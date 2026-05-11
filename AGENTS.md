@@ -1,4 +1,4 @@
-# Project Instructions
+# 项目指南
 
 ## 基础
 
@@ -19,26 +19,26 @@
 - 如果文档与代码冲突，以代码现状为准，并同步修正文档。
 - 新功能完成后，主动检查是否需要更新文档 。
 - 不要让文档长期落后于实现。
-- `design/` 目录下为手动维护的设计文档，不要自行修改。
+- `design/` 目录下为手动维护的设计文档，不要自行修改和参考。
 
 ## 基础工具
 
 - 使用 [QFramework.cs](Assets/Scripts/Core/QFramework.cs) 作为基础架构，遵守规则，降低模块耦合性
-    - 将模块分为 `Model` 、 `System` 、 `Controller` 、 `Utility`
-    - 大多数 `Monobehaviour` 都应该实现 `IController` 来接入QFramework
-    - 在 Controller 中使用 Command 对 `Model` 进行操作
-    - 在 Controller 中使用 Query 对 `Model` 信息进行查询
-    - 在 Controller 中注册 Event 来实现事件回调
-    - Controller 中只能注册 Event，不能发送 Event
-    - 在 System、Model、Command中完成操作时发送 Event 通知 Controller
+  - 将模块分为 `Model` 、 `System` 、 `Controller` 、 `Utility`
+  - 大多数 `Monobehaviour` 都应该实现 `IController` 来接入QFramework
+  - 在 Controller 中使用 Command 对 `Model` 进行操作
+  - 在 Controller 中使用 Query 对 `Model` 信息进行查询
+  - 在 Controller 中注册 Event 来实现事件回调
+  - Controller 中只能注册 Event，不能发送 Event
+  - 在 System、Model、Command中完成操作时发送 Event 通知 Controller
 - 使用 `UniTask` 处理异步操作，优先使用异步操作代替协程、 `Update` 等
 - 使用Unity的 `Addressables` 进行资源加载与管理，不要使用 Resource 加载
-    - 正确处理资源的加载与卸载
+  - 正确处理资源的加载与卸载
 - 使用 Unity 的新输入系统 InputSystem
 - 在开发中优先使用 `Odin` 构建方便使用的Editor工具，充分发挥 Odin 的功能
 - 使用 `SerializedScriptableObject` 或 `ScriptableObject` 作为主要的数据配置类
-    - 数据配置类中各种字段、枚举等标注中文
-    - 使用 Odin 原生功能
+  - 数据配置类中各种字段、枚举等标注中文
+  - 使用 Odin 原生功能
 - 使用 `PrimeTween` 进行动画和补间操作
 - 性能敏感的大量数据优先使用 DOTS 处理
 
@@ -153,34 +153,34 @@
 ### header
 
 - 主要
-    - feat
-        - 增加新功能
-    - improve
-        - 旧功能改进
-    - fix
-        - 修复bug
-    - art
-    - ui
+  - feat
+    - 增加新功能
+  - improve
+    - 旧功能改进
+  - fix
+    - 修复bug
+  - art
+  - ui
 - 特殊
-    - doc
-        - 只改动了文档相关的内容
-    - style
-        - 不影响代码含义的改动，例如去掉空格、改变缩进、增删分号
-    - build
-        - 构造工具的或者外部依赖的改动，例如webpack，npm
-    - refactor
-        - 代码重构时使用
-    - revert
-        - 执行git revert打印的message
+  - doc
+    - 只改动了文档相关的内容
+  - style
+    - 不影响代码含义的改动，例如去掉空格、改变缩进、增删分号
+  - build
+    - 构造工具的或者外部依赖的改动，例如webpack，npm
+  - refactor
+    - 代码重构时使用
+  - revert
+    - 执行git revert打印的message
 - 暂不使用
-    - test
-        - 添加测试或者修改现有测试
-    - perf
-        - 提高性能的改动
-    - ci
-        - 与CI（持续集成服务）有关的改动
-    - chore
-        - 不修改src或者test的其余修改，例如构建过程或辅助工具的变动
+  - test
+    - 添加测试或者修改现有测试
+  - perf
+    - 提高性能的改动
+  - ci
+    - 与CI（持续集成服务）有关的改动
+  - chore
+    - 不修改src或者test的其余修改，例如构建过程或辅助工具的变动
 
 ### subject
 
