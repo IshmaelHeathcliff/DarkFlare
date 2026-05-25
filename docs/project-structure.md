@@ -31,7 +31,7 @@ Assets/
     Sirenix/
   Prefabs/
   Scenes/
-    SampleScene.unity
+    Main.unity
   Scripts/
     Core/
     Data/
@@ -154,4 +154,3 @@ Unity 工程级设置目录，包括版本、构建场景、图形设置等。
 - 业务模块、配置定义和具体内容仍基本为空
 
 因此，后续工作重点不在“再拆目录”，而在把每一层真正填上首批可运行内容。
-

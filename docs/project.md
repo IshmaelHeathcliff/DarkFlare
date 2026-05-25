@@ -4,6 +4,10 @@
 
 `DarkFlare` 当前已完成 Unity 项目的基础目录初始化、核心插件接入和架构入口落地，整体仍处于骨架搭建阶段。
 
+## 游戏定位
+
+项目目标是类暗黑、流放之路的构筑驱动 RPG，并融合类塔科夫的背包资源管理、物资取舍和跑商经营。首个阶段应优先建立一个单场景最小循环，验证刷怪、掉落、装备、交易和打造能围绕同一套伤害与词条系统闭环。
+
 当前可确认的现状：
 
 - Unity 版本为 `6000.4.3f1`
@@ -14,7 +18,7 @@
 - 已引入 `Odin Inspector`
 - 已引入 `PrimeTween`
 - 已引入 `unity-mcp`
-- 当前构建场景只有 `Assets/Scenes/SampleScene.unity`
+- 当前构建场景只有 `Assets/Scenes/Main.unity`
 - 当前自定义脚本主要集中在 `Assets/Scripts/Core`
 
 ## 核心入口
