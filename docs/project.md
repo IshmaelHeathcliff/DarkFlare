@@ -19,7 +19,7 @@
 - 已引入 `PrimeTween`
 - 已引入 `unity-mcp`
 - 当前构建场景只有 `Assets/Scenes/Main.unity`
-- 当前自定义脚本主要集中在 `Assets/Scripts/Core`
+- 当前自定义脚本已包含 `Core`、`Data` 和 `Gameplay` 下的基础框架代码
 
 ## 核心入口
 
@@ -34,6 +34,28 @@
 - `Assets/Scripts/Core/QFramework.cs`
   - 项目内直接放置 QFramework 基础实现
   - 后续 `Model`、`System`、`Controller`、`Utility` 应围绕该架构扩展
+
+### 词条与伤害底座
+
+- `Assets/Scripts/Data/Tags`
+  - 定义标签配置资产
+- `Assets/Scripts/Data/Stats`
+  - 定义属性配置资产
+- `Assets/Scripts/Data/Affixes`
+  - 定义词条、修改器、伤害类型和作用域
+- `Assets/Scripts/Data/Items`
+  - 定义物品基底和基础伤害配置
+- `Assets/Scripts/Gameplay/Combat`
+  - 定义运行时标签集、属性块、词条实例、伤害上下文和纯 C# 伤害计算
+- `Assets/Scripts/Gameplay/Items`
+  - 定义物品实例和随机生成入口
+
+### 编辑器工具
+
+- `Assets/Scripts/Editor/ConfigCenterWindow.cs`
+  - 基于 Odin 提供配置中心
+  - 按 `CreateAssetMenu(menuName = "DarkFlare/Data/...")` 自动发现配置类型
+  - 支持按类型浏览、创建配置和直接编辑真实配置资产
 
 ## 当前技术栈
 

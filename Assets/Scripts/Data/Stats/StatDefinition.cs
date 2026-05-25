@@ -1,0 +1,69 @@
+using Sirenix.OdinInspector;
+using UnityEngine;
+
+namespace DarkFlare
+{
+    public enum StatCategory
+    {
+        Survival,
+        Offense,
+        Defense,
+        Utility,
+        Economy,
+        Crafting
+    }
+
+    [CreateAssetMenu(menuName = "DarkFlare/Data/Stats/Stat Definition", fileName = "StatDefinition")]
+    public class StatDefinition : ScriptableObject
+    {
+        [SerializeField]
+        [LabelText("稳定ID")]
+        string _id = string.Empty;
+
+        [SerializeField]
+        [LabelText("中文名")]
+        string _displayName = string.Empty;
+
+        [SerializeField]
+        [LabelText("类别")]
+        StatCategory _category;
+
+        [SerializeField]
+        [LabelText("默认值")]
+        float _defaultValue;
+
+        [SerializeField]
+        [LabelText("最小值")]
+        float _minValue;
+
+        [SerializeField]
+        [LabelText("最大值")]
+        float _maxValue = 999999f;
+
+        [SerializeField]
+        [LabelText("百分比属性")]
+        bool _isPercent;
+
+        [SerializeField]
+        [TextArea]
+        [LabelText("说明")]
+        string _description = string.Empty;
+
+        public string Id => _id;
+
+        public string DisplayName => _displayName;
+
+        public StatCategory Category => _category;
+
+        public float DefaultValue => _defaultValue;
+
+        public float MinValue => _minValue;
+
+        public float MaxValue => _maxValue;
+
+        public bool IsPercent => _isPercent;
+
+        public string Description => _description;
+    }
+}
+

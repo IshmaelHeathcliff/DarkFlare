@@ -35,8 +35,15 @@ Assets/
   Scripts/
     Core/
     Data/
+      Affixes/
+      Items/
+      Stats/
+      Tags/
     Editor/
+      ConfigCenterWindow.cs
     Gameplay/
+      Combat/
+      Items/
     UI/
     Utilities/
   Settings/
@@ -99,12 +106,19 @@ Addressables 的配置目录，包含资源组、模板和构建器配置。后�
 - `UI`：界面逻辑
 - `Utilities`：通用工具
 
-当前真实代码主要在 `Core`：
+当前代码已覆盖以下基础层：
 
 - `QFramework.cs`
 - `GameArchitecture.cs`
+- `Data/Tags/TagDefinition.cs`
+- `Data/Stats/StatDefinition.cs`
+- `Data/Affixes/AffixDefinition.cs`
+- `Data/Items/ItemBaseDefinition.cs`
+- `Editor/ConfigCenterWindow.cs`
+- `Gameplay/Combat`
+- `Gameplay/Items`
 
-其余目录目前主要是占位，为后续模块扩展预留。
+`UI`、`Utilities` 目前主要是占位，为后续模块扩展预留。
 
 ### `Assets/Settings`
 

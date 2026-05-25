@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2ae069e06d127145ae40593b5a85bd2, type: 3}
+  m_Name: AffixDefinition
+  m_EditorClassIdentifier: Assembly-CSharp::DarkFlare.AffixDefinition
+  _id: 
+  _displayName: 
+  _affixType: 0
+  _groupId: 
+  _minItemLevel: 1
+  _weight: 100
+  _allowedItemTags: []
+  _blockedItemTags: []
+  _modifiers: []

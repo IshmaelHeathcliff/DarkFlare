@@ -366,6 +366,31 @@ Assets/Data/Preset/
 - 随机装备生成
 - 穿戴后词条生效
 
+## 当前代码落地
+
+已完成第一版代码底座：
+
+- `TagDefinition`：标签配置资产。
+- `StatDefinition`：属性配置资产。
+- `AffixDefinition`：词条配置资产，包含修改器、作用域、权重和物品标签筛选。
+- `ItemBaseDefinition`：物品基底配置资产，包含标签、基础伤害、隐式修改器和格子信息。
+- `ItemInstance`：运行时物品实例，支持隐式、前缀、后缀和修改器收集。
+- `ItemGenerator`：基于物品基底、词条池、权重和随机种子生成物品实例。
+- `TagSet`、`ModifierInstance`、`StatBlock`、`StatAggregator`：运行时标签、词条和属性聚合结构。
+- `DamageContext`、`DamagePacket`、`DamageResult`、`DamageCalculator`：纯 C# 命中伤害计算管线。
+
+已实现的伤害计算内容：
+
+- 基础伤害包
+- 伤害转换，单个来源伤害转换总量封顶 100%
+- 额外获得伤害
+- `Increase` 加算
+- `More` 独立乘算
+- 暴击伤害倍率
+- 目标承伤倍率
+- 元素和混沌抗性
+- 物理护甲减伤
+
 暂缓实现：
 
 - 持续伤害
@@ -383,4 +408,3 @@ Assets/Data/Preset/
 - 不要把所有标签写死在枚举里，设计期会频繁增删标签。
 - 不要让伤害计算读取实时对象状态，必须使用快照。
 - 不要过早做复杂异常状态，先让命中伤害、装备词条和打造闭环稳定。
-
