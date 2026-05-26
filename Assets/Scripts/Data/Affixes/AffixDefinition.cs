@@ -48,6 +48,7 @@ namespace DarkFlare
     public class StatModifierDefinition
     {
         [SerializeField]
+        [ShowIf(nameof(UsesStat))]
         [LabelText("目标属性")]
         StatDefinition _stat;
 
@@ -56,28 +57,40 @@ namespace DarkFlare
         ModifierOperation _operation;
 
         [SerializeField]
+        [ShowIf(nameof(UsesScope))]
         [LabelText("作用域")]
         ModifierScope _scope = ModifierScope.GlobalActor;
 
         [SerializeField]
+        [ShowIf(nameof(UsesValue))]
         [LabelText("数值范围")]
         Vector2 _valueRange;
 
         [SerializeField]
+        [ShowIf(nameof(UsesDamageTypeMapping))]
         [LabelText("来源伤害类型")]
         DamageType _fromDamageType = DamageType.Physical;
 
         [SerializeField]
+        [ShowIf(nameof(UsesDamageTypeMapping))]
         [LabelText("目标伤害类型")]
         DamageType _toDamageType = DamageType.Fire;
 
         [SerializeField]
+        [ShowIf(nameof(UsesTags))]
         [LabelText("必须标签")]
         List<TagDefinition> _requiredTags = new List<TagDefinition>();
 
         [SerializeField]
+        [ShowIf(nameof(UsesTags))]
         [LabelText("禁止标签")]
         List<TagDefinition> _blockedTags = new List<TagDefinition>();
+
+        [ShowInInspector]
+        [ShowIf(nameof(IsUnsupportedOperation))]
+        [ReadOnly]
+        [LabelText("说明")]
+        string UnsupportedOperationTip => "当前伤害管线尚未实现该计算方式，仅保留枚举占位。";
 
         public StatDefinition Stat => _stat;
 
@@ -94,6 +107,24 @@ namespace DarkFlare
         public IReadOnlyList<TagDefinition> RequiredTags => _requiredTags;
 
         public IReadOnlyList<TagDefinition> BlockedTags => _blockedTags;
+
+        bool UsesStat => _operation == ModifierOperation.Flat
+            || _operation == ModifierOperation.Increase
+            || _operation == ModifierOperation.More
+            || _operation == ModifierOperation.Override;
+
+        bool UsesScope => UsesStat;
+
+        bool UsesValue => UsesStat || UsesDamageTypeMapping;
+
+        bool UsesDamageTypeMapping => _operation == ModifierOperation.Conversion
+            || _operation == ModifierOperation.GainAsExtra;
+
+        bool UsesTags => UsesValue;
+
+        bool IsUnsupportedOperation => _operation == ModifierOperation.Chance
+            || _operation == ModifierOperation.Trigger
+            || _operation == ModifierOperation.Limit;
 
         public ModifierInstance CreateInstance(System.Random random)
         {
@@ -207,4 +238,3 @@ namespace DarkFlare
         }
     }
 }
-

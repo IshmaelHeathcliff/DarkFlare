@@ -10,17 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: de56d17a7ac2ea64db43d68bd7da6bc8, type: 3}
-  m_Name: ItemBaseDefinition
+  m_Name: "001\u5927\u5251"
   m_EditorClassIdentifier: Assembly-CSharp::DarkFlare.ItemBaseDefinition
-  _id: 
-  _displayName: 
+  _id: LongSword
+  _displayName: "\u5927\u5251"
   _itemType: 0
   _defaultRarity: 0
   _baseValue: 0
   _maxPrefixCount: 3
   _maxSuffixCount: 3
-  _gridSize: {x: 1, y: 1}
-  _weight: 0
+  _gridSize: {x: 2, y: 3}
+  _weight: 10
   _tags: []
-  _baseDamages: []
+  _baseDamages:
+  - _damageType: 0
+    _amountRange: {x: 20, y: 40}
+    _tags:
+    - {fileID: 11400000, guid: 221659ee469b58e48a9edbfb24b56196, type: 2}
   _implicitModifiers: []

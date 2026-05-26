@@ -40,7 +40,7 @@ namespace DarkFlare.Editor
             {
                 ConfigTypeInfo configType = configTypes[i];
                 List<ScriptableObject> assets = FindAssets(configType.Type);
-                ConfigTypePage typePage = new ConfigTypePage(configType, assets, ForceMenuTreeRebuild);
+                ConfigTypePage typePage = new ConfigTypePage(configType, assets, ForceMenuTreeRebuild, OpenAssetForEdit);
                 string typePath = $"按类型/{configType.DisplayName}";
 
                 tree.Add(typePath, typePage);
@@ -53,6 +53,30 @@ namespace DarkFlare.Editor
             }
 
             return tree;
+        }
+
+        void OpenAssetForEdit(ScriptableObject asset)
+        {
+            if (asset == null || MenuTree == null)
+            {
+                return;
+            }
+
+            Selection.activeObject = asset;
+            EditorGUIUtility.PingObject(asset);
+
+            OdinMenuItem menuItem = MenuTree
+                .EnumerateTree(true)
+                .FirstOrDefault(item => ReferenceEquals(item.Value, asset));
+
+            if (menuItem == null)
+            {
+                return;
+            }
+
+            menuItem.Select(false);
+            MenuTree.ScrollToMenuItem(menuItem, true);
+            Repaint();
         }
 
         static List<ConfigTypeInfo> FindConfigTypes()
@@ -268,6 +292,11 @@ namespace DarkFlare.Editor
             readonly List<ScriptableObject> _assets;
             readonly Action _rebuildMenuTree;
 
+            [ShowInInspector]
+            [ListDrawerSettings(DefaultExpandedState = true, DraggableItems = false, HideAddButton = true, HideRemoveButton = true)]
+            [LabelText("已有资产")]
+            List<ConfigAssetEntry> _assetEntries;
+
             [SerializeField]
             [LabelText("新建名称")]
             string _newAssetName;
@@ -292,24 +321,19 @@ namespace DarkFlare.Editor
             [LabelText("已有资产数量")]
             public int AssetCount => _assets.Count;
 
-            [ShowInInspector]
-            [TableList(AlwaysExpanded = true)]
-            [LabelText("已有资产")]
-            public List<ConfigAssetSummary> Assets { get; }
-
-            public ConfigTypePage(ConfigTypeInfo configType, List<ScriptableObject> assets, Action rebuildMenuTree)
+            public ConfigTypePage(ConfigTypeInfo configType, List<ScriptableObject> assets, Action rebuildMenuTree, Action<ScriptableObject> openAsset)
             {
                 _configType = configType;
                 _assets = assets;
                 _rebuildMenuTree = rebuildMenuTree;
                 CreateFolder = GetDefaultFolder(configType, assets);
                 _newAssetName = GetDefaultAssetName(configType);
-                Assets = new List<ConfigAssetSummary>();
+                _assetEntries = new List<ConfigAssetEntry>();
 
                 for (int i = 0; i < assets.Count; i++)
                 {
                     ScriptableObject asset = assets[i];
-                    Assets.Add(new ConfigAssetSummary(asset.name, AssetDatabase.GetAssetPath(asset), asset));
+                    _assetEntries.Add(new ConfigAssetEntry(asset, rebuildMenuTree, openAsset));
                 }
             }
 
@@ -342,32 +366,93 @@ namespace DarkFlare.Editor
             }
         }
 
-        sealed class ConfigAssetSummary
+        [Serializable]
+        [HideReferenceObjectPicker]
+        sealed class ConfigAssetEntry
         {
-            readonly ScriptableObject _asset;
+            [SerializeField]
+            [HideInInspector]
+            ScriptableObject _asset;
+
+            readonly Action _rebuildMenuTree;
+            readonly Action<ScriptableObject> _openAsset;
+
+            [SerializeField]
+            [LabelText("新名称")]
+            string _assetName;
 
             [ShowInInspector]
             [ReadOnly]
             [LabelText("名称")]
-            public string Name { get; }
+            public string Name => _asset != null ? _asset.name : string.Empty;
 
             [ShowInInspector]
             [ReadOnly]
             [LabelText("路径")]
-            public string Path { get; }
+            public string Path => _asset != null ? AssetDatabase.GetAssetPath(_asset) : string.Empty;
 
-            public ConfigAssetSummary(string name, string path, ScriptableObject asset)
+            public ConfigAssetEntry(ScriptableObject asset, Action rebuildMenuTree, Action<ScriptableObject> openAsset)
             {
-                Name = name;
-                Path = path;
                 _asset = asset;
+                _rebuildMenuTree = rebuildMenuTree;
+                _openAsset = openAsset;
+                _assetName = asset != null ? asset.name : string.Empty;
             }
 
+            [HorizontalGroup("操作")]
+            [Button("打开编辑")]
+            public void OpenEdit()
+            {
+                if (_asset == null)
+                {
+                    return;
+                }
+
+                _openAsset?.Invoke(_asset);
+            }
+
+            [HorizontalGroup("操作")]
             [Button("定位")]
             public void Ping()
             {
+                if (_asset == null)
+                {
+                    return;
+                }
+
                 Selection.activeObject = _asset;
                 EditorGUIUtility.PingObject(_asset);
+            }
+
+            [HorizontalGroup("操作")]
+            [Button("应用重命名")]
+            public void Rename()
+            {
+                if (_asset == null)
+                {
+                    return;
+                }
+
+                string sanitizedName = SanitizeFileName(_assetName);
+
+                if (sanitizedName == _asset.name)
+                {
+                    return;
+                }
+
+                string path = AssetDatabase.GetAssetPath(_asset);
+                string error = AssetDatabase.RenameAsset(path, sanitizedName);
+
+                if (!string.IsNullOrEmpty(error))
+                {
+                    Debug.LogError($"重命名配置失败：{error}");
+                    return;
+                }
+
+                AssetDatabase.SaveAssets();
+                AssetDatabase.Refresh();
+                _assetName = _asset.name;
+                _rebuildMenuTree?.Invoke();
             }
         }
     }

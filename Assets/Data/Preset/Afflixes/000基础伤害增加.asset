@@ -10,14 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d2ae069e06d127145ae40593b5a85bd2, type: 3}
-  m_Name: AffixDefinition
+  m_Name: "000\u57FA\u7840\u4F24\u5BB3\u589E\u52A0"
   m_EditorClassIdentifier: Assembly-CSharp::DarkFlare.AffixDefinition
-  _id: 
-  _displayName: 
+  _id: DamageAdd
+  _displayName: "\u57FA\u7840\u4F24\u5BB3\u589E\u52A0"
   _affixType: 0
   _groupId: 
   _minItemLevel: 1
   _weight: 100
   _allowedItemTags: []
   _blockedItemTags: []
-  _modifiers: []
+  _modifiers:
+  - _stat: {fileID: 11400000, guid: 82e204183d947d249b17fb3c9ade3530, type: 2}
+    _operation: 0
+    _scope: 1
+    _valueRange: {x: 10, y: 30}
+    _fromDamageType: 0
+    _toDamageType: 0
+    _requiredTags: []
+    _blockedTags: []
