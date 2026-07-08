@@ -1,0 +1,76 @@
+using System.Collections.Generic;
+using System.Threading;
+using Cysharp.Threading.Tasks;
+using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
+
+namespace DarkFlare
+{
+    public class CombatAssetLoader : IUtility
+    {
+        readonly Dictionary<string, GameObject> _prefabCache = new Dictionary<string, GameObject>();
+        readonly Dictionary<string, AsyncOperationHandle<GameObject>> _handles = new Dictionary<string, AsyncOperationHandle<GameObject>>();
+
+        public async UniTask PreloadAsync(IEnumerable<AssetReferenceGameObject> references, CancellationToken token)
+        {
+            List<UniTask> loadTasks = new List<UniTask>();
+
+            foreach (AssetReferenceGameObject reference in references)
+            {
+                if (reference == null || string.IsNullOrEmpty(reference.AssetGUID) || _prefabCache.ContainsKey(reference.AssetGUID))
+                {
+                    continue;
+                }
+
+                loadTasks.Add(LoadOneAsync(reference, token));
+            }
+
+            await UniTask.WhenAll(loadTasks);
+        }
+
+        public GameObject GetPrefab(AssetReferenceGameObject reference)
+        {
+            if (reference == null || string.IsNullOrEmpty(reference.AssetGUID))
+            {
+                return null;
+            }
+
+            if (_prefabCache.TryGetValue(reference.AssetGUID, out GameObject prefab))
+            {
+                return prefab;
+            }
+
+            Debug.LogError($"[CombatAssetLoader] 未预热的 Addressable 引用: {reference.AssetGUID}");
+            return null;
+        }
+
+        public void ReleaseAll()
+        {
+            foreach (AsyncOperationHandle<GameObject> handle in _handles.Values)
+            {
+                Addressables.Release(handle);
+            }
+
+            _handles.Clear();
+            _prefabCache.Clear();
+        }
+
+        async UniTask LoadOneAsync(AssetReferenceGameObject reference, CancellationToken token)
+        {
+            Debug.Log($"[CombatAssetLoader] 开始加载: {reference.AssetGUID}");
+            AsyncOperationHandle<GameObject> handle = reference.LoadAssetAsync();
+            await UniTask.WaitUntil(() => handle.IsDone, cancellationToken: token);
+
+            if (handle.Status != AsyncOperationStatus.Succeeded)
+            {
+                Debug.LogError($"[CombatAssetLoader] 加载失败: {reference.AssetGUID}");
+                return;
+            }
+
+            Debug.Log($"[CombatAssetLoader] 加载完成: {reference.AssetGUID} -> {handle.Result.name}");
+            _handles[reference.AssetGUID] = handle;
+            _prefabCache[reference.AssetGUID] = handle.Result;
+        }
+    }
+}

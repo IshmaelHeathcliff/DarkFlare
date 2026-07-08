@@ -23,6 +23,7 @@ Assets/
     Audio/
     Materials/
     Textures/
+      Prototype/
   Data/
     Preset/
     Saves/
@@ -30,20 +31,32 @@ Assets/
     Roslyn/
     Sirenix/
   Prefabs/
+    Combat/
   Scenes/
     Main.unity
   Scripts/
     Core/
     Data/
+      Actors/
       Affixes/
       Items/
+      Monsters/
+      Skills/
       Stats/
       Tags/
     Editor/
       ConfigCenterWindow.cs
     Gameplay/
+      Actors/
+      Bootstrap/
       Combat/
+        Commands/
+        Queries/
       Items/
+      Skills/
+      Spawning/
+    Test/
+      Editor/
     UI/
     Utilities/
   Settings/
@@ -65,6 +78,7 @@ Addressables 的配置目录，包含资源组、模板和构建器配置。后�
 - `Audio`
 - `Materials`
 - `Textures`
+  - `Prototype`：战斗原型占位方块贴图（`PrototypeSquare.png`），供 `Prefabs/Combat` 下的 Prefab 共用，正式美术接入后应替换并清理
 
 说明：
 当前目录名为 `Animaitons`，文档按现状记录，若后续修正拼写，需要同步调整文档与资源引用。
@@ -85,7 +99,13 @@ Addressables 的配置目录，包含资源组、模板和构建器配置。后�
 
 ### `Assets/Prefabs`
 
-预制体目录，当前已创建，尚未看到具体业务资源。
+预制体目录，当前已有战斗原型业务资源：
+
+- `Combat/Player.prefab`
+- `Combat/Monster_Basic.prefab`
+- `Combat/Projectile_Default.prefab`
+
+三者都已标记为 Addressable（key 分别是 `Combat/Player`、`Combat/Monster/Basic`、`Combat/Projectile/Default`），由 `SpawnSystem` 通过 `CombatAssetLoader` 预热后实例化，不再运行时现造 GameObject。
 
 ### `Assets/Scenes`
 
@@ -103,20 +123,30 @@ Addressables 的配置目录，包含资源组、模板和构建器配置。后�
 - `Data`：数据定义与配置类型
 - `Editor`：编辑器扩展
 - `Gameplay`：玩法逻辑
+- `Test`：测试代码
 - `UI`：界面逻辑
 - `Utilities`：通用工具
 
 当前代码已覆盖以下基础层：
 
 - `QFramework.cs`
-- `GameArchitecture.cs`
+- `GameArchitecture.cs`（已注册 `CombatModel`/`CombatSystem`/`SpawnSystem`/`CombatAssetLoader`）
 - `Data/Tags/TagDefinition.cs`
 - `Data/Stats/StatDefinition.cs`
+- `Data/Actors/CharacterDefinition.cs`
 - `Data/Affixes/AffixDefinition.cs`
 - `Data/Items/ItemBaseDefinition.cs`
+- `Data/Skills/ProjectileSkillDefinition.cs`
+- `Data/Monsters/MonsterDefinition.cs`
+- `Data/Monsters/MonsterSpawnDefinition.cs`
 - `Editor/ConfigCenterWindow.cs`
-- `Gameplay/Combat`
+- `Gameplay/Combat`：`CombatModel.cs`、`CombatSystem.cs`、`SpawnSystem.cs`、`CombatAssetLoader.cs`、`CombatEvents.cs`、`Commands/`（`RegisterActorCommand`/`UnregisterActorCommand`/`ApplyDamageCommand`/`ReviveActorCommand`/`SpawnPlayerCommand`/`SpawnMonsterCommand`/`FireProjectileCommand`）、`Queries/`（`GetClosestActorQuery`），以及原有的 `DamageCalculator`/`StatBlock`/`TagSet` 等纯逻辑
 - `Gameplay/Items`
+- `Gameplay/Actors`：`CombatActor.cs`、`PlayerController.cs`、`MonsterController.cs`、`ActorTeam.cs`
+- `Gameplay/Skills`：`ProjectileController.cs`
+- `Gameplay/Spawning`：`MonsterSpawner.cs`
+- `Gameplay/Bootstrap`：`CombatPrototypeBootstrap.cs`、`CameraFollowTarget.cs`
+- `Test/Editor/MonsterSpawnDefinitionTests.cs`：EditMode 测试，覆盖 `MonsterSpawnDefinition.PickMonster` 权重逻辑（无独立 asmdef，直接编译进隐式的 `Assembly-CSharp-Editor`，因此能同时引用运行时代码和 NUnit）
 
 `UI`、`Utilities` 目前主要是占位，为后续模块扩展预留。
 

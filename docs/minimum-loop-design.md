@@ -127,6 +127,7 @@ Controller 只注册事件和发送 Command，不直接修改 Model。
 
 ```text
 Assets/Data/Preset/
+  Actors/
   Affixes/
   Items/
   LootTables/
@@ -151,15 +152,32 @@ Assets/Data/Preset/
 7. 接入基础打造。
 8. 用 `Main.unity` 串成一轮完整循环。
 
+## 当前代码落地
+
+已完成第一版战斗原型，并按 QFramework 分层落地（不再是 Controller 之间直接互相调用）：
+
+- 数据配置：`CharacterDefinition`（玩家/通用角色属性，含 Prefab 引用）、`ProjectileSkillDefinition`（投射物技能，含 Prefab 引用）、`MonsterDefinition`（怪物属性、Prefab 引用、碰撞伤害）、`MonsterSpawnDefinition`（刷怪间隔、存活上限、怪物池权重）。怪物、玩家、投射物的 Prefab 引用统一使用 `AssetReferenceGameObject`，走 Addressables 加载，不再用直接 `GameObject` 引用或运行时现造对象。
+- `CombatModel`：按阵营维护存活 `CombatActor` 列表。
+- `CombatSystem`：负责注册/注销 Actor、`ApplyDamage`（伤害结算 + 生死判定）、`Revive`，并在状态变化时发送 `ActorDamagedEvent`/`ActorDiedEvent`/`ActorRevivedEvent`。
+- `SpawnSystem`：负责 `PreloadAsync`（预热玩家、技能、怪物池对应的 Addressable Prefab）和 `SpawnPlayer`/`SpawnMonster`/`SpawnProjectile`（从已预热的 Prefab 实例化）。
+- `CombatAssetLoader`（`IUtility`）：Addressables 加载、缓存与释放。
+- Command：`RegisterActorCommand`/`UnregisterActorCommand`/`ApplyDamageCommand`/`ReviveActorCommand`/`SpawnPlayerCommand`/`SpawnMonsterCommand`/`FireProjectileCommand`。
+- Query：`GetClosestActorQuery`（按阵营、位置、范围查找最近 Actor，取代原来挂在 `CombatActor` 上的静态方法）。
+- Controller：`CombatActor`（生命/阵营/属性本地状态，变更入口只允许 `CombatSystem` 调用，自身不再触发全局事件）、`PlayerController`（读取 Input System 输入移动，通过 Command 发起攻击和复活）、`MonsterController`（追踪玩家、通过 Command 造成碰撞伤害，监听 `ActorDiedEvent` 处理死亡表现）、`ProjectileController`（命中后通过 `ApplyDamageCommand` 结算）、`MonsterSpawner`（定时通过 `SpawnMonsterCommand` 生成怪物）、`CombatPrototypeBootstrap`（场景内常驻组件，预热资源后生成玩家、激活刷怪器、设置相机跟随目标；不再运行时现造 GameObject）。
+- Prefab：`Assets/Prefabs/Combat/Player.prefab`、`Monster_Basic.prefab`、`Projectile_Default.prefab`，均已标记为 Addressable。占位视觉使用共享的方块贴图 `Assets/Art/Textures/Prototype/PrototypeSquare.png`，按 `SpriteRenderer.Color` 区分玩家/怪物/投射物颜色。
+- 数据资源：`Assets/Data/Preset/Actors/玩家.asset`、`Skills/基础投射物技能.asset`、`Monsters/基础怪物.asset`、`Monsters/基础刷怪表.asset`，已在 `Main.unity` 场景中挂到 `CombatPrototypeBootstrap`/`MonsterSpawner`。
+- 测试：`Assets/Scripts/Test/Editor/MonsterSpawnDefinitionTests.cs` 覆盖 `MonsterSpawnDefinition.PickMonster` 的权重选取逻辑。
+
 ## 暂缓内容
 
 - 大型天赋盘
 - 复杂异常状态
 - 召唤物
+- 正式美术资源（当前 Prefab 用占位方块贴图代替最终美术）
+- 掉落、背包、交易和打造闭环
 - 多场景撤离
 - 联机同步
 - 完整经济模拟
 - 自动寻路经营玩法
 
 这些内容都依赖伤害、词条、物品实例和经济价值底座，应该在最小循环稳定后再扩展。
-

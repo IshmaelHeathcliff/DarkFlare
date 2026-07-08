@@ -15,6 +15,7 @@ namespace DarkFlare
         public const string ColdDamage = "cold_damage";
         public const string LightningDamage = "lightning_damage";
         public const string ChaosDamage = "chaos_damage";
+        public const string MaxHealth = "max_health";
+        public const string MoveSpeed = "move_speed";
     }
 }
-

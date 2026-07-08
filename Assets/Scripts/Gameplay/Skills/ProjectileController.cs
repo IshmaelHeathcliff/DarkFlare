@@ -1,0 +1,96 @@
+using System.Collections.Generic;
+using System.Threading;
+using Cysharp.Threading.Tasks;
+using UnityEngine;
+
+namespace DarkFlare
+{
+    [DisallowMultipleComponent]
+    [RequireComponent(typeof(Rigidbody2D))]
+    [RequireComponent(typeof(CircleCollider2D))]
+    public class ProjectileController : MonoBehaviour, IController
+    {
+        Rigidbody2D _rigidbody;
+        CircleCollider2D _collider;
+        CombatActor _owner;
+        ProjectileSkillDefinition _skill;
+        Vector2 _direction;
+        bool _initialized;
+
+        public IArchitecture GetArchitecture()
+        {
+            return GameArchitecture.Interface;
+        }
+
+        public void Init(CombatActor owner, ProjectileSkillDefinition skill, Vector2 direction)
+        {
+            EnsureComponents();
+            _owner = owner;
+            _skill = skill;
+            _direction = direction.sqrMagnitude > 0f ? direction.normalized : Vector2.right;
+            _initialized = true;
+            _collider.radius = skill.ProjectileRadius;
+            _rigidbody.linearVelocity = _direction * skill.ProjectileSpeed;
+            DestroyAfterDelay(skill.ProjectileLifetime, this.GetCancellationTokenOnDestroy()).Forget();
+        }
+
+        void Awake()
+        {
+            EnsureComponents();
+        }
+
+        void OnValidate()
+        {
+            EnsureComponents();
+        }
+
+        void OnTriggerEnter2D(Collider2D other)
+        {
+            if (!_initialized)
+            {
+                return;
+            }
+
+            CombatActor target = other.GetComponentInParent<CombatActor>();
+
+            if (target == null || _owner == null || target.Team == _owner.Team || !target.IsAlive)
+            {
+                return;
+            }
+
+            int seed = Random.Range(int.MinValue, int.MaxValue);
+            List<DamagePacket> packets = _skill.CreateDamagePackets(seed);
+            this.SendCommand(new ApplyDamageCommand(_owner, target, _skill.Id, packets, _skill.RuntimeTags, seed));
+            Destroy(gameObject);
+        }
+
+        void EnsureComponents()
+        {
+            _rigidbody = GetComponent<Rigidbody2D>();
+            _collider = GetComponent<CircleCollider2D>();
+
+            if (_rigidbody != null)
+            {
+                _rigidbody.gravityScale = 0f;
+                _rigidbody.bodyType = RigidbodyType2D.Dynamic;
+                _rigidbody.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
+            }
+
+            if (_collider != null)
+            {
+                _collider.isTrigger = true;
+                _collider.radius = 0.16f;
+            }
+        }
+
+        async UniTaskVoid DestroyAfterDelay(float lifetime, CancellationToken token)
+        {
+            await UniTask.Delay(System.TimeSpan.FromSeconds(lifetime), cancellationToken: token);
+
+            if (this != null)
+            {
+                Destroy(gameObject);
+            }
+        }
+    }
+}

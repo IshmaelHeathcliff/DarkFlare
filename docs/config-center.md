@@ -72,6 +72,10 @@ DarkFlare/配置中心
 - `DarkFlare/Data/Stats/Stat Definition` -> `Assets/Data/Preset/Stats`
 - `DarkFlare/Data/Affixes/Affix Definition` -> `Assets/Data/Preset/Affixes`
 - `DarkFlare/Data/Items/Item Base Definition` -> `Assets/Data/Preset/Items`
+- `DarkFlare/Data/Actors/Character Definition` -> `Assets/Data/Preset/Actors`
+- `DarkFlare/Data/Skills/Projectile Skill Definition` -> `Assets/Data/Preset/Skills`
+- `DarkFlare/Data/Monsters/Monster Definition` -> `Assets/Data/Preset/Monsters`
+- `DarkFlare/Data/Monsters/Monster Spawn Definition` -> `Assets/Data/Preset/Monsters`
 
 ## 扩展约定
 

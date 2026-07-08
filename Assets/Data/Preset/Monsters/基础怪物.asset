@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4eb121f8dc76a8f4695a759b90dc6ce7, type: 3}
+  m_Name: "\u57FA\u7840\u602A\u7269"
+  m_EditorClassIdentifier: Assembly-CSharp::DarkFlare.MonsterDefinition
+  _id: basic_monster
+  _displayName: 基础怪物
+  _character: {fileID: 0}
+  _prefab:
+    m_AssetGUID: 67b8ae84734f42f4792a4190aad88049
+    m_SubObjectName:
+    m_SubObjectType:
+    m_SubObjectGUID:
+    m_EditorAssetChanged: 0
+  _maxHealth: 24
+  _moveSpeed: 2.6
+  _contactDamageInterval: 0.75
+  _contactDamageRadius: 0.75
+  _tags: []
+  _contactDamages: []

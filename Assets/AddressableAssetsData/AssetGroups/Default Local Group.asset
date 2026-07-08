@@ -14,7 +14,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
   m_GroupName: Default Local Group
   m_GUID: 53f4518ea4317d2438bd52f912fcec08
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: 3b6e21dfbc7f54e4f9e0312efd6c6af5
+    m_Address: Combat/Projectile/Default
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 67b8ae84734f42f4792a4190aad88049
+    m_Address: Combat/Monster/Basic
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 942c099ccdd7eed428f0ac0b1694f6ff
+    m_Address: Combat/Player
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 2a89337400d536944bcf12b9576d1482, type: 2}
   m_SchemaSet:
