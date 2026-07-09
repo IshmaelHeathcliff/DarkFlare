@@ -38,12 +38,12 @@ namespace DarkFlare
                 }
             }
 
-            await this.GetUtility<CombatAssetLoader>().PreloadAsync(references, token);
+            await this.GetUtility<PrefabAssetLoader>().PreloadAsync(references, token);
         }
 
         public CombatActor SpawnPlayer(CharacterDefinition definition, ProjectileSkillDefinition skill, Vector3 position)
         {
-            GameObject prefab = this.GetUtility<CombatAssetLoader>().GetPrefab(definition.Prefab);
+            GameObject prefab = this.GetUtility<PrefabAssetLoader>().GetPrefab(definition.Prefab);
 
             if (prefab == null)
             {
@@ -66,7 +66,7 @@ namespace DarkFlare
                 return null;
             }
 
-            GameObject prefab = this.GetUtility<CombatAssetLoader>().GetPrefab(definition.Prefab);
+            GameObject prefab = this.GetUtility<PrefabAssetLoader>().GetPrefab(definition.Prefab);
 
             if (prefab == null)
             {
@@ -82,7 +82,7 @@ namespace DarkFlare
 
         public ProjectileController SpawnProjectile(ProjectileSkillDefinition skill, CombatActor owner, Vector3 position, Vector2 direction)
         {
-            GameObject prefab = this.GetUtility<CombatAssetLoader>().GetPrefab(skill.Prefab);
+            GameObject prefab = this.GetUtility<PrefabAssetLoader>().GetPrefab(skill.Prefab);
 
             if (prefab == null)
             {

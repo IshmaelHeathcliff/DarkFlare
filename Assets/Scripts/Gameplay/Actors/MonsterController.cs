@@ -17,6 +17,8 @@ namespace DarkFlare
 
         public CombatActor Actor => _actor;
 
+        public MonsterDefinition Definition => _definition;
+
         public IArchitecture GetArchitecture()
         {
             return GameArchitecture.Interface;

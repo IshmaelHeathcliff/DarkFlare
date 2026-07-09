@@ -160,13 +160,14 @@ Assets/Data/Preset/
 - `CombatModel`：按阵营维护存活 `CombatActor` 列表。
 - `CombatSystem`：负责注册/注销 Actor、`ApplyDamage`（伤害结算 + 生死判定）、`Revive`，并在状态变化时发送 `ActorDamagedEvent`/`ActorDiedEvent`/`ActorRevivedEvent`。
 - `SpawnSystem`：负责 `PreloadAsync`（预热玩家、技能、怪物池对应的 Addressable Prefab）和 `SpawnPlayer`/`SpawnMonster`/`SpawnProjectile`（从已预热的 Prefab 实例化）。
-- `CombatAssetLoader`（`IUtility`）：Addressables 加载、缓存与释放。
-- Command：`RegisterActorCommand`/`UnregisterActorCommand`/`ApplyDamageCommand`/`ReviveActorCommand`/`SpawnPlayerCommand`/`SpawnMonsterCommand`/`FireProjectileCommand`。
+- `PrefabAssetLoader`（`IUtility`，原名 `CombatAssetLoader`，改名后不再局限于战斗场景，供任意功能预热/缓存 Addressable Prefab）：Addressables 加载、缓存与释放。
+- Command：`RegisterActorCommand`/`UnregisterActorCommand`/`ApplyDamageCommand`/`ReviveActorCommand`/`SpawnPlayerCommand`/`SpawnMonsterCommand`/`FireProjectileCommand`/`PickupLootCommand`。
 - Query：`GetClosestActorQuery`（按阵营、位置、范围查找最近 Actor，取代原来挂在 `CombatActor` 上的静态方法）。
-- Controller：`CombatActor`（生命/阵营/属性本地状态，变更入口只允许 `CombatSystem` 调用，自身不再触发全局事件）、`PlayerController`（读取 Input System 输入移动，通过 Command 发起攻击和复活）、`MonsterController`（追踪玩家、通过 Command 造成碰撞伤害，监听 `ActorDiedEvent` 处理死亡表现）、`ProjectileController`（命中后通过 `ApplyDamageCommand` 结算）、`MonsterSpawner`（定时通过 `SpawnMonsterCommand` 生成怪物）、`CombatPrototypeBootstrap`（场景内常驻组件，预热资源后生成玩家、激活刷怪器、设置相机跟随目标；不再运行时现造 GameObject）。
-- Prefab：`Assets/Prefabs/Combat/Player.prefab`、`Monster_Basic.prefab`、`Projectile_Default.prefab`，均已标记为 Addressable。占位视觉使用共享的方块贴图 `Assets/Art/Textures/Prototype/PrototypeSquare.png`，按 `SpriteRenderer.Color` 区分玩家/怪物/投射物颜色。
-- 数据资源：`Assets/Data/Preset/Actors/玩家.asset`、`Skills/基础投射物技能.asset`、`Monsters/基础怪物.asset`、`Monsters/基础刷怪表.asset`，已在 `Main.unity` 场景中挂到 `CombatPrototypeBootstrap`/`MonsterSpawner`。
-- 测试：`Assets/Scripts/Test/Editor/MonsterSpawnDefinitionTests.cs` 覆盖 `MonsterSpawnDefinition.PickMonster` 的权重选取逻辑。
+- Controller：`CombatActor`（生命/阵营/属性本地状态，变更入口只允许 `CombatSystem` 调用，自身不再触发全局事件）、`PlayerController`（读取 Input System 输入移动，通过 Command 发起攻击和复活）、`MonsterController`（追踪玩家、通过 Command 造成碰撞伤害，监听 `ActorDiedEvent` 处理死亡表现，对外暴露 `Definition` 供 `LootSystem` 反查掉落表）、`ProjectileController`（命中后通过 `ApplyDamageCommand` 结算）、`MonsterSpawner`（定时通过 `SpawnMonsterCommand` 生成怪物）、`LootPickupController`（掉落物在世界中的表现，按稀有度着色，玩家触碰后通过 `PickupLootCommand` 结算）、`CombatPrototypeBootstrap`（场景内常驻组件，预热资源后生成玩家、激活刷怪器、设置相机跟随目标；不再运行时现造 GameObject）。
+- 掉落：`LootTableDefinition`（掉落池 + 词条池，`PickItem` 加权选取、`GenerateLoot` 调用已有的 `ItemGenerator` 生成 `ItemInstance`）、`LootSystem`（监听 `ActorDiedEvent`，命中怪物阵营时按 `MonsterDefinition.LootTable` 生成掉落物并在死亡位置生成 `LootPickup` Prefab；`CollectLoot` 目前只打印日志，真正入背包留给后续步骤）。物品随机生成的纯逻辑（`ItemInstance`/`ItemGenerationOptions`/`ItemGenerator`）此前已经写好但从未被调用，这一步是它们第一次被接入实际流程。
+- Prefab：`Assets/Prefabs/Combat/Player.prefab`、`Monster_Basic.prefab`、`Projectile_Default.prefab`、`Assets/Prefabs/Loot/LootPickup.prefab`，均已标记为 Addressable。占位视觉使用共享的方块贴图 `Assets/Art/Textures/Prototype/PrototypeSquare.png`，按 `SpriteRenderer.Color` 区分（玩家/怪物/投射物用固定颜色，掉落物按稀有度着色）。
+- 数据资源：`Assets/Data/Preset/Actors/玩家.asset`、`Skills/基础投射物技能.asset`、`Monsters/基础怪物.asset`、`Monsters/基础刷怪表.asset`、`Loot/基础怪物掉落表.asset`（引用已有的 `Items/001大剑.asset` 和 `Afflixes/000基础伤害增加.asset`），已在 `Main.unity` 场景中挂到 `CombatPrototypeBootstrap`/`MonsterSpawner`。
+- 测试：`Assets/Scripts/Test/Editor/MonsterSpawnDefinitionTests.cs`、`LootTableDefinitionTests.cs` 分别覆盖 `MonsterSpawnDefinition.PickMonster` 和 `LootTableDefinition.PickItem` 的权重选取逻辑。
 
 ## 暂缓内容
 
@@ -174,7 +175,7 @@ Assets/Data/Preset/
 - 复杂异常状态
 - 召唤物
 - 正式美术资源（当前 Prefab 用占位方块贴图代替最终美术）
-- 掉落、背包、交易和打造闭环
+- 背包、装备穿戴生效、交易和打造闭环（掉落生成已接入，拾取目前只打日志，不真正入包）
 - 多场景撤离
 - 联机同步
 - 完整经济模拟

@@ -15,6 +15,11 @@ MonoBehaviour:
   m_GroupName: Default Local Group
   m_GUID: 53f4518ea4317d2438bd52f912fcec08
   m_SerializeEntries:
+  - m_GUID: 07152fe41aa52d740b4d1df2049f9f3d
+    m_Address: Loot/Pickup
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3b6e21dfbc7f54e4f9e0312efd6c6af5
     m_Address: Combat/Projectile/Default
     m_ReadOnly: 0

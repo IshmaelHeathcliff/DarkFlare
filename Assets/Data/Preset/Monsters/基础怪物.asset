@@ -27,3 +27,4 @@ MonoBehaviour:
   _contactDamageRadius: 0.75
   _tags: []
   _contactDamages: []
+  _lootTable: {fileID: 11400000, guid: 69f6d576aafd2b346801311d31d37a8a, type: 2}

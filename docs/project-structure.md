@@ -32,6 +32,7 @@ Assets/
     Sirenix/
   Prefabs/
     Combat/
+    Loot/
   Scenes/
     Main.unity
   Scripts/
@@ -40,6 +41,7 @@ Assets/
       Actors/
       Affixes/
       Items/
+      Loot/
       Monsters/
       Skills/
       Stats/
@@ -53,6 +55,7 @@ Assets/
         Commands/
         Queries/
       Items/
+      Loot/
       Skills/
       Spawning/
     Test/
@@ -78,7 +81,7 @@ Addressables 的配置目录，包含资源组、模板和构建器配置。后�
 - `Audio`
 - `Materials`
 - `Textures`
-  - `Prototype`：战斗原型占位方块贴图（`PrototypeSquare.png`），供 `Prefabs/Combat` 下的 Prefab 共用，正式美术接入后应替换并清理
+  - `Prototype`：占位方块贴图（`PrototypeSquare.png`），供 `Prefabs/Combat`、`Prefabs/Loot` 下的 Prefab 共用，正式美术接入后应替换并清理
 
 说明：
 当前目录名为 `Animaitons`，文档按现状记录，若后续修正拼写，需要同步调整文档与资源引用。
@@ -104,8 +107,9 @@ Addressables 的配置目录，包含资源组、模板和构建器配置。后�
 - `Combat/Player.prefab`
 - `Combat/Monster_Basic.prefab`
 - `Combat/Projectile_Default.prefab`
+- `Loot/LootPickup.prefab`
 
-三者都已标记为 Addressable（key 分别是 `Combat/Player`、`Combat/Monster/Basic`、`Combat/Projectile/Default`），由 `SpawnSystem` 通过 `CombatAssetLoader` 预热后实例化，不再运行时现造 GameObject。
+四者都已标记为 Addressable（key 分别是 `Combat/Player`、`Combat/Monster/Basic`、`Combat/Projectile/Default`、`Loot/Pickup`），由 `SpawnSystem`/`LootSystem` 通过共用的 `PrefabAssetLoader` 预热后实例化，不再运行时现造 GameObject。
 
 ### `Assets/Scenes`
 
@@ -130,23 +134,25 @@ Addressables 的配置目录，包含资源组、模板和构建器配置。后�
 当前代码已覆盖以下基础层：
 
 - `QFramework.cs`
-- `GameArchitecture.cs`（已注册 `CombatModel`/`CombatSystem`/`SpawnSystem`/`CombatAssetLoader`）
+- `GameArchitecture.cs`（已注册 `CombatModel`/`CombatSystem`/`SpawnSystem`/`LootSystem`/`PrefabAssetLoader`）
 - `Data/Tags/TagDefinition.cs`
 - `Data/Stats/StatDefinition.cs`
 - `Data/Actors/CharacterDefinition.cs`
 - `Data/Affixes/AffixDefinition.cs`
 - `Data/Items/ItemBaseDefinition.cs`
+- `Data/Loot/LootTableDefinition.cs`
 - `Data/Skills/ProjectileSkillDefinition.cs`
 - `Data/Monsters/MonsterDefinition.cs`
 - `Data/Monsters/MonsterSpawnDefinition.cs`
 - `Editor/ConfigCenterWindow.cs`
-- `Gameplay/Combat`：`CombatModel.cs`、`CombatSystem.cs`、`SpawnSystem.cs`、`CombatAssetLoader.cs`、`CombatEvents.cs`、`Commands/`（`RegisterActorCommand`/`UnregisterActorCommand`/`ApplyDamageCommand`/`ReviveActorCommand`/`SpawnPlayerCommand`/`SpawnMonsterCommand`/`FireProjectileCommand`）、`Queries/`（`GetClosestActorQuery`），以及原有的 `DamageCalculator`/`StatBlock`/`TagSet` 等纯逻辑
-- `Gameplay/Items`
+- `Gameplay/Combat`：`CombatModel.cs`、`CombatSystem.cs`、`SpawnSystem.cs`、`LootSystem.cs`、`PrefabAssetLoader.cs`、`CombatEvents.cs`、`Commands/`（`RegisterActorCommand`/`UnregisterActorCommand`/`ApplyDamageCommand`/`ReviveActorCommand`/`SpawnPlayerCommand`/`SpawnMonsterCommand`/`FireProjectileCommand`/`PickupLootCommand`）、`Queries/`（`GetClosestActorQuery`），以及原有的 `DamageCalculator`/`StatBlock`/`TagSet` 等纯逻辑
+- `Gameplay/Items`：`ItemInstance.cs`、`ItemGenerationOptions.cs`、`ItemGenerator.cs`（物品随机生成的纯逻辑，由 `LootSystem` 调用）
 - `Gameplay/Actors`：`CombatActor.cs`、`PlayerController.cs`、`MonsterController.cs`、`ActorTeam.cs`
 - `Gameplay/Skills`：`ProjectileController.cs`
 - `Gameplay/Spawning`：`MonsterSpawner.cs`
+- `Gameplay/Loot`：`LootPickupController.cs`
 - `Gameplay/Bootstrap`：`CombatPrototypeBootstrap.cs`、`CameraFollowTarget.cs`
-- `Test/Editor/MonsterSpawnDefinitionTests.cs`：EditMode 测试，覆盖 `MonsterSpawnDefinition.PickMonster` 权重逻辑（无独立 asmdef，直接编译进隐式的 `Assembly-CSharp-Editor`，因此能同时引用运行时代码和 NUnit）
+- `Test/Editor/MonsterSpawnDefinitionTests.cs`、`LootTableDefinitionTests.cs`：EditMode 测试，分别覆盖 `MonsterSpawnDefinition.PickMonster`、`LootTableDefinition.PickItem` 权重逻辑（无独立 asmdef，直接编译进隐式的 `Assembly-CSharp-Editor`，因此能同时引用运行时代码和 NUnit）
 
 `UI`、`Utilities` 目前主要是占位，为后续模块扩展预留。
 

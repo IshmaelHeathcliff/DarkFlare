@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: "\u57FA\u7840\u6295\u5C04\u7269\u6280\u80FD"
   m_EditorClassIdentifier: Assembly-CSharp::DarkFlare.ProjectileSkillDefinition
   _id: basic_projectile
-  _displayName: 基础投射物技能
+  _displayName: "\u57FA\u7840\u6295\u5C04\u7269\u6280\u80FD"
   _projectilePrefab:
     m_AssetGUID: 3b6e21dfbc7f54e4f9e0312efd6c6af5
-    m_SubObjectName:
-    m_SubObjectType:
-    m_SubObjectGUID:
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
     m_EditorAssetChanged: 0
   _cooldown: 0.6
   _targetRange: 10

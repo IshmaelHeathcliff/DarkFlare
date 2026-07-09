@@ -557,6 +557,12 @@ MonoBehaviour:
   _playerCharacter: {fileID: 11400000, guid: 6d95f9ebf5769094c9a2130370d9c383, type: 2}
   _playerSkill: {fileID: 11400000, guid: 3b9429a30637ee84fabab25134b3a361, type: 2}
   _monsterSpawnDefinition: {fileID: 11400000, guid: e6e50e930e299ea4095e6de9ae5035f9, type: 2}
+  _lootPickupPrefab:
+    m_AssetGUID: 07152fe41aa52d740b4d1df2049f9f3d
+    m_SubObjectName:
+    m_SubObjectType:
+    m_SubObjectGUID:
+    m_EditorAssetChanged: 0
   _playerSpawnPoint: {fileID: 0}
   _monsterSpawner: {fileID: 800447565}
 --- !u!4 &1630975849

@@ -1,6 +1,7 @@
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 namespace DarkFlare
 {
@@ -14,6 +15,9 @@ namespace DarkFlare
 
         [SerializeField]
         MonsterSpawnDefinition _monsterSpawnDefinition;
+
+        [SerializeField]
+        AssetReferenceGameObject _lootPickupPrefab;
 
         [SerializeField]
         Transform _playerSpawnPoint;
@@ -30,7 +34,9 @@ namespace DarkFlare
         {
             Debug.Log("[CombatPrototypeBootstrap] 开始预热资源");
             CancellationToken token = this.GetCancellationTokenOnDestroy();
-            await this.GetSystem<SpawnSystem>().PreloadAsync(_playerCharacter, _playerSkill, _monsterSpawnDefinition, token);
+            await UniTask.WhenAll(
+                this.GetSystem<SpawnSystem>().PreloadAsync(_playerCharacter, _playerSkill, _monsterSpawnDefinition, token),
+                this.GetSystem<LootSystem>().PreloadAsync(_lootPickupPrefab, token));
             Debug.Log("[CombatPrototypeBootstrap] 资源预热完成，开始生成玩家");
 
             Vector3 spawnPosition = _playerSpawnPoint != null ? _playerSpawnPoint.position : transform.position;

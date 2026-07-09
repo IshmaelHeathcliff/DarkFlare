@@ -54,6 +54,10 @@ namespace DarkFlare
         [LabelText("碰撞伤害")]
         List<DamageRollDefinition> _contactDamages = new List<DamageRollDefinition>();
 
+        [SerializeField]
+        [LabelText("掉落表")]
+        LootTableDefinition _lootTable;
+
         public string Id => _id;
 
         public string DisplayName => _displayName;
@@ -69,6 +73,8 @@ namespace DarkFlare
         public float ContactDamageRadius => _contactDamageRadius;
 
         public TagSet RuntimeTags => TagSet.FromDefinitions(_tags);
+
+        public LootTableDefinition LootTable => _lootTable;
 
         bool HasCharacterDefinition => _character != null;
 

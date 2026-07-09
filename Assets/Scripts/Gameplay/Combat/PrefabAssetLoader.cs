@@ -7,7 +7,7 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace DarkFlare
 {
-    public class CombatAssetLoader : IUtility
+    public class PrefabAssetLoader : IUtility
     {
         readonly Dictionary<string, GameObject> _prefabCache = new Dictionary<string, GameObject>();
         readonly Dictionary<string, AsyncOperationHandle<GameObject>> _handles = new Dictionary<string, AsyncOperationHandle<GameObject>>();
@@ -41,7 +41,7 @@ namespace DarkFlare
                 return prefab;
             }
 
-            Debug.LogError($"[CombatAssetLoader] 未预热的 Addressable 引用: {reference.AssetGUID}");
+            Debug.LogError($"[PrefabAssetLoader] 未预热的 Addressable 引用: {reference.AssetGUID}");
             return null;
         }
 
@@ -58,17 +58,17 @@ namespace DarkFlare
 
         async UniTask LoadOneAsync(AssetReferenceGameObject reference, CancellationToken token)
         {
-            Debug.Log($"[CombatAssetLoader] 开始加载: {reference.AssetGUID}");
+            Debug.Log($"[PrefabAssetLoader] 开始加载: {reference.AssetGUID}");
             AsyncOperationHandle<GameObject> handle = reference.LoadAssetAsync();
             await UniTask.WaitUntil(() => handle.IsDone, cancellationToken: token);
 
             if (handle.Status != AsyncOperationStatus.Succeeded)
             {
-                Debug.LogError($"[CombatAssetLoader] 加载失败: {reference.AssetGUID}");
+                Debug.LogError($"[PrefabAssetLoader] 加载失败: {reference.AssetGUID}");
                 return;
             }
 
-            Debug.Log($"[CombatAssetLoader] 加载完成: {reference.AssetGUID} -> {handle.Result.name}");
+            Debug.Log($"[PrefabAssetLoader] 加载完成: {reference.AssetGUID} -> {handle.Result.name}");
             _handles[reference.AssetGUID] = handle;
             _prefabCache[reference.AssetGUID] = handle.Result;
         }
