@@ -36,7 +36,13 @@ namespace DarkFlare
                 return false;
             }
 
-            Debug.Log($"[LootSystem] {collector.ActorId} 拾取了 {DescribeItem(pickup.Item)}");
+            if (!this.GetModel<InventoryModel>().TryAddItem(pickup.Item))
+            {
+                Debug.Log($"[LootSystem] 背包已满，无法拾取 {DescribeItem(pickup.Item)}");
+                return false;
+            }
+
+            Debug.Log($"[LootSystem] {collector.ActorId} 拾取了 {DescribeItem(pickup.Item)}，放入背包");
             return true;
         }
 

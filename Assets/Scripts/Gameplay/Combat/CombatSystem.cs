@@ -83,6 +83,13 @@ namespace DarkFlare
             }
 
             this.GetModel<EquipmentModel>().SetWeapon(actor, weapon);
+
+            if (weapon != null)
+            {
+                // 若武器来自背包，穿戴时从背包移出，保持"已穿戴的物品不占背包格子"不变量
+                this.GetModel<InventoryModel>().RemoveItem(weapon);
+            }
+
             actor.SetModifiers(weapon != null ? weapon.CollectModifiers() : EmptyModifiers);
             Debug.Log($"[CombatSystem] {actor.ActorId} 装备了 {(weapon != null ? weapon.BaseDefinition.DisplayName : "无")}");
         }

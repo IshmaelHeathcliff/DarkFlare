@@ -56,12 +56,8 @@ namespace DarkFlare
 
             if (!collected)
             {
+                // 背包已满，拾取物留在地上等待清理背包后再来
                 return;
-            }
-
-            if (_item.BaseDefinition != null && _item.BaseDefinition.ItemType == ItemType.Weapon)
-            {
-                this.SendCommand(new EquipItemCommand(actor, _item));
             }
 
             Destroy(gameObject);
