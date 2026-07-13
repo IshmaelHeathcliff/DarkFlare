@@ -54,10 +54,17 @@ namespace DarkFlare
 
             bool collected = this.SendCommand(new PickupLootCommand(this, actor));
 
-            if (collected)
+            if (!collected)
             {
-                Destroy(gameObject);
+                return;
             }
+
+            if (_item.BaseDefinition != null && _item.BaseDefinition.ItemType == ItemType.Weapon)
+            {
+                this.SendCommand(new EquipItemCommand(actor, _item));
+            }
+
+            Destroy(gameObject);
         }
 
         void EnsureComponents()

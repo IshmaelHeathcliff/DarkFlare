@@ -88,6 +88,16 @@ namespace DarkFlare
             return false;
         }
 
+        public void SetModifiers(IEnumerable<ModifierInstance> modifiers)
+        {
+            _modifiers.Clear();
+
+            if (modifiers != null)
+            {
+                _modifiers.AddRange(modifiers);
+            }
+        }
+
         public void Revive(Vector3 position)
         {
             CacheComponents();

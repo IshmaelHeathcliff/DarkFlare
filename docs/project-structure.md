@@ -134,7 +134,7 @@ Addressables 的配置目录，包含资源组、模板和构建器配置。后�
 当前代码已覆盖以下基础层：
 
 - `QFramework.cs`
-- `GameArchitecture.cs`（已注册 `CombatModel`/`CombatSystem`/`SpawnSystem`/`LootSystem`/`PrefabAssetLoader`）
+- `GameArchitecture.cs`（已注册 `CombatModel`/`EquipmentModel`/`CombatSystem`/`SpawnSystem`/`LootSystem`/`PrefabAssetLoader`）
 - `Data/Tags/TagDefinition.cs`
 - `Data/Stats/StatDefinition.cs`
 - `Data/Actors/CharacterDefinition.cs`
@@ -145,14 +145,14 @@ Addressables 的配置目录，包含资源组、模板和构建器配置。后�
 - `Data/Monsters/MonsterDefinition.cs`
 - `Data/Monsters/MonsterSpawnDefinition.cs`
 - `Editor/ConfigCenterWindow.cs`
-- `Gameplay/Combat`：`CombatModel.cs`、`CombatSystem.cs`、`SpawnSystem.cs`、`LootSystem.cs`、`PrefabAssetLoader.cs`、`CombatEvents.cs`、`Commands/`（`RegisterActorCommand`/`UnregisterActorCommand`/`ApplyDamageCommand`/`ReviveActorCommand`/`SpawnPlayerCommand`/`SpawnMonsterCommand`/`FireProjectileCommand`/`PickupLootCommand`）、`Queries/`（`GetClosestActorQuery`），以及原有的 `DamageCalculator`/`StatBlock`/`TagSet` 等纯逻辑
+- `Gameplay/Combat`：`CombatModel.cs`、`CombatSystem.cs`、`SpawnSystem.cs`、`LootSystem.cs`、`EquipmentModel.cs`、`PrefabAssetLoader.cs`、`CombatEvents.cs`、`Commands/`（`RegisterActorCommand`/`UnregisterActorCommand`/`ApplyDamageCommand`/`ReviveActorCommand`/`SpawnPlayerCommand`/`SpawnMonsterCommand`/`FireProjectileCommand`/`PickupLootCommand`/`EquipItemCommand`）、`Queries/`（`GetClosestActorQuery`），以及原有的 `DamageCalculator`/`StatBlock`/`TagSet` 等纯逻辑
 - `Gameplay/Items`：`ItemInstance.cs`、`ItemGenerationOptions.cs`、`ItemGenerator.cs`（物品随机生成的纯逻辑，由 `LootSystem` 调用）
 - `Gameplay/Actors`：`CombatActor.cs`、`PlayerController.cs`、`MonsterController.cs`、`ActorTeam.cs`
 - `Gameplay/Skills`：`ProjectileController.cs`
 - `Gameplay/Spawning`：`MonsterSpawner.cs`
 - `Gameplay/Loot`：`LootPickupController.cs`
 - `Gameplay/Bootstrap`：`CombatPrototypeBootstrap.cs`、`CameraFollowTarget.cs`
-- `Test/Editor/MonsterSpawnDefinitionTests.cs`、`LootTableDefinitionTests.cs`：EditMode 测试，分别覆盖 `MonsterSpawnDefinition.PickMonster`、`LootTableDefinition.PickItem` 权重逻辑（无独立 asmdef，直接编译进隐式的 `Assembly-CSharp-Editor`，因此能同时引用运行时代码和 NUnit）
+- `Test/Editor/MonsterSpawnDefinitionTests.cs`、`LootTableDefinitionTests.cs`、`DamageCalculatorTests.cs`：EditMode 测试，分别覆盖 `MonsterSpawnDefinition.PickMonster`、`LootTableDefinition.PickItem` 权重逻辑，以及带 Increase 词条的伤害结算（无独立 asmdef，直接编译进隐式的 `Assembly-CSharp-Editor`，因此能同时引用运行时代码和 NUnit）
 
 `UI`、`Utilities` 目前主要是占位，为后续模块扩展预留。
 

@@ -22,7 +22,7 @@ MonoBehaviour:
   _blockedItemTags: []
   _modifiers:
   - _stat: {fileID: 11400000, guid: 82e204183d947d249b17fb3c9ade3530, type: 2}
-    _operation: 0
+    _operation: 1
     _scope: 1
     _valueRange: {x: 10, y: 30}
     _fromDamageType: 0

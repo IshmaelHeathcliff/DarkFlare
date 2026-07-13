@@ -52,6 +52,11 @@ namespace DarkFlare
             DamageResult result = DamageCalculator.Calculate(context);
             bool justDied = defender.ReceiveDamage(result);
 
+            if (result.IsHit)
+            {
+                Debug.Log($"[CombatSystem] {context.AttackerId} 对 {defender.ActorId} 造成 {result.TotalDamage:0.#} 点伤害");
+            }
+
             this.SendEvent(new ActorDamagedEvent { Actor = defender, Result = result });
 
             if (justDied)
@@ -68,6 +73,18 @@ namespace DarkFlare
             actor.Revive(position);
             Debug.Log($"[CombatSystem] {actor.ActorId} 复活");
             this.SendEvent(new ActorRevivedEvent { Actor = actor });
+        }
+
+        public void EquipWeapon(CombatActor actor, ItemInstance weapon)
+        {
+            if (actor == null)
+            {
+                return;
+            }
+
+            this.GetModel<EquipmentModel>().SetWeapon(actor, weapon);
+            actor.SetModifiers(weapon != null ? weapon.CollectModifiers() : EmptyModifiers);
+            Debug.Log($"[CombatSystem] {actor.ActorId} 装备了 {(weapon != null ? weapon.BaseDefinition.DisplayName : "无")}");
         }
     }
 }

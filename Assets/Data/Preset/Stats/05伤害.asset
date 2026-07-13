@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3e87c3f4a5cdce4497984cafdc034de, type: 3}
   m_Name: "05\u4F24\u5BB3"
   m_EditorClassIdentifier: Assembly-CSharp::DarkFlare.StatDefinition
-  _id: Damage
+  _id: damage
   _displayName: "\u4F24\u5BB3"
   _category: 1
   _defaultValue: 0
