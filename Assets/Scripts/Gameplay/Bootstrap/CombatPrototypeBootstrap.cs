@@ -23,6 +23,9 @@ namespace DarkFlare
         TraderDefinition _trader;
 
         [SerializeField]
+        CraftingDefinition _craftingDefinition;
+
+        [SerializeField]
         [Min(0)]
         int _startingGold = 100;
 
@@ -58,6 +61,7 @@ namespace DarkFlare
 
             this.GetSystem<TradingSystem>().SetupMerchant(_trader);
             this.GetSystem<TradingSystem>().GrantGold(_startingGold);
+            this.GetSystem<CraftingSystem>().Setup(_craftingDefinition);
 
             if (player != null)
             {

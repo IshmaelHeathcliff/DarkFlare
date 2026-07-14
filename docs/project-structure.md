@@ -40,6 +40,7 @@ Assets/
     Data/
       Actors/
       Affixes/
+      Crafting/
       Items/
       Loot/
       Monsters/
@@ -55,6 +56,7 @@ Assets/
       Combat/
         Commands/
         Queries/
+      Crafting/
       Inventory/
       Items/
       Loot/
@@ -137,7 +139,7 @@ Addressables 的配置目录，包含资源组、模板和构建器配置。后�
 当前代码已覆盖以下基础层：
 
 - `QFramework.cs`
-- `GameArchitecture.cs`（已注册 `CombatModel`/`EquipmentModel`/`InventoryModel`/`EconomyModel`/`CombatSystem`/`SpawnSystem`/`LootSystem`/`TradingSystem`/`PrefabAssetLoader`）
+- `GameArchitecture.cs`（已注册 `CombatModel`/`EquipmentModel`/`InventoryModel`/`EconomyModel`/`CombatSystem`/`SpawnSystem`/`LootSystem`/`TradingSystem`/`CraftingSystem`/`PrefabAssetLoader`）
 - `Data/Tags/TagDefinition.cs`
 - `Data/Stats/StatDefinition.cs`
 - `Data/Actors/CharacterDefinition.cs`
@@ -148,17 +150,19 @@ Addressables 的配置目录，包含资源组、模板和构建器配置。后�
 - `Data/Monsters/MonsterDefinition.cs`
 - `Data/Monsters/MonsterSpawnDefinition.cs`
 - `Data/Trading/TraderDefinition.cs`
+- `Data/Crafting/CraftingDefinition.cs`
 - `Editor/ConfigCenterWindow.cs`
-- `Gameplay/Combat`：`CombatModel.cs`、`CombatSystem.cs`、`SpawnSystem.cs`、`LootSystem.cs`、`EquipmentModel.cs`、`PrefabAssetLoader.cs`、`CombatEvents.cs`、`Commands/`（`RegisterActorCommand`/`UnregisterActorCommand`/`ApplyDamageCommand`/`ReviveActorCommand`/`SpawnPlayerCommand`/`SpawnMonsterCommand`/`FireProjectileCommand`/`PickupLootCommand`/`EquipItemCommand`/`BuyItemCommand`/`SellItemCommand`）、`Queries/`（`GetClosestActorQuery`/`GetItemPriceQuery`），以及原有的 `DamageCalculator`/`StatBlock`/`TagSet` 等纯逻辑。注：Command/Query 目前统一放在 `Combat/Commands`、`Combat/Queries` 下，含交易等非战斗动作
+- `Gameplay/Combat`：`CombatModel.cs`、`CombatSystem.cs`、`SpawnSystem.cs`、`LootSystem.cs`、`EquipmentModel.cs`、`PrefabAssetLoader.cs`、`CombatEvents.cs`、`Commands/`（`RegisterActorCommand`/`UnregisterActorCommand`/`ApplyDamageCommand`/`ReviveActorCommand`/`SpawnPlayerCommand`/`SpawnMonsterCommand`/`FireProjectileCommand`/`PickupLootCommand`/`EquipItemCommand`/`BuyItemCommand`/`SellItemCommand`/`CraftItemCommand`）、`Queries/`（`GetClosestActorQuery`/`GetItemPriceQuery`/`GetCraftingCostQuery`），以及原有的 `DamageCalculator`/`StatBlock`/`TagSet` 等纯逻辑。注：Command/Query 目前统一放在 `Combat/Commands`、`Combat/Queries` 下，含交易、打造等非战斗动作
 - `Gameplay/Items`：`ItemInstance.cs`、`ItemGenerationOptions.cs`、`ItemGenerator.cs`（物品随机生成的纯逻辑，由 `LootSystem` 调用）
 - `Gameplay/Inventory`：`InventoryGrid.cs`（纯逻辑二维格子占用）、`InventoryModel.cs`（玩家背包 + 金币，持有单个 `InventoryGrid`）
 - `Gameplay/Trading`：`ItemValueCalculator.cs`（纯逻辑价值/买卖价计算）、`EconomyModel.cs`（商人库存 + 买卖倍率）、`TradingSystem.cs`（买卖/价格/商人 seeding）
+- `Gameplay/Crafting`：`CraftingOperations.cs`（纯逻辑四种词条操作）、`CraftingSystem.cs`（打造金币成本 + seeding，无 Model）
 - `Gameplay/Actors`：`CombatActor.cs`、`PlayerController.cs`、`MonsterController.cs`、`ActorTeam.cs`
 - `Gameplay/Skills`：`ProjectileController.cs`
 - `Gameplay/Spawning`：`MonsterSpawner.cs`
 - `Gameplay/Loot`：`LootPickupController.cs`
 - `Gameplay/Bootstrap`：`CombatPrototypeBootstrap.cs`、`CameraFollowTarget.cs`
-- `Test/Editor/MonsterSpawnDefinitionTests.cs`、`LootTableDefinitionTests.cs`、`DamageCalculatorTests.cs`、`InventoryGridTests.cs`、`ItemValueCalculatorTests.cs`：EditMode 测试，分别覆盖 `MonsterSpawnDefinition.PickMonster`、`LootTableDefinition.PickItem` 权重逻辑、带 Increase 词条的伤害结算、背包格子占用、交易价值计算（无独立 asmdef，直接编译进隐式的 `Assembly-CSharp-Editor`，因此能同时引用运行时代码和 NUnit）
+- `Test/Editor/MonsterSpawnDefinitionTests.cs`、`LootTableDefinitionTests.cs`、`DamageCalculatorTests.cs`、`InventoryGridTests.cs`、`ItemValueCalculatorTests.cs`、`CraftingOperationsTests.cs`：EditMode 测试，分别覆盖 `MonsterSpawnDefinition.PickMonster`、`LootTableDefinition.PickItem` 权重逻辑、带 Increase 词条的伤害结算、背包格子占用、交易价值计算、打造词条操作（无独立 asmdef，直接编译进隐式的 `Assembly-CSharp-Editor`，因此能同时引用运行时代码和 NUnit）
 
 `UI`、`Utilities` 目前主要是占位，为后续模块扩展预留。
 

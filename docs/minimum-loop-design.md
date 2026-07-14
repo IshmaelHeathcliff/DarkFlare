@@ -168,9 +168,10 @@ Assets/Data/Preset/
 - 装备：`EquipmentModel`（按 `CombatActor` 存放已装备武器，为后续给怪物/NPC 装备预留）、`CombatSystem.EquipWeapon`（写入 `EquipmentModel`、从 `InventoryModel` 移出该物品、并调用 `CombatActor.SetModifiers(item.CollectModifiers())`，让 `DamageCalculator` 里的 Increase/More/Conversion 等阶段真正吃到装备词条）。v1 只做武器单槽位，卸装备和多槽位留给后续。修正了两处会让装备验证不出效果的历史数据问题：`Assets/Data/Preset/Stats/05伤害.asset` 的 `_id` 从 `Damage` 改成 `damage`（与 `StatIds.Damage` 大小写对齐），`Assets/Data/Preset/Afflixes/000基础伤害增加.asset` 的运算方式从 `Flat` 改成 `Increase`（`Flat` 目前只有类型专属伤害属性会被 `DamageCalculator.GetFlatDamage` 读取，通用 `damage` 属性走不到）。
 - 背包：`InventoryGrid`（纯逻辑二维格子，`TryAdd` 按 `ItemBaseDefinition.GridSize` 行优先找空矩形占用、`Remove` 释放格子，放不下返回 false）、`InventoryModel`（持有单个玩家背包 grid，默认 10x6，暴露 `TryAddItem`/`RemoveItem`/`Grid`，以及玩家金币 `Gold`/`AddGold`/`TrySpendGold`）。拾取即入包，背包满则拾取物留在地上——体现"有限空间导致取舍"。当前只做格子占用，堆叠（无可堆叠物品）和重量限制（格子已是空间约束）暂缓。从背包穿戴武器时物品会移出背包（`EquipWeapon` 内处理）；这一步不再自动穿戴，从背包选物穿戴的交互等背包 UI。
 - 交易：`ItemValueCalculator`（纯逻辑，价值 = 基础价 × 稀有度倍率 × (1 + 0.25 × 词条数)，买价 ceil(value×买倍率)、卖价 floor(value×卖倍率)）、`EconomyModel`（单个商人的运行时库存 + 买卖倍率）、`TradingSystem`（`BuyItem`/`SellItem`/价格查询/`SetupMerchant`/`GrantGold`）。卖出把物品从背包移除换金币；买入严格"先查金币和空间、再扣钱、再从库存移除"，任一前置不满足直接返回 false，保证不会扣了钱没进包。`TraderDefinition`（商人配置：库存条目 + 买卖倍率）由 `CombatPrototypeBootstrap` 在启动时 `SetupMerchant`，并发放初始金币。金币是 `InventoryModel.Gold` 一个整数、不占背包格子。价格公式暂不含词条 tier / 材料类型（概念未建立），不发交易事件（无监听者），不做多商人、场景商人实体和商店 UI。`BuyItemCommand`/`SellItemCommand`/`GetItemPriceQuery` 供后续 UI 使用。
+- 打造：`ItemInstance` 补齐 `RemoveAffix`/`ClearAffixes`（此前只能加词条）。`CraftingOperations`（纯逻辑）实现四种操作——`AddRandomAffix`（从词条池按权重加一条该物品还能加的词条）、`RerollAllAffixes`（按原前后缀数量清空重掷）、`RemoveAndRerollAffix`（移除指定词条再加一条随机的）、`UpgradeAffix`（重掷指定词条数值，按词条内 `ModifierInstance.Value` 之和取高者，只升不降）。`CraftingSystem`（无 Model——打造无运行时状态，仿 `LootSystem` 持有配置引用）负责 `Setup`/`GetCost`/`Craft`：先查金币够、再调纯逻辑操作、操作成功才扣金币，各操作返回 false 时都不改物品，保证"扣了钱没变化"不发生。`CraftingDefinition`（词条池 + 四操作成本）由 Bootstrap 启动时 `Setup`。成本只用金币（材料物品/配方尚不存在，故不建 `CraftingModel`）。词条池目前仅一条词条，机制可验证、内容后补。`CraftItemCommand`（含 `CraftOperation` 枚举 + item + 可选目标词条）/`GetCraftingCostQuery` 供后续 UI 使用。词条变化后 `ItemValueCalculator.GetValue` 随之变化，打造与交易价值联动。
 - Prefab：`Assets/Prefabs/Combat/Player.prefab`、`Monster_Basic.prefab`、`Projectile_Default.prefab`、`Assets/Prefabs/Loot/LootPickup.prefab`，均已标记为 Addressable。占位视觉使用共享的方块贴图 `Assets/Art/Textures/Prototype/PrototypeSquare.png`，按 `SpriteRenderer.Color` 区分（玩家/怪物/投射物用固定颜色，掉落物按稀有度着色）。
-- 数据资源：`Assets/Data/Preset/Actors/玩家.asset`、`Skills/基础投射物技能.asset`、`Monsters/基础怪物.asset`、`Monsters/基础刷怪表.asset`、`Loot/基础怪物掉落表.asset`（引用已有的 `Items/001大剑.asset` 和 `Afflixes/000基础伤害增加.asset`）、`Traders/基础商人.asset`，已在 `Main.unity` 场景中挂到 `CombatPrototypeBootstrap`/`MonsterSpawner`。`001大剑.asset` 的 `_baseValue` 从 0 修正为 10，否则交易卖价恒为 0 验证不出效果。
-- 测试：`Assets/Scripts/Test/Editor/MonsterSpawnDefinitionTests.cs`、`LootTableDefinitionTests.cs`、`DamageCalculatorTests.cs`、`InventoryGridTests.cs`、`ItemValueCalculatorTests.cs` 分别覆盖 `MonsterSpawnDefinition.PickMonster`、`LootTableDefinition.PickItem` 的权重选取逻辑、"带 Increase 词条的伤害结算确实比没有词条时更高"、背包格子占用（放入/满拒绝/移除后重放/不重叠），以及交易价值计算（稀有度/词条数越高价值越高、卖价低于买价、零价）。
+- 数据资源：`Assets/Data/Preset/Actors/玩家.asset`、`Skills/基础投射物技能.asset`、`Monsters/基础怪物.asset`、`Monsters/基础刷怪表.asset`、`Loot/基础怪物掉落表.asset`（引用已有的 `Items/001大剑.asset` 和 `Afflixes/000基础伤害增加.asset`）、`Traders/基础商人.asset`、`Crafting/基础打造配置.asset`（词条池引用 `Afflixes/000基础伤害增加.asset`），已在 `Main.unity` 场景中挂到 `CombatPrototypeBootstrap`/`MonsterSpawner`。`001大剑.asset` 的 `_baseValue` 从 0 修正为 10，否则交易卖价恒为 0 验证不出效果。
+- 测试：`Assets/Scripts/Test/Editor/MonsterSpawnDefinitionTests.cs`、`LootTableDefinitionTests.cs`、`DamageCalculatorTests.cs`、`InventoryGridTests.cs`、`ItemValueCalculatorTests.cs`、`CraftingOperationsTests.cs` 分别覆盖 `MonsterSpawnDefinition.PickMonster`、`LootTableDefinition.PickItem` 的权重选取逻辑、"带 Increase 词条的伤害结算确实比没有词条时更高"、背包格子占用（放入/满拒绝/移除后重放/不重叠）、交易价值计算（稀有度/词条数越高价值越高、卖价低于买价、零价），以及打造操作（加/满拒绝/重随/移除重随/提升只升不降）。
 
 ## 暂缓内容
 
@@ -178,7 +179,7 @@ Assets/Data/Preset/
 - 复杂异常状态
 - 召唤物
 - 正式美术资源（当前 Prefab 用占位方块贴图代替最终美术）
-- 打造闭环（掉落生成、装备词条生效、背包格子占用、商人买卖已接入；从背包选物穿戴/整理/交易需要背包与商店 UI，堆叠与重量限制暂缓）
+- 全流程 UI（掉落生成、装备词条生效、背包格子占用、商人买卖、基础打造均已接入后端；从背包/商店/打造台选物操作的可视化交互，以及堆叠与重量限制暂缓）
 - 多场景撤离
 - 联机同步
 - 完整经济模拟

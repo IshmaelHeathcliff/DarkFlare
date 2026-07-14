@@ -90,6 +90,22 @@ namespace DarkFlare
             return false;
         }
 
+        public bool RemoveAffix(AffixInstance affix)
+        {
+            if (affix == null)
+            {
+                return false;
+            }
+
+            return _prefixes.Remove(affix) || _suffixes.Remove(affix);
+        }
+
+        public void ClearAffixes()
+        {
+            _prefixes.Clear();
+            _suffixes.Clear();
+        }
+
         public List<ModifierInstance> CollectModifiers()
         {
             List<ModifierInstance> modifiers = new List<ModifierInstance>(_implicitModifiers);

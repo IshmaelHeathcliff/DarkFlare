@@ -564,6 +564,7 @@ MonoBehaviour:
     m_SubObjectGUID:
     m_EditorAssetChanged: 0
   _trader: {fileID: 11400000, guid: a0b0cd4d2de6a6642a0fa974aef694f6, type: 2}
+  _craftingDefinition: {fileID: 11400000, guid: 05997544ccd5bfd41b4c3526a440d30c, type: 2}
   _startingGold: 100
   _playerSpawnPoint: {fileID: 0}
   _monsterSpawner: {fileID: 800447565}
