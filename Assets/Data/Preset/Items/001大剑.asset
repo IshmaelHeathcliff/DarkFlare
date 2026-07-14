@@ -16,7 +16,7 @@ MonoBehaviour:
   _displayName: "\u5927\u5251"
   _itemType: 0
   _defaultRarity: 0
-  _baseValue: 0
+  _baseValue: 10
   _maxPrefixCount: 3
   _maxSuffixCount: 3
   _gridSize: {x: 2, y: 3}

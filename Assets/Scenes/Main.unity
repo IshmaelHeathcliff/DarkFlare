@@ -563,6 +563,8 @@ MonoBehaviour:
     m_SubObjectType:
     m_SubObjectGUID:
     m_EditorAssetChanged: 0
+  _trader: {fileID: 11400000, guid: a0b0cd4d2de6a6642a0fa974aef694f6, type: 2}
+  _startingGold: 100
   _playerSpawnPoint: {fileID: 0}
   _monsterSpawner: {fileID: 800447565}
 --- !u!4 &1630975849

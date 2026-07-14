@@ -20,6 +20,13 @@ namespace DarkFlare
         AssetReferenceGameObject _lootPickupPrefab;
 
         [SerializeField]
+        TraderDefinition _trader;
+
+        [SerializeField]
+        [Min(0)]
+        int _startingGold = 100;
+
+        [SerializeField]
         Transform _playerSpawnPoint;
 
         [SerializeField]
@@ -48,6 +55,9 @@ namespace DarkFlare
                 _monsterSpawner.gameObject.SetActive(true);
                 Debug.Log("[CombatPrototypeBootstrap] 已启用刷怪器");
             }
+
+            this.GetSystem<TradingSystem>().SetupMerchant(_trader);
+            this.GetSystem<TradingSystem>().GrantGold(_startingGold);
 
             if (player != null)
             {

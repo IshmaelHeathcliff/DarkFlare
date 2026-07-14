@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fcef7d33385652747a79e4c145132477, type: 3}
+  m_Name: "\u57FA\u7840\u5546\u4EBA"
+  m_EditorClassIdentifier: Assembly-CSharp::DarkFlare.TraderDefinition
+  _id: basic_trader
+  _displayName: 基础商人
+  _buyMultiplier: 1.5
+  _sellMultiplier: 0.4
+  _stock:
+  - _item: {fileID: 11400000, guid: 97909e3c17a4418428112ff92c410eb5, type: 2}
+    _rarity: 0
+    _itemLevel: 1
+    _count: 2
+  - _item: {fileID: 11400000, guid: 97909e3c17a4418428112ff92c410eb5, type: 2}
+    _rarity: 1
+    _itemLevel: 1
+    _count: 1

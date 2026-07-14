@@ -8,6 +8,8 @@ namespace DarkFlare
 
         public InventoryGrid Grid { get; private set; }
 
+        public int Gold { get; private set; }
+
         protected override void OnInit()
         {
             Grid = new InventoryGrid(DefaultWidth, DefaultHeight);
@@ -21,6 +23,25 @@ namespace DarkFlare
         public bool RemoveItem(ItemInstance item)
         {
             return Grid.Remove(item);
+        }
+
+        public void AddGold(int amount)
+        {
+            if (amount > 0)
+            {
+                Gold += amount;
+            }
+        }
+
+        public bool TrySpendGold(int amount)
+        {
+            if (amount < 0 || Gold < amount)
+            {
+                return false;
+            }
+
+            Gold -= amount;
+            return true;
         }
     }
 }
