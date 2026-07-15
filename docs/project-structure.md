@@ -166,13 +166,17 @@ Addressables 的配置目录，包含资源组、模板和构建器配置。后�
 
 `UI`、`Utilities` 目前主要是占位，为后续模块扩展预留。
 
+**规划中（第 8 步"串成完整循环"，设计见 [`input-ui-design.md`](input-ui-design.md)）**：`Gameplay/Input`（`GameInput` 封装 `InputSystem_Actions` 生成的包装类，替换 `PlayerController` 直接轮询，含 `Player`/`UI` action map 切换）、`Gameplay/UI`（UIToolkit 面板脚本：HUD、背包、商店、打造，均实现 `IController` 接入 QFramework）。UXML/USS 约定放 `Assets/UI/`。这些目录尚未创建，待各子步落地后回填。
+
 ### `Assets/Settings`
 
 项目资源级设置目录。当前可见内容主要用于：
 
-- 输入系统配置
+- 输入系统配置（`InputSystem_Actions.inputactions`，含 `Keyboard&Mouse` 与 `Gamepad` 两套控制方案；第 8 步起改为唯一输入源并生成 C# 包装类）
 - URP 配置
 - 场景相关设置资源
+
+规划中：UIToolkit 的 `PanelSettings` 与主题样式资源将放此处。
 
 ### `Assets/TextMesh Pro`
 

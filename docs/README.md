@@ -5,6 +5,7 @@
 - [项目概览](./project.md)
 - [目录结构](./project-structure.md)
 - [最小循环设计](./minimum-loop-design.md)
+- [输入系统与 UI 设计](./input-ui-design.md)
 - [伤害系统与词条系统设计](./damage-affix-system.md)
 - [配置中心](./config-center.md)
 
