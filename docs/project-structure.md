@@ -36,37 +36,46 @@ Assets/
   Scenes/
     Main.unity
   Scripts/
-    Core/
-    Data/
-      Actors/
-      Affixes/
-      Crafting/
-      Items/
-      Loot/
-      Monsters/
-      Skills/
-      Stats/
-      Tags/
-      Trading/
-    Editor/
+    Runtime/                          # 程序集 DarkFlare.Runtime
+      DarkFlare.Runtime.asmdef
+      GameArchitecture.cs
+      Core/                           # 程序集 DarkFlare.Core（仅 QFramework）
+        DarkFlare.Core.asmdef
+        QFramework.cs
+      Data/
+        Actors/
+        Affixes/
+        Crafting/
+        Items/
+        Loot/
+        Monsters/
+        Skills/
+        Stats/
+        Tags/
+        Trading/
+      Gameplay/
+        Actors/
+        Bootstrap/
+        Combat/
+          Commands/
+          Queries/
+        Crafting/
+        Inventory/
+        Items/
+        Loot/
+        Skills/
+        Spawning/
+        Trading/
+      UI/
+      Utilities/
+    Editor/                           # 程序集 DarkFlare.Editor（仅 Editor 平台）
+      DarkFlare.Editor.asmdef
       ConfigCenterWindow.cs
-    Gameplay/
-      Actors/
-      Bootstrap/
-      Combat/
-        Commands/
-        Queries/
-      Crafting/
-      Inventory/
-      Items/
-      Loot/
-      Skills/
-      Spawning/
-      Trading/
-    Test/
-      Editor/
-    UI/
-    Utilities/
+    Tests/
+      EditMode/                       # 程序集 DarkFlare.Tests.EditMode
+        DarkFlare.Tests.EditMode.asmdef
+      PlayMode/                       # 程序集 DarkFlare.Tests.PlayMode（占位）
+        DarkFlare.Tests.PlayMode.asmdef
   Settings/
     Scenes/
   TextMesh Pro/
@@ -126,20 +135,32 @@ Addressables 的配置目录，包含资源组、模板和构建器配置。后�
 
 ### `Assets/Scripts`
 
-代码目录已按职责分层：
+代码目录已按 **程序集（asmdef）** 分层，共四个程序集：
 
-- `Core`：基础架构与全局入口
+| 程序集 | 目录 | 平台 | 依赖 |
+| --- | --- | --- | --- |
+| `DarkFlare.Core` | `Runtime/Core/` | 全部 | 无（仅 `QFramework.cs`，稳定框架层，隔离后迭代玩法不再重编框架） |
+| `DarkFlare.Runtime` | `Runtime/` | 全部 | `DarkFlare.Core`、`UniTask`、`Unity.InputSystem`、`Unity.Addressables`、`Unity.ResourceManager` |
+| `DarkFlare.Editor` | `Editor/` | 仅 Editor | `DarkFlare.Runtime`、`DarkFlare.Core` |
+| `DarkFlare.Tests.EditMode` | `Tests/EditMode/` | 仅 Editor | `DarkFlare.Runtime`、`DarkFlare.Core`、`UnityEngine.TestRunner`、`UnityEditor.TestRunner`、`nunit.framework.dll` |
+| `DarkFlare.Tests.PlayMode` | `Tests/PlayMode/` | 全部 | 同 EditMode（当前为占位，暂无测试） |
+
+依赖方向单向向上、无环：`Core ← Runtime ← {Editor, Tests}`。`GameArchitecture.cs` 作为组合根依赖全部玩法模块，因此位于 `Runtime/` 根而非 `Core/`。测试程序集带 `defineConstraints: ["UNITY_INCLUDE_TESTS"]`，仅在测试运行时参与编译，不进入 Player 包。Odin 等预编译 DLL 默认对所有程序集可见，无需在 asmdef 中显式引用。
+
+`Runtime/` 下的子目录职责：
+
+- `Core`：基础架构与全局入口（独立成 `DarkFlare.Core` 程序集）
 - `Data`：数据定义与配置类型
-- `Editor`：编辑器扩展
 - `Gameplay`：玩法逻辑
-- `Test`：测试代码
-- `UI`：界面逻辑
-- `Utilities`：通用工具
+- `UI`：界面逻辑（占位）
+- `Utilities`：通用工具（占位）
+
+> 下列文件清单中，`Core/`、`Data/`、`Gameplay/`、`UI/`、`Utilities/` 路径均相对 `Scripts/Runtime/`；`Editor/` 相对 `Scripts/`；测试相对 `Scripts/Tests/`。
 
 当前代码已覆盖以下基础层：
 
-- `QFramework.cs`
-- `GameArchitecture.cs`（已注册 `CombatModel`/`EquipmentModel`/`InventoryModel`/`EconomyModel`/`CombatSystem`/`SpawnSystem`/`LootSystem`/`TradingSystem`/`CraftingSystem`/`PrefabAssetLoader`）
+- `Core/QFramework.cs`（`DarkFlare.Core` 程序集）
+- `GameArchitecture.cs`（位于 `Runtime/` 根，组合根；已注册 `CombatModel`/`EquipmentModel`/`InventoryModel`/`EconomyModel`/`CombatSystem`/`SpawnSystem`/`LootSystem`/`TradingSystem`/`CraftingSystem`/`PrefabAssetLoader`）
 - `Data/Tags/TagDefinition.cs`
 - `Data/Stats/StatDefinition.cs`
 - `Data/Actors/CharacterDefinition.cs`
@@ -162,7 +183,7 @@ Addressables 的配置目录，包含资源组、模板和构建器配置。后�
 - `Gameplay/Spawning`：`MonsterSpawner.cs`
 - `Gameplay/Loot`：`LootPickupController.cs`
 - `Gameplay/Bootstrap`：`CombatPrototypeBootstrap.cs`、`CameraFollowTarget.cs`
-- `Test/Editor/MonsterSpawnDefinitionTests.cs`、`LootTableDefinitionTests.cs`、`DamageCalculatorTests.cs`、`InventoryGridTests.cs`、`ItemValueCalculatorTests.cs`、`CraftingOperationsTests.cs`：EditMode 测试，分别覆盖 `MonsterSpawnDefinition.PickMonster`、`LootTableDefinition.PickItem` 权重逻辑、带 Increase 词条的伤害结算、背包格子占用、交易价值计算、打造词条操作（无独立 asmdef，直接编译进隐式的 `Assembly-CSharp-Editor`，因此能同时引用运行时代码和 NUnit）
+- `Tests/EditMode/MonsterSpawnDefinitionTests.cs`、`LootTableDefinitionTests.cs`、`DamageCalculatorTests.cs`、`InventoryGridTests.cs`、`ItemValueCalculatorTests.cs`、`CraftingOperationsTests.cs`：EditMode 测试，分别覆盖 `MonsterSpawnDefinition.PickMonster`、`LootTableDefinition.PickItem` 权重逻辑、带 Increase 词条的伤害结算、背包格子占用、交易价值计算、打造词条操作。归属 `DarkFlare.Tests.EditMode` 程序集，通过显式引用 `DarkFlare.Runtime`/`DarkFlare.Core` 使用运行时代码，并引用 `nunit.framework.dll` 与 TestRunner
 
 `UI`、`Utilities` 目前主要是占位，为后续模块扩展预留。
 
@@ -213,6 +234,7 @@ Unity 工程级设置目录，包括版本、构建场景、图形设置等。
 当前结构已经具备继续开发的基础条件，特点是：
 
 - 资源目录、代码目录、设置目录已经先分层
+- 代码已按程序集（asmdef）拆分为 `Core`/`Runtime`/`Editor`/`Tests` 四层，编译与测试边界清晰
 - 插件和核心依赖已经接入
 - 代码架构入口已经就位
 - 业务模块、配置定义和具体内容仍基本为空

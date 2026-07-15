@@ -1,0 +1,20 @@
+{
+    "name": "DarkFlare.Runtime",
+    "rootNamespace": "DarkFlare",
+    "references": [
+        "DarkFlare.Core",
+        "UniTask",
+        "Unity.InputSystem",
+        "Unity.Addressables",
+        "Unity.ResourceManager"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
