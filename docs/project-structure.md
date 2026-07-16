@@ -142,7 +142,7 @@ Addressables 的配置目录，包含资源组、模板和构建器配置。后�
 | `DarkFlare.Core` | `Runtime/Core/` | 全部 | 无（仅 `QFramework.cs`，稳定框架层，隔离后迭代玩法不再重编框架） |
 | `DarkFlare.Runtime` | `Runtime/` | 全部 | `DarkFlare.Core`、`UniTask`、`Unity.InputSystem`、`Unity.Addressables`、`Unity.ResourceManager` |
 | `DarkFlare.Editor` | `Editor/` | 仅 Editor | `DarkFlare.Runtime`、`DarkFlare.Core` |
-| `DarkFlare.Tests.EditMode` | `Tests/EditMode/` | 仅 Editor | `DarkFlare.Runtime`、`DarkFlare.Core`、`UnityEngine.TestRunner`、`UnityEditor.TestRunner`、`nunit.framework.dll` |
+| `DarkFlare.Tests.EditMode` | `Tests/EditMode/` | 仅 Editor | `DarkFlare.Runtime`、`DarkFlare.Core`、`Unity.InputSystem`、`Unity.InputSystem.TestFramework`、`UnityEngine.TestRunner`、`UnityEditor.TestRunner`、`nunit.framework.dll` |
 | `DarkFlare.Tests.PlayMode` | `Tests/PlayMode/` | 全部 | 同 EditMode（当前为占位，暂无测试） |
 
 依赖方向单向向上、无环：`Core ← Runtime ← {Editor, Tests}`。`GameArchitecture.cs` 作为组合根依赖全部玩法模块，因此位于 `Runtime/` 根而非 `Core/`。测试程序集带 `defineConstraints: ["UNITY_INCLUDE_TESTS"]`，仅在测试运行时参与编译，不进入 Player 包。Odin 等预编译 DLL 默认对所有程序集可见，无需在 asmdef 中显式引用。
@@ -160,7 +160,7 @@ Addressables 的配置目录，包含资源组、模板和构建器配置。后�
 当前代码已覆盖以下基础层：
 
 - `Core/QFramework.cs`（`DarkFlare.Core` 程序集）
-- `GameArchitecture.cs`（位于 `Runtime/` 根，组合根；已注册 `CombatModel`/`EquipmentModel`/`InventoryModel`/`EconomyModel`/`CombatSystem`/`SpawnSystem`/`LootSystem`/`TradingSystem`/`CraftingSystem`/`PrefabAssetLoader`）
+- `GameArchitecture.cs`（位于 `Runtime/` 根，组合根；已注册 `GameInput`、`CombatModel`/`EquipmentModel`/`InventoryModel`/`EconomyModel`、`CombatSystem`/`SpawnSystem`/`LootSystem`/`TradingSystem`/`CraftingSystem` 与 `PrefabAssetLoader`）
 - `Data/Tags/TagDefinition.cs`
 - `Data/Stats/StatDefinition.cs`
 - `Data/Actors/CharacterDefinition.cs`
@@ -183,17 +183,18 @@ Addressables 的配置目录，包含资源组、模板和构建器配置。后�
 - `Gameplay/Spawning`：`MonsterSpawner.cs`
 - `Gameplay/Loot`：`LootPickupController.cs`
 - `Gameplay/Bootstrap`：`CombatPrototypeBootstrap.cs`、`CameraFollowTarget.cs`
-- `Tests/EditMode/MonsterSpawnDefinitionTests.cs`、`LootTableDefinitionTests.cs`、`DamageCalculatorTests.cs`、`InventoryGridTests.cs`、`ItemValueCalculatorTests.cs`、`CraftingOperationsTests.cs`：EditMode 测试，分别覆盖 `MonsterSpawnDefinition.PickMonster`、`LootTableDefinition.PickItem` 权重逻辑、带 Increase 词条的伤害结算、背包格子占用、交易价值计算、打造词条操作。归属 `DarkFlare.Tests.EditMode` 程序集，通过显式引用 `DarkFlare.Runtime`/`DarkFlare.Core` 使用运行时代码，并引用 `nunit.framework.dll` 与 TestRunner
+- `Gameplay/Input`：`GameInput.cs`（输入封装与 Gameplay/UI Action Map 切换）、`InputSystem_Actions.cs`（由输入资产自动生成的 C# 包装类）
+- `Tests/EditMode/MonsterSpawnDefinitionTests.cs`、`LootTableDefinitionTests.cs`、`DamageCalculatorTests.cs`、`InventoryGridTests.cs`、`ItemValueCalculatorTests.cs`、`CraftingOperationsTests.cs`、`GameInputTests.cs`：EditMode 测试，除既有纯逻辑覆盖外，新增键盘/手柄移动与 Action Map 切换验证。归属 `DarkFlare.Tests.EditMode` 程序集，并显式引用 Input System 测试框架
 
 `UI`、`Utilities` 目前主要是占位，为后续模块扩展预留。
 
-**规划中（第 8 步"串成完整循环"，设计见 [`input-ui-design.md`](input-ui-design.md)）**：`Gameplay/Input`（`GameInput` 封装 `InputSystem_Actions` 生成的包装类，替换 `PlayerController` 直接轮询，含 `Player`/`UI` action map 切换）、`Gameplay/UI`（UIToolkit 面板脚本：HUD、背包、商店、打造，均实现 `IController` 接入 QFramework）。UXML/USS 约定放 `Assets/UI/`。这些目录尚未创建，待各子步落地后回填。
+**规划中（第 8 步“串成完整循环”，设计见 [`input-ui-design.md`](input-ui-design.md)）**：8a `Gameplay/Input` 已完成；下一步 8b 创建 `Gameplay/UI` 与 UIToolkit 根/HUD，后续再补背包、商店、打造面板。UXML/USS 约定放 `Assets/UI/`，该资源目录和 `Gameplay/UI` 尚未创建。
 
 ### `Assets/Settings`
 
 项目资源级设置目录。当前可见内容主要用于：
 
-- 输入系统配置（`InputSystem_Actions.inputactions`，含 `Keyboard&Mouse` 与 `Gamepad` 两套控制方案；第 8 步起改为唯一输入源并生成 C# 包装类）
+- 输入系统配置（`InputSystem_Actions.inputactions`，含 `Keyboard&Mouse` 与 `Gamepad` 两套控制方案；现已作为唯一输入源并自动生成 C# 包装类）
 - URP 配置
 - 场景相关设置资源
 

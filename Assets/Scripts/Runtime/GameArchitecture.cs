@@ -4,6 +4,7 @@ namespace DarkFlare
     {
         protected override void Init()
         {
+            this.RegisterUtility(new GameInput());
             this.RegisterModel(new CombatModel());
             this.RegisterModel(new EquipmentModel());
             this.RegisterModel(new InventoryModel());
@@ -14,6 +15,11 @@ namespace DarkFlare
             this.RegisterSystem(new TradingSystem());
             this.RegisterSystem(new CraftingSystem());
             this.RegisterUtility(new PrefabAssetLoader());
+        }
+
+        protected override void OnDeinit()
+        {
+            this.GetUtility<GameInput>().Dispose();
         }
     }
 }

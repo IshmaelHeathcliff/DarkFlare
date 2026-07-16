@@ -1,7 +1,6 @@
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace DarkFlare
 {
@@ -23,6 +22,7 @@ namespace DarkFlare
         CombatActor _actor;
         CharacterDefinition _definition;
         ProjectileSkillDefinition _defaultSkill;
+        GameInput _gameInput;
         CancellationTokenSource _skillLoopCancellation;
         Vector2 _lastAimDirection = Vector2.right;
         Vector3 _spawnPosition;
@@ -46,6 +46,7 @@ namespace DarkFlare
         void Awake()
         {
             EnsureComponents();
+            _gameInput = this.GetUtility<GameInput>();
         }
 
         void OnEnable()
@@ -59,6 +60,11 @@ namespace DarkFlare
             _skillLoopCancellation?.Cancel();
             _skillLoopCancellation?.Dispose();
             _skillLoopCancellation = null;
+
+            if (_rigidbody != null)
+            {
+                _rigidbody.linearVelocity = Vector2.zero;
+            }
         }
 
         void FixedUpdate()
@@ -113,45 +119,7 @@ namespace DarkFlare
 
         Vector2 ReadMovementInput()
         {
-            Vector2 movement = Vector2.zero;
-            Keyboard keyboard = Keyboard.current;
-
-            if (keyboard != null)
-            {
-                if (keyboard.aKey.isPressed || keyboard.leftArrowKey.isPressed)
-                {
-                    movement.x -= 1f;
-                }
-
-                if (keyboard.dKey.isPressed || keyboard.rightArrowKey.isPressed)
-                {
-                    movement.x += 1f;
-                }
-
-                if (keyboard.sKey.isPressed || keyboard.downArrowKey.isPressed)
-                {
-                    movement.y -= 1f;
-                }
-
-                if (keyboard.wKey.isPressed || keyboard.upArrowKey.isPressed)
-                {
-                    movement.y += 1f;
-                }
-            }
-
-            Gamepad gamepad = Gamepad.current;
-
-            if (gamepad != null)
-            {
-                Vector2 stick = gamepad.leftStick.ReadValue();
-
-                if (stick.sqrMagnitude > movement.sqrMagnitude)
-                {
-                    movement = stick;
-                }
-            }
-
-            return movement;
+            return _gameInput != null ? _gameInput.Move : Vector2.zero;
         }
 
         float GetMoveSpeed()
