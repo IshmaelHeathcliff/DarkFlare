@@ -78,6 +78,44 @@ public class InventoryGridTests
         Assert.IsFalse(firstRect.Overlaps(secondRect));
     }
 
+    [Test]
+    public void TryExchange_ReplacesItemInsideFullGrid()
+    {
+        InventoryGrid grid = new InventoryGrid(2, 1);
+        ItemInstance equippedCandidate = CreateItem(1, 1, "candidate");
+        ItemInstance blocker = CreateItem(1, 1, "blocker");
+        ItemInstance previousWeapon = CreateItem(1, 1, "previous");
+        Assert.IsTrue(grid.TryAdd(equippedCandidate));
+        Assert.IsTrue(grid.TryAdd(blocker));
+
+        bool exchanged = grid.TryExchange(equippedCandidate, previousWeapon);
+
+        Assert.IsTrue(exchanged);
+        Assert.IsFalse(grid.Placements.ContainsKey(equippedCandidate));
+        Assert.AreEqual(new RectInt(0, 0, 1, 1), grid.Placements[previousWeapon]);
+        Assert.AreEqual(new RectInt(1, 0, 1, 1), grid.Placements[blocker]);
+    }
+
+    [Test]
+    public void TryExchange_LeavesGridUnchanged_WhenReplacementDoesNotFit()
+    {
+        InventoryGrid grid = new InventoryGrid(2, 1);
+        ItemInstance equippedCandidate = CreateItem(1, 1, "candidate");
+        ItemInstance blocker = CreateItem(1, 1, "blocker");
+        ItemInstance oversizedPreviousWeapon = CreateItem(2, 1, "previous");
+        Assert.IsTrue(grid.TryAdd(equippedCandidate));
+        Assert.IsTrue(grid.TryAdd(blocker));
+        RectInt originalCandidatePlacement = grid.Placements[equippedCandidate];
+        RectInt originalBlockerPlacement = grid.Placements[blocker];
+
+        bool exchanged = grid.TryExchange(equippedCandidate, oversizedPreviousWeapon);
+
+        Assert.IsFalse(exchanged);
+        Assert.AreEqual(originalCandidatePlacement, grid.Placements[equippedCandidate]);
+        Assert.AreEqual(originalBlockerPlacement, grid.Placements[blocker]);
+        Assert.IsFalse(grid.Placements.ContainsKey(oversizedPreviousWeapon));
+    }
+
     ItemInstance CreateItem(int width, int height, string id)
     {
         ItemBaseDefinition definition = ScriptableObject.CreateInstance<ItemBaseDefinition>();

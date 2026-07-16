@@ -88,6 +88,8 @@ Assets/
     GameRoot.uxml
     Hud.uxml
     Hud.uss
+    Inventory.uxml
+    Inventory.uss
   UI Toolkit/
     UnityThemes/
       UnityDefaultRuntimeTheme.tss
@@ -145,7 +147,7 @@ Addressables 的配置目录，包含资源组、模板和构建器配置。后�
 
 同时 `ProjectSettings/EditorBuildSettings.asset` 里当前也只注册了这个场景。
 
-`Main.unity` 当前包含常驻 `UIRoot`（`UIDocument` + `HudController`）和唯一 `EventSystem`。`InputSystemUIInputModule` 引用项目 `InputSystem_Actions.inputactions` 的 `UI` action map。
+`Main.unity` 当前包含常驻 `UIRoot`（`UIDocument` + `HudController` + `InventoryPanelController`）和唯一 `EventSystem`。`InputSystemUIInputModule` 引用项目 `InputSystem_Actions.inputactions` 的 `UI` action map。
 
 ### `Assets/Scripts`
 
@@ -200,11 +202,12 @@ Addressables 的配置目录，包含资源组、模板和构建器配置。后�
 - `Gameplay/Input`：`GameInput.cs`（输入封装与 Gameplay/UI Action Map 切换）、`InputSystem_Actions.cs`（由输入资产自动生成的 C# 包装类）
 - `Gameplay/Events/GameplayEvents.cs`：金币、背包、装备、打造和 Actor 注册 / 注销领域事件
 - `Gameplay/UI/GetHudSnapshotQuery.cs`、`HudController.cs`：只读 HUD 快照与事件驱动控制器
-- `Tests/EditMode/MonsterSpawnDefinitionTests.cs`、`LootTableDefinitionTests.cs`、`DamageCalculatorTests.cs`、`InventoryGridTests.cs`、`ItemValueCalculatorTests.cs`、`CraftingOperationsTests.cs`、`GameInputTests.cs`、`GameplayUiFoundationTests.cs`：EditMode 测试，覆盖纯逻辑、键鼠 / 手柄输入、Action Map 切换、UI 领域事件与 HUD 快照。归属 `DarkFlare.Tests.EditMode` 程序集
+- `Gameplay/UI/GetInventorySnapshotQuery.cs`、`InventoryPanelController.cs`：只读背包快照、10×6 格子渲染、物品选择与装备交互控制器
+- `Tests/EditMode/MonsterSpawnDefinitionTests.cs`、`LootTableDefinitionTests.cs`、`DamageCalculatorTests.cs`、`InventoryGridTests.cs`、`ItemValueCalculatorTests.cs`、`CraftingOperationsTests.cs`、`GameInputTests.cs`、`GameplayUiFoundationTests.cs`：EditMode 测试，覆盖纯逻辑、原子换装、键鼠 / 手柄输入、Action Map 切换、UI 领域事件与 HUD/背包快照。归属 `DarkFlare.Tests.EditMode` 程序集
 
 `UI`、`Utilities` 目前主要是占位，为后续模块扩展预留。
 
-**规划中（第 8 步“串成完整循环”，设计见 [`plan/input-ui-design.md`](plan/input-ui-design.md)）**：8a `Gameplay/Input` 与 8b UIToolkit 根 / HUD 已完成；下一步 8c 增加背包与装备交互，后续再补商店、打造和场景入口串联。
+**规划中（第 8 步“串成完整循环”，设计见 [`plan/input-ui-design.md`](plan/input-ui-design.md)）**：8a `Gameplay/Input`、8b UIToolkit 根 / HUD 与 8c 背包 / 装备交互已完成；下一步 8d 增加商店交互，后续再补打造和场景入口串联。
 
 ### `Assets/Settings`
 
@@ -255,6 +258,6 @@ Unity 工程级设置目录，包括版本、构建场景、图形设置等。
 - 代码已按程序集（asmdef）拆分为 `Core`/`Runtime`/`Editor`/`Tests` 四层，编译与测试边界清晰
 - 插件和核心依赖已经接入
 - 代码架构入口已经就位
-- 战斗、掉落、背包、交易、打造、输入与基础 HUD 已有首版可运行内容
+- 战斗、掉落、背包、交易、打造、输入、HUD 与背包装备 UI 已有首版可运行内容
 
 因此，后续工作重点不在“再拆目录”，而在把每一层真正填上首批可运行内容。

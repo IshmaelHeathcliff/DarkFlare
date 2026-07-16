@@ -33,28 +33,35 @@ namespace DarkFlare
 
         public bool TryAdd(ItemInstance item)
         {
-            if (item == null || item.BaseDefinition == null || _placements.ContainsKey(item))
+            if (!TryFindPlacement(item, null, out RectInt placement))
             {
                 return false;
             }
 
-            Vector2Int size = item.BaseDefinition.GridSize;
-            int itemWidth = Mathf.Max(1, size.x);
-            int itemHeight = Mathf.Max(1, size.y);
+            Occupy(item, placement);
+            return true;
+        }
 
-            for (int originY = 0; originY <= Height - itemHeight; originY++)
+        public bool TryExchange(ItemInstance itemToRemove, ItemInstance itemToAdd)
+        {
+            if (itemToRemove == null || !_placements.ContainsKey(itemToRemove))
             {
-                for (int originX = 0; originX <= Width - itemWidth; originX++)
-                {
-                    if (CanPlace(originX, originY, itemWidth, itemHeight))
-                    {
-                        Occupy(item, new RectInt(originX, originY, itemWidth, itemHeight));
-                        return true;
-                    }
-                }
+                return false;
             }
 
-            return false;
+            if (itemToAdd == null)
+            {
+                return Remove(itemToRemove);
+            }
+
+            if (!TryFindPlacement(itemToAdd, itemToRemove, out RectInt placement))
+            {
+                return false;
+            }
+
+            Remove(itemToRemove);
+            Occupy(itemToAdd, placement);
+            return true;
         }
 
         public bool Remove(ItemInstance item)
@@ -76,13 +83,43 @@ namespace DarkFlare
             return true;
         }
 
-        bool CanPlace(int originX, int originY, int itemWidth, int itemHeight)
+        bool TryFindPlacement(ItemInstance item, ItemInstance ignoredItem, out RectInt placement)
+        {
+            placement = default;
+
+            if (item == null || item.BaseDefinition == null || _placements.ContainsKey(item))
+            {
+                return false;
+            }
+
+            Vector2Int size = item.BaseDefinition.GridSize;
+            int itemWidth = Mathf.Max(1, size.x);
+            int itemHeight = Mathf.Max(1, size.y);
+
+            for (int originY = 0; originY <= Height - itemHeight; originY++)
+            {
+                for (int originX = 0; originX <= Width - itemWidth; originX++)
+                {
+                    if (CanPlace(originX, originY, itemWidth, itemHeight, ignoredItem))
+                    {
+                        placement = new RectInt(originX, originY, itemWidth, itemHeight);
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        bool CanPlace(int originX, int originY, int itemWidth, int itemHeight, ItemInstance ignoredItem)
         {
             for (int y = originY; y < originY + itemHeight; y++)
             {
                 for (int x = originX; x < originX + itemWidth; x++)
                 {
-                    if (_cells[x, y] != null)
+                    ItemInstance occupiedItem = _cells[x, y];
+
+                    if (occupiedItem != null && occupiedItem != ignoredItem)
                     {
                         return false;
                     }

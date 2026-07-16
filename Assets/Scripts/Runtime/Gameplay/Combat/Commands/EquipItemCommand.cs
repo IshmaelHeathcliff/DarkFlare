@@ -1,6 +1,6 @@
 namespace DarkFlare
 {
-    public class EquipItemCommand : AbstractCommand
+    public class EquipItemCommand : AbstractCommand<bool>
     {
         readonly CombatActor _actor;
         readonly ItemInstance _item;
@@ -11,9 +11,9 @@ namespace DarkFlare
             _item = item;
         }
 
-        protected override void OnExecute()
+        protected override bool OnExecute()
         {
-            this.GetSystem<CombatSystem>().EquipWeapon(_actor, _item);
+            return this.GetSystem<CombatSystem>().EquipWeapon(_actor, _item);
         }
     }
 }

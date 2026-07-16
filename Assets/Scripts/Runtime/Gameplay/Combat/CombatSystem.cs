@@ -77,26 +77,34 @@ namespace DarkFlare
             this.SendEvent(new ActorRevivedEvent { Actor = actor });
         }
 
-        public void EquipWeapon(CombatActor actor, ItemInstance weapon)
+        public bool EquipWeapon(CombatActor actor, ItemInstance weapon)
         {
-            if (actor == null)
+            if (actor == null || weapon == null || weapon.BaseDefinition == null ||
+                weapon.BaseDefinition.ItemType != ItemType.Weapon)
             {
-                return;
+                return false;
             }
 
             EquipmentModel equipment = this.GetModel<EquipmentModel>();
             ItemInstance previousWeapon = equipment.GetWeapon(actor);
-            equipment.SetWeapon(actor, weapon);
 
-            if (weapon != null)
+            if (previousWeapon == weapon)
             {
-                // 若武器来自背包，穿戴时从背包移出，保持"已穿戴的物品不占背包格子"不变量
-                this.GetModel<InventoryModel>().RemoveItem(weapon);
+                return false;
             }
 
-            actor.SetModifiers(weapon != null ? weapon.CollectModifiers() : EmptyModifiers);
+            InventoryModel inventory = this.GetModel<InventoryModel>();
+
+            if (!inventory.TryExchangeItem(weapon, previousWeapon))
+            {
+                return false;
+            }
+
+            equipment.SetWeapon(actor, weapon);
+            actor.SetModifiers(weapon.CollectModifiers());
             this.SendEvent(new EquipmentChangedEvent(actor, previousWeapon, weapon));
-            Debug.Log($"[CombatSystem] {actor.ActorId} 装备了 {(weapon != null ? weapon.BaseDefinition.DisplayName : "无")}");
+            Debug.Log($"[CombatSystem] {actor.ActorId} 装备了 {weapon.BaseDefinition.DisplayName}");
+            return true;
         }
     }
 }

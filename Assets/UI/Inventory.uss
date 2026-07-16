@@ -1,0 +1,315 @@
+.inventory-template {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+
+.inventory-overlay {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(5, 7, 10, 0.82);
+}
+
+.inventory-panel {
+  width: 1060px;
+  max-width: 94%;
+  height: 650px;
+  max-height: 90%;
+  padding: 24px;
+  color: rgb(224, 226, 231);
+  background-color: rgb(20, 24, 31);
+  border-left-width: 1px;
+  border-right-width: 1px;
+  border-top-width: 1px;
+  border-bottom-width: 1px;
+  border-left-color: rgb(116, 91, 54);
+  border-right-color: rgb(116, 91, 54);
+  border-top-color: rgb(116, 91, 54);
+  border-bottom-color: rgb(116, 91, 54);
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.inventory-header {
+  height: 76px;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom-width: 1px;
+  border-bottom-color: rgb(63, 67, 75);
+}
+
+.inventory-heading {
+  flex-direction: row;
+  align-items: center;
+}
+
+.inventory-title {
+  font-size: 34px;
+  -unity-font-style: bold;
+  color: rgb(241, 232, 210);
+  margin-right: 12px;
+}
+
+.inventory-kicker {
+  font-size: 12px;
+  letter-spacing: 3px;
+  color: rgb(166, 132, 77);
+}
+
+.inventory-close {
+  min-width: 150px;
+  height: 38px;
+  color: rgb(209, 211, 216);
+  background-color: rgb(40, 45, 54);
+  border-left-color: rgb(80, 85, 96);
+  border-right-color: rgb(80, 85, 96);
+  border-top-color: rgb(80, 85, 96);
+  border-bottom-color: rgb(80, 85, 96);
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.inventory-close:hover,
+.inventory-close:focus {
+  color: white;
+  background-color: rgb(57, 63, 74);
+  border-left-color: rgb(180, 143, 82);
+  border-right-color: rgb(180, 143, 82);
+  border-top-color: rgb(180, 143, 82);
+  border-bottom-color: rgb(180, 143, 82);
+}
+
+.inventory-body {
+  flex-grow: 1;
+  flex-direction: row;
+  padding-top: 22px;
+}
+
+.inventory-grid-section {
+  flex-grow: 1;
+  min-width: 560px;
+  padding-right: 26px;
+}
+
+.inventory-section-title {
+  height: 28px;
+  font-size: 16px;
+  -unity-font-style: bold;
+  color: rgb(195, 168, 120);
+  margin-bottom: 10px;
+}
+
+.inventory-grid-frame {
+  flex-grow: 1;
+  min-height: 350px;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(13, 16, 22);
+  border-left-width: 1px;
+  border-right-width: 1px;
+  border-top-width: 1px;
+  border-bottom-width: 1px;
+  border-left-color: rgb(49, 54, 64);
+  border-right-color: rgb(49, 54, 64);
+  border-top-color: rgb(49, 54, 64);
+  border-bottom-color: rgb(49, 54, 64);
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+
+.inventory-grid {
+  position: relative;
+}
+
+.inventory-cell {
+  background-color: rgb(28, 33, 41);
+  border-left-width: 1px;
+  border-right-width: 1px;
+  border-top-width: 1px;
+  border-bottom-width: 1px;
+  border-left-color: rgb(48, 55, 67);
+  border-right-color: rgb(48, 55, 67);
+  border-top-color: rgb(48, 55, 67);
+  border-bottom-color: rgb(48, 55, 67);
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+}
+
+.inventory-item {
+  padding: 4px;
+  white-space: normal;
+  font-size: 12px;
+  -unity-font-style: bold;
+  color: rgb(222, 224, 229);
+  background-color: rgb(58, 64, 74);
+  border-left-width: 2px;
+  border-right-width: 2px;
+  border-top-width: 2px;
+  border-bottom-width: 2px;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+.inventory-item:hover,
+.inventory-item:focus,
+.inventory-item--selected {
+  background-color: rgb(80, 70, 52);
+  border-left-color: rgb(236, 192, 110);
+  border-right-color: rgb(236, 192, 110);
+  border-top-color: rgb(236, 192, 110);
+  border-bottom-color: rgb(236, 192, 110);
+}
+
+.inventory-item--normal {
+  border-left-color: rgb(146, 151, 160);
+  border-right-color: rgb(146, 151, 160);
+  border-top-color: rgb(146, 151, 160);
+  border-bottom-color: rgb(146, 151, 160);
+}
+
+.inventory-item--magic {
+  color: rgb(156, 191, 255);
+  border-left-color: rgb(76, 121, 204);
+  border-right-color: rgb(76, 121, 204);
+  border-top-color: rgb(76, 121, 204);
+  border-bottom-color: rgb(76, 121, 204);
+}
+
+.inventory-item--rare {
+  color: rgb(255, 226, 126);
+  border-left-color: rgb(203, 164, 52);
+  border-right-color: rgb(203, 164, 52);
+  border-top-color: rgb(203, 164, 52);
+  border-bottom-color: rgb(203, 164, 52);
+}
+
+.inventory-item--unique {
+  color: rgb(255, 178, 91);
+  border-left-color: rgb(205, 103, 42);
+  border-right-color: rgb(205, 103, 42);
+  border-top-color: rgb(205, 103, 42);
+  border-bottom-color: rgb(205, 103, 42);
+}
+
+.inventory-empty {
+  position: absolute;
+  color: rgb(105, 111, 123);
+  font-size: 18px;
+  -unity-font-style: italic;
+}
+
+.inventory-help {
+  height: 30px;
+  padding-top: 10px;
+  color: rgb(115, 121, 133);
+  font-size: 12px;
+}
+
+.inventory-details {
+  width: 340px;
+  padding: 18px;
+  background-color: rgb(28, 32, 40);
+  border-left-width: 1px;
+  border-right-width: 1px;
+  border-top-width: 1px;
+  border-bottom-width: 1px;
+  border-left-color: rgb(58, 64, 75);
+  border-right-color: rgb(58, 64, 75);
+  border-top-color: rgb(58, 64, 75);
+  border-bottom-color: rgb(58, 64, 75);
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+
+.inventory-current-weapon {
+  min-height: 54px;
+  padding: 12px;
+  white-space: normal;
+  color: rgb(221, 202, 163);
+  background-color: rgb(38, 42, 49);
+  border-left-width: 3px;
+  border-left-color: rgb(168, 126, 62);
+}
+
+.inventory-divider {
+  height: 1px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  background-color: rgb(65, 70, 80);
+}
+
+.inventory-selected-name {
+  min-height: 44px;
+  white-space: normal;
+  font-size: 22px;
+  -unity-font-style: bold;
+  color: rgb(240, 235, 224);
+  margin-bottom: 14px;
+}
+
+.inventory-detail-line {
+  height: 30px;
+  color: rgb(178, 182, 191);
+}
+
+.inventory-details-spacer {
+  flex-grow: 1;
+}
+
+.inventory-feedback {
+  min-height: 48px;
+  white-space: normal;
+  color: rgb(159, 166, 179);
+  margin-bottom: 12px;
+}
+
+.inventory-equip {
+  height: 48px;
+  font-size: 16px;
+  -unity-font-style: bold;
+  color: rgb(28, 24, 18);
+  background-color: rgb(211, 169, 94);
+  border-left-color: rgb(239, 202, 132);
+  border-right-color: rgb(239, 202, 132);
+  border-top-color: rgb(239, 202, 132);
+  border-bottom-color: rgb(239, 202, 132);
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.inventory-equip:hover,
+.inventory-equip:focus {
+  background-color: rgb(238, 193, 109);
+}
+
+.inventory-equip:disabled {
+  color: rgb(105, 108, 114);
+  background-color: rgb(48, 51, 57);
+  border-left-color: rgb(62, 65, 72);
+  border-right-color: rgb(62, 65, 72);
+  border-top-color: rgb(62, 65, 72);
+  border-bottom-color: rgb(62, 65, 72);
+}

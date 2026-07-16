@@ -1,7 +1,10 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
     <ui:Style src="project://database/Assets/UI/Hud.uss?fileID=7433441132597879392&amp;guid=d225eb57055fd094795854125058bc2b&amp;type=3#Hud" />
+    <ui:Style src="project://database/Assets/UI/Inventory.uss?fileID=7433441132597879392&amp;guid=b18b5c9f65901f24c9fcc14f669c79e5&amp;type=3#Inventory" />
     <ui:Template name="Hud" src="project://database/Assets/UI/Hud.uxml?fileID=9197481963319205126&amp;guid=15c85499aee872d4eb028c5b82b83699&amp;type=3#Hud" />
+    <ui:Template name="Inventory" src="project://database/Assets/UI/Inventory.uxml?fileID=9197481963319205126&amp;guid=ab631162532b45f4ea91902aba703eb2&amp;type=3#Inventory" />
     <ui:VisualElement name="game-ui-root" class="game-ui-root" picking-mode="Ignore">
         <ui:Instance template="Hud" />
+        <ui:Instance template="Inventory" class="inventory-template" />
     </ui:VisualElement>
 </ui:UXML>

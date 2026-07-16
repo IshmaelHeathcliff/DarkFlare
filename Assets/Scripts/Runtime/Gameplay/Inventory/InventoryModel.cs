@@ -39,6 +39,25 @@ namespace DarkFlare
             return removed;
         }
 
+        public bool TryExchangeItem(ItemInstance itemToRemove, ItemInstance itemToAdd)
+        {
+            bool exchanged = Grid.TryExchange(itemToRemove, itemToAdd);
+
+            if (!exchanged)
+            {
+                return false;
+            }
+
+            this.SendEvent(new InventoryChangedEvent(itemToRemove, InventoryChangeType.Removed));
+
+            if (itemToAdd != null)
+            {
+                this.SendEvent(new InventoryChangedEvent(itemToAdd, InventoryChangeType.Added));
+            }
+
+            return true;
+        }
+
         public void AddGold(int amount)
         {
             if (amount > 0)

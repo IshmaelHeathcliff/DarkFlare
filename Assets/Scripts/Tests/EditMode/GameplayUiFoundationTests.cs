@@ -66,6 +66,7 @@ public class GameplayUiFoundationTests
         inventory.AddGold(25);
         CombatActor player = CreatePlayer();
         ItemInstance weapon = CreateItem("hud_weapon", "测试长剑");
+        Assert.IsTrue(inventory.TryAddItem(weapon));
         EquipmentChangedEvent equipmentEvent = default;
         int equipmentEventCount = 0;
         _architecture.RegisterEvent<EquipmentChangedEvent>(e =>
@@ -74,9 +75,10 @@ public class GameplayUiFoundationTests
             equipmentEventCount++;
         });
 
-        _architecture.GetSystem<CombatSystem>().EquipWeapon(player, weapon);
+        bool equipped = _architecture.SendCommand(new EquipItemCommand(player, weapon));
         HudSnapshot snapshot = _architecture.SendQuery(new GetHudSnapshotQuery());
 
+        Assert.IsTrue(equipped);
         Assert.IsTrue(snapshot.HasPlayer);
         Assert.AreEqual(100f, snapshot.CurrentHealth);
         Assert.AreEqual(100f, snapshot.MaxHealth);
@@ -86,6 +88,101 @@ public class GameplayUiFoundationTests
         Assert.AreEqual(1, equipmentEventCount);
         Assert.AreSame(player, equipmentEvent.Actor);
         Assert.AreSame(weapon, equipmentEvent.CurrentWeapon);
+    }
+
+    [Test]
+    public void EquipItemCommand_SwapsWeapons_AndRejectsInvalidItems()
+    {
+        InventoryModel inventory = _architecture.GetModel<InventoryModel>();
+        EquipmentModel equipment = _architecture.GetModel<EquipmentModel>();
+        CombatActor player = CreatePlayer();
+        ItemInstance firstWeapon = CreateItem("first_weapon", "第一把武器");
+        ItemInstance secondWeapon = CreateItem("second_weapon", "第二把武器");
+        ItemInstance armor = CreateItem("armor", "测试护甲", ItemType.Armor);
+        int equipmentEventCount = 0;
+        _architecture.RegisterEvent<EquipmentChangedEvent>(_ => equipmentEventCount++);
+        Assert.IsTrue(inventory.TryAddItem(firstWeapon));
+
+        bool firstEquipped = _architecture.SendCommand(new EquipItemCommand(player, firstWeapon));
+        Assert.IsTrue(inventory.TryAddItem(secondWeapon));
+        bool secondEquipped = _architecture.SendCommand(new EquipItemCommand(player, secondWeapon));
+        Assert.IsTrue(inventory.TryAddItem(armor));
+        bool armorEquipped = _architecture.SendCommand(new EquipItemCommand(player, armor));
+        ItemInstance detachedWeapon = CreateItem("detached_weapon", "不在背包的武器");
+        bool detachedEquipped = _architecture.SendCommand(new EquipItemCommand(player, detachedWeapon));
+
+        Assert.IsTrue(firstEquipped);
+        Assert.IsTrue(secondEquipped);
+        Assert.IsFalse(armorEquipped);
+        Assert.IsFalse(detachedEquipped);
+        Assert.AreSame(secondWeapon, equipment.GetWeapon(player));
+        Assert.IsTrue(inventory.Grid.Placements.ContainsKey(firstWeapon));
+        Assert.IsFalse(inventory.Grid.Placements.ContainsKey(secondWeapon));
+        Assert.IsTrue(inventory.Grid.Placements.ContainsKey(armor));
+        Assert.AreEqual(2, equipmentEventCount);
+    }
+
+    [Test]
+    public void EquipItemCommand_RollsBack_WhenPreviousWeaponDoesNotFit()
+    {
+        InventoryModel inventory = _architecture.GetModel<InventoryModel>();
+        EquipmentModel equipment = _architecture.GetModel<EquipmentModel>();
+        CombatActor player = CreatePlayer();
+        ItemInstance previousWeapon = CreateItem(
+            "previous_large_weapon",
+            "旧大型武器",
+            ItemType.Weapon,
+            new Vector2Int(2, 1));
+        ItemInstance candidate = CreateItem("candidate_weapon", "待装备武器");
+        Assert.IsTrue(inventory.TryAddItem(previousWeapon));
+        Assert.IsTrue(_architecture.SendCommand(new EquipItemCommand(player, previousWeapon)));
+        Assert.IsTrue(inventory.TryAddItem(candidate));
+
+        for (int i = 0; i < 59; i++)
+        {
+            Assert.IsTrue(inventory.TryAddItem(CreateItem($"blocker_{i}", $"占位物 {i}")));
+        }
+
+        RectInt candidatePlacement = inventory.Grid.Placements[candidate];
+        int inventoryEventCount = 0;
+        int equipmentEventCount = 0;
+        _architecture.RegisterEvent<InventoryChangedEvent>(_ => inventoryEventCount++);
+        _architecture.RegisterEvent<EquipmentChangedEvent>(_ => equipmentEventCount++);
+
+        bool equipped = _architecture.SendCommand(new EquipItemCommand(player, candidate));
+
+        Assert.IsFalse(equipped);
+        Assert.AreSame(previousWeapon, equipment.GetWeapon(player));
+        Assert.AreEqual(candidatePlacement, inventory.Grid.Placements[candidate]);
+        Assert.IsFalse(inventory.Grid.Placements.ContainsKey(previousWeapon));
+        Assert.AreEqual(0, inventoryEventCount);
+        Assert.AreEqual(0, equipmentEventCount);
+    }
+
+    [Test]
+    public void InventorySnapshot_ContainsOrderedPlacementsAndDisplayData()
+    {
+        InventoryModel inventory = _architecture.GetModel<InventoryModel>();
+        CombatActor player = CreatePlayer();
+        ItemInstance weapon = CreateItem("snapshot_weapon", "快照武器", ItemType.Weapon, new Vector2Int(2, 3));
+        ItemInstance armor = CreateItem("snapshot_armor", "快照护甲", ItemType.Armor);
+        Assert.IsTrue(inventory.TryAddItem(weapon));
+        Assert.IsTrue(inventory.TryAddItem(armor));
+
+        InventorySnapshot snapshot = _architecture.SendQuery(new GetInventorySnapshotQuery());
+
+        Assert.AreSame(player, snapshot.Player);
+        Assert.AreEqual(10, snapshot.Width);
+        Assert.AreEqual(6, snapshot.Height);
+        Assert.AreEqual(2, snapshot.Items.Count);
+        Assert.AreSame(weapon, snapshot.Items[0].Item);
+        Assert.AreEqual(new RectInt(0, 0, 2, 3), snapshot.Items[0].Placement);
+        Assert.AreEqual("快照武器", snapshot.Items[0].DisplayName);
+        Assert.IsTrue(snapshot.Items[0].CanEquip);
+        Assert.AreSame(armor, snapshot.Items[1].Item);
+        Assert.AreEqual(new RectInt(2, 0, 1, 1), snapshot.Items[1].Placement);
+        Assert.IsFalse(snapshot.Items[1].CanEquip);
+        Assert.AreEqual("未装备", snapshot.CurrentWeaponSummary);
     }
 
     [Test]
@@ -126,10 +223,16 @@ public class GameplayUiFoundationTests
         return actor;
     }
 
-    ItemInstance CreateItem(string instanceId, string displayName)
+    ItemInstance CreateItem(
+        string instanceId,
+        string displayName,
+        ItemType itemType = ItemType.Weapon,
+        Vector2Int? gridSize = null)
     {
         ItemBaseDefinition definition = CreateScriptableObject<ItemBaseDefinition>();
         SetField(definition, "_displayName", displayName);
+        SetField(definition, "_itemType", itemType);
+        SetField(definition, "_gridSize", gridSize ?? Vector2Int.one);
         return definition.CreateInstance(instanceId, 1, 1, ItemRarity.Normal);
     }
 
