@@ -1,6 +1,6 @@
 # 输入系统与 UI 设计
 
-本文档记录玩家输入层重构与 UIToolkit UI 架构，是最小循环第 8 步“用 `Main.unity` 串成一轮完整循环”的执行依据。当前 8a 已完成，下一步进入 8b。
+本文档记录玩家输入层重构与 UIToolkit UI 架构，是最小循环第 8 步“用 `Main.unity` 串成一轮完整循环”的执行依据。当前 8a、8b 已完成，下一步进入 8c。
 
 ## 背景
 
@@ -9,8 +9,8 @@
 当前状态：
 
 - **输入（8a 已完成）**：`Assets/Settings/InputSystem_Actions.inputactions` 已成为唯一输入源，`PlayerController` 不再直接轮询 `Keyboard.current`/`Gamepad.current`。`GameInput` 统一管理 Gameplay/UI 模式，切到 UI 时会禁用玩家移动。
-- **UI**：完全没有（`Assets/Scripts/UI` 为空占位，无 UXML/USS/UIDocument）。UIToolkit（Unity 6 内置）与 TextMeshPro 可用。
-- **反应式基础**：目前只有战斗事件（`ActorDamagedEvent`/`ActorDiedEvent`/`ActorRevivedEvent`，见 `Gameplay/Combat/CombatEvents.cs`），**没有金币、背包、装备、打造的变化事件**，UI 无法响应式刷新。
+- **UI（8b 已完成）**：`Main.unity` 已有常驻 `UIRoot`，挂载 `UIDocument`、`GamePanelSettings` 与 `HudController`；HUD 显示生命、金币和当前武器摘要。
+- **反应式基础（8b 已完成）**：金币、背包、装备、打造及 Actor 注册变化均有领域事件，HUD 通过 Query 读取快照并在事件到达时刷新，不做每帧轮询。
 
 ## 一、输入层重构
 
@@ -42,7 +42,7 @@
 
 - 采用 UIToolkit（CLAUDE.md 优先；复杂动画等场景才用 UGUI）。
 - 场景常驻一个 UI 根：`UIDocument` + `PanelSettings` 资产 + 主题样式（TSS）+ `EventSystem` 搭配 `InputSystemUIInputModule`（供指针 / 手柄导航）。
-- UI 资源目录约定：UXML/USS 放 `Assets/UI/`，`PanelSettings` 与主题放 `Assets/Settings/`。
+- UI 资源目录约定：UXML/USS 放 `Assets/UI/`，`PanelSettings` 放 `Assets/Settings/UI/`，Unity 默认运行时主题位于 `Assets/UI Toolkit/UnityThemes/`。
 
 ### 接入 QFramework
 
@@ -63,6 +63,7 @@
 | `InventoryChangedEvent` | 背包增删路径 | 拾取入包、买入、卖出移除、穿戴移出 |
 | `EquipmentChangedEvent` | `CombatSystem.EquipWeapon` | 穿戴 / 卸下 |
 | `ItemCraftedEvent` | `CraftingSystem.Craft` | 打造成功导致物品词条变化 |
+| `ActorRegisteredEvent` / `ActorUnregisteredEvent` | `CombatSystem` | 玩家或怪物加入 / 离开战斗模型 |
 
 血量已有 `ActorDamagedEvent` / `ActorRevivedEvent` 可直接用。补齐这批事件是本步"打基础"的实质内容之一。
 
@@ -84,22 +85,30 @@
 ## 三、分步路线（后续逐条执行，各自 Play 验证）
 
 - **8a 输入层（已完成）**：生成 / 精简 actions，`GameInput` 封装，`PlayerController` 改用它，`Player`/`UI` map 切换。已验证键盘 + 手柄移动、菜单开关与 map 切换；`Interact` 的玩法入口留到 8f 串联。
-- **8b UI 基础 + HUD**：`UIDocument`/`PanelSettings`/主题/`EventSystem` 根节点、UI Controller 接入 QFramework、补上表领域事件、做只读 HUD。验证：受击掉血、`execute_code` 改金币 / 穿戴时 HUD 实时刷新。
+- **8b UI 基础 + HUD（已完成）**：`UIDocument`/`PanelSettings`/主题/`EventSystem` 根节点、UI Controller 接入 QFramework、补上表领域事件、做只读 HUD。已验证运行时玩家生命、金币和武器摘要，以及金币事件驱动刷新。
 - **8c 背包 + 装备**：背包格子面板，点击物品→穿戴（`EquipItemCommand`）。验证：手玩穿戴，伤害 / HUD 变化。
 - **8d 商店**：商店面板买卖（`BuyItemCommand` / `SellItemCommand`）。验证：手玩买卖，金币 / 背包变化。
 - **8e 打造**：打造面板四操作（`CraftItemCommand`）。验证：手玩打造，词条 / 价值变化。
 - **8f 循环收尾**：入口串联（`Interact` 开面板 / 走到商人），一轮完整可玩循环，感受构筑变化。
 
-## 四、下一步具体执行（8b）
+## 四、8b 已落地
 
-1. 在 `Assets/UI/` 建立根 UXML、HUD UXML/USS 与主题资源，在 `Assets/Settings/` 建立 `PanelSettings`。
-2. 复用 `Main.unity` 已有 `EventSystem`，把 `InputSystemUIInputModule` 的 actions 引用校正到当前 `InputSystem_Actions` 的 `UI` map，不创建重复 EventSystem。
-3. 新增场景常驻 `UIDocument` 与 HUD Controller，通过 `IController` 接入 `GameArchitecture`，先显示玩家生命、金币与当前武器摘要。
-4. 在金币、背包、装备、打造的实际写入路径发送领域事件，HUD 只通过 Query/Model 读取状态并响应事件刷新。
-5. 补 EditMode 测试后执行 Unity 编译与 Play 验证，确认键鼠、手柄导航及 Gameplay/UI map 切换不穿透。
+- `Assets/UI/GameRoot.uxml` 组合 `Hud.uxml` 与 `Hud.uss`；`GamePanelSettings.asset` 按 1920×1080 参考分辨率缩放。
+- `Main.unity` 复用唯一 `EventSystem`，`InputSystemUIInputModule` 已指向项目 `InputSystem_Actions.inputactions` 的 `UI` map；没有创建重复 EventSystem。
+- `HudController` 实现 `IController`，通过 `GetHudSnapshotQuery` 获取玩家生命、金币、武器摘要，订阅战斗和领域事件刷新。
+- `GameplayEvents.cs` 集中声明金币、背包、装备、打造与 Actor 注册事件；状态写入失败时不发送成功事件。
+- 验证结果：Unity EditMode 28/28 通过；Runtime/Test 工程编译 0 错误；Play Mode 显示 100/100、金币 100、未装备，金币增加 7 后 HUD 同步为 107；控制台 0 警告、0 错误。
+
+## 五、下一步具体执行（8c）
+
+1. 新增背包快照 Query，把 `InventoryGrid.Placements`、格子尺寸、物品名称 / 稀有度 / 占用范围转换为只读 UI 数据，不让 Controller 直接读取或修改 Model。
+2. 在 `Assets/UI/` 增加背包 UXML/USS：默认隐藏，显示 10×6 格子、物品占位块、选中物品详情与当前武器；先延续纯色占位风格。
+3. 增加背包 Controller，监听 `ToggleMenu` / `Cancel`，统一调用 `GameInput` 切换 Gameplay/UI map，并为键鼠点击和手柄导航设置明确的初始焦点与返回路径。
+4. 选中背包武器后只发送 `EquipItemCommand`；监听 `InventoryChangedEvent` 与 `EquipmentChangedEvent` 刷新背包和 HUD，不从 Controller 直接写 Model。
+5. 补 Query、开关面板、穿戴成功 / 失败和事件刷新测试；在 `Main.unity` 分别用键鼠与手柄完成“打开背包 → 选中武器 → 穿戴 → 关闭面板”，确认玩家移动不穿透且 HUD 武器摘要变化。
 
 ## 约定与边界
 
 - 本文档同时记录规划与落地状态；每个子步完成后更新对应标记和验证结果，保持文档不落后于代码。
 - 美术从简：延续占位方块 / 纯色风格，UI 先功能后美观。
-- 表中领域事件为规划名，实现时以代码为准并同步本表。
+- 表中领域事件已按当前代码同步；后续新增事件仍以实际写入路径为准。

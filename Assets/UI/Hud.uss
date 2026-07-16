@@ -1,0 +1,76 @@
+.game-ui-root,
+.hud-root {
+    flex-grow: 1;
+}
+
+.hud-root {
+    justify-content: space-between;
+    padding: 28px;
+    color: rgb(236, 241, 245);
+}
+
+.hud-top-row {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.hud-card {
+    background-color: rgba(12, 18, 24, 0.92);
+    border-top-width: 2px;
+    border-right-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+    border-top-color: rgba(89, 119, 136, 0.9);
+    border-right-color: rgba(89, 119, 136, 0.9);
+    border-bottom-color: rgba(89, 119, 136, 0.9);
+    border-left-color: rgba(89, 119, 136, 0.9);
+    border-radius: 8px;
+    padding: 14px 18px;
+}
+
+.health-card {
+    width: 390px;
+}
+
+.gold-card {
+    min-width: 180px;
+    align-items: flex-end;
+}
+
+.weapon-card {
+    width: 460px;
+}
+
+.hud-caption {
+    font-size: 13px;
+    color: rgb(145, 169, 181);
+    -unity-font-style: bold;
+    margin-bottom: 5px;
+}
+
+.hud-value {
+    font-size: 20px;
+    color: rgb(245, 238, 210);
+    -unity-font-style: bold;
+}
+
+#health-bar {
+    height: 30px;
+    margin-top: 3px;
+}
+
+#health-bar .unity-progress-bar__background {
+    background-color: rgb(42, 48, 53);
+    border-radius: 5px;
+}
+
+#health-bar .unity-progress-bar__progress {
+    background-color: rgb(194, 54, 57);
+    border-radius: 5px;
+}
+
+#health-bar .unity-progress-bar__title {
+    color: white;
+    -unity-font-style: bold;
+}

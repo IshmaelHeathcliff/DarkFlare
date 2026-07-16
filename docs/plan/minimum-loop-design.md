@@ -152,7 +152,7 @@ Assets/Data/Preset/
 7. 接入基础打造。（已完成）
 8. 用 `Main.unity` 串成一轮完整循环。（进行中）第 1–7 步的装备/交易/打造目前只能由 `execute_code` 触发，本步要补玩家输入层与 UI 才能由人手玩闭合，已拆成 8a–8f 子步，设计见 [`input-ui-design.md`](input-ui-design.md)：
    - 8a 输入层重构（已完成：`InputSystem_Actions` + `GameInput` 封装 + Action Map 切换）
-   - 8b UI 基础 + HUD（`UIDocument`/`PanelSettings`，补金币/背包/装备/打造领域事件，只读 HUD）
+   - 8b UI 基础 + HUD（已完成：`UIDocument`/`PanelSettings`、领域事件、只读 HUD）
    - 8c 背包 + 装备交互
    - 8d 商店交互
    - 8e 打造交互
@@ -164,7 +164,7 @@ Assets/Data/Preset/
 
 - 数据配置：`CharacterDefinition`（玩家/通用角色属性，含 Prefab 引用）、`ProjectileSkillDefinition`（投射物技能，含 Prefab 引用）、`MonsterDefinition`（怪物属性、Prefab 引用、碰撞伤害）、`MonsterSpawnDefinition`（刷怪间隔、存活上限、怪物池权重）。怪物、玩家、投射物的 Prefab 引用统一使用 `AssetReferenceGameObject`，走 Addressables 加载，不再用直接 `GameObject` 引用或运行时现造对象。
 - `CombatModel`：按阵营维护存活 `CombatActor` 列表。
-- `CombatSystem`：负责注册/注销 Actor、`ApplyDamage`（伤害结算 + 生死判定）、`Revive`，并在状态变化时发送 `ActorDamagedEvent`/`ActorDiedEvent`/`ActorRevivedEvent`。
+- `CombatSystem`：负责注册/注销 Actor、`ApplyDamage`（伤害结算 + 生死判定）、`Revive`，并在状态变化时发送战斗事件；注册、注销和装备变更也会发送领域事件供 UI 刷新。
 - `SpawnSystem`：负责 `PreloadAsync`（预热玩家、技能、怪物池对应的 Addressable Prefab）和 `SpawnPlayer`/`SpawnMonster`/`SpawnProjectile`（从已预热的 Prefab 实例化）。
 - `PrefabAssetLoader`（`IUtility`，原名 `CombatAssetLoader`，改名后不再局限于战斗场景，供任意功能预热/缓存 Addressable Prefab）：Addressables 加载、缓存与释放。
 - Command：`RegisterActorCommand`/`UnregisterActorCommand`/`ApplyDamageCommand`/`ReviveActorCommand`/`SpawnPlayerCommand`/`SpawnMonsterCommand`/`FireProjectileCommand`/`PickupLootCommand`/`EquipItemCommand`。
@@ -174,11 +174,12 @@ Assets/Data/Preset/
 - 掉落：`LootTableDefinition`（掉落池 + 词条池，`PickItem` 加权选取、`GenerateLoot` 调用已有的 `ItemGenerator` 生成 `ItemInstance`）、`LootSystem`（监听 `ActorDiedEvent`，命中怪物阵营时按 `MonsterDefinition.LootTable` 生成掉落物并在死亡位置生成 `LootPickup` Prefab；`CollectLoot` 把物品放入 `InventoryModel`，背包满则返回 false）。物品随机生成的纯逻辑（`ItemInstance`/`ItemGenerationOptions`/`ItemGenerator`）此前已经写好但从未被调用，掉落这一步是它们第一次被接入实际流程。
 - 装备：`EquipmentModel`（按 `CombatActor` 存放已装备武器，为后续给怪物/NPC 装备预留）、`CombatSystem.EquipWeapon`（写入 `EquipmentModel`、从 `InventoryModel` 移出该物品、并调用 `CombatActor.SetModifiers(item.CollectModifiers())`，让 `DamageCalculator` 里的 Increase/More/Conversion 等阶段真正吃到装备词条）。v1 只做武器单槽位，卸装备和多槽位留给后续。修正了两处会让装备验证不出效果的历史数据问题：`Assets/Data/Preset/Stats/05伤害.asset` 的 `_id` 从 `Damage` 改成 `damage`（与 `StatIds.Damage` 大小写对齐），`Assets/Data/Preset/Afflixes/000基础伤害增加.asset` 的运算方式从 `Flat` 改成 `Increase`（`Flat` 目前只有类型专属伤害属性会被 `DamageCalculator.GetFlatDamage` 读取，通用 `damage` 属性走不到）。
 - 背包：`InventoryGrid`（纯逻辑二维格子，`TryAdd` 按 `ItemBaseDefinition.GridSize` 行优先找空矩形占用、`Remove` 释放格子，放不下返回 false）、`InventoryModel`（持有单个玩家背包 grid，默认 10x6，暴露 `TryAddItem`/`RemoveItem`/`Grid`，以及玩家金币 `Gold`/`AddGold`/`TrySpendGold`）。拾取即入包，背包满则拾取物留在地上——体现"有限空间导致取舍"。当前只做格子占用，堆叠（无可堆叠物品）和重量限制（格子已是空间约束）暂缓。从背包穿戴武器时物品会移出背包（`EquipWeapon` 内处理）；这一步不再自动穿戴，从背包选物穿戴的交互等背包 UI。
-- 交易：`ItemValueCalculator`（纯逻辑，价值 = 基础价 × 稀有度倍率 × (1 + 0.25 × 词条数)，买价 ceil(value×买倍率)、卖价 floor(value×卖倍率)）、`EconomyModel`（单个商人的运行时库存 + 买卖倍率）、`TradingSystem`（`BuyItem`/`SellItem`/价格查询/`SetupMerchant`/`GrantGold`）。卖出把物品从背包移除换金币；买入严格"先查金币和空间、再扣钱、再从库存移除"，任一前置不满足直接返回 false，保证不会扣了钱没进包。`TraderDefinition`（商人配置：库存条目 + 买卖倍率）由 `CombatPrototypeBootstrap` 在启动时 `SetupMerchant`，并发放初始金币。金币是 `InventoryModel.Gold` 一个整数、不占背包格子。价格公式暂不含词条 tier / 材料类型（概念未建立），不发交易事件（无监听者），不做多商人、场景商人实体和商店 UI。`BuyItemCommand`/`SellItemCommand`/`GetItemPriceQuery` 供后续 UI 使用。
+- 交易：`ItemValueCalculator`（纯逻辑，价值 = 基础价 × 稀有度倍率 × (1 + 0.25 × 词条数)，买价 ceil(value×买倍率)、卖价 floor(value×卖倍率)）、`EconomyModel`（单个商人的运行时库存 + 买卖倍率）、`TradingSystem`（`BuyItem`/`SellItem`/价格查询/`SetupMerchant`/`GrantGold`）。卖出把物品从背包移除换金币；买入严格"先查金币和空间、再扣钱、再从库存移除"，任一前置不满足直接返回 false，保证不会扣了钱没进包。`TraderDefinition`（商人配置：库存条目 + 买卖倍率）由 `CombatPrototypeBootstrap` 在启动时 `SetupMerchant`，并发放初始金币。金币是 `InventoryModel.Gold` 一个整数、不占背包格子。价格公式暂不含词条 tier / 材料类型（概念未建立）；交易复用 `InventoryModel` 发出的金币 / 背包变化事件，不额外定义交易事件。多商人、场景商人实体和商店 UI 尚未实现。`BuyItemCommand`/`SellItemCommand`/`GetItemPriceQuery` 供后续 UI 使用。
 - 打造：`ItemInstance` 补齐 `RemoveAffix`/`ClearAffixes`（此前只能加词条）。`CraftingOperations`（纯逻辑）实现四种操作——`AddRandomAffix`（从词条池按权重加一条该物品还能加的词条）、`RerollAllAffixes`（按原前后缀数量清空重掷）、`RemoveAndRerollAffix`（移除指定词条再加一条随机的）、`UpgradeAffix`（重掷指定词条数值，按词条内 `ModifierInstance.Value` 之和取高者，只升不降）。`CraftingSystem`（无 Model——打造无运行时状态，仿 `LootSystem` 持有配置引用）负责 `Setup`/`GetCost`/`Craft`：先查金币够、再调纯逻辑操作、操作成功才扣金币，各操作返回 false 时都不改物品，保证"扣了钱没变化"不发生。`CraftingDefinition`（词条池 + 四操作成本）由 Bootstrap 启动时 `Setup`。成本只用金币（材料物品/配方尚不存在，故不建 `CraftingModel`）。词条池目前仅一条词条，机制可验证、内容后补。`CraftItemCommand`（含 `CraftOperation` 枚举 + item + 可选目标词条）/`GetCraftingCostQuery` 供后续 UI 使用。词条变化后 `ItemValueCalculator.GetValue` 随之变化，打造与交易价值联动。
 - Prefab：`Assets/Prefabs/Combat/Player.prefab`、`Monster_Basic.prefab`、`Projectile_Default.prefab`、`Assets/Prefabs/Loot/LootPickup.prefab`，均已标记为 Addressable。占位视觉使用共享的方块贴图 `Assets/Art/Textures/Prototype/PrototypeSquare.png`，按 `SpriteRenderer.Color` 区分（玩家/怪物/投射物用固定颜色，掉落物按稀有度着色）。
 - 数据资源：`Assets/Data/Preset/Actors/玩家.asset`、`Skills/基础投射物技能.asset`、`Monsters/基础怪物.asset`、`Monsters/基础刷怪表.asset`、`Loot/基础怪物掉落表.asset`（引用已有的 `Items/001大剑.asset` 和 `Afflixes/000基础伤害增加.asset`）、`Traders/基础商人.asset`、`Crafting/基础打造配置.asset`（词条池引用 `Afflixes/000基础伤害增加.asset`），已在 `Main.unity` 场景中挂到 `CombatPrototypeBootstrap`/`MonsterSpawner`。`001大剑.asset` 的 `_baseValue` 从 0 修正为 10，否则交易卖价恒为 0 验证不出效果。
-- 测试：`Assets/Scripts/Tests/EditMode/` 下的测试覆盖刷怪/掉落权重、伤害词条、背包、交易价值、打造操作，以及 `GameInput` 的键盘/手柄移动和 Gameplay/UI Action Map 切换。当前 Unity EditMode 全套 24/24 通过。
+- UI 基础：`GameRoot.uxml` 组合只读 HUD，`HudController` 通过 `GetHudSnapshotQuery` 显示玩家生命、金币与当前武器摘要，并订阅战斗、金币、背包、装备、打造和 Actor 注册事件刷新。`Main.unity` 已挂 `UIRoot`，复用唯一 `EventSystem` 并连接项目 Input Actions 的 `UI` map。
+- 测试：`Assets/Scripts/Tests/EditMode/` 下的测试覆盖刷怪/掉落权重、伤害词条、背包、交易价值、打造操作、统一输入和 UI 领域事件 / HUD 快照。当前 Unity EditMode 全套 28/28 通过。
 
 ## 暂缓内容
 
@@ -186,7 +187,7 @@ Assets/Data/Preset/
 - 复杂异常状态
 - 召唤物
 - 正式美术资源（当前 Prefab 用占位方块贴图代替最终美术）
-- 全流程 UI（掉落生成、装备词条生效、背包格子占用、商人买卖、基础打造均已接入后端；从背包/商店/打造台选物操作的可视化交互，以及堆叠与重量限制暂缓）
+- 全流程 UI（HUD 已完成；从背包/商店/打造台选物操作的可视化交互，以及堆叠与重量限制暂缓）
 - 多场景撤离
 - 联机同步
 - 完整经济模拟

@@ -17,19 +17,35 @@ namespace DarkFlare
 
         public bool TryAddItem(ItemInstance item)
         {
-            return Grid.TryAdd(item);
+            bool added = Grid.TryAdd(item);
+
+            if (added)
+            {
+                this.SendEvent(new InventoryChangedEvent(item, InventoryChangeType.Added));
+            }
+
+            return added;
         }
 
         public bool RemoveItem(ItemInstance item)
         {
-            return Grid.Remove(item);
+            bool removed = Grid.Remove(item);
+
+            if (removed)
+            {
+                this.SendEvent(new InventoryChangedEvent(item, InventoryChangeType.Removed));
+            }
+
+            return removed;
         }
 
         public void AddGold(int amount)
         {
             if (amount > 0)
             {
+                int previousGold = Gold;
                 Gold += amount;
+                this.SendEvent(new GoldChangedEvent(previousGold, Gold));
             }
         }
 
@@ -40,7 +56,14 @@ namespace DarkFlare
                 return false;
             }
 
+            if (amount == 0)
+            {
+                return true;
+            }
+
+            int previousGold = Gold;
             Gold -= amount;
+            this.SendEvent(new GoldChangedEvent(previousGold, Gold));
             return true;
         }
     }

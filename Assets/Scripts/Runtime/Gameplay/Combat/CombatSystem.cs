@@ -14,11 +14,13 @@ namespace DarkFlare
         public void RegisterActor(CombatActor actor)
         {
             this.GetModel<CombatModel>().RegisterActor(actor);
+            this.SendEvent(new ActorRegisteredEvent(actor));
         }
 
         public void UnregisterActor(CombatActor actor)
         {
             this.GetModel<CombatModel>().UnregisterActor(actor);
+            this.SendEvent(new ActorUnregisteredEvent(actor));
         }
 
         public DamageResult ApplyDamage(
@@ -82,7 +84,9 @@ namespace DarkFlare
                 return;
             }
 
-            this.GetModel<EquipmentModel>().SetWeapon(actor, weapon);
+            EquipmentModel equipment = this.GetModel<EquipmentModel>();
+            ItemInstance previousWeapon = equipment.GetWeapon(actor);
+            equipment.SetWeapon(actor, weapon);
 
             if (weapon != null)
             {
@@ -91,6 +95,7 @@ namespace DarkFlare
             }
 
             actor.SetModifiers(weapon != null ? weapon.CollectModifiers() : EmptyModifiers);
+            this.SendEvent(new EquipmentChangedEvent(actor, previousWeapon, weapon));
             Debug.Log($"[CombatSystem] {actor.ActorId} 装备了 {(weapon != null ? weapon.BaseDefinition.DisplayName : "无")}");
         }
     }

@@ -75,6 +75,7 @@ namespace DarkFlare
             }
 
             inventory.TrySpendGold(cost);
+            this.SendEvent(new ItemCraftedEvent(operation, item));
             Debug.Log($"[CraftingSystem] {operation} 成功，花费 {cost} 金币，{DescribeItem(item)} 当前词条 {item.Prefixes.Count + item.Suffixes.Count} 条，剩余金币 {inventory.Gold}");
             return true;
         }
