@@ -1,10 +1,10 @@
 # 输入系统与 UI 设计
 
-本文档记录玩家输入层重构与 UIToolkit UI 架构，是最小循环第 8 步“用 `Main.unity` 串成一轮完整循环”的执行依据。当前 8a、8b、8c、8d 已完成，下一步进入 8e 打造交互。
+本文档记录玩家输入层重构与 UIToolkit UI 架构，是最小循环第 8 步“用 `Main.unity` 串成一轮完整循环”的执行依据。当前 8a–8e 已完成，下一步进入 8f 场景入口串联。
 
 ## 背景
 
-最小循环第 1–7 步（刷怪→战斗→掉落→背包→装备→交易→打造）后端已全部就绪并通过测试与 Play 验证。装备和交易已经具备玩家 UI 入口；打造仍只能靠 `execute_code` 触发，场景内的商人 / 打造台入口也尚未串联，因此循环还不能完全由人手闭合。
+最小循环第 1–7 步（刷怪→战斗→掉落→背包→装备→交易→打造）后端已全部就绪并通过测试与 Play 验证。装备、交易和打造已经具备玩家 UI 入口；场景内的商人 / 打造台实体与 `Interact` 入口尚未串联，因此完整循环仍需 8f 收尾。
 
 当前状态：
 
@@ -13,6 +13,7 @@
 - **反应式基础（8b 已完成）**：金币、背包、装备、打造及 Actor 注册变化均有领域事件，HUD 通过 Query 读取快照并在事件到达时刷新，不做每帧轮询。
 - **背包与装备（8c 已完成）**：`InventoryPanelController` 通过只读快照绘制 10×6 背包，支持选择武器并发送 `EquipItemCommand`；换装采用原子交换，旧武器安全回包，HUD 与背包由领域事件同步刷新。
 - **商店（8d 已完成）**：`GameMenuController` 统一管理背包 / 商店页签、关闭和 Gameplay/UI 模式；`ShopPanelController` 通过交易快照显示商人库存与玩家背包，并发送买卖 Command。成功交易由 `TradeCompletedEvent` 驱动刷新。
+- **打造（8e 已完成）**：共享菜单增加打造页；`CraftingPanelController` 通过 `GetCraftingSnapshotQuery` 显示背包物品、词缀、成本、价值和出售价，并发送 `CraftItemCommand`。四种操作具备失败回滚和只在实际生效后扣费的事务语义。
 
 ## 一、输入层重构
 
@@ -49,7 +50,7 @@
 ### 接入 QFramework
 
 - 每个 UI 面板脚本实现 `IController`：
-  - 用 **Query** 拉取初始状态（如 `InventoryModel.Grid`、`GetItemPriceQuery`、`GetCraftingCostQuery`）。
+  - 用 **Query** 拉取初始状态（如 `GetInventorySnapshotQuery`、`GetShopSnapshotQuery`、`GetCraftingSnapshotQuery`）。
   - 用 **RegisterEvent** 响应状态变化刷新。
   - 用 **SendCommand** 触发操作（`EquipItemCommand` / `BuyItemCommand` / `SellItemCommand` / `CraftItemCommand`）。
   - 严守"Controller 只注册事件 + 发命令，不直接改 Model"。
@@ -75,7 +76,7 @@
 1. **HUD（常驻）**：血量条、金币、当前武器 / 词条摘要。
 2. **背包面板**：复用 `InventoryModel.Grid`（`InventoryGrid.Placements`）画二维格子；点击物品弹出穿戴 / 出售 / 打造操作。
 3. **商店面板**：商人库存列表 + 买价 / 背包列表 + 卖价，点击买卖。
-4. **打造面板**：选背包物品 + 四个操作按钮 + 成本显示（`GetCraftingCostQuery`）。
+4. **打造面板**：选背包物品与词缀 + 四个操作按钮 + 成本 / 价值显示（`GetCraftingSnapshotQuery`）。
 
 ### UI 美术资源
 
@@ -91,7 +92,7 @@
 - **8b UI 基础 + HUD（已完成）**：`UIDocument`/`PanelSettings`/主题/`EventSystem` 根节点、UI Controller 接入 QFramework、补上表领域事件、做只读 HUD。已验证运行时玩家生命、金币和武器摘要，以及金币事件驱动刷新。
 - **8c 背包 + 装备（已完成）**：背包格子面板，点击物品→穿戴（`EquipItemCommand`）；已验证物品尺寸与位置、装备操作、HUD 同步和 Gameplay/UI 模式互斥。
 - **8d 商店（已完成）**：共享菜单路由与商店面板买卖（`BuyItemCommand` / `SellItemCommand`）；已验证买卖后的金币、商人库存、玩家背包、HUD 和输入模式同步。
-- **8e 打造**：打造面板四操作（`CraftItemCommand`）。验证：手玩打造，词条 / 价值变化。
+- **8e 打造（已完成）**：共享菜单打造页与四操作（`CraftItemCommand`），事务修正、快照 Query、Play 与视觉验证见 [`crafting-ui-plan.md`](crafting-ui-plan.md)。
 - **8f 循环收尾**：入口串联（`Interact` 开面板 / 走到商人），一轮完整可玩循环，感受构筑变化。
 
 ## 四、8b 已落地
@@ -115,7 +116,7 @@
 
 ### 范围与前置修正
 
-- 8c 当时只完成背包浏览、物品选择和武器穿戴；商店已在 8d 完成，打造、拖拽换位、物品旋转、堆叠与重量仍留在后续步骤。
+- 8c 当时只完成背包浏览、物品选择和武器穿戴；商店与打造现已分别在 8d、8e 完成，拖拽换位、物品旋转、堆叠与重量仍留在后续步骤。
 - 当前 `CombatSystem.EquipWeapon` 会直接覆盖旧武器，`EquipItemCommand` 也没有成功 / 失败返回。开放玩家操作前必须先补原子交换：新武器只能来自背包，类型必须为 `Weapon`；换装成功时旧武器回到背包，空间不足或参数无效时所有状态与事件都保持不变。
 - `GameInput` 已自行监听 `Player/ToggleMenu` 与 `UI/Cancel` 并切换 Action Map。面板 Controller 订阅 `GameInput.ModeChanged` 控制显示，不重复监听底层 InputAction。首版保持 Tab / 手柄 Start 打开，Escape / 手柄东键关闭。
 
@@ -153,6 +154,14 @@
 - Play Mode 冻结世界状态后完成真实按钮链路：买入使金币 100→85、商人库存 3→2、玩家背包 0→1；随后卖出使金币 85→89、背包 1→0，HUD 金币同步。
 - 背包 / 商店页签互斥显示；关闭菜单后遮罩与页面隐藏，输入从 UI map 恢复到 Gameplay map。
 - 1920×1080 渲染检查无明显重叠；Play 控制台 0 警告、0 错误。
+
+## 七、8e 已落地
+
+- `CraftingOperations` 的重随全部和移除重随具备失败回滚，并保持原前后缀数量与目标词缀类型；提升数值只有严格变大才成功。
+- `CraftingSystem` 只接受玩家背包内物品，操作实际生效后才扣金币和发送 `ItemCraftedEvent`。
+- `GetCraftingSnapshotQuery` 提供金币、四项成本、背包物品、词缀详情、价值和出售价；`CraftingPanelController` 只消费快照并发送 Command。
+- `Crafting.uxml` / `Crafting.uss` 已作为第三页接入共享菜单，`Main.unity/UIRoot` 新增 `CraftingPanelController`，仍复用唯一 `UIDocument` 与 `EventSystem`。
+- Unity EditMode 全量 42/42 通过；Play Mode 四个真实按钮链路、visual tree、1920×1080 前后渲染与控制台检查通过，0 错误。详细范围和验证数据见 [`crafting-ui-plan.md`](crafting-ui-plan.md)。
 
 ## 约定与边界
 

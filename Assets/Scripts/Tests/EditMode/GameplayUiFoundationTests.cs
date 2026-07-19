@@ -280,6 +280,8 @@ public class GameplayUiFoundationTests
         SetField(craftingDefinition, "_affixPool", new List<AffixDefinition> { affixDefinition });
         SetField(craftingDefinition, "_addAffixCost", 0);
         ItemInstance item = CreateItem("craft_item", "打造测试物品");
+        InventoryModel inventory = _architecture.GetModel<InventoryModel>();
+        Assert.IsTrue(inventory.TryAddItem(item));
         ItemCraftedEvent craftedEvent = default;
         int eventCount = 0;
         _architecture.RegisterEvent<ItemCraftedEvent>(e =>
@@ -296,6 +298,88 @@ public class GameplayUiFoundationTests
         Assert.AreEqual(1, eventCount);
         Assert.AreEqual(CraftOperation.AddAffix, craftedEvent.Operation);
         Assert.AreSame(item, craftedEvent.Item);
+    }
+
+    [Test]
+    public void CraftingSystem_RejectsItemOutsideInventory_WithoutCostOrEvent()
+    {
+        CraftingDefinition craftingDefinition = CreateScriptableObject<CraftingDefinition>();
+        AffixDefinition affixDefinition = CreateScriptableObject<AffixDefinition>();
+        SetField(craftingDefinition, "_affixPool", new List<AffixDefinition> { affixDefinition });
+        SetField(craftingDefinition, "_addAffixCost", 20);
+        ItemInstance item = CreateItem("detached_craft_item", "背包外物品");
+        InventoryModel inventory = _architecture.GetModel<InventoryModel>();
+        inventory.AddGold(100);
+        int eventCount = 0;
+        _architecture.RegisterEvent<ItemCraftedEvent>(_ => eventCount++);
+        _architecture.GetSystem<CraftingSystem>().Setup(craftingDefinition);
+
+        bool crafted = _architecture.SendCommand(new CraftItemCommand(CraftOperation.AddAffix, item));
+
+        Assert.IsFalse(crafted);
+        Assert.AreEqual(100, inventory.Gold);
+        Assert.AreEqual(0, item.Prefixes.Count + item.Suffixes.Count);
+        Assert.AreEqual(0, eventCount);
+    }
+
+    [Test]
+    public void CraftingSnapshot_ContainsCostsItemsAndAffixDetails()
+    {
+        CraftingDefinition craftingDefinition = CreateScriptableObject<CraftingDefinition>();
+        SetField(craftingDefinition, "_addAffixCost", 20);
+        SetField(craftingDefinition, "_rerollAllCost", 40);
+        SetField(craftingDefinition, "_removeRerollCost", 30);
+        SetField(craftingDefinition, "_upgradeCost", 25);
+        AffixDefinition affixDefinition = CreateAffixDefinition("测试增伤", 20f, 20f);
+        ItemInstance item = CreateItem("craft_snapshot_item", "快照大剑", baseValue: 10);
+        Assert.IsTrue(item.TryAddAffix(affixDefinition.CreateInstance(new System.Random(1))));
+        InventoryModel inventory = _architecture.GetModel<InventoryModel>();
+        inventory.AddGold(100);
+        Assert.IsTrue(inventory.TryAddItem(item));
+        _architecture.GetSystem<CraftingSystem>().Setup(craftingDefinition);
+
+        CraftingSnapshot snapshot = _architecture.SendQuery(new GetCraftingSnapshotQuery());
+
+        Assert.IsTrue(snapshot.IsConfigured);
+        Assert.AreEqual(100, snapshot.Gold);
+        Assert.AreEqual(20, snapshot.AddAffixCost);
+        Assert.AreEqual(40, snapshot.RerollAllCost);
+        Assert.AreEqual(30, snapshot.RemoveRerollCost);
+        Assert.AreEqual(25, snapshot.UpgradeAffixCost);
+        Assert.AreEqual(1, snapshot.Items.Count);
+        Assert.AreSame(item, snapshot.Items[0].Item);
+        Assert.AreEqual("快照大剑", snapshot.Items[0].DisplayName);
+        Assert.AreEqual(12, snapshot.Items[0].Value);
+        Assert.AreEqual(4, snapshot.Items[0].SellPrice);
+        Assert.AreEqual(1, snapshot.Items[0].Affixes.Count);
+        Assert.AreEqual("测试增伤", snapshot.Items[0].Affixes[0].DisplayName);
+        StringAssert.Contains("damage", snapshot.Items[0].Affixes[0].ModifierSummary);
+        StringAssert.Contains("20", snapshot.Items[0].Affixes[0].ModifierSummary);
+        Assert.AreEqual(20f, snapshot.Items[0].Affixes[0].TotalValue);
+    }
+
+    [Test]
+    public void CraftingSystem_DoesNotCharge_WhenUpgradeCannotImprove()
+    {
+        CraftingDefinition craftingDefinition = CreateScriptableObject<CraftingDefinition>();
+        SetField(craftingDefinition, "_upgradeCost", 25);
+        AffixDefinition affixDefinition = CreateAffixDefinition("固定增伤", 20f, 20f);
+        ItemInstance item = CreateItem("fixed_upgrade_item", "固定数值物品");
+        AffixInstance affix = affixDefinition.CreateInstance(new System.Random(1));
+        Assert.IsTrue(item.TryAddAffix(affix));
+        InventoryModel inventory = _architecture.GetModel<InventoryModel>();
+        inventory.AddGold(100);
+        Assert.IsTrue(inventory.TryAddItem(item));
+        int eventCount = 0;
+        _architecture.RegisterEvent<ItemCraftedEvent>(_ => eventCount++);
+        _architecture.GetSystem<CraftingSystem>().Setup(craftingDefinition);
+
+        bool crafted = _architecture.SendCommand(new CraftItemCommand(CraftOperation.UpgradeAffix, item, affix));
+
+        Assert.IsFalse(crafted);
+        Assert.AreEqual(100, inventory.Gold);
+        Assert.AreSame(affix, item.Prefixes[0]);
+        Assert.AreEqual(0, eventCount);
     }
 
     CombatActor CreatePlayer()
@@ -323,6 +407,22 @@ public class GameplayUiFoundationTests
         SetField(definition, "_gridSize", gridSize ?? Vector2Int.one);
         SetField(definition, "_baseValue", baseValue);
         return definition.CreateInstance(instanceId, 1, 1, ItemRarity.Normal);
+    }
+
+    AffixDefinition CreateAffixDefinition(string displayName, float minimumValue, float maximumValue)
+    {
+        StatDefinition stat = CreateScriptableObject<StatDefinition>();
+        SetField(stat, "_id", "damage");
+        SetField(stat, "_displayName", "伤害");
+        StatModifierDefinition modifier = new StatModifierDefinition();
+        SetField(modifier, "_stat", stat);
+        SetField(modifier, "_operation", ModifierOperation.Increase);
+        SetField(modifier, "_valueRange", new Vector2(minimumValue, maximumValue));
+        AffixDefinition affix = CreateScriptableObject<AffixDefinition>();
+        SetField(affix, "_displayName", displayName);
+        SetField(affix, "_weight", 100);
+        SetField(affix, "_modifiers", new List<StatModifierDefinition> { modifier });
+        return affix;
     }
 
     T CreateScriptableObject<T>() where T : ScriptableObject

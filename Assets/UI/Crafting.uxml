@@ -1,0 +1,53 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+  <ui:VisualElement name="crafting-page" class="crafting-page" picking-mode="Position">
+    <ui:VisualElement class="crafting-body">
+      <ui:VisualElement class="crafting-list-section crafting-item-section">
+        <ui:VisualElement class="crafting-section-header">
+          <ui:Label text="背包物品" class="crafting-section-title" />
+          <ui:Label text="ITEMS" class="crafting-section-kicker" />
+        </ui:VisualElement>
+        <ui:VisualElement class="crafting-list-frame">
+          <ui:ScrollView class="crafting-scroll">
+            <ui:VisualElement name="crafting-item-list" class="crafting-list" />
+          </ui:ScrollView>
+          <ui:Label name="crafting-item-empty" text="背包中没有可打造物品" class="crafting-empty" />
+        </ui:VisualElement>
+      </ui:VisualElement>
+      <ui:VisualElement class="crafting-list-section crafting-affix-section">
+        <ui:VisualElement class="crafting-section-header">
+          <ui:Label text="现有词缀" class="crafting-section-title" />
+          <ui:Label text="AFFIXES" class="crafting-section-kicker" />
+        </ui:VisualElement>
+        <ui:VisualElement class="crafting-list-frame">
+          <ui:ScrollView class="crafting-scroll">
+            <ui:VisualElement name="crafting-affix-list" class="crafting-list" />
+          </ui:ScrollView>
+          <ui:Label name="crafting-affix-empty" text="选中物品没有词缀" class="crafting-empty" />
+        </ui:VisualElement>
+      </ui:VisualElement>
+      <ui:VisualElement class="crafting-details">
+        <ui:Label name="crafting-gold" text="持有金币  0" class="crafting-gold" />
+        <ui:Label text="打造详情" class="crafting-section-title" />
+        <ui:VisualElement class="crafting-divider" />
+        <ui:Label name="crafting-selected-name" text="未选择物品" class="crafting-selected-name" />
+        <ui:Label name="crafting-selected-type" text="类型：-" class="crafting-detail-line" />
+        <ui:Label name="crafting-selected-rarity" text="稀有度：-" class="crafting-detail-line" />
+        <ui:Label name="crafting-selected-capacity" text="词缀容量：-" class="crafting-detail-line" />
+        <ui:Label name="crafting-selected-value" text="物品价值：-" class="crafting-value" />
+        <ui:VisualElement class="crafting-affix-card">
+          <ui:Label name="crafting-selected-affix" text="未选择词缀" class="crafting-selected-affix" />
+          <ui:Label name="crafting-selected-affix-detail" text="选择词缀后可移除重随或提升数值" class="crafting-affix-detail" />
+        </ui:VisualElement>
+        <ui:VisualElement class="crafting-details-spacer" />
+        <ui:Label name="crafting-feedback" text="选择背包物品开始打造" class="crafting-feedback" />
+        <ui:VisualElement class="crafting-actions">
+          <ui:Button name="crafting-add-affix" text="添加词缀 · 0 金币" class="crafting-action crafting-action--primary" />
+          <ui:Button name="crafting-reroll-all" text="重随全部 · 0 金币" class="crafting-action" />
+          <ui:Button name="crafting-remove-reroll" text="移除并重随 · 0 金币" class="crafting-action" />
+          <ui:Button name="crafting-upgrade-affix" text="提升数值 · 0 金币" class="crafting-action" />
+        </ui:VisualElement>
+      </ui:VisualElement>
+    </ui:VisualElement>
+    <ui:Label text="方向键 / 左摇杆移动焦点 · Enter / A 确认 · Esc / B 关闭" class="crafting-help" />
+  </ui:VisualElement>
+</ui:UXML>

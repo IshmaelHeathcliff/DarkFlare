@@ -6,13 +6,15 @@ namespace DarkFlare
     public enum GameMenuPage
     {
         Inventory,
-        Shop
+        Shop,
+        Crafting
     }
 
     [DisallowMultipleComponent]
     [RequireComponent(typeof(UIDocument))]
     [RequireComponent(typeof(InventoryPanelController))]
     [RequireComponent(typeof(ShopPanelController))]
+    [RequireComponent(typeof(CraftingPanelController))]
     public class GameMenuController : MonoBehaviour, IController
     {
         const string ActiveTabClass = "game-menu-tab--active";
@@ -26,10 +28,14 @@ namespace DarkFlare
         [SerializeField]
         ShopPanelController _shopPanel;
 
+        [SerializeField]
+        CraftingPanelController _craftingPanel;
+
         GameInput _gameInput;
         VisualElement _overlay;
         Button _inventoryTab;
         Button _shopTab;
+        Button _craftingTab;
         Button _closeButton;
 
         public GameMenuPage CurrentPage { get; private set; } = GameMenuPage.Inventory;
@@ -103,6 +109,11 @@ namespace DarkFlare
                 _shopTab.clicked -= OnShopTabClicked;
             }
 
+            if (_craftingTab != null)
+            {
+                _craftingTab.clicked -= OnCraftingTabClicked;
+            }
+
             if (_closeButton != null)
             {
                 _closeButton.clicked -= OnCloseClicked;
@@ -112,6 +123,7 @@ namespace DarkFlare
             _overlay = null;
             _inventoryTab = null;
             _shopTab = null;
+            _craftingTab = null;
             _closeButton = null;
         }
 
@@ -141,6 +153,11 @@ namespace DarkFlare
             {
                 _shopPanel = GetComponent<ShopPanelController>();
             }
+
+            if (_craftingPanel == null)
+            {
+                _craftingPanel = GetComponent<CraftingPanelController>();
+            }
         }
 
         bool BindVisualTree()
@@ -155,9 +172,14 @@ namespace DarkFlare
             _overlay = root.Q<VisualElement>("game-menu-overlay");
             _inventoryTab = root.Q<Button>("game-menu-inventory-tab");
             _shopTab = root.Q<Button>("game-menu-shop-tab");
+            _craftingTab = root.Q<Button>("game-menu-crafting-tab");
             _closeButton = root.Q<Button>("game-menu-close");
 
-            if (_overlay == null || _inventoryTab == null || _shopTab == null || _closeButton == null)
+            if (_overlay == null
+                || _inventoryTab == null
+                || _shopTab == null
+                || _craftingTab == null
+                || _closeButton == null)
             {
                 Debug.LogError("[GameMenuController] 菜单 UXML 缺少必要的命名元素", this);
                 return false;
@@ -165,6 +187,7 @@ namespace DarkFlare
 
             _inventoryTab.clicked += OnInventoryTabClicked;
             _shopTab.clicked += OnShopTabClicked;
+            _craftingTab.clicked += OnCraftingTabClicked;
             _closeButton.clicked += OnCloseClicked;
             return true;
         }
@@ -192,20 +215,36 @@ namespace DarkFlare
 
             _inventoryPanel?.SetVisible(false);
             _shopPanel?.SetVisible(false);
+            _craftingPanel?.SetVisible(false);
             CurrentPage = GameMenuPage.Inventory;
         }
 
         void ApplyPage()
         {
             bool showInventory = CurrentPage == GameMenuPage.Inventory;
+            bool showShop = CurrentPage == GameMenuPage.Shop;
+            bool showCrafting = CurrentPage == GameMenuPage.Crafting;
             _inventoryPanel?.SetVisible(showInventory);
-            _shopPanel?.SetVisible(!showInventory);
+            _shopPanel?.SetVisible(showShop);
+            _craftingPanel?.SetVisible(showCrafting);
             SetTabActive(_inventoryTab, showInventory);
-            SetTabActive(_shopTab, !showInventory);
+            SetTabActive(_shopTab, showShop);
+            SetTabActive(_craftingTab, showCrafting);
 
-            bool focused = showInventory
-                ? _inventoryPanel != null && _inventoryPanel.FocusDefault()
-                : _shopPanel != null && _shopPanel.FocusDefault();
+            bool focused = false;
+
+            if (showInventory)
+            {
+                focused = _inventoryPanel != null && _inventoryPanel.FocusDefault();
+            }
+            else if (showShop)
+            {
+                focused = _shopPanel != null && _shopPanel.FocusDefault();
+            }
+            else if (showCrafting)
+            {
+                focused = _craftingPanel != null && _craftingPanel.FocusDefault();
+            }
 
             if (!focused)
             {
@@ -221,6 +260,11 @@ namespace DarkFlare
         void OnShopTabClicked()
         {
             OpenPage(GameMenuPage.Shop);
+        }
+
+        void OnCraftingTabClicked()
+        {
+            OpenPage(GameMenuPage.Crafting);
         }
 
         void OnCloseClicked()

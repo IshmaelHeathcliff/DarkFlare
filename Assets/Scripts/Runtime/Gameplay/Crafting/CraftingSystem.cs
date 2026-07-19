@@ -16,6 +16,8 @@ namespace DarkFlare
 
         CraftingDefinition _definition;
 
+        public bool IsConfigured => _definition != null;
+
         protected override void OnInit()
         {
         }
@@ -57,8 +59,15 @@ namespace DarkFlare
                 return false;
             }
 
-            int cost = GetCost(operation);
             InventoryModel inventory = this.GetModel<InventoryModel>();
+
+            if (!inventory.Grid.Placements.ContainsKey(item))
+            {
+                Debug.Log($"[CraftingSystem] 打造失败：物品不在玩家背包中（{DescribeItem(item)}）");
+                return false;
+            }
+
+            int cost = GetCost(operation);
 
             if (inventory.Gold < cost)
             {

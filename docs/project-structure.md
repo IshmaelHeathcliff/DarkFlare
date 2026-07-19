@@ -93,6 +93,8 @@ Assets/
     Inventory.uss
     Shop.uxml
     Shop.uss
+    Crafting.uxml
+    Crafting.uss
   UI Toolkit/
     UnityThemes/
       UnityDefaultRuntimeTheme.tss
@@ -150,7 +152,7 @@ Addressables 的配置目录，包含资源组、模板和构建器配置。后�
 
 同时 `ProjectSettings/EditorBuildSettings.asset` 里当前也只注册了这个场景。
 
-`Main.unity` 当前包含常驻 `UIRoot`（`UIDocument` + `HudController` + `GameMenuController` + `InventoryPanelController` + `ShopPanelController`）和唯一 `EventSystem`。`InputSystemUIInputModule` 引用项目 `InputSystem_Actions.inputactions` 的 `UI` action map。
+`Main.unity` 当前包含常驻 `UIRoot`（`UIDocument` + `HudController` + `GameMenuController` + `InventoryPanelController` + `ShopPanelController` + `CraftingPanelController`）和唯一 `EventSystem`。`InputSystemUIInputModule` 引用项目 `InputSystem_Actions.inputactions` 的 `UI` action map。
 
 ### `Assets/Scripts`
 
@@ -207,12 +209,13 @@ Addressables 的配置目录，包含资源组、模板和构建器配置。后�
 - `Gameplay/UI/GetHudSnapshotQuery.cs`、`HudController.cs`：只读 HUD 快照与事件驱动控制器
 - `Gameplay/UI/GetInventorySnapshotQuery.cs`、`InventoryPanelController.cs`：只读背包快照、10×6 格子渲染、物品选择与装备交互控制器
 - `Gameplay/UI/GetShopSnapshotQuery.cs`、`ShopPanelController.cs`：只读商店快照、商人 / 玩家物品列表与买卖交互控制器
-- `Gameplay/UI/GameMenuController.cs`：共享菜单遮罩、背包 / 商店页签、关闭和 Gameplay/UI 输入路由
-- `Tests/EditMode/MonsterSpawnDefinitionTests.cs`、`LootTableDefinitionTests.cs`、`DamageCalculatorTests.cs`、`InventoryGridTests.cs`、`ItemValueCalculatorTests.cs`、`CraftingOperationsTests.cs`、`GameInputTests.cs`、`GameplayUiFoundationTests.cs`：EditMode 测试，覆盖纯逻辑、原子换装、交易成功 / 失败原子性、键鼠 / 手柄输入、Action Map 切换、UI 领域事件及 HUD/背包/商店快照。归属 `DarkFlare.Tests.EditMode` 程序集
+- `Gameplay/UI/GetCraftingSnapshotQuery.cs`、`CraftingPanelController.cs`：只读打造快照、背包物品 / 词缀选择、四种打造操作与事件刷新控制器
+- `Gameplay/UI/GameMenuController.cs`：共享菜单遮罩、背包 / 商店 / 打造页签、关闭和 Gameplay/UI 输入路由
+- `Tests/EditMode/MonsterSpawnDefinitionTests.cs`、`LootTableDefinitionTests.cs`、`DamageCalculatorTests.cs`、`InventoryGridTests.cs`、`ItemValueCalculatorTests.cs`、`CraftingOperationsTests.cs`、`GameInputTests.cs`、`GameplayUiFoundationTests.cs`：EditMode 测试，覆盖纯逻辑、原子换装、交易和打造事务语义、键鼠 / 手柄输入、Action Map 切换、UI 领域事件及 HUD/背包/商店/打造快照。归属 `DarkFlare.Tests.EditMode` 程序集
 
 `UI`、`Utilities` 目前主要是占位，为后续模块扩展预留。
 
-**规划中（第 8 步“串成完整循环”，设计见 [`plan/input-ui-design.md`](plan/input-ui-design.md)）**：8a `Gameplay/Input`、8b UIToolkit 根 / HUD、8c 背包 / 装备交互与 8d 商店交互已完成；下一步 8e 增加打造交互，之后在 8f 串联场景入口。
+**规划中（第 8 步“串成完整循环”，设计见 [`plan/input-ui-design.md`](plan/input-ui-design.md)）**：8a `Gameplay/Input`、8b UIToolkit 根 / HUD、8c 背包 / 装备、8d 商店与 8e 打造交互已完成；下一步在 8f 串联场景入口。
 
 ### `Assets/Settings`
 

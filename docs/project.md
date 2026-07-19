@@ -2,97 +2,75 @@
 
 ## 项目状态
 
-`DarkFlare` 当前已完成 Unity 项目的基础目录初始化、核心插件接入和架构入口落地，整体仍处于骨架搭建阶段。
+`DarkFlare` 已完成单场景最小循环第 1–7 步后端，以及第 8a–8e 的输入、HUD、背包 / 装备、商店和打造交互。当前可以在 `Main.unity` 中战斗、掉落、拾取，并通过共享营地菜单整理装备、买卖和打造；下一步是 8f 场景交互入口与完整循环收尾。
 
 ## 游戏定位
 
-项目目标是类暗黑、流放之路的构筑驱动 RPG，并融合类塔科夫的背包资源管理、物资取舍和跑商经营。首个阶段应优先建立一个单场景最小循环，验证刷怪、掉落、装备、交易和打造能围绕同一套伤害与词条系统闭环。
-
-当前可确认的现状：
-
-- Unity 版本为 `6000.4.3f1`
-- 主架构基于 `QFramework`
-- 已引入 `UniTask`
-- 已启用 `Addressables`
-- 已接入新输入系统 `InputSystem`
-- 已引入 `Odin Inspector`
-- 已引入 `PrimeTween`
-- 已引入 `unity-mcp`
-- 当前构建场景只有 `Assets/Scenes/Main.unity`
-- 当前自定义脚本已包含 `Core`、`Data` 和 `Gameplay` 下的基础框架代码
-
-## 核心入口
-
-### 架构入口
-
-- `Assets/Scripts/Core/GameArchitecture.cs`
-  - 定义 `GameArchitecture : Architecture<GameArchitecture>`
-  - 当前 `Init()` 为空，说明业务模块尚未开始注册
-
-### 基础框架
-
-- `Assets/Scripts/Core/QFramework.cs`
-  - 项目内直接放置 QFramework 基础实现
-  - 后续 `Model`、`System`、`Controller`、`Utility` 应围绕该架构扩展
-
-### 词条与伤害底座
-
-- `Assets/Scripts/Data/Tags`
-  - 定义标签配置资产
-- `Assets/Scripts/Data/Stats`
-  - 定义属性配置资产
-- `Assets/Scripts/Data/Affixes`
-  - 定义词条、修改器、伤害类型和作用域
-- `Assets/Scripts/Data/Items`
-  - 定义物品基底和基础伤害配置
-- `Assets/Scripts/Gameplay/Combat`
-  - 定义运行时标签集、属性块、词条实例、伤害上下文和纯 C# 伤害计算
-- `Assets/Scripts/Gameplay/Items`
-  - 定义物品实例和随机生成入口
-
-### 编辑器工具
-
-- `Assets/Scripts/Editor/ConfigCenterWindow.cs`
-  - 基于 Odin 提供配置中心
-  - 按 `CreateAssetMenu(menuName = "DarkFlare/Data/...")` 自动发现配置类型
-  - 支持按类型浏览、创建配置和直接编辑真实配置资产
+项目目标是类暗黑、流放之路的构筑驱动 RPG，并融合类塔科夫的背包资源管理、物资取舍和跑商经营。首个阶段围绕同一套伤害、词条、物品和经济数据验证“战斗 → 掉落 → 整理 → 交易 / 打造 → 再战斗”的单场景循环。
 
 ## 当前技术栈
 
-根据 `Packages/manifest.json` 与项目目录，当前已接入的关键能力如下：
+- Unity `6000.4.3f1`，URP
+- QFramework 分层与项目内 `QFramework.cs`
+- UniTask 异步
+- Addressables 资源加载
+- Input System 键鼠 / 手柄输入
+- UI Toolkit 运行时界面
+- Odin Inspector 配置与 Editor 工具
+- PrimeTween 动画补间
+- unity-mcp 编辑器自动化与验证
 
-- 架构：QFramework
-- 异步：UniTask
-- 资源管理：Addressables
-- 输入：Input System
-- 编辑器增强：Odin Inspector
-- 动画补间：PrimeTween
-- 渲染管线：URP
-- UI：UGUI
-- 导航：AI Navigation
-- 工具链：unity-mcp
+当前构建场景只有 `Assets/Scenes/Main.unity`。
 
-## 当前资源与配置现状
+## 核心入口
 
-- `Assets/Settings` 下已存在输入系统、URP、场景相关资源
-- `Assets/AddressableAssetsData` 已建立 Addressables 配置目录
-- `Assets/Data/Preset`、`Assets/Data/Saves` 已预留数据目录
-- `Assets/Art`、`Assets/Prefabs` 等资源目录目前仍以占位为主，尚未形成具体业务内容
+### 架构与程序集
 
-说明：
-当前 `Assets/Scripts/UI` 目录已创建，但资源层的 UI 目录尚未单独建立；UI 资源后续可结合实际方案继续细化。
+- `Assets/Scripts/Runtime/Core/QFramework.cs`：独立 `DarkFlare.Core` 程序集。
+- `Assets/Scripts/Runtime/GameArchitecture.cs`：组合根，注册输入 Utility、战斗 / 装备 / 背包 / 经济 Model，以及战斗、生成、掉落、交易、打造 System。
+- `Assets/Scripts/Runtime/`：`DarkFlare.Runtime` 程序集。
+- `Assets/Scripts/Tests/EditMode/`：`DarkFlare.Tests.EditMode`，当前全量 42/42 通过。
 
-## 当前开发判断
+### 玩法模块
 
-从目录和代码现状看，项目已经完成“工程模板化”这一步，但还没有进入具体玩法或系统实现阶段。当前最适合继续补齐的是：
+- 战斗与属性：`Gameplay/Combat`、`Data/Stats`、`Data/Tags`、`Data/Affixes`。
+- 物品、掉落与背包：`Gameplay/Items`、`Gameplay/Loot`、`Gameplay/Inventory`、对应 `Data` 配置。
+- 装备：`EquipmentModel`、`EquipItemCommand` 与 `InventoryPanelController`。
+- 交易：`EconomyModel`、`TradingSystem`、`TraderDefinition` 与 `ShopPanelController`。
+- 打造：`CraftingOperations`、`CraftingSystem`、`CraftingDefinition` 与 `CraftingPanelController`。
+- 输入：`GameInput` 统一管理 Gameplay / UI Action Map，`InputSystem_Actions.inputactions` 是唯一输入源。
 
-1. 明确首个可运行玩法闭环和场景职责
-2. 按 QFramework 规划首批 `Model`、`System`、`Controller`
-3. 明确配置资源类型与 ScriptableObject 数据入口
-4. 为 UI 层确定 UIToolkit/UGUI 的实际分工边界
+### UI
+
+- `Assets/UI/GameRoot.uxml` 组合 HUD、背包、商店和打造模板。
+- `Main.unity/UIRoot` 复用一个 `UIDocument` 和唯一 `EventSystem`。
+- `GameMenuController` 管理共享遮罩、三页签、关闭和输入模式。
+- 各面板 Controller 只通过 Query、Command 与领域事件工作，不直接修改 Model。
+
+### 编辑器工具
+
+- `Assets/Scripts/Editor/ConfigCenterWindow.cs` 基于 Odin 提供配置中心。
+- 按 `CreateAssetMenu(menuName = "DarkFlare/Data/...")` 自动发现配置类型，支持按类型浏览、创建和直接编辑真实配置资产。
+
+## 当前资源与配置
+
+- `Assets/Data/Preset` 已有玩家、技能、怪物、刷怪、掉落、物品、词条、商人和打造配置。
+- 玩家、怪物、投射物和掉落物 Prefab 位于 `Assets/Prefabs`，通过 Addressables 加载。
+- `Assets/UI` 已有 `GameRoot`、`Hud`、`Inventory`、`Shop`、`Crafting` 的 UXML / USS。
+- 原型美术仍以 `Assets/Art/Textures/Prototype/PrototypeSquare.png` 等占位资源为主。
+
+## 当前边界与下一步
+
+当前 UI 可从共享菜单直接访问，但世界中的商人 / 打造台实体和 `Interact` 入口尚未接入。8f 应完成：
+
+1. 定义场景交互目标与距离判断。
+2. 把 `Interact` 接到商人或打造台，并打开对应菜单页。
+3. 验证“战斗 → 拾取 → 装备 / 出售 / 打造 → 关闭菜单 → 再战斗”的完整人手循环。
+
+配方、打造材料、回购、多装备槽、物品旋转 / 堆叠 / 重量和正式美术不属于当前最小范围。
 
 ## 文档维护约定
 
-- 文档内容以代码和目录现状为准
-- 目录调整后，应同步更新 `docs/project-structure.md`
-- 新增核心模块后，应补充项目概览中的入口说明
+- 文档内容以代码和目录现状为准。
+- 目录调整后同步更新 `project-structure.md`。
+- 新增核心模块时补充项目概览和对应模块文档。

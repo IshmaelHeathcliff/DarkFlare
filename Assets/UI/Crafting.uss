@@ -1,0 +1,287 @@
+.crafting-template,
+.crafting-page {
+  flex-grow: 1;
+}
+
+.crafting-page {
+  display: none;
+  padding-top: 20px;
+}
+
+.crafting-body {
+  flex-grow: 1;
+  flex-direction: row;
+}
+
+.crafting-list-section {
+  width: 278px;
+  margin-right: 16px;
+}
+
+.crafting-section-header {
+  height: 36px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.crafting-section-title {
+  font-size: 16px;
+  -unity-font-style: bold;
+  color: rgb(195, 168, 120);
+}
+
+.crafting-section-kicker {
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: rgb(112, 124, 139);
+}
+
+.crafting-list-frame {
+  flex-grow: 1;
+  position: relative;
+  background-color: rgb(13, 16, 22);
+  border-left-width: 1px;
+  border-right-width: 1px;
+  border-top-width: 1px;
+  border-bottom-width: 1px;
+  border-left-color: rgb(49, 54, 64);
+  border-right-color: rgb(49, 54, 64);
+  border-top-color: rgb(49, 54, 64);
+  border-bottom-color: rgb(49, 54, 64);
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+
+.crafting-scroll {
+  flex-grow: 1;
+}
+
+.crafting-list {
+  padding: 10px;
+}
+
+.crafting-empty {
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  top: 48%;
+  white-space: normal;
+  -unity-text-align: middle-center;
+  color: rgb(105, 111, 123);
+  font-size: 14px;
+  -unity-font-style: italic;
+}
+
+.crafting-item,
+.crafting-affix {
+  min-height: 66px;
+  margin-bottom: 8px;
+  padding: 8px 12px;
+  white-space: normal;
+  -unity-text-align: middle-left;
+  font-size: 13px;
+  color: rgb(222, 224, 229);
+  background-color: rgb(34, 39, 48);
+  border-left-width: 3px;
+  border-right-width: 1px;
+  border-top-width: 1px;
+  border-bottom-width: 1px;
+  border-left-color: rgb(118, 126, 139);
+  border-right-color: rgb(58, 64, 75);
+  border-top-color: rgb(58, 64, 75);
+  border-bottom-color: rgb(58, 64, 75);
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+.crafting-item:hover,
+.crafting-item:focus,
+.crafting-item--selected,
+.crafting-affix:hover,
+.crafting-affix:focus,
+.crafting-affix--selected {
+  background-color: rgb(69, 61, 48);
+  border-left-color: rgb(236, 192, 110);
+  border-right-color: rgb(153, 122, 72);
+  border-top-color: rgb(153, 122, 72);
+  border-bottom-color: rgb(153, 122, 72);
+}
+
+.crafting-item--magic {
+  color: rgb(156, 191, 255);
+  border-left-color: rgb(76, 121, 204);
+}
+
+.crafting-item--rare {
+  color: rgb(255, 226, 126);
+  border-left-color: rgb(203, 164, 52);
+}
+
+.crafting-item--unique {
+  color: rgb(255, 178, 91);
+  border-left-color: rgb(205, 103, 42);
+}
+
+.crafting-affix--prefix {
+  border-left-color: rgb(82, 143, 127);
+}
+
+.crafting-affix--suffix {
+  border-left-color: rgb(106, 124, 190);
+}
+
+.crafting-details {
+  flex-grow: 1;
+  min-width: 520px;
+  padding: 18px;
+  background-color: rgb(28, 32, 40);
+  border-left-width: 1px;
+  border-right-width: 1px;
+  border-top-width: 1px;
+  border-bottom-width: 1px;
+  border-left-color: rgb(58, 64, 75);
+  border-right-color: rgb(58, 64, 75);
+  border-top-color: rgb(58, 64, 75);
+  border-bottom-color: rgb(58, 64, 75);
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+
+.crafting-gold {
+  height: 48px;
+  margin-bottom: 16px;
+  padding: 12px;
+  font-size: 18px;
+  -unity-font-style: bold;
+  color: rgb(239, 205, 130);
+  background-color: rgb(42, 39, 31);
+  border-left-width: 3px;
+  border-left-color: rgb(183, 137, 54);
+}
+
+.crafting-divider {
+  height: 1px;
+  margin-top: 12px;
+  margin-bottom: 16px;
+  background-color: rgb(65, 70, 80);
+}
+
+.crafting-selected-name {
+  min-height: 38px;
+  margin-bottom: 8px;
+  white-space: normal;
+  font-size: 22px;
+  -unity-font-style: bold;
+  color: rgb(240, 235, 224);
+}
+
+.crafting-detail-line {
+  min-height: 25px;
+  white-space: normal;
+  color: rgb(178, 182, 191);
+}
+
+.crafting-value {
+  min-height: 32px;
+  margin-top: 4px;
+  font-size: 16px;
+  -unity-font-style: bold;
+  color: rgb(220, 185, 113);
+}
+
+.crafting-affix-card {
+  min-height: 72px;
+  margin-top: 8px;
+  padding: 10px 12px;
+  background-color: rgb(22, 26, 33);
+  border-left-width: 2px;
+  border-left-color: rgb(84, 120, 111);
+}
+
+.crafting-selected-affix {
+  min-height: 24px;
+  -unity-font-style: bold;
+  color: rgb(216, 221, 226);
+}
+
+.crafting-affix-detail {
+  min-height: 24px;
+  white-space: normal;
+  color: rgb(151, 161, 173);
+}
+
+.crafting-details-spacer {
+  flex-grow: 1;
+}
+
+.crafting-feedback {
+  min-height: 42px;
+  margin-bottom: 10px;
+  white-space: normal;
+  color: rgb(159, 166, 179);
+}
+
+.crafting-actions {
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.crafting-action {
+  width: 48%;
+  height: 44px;
+  margin: 4px;
+  font-size: 13px;
+  -unity-font-style: bold;
+  color: rgb(220, 222, 226);
+  background-color: rgb(57, 64, 75);
+  border-left-color: rgb(91, 101, 116);
+  border-right-color: rgb(91, 101, 116);
+  border-top-color: rgb(91, 101, 116);
+  border-bottom-color: rgb(91, 101, 116);
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.crafting-action--primary {
+  color: rgb(24, 28, 24);
+  background-color: rgb(177, 151, 85);
+  border-left-color: rgb(219, 190, 119);
+  border-right-color: rgb(219, 190, 119);
+  border-top-color: rgb(219, 190, 119);
+  border-bottom-color: rgb(219, 190, 119);
+}
+
+.crafting-action:hover,
+.crafting-action:focus {
+  color: rgb(251, 242, 221);
+  background-color: rgb(92, 75, 48);
+  border-left-color: rgb(243, 210, 148);
+  border-right-color: rgb(243, 210, 148);
+  border-top-color: rgb(243, 210, 148);
+  border-bottom-color: rgb(243, 210, 148);
+}
+
+.crafting-action:disabled {
+  color: rgb(105, 108, 114);
+  background-color: rgb(48, 51, 57);
+  border-left-color: rgb(62, 65, 72);
+  border-right-color: rgb(62, 65, 72);
+  border-top-color: rgb(62, 65, 72);
+  border-bottom-color: rgb(62, 65, 72);
+}
+
+.crafting-help {
+  height: 28px;
+  padding-top: 9px;
+  color: rgb(115, 121, 133);
+  font-size: 12px;
+}

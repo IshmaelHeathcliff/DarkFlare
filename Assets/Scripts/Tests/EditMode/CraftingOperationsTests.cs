@@ -70,6 +70,45 @@ public class CraftingOperationsTests
     }
 
     [Test]
+    public void RerollAllAffixes_RollsBack_WhenPoolCannotReplaceAffixes()
+    {
+        ItemInstance item = CreateItem(maxPrefix: 3);
+        List<AffixDefinition> pool = new List<AffixDefinition> { CreatePrefixAffix(10f, 30f) };
+        System.Random random = new System.Random(31);
+        Assert.IsTrue(CraftingOperations.AddRandomAffix(item, pool, random));
+        AffixInstance original = item.Prefixes[0];
+
+        bool rerolled = CraftingOperations.RerollAllAffixes(
+            item,
+            new List<AffixDefinition>(),
+            random);
+
+        Assert.IsFalse(rerolled);
+        Assert.AreEqual(1, item.Prefixes.Count);
+        Assert.AreSame(original, item.Prefixes[0]);
+    }
+
+    [Test]
+    public void RemoveAndRerollAffix_RollsBack_WhenPoolCannotReplaceTarget()
+    {
+        ItemInstance item = CreateItem(maxPrefix: 3);
+        List<AffixDefinition> pool = new List<AffixDefinition> { CreatePrefixAffix(10f, 30f) };
+        System.Random random = new System.Random(32);
+        Assert.IsTrue(CraftingOperations.AddRandomAffix(item, pool, random));
+        AffixInstance original = item.Prefixes[0];
+
+        bool rerolled = CraftingOperations.RemoveAndRerollAffix(
+            item,
+            original,
+            new List<AffixDefinition>(),
+            random);
+
+        Assert.IsFalse(rerolled);
+        Assert.AreEqual(1, item.Prefixes.Count);
+        Assert.AreSame(original, item.Prefixes[0]);
+    }
+
+    [Test]
     public void RemoveAndRerollAffix_ReturnsFalse_WhenTargetNotOnItem()
     {
         ItemInstance item = CreateItem(maxPrefix: 3);
@@ -92,13 +131,39 @@ public class CraftingOperationsTests
 
         for (int i = 0; i < 50; i++)
         {
-            Assert.IsTrue(CraftingOperations.UpgradeAffix(item, item.Prefixes[0], random));
+            bool upgraded = CraftingOperations.UpgradeAffix(item, item.Prefixes[0], random);
             float current = SumValue(item.Prefixes[0]);
             Assert.GreaterOrEqual(current, previous);
+
+            if (upgraded)
+            {
+                Assert.Greater(current, previous);
+            }
+            else
+            {
+                Assert.AreEqual(previous, current);
+            }
+
             previous = current;
         }
 
         Assert.GreaterOrEqual(previous, initial);
+    }
+
+    [Test]
+    public void UpgradeAffix_ReturnsFalse_WhenValueDoesNotIncrease()
+    {
+        ItemInstance item = CreateItem(maxPrefix: 3);
+        List<AffixDefinition> pool = new List<AffixDefinition> { CreatePrefixAffix(20f, 20f) };
+        System.Random random = new System.Random(33);
+        Assert.IsTrue(CraftingOperations.AddRandomAffix(item, pool, random));
+        AffixInstance original = item.Prefixes[0];
+
+        bool upgraded = CraftingOperations.UpgradeAffix(item, original, random);
+
+        Assert.IsFalse(upgraded);
+        Assert.AreSame(original, item.Prefixes[0]);
+        Assert.AreEqual(20f, SumValue(item.Prefixes[0]));
     }
 
     static float SumValue(AffixInstance affix)

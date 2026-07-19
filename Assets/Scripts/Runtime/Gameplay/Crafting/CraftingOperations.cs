@@ -7,12 +7,21 @@ namespace DarkFlare
     {
         public static bool AddRandomAffix(ItemInstance item, IReadOnlyList<AffixDefinition> affixPool, System.Random random)
         {
+            return AddRandomAffix(item, affixPool, random, null);
+        }
+
+        static bool AddRandomAffix(
+            ItemInstance item,
+            IReadOnlyList<AffixDefinition> affixPool,
+            System.Random random,
+            AffixType? requiredType)
+        {
             if (item == null || item.BaseDefinition == null)
             {
                 return false;
             }
 
-            AffixDefinition selected = PickAffix(item, affixPool, random);
+            AffixDefinition selected = PickAffix(item, affixPool, random, requiredType);
 
             if (selected == null)
             {
@@ -29,18 +38,34 @@ namespace DarkFlare
                 return false;
             }
 
-            int total = item.Prefixes.Count + item.Suffixes.Count;
+            int prefixCount = item.Prefixes.Count;
+            int suffixCount = item.Suffixes.Count;
+            int total = prefixCount + suffixCount;
 
             if (total <= 0)
             {
                 return false;
             }
 
+            List<AffixInstance> previousAffixes = CollectAffixes(item);
             item.ClearAffixes();
 
-            for (int i = 0; i < total; i++)
+            for (int i = 0; i < prefixCount; i++)
             {
-                AddRandomAffix(item, affixPool, random);
+                if (!AddRandomAffix(item, affixPool, random, AffixType.Prefix))
+                {
+                    RestoreAffixes(item, previousAffixes);
+                    return false;
+                }
+            }
+
+            for (int i = 0; i < suffixCount; i++)
+            {
+                if (!AddRandomAffix(item, affixPool, random, AffixType.Suffix))
+                {
+                    RestoreAffixes(item, previousAffixes);
+                    return false;
+                }
             }
 
             return true;
@@ -48,13 +73,18 @@ namespace DarkFlare
 
         public static bool RemoveAndRerollAffix(ItemInstance item, AffixInstance target, IReadOnlyList<AffixDefinition> affixPool, System.Random random)
         {
-            if (item == null || !item.RemoveAffix(target))
+            if (item == null || target == null || target.Definition == null || !item.RemoveAffix(target))
             {
                 return false;
             }
 
-            AddRandomAffix(item, affixPool, random);
-            return true;
+            if (AddRandomAffix(item, affixPool, random, target.Definition.AffixType))
+            {
+                return true;
+            }
+
+            item.TryAddAffix(target);
+            return false;
         }
 
         public static bool UpgradeAffix(ItemInstance item, AffixInstance target, System.Random random)
@@ -71,15 +101,25 @@ namespace DarkFlare
 
             AffixInstance rerolled = target.Definition.CreateInstance(random);
 
-            if (SumValue(rerolled) > SumValue(target) && item.RemoveAffix(target))
+            if (SumValue(rerolled) <= SumValue(target) || !item.RemoveAffix(target))
             {
-                item.TryAddAffix(rerolled);
+                return false;
             }
 
-            return true;
+            if (item.TryAddAffix(rerolled))
+            {
+                return true;
+            }
+
+            item.TryAddAffix(target);
+            return false;
         }
 
-        static AffixDefinition PickAffix(ItemInstance item, IReadOnlyList<AffixDefinition> affixPool, System.Random random)
+        static AffixDefinition PickAffix(
+            ItemInstance item,
+            IReadOnlyList<AffixDefinition> affixPool,
+            System.Random random,
+            AffixType? requiredType)
         {
             if (affixPool == null)
             {
@@ -93,7 +133,10 @@ namespace DarkFlare
             {
                 AffixDefinition affix = affixPool[i];
 
-                if (affix == null || affix.Weight <= 0 || !affix.CanApplyTo(item.Tags, item.ItemLevel))
+                if (affix == null
+                    || affix.Weight <= 0
+                    || requiredType.HasValue && affix.AffixType != requiredType.Value
+                    || !affix.CanApplyTo(item.Tags, item.ItemLevel))
                 {
                     continue;
                 }
@@ -125,6 +168,24 @@ namespace DarkFlare
             }
 
             return candidates[candidates.Count - 1];
+        }
+
+        static List<AffixInstance> CollectAffixes(ItemInstance item)
+        {
+            List<AffixInstance> affixes = new List<AffixInstance>(item.Prefixes.Count + item.Suffixes.Count);
+            affixes.AddRange(item.Prefixes);
+            affixes.AddRange(item.Suffixes);
+            return affixes;
+        }
+
+        static void RestoreAffixes(ItemInstance item, IReadOnlyList<AffixInstance> affixes)
+        {
+            item.ClearAffixes();
+
+            for (int i = 0; i < affixes.Count; i++)
+            {
+                item.TryAddAffix(affixes[i]);
+            }
         }
 
         static bool HasRoom(ItemInstance item, AffixDefinition affix)
