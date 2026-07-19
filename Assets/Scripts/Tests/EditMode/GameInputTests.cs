@@ -74,6 +74,26 @@ namespace DarkFlare.Tests
         }
 
         [Test]
+        public void Interact_UsesKeyboardAndGamepad_OnlyInGameplayMode()
+        {
+            Keyboard keyboard = InputSystem.AddDevice<Keyboard>();
+            Gamepad gamepad = InputSystem.AddDevice<Gamepad>();
+            int interactCount = 0;
+            _input.InteractPerformed += () => interactCount++;
+
+            PressAndRelease(keyboard.eKey);
+            PressAndRelease(gamepad.buttonNorth);
+
+            Assert.AreEqual(2, interactCount);
+
+            _input.SwitchToUi();
+            PressAndRelease(keyboard.eKey);
+            PressAndRelease(gamepad.buttonNorth);
+
+            Assert.AreEqual(2, interactCount);
+        }
+
+        [Test]
         public void SwitchMethods_IgnoreRepeatedMode()
         {
             int changeCount = 0;

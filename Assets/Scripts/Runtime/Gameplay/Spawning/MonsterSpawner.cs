@@ -80,7 +80,7 @@ namespace DarkFlare
                 return _target;
             }
 
-            PlayerController player = FindFirstObjectByType<PlayerController>();
+            PlayerController player = FindAnyObjectByType<PlayerController>();
 
             if (player != null)
             {

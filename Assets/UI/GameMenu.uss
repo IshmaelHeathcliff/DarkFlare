@@ -93,6 +93,16 @@
   border-bottom-color: rgb(194, 150, 78);
 }
 
+.game-menu-tab:disabled {
+  opacity: 0.38;
+  color: rgb(126, 130, 138);
+  background-color: rgb(25, 29, 35);
+  border-left-color: rgb(48, 52, 60);
+  border-right-color: rgb(48, 52, 60);
+  border-top-color: rgb(48, 52, 60);
+  border-bottom-color: rgb(48, 52, 60);
+}
+
 .game-menu-close {
   min-width: 150px;
   height: 38px;

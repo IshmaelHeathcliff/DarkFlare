@@ -3,13 +3,6 @@ using UnityEngine.UIElements;
 
 namespace DarkFlare
 {
-    public enum GameMenuPage
-    {
-        Inventory,
-        Shop,
-        Crafting
-    }
-
     [DisallowMultipleComponent]
     [RequireComponent(typeof(UIDocument))]
     [RequireComponent(typeof(InventoryPanelController))]
@@ -32,11 +25,14 @@ namespace DarkFlare
         CraftingPanelController _craftingPanel;
 
         GameInput _gameInput;
+        IUnRegister _openRequestRegistration;
         VisualElement _overlay;
         Button _inventoryTab;
         Button _shopTab;
         Button _craftingTab;
         Button _closeButton;
+
+        public GameMenuAccess AvailablePages { get; private set; } = GameMenuAccess.Inventory;
 
         public GameMenuPage CurrentPage { get; private set; } = GameMenuPage.Inventory;
 
@@ -49,6 +45,11 @@ namespace DarkFlare
 
         public void OpenPage(GameMenuPage page)
         {
+            if (!IsPageAvailable(page))
+            {
+                return;
+            }
+
             CurrentPage = page;
 
             if (_gameInput == null)
@@ -63,6 +64,11 @@ namespace DarkFlare
             }
 
             ApplyPage();
+        }
+
+        public bool IsPageAvailable(GameMenuPage page)
+        {
+            return AvailablePages.Contains(page);
         }
 
         void Awake()
@@ -87,6 +93,7 @@ namespace DarkFlare
                 return;
             }
 
+            _openRequestRegistration = this.RegisterEvent<GameMenuOpenRequestedEvent>(OnMenuOpenRequested);
             _gameInput.ModeChanged += OnInputModeChanged;
             ApplyInputMode(_gameInput.CurrentMode);
             Debug.Log("[GameMenuController] 游戏菜单初始化完成", this);
@@ -94,10 +101,18 @@ namespace DarkFlare
 
         void OnDisable()
         {
+            if (_gameInput != null && _gameInput.CurrentMode == GameInputMode.UI)
+            {
+                _gameInput.SwitchToGameplay();
+            }
+
             if (_gameInput != null)
             {
                 _gameInput.ModeChanged -= OnInputModeChanged;
             }
+
+            _openRequestRegistration?.UnRegister();
+            _openRequestRegistration = null;
 
             if (_inventoryTab != null)
             {
@@ -197,14 +212,22 @@ namespace DarkFlare
             ApplyInputMode(mode);
         }
 
+        void OnMenuOpenRequested(GameMenuOpenRequestedEvent e)
+        {
+            AvailablePages = e.AvailablePages | GameMenuAccess.Inventory;
+            OpenPage(e.Page);
+        }
+
         void ApplyInputMode(GameInputMode mode)
         {
+            bool isOpen = mode == GameInputMode.UI;
+            this.SendCommand(new SetGameplayPausedCommand(isOpen));
+
             if (_overlay == null)
             {
                 return;
             }
 
-            bool isOpen = mode == GameInputMode.UI;
             _overlay.style.display = isOpen ? DisplayStyle.Flex : DisplayStyle.None;
 
             if (isOpen)
@@ -216,11 +239,20 @@ namespace DarkFlare
             _inventoryPanel?.SetVisible(false);
             _shopPanel?.SetVisible(false);
             _craftingPanel?.SetVisible(false);
+            AvailablePages = GameMenuAccess.Inventory;
             CurrentPage = GameMenuPage.Inventory;
         }
 
         void ApplyPage()
         {
+            if (!IsPageAvailable(CurrentPage))
+            {
+                CurrentPage = GameMenuPage.Inventory;
+            }
+
+            _inventoryTab?.SetEnabled(IsPageAvailable(GameMenuPage.Inventory));
+            _shopTab?.SetEnabled(IsPageAvailable(GameMenuPage.Shop));
+            _craftingTab?.SetEnabled(IsPageAvailable(GameMenuPage.Crafting));
             bool showInventory = CurrentPage == GameMenuPage.Inventory;
             bool showShop = CurrentPage == GameMenuPage.Shop;
             bool showCrafting = CurrentPage == GameMenuPage.Crafting;

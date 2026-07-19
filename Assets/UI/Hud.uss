@@ -9,10 +9,18 @@
     color: rgb(236, 241, 245);
 }
 
-.hud-top-row {
+.hud-top-row,
+.hud-bottom-row {
     flex-direction: row;
     justify-content: space-between;
+}
+
+.hud-top-row {
     align-items: flex-start;
+}
+
+.hud-bottom-row {
+    align-items: flex-end;
 }
 
 .hud-card {
@@ -38,7 +46,8 @@
     align-items: flex-end;
 }
 
-.weapon-card {
+.weapon-card,
+.hud-bottom-spacer {
     width: 460px;
 }
 
@@ -52,6 +61,31 @@
 .hud-value {
     font-size: 20px;
     color: rgb(245, 238, 210);
+    -unity-font-style: bold;
+}
+
+.interaction-prompt {
+    display: none;
+    min-width: 360px;
+    min-height: 58px;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 24px;
+    background-color: rgba(12, 18, 24, 0.94);
+    border-top-width: 2px;
+    border-right-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+    border-top-color: rgb(194, 150, 78);
+    border-right-color: rgb(194, 150, 78);
+    border-bottom-color: rgb(194, 150, 78);
+    border-left-color: rgb(194, 150, 78);
+    border-radius: 8px;
+}
+
+.interaction-prompt__label {
+    font-size: 20px;
+    color: rgb(246, 235, 213);
     -unity-font-style: bold;
 }
 

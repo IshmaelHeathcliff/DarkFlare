@@ -6,6 +6,7 @@
 - [目录结构](./project-structure.md)
 - [最小循环设计](./plan/minimum-loop-design.md)
 - [输入系统与 UI 设计](./plan/input-ui-design.md)
+- [8f 场景入口与循环收尾执行计划](./plan/scene-loop-integration-plan.md)
 - [打造交互执行计划](./plan/crafting-ui-plan.md)
 - [打造系统](./crafting-system.md)
 - [伤害系统与词条系统设计](./damage-affix-system.md)

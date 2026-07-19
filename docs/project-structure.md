@@ -62,6 +62,7 @@ Assets/
         Crafting/
         Events/
         Input/
+        Interaction/
         Inventory/
         Items/
         Loot/
@@ -152,7 +153,7 @@ Addressables 的配置目录，包含资源组、模板和构建器配置。后�
 
 同时 `ProjectSettings/EditorBuildSettings.asset` 里当前也只注册了这个场景。
 
-`Main.unity` 当前包含常驻 `UIRoot`（`UIDocument` + `HudController` + `GameMenuController` + `InventoryPanelController` + `ShopPanelController` + `CraftingPanelController`）和唯一 `EventSystem`。`InputSystemUIInputModule` 引用项目 `InputSystem_Actions.inputactions` 的 `UI` action map。
+`Main.unity` 当前包含常驻 `UIRoot`（`UIDocument` + HUD / 菜单 / 背包 / 商店 / 打造 / 交互提示控制器）、唯一 `EventSystem`，以及可交互的 `Merchant` 与 `CraftingStation` 原型对象。`InputSystemUIInputModule` 引用项目 `InputSystem_Actions.inputactions` 的 `UI` action map。
 
 ### `Assets/Scripts`
 
@@ -181,7 +182,7 @@ Addressables 的配置目录，包含资源组、模板和构建器配置。后�
 当前代码已覆盖以下基础层：
 
 - `Core/QFramework.cs`（`DarkFlare.Core` 程序集）
-- `GameArchitecture.cs`（位于 `Runtime/` 根，组合根；已注册 `GameInput`、`CombatModel`/`EquipmentModel`/`InventoryModel`/`EconomyModel`、`CombatSystem`/`SpawnSystem`/`LootSystem`/`TradingSystem`/`CraftingSystem` 与 `PrefabAssetLoader`）
+- `GameArchitecture.cs`（位于 `Runtime/` 根，组合根；已注册 `GameInput`、`CombatModel`/`EquipmentModel`/`InventoryModel`/`EconomyModel`、`CombatSystem`/`SpawnSystem`/`LootSystem`/`TradingSystem`/`CraftingSystem`/`GameplayPauseSystem` 与 `PrefabAssetLoader`）
 - `Data/Tags/TagDefinition.cs`
 - `Data/Stats/StatDefinition.cs`
 - `Data/Actors/CharacterDefinition.cs`
@@ -204,18 +205,20 @@ Addressables 的配置目录，包含资源组、模板和构建器配置。后�
 - `Gameplay/Spawning`：`MonsterSpawner.cs`
 - `Gameplay/Loot`：`LootPickupController.cs`
 - `Gameplay/Bootstrap`：`CombatPrototypeBootstrap.cs`、`CameraFollowTarget.cs`
-- `Gameplay/Input`：`GameInput.cs`（输入封装与 Gameplay/UI Action Map 切换）、`InputSystem_Actions.cs`（由输入资产自动生成的 C# 包装类）
-- `Gameplay/Events/GameplayEvents.cs`：金币、背包、装备、打造、交易完成和 Actor 注册 / 注销领域事件
+- `Gameplay/Input`：`GameInput.cs`（输入封装、Gameplay/UI Action Map 切换与交互事件）、`InputSystem_Actions.cs`（由输入资产自动生成的 C# 包装类）
+- `Gameplay/Interaction`：`WorldInteractionTarget.cs`、`PlayerInteractionController.cs`、`GameplayPauseSystem.cs` 与 `Commands/`，负责最近世界目标、情境菜单请求和集中暂停
+- `Gameplay/Events/GameplayEvents.cs`：金币、背包、装备、打造、交易、交互焦点、菜单请求、暂停和 Actor 注册 / 注销领域事件
 - `Gameplay/UI/GetHudSnapshotQuery.cs`、`HudController.cs`：只读 HUD 快照与事件驱动控制器
 - `Gameplay/UI/GetInventorySnapshotQuery.cs`、`InventoryPanelController.cs`：只读背包快照、10×6 格子渲染、物品选择与装备交互控制器
 - `Gameplay/UI/GetShopSnapshotQuery.cs`、`ShopPanelController.cs`：只读商店快照、商人 / 玩家物品列表与买卖交互控制器
 - `Gameplay/UI/GetCraftingSnapshotQuery.cs`、`CraftingPanelController.cs`：只读打造快照、背包物品 / 词缀选择、四种打造操作与事件刷新控制器
-- `Gameplay/UI/GameMenuController.cs`：共享菜单遮罩、背包 / 商店 / 打造页签、关闭和 Gameplay/UI 输入路由
-- `Tests/EditMode/MonsterSpawnDefinitionTests.cs`、`LootTableDefinitionTests.cs`、`DamageCalculatorTests.cs`、`InventoryGridTests.cs`、`ItemValueCalculatorTests.cs`、`CraftingOperationsTests.cs`、`GameInputTests.cs`、`GameplayUiFoundationTests.cs`：EditMode 测试，覆盖纯逻辑、原子换装、交易和打造事务语义、键鼠 / 手柄输入、Action Map 切换、UI 领域事件及 HUD/背包/商店/打造快照。归属 `DarkFlare.Tests.EditMode` 程序集
+- `Gameplay/UI/GameMenuAccess.cs`、`GameMenuController.cs`：背包 / 商店 / 打造情境访问范围、共享菜单遮罩、关闭和 Gameplay/UI 输入路由
+- `Gameplay/UI/InteractionPromptController.cs`：显示当前世界交互目标，并在 UI 模式或目标失效时隐藏
+- `Tests/EditMode/MonsterSpawnDefinitionTests.cs`、`LootTableDefinitionTests.cs`、`DamageCalculatorTests.cs`、`InventoryGridTests.cs`、`ItemValueCalculatorTests.cs`、`CraftingOperationsTests.cs`、`GameInputTests.cs`、`GameplayUiFoundationTests.cs`：EditMode 测试，覆盖纯逻辑、原子换装、交易和打造事务语义、键鼠 / 手柄输入、Action Map 切换、交互消息、暂停及 HUD/背包/商店/打造快照。归属 `DarkFlare.Tests.EditMode` 程序集
 
 `UI`、`Utilities` 目前主要是占位，为后续模块扩展预留。
 
-**规划中（第 8 步“串成完整循环”，设计见 [`plan/input-ui-design.md`](plan/input-ui-design.md)）**：8a `Gameplay/Input`、8b UIToolkit 根 / HUD、8c 背包 / 装备、8d 商店与 8e 打造交互已完成；下一步在 8f 串联场景入口。
+**第 8 步“串成完整循环”已完成**：8a–8f 已覆盖输入、UIToolkit 根 / HUD、背包装备、商店、打造与场景交互入口，设计和验收见 [`plan/input-ui-design.md`](plan/input-ui-design.md) 与 [`plan/scene-loop-integration-plan.md`](plan/scene-loop-integration-plan.md)。
 
 ### `Assets/Settings`
 
@@ -266,6 +269,6 @@ Unity 工程级设置目录，包括版本、构建场景、图形设置等。
 - 代码已按程序集（asmdef）拆分为 `Core`/`Runtime`/`Editor`/`Tests` 四层，编译与测试边界清晰
 - 插件和核心依赖已经接入
 - 代码架构入口已经就位
-- 战斗、掉落、背包、交易、打造、输入、HUD 与背包装备 UI 已有首版可运行内容
+- 战斗、掉落、背包、交易、打造、输入、HUD、情境菜单与世界交互入口已有首版可运行内容
 
 因此，后续工作重点不在“再拆目录”，而在把每一层真正填上首批可运行内容。

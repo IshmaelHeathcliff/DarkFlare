@@ -9,10 +9,12 @@ public class GameplayUiFoundationTests
     readonly List<Object> _objects = new List<Object>();
 
     IArchitecture _architecture;
+    float _originalTimeScale;
 
     [SetUp]
     public void SetUp()
     {
+        _originalTimeScale = Time.timeScale;
         _architecture = GameArchitecture.Interface;
     }
 
@@ -30,6 +32,7 @@ public class GameplayUiFoundationTests
         _objects.Clear();
         _architecture.Deinit();
         _architecture = null;
+        Time.timeScale = _originalTimeScale;
     }
 
     [Test]
@@ -380,6 +383,68 @@ public class GameplayUiFoundationTests
         Assert.AreEqual(100, inventory.Gold);
         Assert.AreSame(affix, item.Prefixes[0]);
         Assert.AreEqual(0, eventCount);
+    }
+
+    [Test]
+    public void InteractionCommands_PublishFocusAndContextualMenuAccess()
+    {
+        GameObject targetObject = new GameObject("TestMerchant");
+        targetObject.SetActive(false);
+        WorldInteractionTarget target = targetObject.AddComponent<WorldInteractionTarget>();
+        SetField(target, "_displayName", "测试商人");
+        SetField(target, "_menuPage", GameMenuPage.Shop);
+        _objects.Add(targetObject);
+        targetObject.SetActive(true);
+        InteractionFocusChangedEvent focusEvent = default;
+        GameMenuOpenRequestedEvent menuEvent = default;
+        int focusEventCount = 0;
+        int menuEventCount = 0;
+        _architecture.RegisterEvent<InteractionFocusChangedEvent>(e =>
+        {
+            focusEvent = e;
+            focusEventCount++;
+        });
+        _architecture.RegisterEvent<GameMenuOpenRequestedEvent>(e =>
+        {
+            menuEvent = e;
+            menuEventCount++;
+        });
+
+        _architecture.SendCommand(new SetInteractionFocusCommand(target));
+        bool opened = _architecture.SendCommand(new OpenGameMenuCommand(target));
+
+        Assert.IsTrue(opened);
+        Assert.AreEqual(1, focusEventCount);
+        Assert.AreSame(target, focusEvent.Target);
+        Assert.AreEqual(1, menuEventCount);
+        Assert.AreEqual(GameMenuPage.Shop, menuEvent.Page);
+        Assert.IsTrue(menuEvent.AvailablePages.Contains(GameMenuPage.Inventory));
+        Assert.IsTrue(menuEvent.AvailablePages.Contains(GameMenuPage.Shop));
+        Assert.IsFalse(menuEvent.AvailablePages.Contains(GameMenuPage.Crafting));
+    }
+
+    [Test]
+    public void GameplayPauseCommand_IsIdempotentAndRestoresPreviousTimeScale()
+    {
+        GameplayPauseSystem pauseSystem = _architecture.GetSystem<GameplayPauseSystem>();
+        List<GameplayPauseChangedEvent> events = new List<GameplayPauseChangedEvent>();
+        _architecture.RegisterEvent<GameplayPauseChangedEvent>(events.Add);
+        Time.timeScale = 0.75f;
+
+        _architecture.SendCommand(new SetGameplayPausedCommand(true));
+        _architecture.SendCommand(new SetGameplayPausedCommand(true));
+
+        Assert.IsTrue(pauseSystem.IsPaused);
+        Assert.AreEqual(0f, Time.timeScale);
+        Assert.AreEqual(1, events.Count);
+        Assert.IsTrue(events[0].IsPaused);
+
+        _architecture.SendCommand(new SetGameplayPausedCommand(false));
+
+        Assert.IsFalse(pauseSystem.IsPaused);
+        Assert.AreEqual(0.75f, Time.timeScale);
+        Assert.AreEqual(2, events.Count);
+        Assert.IsFalse(events[1].IsPaused);
     }
 
     CombatActor CreatePlayer()

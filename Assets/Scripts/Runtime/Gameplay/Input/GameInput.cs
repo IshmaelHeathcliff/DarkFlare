@@ -17,6 +17,8 @@ namespace DarkFlare
         bool _hasMode;
         bool _disposed;
 
+        public event Action InteractPerformed;
+
         public event Action<GameInputMode> ModeChanged;
 
         public GameInputMode CurrentMode { get; private set; }
@@ -30,6 +32,7 @@ namespace DarkFlare
         public GameInput()
         {
             _actions = new InputSystem_Actions();
+            _actions.Player.Interact.performed += OnInteract;
             _actions.Player.ToggleMenu.performed += OnToggleMenu;
             _actions.UI.Cancel.performed += OnCancel;
             SwitchToGameplay();
@@ -52,6 +55,7 @@ namespace DarkFlare
                 return;
             }
 
+            _actions.Player.Interact.performed -= OnInteract;
             _actions.Player.ToggleMenu.performed -= OnToggleMenu;
             _actions.UI.Cancel.performed -= OnCancel;
             _actions.Disable();
@@ -65,6 +69,7 @@ namespace DarkFlare
                 UnityEngine.Object.DestroyImmediate(_actions.asset);
             }
 
+            InteractPerformed = null;
             ModeChanged = null;
             _disposed = true;
         }
@@ -101,6 +106,11 @@ namespace DarkFlare
         void OnToggleMenu(InputAction.CallbackContext context)
         {
             SwitchToUi();
+        }
+
+        void OnInteract(InputAction.CallbackContext context)
+        {
+            InteractPerformed?.Invoke();
         }
 
         void OnCancel(InputAction.CallbackContext context)

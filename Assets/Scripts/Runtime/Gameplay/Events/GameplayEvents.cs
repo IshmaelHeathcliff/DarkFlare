@@ -102,4 +102,37 @@ namespace DarkFlare
             Actor = actor;
         }
     }
+
+    public readonly struct InteractionFocusChangedEvent
+    {
+        public WorldInteractionTarget Target { get; }
+
+        public InteractionFocusChangedEvent(WorldInteractionTarget target)
+        {
+            Target = target;
+        }
+    }
+
+    public readonly struct GameMenuOpenRequestedEvent
+    {
+        public GameMenuPage Page { get; }
+
+        public GameMenuAccess AvailablePages { get; }
+
+        public GameMenuOpenRequestedEvent(GameMenuPage page, GameMenuAccess availablePages)
+        {
+            Page = page;
+            AvailablePages = availablePages | GameMenuAccess.Inventory;
+        }
+    }
+
+    public readonly struct GameplayPauseChangedEvent
+    {
+        public bool IsPaused { get; }
+
+        public GameplayPauseChangedEvent(bool isPaused)
+        {
+            IsPaused = isPaused;
+        }
+    }
 }

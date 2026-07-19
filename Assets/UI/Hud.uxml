@@ -10,9 +10,15 @@
                 <ui:Label name="gold-label" text="金币 0" class="hud-value" picking-mode="Ignore" />
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:VisualElement name="weapon-card" class="hud-card weapon-card" picking-mode="Ignore">
-            <ui:Label text="当前武器" class="hud-caption" picking-mode="Ignore" />
-            <ui:Label name="weapon-label" text="未装备" class="hud-value" picking-mode="Ignore" />
+        <ui:VisualElement name="hud-bottom-row" class="hud-bottom-row" picking-mode="Ignore">
+            <ui:VisualElement name="weapon-card" class="hud-card weapon-card" picking-mode="Ignore">
+                <ui:Label text="当前武器" class="hud-caption" picking-mode="Ignore" />
+                <ui:Label name="weapon-label" text="未装备" class="hud-value" picking-mode="Ignore" />
+            </ui:VisualElement>
+            <ui:VisualElement name="interaction-prompt" class="interaction-prompt" picking-mode="Ignore">
+                <ui:Label name="interaction-prompt-label" text="E / Y · 交互" class="interaction-prompt__label" picking-mode="Ignore" />
+            </ui:VisualElement>
+            <ui:VisualElement class="hud-bottom-spacer" picking-mode="Ignore" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

@@ -93,7 +93,7 @@
 - **8c 背包 + 装备（已完成）**：背包格子面板，点击物品→穿戴（`EquipItemCommand`）；已验证物品尺寸与位置、装备操作、HUD 同步和 Gameplay/UI 模式互斥。
 - **8d 商店（已完成）**：共享菜单路由与商店面板买卖（`BuyItemCommand` / `SellItemCommand`）；已验证买卖后的金币、商人库存、玩家背包、HUD 和输入模式同步。
 - **8e 打造（已完成）**：共享菜单打造页与四操作（`CraftItemCommand`），事务修正、快照 Query、Play 与视觉验证见 [`crafting-ui-plan.md`](crafting-ui-plan.md)。
-- **8f 循环收尾**：入口串联（`Interact` 开面板 / 走到商人），一轮完整可玩循环，感受构筑变化。
+- **8f 循环收尾（已完成）**：新增世界交互目标、HUD 提示、情境菜单访问和菜单暂停；已串联商人、打造台与“交易→打造→装备→再次战斗”完整循环。实现与验证结果见 [`scene-loop-integration-plan.md`](scene-loop-integration-plan.md)。
 
 ## 四、8b 已落地
 

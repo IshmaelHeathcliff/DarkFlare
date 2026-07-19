@@ -14,6 +14,7 @@ namespace DarkFlare
             this.RegisterSystem(new LootSystem());
             this.RegisterSystem(new TradingSystem());
             this.RegisterSystem(new CraftingSystem());
+            this.RegisterSystem(new GameplayPauseSystem());
             this.RegisterUtility(new PrefabAssetLoader());
         }
 
