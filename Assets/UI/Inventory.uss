@@ -1,101 +1,16 @@
-.inventory-template {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
+.inventory-template,
+.inventory-page {
+  flex-grow: 1;
 }
 
-.inventory-overlay {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
+.inventory-page {
   display: none;
-  justify-content: center;
-  align-items: center;
-  background-color: rgba(5, 7, 10, 0.82);
-}
-
-.inventory-panel {
-  width: 1060px;
-  max-width: 94%;
-  height: 650px;
-  max-height: 90%;
-  padding: 24px;
-  color: rgb(224, 226, 231);
-  background-color: rgb(20, 24, 31);
-  border-left-width: 1px;
-  border-right-width: 1px;
-  border-top-width: 1px;
-  border-bottom-width: 1px;
-  border-left-color: rgb(116, 91, 54);
-  border-right-color: rgb(116, 91, 54);
-  border-top-color: rgb(116, 91, 54);
-  border-bottom-color: rgb(116, 91, 54);
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
-}
-
-.inventory-header {
-  height: 76px;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom-width: 1px;
-  border-bottom-color: rgb(63, 67, 75);
-}
-
-.inventory-heading {
-  flex-direction: row;
-  align-items: center;
-}
-
-.inventory-title {
-  font-size: 34px;
-  -unity-font-style: bold;
-  color: rgb(241, 232, 210);
-  margin-right: 12px;
-}
-
-.inventory-kicker {
-  font-size: 12px;
-  letter-spacing: 3px;
-  color: rgb(166, 132, 77);
-}
-
-.inventory-close {
-  min-width: 150px;
-  height: 38px;
-  color: rgb(209, 211, 216);
-  background-color: rgb(40, 45, 54);
-  border-left-color: rgb(80, 85, 96);
-  border-right-color: rgb(80, 85, 96);
-  border-top-color: rgb(80, 85, 96);
-  border-bottom-color: rgb(80, 85, 96);
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
-  border-bottom-left-radius: 5px;
-  border-bottom-right-radius: 5px;
-}
-
-.inventory-close:hover,
-.inventory-close:focus {
-  color: white;
-  background-color: rgb(57, 63, 74);
-  border-left-color: rgb(180, 143, 82);
-  border-right-color: rgb(180, 143, 82);
-  border-top-color: rgb(180, 143, 82);
-  border-bottom-color: rgb(180, 143, 82);
+  padding-top: 20px;
 }
 
 .inventory-body {
   flex-grow: 1;
   flex-direction: row;
-  padding-top: 22px;
 }
 
 .inventory-grid-section {
@@ -106,10 +21,10 @@
 
 .inventory-section-title {
   height: 28px;
+  margin-bottom: 10px;
   font-size: 16px;
   -unity-font-style: bold;
   color: rgb(195, 168, 120);
-  margin-bottom: 10px;
 }
 
 .inventory-grid-frame {
@@ -261,11 +176,11 @@
 
 .inventory-selected-name {
   min-height: 44px;
+  margin-bottom: 14px;
   white-space: normal;
   font-size: 22px;
   -unity-font-style: bold;
   color: rgb(240, 235, 224);
-  margin-bottom: 14px;
 }
 
 .inventory-detail-line {
@@ -279,9 +194,9 @@
 
 .inventory-feedback {
   min-height: 48px;
+  margin-bottom: 12px;
   white-space: normal;
   color: rgb(159, 166, 179);
-  margin-bottom: 12px;
 }
 
 .inventory-equip {

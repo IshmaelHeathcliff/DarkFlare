@@ -721,6 +721,8 @@ GameObject:
   - component: {fileID: 1678824116}
   - component: {fileID: 1678824115}
   - component: {fileID: 1678824118}
+  - component: {fileID: 1678824120}
+  - component: {fileID: 1678824119}
   m_Layer: 0
   m_Name: UIRoot
   m_TagString: Untagged
@@ -791,6 +793,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 210e8c0882626164caf01dca1f6541ea, type: 3}
   m_Name:
   m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.InventoryPanelController
+  _document: {fileID: 1678824116}
+--- !u!114 &1678824119
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1678824114}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52756951759b9af4c8330e86550ad852, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.GameMenuController
+  _document: {fileID: 1678824116}
+  _inventoryPanel: {fileID: 1678824118}
+  _shopPanel: {fileID: 1678824120}
+--- !u!114 &1678824120
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1678824114}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1325c4f09fa910d43a48e2954827b769, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.ShopPanelController
   _document: {fileID: 1678824116}
 --- !u!114 &2016392448
 MonoBehaviour:

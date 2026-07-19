@@ -6,6 +6,12 @@ namespace DarkFlare
         Removed
     }
 
+    public enum TradeOperation
+    {
+        Buy,
+        Sell
+    }
+
     public readonly struct GoldChangedEvent
     {
         public int PreviousGold { get; }
@@ -29,6 +35,22 @@ namespace DarkFlare
         {
             Item = item;
             ChangeType = changeType;
+        }
+    }
+
+    public readonly struct TradeCompletedEvent
+    {
+        public TradeOperation Operation { get; }
+
+        public ItemInstance Item { get; }
+
+        public int Price { get; }
+
+        public TradeCompletedEvent(TradeOperation operation, ItemInstance item, int price)
+        {
+            Operation = operation;
+            Item = item;
+            Price = price;
         }
     }
 

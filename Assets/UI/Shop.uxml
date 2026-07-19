@@ -1,0 +1,47 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+  <ui:VisualElement name="shop-page" class="shop-page" picking-mode="Position">
+    <ui:VisualElement class="shop-body">
+      <ui:VisualElement class="shop-list-section">
+        <ui:VisualElement class="shop-section-header">
+          <ui:Label text="商人库存" class="shop-section-title" />
+          <ui:Label text="BUY" class="shop-section-kicker" />
+        </ui:VisualElement>
+        <ui:VisualElement class="shop-list-frame">
+          <ui:ScrollView class="shop-scroll">
+            <ui:VisualElement name="shop-merchant-list" class="shop-list" />
+          </ui:ScrollView>
+          <ui:Label name="shop-merchant-empty" text="商人库存为空" class="shop-empty" />
+        </ui:VisualElement>
+      </ui:VisualElement>
+      <ui:VisualElement class="shop-list-section">
+        <ui:VisualElement class="shop-section-header">
+          <ui:Label text="玩家背包" class="shop-section-title" />
+          <ui:Label text="SELL" class="shop-section-kicker" />
+        </ui:VisualElement>
+        <ui:VisualElement class="shop-list-frame">
+          <ui:ScrollView class="shop-scroll">
+            <ui:VisualElement name="shop-player-list" class="shop-list" />
+          </ui:ScrollView>
+          <ui:Label name="shop-player-empty" text="背包中没有可出售物品" class="shop-empty" />
+        </ui:VisualElement>
+      </ui:VisualElement>
+      <ui:VisualElement class="shop-details">
+        <ui:Label name="shop-gold" text="持有金币  0" class="shop-gold" />
+        <ui:Label text="交易详情" class="shop-section-title" />
+        <ui:VisualElement class="shop-divider" />
+        <ui:Label name="shop-selected-name" text="未选择物品" class="shop-selected-name" />
+        <ui:Label name="shop-selected-source" text="来源：-" class="shop-detail-line" />
+        <ui:Label name="shop-selected-rarity" text="稀有度：-" class="shop-detail-line" />
+        <ui:Label name="shop-selected-affixes" text="词缀：-" class="shop-detail-line" />
+        <ui:Label name="shop-selected-price" text="价格：-" class="shop-price" />
+        <ui:VisualElement class="shop-details-spacer" />
+        <ui:Label name="shop-feedback" text="选择物品查看交易信息" class="shop-feedback" />
+        <ui:VisualElement class="shop-actions">
+          <ui:Button name="shop-buy" text="购买选中物品" class="shop-action shop-buy" />
+          <ui:Button name="shop-sell" text="出售选中物品" class="shop-action shop-sell" />
+        </ui:VisualElement>
+      </ui:VisualElement>
+    </ui:VisualElement>
+    <ui:Label text="方向键 / 左摇杆移动焦点 · Enter / A 确认 · Esc / B 关闭" class="shop-help" />
+  </ui:VisualElement>
+</ui:UXML>

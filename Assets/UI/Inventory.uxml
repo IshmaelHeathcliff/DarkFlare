@@ -1,34 +1,25 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
-  <ui:VisualElement name="inventory-overlay" class="inventory-overlay" picking-mode="Position">
-    <ui:VisualElement name="inventory-panel" class="inventory-panel" picking-mode="Position">
-      <ui:VisualElement class="inventory-header">
-        <ui:VisualElement class="inventory-heading">
-          <ui:Label text="背包" class="inventory-title" />
-          <ui:Label text="INVENTORY" class="inventory-kicker" />
+  <ui:VisualElement name="inventory-page" class="inventory-page" picking-mode="Position">
+    <ui:VisualElement class="inventory-body">
+      <ui:VisualElement class="inventory-grid-section">
+        <ui:Label text="物品格  10 × 6" class="inventory-section-title" />
+        <ui:VisualElement class="inventory-grid-frame">
+          <ui:VisualElement name="inventory-grid" class="inventory-grid" picking-mode="Position" />
+          <ui:Label name="inventory-empty" text="背包为空" class="inventory-empty" />
         </ui:VisualElement>
-        <ui:Button name="inventory-close" text="关闭  Esc / B" class="inventory-close" />
+        <ui:Label text="方向键 / 左摇杆移动焦点 · Enter / A 选择" class="inventory-help" />
       </ui:VisualElement>
-      <ui:VisualElement class="inventory-body">
-        <ui:VisualElement class="inventory-grid-section">
-          <ui:Label text="物品格  10 × 6" class="inventory-section-title" />
-          <ui:VisualElement class="inventory-grid-frame">
-            <ui:VisualElement name="inventory-grid" class="inventory-grid" picking-mode="Position" />
-            <ui:Label name="inventory-empty" text="背包为空" class="inventory-empty" />
-          </ui:VisualElement>
-          <ui:Label text="方向键 / 左摇杆移动焦点 · Enter / A 选择" class="inventory-help" />
-        </ui:VisualElement>
-        <ui:VisualElement class="inventory-details">
-          <ui:Label text="装备详情" class="inventory-section-title" />
-          <ui:Label name="inventory-current-weapon" text="当前武器：未装备" class="inventory-current-weapon" />
-          <ui:VisualElement class="inventory-divider" />
-          <ui:Label name="inventory-selected-name" text="未选择物品" class="inventory-selected-name" />
-          <ui:Label name="inventory-selected-type" text="类型：-" class="inventory-detail-line" />
-          <ui:Label name="inventory-selected-rarity" text="稀有度：-" class="inventory-detail-line" />
-          <ui:Label name="inventory-selected-affixes" text="词缀：-" class="inventory-detail-line" />
-          <ui:VisualElement class="inventory-details-spacer" />
-          <ui:Label name="inventory-feedback" text="选择一个物品查看详情" class="inventory-feedback" />
-          <ui:Button name="inventory-equip" text="装备选中物品" class="inventory-equip" />
-        </ui:VisualElement>
+      <ui:VisualElement class="inventory-details">
+        <ui:Label text="装备详情" class="inventory-section-title" />
+        <ui:Label name="inventory-current-weapon" text="当前武器：未装备" class="inventory-current-weapon" />
+        <ui:VisualElement class="inventory-divider" />
+        <ui:Label name="inventory-selected-name" text="未选择物品" class="inventory-selected-name" />
+        <ui:Label name="inventory-selected-type" text="类型：-" class="inventory-detail-line" />
+        <ui:Label name="inventory-selected-rarity" text="稀有度：-" class="inventory-detail-line" />
+        <ui:Label name="inventory-selected-affixes" text="词缀：-" class="inventory-detail-line" />
+        <ui:VisualElement class="inventory-details-spacer" />
+        <ui:Label name="inventory-feedback" text="选择一个物品查看详情" class="inventory-feedback" />
+        <ui:Button name="inventory-equip" text="装备选中物品" class="inventory-equip" />
       </ui:VisualElement>
     </ui:VisualElement>
   </ui:VisualElement>

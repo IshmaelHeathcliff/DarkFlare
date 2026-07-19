@@ -17,8 +17,7 @@ namespace DarkFlare
         readonly List<IUnRegister> _eventRegistrations = new List<IUnRegister>();
         readonly Dictionary<ItemInstance, Button> _itemButtons = new Dictionary<ItemInstance, Button>();
 
-        GameInput _gameInput;
-        VisualElement _overlay;
+        VisualElement _page;
         VisualElement _grid;
         Label _emptyLabel;
         Label _currentWeaponLabel;
@@ -28,14 +27,15 @@ namespace DarkFlare
         Label _selectedAffixesLabel;
         Label _feedbackLabel;
         Button _equipButton;
-        Button _closeButton;
         ItemInstance _selectedItem;
 
         public InventorySnapshot LastSnapshot { get; private set; }
 
         public ItemInstance SelectedItem => _selectedItem;
 
-        public bool IsOpen => _gameInput != null && _gameInput.CurrentMode == GameInputMode.UI;
+        public bool IsVisible { get; private set; }
+
+        public bool IsOpen => IsVisible;
 
         public IArchitecture GetArchitecture()
         {
@@ -83,6 +83,34 @@ namespace DarkFlare
             RefreshSelection();
         }
 
+        public void SetVisible(bool visible)
+        {
+            IsVisible = visible;
+
+            if (_page == null)
+            {
+                return;
+            }
+
+            _page.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
+
+            if (visible)
+            {
+                RefreshInventory();
+            }
+        }
+
+        public bool FocusDefault()
+        {
+            if (_selectedItem == null || !_itemButtons.TryGetValue(_selectedItem, out Button button))
+            {
+                return false;
+            }
+
+            button.Focus();
+            return true;
+        }
+
         void Awake()
         {
             EnsureComponents();
@@ -98,34 +126,16 @@ namespace DarkFlare
             }
 
             RegisterEvents();
-            _gameInput = this.GetUtility<GameInput>();
-
-            if (_gameInput == null)
-            {
-                Debug.LogError("[InventoryPanelController] 缺少 GameInput，无法控制背包开关", this);
-                return;
-            }
-
-            _gameInput.ModeChanged += OnInputModeChanged;
-            ApplyInputMode(_gameInput.CurrentMode);
+            RefreshInventory();
+            SetVisible(IsVisible);
             Debug.Log("[InventoryPanelController] 背包面板初始化完成", this);
         }
 
         void OnDisable()
         {
-            if (_gameInput != null)
-            {
-                _gameInput.ModeChanged -= OnInputModeChanged;
-            }
-
             if (_equipButton != null)
             {
                 _equipButton.clicked -= OnEquipClicked;
-            }
-
-            if (_closeButton != null)
-            {
-                _closeButton.clicked -= OnCloseClicked;
             }
 
             for (int i = 0; i < _eventRegistrations.Count; i++)
@@ -135,8 +145,7 @@ namespace DarkFlare
 
             _eventRegistrations.Clear();
             _itemButtons.Clear();
-            _gameInput = null;
-            _overlay = null;
+            _page = null;
             _grid = null;
             _emptyLabel = null;
             _currentWeaponLabel = null;
@@ -146,8 +155,8 @@ namespace DarkFlare
             _selectedAffixesLabel = null;
             _feedbackLabel = null;
             _equipButton = null;
-            _closeButton = null;
             _selectedItem = null;
+            IsVisible = false;
         }
 
         void OnValidate()
@@ -177,7 +186,7 @@ namespace DarkFlare
             }
 
             VisualElement root = _document.rootVisualElement;
-            _overlay = root.Q<VisualElement>("inventory-overlay");
+            _page = root.Q<VisualElement>("inventory-page");
             _grid = root.Q<VisualElement>("inventory-grid");
             _emptyLabel = root.Q<Label>("inventory-empty");
             _currentWeaponLabel = root.Q<Label>("inventory-current-weapon");
@@ -187,9 +196,8 @@ namespace DarkFlare
             _selectedAffixesLabel = root.Q<Label>("inventory-selected-affixes");
             _feedbackLabel = root.Q<Label>("inventory-feedback");
             _equipButton = root.Q<Button>("inventory-equip");
-            _closeButton = root.Q<Button>("inventory-close");
 
-            if (_overlay == null
+            if (_page == null
                 || _grid == null
                 || _emptyLabel == null
                 || _currentWeaponLabel == null
@@ -198,15 +206,13 @@ namespace DarkFlare
                 || _selectedRarityLabel == null
                 || _selectedAffixesLabel == null
                 || _feedbackLabel == null
-                || _equipButton == null
-                || _closeButton == null)
+                || _equipButton == null)
             {
                 Debug.LogError("[InventoryPanelController] 背包 UXML 缺少必要的命名元素", this);
                 return false;
             }
 
             _equipButton.clicked += OnEquipClicked;
-            _closeButton.clicked += OnCloseClicked;
             return true;
         }
 
@@ -222,30 +228,6 @@ namespace DarkFlare
             _eventRegistrations.Add(this.RegisterEvent<InventoryChangedEvent>(_ => RefreshInventory()));
             _eventRegistrations.Add(this.RegisterEvent<EquipmentChangedEvent>(_ => RefreshInventory()));
             _eventRegistrations.Add(this.RegisterEvent<ItemCraftedEvent>(_ => RefreshInventory()));
-        }
-
-        void OnInputModeChanged(GameInputMode mode)
-        {
-            ApplyInputMode(mode);
-        }
-
-        void ApplyInputMode(GameInputMode mode)
-        {
-            if (_overlay == null)
-            {
-                return;
-            }
-
-            bool isOpen = mode == GameInputMode.UI;
-            _overlay.style.display = isOpen ? DisplayStyle.Flex : DisplayStyle.None;
-
-            if (!isOpen)
-            {
-                return;
-            }
-
-            RefreshInventory();
-            FocusSelection();
         }
 
         void BuildGrid(InventorySnapshot snapshot)
@@ -344,17 +326,6 @@ namespace DarkFlare
             return false;
         }
 
-        void FocusSelection()
-        {
-            if (_selectedItem != null && _itemButtons.TryGetValue(_selectedItem, out Button button))
-            {
-                button.Focus();
-                return;
-            }
-
-            _closeButton.Focus();
-        }
-
         void OnEquipClicked()
         {
             if (_selectedItem == null || !LastSnapshot.HasPlayer)
@@ -374,12 +345,7 @@ namespace DarkFlare
 
             RefreshInventory();
             _feedbackLabel.text = $"已装备 {selectedName}";
-            FocusSelection();
-        }
-
-        void OnCloseClicked()
-        {
-            _gameInput?.SwitchToGameplay();
+            FocusDefault();
         }
 
         static string GetItemTypeText(ItemType type)

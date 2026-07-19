@@ -48,6 +48,7 @@ namespace DarkFlare
 
             int price = GetSellPrice(item);
             inventory.AddGold(price);
+            this.SendEvent(new TradeCompletedEvent(TradeOperation.Sell, item, price));
             Debug.Log($"[TradingSystem] 出售 {DescribeItem(item)} 获得 {price} 金币，当前金币 {inventory.Gold}");
             return true;
         }
@@ -84,6 +85,7 @@ namespace DarkFlare
 
             inventory.TrySpendGold(price);
             economy.RemoveStock(item);
+            this.SendEvent(new TradeCompletedEvent(TradeOperation.Buy, item, price));
             Debug.Log($"[TradingSystem] 购买 {DescribeItem(item)} 花费 {price} 金币，当前金币 {inventory.Gold}");
             return true;
         }

@@ -186,6 +186,93 @@ public class GameplayUiFoundationTests
     }
 
     [Test]
+    public void ShopSnapshot_ContainsMerchantAndPlayerPrices()
+    {
+        InventoryModel inventory = _architecture.GetModel<InventoryModel>();
+        EconomyModel economy = _architecture.GetModel<EconomyModel>();
+        ItemInstance merchantItem = CreateItem("merchant_item", "商人长剑", baseValue: 10);
+        ItemInstance playerItem = CreateItem("player_item", "玩家护甲", ItemType.Armor, baseValue: 20);
+        economy.AddStock(merchantItem);
+        inventory.AddGold(100);
+        Assert.IsTrue(inventory.TryAddItem(playerItem));
+
+        ShopSnapshot snapshot = _architecture.SendQuery(new GetShopSnapshotQuery());
+
+        Assert.AreEqual(100, snapshot.Gold);
+        Assert.AreEqual(1, snapshot.MerchantItems.Count);
+        Assert.AreSame(merchantItem, snapshot.MerchantItems[0].Item);
+        Assert.AreEqual(ShopItemSource.Merchant, snapshot.MerchantItems[0].Source);
+        Assert.AreEqual(15, snapshot.MerchantItems[0].Price);
+        Assert.AreEqual(1, snapshot.PlayerItems.Count);
+        Assert.AreSame(playerItem, snapshot.PlayerItems[0].Item);
+        Assert.AreEqual(ShopItemSource.Player, snapshot.PlayerItems[0].Source);
+        Assert.AreEqual(8, snapshot.PlayerItems[0].Price);
+    }
+
+    [Test]
+    public void TradingCommands_MoveItemsAndSendCompletedEvents()
+    {
+        InventoryModel inventory = _architecture.GetModel<InventoryModel>();
+        EconomyModel economy = _architecture.GetModel<EconomyModel>();
+        ItemInstance item = CreateItem("trade_item", "交易长剑", baseValue: 10);
+        List<TradeCompletedEvent> tradeEvents = new List<TradeCompletedEvent>();
+        _architecture.RegisterEvent<TradeCompletedEvent>(tradeEvents.Add);
+        economy.AddStock(item);
+        inventory.AddGold(100);
+
+        bool bought = _architecture.SendCommand(new BuyItemCommand(item));
+
+        Assert.IsTrue(bought);
+        Assert.IsFalse(economy.HasStock(item));
+        Assert.IsTrue(inventory.Grid.Placements.ContainsKey(item));
+        Assert.AreEqual(85, inventory.Gold);
+        Assert.AreEqual(1, tradeEvents.Count);
+        Assert.AreEqual(TradeOperation.Buy, tradeEvents[0].Operation);
+        Assert.AreEqual(15, tradeEvents[0].Price);
+
+        bool sold = _architecture.SendCommand(new SellItemCommand(item));
+
+        Assert.IsTrue(sold);
+        Assert.IsFalse(inventory.Grid.Placements.ContainsKey(item));
+        Assert.AreEqual(89, inventory.Gold);
+        Assert.AreEqual(2, tradeEvents.Count);
+        Assert.AreEqual(TradeOperation.Sell, tradeEvents[1].Operation);
+        Assert.AreEqual(4, tradeEvents[1].Price);
+    }
+
+    [Test]
+    public void BuyItemCommand_FailuresLeaveAllStateUnchanged()
+    {
+        InventoryModel inventory = _architecture.GetModel<InventoryModel>();
+        EconomyModel economy = _architecture.GetModel<EconomyModel>();
+        ItemInstance absentItem = CreateItem("absent_item", "无库存物品", baseValue: 10);
+        ItemInstance expensiveItem = CreateItem("expensive_item", "金币不足物品", baseValue: 10);
+        ItemInstance fullBagItem = CreateItem("full_bag_item", "背包已满物品", baseValue: 10);
+        int tradeEventCount = 0;
+        _architecture.RegisterEvent<TradeCompletedEvent>(_ => tradeEventCount++);
+        economy.AddStock(expensiveItem);
+
+        Assert.IsFalse(_architecture.SendCommand(new BuyItemCommand(absentItem)));
+        Assert.IsFalse(_architecture.SendCommand(new BuyItemCommand(expensiveItem)));
+        Assert.IsTrue(economy.HasStock(expensiveItem));
+        Assert.AreEqual(0, inventory.Gold);
+
+        for (int i = 0; i < 60; i++)
+        {
+            Assert.IsTrue(inventory.TryAddItem(CreateItem($"trade_blocker_{i}", $"交易占位物 {i}")));
+        }
+
+        economy.AddStock(fullBagItem);
+        inventory.AddGold(100);
+
+        Assert.IsFalse(_architecture.SendCommand(new BuyItemCommand(fullBagItem)));
+        Assert.IsTrue(economy.HasStock(fullBagItem));
+        Assert.IsFalse(inventory.Grid.Placements.ContainsKey(fullBagItem));
+        Assert.AreEqual(100, inventory.Gold);
+        Assert.AreEqual(0, tradeEventCount);
+    }
+
+    [Test]
     public void CraftingSystem_SendsItemCraftedEventAfterSuccess()
     {
         CraftingDefinition craftingDefinition = CreateScriptableObject<CraftingDefinition>();
@@ -227,12 +314,14 @@ public class GameplayUiFoundationTests
         string instanceId,
         string displayName,
         ItemType itemType = ItemType.Weapon,
-        Vector2Int? gridSize = null)
+        Vector2Int? gridSize = null,
+        int baseValue = 0)
     {
         ItemBaseDefinition definition = CreateScriptableObject<ItemBaseDefinition>();
         SetField(definition, "_displayName", displayName);
         SetField(definition, "_itemType", itemType);
         SetField(definition, "_gridSize", gridSize ?? Vector2Int.one);
+        SetField(definition, "_baseValue", baseValue);
         return definition.CreateInstance(instanceId, 1, 1, ItemRarity.Normal);
     }
 
