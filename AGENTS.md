@@ -52,14 +52,19 @@
   - 使用 Odin 原生功能
 - 使用 `PrimeTween` 进行动画和补间操作
 - 性能敏感的大量数据优先使用 DOTS 处理
-- 需要美术资源时，可尝试调用mcp或skill生成
 - 在 Windows 上优先使用 PowerShell 7
+- 不要使用过时 Unity API
 
 ### Unity UI
 
 - UI脚本所需组件应设为 `SerializeField`，并在 `OnValidate` 中检查并尝试创建
-- 优先使用 UIToolkit 创建UI，当设计复杂的动画等逻辑时使用 UGUI
-- 使用 unityMCP 进行UI创建与布局
+- 优先使用 UIToolkit 创建UI，当涉及复杂的动画等逻辑时使用 UGUI
+
+### MCP
+
+- 使用 unityMCP 进行 UI 创建与布局
+- 需要美术资源时，可尝试调用 mcp 或 skill 生成
+- 不能在 Unity Editor 已打开场景时直接修改场景文件，可通过 unityMCP 或脚本修改
 
 ## 编码规范
 
