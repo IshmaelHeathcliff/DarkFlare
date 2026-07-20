@@ -11,6 +11,10 @@
 - [配置中心](./config-center.md)
 - [已完成计划归档](./plan/archive/README.md)
 
+## 进行中的计划
+
+- [初版体验优化计划](./plan/initial-experience-optimization/README.md)
+
 ## 说明
 
 当前项目已完成首版单场景最小循环，能够串联战斗、掉落、拾取、背包装备、交易、打造和再次战斗。文档以现有目录、包依赖和脚本入口为准整理；已完成的执行计划统一保存在 `docs/plan/archive/`。
