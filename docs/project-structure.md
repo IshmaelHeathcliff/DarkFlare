@@ -218,7 +218,7 @@ Addressables 的配置目录，包含资源组、模板和构建器配置。后�
 
 `UI`、`Utilities` 目前主要是占位，为后续模块扩展预留。
 
-**第 8 步“串成完整循环”已完成**：8a–8f 已覆盖输入、UIToolkit 根 / HUD、背包装备、商店、打造与场景交互入口，设计和验收见 [`plan/input-ui-design.md`](plan/input-ui-design.md) 与 [`plan/scene-loop-integration-plan.md`](plan/scene-loop-integration-plan.md)。
+**首版单场景循环已完成**：当前已覆盖输入、UIToolkit 根 / HUD、背包装备、商店、打造与场景交互入口。运行流程见 [`gameplay-loop.md`](gameplay-loop.md)，输入与 UI 结构见 [`input-ui-system.md`](input-ui-system.md)；完成过程保存在 [`plan/archive/`](plan/archive/README.md)。
 
 ### `Assets/Settings`
 

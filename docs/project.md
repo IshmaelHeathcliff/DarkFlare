@@ -2,7 +2,7 @@
 
 ## 项目状态
 
-`DarkFlare` 已完成单场景最小循环第 1–7 步后端，以及第 8a–8e 的输入、HUD、背包 / 装备、商店和打造交互。当前可以在 `Main.unity` 中战斗、掉落、拾取，并通过共享营地菜单整理装备、买卖和打造；下一步是 8f 场景交互入口与完整循环收尾。
+`DarkFlare` 已完成首版单场景最小循环。当前可以在 `Main.unity` 中战斗、掉落、拾取，通过随身背包整理和装备物品，并与场景中的商人、打造台交互完成买卖和打造；关闭菜单后可返回战斗验证构筑变化。
 
 ## 游戏定位
 
@@ -29,7 +29,7 @@
 - `Assets/Scripts/Runtime/Core/QFramework.cs`：独立 `DarkFlare.Core` 程序集。
 - `Assets/Scripts/Runtime/GameArchitecture.cs`：组合根，注册输入 Utility、战斗 / 装备 / 背包 / 经济 Model，以及战斗、生成、掉落、交易、打造 System。
 - `Assets/Scripts/Runtime/`：`DarkFlare.Runtime` 程序集。
-- `Assets/Scripts/Tests/EditMode/`：`DarkFlare.Tests.EditMode`，当前全量 42/42 通过。
+- `Assets/Scripts/Tests/EditMode/`：`DarkFlare.Tests.EditMode`，首版收尾时全量 45/45 通过。
 
 ### 玩法模块
 
@@ -59,15 +59,16 @@
 - `Assets/UI` 已有 `GameRoot`、`Hud`、`Inventory`、`Shop`、`Crafting` 的 UXML / USS。
 - 原型美术仍以 `Assets/Art/Textures/Prototype/PrototypeSquare.png` 等占位资源为主。
 
-## 当前边界与下一步
+## 当前边界
 
-当前 UI 可从共享菜单直接访问，但世界中的商人 / 打造台实体和 `Interact` 入口尚未接入。8f 应完成：
+首版已经完成“战斗 → 拾取 → 装备 / 交易 / 打造 → 再战斗”的人手循环，但仍是用于验证系统闭环的功能原型：
 
-1. 定义场景交互目标与距离判断。
-2. 把 `Interact` 接到商人或打造台，并打开对应菜单页。
-3. 验证“战斗 → 拾取 → 装备 / 出售 / 打造 → 关闭菜单 → 再战斗”的完整人手循环。
+- 仅有 `Main.unity` 单场景，没有撤离、场景切换或存档闭环。
+- 背包没有拖拽换位、旋转、堆叠和重量，装备只实现单武器槽。
+- 交易没有回购或多商人独立库存；打造没有配方、材料和批量操作。
+- 战斗、场景对象和 UI 仍以原型内容与占位视觉为主。
 
-配方、打造材料、回购、多装备槽、物品旋转 / 堆叠 / 重量和正式美术不属于当前最小范围。
+完整流程与模块边界见 [`gameplay-loop.md`](./gameplay-loop.md)，输入、菜单和场景交互结构见 [`input-ui-system.md`](./input-ui-system.md)。
 
 ## 文档维护约定
 

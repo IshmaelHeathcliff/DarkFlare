@@ -1,5 +1,7 @@
 # 最小循环设计
 
+> 归档状态：已完成，归档于 2026-07-20。本文保留首版执行过程；当前实现见 [首版玩法循环](../../gameplay-loop.md)。
+
 ## 目标
 
 先在一个场景中建立可反复验证的最小循环：
@@ -150,7 +152,7 @@ Assets/Data/Preset/
 5. 接入背包格子和拾取。（已完成）
 6. 接入商人买卖。（已完成）
 7. 接入基础打造。（已完成）
-8. 用 `Main.unity` 串成一轮完整循环。（进行中）装备、交易与打造已具备玩家 UI 入口，场景交互入口仍待补齐；本步拆成 8a–8f 子步，设计见 [`input-ui-design.md`](input-ui-design.md)：
+8. 用 `Main.unity` 串成一轮完整循环。（已完成）已接入装备、交易、打造 UI、场景交互入口和菜单暂停；本步拆成 8a–8f 子步，执行记录见 [`input-ui-design.md`](input-ui-design.md)：
    - 8a 输入层重构（已完成：`InputSystem_Actions` + `GameInput` 封装 + Action Map 切换）
    - 8b UI 基础 + HUD（已完成：`UIDocument`/`PanelSettings`、领域事件、只读 HUD）
    - 8c 背包 + 装备交互（已完成：10×6 格子、选择/穿戴、原子换装、HUD 同步）
@@ -175,7 +177,7 @@ Assets/Data/Preset/
 - 装备：`EquipmentModel` 按 `CombatActor` 存放已装备武器；`CombatSystem.EquipWeapon` 只接受背包中的武器，并通过 `InventoryModel.TryExchangeItem` 原子完成“新武器出包、旧武器回包”，任何失败都不修改装备或发送成功事件。成功后调用 `CombatActor.SetModifiers(item.CollectModifiers())`，让 `DamageCalculator` 的 Increase/More/Conversion 等阶段吃到装备词条。`EquipItemCommand` 返回 `bool` 供 UI 显示结果。v1 只做武器单槽位，卸装备和多槽位留给后续。修正了两处会让装备验证不出效果的历史数据问题：`Assets/Data/Preset/Stats/05伤害.asset` 的 `_id` 从 `Damage` 改成 `damage`（与 `StatIds.Damage` 大小写对齐），`Assets/Data/Preset/Afflixes/000基础伤害增加.asset` 的运算方式从 `Flat` 改成 `Increase`（`Flat` 目前只有类型专属伤害属性会被 `DamageCalculator.GetFlatDamage` 读取，通用 `damage` 属性走不到）。
 - 背包：`InventoryGrid`（纯逻辑二维格子，`TryAdd` 按 `ItemBaseDefinition.GridSize` 行优先找空矩形占用、`Remove` 释放格子，`TryExchange` 在不产生中间状态的前提下交换物品）、`InventoryModel`（持有单个玩家背包 grid，默认 10x6，暴露 `TryAddItem`/`RemoveItem`/`TryExchangeItem`/`Grid`，以及玩家金币 `Gold`/`AddGold`/`TrySpendGold`）。拾取即入包，背包满则拾取物留在地上——体现"有限空间导致取舍"。`InventoryPanelController` 已按 `InventoryGrid.Placements` 显示物品尺寸与位置，并通过 `EquipItemCommand` 完成选择和穿戴。当前只做格子占用，拖拽换位、旋转、堆叠和重量限制暂缓。
 - 交易：`ItemValueCalculator`（纯逻辑，价值 = 基础价 × 稀有度倍率 × (1 + 0.25 × 词条数)，买价 ceil(value×买倍率)、卖价 floor(value×卖倍率)）、`EconomyModel`（单个商人的运行时库存 + 买卖倍率）、`TradingSystem`（`BuyItem`/`SellItem`/价格查询/`SetupMerchant`/`GrantGold`）。卖出把物品从背包移除换金币；买入严格"先查金币和空间、再扣钱、再从库存移除"，任一前置不满足直接返回 false，保证不会扣了钱没进包。`TraderDefinition`（商人配置：库存条目 + 买卖倍率）由 `CombatPrototypeBootstrap` 在启动时 `SetupMerchant`，并发放初始金币。金币是 `InventoryModel.Gold` 一个整数、不占背包格子。`TradingSystem` 仅在全部状态提交成功后发送 `TradeCompletedEvent`；`GetShopSnapshotQuery` 与 `ShopPanelController` 已提供玩家可操作的买卖 UI。价格公式暂不含词条 tier / 材料类型；首版卖出不进入商人库存，不提供回购。多商人和场景商人实体尚未实现。
-- 打造：`ItemInstance` 提供 `RemoveAffix`/`ClearAffixes`。`CraftingOperations`（纯逻辑）实现添加词缀、重随全部、移除并重随、提升数值；重随全部保留原前后缀数量和类型，移除重随保留目标类型，任一重建失败都会恢复原词缀；提升数值只有修改器总值严格变大才成功。`CraftingSystem`（无 Model）只接受玩家背包内物品，先检查金币，再执行操作，实际生效后才扣费并发送 `ItemCraftedEvent`。`CraftingDefinition` 由 Bootstrap 启动时 `Setup`，当前只使用金币，词条池仅一条测试内容。`CraftItemCommand`、`GetCraftingCostQuery` 与 `GetCraftingSnapshotQuery` 已接入 `CraftingPanelController`。当前物品价值只受词缀数量影响，因此添加词缀会改变价值，单纯重随或提升数值不会改变交易价值。详见 [`../crafting-system.md`](../crafting-system.md)。
+- 打造：`ItemInstance` 提供 `RemoveAffix`/`ClearAffixes`。`CraftingOperations`（纯逻辑）实现添加词缀、重随全部、移除并重随、提升数值；重随全部保留原前后缀数量和类型，移除重随保留目标类型，任一重建失败都会恢复原词缀；提升数值只有修改器总值严格变大才成功。`CraftingSystem`（无 Model）只接受玩家背包内物品，先检查金币，再执行操作，实际生效后才扣费并发送 `ItemCraftedEvent`。`CraftingDefinition` 由 Bootstrap 启动时 `Setup`，当前只使用金币，词条池仅一条测试内容。`CraftItemCommand`、`GetCraftingCostQuery` 与 `GetCraftingSnapshotQuery` 已接入 `CraftingPanelController`。当前物品价值只受词缀数量影响，因此添加词缀会改变价值，单纯重随或提升数值不会改变交易价值。详见 [`../../crafting-system.md`](../../crafting-system.md)。
 - Prefab：`Assets/Prefabs/Combat/Player.prefab`、`Monster_Basic.prefab`、`Projectile_Default.prefab`、`Assets/Prefabs/Loot/LootPickup.prefab`，均已标记为 Addressable。占位视觉使用共享的方块贴图 `Assets/Art/Textures/Prototype/PrototypeSquare.png`，按 `SpriteRenderer.Color` 区分（玩家/怪物/投射物用固定颜色，掉落物按稀有度着色）。
 - 数据资源：`Assets/Data/Preset/Actors/玩家.asset`、`Skills/基础投射物技能.asset`、`Monsters/基础怪物.asset`、`Monsters/基础刷怪表.asset`、`Loot/基础怪物掉落表.asset`（引用已有的 `Items/001大剑.asset` 和 `Afflixes/000基础伤害增加.asset`）、`Traders/基础商人.asset`、`Crafting/基础打造配置.asset`（词条池引用 `Afflixes/000基础伤害增加.asset`），已在 `Main.unity` 场景中挂到 `CombatPrototypeBootstrap`/`MonsterSpawner`。`001大剑.asset` 的 `_baseValue` 从 0 修正为 10，否则交易卖价恒为 0 验证不出效果。
 - UI：`GameRoot.uxml` 组合 HUD、背包、商店与打造。`GameMenuController` 统一管理共享遮罩、三页签和 Gameplay/UI 输入模式；`HudController`、`InventoryPanelController`、`ShopPanelController`、`CraftingPanelController` 分别消费只读快照并通过领域事件刷新。`Main.unity` 复用唯一 `UIRoot`、`UIDocument` 与 `EventSystem`，并连接项目 Input Actions 的 `UI` map。
