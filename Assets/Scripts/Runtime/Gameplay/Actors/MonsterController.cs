@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace DarkFlare
@@ -14,6 +16,10 @@ namespace DarkFlare
         CombatActor _actor;
         MonsterDefinition _definition;
         float _lastContactDamageTime = -999f;
+
+        [SerializeField]
+        [Min(0f)]
+        float _deathDespawnDelay = 0.65f;
 
         public CombatActor Actor => _actor;
 
@@ -104,6 +110,7 @@ namespace DarkFlare
             _lastContactDamageTime = Time.time;
             int seed = Random.Range(int.MinValue, int.MaxValue);
             List<DamagePacket> packets = _definition.CreateContactDamagePackets(seed);
+            this.SendCommand(new NotifyActorAttackCommand(_actor));
             this.SendCommand(new ApplyDamageCommand(_actor, target, "monster_contact", packets, _actor.Tags, seed));
         }
 
@@ -114,7 +121,20 @@ namespace DarkFlare
                 return;
             }
 
-            Destroy(gameObject);
+            DespawnAfterDeathAnimation(this.GetCancellationTokenOnDestroy()).Forget();
+        }
+
+        async UniTaskVoid DespawnAfterDeathAnimation(CancellationToken token)
+        {
+            bool cancelled = await UniTask.Delay(
+                    System.TimeSpan.FromSeconds(_deathDespawnDelay),
+                    cancellationToken: token)
+                .SuppressCancellationThrow();
+
+            if (!cancelled)
+            {
+                Destroy(gameObject);
+            }
         }
     }
 }

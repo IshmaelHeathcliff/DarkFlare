@@ -20,6 +20,7 @@ namespace DarkFlare
 
         protected override void OnDeinit()
         {
+            this.GetUtility<PrefabAssetLoader>().ReleaseAll();
             this.GetUtility<GameInput>().Dispose();
         }
     }

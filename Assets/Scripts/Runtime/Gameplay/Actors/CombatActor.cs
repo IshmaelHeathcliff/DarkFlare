@@ -152,13 +152,25 @@ namespace DarkFlare
                 _rigidbody.linearVelocity = Vector2.zero;
             }
 
-            if (_hideVisualOnDeath)
+            SetCollidersEnabled(false);
+
+            if (_hideVisualOnDeath && _renderer != null)
             {
-                SetPresentationEnabled(false);
+                _renderer.enabled = false;
             }
         }
 
         void SetPresentationEnabled(bool enabled)
+        {
+            SetCollidersEnabled(enabled);
+
+            if (_renderer != null)
+            {
+                _renderer.enabled = enabled;
+            }
+        }
+
+        void SetCollidersEnabled(bool enabled)
         {
             for (int i = 0; i < _colliders.Count; i++)
             {
@@ -166,11 +178,6 @@ namespace DarkFlare
                 {
                     _colliders[i].enabled = enabled;
                 }
-            }
-
-            if (_renderer != null)
-            {
-                _renderer.enabled = enabled;
             }
         }
     }

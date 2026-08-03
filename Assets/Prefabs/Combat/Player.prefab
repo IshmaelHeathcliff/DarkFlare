@@ -15,6 +15,8 @@ GameObject:
   - component: {fileID: 366642828949679782}
   - component: {fileID: 5330215024113586622}
   - component: {fileID: 5507005191881598343}
+  - component: {fileID: 6927203172082972014}
+  - component: {fileID: 4076681312421792287}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -84,10 +86,10 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 10
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 21300000, guid: 84183fcdb2c887640a3f1ca089210140, type: 3}
-  m_Color: {r: 0.2, g: 0.9, b: 0.45, a: 1}
+  m_Sprite: {fileID: 21300000, guid: 3b93c256c2939984b863c3e8015ab819, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -174,7 +176,7 @@ MonoBehaviour:
   _actorId: 
   _team: 0
   _maxHealth: 100
-  _hideVisualOnDeath: 1
+  _hideVisualOnDeath: 0
 --- !u!114 &5330215024113586622
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -199,5 +201,42 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 91720f964a5a0a04f9acd141bf016cb5, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.PlayerInteractionController
+--- !u!95 &6927203172082972014
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1706851549899684279}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 54942cec8b927e24daa9e31d58dfa0e4, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &4076681312421792287
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1706851549899684279}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab381e5657887c44e9bf75f4efeed023, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.ActorAnimatorController
+  _animator: {fileID: 6927203172082972014}
+  _renderer: {fileID: 387292515771217056}
+  _movementThreshold: 0.05

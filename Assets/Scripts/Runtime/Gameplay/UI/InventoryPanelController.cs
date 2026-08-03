@@ -256,7 +256,7 @@ namespace DarkFlare
         {
             float step = CellSize + CellGap;
             Button button = new Button(() => SelectItem(item.Item));
-            button.text = item.DisplayName;
+            button.text = string.Empty;
             button.tooltip = $"{item.DisplayName} · {GetRarityText(item.Rarity)} · {item.AffixCount} 条词缀";
             button.AddToClassList("inventory-item");
             button.AddToClassList(GetRarityClass(item.Rarity));
@@ -265,6 +265,25 @@ namespace DarkFlare
             button.style.top = item.Placement.y * step;
             button.style.width = item.Placement.width * CellSize + (item.Placement.width - 1) * CellGap;
             button.style.height = item.Placement.height * CellSize + (item.Placement.height - 1) * CellGap;
+
+            VisualElement icon = new VisualElement
+            {
+                pickingMode = PickingMode.Ignore,
+            };
+            icon.AddToClassList("inventory-item-icon");
+
+            if (item.Type == ItemType.Weapon)
+            {
+                icon.AddToClassList("inventory-item-icon--weapon");
+            }
+
+            Label label = new Label(item.DisplayName)
+            {
+                pickingMode = PickingMode.Ignore,
+            };
+            label.AddToClassList("inventory-item-label");
+            button.Add(icon);
+            button.Add(label);
             return button;
         }
 

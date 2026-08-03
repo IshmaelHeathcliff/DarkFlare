@@ -1,5 +1,10 @@
 namespace DarkFlare
 {
+    public struct ActorAttackedEvent
+    {
+        public CombatActor Actor;
+    }
+
     public struct ActorDamagedEvent
     {
         public CombatActor Actor;

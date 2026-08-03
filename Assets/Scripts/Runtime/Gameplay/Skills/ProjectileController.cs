@@ -29,6 +29,7 @@ namespace DarkFlare
             _skill = skill;
             _direction = direction.sqrMagnitude > 0f ? direction.normalized : Vector2.right;
             _initialized = true;
+            transform.right = _direction;
             _collider.radius = skill.ProjectileRadius;
             _rigidbody.linearVelocity = _direction * skill.ProjectileSpeed;
             DestroyAfterDelay(skill.ProjectileLifetime, this.GetCancellationTokenOnDestroy()).Forget();

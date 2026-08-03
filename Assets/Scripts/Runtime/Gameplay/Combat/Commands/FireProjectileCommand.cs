@@ -19,7 +19,12 @@ namespace DarkFlare
 
         protected override void OnExecute()
         {
-            this.GetSystem<SpawnSystem>().SpawnProjectile(_skill, _owner, _position, _direction);
+            ProjectileController projectile = this.GetSystem<SpawnSystem>().SpawnProjectile(_skill, _owner, _position, _direction);
+
+            if (projectile != null)
+            {
+                this.SendEvent(new ActorAttackedEvent { Actor = _owner });
+            }
         }
     }
 }

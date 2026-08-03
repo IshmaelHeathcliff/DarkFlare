@@ -11,13 +11,20 @@
 
 玩家可在场景内持续战斗和获取物品，通过 Tab / 手柄 Start 打开随身背包，也可接近商人或打造台后使用 E / 手柄北键进入对应功能。菜单打开时暂停玩法模拟，关闭后恢复战斗与 Gameplay 输入。
 
-当前成果用于验证战斗、物品、经济与构筑之间的闭环，仍是单场景、单武器槽和占位美术的功能原型，不代表完整游戏内容已经完成。
+当前成果用于验证战斗、物品、经济与构筑之间的闭环，仍是单场景、单武器槽的功能原型。阶段 0 已接入一组视觉垂直切片，但商人、打造台、完整地图和其余内容仍未进入批量美术生产。
+
+## 阶段 0 视觉切片
+
+- `Main.unity` 原点周围增加 3×3 冷灰石地切片，不改变碰撞、刷怪和交互点位置。
+- 玩家与基础怪物 Prefab 已接入 Idle / Move / Attack / Hit / Death Animator；移动由 Rigidbody2D 驱动，战斗状态由领域 Event 驱动。
+- 投射物和世界掉落分别替换为青光飞弹与大剑图标，四个 Prefab 路径及 Addressables 引用保持不变。
+- 视觉生产规格与阶段 0 验收记录见 [视觉规范](./visual-style.md) 与 [视觉资产清单](./visual-assets.md)。
 
 ## 启动与运行流程
 
 1. `CombatPrototypeBootstrap` 预热玩家、怪物、投射物和掉落物 Addressable Prefab，初始化商人、打造配置与玩家初始金币。
 2. `SpawnSystem` 生成玩家，`MonsterSpawner` 按配置持续生成怪物；相机随后绑定玩家。
-3. 玩家和怪物统一注册到 `CombatModel`，攻击通过 Command 进入 `CombatSystem` 和 `DamageCalculator`。
+3. 玩家和怪物统一注册到 `CombatModel`，攻击通过 Command 进入 `CombatSystem` 和 `DamageCalculator`；投射物生成或怪物接触攻击成功后发送 `ActorAttackedEvent`，伤害、死亡与复活沿用 `ActorDamagedEvent`、`ActorDiedEvent`、`ActorRevivedEvent` 驱动 Animator。
 4. 怪物死亡后，`LootSystem` 根据怪物掉落表生成 `ItemInstance`，再实例化世界掉落物。
 5. 玩家触碰掉落物时，`PickupLootCommand` 尝试把物品放入 10×6 背包；背包无空间时保留世界掉落物。
 6. 玩家可在背包内选择武器并发送 `EquipItemCommand`。换装以原子交换提交，成功后装备词条通过 `CombatActor.SetModifiers` 进入后续伤害计算。
@@ -52,11 +59,14 @@ Prefab 通过 Addressables 预热和实例化，首版不使用 `Resources` 或�
 
 ## 首版验证记录
 
-- Unity EditMode 全量 45 项通过，Unity 脚本编译无错误。
+- Unity EditMode 全量 48 项通过，Unity 脚本编译无错误。
 - 键盘 E 与手柄北键均可触发场景交互；Tab / Start 只能打开随身背包。
 - Play Mode 已完成“购买大剑（100→85 金币）→添加词缀（85→65 金币）→装备→返回战斗”的端到端流程。
 - 同一轮验证中，单次伤害由基础 12 提升至 14.9，证明装备词条已进入战斗结算。
 - 已检查 visual tree、1920×1080 渲染和 Play 控制台。
+- 动画专项验收已通过：Player / Monster Animator Controller 结构与死亡显示配置 3 项 EditMode 通过，Main 场景 PlayMode 已验证 `Attack → Hit → Death → Revive/Idle` 实际切换。
+- 阶段 0 体验专项 PlayMode 已通过：真实购买大剑后，键盘 Tab / Esc 与手柄 Start / B 均可打开、关闭背包并恢复暂停状态；物品选中、详情显示、装备命令和默认焦点正常。
+- 1280×720、1920×1080、2560×1440 三档背包渲染与边界检查通过；架构退出时会释放 Addressables 预热句柄，重复初始化不再重复加载同一引用。
 
 以上数据是首版收尾时的验证记录；后续改动仍应重新运行相关测试和 Play 流程。
 
@@ -67,6 +77,6 @@ Prefab 通过 Addressables 预热和实例化，首版不使用 `Resources` 或�
 - 装备只实现单武器槽，没有卸装、多槽位或耐久。
 - 交易只维护单个共享商人库存；卖出物品不进入商人库存，也没有回购。
 - 打造只消耗金币，尚无配方、材料、锁定词缀或批量操作。
-- 战斗、场景对象和 UI 使用原型内容与占位视觉，尚未进入正式内容制作。
+- 视觉垂直切片已替换玩家、基础怪物、投射物、掉落、局部地表和背包皮肤；商人、打造台、完整地图、完整装备池与怪物池仍使用原型内容或占位视觉。
 
 输入和 UI 结构见 [输入与运行时 UI](./input-ui-system.md)，打造事务规则见 [打造系统](./crafting-system.md)，伤害与词条规则见 [伤害系统与词条系统设计](./damage-affix-system.md)。
