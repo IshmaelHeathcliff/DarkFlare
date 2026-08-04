@@ -164,7 +164,8 @@ namespace DarkFlare.Tests
         {
             VisualElement overlay = document.rootVisualElement.Q<VisualElement>("game-menu-overlay");
             Focusable focusedElement = document.rootVisualElement.focusController.focusedElement;
-            Label selectedName = document.rootVisualElement.Q<Label>("inventory-selected-name");
+            VisualElement detailRoot = document.rootVisualElement.Q<VisualElement>("inventory-item-detail");
+            Label selectedName = detailRoot.Q<Label>("item-detail-name");
             Assert.IsTrue(menu.IsOpen, $"{inputPath} 未打开菜单");
             Assert.AreEqual(DisplayStyle.Flex, overlay.resolvedStyle.display, $"{inputPath} 菜单遮罩不可见");
             Assert.AreEqual(0f, Time.timeScale, $"{inputPath} 打开菜单后未暂停玩法");
@@ -190,7 +191,7 @@ namespace DarkFlare.Tests
                 "game-menu-panel",
                 "inventory-page",
                 "inventory-grid",
-                "inventory-selected-name",
+                "inventory-item-detail",
                 "inventory-equip",
                 "game-menu-close",
             };

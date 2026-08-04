@@ -9,13 +9,15 @@ namespace DarkFlare
 
         public RectInt Placement { get; }
 
-        public string DisplayName { get; }
+        public ItemDetailSnapshot Detail { get; }
 
-        public ItemType Type { get; }
+        public string DisplayName => Detail.DisplayName;
 
-        public ItemRarity Rarity { get; }
+        public ItemType Type => Detail.Type;
 
-        public int AffixCount { get; }
+        public ItemRarity Rarity => Detail.Rarity;
+
+        public int AffixCount => Detail.AffixCount;
 
         public bool CanEquip => Type == ItemType.Weapon;
 
@@ -23,10 +25,7 @@ namespace DarkFlare
         {
             Item = item;
             Placement = placement;
-            DisplayName = item.BaseDefinition.DisplayName;
-            Type = item.BaseDefinition.ItemType;
-            Rarity = item.Rarity;
-            AffixCount = item.Prefixes.Count + item.Suffixes.Count;
+            Detail = ItemDetailSnapshotFactory.Create(item);
         }
     }
 
@@ -119,11 +118,8 @@ namespace DarkFlare
                 return "未装备";
             }
 
-            string displayName = string.IsNullOrWhiteSpace(weapon.BaseDefinition.DisplayName)
-                ? weapon.InstanceId
-                : weapon.BaseDefinition.DisplayName;
-            int affixCount = weapon.Prefixes.Count + weapon.Suffixes.Count;
-            return $"{displayName} · {weapon.Rarity} · {affixCount} 条词缀";
+            ItemDetailSnapshot detail = ItemDetailSnapshotFactory.Create(weapon);
+            return $"{detail.DisplayName} · {ItemDetailFormatter.GetRarityText(detail.Rarity)} · {detail.AffixCount} 条词缀";
         }
     }
 }

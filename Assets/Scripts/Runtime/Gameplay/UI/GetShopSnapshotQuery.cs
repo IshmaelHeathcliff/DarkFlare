@@ -14,13 +14,15 @@ namespace DarkFlare
 
         public ShopItemSource Source { get; }
 
-        public string DisplayName { get; }
+        public ItemDetailSnapshot Detail { get; }
 
-        public ItemType Type { get; }
+        public string DisplayName => Detail.DisplayName;
 
-        public ItemRarity Rarity { get; }
+        public ItemType Type => Detail.Type;
 
-        public int AffixCount { get; }
+        public ItemRarity Rarity => Detail.Rarity;
+
+        public int AffixCount => Detail.AffixCount;
 
         public int Price { get; }
 
@@ -28,13 +30,7 @@ namespace DarkFlare
         {
             Item = item;
             Source = source;
-            ItemBaseDefinition definition = item.BaseDefinition;
-            DisplayName = definition != null && !string.IsNullOrWhiteSpace(definition.DisplayName)
-                ? definition.DisplayName
-                : item.InstanceId;
-            Type = definition != null ? definition.ItemType : default;
-            Rarity = item.Rarity;
-            AffixCount = item.Prefixes.Count + item.Suffixes.Count;
+            Detail = ItemDetailSnapshotFactory.Create(item);
             Price = price;
         }
     }

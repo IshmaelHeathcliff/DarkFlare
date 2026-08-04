@@ -14,6 +14,7 @@ namespace DarkFlare
         readonly Dictionary<ItemInstance, Button> _itemButtons = new Dictionary<ItemInstance, Button>();
         readonly Dictionary<AffixInstance, Button> _affixButtons = new Dictionary<AffixInstance, Button>();
         readonly List<IUnRegister> _eventRegistrations = new List<IUnRegister>();
+        readonly ItemListViewState _itemViewState = new ItemListViewState();
 
         [SerializeField]
         UIDocument _document;
@@ -24,19 +25,18 @@ namespace DarkFlare
         Label _itemEmptyLabel;
         Label _affixEmptyLabel;
         Label _goldLabel;
-        Label _selectedNameLabel;
-        Label _selectedTypeLabel;
-        Label _selectedRarityLabel;
         Label _selectedCapacityLabel;
         Label _selectedValueLabel;
         Label _selectedAffixLabel;
         Label _selectedAffixDetailLabel;
         Label _feedbackLabel;
+        ItemDetailView _detailView;
         Button _addAffixButton;
         Button _rerollAllButton;
         Button _removeRerollButton;
         Button _upgradeAffixButton;
         ItemInstance _selectedItem;
+        ItemInstance _previewItem;
         AffixInstance _selectedAffix;
 
         public CraftingSnapshot LastSnapshot { get; private set; }
@@ -55,10 +55,11 @@ namespace DarkFlare
                 return;
             }
 
-            ItemInstance previousItem = _selectedItem;
+            CaptureItemState();
             AffixInstance previousAffix = _selectedAffix;
             LastSnapshot = this.SendQuery(new GetCraftingSnapshotQuery());
             _selectedItem = null;
+            _previewItem = null;
             _selectedAffix = null;
             _itemButtons.Clear();
             _affixButtons.Clear();
@@ -72,15 +73,19 @@ namespace DarkFlare
                 _itemList.Add(button);
                 _itemButtons.Add(item.Item, button);
 
-                if (item.Item == previousItem)
-                {
-                    _selectedItem = item.Item;
-                }
             }
 
-            if (_selectedItem == null && LastSnapshot.Items.Count > 0)
+            int selectedIndex = ItemSelectionResolver.ResolveIndex(
+                LastSnapshot.Items,
+                _itemViewState.SelectedInstanceId,
+                _itemViewState.FallbackIndex,
+                item => item.Detail.InstanceId);
+
+            if (selectedIndex >= 0)
             {
-                _selectedItem = LastSnapshot.Items[0].Item;
+                _selectedItem = LastSnapshot.Items[selectedIndex].Item;
+                _itemViewState.SelectedInstanceId = _selectedItem.InstanceId;
+                _itemViewState.FallbackIndex = selectedIndex;
             }
 
             BuildAffixList(previousAffix);
@@ -147,25 +152,25 @@ namespace DarkFlare
             _eventRegistrations.Clear();
             _itemButtons.Clear();
             _affixButtons.Clear();
+            _itemViewState.Reset();
             _page = null;
             _itemList = null;
             _affixList = null;
             _itemEmptyLabel = null;
             _affixEmptyLabel = null;
             _goldLabel = null;
-            _selectedNameLabel = null;
-            _selectedTypeLabel = null;
-            _selectedRarityLabel = null;
             _selectedCapacityLabel = null;
             _selectedValueLabel = null;
             _selectedAffixLabel = null;
             _selectedAffixDetailLabel = null;
             _feedbackLabel = null;
+            _detailView = null;
             _addAffixButton = null;
             _rerollAllButton = null;
             _removeRerollButton = null;
             _upgradeAffixButton = null;
             _selectedItem = null;
+            _previewItem = null;
             _selectedAffix = null;
             IsVisible = false;
         }
@@ -203,14 +208,12 @@ namespace DarkFlare
             _itemEmptyLabel = root.Q<Label>("crafting-item-empty");
             _affixEmptyLabel = root.Q<Label>("crafting-affix-empty");
             _goldLabel = root.Q<Label>("crafting-gold");
-            _selectedNameLabel = root.Q<Label>("crafting-selected-name");
-            _selectedTypeLabel = root.Q<Label>("crafting-selected-type");
-            _selectedRarityLabel = root.Q<Label>("crafting-selected-rarity");
             _selectedCapacityLabel = root.Q<Label>("crafting-selected-capacity");
             _selectedValueLabel = root.Q<Label>("crafting-selected-value");
             _selectedAffixLabel = root.Q<Label>("crafting-selected-affix");
             _selectedAffixDetailLabel = root.Q<Label>("crafting-selected-affix-detail");
             _feedbackLabel = root.Q<Label>("crafting-feedback");
+            _detailView = new ItemDetailView(root.Q<VisualElement>("crafting-item-detail"));
             _addAffixButton = root.Q<Button>("crafting-add-affix");
             _rerollAllButton = root.Q<Button>("crafting-reroll-all");
             _removeRerollButton = root.Q<Button>("crafting-remove-reroll");
@@ -222,14 +225,12 @@ namespace DarkFlare
                 || _itemEmptyLabel == null
                 || _affixEmptyLabel == null
                 || _goldLabel == null
-                || _selectedNameLabel == null
-                || _selectedTypeLabel == null
-                || _selectedRarityLabel == null
                 || _selectedCapacityLabel == null
                 || _selectedValueLabel == null
                 || _selectedAffixLabel == null
                 || _selectedAffixDetailLabel == null
                 || _feedbackLabel == null
+                || !_detailView.IsValid
                 || _addAffixButton == null
                 || _rerollAllButton == null
                 || _removeRerollButton == null
@@ -285,19 +286,66 @@ namespace DarkFlare
         {
             Button button = new Button(() => SelectItem(item.Item));
             int affixCount = item.PrefixCount + item.SuffixCount;
-            button.text = $"{item.DisplayName}\n{GetRarityText(item.Rarity)} · {affixCount} 条 · 价值 {item.Value}";
+            button.text = $"{item.DisplayName}\n{ItemDetailFormatter.GetRarityText(item.Rarity)} · {affixCount} 条 · 价值 {item.Value}";
             button.tooltip = $"{item.DisplayName} · 售价 {item.SellPrice} · 前缀 {item.PrefixCount}/{item.MaxPrefixCount} · 后缀 {item.SuffixCount}/{item.MaxSuffixCount}";
             button.AddToClassList("crafting-item");
             button.AddToClassList(GetRarityClass(item.Rarity));
+            button.RegisterCallback<PointerEnterEvent>(_ => PreviewItem(item.Item));
+            button.RegisterCallback<PointerLeaveEvent>(_ => EndPreview(item.Item));
+            button.RegisterCallback<FocusInEvent>(_ => PreviewItem(item.Item));
+            button.RegisterCallback<FocusOutEvent>(_ => EndPreview(item.Item));
             return button;
         }
 
         void SelectItem(ItemInstance item)
         {
             _selectedItem = item;
+            _previewItem = null;
+            CaptureItemState();
             _selectedAffix = null;
             BuildAffixList(null);
             RefreshSelection();
+        }
+
+        void CaptureItemState()
+        {
+            if (_selectedItem == null)
+            {
+                return;
+            }
+
+            _itemViewState.SelectedInstanceId = _selectedItem.InstanceId;
+
+            if (LastSnapshot.Items == null)
+            {
+                return;
+            }
+
+            for (int i = 0; i < LastSnapshot.Items.Count; i++)
+            {
+                if (LastSnapshot.Items[i].Item == _selectedItem)
+                {
+                    _itemViewState.FallbackIndex = i;
+                    return;
+                }
+            }
+        }
+
+        void PreviewItem(ItemInstance item)
+        {
+            _previewItem = item;
+            RefreshDetail();
+        }
+
+        void EndPreview(ItemInstance item)
+        {
+            if (_previewItem != item)
+            {
+                return;
+            }
+
+            _previewItem = null;
+            RefreshDetail();
         }
 
         void BuildAffixList(AffixInstance previousAffix)
@@ -314,7 +362,7 @@ namespace DarkFlare
             {
                 CraftingAffixSnapshot affix = item.Affixes[i];
                 Button button = new Button(() => SelectAffix(affix.Affix));
-                button.text = $"{GetAffixTypeText(affix.Type)} · {affix.DisplayName}\n{affix.ModifierSummary}";
+                button.text = $"{ItemDetailFormatter.GetAffixTypeText(affix.Type)} · {affix.DisplayName}\n{affix.ModifierSummary}";
                 button.tooltip = $"{affix.DisplayName} · 总数值 {affix.TotalValue:0.##}";
                 button.AddToClassList("crafting-affix");
                 button.AddToClassList(affix.Type == AffixType.Prefix
@@ -367,15 +415,13 @@ namespace DarkFlare
             }
 
             _affixEmptyLabel.style.display = item.Affixes.Count == 0 ? DisplayStyle.Flex : DisplayStyle.None;
-            _selectedNameLabel.text = item.DisplayName;
-            _selectedTypeLabel.text = $"类型：{GetItemTypeText(item.Type)}";
-            _selectedRarityLabel.text = $"稀有度：{GetRarityText(item.Rarity)}";
+            RefreshDetail();
             _selectedCapacityLabel.text = $"词缀容量：前缀 {item.PrefixCount}/{item.MaxPrefixCount} · 后缀 {item.SuffixCount}/{item.MaxSuffixCount}";
             _selectedValueLabel.text = $"物品价值：{item.Value} · 出售价：{item.SellPrice}";
 
             if (TryGetSelectedAffix(item, out CraftingAffixSnapshot affix))
             {
-                _selectedAffixLabel.text = $"{GetAffixTypeText(affix.Type)} · {affix.DisplayName}";
+                _selectedAffixLabel.text = $"{ItemDetailFormatter.GetAffixTypeText(affix.Type)} · {affix.DisplayName}";
                 _selectedAffixDetailLabel.text = $"{affix.ModifierSummary} · 总数值 {affix.TotalValue:0.##}";
             }
             else
@@ -390,9 +436,7 @@ namespace DarkFlare
         void ShowEmptySelection()
         {
             _affixEmptyLabel.style.display = DisplayStyle.Flex;
-            _selectedNameLabel.text = "未选择物品";
-            _selectedTypeLabel.text = "类型：-";
-            _selectedRarityLabel.text = "稀有度：-";
+            _detailView.Clear();
             _selectedCapacityLabel.text = "词缀容量：-";
             _selectedValueLabel.text = "物品价值：-";
             _selectedAffixLabel.text = "未选择词缀";
@@ -402,6 +446,24 @@ namespace DarkFlare
             SetActionEnabled(_rerollAllButton, false);
             SetActionEnabled(_removeRerollButton, false);
             SetActionEnabled(_upgradeAffixButton, false);
+        }
+
+        void RefreshDetail()
+        {
+            ItemInstance item = _previewItem != null ? _previewItem : _selectedItem;
+
+            for (int i = 0; i < LastSnapshot.Items.Count; i++)
+            {
+                if (LastSnapshot.Items[i].Item != item)
+                {
+                    continue;
+                }
+
+                _detailView.Show(LastSnapshot.Items[i].Detail);
+                return;
+            }
+
+            _detailView.Clear();
         }
 
         void RefreshActions(CraftingItemSnapshot item)
@@ -542,47 +604,6 @@ namespace DarkFlare
                     return "提升数值";
                 default:
                     return operation.ToString();
-            }
-        }
-
-        static string GetAffixTypeText(AffixType type)
-        {
-            return type == AffixType.Prefix ? "前缀" : type == AffixType.Suffix ? "后缀" : "固有";
-        }
-
-        static string GetItemTypeText(ItemType type)
-        {
-            switch (type)
-            {
-                case ItemType.Weapon:
-                    return "武器";
-                case ItemType.Armor:
-                    return "护甲";
-                case ItemType.Accessory:
-                    return "饰品";
-                case ItemType.Material:
-                    return "材料";
-                case ItemType.Currency:
-                    return "货币";
-                default:
-                    return type.ToString();
-            }
-        }
-
-        static string GetRarityText(ItemRarity rarity)
-        {
-            switch (rarity)
-            {
-                case ItemRarity.Normal:
-                    return "普通";
-                case ItemRarity.Magic:
-                    return "魔法";
-                case ItemRarity.Rare:
-                    return "稀有";
-                case ItemRarity.Unique:
-                    return "传奇";
-                default:
-                    return rarity.ToString();
             }
         }
 

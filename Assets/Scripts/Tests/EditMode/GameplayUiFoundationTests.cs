@@ -356,7 +356,8 @@ public class GameplayUiFoundationTests
         Assert.AreEqual(4, snapshot.Items[0].SellPrice);
         Assert.AreEqual(1, snapshot.Items[0].Affixes.Count);
         Assert.AreEqual("测试增伤", snapshot.Items[0].Affixes[0].DisplayName);
-        StringAssert.Contains("damage", snapshot.Items[0].Affixes[0].ModifierSummary);
+        StringAssert.Contains("伤害", snapshot.Items[0].Affixes[0].ModifierSummary);
+        StringAssert.DoesNotContain("damage", snapshot.Items[0].Affixes[0].ModifierSummary);
         StringAssert.Contains("20", snapshot.Items[0].Affixes[0].ModifierSummary);
         Assert.AreEqual(20f, snapshot.Items[0].Affixes[0].TotalValue);
     }

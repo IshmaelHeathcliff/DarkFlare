@@ -183,15 +183,6 @@
   background-color: rgb(65, 70, 80);
 }
 
-.inventory-selected-name {
-  min-height: 44px;
-  margin-bottom: 14px;
-  white-space: normal;
-  font-size: 22px;
-  -unity-font-style: bold;
-  color: rgb(240, 235, 224);
-}
-
 .inventory-detail-line {
   height: 30px;
   color: rgb(178, 182, 191);

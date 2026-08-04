@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Globalization;
 
 namespace DarkFlare
 {
@@ -15,68 +14,16 @@ namespace DarkFlare
 
         public float TotalValue { get; }
 
-        public CraftingAffixSnapshot(AffixInstance affix)
+        public AffixDetailSnapshot Detail { get; }
+
+        public CraftingAffixSnapshot(AffixDetailSnapshot detail)
         {
-            Affix = affix;
-            AffixDefinition definition = affix.Definition;
-            Type = definition != null ? definition.AffixType : default;
-            DisplayName = definition != null && !string.IsNullOrWhiteSpace(definition.DisplayName)
-                ? definition.DisplayName
-                : "未命名词缀";
-            ModifierSummary = DescribeModifiers(affix.Modifiers);
-            TotalValue = SumValues(affix.Modifiers);
-        }
-
-        static string DescribeModifiers(IReadOnlyList<ModifierInstance> modifiers)
-        {
-            if (modifiers.Count == 0)
-            {
-                return "无数值修改";
-            }
-
-            List<string> descriptions = new List<string>(modifiers.Count);
-
-            for (int i = 0; i < modifiers.Count; i++)
-            {
-                ModifierInstance modifier = modifiers[i];
-                string stat = string.IsNullOrWhiteSpace(modifier.StatId) ? "未配置属性" : modifier.StatId;
-                string value = modifier.Value.ToString("0.##", CultureInfo.InvariantCulture);
-
-                if (modifier.Operation == ModifierOperation.Increase || modifier.Operation == ModifierOperation.More)
-                {
-                    descriptions.Add($"{stat} +{value}%");
-                }
-                else if (modifier.Operation == ModifierOperation.Conversion)
-                {
-                    descriptions.Add($"{modifier.FromDamageType} → {modifier.ToDamageType} {value}%");
-                }
-                else if (modifier.Operation == ModifierOperation.GainAsExtra)
-                {
-                    descriptions.Add($"额外获得 {modifier.FromDamageType} → {modifier.ToDamageType} {value}%");
-                }
-                else if (modifier.Operation == ModifierOperation.Override)
-                {
-                    descriptions.Add($"{stat} = {value}");
-                }
-                else
-                {
-                    descriptions.Add($"{stat} +{value}");
-                }
-            }
-
-            return string.Join(" · ", descriptions);
-        }
-
-        static float SumValues(IReadOnlyList<ModifierInstance> modifiers)
-        {
-            float total = 0f;
-
-            for (int i = 0; i < modifiers.Count; i++)
-            {
-                total += modifiers[i].Value;
-            }
-
-            return total;
+            Detail = detail;
+            Affix = detail.Affix;
+            Type = detail.Type;
+            DisplayName = detail.DisplayName;
+            ModifierSummary = detail.ModifierSummary;
+            TotalValue = detail.TotalValue;
         }
     }
 
@@ -89,6 +36,8 @@ namespace DarkFlare
         public ItemType Type { get; }
 
         public ItemRarity Rarity { get; }
+
+        public ItemDetailSnapshot Detail { get; }
 
         public int Value { get; }
 
@@ -109,13 +58,12 @@ namespace DarkFlare
         public CraftingItemSnapshot(ItemInstance item, int sellPrice)
         {
             Item = item;
+            Detail = ItemDetailSnapshotFactory.Create(item);
             ItemBaseDefinition definition = item.BaseDefinition;
-            DisplayName = definition != null && !string.IsNullOrWhiteSpace(definition.DisplayName)
-                ? definition.DisplayName
-                : item.InstanceId;
-            Type = definition != null ? definition.ItemType : default;
-            Rarity = item.Rarity;
-            Value = ItemValueCalculator.GetValue(item);
+            DisplayName = Detail.DisplayName;
+            Type = Detail.Type;
+            Rarity = Detail.Rarity;
+            Value = Detail.CalculatedValue;
             SellPrice = sellPrice;
             PrefixCount = item.Prefixes.Count;
             SuffixCount = item.Suffixes.Count;
@@ -123,14 +71,14 @@ namespace DarkFlare
             MaxSuffixCount = definition != null ? definition.MaxSuffixCount : 0;
             List<CraftingAffixSnapshot> affixes = new List<CraftingAffixSnapshot>(PrefixCount + SuffixCount);
 
-            for (int i = 0; i < item.Prefixes.Count; i++)
+            for (int i = 0; i < Detail.Prefixes.Count; i++)
             {
-                affixes.Add(new CraftingAffixSnapshot(item.Prefixes[i]));
+                affixes.Add(new CraftingAffixSnapshot(Detail.Prefixes[i]));
             }
 
-            for (int i = 0; i < item.Suffixes.Count; i++)
+            for (int i = 0; i < Detail.Suffixes.Count; i++)
             {
-                affixes.Add(new CraftingAffixSnapshot(item.Suffixes[i]));
+                affixes.Add(new CraftingAffixSnapshot(Detail.Suffixes[i]));
             }
 
             Affixes = affixes;

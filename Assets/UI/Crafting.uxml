@@ -1,4 +1,5 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+  <ui:Template name="ItemDetail" src="project://database/Assets/UI/ItemDetail.uxml?fileID=9197481963319205126&amp;guid=6976f322ca12d3a458c3e7b9eb151dfb&amp;type=3#ItemDetail" />
   <ui:VisualElement name="crafting-page" class="crafting-page" picking-mode="Position">
     <ui:VisualElement class="crafting-body">
       <ui:VisualElement class="crafting-list-section crafting-item-section">
@@ -7,7 +8,7 @@
           <ui:Label text="ITEMS" class="crafting-section-kicker" />
         </ui:VisualElement>
         <ui:VisualElement class="crafting-list-frame">
-          <ui:ScrollView class="crafting-scroll">
+          <ui:ScrollView name="crafting-item-scroll" class="crafting-scroll">
             <ui:VisualElement name="crafting-item-list" class="crafting-list" />
           </ui:ScrollView>
           <ui:Label name="crafting-item-empty" text="背包中没有可打造物品" class="crafting-empty" />
@@ -19,32 +20,33 @@
           <ui:Label text="AFFIXES" class="crafting-section-kicker" />
         </ui:VisualElement>
         <ui:VisualElement class="crafting-list-frame">
-          <ui:ScrollView class="crafting-scroll">
+          <ui:ScrollView name="crafting-affix-scroll" class="crafting-scroll">
             <ui:VisualElement name="crafting-affix-list" class="crafting-list" />
           </ui:ScrollView>
           <ui:Label name="crafting-affix-empty" text="选中物品没有词缀" class="crafting-empty" />
         </ui:VisualElement>
       </ui:VisualElement>
-      <ui:VisualElement class="crafting-details">
+      <ui:VisualElement name="crafting-details" class="crafting-details">
         <ui:Label name="crafting-gold" text="持有金币  0" class="crafting-gold" />
         <ui:Label text="打造详情" class="crafting-section-title" />
         <ui:VisualElement class="crafting-divider" />
-        <ui:Label name="crafting-selected-name" text="未选择物品" class="crafting-selected-name" />
-        <ui:Label name="crafting-selected-type" text="类型：-" class="crafting-detail-line" />
-        <ui:Label name="crafting-selected-rarity" text="稀有度：-" class="crafting-detail-line" />
+        <ui:Instance template="ItemDetail" name="crafting-item-detail" class="crafting-item-detail" />
         <ui:Label name="crafting-selected-capacity" text="词缀容量：-" class="crafting-detail-line" />
         <ui:Label name="crafting-selected-value" text="物品价值：-" class="crafting-value" />
         <ui:VisualElement class="crafting-affix-card">
           <ui:Label name="crafting-selected-affix" text="未选择词缀" class="crafting-selected-affix" />
           <ui:Label name="crafting-selected-affix-detail" text="选择词缀后可移除重随或提升数值" class="crafting-affix-detail" />
         </ui:VisualElement>
-        <ui:VisualElement class="crafting-details-spacer" />
         <ui:Label name="crafting-feedback" text="选择背包物品开始打造" class="crafting-feedback" />
-        <ui:VisualElement class="crafting-actions">
-          <ui:Button name="crafting-add-affix" text="添加词缀 · 0 金币" class="crafting-action crafting-action--primary" />
-          <ui:Button name="crafting-reroll-all" text="重随全部 · 0 金币" class="crafting-action" />
-          <ui:Button name="crafting-remove-reroll" text="移除并重随 · 0 金币" class="crafting-action" />
-          <ui:Button name="crafting-upgrade-affix" text="提升数值 · 0 金币" class="crafting-action" />
+        <ui:VisualElement name="crafting-actions" class="crafting-actions">
+          <ui:VisualElement name="crafting-action-row-primary" class="crafting-action-row">
+            <ui:Button name="crafting-add-affix" text="添加词缀 · 0 金币" class="crafting-action crafting-action--primary" />
+            <ui:Button name="crafting-reroll-all" text="重随全部 · 0 金币" class="crafting-action" />
+          </ui:VisualElement>
+          <ui:VisualElement name="crafting-action-row-secondary" class="crafting-action-row">
+            <ui:Button name="crafting-remove-reroll" text="移除并重随 · 0 金币" class="crafting-action" />
+            <ui:Button name="crafting-upgrade-affix" text="提升数值 · 0 金币" class="crafting-action" />
+          </ui:VisualElement>
         </ui:VisualElement>
       </ui:VisualElement>
     </ui:VisualElement>

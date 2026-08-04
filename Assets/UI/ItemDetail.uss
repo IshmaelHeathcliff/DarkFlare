@@ -1,0 +1,112 @@
+.item-detail {
+  flex-grow: 1;
+  min-height: 190px;
+}
+
+.item-detail-header {
+  min-height: 64px;
+  margin-bottom: 8px;
+  flex-direction: row;
+  align-items: center;
+}
+
+.item-detail-icon {
+  width: 56px;
+  height: 56px;
+  margin-right: 12px;
+  background-color: rgb(17, 24, 33);
+  -unity-background-scale-mode: scale-to-fit;
+  border-left-width: 2px;
+  border-right-width: 2px;
+  border-top-width: 2px;
+  border-bottom-width: 2px;
+  border-left-color: rgb(122, 128, 139);
+  border-right-color: rgb(122, 128, 139);
+  border-top-color: rgb(122, 128, 139);
+  border-bottom-color: rgb(122, 128, 139);
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.item-detail-icon--weapon {
+  background-image: url("project://database/Assets/Art/Sprites/Items/Equipment/weapon_greatsword.png");
+}
+
+.item-detail-heading {
+  flex-grow: 1;
+}
+
+.item-detail-name {
+  min-height: 30px;
+  white-space: normal;
+  font-size: 21px;
+  -unity-font-style: bold;
+  color: rgb(231, 233, 236);
+}
+
+.item-detail-meta {
+  min-height: 22px;
+  white-space: normal;
+  color: rgb(151, 160, 172);
+}
+
+.item-detail--magic .item-detail-name {
+  color: rgb(156, 191, 255);
+}
+
+.item-detail--rare .item-detail-name {
+  color: rgb(255, 226, 126);
+}
+
+.item-detail--unique .item-detail-name {
+  color: rgb(255, 178, 91);
+}
+
+.item-detail-scroll {
+  flex-grow: 1;
+  min-height: 120px;
+  padding-right: 4px;
+}
+
+.item-detail-group-title {
+  min-height: 22px;
+  margin-top: 8px;
+  margin-bottom: 3px;
+  padding-left: 7px;
+  font-size: 12px;
+  -unity-font-style: bold;
+  color: rgb(195, 168, 120);
+  border-left-width: 2px;
+  border-left-color: rgb(132, 99, 52);
+}
+
+.item-detail-base,
+.item-detail-modifier,
+.item-detail-empty,
+.item-detail-affix-name {
+  min-height: 21px;
+  padding-left: 9px;
+  padding-right: 5px;
+  white-space: normal;
+}
+
+.item-detail-base {
+  color: rgb(181, 188, 199);
+}
+
+.item-detail-affix-name {
+  margin-top: 3px;
+  -unity-font-style: bold;
+  color: rgb(215, 219, 225);
+}
+
+.item-detail-modifier {
+  color: rgb(137, 188, 163);
+}
+
+.item-detail-empty {
+  color: rgb(103, 111, 123);
+  -unity-font-style: italic;
+}

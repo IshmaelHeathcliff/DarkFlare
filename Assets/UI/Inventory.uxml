@@ -1,4 +1,5 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+  <ui:Template name="ItemDetail" src="project://database/Assets/UI/ItemDetail.uxml?fileID=9197481963319205126&amp;guid=6976f322ca12d3a458c3e7b9eb151dfb&amp;type=3#ItemDetail" />
   <ui:VisualElement name="inventory-page" class="inventory-page" picking-mode="Position">
     <ui:VisualElement class="inventory-body">
       <ui:VisualElement class="inventory-grid-section">
@@ -13,10 +14,7 @@
         <ui:Label text="装备详情" class="inventory-section-title" />
         <ui:Label name="inventory-current-weapon" text="当前武器：未装备" class="inventory-current-weapon" />
         <ui:VisualElement class="inventory-divider" />
-        <ui:Label name="inventory-selected-name" text="未选择物品" class="inventory-selected-name" />
-        <ui:Label name="inventory-selected-type" text="类型：-" class="inventory-detail-line" />
-        <ui:Label name="inventory-selected-rarity" text="稀有度：-" class="inventory-detail-line" />
-        <ui:Label name="inventory-selected-affixes" text="词缀：-" class="inventory-detail-line" />
+        <ui:Instance template="ItemDetail" name="inventory-item-detail" class="inventory-item-detail" />
         <ui:VisualElement class="inventory-details-spacer" />
         <ui:Label name="inventory-feedback" text="选择一个物品查看详情" class="inventory-feedback" />
         <ui:Button name="inventory-equip" text="装备选中物品" class="inventory-equip" />

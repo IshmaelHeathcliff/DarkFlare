@@ -10,6 +10,7 @@
 
 .crafting-body {
   flex-grow: 1;
+  min-height: 0;
   flex-direction: row;
 }
 
@@ -138,6 +139,7 @@
 .crafting-details {
   flex-grow: 1;
   min-width: 520px;
+  min-height: 0;
   padding: 18px;
   background-color: rgb(28, 32, 40);
   border-left-width: 1px;
@@ -152,6 +154,16 @@
   border-top-right-radius: 6px;
   border-bottom-left-radius: 6px;
   border-bottom-right-radius: 6px;
+}
+
+.crafting-item-detail {
+  flex-grow: 1;
+  min-height: 0;
+}
+
+.crafting-item-detail .item-detail,
+.crafting-item-detail .item-detail-scroll {
+  min-height: 0;
 }
 
 .crafting-gold {
@@ -173,23 +185,16 @@
   background-color: rgb(65, 70, 80);
 }
 
-.crafting-selected-name {
-  min-height: 38px;
-  margin-bottom: 8px;
-  white-space: normal;
-  font-size: 22px;
-  -unity-font-style: bold;
-  color: rgb(240, 235, 224);
-}
-
 .crafting-detail-line {
   min-height: 25px;
+  flex-shrink: 0;
   white-space: normal;
   color: rgb(178, 182, 191);
 }
 
 .crafting-value {
   min-height: 32px;
+  flex-shrink: 0;
   margin-top: 4px;
   font-size: 16px;
   -unity-font-style: bold;
@@ -198,6 +203,7 @@
 
 .crafting-affix-card {
   min-height: 72px;
+  flex-shrink: 0;
   margin-top: 8px;
   padding: 10px 12px;
   background-color: rgb(22, 26, 33);
@@ -217,26 +223,35 @@
   color: rgb(151, 161, 173);
 }
 
-.crafting-details-spacer {
-  flex-grow: 1;
-}
-
 .crafting-feedback {
   min-height: 42px;
+  flex-shrink: 0;
   margin-bottom: 10px;
   white-space: normal;
   color: rgb(159, 166, 179);
 }
 
 .crafting-actions {
+  min-height: 96px;
+  flex-shrink: 0;
+  flex-direction: column;
+}
+
+.crafting-action-row {
+  height: 44px;
+  margin-top: 2px;
+  margin-bottom: 2px;
+  flex-shrink: 0;
   flex-direction: row;
-  flex-wrap: wrap;
 }
 
 .crafting-action {
-  width: 48%;
+  width: 0;
+  min-width: 0;
+  flex-grow: 1;
   height: 44px;
-  margin: 4px;
+  margin-left: 4px;
+  margin-right: 4px;
   font-size: 13px;
   -unity-font-style: bold;
   color: rgb(220, 222, 226);

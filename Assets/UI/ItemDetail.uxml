@@ -1,0 +1,21 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+  <ui:VisualElement class="item-detail" picking-mode="Position">
+    <ui:VisualElement class="item-detail-header">
+      <ui:VisualElement name="item-detail-icon" class="item-detail-icon item-detail-icon--weapon" picking-mode="Ignore" />
+      <ui:VisualElement class="item-detail-heading">
+        <ui:Label name="item-detail-name" text="未选择物品" class="item-detail-name" />
+        <ui:Label name="item-detail-meta" text="类型与稀有度：-" class="item-detail-meta" />
+      </ui:VisualElement>
+    </ui:VisualElement>
+    <ui:ScrollView name="item-detail-scroll" class="item-detail-scroll" mode="Vertical">
+      <ui:Label text="基础" class="item-detail-group-title" />
+      <ui:Label name="item-detail-base" text="基础属性：-" class="item-detail-base" />
+      <ui:Label text="固有属性" class="item-detail-group-title" />
+      <ui:VisualElement name="item-detail-implicit-list" class="item-detail-list" />
+      <ui:Label text="前缀" class="item-detail-group-title" />
+      <ui:VisualElement name="item-detail-prefix-list" class="item-detail-list" />
+      <ui:Label text="后缀" class="item-detail-group-title" />
+      <ui:VisualElement name="item-detail-suffix-list" class="item-detail-list" />
+    </ui:ScrollView>
+  </ui:VisualElement>
+</ui:UXML>

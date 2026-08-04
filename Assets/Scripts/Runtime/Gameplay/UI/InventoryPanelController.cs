@@ -16,18 +16,17 @@ namespace DarkFlare
 
         readonly List<IUnRegister> _eventRegistrations = new List<IUnRegister>();
         readonly Dictionary<ItemInstance, Button> _itemButtons = new Dictionary<ItemInstance, Button>();
+        readonly ItemListViewState _selectionState = new ItemListViewState();
 
         VisualElement _page;
         VisualElement _grid;
         Label _emptyLabel;
         Label _currentWeaponLabel;
-        Label _selectedNameLabel;
-        Label _selectedTypeLabel;
-        Label _selectedRarityLabel;
-        Label _selectedAffixesLabel;
         Label _feedbackLabel;
         Button _equipButton;
+        ItemDetailView _detailView;
         ItemInstance _selectedItem;
+        ItemInstance _previewItem;
 
         public InventorySnapshot LastSnapshot { get; private set; }
 
@@ -49,6 +48,7 @@ namespace DarkFlare
                 return;
             }
 
+            CaptureSelectionState();
             InventorySnapshot snapshot = this.SendQuery(new GetInventorySnapshotQuery());
             LastSnapshot = snapshot;
             _currentWeaponLabel.text = $"当前武器：{snapshot.CurrentWeaponSummary}";
@@ -56,8 +56,8 @@ namespace DarkFlare
                 ? DisplayStyle.Flex
                 : DisplayStyle.None;
 
-            ItemInstance previousSelection = _selectedItem;
             _selectedItem = null;
+            _previewItem = null;
             _itemButtons.Clear();
             _grid.Clear();
             BuildGrid(snapshot);
@@ -69,15 +69,19 @@ namespace DarkFlare
                 _grid.Add(button);
                 _itemButtons.Add(item.Item, button);
 
-                if (item.Item == previousSelection)
-                {
-                    _selectedItem = item.Item;
-                }
             }
 
-            if (_selectedItem == null && snapshot.Items.Count > 0)
+            int selectedIndex = ItemSelectionResolver.ResolveIndex(
+                snapshot.Items,
+                _selectionState.SelectedInstanceId,
+                _selectionState.FallbackIndex,
+                item => item.Detail.InstanceId);
+
+            if (selectedIndex >= 0)
             {
-                _selectedItem = snapshot.Items[0].Item;
+                _selectedItem = snapshot.Items[selectedIndex].Item;
+                _selectionState.SelectedInstanceId = _selectedItem.InstanceId;
+                _selectionState.FallbackIndex = selectedIndex;
             }
 
             RefreshSelection();
@@ -145,17 +149,16 @@ namespace DarkFlare
 
             _eventRegistrations.Clear();
             _itemButtons.Clear();
+            _selectionState.Reset();
             _page = null;
             _grid = null;
             _emptyLabel = null;
             _currentWeaponLabel = null;
-            _selectedNameLabel = null;
-            _selectedTypeLabel = null;
-            _selectedRarityLabel = null;
-            _selectedAffixesLabel = null;
             _feedbackLabel = null;
             _equipButton = null;
+            _detailView = null;
             _selectedItem = null;
+            _previewItem = null;
             IsVisible = false;
         }
 
@@ -190,23 +193,17 @@ namespace DarkFlare
             _grid = root.Q<VisualElement>("inventory-grid");
             _emptyLabel = root.Q<Label>("inventory-empty");
             _currentWeaponLabel = root.Q<Label>("inventory-current-weapon");
-            _selectedNameLabel = root.Q<Label>("inventory-selected-name");
-            _selectedTypeLabel = root.Q<Label>("inventory-selected-type");
-            _selectedRarityLabel = root.Q<Label>("inventory-selected-rarity");
-            _selectedAffixesLabel = root.Q<Label>("inventory-selected-affixes");
             _feedbackLabel = root.Q<Label>("inventory-feedback");
             _equipButton = root.Q<Button>("inventory-equip");
+            _detailView = new ItemDetailView(root.Q<VisualElement>("inventory-item-detail"));
 
             if (_page == null
                 || _grid == null
                 || _emptyLabel == null
                 || _currentWeaponLabel == null
-                || _selectedNameLabel == null
-                || _selectedTypeLabel == null
-                || _selectedRarityLabel == null
-                || _selectedAffixesLabel == null
                 || _feedbackLabel == null
-                || _equipButton == null)
+                || _equipButton == null
+                || !_detailView.IsValid)
             {
                 Debug.LogError("[InventoryPanelController] 背包 UXML 缺少必要的命名元素", this);
                 return false;
@@ -257,7 +254,7 @@ namespace DarkFlare
             float step = CellSize + CellGap;
             Button button = new Button(() => SelectItem(item.Item));
             button.text = string.Empty;
-            button.tooltip = $"{item.DisplayName} · {GetRarityText(item.Rarity)} · {item.AffixCount} 条词缀";
+            button.tooltip = $"{item.DisplayName} · {ItemDetailFormatter.GetRarityText(item.Rarity)} · {item.AffixCount} 条词缀";
             button.AddToClassList("inventory-item");
             button.AddToClassList(GetRarityClass(item.Rarity));
             button.style.position = Position.Absolute;
@@ -284,13 +281,60 @@ namespace DarkFlare
             label.AddToClassList("inventory-item-label");
             button.Add(icon);
             button.Add(label);
+            button.RegisterCallback<PointerEnterEvent>(_ => PreviewItem(item.Item));
+            button.RegisterCallback<PointerLeaveEvent>(_ => EndPreview(item.Item));
+            button.RegisterCallback<FocusInEvent>(_ => PreviewItem(item.Item));
+            button.RegisterCallback<FocusOutEvent>(_ => EndPreview(item.Item));
             return button;
         }
 
         void SelectItem(ItemInstance item)
         {
             _selectedItem = item;
+            _previewItem = null;
+            CaptureSelectionState();
             RefreshSelection();
+        }
+
+        void CaptureSelectionState()
+        {
+            if (_selectedItem == null)
+            {
+                return;
+            }
+
+            _selectionState.SelectedInstanceId = _selectedItem.InstanceId;
+
+            if (LastSnapshot.Items == null)
+            {
+                return;
+            }
+
+            for (int i = 0; i < LastSnapshot.Items.Count; i++)
+            {
+                if (LastSnapshot.Items[i].Item == _selectedItem)
+                {
+                    _selectionState.FallbackIndex = i;
+                    return;
+                }
+            }
+        }
+
+        void PreviewItem(ItemInstance item)
+        {
+            _previewItem = item;
+            RefreshDetail();
+        }
+
+        void EndPreview(ItemInstance item)
+        {
+            if (_previewItem != item)
+            {
+                return;
+            }
+
+            _previewItem = null;
+            RefreshDetail();
         }
 
         void RefreshSelection()
@@ -307,19 +351,13 @@ namespace DarkFlare
 
             if (!TryGetSelectedSnapshot(out InventoryItemSnapshot selected))
             {
-                _selectedNameLabel.text = "未选择物品";
-                _selectedTypeLabel.text = "类型：-";
-                _selectedRarityLabel.text = "稀有度：-";
-                _selectedAffixesLabel.text = "词缀：-";
+                _detailView.Clear();
                 _feedbackLabel.text = LastSnapshot.HasPlayer ? "背包为空" : "等待玩家生成";
                 _equipButton.SetEnabled(false);
                 return;
             }
 
-            _selectedNameLabel.text = selected.DisplayName;
-            _selectedTypeLabel.text = $"类型：{GetItemTypeText(selected.Type)}";
-            _selectedRarityLabel.text = $"稀有度：{GetRarityText(selected.Rarity)}";
-            _selectedAffixesLabel.text = $"词缀：{selected.AffixCount} 条";
+            RefreshDetail();
 
             bool canEquip = LastSnapshot.HasPlayer && selected.CanEquip;
             _equipButton.SetEnabled(canEquip);
@@ -328,6 +366,24 @@ namespace DarkFlare
                 : selected.CanEquip
                     ? "等待玩家生成"
                     : "该物品不能装备";
+        }
+
+        void RefreshDetail()
+        {
+            ItemInstance item = _previewItem != null ? _previewItem : _selectedItem;
+
+            for (int i = 0; i < LastSnapshot.Items.Count; i++)
+            {
+                if (LastSnapshot.Items[i].Item != item)
+                {
+                    continue;
+                }
+
+                _detailView.Show(LastSnapshot.Items[i].Detail);
+                return;
+            }
+
+            _detailView.Clear();
         }
 
         bool TryGetSelectedSnapshot(out InventoryItemSnapshot selected)
@@ -365,42 +421,6 @@ namespace DarkFlare
             RefreshInventory();
             _feedbackLabel.text = $"已装备 {selectedName}";
             FocusDefault();
-        }
-
-        static string GetItemTypeText(ItemType type)
-        {
-            switch (type)
-            {
-                case ItemType.Weapon:
-                    return "武器";
-                case ItemType.Armor:
-                    return "护甲";
-                case ItemType.Accessory:
-                    return "饰品";
-                case ItemType.Material:
-                    return "材料";
-                case ItemType.Currency:
-                    return "货币";
-                default:
-                    return type.ToString();
-            }
-        }
-
-        static string GetRarityText(ItemRarity rarity)
-        {
-            switch (rarity)
-            {
-                case ItemRarity.Normal:
-                    return "普通";
-                case ItemRarity.Magic:
-                    return "魔法";
-                case ItemRarity.Rare:
-                    return "稀有";
-                case ItemRarity.Unique:
-                    return "传奇";
-                default:
-                    return rarity.ToString();
-            }
         }
 
         static string GetRarityClass(ItemRarity rarity)

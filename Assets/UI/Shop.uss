@@ -10,6 +10,7 @@
 
 .shop-body {
   flex-grow: 1;
+  min-height: 0;
   flex-direction: row;
 }
 
@@ -130,6 +131,7 @@
 .shop-details {
   flex-grow: 1;
   min-width: 330px;
+  min-height: 0;
   padding: 18px;
   background-color: rgb(28, 32, 40);
   border-left-width: 1px;
@@ -144,6 +146,16 @@
   border-top-right-radius: 6px;
   border-bottom-left-radius: 6px;
   border-bottom-right-radius: 6px;
+}
+
+.shop-item-detail {
+  flex-grow: 1;
+  min-height: 0;
+}
+
+.shop-item-detail .item-detail,
+.shop-item-detail .item-detail-scroll {
+  min-height: 0;
 }
 
 .shop-gold {
@@ -165,45 +177,39 @@
   background-color: rgb(65, 70, 80);
 }
 
-.shop-selected-name {
-  min-height: 46px;
-  margin-bottom: 12px;
-  white-space: normal;
-  font-size: 22px;
-  -unity-font-style: bold;
-  color: rgb(240, 235, 224);
-}
-
 .shop-detail-line {
   min-height: 28px;
+  flex-shrink: 0;
   white-space: normal;
   color: rgb(178, 182, 191);
 }
 
 .shop-price {
   min-height: 38px;
+  flex-shrink: 0;
   margin-top: 10px;
   font-size: 17px;
   -unity-font-style: bold;
   color: rgb(220, 185, 113);
 }
 
-.shop-details-spacer {
-  flex-grow: 1;
-}
-
 .shop-feedback {
   min-height: 48px;
+  flex-shrink: 0;
   margin-bottom: 12px;
   white-space: normal;
   color: rgb(159, 166, 179);
 }
 
 .shop-actions {
+  min-height: 48px;
+  flex-shrink: 0;
   flex-direction: row;
 }
 
 .shop-action {
+  width: 0;
+  min-width: 0;
   flex-grow: 1;
   height: 48px;
   font-size: 15px;
