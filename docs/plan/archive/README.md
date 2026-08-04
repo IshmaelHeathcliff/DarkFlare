@@ -17,5 +17,6 @@
 | [打造交互执行计划](./crafting-ui-plan.md) | 8e | [打造系统](../../crafting-system.md) |
 | [8f 场景入口与循环收尾执行计划](./scene-loop-integration-plan.md) | 8f | [首版玩法循环](../../gameplay-loop.md)、[输入与运行时 UI](../../input-ui-system.md) |
 | [阶段 0：视觉垂直切片执行计划](./phase-0-visual-slice-plan.md) | 初版体验优化阶段 0 | [视觉规范](../../visual-style.md)、[视觉资产清单](../../visual-assets.md) |
+| [阶段 0.5：视觉体验修正执行计划](./phase-0.5-visual-experience-fix-plan.md) | 初版体验优化阶段 0.5 | [视觉规范](../../visual-style.md)、[视觉资产清单](../../visual-assets.md)、[首版玩法循环](../../gameplay-loop.md) |
 
-归档日期：2026-07-20。
+最近归档日期：2026-08-04。

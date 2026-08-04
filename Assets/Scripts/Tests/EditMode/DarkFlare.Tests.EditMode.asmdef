@@ -4,6 +4,7 @@
     "references": [
         "DarkFlare.Runtime",
         "DarkFlare.Core",
+        "Unity.TextMeshPro",
         "Unity.InputSystem",
         "Unity.InputSystem.TestFramework",
         "UnityEngine.TestRunner",

@@ -4,6 +4,8 @@
     "references": [
         "DarkFlare.Core",
         "UniTask",
+        "PrimeTween.Runtime",
+        "Unity.TextMeshPro",
         "Unity.InputSystem",
         "Unity.Addressables",
         "Unity.ResourceManager"

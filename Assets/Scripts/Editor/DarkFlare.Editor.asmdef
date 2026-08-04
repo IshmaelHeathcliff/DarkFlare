@@ -3,7 +3,8 @@
     "rootNamespace": "DarkFlare.Editor",
     "references": [
         "DarkFlare.Runtime",
-        "DarkFlare.Core"
+        "DarkFlare.Core",
+        "Unity.TextMeshPro"
     ],
     "includePlatforms": [
         "Editor"

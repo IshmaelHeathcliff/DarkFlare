@@ -6,11 +6,15 @@ namespace DarkFlare
     [RequireComponent(typeof(CircleCollider2D))]
     public class LootPickupController : MonoBehaviour, IController
     {
-        SpriteRenderer _renderer;
+        [SerializeField]
+        LootPickupVisual _visual;
+
         CircleCollider2D _collider;
         ItemInstance _item;
 
         public ItemInstance Item => _item;
+
+        public LootPickupVisual Visual => _visual;
 
         public IArchitecture GetArchitecture()
         {
@@ -21,11 +25,7 @@ namespace DarkFlare
         {
             EnsureComponents();
             _item = item;
-
-            if (_renderer != null)
-            {
-                _renderer.color = GetRarityColor(item != null ? item.Rarity : ItemRarity.Normal);
-            }
+            _visual?.Bind(item);
         }
 
         void Awake()
@@ -65,28 +65,17 @@ namespace DarkFlare
 
         void EnsureComponents()
         {
-            _renderer = GetComponent<SpriteRenderer>();
             _collider = GetComponent<CircleCollider2D>();
+
+            if (_visual == null)
+            {
+                _visual = GetComponent<LootPickupVisual>();
+            }
 
             if (_collider != null)
             {
                 _collider.isTrigger = true;
             }
-        }
-
-        static Color GetRarityColor(ItemRarity rarity)
-        {
-            if (rarity == ItemRarity.Magic)
-            {
-                return new Color(1f, 0.92f, 0.2f, 1f);
-            }
-
-            if (rarity == ItemRarity.Rare || rarity == ItemRarity.Unique)
-            {
-                return new Color(1f, 0.55f, 0.1f, 1f);
-            }
-
-            return Color.white;
         }
     }
 }

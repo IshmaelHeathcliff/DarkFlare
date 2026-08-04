@@ -1,8 +1,8 @@
 # 视觉资产清单
 
-## 阶段 0 状态
+## 阶段 0 / 0.5 状态
 
-- 状态：阶段 0 已完成并归档，后续进入阶段 1 UX 快速改进
+- 状态：阶段 0 和阶段 0.5 已完成并归档，后续进入阶段 1 UX 快速改进
 - 目标：用最小资产集替换视觉切片内的占位方块，并验证 Sprite、Animator、UIToolkit 与既有 Addressables Prefab 的协作。
 - 视觉规范：[视觉规范](./visual-style.md)
 - 执行计划：[阶段 0：视觉垂直切片执行计划](./plan/archive/phase-0-visual-slice-plan.md)
@@ -41,6 +41,15 @@
 - 背包：`Inventory.uss` 使用面板与三种格子状态纹理；武器按钮增加大剑图标子元素，原选择和装备命令不变。
 - 既有四个 Prefab 路径和 Addressables 引用未改变；`PrototypeSquare.png` 仍保留作回退。
 
+## 阶段 0.5 接入记录
+
+- `Player.prefab`：`Rigidbody2D` 插值设为 `Interpolate`。该最小改动已由玩家实机确认显著缓解相机跟随时的人物移动模糊。
+- `CameraFollowTarget`：保留 `LateUpdate + SmoothDamp`，增加目标变化时的速度清理和可选世界范围约束；相机中心会扣除当前正交半屏范围。
+- `Main.unity`：地表从 3×3 扩展为 5×5；新增约 `(-16, -16)` 到 `(16, 16)` 的闭合 `WorldBounds`，同时绑定相机和 `MonsterSpawner`。
+- `MonsterSpawner`：范围内优先重新采样，有限次失败后回退到边界内最近点，不改变生成半径、间隔和最大数量。
+- `LootPickup.prefab`：根节点恢复稳定缩放并保持原世界拾取半径；新增 `Shadow`、`Visual/Halo`、`Visual/Icon`、`Visual/Label`，使用金属焦点框、中文名 / 稀有度文本和 PrimeTween 悬浮呼吸表现。
+- `LootPickupVisual` 只绑定 `ItemInstance` 到表现，不发送物品或背包事件；原自动拾取、背包满保留和销毁事务不变。
+
 ## 当前验证
 
 - 31 个最终位图全部通过 RGBA、透明四角和主体覆盖率检查。
@@ -52,6 +61,14 @@
 - Unity 全量 EditMode 48/48 通过；PlayMode 共执行 6 项、0 失败，其中 4 项通过，Input System 包内 2 项上游不稳定用例按原标记跳过。
 - 阶段 0 体验专项 PlayMode 已验证真实购买大剑、背包选中与装备、Tab / Esc、Start / B、默认焦点和暂停恢复。
 - 1280×720、1920×1080、2560×1440 三档 Game View 均完成实际切换、边界断言和截图，面板、物品图标、详情、按钮与焦点未越界。
+
+## 阶段 0.5 验证
+
+- 专项 EditMode 4/4 通过：玩家插值、相机正交范围约束、刷怪点范围和掉落表现绑定。
+- Unity 全量 EditMode 51/51 通过；项目 PlayMode 3/3 通过，其中阶段 0.5 场景测试验证 5×5 地表、共享边界和三档宽高比下镜头不会越出地表。
+- `DarkFlare.Runtime.csproj`、`DarkFlare.Editor.csproj` 编译通过，0 错误；仍只有工程既有的 `System.Threading.Tasks.Extensions` 版本冲突警告。
+- 1280×720、1920×1080、2560×1440 原生截图和 1920×1080 边界机位截图均未显示空白背景；多掉落场景中图标和框体仍可分辨。
+- Play 运行及截图后 Console 为 0 条 Error。
 - `GameArchitecture.Deinit()` 已接入 `PrefabAssetLoader.ReleaseAll()`；全量 PlayMode 复跑未再出现同一 `AssetReference` 重复加载。
 
 ## 验收截图
@@ -61,6 +78,10 @@
 - [1280×720 背包验收](./assets/visual-style/phase-0-acceptance-inventory-1280x720.png)
 - [1920×1080 背包验收](./assets/visual-style/phase-0-acceptance-inventory-1920x1080.png)
 - [2560×1440 背包验收](./assets/visual-style/phase-0-acceptance-inventory-2560x1440.png)
+- [阶段 0.5 1280×720 世界验收](./assets/visual-style/phase-0.5/after/phase-0.5-world-1280x720.png)
+- [阶段 0.5 1920×1080 世界验收](./assets/visual-style/phase-0.5/after/phase-0.5-world-1920x1080.png)
+- [阶段 0.5 2560×1440 世界验收](./assets/visual-style/phase-0.5/after/phase-0.5-world-2560x1440.png)
+- [阶段 0.5 1920×1080 边界验收](./assets/visual-style/phase-0.5/after/phase-0.5-boundary-1920x1080.png)
 
 ## 生成记录
 

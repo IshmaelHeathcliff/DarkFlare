@@ -20,6 +20,13 @@
 - 投射物和世界掉落分别替换为青光飞弹与大剑图标，四个 Prefab 路径及 Addressables 引用保持不变。
 - 视觉生产规格与阶段 0 验收记录见 [视觉规范](./visual-style.md) 与 [视觉资产清单](./visual-assets.md)。
 
+## 阶段 0.5 视觉体验修正
+
+- 玩家 `Rigidbody2D` 已启用插值，以物理帧和渲染帧同步为首要方向解决移动模糊；相机继续在 `LateUpdate` 跟随，未引入 Cinemachine 或 Pixel Perfect Camera。
+- `Main.unity` 的地表扩展为 5×5，并新增闭合 `WorldBounds`。玩家 / 怪物碰撞、相机中心限制和刷怪合法范围使用同一边界来源。
+- `MonsterSpawner` 对范围外候选点重新采样，失败时回退到边界内最近点，生成间隔、半径和最大数量保持不变。
+- 世界掉落由独立 `LootPickupVisual` 绑定图标、投影、稀有度框、中文标签和悬浮呼吸动画；拾取成功、背包满保留和 Addressables Prefab 路径不变。
+
 ## 启动与运行流程
 
 1. `CombatPrototypeBootstrap` 预热玩家、怪物、投射物和掉落物 Addressable Prefab，初始化商人、打造配置与玩家初始金币。
@@ -47,7 +54,7 @@
 
 ## 场景与配置
 
-- `Assets/Scenes/Main.unity`：唯一构建场景，包含战斗启动器、刷怪器、`UIRoot`、唯一 `EventSystem`、商人与打造台原型对象。
+- `Assets/Scenes/Main.unity`：唯一构建场景，包含战斗启动器、刷怪器、`WorldBounds`、5×5 地表、`UIRoot`、唯一 `EventSystem`、商人与打造台原型对象。
 - `Assets/Data/Preset/Actors/玩家.asset`：玩家属性与 Prefab 引用。
 - `Assets/Data/Preset/Skills/基础投射物技能.asset`：首版投射物技能。
 - `Assets/Data/Preset/Monsters/基础怪物.asset`、`基础刷怪表.asset`：怪物和生成规则。
@@ -67,6 +74,7 @@ Prefab 通过 Addressables 预热和实例化，首版不使用 `Resources` 或�
 - 动画专项验收已通过：Player / Monster Animator Controller 结构与死亡显示配置 3 项 EditMode 通过，Main 场景 PlayMode 已验证 `Attack → Hit → Death → Revive/Idle` 实际切换。
 - 阶段 0 体验专项 PlayMode 已通过：真实购买大剑后，键盘 Tab / Esc 与手柄 Start / B 均可打开、关闭背包并恢复暂停状态；物品选中、详情显示、装备命令和默认焦点正常。
 - 1280×720、1920×1080、2560×1440 三档背包渲染与边界检查通过；架构退出时会释放 Addressables 预热句柄，重复初始化不再重复加载同一引用。
+- 阶段 0.5 全量 EditMode 51/51、项目 PlayMode 3/3 通过；Runtime / Editor 编译 0 错误，三档世界截图和边界机位均未露出地表外空白。
 
 以上数据是首版收尾时的验证记录；后续改动仍应重新运行相关测试和 Play 流程。
 
@@ -77,6 +85,6 @@ Prefab 通过 Addressables 预热和实例化，首版不使用 `Resources` 或�
 - 装备只实现单武器槽，没有卸装、多槽位或耐久。
 - 交易只维护单个共享商人库存；卖出物品不进入商人库存，也没有回购。
 - 打造只消耗金币，尚无配方、材料、锁定词缀或批量操作。
-- 视觉垂直切片已替换玩家、基础怪物、投射物、掉落、局部地表和背包皮肤；商人、打造台、完整地图、完整装备池与怪物池仍使用原型内容或占位视觉。
+- 视觉垂直切片已替换玩家、基础怪物、投射物、掉落、扩展地表和背包皮肤，并建立首版世界边界；商人、打造台、完整地图分区、完整装备池与怪物池仍使用原型内容或占位视觉。
 
 输入和 UI 结构见 [输入与运行时 UI](./input-ui-system.md)，打造事务规则见 [打造系统](./crafting-system.md)，伤害与词条规则见 [伤害系统与词条系统设计](./damage-affix-system.md)。
