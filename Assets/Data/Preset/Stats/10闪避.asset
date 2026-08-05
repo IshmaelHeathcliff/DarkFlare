@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3e87c3f4a5cdce4497984cafdc034de, type: 3}
   m_Name: "10\u95EA\u907F"
   m_EditorClassIdentifier: Assembly-CSharp::DarkFlare.StatDefinition
-  _id: Evasion
-  _displayName: "\u95EA\u907F"
+  _id: evasion
+  _displayName: "\u95EA\u907F\u503C"
   _category: 2
   _defaultValue: 0
   _minValue: 0
   _maxValue: 999999
   _isPercent: 0
-  _description: 
+  _description: "\u9884\u7559\u7684\u95EA\u907F\u8BC4\u7EA7\uFF0C\u5F53\u524D\u5C1A\u672A\u63A5\u5165\u547D\u4E2D\u5224\u5B9A\u3002"

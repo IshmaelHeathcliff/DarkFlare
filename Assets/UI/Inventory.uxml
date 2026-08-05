@@ -10,14 +10,28 @@
         </ui:VisualElement>
         <ui:Label text="方向键 / 左摇杆移动焦点 · Enter / A 选择" class="inventory-help" />
       </ui:VisualElement>
+      <ui:VisualElement name="inventory-equipment" class="inventory-equipment">
+        <ui:Label text="装备栏" class="inventory-section-title" />
+        <ui:Button name="inventory-slot-weapon" text="武器 · 空" class="inventory-equipment-slot" />
+        <ui:Button name="inventory-slot-armor" text="护甲 · 空" class="inventory-equipment-slot" />
+        <ui:Button name="inventory-slot-ring-left" text="左戒指 · 空" class="inventory-equipment-slot" />
+        <ui:Button name="inventory-slot-ring-right" text="右戒指 · 空" class="inventory-equipment-slot" />
+        <ui:Label text="饰品需先选择左或右戒指槽" class="inventory-equipment-help" />
+      </ui:VisualElement>
       <ui:VisualElement class="inventory-details">
         <ui:Label text="装备详情" class="inventory-section-title" />
-        <ui:Label name="inventory-current-weapon" text="当前武器：未装备" class="inventory-current-weapon" />
+        <ui:Label name="inventory-target-slot" text="目标槽位：未选择" class="inventory-target-slot" />
         <ui:VisualElement class="inventory-divider" />
         <ui:Instance template="ItemDetail" name="inventory-item-detail" class="inventory-item-detail" />
-        <ui:VisualElement class="inventory-details-spacer" />
+        <ui:Label text="装备比较" class="inventory-comparison-title" />
+        <ui:ScrollView name="inventory-comparison-scroll" class="inventory-comparison-scroll" mode="Vertical">
+          <ui:Label name="inventory-comparison" text="选择候选物品和目标槽位后显示" class="inventory-comparison" />
+        </ui:ScrollView>
         <ui:Label name="inventory-feedback" text="选择一个物品查看详情" class="inventory-feedback" />
-        <ui:Button name="inventory-equip" text="装备选中物品" class="inventory-equip" />
+        <ui:VisualElement name="inventory-actions" class="inventory-actions">
+          <ui:Button name="inventory-equip" text="装备 / 替换" class="inventory-action inventory-equip" />
+          <ui:Button name="inventory-unequip" text="卸下" class="inventory-action inventory-unequip" />
+        </ui:VisualElement>
       </ui:VisualElement>
     </ui:VisualElement>
   </ui:VisualElement>

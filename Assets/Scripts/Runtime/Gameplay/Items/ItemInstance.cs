@@ -118,6 +118,11 @@ namespace DarkFlare
 
         public List<DamagePacket> CreateBaseDamagePackets()
         {
+            return CreateBaseDamagePackets(Seed);
+        }
+
+        public List<DamagePacket> CreateBaseDamagePackets(int seed)
+        {
             List<DamagePacket> packets = new List<DamagePacket>();
 
             if (BaseDefinition == null)
@@ -125,7 +130,7 @@ namespace DarkFlare
                 return packets;
             }
 
-            System.Random random = new System.Random(Seed);
+            System.Random random = new System.Random(seed);
 
             for (int i = 0; i < BaseDefinition.BaseDamages.Count; i++)
             {

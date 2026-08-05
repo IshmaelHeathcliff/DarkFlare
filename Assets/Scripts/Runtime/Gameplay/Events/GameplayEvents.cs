@@ -58,15 +58,31 @@ namespace DarkFlare
     {
         public CombatActor Actor { get; }
 
-        public ItemInstance PreviousWeapon { get; }
+        public EquipmentSlot Slot { get; }
 
-        public ItemInstance CurrentWeapon { get; }
+        public ItemInstance PreviousItem { get; }
 
-        public EquipmentChangedEvent(CombatActor actor, ItemInstance previousWeapon, ItemInstance currentWeapon)
+        public ItemInstance CurrentItem { get; }
+
+        public ItemInstance PreviousWeapon => Slot == EquipmentSlot.Weapon ? PreviousItem : null;
+
+        public ItemInstance CurrentWeapon => Slot == EquipmentSlot.Weapon ? CurrentItem : null;
+
+        public EquipmentChangedEvent(
+            CombatActor actor,
+            EquipmentSlot slot,
+            ItemInstance previousItem,
+            ItemInstance currentItem)
         {
             Actor = actor;
-            PreviousWeapon = previousWeapon;
-            CurrentWeapon = currentWeapon;
+            Slot = slot;
+            PreviousItem = previousItem;
+            CurrentItem = currentItem;
+        }
+
+        public EquipmentChangedEvent(CombatActor actor, ItemInstance previousWeapon, ItemInstance currentWeapon)
+            : this(actor, EquipmentSlot.Weapon, previousWeapon, currentWeapon)
+        {
         }
     }
 

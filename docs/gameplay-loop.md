@@ -11,7 +11,7 @@
 
 玩家可在场景内持续战斗和获取物品，通过 Tab / 手柄 Start 打开随身背包，也可接近商人或打造台后使用 E / 手柄北键进入对应功能。菜单打开时暂停玩法模拟，关闭后恢复战斗与 Gameplay 输入。
 
-当前成果用于验证战斗、物品、经济与构筑之间的闭环，仍是单场景、单武器槽的功能原型。阶段 0 已接入一组视觉垂直切片，但商人、打造台、完整地图和其余内容仍未进入批量美术生产。
+当前成果用于验证战斗、物品、经济与构筑之间的闭环，仍是单场景功能原型。装备已扩展为武器、护甲、左戒指和右戒指四槽，并加入大剑、皮甲和铁指环作为首批内容；商人、打造台、完整地图和其余内容尚未进入批量美术生产。
 
 ## 阶段 0 视觉切片
 
@@ -34,7 +34,7 @@
 3. 玩家和怪物统一注册到 `CombatModel`，攻击通过 Command 进入 `CombatSystem` 和 `DamageCalculator`；投射物生成或怪物接触攻击成功后发送 `ActorAttackedEvent`，伤害、死亡与复活沿用 `ActorDamagedEvent`、`ActorDiedEvent`、`ActorRevivedEvent` 驱动 Animator。
 4. 怪物死亡后，`LootSystem` 根据怪物掉落表生成 `ItemInstance`，再实例化世界掉落物。
 5. 玩家触碰掉落物时，`PickupLootCommand` 尝试把物品放入 10×6 背包；背包无空间时保留世界掉落物。
-6. 玩家可在背包内选择武器并发送 `EquipItemCommand`。换装以原子交换提交，成功后装备词条通过 `CombatActor.SetModifiers` 进入后续伤害计算。
+6. 玩家可在背包内选择物品和目标槽并发送 `EquipItemCommand`，也可通过 `UnequipItemCommand` 卸下。`EquipmentSystem` 原子提交背包与四槽状态，并从完整 Loadout 重建角色装备效果。
 7. 玩家接近商人或打造台后，可在对应菜单上下文中买卖、打造和装备；关闭菜单后继续战斗，验证金币、物品、词条和伤害变化。
 
 ## 阶段 1 UX 快速改进
@@ -42,16 +42,26 @@
 - 背包、商店和打造使用同一物品详情快照与中文格式化，统一展示基础伤害、隐式、前缀和后缀；打造不再显示 `damage` 等内部属性 ID。
 - 鼠标悬停 / 手柄焦点用于临时预览，点击 / Submit 固定选择；详情离开临时预览后恢复固定物品。
 - 商店交易后保留原来源列，并按原索引选择下一件或上一件；滚动、焦点和交易反馈可跨刷新、页签往返及关闭重开恢复。
-- 当前仍保持单武器槽与既有战斗数值语义，多槽装备与武器基础伤害接入留到阶段 2。
+- 阶段 1 当时仍保持单武器槽与既有战斗数值语义；这些边界已在阶段 2 被四槽装备与武器伤害来源替换。
+
+## 阶段 2 装备槽与伤害来源
+
+- `EquipmentModel` 已改为每个 Actor 持有完整四槽 Loadout；物品通过序列化槽位掩码声明可装备位置。
+- 装备、替换和卸下均由 `EquipmentSystem` 先预检背包空间，再一次性提交背包、槽位和 Actor 效果，失败时不改变任何状态或发送成功事件。
+- 多件装备效果从四槽集中重建；武器 `LocalItem` 只处理本地基础伤害，护甲、抗性和其他角色属性通过统一聚合进入战斗快照。
+- 最大生命装备通过 `max_health` 进入 Actor 有效属性；穿脱时保持当前生命比例，HUD 随装备事件刷新当前值与上限。
+- 基础投射物已配置为武器伤害来源。装备大剑时使用 20–40 物理基础伤害；空手仍回退 12 点技能伤害。
+- 投射物在发射时生成 `AttackSnapshot`，冻结来源物品、随机结果、标签、攻击者属性和修改器；命中时换装不会追溯改变在途伤害。
+- 背包页已接入四槽按钮、显式左右戒指选槽、安全比较、替换和卸下，并通过键鼠、手柄与三档分辨率自动化验收。
 
 ## 模块边界
 
 | 模块 | 主要入口 | 当前职责 |
 | --- | --- | --- |
 | 启动与生成 | `CombatPrototypeBootstrap`、`SpawnSystem`、`MonsterSpawner` | 预热资源、初始化配置、生成玩家 / 怪物 / 投射物 |
-| 战斗 | `CombatModel`、`CombatSystem`、`DamageCalculator` | Actor 注册、伤害结算、生死状态与装备词条生效 |
+| 战斗 | `CombatModel`、`CombatSystem`、`DamageCalculator`、`AttackSnapshotFactory` | Actor 注册、攻击快照、伤害结算与生死状态 |
 | 掉落与物品 | `LootSystem`、`LootTableDefinition`、`ItemGenerator` | 死亡掉落、物品实例生成和世界掉落物创建 |
-| 背包与装备 | `InventoryModel`、`InventoryGrid`、`EquipmentModel` | 10×6 格子占用、拾取、金币和单武器槽原子换装 |
+| 背包与装备 | `InventoryModel`、`InventoryGrid`、`EquipmentModel`、`EquipmentSystem` | 10×6 格子占用、四槽穿戴、原子替换 / 卸下和装备效果聚合 |
 | 交易 | `EconomyModel`、`TradingSystem`、`ItemValueCalculator` | 单商人库存、买卖价格与事务提交 |
 | 打造 | `CraftingSystem`、`CraftingOperations` | 四种词条操作、金币成本、失败回滚与完成事件 |
 | 输入与 UI | `GameInput`、`GameMenuController`、各面板 Controller | 键鼠 / 手柄输入、HUD、背包、商店和打造交互 |
@@ -83,6 +93,7 @@ Prefab 通过 Addressables 预热和实例化，首版不使用 `Resources` 或�
 - 1280×720、1920×1080、2560×1440 三档背包渲染与边界检查通过；架构退出时会释放 Addressables 预热句柄，重复初始化不再重复加载同一引用。
 - 阶段 0.5 全量 EditMode 51/51、项目 PlayMode 3/3 通过；Runtime / Editor 编译 0 错误，三档世界截图和边界机位均未露出地表外空白。
 - 阶段 1 全量 EditMode 60/60 通过；PlayMode 8 项中 6 项通过、2 项为包内既有忽略测试。商店连续状态恢复和商店 / 打造三档分辨率布局边界通过，Unity Console 0 错误。
+- 阶段 2 后续修正验证为 EditMode 75/75 通过；PlayMode 9 项中 7 项通过、2 项为包内既有忽略测试。四槽键鼠 / 手柄操作、最大生命与 HUD 同步、属性资产一致性、三档分辨率和在途投射物换装快照通过，Runtime / Editor 与测试程序集编译无错误。
 
 以上数据是首版收尾时的验证记录；后续改动仍应重新运行相关测试和 Play 流程。
 
@@ -90,9 +101,9 @@ Prefab 通过 Addressables 预热和实例化，首版不使用 `Resources` 或�
 
 - 仅有 `Main.unity` 单场景，没有安全区、撤离、场景切换或存档闭环。
 - 背包只实现矩形格子占用，没有拖拽换位、旋转、堆叠和重量。
-- 装备只实现单武器槽，没有卸装、多槽位或耐久。
+- 装备已实现武器、护甲和双戒指槽，以及替换和卸下；已有少量正式基底，但尚无耐久、套装、纸娃娃和完整装备池。
 - 交易只维护单个共享商人库存；卖出物品不进入商人库存，也没有回购。
 - 打造只消耗金币，尚无配方、材料、锁定词缀或批量操作。
 - 视觉垂直切片已替换玩家、基础怪物、投射物、掉落、扩展地表和背包皮肤，并建立首版世界边界；商人、打造台、完整地图分区、完整装备池与怪物池仍使用原型内容或占位视觉。
 
-输入和 UI 结构见 [输入与运行时 UI](./input-ui-system.md)，打造事务规则见 [打造系统](./crafting-system.md)，伤害与词条规则见 [伤害系统与词条系统设计](./damage-affix-system.md)。
+输入和 UI 结构见 [输入与运行时 UI](./input-ui-system.md)，装备事务见 [装备系统](./equipment-system.md)，打造事务规则见 [打造系统](./crafting-system.md)，伤害与词条规则见 [伤害系统与词条系统设计](./damage-affix-system.md)。

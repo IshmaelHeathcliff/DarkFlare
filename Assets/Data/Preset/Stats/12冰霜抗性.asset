@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3e87c3f4a5cdce4497984cafdc034de, type: 3}
   m_Name: "12\u51B0\u971C\u6297\u6027"
   m_EditorClassIdentifier: Assembly-CSharp::DarkFlare.StatDefinition
-  _id: ColdResistance
+  _id: cold_resistance
   _displayName: "\u51B0\u971C\u6297\u6027"
   _category: 2
   _defaultValue: 0
-  _minValue: -90
-  _maxValue: 90
+  _minValue: -100
+  _maxValue: 75
   _isPercent: 1
-  _description: 
+  _description: "\u51B0\u971C\u4F24\u5BB3\u51CF\u514D\u767E\u5206\u6BD4\uFF0C\u5F53\u524D\u6709\u6548\u8303\u56F4\u4E3A -100% \u81F3 75%\u3002"

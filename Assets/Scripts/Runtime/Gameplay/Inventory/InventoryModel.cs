@@ -41,7 +41,7 @@ namespace DarkFlare
 
         public bool TryExchangeItem(ItemInstance itemToRemove, ItemInstance itemToAdd)
         {
-            bool exchanged = Grid.TryExchange(itemToRemove, itemToAdd);
+            bool exchanged = TryExchangeItemWithoutEvents(itemToRemove, itemToAdd);
 
             if (!exchanged)
             {
@@ -56,6 +56,36 @@ namespace DarkFlare
             }
 
             return true;
+        }
+
+        public bool CanExchangeItem(ItemInstance itemToRemove, ItemInstance itemToAdd)
+        {
+            return Grid.CanExchange(itemToRemove, itemToAdd);
+        }
+
+        public bool TryExchangeItemWithoutEvents(ItemInstance itemToRemove, ItemInstance itemToAdd)
+        {
+            return Grid.TryExchange(itemToRemove, itemToAdd);
+        }
+
+        public bool CanAddItem(ItemInstance item)
+        {
+            return Grid.CanAdd(item);
+        }
+
+        public bool TryAddItemWithoutEvents(ItemInstance item)
+        {
+            return Grid.TryAdd(item);
+        }
+
+        public bool RemoveItemWithoutEvents(ItemInstance item)
+        {
+            return Grid.Remove(item);
+        }
+
+        public void NotifyItemChanged(ItemInstance item, InventoryChangeType changeType)
+        {
+            this.SendEvent(new InventoryChangedEvent(item, changeType));
         }
 
         public void AddGold(int amount)

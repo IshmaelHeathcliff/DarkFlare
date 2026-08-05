@@ -72,6 +72,11 @@ namespace DarkFlare
         ItemType _itemType;
 
         [SerializeField]
+        [EnumToggleButtons]
+        [LabelText("允许装备槽")]
+        EquipmentSlotMask _allowedEquipmentSlots;
+
+        [SerializeField]
         [LabelText("默认稀有度")]
         ItemRarity _defaultRarity;
 
@@ -117,6 +122,8 @@ namespace DarkFlare
 
         public ItemType ItemType => _itemType;
 
+        public EquipmentSlotMask AllowedEquipmentSlots => _allowedEquipmentSlots;
+
         public ItemRarity DefaultRarity => _defaultRarity;
 
         public int BaseValue => _baseValue;
@@ -137,6 +144,12 @@ namespace DarkFlare
 
         public TagSet RuntimeTags => TagSet.FromDefinitions(_tags);
 
+        public bool CanEquipTo(EquipmentSlot slot)
+        {
+            EquipmentSlotMask slotMask = EquipmentSlots.ToMask(slot);
+            return slotMask != EquipmentSlotMask.None && (_allowedEquipmentSlots & slotMask) != 0;
+        }
+
         public ItemInstance CreateInstance(string instanceId, int itemLevel, int seed)
         {
             return CreateInstance(instanceId, itemLevel, seed, _defaultRarity);
@@ -153,6 +166,16 @@ namespace DarkFlare
             }
 
             return new ItemInstance(instanceId, this, rarity, itemLevel, seed, implicitModifiers);
+        }
+
+        void OnValidate()
+        {
+            List<string> issues = EquipmentConfigurationValidator.Validate(this);
+
+            for (int i = 0; i < issues.Count; i++)
+            {
+                Debug.LogWarning($"[ItemBaseDefinition] {name}: {issues[i]}", this);
+            }
         }
     }
 }

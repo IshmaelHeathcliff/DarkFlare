@@ -15,6 +15,7 @@ public class GameplayUiFoundationTests
     public void SetUp()
     {
         _originalTimeScale = Time.timeScale;
+        GameArchitecture.Interface.Deinit();
         _architecture = GameArchitecture.Interface;
     }
 
@@ -184,7 +185,8 @@ public class GameplayUiFoundationTests
         Assert.IsTrue(snapshot.Items[0].CanEquip);
         Assert.AreSame(armor, snapshot.Items[1].Item);
         Assert.AreEqual(new RectInt(2, 0, 1, 1), snapshot.Items[1].Placement);
-        Assert.IsFalse(snapshot.Items[1].CanEquip);
+        Assert.IsTrue(snapshot.Items[1].CanEquip);
+        Assert.AreEqual(4, snapshot.EquipmentSlots.Count);
         Assert.AreEqual("未装备", snapshot.CurrentWeaponSummary);
     }
 
@@ -468,11 +470,24 @@ public class GameplayUiFoundationTests
         int baseValue = 0)
     {
         ItemBaseDefinition definition = CreateScriptableObject<ItemBaseDefinition>();
+        SetField(definition, "_id", instanceId);
         SetField(definition, "_displayName", displayName);
         SetField(definition, "_itemType", itemType);
+        SetField(definition, "_allowedEquipmentSlots", GetAllowedSlots(itemType));
         SetField(definition, "_gridSize", gridSize ?? Vector2Int.one);
         SetField(definition, "_baseValue", baseValue);
         return definition.CreateInstance(instanceId, 1, 1, ItemRarity.Normal);
+    }
+
+    static EquipmentSlotMask GetAllowedSlots(ItemType itemType)
+    {
+        return itemType switch
+        {
+            ItemType.Weapon => EquipmentSlotMask.Weapon,
+            ItemType.Armor => EquipmentSlotMask.Armor,
+            ItemType.Accessory => EquipmentSlotMask.Rings,
+            _ => EquipmentSlotMask.None,
+        };
     }
 
     AffixDefinition CreateAffixDefinition(string displayName, float minimumValue, float maximumValue)

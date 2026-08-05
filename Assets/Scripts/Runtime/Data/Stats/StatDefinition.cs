@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -64,6 +65,15 @@ namespace DarkFlare
         public bool IsPercent => _isPercent;
 
         public string Description => _description;
+
+        void OnValidate()
+        {
+            List<string> issues = StatConfigurationValidator.Validate(this);
+
+            for (int i = 0; i < issues.Count; i++)
+            {
+                Debug.LogWarning($"[StatDefinition] {name}: {issues[i]}", this);
+            }
+        }
     }
 }
-

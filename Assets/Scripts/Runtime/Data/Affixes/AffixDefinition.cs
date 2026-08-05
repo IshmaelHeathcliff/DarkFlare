@@ -113,7 +113,7 @@ namespace DarkFlare
             || _operation == ModifierOperation.More
             || _operation == ModifierOperation.Override;
 
-        bool UsesScope => UsesStat;
+        bool UsesScope => UsesStat || UsesDamageTypeMapping;
 
         bool UsesValue => UsesStat || UsesDamageTypeMapping;
 
@@ -235,6 +235,16 @@ namespace DarkFlare
             }
 
             return new AffixInstance(this, modifiers);
+        }
+
+        void OnValidate()
+        {
+            List<string> issues = EquipmentConfigurationValidator.Validate(this);
+
+            for (int i = 0; i < issues.Count; i++)
+            {
+                Debug.LogWarning($"[AffixDefinition] {name}: {issues[i]}", this);
+            }
         }
     }
 }

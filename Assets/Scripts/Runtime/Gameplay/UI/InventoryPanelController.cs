@@ -16,21 +16,27 @@ namespace DarkFlare
 
         readonly List<IUnRegister> _eventRegistrations = new List<IUnRegister>();
         readonly Dictionary<ItemInstance, Button> _itemButtons = new Dictionary<ItemInstance, Button>();
+        readonly Dictionary<EquipmentSlot, Button> _slotButtons = new Dictionary<EquipmentSlot, Button>();
         readonly ItemListViewState _selectionState = new ItemListViewState();
 
         VisualElement _page;
         VisualElement _grid;
         Label _emptyLabel;
-        Label _currentWeaponLabel;
+        Label _targetSlotLabel;
+        Label _comparisonLabel;
         Label _feedbackLabel;
         Button _equipButton;
+        Button _unequipButton;
         ItemDetailView _detailView;
         ItemInstance _selectedItem;
         ItemInstance _previewItem;
+        EquipmentSlot? _targetSlot;
 
         public InventorySnapshot LastSnapshot { get; private set; }
 
         public ItemInstance SelectedItem => _selectedItem;
+
+        public EquipmentSlot? TargetSlot => _targetSlot;
 
         public bool IsVisible { get; private set; }
 
@@ -51,7 +57,6 @@ namespace DarkFlare
             CaptureSelectionState();
             InventorySnapshot snapshot = this.SendQuery(new GetInventorySnapshotQuery());
             LastSnapshot = snapshot;
-            _currentWeaponLabel.text = $"当前武器：{snapshot.CurrentWeaponSummary}";
             _emptyLabel.style.display = snapshot.Items.Count == 0
                 ? DisplayStyle.Flex
                 : DisplayStyle.None;
@@ -84,6 +89,7 @@ namespace DarkFlare
                 _selectionState.FallbackIndex = selectedIndex;
             }
 
+            ResolveTargetSlotForSelectedItem(false);
             RefreshSelection();
         }
 
@@ -106,13 +112,18 @@ namespace DarkFlare
 
         public bool FocusDefault()
         {
-            if (_selectedItem == null || !_itemButtons.TryGetValue(_selectedItem, out Button button))
+            if (_selectedItem != null && _itemButtons.TryGetValue(_selectedItem, out Button selectedButton))
             {
-                return false;
+                selectedButton.Focus();
+                return true;
             }
 
-            button.Focus();
-            return true;
+            if (_targetSlot.HasValue && FocusSlot(_targetSlot.Value))
+            {
+                return true;
+            }
+
+            return false;
         }
 
         void Awake()
@@ -132,15 +143,12 @@ namespace DarkFlare
             RegisterEvents();
             RefreshInventory();
             SetVisible(IsVisible);
-            Debug.Log("[InventoryPanelController] 背包面板初始化完成", this);
+            Debug.Log("[InventoryPanelController] 背包与四槽装备面板初始化完成", this);
         }
 
         void OnDisable()
         {
-            if (_equipButton != null)
-            {
-                _equipButton.clicked -= OnEquipClicked;
-            }
+            UnbindButtons();
 
             for (int i = 0; i < _eventRegistrations.Count; i++)
             {
@@ -149,16 +157,20 @@ namespace DarkFlare
 
             _eventRegistrations.Clear();
             _itemButtons.Clear();
+            _slotButtons.Clear();
             _selectionState.Reset();
             _page = null;
             _grid = null;
             _emptyLabel = null;
-            _currentWeaponLabel = null;
+            _targetSlotLabel = null;
+            _comparisonLabel = null;
             _feedbackLabel = null;
             _equipButton = null;
+            _unequipButton = null;
             _detailView = null;
             _selectedItem = null;
             _previewItem = null;
+            _targetSlot = null;
             IsVisible = false;
         }
 
@@ -192,25 +204,83 @@ namespace DarkFlare
             _page = root.Q<VisualElement>("inventory-page");
             _grid = root.Q<VisualElement>("inventory-grid");
             _emptyLabel = root.Q<Label>("inventory-empty");
-            _currentWeaponLabel = root.Q<Label>("inventory-current-weapon");
+            _targetSlotLabel = root.Q<Label>("inventory-target-slot");
+            _comparisonLabel = root.Q<Label>("inventory-comparison");
             _feedbackLabel = root.Q<Label>("inventory-feedback");
             _equipButton = root.Q<Button>("inventory-equip");
+            _unequipButton = root.Q<Button>("inventory-unequip");
             _detailView = new ItemDetailView(root.Q<VisualElement>("inventory-item-detail"));
+            _slotButtons.Clear();
+            AddSlotButton(root, EquipmentSlot.Weapon, "inventory-slot-weapon");
+            AddSlotButton(root, EquipmentSlot.Armor, "inventory-slot-armor");
+            AddSlotButton(root, EquipmentSlot.RingLeft, "inventory-slot-ring-left");
+            AddSlotButton(root, EquipmentSlot.RingRight, "inventory-slot-ring-right");
 
             if (_page == null
                 || _grid == null
                 || _emptyLabel == null
-                || _currentWeaponLabel == null
+                || _targetSlotLabel == null
+                || _comparisonLabel == null
                 || _feedbackLabel == null
                 || _equipButton == null
+                || _unequipButton == null
+                || _slotButtons.Count != EquipmentSlots.All.Count
                 || !_detailView.IsValid)
             {
-                Debug.LogError("[InventoryPanelController] 背包 UXML 缺少必要的命名元素", this);
+                Debug.LogError("[InventoryPanelController] 背包 UXML 缺少四槽装备面板所需的命名元素", this);
                 return false;
             }
 
             _equipButton.clicked += OnEquipClicked;
+            _unequipButton.clicked += OnUnequipClicked;
+            _slotButtons[EquipmentSlot.Weapon].clicked += OnWeaponSlotClicked;
+            _slotButtons[EquipmentSlot.Armor].clicked += OnArmorSlotClicked;
+            _slotButtons[EquipmentSlot.RingLeft].clicked += OnRingLeftSlotClicked;
+            _slotButtons[EquipmentSlot.RingRight].clicked += OnRingRightSlotClicked;
             return true;
+        }
+
+        void AddSlotButton(VisualElement root, EquipmentSlot slot, string name)
+        {
+            Button button = root.Q<Button>(name);
+
+            if (button != null)
+            {
+                _slotButtons.Add(slot, button);
+            }
+        }
+
+        void UnbindButtons()
+        {
+            if (_equipButton != null)
+            {
+                _equipButton.clicked -= OnEquipClicked;
+            }
+
+            if (_unequipButton != null)
+            {
+                _unequipButton.clicked -= OnUnequipClicked;
+            }
+
+            if (_slotButtons.TryGetValue(EquipmentSlot.Weapon, out Button weapon))
+            {
+                weapon.clicked -= OnWeaponSlotClicked;
+            }
+
+            if (_slotButtons.TryGetValue(EquipmentSlot.Armor, out Button armor))
+            {
+                armor.clicked -= OnArmorSlotClicked;
+            }
+
+            if (_slotButtons.TryGetValue(EquipmentSlot.RingLeft, out Button ringLeft))
+            {
+                ringLeft.clicked -= OnRingLeftSlotClicked;
+            }
+
+            if (_slotButtons.TryGetValue(EquipmentSlot.RingRight, out Button ringRight))
+            {
+                ringRight.clicked -= OnRingRightSlotClicked;
+            }
         }
 
         void RegisterEvents()
@@ -293,7 +363,49 @@ namespace DarkFlare
             _selectedItem = item;
             _previewItem = null;
             CaptureSelectionState();
+            ResolveTargetSlotForSelectedItem(true);
             RefreshSelection();
+        }
+
+        void SelectSlot(EquipmentSlot slot)
+        {
+            _targetSlot = slot;
+            _previewItem = null;
+
+            if (_selectedItem != null && !IsCompatible(_selectedItem, slot))
+            {
+                _selectedItem = null;
+                _selectionState.SelectedInstanceId = string.Empty;
+            }
+
+            RefreshSelection();
+        }
+
+        void ResolveTargetSlotForSelectedItem(bool clearAmbiguousRingTarget)
+        {
+            if (_selectedItem == null || _selectedItem.BaseDefinition == null)
+            {
+                return;
+            }
+
+            EquipmentSlotMask slots = _selectedItem.BaseDefinition.AllowedEquipmentSlots;
+
+            if (slots == EquipmentSlotMask.Weapon)
+            {
+                _targetSlot = EquipmentSlot.Weapon;
+            }
+            else if (slots == EquipmentSlotMask.Armor)
+            {
+                _targetSlot = EquipmentSlot.Armor;
+            }
+            else if (slots == EquipmentSlotMask.Rings && clearAmbiguousRingTarget)
+            {
+                _targetSlot = null;
+            }
+            else if (!_targetSlot.HasValue || !IsCompatible(_selectedItem, _targetSlot.Value))
+            {
+                _targetSlot = null;
+            }
         }
 
         void CaptureSelectionState()
@@ -324,6 +436,7 @@ namespace DarkFlare
         {
             _previewItem = item;
             RefreshDetail();
+            RefreshComparison();
         }
 
         void EndPreview(ItemInstance item)
@@ -335,55 +448,127 @@ namespace DarkFlare
 
             _previewItem = null;
             RefreshDetail();
+            RefreshComparison();
         }
 
         void RefreshSelection()
         {
             foreach (KeyValuePair<ItemInstance, Button> entry in _itemButtons)
             {
-                entry.Value.RemoveFromClassList("inventory-item--selected");
-
-                if (entry.Key == _selectedItem)
-                {
-                    entry.Value.AddToClassList("inventory-item--selected");
-                }
+                entry.Value.EnableInClassList("inventory-item--selected", entry.Key == _selectedItem);
             }
 
-            if (!TryGetSelectedSnapshot(out InventoryItemSnapshot selected))
-            {
-                _detailView.Clear();
-                _feedbackLabel.text = LastSnapshot.HasPlayer ? "背包为空" : "等待玩家生成";
-                _equipButton.SetEnabled(false);
-                return;
-            }
-
+            RefreshEquipmentSlots();
             RefreshDetail();
+            RefreshComparison();
 
-            bool canEquip = LastSnapshot.HasPlayer && selected.CanEquip;
+            bool hasTarget = _targetSlot.HasValue;
+            bool hasCandidate = TryGetSelectedSnapshot(out InventoryItemSnapshot selected);
+            bool canEquip = LastSnapshot.HasPlayer
+                && hasTarget
+                && hasCandidate
+                && IsCompatible(selected.Item, _targetSlot.Value);
+            bool canUnequip = LastSnapshot.HasPlayer
+                && hasTarget
+                && TryGetSlotSnapshot(_targetSlot.Value, out EquipmentSlotSnapshot slotSnapshot)
+                && slotSnapshot.Item != null;
             _equipButton.SetEnabled(canEquip);
-            _feedbackLabel.text = canEquip
-                ? "按下装备，将自动把旧武器放回背包"
-                : selected.CanEquip
-                    ? "等待玩家生成"
-                    : "该物品不能装备";
+            _unequipButton.SetEnabled(canUnequip);
+
+            if (!LastSnapshot.HasPlayer)
+            {
+                _feedbackLabel.text = "等待玩家生成";
+            }
+            else if (hasCandidate && !hasTarget && selected.CompatibleSlots == EquipmentSlotMask.Rings)
+            {
+                _feedbackLabel.text = "请选择左戒指或右戒指槽";
+            }
+            else if (canEquip)
+            {
+                _feedbackLabel.text = canUnequip ? "可替换目标槽装备" : "可装备到目标槽";
+            }
+            else if (canUnequip)
+            {
+                _feedbackLabel.text = "可卸下当前槽位装备";
+            }
+            else if (!hasCandidate)
+            {
+                _feedbackLabel.text = "选择背包物品或装备槽";
+            }
+            else
+            {
+                _feedbackLabel.text = selected.CanEquip ? "请选择兼容的装备槽" : "该物品不能装备";
+            }
+        }
+
+        void RefreshEquipmentSlots()
+        {
+            for (int i = 0; i < LastSnapshot.EquipmentSlots.Count; i++)
+            {
+                EquipmentSlotSnapshot snapshot = LastSnapshot.EquipmentSlots[i];
+
+                if (!_slotButtons.TryGetValue(snapshot.Slot, out Button button))
+                {
+                    continue;
+                }
+
+                button.text = snapshot.Summary;
+                button.tooltip = snapshot.Item != null
+                    ? $"{snapshot.Detail.DisplayName} · {ItemDetailFormatter.GetRarityText(snapshot.Detail.Rarity)}"
+                    : $"{snapshot.SlotName}为空";
+                button.EnableInClassList("inventory-equipment-slot--selected", _targetSlot == snapshot.Slot);
+                button.EnableInClassList("inventory-equipment-slot--filled", snapshot.Item != null);
+            }
         }
 
         void RefreshDetail()
         {
             ItemInstance item = _previewItem != null ? _previewItem : _selectedItem;
 
-            for (int i = 0; i < LastSnapshot.Items.Count; i++)
+            if (item != null)
             {
-                if (LastSnapshot.Items[i].Item != item)
-                {
-                    continue;
-                }
+                _detailView.Show(ItemDetailSnapshotFactory.Create(item));
+                return;
+            }
 
-                _detailView.Show(LastSnapshot.Items[i].Detail);
+            if (_targetSlot.HasValue
+                && TryGetSlotSnapshot(_targetSlot.Value, out EquipmentSlotSnapshot slotSnapshot)
+                && slotSnapshot.Item != null)
+            {
+                _detailView.Show(slotSnapshot.Detail);
                 return;
             }
 
             _detailView.Clear();
+        }
+
+        void RefreshComparison()
+        {
+            if (!_targetSlot.HasValue)
+            {
+                _targetSlotLabel.text = "目标槽位：未选择";
+                _comparisonLabel.text = "选择候选物品和目标槽位后显示";
+                return;
+            }
+
+            EquipmentSlot slot = _targetSlot.Value;
+            _targetSlotLabel.text = $"目标槽位：{EquipmentSlots.GetDisplayName(slot)}";
+            TryGetSlotSnapshot(slot, out EquipmentSlotSnapshot slotSnapshot);
+            ItemInstance candidate = _previewItem != null ? _previewItem : _selectedItem;
+
+            if (candidate == null || !IsCompatible(candidate, slot))
+            {
+                _comparisonLabel.text = slotSnapshot.Item != null
+                    ? $"当前：{slotSnapshot.Detail.DisplayName}"
+                    : "当前槽位为空";
+                return;
+            }
+
+            EquipmentComparisonSnapshot comparison = EquipmentComparisonFactory.Create(
+                slot,
+                slotSnapshot.Item,
+                candidate);
+            _comparisonLabel.text = string.Join("\n", comparison.Lines);
         }
 
         bool TryGetSelectedSnapshot(out InventoryItemSnapshot selected)
@@ -401,26 +586,110 @@ namespace DarkFlare
             return false;
         }
 
+        bool TryGetSlotSnapshot(EquipmentSlot slot, out EquipmentSlotSnapshot snapshot)
+        {
+            for (int i = 0; i < LastSnapshot.EquipmentSlots.Count; i++)
+            {
+                if (LastSnapshot.EquipmentSlots[i].Slot == slot)
+                {
+                    snapshot = LastSnapshot.EquipmentSlots[i];
+                    return true;
+                }
+            }
+
+            snapshot = default;
+            return false;
+        }
+
         void OnEquipClicked()
         {
-            if (_selectedItem == null || !LastSnapshot.HasPlayer)
+            if (_selectedItem == null || !LastSnapshot.HasPlayer || !_targetSlot.HasValue)
             {
-                _feedbackLabel.text = "当前没有可装备的物品";
+                _feedbackLabel.text = "请选择可装备物品和目标槽位";
                 return;
             }
 
+            EquipmentSlot slot = _targetSlot.Value;
             string selectedName = _selectedItem.BaseDefinition.DisplayName;
-            bool equipped = this.SendCommand(new EquipItemCommand(LastSnapshot.Player, _selectedItem));
+            bool equipped = this.SendCommand(new EquipItemCommand(LastSnapshot.Player, _selectedItem, slot));
 
             if (!equipped)
             {
-                _feedbackLabel.text = "装备失败，请检查背包空间和物品类型";
+                _feedbackLabel.text = "装备失败，请检查背包空间、目标槽位和物品类型";
                 return;
             }
 
             RefreshInventory();
-            _feedbackLabel.text = $"已装备 {selectedName}";
-            FocusDefault();
+            _targetSlot = slot;
+            RefreshSelection();
+            _feedbackLabel.text = $"已将 {selectedName} 装备到{EquipmentSlots.GetDisplayName(slot)}";
+            FocusSlot(slot);
+        }
+
+        void OnUnequipClicked()
+        {
+            if (!LastSnapshot.HasPlayer
+                || !_targetSlot.HasValue
+                || !TryGetSlotSnapshot(_targetSlot.Value, out EquipmentSlotSnapshot snapshot)
+                || snapshot.Item == null)
+            {
+                _feedbackLabel.text = "当前槽位没有可卸下的装备";
+                return;
+            }
+
+            EquipmentSlot slot = _targetSlot.Value;
+            ItemInstance item = snapshot.Item;
+            string displayName = snapshot.Detail.DisplayName;
+            bool unequipped = this.SendCommand(new UnequipItemCommand(LastSnapshot.Player, slot));
+
+            if (!unequipped)
+            {
+                _feedbackLabel.text = "卸下失败，请检查背包空间";
+                return;
+            }
+
+            _selectionState.SelectedInstanceId = item.InstanceId;
+            RefreshInventory();
+            _targetSlot = slot;
+            RefreshSelection();
+            _feedbackLabel.text = $"已卸下 {displayName}";
+            FocusSlot(slot);
+        }
+
+        bool FocusSlot(EquipmentSlot slot)
+        {
+            if (!_slotButtons.TryGetValue(slot, out Button button))
+            {
+                return false;
+            }
+
+            button.Focus();
+            return true;
+        }
+
+        void OnWeaponSlotClicked()
+        {
+            SelectSlot(EquipmentSlot.Weapon);
+        }
+
+        void OnArmorSlotClicked()
+        {
+            SelectSlot(EquipmentSlot.Armor);
+        }
+
+        void OnRingLeftSlotClicked()
+        {
+            SelectSlot(EquipmentSlot.RingLeft);
+        }
+
+        void OnRingRightSlotClicked()
+        {
+            SelectSlot(EquipmentSlot.RingRight);
+        }
+
+        static bool IsCompatible(ItemInstance item, EquipmentSlot slot)
+        {
+            return item != null && item.BaseDefinition != null && item.BaseDefinition.CanEquipTo(slot);
         }
 
         static string GetRarityClass(ItemRarity rarity)

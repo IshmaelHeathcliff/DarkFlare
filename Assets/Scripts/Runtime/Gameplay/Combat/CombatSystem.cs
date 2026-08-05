@@ -5,8 +5,6 @@ namespace DarkFlare
 {
     public class CombatSystem : AbstractSystem
     {
-        static readonly List<ModifierInstance> EmptyModifiers = new List<ModifierInstance>();
-
         protected override void OnInit()
         {
         }
@@ -31,25 +29,37 @@ namespace DarkFlare
             TagSet contextTags,
             int randomSeed)
         {
-            if (defender == null || !defender.IsAlive)
+            AttackSnapshot attack = AttackSnapshotFactory.CreateImmediate(
+                attacker,
+                skillId,
+                string.Empty,
+                baseDamages,
+                contextTags,
+                randomSeed);
+            return ApplyDamage(attack, defender);
+        }
+
+        public DamageResult ApplyDamage(AttackSnapshot attack, CombatActor defender)
+        {
+            if (attack == null || defender == null || !defender.IsAlive)
             {
                 return new DamageResult(false, false, new Dictionary<DamageType, float>(), new Dictionary<DamageType, float>());
             }
 
-            StatBlock attackerStats = attacker != null ? attacker.Stats : new StatBlock();
-            IEnumerable<ModifierInstance> attackerModifiers = attacker != null ? attacker.Modifiers : EmptyModifiers;
             DamageContext context = new DamageContext(
-                attacker != null ? attacker.ActorId : "environment",
+                attack.AttackerId,
                 defender.ActorId,
-                skillId,
-                string.Empty,
-                randomSeed,
-                baseDamages,
-                contextTags ?? TagSet.Empty,
-                attackerStats,
+                attack.SkillId,
+                attack.SourceItemId,
+                attack.RandomSeed,
+                attack.BaseDamages,
+                attack.ContextTags,
+                attack.AttackerStats,
                 defender.Stats,
-                attackerModifiers,
-                defender.Modifiers);
+                attack.AttackerModifiers,
+                defender.Modifiers,
+                attack.IsHit,
+                attack.IsCritical);
 
             DamageResult result = DamageCalculator.Calculate(context);
             bool justDied = defender.ReceiveDamage(result);
@@ -77,34 +87,5 @@ namespace DarkFlare
             this.SendEvent(new ActorRevivedEvent { Actor = actor });
         }
 
-        public bool EquipWeapon(CombatActor actor, ItemInstance weapon)
-        {
-            if (actor == null || weapon == null || weapon.BaseDefinition == null ||
-                weapon.BaseDefinition.ItemType != ItemType.Weapon)
-            {
-                return false;
-            }
-
-            EquipmentModel equipment = this.GetModel<EquipmentModel>();
-            ItemInstance previousWeapon = equipment.GetWeapon(actor);
-
-            if (previousWeapon == weapon)
-            {
-                return false;
-            }
-
-            InventoryModel inventory = this.GetModel<InventoryModel>();
-
-            if (!inventory.TryExchangeItem(weapon, previousWeapon))
-            {
-                return false;
-            }
-
-            equipment.SetWeapon(actor, weapon);
-            actor.SetModifiers(weapon.CollectModifiers());
-            this.SendEvent(new EquipmentChangedEvent(actor, previousWeapon, weapon));
-            Debug.Log($"[CombatSystem] {actor.ActorId} 装备了 {weapon.BaseDefinition.DisplayName}");
-            return true;
-        }
     }
 }

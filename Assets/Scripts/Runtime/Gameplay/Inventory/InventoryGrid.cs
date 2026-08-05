@@ -42,9 +42,14 @@ namespace DarkFlare
             return true;
         }
 
+        public bool CanAdd(ItemInstance item)
+        {
+            return TryFindPlacement(item, null, out _);
+        }
+
         public bool TryExchange(ItemInstance itemToRemove, ItemInstance itemToAdd)
         {
-            if (itemToRemove == null || !_placements.ContainsKey(itemToRemove))
+            if (!CanExchange(itemToRemove, itemToAdd))
             {
                 return false;
             }
@@ -62,6 +67,16 @@ namespace DarkFlare
             Remove(itemToRemove);
             Occupy(itemToAdd, placement);
             return true;
+        }
+
+        public bool CanExchange(ItemInstance itemToRemove, ItemInstance itemToAdd)
+        {
+            if (itemToRemove == null || !_placements.ContainsKey(itemToRemove))
+            {
+                return false;
+            }
+
+            return itemToAdd == null || TryFindPlacement(itemToAdd, itemToRemove, out _);
         }
 
         public bool Remove(ItemInstance item)

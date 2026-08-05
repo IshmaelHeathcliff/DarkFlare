@@ -4,12 +4,14 @@ namespace DarkFlare
 {
     public class ApplyDamageCommand : AbstractCommand<DamageResult>
     {
-        readonly CombatActor _attacker;
         readonly CombatActor _defender;
-        readonly string _skillId;
-        readonly IEnumerable<DamagePacket> _baseDamages;
-        readonly TagSet _contextTags;
-        readonly int _randomSeed;
+        readonly AttackSnapshot _attack;
+
+        public ApplyDamageCommand(AttackSnapshot attack, CombatActor defender)
+        {
+            _attack = attack;
+            _defender = defender;
+        }
 
         public ApplyDamageCommand(
             CombatActor attacker,
@@ -19,17 +21,19 @@ namespace DarkFlare
             TagSet contextTags,
             int randomSeed)
         {
-            _attacker = attacker;
             _defender = defender;
-            _skillId = skillId;
-            _baseDamages = baseDamages;
-            _contextTags = contextTags;
-            _randomSeed = randomSeed;
+            _attack = AttackSnapshotFactory.CreateImmediate(
+                attacker,
+                skillId,
+                string.Empty,
+                baseDamages,
+                contextTags,
+                randomSeed);
         }
 
         protected override DamageResult OnExecute()
         {
-            return this.GetSystem<CombatSystem>().ApplyDamage(_attacker, _defender, _skillId, _baseDamages, _contextTags, _randomSeed);
+            return this.GetSystem<CombatSystem>().ApplyDamage(_attack, _defender);
         }
     }
 }

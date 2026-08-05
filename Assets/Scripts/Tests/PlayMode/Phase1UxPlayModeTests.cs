@@ -227,6 +227,7 @@ namespace DarkFlare.Tests
             SetField(definition, "_id", id);
             SetField(definition, "_displayName", displayName);
             SetField(definition, "_itemType", ItemType.Weapon);
+            SetField(definition, "_allowedEquipmentSlots", EquipmentSlotMask.Weapon);
             SetField(definition, "_gridSize", Vector2Int.one);
             SetField(definition, "_baseValue", 1);
             return definition;
@@ -234,7 +235,7 @@ namespace DarkFlare.Tests
 
         static WorldInteractionTarget FindTarget(GameMenuPage page)
         {
-            WorldInteractionTarget[] targets = Object.FindObjectsByType<WorldInteractionTarget>(FindObjectsSortMode.None);
+            WorldInteractionTarget[] targets = Object.FindObjectsByType<WorldInteractionTarget>();
 
             for (int i = 0; i < targets.Length; i++)
             {

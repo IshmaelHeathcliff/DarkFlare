@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3e87c3f4a5cdce4497984cafdc034de, type: 3}
   m_Name: "01\u9B54\u529B"
   m_EditorClassIdentifier: Assembly-CSharp::DarkFlare.StatDefinition
-  _id: Mana
+  _id: mana
   _displayName: "\u9B54\u529B"
-  _category: 1
+  _category: 0
   _defaultValue: 0
   _minValue: 0
   _maxValue: 999999
   _isPercent: 0
-  _description: 
+  _description: "\u9884\u7559\u7684\u6280\u80FD\u8D44\u6E90\u4E0A\u9650\uFF0C\u5F53\u524D\u5C1A\u672A\u63A5\u5165\u6D88\u8017\u4E0E\u6062\u590D\u6D41\u7A0B\u3002"

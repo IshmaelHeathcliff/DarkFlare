@@ -19,7 +19,22 @@ namespace DarkFlare
 
         protected override void OnExecute()
         {
-            ProjectileController projectile = this.GetSystem<SpawnSystem>().SpawnProjectile(_skill, _owner, _position, _direction);
+            if (_owner == null || _skill == null)
+            {
+                return;
+            }
+
+            int seed = Random.Range(int.MinValue, int.MaxValue);
+            AttackSnapshot attack = AttackSnapshotFactory.CreateProjectile(
+                _owner,
+                _skill,
+                this.GetModel<EquipmentModel>(),
+                seed);
+            ProjectileController projectile = this.GetSystem<SpawnSystem>().SpawnProjectile(
+                _skill,
+                _position,
+                _direction,
+                attack);
 
             if (projectile != null)
             {

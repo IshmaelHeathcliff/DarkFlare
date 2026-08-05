@@ -6,6 +6,12 @@ using UnityEngine.AddressableAssets;
 
 namespace DarkFlare
 {
+    public enum ProjectileDamageSource
+    {
+        Skill,
+        EquippedWeapon
+    }
+
     [CreateAssetMenu(menuName = "DarkFlare/Data/Skills/Projectile Skill Definition", fileName = "ProjectileSkillDefinition")]
     public class ProjectileSkillDefinition : ScriptableObject
     {
@@ -51,6 +57,10 @@ namespace DarkFlare
         List<TagDefinition> _tags = new List<TagDefinition>();
 
         [SerializeField]
+        [LabelText("伤害来源")]
+        ProjectileDamageSource _damageSource;
+
+        [SerializeField]
         [LabelText("基础伤害")]
         List<DamageRollDefinition> _baseDamages = new List<DamageRollDefinition>();
 
@@ -71,6 +81,8 @@ namespace DarkFlare
         public float ProjectileLifetime => _projectileLifetime;
 
         public TagSet RuntimeTags => TagSet.FromDefinitions(_tags);
+
+        public ProjectileDamageSource DamageSource => _damageSource;
 
         public IReadOnlyList<DamageRollDefinition> BaseDamages => _baseDamages;
 

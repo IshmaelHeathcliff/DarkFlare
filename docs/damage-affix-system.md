@@ -47,6 +47,10 @@
 
 建议用 `StatDefinition` 配置资产定义属性 ID、中文名、类别、默认值、最小值、最大值、是否百分比。
 
+配置资产和运行时代码必须共用同一个稳定 ID。最大生命的标准 ID 为 `max_health`；使用显示名或旧 ID 会被配置校验报告为未知属性，不能进入有效属性聚合。
+
+完整属性清单、运行时消费者和配置校验规则见[属性定义与调用关系](./stat-system.md)。
+
 ### 词条
 
 词条由一个或多个修改器组成。
@@ -341,10 +345,9 @@ Assets/Data/Preset/
 
 ## 与 QFramework 的关系
 
-- `StatSystem` 负责属性聚合和缓存。
-- `DamageSystem` 负责纯伤害计算，不直接改 Model。
-- `CombatSystem` 负责组织战斗流程，调用 `DamageSystem` 并发送 Command。
-- `ItemGenerationSystem` 负责装备实例和词条随机。
+- `EquipmentSystem` 负责四槽事务与装备效果重建。
+- `CombatSystem` 负责组织伤害、生死和 Actor 生命周期，调用纯计算的 `DamageCalculator`。
+- `ItemGenerator` 负责装备实例和词条随机，由掉落、交易和测试等入口调用。
 - `CraftingSystem` 负责修改物品实例。
 - `TradingSystem` 负责价格与交易。
 
@@ -378,6 +381,9 @@ Assets/Data/Preset/
 - `ItemGenerator`：基于物品基底、词条池、权重和随机种子生成物品实例。
 - `TagSet`、`ModifierInstance`、`StatBlock`、`StatAggregator`：运行时标签、词条和属性聚合结构。
 - `DamageContext`、`DamagePacket`、`DamageResult`、`DamageCalculator`：纯 C# 命中伤害计算管线。
+- `EquipmentEffectResolver`、`CombatStatResolver`：从四槽分流 LocalItem 与角色效果，并聚合护甲、抗性等有效属性。
+- `CombatActor`：从有效属性读取 `max_health`，穿脱装备时按最大生命变化保持当前生命比例，并由装备事件触发 HUD 刷新。
+- `AttackSnapshot`、`AttackSnapshotFactory`：在攻击发起时冻结来源物品、随机伤害包、标签、攻击者属性和修改器。
 
 已实现的伤害计算内容：
 
@@ -390,6 +396,9 @@ Assets/Data/Preset/
 - 目标承伤倍率
 - 元素和混沌抗性
 - 物理护甲减伤
+- 武器基础伤害来源与空手技能回退
+- 发射时攻击快照；投射物命中时只读取当前防御者快照
+- `LocalItem` 仅作用于武器本地伤害，伤害修改器不会在属性层重复计算
 
 暂缓实现：
 
@@ -399,7 +408,7 @@ Assets/Data/Preset/
 - 反伤
 - 大型天赋盘
 - 复杂触发链
-- 多阶段伤害快照
+- Buff、区域与多段技能各自独立的快照时机
 
 ## 风险与约束
 

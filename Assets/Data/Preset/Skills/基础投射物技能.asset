@@ -26,4 +26,5 @@ MonoBehaviour:
   _projectileRadius: 0.16
   _projectileLifetime: 2
   _tags: []
+  _damageSource: 1
   _baseDamages: []

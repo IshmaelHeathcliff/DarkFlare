@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3e87c3f4a5cdce4497984cafdc034de, type: 3}
   m_Name: "00\u751F\u547D"
   m_EditorClassIdentifier: Assembly-CSharp::DarkFlare.StatDefinition
-  _id: Health
-  _displayName: "\u751F\u547D"
+  _id: max_health
+  _displayName: "\u6700\u5927\u751F\u547D"
   _category: 0
   _defaultValue: 0
   _minValue: 0
   _maxValue: 999999
   _isPercent: 0
-  _description: 
+  _description: "\u89D2\u8272\u7684\u6700\u5927\u751F\u547D\u4E0A\u9650\uFF0C\u7A7F\u8131\u88C5\u5907\u65F6\u6309\u6BD4\u4F8B\u4FDD\u7559\u5F53\u524D\u751F\u547D\u3002"

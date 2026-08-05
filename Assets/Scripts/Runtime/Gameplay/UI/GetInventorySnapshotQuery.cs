@@ -19,12 +19,38 @@ namespace DarkFlare
 
         public int AffixCount => Detail.AffixCount;
 
-        public bool CanEquip => Type == ItemType.Weapon;
+        public EquipmentSlotMask CompatibleSlots => Item != null && Item.BaseDefinition != null
+            ? Item.BaseDefinition.AllowedEquipmentSlots
+            : EquipmentSlotMask.None;
+
+        public bool CanEquip => CompatibleSlots != EquipmentSlotMask.None;
 
         public InventoryItemSnapshot(ItemInstance item, RectInt placement)
         {
             Item = item;
             Placement = placement;
+            Detail = ItemDetailSnapshotFactory.Create(item);
+        }
+    }
+
+    public readonly struct EquipmentSlotSnapshot
+    {
+        public EquipmentSlot Slot { get; }
+
+        public ItemInstance Item { get; }
+
+        public ItemDetailSnapshot Detail { get; }
+
+        public string SlotName => EquipmentSlots.GetDisplayName(Slot);
+
+        public string Summary => Item != null
+            ? $"{SlotName} · {Detail.DisplayName}"
+            : $"{SlotName} · 空";
+
+        public EquipmentSlotSnapshot(EquipmentSlot slot, ItemInstance item)
+        {
+            Slot = slot;
+            Item = item;
             Detail = ItemDetailSnapshotFactory.Create(item);
         }
     }
@@ -43,6 +69,8 @@ namespace DarkFlare
 
         public string CurrentWeaponSummary { get; }
 
+        public IReadOnlyList<EquipmentSlotSnapshot> EquipmentSlots { get; }
+
         public bool HasPlayer => Player != null;
 
         public InventorySnapshot(
@@ -51,7 +79,8 @@ namespace DarkFlare
             int height,
             IReadOnlyList<InventoryItemSnapshot> items,
             ItemInstance currentWeapon,
-            string currentWeaponSummary)
+            string currentWeaponSummary,
+            IReadOnlyList<EquipmentSlotSnapshot> equipmentSlots)
         {
             Player = player;
             Width = width;
@@ -59,6 +88,7 @@ namespace DarkFlare
             Items = items;
             CurrentWeapon = currentWeapon;
             CurrentWeaponSummary = currentWeaponSummary;
+            EquipmentSlots = equipmentSlots;
         }
     }
 
@@ -79,13 +109,31 @@ namespace DarkFlare
             ItemInstance currentWeapon = player != null
                 ? this.GetModel<EquipmentModel>().GetWeapon(player)
                 : null;
+            List<EquipmentSlotSnapshot> equipmentSlots = CreateEquipmentSlots(player);
             return new InventorySnapshot(
                 player,
                 grid.Width,
                 grid.Height,
                 items,
                 currentWeapon,
-                DescribeWeapon(currentWeapon));
+                DescribeWeapon(currentWeapon),
+                equipmentSlots);
+        }
+
+        List<EquipmentSlotSnapshot> CreateEquipmentSlots(CombatActor player)
+        {
+            IReadOnlyList<EquipmentSlot> slots = EquipmentSlots.All;
+            List<EquipmentSlotSnapshot> result = new List<EquipmentSlotSnapshot>(slots.Count);
+            EquipmentModel equipment = this.GetModel<EquipmentModel>();
+
+            for (int i = 0; i < slots.Count; i++)
+            {
+                EquipmentSlot slot = slots[i];
+                ItemInstance item = player != null ? equipment.GetItem(player, slot) : null;
+                result.Add(new EquipmentSlotSnapshot(slot, item));
+            }
+
+            return result;
         }
 
         CombatActor GetPlayer()

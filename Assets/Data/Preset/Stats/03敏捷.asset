@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3e87c3f4a5cdce4497984cafdc034de, type: 3}
   m_Name: "03\u654F\u6377"
   m_EditorClassIdentifier: Assembly-CSharp::DarkFlare.StatDefinition
-  _id: Dexterity
+  _id: dexterity
   _displayName: "\u654F\u6377"
   _category: 1
   _defaultValue: 0
   _minValue: 0
   _maxValue: 999999
   _isPercent: 0
-  _description: 
+  _description: "\u9884\u7559\u7684\u57FA\u7840\u5C5E\u6027\uFF0C\u5F53\u524D\u4EC5\u652F\u6301\u901A\u7528\u5C5E\u6027\u805A\u5408\u548C UI \u5C55\u793A\u3002"

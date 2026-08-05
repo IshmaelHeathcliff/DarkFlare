@@ -23,6 +23,7 @@ namespace DarkFlare
 
         Rigidbody2D _rigidbody;
         SpriteRenderer _renderer;
+        StatBlock _baseStats = new StatBlock();
         StatBlock _stats = new StatBlock();
         TagSet _tags = TagSet.Empty;
         float _currentHealth;
@@ -32,7 +33,7 @@ namespace DarkFlare
 
         public ActorTeam Team => _team;
 
-        public float MaxHealth => _maxHealth;
+        public float MaxHealth => GetEffectiveMaxHealth();
 
         public float CurrentHealth => _currentHealth;
 
@@ -54,10 +55,11 @@ namespace DarkFlare
             _actorId = actorId;
             _team = team;
             _maxHealth = Mathf.Max(1f, maxHealth);
-            _stats = stats != null ? stats.Clone() : new StatBlock();
-            _stats.SetValue(StatIds.MaxHealth, _maxHealth);
+            _baseStats = stats != null ? stats.Clone() : new StatBlock();
+            _baseStats.SetValue(StatIds.MaxHealth, _maxHealth);
+            RebuildStats();
             _tags = tags ?? TagSet.Empty;
-            _currentHealth = _maxHealth;
+            _currentHealth = MaxHealth;
 
             if (!_isAlive)
             {
@@ -90,19 +92,26 @@ namespace DarkFlare
 
         public void SetModifiers(IEnumerable<ModifierInstance> modifiers)
         {
+            float previousMaxHealth = MaxHealth;
+            float healthRatio = previousMaxHealth > 0f
+                ? Mathf.Clamp01(_currentHealth / previousMaxHealth)
+                : 1f;
             _modifiers.Clear();
 
             if (modifiers != null)
             {
                 _modifiers.AddRange(modifiers);
             }
+
+            RebuildStats();
+            _currentHealth = MaxHealth * healthRatio;
         }
 
         public void Revive(Vector3 position)
         {
             CacheComponents();
             transform.position = position;
-            _currentHealth = _maxHealth;
+            _currentHealth = MaxHealth;
             _isAlive = true;
             SetPresentationEnabled(true);
         }
@@ -110,7 +119,7 @@ namespace DarkFlare
         void Awake()
         {
             CacheComponents();
-            _currentHealth = _maxHealth;
+            _currentHealth = MaxHealth;
             _isAlive = true;
         }
 
@@ -136,6 +145,21 @@ namespace DarkFlare
             _renderer = GetComponent<SpriteRenderer>();
             _colliders.Clear();
             GetComponents(_colliders);
+        }
+
+        void RebuildStats()
+        {
+            _stats = CombatStatResolver.Build(_baseStats, _modifiers);
+        }
+
+        float GetEffectiveMaxHealth()
+        {
+            if (_baseStats.GetValue(StatIds.MaxHealth) <= 0f)
+            {
+                return Mathf.Max(1f, _maxHealth);
+            }
+
+            return Mathf.Max(1f, _stats.GetValue(StatIds.MaxHealth));
         }
 
         void Die()

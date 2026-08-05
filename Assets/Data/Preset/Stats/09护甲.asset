@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3e87c3f4a5cdce4497984cafdc034de, type: 3}
   m_Name: "09\u62A4\u7532"
   m_EditorClassIdentifier: Assembly-CSharp::DarkFlare.StatDefinition
-  _id: Defence
+  _id: armor
   _displayName: "\u62A4\u7532"
   _category: 2
   _defaultValue: 0
   _minValue: 0
   _maxValue: 999999
   _isPercent: 0
-  _description: 
+  _description: "\u6309\u672C\u6B21\u7269\u7406\u547D\u4E2D\u4F24\u5BB3\u8FDB\u884C\u975E\u7EBF\u6027\u51CF\u4F24\u3002"

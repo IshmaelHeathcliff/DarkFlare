@@ -1,0 +1,371 @@
+using System.Collections;
+using System.Collections.Generic;
+using System.Reflection;
+using DarkFlare;
+using NUnit.Framework;
+using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Controls;
+using UnityEngine.SceneManagement;
+using UnityEngine.TestTools;
+using UnityEngine.UIElements;
+
+namespace DarkFlare.Tests
+{
+    public class EquipmentPhase2PlayModeTests : InputTestFixture
+    {
+        readonly List<Object> _objects = new List<Object>();
+
+        IArchitecture _architecture;
+
+        public override void Setup()
+        {
+            base.Setup();
+            GameArchitecture.Interface.Deinit();
+            _architecture = GameArchitecture.Interface;
+        }
+
+        public override void TearDown()
+        {
+            for (int i = _objects.Count - 1; i >= 0; i--)
+            {
+                if (_objects[i] != null)
+                {
+                    Object.DestroyImmediate(_objects[i]);
+                }
+            }
+
+            _objects.Clear();
+            Time.timeScale = 1f;
+            _architecture?.Deinit();
+            _architecture = null;
+            base.TearDown();
+        }
+
+        [UnityTest]
+        public IEnumerator InventoryFourSlots_SupportKeyboardGamepadLayoutAndProjectileSnapshot()
+        {
+            int originalWidth = Screen.width;
+            int originalHeight = Screen.height;
+            yield return SceneManager.LoadSceneAsync("Main", LoadSceneMode.Single);
+            GameMenuController menu = null;
+            UIDocument document = null;
+            CombatActor player = null;
+            float timeout = Time.realtimeSinceStartup + 15f;
+
+            while ((menu == null || document == null || document.rootVisualElement.panel == null || player == null)
+                   && Time.realtimeSinceStartup < timeout)
+            {
+                menu = Object.FindAnyObjectByType<GameMenuController>();
+                document = menu != null ? menu.GetComponent<UIDocument>() : null;
+                player = FindPlayer();
+                yield return null;
+            }
+
+            Assert.IsNotNull(menu, "Main 场景未初始化 GameMenuController");
+            Assert.IsNotNull(document, "UIRoot 缺少 UIDocument");
+            Assert.IsNotNull(player, "Main 场景未生成玩家");
+            _architecture = menu.GetArchitecture();
+            float baseMaxHealth = player.MaxHealth;
+            InventoryModel inventory = _architecture.GetModel<InventoryModel>();
+            EquipmentModel equipment = _architecture.GetModel<EquipmentModel>();
+            ItemInstance weapon = CreateItem(
+                "phase2_weapon",
+                "阶段二武器",
+                ItemType.Weapon,
+                EquipmentSlotMask.Weapon,
+                20f);
+            ItemInstance armor = CreateItem(
+                "phase2_armor",
+                "阶段二护甲",
+                ItemType.Armor,
+                EquipmentSlotMask.Armor,
+                maxHealth: 200f);
+            ItemInstance leftRing = CreateItem(
+                "phase2_left_ring",
+                "左槽测试戒指",
+                ItemType.Accessory,
+                EquipmentSlotMask.Rings);
+            ItemInstance rightRing = CreateItem(
+                "phase2_right_ring",
+                "右槽测试戒指",
+                ItemType.Accessory,
+                EquipmentSlotMask.Rings);
+            Assert.IsTrue(inventory.TryAddItem(weapon));
+            Assert.IsTrue(inventory.TryAddItem(armor));
+            Assert.IsTrue(inventory.TryAddItem(leftRing));
+            Assert.IsTrue(inventory.TryAddItem(rightRing));
+
+            menu.OpenPage(GameMenuPage.Inventory);
+            yield return null;
+            yield return null;
+            VisualElement root = document.rootVisualElement;
+            InventoryPanelController panel = menu.GetComponent<InventoryPanelController>();
+            Keyboard keyboard = InputSystem.AddDevice<Keyboard>();
+            Gamepad gamepad = InputSystem.AddDevice<Gamepad>();
+
+            yield return SelectAndSubmit(root, "阶段二武器", keyboard.enterKey);
+            Assert.AreEqual(EquipmentSlot.Weapon, panel.TargetSlot);
+            yield return Submit(root.Q<Button>("inventory-equip"), keyboard.enterKey);
+            Assert.AreSame(weapon, equipment.GetItem(player, EquipmentSlot.Weapon));
+            Assert.AreSame(root.Q<Button>("inventory-slot-weapon"), root.focusController.focusedElement);
+
+            yield return SelectAndSubmit(root, "阶段二护甲", keyboard.enterKey);
+            Assert.AreEqual(EquipmentSlot.Armor, panel.TargetSlot);
+            yield return Submit(root.Q<Button>("inventory-equip"), keyboard.enterKey);
+            Assert.AreSame(armor, equipment.GetItem(player, EquipmentSlot.Armor));
+            Assert.AreEqual(baseMaxHealth + 200f, player.MaxHealth, 0.001f);
+            Assert.AreEqual(player.MaxHealth, player.CurrentHealth, 0.001f);
+            Assert.AreEqual(
+                $"{player.CurrentHealth:0.#} / {player.MaxHealth:0.#}",
+                root.Q<ProgressBar>("health-bar").title);
+
+            yield return SelectAndSubmit(root, "左槽测试戒指", gamepad.buttonSouth);
+            Assert.IsNull(panel.TargetSlot, "饰品不应自动猜测左右戒指槽");
+            yield return Submit(root.Q<Button>("inventory-slot-ring-left"), gamepad.buttonSouth);
+            Assert.AreEqual(EquipmentSlot.RingLeft, panel.TargetSlot);
+            yield return Submit(root.Q<Button>("inventory-equip"), gamepad.buttonSouth);
+            Assert.AreSame(leftRing, equipment.GetItem(player, EquipmentSlot.RingLeft));
+            Assert.AreSame(root.Q<Button>("inventory-slot-ring-left"), root.focusController.focusedElement);
+
+            yield return SelectAndSubmit(root, "右槽测试戒指", gamepad.buttonSouth);
+            Assert.IsNull(panel.TargetSlot, "第二个饰品仍应显式选择目标槽");
+            yield return Submit(root.Q<Button>("inventory-slot-ring-right"), gamepad.buttonSouth);
+            yield return Submit(root.Q<Button>("inventory-equip"), gamepad.buttonSouth);
+            Assert.AreSame(rightRing, equipment.GetItem(player, EquipmentSlot.RingRight));
+            Assert.AreSame(leftRing, equipment.GetItem(player, EquipmentSlot.RingLeft));
+
+            yield return Submit(root.Q<Button>("inventory-slot-ring-left"), gamepad.buttonSouth);
+            yield return Submit(root.Q<Button>("inventory-unequip"), gamepad.buttonSouth);
+            Assert.IsNull(equipment.GetItem(player, EquipmentSlot.RingLeft));
+            Assert.IsTrue(inventory.Grid.Placements.ContainsKey(leftRing));
+            StringAssert.Contains("已卸下", root.Q<Label>("inventory-feedback").text);
+
+            Vector2Int[] resolutions =
+            {
+                new Vector2Int(1280, 720),
+                new Vector2Int(1920, 1080),
+                new Vector2Int(2560, 1440),
+            };
+
+            try
+            {
+                for (int i = 0; i < resolutions.Length; i++)
+                {
+                    SetGameViewResolution(resolutions[i]);
+                    yield return WaitForResolution(resolutions[i], 5f);
+                    yield return null;
+                    AssertLayoutInsideRoot(root, new[]
+                    {
+                        "game-menu-panel",
+                        "inventory-page",
+                        "inventory-grid",
+                        "inventory-equipment",
+                        "inventory-slot-weapon",
+                        "inventory-slot-armor",
+                        "inventory-slot-ring-left",
+                        "inventory-slot-ring-right",
+                        "inventory-item-detail",
+                        "inventory-actions",
+                        "inventory-equip",
+                        "inventory-unequip",
+                        "game-menu-close",
+                    });
+                }
+            }
+            finally
+            {
+                SetGameViewResolution(new Vector2Int(originalWidth, originalHeight));
+            }
+
+            _architecture.GetUtility<GameInput>().SwitchToGameplay();
+            yield return null;
+            ProjectileSkillDefinition skill = CreateSkill();
+            AttackSnapshot inFlight = AttackSnapshotFactory.CreateProjectile(player, skill, equipment, 42);
+            Assert.AreEqual(20f, inFlight.BaseDamages[0].Amount);
+            ItemInstance strongerWeapon = CreateItem(
+                "phase2_strong_weapon",
+                "换装后武器",
+                ItemType.Weapon,
+                EquipmentSlotMask.Weapon,
+                100f);
+            Assert.IsTrue(inventory.TryAddItem(strongerWeapon));
+            Assert.IsTrue(_architecture.SendCommand(
+                new EquipItemCommand(player, strongerWeapon, EquipmentSlot.Weapon)));
+            CombatActor defender = CreateDefender();
+            GameObject projectileObject = new GameObject("Phase2SnapshotProjectile");
+            _objects.Add(projectileObject);
+            ProjectileController projectile = projectileObject.AddComponent<ProjectileController>();
+            projectile.Init(skill, Vector2.right, inFlight);
+            Assert.IsTrue(projectile.TryHit(defender, out DamageResult hitResult));
+            yield return null;
+
+            Assert.AreEqual(20f, hitResult.TotalDamage, 0.001f, "在途投射物读取了换装后的武器");
+        }
+
+        IEnumerator SelectAndSubmit(VisualElement root, string displayName, ButtonControl submitControl)
+        {
+            Button button = FindInventoryButton(root, displayName);
+            Assert.IsNotNull(button, $"背包中缺少 {displayName}");
+            yield return Submit(button, submitControl);
+        }
+
+        IEnumerator Submit(Button button, ButtonControl submitControl)
+        {
+            Assert.IsNotNull(button);
+            button.Focus();
+            yield return null;
+            PressAndRelease(submitControl);
+            yield return null;
+            yield return null;
+        }
+
+        ItemInstance CreateItem(
+            string id,
+            string displayName,
+            ItemType type,
+            EquipmentSlotMask slots,
+            float damage = 0f,
+            float maxHealth = 0f)
+        {
+            ItemBaseDefinition definition = ScriptableObject.CreateInstance<ItemBaseDefinition>();
+            _objects.Add(definition);
+            SetField(definition, "_id", id);
+            SetField(definition, "_displayName", displayName);
+            SetField(definition, "_itemType", type);
+            SetField(definition, "_allowedEquipmentSlots", slots);
+            SetField(definition, "_gridSize", Vector2Int.one);
+
+            if (damage > 0f)
+            {
+                DamageRollDefinition roll = new DamageRollDefinition();
+                SetField(roll, "_damageType", DamageType.Physical);
+                SetField(roll, "_amountRange", new Vector2(damage, damage));
+                SetField(definition, "_baseDamages", new List<DamageRollDefinition> { roll });
+            }
+
+            if (maxHealth > 0f)
+            {
+                StatDefinition stat = ScriptableObject.CreateInstance<StatDefinition>();
+                _objects.Add(stat);
+                SetField(stat, "_id", StatIds.MaxHealth);
+                SetField(stat, "_displayName", "最大生命");
+                StatModifierDefinition modifier = new StatModifierDefinition();
+                SetField(modifier, "_stat", stat);
+                SetField(modifier, "_operation", ModifierOperation.Flat);
+                SetField(modifier, "_scope", ModifierScope.GlobalActor);
+                SetField(modifier, "_valueRange", new Vector2(maxHealth, maxHealth));
+                SetField(definition, "_implicitModifiers", new List<StatModifierDefinition> { modifier });
+            }
+
+            return definition.CreateInstance(id, 1, 1);
+        }
+
+        ProjectileSkillDefinition CreateSkill()
+        {
+            ProjectileSkillDefinition skill = ScriptableObject.CreateInstance<ProjectileSkillDefinition>();
+            _objects.Add(skill);
+            SetField(skill, "_id", "phase2_snapshot_skill");
+            SetField(skill, "_damageSource", ProjectileDamageSource.EquippedWeapon);
+            SetField(skill, "_projectileSpeed", 1f);
+            SetField(skill, "_projectileLifetime", 10f);
+            return skill;
+        }
+
+        CombatActor CreateDefender()
+        {
+            GameObject defenderObject = new GameObject("Phase2SnapshotDefender");
+            defenderObject.SetActive(false);
+            _objects.Add(defenderObject);
+            defenderObject.AddComponent<CircleCollider2D>();
+            CombatActor defender = defenderObject.AddComponent<CombatActor>();
+            defender.Configure("phase2_snapshot_defender", ActorTeam.Monster, 1000f, new StatBlock(), TagSet.Empty);
+            return defender;
+        }
+
+        static CombatActor FindPlayer()
+        {
+            CombatActor[] actors = Object.FindObjectsByType<CombatActor>();
+
+            for (int i = 0; i < actors.Length; i++)
+            {
+                if (actors[i].Team == ActorTeam.Player)
+                {
+                    return actors[i];
+                }
+            }
+
+            return null;
+        }
+
+        static Button FindInventoryButton(VisualElement root, string displayName)
+        {
+            VisualElement grid = root.Q<VisualElement>("inventory-grid");
+
+            for (int i = 0; i < grid.childCount; i++)
+            {
+                if (grid[i] is not Button button)
+                {
+                    continue;
+                }
+
+                Label label = button.Q<Label>();
+
+                if (label != null && label.text == displayName)
+                {
+                    return button;
+                }
+            }
+
+            return null;
+        }
+
+        static IEnumerator WaitForResolution(Vector2Int resolution, float timeoutSeconds)
+        {
+            float timeout = Time.realtimeSinceStartup + timeoutSeconds;
+
+            while ((Screen.width != resolution.x || Screen.height != resolution.y)
+                   && Time.realtimeSinceStartup < timeout)
+            {
+                yield return null;
+            }
+
+            Assert.AreEqual(resolution.x, Screen.width);
+            Assert.AreEqual(resolution.y, Screen.height);
+        }
+
+        static void SetGameViewResolution(Vector2Int resolution)
+        {
+            const string UtilityTypeName = "DarkFlare.Editor.Phase0GameViewResolutionUtility, DarkFlare.Editor";
+            System.Type utilityType = System.Type.GetType(UtilityTypeName, true);
+            MethodInfo method = utilityType.GetMethod("SetResolution", BindingFlags.Static | BindingFlags.Public)
+                ?? throw new System.MissingMethodException(UtilityTypeName, "SetResolution");
+            method.Invoke(null, new object[] { resolution.x, resolution.y });
+        }
+
+        static void AssertLayoutInsideRoot(VisualElement root, IReadOnlyList<string> names)
+        {
+            Rect rootBounds = root.worldBound;
+
+            for (int i = 0; i < names.Count; i++)
+            {
+                VisualElement element = root.Q<VisualElement>(names[i]);
+                Assert.IsNotNull(element, $"缺少 UI 元素 {names[i]}");
+                Rect bounds = element.worldBound;
+                Assert.Greater(bounds.width, 0f, $"{names[i]} 宽度无效");
+                Assert.Greater(bounds.height, 0f, $"{names[i]} 高度无效");
+                Assert.GreaterOrEqual(bounds.xMin, rootBounds.xMin - 1f, $"{names[i]} 超出左边界");
+                Assert.GreaterOrEqual(bounds.yMin, rootBounds.yMin - 1f, $"{names[i]} 超出上边界");
+                Assert.LessOrEqual(bounds.xMax, rootBounds.xMax + 1f, $"{names[i]} 超出右边界");
+                Assert.LessOrEqual(bounds.yMax, rootBounds.yMax + 1f, $"{names[i]} 超出下边界");
+            }
+        }
+
+        static void SetField(object target, string fieldName, object value)
+        {
+            FieldInfo field = target.GetType().GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Instance);
+            Assert.IsNotNull(field, $"缺少字段 {target.GetType().Name}.{fieldName}");
+            field.SetValue(target, value);
+        }
+    }
+}

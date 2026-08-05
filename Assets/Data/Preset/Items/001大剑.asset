@@ -15,6 +15,7 @@ MonoBehaviour:
   _id: LongSword
   _displayName: "\u5927\u5251"
   _itemType: 0
+  _allowedEquipmentSlots: 1
   _defaultRarity: 0
   _baseValue: 10
   _maxPrefixCount: 3

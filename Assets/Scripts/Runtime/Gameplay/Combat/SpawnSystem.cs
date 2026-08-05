@@ -80,7 +80,11 @@ namespace DarkFlare
             return controller;
         }
 
-        public ProjectileController SpawnProjectile(ProjectileSkillDefinition skill, CombatActor owner, Vector3 position, Vector2 direction)
+        public ProjectileController SpawnProjectile(
+            ProjectileSkillDefinition skill,
+            Vector3 position,
+            Vector2 direction,
+            AttackSnapshot attack)
         {
             GameObject prefab = this.GetUtility<PrefabAssetLoader>().GetPrefab(skill.Prefab);
 
@@ -92,7 +96,7 @@ namespace DarkFlare
 
             GameObject instance = Object.Instantiate(prefab, position, Quaternion.identity);
             ProjectileController controller = instance.GetComponent<ProjectileController>();
-            controller.Init(owner, skill, direction);
+            controller.Init(skill, direction, attack);
             return controller;
         }
     }

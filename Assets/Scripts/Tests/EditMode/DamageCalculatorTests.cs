@@ -31,11 +31,33 @@ public class DamageCalculatorTests
         Assert.Greater(withModifierResult.TotalDamage, baselineResult.TotalDamage);
     }
 
+    [Test]
+    public void Calculate_CriticalDamage_UsesAdditionalPercentage()
+    {
+        List<DamagePacket> baseDamages = new List<DamagePacket>
+        {
+            new DamagePacket(DamageType.Physical, 100f, TagSet.Empty),
+        };
+        StatBlock attackerStats = new StatBlock();
+        attackerStats.SetValue(StatIds.CriticalDamage, 50f);
+        DamageContext context = CreateContext(
+            baseDamages,
+            attackerStats,
+            new StatBlock(),
+            new List<ModifierInstance>(),
+            true);
+
+        DamageResult result = DamageCalculator.Calculate(context);
+
+        Assert.AreEqual(150f, result.TotalDamage, 0.001f);
+    }
+
     static DamageContext CreateContext(
         List<DamagePacket> baseDamages,
         StatBlock attackerStats,
         StatBlock defenderStats,
-        List<ModifierInstance> attackerModifiers)
+        List<ModifierInstance> attackerModifiers,
+        bool isCritical = false)
     {
         return new DamageContext(
             "attacker",
@@ -48,6 +70,8 @@ public class DamageCalculatorTests
             attackerStats,
             defenderStats,
             attackerModifiers,
-            new List<ModifierInstance>());
+            new List<ModifierInstance>(),
+            true,
+            isCritical);
     }
 }

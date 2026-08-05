@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3e87c3f4a5cdce4497984cafdc034de, type: 3}
   m_Name: "07\u66B4\u51FB\u500D\u7387"
   m_EditorClassIdentifier: Assembly-CSharp::DarkFlare.StatDefinition
-  _id: CriticalMultiplier
-  _displayName: "\u66B4\u51FB\u500D\u7387"
+  _id: critical_damage
+  _displayName: "\u66B4\u51FB\u4F24\u5BB3"
   _category: 1
-  _defaultValue: 1
-  _minValue: 1
-  _maxValue: 999999
-  _isPercent: 0
-  _description: 
+  _defaultValue: 0
+  _minValue: 0
+  _maxValue: 9999
+  _isPercent: 1
+  _description: "\u66B4\u51FB\u65F6\u7684\u989D\u5916\u4F24\u5BB3\u767E\u5206\u6BD4\uFF1B50 \u8868\u793A\u66B4\u51FB\u9020\u6210 150% \u4F24\u5BB3\u3002"

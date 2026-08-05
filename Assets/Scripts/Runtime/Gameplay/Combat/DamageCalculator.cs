@@ -35,7 +35,10 @@ namespace DarkFlare
 
             foreach (ModifierInstance modifier in modifiers)
             {
-                if (modifier == null || modifier.Operation != ModifierOperation.Conversion || !modifier.Matches(contextTags))
+                if (modifier == null
+                    || modifier.Operation != ModifierOperation.Conversion
+                    || !IsAttackerModifier(modifier)
+                    || !modifier.Matches(contextTags))
                 {
                     continue;
                 }
@@ -94,7 +97,10 @@ namespace DarkFlare
 
             foreach (ModifierInstance modifier in modifiers)
             {
-                if (modifier == null || modifier.Operation != ModifierOperation.GainAsExtra || !modifier.Matches(contextTags))
+                if (modifier == null
+                    || modifier.Operation != ModifierOperation.GainAsExtra
+                    || !IsAttackerModifier(modifier)
+                    || !modifier.Matches(contextTags))
                 {
                     continue;
                 }
@@ -128,7 +134,7 @@ namespace DarkFlare
                 DamagePacket packet = packets[i];
                 TagSet tags = contextTags.Union(packet.Tags);
                 float amount = packet.Amount;
-                amount += GetFlatDamage(attackerStats, packet.DamageType);
+                amount += GetFlatDamage(attackerStats, modifiers, tags, packet.DamageType);
                 amount *= 1f + GetIncreasedDamage(modifiers, tags, packet.DamageType) / 100f;
                 amount *= GetMoreDamageMultiplier(modifiers, tags, packet.DamageType);
                 result.Add(packet.WithAmount(amount));
@@ -137,9 +143,32 @@ namespace DarkFlare
             return result;
         }
 
-        static float GetFlatDamage(StatBlock stats, DamageType damageType)
+        static float GetFlatDamage(
+            StatBlock stats,
+            IEnumerable<ModifierInstance> modifiers,
+            TagSet tags,
+            DamageType damageType)
         {
-            return stats.GetValue(GetDamageStatId(damageType));
+            string typedDamageStatId = GetDamageStatId(damageType);
+            float value = stats.GetValue(typedDamageStatId);
+
+            foreach (ModifierInstance modifier in modifiers)
+            {
+                if (modifier == null
+                    || modifier.Operation != ModifierOperation.Flat
+                    || !IsAttackerModifier(modifier)
+                    || !modifier.Matches(tags))
+                {
+                    continue;
+                }
+
+                if (modifier.StatId == StatIds.Damage || modifier.StatId == typedDamageStatId)
+                {
+                    value += modifier.Value;
+                }
+            }
+
+            return value;
         }
 
         static float GetIncreasedDamage(IEnumerable<ModifierInstance> modifiers, TagSet tags, DamageType damageType)
@@ -148,7 +177,10 @@ namespace DarkFlare
 
             foreach (ModifierInstance modifier in modifiers)
             {
-                if (modifier == null || modifier.Operation != ModifierOperation.Increase || !modifier.Matches(tags))
+                if (modifier == null
+                    || modifier.Operation != ModifierOperation.Increase
+                    || !IsAttackerModifier(modifier)
+                    || !modifier.Matches(tags))
                 {
                     continue;
                 }
@@ -168,7 +200,10 @@ namespace DarkFlare
 
             foreach (ModifierInstance modifier in modifiers)
             {
-                if (modifier == null || modifier.Operation != ModifierOperation.More || !modifier.Matches(tags))
+                if (modifier == null
+                    || modifier.Operation != ModifierOperation.More
+                    || !IsAttackerModifier(modifier)
+                    || !modifier.Matches(tags))
                 {
                     continue;
                 }
@@ -333,6 +368,13 @@ namespace DarkFlare
             }
 
             return string.Empty;
+        }
+
+        static bool IsAttackerModifier(ModifierInstance modifier)
+        {
+            return modifier.Scope == ModifierScope.GlobalActor
+                || modifier.Scope == ModifierScope.Skill
+                || modifier.Scope == ModifierScope.LocalItem;
         }
 
         static float Clamp(float value, float min, float max)

@@ -48,10 +48,12 @@
 
 商店额外使用表现层 `ShopViewState` 保存商人 / 玩家两列的选择、后备索引和滚动偏移，以及活动来源、焦点目标和交易反馈。列表重建后优先恢复同一实例；交易移除当前物品时选择原索引下一件，没有下一件时选择上一件，原列为空才切换来源。布局完成后通过带代次的 UI Toolkit 调度恢复滚动与焦点，页签往返和关闭后重新与同一商人交互仍保留本次运行期状态。
 
+阶段 2 把背包装备区扩展为武器、护甲、左戒指和右戒指四个可聚焦按钮。武器与护甲候选自动确定唯一目标槽；饰品必须先明确选择左或右戒指，装备按钮才会启用。选中槽位可以查看当前物品并卸下，选中背包候选则显示目标槽比较。操作完成后统一重查快照并恢复合理选择、目标槽和焦点，键鼠与手柄共享同一状态机。
+
 | Controller | 只读数据入口 | 写入入口 | 主要刷新来源 |
 | --- | --- | --- | --- |
 | `HudController` | `GetHudSnapshotQuery` | 无 | Actor、生命、金币、装备事件 |
-| `InventoryPanelController` | `GetInventorySnapshotQuery` | `EquipItemCommand` | 背包、装备事件 |
+| `InventoryPanelController` | `GetInventorySnapshotQuery` | `EquipItemCommand`、`UnequipItemCommand` | 背包、装备事件 |
 | `ShopPanelController` | `GetShopSnapshotQuery` | `BuyItemCommand`、`SellItemCommand` | 交易、金币、背包事件 |
 | `CraftingPanelController` | `GetCraftingSnapshotQuery` | `CraftItemCommand` | 打造、金币、背包事件 |
 | `InteractionPromptController` | 交互焦点消息 | 无 | 焦点、输入模式和 Actor 状态变化 |
@@ -88,15 +90,16 @@
 - 阶段 0 体验专项 PlayMode 使用虚拟键盘和手柄验证 Tab / Esc、Start / B、默认焦点、物品选中与装备，并在三档 16:9 分辨率检查主要元素边界。
 - 1920×1080 下完成 visual tree、渲染和 Play 控制台检查。
 - 阶段 1 全量 EditMode 60/60 通过；PlayMode 8 项中 6 项通过、2 项为包内既有忽略测试。商店购买状态链及商店 / 打造 1280×720、1920×1080、2560×1440 布局边界均通过。
+- 阶段 2 全量 EditMode 70/70 通过；PlayMode 9 项中 7 项通过、2 项为包内既有忽略测试。真实 Main 菜单中已覆盖键盘装备武器 / 护甲、手柄显式选择左右戒指、卸下，以及背包装备区三档分辨率边界。
 
 以上数据是首版收尾时的验证记录；修改输入资产、菜单路由、UXML 或场景组件后，应重新验证键鼠与手柄两条路径。
 
 ## 当前限制
 
 - 背包页已完成阶段 0 静态视觉切片；HUD、商店、打造及完整菜单动画和音效反馈仍以原型为主。
-- 背包不支持拖拽、旋转、堆叠和重量，列表选择与穿戴是当前主要交互。
+- 背包不支持拖拽、旋转、堆叠和重量，列表选择、目标槽选择、穿戴和卸下是当前主要交互。
 - 商店和打造共用首版单实例运行时数据；商店状态可在同一商人运行期内保留，但不支持多商人独立状态或持久化。
 - `Attack`、`Look` 尚未接入手动战斗操作。
 - PlayMode 已包含角色动画状态与阶段 0 背包体验两项项目测试；包内测试另有上游不稳定用例按原标记跳过。
 
-完整玩法链见 [首版玩法循环](./gameplay-loop.md)，打造页的数据和事务规则见 [打造系统](./crafting-system.md)。
+完整玩法链见 [首版玩法循环](./gameplay-loop.md)，装备规则见 [装备系统](./equipment-system.md)，打造页的数据和事务规则见 [打造系统](./crafting-system.md)。

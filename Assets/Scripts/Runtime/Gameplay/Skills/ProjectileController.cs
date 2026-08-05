@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -12,8 +11,7 @@ namespace DarkFlare
     {
         Rigidbody2D _rigidbody;
         CircleCollider2D _collider;
-        CombatActor _owner;
-        ProjectileSkillDefinition _skill;
+        AttackSnapshot _attack;
         Vector2 _direction;
         bool _initialized;
 
@@ -22,17 +20,37 @@ namespace DarkFlare
             return GameArchitecture.Interface;
         }
 
-        public void Init(CombatActor owner, ProjectileSkillDefinition skill, Vector2 direction)
+        public void Init(
+            ProjectileSkillDefinition skill,
+            Vector2 direction,
+            AttackSnapshot attack)
         {
             EnsureComponents();
-            _owner = owner;
-            _skill = skill;
+            _attack = attack;
             _direction = direction.sqrMagnitude > 0f ? direction.normalized : Vector2.right;
             _initialized = true;
             transform.right = _direction;
             _collider.radius = skill.ProjectileRadius;
             _rigidbody.linearVelocity = _direction * skill.ProjectileSpeed;
             DestroyAfterDelay(skill.ProjectileLifetime, this.GetCancellationTokenOnDestroy()).Forget();
+        }
+
+        public bool TryHit(CombatActor target, out DamageResult result)
+        {
+            result = null;
+
+            if (!_initialized
+                || target == null
+                || _attack == null
+                || target.Team == _attack.AttackerTeam
+                || !target.IsAlive)
+            {
+                return false;
+            }
+
+            result = this.SendCommand(new ApplyDamageCommand(_attack, target));
+            Destroy(gameObject);
+            return true;
         }
 
         void Awake()
@@ -53,16 +71,7 @@ namespace DarkFlare
             }
 
             CombatActor target = other.GetComponentInParent<CombatActor>();
-
-            if (target == null || _owner == null || target.Team == _owner.Team || !target.IsAlive)
-            {
-                return;
-            }
-
-            int seed = Random.Range(int.MinValue, int.MaxValue);
-            List<DamagePacket> packets = _skill.CreateDamagePackets(seed);
-            this.SendCommand(new ApplyDamageCommand(_owner, target, _skill.Id, packets, _skill.RuntimeTags, seed));
-            Destroy(gameObject);
+            TryHit(target, out _);
         }
 
         void EnsureComponents()

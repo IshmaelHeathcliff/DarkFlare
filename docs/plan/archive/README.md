@@ -6,6 +6,7 @@
 
 - [首版玩法循环](../../gameplay-loop.md)
 - [输入与运行时 UI](../../input-ui-system.md)
+- [装备系统](../../equipment-system.md)
 - [打造系统](../../crafting-system.md)
 
 ## 归档清单
@@ -18,5 +19,7 @@
 | [8f 场景入口与循环收尾执行计划](./scene-loop-integration-plan.md) | 8f | [首版玩法循环](../../gameplay-loop.md)、[输入与运行时 UI](../../input-ui-system.md) |
 | [阶段 0：视觉垂直切片执行计划](./phase-0-visual-slice-plan.md) | 初版体验优化阶段 0 | [视觉规范](../../visual-style.md)、[视觉资产清单](../../visual-assets.md) |
 | [阶段 0.5：视觉体验修正执行计划](./phase-0.5-visual-experience-fix-plan.md) | 初版体验优化阶段 0.5 | [视觉规范](../../visual-style.md)、[视觉资产清单](../../visual-assets.md)、[首版玩法循环](../../gameplay-loop.md) |
+| [阶段 1：UX 快速改进执行计划](./phase-1-ux-quick-improvement-plan.md) | 初版体验优化阶段 1 | [输入与运行时 UI](../../input-ui-system.md) |
+| [阶段 2：装备槽与伤害来源执行计划](./phase-2-equipment-slots-damage-source-plan.md) | 初版体验优化阶段 2 | [装备系统](../../equipment-system.md)、[伤害系统与词条系统设计](../../damage-affix-system.md) |
 
-最近归档日期：2026-08-04。
+最近归档日期：2026-08-05。

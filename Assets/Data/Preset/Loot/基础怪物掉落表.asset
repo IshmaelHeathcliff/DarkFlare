@@ -17,6 +17,17 @@ MonoBehaviour:
     _weight: 100
     _rarity: 1
     _prefixCount: 1
-    _suffixCount: 0
+    _suffixCount: 1
+  - _item: {fileID: 11400000, guid: a03568360f4764b498e15d98263706c8, type: 2}
+    _weight: 100
+    _rarity: 0
+    _prefixCount: 1
+    _suffixCount: 1
+  - _item: {fileID: 11400000, guid: c8a3f702d370824459a1eea34e50de52, type: 2}
+    _weight: 100
+    _rarity: 0
+    _prefixCount: 1
+    _suffixCount: 1
   _affixPool:
   - {fileID: 11400000, guid: de8f44ef4c5945044bd186a92f9deb34, type: 2}
+  - {fileID: 11400000, guid: 3d117ca89a4e9174fa25d5c294b3c736, type: 2}

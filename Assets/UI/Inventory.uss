@@ -15,8 +15,8 @@
 
 .inventory-grid-section {
   flex-grow: 1;
-  min-width: 560px;
-  padding-right: 26px;
+  min-width: 520px;
+  padding-right: 18px;
 }
 
 .inventory-section-title {
@@ -155,9 +155,10 @@
   font-size: 12px;
 }
 
-.inventory-details {
-  width: 340px;
-  padding: 30px;
+.inventory-equipment {
+  width: 184px;
+  margin-right: 18px;
+  padding: 18px;
   background-color: rgb(17, 24, 33);
   background-image: url("project://database/Assets/Art/Sprites/UI/ui_inventory_panel.png");
   -unity-slice-left: 28;
@@ -166,9 +167,54 @@
   -unity-slice-bottom: 28;
 }
 
-.inventory-current-weapon {
-  min-height: 54px;
-  padding: 12px;
+.inventory-equipment-slot {
+  min-height: 66px;
+  margin-bottom: 12px;
+  padding: 9px;
+  white-space: normal;
+  -unity-text-align: middle-center;
+  color: rgb(187, 192, 201);
+  background-color: rgb(28, 34, 43);
+  background-image: url("project://database/Assets/Art/Sprites/UI/ui_slot_normal.png");
+  -unity-slice-left: 10;
+  -unity-slice-right: 10;
+  -unity-slice-top: 10;
+  -unity-slice-bottom: 10;
+}
+
+.inventory-equipment-slot:hover,
+.inventory-equipment-slot:focus,
+.inventory-equipment-slot--selected {
+  color: rgb(246, 235, 213);
+  background-image: url("project://database/Assets/Art/Sprites/UI/ui_slot_focus.png");
+}
+
+.inventory-equipment-slot--filled {
+  color: rgb(221, 202, 163);
+}
+
+.inventory-equipment-help {
+  min-height: 46px;
+  margin-top: 4px;
+  white-space: normal;
+  font-size: 11px;
+  color: rgb(115, 121, 133);
+}
+
+.inventory-details {
+  width: 326px;
+  padding: 22px;
+  background-color: rgb(17, 24, 33);
+  background-image: url("project://database/Assets/Art/Sprites/UI/ui_inventory_panel.png");
+  -unity-slice-left: 28;
+  -unity-slice-right: 28;
+  -unity-slice-top: 28;
+  -unity-slice-bottom: 28;
+}
+
+.inventory-target-slot {
+  min-height: 40px;
+  padding: 10px;
   white-space: normal;
   color: rgb(221, 202, 163);
   background-color: rgb(38, 42, 49);
@@ -178,8 +224,8 @@
 
 .inventory-divider {
   height: 1px;
-  margin-top: 20px;
-  margin-bottom: 20px;
+  margin-top: 12px;
+  margin-bottom: 12px;
   background-color: rgb(65, 70, 80);
 }
 
@@ -188,21 +234,52 @@
   color: rgb(178, 182, 191);
 }
 
-.inventory-details-spacer {
+.inventory-item-detail {
   flex-grow: 1;
+  min-height: 190px;
+}
+
+.inventory-comparison-title {
+  min-height: 22px;
+  margin-top: 8px;
+  -unity-font-style: bold;
+  color: rgb(195, 168, 120);
+}
+
+.inventory-comparison-scroll {
+  height: 74px;
+  min-height: 56px;
+  margin-bottom: 8px;
+  padding: 7px;
+  background-color: rgb(27, 32, 40);
+}
+
+.inventory-comparison {
+  white-space: normal;
+  color: rgb(160, 168, 180);
 }
 
 .inventory-feedback {
-  min-height: 48px;
-  margin-bottom: 12px;
+  min-height: 40px;
+  margin-bottom: 8px;
   white-space: normal;
   color: rgb(159, 166, 179);
 }
 
-.inventory-equip {
-  height: 48px;
-  font-size: 16px;
+.inventory-actions {
+  height: 44px;
+  flex-direction: row;
+}
+
+.inventory-action {
+  flex-grow: 1;
+  height: 44px;
+  font-size: 14px;
   -unity-font-style: bold;
+}
+
+.inventory-equip {
+  margin-right: 6px;
   color: rgb(28, 24, 18);
   background-color: rgb(211, 169, 94);
   border-left-color: rgb(239, 202, 132);
@@ -227,4 +304,33 @@
   border-right-color: rgb(62, 65, 72);
   border-top-color: rgb(62, 65, 72);
   border-bottom-color: rgb(62, 65, 72);
+}
+
+.inventory-unequip {
+  margin-left: 6px;
+  color: rgb(213, 216, 222);
+  background-color: rgb(48, 53, 62);
+  border-left-color: rgb(78, 84, 96);
+  border-right-color: rgb(78, 84, 96);
+  border-top-color: rgb(78, 84, 96);
+  border-bottom-color: rgb(78, 84, 96);
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.inventory-unequip:hover,
+.inventory-unequip:focus {
+  color: white;
+  background-color: rgb(66, 72, 84);
+  border-left-color: rgb(177, 139, 78);
+  border-right-color: rgb(177, 139, 78);
+  border-top-color: rgb(177, 139, 78);
+  border-bottom-color: rgb(177, 139, 78);
+}
+
+.inventory-unequip:disabled {
+  color: rgb(105, 108, 114);
+  background-color: rgb(42, 45, 51);
 }

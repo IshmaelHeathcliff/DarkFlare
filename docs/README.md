@@ -6,6 +6,8 @@
 - [目录结构](./project-structure.md)
 - [首版玩法循环](./gameplay-loop.md)
 - [输入与运行时 UI](./input-ui-system.md)
+- [装备系统](./equipment-system.md)
+- [属性定义与调用关系](./stat-system.md)
 - [打造系统](./crafting-system.md)
 - [伤害系统与词条系统设计](./damage-affix-system.md)
 - [配置中心](./config-center.md)
