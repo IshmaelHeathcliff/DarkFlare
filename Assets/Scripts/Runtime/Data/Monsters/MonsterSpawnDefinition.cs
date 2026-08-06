@@ -50,6 +50,8 @@ namespace DarkFlare
 
         public float SpawnRadius => _spawnRadius;
 
+        public IReadOnlyList<MonsterSpawnRule> Rules => _rules;
+
         public IEnumerable<MonsterDefinition> AllMonsters
         {
             get

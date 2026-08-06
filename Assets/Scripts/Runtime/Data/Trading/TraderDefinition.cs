@@ -68,6 +68,8 @@ namespace DarkFlare
 
         public float SellMultiplier => _sellMultiplier;
 
+        public IReadOnlyList<TraderStockEntry> Stock => _stock;
+
         public IEnumerable<ItemInstance> CreateStock(System.Random random)
         {
             for (int i = 0; i < _stock.Count; i++)

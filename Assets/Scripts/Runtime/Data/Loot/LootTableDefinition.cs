@@ -62,6 +62,8 @@ namespace DarkFlare
 
         public IReadOnlyList<LootTableEntry> Entries => _entries;
 
+        public IReadOnlyList<AffixDefinition> AffixPool => _affixPool;
+
         public ItemBaseDefinition PickItem(System.Random random)
         {
             LootTableEntry entry = PickEntry(random);

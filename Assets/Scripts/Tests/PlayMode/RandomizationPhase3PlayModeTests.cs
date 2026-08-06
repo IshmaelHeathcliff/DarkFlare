@@ -14,8 +14,8 @@ namespace DarkFlare.Tests
     public class RandomizationPhase3PlayModeTests
     {
         const int FixedSeed = 24681357;
-        const int MonsterSampleCount = 3;
-        const float RunTimeoutSeconds = 20f;
+        const int MonsterSampleCount = 12;
+        const float RunTimeoutSeconds = 35f;
 
         static readonly FieldInfo UseFixedSeedField = typeof(CombatPrototypeBootstrap).GetField(
             "_useFixedRandomSeed",
@@ -41,6 +41,10 @@ namespace DarkFlare.Tests
             Assert.IsNotNull(first);
             Assert.IsNotNull(second);
             CollectionAssert.AreEqual(first.Monsters, second.Monsters, "怪物实例生命序列未能按固定种子复现");
+            CollectionAssert.AreEquivalent(
+                new[] { "wasteland_wraith", "razor_hound", "iron_husk" },
+                first.MonsterIds,
+                "Main 前 12 个生成实例未覆盖三种怪物");
             CollectionAssert.AreEqual(first.PlayerDamages, second.PlayerDamages, "玩家攻击伤害序列未能按固定种子复现");
             CollectionAssert.AreEqual(first.MonsterDamages, second.MonsterDamages, "怪物攻击伤害序列未能按固定种子复现");
             CollectionAssert.AreEqual(first.Loot, second.Loot, "掉落结果序列未能按固定种子复现");
@@ -111,7 +115,10 @@ namespace DarkFlare.Tests
                     }
 
                     monster.enabled = false;
-                    monsters.Add(new MonsterRecord(monster.Instance.Seed, monster.Instance.MaxHealth));
+                    monsters.Add(new MonsterRecord(
+                        monster.Definition.Id,
+                        monster.Instance.Seed,
+                        monster.Instance.MaxHealth));
                 }
 
                 yield return null;
@@ -123,8 +130,8 @@ namespace DarkFlare.Tests
 
             RunSnapshot result = new RunSnapshot(monsters);
             EquipmentModel equipment = GameArchitecture.Interface.GetModel<EquipmentModel>();
-            MonsterDefinition monsterDefinition = UnityEngine.Object.FindObjectsByType<MonsterController>()[0].Definition;
-            Assert.IsNotNull(monsterDefinition);
+            MonsterDefinition monsterDefinition = FindMonsterDefinition("wasteland_wraith");
+            Assert.IsNotNull(monsterDefinition, "Main 场景未生成用于伤害和掉落复现的荒原游魂");
             Assert.IsNotNull(monsterDefinition.LootTable, "Main 场景怪物未配置掉落表");
 
             for (int i = 0; i < MonsterSampleCount; i++)
@@ -145,6 +152,21 @@ namespace DarkFlare.Tests
             }
 
             onCompleted(result);
+        }
+
+        static MonsterDefinition FindMonsterDefinition(string id)
+        {
+            MonsterController[] monsters = UnityEngine.Object.FindObjectsByType<MonsterController>();
+
+            for (int i = 0; i < monsters.Length; i++)
+            {
+                if (monsters[i].Definition != null && monsters[i].Definition.Id == id)
+                {
+                    return monsters[i].Definition;
+                }
+            }
+
+            return null;
         }
 
         static void ConfigureBootstrapSeed(Scene scene, LoadSceneMode mode)
@@ -172,6 +194,7 @@ namespace DarkFlare.Tests
         sealed class RunSnapshot
         {
             public readonly List<MonsterRecord> Monsters;
+            public readonly HashSet<string> MonsterIds = new HashSet<string>();
             public readonly List<string> PlayerDamages = new List<string>();
             public readonly List<string> MonsterDamages = new List<string>();
             public readonly List<string> Loot = new List<string>();
@@ -179,6 +202,11 @@ namespace DarkFlare.Tests
             public RunSnapshot(List<MonsterRecord> monsters)
             {
                 Monsters = monsters;
+
+                for (int i = 0; i < monsters.Count; i++)
+                {
+                    MonsterIds.Add(monsters[i].MonsterId);
+                }
             }
 
             public override string ToString()
@@ -189,18 +217,23 @@ namespace DarkFlare.Tests
 
         readonly struct MonsterRecord : IEquatable<MonsterRecord>
         {
+            public string MonsterId { get; }
+
             readonly int _seed;
             readonly float _maxHealth;
 
-            public MonsterRecord(int seed, float maxHealth)
+            public MonsterRecord(string monsterId, int seed, float maxHealth)
             {
+                MonsterId = monsterId;
                 _seed = seed;
                 _maxHealth = maxHealth;
             }
 
             public bool Equals(MonsterRecord other)
             {
-                return _seed == other._seed && Math.Abs(_maxHealth - other._maxHealth) < float.Epsilon;
+                return MonsterId == other.MonsterId
+                       && _seed == other._seed
+                       && Math.Abs(_maxHealth - other._maxHealth) < float.Epsilon;
             }
 
             public override bool Equals(object obj)
@@ -210,12 +243,12 @@ namespace DarkFlare.Tests
 
             public override int GetHashCode()
             {
-                return HashCode.Combine(_seed, _maxHealth);
+                return HashCode.Combine(MonsterId, _seed, _maxHealth);
             }
 
             public override string ToString()
             {
-                return $"{_seed}:{_maxHealth.ToString("R", CultureInfo.InvariantCulture)}";
+                return $"{MonsterId}:{_seed}:{_maxHealth.ToString("R", CultureInfo.InvariantCulture)}";
             }
         }
     }

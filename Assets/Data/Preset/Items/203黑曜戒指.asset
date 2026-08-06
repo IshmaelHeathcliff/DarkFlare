@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de56d17a7ac2ea64db43d68bd7da6bc8, type: 3}
+  m_Name: "203\u9ED1\u66DC\u6212\u6307"
+  m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.ItemBaseDefinition
+  _id: obsidian_ring
+  _displayName: "\u9ED1\u66DC\u6212\u6307"
+  _itemType: 2
+  _allowedEquipmentSlots: 12
+  _defaultRarity: 0
+  _baseValue: 28
+  _maxPrefixCount: 3
+  _maxSuffixCount: 3
+  _gridSize: {x: 1, y: 1}
+  _weight: 1
+  _tags:
+  - {fileID: 11400000, guid: f4100000000000000000000000000004, type: 2}
+  _baseDamages: []
+  _implicitModifiers:
+  - _stat: {fileID: 11400000, guid: eac0a016975684141b04624e26243f12, type: 2}
+    _operation: 0
+    _scope: 1
+    _valueRange: {x: 5, y: 10}
+    _fromDamageType: 0
+    _toDamageType: 1
+    _requiredTags: []
+    _blockedTags: []
+  - _stat: {fileID: 11400000, guid: 7cc0c9fbd9db5e74aad4d2e8aa356e70, type: 2}
+    _operation: 0
+    _scope: 1
+    _valueRange: {x: 5, y: 10}
+    _fromDamageType: 0
+    _toDamageType: 1
+    _requiredTags: []
+    _blockedTags: []
+  - _stat: {fileID: 11400000, guid: 24432569e4f308040965ce8fd9a32874, type: 2}
+    _operation: 0
+    _scope: 1
+    _valueRange: {x: 5, y: 10}
+    _fromDamageType: 0
+    _toDamageType: 1
+    _requiredTags: []
+    _blockedTags: []
+  - _stat: {fileID: 11400000, guid: eb3a1ac12d075964d8a5476e6808ee97, type: 2}
+    _operation: 0
+    _scope: 1
+    _valueRange: {x: 5, y: 10}
+    _fromDamageType: 0
+    _toDamageType: 1
+    _requiredTags: []
+    _blockedTags: []

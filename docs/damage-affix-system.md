@@ -24,13 +24,14 @@
 
 标签用于匹配词条条件和伤害范围。
 
-首版标签示例：
+当前正式标签：
 
-- 技能标签：`Attack`、`Spell`、`Projectile`、`Melee`、`Area`、`Minion`
-- 伤害标签：`Physical`、`Fire`、`Cold`、`Lightning`、`Chaos`
-- 来源标签：`Weapon`、`Skill`、`Item`、`Talent`、`Buff`
-- 目标标签：`Enemy`、`Boss`、`Elite`、`LowLife`、`Burning`
-- 物品标签：`Sword`、`Bow`、`Armor`、`Ring`、`Material`
+- 通用：`damage`
+- 装备：`weapon`、`armor`、`ring`
+- 武器子类：`sword`、`axe`
+- 伤害：`physical`、`fire`、`cold`、`lightning`、`chaos`
+- 技能来源：`projectile`、`melee`
+- 角色：`monster`
 
 建议首版用 `TagDefinition` 配置资产保存稳定 ID 和中文名，不把所有标签写死成枚举。运行时可以把标签映射成整数位或哈希集合来提升性能。
 
@@ -385,6 +386,7 @@ Assets/Data/Preset/
 - `CombatActor`：从有效属性读取 `max_health`，穿脱装备时按最大生命变化保持当前生命比例，并由装备事件触发 HUD 刷新。
 - `AttackSnapshot`、`AttackSnapshotFactory`：在攻击发起时冻结来源物品、随机伤害包、标签、攻击者属性和修改器。
 - `GameplayRandomSystem`：提供根种子与独立随机通道，隔离生成位置、怪物实例、玩家攻击、怪物攻击和掉落序列。
+- `ContentConfigurationValidator`：校验首批标签、词条、装备、怪物与各内容池，并检查 Addressable Prefab。
 
 已实现的伤害计算内容：
 
@@ -400,6 +402,9 @@ Assets/Data/Preset/
 - 武器基础伤害来源、10–14 空手技能配置与 12 点代码级空配置保护
 - 发射时攻击快照；投射物命中时只读取当前防御者快照
 - `LocalItem` 仅作用于武器本地伤害，伤害修改器不会在属性层重复计算
+- 转换和额外获得伤害会合并技能上下文与当前伤害包标签；物理伤害包上的 `physical` 条件可正确匹配。
+
+阶段 4 已配置 12 个当前管线实际支持的词条，不加入 `Chance`、`Trigger`、`Limit`、暴击率、命中或闪避配置。完整 ID、范围、权重和装备兼容见[首批内容池](./content-system.md)。
 
 暂缓实现：
 

@@ -15,20 +15,50 @@ MonoBehaviour:
   _dropChance: 0.35
   _entries:
   - _item: {fileID: 11400000, guid: 97909e3c17a4418428112ff92c410eb5, type: 2}
-    _weight: 100
+    _weight: 16
+    _rarity: 1
+    _prefixCount: 1
+    _suffixCount: 1
+  - _item: {fileID: 11400000, guid: f4300000000000000000000000000002, type: 2}
+    _weight: 14
     _rarity: 1
     _prefixCount: 1
     _suffixCount: 1
   - _item: {fileID: 11400000, guid: a03568360f4764b498e15d98263706c8, type: 2}
-    _weight: 100
-    _rarity: 0
+    _weight: 16
+    _rarity: 1
+    _prefixCount: 1
+    _suffixCount: 1
+  - _item: {fileID: 11400000, guid: f4300000000000000000000000000004, type: 2}
+    _weight: 12
+    _rarity: 1
     _prefixCount: 1
     _suffixCount: 1
   - _item: {fileID: 11400000, guid: c8a3f702d370824459a1eea34e50de52, type: 2}
-    _weight: 100
-    _rarity: 0
+    _weight: 14
+    _rarity: 1
+    _prefixCount: 1
+    _suffixCount: 1
+  - _item: {fileID: 11400000, guid: f4300000000000000000000000000006, type: 2}
+    _weight: 14
+    _rarity: 1
+    _prefixCount: 1
+    _suffixCount: 1
+  - _item: {fileID: 11400000, guid: f4300000000000000000000000000007, type: 2}
+    _weight: 14
+    _rarity: 1
     _prefixCount: 1
     _suffixCount: 1
   _affixPool:
   - {fileID: 11400000, guid: de8f44ef4c5945044bd186a92f9deb34, type: 2}
+  - {fileID: 11400000, guid: f4200000000000000000000000000002, type: 2}
+  - {fileID: 11400000, guid: f4200000000000000000000000000003, type: 2}
+  - {fileID: 11400000, guid: f4200000000000000000000000000004, type: 2}
   - {fileID: 11400000, guid: 3d117ca89a4e9174fa25d5c294b3c736, type: 2}
+  - {fileID: 11400000, guid: f4200000000000000000000000000006, type: 2}
+  - {fileID: 11400000, guid: f4200000000000000000000000000007, type: 2}
+  - {fileID: 11400000, guid: f4200000000000000000000000000008, type: 2}
+  - {fileID: 11400000, guid: f4200000000000000000000000000009, type: 2}
+  - {fileID: 11400000, guid: f420000000000000000000000000000a, type: 2}
+  - {fileID: 11400000, guid: f420000000000000000000000000000b, type: 2}
+  - {fileID: 11400000, guid: f420000000000000000000000000000c, type: 2}

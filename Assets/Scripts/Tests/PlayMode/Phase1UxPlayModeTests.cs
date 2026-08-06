@@ -101,8 +101,7 @@ namespace DarkFlare.Tests
             Button selectedButton = FindButton(merchantList, "状态测试装备 3");
             Assert.IsNotNull(selectedButton, "未生成可用于滚动验收的商店按钮");
             Keyboard keyboard = InputSystem.AddDevice<Keyboard>();
-            selectedButton.Focus();
-            yield return null;
+            yield return FocusAfterScheduledRestore(root, selectedButton);
             PressAndRelease(keyboard.enterKey);
             yield return null;
             Assert.AreEqual("phase1_shop_item_3", shop.SelectedItem.InstanceId, "Submit 未固定当前选择");
@@ -218,6 +217,27 @@ namespace DarkFlare.Tests
             }
 
             yield return null;
+        }
+
+        static IEnumerator FocusAfterScheduledRestore(VisualElement root, Button button)
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                button.Focus();
+                yield return null;
+
+                if (root.focusController.focusedElement == button)
+                {
+                    yield return null;
+
+                    if (root.focusController.focusedElement == button)
+                    {
+                        yield break;
+                    }
+                }
+            }
+
+            Assert.AreSame(button, root.focusController.focusedElement, "商店延迟焦点恢复未稳定");
         }
 
         ItemBaseDefinition CreateItemDefinition(string id, string displayName)

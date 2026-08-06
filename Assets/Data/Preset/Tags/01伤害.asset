@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83fd375c000991948bbfb75e79e5a320, type: 3}
   m_Name: "01\u4F24\u5BB3"
   m_EditorClassIdentifier: Assembly-CSharp::DarkFlare.TagDefinition
-  _id: Damage
+  _id: damage
   _displayName: "\u4F24\u5BB3"
-  _description: 
+  _description: "\u4F24\u5BB3\u5305\u4E0E\u4F24\u5BB3\u6548\u679C\u7684\u901A\u7528\u6807\u7B7E\u3002"

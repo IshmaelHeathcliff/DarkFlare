@@ -37,8 +37,7 @@ namespace DarkFlare
             {
                 if (modifier == null
                     || modifier.Operation != ModifierOperation.Conversion
-                    || !IsAttackerModifier(modifier)
-                    || !modifier.Matches(contextTags))
+                    || !IsAttackerModifier(modifier))
                 {
                     continue;
                 }
@@ -49,13 +48,14 @@ namespace DarkFlare
             for (int i = 0; i < packets.Count; i++)
             {
                 DamagePacket packet = packets[i];
+                TagSet tags = contextTags.Union(packet.Tags);
                 float totalConversion = 0f;
 
                 for (int j = 0; j < conversionModifiers.Count; j++)
                 {
                     ModifierInstance modifier = conversionModifiers[j];
 
-                    if (modifier.FromDamageType == packet.DamageType)
+                    if (modifier.FromDamageType == packet.DamageType && modifier.Matches(tags))
                     {
                         totalConversion += modifier.Value;
                     }
@@ -75,6 +75,11 @@ namespace DarkFlare
                     ModifierInstance modifier = conversionModifiers[j];
 
                     if (modifier.FromDamageType != packet.DamageType)
+                    {
+                        continue;
+                    }
+
+                    if (!modifier.Matches(tags))
                     {
                         continue;
                     }
@@ -99,8 +104,7 @@ namespace DarkFlare
             {
                 if (modifier == null
                     || modifier.Operation != ModifierOperation.GainAsExtra
-                    || !IsAttackerModifier(modifier)
-                    || !modifier.Matches(contextTags))
+                    || !IsAttackerModifier(modifier))
                 {
                     continue;
                 }
@@ -110,8 +114,11 @@ namespace DarkFlare
                 for (int i = 0; i < packets.Count; i++)
                 {
                     DamagePacket packet = packets[i];
+                    TagSet tags = contextTags.Union(packet.Tags);
 
-                    if (packet.DamageType == modifier.FromDamageType && packet.Amount > 0f)
+                    if (packet.DamageType == modifier.FromDamageType
+                        && packet.Amount > 0f
+                        && modifier.Matches(tags))
                     {
                         result.Add(new DamagePacket(modifier.ToDamageType, packet.Amount * ratio, packet.Tags));
                     }

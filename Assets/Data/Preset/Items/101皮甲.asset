@@ -12,23 +12,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de56d17a7ac2ea64db43d68bd7da6bc8, type: 3}
   m_Name: "101\u76AE\u7532"
   m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.ItemBaseDefinition
-  _id: LeatherArmour
+  _id: leather_armor
   _displayName: "\u76AE\u7532"
   _itemType: 1
   _allowedEquipmentSlots: 2
   _defaultRarity: 0
-  _baseValue: 10
+  _baseValue: 24
   _maxPrefixCount: 3
   _maxSuffixCount: 3
   _gridSize: {x: 2, y: 3}
-  _weight: 10
-  _tags: []
+  _weight: 8
+  _tags:
+  - {fileID: 11400000, guid: f4100000000000000000000000000003, type: 2}
   _baseDamages: []
   _implicitModifiers:
   - _stat: {fileID: 11400000, guid: f44056e439bbcaa4eb1d3fc790dff43a, type: 2}
     _operation: 0
     _scope: 1
-    _valueRange: {x: 20, y: 40}
+    _valueRange: {x: 20, y: 35}
     _fromDamageType: 0
     _toDamageType: 1
     _requiredTags: []

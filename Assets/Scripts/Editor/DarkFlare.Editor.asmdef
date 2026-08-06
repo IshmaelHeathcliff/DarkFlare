@@ -4,7 +4,9 @@
     "references": [
         "DarkFlare.Runtime",
         "DarkFlare.Core",
-        "Unity.TextMeshPro"
+        "Unity.TextMeshPro",
+        "Unity.Addressables",
+        "Unity.Addressables.Editor"
     ],
     "includePlatforms": [
         "Editor"

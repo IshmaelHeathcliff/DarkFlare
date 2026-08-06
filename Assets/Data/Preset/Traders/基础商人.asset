@@ -13,15 +13,35 @@ MonoBehaviour:
   m_Name: "\u57FA\u7840\u5546\u4EBA"
   m_EditorClassIdentifier: Assembly-CSharp::DarkFlare.TraderDefinition
   _id: basic_trader
-  _displayName: 基础商人
+  _displayName: "\u57FA\u7840\u5546\u4EBA"
   _buyMultiplier: 1.5
   _sellMultiplier: 0.4
   _stock:
   - _item: {fileID: 11400000, guid: 97909e3c17a4418428112ff92c410eb5, type: 2}
     _rarity: 0
     _itemLevel: 1
-    _count: 2
-  - _item: {fileID: 11400000, guid: 97909e3c17a4418428112ff92c410eb5, type: 2}
-    _rarity: 1
+    _count: 1
+  - _item: {fileID: 11400000, guid: f4300000000000000000000000000002, type: 2}
+    _rarity: 0
+    _itemLevel: 1
+    _count: 1
+  - _item: {fileID: 11400000, guid: a03568360f4764b498e15d98263706c8, type: 2}
+    _rarity: 0
+    _itemLevel: 1
+    _count: 1
+  - _item: {fileID: 11400000, guid: f4300000000000000000000000000004, type: 2}
+    _rarity: 0
+    _itemLevel: 1
+    _count: 1
+  - _item: {fileID: 11400000, guid: c8a3f702d370824459a1eea34e50de52, type: 2}
+    _rarity: 0
+    _itemLevel: 1
+    _count: 1
+  - _item: {fileID: 11400000, guid: f4300000000000000000000000000006, type: 2}
+    _rarity: 0
+    _itemLevel: 1
+    _count: 1
+  - _item: {fileID: 11400000, guid: f4300000000000000000000000000007, type: 2}
+    _rarity: 0
     _itemLevel: 1
     _count: 1

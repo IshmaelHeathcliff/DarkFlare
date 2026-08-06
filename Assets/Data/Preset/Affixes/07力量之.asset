@@ -10,22 +10,24 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d2ae069e06d127145ae40593b5a85bd2, type: 3}
-  m_Name: "000\u57FA\u7840\u4F24\u5BB3\u589E\u52A0"
-  m_EditorClassIdentifier: Assembly-CSharp::DarkFlare.AffixDefinition
-  _id: DamageIncrease
-  _displayName: "\u57FA\u7840\u4F24\u5BB3\u63D0\u9AD8"
-  _affixType: 0
-  _groupId: 
+  m_Name: "07\u529B\u91CF\u4E4B"
+  m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.AffixDefinition
+  _id: of_power
+  _displayName: "\u529B\u91CF\u4E4B"
+  _affixType: 1
+  _groupId: global_damage_increase
   _minItemLevel: 1
-  _weight: 100
-  _allowedItemTags: []
+  _weight: 80
+  _allowedItemTags:
+  - {fileID: 11400000, guid: f4100000000000000000000000000002, type: 2}
+  - {fileID: 11400000, guid: f4100000000000000000000000000004, type: 2}
   _blockedItemTags: []
   _modifiers:
   - _stat: {fileID: 11400000, guid: 82e204183d947d249b17fb3c9ade3530, type: 2}
     _operation: 1
     _scope: 1
-    _valueRange: {x: 10, y: 30}
+    _valueRange: {x: 8, y: 15}
     _fromDamageType: 0
-    _toDamageType: 0
+    _toDamageType: 1
     _requiredTags: []
     _blockedTags: []

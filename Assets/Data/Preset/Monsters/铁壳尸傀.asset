@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4eb121f8dc76a8f4695a759b90dc6ce7, type: 3}
+  m_Name: "\u94C1\u58F3\u5C38\u5080"
+  m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.MonsterDefinition
+  _id: iron_husk
+  _displayName: "\u94C1\u58F3\u5C38\u5080"
+  _character: {fileID: 0}
+  _prefab:
+    m_AssetGUID: f4600000000000000000000000000003
+    m_SubObjectName:
+    m_SubObjectType:
+    m_SubObjectGUID:
+    m_EditorAssetChanged: 0
+  _maxHealth: 96
+  _moveSpeed: 1.7
+  _healthMultiplierRange: {x: 0.85, y: 1.15}
+  _contactDamageInterval: 1
+  _contactDamageRadius: 0.75
+  _tags:
+  - {fileID: 11400000, guid: f410000000000000000000000000000e, type: 2}
+  _contactDamages:
+  - _damageType: 0
+    _amountRange: {x: 10, y: 14}
+    _tags:
+    - {fileID: 11400000, guid: 221659ee469b58e48a9edbfb24b56196, type: 2}
+    - {fileID: 11400000, guid: f4100000000000000000000000000007, type: 2}
+  _lootTable: {fileID: 11400000, guid: f4400000000000000000000000000003, type: 2}

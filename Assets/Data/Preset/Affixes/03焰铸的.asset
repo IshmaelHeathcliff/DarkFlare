@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2ae069e06d127145ae40593b5a85bd2, type: 3}
+  m_Name: "03\u7130\u94F8\u7684"
+  m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.AffixDefinition
+  _id: flame_touched
+  _displayName: "\u7130\u94F8\u7684"
+  _affixType: 0
+  _groupId: elemental_extra
+  _minItemLevel: 1
+  _weight: 60
+  _allowedItemTags:
+  - {fileID: 11400000, guid: f4100000000000000000000000000002, type: 2}
+  - {fileID: 11400000, guid: f4100000000000000000000000000004, type: 2}
+  _blockedItemTags: []
+  _modifiers:
+  - _stat: {fileID: 0}
+    _operation: 5
+    _scope: 1
+    _valueRange: {x: 8, y: 12}
+    _fromDamageType: 0
+    _toDamageType: 1
+    _requiredTags:
+    - {fileID: 11400000, guid: f4100000000000000000000000000007, type: 2}
+    _blockedTags: []

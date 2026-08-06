@@ -17,4 +17,8 @@ MonoBehaviour:
   _spawnRadius: 8
   _rules:
   - _monster: {fileID: 11400000, guid: a9c5fedc098b0394588489b2e0d091ca, type: 2}
-    _weight: 100
+    _weight: 55
+  - _monster: {fileID: 11400000, guid: f4500000000000000000000000000002, type: 2}
+    _weight: 30
+  - _monster: {fileID: 11400000, guid: f4500000000000000000000000000003, type: 2}
+    _weight: 15

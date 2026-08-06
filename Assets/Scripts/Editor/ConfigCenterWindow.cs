@@ -35,6 +35,7 @@ namespace DarkFlare.Editor
 
             List<ConfigTypeInfo> configTypes = FindConfigTypes();
             tree.Add("配置概览", new ConfigOverviewPage(configTypes));
+            tree.Add("内容校验", new ContentValidationPage(OpenAssetForEdit));
 
             for (int i = 0; i < configTypes.Count; i++)
             {
@@ -212,6 +213,119 @@ namespace DarkFlare.Editor
             }
 
             return string.IsNullOrWhiteSpace(result) ? "NewConfig" : result;
+        }
+
+        sealed class ContentValidationPage
+        {
+            readonly Action<ScriptableObject> _openAsset;
+
+            [ShowInInspector]
+            [ReadOnly]
+            [LabelText("校验状态")]
+            public string Status => ErrorCount == 0 && WarningCount == 0
+                ? "通过：未发现内容配置问题"
+                : $"发现 {ErrorCount} 个错误，{WarningCount} 个警告";
+
+            [ShowInInspector]
+            [ReadOnly]
+            [LabelText("错误")]
+            public int ErrorCount => Issues.Count(issue => issue.Severity == ContentValidationSeverity.Error);
+
+            [ShowInInspector]
+            [ReadOnly]
+            [LabelText("警告")]
+            public int WarningCount => Issues.Count(issue => issue.Severity == ContentValidationSeverity.Warning);
+
+            [ShowInInspector]
+            [TableList(AlwaysExpanded = true)]
+            [LabelText("问题列表")]
+            public List<ContentValidationEntry> Issues { get; private set; }
+
+            public ContentValidationPage(Action<ScriptableObject> openAsset)
+            {
+                _openAsset = openAsset;
+                Rescan();
+            }
+
+            [Button("重新扫描", ButtonSizes.Large)]
+            public void Rescan()
+            {
+                List<ContentValidationIssue> issues = ContentConfigurationValidator.Scan();
+                Issues = new List<ContentValidationEntry>(issues.Count);
+
+                for (int i = 0; i < issues.Count; i++)
+                {
+                    Issues.Add(new ContentValidationEntry(issues[i], _openAsset));
+                }
+            }
+        }
+
+        [Serializable]
+        [HideReferenceObjectPicker]
+        sealed class ContentValidationEntry
+        {
+            [SerializeField]
+            [HideInInspector]
+            UnityEngine.Object _asset;
+
+            readonly Action<ScriptableObject> _openAsset;
+
+            [ShowInInspector]
+            [ReadOnly]
+            [LabelText("级别")]
+            public ContentValidationSeverity Severity { get; }
+
+            [ShowInInspector]
+            [ReadOnly]
+            [LabelText("资产")]
+            public string AssetName => _asset != null ? _asset.name : "全局";
+
+            [ShowInInspector]
+            [ReadOnly]
+            [LabelText("路径")]
+            public string Path { get; }
+
+            [ShowInInspector]
+            [ReadOnly]
+            [LabelText("原因")]
+            public string Message { get; }
+
+            public ContentValidationEntry(
+                ContentValidationIssue issue,
+                Action<ScriptableObject> openAsset)
+            {
+                _asset = issue.Asset;
+                _openAsset = openAsset;
+                Severity = issue.Severity;
+                Path = issue.AssetPath;
+                Message = issue.Message;
+            }
+
+            [HorizontalGroup("操作")]
+            [Button("打开")]
+            public void Open()
+            {
+                if (_asset is ScriptableObject scriptableObject)
+                {
+                    _openAsset?.Invoke(scriptableObject);
+                    return;
+                }
+
+                Ping();
+            }
+
+            [HorizontalGroup("操作")]
+            [Button("定位")]
+            public void Ping()
+            {
+                if (_asset == null)
+                {
+                    return;
+                }
+
+                Selection.activeObject = _asset;
+                EditorGUIUtility.PingObject(_asset);
+            }
         }
 
         sealed class ConfigTypeInfo

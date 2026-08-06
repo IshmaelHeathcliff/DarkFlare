@@ -10,21 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d2ae069e06d127145ae40593b5a85bd2, type: 3}
-  m_Name: "001\u751F\u547D\u589E\u52A0"
+  m_Name: "10\u51B0\u536B\u4E4B"
   m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.AffixDefinition
-  _id: HealthAdd
-  _displayName: "\u751F\u547D\u589E\u52A0"
+  _id: of_cold_guard
+  _displayName: "\u51B0\u536B\u4E4B"
   _affixType: 1
-  _groupId:
+  _groupId: cold_resistance_flat
   _minItemLevel: 1
   _weight: 100
-  _allowedItemTags: []
+  _allowedItemTags:
+  - {fileID: 11400000, guid: f4100000000000000000000000000003, type: 2}
+  - {fileID: 11400000, guid: f4100000000000000000000000000004, type: 2}
   _blockedItemTags: []
   _modifiers:
-  - _stat: {fileID: 11400000, guid: f44056e439bbcaa4eb1d3fc790dff43a, type: 2}
+  - _stat: {fileID: 11400000, guid: 7cc0c9fbd9db5e74aad4d2e8aa356e70, type: 2}
     _operation: 0
     _scope: 1
-    _valueRange: {x: 20, y: 50}
+    _valueRange: {x: 10, y: 20}
     _fromDamageType: 0
     _toDamageType: 1
     _requiredTags: []

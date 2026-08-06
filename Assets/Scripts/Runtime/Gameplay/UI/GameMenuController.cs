@@ -101,7 +101,7 @@ namespace DarkFlare
 
         void OnDisable()
         {
-            if (_gameInput != null && _gameInput.CurrentMode == GameInputMode.UI)
+            if (_gameInput != null && _gameInput.IsUiEnabled)
             {
                 _gameInput.SwitchToGameplay();
             }

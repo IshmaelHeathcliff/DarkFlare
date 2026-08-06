@@ -12,23 +12,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de56d17a7ac2ea64db43d68bd7da6bc8, type: 3}
   m_Name: "201\u94C1\u6307\u73AF"
   m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.ItemBaseDefinition
-  _id: IronRing
+  _id: iron_ring
   _displayName: "\u94C1\u6307\u73AF"
   _itemType: 2
   _allowedEquipmentSlots: 12
   _defaultRarity: 0
-  _baseValue: 10
+  _baseValue: 20
   _maxPrefixCount: 3
   _maxSuffixCount: 3
   _gridSize: {x: 1, y: 1}
   _weight: 1
-  _tags: []
+  _tags:
+  - {fileID: 11400000, guid: f4100000000000000000000000000004, type: 2}
   _baseDamages: []
   _implicitModifiers:
   - _stat: {fileID: 11400000, guid: 82e204183d947d249b17fb3c9ade3530, type: 2}
     _operation: 1
     _scope: 1
-    _valueRange: {x: 10, y: 20}
+    _valueRange: {x: 8, y: 14}
     _fromDamageType: 0
     _toDamageType: 1
     _requiredTags: []
