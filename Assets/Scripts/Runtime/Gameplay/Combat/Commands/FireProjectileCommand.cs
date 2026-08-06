@@ -24,7 +24,7 @@ namespace DarkFlare
                 return;
             }
 
-            int seed = Random.Range(int.MinValue, int.MaxValue);
+            int seed = this.GetSystem<GameplayRandomSystem>().NextSeed(GameplayRandomChannel.PlayerAttack);
             AttackSnapshot attack = AttackSnapshotFactory.CreateProjectile(
                 _owner,
                 _skill,

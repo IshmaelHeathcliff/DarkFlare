@@ -57,8 +57,9 @@ namespace DarkFlare
             return controller.Actor;
         }
 
-        public MonsterController SpawnMonster(MonsterSpawnDefinition spawnDefinition, System.Random random, Vector3 position)
+        public MonsterController SpawnMonster(MonsterSpawnDefinition spawnDefinition, int seed, Vector3 position)
         {
+            System.Random random = new System.Random(seed);
             MonsterDefinition definition = spawnDefinition != null ? spawnDefinition.PickMonster(random) : null;
 
             if (definition == null)
@@ -76,7 +77,11 @@ namespace DarkFlare
 
             GameObject instance = Object.Instantiate(prefab, position, Quaternion.identity);
             MonsterController controller = instance.GetComponent<MonsterController>();
-            controller.SetDefinition(definition);
+            int instanceSeed = random.Next(int.MinValue, int.MaxValue);
+            MonsterInstanceData instanceData = definition.CreateInstanceData(instanceSeed);
+            controller.Configure(definition, instanceData);
+            Debug.Log(
+                $"[SpawnSystem] 生成怪物 {definition.Id}，生成种子 {seed}，实例种子 {instanceSeed}，最大生命 {instanceData.MaxHealth:0.##}");
             return controller;
         }
 

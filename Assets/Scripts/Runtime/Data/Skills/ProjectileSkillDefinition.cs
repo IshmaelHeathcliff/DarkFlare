@@ -103,5 +103,15 @@ namespace DarkFlare
 
             return packets;
         }
+
+        void OnValidate()
+        {
+            List<string> issues = RandomizationConfigurationValidator.Validate(this);
+
+            for (int i = 0; i < issues.Count; i++)
+            {
+                Debug.LogWarning($"[ProjectileSkillDefinition] {name}: {issues[i]}", this);
+            }
+        }
     }
 }

@@ -21,6 +21,11 @@ namespace DarkFlare
 
             ValidateSlots(definition, issues);
             ValidateModifiers(definition, issues);
+            RandomizationConfigurationValidator.ValidateDamageRolls(
+                definition.BaseDamages,
+                "基础伤害",
+                issues,
+                definition.ItemType == ItemType.Weapon);
             return issues;
         }
 

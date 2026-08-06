@@ -23,8 +23,12 @@ MonoBehaviour:
     m_EditorAssetChanged: 0
   _maxHealth: 24
   _moveSpeed: 2.6
+  _healthMultiplierRange: {x: 0.85, y: 1.15}
   _contactDamageInterval: 0.75
   _contactDamageRadius: 0.75
   _tags: []
-  _contactDamages: []
+  _contactDamages:
+  - _damageType: 0
+    _amountRange: {x: 6, y: 10}
+    _tags: []
   _lootTable: {fileID: 11400000, guid: 69f6d576aafd2b346801311d31d37a8a, type: 2}

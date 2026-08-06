@@ -15,6 +15,7 @@ namespace DarkFlare
         CircleCollider2D _collider;
         CombatActor _actor;
         MonsterDefinition _definition;
+        MonsterInstanceData _instance;
         float _lastContactDamageTime = -999f;
 
         [SerializeField]
@@ -25,14 +26,17 @@ namespace DarkFlare
 
         public MonsterDefinition Definition => _definition;
 
+        public MonsterInstanceData Instance => _instance;
+
         public IArchitecture GetArchitecture()
         {
             return GameArchitecture.Interface;
         }
 
-        public void SetDefinition(MonsterDefinition definition)
+        public void Configure(MonsterDefinition definition, MonsterInstanceData instance)
         {
             _definition = definition;
+            _instance = instance;
             ApplyDefinition();
         }
 
@@ -92,7 +96,7 @@ namespace DarkFlare
 
         void ApplyDefinition()
         {
-            _actor.Configure(_definition.Id, ActorTeam.Monster, _definition.MaxHealth, _definition.CreateStats(), _definition.RuntimeTags);
+            _actor.Configure(_definition.Id, ActorTeam.Monster, _instance.MaxHealth, _instance.Stats, _definition.RuntimeTags);
         }
 
         float GetMoveSpeed()
@@ -108,7 +112,7 @@ namespace DarkFlare
             }
 
             _lastContactDamageTime = Time.time;
-            int seed = Random.Range(int.MinValue, int.MaxValue);
+            int seed = this.GetSystem<GameplayRandomSystem>().NextSeed(GameplayRandomChannel.MonsterAttack);
             List<DamagePacket> packets = _definition.CreateContactDamagePackets(seed);
             this.SendCommand(new NotifyActorAttackCommand(_actor));
             this.SendCommand(new ApplyDamageCommand(_actor, target, "monster_contact", packets, _actor.Tags, seed));

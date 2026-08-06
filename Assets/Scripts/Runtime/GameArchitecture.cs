@@ -9,6 +9,7 @@ namespace DarkFlare
             this.RegisterModel(new EquipmentModel());
             this.RegisterModel(new InventoryModel());
             this.RegisterModel(new EconomyModel());
+            this.RegisterSystem(new GameplayRandomSystem());
             this.RegisterSystem(new EquipmentSystem());
             this.RegisterSystem(new CombatSystem());
             this.RegisterSystem(new SpawnSystem());

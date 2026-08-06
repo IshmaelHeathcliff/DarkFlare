@@ -24,7 +24,6 @@ namespace DarkFlare
 
         readonly List<MonsterController> _aliveMonsters = new List<MonsterController>();
         CancellationTokenSource _spawnCancellation;
-        System.Random _random;
 
         public Collider2D WorldBounds => _worldBounds;
 
@@ -36,11 +35,6 @@ namespace DarkFlare
         public void SetWorldBounds(Collider2D worldBounds)
         {
             _worldBounds = worldBounds;
-        }
-
-        void Awake()
-        {
-            _random = new System.Random();
         }
 
         void OnEnable()
@@ -73,7 +67,11 @@ namespace DarkFlare
 
         void SpawnOne()
         {
-            MonsterController monster = this.SendCommand(new SpawnMonsterCommand(_spawnDefinition, _random, GetSpawnPosition()));
+            GameplayRandomSystem randomSystem = this.GetSystem<GameplayRandomSystem>();
+            int positionSeed = randomSystem.NextSeed(GameplayRandomChannel.SpawnPosition);
+            int monsterSeed = randomSystem.NextSeed(GameplayRandomChannel.MonsterInstance);
+            MonsterController monster = this.SendCommand(
+                new SpawnMonsterCommand(_spawnDefinition, monsterSeed, GetSpawnPosition(new System.Random(positionSeed))));
 
             if (monster != null)
             {
@@ -81,21 +79,21 @@ namespace DarkFlare
             }
         }
 
-        Vector3 GetSpawnPosition()
+        Vector3 GetSpawnPosition(System.Random random)
         {
             Transform target = GetTarget();
             Vector3 center = target != null ? target.position : transform.position;
 
             if (_worldBounds == null)
             {
-                return center + (Vector3)(GetRandomDirection() * _spawnDefinition.SpawnRadius);
+                return center + (Vector3)(GetRandomDirection(random) * _spawnDefinition.SpawnRadius);
             }
 
             Bounds bounds = _worldBounds.bounds;
 
             for (int i = 0; i < MaxSpawnPositionAttempts; i++)
             {
-                Vector2 offset = GetRandomDirection() * _spawnDefinition.SpawnRadius;
+                Vector2 offset = GetRandomDirection(random) * _spawnDefinition.SpawnRadius;
                 Vector3 candidate = center + new Vector3(offset.x, offset.y, 0f);
 
                 if (IsInsideBounds(candidate, bounds, _spawnBoundsPadding))
@@ -104,7 +102,7 @@ namespace DarkFlare
                 }
             }
 
-            Vector2 fallbackOffset = GetRandomDirection() * _spawnDefinition.SpawnRadius;
+            Vector2 fallbackOffset = GetRandomDirection(random) * _spawnDefinition.SpawnRadius;
             Vector3 fallback = center + new Vector3(fallbackOffset.x, fallbackOffset.y, 0f);
             return ClampToBounds(fallback, bounds, _spawnBoundsPadding);
         }
@@ -139,14 +137,9 @@ namespace DarkFlare
             }
         }
 
-        Vector2 GetRandomDirection()
+        static Vector2 GetRandomDirection(System.Random random)
         {
-            if (_random == null)
-            {
-                _random = new System.Random();
-            }
-
-            double angle = _random.NextDouble() * System.Math.PI * 2d;
+            double angle = random.NextDouble() * System.Math.PI * 2d;
             return new Vector2((float)System.Math.Cos(angle), (float)System.Math.Sin(angle));
         }
 

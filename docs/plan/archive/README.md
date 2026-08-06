@@ -7,6 +7,7 @@
 - [首版玩法循环](../../gameplay-loop.md)
 - [输入与运行时 UI](../../input-ui-system.md)
 - [装备系统](../../equipment-system.md)
+- [随机化与掉落规则](../../randomization-system.md)
 - [打造系统](../../crafting-system.md)
 
 ## 归档清单
@@ -21,5 +22,6 @@
 | [阶段 0.5：视觉体验修正执行计划](./phase-0.5-visual-experience-fix-plan.md) | 初版体验优化阶段 0.5 | [视觉规范](../../visual-style.md)、[视觉资产清单](../../visual-assets.md)、[首版玩法循环](../../gameplay-loop.md) |
 | [阶段 1：UX 快速改进执行计划](./phase-1-ux-quick-improvement-plan.md) | 初版体验优化阶段 1 | [输入与运行时 UI](../../input-ui-system.md) |
 | [阶段 2：装备槽与伤害来源执行计划](./phase-2-equipment-slots-damage-source-plan.md) | 初版体验优化阶段 2 | [装备系统](../../equipment-system.md)、[伤害系统与词条系统设计](../../damage-affix-system.md) |
+| [阶段 3：随机化与掉落规则执行计划](./phase-3-randomization-loot-plan.md) | 初版体验优化阶段 3 | [随机化与掉落规则](../../randomization-system.md)、[首版玩法循环](../../gameplay-loop.md) |
 
-最近归档日期：2026-08-05。
+最近归档日期：2026-08-06。

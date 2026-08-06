@@ -384,6 +384,7 @@ Assets/Data/Preset/
 - `EquipmentEffectResolver`、`CombatStatResolver`：从四槽分流 LocalItem 与角色效果，并聚合护甲、抗性等有效属性。
 - `CombatActor`：从有效属性读取 `max_health`，穿脱装备时按最大生命变化保持当前生命比例，并由装备事件触发 HUD 刷新。
 - `AttackSnapshot`、`AttackSnapshotFactory`：在攻击发起时冻结来源物品、随机伤害包、标签、攻击者属性和修改器。
+- `GameplayRandomSystem`：提供根种子与独立随机通道，隔离生成位置、怪物实例、玩家攻击、怪物攻击和掉落序列。
 
 已实现的伤害计算内容：
 
@@ -396,7 +397,7 @@ Assets/Data/Preset/
 - 目标承伤倍率
 - 元素和混沌抗性
 - 物理护甲减伤
-- 武器基础伤害来源与空手技能回退
+- 武器基础伤害来源、10–14 空手技能配置与 12 点代码级空配置保护
 - 发射时攻击快照；投射物命中时只读取当前防御者快照
 - `LocalItem` 仅作用于武器本地伤害，伤害修改器不会在属性层重复计算
 

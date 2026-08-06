@@ -46,12 +46,21 @@ namespace DarkFlare
     public class LootTableDefinition : ScriptableObject
     {
         [SerializeField]
+        [Range(0f, 1f)]
+        [LabelText("掉落概率")]
+        float _dropChance = 1f;
+
+        [SerializeField]
         [LabelText("掉落池")]
         List<LootTableEntry> _entries = new List<LootTableEntry>();
 
         [SerializeField]
         [LabelText("词条池")]
         List<AffixDefinition> _affixPool = new List<AffixDefinition>();
+
+        public float DropChance => _dropChance;
+
+        public IReadOnlyList<LootTableEntry> Entries => _entries;
 
         public ItemBaseDefinition PickItem(System.Random random)
         {
@@ -61,6 +70,11 @@ namespace DarkFlare
 
         public ItemInstance GenerateLoot(System.Random random, string instanceId, int itemLevel)
         {
+            if (!ShouldDrop(random))
+            {
+                return null;
+            }
+
             LootTableEntry entry = PickEntry(random);
 
             if (entry == null || entry.Item == null)
@@ -71,6 +85,16 @@ namespace DarkFlare
             int seed = random.Next(int.MinValue, int.MaxValue);
             ItemGenerationOptions options = new ItemGenerationOptions(instanceId, itemLevel, seed, entry.Rarity, entry.PrefixCount, entry.SuffixCount);
             return ItemGenerator.Generate(entry.Item, _affixPool, options);
+        }
+
+        bool ShouldDrop(System.Random random)
+        {
+            if (_dropChance <= 0f)
+            {
+                return false;
+            }
+
+            return _dropChance >= 1f || random.NextDouble() < _dropChance;
         }
 
         LootTableEntry PickEntry(System.Random random)
@@ -110,6 +134,16 @@ namespace DarkFlare
             }
 
             return null;
+        }
+
+        void OnValidate()
+        {
+            List<string> issues = RandomizationConfigurationValidator.Validate(this);
+
+            for (int i = 0; i < issues.Count; i++)
+            {
+                Debug.LogWarning($"[LootTableDefinition] {name}: {issues[i]}", this);
+            }
         }
     }
 }

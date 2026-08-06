@@ -27,4 +27,7 @@ MonoBehaviour:
   _projectileLifetime: 2
   _tags: []
   _damageSource: 1
-  _baseDamages: []
+  _baseDamages:
+  - _damageType: 0
+    _amountRange: {x: 10, y: 14}
+    _tags: []

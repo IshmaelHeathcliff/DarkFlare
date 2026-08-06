@@ -29,10 +29,10 @@
 
 ## 启动与运行流程
 
-1. `CombatPrototypeBootstrap` 预热玩家、怪物、投射物和掉落物 Addressable Prefab，初始化商人、打造配置与玩家初始金币。
-2. `SpawnSystem` 生成玩家，`MonsterSpawner` 按配置持续生成怪物；相机随后绑定玩家。
+1. `CombatPrototypeBootstrap` 先配置并记录随机根种子，再预热玩家、怪物、投射物和掉落物 Addressable Prefab，初始化商人、打造配置与玩家初始金币。
+2. `SpawnSystem` 生成玩家，`MonsterSpawner` 使用独立位置与实例种子持续生成怪物；相机随后绑定玩家。
 3. 玩家和怪物统一注册到 `CombatModel`，攻击通过 Command 进入 `CombatSystem` 和 `DamageCalculator`；投射物生成或怪物接触攻击成功后发送 `ActorAttackedEvent`，伤害、死亡与复活沿用 `ActorDamagedEvent`、`ActorDiedEvent`、`ActorRevivedEvent` 驱动 Animator。
-4. 怪物死亡后，`LootSystem` 根据怪物掉落表生成 `ItemInstance`，再实例化世界掉落物。
+4. 怪物死亡后，`LootSystem` 先执行表级掉落概率，成功后才按条目权重生成 `ItemInstance` 并实例化世界掉落物。
 5. 玩家触碰掉落物时，`PickupLootCommand` 尝试把物品放入 10×6 背包；背包无空间时保留世界掉落物。
 6. 玩家可在背包内选择物品和目标槽并发送 `EquipItemCommand`，也可通过 `UnequipItemCommand` 卸下。`EquipmentSystem` 原子提交背包与四槽状态，并从完整 Loadout 重建角色装备效果。
 7. 玩家接近商人或打造台后，可在对应菜单上下文中买卖、打造和装备；关闭菜单后继续战斗，验证金币、物品、词条和伤害变化。
@@ -50,9 +50,20 @@
 - 装备、替换和卸下均由 `EquipmentSystem` 先预检背包空间，再一次性提交背包、槽位和 Actor 效果，失败时不改变任何状态或发送成功事件。
 - 多件装备效果从四槽集中重建；武器 `LocalItem` 只处理本地基础伤害，护甲、抗性和其他角色属性通过统一聚合进入战斗快照。
 - 最大生命装备通过 `max_health` 进入 Actor 有效属性；穿脱时保持当前生命比例，HUD 随装备事件刷新当前值与上限。
-- 基础投射物已配置为武器伤害来源。装备大剑时使用 20–40 物理基础伤害；空手仍回退 12 点技能伤害。
+- 基础投射物已配置为武器伤害来源。装备大剑时使用 20–40 物理基础伤害；空手使用技能配置的 10–14 物理伤害，代码仍保留 12 点空配置保护。
 - 投射物在发射时生成 `AttackSnapshot`，冻结来源物品、随机结果、标签、攻击者属性和修改器；命中时换装不会追溯改变在途伤害。
 - 背包页已接入四槽按钮、显式左右戒指选槽、安全比较、替换和卸下，并通过键鼠、手柄与三档分辨率自动化验收。
+
+## 阶段 3 随机化与掉落规则
+
+- `GameplayRandomSystem` 统一管理根种子，并把生成位置、怪物实例、玩家攻击、怪物攻击和掉落拆为独立序列。
+- `CombatPrototypeBootstrap` 提供固定种子调试开关，默认关闭；根种子在启动时写入日志。
+- 基础怪物每个实例按基础生命的 `0.85–1.15` 生成最大生命，实例属性不修改共享 `MonsterDefinition`。
+- 玩家空手技能伤害为 `10–14`，怪物接触伤害为 `6–10`；同一攻击快照只掷一次。
+- 基础怪物掉落表概率为 `35%`。失败时不创建世界物体，成功后才执行条目权重和物品词条生成。
+- 生命、伤害和掉落配置增加倒置范围、负值、概率越界、空池和全零权重校验。
+
+完整规则见 [随机化与掉落规则](./randomization-system.md)。
 
 ## 模块边界
 
@@ -60,6 +71,7 @@
 | --- | --- | --- |
 | 启动与生成 | `CombatPrototypeBootstrap`、`SpawnSystem`、`MonsterSpawner` | 预热资源、初始化配置、生成玩家 / 怪物 / 投射物 |
 | 战斗 | `CombatModel`、`CombatSystem`、`DamageCalculator`、`AttackSnapshotFactory` | Actor 注册、攻击快照、伤害结算与生死状态 |
+| 随机化 | `GameplayRandomSystem`、`MonsterInstanceData` | 根种子、独立通道、怪物实例生命与可复现调试 |
 | 掉落与物品 | `LootSystem`、`LootTableDefinition`、`ItemGenerator` | 死亡掉落、物品实例生成和世界掉落物创建 |
 | 背包与装备 | `InventoryModel`、`InventoryGrid`、`EquipmentModel`、`EquipmentSystem` | 10×6 格子占用、四槽穿戴、原子替换 / 卸下和装备效果聚合 |
 | 交易 | `EconomyModel`、`TradingSystem`、`ItemValueCalculator` | 单商人库存、买卖价格与事务提交 |
@@ -94,6 +106,7 @@ Prefab 通过 Addressables 预热和实例化，首版不使用 `Resources` 或�
 - 阶段 0.5 全量 EditMode 51/51、项目 PlayMode 3/3 通过；Runtime / Editor 编译 0 错误，三档世界截图和边界机位均未露出地表外空白。
 - 阶段 1 全量 EditMode 60/60 通过；PlayMode 8 项中 6 项通过、2 项为包内既有忽略测试。商店连续状态恢复和商店 / 打造三档分辨率布局边界通过，Unity Console 0 错误。
 - 阶段 2 后续修正验证为 EditMode 75/75 通过；PlayMode 9 项中 7 项通过、2 项为包内既有忽略测试。四槽键鼠 / 手柄操作、最大生命与 HUD 同步、属性资产一致性、三档分辨率和在途投射物换装快照通过，Runtime / Editor 与测试程序集编译无错误。
+- 阶段 3 全量 EditMode 82/82 通过；PlayMode 11 项中 9 项通过、2 项为项目既有忽略测试。固定种子 `24681357` 连续运行两次 Main 时，前三只怪物生命、玩家 / 怪物攻击和掉落序列完全一致；关闭固定种子后两次启动根种子正常变化。Runtime / Editor 与测试程序集编译 0 警告、0 错误。
 
 以上数据是首版收尾时的验证记录；后续改动仍应重新运行相关测试和 Play 流程。
 

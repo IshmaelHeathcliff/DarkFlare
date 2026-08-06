@@ -1,5 +1,6 @@
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
@@ -35,6 +36,15 @@ namespace DarkFlare
         [SerializeField]
         MonsterSpawner _monsterSpawner;
 
+        [SerializeField]
+        [LabelText("使用固定随机种子")]
+        bool _useFixedRandomSeed;
+
+        [SerializeField]
+        [ShowIf(nameof(_useFixedRandomSeed))]
+        [LabelText("固定随机种子")]
+        int _fixedRandomSeed = 12345;
+
         public IArchitecture GetArchitecture()
         {
             return GameArchitecture.Interface;
@@ -42,6 +52,7 @@ namespace DarkFlare
 
         async UniTaskVoid Start()
         {
+            this.GetSystem<GameplayRandomSystem>().Configure(_useFixedRandomSeed, _fixedRandomSeed);
             Debug.Log("[CombatPrototypeBootstrap] 开始预热资源");
             CancellationToken token = this.GetCancellationTokenOnDestroy();
             await UniTask.WhenAll(

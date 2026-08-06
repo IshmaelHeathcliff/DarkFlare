@@ -37,6 +37,10 @@ namespace DarkFlare
         float _moveSpeed = 2.6f;
 
         [SerializeField]
+        [LabelText("生命倍率范围")]
+        Vector2 _healthMultiplierRange = Vector2.one;
+
+        [SerializeField]
         [MinValue(0.05f)]
         [LabelText("碰撞伤害间隔")]
         float _contactDamageInterval = 0.75f;
@@ -68,6 +72,8 @@ namespace DarkFlare
 
         public float MoveSpeed => _character != null ? _character.MoveSpeed : _moveSpeed;
 
+        public Vector2 HealthMultiplierRange => _healthMultiplierRange;
+
         public float ContactDamageInterval => _contactDamageInterval;
 
         public float ContactDamageRadius => _contactDamageRadius;
@@ -75,6 +81,8 @@ namespace DarkFlare
         public TagSet RuntimeTags => TagSet.FromDefinitions(_tags);
 
         public LootTableDefinition LootTable => _lootTable;
+
+        public IReadOnlyList<DamageRollDefinition> ContactDamages => _contactDamages;
 
         bool HasCharacterDefinition => _character != null;
 
@@ -89,6 +97,18 @@ namespace DarkFlare
             stats.SetValue(StatIds.MaxHealth, _maxHealth);
             stats.SetValue(StatIds.MoveSpeed, _moveSpeed);
             return stats;
+        }
+
+        public MonsterInstanceData CreateInstanceData(int seed)
+        {
+            System.Random random = new System.Random(seed);
+            float minimumMultiplier = Mathf.Max(0.01f, Mathf.Min(_healthMultiplierRange.x, _healthMultiplierRange.y));
+            float maximumMultiplier = Mathf.Max(minimumMultiplier, Mathf.Max(_healthMultiplierRange.x, _healthMultiplierRange.y));
+            float multiplier = Mathf.Lerp(minimumMultiplier, maximumMultiplier, (float)random.NextDouble());
+            float maxHealth = Mathf.Max(1f, MaxHealth * multiplier);
+            StatBlock stats = CreateStats();
+            stats.SetValue(StatIds.MaxHealth, maxHealth);
+            return new MonsterInstanceData(seed, maxHealth, stats);
         }
 
         public List<DamagePacket> CreateContactDamagePackets(int seed)
@@ -107,6 +127,16 @@ namespace DarkFlare
             }
 
             return packets;
+        }
+
+        void OnValidate()
+        {
+            List<string> issues = RandomizationConfigurationValidator.Validate(this);
+
+            for (int i = 0; i < issues.Count; i++)
+            {
+                Debug.LogWarning($"[MonsterDefinition] {name}: {issues[i]}", this);
+            }
         }
     }
 }

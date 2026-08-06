@@ -76,13 +76,18 @@ namespace DarkFlare.Tests
             spawner.SetWorldBounds(bounds);
             MethodInfo getSpawnPosition = typeof(MonsterSpawner).GetMethod(
                 "GetSpawnPosition",
-                BindingFlags.Instance | BindingFlags.NonPublic);
+                BindingFlags.Instance | BindingFlags.NonPublic,
+                null,
+                new[] { typeof(System.Random) },
+                null);
 
             Assert.IsNotNull(getSpawnPosition);
 
             for (int i = 0; i < 100; i++)
             {
-                Vector3 position = (Vector3)getSpawnPosition.Invoke(spawner, null);
+                Vector3 position = (Vector3)getSpawnPosition.Invoke(
+                    spawner,
+                    new object[] { new System.Random(i) });
                 Assert.That(position.x, Is.InRange(bounds.bounds.min.x + 0.5f, bounds.bounds.max.x - 0.5f));
                 Assert.That(position.y, Is.InRange(bounds.bounds.min.y + 0.5f, bounds.bounds.max.y - 0.5f));
             }
