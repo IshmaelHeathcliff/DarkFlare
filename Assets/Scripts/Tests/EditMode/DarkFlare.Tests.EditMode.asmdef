@@ -5,6 +5,8 @@
         "DarkFlare.Runtime",
         "DarkFlare.Core",
         "DarkFlare.Editor",
+        "UniTask",
+        "Unity.Addressables",
         "Unity.TextMeshPro",
         "Unity.InputSystem",
         "Unity.InputSystem.TestFramework",

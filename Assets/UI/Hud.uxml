@@ -1,24 +1,33 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
-    <ui:VisualElement name="hud-root" class="hud-root" picking-mode="Ignore">
-        <ui:VisualElement name="hud-top-row" class="hud-top-row" picking-mode="Ignore">
-            <ui:VisualElement name="health-card" class="hud-card health-card" picking-mode="Ignore">
-                <ui:Label text="生命" class="hud-caption" picking-mode="Ignore" />
-                <ui:ProgressBar name="health-bar" title="等待玩家..." low-value="0" high-value="1" value="0" picking-mode="Ignore" />
-            </ui:VisualElement>
-            <ui:VisualElement name="gold-card" class="hud-card gold-card" picking-mode="Ignore">
-                <ui:Label text="资源" class="hud-caption" picking-mode="Ignore" />
-                <ui:Label name="gold-label" text="金币 0" class="hud-value" picking-mode="Ignore" />
-            </ui:VisualElement>
+  <ui:VisualElement name="hud-root" class="hud-root" picking-mode="Ignore">
+    <ui:VisualElement name="hud-top-row" class="hud-top-row" picking-mode="Ignore">
+      <ui:VisualElement name="health-card" class="hud-card health-card hud-card--row" picking-mode="Ignore">
+        <ui:VisualElement class="ui-icon ui-icon--health hud-leading-icon" picking-mode="Ignore" />
+        <ui:VisualElement class="hud-card-content" picking-mode="Ignore">
+          <ui:Label text="生命" class="hud-caption" picking-mode="Ignore" />
+          <ui:ProgressBar name="health-bar" title="等待玩家..." low-value="0" high-value="1" value="0" picking-mode="Ignore" />
         </ui:VisualElement>
-        <ui:VisualElement name="hud-bottom-row" class="hud-bottom-row" picking-mode="Ignore">
-            <ui:VisualElement name="weapon-card" class="hud-card weapon-card" picking-mode="Ignore">
-                <ui:Label text="当前武器" class="hud-caption" picking-mode="Ignore" />
-                <ui:Label name="weapon-label" text="未装备" class="hud-value" picking-mode="Ignore" />
-            </ui:VisualElement>
-            <ui:VisualElement name="interaction-prompt" class="interaction-prompt" picking-mode="Ignore">
-                <ui:Label name="interaction-prompt-label" text="E / Y · 交互" class="interaction-prompt__label" picking-mode="Ignore" />
-            </ui:VisualElement>
-            <ui:VisualElement class="hud-bottom-spacer" picking-mode="Ignore" />
+      </ui:VisualElement>
+      <ui:VisualElement name="gold-card" class="hud-card gold-card hud-card--row" picking-mode="Ignore">
+        <ui:VisualElement class="ui-icon ui-icon--gold hud-leading-icon" picking-mode="Ignore" />
+        <ui:VisualElement class="hud-card-content hud-card-content--compact" picking-mode="Ignore">
+          <ui:Label text="资源" class="hud-caption" picking-mode="Ignore" />
+          <ui:Label name="gold-label" text="金币 0" class="hud-value" picking-mode="Ignore" />
         </ui:VisualElement>
+      </ui:VisualElement>
     </ui:VisualElement>
+    <ui:VisualElement name="hud-bottom-row" class="hud-bottom-row" picking-mode="Ignore">
+      <ui:VisualElement name="weapon-card" class="hud-card weapon-card hud-card--row" picking-mode="Ignore">
+        <ui:VisualElement name="weapon-icon" class="hud-weapon-icon hud-weapon-icon--empty" picking-mode="Ignore" />
+        <ui:VisualElement class="hud-card-content" picking-mode="Ignore">
+          <ui:Label text="当前武器" class="hud-caption" picking-mode="Ignore" />
+          <ui:Label name="weapon-label" text="未装备" class="hud-value" picking-mode="Ignore" />
+        </ui:VisualElement>
+      </ui:VisualElement>
+      <ui:VisualElement name="interaction-prompt" class="interaction-prompt" picking-mode="Ignore">
+        <ui:Label name="interaction-prompt-label" text="E / Y · 交互" class="interaction-prompt__label" picking-mode="Ignore" />
+      </ui:VisualElement>
+      <ui:VisualElement class="hud-bottom-spacer" picking-mode="Ignore" />
+    </ui:VisualElement>
+  </ui:VisualElement>
 </ui:UXML>

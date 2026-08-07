@@ -272,7 +272,7 @@ namespace DarkFlare.Tests
         {
             for (int i = 0; i < list.childCount; i++)
             {
-                if (list[i] is Button button && button.text.Contains(text))
+                if (list[i] is Button button && GetButtonContentText(button).Contains(text))
                 {
                     return button;
                 }
@@ -298,7 +298,23 @@ namespace DarkFlare.Tests
         {
             Focusable focused = root.focusController.focusedElement;
             Assert.IsInstanceOf<Button>(focused, "交易后焦点未恢复到物品按钮");
-            StringAssert.Contains(displayName, ((Button)focused).text, "焦点与恢复后的选择不一致");
+            StringAssert.Contains(
+                displayName,
+                GetButtonContentText((Button)focused),
+                "焦点与恢复后的选择不一致");
+        }
+
+        static string GetButtonContentText(Button button)
+        {
+            string content = button.text;
+            List<Label> labels = button.Query<Label>().ToList();
+
+            for (int i = 0; i < labels.Count; i++)
+            {
+                content += $" {labels[i].text}";
+            }
+
+            return content;
         }
 
         static IEnumerator WaitForResolution(Vector2Int resolution, float timeoutSeconds)

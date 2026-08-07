@@ -1,0 +1,465 @@
+fileFormatVersion: 2
+guid: 844f4b1dc04fe954f8185cedb58f295a
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -586846704680329818
+    second: monster_swift_sheet_0
+  - first:
+      213: -5575810258421199614
+    second: monster_swift_sheet_1
+  - first:
+      213: 2649291389373404974
+    second: monster_swift_sheet_2
+  - first:
+      213: 305311401054375358
+    second: monster_swift_sheet_3
+  - first:
+      213: 8578565957248423943
+    second: monster_swift_sheet_4
+  - first:
+      213: -2026057564126388300
+    second: monster_swift_sheet_5
+  - first:
+      213: -7283696248585344656
+    second: monster_swift_sheet_6
+  - first:
+      213: -5270216740108872311
+    second: monster_swift_sheet_7
+  - first:
+      213: -6758649883740989386
+    second: monster_swift_sheet_8
+  - first:
+      213: -6055043146195168594
+    second: monster_swift_sheet_9
+  - first:
+      213: -8358715695975284118
+    second: monster_swift_sheet_10
+  - first:
+      213: 4229919189401688926
+    second: monster_swift_sheet_11
+  - first:
+      213: 6470071262086556050
+    second: monster_swift_sheet_12
+  - first:
+      213: -7723834968880499900
+    second: monster_swift_sheet_13
+  - first:
+      213: -375124173184558852
+    second: monster_swift_sheet_14
+  - first:
+      213: 2324548045598819795
+    second: monster_swift_sheet_15
+  - first:
+      213: 5922517010253738049
+    second: monster_swift_sheet_16
+  - first:
+      213: -3566767065093207952
+    second: monster_swift_sheet_17
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 181.33333
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: monster_swift_idle_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 724
+        width: 362
+        height: 362
+      alignment: 9
+      pivot: {x: 0.5635359, y: 0.17679559}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 47835dc2e84e9554da3bcdf81b91df03
+      internalID: 1939553458
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster_swift_idle_1
+      rect:
+        serializedVersion: 2
+        x: 362
+        y: 724
+        width: 362
+        height: 362
+      alignment: 9
+      pivot: {x: 0.50276244, y: 0.17679559}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 220ecdc51f4a6bc448234c5c1daefa58
+      internalID: -1562643938
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster_swift_idle_2
+      rect:
+        serializedVersion: 2
+        x: 724
+        y: 724
+        width: 362
+        height: 362
+      alignment: 9
+      pivot: {x: 0.46685082, y: 0.17679559}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5c36aa6e8321a694fbe649b984267d85
+      internalID: 714015706
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster_swift_idle_3
+      rect:
+        serializedVersion: 2
+        x: 1086
+        y: 724
+        width: 362
+        height: 362
+      alignment: 9
+      pivot: {x: 0.39502764, y: 0.17679559}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ab78bf8f9cb0c6f4791d5e5d461cc24b
+      internalID: 769024044
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster_swift_move_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 362
+        width: 362
+        height: 362
+      alignment: 9
+      pivot: {x: 0.5801105, y: 0.34254143}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5a9eac5529e132840a14975b06f651df
+      internalID: -675029141
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster_swift_move_1
+      rect:
+        serializedVersion: 2
+        x: 362
+        y: 362
+        width: 362
+        height: 362
+      alignment: 9
+      pivot: {x: 0.5331492, y: 0.34254143}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 80b2d1b36d2adfa499a1046d17b805eb
+      internalID: -1078487614
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster_swift_move_2
+      rect:
+        serializedVersion: 2
+        x: 724
+        y: 362
+        width: 362
+        height: 362
+      alignment: 9
+      pivot: {x: 0.47513813, y: 0.34254143}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cdf4d25b93073a64dad8c3c518005980
+      internalID: 1417002637
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster_swift_move_3
+      rect:
+        serializedVersion: 2
+        x: 1086
+        y: 362
+        width: 362
+        height: 362
+      alignment: 9
+      pivot: {x: 0.4088398, y: 0.38121548}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 390c20a6be08ab0499bb5dc8be3409a9
+      internalID: 108950298
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster_swift_attack_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 362
+        height: 362
+      alignment: 9
+      pivot: {x: 0.5621547, y: 0.51657456}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5a1cb03c70b3f4141ac7441c0310e48b
+      internalID: 36114291
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster_swift_attack_1
+      rect:
+        serializedVersion: 2
+        x: 362
+        y: 0
+        width: 362
+        height: 362
+      alignment: 9
+      pivot: {x: 0.57734805, y: 0.51657456}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ae39c5d4880afad4c9b037e58063b724
+      internalID: 1346637294
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster_swift_hit_0
+      rect:
+        serializedVersion: 2
+        x: 724
+        y: 0
+        width: 362
+        height: 362
+      alignment: 9
+      pivot: {x: 0.46961325, y: 0.5359116}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e403162a63a2b674fae46d7ba6145740
+      internalID: -1813949367
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster_swift_death_0
+      rect:
+        serializedVersion: 2
+        x: 1086
+        y: 0
+        width: 362
+        height: 362
+      alignment: 9
+      pivot: {x: 0.4116022, y: 0.5138122}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5a3c1814680a7b744910ae74349a0abd
+      internalID: -1833718368
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    outline: []
+    customData:
+    physicsShape: []
+    bones: []
+    spriteID: b9b39e0b3a7084443aaa303d0987d043
+    internalID: 0
+    vertices: []
+    indices:
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      monster_swift_attack_0: 36114291
+      monster_swift_attack_1: 1346637294
+      monster_swift_death_0: -1833718368
+      monster_swift_hit_0: -1813949367
+      monster_swift_idle_0: 1939553458
+      monster_swift_idle_1: -1562643938
+      monster_swift_idle_2: 714015706
+      monster_swift_idle_3: 769024044
+      monster_swift_move_0: -675029141
+      monster_swift_move_1: -1078487614
+      monster_swift_move_2: 1417002637
+      monster_swift_move_3: 108950298
+      monster_swift_sheet_0: -586846704680329818
+      monster_swift_sheet_1: -5575810258421199614
+      monster_swift_sheet_10: -8358715695975284118
+      monster_swift_sheet_11: 4229919189401688926
+      monster_swift_sheet_12: 6470071262086556050
+      monster_swift_sheet_13: -7723834968880499900
+      monster_swift_sheet_14: -375124173184558852
+      monster_swift_sheet_15: 2324548045598819795
+      monster_swift_sheet_16: 5922517010253738049
+      monster_swift_sheet_17: -3566767065093207952
+      monster_swift_sheet_2: 2649291389373404974
+      monster_swift_sheet_3: 305311401054375358
+      monster_swift_sheet_4: 8578565957248423943
+      monster_swift_sheet_5: -2026057564126388300
+      monster_swift_sheet_6: -7283696248585344656
+      monster_swift_sheet_7: -5270216740108872311
+      monster_swift_sheet_8: -6758649883740989386
+      monster_swift_sheet_9: -6055043146195168594
+  mipmapLimitGroupName:
+  pSDRemoveMatte: 0
+  userData:
+  assetBundleName:
+  assetBundleVariant:

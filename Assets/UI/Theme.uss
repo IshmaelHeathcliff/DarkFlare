@@ -1,0 +1,245 @@
+Button:hover {
+  background-color: rgb(61, 66, 76);
+}
+
+Button:focus {
+  border-left-width: 2px;
+  border-right-width: 2px;
+  border-top-width: 2px;
+  border-bottom-width: 2px;
+  border-left-color: rgb(246, 203, 126);
+  border-right-color: rgb(246, 203, 126);
+  border-top-color: rgb(246, 203, 126);
+  border-bottom-color: rgb(246, 203, 126);
+}
+
+Button:active {
+  scale: 0.97 0.97;
+  background-color: rgb(91, 70, 43);
+}
+
+Button:disabled {
+  opacity: 0.42;
+  color: rgb(109, 113, 122);
+  background-color: rgb(42, 45, 51);
+  border-left-color: rgb(59, 63, 71);
+  border-right-color: rgb(59, 63, 71);
+  border-top-color: rgb(59, 63, 71);
+  border-bottom-color: rgb(59, 63, 71);
+}
+
+.ui-icon {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  -unity-background-scale-mode: scale-to-fit;
+}
+
+.ui-icon--health {
+  background-image: url("project://database/Assets/Art/SpriteSheets/Phase5/ui_icons_sheet.png?fileID=3727665825739426205&guid=3d33168ffb68da5478536df049f83403&type=3#ui_icons_sheet_0");
+}
+
+.ui-icon--gold {
+  background-image: url("project://database/Assets/Art/SpriteSheets/Phase5/ui_icons_sheet.png?fileID=-1691496728913257943&guid=3d33168ffb68da5478536df049f83403&type=3#ui_icons_sheet_1");
+}
+
+.ui-icon--weapon {
+  background-image: url("project://database/Assets/Art/SpriteSheets/Phase5/ui_icons_sheet.png?fileID=-8149964302969819370&guid=3d33168ffb68da5478536df049f83403&type=3#ui_icons_sheet_2");
+}
+
+.ui-icon--armor {
+  background-image: url("project://database/Assets/Art/SpriteSheets/Phase5/ui_icons_sheet.png?fileID=-4858508832188841462&guid=3d33168ffb68da5478536df049f83403&type=3#ui_icons_sheet_3");
+}
+
+.ui-icon--ring {
+  background-image: url("project://database/Assets/Art/SpriteSheets/Phase5/ui_icons_sheet.png?fileID=5052022550113441473&guid=3d33168ffb68da5478536df049f83403&type=3#ui_icons_sheet_4");
+}
+
+.ui-icon--inventory {
+  background-image: url("project://database/Assets/Art/SpriteSheets/Phase5/ui_icons_sheet.png?fileID=-5583588468364672500&guid=3d33168ffb68da5478536df049f83403&type=3#ui_icons_sheet_5");
+}
+
+.ui-icon--shop {
+  background-image: url("project://database/Assets/Art/SpriteSheets/Phase5/ui_icons_sheet.png?fileID=5544213995541881746&guid=3d33168ffb68da5478536df049f83403&type=3#ui_icons_sheet_6");
+}
+
+.ui-icon--crafting {
+  background-image: url("project://database/Assets/Art/SpriteSheets/Phase5/ui_icons_sheet.png?fileID=-199588985272624685&guid=3d33168ffb68da5478536df049f83403&type=3#ui_icons_sheet_7");
+}
+
+.ui-icon--close {
+  background-image: url("project://database/Assets/Art/SpriteSheets/Phase5/ui_icons_sheet.png?fileID=1558839003169599531&guid=3d33168ffb68da5478536df049f83403&type=3#ui_icons_sheet_8");
+}
+
+.item-icon--missing {
+  background-image: url("project://database/Assets/Art/SpriteSheets/Phase5/ui_icons_sheet.png?fileID=3617589548185855585&guid=3d33168ffb68da5478536df049f83403&type=3#ui_icons_sheet_11");
+  -unity-background-scale-mode: scale-to-fit;
+}
+
+.shop-item,
+.crafting-item {
+  flex-direction: row;
+  align-items: center;
+}
+
+.shop-item-icon,
+.crafting-item-icon {
+  width: 48px;
+  height: 48px;
+  margin-right: 10px;
+  flex-shrink: 0;
+  -unity-background-scale-mode: scale-to-fit;
+}
+
+.shop-item-summary,
+.crafting-item-summary {
+  flex-grow: 1;
+  white-space: normal;
+  -unity-text-align: middle-left;
+}
+
+.inventory-equipment-slot {
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.inventory-equipment-slot-icon {
+  width: 42px;
+  height: 42px;
+  margin-right: 7px;
+  flex-shrink: 0;
+  -unity-background-scale-mode: scale-to-fit;
+}
+
+.inventory-equipment-slot-icon--weapon.inventory-equipment-slot-icon--empty {
+  background-image: url("project://database/Assets/Art/SpriteSheets/Phase5/ui_icons_sheet.png?fileID=-8149964302969819370&guid=3d33168ffb68da5478536df049f83403&type=3#ui_icons_sheet_2");
+  opacity: 0.35;
+}
+
+.inventory-equipment-slot-icon--armor.inventory-equipment-slot-icon--empty {
+  background-image: url("project://database/Assets/Art/SpriteSheets/Phase5/ui_icons_sheet.png?fileID=-4858508832188841462&guid=3d33168ffb68da5478536df049f83403&type=3#ui_icons_sheet_3");
+  opacity: 0.35;
+}
+
+.inventory-equipment-slot-icon--ring.inventory-equipment-slot-icon--empty {
+  background-image: url("project://database/Assets/Art/SpriteSheets/Phase5/ui_icons_sheet.png?fileID=5052022550113441473&guid=3d33168ffb68da5478536df049f83403&type=3#ui_icons_sheet_4");
+  opacity: 0.35;
+}
+
+.inventory-item--normal,
+.shop-item--normal,
+.crafting-item--normal,
+.item-detail--normal .item-detail-icon {
+  border-left-width: 2px;
+  border-left-color: rgb(153, 158, 168);
+}
+
+.inventory-item--magic,
+.shop-item--magic,
+.crafting-item--magic,
+.item-detail--magic .item-detail-icon {
+  border-left-width: 3px;
+  border-left-color: rgb(92, 138, 220);
+  border-top-color: rgb(92, 138, 220);
+}
+
+.inventory-item--rare,
+.shop-item--rare,
+.crafting-item--rare,
+.item-detail--rare .item-detail-icon {
+  border-left-width: 4px;
+  border-left-color: rgb(220, 176, 63);
+  border-top-color: rgb(220, 176, 63);
+  border-bottom-right-radius: 0;
+}
+
+.inventory-item--unique,
+.shop-item--unique,
+.crafting-item--unique,
+.item-detail--unique .item-detail-icon {
+  border-left-width: 5px;
+  border-left-color: rgb(211, 105, 48);
+  border-top-color: rgb(211, 105, 48);
+  border-bottom-color: rgb(211, 105, 48);
+  border-top-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.game-menu-tab--active,
+.inventory-item--selected,
+.inventory-equipment-slot--selected,
+.shop-item--selected,
+.crafting-item--selected,
+.crafting-affix--selected {
+  border-left-color: rgb(246, 203, 126);
+  border-right-color: rgb(246, 203, 126);
+  border-top-color: rgb(246, 203, 126);
+  border-bottom-color: rgb(246, 203, 126);
+}
+
+
+.hud-card--row {
+  flex-direction: row;
+  align-items: center;
+}
+
+.hud-leading-icon {
+  width: 44px;
+  height: 44px;
+  margin-right: 14px;
+}
+
+.hud-card-content {
+  flex-grow: 1;
+}
+
+.hud-card-content--compact {
+  align-items: flex-end;
+}
+
+.hud-weapon-icon {
+  width: 52px;
+  height: 52px;
+  margin-right: 14px;
+  flex-shrink: 0;
+  -unity-background-scale-mode: scale-to-fit;
+  background-color: rgba(10, 13, 18, 0.7);
+  border-left-width: 2px;
+  border-right-width: 2px;
+  border-top-width: 2px;
+  border-bottom-width: 2px;
+  border-left-color: rgb(121, 101, 68);
+  border-right-color: rgb(121, 101, 68);
+  border-top-color: rgb(121, 101, 68);
+  border-bottom-color: rgb(121, 101, 68);
+  border-radius: 6px;
+}
+
+.hud-weapon-icon--empty {
+  background-image: url("project://database/Assets/Art/SpriteSheets/Phase5/ui_icons_sheet.png?fileID=-1231449721535339815&guid=3d33168ffb68da5478536df049f83403&type=3#ui_icons_sheet_10");
+  opacity: 0.55;
+}
+
+.game-menu-tab,
+.game-menu-close {
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.game-menu-tab-icon {
+  width: 24px;
+  height: 24px;
+  margin-right: 8px;
+}
+
+.game-menu-close-icon {
+  width: 22px;
+  height: 22px;
+  margin-right: 7px;
+}
+
+.game-menu-tab-label {
+  -unity-font-style: bold;
+}

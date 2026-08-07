@@ -1,0 +1,451 @@
+fileFormatVersion: 2
+guid: 7437197d5411fb94da395d8598fe8aec
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 7328451820398300488
+    second: world_props_sheet_0
+  - first:
+      213: -5002312450572469645
+    second: world_props_sheet_1
+  - first:
+      213: -3622355580343700691
+    second: world_props_sheet_2
+  - first:
+      213: 3323537082208509738
+    second: world_props_sheet_3
+  - first:
+      213: -3900381606349647639
+    second: world_props_sheet_4
+  - first:
+      213: 2030520168434006313
+    second: world_props_sheet_5
+  - first:
+      213: -4642783568996118055
+    second: world_props_sheet_6
+  - first:
+      213: -1253116722524794991
+    second: world_props_sheet_7
+  - first:
+      213: 2113690088321339713
+    second: world_props_sheet_8
+  - first:
+      213: 2037384590450605770
+    second: world_props_sheet_9
+  - first:
+      213: -8506665006218495979
+    second: world_props_sheet_10
+  - first:
+      213: -4628286606573348509
+    second: world_props_sheet_11
+  - first:
+      213: -7118475457696645323
+    second: world_props_sheet_12
+  - first:
+      213: -2783324608303037370
+    second: world_props_sheet_13
+  - first:
+      213: -5098519548830468692
+    second: world_props_sheet_14
+  - first:
+      213: -8531233016104936335
+    second: world_props_sheet_15
+  - first:
+      213: -6529891288808986560
+    second: world_props_sheet_16
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 181
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: world_props_sheet_0
+      rect:
+        serializedVersion: 2
+        x: 53
+        y: 729
+        width: 287
+        height: 284
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2e333ddb3e77320438d5889ac6a62b1b
+      internalID: 7328451820398300488
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: world_props_sheet_1
+      rect:
+        serializedVersion: 2
+        x: 399
+        y: 730
+        width: 285
+        height: 281
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 26b6633a55e5fdc4fa46d2e2f66175d3
+      internalID: -5002312450572469645
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: world_props_sheet_2
+      rect:
+        serializedVersion: 2
+        x: 741
+        y: 730
+        width: 285
+        height: 281
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a17e14944bea7194da55461b502692cd
+      internalID: -3622355580343700691
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: world_props_sheet_3
+      rect:
+        serializedVersion: 2
+        x: 1080
+        y: 712
+        width: 336
+        height: 332
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 25f959a237fbc2e4a97c0e7b6bf6b3a6
+      internalID: 3323537082208509738
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: world_props_sheet_5
+      rect:
+        serializedVersion: 2
+        x: 95
+        y: 416
+        width: 194
+        height: 208
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 05eb6dfa9f0f0be4ebaea476e8fcfb1d
+      internalID: 2030520168434006313
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: world_props_sheet_6
+      rect:
+        serializedVersion: 2
+        x: 389
+        y: 389
+        width: 276
+        height: 288
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 944eddc99b060a54aba407470f519e89
+      internalID: -4642783568996118055
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: world_props_sheet_8
+      rect:
+        serializedVersion: 2
+        x: 735
+        y: 394
+        width: 274
+        height: 291
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e164c3bbb51f5034ab616d05f82624bb
+      internalID: 2113690088321339713
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: world_props_sheet_10
+      rect:
+        serializedVersion: 2
+        x: 1149
+        y: 396
+        width: 197
+        height: 275
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0acf7d80a8bbbc349a2e044f1a8c7ccf
+      internalID: -8506665006218495979
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: world_props_sheet_12
+      rect:
+        serializedVersion: 2
+        x: 37
+        y: 66
+        width: 298
+        height: 259
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 987b4f548e052b3488b09fb215809bc0
+      internalID: -7118475457696645323
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: world_props_sheet_13
+      rect:
+        serializedVersion: 2
+        x: 404
+        y: 72
+        width: 207
+        height: 225
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: deafec1a09999ce48976da58c0292df6
+      internalID: -2783324608303037370
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: world_props_sheet_14
+      rect:
+        serializedVersion: 2
+        x: 678
+        y: 45
+        width: 359
+        height: 296
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 51ebe87a86d6f6f449bd7df24527aa4b
+      internalID: -5098519548830468692
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: world_props_sheet_16
+      rect:
+        serializedVersion: 2
+        x: 1070
+        y: 44
+        width: 336
+        height: 300
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 66d75c1ea804a384b931ccd036d1317c
+      internalID: -6529891288808986560
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    outline: []
+    customData:
+    physicsShape: []
+    bones: []
+    spriteID: eb668f0c973f34b4c9ecdc107e3ceb53
+    internalID: 0
+    vertices: []
+    indices:
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":0,"keepEmptyRects":false,"isAlternate":false}'
+    nameFileIdTable:
+      world_props_sheet_0: 7328451820398300488
+      world_props_sheet_1: -5002312450572469645
+      world_props_sheet_10: -8506665006218495979
+      world_props_sheet_11: -4628286606573348509
+      world_props_sheet_12: -7118475457696645323
+      world_props_sheet_13: -2783324608303037370
+      world_props_sheet_14: -5098519548830468692
+      world_props_sheet_15: -8531233016104936335
+      world_props_sheet_16: -6529891288808986560
+      world_props_sheet_2: -3622355580343700691
+      world_props_sheet_3: 3323537082208509738
+      world_props_sheet_4: -3900381606349647639
+      world_props_sheet_5: 2030520168434006313
+      world_props_sheet_6: -4642783568996118055
+      world_props_sheet_7: -1253116722524794991
+      world_props_sheet_8: 2113690088321339713
+      world_props_sheet_9: 2037384590450605770
+  mipmapLimitGroupName:
+  pSDRemoveMatte: 0
+  userData:
+  assetBundleName:
+  assetBundleVariant:

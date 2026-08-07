@@ -30,9 +30,6 @@
   border-bottom-right-radius: 5px;
 }
 
-.item-detail-icon--weapon {
-  background-image: url("project://database/Assets/Art/Sprites/Items/Equipment/weapon_greatsword.png");
-}
 
 .item-detail-heading {
   flex-grow: 1;

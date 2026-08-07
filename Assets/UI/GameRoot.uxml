@@ -1,4 +1,5 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <ui:Style src="project://database/Assets/UI/Theme.uss" />
   <ui:Style src="project://database/Assets/UI/Hud.uss?fileID=7433441132597879392&amp;guid=d225eb57055fd094795854125058bc2b&amp;type=3#Hud" />
   <ui:Style src="project://database/Assets/UI/GameMenu.uss?fileID=7433441132597879392&amp;guid=b4d4f2a63cd70ac488b7a48eb4b04c9e&amp;type=3#GameMenu" />
   <ui:Style src="project://database/Assets/UI/Inventory.uss?fileID=7433441132597879392&amp;guid=b18b5c9f65901f24c9fcc14f669c79e5&amp;type=3#Inventory" />
@@ -19,11 +20,23 @@
             <ui:Label text="GAME MENU" class="game-menu-kicker" />
           </ui:VisualElement>
           <ui:VisualElement class="game-menu-tabs">
-            <ui:Button name="game-menu-inventory-tab" text="背包" class="game-menu-tab" />
-            <ui:Button name="game-menu-shop-tab" text="商店" class="game-menu-tab" />
-            <ui:Button name="game-menu-crafting-tab" text="打造" class="game-menu-tab" />
+            <ui:Button name="game-menu-inventory-tab" class="game-menu-tab">
+              <ui:VisualElement class="ui-icon ui-icon--inventory game-menu-tab-icon" picking-mode="Ignore" />
+              <ui:Label text="背包" class="game-menu-tab-label" picking-mode="Ignore" />
+            </ui:Button>
+            <ui:Button name="game-menu-shop-tab" class="game-menu-tab">
+              <ui:VisualElement class="ui-icon ui-icon--shop game-menu-tab-icon" picking-mode="Ignore" />
+              <ui:Label text="商店" class="game-menu-tab-label" picking-mode="Ignore" />
+            </ui:Button>
+            <ui:Button name="game-menu-crafting-tab" class="game-menu-tab">
+              <ui:VisualElement class="ui-icon ui-icon--crafting game-menu-tab-icon" picking-mode="Ignore" />
+              <ui:Label text="打造" class="game-menu-tab-label" picking-mode="Ignore" />
+            </ui:Button>
           </ui:VisualElement>
-          <ui:Button name="game-menu-close" text="关闭  Esc / B" class="game-menu-close" />
+          <ui:Button name="game-menu-close" class="game-menu-close">
+            <ui:VisualElement class="ui-icon ui-icon--close game-menu-close-icon" picking-mode="Ignore" />
+            <ui:Label text="关闭  Esc / B" picking-mode="Ignore" />
+          </ui:Button>
         </ui:VisualElement>
         <ui:VisualElement name="game-menu-content" class="game-menu-content">
           <ui:Instance template="Inventory" class="inventory-template" />

@@ -15,6 +15,12 @@ MonoBehaviour:
   _id: plate_armor
   _displayName: "\u677F\u7532"
   _itemType: 1
+  _icon:
+    m_AssetGUID: b25638dc709c3184cabc93ae9de79ee2
+    m_SubObjectName:
+    m_SubObjectType:
+    m_SubObjectGUID:
+    m_EditorAssetChanged: 0
   _allowedEquipmentSlots: 2
   _defaultRarity: 0
   _baseValue: 36

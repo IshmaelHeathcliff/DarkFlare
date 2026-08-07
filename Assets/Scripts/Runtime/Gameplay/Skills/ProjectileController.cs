@@ -14,6 +14,7 @@ namespace DarkFlare
         AttackSnapshot _attack;
         Vector2 _direction;
         bool _initialized;
+        SpriteRenderer _renderer;
 
         public IArchitecture GetArchitecture()
         {
@@ -49,6 +50,8 @@ namespace DarkFlare
             }
 
             result = this.SendCommand(new ApplyDamageCommand(_attack, target));
+            _initialized = false;
+            ProjectileImpactVisual.Spawn(transform.position, _renderer != null ? _renderer.sprite : null);
             Destroy(gameObject);
             return true;
         }
@@ -78,6 +81,7 @@ namespace DarkFlare
         {
             _rigidbody = GetComponent<Rigidbody2D>();
             _collider = GetComponent<CircleCollider2D>();
+            _renderer = GetComponentInChildren<SpriteRenderer>();
 
             if (_rigidbody != null)
             {

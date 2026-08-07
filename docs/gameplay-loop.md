@@ -11,7 +11,7 @@
 
 玩家可在场景内持续战斗和获取物品，通过 Tab / 手柄 Start 打开随身背包，也可接近商人或打造台后使用 E / 手柄北键进入对应功能。菜单打开时暂停玩法模拟，关闭后恢复战斗与 Gameplay 输入。
 
-当前成果用于验证战斗、物品、经济与构筑之间的闭环，仍是单场景功能原型。装备已扩展为武器、护甲、左戒指和右戒指四槽，正式内容池包含七件装备、十二词条和三种怪物；商人、打造台及新增内容仍未进入批量美术生产。
+当前成果用于验证战斗、物品、经济与构筑之间的闭环，仍是单场景功能原型。装备已扩展为武器、护甲、左戒指和右戒指四槽，正式内容池包含七件装备、十二词条和三种怪物；地图、商人、打造台、三种怪物、七件装备与运行时 UI 已完成首版视觉接入。
 
 ## 阶段 0 视觉切片
 
@@ -29,7 +29,7 @@
 
 ## 启动与运行流程
 
-1. `CombatPrototypeBootstrap` 先配置并记录随机根种子，再预热玩家、怪物、投射物和掉落物 Addressable Prefab，初始化商人、打造配置与玩家初始金币。
+1. `CombatPrototypeBootstrap` 先配置并记录随机根种子，再预热玩家、怪物、投射物、掉落物 Addressable Prefab 和七件装备图标，初始化商人、打造配置与玩家初始金币。
 2. `SpawnSystem` 生成玩家，`MonsterSpawner` 使用独立位置与实例种子持续生成怪物；相机随后绑定玩家。
 3. 玩家和怪物统一注册到 `CombatModel`，攻击通过 Command 进入 `CombatSystem` 和 `DamageCalculator`；投射物生成或怪物接触攻击成功后发送 `ActorAttackedEvent`，伤害、死亡与复活沿用 `ActorDamagedEvent`、`ActorDiedEvent`、`ActorRevivedEvent` 驱动 Animator。
 4. 怪物死亡后，`LootSystem` 先执行表级掉落概率，成功后才按条目权重生成 `ItemInstance` 并实例化世界掉落物。
@@ -75,6 +75,17 @@
 
 完整内容清单见 [首批内容池](./content-system.md)。
 
+## 阶段 5 批量视觉接入与表现反馈
+
+- 裂爪猎犬和铁壳尸傀已接入独立 Sprite、Animation Clip、Animator Controller 与 Addressable Prefab；三种怪物可直接依靠轮廓和体量区分。
+- 七件正式装备使用独立 Addressable 图标，世界掉落、背包、四个装备槽、商店、打造、详情和 HUD 从同一物品基底解析视觉。
+- `SpriteAssetLoader` 统一负责图标去重预热、缓存、取消清理与释放，`GameArchitecture.Deinit()` 与 Prefab Loader 一并释放资源。
+- 地图在既有 5×5 地表和 `WorldBounds` 上补充营地、路径、破损地表、边界装饰与火盆，不改变生成、碰撞、交互或 AI 规则。
+- 商人与打造台改为独立 Prefab，通过 `WorldInteractionVisual` 响应既有焦点消息；战斗表现增加命中闪白、伤害数字、怪物血条、死亡淡出和投射物冲击。
+- `Theme.uss` 统一 HUD 与三个菜单的图标、稀有度、按钮和焦点状态，继续复用唯一 `UIDocument` 和 `EventSystem`。
+
+完整规格、资产与验收截图见 [视觉规范](./visual-style.md) 和 [视觉资产清单](./visual-assets.md)。
+
 ## 模块边界
 
 | 模块 | 主要入口 | 当前职责 |
@@ -88,12 +99,13 @@
 | 打造 | `CraftingSystem`、`CraftingOperations` | 四种词条操作、金币成本、失败回滚与完成事件 |
 | 输入与 UI | `GameInput`、`GameMenuController`、各面板 Controller | 键鼠 / 手柄输入、HUD、背包、商店和打造交互 |
 | 世界交互 | `PlayerInteractionController`、`WorldInteractionTarget`、`GameplayPauseSystem` | 最近目标选择、情境菜单请求、交互提示与菜单暂停 |
+| 视觉表现 | `SpriteAssetLoader`、`ItemVisualPresenter`、`ActorVisualFeedbackController`、`WorldInteractionVisual` | 动态图标、战斗反馈、交互高亮和临时表现清理 |
 
 各场景 Controller 实现 `IController`，通过 Command 修改 Model / System，通过 Query 获取只读快照，并注册 Event 刷新表现。Controller 不直接修改 Model，也不直接发送领域 Event。
 
 ## 场景与配置
 
-- `Assets/Scenes/Main.unity`：唯一构建场景，包含战斗启动器、刷怪器、`WorldBounds`、5×5 地表、`UIRoot`、唯一 `EventSystem`、商人与打造台原型对象。
+- `Assets/Scenes/Main.unity`：唯一构建场景，包含战斗启动器、刷怪器、`WorldBounds`、5×5 分层地表、营地与边界装饰、`UIRoot`、唯一 `EventSystem`、商人与打造台 Prefab。
 - `Assets/Data/Preset/Actors/玩家.asset`：玩家属性与 Prefab 引用。
 - `Assets/Data/Preset/Skills/基础投射物技能.asset`：首版投射物技能。
 - `Assets/Data/Preset/Monsters/`：三种怪物定义与 `基础刷怪表.asset`。
@@ -118,6 +130,7 @@ Prefab 通过 Addressables 预热和实例化，首版不使用 `Resources` 或�
 - 阶段 2 后续修正验证为 EditMode 75/75 通过；PlayMode 9 项中 7 项通过、2 项为包内既有忽略测试。四槽键鼠 / 手柄操作、最大生命与 HUD 同步、属性资产一致性、三档分辨率和在途投射物换装快照通过，Runtime / Editor 与测试程序集编译无错误。
 - 阶段 3 全量 EditMode 82/82 通过；PlayMode 11 项中 9 项通过、2 项为项目既有忽略测试。固定种子 `24681357` 连续运行两次 Main 时，前三只怪物生命、玩家 / 怪物攻击和掉落序列完全一致；关闭固定种子后两次启动根种子正常变化。Runtime / Editor 与测试程序集编译 0 警告、0 错误。
 - 阶段 4 全量 EditMode 87/87 通过；PlayMode 12 项中 10 项通过、2 项 Input System 上游用例按原标记忽略、0 失败。正式装备交易 / 打造 / 四槽流程、固定种子前 12 只怪物双次重放和三个怪物 Addressables 预热通过，四个项目程序集编译无警告和错误。
+- 阶段 5 全量 EditMode 92/92 通过；PlayMode 12 项中 10 项通过、2 项 Input System 上游用例按原标记跳过、0 失败。Core、Runtime、Editor、EditMode 与 PlayMode 五个项目程序集编译通过；七件装备图标预热、三种怪物 Animator、战斗反馈与三档 UI 渲染通过，最终 Play Console 为 0 错误、0 警告。
 
 以上数据是首版收尾时的验证记录；后续改动仍应重新运行相关测试和 Play 流程。
 
@@ -128,6 +141,6 @@ Prefab 通过 Addressables 预热和实例化，首版不使用 `Resources` 或�
 - 装备已实现武器、护甲和双戒指槽，以及替换和卸下；首批七件装备和十二词条已接入，但尚无耐久、套装、纸娃娃和词条等级段。
 - 交易只维护单个共享商人库存；卖出物品不进入商人库存，也没有回购。
 - 打造只消耗金币，尚无配方、材料、锁定词缀或批量操作。
-- 视觉垂直切片已替换玩家、基础怪物、投射物、掉落、扩展地表和背包皮肤，并建立首版世界边界；商人、打造台和新增装备 / 怪物仍使用原型内容或共享占位视觉。
+- 首版视觉已覆盖地图、玩家、三种怪物、投射物、掉落、七件装备、商人、打造台、HUD 与三个菜单；`PrototypeSquare` 仅保留为调试回退，不再表达主要可玩对象。当前仍不包含音效、音乐、纸娃娃或镜头震动。
 
 输入和 UI 结构见 [输入与运行时 UI](./input-ui-system.md)，装备事务见 [装备系统](./equipment-system.md)，打造事务规则见 [打造系统](./crafting-system.md)，伤害与词条规则见 [伤害系统与词条系统设计](./damage-affix-system.md)。

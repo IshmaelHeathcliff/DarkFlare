@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace DarkFlare
@@ -11,6 +12,7 @@ namespace DarkFlare
         const string UniqueClass = "item-detail--unique";
 
         readonly VisualElement _root;
+        readonly VisualElement _icon;
         readonly Label _nameLabel;
         readonly Label _metaLabel;
         readonly Label _baseLabel;
@@ -28,6 +30,7 @@ namespace DarkFlare
             }
 
             _nameLabel = _root.Q<Label>("item-detail-name");
+            _icon = _root.Q<VisualElement>("item-detail-icon");
             _metaLabel = _root.Q<Label>("item-detail-meta");
             _baseLabel = _root.Q<Label>("item-detail-base");
             _implicitList = _root.Q<VisualElement>("item-detail-implicit-list");
@@ -36,6 +39,7 @@ namespace DarkFlare
         }
 
         public bool IsValid => _root != null
+            && _icon != null
             && _nameLabel != null
             && _metaLabel != null
             && _baseLabel != null
@@ -45,12 +49,21 @@ namespace DarkFlare
 
         public void Show(ItemDetailSnapshot detail)
         {
+            Show(detail, ItemVisualPresenter.GetSprite(detail.IconGuid));
+        }
+
+        public void Show(ItemDetailSnapshot detail, Sprite icon)
+        {
             if (!IsValid)
             {
                 return;
             }
 
             ApplyRarityClass(detail.Rarity);
+            _icon.EnableInClassList("item-icon--missing", detail.Item != null && icon == null);
+            _icon.style.backgroundImage = icon != null
+                ? new StyleBackground(icon)
+                : new StyleBackground(StyleKeyword.None);
             _nameLabel.text = detail.Item != null ? detail.DisplayName : "未选择物品";
             _metaLabel.text = detail.Item != null
                 ? $"{ItemDetailFormatter.GetItemTypeText(detail.Type)} · {ItemDetailFormatter.GetRarityText(detail.Rarity)} · 等级 {detail.ItemLevel}"

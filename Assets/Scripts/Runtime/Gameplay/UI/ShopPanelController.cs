@@ -264,13 +264,27 @@ namespace DarkFlare
             {
                 ShopItemSnapshot item = items[i];
                 Button button = new Button(() => SelectItem(item.Item, item.Source));
-                button.text = $"{item.DisplayName}\n{ItemDetailFormatter.GetRarityText(item.Rarity)} · {item.Price} 金币";
+                button.text = string.Empty;
                 button.tooltip = $"{item.DisplayName} · {ItemDetailFormatter.GetItemTypeText(item.Type)} · {item.AffixCount} 条词缀";
                 button.AddToClassList("shop-item");
                 button.AddToClassList(item.Source == ShopItemSource.Merchant
                     ? "shop-item--merchant"
                     : "shop-item--player");
                 button.AddToClassList(GetRarityClass(item.Rarity));
+
+                VisualElement icon = new VisualElement
+                {
+                    pickingMode = PickingMode.Ignore,
+                };
+                icon.AddToClassList("shop-item-icon");
+                ItemVisualPresenter.ApplyIcon(icon, item.Detail.IconGuid);
+                Label summary = new Label($"{item.DisplayName}\n{ItemDetailFormatter.GetRarityText(item.Rarity)} · {item.Price} 金币")
+                {
+                    pickingMode = PickingMode.Ignore,
+                };
+                summary.AddToClassList("shop-item-summary");
+                button.Add(icon);
+                button.Add(summary);
                 button.RegisterCallback<PointerEnterEvent>(_ => PreviewItem(item.Item, item.Source));
                 button.RegisterCallback<PointerLeaveEvent>(_ => EndPreview(item.Item));
                 button.RegisterCallback<FocusInEvent>(_ => PreviewItem(item.Item, item.Source));
@@ -354,7 +368,7 @@ namespace DarkFlare
 
             if (TryFindSnapshot(item, source, out ShopItemSnapshot snapshot))
             {
-                _detailView.Show(snapshot.Detail);
+                _detailView.Show(snapshot.Detail, ItemVisualPresenter.GetSprite(snapshot.Detail.IconGuid));
                 return;
             }
 

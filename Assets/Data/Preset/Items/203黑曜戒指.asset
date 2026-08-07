@@ -15,6 +15,12 @@ MonoBehaviour:
   _id: obsidian_ring
   _displayName: "\u9ED1\u66DC\u6212\u6307"
   _itemType: 2
+  _icon:
+    m_AssetGUID: bf07871323670d148819cd1d7e079297
+    m_SubObjectName:
+    m_SubObjectType:
+    m_SubObjectGUID:
+    m_EditorAssetChanged: 0
   _allowedEquipmentSlots: 12
   _defaultRarity: 0
   _baseValue: 28

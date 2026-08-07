@@ -2,7 +2,7 @@
 
 ## 当前范围
 
-阶段 4 已把首版正式内容扩充为 14 个标签、12 个可生效词条、7 件装备和 3 种怪物，并统一接入刷怪、掉落、商店与打造。正式图标、怪物外观和动画差异仍留在阶段 5。
+阶段 4 已把首版正式内容扩充为 14 个标签、12 个可生效词条、7 件装备和 3 种怪物，并统一接入刷怪、掉落、商店与打造。阶段 5 已补齐七件装备图标，以及裂爪猎犬、铁壳尸傀的独立外观与动画。
 
 稳定 ID 均使用小写 `snake_case`。运行时随机规则继续沿用阶段 3：怪物生命倍率 `0.85–1.15`、空手伤害 `10–14`，大剑伤害 `20–40`，掉落概率由各怪物掉落表独立配置。
 
@@ -62,7 +62,7 @@
 | 裂爪猎犬 | `razor_hound` | 36 | 3.6 | `4–7` | 0.55s | 30% | 30 |
 | 铁壳尸傀 | `iron_husk` | 96 | 1.7 | `10–14` | 1.0s | 45% | 15 |
 
-三者使用独立 `MonsterDefinition`、掉落表和 Addressable Prefab，当前暂时共享阶段 0 的视觉结构与 Animator。三张掉落表都覆盖七件装备和十二词条，装备顺序统一为大剑、战斧、皮甲、板甲、铁指环、翡翠戒指、黑曜戒指：
+三者使用独立 `MonsterDefinition`、掉落表、Addressable Prefab、Sprite 和 Animator Controller，并保持统一的移动、攻击、受伤与死亡参数契约。三张掉落表都覆盖七件装备和十二词条，装备顺序统一为大剑、战斧、皮甲、板甲、铁指环、翡翠戒指、黑曜戒指：
 
 | 掉落表 | 条目权重 |
 | --- | --- |
@@ -79,6 +79,7 @@
 - 标签兼容、每件装备候选数量和池覆盖。
 - 刷怪、掉落、商店和打造池的空项、权重与内容覆盖。
 - 怪物 Prefab 的独立 GUID、Addressables 注册和运行组件。
+- 正式装备图标的非空、唯一、Addressables 注册、Sprite 类型、64 PPU、Point Filter 和无压缩导入规格。
 
 `MonsterSpawnDefinition.Rules`、`LootTableDefinition.AffixPool` 与 `TraderDefinition.Stock` 提供只读检查入口，不改变运行时事务接口。阶段 4 的一次性安装与迁移脚本已在正式资产落地并通过验收后移除，后续内容维护统一通过配置中心直接编辑正式资产。
 
@@ -89,5 +90,6 @@
 - 固定种子 `24681357` 连续两次运行 Main，前 12 个实例覆盖三种怪物，怪物类型、实例生命、攻击和掉落序列完全一致。
 - 全量 EditMode 87/87 通过；PlayMode 12 项中 10 项通过、2 项 Input System 上游用例按原标记忽略、0 失败。
 - Runtime、Editor、EditMode 与 PlayMode 四个程序集编译 0 警告、0 错误；三个怪物 Addressable Prefab 在 Main 预热中均成功加载，最终 Console 无错误。
+- 阶段 5 全量 EditMode 92/92 通过；PlayMode 12 项中 10 项通过、2 项 Input System 上游用例按原标记跳过。七个图标、三种怪物 Prefab 与 Animator 契约、Addressables 图标预热、缓存和释放路径均通过专项检查。
 
 随机种子与掉落判定见 [随机化与掉落规则](./randomization-system.md)，装备事务见 [装备系统](./equipment-system.md)，词条计算语义见 [伤害系统与词条系统设计](./damage-affix-system.md)。

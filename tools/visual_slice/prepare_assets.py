@@ -1,3 +1,4 @@
+import shutil
 from pathlib import Path
 
 from PIL import Image, ImageOps
@@ -11,23 +12,13 @@ ART = ROOT / "Assets" / "Art" / "Sprites"
 def ensure_directories() -> None:
     paths = [
         ART / "Environment" / "VisualSlice",
-        ART / "Characters" / "Player" / "Preview",
-        ART / "Characters" / "Monsters" / "Basic" / "Preview",
         ART / "Effects",
         ART / "Items" / "Equipment",
-        ART / "UI",
+        ART.parent / "SpriteSheets" / "Phase5",
     ]
 
     for path in paths:
         path.mkdir(parents=True, exist_ok=True)
-
-
-def crop_grid_cell(image: Image.Image, columns: int, rows: int, column: int, row: int) -> Image.Image:
-    left = image.width * column // columns
-    right = image.width * (column + 1) // columns
-    top = image.height * row // rows
-    bottom = image.height * (row + 1) // rows
-    return image.crop((left, top, right, bottom))
 
 
 def normalize_cutout(
@@ -132,37 +123,6 @@ def remove_alpha_islands(image: Image.Image, minimum_relative_area: float = 0.02
     return rgba
 
 
-def save_character_sheet(
-    source_name: str,
-    output_root: Path,
-    prefix: str,
-) -> list[Path]:
-    image = Image.open(SOURCE / source_name).convert("RGBA")
-    outputs: list[Path] = []
-
-    for column in range(4):
-        idle = normalize_cutout(crop_grid_cell(image, 4, 3, column, 0), (96, 96), 3, bottom_anchor=True)
-        idle_path = output_root / f"{prefix}_idle_se_{column}.png"
-        idle.save(idle_path)
-        outputs.append(idle_path)
-
-        move = normalize_cutout(crop_grid_cell(image, 4, 3, column, 1), (96, 96), 3, bottom_anchor=True)
-        move_path = output_root / f"{prefix}_move_se_{column}.png"
-        move.save(move_path)
-        outputs.append(move_path)
-
-    preview_names = ["attack_anticipation", "attack_release", "hit", "death"]
-    preview_root = output_root / "Preview"
-
-    for column, state in enumerate(preview_names):
-        preview = normalize_cutout(crop_grid_cell(image, 4, 3, column, 2), (96, 96), 3, bottom_anchor=True)
-        preview_path = preview_root / f"{prefix}_{state}_se.png"
-        preview.save(preview_path)
-        outputs.append(preview_path)
-
-    return outputs
-
-
 def save_ground() -> Path:
     source = Image.open(SOURCE / "ground-source.png").convert("RGB")
     square_size = min(source.size)
@@ -188,27 +148,21 @@ def save_single_cutouts() -> list[Path]:
     projectile_path = ART / "Effects" / "projectile_arcane.png"
     projectile.save(projectile_path)
 
-    sword_source = Image.open(SOURCE / "greatsword-alpha.png")
-    sword = normalize_cutout(sword_source, (64, 64), 4)
-    sword_path = ART / "Items" / "Equipment" / "weapon_greatsword.png"
-    sword.save(sword_path)
-    return [projectile_path, sword_path]
+    return [projectile_path]
 
 
-def save_ui_components() -> list[Path]:
-    source = Image.open(SOURCE / "ui-sheet-alpha.png").convert("RGBA")
+def copy_retained_sheets() -> list[Path]:
+    sheet_root = ART.parent / "SpriteSheets" / "Phase5"
     definitions = [
-        (0, 0, "ui_inventory_panel.png", (256, 256), 2),
-        (1, 0, "ui_slot_normal.png", (64, 64), 2),
-        (0, 1, "ui_slot_focus.png", (64, 64), 2),
-        (1, 1, "ui_slot_disabled.png", (64, 64), 2),
+        (SOURCE / "player-sheet-alpha.png", sheet_root / "player_sheet.png"),
+        (SOURCE / "monster-sheet-alpha.png", sheet_root / "monster_basic_sheet.png"),
+        (SOURCE / "phase-5" / "ui-icons-sheet-transparent.png", sheet_root / "ui_icons_sheet.png"),
+        (SOURCE / "ui-sheet-alpha.png", sheet_root / "ui_frames_sheet.png"),
     ]
     outputs: list[Path] = []
 
-    for column, row, name, size, padding in definitions:
-        component = normalize_cutout(crop_grid_cell(source, 2, 2, column, row), size, padding)
-        output = ART / "UI" / name
-        component.save(output)
+    for source, output in definitions:
+        shutil.copy2(source, output)
         outputs.append(output)
 
     return outputs
@@ -239,22 +193,8 @@ def validate_alpha(path: Path) -> tuple[float, int]:
 def main() -> None:
     ensure_directories()
     outputs = [save_ground()]
-    outputs.extend(
-        save_character_sheet(
-            "player-sheet-alpha.png",
-            ART / "Characters" / "Player",
-            "player",
-        )
-    )
-    outputs.extend(
-        save_character_sheet(
-            "monster-sheet-alpha.png",
-            ART / "Characters" / "Monsters" / "Basic",
-            "monster_basic",
-        )
-    )
+    outputs.extend(copy_retained_sheets())
     outputs.extend(save_single_cutouts())
-    outputs.extend(save_ui_components())
 
     print(f"Prepared {len(outputs)} visual slice assets")
 

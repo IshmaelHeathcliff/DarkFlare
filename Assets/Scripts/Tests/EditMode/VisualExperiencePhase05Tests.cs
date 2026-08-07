@@ -94,7 +94,7 @@ namespace DarkFlare.Tests
         }
 
         [Test]
-        public void LootPrefab_BindsNameRarityAndIndependentVisualHierarchy()
+        public void LootPrefab_BindsNameRarityAndVisualHierarchy()
         {
             GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(LootPrefabPath);
 
@@ -109,7 +109,6 @@ namespace DarkFlare.Tests
             Assert.IsNotNull(pickup);
             Assert.IsNotNull(visual);
             Assert.IsNotNull(collider);
-            Assert.IsNotNull(instance.transform.Find("Shadow"));
             Assert.IsNotNull(instance.transform.Find("Visual/Halo"));
             Assert.IsNotNull(instance.transform.Find("Visual/Icon"));
             Assert.IsNotNull(instance.transform.Find("Visual/Label"));

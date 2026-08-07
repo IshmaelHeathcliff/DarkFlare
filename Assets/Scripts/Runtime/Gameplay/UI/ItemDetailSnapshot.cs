@@ -97,6 +97,8 @@ namespace DarkFlare
 
         public string DisplayName { get; }
 
+        public string IconGuid { get; }
+
         public ItemType Type { get; }
 
         public ItemRarity Rarity { get; }
@@ -125,6 +127,7 @@ namespace DarkFlare
             ItemInstance item,
             string instanceId,
             string displayName,
+            string iconGuid,
             ItemType type,
             ItemRarity rarity,
             int itemLevel,
@@ -140,6 +143,7 @@ namespace DarkFlare
             Item = item;
             InstanceId = instanceId;
             DisplayName = displayName;
+            IconGuid = iconGuid;
             Type = type;
             Rarity = rarity;
             ItemLevel = itemLevel;

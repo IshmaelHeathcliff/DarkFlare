@@ -15,6 +15,12 @@ MonoBehaviour:
   _id: great_sword
   _displayName: "\u5927\u5251"
   _itemType: 0
+  _icon:
+    m_AssetGUID: 1a1e12f2b0381f54c829d3ef4165a2de
+    m_SubObjectName:
+    m_SubObjectType:
+    m_SubObjectGUID:
+    m_EditorAssetChanged: 0
   _allowedEquipmentSlots: 1
   _defaultRarity: 0
   _baseValue: 30

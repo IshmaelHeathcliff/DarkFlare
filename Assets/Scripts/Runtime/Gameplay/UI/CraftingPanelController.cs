@@ -286,10 +286,24 @@ namespace DarkFlare
         {
             Button button = new Button(() => SelectItem(item.Item));
             int affixCount = item.PrefixCount + item.SuffixCount;
-            button.text = $"{item.DisplayName}\n{ItemDetailFormatter.GetRarityText(item.Rarity)} · {affixCount} 条 · 价值 {item.Value}";
+            button.text = string.Empty;
             button.tooltip = $"{item.DisplayName} · 售价 {item.SellPrice} · 前缀 {item.PrefixCount}/{item.MaxPrefixCount} · 后缀 {item.SuffixCount}/{item.MaxSuffixCount}";
             button.AddToClassList("crafting-item");
             button.AddToClassList(GetRarityClass(item.Rarity));
+
+            VisualElement icon = new VisualElement
+            {
+                pickingMode = PickingMode.Ignore,
+            };
+            icon.AddToClassList("crafting-item-icon");
+            ItemVisualPresenter.ApplyIcon(icon, item.Detail.IconGuid);
+            Label summary = new Label($"{item.DisplayName}\n{ItemDetailFormatter.GetRarityText(item.Rarity)} · {affixCount} 条 · 价值 {item.Value}")
+            {
+                pickingMode = PickingMode.Ignore,
+            };
+            summary.AddToClassList("crafting-item-summary");
+            button.Add(icon);
+            button.Add(summary);
             button.RegisterCallback<PointerEnterEvent>(_ => PreviewItem(item.Item));
             button.RegisterCallback<PointerLeaveEvent>(_ => EndPreview(item.Item));
             button.RegisterCallback<FocusInEvent>(_ => PreviewItem(item.Item));
@@ -459,7 +473,8 @@ namespace DarkFlare
                     continue;
                 }
 
-                _detailView.Show(LastSnapshot.Items[i].Detail);
+                ItemDetailSnapshot detail = LastSnapshot.Items[i].Detail;
+                _detailView.Show(detail, ItemVisualPresenter.GetSprite(detail.IconGuid));
                 return;
             }
 

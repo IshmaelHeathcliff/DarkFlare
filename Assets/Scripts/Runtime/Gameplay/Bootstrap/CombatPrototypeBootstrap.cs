@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Sirenix.OdinInspector;
@@ -55,9 +56,11 @@ namespace DarkFlare
             this.GetSystem<GameplayRandomSystem>().Configure(_useFixedRandomSeed, _fixedRandomSeed);
             Debug.Log("[CombatPrototypeBootstrap] 开始预热资源");
             CancellationToken token = this.GetCancellationTokenOnDestroy();
+            List<AssetReferenceSprite> itemIcons = CollectItemIcons();
             await UniTask.WhenAll(
                 this.GetSystem<SpawnSystem>().PreloadAsync(_playerCharacter, _playerSkill, _monsterSpawnDefinition, token),
-                this.GetSystem<LootSystem>().PreloadAsync(_lootPickupPrefab, token));
+                this.GetSystem<LootSystem>().PreloadAsync(_lootPickupPrefab, token),
+                this.GetUtility<SpriteAssetLoader>().PreloadAsync(itemIcons, token));
             Debug.Log("[CombatPrototypeBootstrap] 资源预热完成，开始生成玩家");
 
             Vector3 spawnPosition = _playerSpawnPoint != null ? _playerSpawnPoint.position : transform.position;
@@ -99,6 +102,54 @@ namespace DarkFlare
             }
 
             follow.SetTarget(target);
+        }
+
+        List<AssetReferenceSprite> CollectItemIcons()
+        {
+            List<AssetReferenceSprite> icons = new List<AssetReferenceSprite>();
+            HashSet<string> iconGuids = new HashSet<string>();
+
+            if (_trader != null)
+            {
+                for (int i = 0; i < _trader.Stock.Count; i++)
+                {
+                    AddItemIcon(_trader.Stock[i].Item, icons, iconGuids);
+                }
+            }
+
+            if (_monsterSpawnDefinition != null)
+            {
+                foreach (MonsterDefinition monster in _monsterSpawnDefinition.AllMonsters)
+                {
+                    LootTableDefinition lootTable = monster != null ? monster.LootTable : null;
+
+                    if (lootTable == null)
+                    {
+                        continue;
+                    }
+
+                    for (int i = 0; i < lootTable.Entries.Count; i++)
+                    {
+                        AddItemIcon(lootTable.Entries[i].Item, icons, iconGuids);
+                    }
+                }
+            }
+
+            return icons;
+        }
+
+        static void AddItemIcon(
+            ItemBaseDefinition item,
+            List<AssetReferenceSprite> icons,
+            HashSet<string> iconGuids)
+        {
+            AssetReferenceSprite icon = item != null ? item.Icon : null;
+            string guid = icon != null ? icon.AssetGUID : string.Empty;
+
+            if (!string.IsNullOrWhiteSpace(guid) && iconGuids.Add(guid))
+            {
+                icons.Add(icon);
+            }
         }
     }
 }

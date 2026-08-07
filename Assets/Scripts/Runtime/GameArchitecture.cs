@@ -18,10 +18,12 @@ namespace DarkFlare
             this.RegisterSystem(new CraftingSystem());
             this.RegisterSystem(new GameplayPauseSystem());
             this.RegisterUtility(new PrefabAssetLoader());
+            this.RegisterUtility(new SpriteAssetLoader());
         }
 
         protected override void OnDeinit()
         {
+            this.GetUtility<SpriteAssetLoader>().ReleaseAll();
             this.GetUtility<PrefabAssetLoader>().ReleaseAll();
             this.GetUtility<GameInput>().Dispose();
         }

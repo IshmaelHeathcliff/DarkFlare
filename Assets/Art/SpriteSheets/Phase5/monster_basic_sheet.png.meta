@@ -1,0 +1,473 @@
+fileFormatVersion: 2
+guid: a862d0b53cd77854ab577b082f90c77f
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -7512522768773661338
+    second: monster_basic_sheet_0
+  - first:
+      213: -7708014487081369859
+    second: monster_basic_sheet_1
+  - first:
+      213: -7658407147825245238
+    second: monster_basic_sheet_2
+  - first:
+      213: -1232857477635670584
+    second: monster_basic_sheet_3
+  - first:
+      213: 7561526123762887322
+    second: monster_basic_sheet_4
+  - first:
+      213: -5024220927262696566
+    second: monster_basic_sheet_5
+  - first:
+      213: -6128957492343764506
+    second: monster_basic_sheet_6
+  - first:
+      213: 8230060517663988366
+    second: monster_basic_sheet_7
+  - first:
+      213: 3921706009129144172
+    second: monster_basic_sheet_8
+  - first:
+      213: -8476800848586424810
+    second: monster_basic_sheet_9
+  - first:
+      213: 1115458711258381799
+    second: monster_basic_sheet_10
+  - first:
+      213: -896244265449511272
+    second: monster_basic_sheet_11
+  - first:
+      213: 4400556272045894675
+    second: monster_basic_sheet_12
+  - first:
+      213: 934358566521411423
+    second: monster_basic_sheet_13
+  - first:
+      213: 6555989086519304928
+    second: monster_basic_sheet_14
+  - first:
+      213: -6807633168846060660
+    second: monster_basic_sheet_15
+  - first:
+      213: 317007753004751482
+    second: monster_basic_sheet_16
+  - first:
+      213: 4871340951684400752
+    second: monster_basic_sheet_17
+  - first:
+      213: -2563854676738236363
+    second: monster_basic_sheet_18
+  - first:
+      213: 5043706652839365479
+    second: monster_basic_sheet_19
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 192
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: monster_basic_idle_se_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 724
+        width: 362
+        height: 362
+      alignment: 9
+      pivot: {x: 0.52209944, y: 0.18508287}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f36fe1a4134e51e46ae086e17d5cf784
+      internalID: 1143549659
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster_basic_idle_se_1
+      rect:
+        serializedVersion: 2
+        x: 362
+        y: 724
+        width: 362
+        height: 362
+      alignment: 9
+      pivot: {x: 0.40607736, y: 0.18508287}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9dfede6f45f714b49847e1430e4dcc8c
+      internalID: 828652900
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster_basic_idle_se_2
+      rect:
+        serializedVersion: 2
+        x: 724
+        y: 724
+        width: 362
+        height: 362
+      alignment: 9
+      pivot: {x: 0.43508288, y: 0.18508287}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a8dffe5aa701de646b1c9894683074d3
+      internalID: -1749104048
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster_basic_idle_se_3
+      rect:
+        serializedVersion: 2
+        x: 1086
+        y: 724
+        width: 362
+        height: 362
+      alignment: 9
+      pivot: {x: 0.3839779, y: 0.18508287}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b66de335a9e6e924fba36e142ccb9c36
+      internalID: 1975570356
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster_basic_move_se_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 362
+        width: 362
+        height: 362
+      alignment: 9
+      pivot: {x: 0.5276243, y: 0.2596685}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cce33e3b4db325847839d993dd17df7b
+      internalID: 917131774
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster_basic_move_se_1
+      rect:
+        serializedVersion: 2
+        x: 362
+        y: 362
+        width: 362
+        height: 362
+      alignment: 9
+      pivot: {x: 0.44751382, y: 0.24033149}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0ae772043b1d87f4f860aed3c1acc75e
+      internalID: 2048069636
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster_basic_move_se_2
+      rect:
+        serializedVersion: 2
+        x: 724
+        y: 362
+        width: 362
+        height: 362
+      alignment: 9
+      pivot: {x: 0.37983426, y: 0.21546961}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 976cdecb0b37e214fac4019a0fc7db47
+      internalID: -1248339242
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster_basic_move_se_3
+      rect:
+        serializedVersion: 2
+        x: 1086
+        y: 362
+        width: 362
+        height: 362
+      alignment: 9
+      pivot: {x: 0.35082874, y: 0.24585636}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 70c0a60e9313cd149abe9b1fee00f800
+      internalID: 1146372569
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster_basic_attack_anticipation_se
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 362
+        height: 362
+      alignment: 9
+      pivot: {x: 0.53729284, y: 0.24309392}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 488939bf39e03f84c94d50f83ffc4aea
+      internalID: -141064248
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster_basic_attack_release_se
+      rect:
+        serializedVersion: 2
+        x: 362
+        y: 0
+        width: 362
+        height: 362
+      alignment: 9
+      pivot: {x: 0.48066297, y: 0.23756906}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c01571fa0c6fd2545ace46bfb9a5ade6
+      internalID: 1618106990
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster_basic_hit_se
+      rect:
+        serializedVersion: 2
+        x: 724
+        y: 0
+        width: 362
+        height: 362
+      alignment: 9
+      pivot: {x: 0.42679557, y: 0.24309392}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c2157f4b23f98b340808fd924b56f241
+      internalID: 498005770
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster_basic_death_se
+      rect:
+        serializedVersion: 2
+        x: 1086
+        y: 0
+        width: 362
+        height: 362
+      alignment: 9
+      pivot: {x: 0.39364642, y: 0.25138122}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fc8566998bb4fb4489eb2ca7c22be784
+      internalID: 1215971991
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    outline: []
+    customData:
+    physicsShape: []
+    bones: []
+    spriteID: 03ff3b73f431b3148b7eef47e046a370
+    internalID: 0
+    vertices: []
+    indices:
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      monster_basic_attack_anticipation_se: -141064248
+      monster_basic_attack_release_se: 1618106990
+      monster_basic_death_se: 1215971991
+      monster_basic_hit_se: 498005770
+      monster_basic_idle_se_0: 1143549659
+      monster_basic_idle_se_1: 828652900
+      monster_basic_idle_se_2: -1749104048
+      monster_basic_idle_se_3: 1975570356
+      monster_basic_move_se_0: 917131774
+      monster_basic_move_se_1: 2048069636
+      monster_basic_move_se_2: -1248339242
+      monster_basic_move_se_3: 1146372569
+      monster_basic_sheet_0: -7512522768773661338
+      monster_basic_sheet_1: -7708014487081369859
+      monster_basic_sheet_10: 1115458711258381799
+      monster_basic_sheet_11: -896244265449511272
+      monster_basic_sheet_12: 4400556272045894675
+      monster_basic_sheet_13: 934358566521411423
+      monster_basic_sheet_14: 6555989086519304928
+      monster_basic_sheet_15: -6807633168846060660
+      monster_basic_sheet_16: 317007753004751482
+      monster_basic_sheet_17: 4871340951684400752
+      monster_basic_sheet_18: -2563854676738236363
+      monster_basic_sheet_19: 5043706652839365479
+      monster_basic_sheet_2: -7658407147825245238
+      monster_basic_sheet_3: -1232857477635670584
+      monster_basic_sheet_4: 7561526123762887322
+      monster_basic_sheet_5: -5024220927262696566
+      monster_basic_sheet_6: -6128957492343764506
+      monster_basic_sheet_7: 8230060517663988366
+      monster_basic_sheet_8: 3921706009129144172
+      monster_basic_sheet_9: -8476800848586424810
+  mipmapLimitGroupName:
+  pSDRemoveMatte: 0
+  userData:
+  assetBundleName:
+  assetBundleVariant:

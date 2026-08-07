@@ -25,5 +25,6 @@
 | [阶段 2：装备槽与伤害来源执行计划](./phase-2-equipment-slots-damage-source-plan.md) | 初版体验优化阶段 2 | [装备系统](../../equipment-system.md)、[伤害系统与词条系统设计](../../damage-affix-system.md) |
 | [阶段 3：随机化与掉落规则执行计划](./phase-3-randomization-loot-plan.md) | 初版体验优化阶段 3 | [随机化与掉落规则](../../randomization-system.md)、[首版玩法循环](../../gameplay-loop.md) |
 | [阶段 4：标签、词条与内容池填充](./phase-4-content-pool-plan.md) | 初版体验优化阶段 4 | [首批内容池](../../content-system.md)、[伤害系统与词条系统设计](../../damage-affix-system.md) |
+| [阶段 5：批量视觉接入与表现反馈](./phase-5-batch-visual-integration-plan.md) | 初版体验优化阶段 5 | [视觉规范](../../visual-style.md)、[视觉资产清单](../../visual-assets.md)、[输入与运行时 UI](../../input-ui-system.md)、[首版玩法循环](../../gameplay-loop.md) |
 
-最近归档日期：2026-08-06。
+最近归档日期：2026-08-07。

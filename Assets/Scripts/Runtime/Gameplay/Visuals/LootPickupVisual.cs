@@ -20,6 +20,9 @@ namespace DarkFlare
         SpriteRenderer _iconRenderer;
 
         [SerializeField]
+        Sprite _missingIcon;
+
+        [SerializeField]
         TextMeshPro _label;
 
         [SerializeField]
@@ -66,6 +69,11 @@ namespace DarkFlare
 
             if (_iconRenderer != null)
             {
+                string iconGuid = item?.BaseDefinition?.Icon != null
+                    ? item.BaseDefinition.Icon.AssetGUID
+                    : string.Empty;
+                Sprite icon = ItemVisualPresenter.GetSprite(iconGuid);
+                _iconRenderer.sprite = icon != null ? icon : _missingIcon;
                 _iconRenderer.color = Color.white;
             }
 

@@ -1,5 +1,7 @@
 # 初版体验优化：视觉填充
 
+> 当前状态：阶段 0、0.5 与阶段 5 视觉工作均已完成并归档。完成记录见[阶段 5：批量视觉接入与表现反馈](../archive/phase-5-batch-visual-integration-plan.md)，当前规格见[视觉规范](../../visual-style.md)与[视觉资产清单](../../visual-assets.md)。
+
 ## 目标
 
 用统一且可批量扩展的视觉语言替换当前主要对象共用 `PrototypeSquare.png` 的状态，同时保持战斗、掉落和交互信息清楚。主执行顺序与总验收见 [初版体验优化计划](./README.md)。

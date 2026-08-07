@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 namespace DarkFlare
 {
@@ -72,6 +73,10 @@ namespace DarkFlare
         ItemType _itemType;
 
         [SerializeField]
+        [LabelText("图标")]
+        AssetReferenceSprite _icon;
+
+        [SerializeField]
         [EnumToggleButtons]
         [LabelText("允许装备槽")]
         EquipmentSlotMask _allowedEquipmentSlots;
@@ -121,6 +126,8 @@ namespace DarkFlare
         public string DisplayName => _displayName;
 
         public ItemType ItemType => _itemType;
+
+        public AssetReferenceSprite Icon => _icon;
 
         public EquipmentSlotMask AllowedEquipmentSlots => _allowedEquipmentSlots;
 

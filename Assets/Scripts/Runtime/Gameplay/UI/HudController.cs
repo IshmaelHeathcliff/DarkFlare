@@ -16,6 +16,7 @@ namespace DarkFlare
         ProgressBar _healthBar;
         Label _goldLabel;
         Label _weaponLabel;
+        VisualElement _weaponIcon;
 
         public HudSnapshot LastSnapshot { get; private set; }
 
@@ -26,7 +27,7 @@ namespace DarkFlare
 
         public void RefreshHud()
         {
-            if (_healthBar == null || _goldLabel == null || _weaponLabel == null)
+            if (_healthBar == null || _goldLabel == null || _weaponLabel == null || _weaponIcon == null)
             {
                 return;
             }
@@ -39,6 +40,8 @@ namespace DarkFlare
                 : "等待玩家...";
             _goldLabel.text = $"金币 {snapshot.Gold}";
             _weaponLabel.text = snapshot.WeaponSummary;
+            ItemVisualPresenter.ApplyIcon(_weaponIcon, snapshot.WeaponIconGuid);
+            _weaponIcon.EnableInClassList("hud-weapon-icon--empty", string.IsNullOrWhiteSpace(snapshot.WeaponIconGuid));
         }
 
         void Awake()
@@ -64,6 +67,7 @@ namespace DarkFlare
             _healthBar = null;
             _goldLabel = null;
             _weaponLabel = null;
+            _weaponIcon = null;
         }
 
         void OnValidate()
@@ -113,10 +117,11 @@ namespace DarkFlare
             _healthBar = root.Q<ProgressBar>("health-bar");
             _goldLabel = root.Q<Label>("gold-label");
             _weaponLabel = root.Q<Label>("weapon-label");
+            _weaponIcon = root.Q<VisualElement>("weapon-icon");
 
-            if (_healthBar == null || _goldLabel == null || _weaponLabel == null)
+            if (_healthBar == null || _goldLabel == null || _weaponLabel == null || _weaponIcon == null)
             {
-                Debug.LogError("[HudController] HUD UXML 缺少 health-bar、gold-label 或 weapon-label", this);
+                Debug.LogError("[HudController] HUD UXML 缺少 health-bar、gold-label、weapon-label 或 weapon-icon", this);
                 return;
             }
 

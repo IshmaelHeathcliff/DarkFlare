@@ -1,7 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
   <ui:VisualElement class="item-detail" picking-mode="Position">
     <ui:VisualElement class="item-detail-header">
-      <ui:VisualElement name="item-detail-icon" class="item-detail-icon item-detail-icon--weapon" picking-mode="Ignore" />
+      <ui:VisualElement name="item-detail-icon" class="item-detail-icon" picking-mode="Ignore" />
       <ui:VisualElement class="item-detail-heading">
         <ui:Label name="item-detail-name" text="未选择物品" class="item-detail-name" />
         <ui:Label name="item-detail-meta" text="类型与稀有度：-" class="item-detail-meta" />

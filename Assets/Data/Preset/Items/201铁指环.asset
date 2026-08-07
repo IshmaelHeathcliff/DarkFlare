@@ -15,6 +15,12 @@ MonoBehaviour:
   _id: iron_ring
   _displayName: "\u94C1\u6307\u73AF"
   _itemType: 2
+  _icon:
+    m_AssetGUID: f597b10c126e825418717edee921bd16
+    m_SubObjectName:
+    m_SubObjectType:
+    m_SubObjectGUID:
+    m_EditorAssetChanged: 0
   _allowedEquipmentSlots: 12
   _defaultRarity: 0
   _baseValue: 20

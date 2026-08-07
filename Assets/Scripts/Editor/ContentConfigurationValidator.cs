@@ -322,6 +322,9 @@ namespace DarkFlare.Editor
             IReadOnlyList<AffixDefinition> affixes,
             List<ContentValidationIssue> issues)
         {
+            HashSet<string> iconGuids = new HashSet<string>(StringComparer.Ordinal);
+            AddressableAssetSettings settings = AddressableAssetSettingsDefaultObject.Settings;
+
             for (int i = 0; i < items.Count; i++)
             {
                 ItemBaseDefinition item = items[i];
@@ -330,6 +333,8 @@ namespace DarkFlare.Editor
                 {
                     AddError(issues, item, "装备中文名不能为空");
                 }
+
+                ValidateItemIcon(item, iconGuids, settings, issues);
 
                 List<string> baseIssues = EquipmentConfigurationValidator.Validate(item);
 
@@ -365,6 +370,54 @@ namespace DarkFlare.Editor
                 {
                     AddError(issues, item, $"兼容词条不足 4 个，当前为 {candidateCount}");
                 }
+            }
+        }
+
+        static void ValidateItemIcon(
+            ItemBaseDefinition item,
+            HashSet<string> iconGuids,
+            AddressableAssetSettings settings,
+            List<ContentValidationIssue> issues)
+        {
+            string guid = item.Icon != null ? item.Icon.AssetGUID : string.Empty;
+
+            if (string.IsNullOrWhiteSpace(guid))
+            {
+                AddError(issues, item, "正式装备图标不能为空");
+                return;
+            }
+
+            if (!iconGuids.Add(guid))
+            {
+                AddError(issues, item, $"正式装备图标必须唯一：{guid}");
+            }
+
+            string path = AssetDatabase.GUIDToAssetPath(guid);
+            Sprite sprite = AssetDatabase.LoadAssetAtPath<Sprite>(path);
+
+            if (sprite == null)
+            {
+                AddError(issues, item, $"装备图标不是 Sprite 或无法加载：{guid}");
+                return;
+            }
+
+            if (settings == null || settings.FindAssetEntry(guid) == null)
+            {
+                AddError(issues, item, "装备图标未加入 Addressables");
+            }
+
+            if (AssetImporter.GetAtPath(path) is not TextureImporter importer)
+            {
+                AddError(issues, item, "装备图标缺少 TextureImporter");
+                return;
+            }
+
+            if (importer.textureType != TextureImporterType.Sprite
+                || importer.filterMode != FilterMode.Point
+                || importer.textureCompression != TextureImporterCompression.Uncompressed
+                || Math.Abs(importer.spritePixelsPerUnit - 64f) > 0.01f)
+            {
+                AddError(issues, item, "装备图标导入规格必须为 Sprite、64 PPU、Point、无压缩");
             }
         }
 

@@ -34,11 +34,11 @@
   align-items: center;
   padding: 28px;
   background-color: rgb(17, 24, 33);
-  background-image: url("project://database/Assets/Art/Sprites/UI/ui_inventory_panel.png");
-  -unity-slice-left: 28;
-  -unity-slice-right: 28;
-  -unity-slice-top: 28;
-  -unity-slice-bottom: 28;
+  background-image: url("project://database/Assets/Art/SpriteSheets/Phase5/ui_frames_sheet.png?fileID=-7009838889800730027&guid=19d81cb40ae62844597b40ddf83e9ddd&type=3#ui_frames_sheet_0");
+  -unity-slice-left: 98;
+  -unity-slice-right: 98;
+  -unity-slice-top: 98;
+  -unity-slice-bottom: 98;
 }
 
 .inventory-grid {
@@ -47,11 +47,11 @@
 
 .inventory-cell {
   background-color: rgb(17, 24, 33);
-  background-image: url("project://database/Assets/Art/Sprites/UI/ui_slot_normal.png");
-  -unity-slice-left: 10;
-  -unity-slice-right: 10;
-  -unity-slice-top: 10;
-  -unity-slice-bottom: 10;
+  background-image: url("project://database/Assets/Art/SpriteSheets/Phase5/ui_frames_sheet.png?fileID=1991563088907582009&guid=19d81cb40ae62844597b40ddf83e9ddd&type=3#ui_frames_sheet_1");
+  -unity-slice-left: 78;
+  -unity-slice-right: 78;
+  -unity-slice-top: 78;
+  -unity-slice-bottom: 78;
 }
 
 .inventory-item {
@@ -63,11 +63,11 @@
   -unity-font-style: bold;
   color: rgb(230, 232, 233);
   background-color: rgb(17, 24, 33);
-  background-image: url("project://database/Assets/Art/Sprites/UI/ui_slot_normal.png");
-  -unity-slice-left: 10;
-  -unity-slice-right: 10;
-  -unity-slice-top: 10;
-  -unity-slice-bottom: 10;
+  background-image: url("project://database/Assets/Art/SpriteSheets/Phase5/ui_frames_sheet.png?fileID=1991563088907582009&guid=19d81cb40ae62844597b40ddf83e9ddd&type=3#ui_frames_sheet_1");
+  -unity-slice-left: 78;
+  -unity-slice-right: 78;
+  -unity-slice-top: 78;
+  -unity-slice-bottom: 78;
   border-left-width: 0;
   border-right-width: 0;
   border-top-width: 0;
@@ -78,11 +78,19 @@
 .inventory-item:focus,
 .inventory-item--selected {
   background-color: rgb(17, 24, 33);
-  background-image: url("project://database/Assets/Art/Sprites/UI/ui_slot_focus.png");
+  background-image: url("project://database/Assets/Art/SpriteSheets/Phase5/ui_frames_sheet.png?fileID=-8505751119502260002&guid=19d81cb40ae62844597b40ddf83e9ddd&type=3#ui_frames_sheet_2");
+  -unity-slice-left: 157;
+  -unity-slice-right: 157;
+  -unity-slice-top: 157;
+  -unity-slice-bottom: 157;
 }
 
 .inventory-item:disabled {
-  background-image: url("project://database/Assets/Art/Sprites/UI/ui_slot_disabled.png");
+  background-image: url("project://database/Assets/Art/SpriteSheets/Phase5/ui_frames_sheet.png?fileID=8076980293131053671&guid=19d81cb40ae62844597b40ddf83e9ddd&type=3#ui_frames_sheet_3");
+  -unity-slice-left: 157;
+  -unity-slice-right: 157;
+  -unity-slice-top: 157;
+  -unity-slice-bottom: 157;
 }
 
 .inventory-item-icon {
@@ -93,9 +101,6 @@
   -unity-background-scale-mode: scale-to-fit;
 }
 
-.inventory-item-icon--weapon {
-  background-image: url("project://database/Assets/Art/Sprites/Items/Equipment/weapon_greatsword.png");
-}
 
 .inventory-item-label {
   min-height: 18px;
@@ -160,11 +165,11 @@
   margin-right: 18px;
   padding: 18px;
   background-color: rgb(17, 24, 33);
-  background-image: url("project://database/Assets/Art/Sprites/UI/ui_inventory_panel.png");
-  -unity-slice-left: 28;
-  -unity-slice-right: 28;
-  -unity-slice-top: 28;
-  -unity-slice-bottom: 28;
+  background-image: url("project://database/Assets/Art/SpriteSheets/Phase5/ui_frames_sheet.png?fileID=-7009838889800730027&guid=19d81cb40ae62844597b40ddf83e9ddd&type=3#ui_frames_sheet_0");
+  -unity-slice-left: 98;
+  -unity-slice-right: 98;
+  -unity-slice-top: 98;
+  -unity-slice-bottom: 98;
 }
 
 .inventory-equipment-slot {
@@ -175,18 +180,22 @@
   -unity-text-align: middle-center;
   color: rgb(187, 192, 201);
   background-color: rgb(28, 34, 43);
-  background-image: url("project://database/Assets/Art/Sprites/UI/ui_slot_normal.png");
-  -unity-slice-left: 10;
-  -unity-slice-right: 10;
-  -unity-slice-top: 10;
-  -unity-slice-bottom: 10;
+  background-image: url("project://database/Assets/Art/SpriteSheets/Phase5/ui_frames_sheet.png?fileID=1991563088907582009&guid=19d81cb40ae62844597b40ddf83e9ddd&type=3#ui_frames_sheet_1");
+  -unity-slice-left: 78;
+  -unity-slice-right: 78;
+  -unity-slice-top: 78;
+  -unity-slice-bottom: 78;
 }
 
 .inventory-equipment-slot:hover,
 .inventory-equipment-slot:focus,
 .inventory-equipment-slot--selected {
   color: rgb(246, 235, 213);
-  background-image: url("project://database/Assets/Art/Sprites/UI/ui_slot_focus.png");
+  background-image: url("project://database/Assets/Art/SpriteSheets/Phase5/ui_frames_sheet.png?fileID=-8505751119502260002&guid=19d81cb40ae62844597b40ddf83e9ddd&type=3#ui_frames_sheet_2");
+  -unity-slice-left: 157;
+  -unity-slice-right: 157;
+  -unity-slice-top: 157;
+  -unity-slice-bottom: 157;
 }
 
 .inventory-equipment-slot--filled {
@@ -205,11 +214,11 @@
   width: 326px;
   padding: 22px;
   background-color: rgb(17, 24, 33);
-  background-image: url("project://database/Assets/Art/Sprites/UI/ui_inventory_panel.png");
-  -unity-slice-left: 28;
-  -unity-slice-right: 28;
-  -unity-slice-top: 28;
-  -unity-slice-bottom: 28;
+  background-image: url("project://database/Assets/Art/SpriteSheets/Phase5/ui_frames_sheet.png?fileID=-7009838889800730027&guid=19d81cb40ae62844597b40ddf83e9ddd&type=3#ui_frames_sheet_0");
+  -unity-slice-left: 98;
+  -unity-slice-right: 98;
+  -unity-slice-top: 98;
+  -unity-slice-bottom: 98;
 }
 
 .inventory-target-slot {

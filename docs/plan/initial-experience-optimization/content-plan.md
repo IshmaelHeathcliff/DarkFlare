@@ -1,6 +1,6 @@
 # 初版体验优化：内容与随机化
 
-> 当前状态：阶段 3 随机化与阶段 4 内容池均已完成并归档。当前模块说明见[随机化与掉落规则](../../randomization-system.md)和[首批内容池](../../content-system.md)。
+> 当前状态：阶段 3 随机化、阶段 4 内容池与阶段 5 视觉接入均已完成并归档。当前模块说明见[随机化与掉落规则](../../randomization-system.md)和[首批内容池](../../content-system.md)。
 
 ## 目标
 
@@ -56,7 +56,7 @@
 - 2 件护甲：生命取向与护甲取向。
 - 3 枚戒指：伤害、生命和抗性取向。
 
-每个基底都已配置稳定 ID、中文名、装备槽、标签、格子尺寸、基础价值、前后缀容量和至少一个有意义的基础属性或隐式修改器。正式图标留在阶段 5。
+每个基底都已配置稳定 ID、中文名、装备槽、标签、格子尺寸、基础价值、前后缀容量和至少一个有意义的基础属性或隐式修改器。阶段 5 已为七件装备接入独立 Addressable 图标。
 
 首版继续使用 `LootTableDefinition` 条目和 `TraderDefinition` 库存组织装备，不急于新增全局 `EquipmentPoolDefinition`。只有多个系统开始重复同一池配置时再抽取共用类型。
 
@@ -68,7 +68,7 @@
 - 迅捷型：低生命、高移动、较低单次伤害。
 - 重装型：高生命、低移动、较高单次伤害和掉落机会。
 
-每种怪物使用独立 `MonsterDefinition`、Addressable Prefab 和掉落表，在 `MonsterSpawnDefinition` 中配置权重。阶段 4 暂时共享现有视觉和 Animator，阶段 5 再替换为可区分美术。
+每种怪物使用独立 `MonsterDefinition`、Addressable Prefab 和掉落表，在 `MonsterSpawnDefinition` 中配置权重。阶段 5 已为裂爪猎犬和铁壳尸傀替换独立视觉与 Animator，三种怪物可直接辨识。
 
 ## 阶段 4 完成结果
 

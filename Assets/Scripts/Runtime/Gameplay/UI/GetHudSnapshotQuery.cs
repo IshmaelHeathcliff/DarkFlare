@@ -15,6 +15,8 @@ namespace DarkFlare
 
         public string WeaponSummary { get; }
 
+        public string WeaponIconGuid { get; }
+
         public float HealthNormalized => HasPlayer && MaxHealth > 0f
             ? Mathf.Clamp01(CurrentHealth / MaxHealth)
             : 0f;
@@ -25,12 +27,24 @@ namespace DarkFlare
             float maxHealth,
             int gold,
             string weaponSummary)
+            : this(hasPlayer, currentHealth, maxHealth, gold, weaponSummary, string.Empty)
+        {
+        }
+
+        public HudSnapshot(
+            bool hasPlayer,
+            float currentHealth,
+            float maxHealth,
+            int gold,
+            string weaponSummary,
+            string weaponIconGuid)
         {
             HasPlayer = hasPlayer;
             CurrentHealth = currentHealth;
             MaxHealth = maxHealth;
             Gold = gold;
             WeaponSummary = weaponSummary;
+            WeaponIconGuid = weaponIconGuid;
         }
     }
 
@@ -43,7 +57,7 @@ namespace DarkFlare
 
             if (player == null)
             {
-                return new HudSnapshot(false, 0f, 0f, gold, "未装备");
+                return new HudSnapshot(false, 0f, 0f, gold, "未装备", string.Empty);
             }
 
             ItemInstance weapon = this.GetModel<EquipmentModel>().GetWeapon(player);
@@ -52,7 +66,8 @@ namespace DarkFlare
                 player.CurrentHealth,
                 player.MaxHealth,
                 gold,
-                DescribeWeapon(weapon));
+                DescribeWeapon(weapon),
+                GetIconGuid(weapon));
         }
 
         CombatActor GetPlayer()
@@ -82,6 +97,13 @@ namespace DarkFlare
                 : weapon.InstanceId;
             int affixCount = weapon.Prefixes.Count + weapon.Suffixes.Count;
             return $"{displayName} · {weapon.Rarity} · {affixCount} 条词缀";
+        }
+
+        static string GetIconGuid(ItemInstance weapon)
+        {
+            return weapon?.BaseDefinition?.Icon != null
+                ? weapon.BaseDefinition.Icon.AssetGUID
+                : string.Empty;
         }
     }
 }

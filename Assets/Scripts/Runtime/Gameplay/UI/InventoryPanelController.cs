@@ -338,11 +338,7 @@ namespace DarkFlare
                 pickingMode = PickingMode.Ignore,
             };
             icon.AddToClassList("inventory-item-icon");
-
-            if (item.Type == ItemType.Weapon)
-            {
-                icon.AddToClassList("inventory-item-icon--weapon");
-            }
+            ItemVisualPresenter.ApplyIcon(icon, item.Detail.IconGuid);
 
             Label label = new Label(item.DisplayName)
             {
@@ -513,6 +509,22 @@ namespace DarkFlare
                 }
 
                 button.text = snapshot.Summary;
+                VisualElement icon = button.Q<VisualElement>("equipment-slot-icon");
+
+                if (icon == null)
+                {
+                    icon = new VisualElement
+                    {
+                        name = "equipment-slot-icon",
+                        pickingMode = PickingMode.Ignore,
+                    };
+                    icon.AddToClassList("inventory-equipment-slot-icon");
+                    icon.AddToClassList(GetSlotIconClass(snapshot.Slot));
+                    button.Insert(0, icon);
+                }
+
+                ItemVisualPresenter.ApplyIcon(icon, snapshot.Detail.IconGuid);
+                icon.EnableInClassList("inventory-equipment-slot-icon--empty", snapshot.Item == null);
                 button.tooltip = snapshot.Item != null
                     ? $"{snapshot.Detail.DisplayName} · {ItemDetailFormatter.GetRarityText(snapshot.Detail.Rarity)}"
                     : $"{snapshot.SlotName}为空";
@@ -527,7 +539,8 @@ namespace DarkFlare
 
             if (item != null)
             {
-                _detailView.Show(ItemDetailSnapshotFactory.Create(item));
+                ItemDetailSnapshot detail = ItemDetailSnapshotFactory.Create(item);
+                _detailView.Show(detail, ItemVisualPresenter.GetSprite(detail.IconGuid));
                 return;
             }
 
@@ -535,7 +548,7 @@ namespace DarkFlare
                 && TryGetSlotSnapshot(_targetSlot.Value, out EquipmentSlotSnapshot slotSnapshot)
                 && slotSnapshot.Item != null)
             {
-                _detailView.Show(slotSnapshot.Detail);
+                _detailView.Show(slotSnapshot.Detail, ItemVisualPresenter.GetSprite(slotSnapshot.Detail.IconGuid));
                 return;
             }
 
@@ -704,6 +717,19 @@ namespace DarkFlare
                     return "inventory-item--unique";
                 default:
                     return "inventory-item--normal";
+            }
+        }
+
+        static string GetSlotIconClass(EquipmentSlot slot)
+        {
+            switch (slot)
+            {
+                case EquipmentSlot.Weapon:
+                    return "inventory-equipment-slot-icon--weapon";
+                case EquipmentSlot.Armor:
+                    return "inventory-equipment-slot-icon--armor";
+                default:
+                    return "inventory-equipment-slot-icon--ring";
             }
         }
     }
