@@ -11,7 +11,7 @@ namespace DarkFlare
     public class SpriteAssetLoader : IUtility
     {
         readonly Dictionary<string, Sprite> _spriteCache = new Dictionary<string, Sprite>();
-        readonly Dictionary<string, AsyncOperationHandle<Sprite>> _handles = new Dictionary<string, AsyncOperationHandle<Sprite>>();
+        readonly Dictionary<string, AssetReferenceSprite> _references = new Dictionary<string, AssetReferenceSprite>();
         readonly HashSet<string> _loadingGuids = new HashSet<string>();
 
         public async UniTask PreloadAsync(IEnumerable<AssetReferenceSprite> references, CancellationToken token)
@@ -61,15 +61,15 @@ namespace DarkFlare
 
         public void ReleaseAll()
         {
-            foreach (AsyncOperationHandle<Sprite> handle in _handles.Values)
+            foreach (AssetReferenceSprite reference in _references.Values)
             {
-                if (handle.IsValid())
+                if (reference.OperationHandle.IsValid())
                 {
-                    Addressables.Release(handle);
+                    reference.ReleaseAsset();
                 }
             }
 
-            _handles.Clear();
+            _references.Clear();
             _spriteCache.Clear();
             _loadingGuids.Clear();
         }
@@ -86,17 +86,17 @@ namespace DarkFlare
                 if (handle.Status != AsyncOperationStatus.Succeeded || handle.Result == null)
                 {
                     Debug.LogError($"[SpriteAssetLoader] 图标加载失败: {guid}");
-                    ReleaseFailedHandle(handle);
+                    ReleaseFailedReference(reference);
                     return;
                 }
 
-                _handles[guid] = handle;
+                _references[guid] = reference;
                 _spriteCache[guid] = handle.Result;
                 Debug.Log($"[SpriteAssetLoader] 图标加载完成: {guid} -> {handle.Result.name}");
             }
             catch (OperationCanceledException)
             {
-                ReleaseFailedHandle(handle);
+                ReleaseFailedReference(reference);
                 throw;
             }
             finally
@@ -105,11 +105,11 @@ namespace DarkFlare
             }
         }
 
-        static void ReleaseFailedHandle(AsyncOperationHandle<Sprite> handle)
+        static void ReleaseFailedReference(AssetReferenceSprite reference)
         {
-            if (handle.IsValid())
+            if (reference.OperationHandle.IsValid())
             {
-                Addressables.Release(handle);
+                reference.ReleaseAsset();
             }
         }
     }

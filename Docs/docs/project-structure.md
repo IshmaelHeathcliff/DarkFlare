@@ -11,6 +11,11 @@ DarkFlare/
     docs/
   Packages/
   ProjectSettings/
+  tools/
+    visual_slice/
+      prepare_assets.py
+      asset_pipeline_manifest.json
+      run_asset_audits.ps1
 ```
 
 ## Assets 目录
@@ -19,11 +24,19 @@ DarkFlare/
 Assets/
   AddressableAssetsData/
   Art/
-    Animaitons/
-      AnimationClips/
-      Animators/
+    Animations/
+      Clips/
+      Controllers/
     Audio/
     Materials/
+    Sprites/
+      Characters/Player/
+      Monsters/{Basic,Swift,Heavy}/
+      NPCs/Merchant/
+      Effects/
+      Environment/{VisualSlice,WorldProps}/
+      Items/Equipment/
+      UI/{Frames,Icons,Phase5}/
     Textures/
       Prototype/
   Data/
@@ -77,10 +90,12 @@ Assets/
     Editor/                           # 程序集 DarkFlare.Editor（仅 Editor 平台）
       DarkFlare.Editor.asmdef
       ConfigCenterWindow.cs
+      VisualAssetSingleSpriteMigration.cs
     Tests/
       EditMode/                       # 程序集 DarkFlare.Tests.EditMode
         DarkFlare.Tests.EditMode.asmdef
-      PlayMode/                       # 程序集 DarkFlare.Tests.PlayMode（占位）
+        Phase5VisualIntegrationTests.cs
+      PlayMode/                       # 程序集 DarkFlare.Tests.PlayMode
         DarkFlare.Tests.PlayMode.asmdef
   Settings/
     Scenes/
@@ -111,16 +126,14 @@ Addressables 的配置目录，包含资源组、模板和构建器配置。后�
 
 ### `Assets/Art`
 
-美术资源目录，当前已预留：
+美术资源目录当前包括：
 
-- `Animaitons`
-- `Audio`
-- `Materials`
-- `Textures`
-  - `Prototype`：占位方块贴图（`PrototypeSquare.png`），供 `Prefabs/Combat`、`Prefabs/Loot` 下的 Prefab 共用，正式美术接入后应替换并清理
+- `Animations/Clips` 与 `Animations/Controllers`：角色、怪物和商人的动画资源。
+- `Sprites/Characters`、`Monsters`、`NPCs`：52 张 128×128 独立动画帧。
+- `Sprites/Effects`、`Environment`、`Items`、`UI`：独立投射物、世界物件、装备图标、固定 UI 图标与 UI Frame。
+- `Textures/Prototype/PrototypeSquare.png`：64×64 的非生产回退纹理，正式场景和 Prefab 不依赖它。
 
-说明：
-当前目录名为 `Animaitons`，文档按现状记录，若后续修正拼写，需要同步调整文档与资源引用。
+项目自有运行时栅格资产统一使用 `Sprite Mode: Single`。旧 `Assets/Art/SpriteSheets/` 已在 alpha 0.1 前置迁移中清理，当前不保留生产 SpriteSheet 或 sub-sprite fileID 依赖。生成、审计与迁移工具见 `tools/visual_slice/` 和 `Assets/Scripts/Editor/VisualAssetSingleSpriteMigration.cs`。
 
 ### `Assets/Data`
 
@@ -167,7 +180,7 @@ Addressables 的配置目录，包含资源组、模板和构建器配置。后�
 | `DarkFlare.Runtime` | `Runtime/` | 全部 | `DarkFlare.Core`、`UniTask`、`Unity.InputSystem`、`Unity.Addressables`、`Unity.ResourceManager` |
 | `DarkFlare.Editor` | `Editor/` | 仅 Editor | `DarkFlare.Runtime`、`DarkFlare.Core` |
 | `DarkFlare.Tests.EditMode` | `Tests/EditMode/` | 仅 Editor | `DarkFlare.Runtime`、`DarkFlare.Core`、`Unity.InputSystem`、`Unity.InputSystem.TestFramework`、`UnityEngine.TestRunner`、`UnityEditor.TestRunner`、`nunit.framework.dll` |
-| `DarkFlare.Tests.PlayMode` | `Tests/PlayMode/` | 全部 | 同 EditMode（当前为占位，暂无测试） |
+| `DarkFlare.Tests.PlayMode` | `Tests/PlayMode/` | 全部 | 同 EditMode；覆盖场景循环、输入、装备、随机化与运行时资源加载 |
 
 依赖方向单向向上、无环：`Core ← Runtime ← {Editor, Tests}`。`GameArchitecture.cs` 作为组合根依赖全部玩法模块，因此位于 `Runtime/` 根而非 `Core/`。测试程序集带 `defineConstraints: ["UNITY_INCLUDE_TESTS"]`，仅在测试运行时参与编译，不进入 Player 包。Odin 等预编译 DLL 默认对所有程序集可见，无需在 asmdef 中显式引用。
 

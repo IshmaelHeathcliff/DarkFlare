@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "family": "ground-texture",
+  "alpha_threshold": 8,
+  "canvas": { "width": 512, "height": 512 },
+  "alpha_required": false,
+  "unity_import": { "pixels_per_unit": 64, "pivot": [0.5, 0.5], "filter": "Point", "wrap": "Repeat", "mesh": "FullRect" },
+  "assets": [
+    { "name": "ground_slice", "image": "../../../../../../Assets/Art/Sprites/Environment/VisualSlice/ground_slice.png", "visible_width": [512, 512], "visible_height": [512, 512], "alpha_coverage": [1, 1], "visual_center_x": [256, 256], "visual_center_y": [256, 256], "bottom_margin": [0, 0], "edge_clearance": 0 }
+  ],
+  "groups": []
+}

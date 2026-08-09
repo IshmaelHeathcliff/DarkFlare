@@ -100,7 +100,7 @@ MonoBehaviour:
   _shadowRenderer: {fileID: 0}
   _haloRenderer: {fileID: 2811787139413863872}
   _iconRenderer: {fileID: 454059939862610131}
-  _missingIcon: {fileID: 3617589548185855585, guid: 3d33168ffb68da5478536df049f83403, type: 3}
+  _missingIcon: {fileID: 21300000, guid: 14bbd91baeecb464f9e63ec95fa2cc2f, type: 3}
   _label: {fileID: 7621173367350973129}
   _floatDistance: 0.1
   _floatDuration: 0.9
@@ -492,7 +492,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 5
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -8505751119502260002, guid: 19d81cb40ae62844597b40ddf83e9ddd, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 34725bdcabe3739479c23e98829e8c71, type: 3}
   m_Color: {r: 0.82, g: 0.88, b: 0.94, a: 0.55}
   m_FlipX: 0
   m_FlipY: 0

@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "family": "equipment-icons",
+  "alpha_threshold": 8,
+  "canvas": { "width": 96, "height": 96 },
+  "alpha_required": true,
+  "unity_import": { "pixels_per_unit": 64, "pivot": [0.5, 0.5], "filter": "Point", "mesh": "FullRect" },
+  "assets": [
+    { "name": "armor_leather", "image": "../../../../../../Assets/Art/Sprites/Items/Equipment/armor_leather.png", "visible_width": [55, 80], "visible_height": [70, 80], "alpha_coverage": [0.10, 0.51], "visual_center_x": [45, 50], "visual_center_y": [45, 50], "bottom_margin": [5, 12], "edge_clearance": 5, "group": "equipment" },
+    { "name": "armor_plate", "image": "../../../../../../Assets/Art/Sprites/Items/Equipment/armor_plate.png", "visible_width": [55, 80], "visible_height": [70, 80], "alpha_coverage": [0.10, 0.51], "visual_center_x": [45, 50], "visual_center_y": [45, 50], "bottom_margin": [5, 12], "edge_clearance": 5, "group": "equipment" },
+    { "name": "ring_iron", "image": "../../../../../../Assets/Art/Sprites/Items/Equipment/ring_iron.png", "visible_width": [55, 80], "visible_height": [70, 80], "alpha_coverage": [0.10, 0.51], "visual_center_x": [45, 50], "visual_center_y": [45, 50], "bottom_margin": [5, 12], "edge_clearance": 5, "group": "equipment" },
+    { "name": "ring_jade", "image": "../../../../../../Assets/Art/Sprites/Items/Equipment/ring_jade.png", "visible_width": [55, 80], "visible_height": [70, 80], "alpha_coverage": [0.10, 0.51], "visual_center_x": [45, 50], "visual_center_y": [45, 50], "bottom_margin": [5, 12], "edge_clearance": 5, "group": "equipment" },
+    { "name": "ring_obsidian", "image": "../../../../../../Assets/Art/Sprites/Items/Equipment/ring_obsidian.png", "visible_width": [55, 80], "visible_height": [70, 80], "alpha_coverage": [0.10, 0.51], "visual_center_x": [45, 50], "visual_center_y": [45, 50], "bottom_margin": [5, 12], "edge_clearance": 5, "group": "equipment" },
+    { "name": "weapon_greatsword", "image": "../../../../../../Assets/Art/Sprites/Items/Equipment/weapon_greatsword.png", "visible_width": [55, 80], "visible_height": [70, 80], "alpha_coverage": [0.10, 0.51], "visual_center_x": [45, 50], "visual_center_y": [45, 50], "bottom_margin": [5, 12], "edge_clearance": 5, "group": "equipment" },
+    { "name": "weapon_war_axe", "image": "../../../../../../Assets/Art/Sprites/Items/Equipment/weapon_war_axe.png", "visible_width": [55, 80], "visible_height": [70, 80], "alpha_coverage": [0.10, 0.51], "visual_center_x": [45, 50], "visual_center_y": [45, 50], "bottom_margin": [5, 12], "edge_clearance": 5, "group": "equipment" }
+  ],
+  "groups": [
+    { "name": "equipment", "max_width_delta": 25, "max_height_delta": 10, "max_visual_center_x_delta": 5, "max_visual_center_y_delta": 5, "max_bottom_margin_delta": 7, "max_alpha_coverage_delta": 0.41 }
+  ]
+}

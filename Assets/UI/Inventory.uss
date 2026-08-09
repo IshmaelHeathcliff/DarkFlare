@@ -34,7 +34,7 @@
   align-items: center;
   padding: 28px;
   background-color: rgb(17, 24, 33);
-  background-image: url("project://database/Assets/Art/SpriteSheets/Phase5/ui_frames_sheet.png?fileID=-7009838889800730027&guid=19d81cb40ae62844597b40ddf83e9ddd&type=3#ui_frames_sheet_0");
+  background-image: url("project://database/Assets/Art/Sprites/UI/Frames/ui_inventory_panel_base.png?fileID=21300000&guid=0db689d6a3dcfeb44b0439b68ecea304&type=3");
   -unity-slice-left: 98;
   -unity-slice-right: 98;
   -unity-slice-top: 98;
@@ -47,7 +47,7 @@
 
 .inventory-cell {
   background-color: rgb(17, 24, 33);
-  background-image: url("project://database/Assets/Art/SpriteSheets/Phase5/ui_frames_sheet.png?fileID=1991563088907582009&guid=19d81cb40ae62844597b40ddf83e9ddd&type=3#ui_frames_sheet_1");
+  background-image: url("project://database/Assets/Art/Sprites/UI/Frames/ui_inventory_slot_default.png?fileID=21300000&guid=46012d904a35eda42822dc497380be88&type=3");
   -unity-slice-left: 78;
   -unity-slice-right: 78;
   -unity-slice-top: 78;
@@ -63,7 +63,7 @@
   -unity-font-style: bold;
   color: rgb(230, 232, 233);
   background-color: rgb(17, 24, 33);
-  background-image: url("project://database/Assets/Art/SpriteSheets/Phase5/ui_frames_sheet.png?fileID=1991563088907582009&guid=19d81cb40ae62844597b40ddf83e9ddd&type=3#ui_frames_sheet_1");
+  background-image: url("project://database/Assets/Art/Sprites/UI/Frames/ui_inventory_slot_default.png?fileID=21300000&guid=46012d904a35eda42822dc497380be88&type=3");
   -unity-slice-left: 78;
   -unity-slice-right: 78;
   -unity-slice-top: 78;
@@ -78,7 +78,7 @@
 .inventory-item:focus,
 .inventory-item--selected {
   background-color: rgb(17, 24, 33);
-  background-image: url("project://database/Assets/Art/SpriteSheets/Phase5/ui_frames_sheet.png?fileID=-8505751119502260002&guid=19d81cb40ae62844597b40ddf83e9ddd&type=3#ui_frames_sheet_2");
+  background-image: url("project://database/Assets/Art/Sprites/UI/Frames/ui_inventory_slot_focused.png?fileID=21300000&guid=34725bdcabe3739479c23e98829e8c71&type=3");
   -unity-slice-left: 157;
   -unity-slice-right: 157;
   -unity-slice-top: 157;
@@ -86,7 +86,7 @@
 }
 
 .inventory-item:disabled {
-  background-image: url("project://database/Assets/Art/SpriteSheets/Phase5/ui_frames_sheet.png?fileID=8076980293131053671&guid=19d81cb40ae62844597b40ddf83e9ddd&type=3#ui_frames_sheet_3");
+  background-image: url("project://database/Assets/Art/Sprites/UI/Frames/ui_inventory_slot_disabled.png?fileID=21300000&guid=d8ad767f9163b554bae3be80f5406f88&type=3");
   -unity-slice-left: 157;
   -unity-slice-right: 157;
   -unity-slice-top: 157;
@@ -165,7 +165,7 @@
   margin-right: 18px;
   padding: 18px;
   background-color: rgb(17, 24, 33);
-  background-image: url("project://database/Assets/Art/SpriteSheets/Phase5/ui_frames_sheet.png?fileID=-7009838889800730027&guid=19d81cb40ae62844597b40ddf83e9ddd&type=3#ui_frames_sheet_0");
+  background-image: url("project://database/Assets/Art/Sprites/UI/Frames/ui_inventory_panel_base.png?fileID=21300000&guid=0db689d6a3dcfeb44b0439b68ecea304&type=3");
   -unity-slice-left: 98;
   -unity-slice-right: 98;
   -unity-slice-top: 98;
@@ -180,7 +180,7 @@
   -unity-text-align: middle-center;
   color: rgb(187, 192, 201);
   background-color: rgb(28, 34, 43);
-  background-image: url("project://database/Assets/Art/SpriteSheets/Phase5/ui_frames_sheet.png?fileID=1991563088907582009&guid=19d81cb40ae62844597b40ddf83e9ddd&type=3#ui_frames_sheet_1");
+  background-image: url("project://database/Assets/Art/Sprites/UI/Frames/ui_inventory_slot_default.png?fileID=21300000&guid=46012d904a35eda42822dc497380be88&type=3");
   -unity-slice-left: 78;
   -unity-slice-right: 78;
   -unity-slice-top: 78;
@@ -191,7 +191,7 @@
 .inventory-equipment-slot:focus,
 .inventory-equipment-slot--selected {
   color: rgb(246, 235, 213);
-  background-image: url("project://database/Assets/Art/SpriteSheets/Phase5/ui_frames_sheet.png?fileID=-8505751119502260002&guid=19d81cb40ae62844597b40ddf83e9ddd&type=3#ui_frames_sheet_2");
+  background-image: url("project://database/Assets/Art/Sprites/UI/Frames/ui_inventory_slot_focused.png?fileID=21300000&guid=34725bdcabe3739479c23e98829e8c71&type=3");
   -unity-slice-left: 157;
   -unity-slice-right: 157;
   -unity-slice-top: 157;
@@ -214,7 +214,7 @@
   width: 326px;
   padding: 22px;
   background-color: rgb(17, 24, 33);
-  background-image: url("project://database/Assets/Art/SpriteSheets/Phase5/ui_frames_sheet.png?fileID=-7009838889800730027&guid=19d81cb40ae62844597b40ddf83e9ddd&type=3#ui_frames_sheet_0");
+  background-image: url("project://database/Assets/Art/Sprites/UI/Frames/ui_inventory_panel_base.png?fileID=21300000&guid=0db689d6a3dcfeb44b0439b68ecea304&type=3");
   -unity-slice-left: 98;
   -unity-slice-right: 98;
   -unity-slice-top: 98;

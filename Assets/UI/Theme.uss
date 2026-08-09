@@ -36,43 +36,43 @@ Button:disabled {
 }
 
 .ui-icon--health {
-  background-image: url("project://database/Assets/Art/SpriteSheets/Phase5/ui_icons_sheet.png?fileID=3727665825739426205&guid=3d33168ffb68da5478536df049f83403&type=3#ui_icons_sheet_0");
+  background-image: url("project://database/Assets/Art/Sprites/UI/Icons/ui_icon_health.png?fileID=21300000&guid=0cf093226e4ff984f8f05943a35c4c87&type=3");
 }
 
 .ui-icon--gold {
-  background-image: url("project://database/Assets/Art/SpriteSheets/Phase5/ui_icons_sheet.png?fileID=-1691496728913257943&guid=3d33168ffb68da5478536df049f83403&type=3#ui_icons_sheet_1");
+  background-image: url("project://database/Assets/Art/Sprites/UI/Icons/ui_icon_gold.png?fileID=21300000&guid=d8ac47a9d99c13247946bc4941ac2d60&type=3");
 }
 
 .ui-icon--weapon {
-  background-image: url("project://database/Assets/Art/SpriteSheets/Phase5/ui_icons_sheet.png?fileID=-8149964302969819370&guid=3d33168ffb68da5478536df049f83403&type=3#ui_icons_sheet_2");
+  background-image: url("project://database/Assets/Art/Sprites/UI/Icons/ui_icon_weapon.png?fileID=21300000&guid=b7f0a8b24b110f845b39d59693b14cc4&type=3");
 }
 
 .ui-icon--armor {
-  background-image: url("project://database/Assets/Art/SpriteSheets/Phase5/ui_icons_sheet.png?fileID=-4858508832188841462&guid=3d33168ffb68da5478536df049f83403&type=3#ui_icons_sheet_3");
+  background-image: url("project://database/Assets/Art/Sprites/UI/Icons/ui_icon_armor.png?fileID=21300000&guid=c99d8de66959e404cbf64bbef2bc3b58&type=3");
 }
 
 .ui-icon--ring {
-  background-image: url("project://database/Assets/Art/SpriteSheets/Phase5/ui_icons_sheet.png?fileID=5052022550113441473&guid=3d33168ffb68da5478536df049f83403&type=3#ui_icons_sheet_4");
+  background-image: url("project://database/Assets/Art/Sprites/UI/Icons/ui_icon_ring.png?fileID=21300000&guid=c3657d599f6833e43a465b890033398e&type=3");
 }
 
 .ui-icon--inventory {
-  background-image: url("project://database/Assets/Art/SpriteSheets/Phase5/ui_icons_sheet.png?fileID=-5583588468364672500&guid=3d33168ffb68da5478536df049f83403&type=3#ui_icons_sheet_5");
+  background-image: url("project://database/Assets/Art/Sprites/UI/Icons/ui_icon_inventory.png?fileID=21300000&guid=ff3f9a1742cf9d4438339ccce8be8eee&type=3");
 }
 
 .ui-icon--shop {
-  background-image: url("project://database/Assets/Art/SpriteSheets/Phase5/ui_icons_sheet.png?fileID=5544213995541881746&guid=3d33168ffb68da5478536df049f83403&type=3#ui_icons_sheet_6");
+  background-image: url("project://database/Assets/Art/Sprites/UI/Icons/ui_icon_shop.png?fileID=21300000&guid=b29338138fd2c704e9026d3d44b1febe&type=3");
 }
 
 .ui-icon--crafting {
-  background-image: url("project://database/Assets/Art/SpriteSheets/Phase5/ui_icons_sheet.png?fileID=-199588985272624685&guid=3d33168ffb68da5478536df049f83403&type=3#ui_icons_sheet_7");
+  background-image: url("project://database/Assets/Art/Sprites/UI/Icons/ui_icon_crafting.png?fileID=21300000&guid=47116b89afccbea47b41f954b70a7315&type=3");
 }
 
 .ui-icon--close {
-  background-image: url("project://database/Assets/Art/SpriteSheets/Phase5/ui_icons_sheet.png?fileID=1558839003169599531&guid=3d33168ffb68da5478536df049f83403&type=3#ui_icons_sheet_8");
+  background-image: url("project://database/Assets/Art/Sprites/UI/Icons/ui_icon_close.png?fileID=21300000&guid=f88d2fc91b328eb419c66f65abda751a&type=3");
 }
 
 .item-icon--missing {
-  background-image: url("project://database/Assets/Art/SpriteSheets/Phase5/ui_icons_sheet.png?fileID=3617589548185855585&guid=3d33168ffb68da5478536df049f83403&type=3#ui_icons_sheet_11");
+  background-image: url("project://database/Assets/Art/Sprites/UI/Icons/ui_icon_missing.png?fileID=21300000&guid=14bbd91baeecb464f9e63ec95fa2cc2f&type=3");
   -unity-background-scale-mode: scale-to-fit;
 }
 
@@ -113,17 +113,17 @@ Button:disabled {
 }
 
 .inventory-equipment-slot-icon--weapon.inventory-equipment-slot-icon--empty {
-  background-image: url("project://database/Assets/Art/SpriteSheets/Phase5/ui_icons_sheet.png?fileID=-8149964302969819370&guid=3d33168ffb68da5478536df049f83403&type=3#ui_icons_sheet_2");
+  background-image: url("project://database/Assets/Art/Sprites/UI/Icons/ui_icon_weapon.png?fileID=21300000&guid=b7f0a8b24b110f845b39d59693b14cc4&type=3");
   opacity: 0.35;
 }
 
 .inventory-equipment-slot-icon--armor.inventory-equipment-slot-icon--empty {
-  background-image: url("project://database/Assets/Art/SpriteSheets/Phase5/ui_icons_sheet.png?fileID=-4858508832188841462&guid=3d33168ffb68da5478536df049f83403&type=3#ui_icons_sheet_3");
+  background-image: url("project://database/Assets/Art/Sprites/UI/Icons/ui_icon_armor.png?fileID=21300000&guid=c99d8de66959e404cbf64bbef2bc3b58&type=3");
   opacity: 0.35;
 }
 
 .inventory-equipment-slot-icon--ring.inventory-equipment-slot-icon--empty {
-  background-image: url("project://database/Assets/Art/SpriteSheets/Phase5/ui_icons_sheet.png?fileID=5052022550113441473&guid=3d33168ffb68da5478536df049f83403&type=3#ui_icons_sheet_4");
+  background-image: url("project://database/Assets/Art/Sprites/UI/Icons/ui_icon_ring.png?fileID=21300000&guid=c3657d599f6833e43a465b890033398e&type=3");
   opacity: 0.35;
 }
 
@@ -217,7 +217,7 @@ Button:disabled {
 }
 
 .hud-weapon-icon--empty {
-  background-image: url("project://database/Assets/Art/SpriteSheets/Phase5/ui_icons_sheet.png?fileID=-1231449721535339815&guid=3d33168ffb68da5478536df049f83403&type=3#ui_icons_sheet_10");
+  background-image: url("project://database/Assets/Art/Sprites/UI/Icons/ui_icon_weapon_empty.png?fileID=21300000&guid=c5307ddfd39bc1b45bb06c2390fda280&type=3");
   opacity: 0.55;
 }
 

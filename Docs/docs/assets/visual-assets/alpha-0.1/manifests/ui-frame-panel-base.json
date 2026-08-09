@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "family": "ui-frame-panel-base",
+  "alpha_threshold": 8,
+  "canvas": { "width": 534, "height": 527 },
+  "alpha_required": true,
+  "unity_import": { "pixels_per_unit": 100, "pivot": [0.5, 0.5], "slice_border": [98, 98, 98, 98], "filter": "Point", "mesh": "FullRect" },
+  "assets": [
+    { "name": "panel_base", "image": "../../../../../../Assets/Art/Sprites/UI/Frames/ui_inventory_panel_base.png", "visible_width": [534, 534], "visible_height": [527, 527], "alpha_coverage": [0.95, 1], "visual_center_x": [266, 269], "visual_center_y": [262, 265], "bottom_margin": [0, 0], "edge_clearance": 0 }
+  ],
+  "groups": []
+}

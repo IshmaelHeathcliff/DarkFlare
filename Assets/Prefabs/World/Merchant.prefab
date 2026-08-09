@@ -81,7 +81,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 9
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 502296562, guid: cb7032fea677dc94bb79c493f09ce7c0, type: 3}
+  m_Sprite: {fileID: 21300000, guid: af4a834b7db913f48813b02ca3d7b26c, type: 3}
   m_Color: {r: 1, g: 0.72, b: 0.25, a: 0.65}
   m_FlipX: 0
   m_FlipY: 0
@@ -541,7 +541,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 10
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 502296562, guid: cb7032fea677dc94bb79c493f09ce7c0, type: 3}
+  m_Sprite: {fileID: 21300000, guid: af4a834b7db913f48813b02ca3d7b26c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -642,4 +642,3 @@ MonoBehaviour:
   _outlineRenderer: {fileID: 5102571805779313026}
   _nameplate: {fileID: 3367824576698429426}
   _focusPrompt: {fileID: 2322580944358186766}
-  _pulseAmount: 0.05

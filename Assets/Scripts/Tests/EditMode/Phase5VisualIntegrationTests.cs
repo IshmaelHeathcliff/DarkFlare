@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -19,6 +20,93 @@ namespace DarkFlare.Tests
     public class Phase5VisualIntegrationTests
     {
         const string ItemRoot = "Assets/Data/Preset/Items";
+        const string ProductionSpriteRoot = "Assets/Art/Sprites";
+        const string ActorClipRoot = "Assets/Art/Animations/Clips";
+        const string UiIconRoot = "Assets/Art/Sprites/UI/Icons";
+        const string UiFrameRoot = "Assets/Art/Sprites/UI/Frames";
+        const string WorldPropRoot = "Assets/Art/Sprites/Environment/WorldProps";
+        const string ProjectilePath = "Assets/Art/Sprites/Effects/projectile_arcane.png";
+        const string GroundSlicePath = "Assets/Art/Sprites/Environment/VisualSlice/ground_slice.png";
+        const string HealthBarBackgroundPath = "Assets/Art/Sprites/UI/Phase5/world_health_bar_background.png";
+        const string HealthBarFillPath = "Assets/Art/Sprites/UI/Phase5/world_health_bar_fill.png";
+        const string PrototypeSquarePath = "Assets/Art/Textures/Prototype/PrototypeSquare.png";
+
+        static readonly string[] ActorRoots =
+        {
+            "Assets/Art/Sprites/Characters/Player",
+            "Assets/Art/Sprites/Monsters/Basic",
+            "Assets/Art/Sprites/Monsters/Swift",
+            "Assets/Art/Sprites/Monsters/Heavy",
+            "Assets/Art/Sprites/NPCs/Merchant",
+        };
+
+        static readonly string[] UiIconPaths =
+        {
+            $"{UiIconRoot}/ui_icon_health.png",
+            $"{UiIconRoot}/ui_icon_gold.png",
+            $"{UiIconRoot}/ui_icon_weapon.png",
+            $"{UiIconRoot}/ui_icon_armor.png",
+            $"{UiIconRoot}/ui_icon_ring.png",
+            $"{UiIconRoot}/ui_icon_inventory.png",
+            $"{UiIconRoot}/ui_icon_shop.png",
+            $"{UiIconRoot}/ui_icon_crafting.png",
+            $"{UiIconRoot}/ui_icon_close.png",
+            $"{UiIconRoot}/ui_icon_back.png",
+            $"{UiIconRoot}/ui_icon_weapon_empty.png",
+            $"{UiIconRoot}/ui_icon_missing.png",
+        };
+
+        static readonly string[] UiFramePaths =
+        {
+            $"{UiFrameRoot}/ui_inventory_panel_base.png",
+            $"{UiFrameRoot}/ui_inventory_slot_default.png",
+            $"{UiFrameRoot}/ui_inventory_slot_focused.png",
+            $"{UiFrameRoot}/ui_inventory_slot_disabled.png",
+        };
+
+        static readonly string[] WorldPropPaths =
+        {
+            $"{WorldPropRoot}/world_prop_ground_cracked.png",
+            $"{WorldPropRoot}/world_prop_ground_dirt.png",
+            $"{WorldPropRoot}/world_prop_ground_stone_path.png",
+            $"{WorldPropRoot}/world_prop_ruined_wall.png",
+            $"{WorldPropRoot}/world_prop_rock_small.png",
+            $"{WorldPropRoot}/world_prop_rock_large.png",
+            $"{WorldPropRoot}/world_prop_dead_tree.png",
+            $"{WorldPropRoot}/world_prop_tattered_banner.png",
+            $"{WorldPropRoot}/world_prop_supplies.png",
+            $"{WorldPropRoot}/world_prop_brazier.png",
+            $"{WorldPropRoot}/world_prop_crafting_station.png",
+            $"{WorldPropRoot}/world_prop_tent.png",
+        };
+
+        static readonly string[] UsedWorldPropPaths =
+        {
+            $"{WorldPropRoot}/world_prop_rock_small.png",
+            $"{WorldPropRoot}/world_prop_rock_large.png",
+            $"{WorldPropRoot}/world_prop_dead_tree.png",
+            $"{WorldPropRoot}/world_prop_tattered_banner.png",
+            $"{WorldPropRoot}/world_prop_supplies.png",
+            $"{WorldPropRoot}/world_prop_brazier.png",
+            $"{WorldPropRoot}/world_prop_crafting_station.png",
+            $"{WorldPropRoot}/world_prop_tent.png",
+        };
+
+        static readonly string[] LegacySheetPaths =
+        {
+            "Assets/Art/SpriteSheets/Phase5/player_sheet.png",
+            "Assets/Art/SpriteSheets/Phase5/monster_basic_sheet.png",
+            "Assets/Art/SpriteSheets/Phase5/monster_swift_sheet.png",
+            "Assets/Art/SpriteSheets/Phase5/monster_heavy_sheet.png",
+            "Assets/Art/SpriteSheets/Phase5/merchant_idle_sheet.png",
+            "Assets/Art/SpriteSheets/Phase5/world_props_sheet.png",
+            "Assets/Art/SpriteSheets/Phase5/ui_icons_sheet.png",
+            "Assets/Art/SpriteSheets/Phase5/ui_frames_sheet.png",
+        };
+
+        static readonly Regex ActorFrameNamePattern = new Regex(
+            "^(?:actor_player|monster_(?:basic|swift|heavy)|npc_merchant)_(?:idle|move|attack|hit|death)_se_[0-9]{2}\\.png$",
+            RegexOptions.Compiled | RegexOptions.CultureInvariant);
 
         [Test]
         public void OfficialItems_HaveUniqueProductionReadyIcons()
@@ -36,61 +124,161 @@ namespace DarkFlare.Tests
                 Assert.IsTrue(iconGuids.Add(item.Icon.AssetGUID), $"{item.Id} 与其他装备共用了图标");
 
                 string path = AssetDatabase.GUIDToAssetPath(item.Icon.AssetGUID);
-                Sprite sprite = AssetDatabase.LoadAssetAtPath<Sprite>(path);
-                TextureImporter importer = AssetImporter.GetAtPath(path) as TextureImporter;
-                Assert.IsNotNull(sprite, $"{item.Id} 的图标不是 Sprite: {path}");
-                Assert.IsNotNull(importer, $"{item.Id} 缺少 TextureImporter: {path}");
-                Assert.AreEqual(FilterMode.Point, importer.filterMode, path);
-                Assert.AreEqual(TextureImporterCompression.Uncompressed, importer.textureCompression, path);
-                Assert.AreEqual(64f, importer.spritePixelsPerUnit, 0.001f, path);
-                Assert.IsTrue(importer.alphaIsTransparency, path);
-                AssertSpriteCanvasAndAlphaBounds(path, 6, 72, 80);
+                Assert.That(
+                    path,
+                    Does.StartWith("Assets/Art/Sprites/Items/Equipment/"),
+                    $"{item.Id} 未引用独立装备图标");
+                AssertSpriteContract(path, 96, 96, 64f, new Vector2(0.5f, 0.5f), Vector4.zero);
+                AssertSpriteCanvasAndAlphaBounds(path, 5, 72, 80);
             }
         }
 
         [Test]
-        public void GeneratedArt_UsesEditableSpriteSheetsAndExpectedWorldScale()
+        public void ProductionArt_UsesOneSingleSpritePerPng()
         {
-            AssertSpriteSheet("Assets/Art/SpriteSheets/Phase5/player_sheet.png", 12);
-            AssertSpriteSheet("Assets/Art/SpriteSheets/Phase5/monster_basic_sheet.png", 12);
-            AssertSpriteSheet("Assets/Art/SpriteSheets/Phase5/monster_swift_sheet.png", 12);
-            AssertSpriteSheet("Assets/Art/SpriteSheets/Phase5/monster_heavy_sheet.png", 12);
-            AssertSpriteSheet("Assets/Art/SpriteSheets/Phase5/merchant_idle_sheet.png", 4);
-            AssertSpriteSheet("Assets/Art/SpriteSheets/Phase5/world_props_sheet.png", 12);
-            AssertSpriteSheet("Assets/Art/SpriteSheets/Phase5/ui_icons_sheet.png", 12);
-            AssertSpriteSheet("Assets/Art/SpriteSheets/Phase5/ui_frames_sheet.png", 4);
-            AssertUniformSpriteGrid("Assets/Art/SpriteSheets/Phase5/player_sheet.png", 4, 3, 192f);
-            AssertUniformSpriteGrid("Assets/Art/SpriteSheets/Phase5/monster_basic_sheet.png", 4, 3, 192f);
+            string[] paths = FindPngAssetPaths(ProductionSpriteRoot);
 
-            AssertUniformPrefabScale("Assets/Prefabs/Combat/Monster_Swift.prefab", 0.9f);
-            AssertUniformPrefabScale("Assets/Prefabs/Combat/Monster_Heavy.prefab", 0.75f);
-            AssertUniformPrefabScale("Assets/Prefabs/World/Merchant.prefab", 0.8f);
+            Assert.IsNotEmpty(paths);
+
+            for (int i = 0; i < paths.Length; i++)
+            {
+                AssertSingleSpriteContract(paths[i]);
+            }
         }
 
         [Test]
-        public void WorldPropsSheet_BrazierAndCraftingStationUseCorrectedTightRects()
+        public void ActorFrames_UseFrozen128PixelContract()
         {
-            const string SheetPath = "Assets/Art/SpriteSheets/Phase5/world_props_sheet.png";
-            Dictionary<string, Sprite> sprites = AssetDatabase.LoadAllAssetsAtPath(SheetPath)
-                .OfType<Sprite>()
-                .ToDictionary(sprite => sprite.name);
+            string[] paths = FindPngAssetPaths(ActorRoots);
 
-            Assert.AreEqual(new Rect(404f, 72f, 207f, 225f), sprites["world_props_sheet_13"].rect);
-            Assert.AreEqual(new Rect(678f, 45f, 359f, 296f), sprites["world_props_sheet_14"].rect);
+            Assert.AreEqual(52, paths.Length);
+
+            for (int i = 0; i < paths.Length; i++)
+            {
+                Assert.IsTrue(
+                    ActorFrameNamePattern.IsMatch(Path.GetFileName(paths[i])),
+                    $"角色帧命名不符合单图规范: {paths[i]}");
+                AssertSpriteContract(
+                    paths[i],
+                    128,
+                    128,
+                    64f,
+                    new Vector2(0.5f, 12f / 128f),
+                    Vector4.zero);
+            }
         }
 
         [Test]
-        public void UiFrameSheet_UsesCorrectedTightRects()
+        public void FixedUiIconsAndProjectile_Use96PixelContract()
         {
-            const string SheetPath = "Assets/Art/SpriteSheets/Phase5/ui_frames_sheet.png";
-            Dictionary<string, Sprite> sprites = AssetDatabase.LoadAllAssetsAtPath(SheetPath)
-                .OfType<Sprite>()
-                .ToDictionary(sprite => sprite.name);
+            CollectionAssert.AreEquivalent(UiIconPaths, FindPngAssetPaths(UiIconRoot));
 
-            Assert.AreEqual(new Rect(79f, 648f, 534f, 527f), sprites["ui_frames_sheet_0"].rect);
-            Assert.AreEqual(new Rect(693f, 679f, 436f, 465f), sprites["ui_frames_sheet_1"].rect);
-            Assert.AreEqual(new Rect(105f, 110f, 479f, 469f), sprites["ui_frames_sheet_2"].rect);
-            Assert.AreEqual(new Rect(693f, 110f, 436f, 469f), sprites["ui_frames_sheet_3"].rect);
+            for (int i = 0; i < UiIconPaths.Length; i++)
+            {
+                AssertSpriteContract(
+                    UiIconPaths[i],
+                    96,
+                    96,
+                    64f,
+                    new Vector2(0.5f, 0.5f),
+                    Vector4.zero);
+            }
+
+            AssertSpriteContract(
+                ProjectilePath,
+                96,
+                96,
+                64f,
+                new Vector2(0.5f, 0.5f),
+                Vector4.zero);
+        }
+
+        [Test]
+        public void WorldProps_UseFrozen384PixelContract()
+        {
+            CollectionAssert.AreEquivalent(WorldPropPaths, FindPngAssetPaths(WorldPropRoot));
+
+            for (int i = 0; i < WorldPropPaths.Length; i++)
+            {
+                AssertSpriteContract(
+                    WorldPropPaths[i],
+                    384,
+                    384,
+                    181f,
+                    new Vector2(0.5f, 0.5f),
+                    Vector4.zero);
+            }
+        }
+
+        [Test]
+        public void UiFrames_UseExactCanvasAndNineSliceContracts()
+        {
+            CollectionAssert.AreEquivalent(UiFramePaths, FindPngAssetPaths(UiFrameRoot));
+            AssertSpriteContract(
+                UiFramePaths[0],
+                534,
+                527,
+                100f,
+                new Vector2(0.5f, 0.5f),
+                new Vector4(98f, 98f, 98f, 98f));
+            AssertSpriteContract(
+                UiFramePaths[1],
+                436,
+                465,
+                100f,
+                new Vector2(0.5f, 0.5f),
+                new Vector4(78f, 78f, 78f, 78f));
+            AssertSpriteContract(
+                UiFramePaths[2],
+                479,
+                469,
+                100f,
+                new Vector2(0.5f, 0.5f),
+                new Vector4(157f, 157f, 157f, 157f));
+            AssertSpriteContract(
+                UiFramePaths[3],
+                436,
+                469,
+                100f,
+                new Vector2(0.5f, 0.5f),
+                new Vector4(157f, 157f, 157f, 157f));
+        }
+
+        [Test]
+        public void SupportingProductionSprites_UseFrozenCanvasContracts()
+        {
+            AssertSpriteContract(
+                GroundSlicePath,
+                512,
+                512,
+                64f,
+                new Vector2(0.5f, 0.5f),
+                Vector4.zero);
+            AssertSpriteContract(
+                HealthBarBackgroundPath,
+                64,
+                8,
+                64f,
+                new Vector2(0.5f, 0.5f),
+                Vector4.zero);
+            AssertSpriteContract(
+                HealthBarFillPath,
+                64,
+                8,
+                64f,
+                new Vector2(0.5f, 0.5f),
+                Vector4.zero);
+        }
+
+        [Test]
+        public void ProductionPrefabRootScales_PreserveHistoricalRuntimeExceptions()
+        {
+            AssertPrefabScale("Assets/Prefabs/Combat/Player.prefab", new Vector3(0.8f, 0.8f, 1f));
+            AssertPrefabScale("Assets/Prefabs/Combat/Monster_Basic.prefab", new Vector3(0.75f, 0.75f, 1f));
+            AssertPrefabScale("Assets/Prefabs/Combat/Monster_Swift.prefab", new Vector3(0.9f, 0.9f, 0.9f));
+            AssertPrefabScale("Assets/Prefabs/Combat/Monster_Heavy.prefab", new Vector3(0.75f, 0.75f, 1f));
+            AssertPrefabScale("Assets/Prefabs/World/Merchant.prefab", new Vector3(0.8f, 0.8f, 0.8f));
+            AssertPrefabScale("Assets/Prefabs/Combat/Projectile_Default.prefab", new Vector3(0.25f, 0.25f, 1f));
         }
 
         [Test]
@@ -128,75 +316,109 @@ namespace DarkFlare.Tests
             }
             finally
             {
-                if (setup.Length > 0)
-                {
-                    EditorSceneManager.RestoreSceneManagerSetup(setup);
-                }
-                else
-                {
-                    EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
-                }
+                RestoreSceneSetup(setup);
             }
         }
 
         [Test]
-        public void InventoryNineSlice_UsesPerAssetSafeInsets()
+        public void InventoryNineSlice_UsesIndependentAssetsAndSafeInsets()
         {
             string uss = File.ReadAllText(GetAbsolutePath("Assets/UI/Inventory.uss"));
 
+            for (int i = 0; i < UiFramePaths.Length; i++)
+            {
+                StringAssert.Contains(UiFramePaths[i], uss);
+            }
+
             StringAssert.Contains("-unity-slice-left: 98;", uss);
-            StringAssert.Contains("-unity-slice-left: 157;", uss);
+            StringAssert.Contains("-unity-slice-right: 98;", uss);
+            StringAssert.Contains("-unity-slice-top: 98;", uss);
+            StringAssert.Contains("-unity-slice-bottom: 98;", uss);
             StringAssert.Contains("-unity-slice-left: 78;", uss);
-            StringAssert.DoesNotContain("-unity-slice-left: 40;", uss);
-            StringAssert.DoesNotContain("-unity-slice-left: 16;", uss);
-            StringAssert.DoesNotContain("-unity-slice-left: 8;", uss);
-            StringAssert.DoesNotContain("-unity-slice-left: 28;", uss);
-            StringAssert.DoesNotContain("-unity-slice-left: 10;", uss);
+            StringAssert.Contains("-unity-slice-left: 157;", uss);
+            StringAssert.DoesNotContain("SpriteSheets/Phase5", uss);
         }
 
         [Test]
-        public void CharactersAndUi_ReferenceSpriteSheetsInsteadOfDerivedSingles()
+        public void AnimationsAndCharacterPrefabs_ReferenceIndependentFrames()
         {
-            string[] characterDependencies = AssetDatabase.GetDependencies(
-                new[]
-                {
-                    "Assets/Prefabs/Combat/Player.prefab",
-                    "Assets/Prefabs/Combat/Monster_Basic.prefab",
-                },
-                true);
-            string[] uiDependencies = AssetDatabase.GetDependencies(
-                new[]
-                {
-                    "Assets/UI/Theme.uss",
-                    "Assets/UI/Inventory.uss",
-                    "Assets/Prefabs/Loot/LootPickup.prefab",
-                },
-                true);
+            string[] actorPaths = FindPngAssetPaths(ActorRoots);
+            string[] clipPaths = AssetDatabase.FindAssets("t:AnimationClip", new[] { ActorClipRoot })
+                .Select(AssetDatabase.GUIDToAssetPath)
+                .OrderBy(path => path, StringComparer.Ordinal)
+                .ToArray();
+            HashSet<string> referencedActorPaths = new HashSet<string>(StringComparer.Ordinal);
 
-            CollectionAssert.Contains(
-                characterDependencies,
-                "Assets/Art/SpriteSheets/Phase5/player_sheet.png");
-            CollectionAssert.Contains(
-                characterDependencies,
-                "Assets/Art/SpriteSheets/Phase5/monster_basic_sheet.png");
-            CollectionAssert.Contains(
-                uiDependencies,
-                "Assets/Art/SpriteSheets/Phase5/ui_icons_sheet.png");
-            CollectionAssert.Contains(
-                uiDependencies,
-                "Assets/Art/SpriteSheets/Phase5/ui_frames_sheet.png");
-            Assert.IsFalse(
-                characterDependencies.Any(path => path.Contains("Assets/Art/Sprites/Characters/Player/")));
-            Assert.IsFalse(
-                characterDependencies.Any(path => path.Contains("Assets/Art/Sprites/Characters/Monsters/Basic/")));
-            Assert.IsFalse(
-                uiDependencies.Any(path => path.Contains("Assets/Art/Sprites/UI/Phase5/ui_")));
+            Assert.AreEqual(21, clipPaths.Length);
 
-            GameObject craftingStation = AssetDatabase.LoadAssetAtPath<GameObject>(
-                "Assets/Prefabs/World/CraftingStation.prefab");
-            SpriteRenderer[] craftingRenderers = craftingStation.GetComponentsInChildren<SpriteRenderer>(true);
-            Assert.AreEqual("world_props_sheet_14", craftingRenderers.Single(renderer => renderer.name == "Outline").sprite.name);
-            Assert.AreEqual("world_props_sheet_13", craftingRenderers.Single(renderer => renderer.name == "Fire").sprite.name);
+            for (int clipIndex = 0; clipIndex < clipPaths.Length; clipIndex++)
+            {
+                AnimationClip clip = AssetDatabase.LoadAssetAtPath<AnimationClip>(clipPaths[clipIndex]);
+                EditorCurveBinding[] bindings = AnimationUtility.GetObjectReferenceCurveBindings(clip);
+
+                for (int bindingIndex = 0; bindingIndex < bindings.Length; bindingIndex++)
+                {
+                    ObjectReferenceKeyframe[] keyframes = AnimationUtility.GetObjectReferenceCurve(
+                        clip,
+                        bindings[bindingIndex]);
+
+                    for (int keyIndex = 0; keyIndex < keyframes.Length; keyIndex++)
+                    {
+                        if (keyframes[keyIndex].value is not Sprite sprite)
+                        {
+                            continue;
+                        }
+
+                        string path = AssetDatabase.GetAssetPath(sprite);
+                        Assert.IsTrue(
+                            ActorRoots.Any(root => path.StartsWith(root, StringComparison.Ordinal)),
+                            $"{clipPaths[clipIndex]} 仍引用非单图角色帧: {path}");
+                        referencedActorPaths.Add(path);
+                    }
+                }
+            }
+
+            CollectionAssert.AreEquivalent(actorPaths, referencedActorPaths);
+            AssertPrefabRootSpritePath(
+                "Assets/Prefabs/Combat/Player.prefab",
+                "Assets/Art/Sprites/Characters/Player/actor_player_idle_se_00.png");
+            AssertPrefabRootSpritePath(
+                "Assets/Prefabs/Combat/Monster_Basic.prefab",
+                "Assets/Art/Sprites/Monsters/Basic/monster_basic_idle_se_00.png");
+            AssertPrefabRootSpritePath(
+                "Assets/Prefabs/Combat/Monster_Swift.prefab",
+                "Assets/Art/Sprites/Monsters/Swift/monster_swift_idle_se_00.png");
+            AssertPrefabRootSpritePath(
+                "Assets/Prefabs/Combat/Monster_Heavy.prefab",
+                "Assets/Art/Sprites/Monsters/Heavy/monster_heavy_idle_se_00.png");
+            AssertPrefabRootSpritePath(
+                "Assets/Prefabs/World/Merchant.prefab",
+                "Assets/Art/Sprites/NPCs/Merchant/npc_merchant_idle_se_00.png");
+        }
+
+        [Test]
+        public void UiAndWorldConsumers_ReferenceIndependentSprites()
+        {
+            string theme = File.ReadAllText(GetAbsolutePath("Assets/UI/Theme.uss"));
+            string inventory = File.ReadAllText(GetAbsolutePath("Assets/UI/Inventory.uss"));
+
+            for (int i = 0; i < UiIconPaths.Length; i++)
+            {
+                if (UiIconPaths[i].EndsWith("ui_icon_back.png", StringComparison.Ordinal))
+                {
+                    continue;
+                }
+
+                StringAssert.Contains(UiIconPaths[i], theme);
+            }
+
+            for (int i = 0; i < UiFramePaths.Length; i++)
+            {
+                StringAssert.Contains(UiFramePaths[i], inventory);
+            }
+
+            StringAssert.DoesNotContain("SpriteSheets/Phase5", theme);
+            StringAssert.DoesNotContain("SpriteSheets/Phase5", inventory);
 
             GameObject lootPickup = AssetDatabase.LoadAssetAtPath<GameObject>(
                 "Assets/Prefabs/Loot/LootPickup.prefab");
@@ -204,8 +426,54 @@ namespace DarkFlare.Tests
             LootPickupVisual lootVisual = lootPickup.GetComponent<LootPickupVisual>();
             SerializedObject serializedLoot = new SerializedObject(lootVisual);
             Sprite missingIcon = serializedLoot.FindProperty("_missingIcon").objectReferenceValue as Sprite;
-            Assert.AreEqual("ui_frames_sheet_2", halo.sprite.name);
-            Assert.AreEqual("ui_icons_sheet_11", missingIcon.name);
+            AssertSpritePath(halo.sprite, UiFramePaths[2], "LootPickup/Visual/Halo");
+            AssertSpritePath(missingIcon, UiIconPaths[11], "LootPickupVisual._missingIcon");
+
+            GameObject craftingStation = AssetDatabase.LoadAssetAtPath<GameObject>(
+                "Assets/Prefabs/World/CraftingStation.prefab");
+            SpriteRenderer[] craftingRenderers = craftingStation.GetComponentsInChildren<SpriteRenderer>(true);
+            AssertSpritePath(
+                craftingRenderers.Single(renderer => renderer.name == "Outline").sprite,
+                $"{WorldPropRoot}/world_prop_crafting_station.png",
+                "CraftingStation/Outline");
+            AssertSpritePath(
+                craftingRenderers.Single(renderer => renderer.name == "Fire").sprite,
+                $"{WorldPropRoot}/world_prop_brazier.png",
+                "CraftingStation/Fire");
+
+            SceneSetup[] setup = EditorSceneManager.GetSceneManagerSetup();
+
+            try
+            {
+                Scene scene = EditorSceneManager.OpenScene("Assets/Scenes/Main.unity", OpenSceneMode.Single);
+                HashSet<string> sceneSpritePaths = new HashSet<string>(StringComparer.Ordinal);
+
+                foreach (GameObject root in scene.GetRootGameObjects())
+                {
+                    SpriteRenderer[] renderers = root.GetComponentsInChildren<SpriteRenderer>(true);
+
+                    for (int rendererIndex = 0; rendererIndex < renderers.Length; rendererIndex++)
+                    {
+                        if (renderers[rendererIndex].sprite != null)
+                        {
+                            sceneSpritePaths.Add(AssetDatabase.GetAssetPath(renderers[rendererIndex].sprite));
+                        }
+                    }
+                }
+
+                for (int i = 0; i < UsedWorldPropPaths.Length; i++)
+                {
+                    CollectionAssert.Contains(sceneSpritePaths, UsedWorldPropPaths[i]);
+                }
+
+                Assert.IsFalse(
+                    sceneSpritePaths.Any(path => path.Contains("/SpriteSheets/", StringComparison.Ordinal)),
+                    string.Join("\n", sceneSpritePaths));
+            }
+            finally
+            {
+                RestoreSceneSetup(setup);
+            }
         }
 
         [Test]
@@ -227,6 +495,44 @@ namespace DarkFlare.Tests
         }
 
         [Test]
+        public void LegacySpriteSheets_AreRetiredAndHaveNoProductionDependencies()
+        {
+            for (int i = 0; i < LegacySheetPaths.Length; i++)
+            {
+                Assert.IsFalse(AssetDatabase.AssetPathExists(LegacySheetPaths[i]), LegacySheetPaths[i]);
+                Assert.IsFalse(File.Exists(GetAbsolutePath(LegacySheetPaths[i])), LegacySheetPaths[i]);
+                Assert.IsNull(AssetDatabase.LoadMainAssetAtPath(LegacySheetPaths[i]), LegacySheetPaths[i]);
+            }
+
+            List<string> consumerPaths = AssetDatabase.FindAssets(
+                    "t:AnimationClip",
+                    new[] { ActorClipRoot })
+                .Select(AssetDatabase.GUIDToAssetPath)
+                .ToList();
+            consumerPaths.AddRange(new[]
+            {
+                "Assets/Scenes/Main.unity",
+                "Assets/Prefabs/Combat/Player.prefab",
+                "Assets/Prefabs/Combat/Monster_Basic.prefab",
+                "Assets/Prefabs/Combat/Monster_Swift.prefab",
+                "Assets/Prefabs/Combat/Monster_Heavy.prefab",
+                "Assets/Prefabs/Loot/LootPickup.prefab",
+                "Assets/Prefabs/World/Merchant.prefab",
+                "Assets/Prefabs/World/CraftingStation.prefab",
+                "Assets/UI/Theme.uss",
+                "Assets/UI/Inventory.uss",
+            });
+            string[] dependencies = AssetDatabase.GetDependencies(consumerPaths.ToArray(), true);
+
+            for (int i = 0; i < LegacySheetPaths.Length; i++)
+            {
+                CollectionAssert.DoesNotContain(dependencies, LegacySheetPaths[i]);
+            }
+
+            Assert.IsTrue(AssetDatabase.AssetPathExists(PrototypeSquarePath));
+        }
+
+        [Test]
         public void ProductionSceneAndPrefabs_DoNotDependOnPrototypeSquare()
         {
             string[] roots =
@@ -244,8 +550,8 @@ namespace DarkFlare.Tests
             string[] dependencies = AssetDatabase.GetDependencies(roots, true);
 
             Assert.IsFalse(
-                dependencies.Any(path => path.Contains("PrototypeSquare")),
-                string.Join("\n", dependencies.Where(path => path.Contains("PrototypeSquare"))));
+                dependencies.Any(path => path.Contains("PrototypeSquare", StringComparison.Ordinal)),
+                string.Join("\n", dependencies.Where(path => path.Contains("PrototypeSquare", StringComparison.Ordinal))));
         }
 
         [Test]
@@ -337,57 +643,124 @@ namespace DarkFlare.Tests
             Assert.GreaterOrEqual(bounds.yMin, minimumMargin, assetPath);
             Assert.GreaterOrEqual(texture.width - bounds.xMax, minimumMargin, assetPath);
             Assert.GreaterOrEqual(texture.height - bounds.yMax, minimumMargin, assetPath);
-            Object.DestroyImmediate(texture);
+            UnityEngine.Object.DestroyImmediate(texture);
         }
 
-        static void AssertSpriteSheet(string assetPath, int expectedSpriteCount)
+        static void AssertSingleSpriteContract(string assetPath)
         {
             TextureImporter importer = AssetImporter.GetAtPath(assetPath) as TextureImporter;
             Sprite[] sprites = AssetDatabase.LoadAllAssetsAtPath(assetPath).OfType<Sprite>().ToArray();
 
             Assert.IsNotNull(importer, assetPath);
-            Assert.AreEqual(SpriteImportMode.Multiple, importer.spriteImportMode, assetPath);
+            Assert.AreEqual(TextureImporterType.Sprite, importer.textureType, assetPath);
+            Assert.AreEqual(SpriteImportMode.Single, importer.spriteImportMode, assetPath);
             Assert.AreEqual(FilterMode.Point, importer.filterMode, assetPath);
             Assert.AreEqual(TextureImporterCompression.Uncompressed, importer.textureCompression, assetPath);
-            Assert.IsTrue(importer.alphaIsTransparency, assetPath);
-            Assert.AreEqual(expectedSpriteCount, sprites.Length, assetPath);
+            Assert.IsFalse(importer.mipmapEnabled, assetPath);
+            Assert.IsTrue(importer.sRGBTexture, assetPath);
+            Assert.AreEqual(
+                assetPath == GroundSlicePath ? TextureWrapMode.Repeat : TextureWrapMode.Clamp,
+                importer.wrapMode,
+                assetPath);
+
+            if (assetPath != GroundSlicePath)
+            {
+                Assert.IsTrue(importer.alphaIsTransparency, assetPath);
+            }
+
+            TextureImporterSettings settings = new TextureImporterSettings();
+            importer.ReadTextureSettings(settings);
+            Assert.AreEqual(SpriteMeshType.FullRect, settings.spriteMeshType, assetPath);
+            Assert.AreEqual(1, sprites.Length, assetPath);
+            Assert.IsTrue(
+                AssetDatabase.TryGetGUIDAndLocalFileIdentifier(
+                    sprites[0],
+                    out string _,
+                    out long localId),
+                assetPath);
+            Assert.AreEqual(21300000L, localId, assetPath);
         }
 
-        static void AssertUniformPrefabScale(string assetPath, float expectedScale)
+        static void AssertSpriteContract(
+            string assetPath,
+            int expectedWidth,
+            int expectedHeight,
+            float expectedPixelsPerUnit,
+            Vector2 expectedPivot,
+            Vector4 expectedBorder)
+        {
+            AssertSingleSpriteContract(assetPath);
+            TextureImporter importer = AssetImporter.GetAtPath(assetPath) as TextureImporter;
+            importer.GetSourceTextureWidthAndHeight(out int width, out int height);
+            Sprite sprite = AssetDatabase.LoadAssetAtPath<Sprite>(assetPath);
+
+            Assert.IsNotNull(sprite, assetPath);
+            Assert.AreEqual(expectedWidth, width, assetPath);
+            Assert.AreEqual(expectedHeight, height, assetPath);
+            Assert.AreEqual(expectedPixelsPerUnit, importer.spritePixelsPerUnit, 0.001f, assetPath);
+            Assert.AreEqual(expectedPivot.x, importer.spritePivot.x, 0.0001f, assetPath);
+            Assert.AreEqual(expectedPivot.y, importer.spritePivot.y, 0.0001f, assetPath);
+            AssertVector4(expectedBorder, importer.spriteBorder, assetPath);
+            Assert.AreEqual(expectedWidth, sprite.rect.width, 0.001f, assetPath);
+            Assert.AreEqual(expectedHeight, sprite.rect.height, 0.001f, assetPath);
+            Assert.AreEqual(expectedWidth * expectedPivot.x, sprite.pivot.x, 0.001f, assetPath);
+            Assert.AreEqual(expectedHeight * expectedPivot.y, sprite.pivot.y, 0.001f, assetPath);
+            Assert.AreEqual(expectedPixelsPerUnit, sprite.pixelsPerUnit, 0.001f, assetPath);
+        }
+
+        static void AssertVector4(Vector4 expected, Vector4 actual, string message)
+        {
+            Assert.AreEqual(expected.x, actual.x, 0.001f, message);
+            Assert.AreEqual(expected.y, actual.y, 0.001f, message);
+            Assert.AreEqual(expected.z, actual.z, 0.001f, message);
+            Assert.AreEqual(expected.w, actual.w, 0.001f, message);
+        }
+
+        static void AssertPrefabScale(string assetPath, Vector3 expectedScale)
         {
             GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(assetPath);
 
             Assert.IsNotNull(prefab, assetPath);
-            Assert.AreEqual(expectedScale, prefab.transform.localScale.x, 0.001f, assetPath);
-            Assert.AreEqual(prefab.transform.localScale.x, prefab.transform.localScale.y, 0.001f, assetPath);
+            Assert.AreEqual(expectedScale.x, prefab.transform.localScale.x, 0.001f, assetPath);
+            Assert.AreEqual(expectedScale.y, prefab.transform.localScale.y, 0.001f, assetPath);
+            Assert.AreEqual(expectedScale.z, prefab.transform.localScale.z, 0.001f, assetPath);
         }
 
-        static void AssertUniformSpriteGrid(
-            string assetPath,
-            int columns,
-            int rows,
-            float expectedPixelsPerUnit)
+        static void AssertPrefabRootSpritePath(string prefabPath, string expectedSpritePath)
         {
-            TextureImporter importer = AssetImporter.GetAtPath(assetPath) as TextureImporter;
-            Texture2D texture = AssetDatabase.LoadAssetAtPath<Texture2D>(assetPath);
-            Sprite[] sprites = AssetDatabase.LoadAllAssetsAtPath(assetPath).OfType<Sprite>().ToArray();
+            GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
 
-            Assert.IsNotNull(importer, assetPath);
-            Assert.IsNotNull(texture, assetPath);
-            Assert.AreEqual(expectedPixelsPerUnit, importer.spritePixelsPerUnit, 0.001f, assetPath);
-            Assert.Zero(texture.width % columns, assetPath);
-            Assert.Zero(texture.height % rows, assetPath);
+            Assert.IsNotNull(prefab, prefabPath);
+            SpriteRenderer renderer = prefab.GetComponent<SpriteRenderer>();
+            Assert.IsNotNull(renderer, prefabPath);
+            AssertSpritePath(renderer.sprite, expectedSpritePath, prefabPath);
+        }
 
-            float cellWidth = texture.width / columns;
-            float cellHeight = texture.height / rows;
+        static void AssertSpritePath(Sprite sprite, string expectedPath, string message)
+        {
+            Assert.IsNotNull(sprite, message);
+            Assert.AreEqual(expectedPath, AssetDatabase.GetAssetPath(sprite), message);
+        }
 
-            for (int i = 0; i < sprites.Length; i++)
+        static string[] FindPngAssetPaths(params string[] roots)
+        {
+            return AssetDatabase.FindAssets("t:Texture2D", roots)
+                .Select(AssetDatabase.GUIDToAssetPath)
+                .Where(path => string.Equals(Path.GetExtension(path), ".png", StringComparison.OrdinalIgnoreCase))
+                .Distinct(StringComparer.Ordinal)
+                .OrderBy(path => path, StringComparer.Ordinal)
+                .ToArray();
+        }
+
+        static void RestoreSceneSetup(SceneSetup[] setup)
+        {
+            if (setup.Length > 0)
             {
-                Rect rect = sprites[i].rect;
-                Assert.AreEqual(cellWidth, rect.width, 0.001f, sprites[i].name);
-                Assert.AreEqual(cellHeight, rect.height, 0.001f, sprites[i].name);
-                Assert.AreEqual(0f, rect.x % cellWidth, 0.001f, sprites[i].name);
-                Assert.AreEqual(0f, rect.y % cellHeight, 0.001f, sprites[i].name);
+                EditorSceneManager.RestoreSceneManagerSetup(setup);
+            }
+            else
+            {
+                EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
             }
         }
 
@@ -434,7 +807,7 @@ namespace DarkFlare.Tests
             return Path.Combine(projectRoot, assetPath);
         }
 
-        static List<T> LoadAssets<T>(string root) where T : Object
+        static List<T> LoadAssets<T>(string root) where T : UnityEngine.Object
         {
             string[] guids = AssetDatabase.FindAssets($"t:{typeof(T).Name}", new[] { root });
             List<T> result = new List<T>(guids.Length);

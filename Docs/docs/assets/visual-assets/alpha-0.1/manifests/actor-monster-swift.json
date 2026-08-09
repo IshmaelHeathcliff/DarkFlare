@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "family": "actor-monster-swift",
+  "alpha_threshold": 8,
+  "canvas": { "width": 128, "height": 128 },
+  "alpha_required": true,
+  "unity_import": { "pixels_per_unit": 64, "pivot": [0.5, 0.09375], "filter": "Point", "mesh": "FullRect" },
+  "assets": [
+    { "name": "attack_00", "image": "../../../../../../Assets/Art/Sprites/Monsters/Swift/monster_swift_attack_se_00.png", "visible_width": [65, 108], "visible_height": [26, 62], "alpha_coverage": [0.085, 0.14], "visual_center_x": [53, 74], "visual_center_y": [90, 114], "bottom_margin": [3, 6], "edge_clearance": 3 },
+    { "name": "attack_01", "image": "../../../../../../Assets/Art/Sprites/Monsters/Swift/monster_swift_attack_se_01.png", "visible_width": [65, 108], "visible_height": [26, 62], "alpha_coverage": [0.085, 0.14], "visual_center_x": [53, 74], "visual_center_y": [90, 114], "bottom_margin": [3, 6], "edge_clearance": 3 },
+    { "name": "death_00", "image": "../../../../../../Assets/Art/Sprites/Monsters/Swift/monster_swift_death_se_00.png", "visible_width": [65, 108], "visible_height": [26, 62], "alpha_coverage": [0.085, 0.14], "visual_center_x": [53, 74], "visual_center_y": [90, 114], "bottom_margin": [3, 6], "edge_clearance": 3 },
+    { "name": "hit_00", "image": "../../../../../../Assets/Art/Sprites/Monsters/Swift/monster_swift_hit_se_00.png", "visible_width": [65, 108], "visible_height": [26, 62], "alpha_coverage": [0.085, 0.14], "visual_center_x": [53, 74], "visual_center_y": [90, 114], "bottom_margin": [3, 6], "edge_clearance": 3 },
+    { "name": "idle_00", "image": "../../../../../../Assets/Art/Sprites/Monsters/Swift/monster_swift_idle_se_00.png", "visible_width": [65, 108], "visible_height": [26, 62], "alpha_coverage": [0.085, 0.14], "visual_center_x": [53, 74], "visual_center_y": [90, 114], "bottom_margin": [3, 6], "edge_clearance": 3, "group": "idle" },
+    { "name": "idle_01", "image": "../../../../../../Assets/Art/Sprites/Monsters/Swift/monster_swift_idle_se_01.png", "visible_width": [65, 108], "visible_height": [26, 62], "alpha_coverage": [0.085, 0.14], "visual_center_x": [53, 74], "visual_center_y": [90, 114], "bottom_margin": [3, 6], "edge_clearance": 3, "group": "idle" },
+    { "name": "idle_02", "image": "../../../../../../Assets/Art/Sprites/Monsters/Swift/monster_swift_idle_se_02.png", "visible_width": [65, 108], "visible_height": [26, 62], "alpha_coverage": [0.085, 0.14], "visual_center_x": [53, 74], "visual_center_y": [90, 114], "bottom_margin": [3, 6], "edge_clearance": 3, "group": "idle" },
+    { "name": "idle_03", "image": "../../../../../../Assets/Art/Sprites/Monsters/Swift/monster_swift_idle_se_03.png", "visible_width": [65, 108], "visible_height": [26, 62], "alpha_coverage": [0.085, 0.14], "visual_center_x": [53, 74], "visual_center_y": [90, 114], "bottom_margin": [3, 6], "edge_clearance": 3, "group": "idle" },
+    { "name": "move_00", "image": "../../../../../../Assets/Art/Sprites/Monsters/Swift/monster_swift_move_se_00.png", "visible_width": [65, 108], "visible_height": [26, 62], "alpha_coverage": [0.085, 0.14], "visual_center_x": [53, 74], "visual_center_y": [90, 114], "bottom_margin": [3, 6], "edge_clearance": 3, "group": "move" },
+    { "name": "move_01", "image": "../../../../../../Assets/Art/Sprites/Monsters/Swift/monster_swift_move_se_01.png", "visible_width": [65, 108], "visible_height": [26, 62], "alpha_coverage": [0.085, 0.14], "visual_center_x": [53, 74], "visual_center_y": [90, 114], "bottom_margin": [3, 6], "edge_clearance": 3, "group": "move" },
+    { "name": "move_02", "image": "../../../../../../Assets/Art/Sprites/Monsters/Swift/monster_swift_move_se_02.png", "visible_width": [65, 108], "visible_height": [26, 62], "alpha_coverage": [0.085, 0.14], "visual_center_x": [53, 74], "visual_center_y": [90, 114], "bottom_margin": [3, 6], "edge_clearance": 3, "group": "move" },
+    { "name": "move_03", "image": "../../../../../../Assets/Art/Sprites/Monsters/Swift/monster_swift_move_se_03.png", "visible_width": [65, 108], "visible_height": [26, 62], "alpha_coverage": [0.085, 0.14], "visual_center_x": [53, 74], "visual_center_y": [90, 114], "bottom_margin": [3, 6], "edge_clearance": 3, "group": "move" }
+  ],
+  "groups": [
+    { "name": "idle", "max_width_delta": 8, "max_height_delta": 6, "max_visual_center_x_delta": 3, "max_visual_center_y_delta": 4, "max_bottom_margin_delta": 0, "max_alpha_coverage_delta": 0.015 },
+    { "name": "move", "max_width_delta": 10, "max_height_delta": 12, "max_visual_center_x_delta": 3, "max_visual_center_y_delta": 5, "max_bottom_margin_delta": 1, "max_alpha_coverage_delta": 0.015 }
+  ]
+}

@@ -1,0 +1,1972 @@
+{
+  "schemaVersion": 1,
+  "expectedMappingCount": 80,
+  "families": [
+    {
+      "id": "actors",
+      "canvasWidth": 128,
+      "canvasHeight": 128,
+      "pixelsPerUnit": 64.0,
+      "pivotX": 0.5,
+      "pivotY": 0.09375,
+      "borderLeft": 0.0,
+      "borderBottom": 0.0,
+      "borderRight": 0.0,
+      "borderTop": 0.0
+    },
+    {
+      "id": "ui_icons",
+      "canvasWidth": 96,
+      "canvasHeight": 96,
+      "pixelsPerUnit": 64.0,
+      "pivotX": 0.5,
+      "pivotY": 0.5,
+      "borderLeft": 0.0,
+      "borderBottom": 0.0,
+      "borderRight": 0.0,
+      "borderTop": 0.0
+    },
+    {
+      "id": "world_props",
+      "canvasWidth": 384,
+      "canvasHeight": 384,
+      "pixelsPerUnit": 181.0,
+      "pivotX": 0.5,
+      "pivotY": 0.5,
+      "borderLeft": 0.0,
+      "borderBottom": 0.0,
+      "borderRight": 0.0,
+      "borderTop": 0.0
+    },
+    {
+      "id": "ui_frames_sheet_0",
+      "canvasWidth": 534,
+      "canvasHeight": 527,
+      "pixelsPerUnit": 100.0,
+      "pivotX": 0.5,
+      "pivotY": 0.5,
+      "borderLeft": 98.0,
+      "borderBottom": 98.0,
+      "borderRight": 98.0,
+      "borderTop": 98.0,
+      "semanticName": "ui_inventory_panel_base"
+    },
+    {
+      "id": "ui_frames_sheet_1",
+      "canvasWidth": 436,
+      "canvasHeight": 465,
+      "pixelsPerUnit": 100.0,
+      "pivotX": 0.5,
+      "pivotY": 0.5,
+      "borderLeft": 78.0,
+      "borderBottom": 78.0,
+      "borderRight": 78.0,
+      "borderTop": 78.0,
+      "semanticName": "ui_inventory_slot_default"
+    },
+    {
+      "id": "ui_frames_sheet_2",
+      "canvasWidth": 479,
+      "canvasHeight": 469,
+      "pixelsPerUnit": 100.0,
+      "pivotX": 0.5,
+      "pivotY": 0.5,
+      "borderLeft": 157.0,
+      "borderBottom": 157.0,
+      "borderRight": 157.0,
+      "borderTop": 157.0,
+      "semanticName": "ui_inventory_slot_focused"
+    },
+    {
+      "id": "ui_frames_sheet_3",
+      "canvasWidth": 436,
+      "canvasHeight": 469,
+      "pixelsPerUnit": 100.0,
+      "pivotX": 0.5,
+      "pivotY": 0.5,
+      "borderLeft": 157.0,
+      "borderBottom": 157.0,
+      "borderRight": 157.0,
+      "borderTop": 157.0,
+      "semanticName": "ui_inventory_slot_disabled"
+    }
+  ],
+  "legacySheets": [
+    {
+      "id": "player",
+      "kind": "actor",
+      "assetPath": "Assets/Art/SpriteSheets/Phase5/player_sheet.png",
+      "sourcePath": "Docs/docs/assets/visual-style/source/player-sheet-alpha.png",
+      "guid": "bb4b4ffb8727d1c44a193ba3a5eabab7",
+      "oldPixelsPerUnit": 192.0,
+      "expectedSpriteCount": 12,
+      "sourceSha256": "57f5485f9243bc21b62d496c890d1df3e5ba34f45823dd9150ab9c7555b8d79a"
+    },
+    {
+      "id": "monster_basic",
+      "kind": "actor",
+      "assetPath": "Assets/Art/SpriteSheets/Phase5/monster_basic_sheet.png",
+      "sourcePath": "Docs/docs/assets/visual-style/source/monster-sheet-alpha.png",
+      "guid": "a862d0b53cd77854ab577b082f90c77f",
+      "oldPixelsPerUnit": 192.0,
+      "expectedSpriteCount": 12,
+      "sourceSha256": "04cba32cac91ad6755e7b5bdbcbeec64473f57ba7c296af7781f198c39da37fe"
+    },
+    {
+      "id": "monster_swift",
+      "kind": "actor",
+      "assetPath": "Assets/Art/SpriteSheets/Phase5/monster_swift_sheet.png",
+      "sourcePath": "Docs/docs/assets/visual-style/source/phase-5/razor-hound-sheet-transparent.png",
+      "guid": "844f4b1dc04fe954f8185cedb58f295a",
+      "oldPixelsPerUnit": 181.33333,
+      "expectedSpriteCount": 12,
+      "sourceSha256": "c8b3f966a3d5995bd1163e250f872e0355ec1f9600c1d98436aa956a27ede2c4"
+    },
+    {
+      "id": "monster_heavy",
+      "kind": "actor",
+      "assetPath": "Assets/Art/SpriteSheets/Phase5/monster_heavy_sheet.png",
+      "sourcePath": "Docs/docs/assets/visual-style/source/phase-5/iron-husk-sheet-transparent.png",
+      "guid": "90d6f8cb11a79f0499331ad5eaba6b7d",
+      "oldPixelsPerUnit": 212.33333,
+      "expectedSpriteCount": 12,
+      "sourceSha256": "ff5164876112f1a253100b1e8878adcc0abf53ebc398a079f1192475b082b9f0"
+    },
+    {
+      "id": "merchant",
+      "kind": "actor",
+      "assetPath": "Assets/Art/SpriteSheets/Phase5/merchant_idle_sheet.png",
+      "sourcePath": "Docs/docs/assets/visual-style/source/phase-5/merchant-idle-sheet-transparent.png",
+      "guid": "cb7032fea677dc94bb79c493f09ce7c0",
+      "oldPixelsPerUnit": 398.22223,
+      "expectedSpriteCount": 4,
+      "sourceSha256": "81a0b477168aa1c69ac7fda634ad2906b92013b91fd4b30fdc6a782a6441b079"
+    },
+    {
+      "id": "ui_icons",
+      "kind": "ui_icon",
+      "assetPath": "Assets/Art/SpriteSheets/Phase5/ui_icons_sheet.png",
+      "sourcePath": "Docs/docs/assets/visual-style/source/phase-5/ui-icons-sheet-transparent.png",
+      "guid": "3d33168ffb68da5478536df049f83403",
+      "oldPixelsPerUnit": 64.0,
+      "expectedSpriteCount": 12,
+      "sourceSha256": "5d19e744a8302807312c08a9782875dacc2fd95e97ec3d465df179d51f0a3354"
+    },
+    {
+      "id": "ui_frames",
+      "kind": "ui_frame",
+      "assetPath": "Assets/Art/SpriteSheets/Phase5/ui_frames_sheet.png",
+      "sourcePath": "Docs/docs/assets/visual-style/source/ui-sheet-alpha.png",
+      "guid": "19d81cb40ae62844597b40ddf83e9ddd",
+      "oldPixelsPerUnit": 100.0,
+      "expectedSpriteCount": 4,
+      "sourceSha256": "45590ed03b387e436a56653139670104a54b2319fdf17b90aa08b4b02b8ec00d"
+    },
+    {
+      "id": "world_props",
+      "kind": "world_prop",
+      "assetPath": "Assets/Art/SpriteSheets/Phase5/world_props_sheet.png",
+      "sourcePath": "Docs/docs/assets/visual-style/source/phase-5/world-props-sheet-transparent.png",
+      "guid": "7437197d5411fb94da395d8598fe8aec",
+      "oldPixelsPerUnit": 181.0,
+      "expectedSpriteCount": 12,
+      "sourceSha256": "6b1aedbda4e22054af8f3fd6c4fdc4e4377bd520c254ef67b77f8a3572aac940"
+    }
+  ],
+  "mappings": [
+    {
+      "sheetId": "player",
+      "familyId": "actors",
+      "legacySheetGuid": "bb4b4ffb8727d1c44a193ba3a5eabab7",
+      "legacyLocalId": 1129177667,
+      "legacySpriteName": "player_idle_se_0",
+      "rect": {
+        "x": 0,
+        "y": 724,
+        "width": 362,
+        "height": 362
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.19751382
+      },
+      "targetPath": "Assets/Art/Sprites/Characters/Player/actor_player_idle_se_00.png",
+      "allowUnreferenced": false,
+      "targetSha256": "547d0ccd9207a84be9e297c020c3e9176dd35c86859ae9547c576ea18fcda33f"
+    },
+    {
+      "sheetId": "player",
+      "familyId": "actors",
+      "legacySheetGuid": "bb4b4ffb8727d1c44a193ba3a5eabab7",
+      "legacyLocalId": -129244894,
+      "legacySpriteName": "player_idle_se_1",
+      "rect": {
+        "x": 362,
+        "y": 724,
+        "width": 362,
+        "height": 362
+      },
+      "pivot": {
+        "x": 0.4088398,
+        "y": 0.19751382
+      },
+      "targetPath": "Assets/Art/Sprites/Characters/Player/actor_player_idle_se_01.png",
+      "allowUnreferenced": false,
+      "targetSha256": "26461610b58ad9d599941708c86f2a94095c7496bc47d38658ae1fee1932d84d"
+    },
+    {
+      "sheetId": "player",
+      "familyId": "actors",
+      "legacySheetGuid": "bb4b4ffb8727d1c44a193ba3a5eabab7",
+      "legacyLocalId": 2131848916,
+      "legacySpriteName": "player_idle_se_2",
+      "rect": {
+        "x": 724,
+        "y": 724,
+        "width": 362,
+        "height": 362
+      },
+      "pivot": {
+        "x": 0.38674033,
+        "y": 0.19751382
+      },
+      "targetPath": "Assets/Art/Sprites/Characters/Player/actor_player_idle_se_02.png",
+      "allowUnreferenced": false,
+      "targetSha256": "980300de2461c7360373140c773925d9c67dc5a2352fbb1e1ad35e1a9180d79e"
+    },
+    {
+      "sheetId": "player",
+      "familyId": "actors",
+      "legacySheetGuid": "bb4b4ffb8727d1c44a193ba3a5eabab7",
+      "legacyLocalId": 1062942677,
+      "legacySpriteName": "player_idle_se_3",
+      "rect": {
+        "x": 1086,
+        "y": 724,
+        "width": 362,
+        "height": 362
+      },
+      "pivot": {
+        "x": 0.31491712,
+        "y": 0.19751382
+      },
+      "targetPath": "Assets/Art/Sprites/Characters/Player/actor_player_idle_se_03.png",
+      "allowUnreferenced": false,
+      "targetSha256": "dfe484b9bfb3b6b4f966b194e2ac3f5c3b31e6ad53263feaa15735645ca1eefd"
+    },
+    {
+      "sheetId": "player",
+      "familyId": "actors",
+      "legacySheetGuid": "bb4b4ffb8727d1c44a193ba3a5eabab7",
+      "legacyLocalId": 2045649079,
+      "legacySpriteName": "player_move_se_0",
+      "rect": {
+        "x": 0,
+        "y": 362,
+        "width": 362,
+        "height": 362
+      },
+      "pivot": {
+        "x": 0.5082873,
+        "y": 0.23618785
+      },
+      "targetPath": "Assets/Art/Sprites/Characters/Player/actor_player_move_se_00.png",
+      "allowUnreferenced": false,
+      "targetSha256": "9000b4729c818c4c742fc8edcbc9a747a3dabfbea710b825bf2cee72a6863a84"
+    },
+    {
+      "sheetId": "player",
+      "familyId": "actors",
+      "legacySheetGuid": "bb4b4ffb8727d1c44a193ba3a5eabab7",
+      "legacyLocalId": -1328210451,
+      "legacySpriteName": "player_move_se_1",
+      "rect": {
+        "x": 362,
+        "y": 362,
+        "width": 362,
+        "height": 362
+      },
+      "pivot": {
+        "x": 0.39640883,
+        "y": 0.23618785
+      },
+      "targetPath": "Assets/Art/Sprites/Characters/Player/actor_player_move_se_01.png",
+      "allowUnreferenced": false,
+      "targetSha256": "9feabc5dcb662592b4a40ef6788c0ca99f3639a55a09dcd95460823cf7df1295"
+    },
+    {
+      "sheetId": "player",
+      "familyId": "actors",
+      "legacySheetGuid": "bb4b4ffb8727d1c44a193ba3a5eabab7",
+      "legacyLocalId": -745452477,
+      "legacySpriteName": "player_move_se_2",
+      "rect": {
+        "x": 724,
+        "y": 362,
+        "width": 362,
+        "height": 362
+      },
+      "pivot": {
+        "x": 0.37154695,
+        "y": 0.22790055
+      },
+      "targetPath": "Assets/Art/Sprites/Characters/Player/actor_player_move_se_02.png",
+      "allowUnreferenced": false,
+      "targetSha256": "5072728bd1add4b79f0edd433b03b96fdecf64b35991980bc0ca2ff2424d3a8e"
+    },
+    {
+      "sheetId": "player",
+      "familyId": "actors",
+      "legacySheetGuid": "bb4b4ffb8727d1c44a193ba3a5eabab7",
+      "legacyLocalId": -791848539,
+      "legacySpriteName": "player_move_se_3",
+      "rect": {
+        "x": 1086,
+        "y": 362,
+        "width": 362,
+        "height": 362
+      },
+      "pivot": {
+        "x": 0.29143646,
+        "y": 0.22790055
+      },
+      "targetPath": "Assets/Art/Sprites/Characters/Player/actor_player_move_se_03.png",
+      "allowUnreferenced": false,
+      "targetSha256": "3c0e79ba254268a3532998671a521d73de4eeac4e12445fdaa2a4163d99d0f2f"
+    },
+    {
+      "sheetId": "player",
+      "familyId": "actors",
+      "legacySheetGuid": "bb4b4ffb8727d1c44a193ba3a5eabab7",
+      "legacyLocalId": -1448546007,
+      "legacySpriteName": "player_attack_anticipation_se",
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 362,
+        "height": 362
+      },
+      "pivot": {
+        "x": 0.5400553,
+        "y": 0.31906077
+      },
+      "targetPath": "Assets/Art/Sprites/Characters/Player/actor_player_attack_se_00.png",
+      "allowUnreferenced": false,
+      "targetSha256": "1798fc35eee1c14e8b79ed6bc733bd2ae53d894f9f2b45429e7839d21c8085dd"
+    },
+    {
+      "sheetId": "player",
+      "familyId": "actors",
+      "legacySheetGuid": "bb4b4ffb8727d1c44a193ba3a5eabab7",
+      "legacyLocalId": -1116178088,
+      "legacySpriteName": "player_attack_release_se",
+      "rect": {
+        "x": 362,
+        "y": 0,
+        "width": 362,
+        "height": 362
+      },
+      "pivot": {
+        "x": 0.5607735,
+        "y": 0.3218232
+      },
+      "targetPath": "Assets/Art/Sprites/Characters/Player/actor_player_attack_se_01.png",
+      "allowUnreferenced": false,
+      "targetSha256": "e570f2d86331b28d8cf8e7ab7492d28eac2db5c25d278986b08ff15d04fa92e1"
+    },
+    {
+      "sheetId": "player",
+      "familyId": "actors",
+      "legacySheetGuid": "bb4b4ffb8727d1c44a193ba3a5eabab7",
+      "legacyLocalId": 1435384561,
+      "legacySpriteName": "player_hit_se",
+      "rect": {
+        "x": 724,
+        "y": 0,
+        "width": 362,
+        "height": 362
+      },
+      "pivot": {
+        "x": 0.45994475,
+        "y": 0.3218232
+      },
+      "targetPath": "Assets/Art/Sprites/Characters/Player/actor_player_hit_se_00.png",
+      "allowUnreferenced": false,
+      "targetSha256": "4a1e26882de76b02bc94481ce46c438f4ca528aaa09087657175d6df4551888c"
+    },
+    {
+      "sheetId": "player",
+      "familyId": "actors",
+      "legacySheetGuid": "bb4b4ffb8727d1c44a193ba3a5eabab7",
+      "legacyLocalId": 236926663,
+      "legacySpriteName": "player_death_se",
+      "rect": {
+        "x": 1086,
+        "y": 0,
+        "width": 362,
+        "height": 362
+      },
+      "pivot": {
+        "x": 0.37983426,
+        "y": 0.27486187
+      },
+      "targetPath": "Assets/Art/Sprites/Characters/Player/actor_player_death_se_00.png",
+      "allowUnreferenced": false,
+      "targetSha256": "baa58be35ee0cef379cb7e39c00554e71153ef4e15b2549a30f95cd403528e39"
+    },
+    {
+      "sheetId": "monster_basic",
+      "familyId": "actors",
+      "legacySheetGuid": "a862d0b53cd77854ab577b082f90c77f",
+      "legacyLocalId": 1143549659,
+      "legacySpriteName": "monster_basic_idle_se_0",
+      "rect": {
+        "x": 0,
+        "y": 724,
+        "width": 362,
+        "height": 362
+      },
+      "pivot": {
+        "x": 0.52209944,
+        "y": 0.18508287
+      },
+      "targetPath": "Assets/Art/Sprites/Monsters/Basic/monster_basic_idle_se_00.png",
+      "allowUnreferenced": false,
+      "targetSha256": "968a4299905a4634f0cd3110b00d33fd4afb48139544170fe40c369c0a474ffb"
+    },
+    {
+      "sheetId": "monster_basic",
+      "familyId": "actors",
+      "legacySheetGuid": "a862d0b53cd77854ab577b082f90c77f",
+      "legacyLocalId": 828652900,
+      "legacySpriteName": "monster_basic_idle_se_1",
+      "rect": {
+        "x": 362,
+        "y": 724,
+        "width": 362,
+        "height": 362
+      },
+      "pivot": {
+        "x": 0.40607736,
+        "y": 0.18508287
+      },
+      "targetPath": "Assets/Art/Sprites/Monsters/Basic/monster_basic_idle_se_01.png",
+      "allowUnreferenced": false,
+      "targetSha256": "020af3b88e881c453fca14efacef0e23e0932abb9ebe7be0df100a214ab6e761"
+    },
+    {
+      "sheetId": "monster_basic",
+      "familyId": "actors",
+      "legacySheetGuid": "a862d0b53cd77854ab577b082f90c77f",
+      "legacyLocalId": -1749104048,
+      "legacySpriteName": "monster_basic_idle_se_2",
+      "rect": {
+        "x": 724,
+        "y": 724,
+        "width": 362,
+        "height": 362
+      },
+      "pivot": {
+        "x": 0.43508288,
+        "y": 0.18508287
+      },
+      "targetPath": "Assets/Art/Sprites/Monsters/Basic/monster_basic_idle_se_02.png",
+      "allowUnreferenced": false,
+      "targetSha256": "b295e2be916f3f5bff8d96efc34cf738b9d201f84d83365804411c7e6d4551b7"
+    },
+    {
+      "sheetId": "monster_basic",
+      "familyId": "actors",
+      "legacySheetGuid": "a862d0b53cd77854ab577b082f90c77f",
+      "legacyLocalId": 1975570356,
+      "legacySpriteName": "monster_basic_idle_se_3",
+      "rect": {
+        "x": 1086,
+        "y": 724,
+        "width": 362,
+        "height": 362
+      },
+      "pivot": {
+        "x": 0.3839779,
+        "y": 0.18508287
+      },
+      "targetPath": "Assets/Art/Sprites/Monsters/Basic/monster_basic_idle_se_03.png",
+      "allowUnreferenced": false,
+      "targetSha256": "dc58e9b73dfbfb383609c4bb96d2c7bb189e08c852c9739958672808fc4e17ca"
+    },
+    {
+      "sheetId": "monster_basic",
+      "familyId": "actors",
+      "legacySheetGuid": "a862d0b53cd77854ab577b082f90c77f",
+      "legacyLocalId": 917131774,
+      "legacySpriteName": "monster_basic_move_se_0",
+      "rect": {
+        "x": 0,
+        "y": 362,
+        "width": 362,
+        "height": 362
+      },
+      "pivot": {
+        "x": 0.5276243,
+        "y": 0.2596685
+      },
+      "targetPath": "Assets/Art/Sprites/Monsters/Basic/monster_basic_move_se_00.png",
+      "allowUnreferenced": false,
+      "targetSha256": "8a13ed948b345bb2d48b2c5471c9b669384871807e12a6263f842c9abb4f918f"
+    },
+    {
+      "sheetId": "monster_basic",
+      "familyId": "actors",
+      "legacySheetGuid": "a862d0b53cd77854ab577b082f90c77f",
+      "legacyLocalId": 2048069636,
+      "legacySpriteName": "monster_basic_move_se_1",
+      "rect": {
+        "x": 362,
+        "y": 362,
+        "width": 362,
+        "height": 362
+      },
+      "pivot": {
+        "x": 0.44751382,
+        "y": 0.24033149
+      },
+      "targetPath": "Assets/Art/Sprites/Monsters/Basic/monster_basic_move_se_01.png",
+      "allowUnreferenced": false,
+      "targetSha256": "484bdda4037cf0e28a53a7e4420ffd80310d98299272addac73b621fe9ed6dc2"
+    },
+    {
+      "sheetId": "monster_basic",
+      "familyId": "actors",
+      "legacySheetGuid": "a862d0b53cd77854ab577b082f90c77f",
+      "legacyLocalId": -1248339242,
+      "legacySpriteName": "monster_basic_move_se_2",
+      "rect": {
+        "x": 724,
+        "y": 362,
+        "width": 362,
+        "height": 362
+      },
+      "pivot": {
+        "x": 0.37983426,
+        "y": 0.21546961
+      },
+      "targetPath": "Assets/Art/Sprites/Monsters/Basic/monster_basic_move_se_02.png",
+      "allowUnreferenced": false,
+      "targetSha256": "23589ce2d5caf07a6e1e21f34e27fed45bca4357fc360b9a5b714d4b45b9250d"
+    },
+    {
+      "sheetId": "monster_basic",
+      "familyId": "actors",
+      "legacySheetGuid": "a862d0b53cd77854ab577b082f90c77f",
+      "legacyLocalId": 1146372569,
+      "legacySpriteName": "monster_basic_move_se_3",
+      "rect": {
+        "x": 1086,
+        "y": 362,
+        "width": 362,
+        "height": 362
+      },
+      "pivot": {
+        "x": 0.35082874,
+        "y": 0.24585636
+      },
+      "targetPath": "Assets/Art/Sprites/Monsters/Basic/monster_basic_move_se_03.png",
+      "allowUnreferenced": false,
+      "targetSha256": "16345fbd245778c513c30a229a895e383531bfab5878f6bddc119ac784caca83"
+    },
+    {
+      "sheetId": "monster_basic",
+      "familyId": "actors",
+      "legacySheetGuid": "a862d0b53cd77854ab577b082f90c77f",
+      "legacyLocalId": -141064248,
+      "legacySpriteName": "monster_basic_attack_anticipation_se",
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 362,
+        "height": 362
+      },
+      "pivot": {
+        "x": 0.53729284,
+        "y": 0.24309392
+      },
+      "targetPath": "Assets/Art/Sprites/Monsters/Basic/monster_basic_attack_se_00.png",
+      "allowUnreferenced": false,
+      "targetSha256": "e1d3d05506e413c9cb7ab000e5ab6a9c08258be08464a288887c593b42d10502"
+    },
+    {
+      "sheetId": "monster_basic",
+      "familyId": "actors",
+      "legacySheetGuid": "a862d0b53cd77854ab577b082f90c77f",
+      "legacyLocalId": 1618106990,
+      "legacySpriteName": "monster_basic_attack_release_se",
+      "rect": {
+        "x": 362,
+        "y": 0,
+        "width": 362,
+        "height": 362
+      },
+      "pivot": {
+        "x": 0.48066297,
+        "y": 0.23756906
+      },
+      "targetPath": "Assets/Art/Sprites/Monsters/Basic/monster_basic_attack_se_01.png",
+      "allowUnreferenced": false,
+      "targetSha256": "2bb32ecb579c247cd5112daef69114a7564324d026509be81c027d3e4d2eb876"
+    },
+    {
+      "sheetId": "monster_basic",
+      "familyId": "actors",
+      "legacySheetGuid": "a862d0b53cd77854ab577b082f90c77f",
+      "legacyLocalId": 498005770,
+      "legacySpriteName": "monster_basic_hit_se",
+      "rect": {
+        "x": 724,
+        "y": 0,
+        "width": 362,
+        "height": 362
+      },
+      "pivot": {
+        "x": 0.42679557,
+        "y": 0.24309392
+      },
+      "targetPath": "Assets/Art/Sprites/Monsters/Basic/monster_basic_hit_se_00.png",
+      "allowUnreferenced": false,
+      "targetSha256": "08e74b69c15ee58835bbc3012c7e62c83f88a1b78029cd397dbf4392e534efd1"
+    },
+    {
+      "sheetId": "monster_basic",
+      "familyId": "actors",
+      "legacySheetGuid": "a862d0b53cd77854ab577b082f90c77f",
+      "legacyLocalId": 1215971991,
+      "legacySpriteName": "monster_basic_death_se",
+      "rect": {
+        "x": 1086,
+        "y": 0,
+        "width": 362,
+        "height": 362
+      },
+      "pivot": {
+        "x": 0.39364642,
+        "y": 0.25138122
+      },
+      "targetPath": "Assets/Art/Sprites/Monsters/Basic/monster_basic_death_se_00.png",
+      "allowUnreferenced": false,
+      "targetSha256": "3d333098d2b7183b7cf01e2ce86c8ac880b48a757c497db8a682461ea9ce4fff"
+    },
+    {
+      "sheetId": "monster_swift",
+      "familyId": "actors",
+      "legacySheetGuid": "844f4b1dc04fe954f8185cedb58f295a",
+      "legacyLocalId": 1939553458,
+      "legacySpriteName": "monster_swift_idle_0",
+      "rect": {
+        "x": 0,
+        "y": 724,
+        "width": 362,
+        "height": 362
+      },
+      "pivot": {
+        "x": 0.5635359,
+        "y": 0.17679559
+      },
+      "targetPath": "Assets/Art/Sprites/Monsters/Swift/monster_swift_idle_se_00.png",
+      "allowUnreferenced": false,
+      "targetSha256": "419f80e1ef27fcaa78c91db37ed3cd9e337dec2c741688e3800b32d46a43e10a"
+    },
+    {
+      "sheetId": "monster_swift",
+      "familyId": "actors",
+      "legacySheetGuid": "844f4b1dc04fe954f8185cedb58f295a",
+      "legacyLocalId": -1562643938,
+      "legacySpriteName": "monster_swift_idle_1",
+      "rect": {
+        "x": 362,
+        "y": 724,
+        "width": 362,
+        "height": 362
+      },
+      "pivot": {
+        "x": 0.50276244,
+        "y": 0.17679559
+      },
+      "targetPath": "Assets/Art/Sprites/Monsters/Swift/monster_swift_idle_se_01.png",
+      "allowUnreferenced": false,
+      "targetSha256": "64d5c8e3e17a0ca5a02134556f502be7059d9464904ae1c66e102da98f0af626"
+    },
+    {
+      "sheetId": "monster_swift",
+      "familyId": "actors",
+      "legacySheetGuid": "844f4b1dc04fe954f8185cedb58f295a",
+      "legacyLocalId": 714015706,
+      "legacySpriteName": "monster_swift_idle_2",
+      "rect": {
+        "x": 724,
+        "y": 724,
+        "width": 362,
+        "height": 362
+      },
+      "pivot": {
+        "x": 0.46685082,
+        "y": 0.17679559
+      },
+      "targetPath": "Assets/Art/Sprites/Monsters/Swift/monster_swift_idle_se_02.png",
+      "allowUnreferenced": false,
+      "targetSha256": "2ddcc4031c4cd1d2a2976d7ee0506d1796af7c72c11c742f2f401d3b4b360d22"
+    },
+    {
+      "sheetId": "monster_swift",
+      "familyId": "actors",
+      "legacySheetGuid": "844f4b1dc04fe954f8185cedb58f295a",
+      "legacyLocalId": 769024044,
+      "legacySpriteName": "monster_swift_idle_3",
+      "rect": {
+        "x": 1086,
+        "y": 724,
+        "width": 362,
+        "height": 362
+      },
+      "pivot": {
+        "x": 0.39502764,
+        "y": 0.17679559
+      },
+      "targetPath": "Assets/Art/Sprites/Monsters/Swift/monster_swift_idle_se_03.png",
+      "allowUnreferenced": false,
+      "targetSha256": "f20ce5a9bf2f29e0760baf116d1e3f498f41e0497df5c63fbb44d72122ee2857"
+    },
+    {
+      "sheetId": "monster_swift",
+      "familyId": "actors",
+      "legacySheetGuid": "844f4b1dc04fe954f8185cedb58f295a",
+      "legacyLocalId": -675029141,
+      "legacySpriteName": "monster_swift_move_0",
+      "rect": {
+        "x": 0,
+        "y": 362,
+        "width": 362,
+        "height": 362
+      },
+      "pivot": {
+        "x": 0.5801105,
+        "y": 0.34254143
+      },
+      "targetPath": "Assets/Art/Sprites/Monsters/Swift/monster_swift_move_se_00.png",
+      "allowUnreferenced": false,
+      "targetSha256": "20cde371e12170638f03e3bacfcb0e9d33dac4f79598528aa1c2a98373b964c1"
+    },
+    {
+      "sheetId": "monster_swift",
+      "familyId": "actors",
+      "legacySheetGuid": "844f4b1dc04fe954f8185cedb58f295a",
+      "legacyLocalId": -1078487614,
+      "legacySpriteName": "monster_swift_move_1",
+      "rect": {
+        "x": 362,
+        "y": 362,
+        "width": 362,
+        "height": 362
+      },
+      "pivot": {
+        "x": 0.5331492,
+        "y": 0.34254143
+      },
+      "targetPath": "Assets/Art/Sprites/Monsters/Swift/monster_swift_move_se_01.png",
+      "allowUnreferenced": false,
+      "targetSha256": "eead7c8ea4753470b21ae9884ca0bfa80a16ce5f3116e92c607d8babca98dbda"
+    },
+    {
+      "sheetId": "monster_swift",
+      "familyId": "actors",
+      "legacySheetGuid": "844f4b1dc04fe954f8185cedb58f295a",
+      "legacyLocalId": 1417002637,
+      "legacySpriteName": "monster_swift_move_2",
+      "rect": {
+        "x": 724,
+        "y": 362,
+        "width": 362,
+        "height": 362
+      },
+      "pivot": {
+        "x": 0.47513813,
+        "y": 0.34254143
+      },
+      "targetPath": "Assets/Art/Sprites/Monsters/Swift/monster_swift_move_se_02.png",
+      "allowUnreferenced": false,
+      "targetSha256": "271fa70d4155885f5d3c241a16bead797db84c65dc22fb828c060d70093e8a08"
+    },
+    {
+      "sheetId": "monster_swift",
+      "familyId": "actors",
+      "legacySheetGuid": "844f4b1dc04fe954f8185cedb58f295a",
+      "legacyLocalId": 108950298,
+      "legacySpriteName": "monster_swift_move_3",
+      "rect": {
+        "x": 1086,
+        "y": 362,
+        "width": 362,
+        "height": 362
+      },
+      "pivot": {
+        "x": 0.4088398,
+        "y": 0.38121548
+      },
+      "targetPath": "Assets/Art/Sprites/Monsters/Swift/monster_swift_move_se_03.png",
+      "allowUnreferenced": false,
+      "targetSha256": "e890642539d4fd680531b369c61104b212acb37890067c484534d4a7fcb91479"
+    },
+    {
+      "sheetId": "monster_swift",
+      "familyId": "actors",
+      "legacySheetGuid": "844f4b1dc04fe954f8185cedb58f295a",
+      "legacyLocalId": 36114291,
+      "legacySpriteName": "monster_swift_attack_0",
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 362,
+        "height": 362
+      },
+      "pivot": {
+        "x": 0.5621547,
+        "y": 0.51657456
+      },
+      "targetPath": "Assets/Art/Sprites/Monsters/Swift/monster_swift_attack_se_00.png",
+      "allowUnreferenced": false,
+      "targetSha256": "6c0b51d3e4eceb4d4361b47dd56efff1c82687c30f12d83405e0b66db6087552"
+    },
+    {
+      "sheetId": "monster_swift",
+      "familyId": "actors",
+      "legacySheetGuid": "844f4b1dc04fe954f8185cedb58f295a",
+      "legacyLocalId": 1346637294,
+      "legacySpriteName": "monster_swift_attack_1",
+      "rect": {
+        "x": 362,
+        "y": 0,
+        "width": 362,
+        "height": 362
+      },
+      "pivot": {
+        "x": 0.57734805,
+        "y": 0.51657456
+      },
+      "targetPath": "Assets/Art/Sprites/Monsters/Swift/monster_swift_attack_se_01.png",
+      "allowUnreferenced": false,
+      "targetSha256": "781e31eb04275136486f9999813cb753c580c48c0ca29af0bf5ec1bbc95954a5"
+    },
+    {
+      "sheetId": "monster_swift",
+      "familyId": "actors",
+      "legacySheetGuid": "844f4b1dc04fe954f8185cedb58f295a",
+      "legacyLocalId": -1813949367,
+      "legacySpriteName": "monster_swift_hit_0",
+      "rect": {
+        "x": 724,
+        "y": 0,
+        "width": 362,
+        "height": 362
+      },
+      "pivot": {
+        "x": 0.46961325,
+        "y": 0.5359116
+      },
+      "targetPath": "Assets/Art/Sprites/Monsters/Swift/monster_swift_hit_se_00.png",
+      "allowUnreferenced": false,
+      "targetSha256": "9458a999a5c992d6bfad76220d65bd41923c58f829554bf055492c4d5fd781c9"
+    },
+    {
+      "sheetId": "monster_swift",
+      "familyId": "actors",
+      "legacySheetGuid": "844f4b1dc04fe954f8185cedb58f295a",
+      "legacyLocalId": -1833718368,
+      "legacySpriteName": "monster_swift_death_0",
+      "rect": {
+        "x": 1086,
+        "y": 0,
+        "width": 362,
+        "height": 362
+      },
+      "pivot": {
+        "x": 0.4116022,
+        "y": 0.5138122
+      },
+      "targetPath": "Assets/Art/Sprites/Monsters/Swift/monster_swift_death_se_00.png",
+      "allowUnreferenced": false,
+      "targetSha256": "111df449e12219c949b335f0a87df2c48fc7caf06c958da561ba87c226751cac"
+    },
+    {
+      "sheetId": "monster_heavy",
+      "familyId": "actors",
+      "legacySheetGuid": "90d6f8cb11a79f0499331ad5eaba6b7d",
+      "legacyLocalId": 1515634581,
+      "legacySpriteName": "monster_heavy_idle_0",
+      "rect": {
+        "x": 0,
+        "y": 836,
+        "width": 313,
+        "height": 418
+      },
+      "pivot": {
+        "x": 0.6070288,
+        "y": 0.18660288
+      },
+      "targetPath": "Assets/Art/Sprites/Monsters/Heavy/monster_heavy_idle_se_00.png",
+      "allowUnreferenced": false,
+      "targetSha256": "2e682435c101b91026223283ee6bedc42beb8c22715d61a90c98e4933d3bdc91"
+    },
+    {
+      "sheetId": "monster_heavy",
+      "familyId": "actors",
+      "legacySheetGuid": "90d6f8cb11a79f0499331ad5eaba6b7d",
+      "legacyLocalId": -1445496992,
+      "legacySpriteName": "monster_heavy_idle_1",
+      "rect": {
+        "x": 313,
+        "y": 836,
+        "width": 314,
+        "height": 418
+      },
+      "pivot": {
+        "x": 0.5477707,
+        "y": 0.18660288
+      },
+      "targetPath": "Assets/Art/Sprites/Monsters/Heavy/monster_heavy_idle_se_01.png",
+      "allowUnreferenced": false,
+      "targetSha256": "28fc337d3bb256dd679d96c1056140b697dfac3befef2e70b9394bf311279f89"
+    },
+    {
+      "sheetId": "monster_heavy",
+      "familyId": "actors",
+      "legacySheetGuid": "90d6f8cb11a79f0499331ad5eaba6b7d",
+      "legacyLocalId": -1911057921,
+      "legacySpriteName": "monster_heavy_idle_2",
+      "rect": {
+        "x": 627,
+        "y": 836,
+        "width": 313,
+        "height": 418
+      },
+      "pivot": {
+        "x": 0.50958467,
+        "y": 0.18660288
+      },
+      "targetPath": "Assets/Art/Sprites/Monsters/Heavy/monster_heavy_idle_se_02.png",
+      "allowUnreferenced": false,
+      "targetSha256": "cf3254a44dac3ec9bd92d4c59d6109ca5d4a0fa06764b727c215a0230cf63131"
+    },
+    {
+      "sheetId": "monster_heavy",
+      "familyId": "actors",
+      "legacySheetGuid": "90d6f8cb11a79f0499331ad5eaba6b7d",
+      "legacyLocalId": -799117156,
+      "legacySpriteName": "monster_heavy_idle_3",
+      "rect": {
+        "x": 940,
+        "y": 836,
+        "width": 314,
+        "height": 418
+      },
+      "pivot": {
+        "x": 0.46019107,
+        "y": 0.18660288
+      },
+      "targetPath": "Assets/Art/Sprites/Monsters/Heavy/monster_heavy_idle_se_03.png",
+      "allowUnreferenced": false,
+      "targetSha256": "3322b98671463609346f833a50e20b11361b5ea71df1a2da3d0369771e3d4b8c"
+    },
+    {
+      "sheetId": "monster_heavy",
+      "familyId": "actors",
+      "legacySheetGuid": "90d6f8cb11a79f0499331ad5eaba6b7d",
+      "legacyLocalId": -1132345904,
+      "legacySpriteName": "monster_heavy_move_0",
+      "rect": {
+        "x": 0,
+        "y": 418,
+        "width": 313,
+        "height": 418
+      },
+      "pivot": {
+        "x": 0.57348245,
+        "y": 0.2416268
+      },
+      "targetPath": "Assets/Art/Sprites/Monsters/Heavy/monster_heavy_move_se_00.png",
+      "allowUnreferenced": false,
+      "targetSha256": "1dd0ed0ebcd581850a14044f89f0ef3211c1348d2edd8ea473967f9978d418a4"
+    },
+    {
+      "sheetId": "monster_heavy",
+      "familyId": "actors",
+      "legacySheetGuid": "90d6f8cb11a79f0499331ad5eaba6b7d",
+      "legacyLocalId": 870618670,
+      "legacySpriteName": "monster_heavy_move_1",
+      "rect": {
+        "x": 313,
+        "y": 418,
+        "width": 314,
+        "height": 418
+      },
+      "pivot": {
+        "x": 0.48566878,
+        "y": 0.2416268
+      },
+      "targetPath": "Assets/Art/Sprites/Monsters/Heavy/monster_heavy_move_se_01.png",
+      "allowUnreferenced": false,
+      "targetSha256": "3dda4385f0d54fd9d4f03668a87bad98e32bc398d66ab2dc333995f72f5441b9"
+    },
+    {
+      "sheetId": "monster_heavy",
+      "familyId": "actors",
+      "legacySheetGuid": "90d6f8cb11a79f0499331ad5eaba6b7d",
+      "legacyLocalId": -883478221,
+      "legacySpriteName": "monster_heavy_move_2",
+      "rect": {
+        "x": 627,
+        "y": 418,
+        "width": 313,
+        "height": 418
+      },
+      "pivot": {
+        "x": 0.5111821,
+        "y": 0.2416268
+      },
+      "targetPath": "Assets/Art/Sprites/Monsters/Heavy/monster_heavy_move_se_02.png",
+      "allowUnreferenced": false,
+      "targetSha256": "684f09b6698e004d047f1fd8c93ee31bbedc5fa42d49171d8a92da685362376c"
+    },
+    {
+      "sheetId": "monster_heavy",
+      "familyId": "actors",
+      "legacySheetGuid": "90d6f8cb11a79f0499331ad5eaba6b7d",
+      "legacyLocalId": 773746651,
+      "legacySpriteName": "monster_heavy_move_3",
+      "rect": {
+        "x": 940,
+        "y": 418,
+        "width": 314,
+        "height": 418
+      },
+      "pivot": {
+        "x": 0.45382166,
+        "y": 0.2416268
+      },
+      "targetPath": "Assets/Art/Sprites/Monsters/Heavy/monster_heavy_move_se_03.png",
+      "allowUnreferenced": false,
+      "targetSha256": "1cee56167b4d29a64f02158324b0c1cfaae3d3e8d6eb4e098c9d4366e7280d74"
+    },
+    {
+      "sheetId": "monster_heavy",
+      "familyId": "actors",
+      "legacySheetGuid": "90d6f8cb11a79f0499331ad5eaba6b7d",
+      "legacyLocalId": -1239879093,
+      "legacySpriteName": "monster_heavy_attack_0",
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 313,
+        "height": 418
+      },
+      "pivot": {
+        "x": 0.56709266,
+        "y": 0.33492824
+      },
+      "targetPath": "Assets/Art/Sprites/Monsters/Heavy/monster_heavy_attack_se_00.png",
+      "allowUnreferenced": false,
+      "targetSha256": "5d139e373e3c894f33f56e89a2d67a5f53e7482acda604ce00e4d387ca4d5dc0"
+    },
+    {
+      "sheetId": "monster_heavy",
+      "familyId": "actors",
+      "legacySheetGuid": "90d6f8cb11a79f0499331ad5eaba6b7d",
+      "legacyLocalId": -1030538212,
+      "legacySpriteName": "monster_heavy_attack_1",
+      "rect": {
+        "x": 313,
+        "y": 0,
+        "width": 314,
+        "height": 418
+      },
+      "pivot": {
+        "x": 0.49522293,
+        "y": 0.2799043
+      },
+      "targetPath": "Assets/Art/Sprites/Monsters/Heavy/monster_heavy_attack_se_01.png",
+      "allowUnreferenced": false,
+      "targetSha256": "8300a59e94bf52803a3f738c11220b26a7205d0dc47249435f084b746d851ecd"
+    },
+    {
+      "sheetId": "monster_heavy",
+      "familyId": "actors",
+      "legacySheetGuid": "90d6f8cb11a79f0499331ad5eaba6b7d",
+      "legacyLocalId": 897534035,
+      "legacySpriteName": "monster_heavy_hit_0",
+      "rect": {
+        "x": 627,
+        "y": 0,
+        "width": 313,
+        "height": 418
+      },
+      "pivot": {
+        "x": 0.5511182,
+        "y": 0.3277512
+      },
+      "targetPath": "Assets/Art/Sprites/Monsters/Heavy/monster_heavy_hit_se_00.png",
+      "allowUnreferenced": false,
+      "targetSha256": "e394d5ea06507c97ab42ca8a3d49016fbfcc651b9e26f13d1d8b212d691558c9"
+    },
+    {
+      "sheetId": "monster_heavy",
+      "familyId": "actors",
+      "legacySheetGuid": "90d6f8cb11a79f0499331ad5eaba6b7d",
+      "legacyLocalId": -715371933,
+      "legacySpriteName": "monster_heavy_death_0",
+      "rect": {
+        "x": 940,
+        "y": 0,
+        "width": 314,
+        "height": 418
+      },
+      "pivot": {
+        "x": 0.44267517,
+        "y": 0.284689
+      },
+      "targetPath": "Assets/Art/Sprites/Monsters/Heavy/monster_heavy_death_se_00.png",
+      "allowUnreferenced": false,
+      "targetSha256": "4e745733bef7addabc22a7c841268cdc1df6d76bfdaf16751a91dfd3d0a0dfe4"
+    },
+    {
+      "sheetId": "merchant",
+      "familyId": "actors",
+      "legacySheetGuid": "cb7032fea677dc94bb79c493f09ce7c0",
+      "legacyLocalId": 502296562,
+      "legacySpriteName": "merchant_idle_0",
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 495,
+        "height": 793
+      },
+      "pivot": {
+        "x": 0.5050505,
+        "y": 0.2143758
+      },
+      "targetPath": "Assets/Art/Sprites/NPCs/Merchant/npc_merchant_idle_se_00.png",
+      "allowUnreferenced": false,
+      "targetSha256": "3b5ee9a940930b0856900802ac11186453405db34af69699052c4dcfa83e68b1"
+    },
+    {
+      "sheetId": "merchant",
+      "familyId": "actors",
+      "legacySheetGuid": "cb7032fea677dc94bb79c493f09ce7c0",
+      "legacyLocalId": 1880051000,
+      "legacySpriteName": "merchant_idle_1",
+      "rect": {
+        "x": 495,
+        "y": 0,
+        "width": 496,
+        "height": 793
+      },
+      "pivot": {
+        "x": 0.46975806,
+        "y": 0.2143758
+      },
+      "targetPath": "Assets/Art/Sprites/NPCs/Merchant/npc_merchant_idle_se_01.png",
+      "allowUnreferenced": false,
+      "targetSha256": "8c0fb0070216ca05e59868ee35113269a452d42ee9a0715f4d442db7bdb6388b"
+    },
+    {
+      "sheetId": "merchant",
+      "familyId": "actors",
+      "legacySheetGuid": "cb7032fea677dc94bb79c493f09ce7c0",
+      "legacyLocalId": -818011198,
+      "legacySpriteName": "merchant_idle_2",
+      "rect": {
+        "x": 991,
+        "y": 0,
+        "width": 496,
+        "height": 793
+      },
+      "pivot": {
+        "x": 0.43850806,
+        "y": 0.2143758
+      },
+      "targetPath": "Assets/Art/Sprites/NPCs/Merchant/npc_merchant_idle_se_02.png",
+      "allowUnreferenced": false,
+      "targetSha256": "5a56a7b9ca40e5762cfaf2f60e1606c16e24a93cc3868ad44c3e4181aa7e109c"
+    },
+    {
+      "sheetId": "merchant",
+      "familyId": "actors",
+      "legacySheetGuid": "cb7032fea677dc94bb79c493f09ce7c0",
+      "legacyLocalId": 528575084,
+      "legacySpriteName": "merchant_idle_3",
+      "rect": {
+        "x": 1487,
+        "y": 0,
+        "width": 496,
+        "height": 793
+      },
+      "pivot": {
+        "x": 0.41330644,
+        "y": 0.2143758
+      },
+      "targetPath": "Assets/Art/Sprites/NPCs/Merchant/npc_merchant_idle_se_03.png",
+      "allowUnreferenced": false,
+      "targetSha256": "099318193edcf2bf1c2be6f331998b89251b54db86b922038d171088a516fab2"
+    },
+    {
+      "sheetId": "ui_icons",
+      "familyId": "ui_icons",
+      "legacySheetGuid": "3d33168ffb68da5478536df049f83403",
+      "legacyLocalId": 3727665825739426205,
+      "legacySpriteName": "ui_icons_sheet_0",
+      "rect": {
+        "x": 117,
+        "y": 759,
+        "width": 225,
+        "height": 212
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "targetPath": "Assets/Art/Sprites/UI/Icons/ui_icon_health.png",
+      "allowUnreferenced": false,
+      "targetSha256": "25a682e3c04ebaeef6f7b673a21ad6fcfbef55e55177a9b37dc68854b36c4ec5"
+    },
+    {
+      "sheetId": "ui_icons",
+      "familyId": "ui_icons",
+      "legacySheetGuid": "3d33168ffb68da5478536df049f83403",
+      "legacyLocalId": -1691496728913257943,
+      "legacySpriteName": "ui_icons_sheet_1",
+      "rect": {
+        "x": 446,
+        "y": 751,
+        "width": 226,
+        "height": 230
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "targetPath": "Assets/Art/Sprites/UI/Icons/ui_icon_gold.png",
+      "allowUnreferenced": false,
+      "targetSha256": "fb1453c960c6a5f0bebb1987c8c1812563198a492ca63845862ff2aa18aec252"
+    },
+    {
+      "sheetId": "ui_icons",
+      "familyId": "ui_icons",
+      "legacySheetGuid": "3d33168ffb68da5478536df049f83403",
+      "legacyLocalId": -8149964302969819370,
+      "legacySpriteName": "ui_icons_sheet_2",
+      "rect": {
+        "x": 772,
+        "y": 753,
+        "width": 217,
+        "height": 228
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "targetPath": "Assets/Art/Sprites/UI/Icons/ui_icon_weapon.png",
+      "allowUnreferenced": false,
+      "targetSha256": "0d1c2f2bc3d5fb06523d643dcf250c734a9c2207dd6c60d0c8938aaef7c7b4fa"
+    },
+    {
+      "sheetId": "ui_icons",
+      "familyId": "ui_icons",
+      "legacySheetGuid": "3d33168ffb68da5478536df049f83403",
+      "legacyLocalId": -4858508832188841462,
+      "legacySpriteName": "ui_icons_sheet_3",
+      "rect": {
+        "x": 1074,
+        "y": 750,
+        "width": 247,
+        "height": 224
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "targetPath": "Assets/Art/Sprites/UI/Icons/ui_icon_armor.png",
+      "allowUnreferenced": false,
+      "targetSha256": "ed7ccc13fcf5ed275711d5a0e3ab71a36fc6a63d71f50cf21f6adeeda1b89b70"
+    },
+    {
+      "sheetId": "ui_icons",
+      "familyId": "ui_icons",
+      "legacySheetGuid": "3d33168ffb68da5478536df049f83403",
+      "legacyLocalId": 5052022550113441473,
+      "legacySpriteName": "ui_icons_sheet_4",
+      "rect": {
+        "x": 133,
+        "y": 433,
+        "width": 191,
+        "height": 226
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "targetPath": "Assets/Art/Sprites/UI/Icons/ui_icon_ring.png",
+      "allowUnreferenced": false,
+      "targetSha256": "5666f1ec2ca2c759a18a575ccd92bfd80c12a7d487f0103615fbeaa6bd0242b6"
+    },
+    {
+      "sheetId": "ui_icons",
+      "familyId": "ui_icons",
+      "legacySheetGuid": "3d33168ffb68da5478536df049f83403",
+      "legacyLocalId": -5583588468364672500,
+      "legacySpriteName": "ui_icons_sheet_5",
+      "rect": {
+        "x": 432,
+        "y": 422,
+        "width": 249,
+        "height": 244
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "targetPath": "Assets/Art/Sprites/UI/Icons/ui_icon_inventory.png",
+      "allowUnreferenced": false,
+      "targetSha256": "7654379e14306b5f316b8f2dd0e1daf74fb2265e6807c50855ac38f00705efee"
+    },
+    {
+      "sheetId": "ui_icons",
+      "familyId": "ui_icons",
+      "legacySheetGuid": "3d33168ffb68da5478536df049f83403",
+      "legacyLocalId": 5544213995541881746,
+      "legacySpriteName": "ui_icons_sheet_6",
+      "rect": {
+        "x": 753,
+        "y": 422,
+        "width": 256,
+        "height": 244
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "targetPath": "Assets/Art/Sprites/UI/Icons/ui_icon_shop.png",
+      "allowUnreferenced": false,
+      "targetSha256": "0d4fad9903a646736f862c0ed971d3b9f4d279cc624bcbc4d618ec031b102260"
+    },
+    {
+      "sheetId": "ui_icons",
+      "familyId": "ui_icons",
+      "legacySheetGuid": "3d33168ffb68da5478536df049f83403",
+      "legacyLocalId": -199588985272624685,
+      "legacySpriteName": "ui_icons_sheet_7",
+      "rect": {
+        "x": 1085,
+        "y": 422,
+        "width": 236,
+        "height": 250
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "targetPath": "Assets/Art/Sprites/UI/Icons/ui_icon_crafting.png",
+      "allowUnreferenced": false,
+      "targetSha256": "139626a15691d1162dae2e0c3d9266e0dbb769e8e41c0db01eff55722c51fc3b"
+    },
+    {
+      "sheetId": "ui_icons",
+      "familyId": "ui_icons",
+      "legacySheetGuid": "3d33168ffb68da5478536df049f83403",
+      "legacyLocalId": 1558839003169599531,
+      "legacySpriteName": "ui_icons_sheet_8",
+      "rect": {
+        "x": 123,
+        "y": 120,
+        "width": 212,
+        "height": 217
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "targetPath": "Assets/Art/Sprites/UI/Icons/ui_icon_close.png",
+      "allowUnreferenced": false,
+      "targetSha256": "696294cfb13a2f9533b9ab7ef422d9a01e2c8f1a2951bc91615991bf3537a63a"
+    },
+    {
+      "sheetId": "ui_icons",
+      "familyId": "ui_icons",
+      "legacySheetGuid": "3d33168ffb68da5478536df049f83403",
+      "legacyLocalId": 6094433505011904817,
+      "legacySpriteName": "ui_icons_sheet_9",
+      "rect": {
+        "x": 436,
+        "y": 111,
+        "width": 221,
+        "height": 233
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "targetPath": "Assets/Art/Sprites/UI/Icons/ui_icon_back.png",
+      "allowUnreferenced": true,
+      "targetSha256": "fcc3450cecf4e36b6ccb93325523a00454c2973316867f5ab87493c0d7568d9d"
+    },
+    {
+      "sheetId": "ui_icons",
+      "familyId": "ui_icons",
+      "legacySheetGuid": "3d33168ffb68da5478536df049f83403",
+      "legacyLocalId": -1231449721535339815,
+      "legacySpriteName": "ui_icons_sheet_10",
+      "rect": {
+        "x": 771,
+        "y": 105,
+        "width": 217,
+        "height": 238
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "targetPath": "Assets/Art/Sprites/UI/Icons/ui_icon_weapon_empty.png",
+      "allowUnreferenced": false,
+      "targetSha256": "3eb56f3d6c047e345f0fce0593fbbd340828a47689b15bf2ee5e4a512c9d6944"
+    },
+    {
+      "sheetId": "ui_icons",
+      "familyId": "ui_icons",
+      "legacySheetGuid": "3d33168ffb68da5478536df049f83403",
+      "legacyLocalId": 3617589548185855585,
+      "legacySpriteName": "ui_icons_sheet_11",
+      "rect": {
+        "x": 1063,
+        "y": 102,
+        "width": 258,
+        "height": 257
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "targetPath": "Assets/Art/Sprites/UI/Icons/ui_icon_missing.png",
+      "allowUnreferenced": false,
+      "targetSha256": "63792d200d9153343bcc4a443a124297c754908605a65ddd2648b24355bdd5c7"
+    },
+    {
+      "sheetId": "ui_frames",
+      "familyId": "ui_frames_sheet_0",
+      "legacySheetGuid": "19d81cb40ae62844597b40ddf83e9ddd",
+      "legacyLocalId": -7009838889800730027,
+      "legacySpriteName": "ui_frames_sheet_0",
+      "rect": {
+        "x": 79,
+        "y": 648,
+        "width": 534,
+        "height": 527
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "targetPath": "Assets/Art/Sprites/UI/Frames/ui_inventory_panel_base.png",
+      "allowUnreferenced": false,
+      "targetSha256": "ac6e77ba6b426b93a99ad9b25e440812e0d4b6393c614083285694d881593551"
+    },
+    {
+      "sheetId": "ui_frames",
+      "familyId": "ui_frames_sheet_1",
+      "legacySheetGuid": "19d81cb40ae62844597b40ddf83e9ddd",
+      "legacyLocalId": 1991563088907582009,
+      "legacySpriteName": "ui_frames_sheet_1",
+      "rect": {
+        "x": 693,
+        "y": 679,
+        "width": 436,
+        "height": 465
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "targetPath": "Assets/Art/Sprites/UI/Frames/ui_inventory_slot_default.png",
+      "allowUnreferenced": false,
+      "targetSha256": "bd36b181a062ba9f3588c23db1573fcc1ffe6b38503336703802240212f33659"
+    },
+    {
+      "sheetId": "ui_frames",
+      "familyId": "ui_frames_sheet_2",
+      "legacySheetGuid": "19d81cb40ae62844597b40ddf83e9ddd",
+      "legacyLocalId": -8505751119502260002,
+      "legacySpriteName": "ui_frames_sheet_2",
+      "rect": {
+        "x": 105,
+        "y": 110,
+        "width": 479,
+        "height": 469
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "targetPath": "Assets/Art/Sprites/UI/Frames/ui_inventory_slot_focused.png",
+      "allowUnreferenced": false,
+      "targetSha256": "60dc0098f1a01984d4f9c05aaec2e82209bc076b1efbd7b7f0801451c1ebb419"
+    },
+    {
+      "sheetId": "ui_frames",
+      "familyId": "ui_frames_sheet_3",
+      "legacySheetGuid": "19d81cb40ae62844597b40ddf83e9ddd",
+      "legacyLocalId": 8076980293131053671,
+      "legacySpriteName": "ui_frames_sheet_3",
+      "rect": {
+        "x": 693,
+        "y": 110,
+        "width": 436,
+        "height": 469
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "targetPath": "Assets/Art/Sprites/UI/Frames/ui_inventory_slot_disabled.png",
+      "allowUnreferenced": false,
+      "targetSha256": "06eb2b2335046a54df940b1fc435d971169f3c603d516ef80e592ab6e874d995"
+    },
+    {
+      "sheetId": "world_props",
+      "familyId": "world_props",
+      "legacySheetGuid": "7437197d5411fb94da395d8598fe8aec",
+      "legacyLocalId": 7328451820398300488,
+      "legacySpriteName": "world_props_sheet_0",
+      "rect": {
+        "x": 53,
+        "y": 729,
+        "width": 287,
+        "height": 284
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "targetPath": "Assets/Art/Sprites/Environment/WorldProps/world_prop_ground_cracked.png",
+      "allowUnreferenced": true,
+      "targetSha256": "cfa634576d5825404216af081d753ba1e3bcfe2660d84c34b7de7597948255ba"
+    },
+    {
+      "sheetId": "world_props",
+      "familyId": "world_props",
+      "legacySheetGuid": "7437197d5411fb94da395d8598fe8aec",
+      "legacyLocalId": -5002312450572469645,
+      "legacySpriteName": "world_props_sheet_1",
+      "rect": {
+        "x": 399,
+        "y": 730,
+        "width": 285,
+        "height": 281
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "targetPath": "Assets/Art/Sprites/Environment/WorldProps/world_prop_ground_dirt.png",
+      "allowUnreferenced": true,
+      "targetSha256": "e1acd27ae38f6e958adc1faa0207c6071929bb87d4e51fcf28bfa82f91cc8e96"
+    },
+    {
+      "sheetId": "world_props",
+      "familyId": "world_props",
+      "legacySheetGuid": "7437197d5411fb94da395d8598fe8aec",
+      "legacyLocalId": -3622355580343700691,
+      "legacySpriteName": "world_props_sheet_2",
+      "rect": {
+        "x": 741,
+        "y": 730,
+        "width": 285,
+        "height": 281
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "targetPath": "Assets/Art/Sprites/Environment/WorldProps/world_prop_ground_stone_path.png",
+      "allowUnreferenced": true,
+      "targetSha256": "b4964af2fb3e72727130d2fcee401e136a275621995825baf295193277dda2cc"
+    },
+    {
+      "sheetId": "world_props",
+      "familyId": "world_props",
+      "legacySheetGuid": "7437197d5411fb94da395d8598fe8aec",
+      "legacyLocalId": 3323537082208509738,
+      "legacySpriteName": "world_props_sheet_3",
+      "rect": {
+        "x": 1080,
+        "y": 712,
+        "width": 336,
+        "height": 332
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "targetPath": "Assets/Art/Sprites/Environment/WorldProps/world_prop_ruined_wall.png",
+      "allowUnreferenced": true,
+      "targetSha256": "f094cb972361c35c89a86346cac1eecdd8443dc8dc8d8715758bfbaf5d3efb8a"
+    },
+    {
+      "sheetId": "world_props",
+      "familyId": "world_props",
+      "legacySheetGuid": "7437197d5411fb94da395d8598fe8aec",
+      "legacyLocalId": 2030520168434006313,
+      "legacySpriteName": "world_props_sheet_5",
+      "rect": {
+        "x": 95,
+        "y": 416,
+        "width": 194,
+        "height": 208
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "targetPath": "Assets/Art/Sprites/Environment/WorldProps/world_prop_rock_small.png",
+      "allowUnreferenced": false,
+      "targetSha256": "800040848a56b547c49aa05e8becde3f6f00e66b2b590d525f4825fd4e9feee6"
+    },
+    {
+      "sheetId": "world_props",
+      "familyId": "world_props",
+      "legacySheetGuid": "7437197d5411fb94da395d8598fe8aec",
+      "legacyLocalId": -4642783568996118055,
+      "legacySpriteName": "world_props_sheet_6",
+      "rect": {
+        "x": 389,
+        "y": 389,
+        "width": 276,
+        "height": 288
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "targetPath": "Assets/Art/Sprites/Environment/WorldProps/world_prop_rock_large.png",
+      "allowUnreferenced": false,
+      "targetSha256": "464e91eb946c6a11d833d6ab03cafb73e00ad2d567e9f5fcafdf3b6adb869b20"
+    },
+    {
+      "sheetId": "world_props",
+      "familyId": "world_props",
+      "legacySheetGuid": "7437197d5411fb94da395d8598fe8aec",
+      "legacyLocalId": 2113690088321339713,
+      "legacySpriteName": "world_props_sheet_8",
+      "rect": {
+        "x": 735,
+        "y": 394,
+        "width": 274,
+        "height": 291
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "targetPath": "Assets/Art/Sprites/Environment/WorldProps/world_prop_dead_tree.png",
+      "allowUnreferenced": false,
+      "targetSha256": "73c1def2fc97c456360ef53d4fe85d0e867d99db65e80a7070ebf731fccf1802"
+    },
+    {
+      "sheetId": "world_props",
+      "familyId": "world_props",
+      "legacySheetGuid": "7437197d5411fb94da395d8598fe8aec",
+      "legacyLocalId": -8506665006218495979,
+      "legacySpriteName": "world_props_sheet_10",
+      "rect": {
+        "x": 1149,
+        "y": 396,
+        "width": 197,
+        "height": 275
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "targetPath": "Assets/Art/Sprites/Environment/WorldProps/world_prop_tattered_banner.png",
+      "allowUnreferenced": false,
+      "targetSha256": "79196a808adba32389b09f67631e97401217f55475039999a2cbf5f09dd0fcd6"
+    },
+    {
+      "sheetId": "world_props",
+      "familyId": "world_props",
+      "legacySheetGuid": "7437197d5411fb94da395d8598fe8aec",
+      "legacyLocalId": -7118475457696645323,
+      "legacySpriteName": "world_props_sheet_12",
+      "rect": {
+        "x": 37,
+        "y": 66,
+        "width": 298,
+        "height": 259
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "targetPath": "Assets/Art/Sprites/Environment/WorldProps/world_prop_supplies.png",
+      "allowUnreferenced": false,
+      "targetSha256": "7d4abe12ac54c12f32899372a46a9c870c3615e2b8811486f9afba736f78f9de"
+    },
+    {
+      "sheetId": "world_props",
+      "familyId": "world_props",
+      "legacySheetGuid": "7437197d5411fb94da395d8598fe8aec",
+      "legacyLocalId": -2783324608303037370,
+      "legacySpriteName": "world_props_sheet_13",
+      "rect": {
+        "x": 404,
+        "y": 72,
+        "width": 207,
+        "height": 225
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "targetPath": "Assets/Art/Sprites/Environment/WorldProps/world_prop_brazier.png",
+      "allowUnreferenced": false,
+      "targetSha256": "0e1eb809548b4a7b6b4ee6cf5350332c240f201b4100e217ec9c8a2e38346d7d"
+    },
+    {
+      "sheetId": "world_props",
+      "familyId": "world_props",
+      "legacySheetGuid": "7437197d5411fb94da395d8598fe8aec",
+      "legacyLocalId": -5098519548830468692,
+      "legacySpriteName": "world_props_sheet_14",
+      "rect": {
+        "x": 678,
+        "y": 45,
+        "width": 359,
+        "height": 296
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "targetPath": "Assets/Art/Sprites/Environment/WorldProps/world_prop_crafting_station.png",
+      "allowUnreferenced": false,
+      "targetSha256": "0949e124111c7c4ad11a558e99e5cbec90ccae27ed2b8c7d911e5818383676ff"
+    },
+    {
+      "sheetId": "world_props",
+      "familyId": "world_props",
+      "legacySheetGuid": "7437197d5411fb94da395d8598fe8aec",
+      "legacyLocalId": -6529891288808986560,
+      "legacySpriteName": "world_props_sheet_16",
+      "rect": {
+        "x": 1070,
+        "y": 44,
+        "width": 336,
+        "height": 300
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "targetPath": "Assets/Art/Sprites/Environment/WorldProps/world_prop_tent.png",
+      "allowUnreferenced": false,
+      "targetSha256": "3a123f7283d88731b49e6fbc70c32605ec4e506d6c8ceaccc0ba59def5aa7e4a"
+    }
+  ],
+  "standaloneAssets": [
+    {
+      "path": "Assets/Art/Sprites/Effects/projectile_arcane.png",
+      "canvasWidth": 96,
+      "canvasHeight": 96,
+      "pixelsPerUnit": 64.0,
+      "pivotX": 0.5,
+      "pivotY": 0.5,
+      "borderLeft": 0.0,
+      "borderBottom": 0.0,
+      "borderRight": 0.0,
+      "borderTop": 0.0,
+      "wrapMode": "Clamp",
+      "alphaRequired": true,
+      "production": true,
+      "sha256": "963e9b69b576d0879e8a6c18c5a5f33c38509cfa887bcf40e89fb76692722710"
+    },
+    {
+      "path": "Assets/Art/Sprites/Environment/VisualSlice/ground_slice.png",
+      "canvasWidth": 512,
+      "canvasHeight": 512,
+      "pixelsPerUnit": 64.0,
+      "pivotX": 0.5,
+      "pivotY": 0.5,
+      "borderLeft": 0.0,
+      "borderBottom": 0.0,
+      "borderRight": 0.0,
+      "borderTop": 0.0,
+      "wrapMode": "Repeat",
+      "alphaRequired": false,
+      "production": true,
+      "sha256": "ba474bcb2dddec4b212607277e488b990eeec5000daf063a4f5013b04bec097c"
+    },
+    {
+      "path": "Assets/Art/Sprites/UI/Phase5/world_health_bar_background.png",
+      "canvasWidth": 64,
+      "canvasHeight": 8,
+      "pixelsPerUnit": 64.0,
+      "pivotX": 0.5,
+      "pivotY": 0.5,
+      "borderLeft": 0.0,
+      "borderBottom": 0.0,
+      "borderRight": 0.0,
+      "borderTop": 0.0,
+      "wrapMode": "Clamp",
+      "alphaRequired": true,
+      "production": true,
+      "sha256": "10701207ebb60b528ca03719cb5c12c3efda3acc0f141e99dcc84f5453a198fa"
+    },
+    {
+      "path": "Assets/Art/Sprites/UI/Phase5/world_health_bar_fill.png",
+      "canvasWidth": 64,
+      "canvasHeight": 8,
+      "pixelsPerUnit": 64.0,
+      "pivotX": 0.5,
+      "pivotY": 0.5,
+      "borderLeft": 0.0,
+      "borderBottom": 0.0,
+      "borderRight": 0.0,
+      "borderTop": 0.0,
+      "wrapMode": "Clamp",
+      "alphaRequired": true,
+      "production": true,
+      "sha256": "15128a449f669a3f769d4bf8ddf4149e2e2f58890bd40ed53ca0937e2d79a2a7"
+    },
+    {
+      "path": "Assets/Art/Textures/Prototype/PrototypeSquare.png",
+      "canvasWidth": 64,
+      "canvasHeight": 64,
+      "pixelsPerUnit": 100.0,
+      "pivotX": 0.5,
+      "pivotY": 0.5,
+      "borderLeft": 0.0,
+      "borderBottom": 0.0,
+      "borderRight": 0.0,
+      "borderTop": 0.0,
+      "wrapMode": "Clamp",
+      "alphaRequired": false,
+      "production": false,
+      "sha256": "b3953e0be8bde97630eb7e1ee94a34f08cc408895ddd1244a29958ef5da3ea40"
+    },
+    {
+      "path": "Assets/Art/Sprites/Items/Equipment/armor_leather.png",
+      "canvasWidth": 96,
+      "canvasHeight": 96,
+      "pixelsPerUnit": 64.0,
+      "pivotX": 0.5,
+      "pivotY": 0.5,
+      "borderLeft": 0.0,
+      "borderBottom": 0.0,
+      "borderRight": 0.0,
+      "borderTop": 0.0,
+      "wrapMode": "Clamp",
+      "alphaRequired": true,
+      "production": true,
+      "sha256": "873609436e736cfae11a6cff8c9fa99732c10959de4f1605357a1c2071413dba"
+    },
+    {
+      "path": "Assets/Art/Sprites/Items/Equipment/armor_plate.png",
+      "canvasWidth": 96,
+      "canvasHeight": 96,
+      "pixelsPerUnit": 64.0,
+      "pivotX": 0.5,
+      "pivotY": 0.5,
+      "borderLeft": 0.0,
+      "borderBottom": 0.0,
+      "borderRight": 0.0,
+      "borderTop": 0.0,
+      "wrapMode": "Clamp",
+      "alphaRequired": true,
+      "production": true,
+      "sha256": "244afb4dd9368b5634b3ad8ee04e7345275caa31c557b825a685484a31c23885"
+    },
+    {
+      "path": "Assets/Art/Sprites/Items/Equipment/ring_iron.png",
+      "canvasWidth": 96,
+      "canvasHeight": 96,
+      "pixelsPerUnit": 64.0,
+      "pivotX": 0.5,
+      "pivotY": 0.5,
+      "borderLeft": 0.0,
+      "borderBottom": 0.0,
+      "borderRight": 0.0,
+      "borderTop": 0.0,
+      "wrapMode": "Clamp",
+      "alphaRequired": true,
+      "production": true,
+      "sha256": "1366b166abacff7ea2b8258395c6381f15e7580fa2b3ff50e90d7d838a376aaf"
+    },
+    {
+      "path": "Assets/Art/Sprites/Items/Equipment/ring_jade.png",
+      "canvasWidth": 96,
+      "canvasHeight": 96,
+      "pixelsPerUnit": 64.0,
+      "pivotX": 0.5,
+      "pivotY": 0.5,
+      "borderLeft": 0.0,
+      "borderBottom": 0.0,
+      "borderRight": 0.0,
+      "borderTop": 0.0,
+      "wrapMode": "Clamp",
+      "alphaRequired": true,
+      "production": true,
+      "sha256": "d89b8b44d71447a1cfb50470371e762449251491255bb50efc6f323115770195"
+    },
+    {
+      "path": "Assets/Art/Sprites/Items/Equipment/ring_obsidian.png",
+      "canvasWidth": 96,
+      "canvasHeight": 96,
+      "pixelsPerUnit": 64.0,
+      "pivotX": 0.5,
+      "pivotY": 0.5,
+      "borderLeft": 0.0,
+      "borderBottom": 0.0,
+      "borderRight": 0.0,
+      "borderTop": 0.0,
+      "wrapMode": "Clamp",
+      "alphaRequired": true,
+      "production": true,
+      "sha256": "e3f0bdc204b1cfe5fa9b297b7af071c31ef15623d0079b537ceff2b1476f0fea"
+    },
+    {
+      "path": "Assets/Art/Sprites/Items/Equipment/weapon_greatsword.png",
+      "canvasWidth": 96,
+      "canvasHeight": 96,
+      "pixelsPerUnit": 64.0,
+      "pivotX": 0.5,
+      "pivotY": 0.5,
+      "borderLeft": 0.0,
+      "borderBottom": 0.0,
+      "borderRight": 0.0,
+      "borderTop": 0.0,
+      "wrapMode": "Clamp",
+      "alphaRequired": true,
+      "production": true,
+      "sha256": "1d774d509b00f78ae411578d8a3496c999dad39ed73f926e32c7814eaec30d40"
+    },
+    {
+      "path": "Assets/Art/Sprites/Items/Equipment/weapon_war_axe.png",
+      "canvasWidth": 96,
+      "canvasHeight": 96,
+      "pixelsPerUnit": 64.0,
+      "pivotX": 0.5,
+      "pivotY": 0.5,
+      "borderLeft": 0.0,
+      "borderBottom": 0.0,
+      "borderRight": 0.0,
+      "borderTop": 0.0,
+      "wrapMode": "Clamp",
+      "alphaRequired": true,
+      "production": true,
+      "sha256": "8994155ec5a9eb8eb31161e44b8029d7e320264d4d4792a7af390ef79139bc88"
+    }
+  ]
+}

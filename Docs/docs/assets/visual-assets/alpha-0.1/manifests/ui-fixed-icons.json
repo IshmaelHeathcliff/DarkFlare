@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "family": "ui-fixed-icons",
+  "alpha_threshold": 8,
+  "canvas": { "width": 96, "height": 96 },
+  "alpha_required": true,
+  "export_transform": { "uniform_scale": 0.3, "alignment": "alpha-weighted-center" },
+  "unity_import": { "pixels_per_unit": 64, "pivot": [0.5, 0.5], "filter": "Point", "mesh": "FullRect" },
+  "assets": [
+    { "name": "armor", "image": "../../../../../../Assets/Art/Sprites/UI/Icons/ui_icon_armor.png", "visible_width": [56, 80], "visible_height": [62, 78], "alpha_coverage": [0.20, 0.52], "visual_center_x": [47.5, 48.75], "visual_center_y": [47.5, 48.75], "bottom_margin": [8, 16], "edge_clearance": 5, "group": "fixed-icons" },
+    { "name": "back", "image": "../../../../../../Assets/Art/Sprites/UI/Icons/ui_icon_back.png", "visible_width": [56, 80], "visible_height": [62, 78], "alpha_coverage": [0.20, 0.52], "visual_center_x": [47.5, 48.75], "visual_center_y": [47.5, 48.75], "bottom_margin": [8, 16], "edge_clearance": 5, "group": "fixed-icons" },
+    { "name": "close", "image": "../../../../../../Assets/Art/Sprites/UI/Icons/ui_icon_close.png", "visible_width": [56, 80], "visible_height": [62, 78], "alpha_coverage": [0.20, 0.52], "visual_center_x": [47.5, 48.75], "visual_center_y": [47.5, 48.75], "bottom_margin": [8, 16], "edge_clearance": 5, "group": "fixed-icons" },
+    { "name": "crafting", "image": "../../../../../../Assets/Art/Sprites/UI/Icons/ui_icon_crafting.png", "visible_width": [56, 80], "visible_height": [62, 78], "alpha_coverage": [0.20, 0.52], "visual_center_x": [47.5, 48.75], "visual_center_y": [47.5, 48.75], "bottom_margin": [8, 16], "edge_clearance": 5, "group": "fixed-icons" },
+    { "name": "gold", "image": "../../../../../../Assets/Art/Sprites/UI/Icons/ui_icon_gold.png", "visible_width": [56, 80], "visible_height": [62, 78], "alpha_coverage": [0.20, 0.52], "visual_center_x": [47.5, 48.75], "visual_center_y": [47.5, 48.75], "bottom_margin": [8, 16], "edge_clearance": 5, "group": "fixed-icons" },
+    { "name": "health", "image": "../../../../../../Assets/Art/Sprites/UI/Icons/ui_icon_health.png", "visible_width": [56, 80], "visible_height": [62, 78], "alpha_coverage": [0.20, 0.52], "visual_center_x": [47.5, 48.75], "visual_center_y": [47.5, 48.75], "bottom_margin": [8, 16], "edge_clearance": 5, "group": "fixed-icons" },
+    { "name": "inventory", "image": "../../../../../../Assets/Art/Sprites/UI/Icons/ui_icon_inventory.png", "visible_width": [56, 80], "visible_height": [62, 78], "alpha_coverage": [0.20, 0.52], "visual_center_x": [47.5, 48.75], "visual_center_y": [47.5, 48.75], "bottom_margin": [8, 16], "edge_clearance": 5, "group": "fixed-icons" },
+    { "name": "missing", "image": "../../../../../../Assets/Art/Sprites/UI/Icons/ui_icon_missing.png", "visible_width": [56, 80], "visible_height": [62, 78], "alpha_coverage": [0.20, 0.52], "visual_center_x": [47.5, 48.75], "visual_center_y": [47.5, 48.75], "bottom_margin": [8, 16], "edge_clearance": 5, "group": "fixed-icons" },
+    { "name": "ring", "image": "../../../../../../Assets/Art/Sprites/UI/Icons/ui_icon_ring.png", "visible_width": [56, 80], "visible_height": [62, 78], "alpha_coverage": [0.20, 0.52], "visual_center_x": [47.5, 48.75], "visual_center_y": [47.5, 48.75], "bottom_margin": [8, 16], "edge_clearance": 5, "group": "fixed-icons" },
+    { "name": "shop", "image": "../../../../../../Assets/Art/Sprites/UI/Icons/ui_icon_shop.png", "visible_width": [56, 80], "visible_height": [62, 78], "alpha_coverage": [0.20, 0.52], "visual_center_x": [47.5, 48.75], "visual_center_y": [47.5, 48.75], "bottom_margin": [8, 16], "edge_clearance": 5, "group": "fixed-icons" },
+    { "name": "weapon", "image": "../../../../../../Assets/Art/Sprites/UI/Icons/ui_icon_weapon.png", "visible_width": [56, 80], "visible_height": [62, 78], "alpha_coverage": [0.20, 0.52], "visual_center_x": [47.5, 48.75], "visual_center_y": [47.5, 48.75], "bottom_margin": [8, 16], "edge_clearance": 5, "group": "fixed-icons" },
+    { "name": "weapon_empty", "image": "../../../../../../Assets/Art/Sprites/UI/Icons/ui_icon_weapon_empty.png", "visible_width": [56, 80], "visible_height": [62, 78], "alpha_coverage": [0.20, 0.52], "visual_center_x": [47.5, 48.75], "visual_center_y": [47.5, 48.75], "bottom_margin": [8, 16], "edge_clearance": 5, "group": "fixed-icons" }
+  ],
+  "groups": [
+    { "name": "fixed-icons", "max_width_delta": 24, "max_height_delta": 16, "max_visual_center_x_delta": 0.5, "max_visual_center_y_delta": 0.5, "max_bottom_margin_delta": 8, "max_alpha_coverage_delta": 0.32 }
+  ]
+}

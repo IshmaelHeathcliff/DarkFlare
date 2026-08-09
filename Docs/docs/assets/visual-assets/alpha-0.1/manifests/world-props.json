@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "family": "world-props",
+  "alpha_threshold": 8,
+  "canvas": { "width": 384, "height": 384 },
+  "alpha_required": true,
+  "export_transform": { "uniform_scale": 1, "alignment": "source-content-centered" },
+  "unity_import": { "pixels_per_unit": 181, "pivot": [0.5, 0.5], "filter": "Point", "mesh": "FullRect" },
+  "assets": [
+    { "name": "brazier", "image": "../../../../../../Assets/Art/Sprites/Environment/WorldProps/world_prop_brazier.png", "visible_width": [185, 365], "visible_height": [200, 325], "alpha_coverage": [0.12, 0.55], "visual_center_x": [178, 204], "visual_center_y": [188, 238], "bottom_margin": [35, 90], "edge_clearance": 10 },
+    { "name": "crafting_station", "image": "../../../../../../Assets/Art/Sprites/Environment/WorldProps/world_prop_crafting_station.png", "visible_width": [185, 365], "visible_height": [200, 325], "alpha_coverage": [0.12, 0.55], "visual_center_x": [178, 204], "visual_center_y": [188, 238], "bottom_margin": [35, 90], "edge_clearance": 10 },
+    { "name": "dead_tree", "image": "../../../../../../Assets/Art/Sprites/Environment/WorldProps/world_prop_dead_tree.png", "visible_width": [185, 365], "visible_height": [200, 325], "alpha_coverage": [0.12, 0.55], "visual_center_x": [178, 204], "visual_center_y": [188, 238], "bottom_margin": [35, 90], "edge_clearance": 10 },
+    { "name": "ground_cracked", "image": "../../../../../../Assets/Art/Sprites/Environment/WorldProps/world_prop_ground_cracked.png", "visible_width": [185, 365], "visible_height": [200, 325], "alpha_coverage": [0.12, 0.55], "visual_center_x": [178, 204], "visual_center_y": [188, 238], "bottom_margin": [35, 90], "edge_clearance": 10 },
+    { "name": "ground_dirt", "image": "../../../../../../Assets/Art/Sprites/Environment/WorldProps/world_prop_ground_dirt.png", "visible_width": [185, 365], "visible_height": [200, 325], "alpha_coverage": [0.12, 0.55], "visual_center_x": [178, 204], "visual_center_y": [188, 238], "bottom_margin": [35, 90], "edge_clearance": 10 },
+    { "name": "ground_stone_path", "image": "../../../../../../Assets/Art/Sprites/Environment/WorldProps/world_prop_ground_stone_path.png", "visible_width": [185, 365], "visible_height": [200, 325], "alpha_coverage": [0.12, 0.55], "visual_center_x": [178, 204], "visual_center_y": [188, 238], "bottom_margin": [35, 90], "edge_clearance": 10 },
+    { "name": "rock_large", "image": "../../../../../../Assets/Art/Sprites/Environment/WorldProps/world_prop_rock_large.png", "visible_width": [185, 365], "visible_height": [200, 325], "alpha_coverage": [0.12, 0.55], "visual_center_x": [178, 204], "visual_center_y": [188, 238], "bottom_margin": [35, 90], "edge_clearance": 10 },
+    { "name": "rock_small", "image": "../../../../../../Assets/Art/Sprites/Environment/WorldProps/world_prop_rock_small.png", "visible_width": [185, 365], "visible_height": [200, 325], "alpha_coverage": [0.12, 0.55], "visual_center_x": [178, 204], "visual_center_y": [188, 238], "bottom_margin": [35, 90], "edge_clearance": 10 },
+    { "name": "ruined_wall", "image": "../../../../../../Assets/Art/Sprites/Environment/WorldProps/world_prop_ruined_wall.png", "visible_width": [185, 365], "visible_height": [200, 325], "alpha_coverage": [0.12, 0.55], "visual_center_x": [178, 204], "visual_center_y": [188, 238], "bottom_margin": [35, 90], "edge_clearance": 10 },
+    { "name": "supplies", "image": "../../../../../../Assets/Art/Sprites/Environment/WorldProps/world_prop_supplies.png", "visible_width": [185, 365], "visible_height": [200, 325], "alpha_coverage": [0.12, 0.55], "visual_center_x": [178, 204], "visual_center_y": [188, 238], "bottom_margin": [35, 90], "edge_clearance": 10 },
+    { "name": "tattered_banner", "image": "../../../../../../Assets/Art/Sprites/Environment/WorldProps/world_prop_tattered_banner.png", "visible_width": [185, 365], "visible_height": [200, 325], "alpha_coverage": [0.12, 0.55], "visual_center_x": [178, 204], "visual_center_y": [188, 238], "bottom_margin": [35, 90], "edge_clearance": 10 },
+    { "name": "tent", "image": "../../../../../../Assets/Art/Sprites/Environment/WorldProps/world_prop_tent.png", "visible_width": [185, 365], "visible_height": [200, 325], "alpha_coverage": [0.12, 0.55], "visual_center_x": [178, 204], "visual_center_y": [188, 238], "bottom_margin": [35, 90], "edge_clearance": 10 }
+  ],
+  "groups": []
+}

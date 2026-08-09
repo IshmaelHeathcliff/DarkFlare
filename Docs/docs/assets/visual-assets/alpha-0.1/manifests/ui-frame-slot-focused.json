@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "family": "ui-frame-slot-focused",
+  "alpha_threshold": 8,
+  "canvas": { "width": 479, "height": 469 },
+  "alpha_required": true,
+  "unity_import": { "pixels_per_unit": 100, "pivot": [0.5, 0.5], "slice_border": [157, 157, 157, 157], "filter": "Point", "mesh": "FullRect" },
+  "assets": [
+    { "name": "slot_focused", "image": "../../../../../../Assets/Art/Sprites/UI/Frames/ui_inventory_slot_focused.png", "visible_width": [479, 479], "visible_height": [469, 469], "alpha_coverage": [0.96, 1], "visual_center_x": [238, 241], "visual_center_y": [232, 235], "bottom_margin": [0, 0], "edge_clearance": 0 }
+  ],
+  "groups": []
+}

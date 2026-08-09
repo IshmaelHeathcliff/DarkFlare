@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "family": "actor-npc-merchant",
+  "alpha_threshold": 8,
+  "canvas": { "width": 128, "height": 128 },
+  "alpha_required": true,
+  "unity_import": { "pixels_per_unit": 64, "pivot": [0.5, 0.09375], "filter": "Point", "mesh": "FullRect" },
+  "assets": [
+    { "name": "idle_00", "image": "../../../../../../Assets/Art/Sprites/NPCs/Merchant/npc_merchant_idle_se_00.png", "visible_width": [52, 56], "visible_height": [88, 93], "alpha_coverage": [0.21, 0.23], "visual_center_x": [62, 65], "visual_center_y": [77, 80], "bottom_margin": [3, 5], "edge_clearance": 3, "group": "idle" },
+    { "name": "idle_01", "image": "../../../../../../Assets/Art/Sprites/NPCs/Merchant/npc_merchant_idle_se_01.png", "visible_width": [52, 56], "visible_height": [88, 93], "alpha_coverage": [0.21, 0.23], "visual_center_x": [62, 65], "visual_center_y": [77, 80], "bottom_margin": [3, 5], "edge_clearance": 3, "group": "idle" },
+    { "name": "idle_02", "image": "../../../../../../Assets/Art/Sprites/NPCs/Merchant/npc_merchant_idle_se_02.png", "visible_width": [52, 56], "visible_height": [88, 93], "alpha_coverage": [0.21, 0.23], "visual_center_x": [62, 65], "visual_center_y": [77, 80], "bottom_margin": [3, 5], "edge_clearance": 3, "group": "idle" },
+    { "name": "idle_03", "image": "../../../../../../Assets/Art/Sprites/NPCs/Merchant/npc_merchant_idle_se_03.png", "visible_width": [52, 56], "visible_height": [88, 93], "alpha_coverage": [0.21, 0.23], "visual_center_x": [62, 65], "visual_center_y": [77, 80], "bottom_margin": [3, 5], "edge_clearance": 3, "group": "idle" }
+  ],
+  "groups": [
+    { "name": "idle", "max_width_delta": 0, "max_height_delta": 1, "max_visual_center_x_delta": 0.25, "max_visual_center_y_delta": 0.25, "max_bottom_margin_delta": 0, "max_alpha_coverage_delta": 0.002 }
+  ]
+}
