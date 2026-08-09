@@ -5,8 +5,10 @@
 ```text
 DarkFlare/
   Assets/
-  design/
-  docs/
+  Docs/
+    README.md
+    design/
+    docs/
   Packages/
   ProjectSettings/
 ```
@@ -237,13 +239,17 @@ TextMesh Pro 默认资源目录。
 
 ## 非 Assets 目录
 
-### `design`
+### `Docs`
 
-设计资料目录，当前未见明确内容。适合后续放玩法草案、流程稿、界面草图等非运行时资源。
+项目文档统一容器，入口为 `Docs/README.md`。
 
-### `docs`
+#### `Docs/design`
 
-项目文档目录。当前已建立基础文档，应作为结构说明、开发约定和系统设计的统一入口。
+游戏设计文档目录，主要由人工维护。Agent 只有在纯游戏设计任务中显式使用 `/design` 或 `$design` Skill 时才允许读取或修改。
+
+#### `Docs/docs`
+
+Agent 管理的项目文档目录，包含结构说明、开发约定、模块文档、执行计划、归档与验收资源。
 
 ### `Packages`
 

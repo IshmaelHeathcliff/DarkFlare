@@ -255,7 +255,7 @@ InventoryPage
 2. 在真实 `Main.unity` 完成购买武器、四槽临时装备注入、比较、替换、卸装、返回战斗流程。
 3. 验证发射后立即换装的在途投射物快照。
 4. 验证三档分辨率以及键鼠 / 手柄焦点和返回路径。
-5. 新增或更新装备模块文档、玩法循环、输入 UI 和伤害词条文档；完成后将本计划移入 `docs/plan/archive/`。
+5. 新增或更新装备模块文档、玩法循环、输入 UI 和伤害词条文档；完成后将本计划移入 `Docs/docs/plan/archive/`。
 
 ## 自动化测试重点
 
@@ -317,7 +317,7 @@ InventoryPage
 - `Assets/Scripts/Runtime/Gameplay/Combat/WeaponDamageResolver.cs`
 - `Assets/Scripts/Runtime/Gameplay/Combat/Commands/UnequipItemCommand.cs`
 - 装备事务、聚合、攻击快照和阶段 2 PlayMode 测试
-- `docs/equipment-system.md`
+- `Docs/docs/equipment-system.md`
 
 ### 修改候选
 

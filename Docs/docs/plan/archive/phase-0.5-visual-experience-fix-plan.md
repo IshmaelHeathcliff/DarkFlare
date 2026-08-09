@@ -74,7 +74,7 @@
    - 水平、垂直、斜向移动中的 Idle / Move / Attack 切换。
    - 地图四个方向的最远可达位置。
    - 单个掉落和多个相邻掉落。
-3. 将修正前截图放入 `docs/assets/visual-style/phase-0.5/before/`，固定相同位置用于前后对比。
+3. 将修正前截图放入 `Docs/docs/assets/visual-style/phase-0.5/before/`，固定相同位置用于前后对比。
 4. 记录以下诊断数据：Game View 缩放、相机位置小数、玩家位置小数、相机与玩家误差、当前帧率和 `Fixed Timestep`。
 
 决策门槛：
@@ -186,7 +186,7 @@ LootPickup
 4. 键鼠和手柄各跑一轮“移动 → 战斗 → 掉落 → 自动拾取 → 背包满后保留”。
 5. 检查 Console、Tween 取消、场景退出、暂停恢复和 Addressables 释放。
 6. 同步更新 `visual-style.md`、`visual-assets.md` 和 `gameplay-loop.md`。
-7. 完成后总结模块文档，将本计划移动到 `docs/plan/archive/`，再把总计划状态切换为阶段 1。
+7. 完成后总结模块文档，将本计划移动到 `Docs/docs/plan/archive/`，再把总计划状态切换为阶段 1。
 
 ## 预计影响文件
 
@@ -205,7 +205,7 @@ LootPickup
 
 - 掉落表现组件，例如 `Assets/Scripts/Runtime/Gameplay/Visuals/LootPickupVisual.cs`
 - 掉落光圈、投影等小型资源，放入 `Assets/Art/Sprites/Effects/Loot/`
-- 阶段 0.5 验收截图，放入 `docs/assets/visual-style/phase-0.5/`
+- 阶段 0.5 验收截图，放入 `Docs/docs/assets/visual-style/phase-0.5/`
 
 ## 总验收矩阵
 

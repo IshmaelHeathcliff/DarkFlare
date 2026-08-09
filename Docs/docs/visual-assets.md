@@ -11,7 +11,7 @@
 
 | 资产 | 规格 | 状态 | 目标路径 | 用途 |
 | --- | --- | --- | --- | --- |
-| 风格板 | 1254×1254 参考图 | 已完成 | `docs/assets/visual-style/phase-0-style-board.png` | 统一视觉语言，不直接入游戏 |
+| 风格板 | 1254×1254 参考图 | 已完成 | `Docs/docs/assets/visual-style/phase-0-style-board.png` | 统一视觉语言，不直接入游戏 |
 | 地表切片 | 512×512，64 PPU | 已接入 | `Assets/Art/Sprites/Environment/VisualSlice/ground_slice.png` | `Main.unity` 原点周围 3×3 地表 |
 | 玩家动画 | 1448×1086 Sheet；12 个子 Sprite | 已迁移 | `Assets/Art/SpriteSheets/Phase5/player_sheet.png` | 玩家 Idle / Move / Attack / Hit / Death Animator |
 | 基础怪物动画 | 1448×1086 Sheet；12 个子 Sprite | 已迁移 | `Assets/Art/SpriteSheets/Phase5/monster_basic_sheet.png` | 荒原游魂运行时 Animator |
@@ -36,7 +36,7 @@
 - 不直接修改 `Main.unity` YAML；场景和 Prefab 改动只通过 Unity MCP 或 Editor 脚本执行。
 - 阶段 0 不修改装备槽、掉落概率、怪物属性随机、词条系统和商店状态。
 - 透明资产必须验证存在 Alpha 通道、四角透明且无明显色键边缘。
-- 生成源图保存在 `docs/assets/visual-style/source/`；角色、固定 UI 与世界物件以原尺寸整图进入 Unity，并在 Sprite Editor 中维护子 Sprite。
+- 生成源图保存在 `Docs/docs/assets/visual-style/source/`；角色、固定 UI 与世界物件以原尺寸整图进入 Unity，并在 Sprite Editor 中维护子 Sprite。
 - 完整提示词见 [阶段 0 视觉生成提示词](./assets/visual-style/generation-prompts.md)。
 
 ## Unity 接入记录
@@ -133,6 +133,6 @@
 ### 风格板
 
 - 模式：内置 imagegen。
-- 文件：`docs/assets/visual-style/phase-0-style-board.png`。
+- 文件：`Docs/docs/assets/visual-style/phase-0-style-board.png`。
 - 提示摘要：2D 俯视 3/4 暗色奇幻垂直切片；冷灰石地、青绿玩家、暖红怪物、金铜交互、青色投射物；低分辨率手绘和像素化硬边；同时展示地图、角色、物品、特效和背包组件；无文字、无标志、无水印。
 - 完整提示集：[阶段 0 视觉生成提示词](./assets/visual-style/generation-prompts.md)。

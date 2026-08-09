@@ -186,7 +186,7 @@ ItemListViewState
 2. 运行阶段 1 PlayMode：键鼠与虚拟手柄分别完成选择、预览、购买、出售、页签往返和关闭 / 重开。
 3. 检查 1280×720、1920×1080、2560×1440 的长词条、空列表、滚动和操作按钮边界。
 4. 检查 Console、重复事件订阅、延迟布局回调和组件禁用后的清理。
-5. 更新 `input-ui-system.md` 和 `gameplay-loop.md`，完成后将本计划移动到 `docs/plan/archive/`。
+5. 更新 `input-ui-system.md` 和 `gameplay-loop.md`，完成后将本计划移动到 `Docs/docs/plan/archive/`。
 
 ## 自动化测试重点
 

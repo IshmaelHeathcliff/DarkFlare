@@ -28,7 +28,7 @@
 
 ## 正式截图
 
-最终截图统一保存到 `docs/assets/acceptance/phase-6/`：
+最终截图统一保存到 `Docs/docs/assets/acceptance/phase-6/`：
 
 - `world-hud-1920x1080.png`
 - `inventory-1920x1080.png`
