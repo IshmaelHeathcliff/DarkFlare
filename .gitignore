@@ -30,6 +30,7 @@
 .idea/
 *.code-workspace
 .history/
+.obsidian/
 
 # Gradle cache directory
 .gradle/
