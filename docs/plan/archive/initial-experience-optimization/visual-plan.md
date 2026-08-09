@@ -1,6 +1,6 @@
 # 初版体验优化：视觉填充
 
-> 当前状态：阶段 0、0.5 与阶段 5 视觉工作均已完成并归档。完成记录见[阶段 5：批量视觉接入与表现反馈](../archive/phase-5-batch-visual-integration-plan.md)，当前规格见[视觉规范](../../visual-style.md)与[视觉资产清单](../../visual-assets.md)。
+> 当前状态：阶段 0、0.5 与阶段 5 视觉实现、美术返工及阶段 6 的 1920×1080 完整终验均已完成并归档。记录见[阶段 5：批量视觉接入与表现反馈](../phase-5-batch-visual-integration-plan.md)与[阶段 5 美术资产规范收缩与返工](./phase-5-visual-asset-correction-plan.md)，当前规格见[视觉规范](../../../visual-style.md)与[视觉资产清单](../../../visual-assets.md)。
 
 ## 目标
 
@@ -10,7 +10,7 @@
 
 以下问题来自阶段 0 实机验收，已在阶段 0.5 先于 UX 和批量视觉工作完成处理：
 
-完成记录与验收见 [阶段 0.5：视觉体验修正执行计划](../archive/phase-0.5-visual-experience-fix-plan.md)。
+完成记录与验收见 [阶段 0.5：视觉体验修正执行计划](../phase-0.5-visual-experience-fix-plan.md)。
 
 ### 相机跟随与人物运动清晰度
 

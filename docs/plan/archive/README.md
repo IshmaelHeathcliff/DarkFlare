@@ -26,5 +26,8 @@
 | [阶段 3：随机化与掉落规则执行计划](./phase-3-randomization-loot-plan.md) | 初版体验优化阶段 3 | [随机化与掉落规则](../../randomization-system.md)、[首版玩法循环](../../gameplay-loop.md) |
 | [阶段 4：标签、词条与内容池填充](./phase-4-content-pool-plan.md) | 初版体验优化阶段 4 | [首批内容池](../../content-system.md)、[伤害系统与词条系统设计](../../damage-affix-system.md) |
 | [阶段 5：批量视觉接入与表现反馈](./phase-5-batch-visual-integration-plan.md) | 初版体验优化阶段 5 | [视觉规范](../../visual-style.md)、[视觉资产清单](../../visual-assets.md)、[输入与运行时 UI](../../input-ui-system.md)、[首版玩法循环](../../gameplay-loop.md) |
+| [初版体验优化总计划](./initial-experience-optimization/README.md) | 初版体验优化阶段 0–6 | [首版玩法循环](../../gameplay-loop.md)、[输入与运行时 UI](../../input-ui-system.md)、[装备系统](../../equipment-system.md)、[视觉规范](../../visual-style.md) |
+| [阶段 5：美术资产规范收缩与返工](./initial-experience-optimization/phase-5-visual-asset-correction-plan.md) | 初版体验优化阶段 5 返工 | [视觉规范](../../visual-style.md)、[视觉资产清单](../../visual-assets.md) |
+| [阶段 6：整体验收与初版优化收尾](./initial-experience-optimization/phase-6-integrated-acceptance-plan.md) | 初版体验优化阶段 6 | [首版玩法循环](../../gameplay-loop.md)、[输入与运行时 UI](../../input-ui-system.md)、[视觉资产清单](../../visual-assets.md) |
 
-最近归档日期：2026-08-07。
+最近归档日期：2026-08-09。

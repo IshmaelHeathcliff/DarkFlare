@@ -3,7 +3,7 @@
 ## 状态
 
 - 状态：已完成并归档（2026-08-04）
-- 所属计划：[初版体验优化计划](../initial-experience-optimization/README.md)
+- 所属计划：[初版体验优化计划](./initial-experience-optimization/README.md)
 - 目标场景：`Assets/Scenes/Main.unity`
 - 后续阶段：阶段 1 UX 快速改进
 

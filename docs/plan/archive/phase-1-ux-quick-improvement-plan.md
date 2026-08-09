@@ -4,8 +4,8 @@
 
 - 状态：已完成，归档日期 2026-08-04
 - 建立日期：2026-08-04
-- 所属计划：[初版体验优化计划](../initial-experience-optimization/README.md)
-- 关联子计划：[UX 与装备系统](../initial-experience-optimization/ux-equipment-plan.md)
+- 所属计划：[初版体验优化计划](./initial-experience-optimization/README.md)
+- 关联子计划：[UX 与装备系统](./initial-experience-optimization/ux-equipment-plan.md)
 - 前置阶段：[阶段 0.5：视觉体验修正](./phase-0.5-visual-experience-fix-plan.md)
 - 目标场景：`Assets/Scenes/Main.unity`
 

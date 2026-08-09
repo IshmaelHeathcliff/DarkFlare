@@ -5,7 +5,7 @@
 - 状态：阶段 5 美术返工已完成实现与自动化回归，等待最终视觉复验；阶段 6 暂缓
 - 目标：以统一的暗色奇幻视觉覆盖世界、三种怪物、七件装备、交互物、战斗反馈与运行时 UI，同时保持既有玩法事务不变。
 - 视觉规范：[视觉规范](./visual-style.md)
-- 执行计划：[阶段 5 美术资产规范收缩与返工](./plan/initial-experience-optimization/phase-5-visual-asset-correction-plan.md)
+- 执行计划：[阶段 5 美术资产规范收缩与返工（已归档）](./plan/archive/initial-experience-optimization/phase-5-visual-asset-correction-plan.md)
 
 ## 资源清单
 
@@ -119,20 +119,14 @@
 - [阶段 0.5 1920×1080 世界验收](./assets/visual-style/phase-0.5/after/phase-0.5-world-1920x1080.png)
 - [阶段 0.5 2560×1440 世界验收](./assets/visual-style/phase-0.5/after/phase-0.5-world-2560x1440.png)
 - [阶段 0.5 1920×1080 边界验收](./assets/visual-style/phase-0.5/after/phase-0.5-boundary-1920x1080.png)
-- [阶段 5 1280×720 世界验收](./assets/acceptance/phase-5/main-world-1280x720-final.png)
-- [阶段 5 1280×720 背包验收](./assets/acceptance/phase-5/inventory-1280x720.png)
-- [阶段 5 1920×1080 商店验收](./assets/acceptance/phase-5/shop-1920x1080.png)
-- [阶段 5 2560×1440 打造验收](./assets/acceptance/phase-5/crafting-2560x1440.png)
-- [阶段 5 2560×1440 世界验收](./assets/acceptance/phase-5/main-world-2560x1440.png)
-- [阶段 5 返工后 1280×720 世界验收](./assets/acceptance/phase-5-correction/world-1280x720.png)
-- [阶段 5 返工后 1280×720 背包验收](./assets/acceptance/phase-5-correction/inventory-1280x720.png)
-- [阶段 5 SpriteSheet 迁移后 1280×720 世界 / HUD 验收](./assets/acceptance/phase-5-correction/spritesheet-player-ui-world-1.png)
-- [阶段 5 SpriteSheet 迁移后 1280×720 背包验收](./assets/acceptance/phase-5-correction/spritesheet-ui-inventory.png)
 - [阶段 5 人工切片重绑后 1280×720 世界 / HUD 验收](./assets/acceptance/phase-5-correction/rebound-world-ui.png)
 - [阶段 5 人工切片重绑后 1280×720 背包验收](./assets/acceptance/phase-5-correction/rebound-inventory-ui.png)
-- [阶段 5 返工后 1920×1080 背包验收](./assets/acceptance/phase-5-correction/inventory-1920x1080.png)
-- [阶段 5 返工后 2560×1440 背包验收](./assets/acceptance/phase-5-correction/inventory-2560x1440.png)
-- [阶段 5 Sprite Sheet 运行时世界验收](./assets/acceptance/phase-5-correction/sprite-sheet-world-1280x720.png)
+- [阶段 6 1920×1080 世界 / HUD 终验](./assets/acceptance/phase-6/world-hud-1920x1080.png)
+- [阶段 6 1920×1080 背包终验](./assets/acceptance/phase-6/inventory-1920x1080.png)
+- [阶段 6 1920×1080 商店终验](./assets/acceptance/phase-6/shop-1920x1080.png)
+- [阶段 6 1920×1080 打造终验](./assets/acceptance/phase-6/crafting-1920x1080.png)
+
+阶段 5 首轮及中间返工截图已在人工切片重绑完成后清理，避免旧切片和旧引用画面继续作为当前验收依据。自阶段 6 起，当前及后续视觉验收只保证 1920×1080；上述四张阶段 6 截图是当前正式验收基线。
 
 ## 生成记录
 

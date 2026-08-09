@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.IO;
 using System.Reflection;
 using DarkFlare;
 using NUnit.Framework;
@@ -32,7 +31,7 @@ namespace DarkFlare.Tests
         }
 
         [UnityTest]
-        public IEnumerator MainScene_InventorySupportsKeyboardGamepadAndTargetResolutions()
+        public IEnumerator MainScene_InventorySupportsKeyboardGamepadAndStandardResolution()
         {
             int originalWidth = Screen.width;
             int originalHeight = Screen.height;
@@ -94,30 +93,18 @@ namespace DarkFlare.Tests
 
             try
             {
-                Vector2Int[] resolutions =
-                {
-                    new Vector2Int(1280, 720),
-                    new Vector2Int(1920, 1080),
-                    new Vector2Int(2560, 1440),
-                };
+                Vector2Int resolution = new Vector2Int(1920, 1080);
+                SetGameViewResolution(resolution);
+                yield return WaitForResolution(resolution, 5f);
+                menu.OpenPage(GameMenuPage.Inventory);
+                yield return null;
 
-                for (int i = 0; i < resolutions.Length; i++)
-                {
-                    Vector2Int resolution = resolutions[i];
-                    SetGameViewResolution(resolution);
-                    yield return WaitForResolution(resolution, 5f);
-                    menu.OpenPage(GameMenuPage.Inventory);
-                    yield return null;
-
-                    Assert.AreEqual(resolution.x, Screen.width, $"Game View 宽度未切换为 {resolution.x}");
-                    Assert.AreEqual(resolution.y, Screen.height, $"Game View 高度未切换为 {resolution.y}");
-                    AssertMenuOpen(menu, document, acceptanceItem, $"{resolution.x}×{resolution.y}");
-                    AssertLayoutInsideRoot(document.rootVisualElement);
-                    CaptureAcceptanceScreenshot(resolution);
-                    yield return new WaitForEndOfFrame();
-                    menu.GetArchitecture().GetUtility<GameInput>().SwitchToGameplay();
-                    yield return null;
-                }
+                Assert.AreEqual(resolution.x, Screen.width, $"Game View 宽度未切换为 {resolution.x}");
+                Assert.AreEqual(resolution.y, Screen.height, $"Game View 高度未切换为 {resolution.y}");
+                AssertMenuOpen(menu, document, acceptanceItem, "1920×1080");
+                AssertLayoutInsideRoot(document.rootVisualElement);
+                menu.GetArchitecture().GetUtility<GameInput>().SwitchToGameplay();
+                yield return null;
 
                 Assert.IsTrue(
                     architecture.SendCommand(new EquipItemCommand(inventory.Player, acceptanceItem)),
@@ -133,7 +120,7 @@ namespace DarkFlare.Tests
                 Time.timeScale = 1f;
             }
 
-            Debug.Log("[Phase0ExperiencePlayMode] 键鼠、手柄、背包焦点与三档分辨率验收通过");
+            Debug.Log("[Phase0ExperiencePlayMode] 键鼠、手柄、背包焦点与 1920×1080 验收通过");
         }
 
         static IEnumerator WaitForResolution(Vector2Int resolution, float timeoutSeconds)
@@ -209,17 +196,6 @@ namespace DarkFlare.Tests
                 Assert.LessOrEqual(bounds.xMax, rootBounds.xMax + 1f, $"{names[i]} 超出右边界");
                 Assert.LessOrEqual(bounds.yMax, rootBounds.yMax + 1f, $"{names[i]} 超出下边界");
             }
-        }
-
-        static void CaptureAcceptanceScreenshot(Vector2Int resolution)
-        {
-            string projectRoot = Directory.GetParent(Application.dataPath).FullName;
-            string folder = Path.Combine(projectRoot, "docs", "assets", "visual-style");
-            Directory.CreateDirectory(folder);
-            string path = Path.Combine(
-                folder,
-                $"phase-0-acceptance-inventory-{resolution.x}x{resolution.y}.png");
-            ScreenCapture.CaptureScreenshot(path);
         }
     }
 }

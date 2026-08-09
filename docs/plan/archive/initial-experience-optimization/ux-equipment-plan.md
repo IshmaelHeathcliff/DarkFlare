@@ -6,8 +6,8 @@
 
 ## 分阶段实施
 
-- 阶段 1 已完成共用物品详情、中文词条格式和商店选择 / 滚动 / 焦点恢复，记录见 [阶段 1：UX 快速改进](../archive/phase-1-ux-quick-improvement-plan.md)。
-- 阶段 2 已完成，归档记录见 [阶段 2：装备槽与伤害来源](../archive/phase-2-equipment-slots-damage-source-plan.md)，当前实现见 [装备系统](../../equipment-system.md)。
+- 阶段 1 已完成共用物品详情、中文词条格式和商店选择 / 滚动 / 焦点恢复，记录见 [阶段 1：UX 快速改进](../phase-1-ux-quick-improvement-plan.md)。
+- 阶段 2 已完成，归档记录见 [阶段 2：装备槽与伤害来源](../phase-2-equipment-slots-damage-source-plan.md)，当前实现见 [装备系统](../../../equipment-system.md)。
 - 当前已落地四槽原子事务、左右戒指显式选槽、LocalItem 分流、发射时攻击快照和背包比较；正式护甲、戒指和装备池留给内容填充阶段。
 
 ## 一、商店操作保留状态

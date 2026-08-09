@@ -5,8 +5,8 @@
 - 状态：已完成并归档
 - 建立日期：2026-08-04
 - 完成日期：2026-08-04
-- 所属计划：[初版体验优化计划](../initial-experience-optimization/README.md)
-- 关联子计划：[视觉填充](../initial-experience-optimization/visual-plan.md)
+- 所属计划：[初版体验优化计划](./initial-experience-optimization/README.md)
+- 关联子计划：[视觉填充](./initial-experience-optimization/visual-plan.md)
 - 前置阶段：[阶段 0：视觉垂直切片](./phase-0-visual-slice-plan.md)
 - 目标场景：`Assets/Scenes/Main.unity`
 

@@ -17,7 +17,7 @@
 
 ## 进行中的计划
 
-- [初版体验优化计划](./plan/initial-experience-optimization/README.md)
+- [初版体验优化计划（已归档）](./plan/archive/initial-experience-optimization/README.md)
 
 ## 说明
 

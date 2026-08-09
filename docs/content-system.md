@@ -91,5 +91,6 @@
 - 全量 EditMode 87/87 通过；PlayMode 12 项中 10 项通过、2 项 Input System 上游用例按原标记忽略、0 失败。
 - Runtime、Editor、EditMode 与 PlayMode 四个程序集编译 0 警告、0 错误；三个怪物 Addressable Prefab 在 Main 预热中均成功加载，最终 Console 无错误。
 - 阶段 5 全量 EditMode 92/92 通过；PlayMode 12 项中 10 项通过、2 项 Input System 上游用例按原标记跳过。七个图标、三种怪物 Prefab 与 Animator 契约、Addressables 图标预热、缓存和释放路径均通过专项检查。
+- 阶段 6 全量 EditMode 98/98 通过；PlayMode 12 项中 10 项通过、2 项 Input System 上游既有用例跳过、0 失败。正式七件装备的交易 / 打造 / 四槽流程、三种怪物与十二词条池继续通过整合回归。
 
 随机种子与掉落判定见 [随机化与掉落规则](./randomization-system.md)，装备事务见 [装备系统](./equipment-system.md)，词条计算语义见 [伤害系统与词条系统设计](./damage-affix-system.md)。

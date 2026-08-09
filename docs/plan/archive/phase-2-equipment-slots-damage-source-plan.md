@@ -5,10 +5,10 @@
 - 状态：已完成并归档
 - 建立日期：2026-08-05
 - 完成日期：2026-08-05
-- 所属计划：[初版体验优化计划](../initial-experience-optimization/README.md)
-- 关联子计划：[UX 与装备系统](../initial-experience-optimization/ux-equipment-plan.md)
+- 所属计划：[初版体验优化计划](./initial-experience-optimization/README.md)
+- 关联子计划：[UX 与装备系统](./initial-experience-optimization/ux-equipment-plan.md)
 - 前置阶段：[阶段 1：UX 快速改进](./phase-1-ux-quick-improvement-plan.md)
-- 后续阶段：[阶段 3：随机化与掉落规则](../initial-experience-optimization/README.md#阶段-3随机化与掉落规则)
+- 后续阶段：[阶段 3：随机化与掉落规则](./initial-experience-optimization/README.md#阶段-3随机化与掉落规则)
 - 目标场景：`Assets/Scenes/Main.unity`
 
 ## 完成结果
