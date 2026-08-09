@@ -2,10 +2,13 @@
 
 ## 当前状态
 
-- 状态：阶段 5 美术返工已完成实现与自动化回归，等待最终视觉复验；阶段 6 暂缓
+- 状态：阶段 5 美术返工与阶段 6 最终视觉复验均已完成；alpha 单图生产规范已生效
 - 目标：以统一的暗色奇幻视觉覆盖世界、三种怪物、七件装备、交互物、战斗反馈与运行时 UI，同时保持既有玩法事务不变。
 - 视觉规范：[视觉规范](./visual-style.md)
+- 生产规范：[美术资产生成规范](./visual-asset-generation.md)
 - 执行计划：[阶段 5 美术资产规范收缩与返工（已归档）](./plan/archive/initial-experience-optimization/phase-5-visual-asset-correction-plan.md)
+
+下表中的 Sheet、人工 Rect 和 sub-sprite 引用是初版已接入资产的现状记录，不再作为后续生产模板。alpha 阶段新增或重新生成的资产统一使用一图一 Sprite、逐图审计和 `Sprite Mode: Single`；既有 Sheet 只在独立迁移计划中替换。
 
 ## 资源清单
 
@@ -36,8 +39,9 @@
 - 不直接修改 `Main.unity` YAML；场景和 Prefab 改动只通过 Unity MCP 或 Editor 脚本执行。
 - 阶段 0 不修改装备槽、掉落概率、怪物属性随机、词条系统和商店状态。
 - 透明资产必须验证存在 Alpha 通道、四角透明且无明显色键边缘。
-- 生成源图保存在 `Docs/docs/assets/visual-style/source/`；角色、固定 UI 与世界物件以原尺寸整图进入 Unity，并在 Sprite Editor 中维护子 Sprite。
-- 完整提示词见 [阶段 0 视觉生成提示词](./assets/visual-style/generation-prompts.md)。
+- 新生成源图、家族合同、Manifest 和审计报告保存在对应版本的视觉资产目录；一个生产 PNG 只能包含一个 Sprite、动画帧、UI 状态或世界物件。
+- 新资产不得生成或合并 SpriteSheet，不依赖 Sprite Editor 人工切片、Pivot 微调或逐资产缩放；Unity 导入设置通过 Preset、Editor 工具或 Unity MCP 自动完成。
+- [阶段 0 视觉生成提示词](./assets/visual-style/generation-prompts.md)仅作为初版历史记录，其中的 Sheet 提示不得复用于 alpha 生产。
 
 ## Unity 接入记录
 

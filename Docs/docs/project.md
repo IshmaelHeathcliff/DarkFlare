@@ -2,7 +2,9 @@
 
 ## 项目状态
 
-`DarkFlare` 已完成首版单场景最小循环。当前可以在 `Main.unity` 中战斗、掉落、拾取，通过随身背包整理和装备物品，并与场景中的商人、打造台交互完成买卖和打造；关闭菜单后可返回战斗验证构筑变化。
+`DarkFlare` 已完成首版单场景最小循环及初步体验优化，正式进入 alpha 阶段，当前从 `alpha 0.1` 开始规划。现有基线可以在 `Main.unity` 中完成战斗、掉落、拾取、四槽装备、交易、打造和返回战斗的完整循环。
+
+alpha 版本内的阶段使用三段式名称：`alpha 0.1` 的首个阶段为 `alpha 0.1.0`，后续依次为 `alpha 0.1.1`、`alpha 0.1.2`。当前版本入口见 [alpha 0.1 开发计划](./plan/alpha-0.1-plan.md)。
 
 ## 游戏定位
 
@@ -29,7 +31,7 @@
 - `Assets/Scripts/Runtime/Core/QFramework.cs`：独立 `DarkFlare.Core` 程序集。
 - `Assets/Scripts/Runtime/GameArchitecture.cs`：组合根，注册输入 Utility、战斗 / 装备 / 背包 / 经济 Model，以及战斗、生成、掉落、交易、打造 System。
 - `Assets/Scripts/Runtime/`：`DarkFlare.Runtime` 程序集。
-- `Assets/Scripts/Tests/EditMode/`：`DarkFlare.Tests.EditMode`，首版收尾时全量 45/45 通过。
+- `Assets/Scripts/Tests/EditMode/`：`DarkFlare.Tests.EditMode`，初步体验优化收尾时全量 98/98 通过。
 
 ### 玩法模块
 
@@ -57,16 +59,16 @@
 - `Assets/Data/Preset` 已有玩家、技能、怪物、刷怪、掉落、物品、词条、商人和打造配置。
 - 玩家、怪物、投射物和掉落物 Prefab 位于 `Assets/Prefabs`，通过 Addressables 加载。
 - `Assets/UI` 已有 `GameRoot`、`Hud`、`Inventory`、`Shop`、`Crafting` 的 UXML / USS。
-- 原型美术仍以 `Assets/Art/Textures/Prototype/PrototypeSquare.png` 等占位资源为主。
+- 地图、玩家、三种怪物、七件装备、商人、打造台和运行时 UI 已完成首批视觉接入；`PrototypeSquare.png` 仅保留为调试回退。
 
 ## 当前边界
 
 首版已经完成“战斗 → 拾取 → 装备 / 交易 / 打造 → 再战斗”的人手循环，但仍是用于验证系统闭环的功能原型：
 
 - 仅有 `Main.unity` 单场景，没有撤离、场景切换或存档闭环。
-- 背包没有拖拽换位、旋转、堆叠和重量，装备只实现单武器槽。
+- 背包没有拖拽换位、旋转、堆叠和重量；装备已实现武器、护甲、左戒指和右戒指四槽，但没有耐久、套装、纸娃娃或唯一装备特效。
 - 交易没有回购或多商人独立库存；打造没有配方、材料和批量操作。
-- 战斗、场景对象和 UI 仍以原型内容与占位视觉为主。
+- 战斗内容密度、场景规模和 UI 功能深度仍属于原型基线；现有首批视觉不视为最终美术质量。
 
 完整流程与模块边界见 [`gameplay-loop.md`](./gameplay-loop.md)，输入、菜单和场景交互结构见 [`input-ui-system.md`](./input-ui-system.md)。
 

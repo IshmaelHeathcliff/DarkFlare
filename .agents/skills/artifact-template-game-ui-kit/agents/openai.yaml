@@ -1,0 +1,7 @@
+interface:
+  display_name: "Game UI Kit"
+  short_description: "生成 Game UI Kit 风格参考图或独立 UI 资产"
+  icon_large: "./assets/preview.png"
+  default_prompt: "Use $artifact-template-game-ui-kit to create a UI reference image or one audited production UI asset in this visual style."
+policy:
+  allow_implicit_invocation: true

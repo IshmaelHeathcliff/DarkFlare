@@ -2,6 +2,8 @@
 
 ## 说明
 
+> 本文仅保留初版阶段的生成溯源记录，不是 alpha 阶段提示词模板。本文中的 4×3 角色 Sheet、2×2 UI 组件 Sheet、外部裁帧和尺寸归一流程已停止使用；新生成资产必须遵守[美术资产生成规范](../../visual-asset-generation.md)，一次只生成一个固定画布生产资产并逐张审计。
+
 - 生成模式：内置 imagegen。
 - 风格板无参考图；其余资产均以 `phase-0-style-board.png` 作为严格风格参考。
 - 透明资产先生成均匀色键背景，再使用 imagegen 技能提供的 `remove_chroma_key.py` 本地移除背景。

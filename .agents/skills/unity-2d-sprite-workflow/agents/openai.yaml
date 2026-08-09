@@ -1,0 +1,4 @@
+interface:
+  display_name: "Unity 2D Single-Sprite Production"
+  short_description: "单图生成、自动审计并导入 Unity 2D 美术资产"
+  default_prompt: "Use $unity-2d-sprite-workflow to define a fixed-canvas contract, generate one PNG per Sprite, audit it, and integrate it into Unity."
