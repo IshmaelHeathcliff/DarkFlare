@@ -1,0 +1,1963 @@
+fileFormatVersion: 2
+guid: 709b3d370228fb54192e8bf3a1983f9a
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 8914223175343601252
+    second: ground_detail_rubble_00_0
+  - first:
+      213: 5057234448734017510
+    second: ground_detail_rubble_00_1
+  - first:
+      213: 9221242836728421172
+    second: ground_detail_rubble_00_2
+  - first:
+      213: -5816903130741767656
+    second: ground_detail_rubble_00_3
+  - first:
+      213: 6750208127048741810
+    second: ground_detail_rubble_00_4
+  - first:
+      213: 5242423600738945258
+    second: ground_detail_rubble_00_5
+  - first:
+      213: 4562691365071144774
+    second: ground_detail_rubble_00_6
+  - first:
+      213: -4101582847827214415
+    second: ground_detail_rubble_00_7
+  - first:
+      213: -1815880019071626062
+    second: ground_detail_rubble_00_8
+  - first:
+      213: -5798191664551494630
+    second: ground_detail_rubble_00_9
+  - first:
+      213: -8628298022444513493
+    second: ground_detail_rubble_00_10
+  - first:
+      213: -7698867972053440536
+    second: ground_detail_rubble_00_11
+  - first:
+      213: 8086848258548171171
+    second: ground_detail_rubble_00_12
+  - first:
+      213: -7366376196846883895
+    second: ground_detail_rubble_00_13
+  - first:
+      213: -3206495831621753355
+    second: ground_detail_rubble_00_14
+  - first:
+      213: 3193709339438801581
+    second: ground_detail_rubble_00_15
+  - first:
+      213: 9046216515214353506
+    second: ground_detail_rubble_00_16
+  - first:
+      213: 1852780038707815226
+    second: ground_detail_rubble_00_17
+  - first:
+      213: 1054403922737896728
+    second: ground_detail_rubble_00_18
+  - first:
+      213: -5864528953001361819
+    second: ground_detail_rubble_00_19
+  - first:
+      213: 8980829707525395141
+    second: ground_detail_rubble_00_20
+  - first:
+      213: -4914838481635885214
+    second: ground_detail_rubble_00_21
+  - first:
+      213: 6191994046717643870
+    second: ground_detail_rubble_00_22
+  - first:
+      213: 1259734596412403681
+    second: ground_detail_rubble_00_23
+  - first:
+      213: -4459933423314245527
+    second: ground_detail_rubble_00_24
+  - first:
+      213: 3358348177603635
+    second: ground_detail_rubble_00_25
+  - first:
+      213: 4683677160251947852
+    second: ground_detail_rubble_00_26
+  - first:
+      213: 3927948360474766612
+    second: ground_detail_rubble_00_27
+  - first:
+      213: 1035542969100550603
+    second: ground_detail_rubble_00_28
+  - first:
+      213: -4924934643023323063
+    second: ground_detail_rubble_00_29
+  - first:
+      213: 3194231423120270881
+    second: ground_detail_rubble_00_30
+  - first:
+      213: 6505665276281824765
+    second: ground_detail_rubble_00_31
+  - first:
+      213: 1079068790064133874
+    second: ground_detail_rubble_00_32
+  - first:
+      213: -898180560152892062
+    second: ground_detail_rubble_00_33
+  - first:
+      213: -9165427845110609409
+    second: ground_detail_rubble_00_34
+  - first:
+      213: -7580664032929540861
+    second: ground_detail_rubble_00_35
+  - first:
+      213: 4629151013076139592
+    second: ground_detail_rubble_00_36
+  - first:
+      213: 1651433334897965164
+    second: ground_detail_rubble_00_37
+  - first:
+      213: -2553257731124409733
+    second: ground_detail_rubble_00_38
+  - first:
+      213: -7197761646531635432
+    second: ground_detail_rubble_00_39
+  - first:
+      213: 628775535663099130
+    second: ground_detail_rubble_00_40
+  - first:
+      213: 7693012023718696106
+    second: ground_detail_rubble_00_41
+  - first:
+      213: 4858594529894108920
+    second: ground_detail_rubble_00_42
+  - first:
+      213: -1048134680401408650
+    second: ground_detail_rubble_00_43
+  - first:
+      213: -5368099431110350235
+    second: ground_detail_rubble_00_44
+  - first:
+      213: 315922706659624378
+    second: ground_detail_rubble_00_45
+  - first:
+      213: 7398321782817265726
+    second: ground_detail_rubble_00_46
+  - first:
+      213: 1797975684665480293
+    second: ground_detail_rubble_00_47
+  - first:
+      213: -12394745989410522
+    second: ground_detail_rubble_00_48
+  - first:
+      213: -8764778398594247213
+    second: ground_detail_rubble_00_49
+  - first:
+      213: 7948066420441414961
+    second: ground_detail_rubble_00_50
+  - first:
+      213: -7495140915565107401
+    second: ground_detail_rubble_00_51
+  - first:
+      213: 6356155643832899701
+    second: ground_detail_rubble_00_52
+  - first:
+      213: -4309521880886856321
+    second: ground_detail_rubble_00_53
+  - first:
+      213: 8976278493101828576
+    second: ground_detail_rubble_00_54
+  - first:
+      213: -5476568530893755385
+    second: ground_detail_rubble_00_55
+  - first:
+      213: 5069018612023972055
+    second: ground_detail_rubble_00_56
+  - first:
+      213: 5128693113883457740
+    second: ground_detail_rubble_00_57
+  - first:
+      213: -289261040934297732
+    second: ground_detail_rubble_00_58
+  - first:
+      213: 6302463709948701875
+    second: ground_detail_rubble_00_59
+  - first:
+      213: 2687823836989557734
+    second: ground_detail_rubble_00_60
+  - first:
+      213: -3841900665116038706
+    second: ground_detail_rubble_00_61
+  - first:
+      213: 6165294308441130805
+    second: ground_detail_rubble_00_62
+  - first:
+      213: -989970227062468896
+    second: ground_detail_rubble_00_63
+  - first:
+      213: 1262931409392475268
+    second: ground_detail_rubble_00_64
+  - first:
+      213: -7389376604735925076
+    second: ground_detail_rubble_00_65
+  - first:
+      213: 6285936103058236779
+    second: ground_detail_rubble_00_66
+  - first:
+      213: 6493617080159900619
+    second: ground_detail_rubble_00_67
+  - first:
+      213: 7900559717215849106
+    second: ground_detail_rubble_00_68
+  - first:
+      213: 2082588786847349977
+    second: ground_detail_rubble_00_69
+  - first:
+      213: 5501749063003242639
+    second: ground_detail_rubble_00_70
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 9
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 64
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 512
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: ground_detail_rubble_00_0
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 388
+        width: 14
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 466f8e69fbea5bb70800000000000000
+      internalID: 8914223175343601252
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_rubble_00_1
+      rect:
+        serializedVersion: 2
+        x: 258
+        y: 400
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6e7d8aecfe7ee2640800000000000000
+      internalID: 5057234448734017510
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_rubble_00_2
+      rect:
+        serializedVersion: 2
+        x: 155
+        y: 380
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 43b10d6f08f68ff70800000000000000
+      internalID: 9221242836728421172
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_rubble_00_3
+      rect:
+        serializedVersion: 2
+        x: 223
+        y: 381
+        width: 11
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 812874ffb65364fa0800000000000000
+      internalID: -5816903130741767656
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_rubble_00_4
+      rect:
+        serializedVersion: 2
+        x: 241
+        y: 389
+        width: 11
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2b3f1b4078e8dad50800000000000000
+      internalID: 6750208127048741810
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_rubble_00_5
+      rect:
+        serializedVersion: 2
+        x: 266
+        y: 373
+        width: 21
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ae84b244d74d0c840800000000000000
+      internalID: 5242423600738945258
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_rubble_00_6
+      rect:
+        serializedVersion: 2
+        x: 303
+        y: 381
+        width: 15
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 647cec25f9fe15f30800000000000000
+      internalID: 4562691365071144774
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_rubble_00_7
+      rect:
+        serializedVersion: 2
+        x: 136
+        y: 363
+        width: 24
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1bf7c6a81204417c0800000000000000
+      internalID: -4101582847827214415
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_rubble_00_8
+      rect:
+        serializedVersion: 2
+        x: 183
+        y: 369
+        width: 17
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2b4918c5eb2bcc6e0800000000000000
+      internalID: -1815880019071626062
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_rubble_00_9
+      rect:
+        serializedVersion: 2
+        x: 190
+        y: 188
+        width: 104
+        height: 199
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a1cf6c6b66fa88fa0800000000000000
+      internalID: -5798191664551494630
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_rubble_00_10
+      rect:
+        serializedVersion: 2
+        x: 295
+        y: 369
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b274dfbc9a0224880800000000000000
+      internalID: -8628298022444513493
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_rubble_00_11
+      rect:
+        serializedVersion: 2
+        x: 312
+        y: 368
+        width: 11
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8e76f19ae50282590800000000000000
+      internalID: -7698867972053440536
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_rubble_00_12
+      rect:
+        serializedVersion: 2
+        x: 325
+        y: 355
+        width: 21
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3a1004b25a14a3070800000000000000
+      internalID: 8086848258548171171
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_rubble_00_13
+      rect:
+        serializedVersion: 2
+        x: 344
+        y: 376
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9cb6c01b0ef55c990800000000000000
+      internalID: -7366376196846883895
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_rubble_00_14
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 350
+        width: 7
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5f52a66a70d3083d0800000000000000
+      internalID: -3206495831621753355
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_rubble_00_15
+      rect:
+        serializedVersion: 2
+        x: 170
+        y: 356
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: da2e81529b5525c20800000000000000
+      internalID: 3193709339438801581
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_rubble_00_16
+      rect:
+        serializedVersion: 2
+        x: 188
+        y: 350
+        width: 12
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 264af9eddfd9a8d70800000000000000
+      internalID: 9046216515214353506
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_rubble_00_17
+      rect:
+        serializedVersion: 2
+        x: 279
+        y: 327
+        width: 43
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a332d16f0a566b910800000000000000
+      internalID: 1852780038707815226
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_rubble_00_18
+      rect:
+        serializedVersion: 2
+        x: 344
+        y: 349
+        width: 14
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 81d129008cef1ae00800000000000000
+      internalID: 1054403922737896728
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_rubble_00_19
+      rect:
+        serializedVersion: 2
+        x: 113
+        y: 322
+        width: 19
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 56e3c552df10d9ea0800000000000000
+      internalID: -5864528953001361819
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_rubble_00_20
+      rect:
+        serializedVersion: 2
+        x: 122
+        y: 229
+        width: 94
+        height: 120
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5c29359590152ac70800000000000000
+      internalID: 8980829707525395141
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_rubble_00_21
+      rect:
+        serializedVersion: 2
+        x: 150
+        y: 340
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 26f3cadd07cfacbb0800000000000000
+      internalID: -4914838481635885214
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_rubble_00_22
+      rect:
+        serializedVersion: 2
+        x: 323
+        y: 331
+        width: 19
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e5c40f567c16ee550800000000000000
+      internalID: 6191994046717643870
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_rubble_00_23
+      rect:
+        serializedVersion: 2
+        x: 357
+        y: 318
+        width: 30
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1ef6e6ae0f97b7110800000000000000
+      internalID: 1259734596412403681
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_rubble_00_24
+      rect:
+        serializedVersion: 2
+        x: 253
+        y: 147
+        width: 96
+        height: 191
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 96866756e222b12c0800000000000000
+      internalID: -4459933423314245527
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_rubble_00_25
+      rect:
+        serializedVersion: 2
+        x: 332
+        y: 307
+        width: 24
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 33c782e566eeb0000800000000000000
+      internalID: 3358348177603635
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_rubble_00_26
+      rect:
+        serializedVersion: 2
+        x: 370
+        y: 300
+        width: 14
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c4b7d63ef83cff040800000000000000
+      internalID: 4683677160251947852
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_rubble_00_27
+      rect:
+        serializedVersion: 2
+        x: 97
+        y: 283
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 41d2d220930e28630800000000000000
+      internalID: 3927948360474766612
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_rubble_00_28
+      rect:
+        serializedVersion: 2
+        x: 110
+        y: 258
+        width: 39
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bc144e608dcfe5e00800000000000000
+      internalID: 1035542969100550603
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_rubble_00_29
+      rect:
+        serializedVersion: 2
+        x: 330
+        y: 277
+        width: 34
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 940649c190e17abb0800000000000000
+      internalID: -4924934643023323063
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_rubble_00_30
+      rect:
+        serializedVersion: 2
+        x: 356
+        y: 284
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 12669793e80345c20800000000000000
+      internalID: 3194231423120270881
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_rubble_00_31
+      rect:
+        serializedVersion: 2
+        x: 364
+        y: 268
+        width: 24
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: df52f5ca914c84a50800000000000000
+      internalID: 6505665276281824765
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_rubble_00_32
+      rect:
+        serializedVersion: 2
+        x: 396
+        y: 279
+        width: 15
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2f6bbffe85f99fe00800000000000000
+      internalID: 1079068790064133874
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_rubble_00_33
+      rect:
+        serializedVersion: 2
+        x: 84
+        y: 241
+        width: 22
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 26decef0a850983f0800000000000000
+      internalID: -898180560152892062
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_rubble_00_34
+      rect:
+        serializedVersion: 2
+        x: 182
+        y: 226
+        width: 24
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ff945b57febddc080800000000000000
+      internalID: -9165427845110609409
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_rubble_00_35
+      rect:
+        serializedVersion: 2
+        x: 340
+        y: 238
+        width: 30
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 30597a3e9321cc690800000000000000
+      internalID: -7580664032929540861
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_rubble_00_36
+      rect:
+        serializedVersion: 2
+        x: 352
+        y: 212
+        width: 30
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 84efa02f15c0e3040800000000000000
+      internalID: 4629151013076139592
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_rubble_00_37
+      rect:
+        serializedVersion: 2
+        x: 371
+        y: 239
+        width: 13
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c68f4d05ed11be610800000000000000
+      internalID: 1651433334897965164
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_rubble_00_38
+      rect:
+        serializedVersion: 2
+        x: 378
+        y: 240
+        width: 46
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b7a4f4c0f91019cd0800000000000000
+      internalID: -2553257731124409733
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_rubble_00_39
+      rect:
+        serializedVersion: 2
+        x: 417
+        y: 229
+        width: 19
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8171d88fae96c1c90800000000000000
+      internalID: -7197761646531635432
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_rubble_00_40
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 223
+        width: 16
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: afca7aea40cd9b800800000000000000
+      internalID: 628775535663099130
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_rubble_00_41
+      rect:
+        serializedVersion: 2
+        x: 98
+        y: 167
+        width: 48
+        height: 57
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aa4df8e1da113ca60800000000000000
+      internalID: 7693012023718696106
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_rubble_00_42
+      rect:
+        serializedVersion: 2
+        x: 140
+        y: 218
+        width: 18
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8fe8ef5abf13d6340800000000000000
+      internalID: 4858594529894108920
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_rubble_00_43
+      rect:
+        serializedVersion: 2
+        x: 162
+        y: 214
+        width: 20
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 67d08e9bf074471f0800000000000000
+      internalID: -1048134680401408650
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_rubble_00_44
+      rect:
+        serializedVersion: 2
+        x: 378
+        y: 204
+        width: 28
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 56ae0b1420ea085b0800000000000000
+      internalID: -5368099431110350235
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_rubble_00_45
+      rect:
+        serializedVersion: 2
+        x: 168
+        y: 169
+        width: 41
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ab54de22702626400800000000000000
+      internalID: 315922706659624378
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_rubble_00_46
+      rect:
+        serializedVersion: 2
+        x: 343
+        y: 179
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e389bd6a67e1ca660800000000000000
+      internalID: 7398321782817265726
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_rubble_00_47
+      rect:
+        serializedVersion: 2
+        x: 409
+        y: 209
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 564964feb51b3f810800000000000000
+      internalID: 1797975684665480293
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_rubble_00_48
+      rect:
+        serializedVersion: 2
+        x: 92
+        y: 187
+        width: 7
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 62158305b07f3dff0800000000000000
+      internalID: -12394745989410522
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_rubble_00_49
+      rect:
+        serializedVersion: 2
+        x: 145
+        y: 181
+        width: 25
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3d5d5c8fb704d5680800000000000000
+      internalID: -8764778398594247213
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_rubble_00_50
+      rect:
+        serializedVersion: 2
+        x: 203
+        y: 143
+        width: 44
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 13dfe997c443d4e60800000000000000
+      internalID: 7948066420441414961
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_rubble_00_51
+      rect:
+        serializedVersion: 2
+        x: 215
+        y: 184
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 737ee3a5c09ebf790800000000000000
+      internalID: -7495140915565107401
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_rubble_00_52
+      rect:
+        serializedVersion: 2
+        x: 252
+        y: 180
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 57811c7b1e9953850800000000000000
+      internalID: 6356155643832899701
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_rubble_00_53
+      rect:
+        serializedVersion: 2
+        x: 387
+        y: 177
+        width: 17
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f7537f1aea08134c0800000000000000
+      internalID: -4309521880886856321
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_rubble_00_54
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 154
+        width: 10
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0e9205a2bb5229c70800000000000000
+      internalID: 8976278493101828576
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_rubble_00_55
+      rect:
+        serializedVersion: 2
+        x: 176
+        y: 155
+        width: 22
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 70caeffefe15ff3b0800000000000000
+      internalID: -5476568530893755385
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_rubble_00_56
+      rect:
+        serializedVersion: 2
+        x: 325
+        y: 141
+        width: 29
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7d058812295c85640800000000000000
+      internalID: 5069018612023972055
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_rubble_00_57
+      rect:
+        serializedVersion: 2
+        x: 402
+        y: 165
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cc8f30fc637cc2740800000000000000
+      internalID: 5128693113883457740
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_rubble_00_58
+      rect:
+        serializedVersion: 2
+        x: 143
+        y: 131
+        width: 17
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c7f50c7ad965cfbf0800000000000000
+      internalID: -289261040934297732
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_rubble_00_59
+      rect:
+        serializedVersion: 2
+        x: 177
+        y: 117
+        width: 34
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3bc68413a59d67750800000000000000
+      internalID: 6302463709948701875
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_rubble_00_60
+      rect:
+        serializedVersion: 2
+        x: 235
+        y: 133
+        width: 24
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6eb079ef9811d4520800000000000000
+      internalID: 2687823836989557734
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_rubble_00_61
+      rect:
+        serializedVersion: 2
+        x: 278
+        y: 134
+        width: 13
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ec9eb6943b3deaac0800000000000000
+      internalID: -3841900665116038706
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_rubble_00_62
+      rect:
+        serializedVersion: 2
+        x: 299
+        y: 112
+        width: 31
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5370f5622868f8550800000000000000
+      internalID: 6165294308441130805
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_rubble_00_63
+      rect:
+        serializedVersion: 2
+        x: 358
+        y: 147
+        width: 17
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0ee8ab5d25be242f0800000000000000
+      internalID: -989970227062468896
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_rubble_00_64
+      rect:
+        serializedVersion: 2
+        x: 127
+        y: 140
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 48c9580fc65d68110800000000000000
+      internalID: 1262931409392475268
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_rubble_00_65
+      rect:
+        serializedVersion: 2
+        x: 166
+        y: 131
+        width: 13
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ca4122be029a37990800000000000000
+      internalID: -7389376604735925076
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_rubble_00_66
+      rect:
+        serializedVersion: 2
+        x: 213
+        y: 119
+        width: 22
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b65e697d4912c3750800000000000000
+      internalID: 6285936103058236779
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_rubble_00_67
+      rect:
+        serializedVersion: 2
+        x: 161
+        y: 98
+        width: 21
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bc3175a6456fd1a50800000000000000
+      internalID: 6493617080159900619
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_rubble_00_68
+      rect:
+        serializedVersion: 2
+        x: 258
+        y: 105
+        width: 20
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 29a496f243d64ad60800000000000000
+      internalID: 7900559717215849106
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_rubble_00_69
+      rect:
+        serializedVersion: 2
+        x: 340
+        y: 119
+        width: 19
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9dc7f35b777d6ec10800000000000000
+      internalID: 2082588786847349977
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_rubble_00_70
+      rect:
+        serializedVersion: 2
+        x: 234
+        y: 89
+        width: 22
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f8085af8f932a5c40800000000000000
+      internalID: 5501749063003242639
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      ground_detail_rubble_00_0: 8914223175343601252
+      ground_detail_rubble_00_1: 5057234448734017510
+      ground_detail_rubble_00_10: -8628298022444513493
+      ground_detail_rubble_00_11: -7698867972053440536
+      ground_detail_rubble_00_12: 8086848258548171171
+      ground_detail_rubble_00_13: -7366376196846883895
+      ground_detail_rubble_00_14: -3206495831621753355
+      ground_detail_rubble_00_15: 3193709339438801581
+      ground_detail_rubble_00_16: 9046216515214353506
+      ground_detail_rubble_00_17: 1852780038707815226
+      ground_detail_rubble_00_18: 1054403922737896728
+      ground_detail_rubble_00_19: -5864528953001361819
+      ground_detail_rubble_00_2: 9221242836728421172
+      ground_detail_rubble_00_20: 8980829707525395141
+      ground_detail_rubble_00_21: -4914838481635885214
+      ground_detail_rubble_00_22: 6191994046717643870
+      ground_detail_rubble_00_23: 1259734596412403681
+      ground_detail_rubble_00_24: -4459933423314245527
+      ground_detail_rubble_00_25: 3358348177603635
+      ground_detail_rubble_00_26: 4683677160251947852
+      ground_detail_rubble_00_27: 3927948360474766612
+      ground_detail_rubble_00_28: 1035542969100550603
+      ground_detail_rubble_00_29: -4924934643023323063
+      ground_detail_rubble_00_3: -5816903130741767656
+      ground_detail_rubble_00_30: 3194231423120270881
+      ground_detail_rubble_00_31: 6505665276281824765
+      ground_detail_rubble_00_32: 1079068790064133874
+      ground_detail_rubble_00_33: -898180560152892062
+      ground_detail_rubble_00_34: -9165427845110609409
+      ground_detail_rubble_00_35: -7580664032929540861
+      ground_detail_rubble_00_36: 4629151013076139592
+      ground_detail_rubble_00_37: 1651433334897965164
+      ground_detail_rubble_00_38: -2553257731124409733
+      ground_detail_rubble_00_39: -7197761646531635432
+      ground_detail_rubble_00_4: 6750208127048741810
+      ground_detail_rubble_00_40: 628775535663099130
+      ground_detail_rubble_00_41: 7693012023718696106
+      ground_detail_rubble_00_42: 4858594529894108920
+      ground_detail_rubble_00_43: -1048134680401408650
+      ground_detail_rubble_00_44: -5368099431110350235
+      ground_detail_rubble_00_45: 315922706659624378
+      ground_detail_rubble_00_46: 7398321782817265726
+      ground_detail_rubble_00_47: 1797975684665480293
+      ground_detail_rubble_00_48: -12394745989410522
+      ground_detail_rubble_00_49: -8764778398594247213
+      ground_detail_rubble_00_5: 5242423600738945258
+      ground_detail_rubble_00_50: 7948066420441414961
+      ground_detail_rubble_00_51: -7495140915565107401
+      ground_detail_rubble_00_52: 6356155643832899701
+      ground_detail_rubble_00_53: -4309521880886856321
+      ground_detail_rubble_00_54: 8976278493101828576
+      ground_detail_rubble_00_55: -5476568530893755385
+      ground_detail_rubble_00_56: 5069018612023972055
+      ground_detail_rubble_00_57: 5128693113883457740
+      ground_detail_rubble_00_58: -289261040934297732
+      ground_detail_rubble_00_59: 6302463709948701875
+      ground_detail_rubble_00_6: 4562691365071144774
+      ground_detail_rubble_00_60: 2687823836989557734
+      ground_detail_rubble_00_61: -3841900665116038706
+      ground_detail_rubble_00_62: 6165294308441130805
+      ground_detail_rubble_00_63: -989970227062468896
+      ground_detail_rubble_00_64: 1262931409392475268
+      ground_detail_rubble_00_65: -7389376604735925076
+      ground_detail_rubble_00_66: 6285936103058236779
+      ground_detail_rubble_00_67: 6493617080159900619
+      ground_detail_rubble_00_68: 7900559717215849106
+      ground_detail_rubble_00_69: 2082588786847349977
+      ground_detail_rubble_00_7: -4101582847827214415
+      ground_detail_rubble_00_70: 5501749063003242639
+      ground_detail_rubble_00_8: -1815880019071626062
+      ground_detail_rubble_00_9: -5798191664551494630
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

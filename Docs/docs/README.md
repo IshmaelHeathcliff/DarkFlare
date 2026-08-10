@@ -17,6 +17,7 @@
 - [美术资产生成规范](./visual-asset-generation.md)
 - [视觉规范](./visual-style.md)
 - [视觉资产清单](./visual-assets.md)
+- [双层地表 Tilemap](./ground-tilemap.md)
 - [已完成计划归档](./plan/archive/README.md)
 
 ## 进行中的计划

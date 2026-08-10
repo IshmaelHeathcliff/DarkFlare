@@ -280,25 +280,12 @@ namespace DarkFlare
             SetTabActive(_shopTab, showShop);
             SetTabActive(_craftingTab, showCrafting);
 
-            bool focused = false;
-
-            if (showInventory)
-            {
-                focused = _inventoryPanel != null && _inventoryPanel.FocusDefault();
-            }
-            else if (showShop)
-            {
-                focused = _shopPanel != null && _shopPanel.FocusDefault();
-            }
-            else if (showCrafting)
-            {
-                focused = _craftingPanel != null && _craftingPanel.FocusDefault();
-            }
-
-            if (!focused)
-            {
-                _closeButton.Focus();
-            }
+            Button activeTab = showInventory
+                ? _inventoryTab
+                : showShop
+                    ? _shopTab
+                    : _craftingTab;
+            activeTab?.Focus();
         }
 
         void OnInventoryTabClicked()
@@ -325,7 +312,8 @@ namespace DarkFlare
         void OnPanelGeometryChanged(GeometryChangedEvent evt)
         {
             float width = evt.newRect.width;
-            _panel.EnableInClassList("game-menu-panel--compact", width < 1260f);
+            float height = evt.newRect.height;
+            _panel.EnableInClassList("game-menu-panel--compact", width < 1100f || height < 820f);
             _panel.EnableInClassList("game-menu-panel--wide", width >= 1580f);
         }
 

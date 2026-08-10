@@ -172,9 +172,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a5d8b646819eba54e977dba010206d7c, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DarkFlare.CombatActor
-  _actorId:
+  _actorId: 
   _team: 0
   _maxHealth: 100
   _hideVisualOnDeath: 0
@@ -188,7 +188,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f46969162fa5af14194ded60b9105abd, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DarkFlare.PlayerController
   _firePoint: {fileID: 0}
   _respawnDelay: 2
@@ -202,7 +202,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 91720f964a5a0a04f9acd141bf016cb5, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.PlayerInteractionController
 --- !u!95 &6927203172082972014
 Animator:
@@ -221,7 +221,7 @@ Animator:
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
-  m_WarningMessage:
+  m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
@@ -236,7 +236,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ab381e5657887c44e9bf75f4efeed023, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.ActorAnimatorController
   _animator: {fileID: 6927203172082972014}
   _renderer: {fileID: 387292515771217056}
@@ -251,7 +251,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1d5aebde29ebbfc459de8bb5fac1d852, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.ActorVisualFeedbackController
   _actor: {fileID: 366642828949679782}
   _renderer: {fileID: 387292515771217056}

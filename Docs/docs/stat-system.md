@@ -33,6 +33,8 @@ flowchart LR
 5. 攻击发起时，`AttackSnapshotFactory` 冻结攻击者属性和修改器；`DamageCalculator` 使用快照计算类型伤害、暴击伤害、护甲和抗性。
 6. `ItemDetailSnapshotFactory` 从原始 `StatDefinition` 读取中文名和百分比标记，再交给 `ItemDetailFormatter` 生成背包、商店和打造 UI 文本。
 
+背包右侧的当前属性卡不再维护局部白名单。`HudAttributeSnapshot.Values` 按 `StatIds.All` 生成完整、有序的显示快照，当前 21 项全部可见；抗性沿用伤害结算边界，其他百分比语义与 `StatDefinition` 保持一致。
+
 ## 当前属性清单
 
 | 分组 | 稳定 ID | 中文名 | 当前运行时用途 |

@@ -2,10 +2,11 @@
 
 ## 当前状态
 
-- 状态：alpha 单图迁移已完成；92 个独立 PNG 已生成、审计、导入和重绑，旧 SpriteSheet 已清理。
+- 状态：alpha 单图迁移、双层地表 Tile 与掉落稀有度环已完成；当前共 99 个独立 PNG，旧 SpriteSheet 已清理。
 - 生产规范：[美术资产生成规范](./visual-asset-generation.md)
 - 视觉规范：[视觉规范](./visual-style.md)
 - 已归档计划：[alpha 0.1 美术资产单图迁移计划](./plan/archive/alpha-0.1-art-asset-migration-plan.md)
+- 地表模块：[双层地表 Tilemap](./ground-tilemap.md)
 - 初版返工历史：[阶段 5 美术资产规范收缩与返工](./plan/archive/initial-experience-optimization/phase-5-visual-asset-correction-plan.md)
 
 项目自有运行时栅格资产统一为“一张 PNG、一个主 Sprite”。生产资产使用 `Sprite Mode: Single`，不再维护 SpriteSheet、人工 Rect、人工 Pivot 或 sub-sprite fileID。
@@ -20,11 +21,14 @@
 | 铁壳尸傀动画帧 | 12 | 128×128 / 64 | `Assets/Art/Sprites/Monsters/Heavy/` | Monster Heavy Animator |
 | 商人动画帧 | 4 | 128×128 / 64 | `Assets/Art/Sprites/NPCs/Merchant/` | Merchant Idle Animator |
 | 投射物 | 1 | 96×96 / 64 | `Assets/Art/Sprites/Effects/projectile_arcane.png` | 飞行投射物与命中表现 |
+| 掉落稀有度环 | 1 | 96×96 / 100 | `Assets/Art/Sprites/Effects/effect_loot_rarity_ring.png` | 世界掉落旋转圆环，由运行时按稀有度着色 |
 | 装备图标 | 7 | 96×96 / 64 | `Assets/Art/Sprites/Items/Equipment/` | Addressables、世界掉落和全部物品 UI |
 | 固定 UI 图标 | 12 | 96×96 / 64 | `Assets/Art/Sprites/UI/Icons/` | HUD、菜单、装备空槽、缺失图标 |
 | UI 面板 / 槽位状态 | 4 | 独立精确画布 / 100 | `Assets/Art/Sprites/UI/Frames/` | 背包面板、默认、焦点、禁用状态 |
 | 世界物件 | 12 | 384×384 / 181 | `Assets/Art/Sprites/Environment/WorldProps/` | 营地、道路、岩石、树木与打造区装饰 |
-| 地表切片 | 1 | 512×512 / 64 | `Assets/Art/Sprites/Environment/VisualSlice/ground_slice.png` | Main 场景 5×5 地表，Wrap Repeat |
+| 基础地表 Tile | 3 | 512×512 / 64 | `Assets/Art/Sprites/Environment/GroundTiles/Base/` | `GroundBaseTilemap` 5×5 全覆盖 |
+| 地表细节 Tile | 3 | 512×512 / 64 | `Assets/Art/Sprites/Environment/GroundTiles/Details/` | `GroundDetailTilemap` 稀疏裂纹、碎石与灰烬 |
+| 旧地表风格参考 | 1 | 512×512 / 64 | `Assets/Art/Sprites/Environment/VisualSlice/ground_slice.png` | 无运行时消费者，仅保留为风格参考 |
 | 世界血条 | 2 | 64×8 / 64 | `Assets/Art/Sprites/UI/Phase5/` | 三种怪物的世界空间血条 |
 
 `Assets/Art/Textures/Prototype/PrototypeSquare.png` 保留为 64×64、100 PPU 的非生产回退纹理；正式场景和 Prefab 不得依赖它。
@@ -41,6 +45,8 @@
 ### 投射物、图标与 UI
 
 - 投射物交付画布固定 96×96；保留原 56×22 主体像素尺寸并居中补边，不做非整数放大。Projectile Prefab 根 Scale 0.25 保持不变。
+- 掉落稀有度环交付画布固定 96×96、100 PPU、Center Pivot；可见圆环为 80×80 px，四边透明留白 8 px。运行时保持 Transform Scale 1，以 55°/s 匀速顺时针旋转，不再复用 UI 槽位框或缩放脉冲。
+- 稀有度环使用同一张中性灰白 Sprite 着色：普通 `rgb(153,158,168)`、魔法 `rgb(92,138,220)`、稀有 `rgb(220,176,63)`、独特 `rgb(211,105,48)`，与 UI 稀有度语义一致。
 - 12 个固定 UI 图标交付画布固定 96×96；全家族统一使用 0.30 导出因子，再按 Alpha 加权中心放置，不按单图缩放。
 - 七件装备保持 96×96；只对战斧做整数平移以修正视觉中心，原路径、GUID 和 Addressables 所有权不变。
 - 四个 UI Frame 保留原生像素与独立画布：面板 `534×527 / Border 98`，默认槽 `436×465 / 78`，焦点槽 `479×469 / 157`，禁用槽 `436×469 / 157`。
@@ -50,7 +56,8 @@
 
 - 12 个世界物件统一使用 384×384、181 PPU、Center Pivot；保留原主体像素，不按物件单独放大。
 - 既有场景实例 Scale 属于布局意图，不在资产迁移中归一；场景位置、Collider、交互范围与排序保持不变。
-- 地表保持 512×512 Full-bleed 和 Wrap Repeat；世界血条背景与 Fill 统一为 64×8。
+- 三张基础地表 Tile 保持 512×512 Full-bleed，并通过共享边缘和对边一致性保证任意变体相邻；三张细节 Tile 使用同画布透明叠加。两层均不包含 Collider。
+- 世界血条背景与 Fill 统一为 64×8。
 
 ## 自动化与审计
 
@@ -60,14 +67,16 @@
 - 静态合同：`Docs/docs/assets/visual-assets/alpha-0.1/manifests/`
 - 机器报告：运行审计时生成到 `Temp/VisualAssetAudits/alpha-0.1/reports/`，不纳入版本控制。
 
-当前 16 份静态合同覆盖 92/92 个非 Sheet PNG，无重复、无遗漏。审计结果为 92 assets、0 errors、0 warnings，二次运行的报告哈希完全一致。
+当前 17 份静态合同覆盖 93/93 个非 Sheet 合同 PNG，无重复、无遗漏。新增六张地表 Tile 使用独立 Pilot / Family 合同和边缘审计；所有审计均未通过放宽阈值或逐图缩放资产。
 
 关键量化结果：
 
 - 固定 UI 图标视觉中心：x=48.116–48.283、y=48.110–48.397。
 - 投射物主体：56×22，视觉中心 `(51.725, 48.390)`，四边留白 20 / 37 / 20 / 37 px。
+- 掉落稀有度环主体：80×80，视觉中心 `(48.016, 48.178)`，四边留白均为 8 px。
 - 角色帧底部边距 3–5 px；Idle / Move 稳定组差异全部在冻结上限内。
 - 世界物件最小边缘留白 12 px。
+- 三张基础 Tile 的水平、垂直对边差值均为 0，跨变体共享边缘差值为 0；三张细节 Tile 的 Alpha 覆盖率为 13.7%–22.8%，四边留白均不低于 56 px。
 
 ## Unity 消费者
 
@@ -77,12 +86,14 @@
 - 七个 Item ScriptableObject 与 Addressables 继续引用原装备图标 GUID。
 - `SpriteAssetLoader` 与 `PrefabAssetLoader` 通过 `AssetReference.ReleaseAsset()` 释放并清空内部 OperationHandle，重复进入场景或复跑测试不会复用失效句柄。
 - `LootPickup.prefab`、`CraftingStation.prefab`、三种怪物血条和 `Main.unity` 通过独立 Sprite 绑定。
+- `LootPickup.prefab` 的 Halo 独立绑定掉落稀有度环，并由 `LootPickupVisual` 驱动持续旋转及四档稀有度着色。
+- `Main.unity` 通过六个独立 `Tile` 资产构成 `GroundBaseTilemap` 与 `GroundDetailTilemap`；旧 `ground_slice.png` 不再参与运行时绑定。
 - `Theme.uss` 使用 11 个已消费固定图标；`ui_icon_back.png` 作为当前未消费的语义资产保留。
 - 12 个世界物件中的 ground cracked、ground dirt、stone path 和 ruined wall 当前未消费，仍按语义名保留。
 
 ## 迁移验收结果
 
-- `Assets/Art` 当前有 92 张 PNG、0 个 `Sprite Mode: Multiple`，`Assets/Art/SpriteSheets/` 已删除。
+- `Assets/Art` 当前有 99 张 PNG、0 个 `Sprite Mode: Multiple`，`Assets/Art/SpriteSheets/` 已删除。
 - 80 个旧 sub-sprite 的 75 个消费者已全部重绑，5 个未消费语义资产仍保留。
 - 全部 PNG Importer 与画布、PPU、Pivot、Border、Point、None、Full Rect、Mipmap Off、Wrap 合同一致。
 - 对 Animation、Prefab、Scene、USS、ScriptableObject 和 Addressables 的精准扫描未发现旧 Sheet GUID、路径或 fileID。
@@ -91,3 +102,11 @@
 - `Phase5VisualIntegrationTests` 17/17 通过；受 Addressables 加载器影响的 PlayMode 冒烟用例 1/1 通过。
 - 全量 PlayMode 的一次串行运行仍可触发既有测试顺序波动，失败用例单独复跑通过，不涉及旧 Sheet 引用。
 - 运行时世界、角色、怪物、商人、打造台和 HUD 已在 16:9 画面复核；截图见 [`main-runtime-2560x1440.png`](./assets/visual-assets/alpha-0.1/acceptance/main-runtime-2560x1440.png)。
+- 双层地表专项的 19 项 EditMode 与 1 项 PlayMode 验收通过；5×5 基础层、11 格细节层、无 Collider、排序和 40×40 视觉覆盖均由自动化校验。
+
+## 掉落稀有度环生成记录
+
+- 生成工具：内置 imagegen。
+- Pilot 提示：单个深色奇幻掉落特效；中性灰白的细金属 / 奥术圆环，中心完全留空，四个方位带短尖角与少量不对称符文刻度，使旋转清晰可读；正交视图，无物品、无文字、无方框、无阴影；纯绿色色键背景。
+- 处理：统一移除色键后，以完整源画布中心为基准使用 `0.875` 等比因子，再一次性导出 96×96；没有紧边裁切、逐图 fit、手工 Sprite Editor 调整或运行时比例补偿。
+- 验收：`loot-rarity-effects.json` 为静态合同，结果为 1 asset / 0 errors / 0 warnings。

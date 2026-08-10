@@ -161,6 +161,11 @@ namespace DarkFlare.Tests
                     Assert.IsTrue(architecture.SendCommand(new OpenGameMenuCommand(merchant)), "无法打开商店布局验收");
                     yield return null;
                     yield return null;
+                    List<Button> merchantPreviewButtons = root.Query<Button>(className: "shop-item").ToList();
+                    Assert.IsNotEmpty(merchantPreviewButtons, "商人背包缺少可悬停物品");
+                    merchantPreviewButtons[0].Focus();
+                    yield return null;
+                    yield return null;
                     AssertLayoutInsideRoot(root, new[]
                     {
                         "game-menu-panel",
@@ -185,9 +190,15 @@ namespace DarkFlare.Tests
                     if (resolution.x >= 1920)
                     {
                         AssertElementsDoNotOverlap(root, "item-tooltip", "game-menu-panel");
+                        AssertTooltipSide(root, true);
                     }
 
                     Assert.IsTrue(architecture.SendCommand(new OpenGameMenuCommand(crafting)), "无法打开打造页布局验收");
+                    yield return null;
+                    yield return null;
+                    List<Button> playerPreviewButtons = root.Query<Button>(className: "inventory-item").ToList();
+                    Assert.IsNotEmpty(playerPreviewButtons, "玩家背包缺少可悬停物品");
+                    playerPreviewButtons[0].Focus();
                     yield return null;
                     yield return null;
                     AssertLayoutInsideRoot(root, new[]
@@ -210,6 +221,11 @@ namespace DarkFlare.Tests
                         "crafting-upgrade-affix",
                     });
                     AssertWorkbenchShare(root);
+
+                    if (resolution.x >= 1920)
+                    {
+                        AssertTooltipSide(root, false);
+                    }
                 }
             }
             finally
@@ -392,6 +408,21 @@ namespace DarkFlare.Tests
             Assert.IsNotNull(first, $"缺少 UI 元素 {firstName}");
             Assert.IsNotNull(second, $"缺少 UI 元素 {secondName}");
             Assert.IsFalse(first.worldBound.Overlaps(second.worldBound), $"{firstName} 遮挡了 {secondName}");
+        }
+
+        static void AssertTooltipSide(VisualElement root, bool right)
+        {
+            Rect tooltip = root.Q<VisualElement>("item-tooltip").worldBound;
+            Rect panel = root.Q<VisualElement>("game-menu-panel").worldBound;
+            Assert.AreEqual(panel.yMin, tooltip.yMin, 1f, "物品信息栏顶部未与主 UI 对齐");
+
+            if (right)
+            {
+                Assert.GreaterOrEqual(tooltip.xMin, panel.xMax, "商人物品信息栏未固定在主 UI 右侧");
+                return;
+            }
+
+            Assert.LessOrEqual(tooltip.xMax, panel.xMin, "玩家物品信息栏未固定在主 UI 左侧");
         }
 
         static void AssertWorkbenchShare(VisualElement root)

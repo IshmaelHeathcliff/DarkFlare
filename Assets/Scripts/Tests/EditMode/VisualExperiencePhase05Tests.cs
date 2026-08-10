@@ -126,8 +126,26 @@ namespace DarkFlare.Tests
             Assert.AreSame(item, pickup.Item);
             Assert.AreSame(item, visual.Item);
             Assert.AreEqual("测试大剑 · 稀有", label.text);
-            Assert.AreEqual(0.55f, halo.color.a, 0.001f);
+            Assert.AreEqual(0.82f, halo.color.a, 0.001f);
             Assert.AreNotEqual(Color.white, halo.color);
+            Assert.AreEqual(Vector3.one, halo.transform.localScale);
+            Assert.IsNull(
+                typeof(LootPickupVisual).GetField(
+                    "_pulseTween",
+                    BindingFlags.Instance | BindingFlags.NonPublic));
+            Assert.IsNotNull(
+                typeof(LootPickupVisual).GetField(
+                    "_rotationTween",
+                    BindingFlags.Instance | BindingFlags.NonPublic));
+            Assert.AreNotEqual(
+                LootPickupVisual.GetRarityColor(ItemRarity.Normal),
+                LootPickupVisual.GetRarityColor(ItemRarity.Magic));
+            Assert.AreNotEqual(
+                LootPickupVisual.GetRarityColor(ItemRarity.Magic),
+                LootPickupVisual.GetRarityColor(ItemRarity.Rare));
+            Assert.AreNotEqual(
+                LootPickupVisual.GetRarityColor(ItemRarity.Rare),
+                LootPickupVisual.GetRarityColor(ItemRarity.Unique));
         }
 
         GameObject CreateGameObject(string name, bool active = true)

@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "canvas": [512, 512],
+  "base_edge_band": 16,
+  "base_assets": [
+    "../../Assets/Art/Sprites/Environment/GroundTiles/Base/ground_base_stone_00.png",
+    "../../Assets/Art/Sprites/Environment/GroundTiles/Base/ground_base_stone_01.png",
+    "../../Assets/Art/Sprites/Environment/GroundTiles/Base/ground_base_stone_02.png"
+  ],
+  "detail_assets": [
+    "../../Assets/Art/Sprites/Environment/GroundTiles/Details/ground_detail_cracks_00.png",
+    "../../Assets/Art/Sprites/Environment/GroundTiles/Details/ground_detail_rubble_00.png",
+    "../../Assets/Art/Sprites/Environment/GroundTiles/Details/ground_detail_ash_00.png"
+  ],
+  "detail_contract": {
+    "coverage": [0.03, 0.35],
+    "edge_clearance": 48,
+    "center_x": [200, 312],
+    "center_y": [200, 312]
+  }
+}

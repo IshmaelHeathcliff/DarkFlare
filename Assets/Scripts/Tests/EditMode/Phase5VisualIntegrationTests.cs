@@ -25,7 +25,9 @@ namespace DarkFlare.Tests
         const string UiIconRoot = "Assets/Art/Sprites/UI/Icons";
         const string UiFrameRoot = "Assets/Art/Sprites/UI/Frames";
         const string WorldPropRoot = "Assets/Art/Sprites/Environment/WorldProps";
+        const string GroundBaseRoot = "Assets/Art/Sprites/Environment/GroundTiles/Base";
         const string ProjectilePath = "Assets/Art/Sprites/Effects/projectile_arcane.png";
+        const string LootRarityEffectPath = "Assets/Art/Sprites/Effects/effect_loot_rarity_ring.png";
         const string GroundSlicePath = "Assets/Art/Sprites/Environment/VisualSlice/ground_slice.png";
         const string HealthBarBackgroundPath = "Assets/Art/Sprites/UI/Phase5/world_health_bar_background.png";
         const string HealthBarFillPath = "Assets/Art/Sprites/UI/Phase5/world_health_bar_fill.png";
@@ -189,6 +191,13 @@ namespace DarkFlare.Tests
                 96,
                 96,
                 64f,
+                new Vector2(0.5f, 0.5f),
+                Vector4.zero);
+            AssertSpriteContract(
+                LootRarityEffectPath,
+                96,
+                96,
+                100f,
                 new Vector2(0.5f, 0.5f),
                 Vector4.zero);
         }
@@ -400,7 +409,8 @@ namespace DarkFlare.Tests
 
             for (int i = 0; i < UiIconPaths.Length; i++)
             {
-                if (UiIconPaths[i].EndsWith("ui_icon_back.png", StringComparison.Ordinal))
+                if (UiIconPaths[i].EndsWith("ui_icon_back.png", StringComparison.Ordinal)
+                    || UiIconPaths[i].EndsWith("ui_icon_weapon_empty.png", StringComparison.Ordinal))
                 {
                     continue;
                 }
@@ -418,7 +428,8 @@ namespace DarkFlare.Tests
             LootPickupVisual lootVisual = lootPickup.GetComponent<LootPickupVisual>();
             SerializedObject serializedLoot = new SerializedObject(lootVisual);
             Sprite missingIcon = serializedLoot.FindProperty("_missingIcon").objectReferenceValue as Sprite;
-            AssertSpritePath(halo.sprite, UiFramePaths[2], "LootPickup/Visual/Halo");
+            AssertSpritePath(halo.sprite, LootRarityEffectPath, "LootPickup/Visual/Halo");
+            Assert.AreEqual(Vector3.one, halo.transform.localScale);
             AssertSpritePath(missingIcon, UiIconPaths[11], "LootPickupVisual._missingIcon");
 
             GameObject craftingStation = AssetDatabase.LoadAssetAtPath<GameObject>(
@@ -655,7 +666,8 @@ namespace DarkFlare.Tests
                 importer.wrapMode,
                 assetPath);
 
-            if (assetPath != GroundSlicePath)
+            if (assetPath != GroundSlicePath
+                && !assetPath.StartsWith(GroundBaseRoot, StringComparison.Ordinal))
             {
                 Assert.IsTrue(importer.alphaIsTransparency, assetPath);
             }

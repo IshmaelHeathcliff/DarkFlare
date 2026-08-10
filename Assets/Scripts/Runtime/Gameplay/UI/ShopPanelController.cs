@@ -337,7 +337,6 @@ namespace DarkFlare
         {
             _selectedItem = item;
             _selectedSource = source;
-            _previewItem = null;
             _viewState.ActiveSource = source;
             _viewState.FocusTarget = ShopFocusTarget.Item;
             _viewState.ClearFeedback();
@@ -419,22 +418,22 @@ namespace DarkFlare
 
         void RefreshDetail()
         {
-            ItemInstance item = _previewItem != null ? _previewItem : _selectedItem;
-            ShopItemSource source = _previewItem != null ? _previewSource : _selectedSource;
+            ItemInstance item = _previewItem;
+            ShopItemSource source = _previewSource;
 
             if (TryFindSnapshot(item, source, out ShopItemSnapshot snapshot))
             {
-                if (source == ShopItemSource.Merchant
-                    && _merchantButtons.TryGetValue(item, out Button button))
+                if (source == ShopItemSource.Merchant)
                 {
-                    _inventoryPanel.ShowExternalTooltip(
+                    _inventoryPanel.ShowMerchantTooltip(
                         item,
-                        button,
                         $"商人库存 · 买入 {snapshot.Price} 金币");
                 }
                 else
                 {
-                    _inventoryPanel.ShowSelectedTooltip($"玩家背包 · 卖出 {snapshot.Price} 金币");
+                    _inventoryPanel.ShowPlayerTooltip(
+                        item,
+                        $"玩家背包 · 卖出 {snapshot.Price} 金币");
                 }
 
                 return;
@@ -633,6 +632,11 @@ namespace DarkFlare
             IReadOnlyList<ShopItemSnapshot> items,
             ItemListViewState state)
         {
+            if (string.IsNullOrEmpty(state.SelectedInstanceId))
+            {
+                return -1;
+            }
+
             int index = ItemSelectionResolver.ResolveIndex(
                 items,
                 state.SelectedInstanceId,

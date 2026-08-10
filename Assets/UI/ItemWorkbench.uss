@@ -1,7 +1,7 @@
 .item-workbench-template {
   flex-grow: 0;
   flex-shrink: 0;
-  width: 604px;
+  width: 560px;
   max-width: 49%;
   min-width: 540px;
 }
@@ -30,19 +30,20 @@
 }
 
 .item-workbench-equipment {
-  flex-grow: 0;
+  flex-grow: 1;
   flex-shrink: 0;
-  height: 196px;
-  min-height: 196px;
+  min-height: 304px;
   margin-bottom: 10px;
   padding: 12px;
 }
 
 .item-workbench-inventory {
-  flex-grow: 1;
+  flex-grow: 0;
+  flex-shrink: 0;
+  height: 408px;
+  min-height: 408px;
   min-width: 0;
-  min-height: 0;
-  padding: 12px;
+  padding: 8px;
 }
 
 .item-workbench-section-header {
@@ -68,9 +69,8 @@
 
 .equipment-canvas {
   position: relative;
-  flex-grow: 0;
-  height: 128px;
-  min-height: 128px;
+  flex-grow: 1;
+  min-height: 236px;
   margin-top: 6px;
   background-color: rgba(8, 10, 14, 0.45);
   border-left-width: 1px;
@@ -87,8 +87,8 @@
   position: absolute;
   left: 16px;
   right: 16px;
-  top: 8px;
-  bottom: 8px;
+  top: 12px;
+  bottom: 12px;
   flex-direction: row;
   align-items: center;
   justify-content: center;
@@ -96,27 +96,27 @@
 
 .equipment-silhouette {
   position: absolute;
-  left: 226px;
-  top: 8px;
-  width: 72px;
-  height: 112px;
+  left: 216px;
+  top: 18px;
+  width: 84px;
+  height: 154px;
   align-items: center;
   opacity: 0.22;
 }
 
 .equipment-silhouette-head {
-  width: 32px;
-  height: 32px;
-  border-top-left-radius: 16px;
-  border-top-right-radius: 16px;
-  border-bottom-left-radius: 16px;
-  border-bottom-right-radius: 16px;
+  width: 38px;
+  height: 38px;
+  border-top-left-radius: 19px;
+  border-top-right-radius: 19px;
+  border-bottom-left-radius: 19px;
+  border-bottom-right-radius: 19px;
   background-color: rgb(126, 113, 87);
 }
 
 .equipment-silhouette-body {
-  width: 64px;
-  height: 72px;
+  width: 76px;
+  height: 102px;
   margin-top: 5px;
   border-top-left-radius: 22px;
   border-top-right-radius: 22px;
@@ -129,7 +129,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 5px;
+  padding: 0;
   white-space: normal;
   -unity-text-align: lower-center;
   font-size: 10px;
@@ -177,27 +177,27 @@
 }
 
 .equipment-slot--weapon {
-  width: 70px;
-  height: 104px;
-  margin-right: 10px;
-}
-
-.equipment-slot--armor {
-  width: 76px;
-  height: 104px;
-  margin-right: 10px;
-}
-
-.equipment-slot--ring-left {
-  width: 64px;
-  height: 80px;
+  width: 100px;
+  height: 152px;
   margin-right: 8px;
 }
 
+.equipment-slot--armor {
+  width: 100px;
+  height: 152px;
+  margin-right: 8px;
+}
+
+.equipment-slot--ring-left {
+  width: 60px;
+  height: 60px;
+  margin-right: 6px;
+}
+
 .equipment-slot--ring-right {
-  width: 64px;
-  height: 80px;
-  margin-right: 12px;
+  width: 60px;
+  height: 60px;
+  margin-right: 8px;
 }
 
 .inventory-equipment-slot .inventory-equipment-slot-icon {
@@ -205,8 +205,8 @@
 }
 
 .equipment-future-slots {
-  width: 132px;
-  height: 94px;
+  width: 112px;
+  height: 112px;
   flex-shrink: 0;
   justify-content: center;
   opacity: 0.5;
@@ -226,8 +226,8 @@
 }
 
 .equipment-future-slot {
-  width: 52px;
-  height: 52px;
+  width: 48px;
+  height: 48px;
   margin-left: 4px;
   margin-right: 4px;
   background-color: rgba(20, 24, 30, 0.6);
@@ -242,10 +242,32 @@
 }
 
 .inventory-equipment-slot-icon {
-  flex-grow: 1;
+  position: absolute;
+  left: 4px;
+  right: 4px;
+  top: 4px;
+  bottom: 4px;
+  width: auto;
+  height: auto;
+  flex-grow: 0;
+  flex-shrink: 0;
   min-width: 28px;
   min-height: 28px;
   -unity-background-scale-mode: scale-to-fit;
+}
+
+.inventory-equipment-slot-label {
+  position: absolute;
+  left: 3px;
+  right: 3px;
+  bottom: 3px;
+  height: 18px;
+  padding-left: 2px;
+  padding-right: 2px;
+  -unity-text-align: middle-center;
+  font-size: 10px;
+  color: rgb(225, 216, 195);
+  background-color: rgba(10, 12, 16, 0.78);
 }
 
 .inventory-equipment-slot-icon--empty {
@@ -253,13 +275,15 @@
 }
 
 .inventory-grid-frame {
-  flex-grow: 1;
-  min-height: 344px;
+  flex-grow: 0;
+  flex-shrink: 0;
+  height: 324px;
+  min-height: 324px;
   justify-content: center;
   align-items: center;
-  margin-top: 10px;
-  margin-bottom: 8px;
-  padding: 12px;
+  margin-top: 6px;
+  margin-bottom: 4px;
+  padding: 8px;
   background-color: rgba(8, 10, 14, 0.5);
   border-left-width: 1px;
   border-right-width: 1px;
@@ -392,19 +416,25 @@
 }
 
 .game-menu-panel--compact .item-workbench-equipment {
-  height: 176px;
-  min-height: 176px;
+  height: 222px;
+  min-height: 222px;
+  flex-grow: 0;
   padding: 8px;
 }
 
 .game-menu-panel--compact .item-workbench-inventory {
+  height: 372px;
+  min-height: 372px;
   min-width: 0;
   padding: 8px;
 }
 
 .game-menu-panel--compact .inventory-grid-frame {
-  min-height: 304px;
-  padding: 8px;
+  height: 316px;
+  min-height: 316px;
+  margin-top: 4px;
+  margin-bottom: 4px;
+  padding: 4px;
 }
 
 .item-workbench-equipment .item-workbench-help {
@@ -416,7 +446,17 @@
 }
 
 .game-menu-panel--compact .equipment-canvas {
-  height: 124px;
-  min-height: 124px;
+  height: 168px;
+  min-height: 168px;
+  flex-grow: 0;
   margin-top: 4px;
+}
+
+.game-menu-panel--compact .item-workbench-inventory .item-workbench-help {
+  display: none;
+}
+
+.game-menu-panel--compact .equipment-silhouette {
+  top: 8px;
+  height: 150px;
 }

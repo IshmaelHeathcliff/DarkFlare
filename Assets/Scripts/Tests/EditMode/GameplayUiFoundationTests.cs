@@ -85,20 +85,68 @@ public class GameplayUiFoundationTests
         Assert.AreEqual(12f, snapshot.Attributes.ColdResistance);
         Assert.AreEqual(-15f, snapshot.Attributes.LightningResistance);
         Assert.AreEqual(-100f, snapshot.Attributes.ChaosResistance, "HUD 应显示伤害管线实际使用的抗性下限");
+        Assert.AreEqual(StatIds.All.Count, snapshot.Attributes.Values.Count, "属性面板快照必须覆盖全部已登记属性");
+
+        for (int i = 0; i < StatIds.All.Count; i++)
+        {
+            Assert.AreEqual(StatIds.All[i], snapshot.Attributes.Values[i].StatId);
+        }
     }
 
     [Test]
-    public void HudUxml_UsesAttributeWindowAndDoesNotShowEquipment()
+    public void AttributesMoveFromHudToInventoryContext()
     {
-        string path = Path.GetFullPath(Path.Combine(Application.dataPath, "../Assets/UI/Hud.uxml"));
-        string uxml = File.ReadAllText(path);
+        string hudPath = Path.GetFullPath(Path.Combine(Application.dataPath, "../Assets/UI/Hud.uxml"));
+        string inventoryPath = Path.GetFullPath(Path.Combine(Application.dataPath, "../Assets/UI/Inventory.uxml"));
+        string hud = File.ReadAllText(hudPath);
+        string inventory = File.ReadAllText(inventoryPath);
 
-        StringAssert.Contains("name=\"attribute-card\"", uxml);
-        StringAssert.Contains("name=\"attribute-armor\"", uxml);
-        StringAssert.Contains("name=\"attribute-chaos-resistance\"", uxml);
-        StringAssert.DoesNotContain("weapon-card", uxml);
-        StringAssert.DoesNotContain("weapon-label", uxml);
-        StringAssert.DoesNotContain("weapon-icon", uxml);
+        StringAssert.DoesNotContain("name=\"attribute-card\"", hud);
+        StringAssert.DoesNotContain("name=\"attribute-armor\"", hud);
+        StringAssert.Contains("name=\"inventory-attribute-card\"", inventory);
+        StringAssert.Contains("name=\"inventory-attribute-grid\"", inventory);
+        StringAssert.DoesNotContain("weapon-card", hud);
+        StringAssert.DoesNotContain("weapon-label", hud);
+        StringAssert.DoesNotContain("weapon-icon", hud);
+    }
+
+    [Test]
+    public void CombatFloatingText_DistinguishesTeamAndHealthChangeKind()
+    {
+        Assert.AreEqual("-12.5", DamageNumberVisual.FormatText(12.5f, CombatTextKind.Damage));
+        Assert.AreEqual("+12.5", DamageNumberVisual.FormatText(12.5f, CombatTextKind.Healing));
+        Color playerDamage = DamageNumberVisual.GetColor(ActorTeam.Player, CombatTextKind.Damage);
+        Color monsterDamage = DamageNumberVisual.GetColor(ActorTeam.Monster, CombatTextKind.Damage);
+        Color playerHealing = DamageNumberVisual.GetColor(ActorTeam.Player, CombatTextKind.Healing);
+        Color monsterHealing = DamageNumberVisual.GetColor(ActorTeam.Monster, CombatTextKind.Healing);
+
+        Assert.AreNotEqual(playerDamage, monsterDamage);
+        Assert.AreNotEqual(playerDamage, playerHealing);
+        Assert.AreNotEqual(monsterDamage, monsterHealing);
+        Assert.AreNotEqual(playerHealing, monsterHealing);
+    }
+
+    [Test]
+    public void CombatHealing_ClampsToMissingHealthAndPublishesActualAmount()
+    {
+        CombatActor actor = CreatePlayer();
+        Dictionary<DamageType, float> damage = new Dictionary<DamageType, float>
+        {
+            { DamageType.Physical, 35f },
+        };
+        actor.ReceiveDamage(new DamageResult(true, false, damage, damage));
+        List<ActorHealedEvent> events = new List<ActorHealedEvent>();
+        _architecture.RegisterEvent<ActorHealedEvent>(events.Add);
+
+        float healedAmount = _architecture.GetSystem<CombatSystem>().ApplyHealing(actor, 100f);
+
+        Assert.AreEqual(35f, healedAmount);
+        Assert.AreEqual(actor.MaxHealth, actor.CurrentHealth);
+        Assert.AreEqual(1, events.Count);
+        Assert.AreSame(actor, events[0].Actor);
+        Assert.AreEqual(35f, events[0].Amount);
+        Assert.AreEqual(0f, _architecture.GetSystem<CombatSystem>().ApplyHealing(actor, 10f));
+        Assert.AreEqual(1, events.Count, "满生命时不应发送伪治疗事件");
     }
 
     [Test]

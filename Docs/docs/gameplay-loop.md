@@ -23,7 +23,7 @@
 ## 阶段 0.5 视觉体验修正
 
 - 玩家 `Rigidbody2D` 已启用插值，以物理帧和渲染帧同步为首要方向解决移动模糊；相机继续在 `LateUpdate` 跟随，未引入 Cinemachine 或 Pixel Perfect Camera。
-- `Main.unity` 的地表扩展为 5×5，并新增闭合 `WorldBounds`。玩家 / 怪物碰撞、相机中心限制和刷怪合法范围使用同一边界来源。
+- `Main.unity` 的视觉地表扩展为 5×5，并新增闭合 `WorldBounds`。当前已在保持覆盖范围不变的前提下迁移为基础 / 细节双层 Tilemap；玩家 / 怪物碰撞、相机中心限制和刷怪合法范围仍使用同一边界来源。
 - `MonsterSpawner` 对范围外候选点重新采样，失败时回退到边界内最近点，生成间隔、半径和最大数量保持不变。
 - 世界掉落由独立 `LootPickupVisual` 绑定图标、投影、稀有度框、中文标签和悬浮呼吸动画；拾取成功、背包满保留和 Addressables Prefab 路径不变。
 
@@ -82,7 +82,7 @@
 - 裂爪猎犬和铁壳尸傀已接入独立 Sprite、Animation Clip、Animator Controller 与 Addressable Prefab；三种怪物可直接依靠轮廓和体量区分。
 - 七件正式装备使用独立 Addressable 图标，世界掉落、背包、四个装备槽、商店、打造和详情从同一物品基底解析视觉；HUD 不再消费装备图标。
 - `SpriteAssetLoader` 统一负责图标去重预热、缓存、取消清理与释放，`GameArchitecture.Deinit()` 与 Prefab Loader 一并释放资源。
-- 地图在既有 5×5 地表和 `WorldBounds` 上补充营地、路径、破损地表、边界装饰与火盆，不改变生成、碰撞、交互或 AI 规则。
+- 地图在 5×5 基础 Tilemap、稀疏细节 Tilemap 和 `WorldBounds` 上布置营地、路径、边界装饰与火盆，不改变生成、碰撞、交互或 AI 规则。
 - 商人与打造台改为独立 Prefab，通过 `WorldInteractionVisual` 响应既有焦点消息；战斗表现增加命中闪白、伤害数字、怪物血条、死亡淡出和投射物冲击。
 - `Theme.uss` 统一 HUD 与三个菜单的图标、稀有度、按钮和焦点状态，继续复用唯一 `UIDocument` 和 `EventSystem`。
 
@@ -107,7 +107,7 @@
 
 ## 场景与配置
 
-- `Assets/Scenes/Main.unity`：唯一构建场景，包含战斗启动器、刷怪器、`WorldBounds`、5×5 分层地表、营地与边界装饰、`UIRoot`、唯一 `EventSystem`、商人与打造台 Prefab。
+- `Assets/Scenes/Main.unity`：唯一构建场景，包含战斗启动器、刷怪器、`WorldBounds`、`GroundGrid` 下的 5×5 基础 Tilemap 与稀疏细节 Tilemap、营地与边界装饰、`UIRoot`、唯一 `EventSystem`、商人与打造台 Prefab。
 - `Assets/Data/Preset/Actors/玩家.asset`：玩家属性与 Prefab 引用。
 - `Assets/Data/Preset/Skills/基础投射物技能.asset`：首版投射物技能。
 - `Assets/Data/Preset/Monsters/`：三种怪物定义与 `基础刷怪表.asset`。
@@ -134,6 +134,7 @@ Prefab 通过 Addressables 预热和实例化，首版不使用 `Resources` 或�
 - 阶段 4 全量 EditMode 87/87 通过；PlayMode 12 项中 10 项通过、2 项 Input System 上游用例按原标记忽略、0 失败。正式装备交易 / 打造 / 四槽流程、固定种子前 12 只怪物双次重放和三个怪物 Addressables 预热通过，四个项目程序集编译无警告和错误。
 - 阶段 5 全量 EditMode 92/92 通过；PlayMode 12 项中 10 项通过、2 项 Input System 上游用例按原标记跳过、0 失败。Core、Runtime、Editor、EditMode 与 PlayMode 五个项目程序集编译通过；七件装备图标预热、三种怪物 Animator、战斗反馈与三档 UI 渲染通过，最终 Play Console 为 0 错误、0 警告。
 - 阶段 6 全量 EditMode 98/98 通过；PlayMode 12 项中 10 项通过、2 项 Input System 上游既有用例按标记跳过、0 失败。五个项目程序集顺序编译均为 0 警告、0 错误，Unity Console 为 0 错误、0 警告。Main 重复进入前后 Addressables 缓存稳定为 6 个 Prefab 与 7 个 Sprite，停止战斗发射源后临时伤害数字、冲击和投射物均清零。
+- 双层地表专项验收为 EditMode 19/19、PlayMode 1/1 通过；基础层 25 格、细节层 11 格、两层无 Collider，视觉覆盖继续保持 `-20..20`，`WorldBounds` 保持 `-16..16`。
 
 以上数据是首版收尾时的验证记录；后续改动仍应重新运行相关测试和 Play 流程。
 

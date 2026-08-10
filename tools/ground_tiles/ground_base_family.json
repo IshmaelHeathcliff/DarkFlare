@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "family": "ground-base",
+  "alpha_threshold": 8,
+  "canvas": {
+    "width": 512,
+    "height": 512
+  },
+  "alpha_required": false,
+  "assets": [
+    {
+      "name": "ground_base_stone_00",
+      "image": "../../Assets/Art/Sprites/Environment/GroundTiles/Base/ground_base_stone_00.png",
+      "visible_width": [512, 512],
+      "visible_height": [512, 512],
+      "alpha_coverage": [1, 1],
+      "visual_center_x": [255, 256],
+      "visual_center_y": [255, 256],
+      "bottom_margin": [0, 0],
+      "group": "base"
+    },
+    {
+      "name": "ground_base_stone_01",
+      "image": "../../Assets/Art/Sprites/Environment/GroundTiles/Base/ground_base_stone_01.png",
+      "visible_width": [512, 512],
+      "visible_height": [512, 512],
+      "alpha_coverage": [1, 1],
+      "visual_center_x": [255, 256],
+      "visual_center_y": [255, 256],
+      "bottom_margin": [0, 0],
+      "group": "base"
+    },
+    {
+      "name": "ground_base_stone_02",
+      "image": "../../Assets/Art/Sprites/Environment/GroundTiles/Base/ground_base_stone_02.png",
+      "visible_width": [512, 512],
+      "visible_height": [512, 512],
+      "alpha_coverage": [1, 1],
+      "visual_center_x": [255, 256],
+      "visual_center_y": [255, 256],
+      "bottom_margin": [0, 0],
+      "group": "base"
+    }
+  ],
+  "groups": [
+    {
+      "name": "base",
+      "max_width_delta": 0,
+      "max_height_delta": 0,
+      "max_visual_center_x_delta": 0,
+      "max_visual_center_y_delta": 0,
+      "max_bottom_margin_delta": 0,
+      "max_alpha_coverage_delta": 0
+    }
+  ]
+}

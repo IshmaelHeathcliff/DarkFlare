@@ -7,7 +7,7 @@
         <ui:Label name="item-detail-meta" text="类型与稀有度：-" class="item-detail-meta" />
       </ui:VisualElement>
     </ui:VisualElement>
-    <ui:ScrollView name="item-detail-scroll" class="item-detail-scroll" mode="Vertical">
+    <ui:VisualElement name="item-detail-body" class="item-detail-body">
       <ui:Label text="基础" class="item-detail-group-title" />
       <ui:Label name="item-detail-base" text="基础属性：-" class="item-detail-base" />
       <ui:Label text="固有属性" class="item-detail-group-title" />
@@ -16,6 +16,6 @@
       <ui:VisualElement name="item-detail-prefix-list" class="item-detail-list" />
       <ui:Label text="后缀" class="item-detail-group-title" />
       <ui:VisualElement name="item-detail-suffix-list" class="item-detail-list" />
-    </ui:ScrollView>
+    </ui:VisualElement>
   </ui:VisualElement>
 </ui:UXML>

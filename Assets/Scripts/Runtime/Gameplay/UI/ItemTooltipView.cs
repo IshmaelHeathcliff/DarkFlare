@@ -3,10 +3,17 @@ using UnityEngine.UIElements;
 
 namespace DarkFlare
 {
+    public enum ItemTooltipSide
+    {
+        Left,
+        Right
+    }
+
     public sealed class ItemTooltipView
     {
         const float EdgePadding = 8f;
-        const float AnchorGap = 10f;
+        const float PanelGap = 10f;
+        const int MaxPositionAttempts = 4;
 
         readonly VisualElement _root;
         readonly VisualElement _layer;
@@ -38,7 +45,7 @@ namespace DarkFlare
             && _contextLabel != null
             && _detailView.IsValid;
 
-        public void Show(ItemInstance item, VisualElement anchor, string context)
+        public void Show(ItemInstance item, string context, ItemTooltipSide side)
         {
             if (!IsValid || item == null)
             {
@@ -52,10 +59,11 @@ namespace DarkFlare
             _contextLabel.style.display = string.IsNullOrWhiteSpace(context)
                 ? DisplayStyle.None
                 : DisplayStyle.Flex;
+            _root.style.visibility = Visibility.Hidden;
             _root.style.display = DisplayStyle.Flex;
             _root.BringToFront();
             int generation = ++_positionGeneration;
-            _root.schedule.Execute(() => Position(anchor, generation));
+            _root.schedule.Execute(() => Position(side, generation, 0));
         }
 
         public void Hide()
@@ -64,11 +72,12 @@ namespace DarkFlare
 
             if (_root != null)
             {
+                _root.style.visibility = Visibility.Hidden;
                 _root.style.display = DisplayStyle.None;
             }
         }
 
-        void Position(VisualElement anchor, int generation)
+        void Position(ItemTooltipSide side, int generation, int attempt)
         {
             if (generation != _positionGeneration
                 || !IsValid
@@ -79,28 +88,62 @@ namespace DarkFlare
 
             Rect panelBounds = _panel.worldBound;
             Rect screenBounds = _layer.panel.visualTree.worldBound;
-            float tooltipWidth = Mathf.Max(1f, _root.resolvedStyle.width);
-            Rect anchorBounds = anchor != null && anchor.panel != null
-                ? anchor.worldBound
-                : new Rect(panelBounds.center.x, panelBounds.yMin + EdgePadding, 1f, 1f);
-            float x = panelBounds.xMin - tooltipWidth - AnchorGap;
+            Rect tooltipBounds = _root.worldBound;
 
-            if (x < screenBounds.xMin + EdgePadding)
+            bool hasValidGeometry = panelBounds.width > 1f
+                && screenBounds.width > 1f
+                && tooltipBounds.width > 1f
+                && tooltipBounds.height > 1f;
+
+            if (!hasValidGeometry)
             {
-                float exteriorRight = panelBounds.xMax + AnchorGap;
-                x = exteriorRight + tooltipWidth <= screenBounds.xMax - EdgePadding
-                    ? exteriorRight
-                    : anchorBounds.xMin - tooltipWidth - AnchorGap;
+                if (attempt < MaxPositionAttempts)
+                {
+                    _root.schedule.Execute(() => Position(side, generation, attempt + 1));
+                }
+                else
+                {
+                    Hide();
+                }
+
+                return;
+            }
+
+            float tooltipWidth = Mathf.Max(1f, tooltipBounds.width);
+            float preferredX = side == ItemTooltipSide.Left
+                ? panelBounds.xMin - tooltipWidth - PanelGap
+                : panelBounds.xMax + PanelGap;
+            float oppositeX = side == ItemTooltipSide.Left
+                ? panelBounds.xMax + PanelGap
+                : panelBounds.xMin - tooltipWidth - PanelGap;
+            float x = preferredX;
+
+            if (!FitsHorizontally(x, tooltipWidth, screenBounds))
+            {
+                x = FitsHorizontally(oppositeX, tooltipWidth, screenBounds)
+                    ? oppositeX
+                    : preferredX;
             }
 
             x = Mathf.Clamp(
                 x,
                 screenBounds.xMin + EdgePadding,
                 Mathf.Max(screenBounds.xMin + EdgePadding, screenBounds.xMax - tooltipWidth - EdgePadding));
-            float y = screenBounds.yMin + EdgePadding;
+            float tooltipHeight = Mathf.Max(1f, tooltipBounds.height);
+            float y = Mathf.Clamp(
+                panelBounds.yMin,
+                screenBounds.yMin + EdgePadding,
+                Mathf.Max(screenBounds.yMin + EdgePadding, screenBounds.yMax - tooltipHeight - EdgePadding));
             Vector2 local = _layer.WorldToLocal(new Vector2(x, y));
             _root.style.left = local.x;
             _root.style.top = local.y;
+            _root.style.visibility = Visibility.Visible;
+        }
+
+        static bool FitsHorizontally(float x, float width, Rect screenBounds)
+        {
+            return x >= screenBounds.xMin + EdgePadding
+                && x + width <= screenBounds.xMax - EdgePadding;
         }
 
         static void DisablePicking(VisualElement element)

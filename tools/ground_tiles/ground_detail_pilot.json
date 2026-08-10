@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "family": "ground-detail-pilot",
+  "alpha_threshold": 8,
+  "canvas": {
+    "width": 512,
+    "height": 512
+  },
+  "alpha_required": true,
+  "assets": [
+    {
+      "name": "ground_detail_cracks_00",
+      "image": "../../Assets/Art/Sprites/Environment/GroundTiles/Details/ground_detail_cracks_00.png",
+      "visible_width": [160, 416],
+      "visible_height": [160, 416],
+      "alpha_coverage": [0.03, 0.35],
+      "visual_center_x": [200, 312],
+      "visual_center_y": [200, 312],
+      "edge_clearance": 48
+    }
+  ]
+}

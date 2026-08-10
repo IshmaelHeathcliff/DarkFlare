@@ -90,6 +90,18 @@ namespace DarkFlare
             return false;
         }
 
+        public float ReceiveHealing(float amount)
+        {
+            if (!_isAlive || amount <= 0f)
+            {
+                return 0f;
+            }
+
+            float previousHealth = _currentHealth;
+            _currentHealth = Mathf.Min(MaxHealth, _currentHealth + amount);
+            return _currentHealth - previousHealth;
+        }
+
         public void SetModifiers(IEnumerable<ModifierInstance> modifiers)
         {
             float previousMaxHealth = MaxHealth;

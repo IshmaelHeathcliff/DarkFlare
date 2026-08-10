@@ -100,17 +100,29 @@ namespace DarkFlare.Tests
             yield return null;
             yield return null;
             VisualElement root = document.rootVisualElement;
-            Assert.IsNotNull(root.Q<VisualElement>("attribute-card"), "HUD 缺少当前属性窗口");
+            Assert.IsNull(root.Q<VisualElement>("attribute-card"), "HUD 不应继续显示当前属性窗口");
+            Assert.IsNotNull(root.Q<VisualElement>("inventory-attribute-card"), "背包右侧缺少当前属性窗口");
+            Assert.AreEqual(
+                StatIds.All.Count,
+                root.Query<Label>(className: "inventory-attribute-value").ToList().Count,
+                "当前属性窗口必须显示全部已登记属性");
             Assert.IsNull(root.Q<VisualElement>("weapon-card"), "HUD 不应继续显示当前装备");
             InventoryPanelController panel = menu.GetComponent<InventoryPanelController>();
             Keyboard keyboard = InputSystem.AddDevice<Keyboard>();
             Gamepad gamepad = InputSystem.AddDevice<Gamepad>();
+            VisualElement backpackWeaponIcon = root.Q<Button>("inventory-item-phase2_weapon")
+                .Q<VisualElement>(className: "inventory-item-icon");
+            Vector2 backpackWeaponIconSize = backpackWeaponIcon.worldBound.size;
 
             yield return SelectAndSubmit(root, "阶段二武器", keyboard.enterKey);
             Assert.AreEqual(EquipmentSlot.Weapon, panel.TargetSlot);
             yield return Submit(root.Q<Button>("inventory-equip"), keyboard.enterKey);
             Assert.AreSame(weapon, equipment.GetItem(player, EquipmentSlot.Weapon));
             Assert.AreSame(root.Q<Button>("inventory-slot-weapon"), root.focusController.focusedElement);
+            VisualElement equippedWeaponIcon = root.Q<Button>("inventory-slot-weapon")
+                .Q<VisualElement>("equipment-slot-icon");
+            Assert.GreaterOrEqual(equippedWeaponIcon.worldBound.width, backpackWeaponIconSize.x - 0.5f);
+            Assert.GreaterOrEqual(equippedWeaponIcon.worldBound.height, backpackWeaponIconSize.y - 0.5f);
 
             yield return SelectAndSubmit(root, "阶段二护甲", keyboard.enterKey);
             Assert.AreEqual(EquipmentSlot.Armor, panel.TargetSlot);
@@ -160,9 +172,9 @@ namespace DarkFlare.Tests
                     AssertLayoutInsideRoot(root, new[]
                     {
                         "game-menu-panel",
-                        "attribute-card",
-                        "attribute-armor",
-                        "attribute-chaos-resistance",
+                        "inventory-attribute-card",
+                        "inventory-attribute-armor",
+                        "inventory-attribute-chaos-resistance",
                         "inventory-page",
                         "inventory-grid",
                         "inventory-equipment",
@@ -170,7 +182,6 @@ namespace DarkFlare.Tests
                         "inventory-slot-armor",
                         "inventory-slot-ring-left",
                         "inventory-slot-ring-right",
-                        "item-tooltip",
                         "inventory-actions",
                         "inventory-equip",
                         "inventory-unequip",

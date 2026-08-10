@@ -26,6 +26,7 @@
 - 一个生产 PNG 只包含一个 Sprite、动画帧、UI 状态或世界物件，不新增 SpriteSheet，也不依赖 Sprite Editor 人工切片。
 - 生成前冻结家族画布、主体占比、视觉中心、锚点与 Unity 导入合同；生成后逐张自动审计和视觉复核。
 - 2026-08-09 已完成并归档[美术资产单图迁移计划](./archive/alpha-0.1-art-asset-migration-plan.md)：92 张 PNG 均为独立单图，8 张旧 Sheet 已清理，`Sprite Mode: Multiple` 与旧引用均为 0。该工作属于版本目标确定前的生产准备，不占用 `alpha 0.1.0` 阶段编号。
+- 2026-08-10 已完成并归档[双层地表 Tilemap 计划](./archive/alpha-0.1.0-ground-double-tilemap-plan.md)：新增六张独立地表 Tile，建立 5×5 基础层与 11 格细节层，保持视觉覆盖和玩法边界不变。
 
 ## 已知边界
 

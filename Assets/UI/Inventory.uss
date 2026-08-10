@@ -1,6 +1,76 @@
+.inventory-attribute-card {
+  min-height: 378px;
+  padding: 10px;
+  background-color: rgb(24, 28, 35);
+  border-left-width: 1px;
+  border-right-width: 1px;
+  border-top-width: 1px;
+  border-bottom-width: 1px;
+  border-left-color: rgb(56, 58, 63);
+  border-right-color: rgb(56, 58, 63);
+  border-top-color: rgb(56, 58, 63);
+  border-bottom-color: rgb(56, 58, 63);
+}
+
+.inventory-attribute-grid {
+  flex-grow: 1;
+  flex-direction: row;
+}
+
+.inventory-attribute-column {
+  flex-grow: 1;
+  min-width: 0;
+  justify-content: center;
+}
+
+.inventory-attribute-column--separated {
+  margin-left: 12px;
+  padding-left: 12px;
+  border-left-width: 1px;
+  border-left-color: rgb(66, 65, 61);
+}
+
+.inventory-attribute-row {
+  height: 31px;
+  flex-direction: row;
+  align-items: center;
+  border-bottom-width: 1px;
+  border-bottom-color: rgba(65, 66, 70, 0.6);
+}
+
+.inventory-attribute-name {
+  flex-grow: 1;
+  font-size: 12px;
+  color: rgb(166, 175, 187);
+}
+
+.inventory-attribute-value {
+  min-width: 58px;
+  font-size: 14px;
+  -unity-text-align: middle-right;
+  -unity-font-style: bold;
+  color: rgb(235, 226, 201);
+}
+
+.inventory-attribute-value--fire {
+  color: rgb(224, 139, 101);
+}
+
+.inventory-attribute-value--cold {
+  color: rgb(128, 183, 220);
+}
+
+.inventory-attribute-value--lightning {
+  color: rgb(220, 196, 105);
+}
+
+.inventory-attribute-value--chaos {
+  color: rgb(185, 139, 208);
+}
+
 .inventory-target-slot {
-  min-height: 40px;
-  padding: 9px;
+  min-height: 44px;
+  padding: 10px;
   white-space: normal;
   color: rgb(221, 202, 163);
   background-color: rgb(31, 34, 40);
@@ -8,26 +78,22 @@
   border-left-color: rgb(168, 126, 62);
 }
 
-.inventory-comparison-scroll {
-  flex-grow: 1;
-  min-height: 120px;
-  margin-bottom: 8px;
-  padding: 8px;
-  background-color: rgb(24, 28, 35);
-}
-
-.inventory-comparison {
-  white-space: normal;
-  color: rgb(160, 168, 180);
-}
-
 .inventory-feedback {
-  min-height: 62px;
+  min-height: 54px;
+  margin-top: 8px;
   margin-bottom: 8px;
   white-space: normal;
   color: rgb(159, 166, 179);
 }
 
 .inventory-actions {
-  flex-direction: column;
+  flex-direction: row;
+}
+
+.inventory-actions .item-context-action {
+  flex-grow: 1;
+}
+
+.inventory-actions .inventory-equip {
+  margin-right: 6px;
 }

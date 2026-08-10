@@ -80,6 +80,25 @@ namespace DarkFlare
             return result;
         }
 
+        public float ApplyHealing(CombatActor actor, float amount)
+        {
+            if (actor == null || !actor.IsAlive || amount <= 0f)
+            {
+                return 0f;
+            }
+
+            float healedAmount = actor.ReceiveHealing(amount);
+
+            if (healedAmount <= 0f)
+            {
+                return 0f;
+            }
+
+            Debug.Log($"[CombatSystem] {actor.ActorId} 恢复 {healedAmount:0.#} 点生命");
+            this.SendEvent(new ActorHealedEvent { Actor = actor, Amount = healedAmount });
+            return healedAmount;
+        }
+
         public void Revive(CombatActor actor, Vector3 position)
         {
             actor.Revive(position);

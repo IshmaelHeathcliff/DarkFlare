@@ -34,14 +34,14 @@ namespace DarkFlare
         float _floatDuration = 0.9f;
 
         [SerializeField]
-        [Min(0f)]
-        float _pulseAmount = 0.08f;
+        [Min(1f)]
+        float _rotationDegreesPerSecond = 55f;
 
         ItemInstance _item;
         Vector3 _visualBasePosition;
-        Vector3 _haloBaseScale;
+        Quaternion _haloBaseRotation;
         Tween _floatTween;
-        Tween _pulseTween;
+        Tween _rotationTween;
         bool _hasBaseState;
 
         public ItemInstance Item => _item;
@@ -63,7 +63,7 @@ namespace DarkFlare
 
             if (_haloRenderer != null)
             {
-                rarityColor.a = 0.55f;
+                rarityColor.a = 0.82f;
                 _haloRenderer.color = rarityColor;
             }
 
@@ -97,20 +97,20 @@ namespace DarkFlare
         {
             if (rarity == ItemRarity.Magic)
             {
-                return new Color(1f, 0.88f, 0.25f, 1f);
+                return new Color32(92, 138, 220, 255);
             }
 
             if (rarity == ItemRarity.Rare)
             {
-                return new Color(1f, 0.45f, 0.1f, 1f);
+                return new Color32(220, 176, 63, 255);
             }
 
             if (rarity == ItemRarity.Unique)
             {
-                return new Color(0.85f, 0.35f, 1f, 1f);
+                return new Color32(211, 105, 48, 255);
             }
 
-            return new Color(0.82f, 0.88f, 0.94f, 1f);
+            return new Color32(153, 158, 168, 255);
         }
 
         public static string GetRarityText(ItemRarity rarity)
@@ -198,7 +198,7 @@ namespace DarkFlare
             }
 
             _visualBasePosition = _visualRoot.localPosition;
-            _haloBaseScale = _haloRenderer.transform.localScale;
+            _haloBaseRotation = _haloRenderer.transform.localRotation;
             _hasBaseState = true;
         }
 
@@ -219,15 +219,14 @@ namespace DarkFlare
                 Ease.InOutSine,
                 -1,
                 CycleMode.Yoyo);
-            Vector3 pulseOffset = Vector3.one * _pulseAmount;
-            _pulseTween = Tween.Scale(
-                _haloRenderer.transform,
-                _haloBaseScale - pulseOffset,
-                _haloBaseScale + pulseOffset,
-                _floatDuration,
-                Ease.InOutSine,
+            _rotationTween = Tween.Custom(
+                0f,
+                -360f,
+                360f / _rotationDegreesPerSecond,
+                ApplyHaloRotation,
+                Ease.Linear,
                 -1,
-                CycleMode.Yoyo);
+                CycleMode.Restart);
         }
 
         void StopAnimations()
@@ -237,9 +236,9 @@ namespace DarkFlare
                 _floatTween.Stop();
             }
 
-            if (_pulseTween.isAlive)
+            if (_rotationTween.isAlive)
             {
-                _pulseTween.Stop();
+                _rotationTween.Stop();
             }
         }
 
@@ -257,8 +256,18 @@ namespace DarkFlare
 
             if (_haloRenderer != null)
             {
-                _haloRenderer.transform.localScale = _haloBaseScale;
+                _haloRenderer.transform.localRotation = _haloBaseRotation;
             }
+        }
+
+        void ApplyHaloRotation(float angle)
+        {
+            if (_haloRenderer == null)
+            {
+                return;
+            }
+
+            _haloRenderer.transform.localRotation = _haloBaseRotation * Quaternion.Euler(0f, 0f, angle);
         }
     }
 }

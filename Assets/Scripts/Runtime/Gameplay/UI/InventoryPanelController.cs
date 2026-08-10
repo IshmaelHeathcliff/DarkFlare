@@ -48,15 +48,14 @@ namespace DarkFlare
         VisualElement _menuPanel;
         Label _emptyLabel;
         Label _targetSlotLabel;
-        Label _comparisonLabel;
         Label _feedbackLabel;
+        VisualElement _attributeGrid;
         Button _equipButton;
         Button _unequipButton;
         ItemTooltipView _tooltip;
         GameInput _gameInput;
         ItemInstance _selectedItem;
         ItemInstance _previewItem;
-        VisualElement _previewAnchor;
         EquipmentSlot? _targetSlot;
         DragSourceKind _dragSourceKind;
         DropTargetKind _dropTargetKind;
@@ -110,6 +109,7 @@ namespace DarkFlare
             CaptureSelectionState();
             InventorySnapshot snapshot = this.SendQuery(new GetInventorySnapshotQuery());
             LastSnapshot = snapshot;
+            RefreshAttributes();
             _emptyLabel.style.display = snapshot.Items.Count == 0
                 ? DisplayStyle.Flex
                 : DisplayStyle.None;
@@ -130,11 +130,13 @@ namespace DarkFlare
 
             }
 
-            int selectedIndex = ItemSelectionResolver.ResolveIndex(
-                snapshot.Items,
-                _selectionState.SelectedInstanceId,
-                _selectionState.FallbackIndex,
-                item => item.Detail.InstanceId);
+            int selectedIndex = string.IsNullOrEmpty(_selectionState.SelectedInstanceId)
+                ? -1
+                : ItemSelectionResolver.ResolveIndex(
+                    snapshot.Items,
+                    _selectionState.SelectedInstanceId,
+                    _selectionState.FallbackIndex,
+                    item => item.Detail.InstanceId);
 
             if (selectedIndex >= 0)
             {
@@ -174,12 +176,12 @@ namespace DarkFlare
             }
         }
 
-        public void ShowExternalTooltip(ItemInstance item, VisualElement anchor, string context)
+        public void ShowMerchantTooltip(ItemInstance item, string context)
         {
             if (!_isDragging)
             {
                 _suppressTooltipUntilPreview = false;
-                _tooltip?.Show(item, anchor, context);
+                _tooltip?.Show(item, context, ItemTooltipSide.Right);
             }
         }
 
@@ -188,13 +190,13 @@ namespace DarkFlare
             RefreshDetail();
         }
 
-        public void ShowSelectedTooltip(string context)
+        public void ShowPlayerTooltip(ItemInstance item, string context)
         {
-            if (!_isDragging && !_suppressTooltipUntilPreview && _selectedItem != null)
+            if (!_isDragging && item != null)
             {
-                _tooltip?.Show(_selectedItem, GetItemAnchor(_selectedItem), context);
+                _tooltip?.Show(item, context, ItemTooltipSide.Left);
             }
-            else if (_suppressTooltipUntilPreview)
+            else
             {
                 _tooltip?.Hide();
             }
@@ -280,15 +282,14 @@ namespace DarkFlare
             _menuPanel = null;
             _emptyLabel = null;
             _targetSlotLabel = null;
-            _comparisonLabel = null;
             _feedbackLabel = null;
+            _attributeGrid = null;
             _equipButton = null;
             _unequipButton = null;
             _tooltip = null;
             _gameInput = null;
             _selectedItem = null;
             _previewItem = null;
-            _previewAnchor = null;
             _targetSlot = null;
             _suppressTooltipUntilPreview = false;
             SelectionChanged = null;
@@ -330,8 +331,8 @@ namespace DarkFlare
             _menuPanel = root.Q<VisualElement>("game-menu-panel");
             _emptyLabel = root.Q<Label>("inventory-empty");
             _targetSlotLabel = root.Q<Label>("inventory-target-slot");
-            _comparisonLabel = root.Q<Label>("inventory-comparison");
             _feedbackLabel = root.Q<Label>("inventory-feedback");
+            _attributeGrid = root.Q<VisualElement>("inventory-attribute-grid");
             _equipButton = root.Q<Button>("inventory-equip");
             _unequipButton = root.Q<Button>("inventory-unequip");
             _tooltip = new ItemTooltipView(
@@ -353,8 +354,8 @@ namespace DarkFlare
                 || _menuPanel == null
                 || _emptyLabel == null
                 || _targetSlotLabel == null
-                || _comparisonLabel == null
                 || _feedbackLabel == null
+                || _attributeGrid == null
                 || _equipButton == null
                 || _unequipButton == null
                 || _slotButtons.Count != EquipmentSlots.All.Count
@@ -500,9 +501,9 @@ namespace DarkFlare
             icon.AddToClassList("inventory-item-icon");
             ItemVisualPresenter.ApplyIcon(icon, item.Detail.IconGuid);
             button.Add(icon);
-            button.RegisterCallback<PointerEnterEvent>(_ => PreviewItem(item.Item, button));
+            button.RegisterCallback<PointerEnterEvent>(_ => PreviewItem(item.Item));
             button.RegisterCallback<PointerLeaveEvent>(_ => EndPreview(item.Item));
-            button.RegisterCallback<FocusInEvent>(_ => PreviewItem(item.Item, button));
+            button.RegisterCallback<FocusInEvent>(_ => PreviewItem(item.Item));
             button.RegisterCallback<FocusOutEvent>(_ => EndPreview(item.Item));
             button.RegisterCallback<PointerDownEvent>(
                 evt => OnInventoryPointerDown(evt, item, button),
@@ -517,8 +518,6 @@ namespace DarkFlare
             ItemInstance previous = _selectedItem;
             _suppressTooltipUntilPreview = false;
             _selectedItem = item;
-            _previewItem = null;
-            _previewAnchor = null;
             CaptureSelectionState();
             ResolveTargetSlotForSelectedItem(true);
             RefreshSelection();
@@ -534,8 +533,6 @@ namespace DarkFlare
             ItemInstance previous = _selectedItem;
             _suppressTooltipUntilPreview = false;
             _targetSlot = slot;
-            _previewItem = null;
-            _previewAnchor = null;
 
             if (_selectedItem != null && !IsCompatible(_selectedItem, slot))
             {
@@ -602,7 +599,7 @@ namespace DarkFlare
             }
         }
 
-        void PreviewItem(ItemInstance item, VisualElement anchor)
+        void PreviewItem(ItemInstance item)
         {
             if (_isDragging || _suppressTooltipUntilPreview)
             {
@@ -610,9 +607,7 @@ namespace DarkFlare
             }
 
             _previewItem = item;
-            _previewAnchor = anchor;
             RefreshDetail();
-            RefreshComparison();
         }
 
         void EndPreview(ItemInstance item)
@@ -630,9 +625,7 @@ namespace DarkFlare
             }
 
             _previewItem = null;
-            _previewAnchor = null;
             RefreshDetail();
-            RefreshComparison();
         }
 
         void RefreshSelection()
@@ -644,7 +637,7 @@ namespace DarkFlare
 
             RefreshEquipmentSlots();
             RefreshDetail();
-            RefreshComparison();
+            RefreshTargetSlotLabel();
 
             bool hasTarget = _targetSlot.HasValue;
             bool hasCandidate = TryGetSelectedSnapshot(out InventoryItemSnapshot selected);
@@ -696,10 +689,9 @@ namespace DarkFlare
                     continue;
                 }
 
-                button.text = snapshot.Item != null
-                    ? snapshot.SlotName
-                    : $"{snapshot.SlotName} · 空";
+                button.text = string.Empty;
                 VisualElement icon = button.Q<VisualElement>("equipment-slot-icon");
+                Label slotLabel = button.Q<Label>("equipment-slot-label");
 
                 if (icon == null)
                 {
@@ -713,8 +705,22 @@ namespace DarkFlare
                     button.Insert(0, icon);
                 }
 
+                if (slotLabel == null)
+                {
+                    slotLabel = new Label
+                    {
+                        name = "equipment-slot-label",
+                        pickingMode = PickingMode.Ignore,
+                    };
+                    slotLabel.AddToClassList("inventory-equipment-slot-label");
+                    button.Add(slotLabel);
+                }
+
                 ItemVisualPresenter.ApplyIcon(icon, snapshot.Detail.IconGuid);
                 icon.EnableInClassList("inventory-equipment-slot-icon--empty", snapshot.Item == null);
+                slotLabel.text = snapshot.Item != null
+                    ? snapshot.SlotName
+                    : $"{snapshot.SlotName} · 空";
                 button.tooltip = snapshot.Item != null
                     ? $"{snapshot.Detail.DisplayName} · {ItemDetailFormatter.GetRarityText(snapshot.Detail.Rarity)}"
                     : $"{snapshot.SlotName}为空";
@@ -737,58 +743,111 @@ namespace DarkFlare
                 return;
             }
 
-            ItemInstance item = _previewItem != null ? _previewItem : _selectedItem;
-
-            if (item != null)
-            {
-                VisualElement anchor = _previewItem != null
-                    ? _previewAnchor
-                    : GetItemAnchor(item);
-                _tooltip.Show(item, anchor, BuildTooltipContext(item));
-                return;
-            }
-
-            if (_targetSlot.HasValue
-                && TryGetSlotSnapshot(_targetSlot.Value, out EquipmentSlotSnapshot slotSnapshot)
-                && slotSnapshot.Item != null)
+            if (_previewItem != null)
             {
                 _tooltip.Show(
-                    slotSnapshot.Item,
-                    _slotButtons[_targetSlot.Value],
-                    $"已装备 · {slotSnapshot.SlotName}");
+                    _previewItem,
+                    BuildTooltipContext(_previewItem),
+                    ItemTooltipSide.Left);
                 return;
             }
 
             _tooltip.Hide();
         }
 
-        void RefreshComparison()
+        void RefreshTargetSlotLabel()
         {
             if (!_targetSlot.HasValue)
             {
-                _targetSlotLabel.text = "目标槽位：未选择";
-                _comparisonLabel.text = "选择候选物品和目标槽位后显示";
+                _targetSlotLabel.text = "操作槽位：未选择";
                 return;
             }
 
-            EquipmentSlot slot = _targetSlot.Value;
-            _targetSlotLabel.text = $"目标槽位：{EquipmentSlots.GetDisplayName(slot)}";
-            TryGetSlotSnapshot(slot, out EquipmentSlotSnapshot slotSnapshot);
-            ItemInstance candidate = _previewItem != null ? _previewItem : _selectedItem;
+            _targetSlotLabel.text = $"操作槽位：{EquipmentSlots.GetDisplayName(_targetSlot.Value)}";
+        }
 
-            if (candidate == null || !IsCompatible(candidate, slot))
+        void RefreshAttributes()
+        {
+            HudSnapshot snapshot = this.SendQuery(new GetHudSnapshotQuery());
+            IReadOnlyList<HudAttributeValue> attributes = snapshot.Attributes.Values;
+            int firstColumnCount = (attributes.Count + 1) / 2;
+            _attributeGrid.Clear();
+            _attributeGrid.Add(CreateAttributeColumn(attributes, 0, firstColumnCount, false, snapshot.HasPlayer));
+            _attributeGrid.Add(CreateAttributeColumn(
+                attributes,
+                firstColumnCount,
+                attributes.Count,
+                true,
+                snapshot.HasPlayer));
+        }
+
+        static VisualElement CreateAttributeColumn(
+            IReadOnlyList<HudAttributeValue> attributes,
+            int startIndex,
+            int endIndex,
+            bool separated,
+            bool hasPlayer)
+        {
+            VisualElement column = new VisualElement();
+            column.AddToClassList("inventory-attribute-column");
+
+            if (separated)
             {
-                _comparisonLabel.text = slotSnapshot.Item != null
-                    ? $"当前：{slotSnapshot.Detail.DisplayName}"
-                    : "当前槽位为空";
-                return;
+                column.AddToClassList("inventory-attribute-column--separated");
             }
 
-            EquipmentComparisonSnapshot comparison = EquipmentComparisonFactory.Create(
-                slot,
-                slotSnapshot.Item,
-                candidate);
-            _comparisonLabel.text = string.Join("\n", comparison.Lines);
+            for (int i = startIndex; i < endIndex; i++)
+            {
+                HudAttributeValue attribute = attributes[i];
+                VisualElement row = new VisualElement();
+                row.AddToClassList("inventory-attribute-row");
+                Label name = new Label(attribute.DisplayName);
+                name.AddToClassList("inventory-attribute-name");
+                Label value = new Label
+                {
+                    name = $"inventory-attribute-{attribute.StatId.Replace('_', '-')}",
+                    text = attribute.IsPercentage
+                        ? FormatPercentage(attribute.Value, hasPlayer)
+                        : FormatAttribute(attribute.Value, hasPlayer),
+                };
+                value.AddToClassList("inventory-attribute-value");
+                AddAttributeColorClass(value, attribute.StatId);
+                row.Add(name);
+                row.Add(value);
+                column.Add(row);
+            }
+
+            return column;
+        }
+
+        static void AddAttributeColorClass(VisualElement value, string statId)
+        {
+            if (statId == StatIds.FireDamage || statId == StatIds.FireResistance)
+            {
+                value.AddToClassList("inventory-attribute-value--fire");
+            }
+            else if (statId == StatIds.ColdDamage || statId == StatIds.ColdResistance)
+            {
+                value.AddToClassList("inventory-attribute-value--cold");
+            }
+            else if (statId == StatIds.LightningDamage || statId == StatIds.LightningResistance)
+            {
+                value.AddToClassList("inventory-attribute-value--lightning");
+            }
+            else if (statId == StatIds.ChaosDamage || statId == StatIds.ChaosResistance)
+            {
+                value.AddToClassList("inventory-attribute-value--chaos");
+            }
+        }
+
+        static string FormatAttribute(float value, bool hasPlayer)
+        {
+            return hasPlayer ? value.ToString("0.##") : "--";
+        }
+
+        static string FormatPercentage(float value, bool hasPlayer)
+        {
+            return hasPlayer ? $"{value:0.#}%" : "--";
         }
 
         bool TryGetSelectedSnapshot(out InventoryItemSnapshot selected)
@@ -1533,7 +1592,7 @@ namespace DarkFlare
                 && TryGetSlotSnapshot(slot, out EquipmentSlotSnapshot snapshot)
                 && snapshot.Item != null)
             {
-                PreviewItem(snapshot.Item, element);
+                PreviewItem(snapshot.Item);
             }
         }
 
@@ -1576,16 +1635,6 @@ namespace DarkFlare
 
             snapshot = default;
             return false;
-        }
-
-        VisualElement GetItemAnchor(ItemInstance item)
-        {
-            if (item != null && _itemButtons.TryGetValue(item, out Button button))
-            {
-                return button;
-            }
-
-            return _workbench;
         }
 
         string BuildTooltipContext(ItemInstance item)

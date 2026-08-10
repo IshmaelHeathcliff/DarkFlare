@@ -12,6 +12,10 @@ DarkFlare/
   Packages/
   ProjectSettings/
   tools/
+    ground_tiles/
+      process_ground_tiles.py
+      audit_ground_tiles.py
+      ground_tile_contract.json
     visual_slice/
       prepare_assets.py
       asset_pipeline_manifest.json
@@ -34,9 +38,11 @@ Assets/
       Monsters/{Basic,Swift,Heavy}/
       NPCs/Merchant/
       Effects/
-      Environment/{VisualSlice,WorldProps}/
+      Environment/{GroundTiles,VisualSlice,WorldProps}/
       Items/Equipment/
       UI/{Frames,Icons,Phase5}/
+    Tiles/
+      Environment/Ground/
     Textures/
       Prototype/
   Data/
@@ -90,10 +96,12 @@ Assets/
     Editor/                           # 程序集 DarkFlare.Editor（仅 Editor 平台）
       DarkFlare.Editor.asmdef
       ConfigCenterWindow.cs
+      GroundTilemapSetup.cs
       VisualAssetSingleSpriteMigration.cs
     Tests/
       EditMode/                       # 程序集 DarkFlare.Tests.EditMode
         DarkFlare.Tests.EditMode.asmdef
+        GroundTilemapTests.cs
         Phase5VisualIntegrationTests.cs
       PlayMode/                       # 程序集 DarkFlare.Tests.PlayMode
         DarkFlare.Tests.PlayMode.asmdef
@@ -130,10 +138,11 @@ Addressables 的配置目录，包含资源组、模板和构建器配置。后�
 
 - `Animations/Clips` 与 `Animations/Controllers`：角色、怪物和商人的动画资源。
 - `Sprites/Characters`、`Monsters`、`NPCs`：52 张 128×128 独立动画帧。
-- `Sprites/Effects`、`Environment`、`Items`、`UI`：独立投射物、世界物件、装备图标、固定 UI 图标与 UI Frame。
+- `Sprites/Effects`、`Environment`、`Items`、`UI`：独立投射物、世界物件、六张地表 Tile 源图、装备图标、固定 UI 图标与 UI Frame。
+- `Tiles/Environment/Ground`：由地表源图自动生成的六个 Unity `Tile` 资产。
 - `Textures/Prototype/PrototypeSquare.png`：64×64 的非生产回退纹理，正式场景和 Prefab 不依赖它。
 
-项目自有运行时栅格资产统一使用 `Sprite Mode: Single`。旧 `Assets/Art/SpriteSheets/` 已在 alpha 0.1 前置迁移中清理，当前不保留生产 SpriteSheet 或 sub-sprite fileID 依赖。生成、审计与迁移工具见 `tools/visual_slice/` 和 `Assets/Scripts/Editor/VisualAssetSingleSpriteMigration.cs`。
+项目自有运行时栅格资产统一使用 `Sprite Mode: Single`。旧 `Assets/Art/SpriteSheets/` 已在 alpha 0.1 前置迁移中清理，当前不保留生产 SpriteSheet 或 sub-sprite fileID 依赖。常规单图工具见 `tools/visual_slice/`；双层地表的生成审计和场景重建入口见 `tools/ground_tiles/` 与 `Assets/Scripts/Editor/GroundTilemapSetup.cs`。
 
 ### `Assets/Data`
 
@@ -168,7 +177,7 @@ Addressables 的配置目录，包含资源组、模板和构建器配置。后�
 
 同时 `ProjectSettings/EditorBuildSettings.asset` 里当前也只注册了这个场景。
 
-`Main.unity` 当前包含常驻 `UIRoot`（`UIDocument` + HUD / 菜单 / 背包 / 商店 / 打造 / 交互提示控制器）、唯一 `EventSystem`，以及可交互的 `Merchant` 与 `CraftingStation` 原型对象。`InputSystemUIInputModule` 引用项目 `InputSystem_Actions.inputactions` 的 `UI` action map。
+`Main.unity` 当前包含常驻 `UIRoot`（`UIDocument` + HUD / 菜单 / 背包 / 商店 / 打造 / 交互提示控制器）、唯一 `EventSystem`，以及可交互的 `Merchant` 与 `CraftingStation` 原型对象。视觉地表位于 `GroundGrid`，包含 5×5 全覆盖的 `GroundBaseTilemap` 和 11 格稀疏的 `GroundDetailTilemap`；两层均不带 Collider，玩法边界仍由独立 `WorldBounds` 提供。`InputSystemUIInputModule` 引用项目 `InputSystem_Actions.inputactions` 的 `UI` action map。
 
 ### `Assets/Scripts`
 

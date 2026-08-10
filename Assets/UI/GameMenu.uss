@@ -12,10 +12,10 @@
 
 .game-menu-panel {
   position: relative;
-  width: 1340px;
-  max-width: 96%;
-  height: 850px;
-  max-height: 94%;
+  width: 1160px;
+  max-width: 92%;
+  height: 940px;
+  max-height: 96%;
   padding: 16px;
   color: rgb(224, 226, 231);
   background-color: rgb(14, 17, 22);
@@ -238,11 +238,11 @@
 .item-tooltip {
   position: absolute;
   display: none;
-  width: 270px;
-  height: 520px;
-  min-height: 520px;
-  max-height: 520px;
-  padding: 14px;
+  width: 360px;
+  height: 680px;
+  min-height: 680px;
+  max-height: 680px;
+  padding: 16px;
   background-color: rgba(14, 18, 24, 0.98);
 }
 

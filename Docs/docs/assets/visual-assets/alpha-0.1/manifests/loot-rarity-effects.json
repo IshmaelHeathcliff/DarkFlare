@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "family": "loot-rarity-effects",
+  "alpha_threshold": 8,
+  "canvas": { "width": 96, "height": 96 },
+  "alpha_required": true,
+  "export_transform": { "uniform_scale": 0.875, "alignment": "source-canvas-centered" },
+  "unity_import": { "pixels_per_unit": 100, "pivot": [0.5, 0.5], "filter": "Point", "mesh": "FullRect" },
+  "assets": [
+    {
+      "name": "rarity-ring",
+      "image": "../../../../../../Assets/Art/Sprites/Effects/effect_loot_rarity_ring.png",
+      "visible_width": [79, 81],
+      "visible_height": [79, 81],
+      "alpha_coverage": [0.09, 0.11],
+      "visual_center_x": [47, 49],
+      "visual_center_y": [47, 49],
+      "bottom_margin": [7, 9],
+      "edge_clearance": 8
+    }
+  ],
+  "groups": []
+}

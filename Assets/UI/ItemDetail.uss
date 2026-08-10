@@ -61,10 +61,10 @@
   color: rgb(255, 178, 91);
 }
 
-.item-detail-scroll {
+.item-detail-body {
   flex-grow: 1;
   min-height: 120px;
-  padding-right: 4px;
+  padding-right: 6px;
 }
 
 .item-detail-group-title {

@@ -77,7 +77,7 @@ namespace DarkFlare.Tests
 
             PressAndRelease(keyboard.tabKey);
             yield return null;
-            AssertMenuOpen(menu, document, acceptanceItem, "键盘 Tab");
+            AssertMenuOpen(menu, document, "键盘 Tab");
 
             PressAndRelease(keyboard.escapeKey);
             yield return null;
@@ -85,7 +85,7 @@ namespace DarkFlare.Tests
 
             PressAndRelease(gamepad.startButton);
             yield return null;
-            AssertMenuOpen(menu, document, acceptanceItem, "手柄 Start");
+            AssertMenuOpen(menu, document, "手柄 Start");
 
             PressAndRelease(gamepad.buttonEast);
             yield return null;
@@ -101,7 +101,7 @@ namespace DarkFlare.Tests
 
                 Assert.AreEqual(resolution.x, Screen.width, $"Game View 宽度未切换为 {resolution.x}");
                 Assert.AreEqual(resolution.y, Screen.height, $"Game View 高度未切换为 {resolution.y}");
-                AssertMenuOpen(menu, document, acceptanceItem, "1920×1080");
+                AssertMenuOpen(menu, document, "1920×1080");
                 AssertLayoutInsideRoot(document.rootVisualElement);
                 menu.GetArchitecture().GetUtility<GameInput>().SwitchToGameplay();
                 yield return null;
@@ -211,6 +211,30 @@ namespace DarkFlare.Tests
             InventorySnapshot unequipped = architecture.SendQuery(new GetInventorySnapshotQuery());
             Assert.IsNull(unequipped.CurrentWeapon, "从装备槽拖回背包后武器仍处于装备状态");
             Assert.IsTrue(ContainsItem(unequipped, weapon), "从装备槽拖回背包后武器未回到背包");
+            itemButton = FindInventoryButton(root, weapon.BaseDefinition.DisplayName);
+            Set(mouse.position, PanelToScreen(root, root.worldBound.max - new Vector2(12f, 12f)));
+            yield return null;
+            Assert.AreEqual(
+                DisplayStyle.None,
+                root.Q<VisualElement>("item-tooltip").resolvedStyle.display,
+                "鼠标离开所有物品后提示窗仍然可见");
+            Set(mouse.position, PanelToScreen(root, itemButton.worldBound.center));
+            yield return null;
+            yield return null;
+            VisualElement tooltip = root.Q<VisualElement>("item-tooltip");
+
+            for (int i = 0; i < 10 && tooltip.resolvedStyle.visibility != Visibility.Visible; i++)
+            {
+                yield return null;
+            }
+
+            Assert.AreEqual(DisplayStyle.Flex, tooltip.resolvedStyle.display, "拖回背包后首次悬停未显示物品信息");
+            Assert.AreEqual(Visibility.Visible, tooltip.resolvedStyle.visibility, "物品信息完成定位后仍不可见");
+            Assert.AreEqual(
+                root.Q<VisualElement>("game-menu-panel").worldBound.yMin,
+                tooltip.worldBound.yMin,
+                1f,
+                "拖回背包后物品信息顶部位置错误");
             architecture.GetUtility<GameInput>().SwitchToGameplay();
             yield return null;
         }
@@ -372,21 +396,22 @@ namespace DarkFlare.Tests
         static void AssertMenuOpen(
             GameMenuController menu,
             UIDocument document,
-            ItemInstance selectedItem,
             string inputPath)
         {
             VisualElement overlay = document.rootVisualElement.Q<VisualElement>("game-menu-overlay");
             Focusable focusedElement = document.rootVisualElement.focusController.focusedElement;
             VisualElement detailRoot = document.rootVisualElement.Q<VisualElement>("item-tooltip");
-            Label selectedName = detailRoot.Q<Label>("item-detail-name");
             Assert.IsTrue(menu.IsOpen, $"{inputPath} 未打开菜单");
             Assert.AreEqual(DisplayStyle.Flex, overlay.resolvedStyle.display, $"{inputPath} 菜单遮罩不可见");
             Assert.AreEqual(0f, Time.timeScale, $"{inputPath} 打开菜单后未暂停玩法");
             Assert.IsNotNull(focusedElement, $"{inputPath} 打开菜单后没有默认焦点");
+            Assert.IsNull(
+                document.rootVisualElement.Q<VisualElement>(className: "inventory-item--selected"),
+                $"{inputPath} 在没有操作物品时错误创建了默认选择");
             Assert.AreEqual(
-                selectedItem.BaseDefinition.DisplayName,
-                selectedName.text,
-                $"{inputPath} 未显示当前选中装备");
+                DisplayStyle.None,
+                detailRoot.resolvedStyle.display,
+                $"{inputPath} 在没有悬停物品时错误显示了默认物品信息");
         }
 
         static void AssertMenuClosed(GameMenuController menu, UIDocument document, string inputPath)
@@ -405,7 +430,6 @@ namespace DarkFlare.Tests
                 "inventory-page",
                 "inventory-grid",
                 "item-workbench-shared",
-                "item-tooltip",
                 "inventory-equip",
                 "game-menu-close",
             };
@@ -426,8 +450,23 @@ namespace DarkFlare.Tests
 
             AssertInventoryGridInsideFrame(root);
             Rect equipment = root.Q<VisualElement>("inventory-equipment").worldBound;
+            Rect inventoryPanel = root.Q<VisualElement>(className: "item-workbench-inventory").worldBound;
             Rect inventory = root.Q<VisualElement>("inventory-grid-frame").worldBound;
             Assert.LessOrEqual(equipment.yMax, inventory.yMin + 1f, "装备区没有位于背包上方");
+            Assert.Greater(equipment.height, inventoryPanel.height, "装备区高度没有高于压缩后的背包区");
+            Rect cell = root.Q<VisualElement>(className: "inventory-cell").worldBound;
+            Rect weapon = root.Q<VisualElement>("inventory-slot-weapon").worldBound;
+            Rect armor = root.Q<VisualElement>("inventory-slot-armor").worldBound;
+            Rect ringLeft = root.Q<VisualElement>("inventory-slot-ring-left").worldBound;
+            Rect ringRight = root.Q<VisualElement>("inventory-slot-ring-right").worldBound;
+            Assert.GreaterOrEqual(weapon.width, cell.width * 2f + 4f, "武器槽宽度小于背包 2 格");
+            Assert.GreaterOrEqual(weapon.height, cell.height * 3f + 8f, "武器槽高度小于背包 3 格");
+            Assert.GreaterOrEqual(armor.width, cell.width * 2f + 4f, "护甲槽宽度小于背包 2 格");
+            Assert.GreaterOrEqual(armor.height, cell.height * 3f + 8f, "护甲槽高度小于背包 3 格");
+            Assert.GreaterOrEqual(ringLeft.width, cell.width, "左戒指槽小于背包 1 格");
+            Assert.AreEqual(ringLeft.width, ringLeft.height, 0.1f, "左戒指槽不是 1:1");
+            Assert.GreaterOrEqual(ringRight.width, cell.width, "右戒指槽小于背包 1 格");
+            Assert.AreEqual(ringRight.width, ringRight.height, 0.1f, "右戒指槽不是 1:1");
         }
 
         static void AssertInventoryGridInsideFrame(VisualElement root)

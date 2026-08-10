@@ -59,6 +59,11 @@ def build_standalone_assets() -> list[dict[str, object]]:
             64.0,
         ),
         standalone_asset(
+            "Assets/Art/Sprites/Effects/effect_loot_rarity_ring.png",
+            (96, 96),
+            100.0,
+        ),
+        standalone_asset(
             "Assets/Art/Sprites/Environment/VisualSlice/ground_slice.png",
             (512, 512),
             64.0,

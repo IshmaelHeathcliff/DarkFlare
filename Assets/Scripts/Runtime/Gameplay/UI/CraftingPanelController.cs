@@ -302,7 +302,6 @@ namespace DarkFlare
         void SelectItem(ItemInstance item)
         {
             _selectedItem = item;
-            _previewItem = null;
             CaptureItemState();
             _selectedAffix = null;
             BuildAffixList(null);
@@ -461,7 +460,7 @@ namespace DarkFlare
 
         void RefreshDetail()
         {
-            ItemInstance item = _previewItem != null ? _previewItem : _selectedItem;
+            ItemInstance item = _previewItem;
 
             for (int i = 0; i < LastSnapshot.Items.Count; i++)
             {
@@ -470,7 +469,9 @@ namespace DarkFlare
                     continue;
                 }
 
-                _inventoryPanel.ShowSelectedTooltip("打造候选 · 所有操作需明确确认");
+                _inventoryPanel.ShowPlayerTooltip(
+                    item,
+                    "打造候选 · 所有操作需明确确认");
                 return;
             }
 

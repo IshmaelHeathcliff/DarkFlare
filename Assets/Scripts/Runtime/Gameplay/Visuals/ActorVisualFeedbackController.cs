@@ -82,6 +82,7 @@ namespace DarkFlare
             }
 
             _registrations.Add(this.RegisterEvent<ActorDamagedEvent>(OnActorDamaged));
+            _registrations.Add(this.RegisterEvent<ActorHealedEvent>(OnActorHealed));
             _registrations.Add(this.RegisterEvent<ActorDiedEvent>(OnActorDied));
             _registrations.Add(this.RegisterEvent<ActorRevivedEvent>(OnActorRevived));
         }
@@ -104,7 +105,30 @@ namespace DarkFlare
             }
 
             Flash();
-            DamageNumberVisual.Spawn(transform.position, e.Result.TotalDamage);
+            DamageNumberVisual.Spawn(
+                transform.position,
+                e.Result.TotalDamage,
+                _actor.Team,
+                CombatTextKind.Damage);
+
+            if (_monsterHealthBar != null)
+            {
+                _monsterHealthBar.Refresh(_actor);
+            }
+        }
+
+        void OnActorHealed(ActorHealedEvent e)
+        {
+            if (e.Actor != _actor || e.Amount <= 0f)
+            {
+                return;
+            }
+
+            DamageNumberVisual.Spawn(
+                transform.position,
+                e.Amount,
+                _actor.Team,
+                CombatTextKind.Healing);
 
             if (_monsterHealthBar != null)
             {

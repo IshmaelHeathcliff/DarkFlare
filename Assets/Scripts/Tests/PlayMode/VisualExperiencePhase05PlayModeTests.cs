@@ -3,6 +3,7 @@ using DarkFlare;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Tilemaps;
 using UnityEngine.TestTools;
 
 namespace DarkFlare.Tests
@@ -52,10 +53,14 @@ namespace DarkFlare.Tests
             Assert.IsNotNull(follow.WorldBounds, "相机未绑定 WorldBounds");
             Assert.AreSame(follow.WorldBounds, spawner.WorldBounds, "相机与刷怪器未共用同一边界");
 
-            GameObject ground = GameObject.Find("VisualSliceGround");
+            GameObject ground = GameObject.Find("GroundGrid");
             GameObject boundsObject = GameObject.Find("WorldBounds");
             Assert.IsNotNull(ground);
-            Assert.AreEqual(25, ground.transform.childCount);
+            Assert.AreEqual(2, ground.transform.childCount);
+            Tilemap baseTilemap = ground.transform.Find("GroundBaseTilemap").GetComponent<Tilemap>();
+            Tilemap detailTilemap = ground.transform.Find("GroundDetailTilemap").GetComponent<Tilemap>();
+            Assert.AreEqual(25, CountTiles(baseTilemap));
+            Assert.AreEqual(11, CountTiles(detailTilemap));
             Assert.IsNotNull(boundsObject);
             Assert.AreEqual(follow.WorldBounds, boundsObject.GetComponent<EdgeCollider2D>());
 
@@ -70,9 +75,38 @@ namespace DarkFlare.Tests
             Assert.LessOrEqual(clamped.y + halfHeight, groundBounds.max.y);
         }
 
+        [UnityTest]
+        public IEnumerator LootRarityRing_RotatesAndUsesRuntimeRarityColor()
+        {
+            GameObject root = new GameObject("LootPickupVisualTest");
+            GameObject visualRoot = new GameObject("Visual");
+            GameObject halo = new GameObject("Halo");
+            visualRoot.transform.SetParent(root.transform, false);
+            halo.transform.SetParent(visualRoot.transform, false);
+            SpriteRenderer haloRenderer = halo.AddComponent<SpriteRenderer>();
+            LootPickupVisual visual = root.AddComponent<LootPickupVisual>();
+            ItemBaseDefinition definition = ScriptableObject.CreateInstance<ItemBaseDefinition>();
+            ItemInstance item = definition.CreateInstance("loot-ring-playmode", 1, 1, ItemRarity.Magic);
+            Quaternion initialRotation = halo.transform.localRotation;
+
+            visual.Bind(item);
+            yield return new WaitForSeconds(0.25f);
+
+            Assert.Greater(Quaternion.Angle(initialRotation, halo.transform.localRotation), 5f);
+            Color expected = LootPickupVisual.GetRarityColor(ItemRarity.Magic);
+            Assert.AreEqual(expected.r, haloRenderer.color.r, 0.001f);
+            Assert.AreEqual(expected.g, haloRenderer.color.g, 0.001f);
+            Assert.AreEqual(expected.b, haloRenderer.color.b, 0.001f);
+            Assert.AreEqual(0.82f, haloRenderer.color.a, 0.001f);
+
+            Object.Destroy(root);
+            Object.Destroy(definition);
+            yield return null;
+        }
+
         static Bounds GetRendererBounds(GameObject root)
         {
-            SpriteRenderer[] renderers = root.GetComponentsInChildren<SpriteRenderer>();
+            Renderer[] renderers = root.GetComponentsInChildren<Renderer>();
             Assert.IsNotEmpty(renderers);
             Bounds bounds = renderers[0].bounds;
 
@@ -82,6 +116,21 @@ namespace DarkFlare.Tests
             }
 
             return bounds;
+        }
+
+        static int CountTiles(Tilemap tilemap)
+        {
+            int count = 0;
+
+            foreach (Vector3Int position in tilemap.cellBounds.allPositionsWithin)
+            {
+                if (tilemap.HasTile(position))
+                {
+                    count++;
+                }
+            }
+
+            return count;
         }
     }
 }

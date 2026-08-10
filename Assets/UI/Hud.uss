@@ -20,6 +20,7 @@
 }
 
 .hud-bottom-row {
+    justify-content: center;
     align-items: flex-end;
 }
 
@@ -44,89 +45,6 @@
 .gold-card {
     min-width: 180px;
     align-items: flex-end;
-}
-
-.attribute-card,
-.hud-bottom-spacer {
-    width: 420px;
-}
-
-.attribute-card {
-    height: 176px;
-    padding: 12px 16px;
-}
-
-.hud-attribute-header {
-    height: 25px;
-    flex-direction: row;
-    align-items: center;
-    border-bottom-width: 1px;
-    border-bottom-color: rgba(89, 119, 136, 0.5);
-}
-
-.hud-attribute-title {
-    flex-grow: 1;
-    margin-bottom: 0;
-}
-
-.hud-attribute-kicker {
-    font-size: 9px;
-    letter-spacing: 2px;
-    color: rgb(125, 151, 164);
-}
-
-.hud-attribute-grid {
-    flex-grow: 1;
-    flex-direction: row;
-    margin-top: 8px;
-}
-
-.hud-attribute-column {
-    flex-grow: 1;
-    min-width: 0;
-}
-
-.hud-attribute-column--resistance {
-    margin-left: 14px;
-    padding-left: 14px;
-    border-left-width: 1px;
-    border-left-color: rgba(89, 119, 136, 0.45);
-}
-
-.hud-attribute-row {
-    height: 27px;
-    flex-direction: row;
-    align-items: center;
-}
-
-.hud-attribute-name {
-    flex-grow: 1;
-    font-size: 12px;
-    color: rgb(157, 177, 187);
-}
-
-.hud-attribute-value {
-    min-width: 48px;
-    font-size: 14px;
-    -unity-text-align: middle-right;
-    -unity-font-style: bold;
-    color: rgb(235, 226, 201);
-}
-
-.hud-attribute-value--fire {
-    color: rgb(224, 139, 101);
-}
-
-.hud-attribute-value--cold {
-    color: rgb(128, 183, 220);
-}
-
-.hud-attribute-value--lightning {
-    color: rgb(220, 196, 105);
-}
-
-.hud-attribute-value--chaos {
-    color: rgb(185, 139, 208);
 }
 
 .hud-caption {

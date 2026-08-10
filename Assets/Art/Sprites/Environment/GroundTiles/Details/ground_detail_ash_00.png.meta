@@ -1,0 +1,507 @@
+fileFormatVersion: 2
+guid: 1ffdeec36166edb4daf184e96cffc798
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 4569582006211247275
+    second: ground_detail_ash_00_0
+  - first:
+      213: 8623857919125228234
+    second: ground_detail_ash_00_1
+  - first:
+      213: -4127348617325931321
+    second: ground_detail_ash_00_2
+  - first:
+      213: -8010385308800209582
+    second: ground_detail_ash_00_3
+  - first:
+      213: 4972844462055488068
+    second: ground_detail_ash_00_4
+  - first:
+      213: 4877302715915245611
+    second: ground_detail_ash_00_5
+  - first:
+      213: -7395435294051545045
+    second: ground_detail_ash_00_6
+  - first:
+      213: 3903262512683161920
+    second: ground_detail_ash_00_7
+  - first:
+      213: -4571584799411812027
+    second: ground_detail_ash_00_8
+  - first:
+      213: -4844357378178186665
+    second: ground_detail_ash_00_9
+  - first:
+      213: -2881619714107179880
+    second: ground_detail_ash_00_10
+  - first:
+      213: 1672864995633302751
+    second: ground_detail_ash_00_11
+  - first:
+      213: 1223583431896722950
+    second: ground_detail_ash_00_12
+  - first:
+      213: -6929395817369679223
+    second: ground_detail_ash_00_13
+  - first:
+      213: 7299063902807396749
+    second: ground_detail_ash_00_14
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 9
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 64
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 512
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: ground_detail_ash_00_0
+      rect:
+        serializedVersion: 2
+        x: 199
+        y: 410
+        width: 8
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bacfc3cbf9a6a6f30800000000000000
+      internalID: 4569582006211247275
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_ash_00_1
+      rect:
+        serializedVersion: 2
+        x: 267
+        y: 418
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aca06e616191ea770800000000000000
+      internalID: 8623857919125228234
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_ash_00_2
+      rect:
+        serializedVersion: 2
+        x: 301
+        y: 415
+        width: 16
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7c49618dc46b8b6c0800000000000000
+      internalID: -4127348617325931321
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_ash_00_3
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 345
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 25da4f2a00565d090800000000000000
+      internalID: -8010385308800209582
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_ash_00_4
+      rect:
+        serializedVersion: 2
+        x: 94
+        y: 74
+        width: 352
+        height: 329
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 44af514e0b7130540800000000000000
+      internalID: 4972844462055488068
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_ash_00_5
+      rect:
+        serializedVersion: 2
+        x: 90
+        y: 312
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b281d24aaf8afa340800000000000000
+      internalID: 4877302715915245611
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_ash_00_6
+      rect:
+        serializedVersion: 2
+        x: 73
+        y: 292
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b20dba268c22e5990800000000000000
+      internalID: -7395435294051545045
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_ash_00_7
+      rect:
+        serializedVersion: 2
+        x: 421
+        y: 297
+        width: 13
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 049149d239c2b2630800000000000000
+      internalID: 3903262512683161920
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_ash_00_8
+      rect:
+        serializedVersion: 2
+        x: 439
+        y: 265
+        width: 11
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 549cb72a8d77e80c0800000000000000
+      internalID: -4571584799411812027
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_ash_00_9
+      rect:
+        serializedVersion: 2
+        x: 428
+        y: 233
+        width: 10
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 75285ac81a265ccb0800000000000000
+      internalID: -4844357378178186665
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_ash_00_10
+      rect:
+        serializedVersion: 2
+        x: 75
+        y: 206
+        width: 20
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 89cf0e2332e6208d0800000000000000
+      internalID: -2881619714107179880
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_ash_00_11
+      rect:
+        serializedVersion: 2
+        x: 445
+        y: 214
+        width: 12
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fdc88eda9d5373710800000000000000
+      internalID: 1672864995633302751
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_ash_00_12
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 136
+        width: 18
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 60ee14306aa0bf010800000000000000
+      internalID: 1223583431896722950
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_ash_00_13
+      rect:
+        serializedVersion: 2
+        x: 198
+        y: 72
+        width: 12
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 98a4a95b737d5df90800000000000000
+      internalID: -6929395817369679223
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ground_detail_ash_00_14
+      rect:
+        serializedVersion: 2
+        x: 215
+        y: 70
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d8116bf82fb7b4560800000000000000
+      internalID: 7299063902807396749
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      ground_detail_ash_00_0: 4569582006211247275
+      ground_detail_ash_00_1: 8623857919125228234
+      ground_detail_ash_00_10: -2881619714107179880
+      ground_detail_ash_00_11: 1672864995633302751
+      ground_detail_ash_00_12: 1223583431896722950
+      ground_detail_ash_00_13: -6929395817369679223
+      ground_detail_ash_00_14: 7299063902807396749
+      ground_detail_ash_00_2: -4127348617325931321
+      ground_detail_ash_00_3: -8010385308800209582
+      ground_detail_ash_00_4: 4972844462055488068
+      ground_detail_ash_00_5: 4877302715915245611
+      ground_detail_ash_00_6: -7395435294051545045
+      ground_detail_ash_00_7: 3903262512683161920
+      ground_detail_ash_00_8: -4571584799411812027
+      ground_detail_ash_00_9: -4844357378178186665
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

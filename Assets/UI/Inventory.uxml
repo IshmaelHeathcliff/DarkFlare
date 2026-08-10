@@ -1,14 +1,14 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
   <ui:VisualElement name="inventory-page" class="inventory-page item-context-panel ui-panel-frame" picking-mode="Position">
     <ui:VisualElement class="item-context-header">
-      <ui:Label text="装备信息" class="item-context-title" />
-      <ui:Label text="INVENTORY" class="item-context-kicker" />
+      <ui:Label text="当前属性" class="item-context-title" />
+      <ui:Label text="CHARACTER" class="item-context-kicker" />
     </ui:VisualElement>
-    <ui:Label name="inventory-target-slot" text="目标槽位：未选择" class="inventory-target-slot" />
-    <ui:Label text="装备比较" class="item-context-subtitle" />
-    <ui:ScrollView name="inventory-comparison-scroll" class="inventory-comparison-scroll" mode="Vertical">
-      <ui:Label name="inventory-comparison" text="选择候选物品和目标槽位后显示" class="inventory-comparison" />
-    </ui:ScrollView>
+    <ui:VisualElement name="inventory-attribute-card" class="inventory-attribute-card">
+      <ui:VisualElement name="inventory-attribute-grid" class="inventory-attribute-grid" />
+    </ui:VisualElement>
+    <ui:Label text="装备操作" class="item-context-subtitle" />
+    <ui:Label name="inventory-target-slot" text="操作槽位：未选择" class="inventory-target-slot" />
     <ui:Label name="inventory-feedback" text="选择物品或装备槽查看操作" class="inventory-feedback" />
     <ui:VisualElement name="inventory-actions" class="inventory-actions">
       <ui:Button name="inventory-equip" text="装备 / 替换" class="item-context-action item-context-action--primary inventory-equip" />
