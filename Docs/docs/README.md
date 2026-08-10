@@ -23,10 +23,7 @@
 ## 进行中的计划
 
 - [alpha 0.1 开发计划](./plan/alpha-0.1-plan.md)
-
-## 独立待实施计划
-
-- [战斗标签系统改进计划](./plan/combat-tag-system-improvement-plan.md)
+- [战斗标签系统改进计划](./plan/combat-tag-system-improvement-plan.md)（`alpha 0.1.1` 实施依据）
 
 ## 说明
 
