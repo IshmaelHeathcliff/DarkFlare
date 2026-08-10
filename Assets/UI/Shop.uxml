@@ -1,45 +1,23 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
-  <ui:Template name="ItemDetail" src="project://database/Assets/UI/ItemDetail.uxml?fileID=9197481963319205126&amp;guid=6976f322ca12d3a458c3e7b9eb151dfb&amp;type=3#ItemDetail" />
-  <ui:VisualElement name="shop-page" class="shop-page" picking-mode="Position">
-    <ui:VisualElement class="shop-body">
-      <ui:VisualElement class="shop-list-section">
-        <ui:VisualElement class="shop-section-header">
-          <ui:Label text="商人库存" class="shop-section-title" />
-          <ui:Label text="BUY" class="shop-section-kicker" />
-        </ui:VisualElement>
-        <ui:VisualElement class="shop-list-frame">
-          <ui:ScrollView name="shop-merchant-scroll" class="shop-scroll">
-            <ui:VisualElement name="shop-merchant-list" class="shop-list" />
-          </ui:ScrollView>
-          <ui:Label name="shop-merchant-empty" text="商人库存为空" class="shop-empty" />
-        </ui:VisualElement>
-      </ui:VisualElement>
-      <ui:VisualElement class="shop-list-section">
-        <ui:VisualElement class="shop-section-header">
-          <ui:Label text="玩家背包" class="shop-section-title" />
-          <ui:Label text="SELL" class="shop-section-kicker" />
-        </ui:VisualElement>
-        <ui:VisualElement class="shop-list-frame">
-          <ui:ScrollView name="shop-player-scroll" class="shop-scroll">
-            <ui:VisualElement name="shop-player-list" class="shop-list" />
-          </ui:ScrollView>
-          <ui:Label name="shop-player-empty" text="背包中没有可出售物品" class="shop-empty" />
-        </ui:VisualElement>
-      </ui:VisualElement>
-      <ui:VisualElement name="shop-details" class="shop-details">
-        <ui:Label name="shop-gold" text="持有金币  0" class="shop-gold" />
-        <ui:Label text="交易详情" class="shop-section-title" />
-        <ui:VisualElement class="shop-divider" />
-        <ui:Label name="shop-selected-source" text="来源：-" class="shop-detail-line" />
-        <ui:Instance template="ItemDetail" name="shop-item-detail" class="shop-item-detail" />
-        <ui:Label name="shop-selected-price" text="价格：-" class="shop-price" />
-        <ui:Label name="shop-feedback" text="选择物品查看交易信息" class="shop-feedback" />
-        <ui:VisualElement name="shop-actions" class="shop-actions">
-          <ui:Button name="shop-buy" text="购买选中物品" class="shop-action shop-buy" />
-          <ui:Button name="shop-sell" text="出售选中物品" class="shop-action shop-sell" />
-        </ui:VisualElement>
-      </ui:VisualElement>
+  <ui:VisualElement name="shop-page" class="shop-page item-context-panel ui-panel-frame" picking-mode="Position">
+    <ui:VisualElement class="item-context-header">
+      <ui:Label text="商人背包" class="item-context-title" />
+      <ui:Label text="TRADE" class="item-context-kicker" />
     </ui:VisualElement>
-    <ui:Label text="方向键 / 左摇杆移动焦点 · Enter / A 确认 · Esc / B 关闭" class="shop-help" />
+    <ui:Label name="shop-gold" text="持有金币  0" class="shop-gold" />
+    <ui:VisualElement name="shop-merchant-frame" class="shop-merchant-frame">
+      <ui:VisualElement name="shop-merchant-list" class="shop-merchant-grid" picking-mode="Position" />
+      <ui:Label name="shop-merchant-empty" text="商人背包为空" class="shop-empty" picking-mode="Ignore" />
+    </ui:VisualElement>
+    <ui:VisualElement class="shop-selection-summary">
+      <ui:Label name="shop-selected-source" text="来源：-" class="shop-detail-line" />
+      <ui:Label name="shop-selected-price" text="价格：-" class="shop-price" />
+    </ui:VisualElement>
+    <ui:Label name="shop-feedback" text="选择商人物品购买，或选择玩家背包物品出售" class="shop-feedback" />
+    <ui:VisualElement name="shop-actions" class="shop-actions">
+      <ui:Button name="shop-buy" text="购买商人物品" class="item-context-action item-context-action--primary shop-buy" />
+      <ui:Button name="shop-sell" text="出售背包物品" class="item-context-action shop-sell" />
+    </ui:VisualElement>
+    <ui:Label text="商人格只读；拖放不会触发交易" class="item-context-help" />
   </ui:VisualElement>
 </ui:UXML>

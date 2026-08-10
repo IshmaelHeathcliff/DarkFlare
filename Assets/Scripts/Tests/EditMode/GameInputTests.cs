@@ -106,5 +106,31 @@ namespace DarkFlare.Tests
 
             Assert.AreEqual(2, changeCount);
         }
+
+        [Test]
+        public void UiRearrangeNavigateAndConsumedCancel_AreForwarded()
+        {
+            Keyboard keyboard = InputSystem.AddDevice<Keyboard>();
+            int rearrangeCount = 0;
+            int navigateCount = 0;
+            int cancelCount = 0;
+            _input.RearrangePerformed += () => rearrangeCount++;
+            _input.NavigatePerformed += _ => navigateCount++;
+            _input.CancelRequested += () =>
+            {
+                cancelCount++;
+                return true;
+            };
+            _input.SwitchToUi();
+
+            PressAndRelease(keyboard.spaceKey);
+            PressAndRelease(keyboard.rightArrowKey);
+            PressAndRelease(keyboard.escapeKey);
+
+            Assert.AreEqual(1, rearrangeCount);
+            Assert.GreaterOrEqual(navigateCount, 1);
+            Assert.AreEqual(1, cancelCount);
+            Assert.AreEqual(GameInputMode.UI, _input.CurrentMode);
+        }
     }
 }

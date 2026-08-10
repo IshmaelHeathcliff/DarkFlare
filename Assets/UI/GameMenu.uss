@@ -7,55 +7,57 @@
   display: none;
   justify-content: center;
   align-items: center;
-  background-color: rgba(5, 7, 10, 0.84);
+  background-color: rgba(5, 7, 10, 0.86);
 }
 
 .game-menu-panel {
-  width: 1220px;
-  max-width: 94%;
-  height: 760px;
-  max-height: 92%;
-  padding: 24px;
+  position: relative;
+  width: 1340px;
+  max-width: 96%;
+  height: 850px;
+  max-height: 94%;
+  padding: 16px;
   color: rgb(224, 226, 231);
-  background-color: rgb(20, 24, 31);
+  background-color: rgb(14, 17, 22);
   border-left-width: 1px;
   border-right-width: 1px;
   border-top-width: 1px;
   border-bottom-width: 1px;
-  border-left-color: rgb(116, 91, 54);
-  border-right-color: rgb(116, 91, 54);
-  border-top-color: rgb(116, 91, 54);
-  border-bottom-color: rgb(116, 91, 54);
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
+  border-left-color: rgb(121, 92, 52);
+  border-right-color: rgb(121, 92, 52);
+  border-top-color: rgb(121, 92, 52);
+  border-bottom-color: rgb(121, 92, 52);
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
 }
 
 .game-menu-header {
-  height: 72px;
+  height: 58px;
   flex-direction: row;
   align-items: center;
+  margin-bottom: 12px;
   border-bottom-width: 1px;
-  border-bottom-color: rgb(63, 67, 75);
+  border-bottom-color: rgb(61, 60, 58);
 }
 
 .game-menu-heading {
-  width: 320px;
+  width: 286px;
   flex-direction: row;
   align-items: center;
 }
 
 .game-menu-title {
-  margin-right: 12px;
-  font-size: 30px;
+  margin-right: 10px;
+  font-size: 25px;
   -unity-font-style: bold;
   color: rgb(241, 232, 210);
 }
 
 .game-menu-kicker {
-  font-size: 11px;
-  letter-spacing: 3px;
+  font-size: 9px;
+  letter-spacing: 2px;
   color: rgb(166, 132, 77);
 }
 
@@ -66,27 +68,27 @@
 }
 
 .game-menu-tab {
-  min-width: 140px;
-  height: 40px;
-  margin-left: 5px;
-  margin-right: 5px;
+  min-width: 118px;
+  height: 36px;
+  margin-left: 4px;
+  margin-right: 4px;
   color: rgb(177, 182, 191);
-  background-color: rgb(32, 37, 45);
-  border-left-color: rgb(64, 70, 81);
-  border-right-color: rgb(64, 70, 81);
-  border-top-color: rgb(64, 70, 81);
-  border-bottom-color: rgb(64, 70, 81);
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
-  border-bottom-left-radius: 5px;
-  border-bottom-right-radius: 5px;
+  background-color: rgb(28, 32, 39);
+  border-left-color: rgb(60, 64, 72);
+  border-right-color: rgb(60, 64, 72);
+  border-top-color: rgb(60, 64, 72);
+  border-bottom-color: rgb(60, 64, 72);
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
 }
 
 .game-menu-tab:hover,
 .game-menu-tab:focus,
 .game-menu-tab--active {
   color: rgb(246, 235, 213);
-  background-color: rgb(75, 62, 43);
+  background-color: rgb(66, 54, 38);
   border-left-color: rgb(194, 150, 78);
   border-right-color: rgb(194, 150, 78);
   border-top-color: rgb(194, 150, 78);
@@ -95,33 +97,27 @@
 
 .game-menu-tab:disabled {
   opacity: 0.38;
-  color: rgb(126, 130, 138);
-  background-color: rgb(25, 29, 35);
-  border-left-color: rgb(48, 52, 60);
-  border-right-color: rgb(48, 52, 60);
-  border-top-color: rgb(48, 52, 60);
-  border-bottom-color: rgb(48, 52, 60);
 }
 
 .game-menu-close {
-  min-width: 150px;
-  height: 38px;
+  min-width: 138px;
+  height: 36px;
   color: rgb(209, 211, 216);
-  background-color: rgb(40, 45, 54);
-  border-left-color: rgb(80, 85, 96);
-  border-right-color: rgb(80, 85, 96);
-  border-top-color: rgb(80, 85, 96);
-  border-bottom-color: rgb(80, 85, 96);
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
-  border-bottom-left-radius: 5px;
-  border-bottom-right-radius: 5px;
+  background-color: rgb(35, 39, 46);
+  border-left-color: rgb(72, 76, 85);
+  border-right-color: rgb(72, 76, 85);
+  border-top-color: rgb(72, 76, 85);
+  border-bottom-color: rgb(72, 76, 85);
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
 }
 
 .game-menu-close:hover,
 .game-menu-close:focus {
   color: white;
-  background-color: rgb(57, 63, 74);
+  background-color: rgb(54, 59, 68);
   border-left-color: rgb(180, 143, 82);
   border-right-color: rgb(180, 143, 82);
   border-top-color: rgb(180, 143, 82);
@@ -130,4 +126,176 @@
 
 .game-menu-content {
   flex-grow: 1;
+  min-height: 0;
+  flex-direction: row;
+}
+
+.game-menu-context-stack {
+  flex-grow: 1;
+  min-width: 0;
+  margin-left: 12px;
+}
+
+.inventory-template,
+.shop-template,
+.crafting-template,
+.inventory-page,
+.shop-page,
+.crafting-page {
+  flex-grow: 1;
+}
+
+.item-context-panel {
+  display: none;
+  min-height: 0;
+  padding: 14px;
+}
+
+.item-context-header {
+  height: 36px;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 10px;
+  border-bottom-width: 1px;
+  border-bottom-color: rgb(56, 55, 53);
+}
+
+.item-context-title {
+  flex-grow: 1;
+  font-size: 17px;
+  -unity-font-style: bold;
+  color: rgb(214, 190, 145);
+}
+
+.item-context-kicker {
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: rgb(132, 107, 67);
+}
+
+.item-context-subtitle {
+  min-height: 22px;
+  margin-top: 10px;
+  -unity-font-style: bold;
+  color: rgb(190, 163, 115);
+}
+
+.item-context-action {
+  min-height: 38px;
+  margin-top: 5px;
+  color: rgb(215, 218, 223);
+  background-color: rgb(42, 46, 54);
+  border-left-color: rgb(74, 79, 89);
+  border-right-color: rgb(74, 79, 89);
+  border-top-color: rgb(74, 79, 89);
+  border-bottom-color: rgb(74, 79, 89);
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+}
+
+.item-context-action:hover,
+.item-context-action:focus {
+  color: white;
+  background-color: rgb(60, 65, 75);
+  border-left-color: rgb(184, 143, 75);
+  border-right-color: rgb(184, 143, 75);
+  border-top-color: rgb(184, 143, 75);
+  border-bottom-color: rgb(184, 143, 75);
+}
+
+.item-context-action--primary {
+  color: rgb(31, 25, 17);
+  background-color: rgb(205, 163, 88);
+  border-left-color: rgb(231, 196, 130);
+  border-right-color: rgb(231, 196, 130);
+  border-top-color: rgb(231, 196, 130);
+  border-bottom-color: rgb(231, 196, 130);
+}
+
+.item-context-action:disabled {
+  opacity: 0.38;
+}
+
+.item-context-help {
+  min-height: 28px;
+  margin-top: 8px;
+  white-space: normal;
+  font-size: 10px;
+  color: rgb(111, 116, 125);
+}
+
+.item-tooltip-layer,
+.item-drag-layer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+
+.item-tooltip {
+  position: absolute;
+  display: none;
+  width: 270px;
+  height: 520px;
+  min-height: 520px;
+  max-height: 520px;
+  padding: 14px;
+  background-color: rgba(14, 18, 24, 0.98);
+}
+
+.item-tooltip-detail {
+  flex-grow: 1;
+  min-height: 200px;
+}
+
+.item-tooltip-context {
+  min-height: 22px;
+  margin-top: 8px;
+  padding-top: 6px;
+  white-space: normal;
+  color: rgb(205, 174, 118);
+  border-top-width: 1px;
+  border-top-color: rgb(65, 62, 57);
+}
+
+.game-menu-panel--compact {
+  padding: 10px;
+}
+
+.game-menu-panel--compact .game-menu-header {
+  height: 50px;
+  margin-bottom: 8px;
+}
+
+.game-menu-panel--compact .game-menu-heading {
+  width: 214px;
+}
+
+.game-menu-panel--compact .game-menu-title {
+  font-size: 21px;
+}
+
+.game-menu-panel--compact .game-menu-kicker {
+  display: none;
+}
+
+.game-menu-panel--compact .game-menu-tab {
+  min-width: 92px;
+}
+
+.game-menu-panel--compact .game-menu-context-stack {
+  flex-grow: 1;
+  min-width: 0;
+  margin-left: 8px;
+}
+
+.game-menu-panel--compact .item-context-panel {
+  padding: 10px;
+}
+
+.game-menu-panel--wide .game-menu-context-stack {
+  width: 380px;
 }

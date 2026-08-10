@@ -17,11 +17,48 @@
       </ui:VisualElement>
     </ui:VisualElement>
     <ui:VisualElement name="hud-bottom-row" class="hud-bottom-row" picking-mode="Ignore">
-      <ui:VisualElement name="weapon-card" class="hud-card weapon-card hud-card--row" picking-mode="Ignore">
-        <ui:VisualElement name="weapon-icon" class="hud-weapon-icon hud-weapon-icon--empty" picking-mode="Ignore" />
-        <ui:VisualElement class="hud-card-content" picking-mode="Ignore">
-          <ui:Label text="当前武器" class="hud-caption" picking-mode="Ignore" />
-          <ui:Label name="weapon-label" text="未装备" class="hud-value" picking-mode="Ignore" />
+      <ui:VisualElement name="attribute-card" class="hud-card attribute-card" picking-mode="Ignore">
+        <ui:VisualElement class="hud-attribute-header" picking-mode="Ignore">
+          <ui:Label text="当前属性" class="hud-caption hud-attribute-title" picking-mode="Ignore" />
+          <ui:Label text="STATUS" class="hud-attribute-kicker" picking-mode="Ignore" />
+        </ui:VisualElement>
+        <ui:VisualElement class="hud-attribute-grid" picking-mode="Ignore">
+          <ui:VisualElement class="hud-attribute-column" picking-mode="Ignore">
+            <ui:VisualElement class="hud-attribute-row" picking-mode="Ignore">
+              <ui:Label text="护甲" class="hud-attribute-name" picking-mode="Ignore" />
+              <ui:Label name="attribute-armor" text="0" class="hud-attribute-value" picking-mode="Ignore" />
+            </ui:VisualElement>
+            <ui:VisualElement class="hud-attribute-row" picking-mode="Ignore">
+              <ui:Label text="闪避" class="hud-attribute-name" picking-mode="Ignore" />
+              <ui:Label name="attribute-evasion" text="0" class="hud-attribute-value" picking-mode="Ignore" />
+            </ui:VisualElement>
+            <ui:VisualElement class="hud-attribute-row" picking-mode="Ignore">
+              <ui:Label text="移动速度" class="hud-attribute-name" picking-mode="Ignore" />
+              <ui:Label name="attribute-move-speed" text="0" class="hud-attribute-value" picking-mode="Ignore" />
+            </ui:VisualElement>
+            <ui:VisualElement class="hud-attribute-row" picking-mode="Ignore">
+              <ui:Label text="暴击率" class="hud-attribute-name" picking-mode="Ignore" />
+              <ui:Label name="attribute-critical-chance" text="0%" class="hud-attribute-value" picking-mode="Ignore" />
+            </ui:VisualElement>
+          </ui:VisualElement>
+          <ui:VisualElement class="hud-attribute-column hud-attribute-column--resistance" picking-mode="Ignore">
+            <ui:VisualElement class="hud-attribute-row" picking-mode="Ignore">
+              <ui:Label text="火焰抗性" class="hud-attribute-name" picking-mode="Ignore" />
+              <ui:Label name="attribute-fire-resistance" text="0%" class="hud-attribute-value hud-attribute-value--fire" picking-mode="Ignore" />
+            </ui:VisualElement>
+            <ui:VisualElement class="hud-attribute-row" picking-mode="Ignore">
+              <ui:Label text="冰霜抗性" class="hud-attribute-name" picking-mode="Ignore" />
+              <ui:Label name="attribute-cold-resistance" text="0%" class="hud-attribute-value hud-attribute-value--cold" picking-mode="Ignore" />
+            </ui:VisualElement>
+            <ui:VisualElement class="hud-attribute-row" picking-mode="Ignore">
+              <ui:Label text="闪电抗性" class="hud-attribute-name" picking-mode="Ignore" />
+              <ui:Label name="attribute-lightning-resistance" text="0%" class="hud-attribute-value hud-attribute-value--lightning" picking-mode="Ignore" />
+            </ui:VisualElement>
+            <ui:VisualElement class="hud-attribute-row" picking-mode="Ignore">
+              <ui:Label text="混沌抗性" class="hud-attribute-name" picking-mode="Ignore" />
+              <ui:Label name="attribute-chaos-resistance" text="0%" class="hud-attribute-value hud-attribute-value--chaos" picking-mode="Ignore" />
+            </ui:VisualElement>
+          </ui:VisualElement>
         </ui:VisualElement>
       </ui:VisualElement>
       <ui:VisualElement name="interaction-prompt" class="interaction-prompt" picking-mode="Ignore">

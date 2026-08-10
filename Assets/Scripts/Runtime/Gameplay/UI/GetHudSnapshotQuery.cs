@@ -3,6 +3,47 @@ using UnityEngine;
 
 namespace DarkFlare
 {
+    public readonly struct HudAttributeSnapshot
+    {
+        public float Armor { get; }
+
+        public float Evasion { get; }
+
+        public float MoveSpeed { get; }
+
+        public float CriticalChance { get; }
+
+        public float FireResistance { get; }
+
+        public float ColdResistance { get; }
+
+        public float LightningResistance { get; }
+
+        public float ChaosResistance { get; }
+
+        public HudAttributeSnapshot(StatBlock stats)
+        {
+            Armor = GetNonNegative(stats, StatIds.Armor);
+            Evasion = GetNonNegative(stats, StatIds.Evasion);
+            MoveSpeed = GetNonNegative(stats, StatIds.MoveSpeed);
+            CriticalChance = GetNonNegative(stats, StatIds.CriticalChance);
+            FireResistance = GetResistance(stats, StatIds.FireResistance);
+            ColdResistance = GetResistance(stats, StatIds.ColdResistance);
+            LightningResistance = GetResistance(stats, StatIds.LightningResistance);
+            ChaosResistance = GetResistance(stats, StatIds.ChaosResistance);
+        }
+
+        static float GetNonNegative(StatBlock stats, string statId)
+        {
+            return stats != null ? Mathf.Max(0f, stats.GetValue(statId)) : 0f;
+        }
+
+        static float GetResistance(StatBlock stats, string statId)
+        {
+            return stats != null ? Mathf.Clamp(stats.GetValue(statId), -100f, 75f) : 0f;
+        }
+    }
+
     public readonly struct HudSnapshot
     {
         public bool HasPlayer { get; }
@@ -13,9 +54,7 @@ namespace DarkFlare
 
         public int Gold { get; }
 
-        public string WeaponSummary { get; }
-
-        public string WeaponIconGuid { get; }
+        public HudAttributeSnapshot Attributes { get; }
 
         public float HealthNormalized => HasPlayer && MaxHealth > 0f
             ? Mathf.Clamp01(CurrentHealth / MaxHealth)
@@ -26,25 +65,13 @@ namespace DarkFlare
             float currentHealth,
             float maxHealth,
             int gold,
-            string weaponSummary)
-            : this(hasPlayer, currentHealth, maxHealth, gold, weaponSummary, string.Empty)
-        {
-        }
-
-        public HudSnapshot(
-            bool hasPlayer,
-            float currentHealth,
-            float maxHealth,
-            int gold,
-            string weaponSummary,
-            string weaponIconGuid)
+            HudAttributeSnapshot attributes)
         {
             HasPlayer = hasPlayer;
             CurrentHealth = currentHealth;
             MaxHealth = maxHealth;
             Gold = gold;
-            WeaponSummary = weaponSummary;
-            WeaponIconGuid = weaponIconGuid;
+            Attributes = attributes;
         }
     }
 
@@ -57,17 +84,15 @@ namespace DarkFlare
 
             if (player == null)
             {
-                return new HudSnapshot(false, 0f, 0f, gold, "未装备", string.Empty);
+                return new HudSnapshot(false, 0f, 0f, gold, default);
             }
 
-            ItemInstance weapon = this.GetModel<EquipmentModel>().GetWeapon(player);
             return new HudSnapshot(
                 true,
                 player.CurrentHealth,
                 player.MaxHealth,
                 gold,
-                DescribeWeapon(weapon),
-                GetIconGuid(weapon));
+                new HudAttributeSnapshot(player.Stats));
         }
 
         CombatActor GetPlayer()
@@ -83,27 +108,6 @@ namespace DarkFlare
             }
 
             return null;
-        }
-
-        static string DescribeWeapon(ItemInstance weapon)
-        {
-            if (weapon == null)
-            {
-                return "未装备";
-            }
-
-            string displayName = weapon.BaseDefinition != null && !string.IsNullOrWhiteSpace(weapon.BaseDefinition.DisplayName)
-                ? weapon.BaseDefinition.DisplayName
-                : weapon.InstanceId;
-            int affixCount = weapon.Prefixes.Count + weapon.Suffixes.Count;
-            return $"{displayName} · {weapon.Rarity} · {affixCount} 条词缀";
-        }
-
-        static string GetIconGuid(ItemInstance weapon)
-        {
-            return weapon?.BaseDefinition?.Icon != null
-                ? weapon.BaseDefinition.Icon.AssetGUID
-                : string.Empty;
         }
     }
 }

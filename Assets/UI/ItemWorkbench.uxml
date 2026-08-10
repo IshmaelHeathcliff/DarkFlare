@@ -1,0 +1,41 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+  <ui:VisualElement name="item-workbench-shared" class="item-workbench-shared" picking-mode="Position">
+    <ui:VisualElement name="inventory-equipment" class="item-workbench-equipment ui-panel-frame">
+      <ui:VisualElement class="item-workbench-section-header">
+        <ui:Label text="装备" class="item-workbench-section-title" />
+        <ui:Label text="EQUIPMENT" class="item-workbench-section-kicker" />
+      </ui:VisualElement>
+      <ui:VisualElement class="equipment-canvas">
+        <ui:VisualElement class="equipment-silhouette" picking-mode="Ignore">
+          <ui:VisualElement class="equipment-silhouette-head" />
+          <ui:VisualElement class="equipment-silhouette-body" />
+        </ui:VisualElement>
+        <ui:VisualElement class="equipment-slot-layout">
+          <ui:Button name="inventory-slot-weapon" text="武器 · 空" class="inventory-equipment-slot equipment-slot--weapon" />
+          <ui:Button name="inventory-slot-armor" text="护甲 · 空" class="inventory-equipment-slot equipment-slot--armor" />
+          <ui:Button name="inventory-slot-ring-left" text="左戒指 · 空" class="inventory-equipment-slot equipment-slot--ring-left" />
+          <ui:Button name="inventory-slot-ring-right" text="右戒指 · 空" class="inventory-equipment-slot equipment-slot--ring-right" />
+          <ui:VisualElement name="equipment-future-slots" class="equipment-future-slots" picking-mode="Ignore">
+            <ui:Label text="扩展预留" class="equipment-future-title" />
+            <ui:VisualElement class="equipment-future-slot-row">
+              <ui:VisualElement class="equipment-future-slot" />
+              <ui:VisualElement class="equipment-future-slot" />
+            </ui:VisualElement>
+          </ui:VisualElement>
+        </ui:VisualElement>
+      </ui:VisualElement>
+      <ui:Label text="拖拽装备，或使用整理键拿起 / 放置" class="item-workbench-help" />
+    </ui:VisualElement>
+    <ui:VisualElement class="item-workbench-inventory ui-panel-frame">
+      <ui:VisualElement class="item-workbench-section-header">
+        <ui:Label text="玩家背包" class="item-workbench-section-title" />
+        <ui:Label text="10 × 6" class="item-workbench-section-kicker" />
+      </ui:VisualElement>
+      <ui:VisualElement name="inventory-grid-frame" class="inventory-grid-frame">
+        <ui:VisualElement name="inventory-grid" class="inventory-grid" picking-mode="Position" />
+        <ui:Label name="inventory-empty" text="背包为空" class="inventory-empty" picking-mode="Ignore" />
+      </ui:VisualElement>
+      <ui:Label text="拖拽整理 · Space / X 拿起或放置 · Esc / B 取消" class="item-workbench-help" />
+    </ui:VisualElement>
+  </ui:VisualElement>
+</ui:UXML>

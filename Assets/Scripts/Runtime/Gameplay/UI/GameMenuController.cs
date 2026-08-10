@@ -27,6 +27,7 @@ namespace DarkFlare
         GameInput _gameInput;
         IUnRegister _openRequestRegistration;
         VisualElement _overlay;
+        VisualElement _panel;
         Button _inventoryTab;
         Button _shopTab;
         Button _craftingTab;
@@ -134,8 +135,14 @@ namespace DarkFlare
                 _closeButton.clicked -= OnCloseClicked;
             }
 
+            if (_panel != null)
+            {
+                _panel.UnregisterCallback<GeometryChangedEvent>(OnPanelGeometryChanged);
+            }
+
             _gameInput = null;
             _overlay = null;
+            _panel = null;
             _inventoryTab = null;
             _shopTab = null;
             _craftingTab = null;
@@ -185,12 +192,14 @@ namespace DarkFlare
 
             VisualElement root = _document.rootVisualElement;
             _overlay = root.Q<VisualElement>("game-menu-overlay");
+            _panel = root.Q<VisualElement>("game-menu-panel");
             _inventoryTab = root.Q<Button>("game-menu-inventory-tab");
             _shopTab = root.Q<Button>("game-menu-shop-tab");
             _craftingTab = root.Q<Button>("game-menu-crafting-tab");
             _closeButton = root.Q<Button>("game-menu-close");
 
             if (_overlay == null
+                || _panel == null
                 || _inventoryTab == null
                 || _shopTab == null
                 || _craftingTab == null
@@ -204,6 +213,7 @@ namespace DarkFlare
             _shopTab.clicked += OnShopTabClicked;
             _craftingTab.clicked += OnCraftingTabClicked;
             _closeButton.clicked += OnCloseClicked;
+            _panel.RegisterCallback<GeometryChangedEvent>(OnPanelGeometryChanged);
             return true;
         }
 
@@ -237,6 +247,7 @@ namespace DarkFlare
             }
 
             _inventoryPanel?.SetVisible(false);
+            _inventoryPanel?.CancelActiveDrag();
             _shopPanel?.SetVisible(false);
             _craftingPanel?.SetVisible(false);
             AvailablePages = GameMenuAccess.Inventory;
@@ -256,7 +267,13 @@ namespace DarkFlare
             bool showInventory = CurrentPage == GameMenuPage.Inventory;
             bool showShop = CurrentPage == GameMenuPage.Shop;
             bool showCrafting = CurrentPage == GameMenuPage.Crafting;
+            _inventoryPanel?.CancelActiveDrag();
             _inventoryPanel?.SetVisible(showInventory);
+
+            if (!showInventory)
+            {
+                _inventoryPanel?.RefreshInventory();
+            }
             _shopPanel?.SetVisible(showShop);
             _craftingPanel?.SetVisible(showCrafting);
             SetTabActive(_inventoryTab, showInventory);
@@ -301,7 +318,15 @@ namespace DarkFlare
 
         void OnCloseClicked()
         {
+            _inventoryPanel?.CancelActiveDrag();
             _gameInput?.SwitchToGameplay();
+        }
+
+        void OnPanelGeometryChanged(GeometryChangedEvent evt)
+        {
+            float width = evt.newRect.width;
+            _panel.EnableInClassList("game-menu-panel--compact", width < 1260f);
+            _panel.EnableInClassList("game-menu-panel--wide", width >= 1580f);
         }
 
         static void SetTabActive(Button button, bool active)

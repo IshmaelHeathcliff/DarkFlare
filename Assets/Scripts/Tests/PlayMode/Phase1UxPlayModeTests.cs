@@ -42,7 +42,7 @@ namespace DarkFlare.Tests
         }
 
         [UnityTest]
-        public IEnumerator ShopPurchase_RestoresNeighborScrollFocusFeedbackAndDetail()
+        public IEnumerator ShopPurchase_UsesGridAndRestoresNeighborFocusFeedbackAndTooltip()
         {
             int originalWidth = Screen.width;
             int originalHeight = Screen.height;
@@ -82,7 +82,7 @@ namespace DarkFlare.Tests
             InventoryModel inventory = architecture.GetModel<InventoryModel>();
             inventory.AddGold(10000);
 
-            for (int i = 0; i < 8; i++)
+            for (int i = 0; i < 30; i++)
             {
                 ItemBaseDefinition definition = CreateItemDefinition($"phase1_shop_{i}", $"状态测试装备 {i}");
                 economy.AddStock(definition.CreateInstance($"phase1_shop_item_{i}", 1, 100 + i));
@@ -97,12 +97,13 @@ namespace DarkFlare.Tests
             ShopPanelController shop = menu.GetComponent<ShopPanelController>();
             VisualElement root = document.rootVisualElement;
             VisualElement merchantList = root.Q<VisualElement>("shop-merchant-list");
-            ScrollView merchantScroll = root.Q<ScrollView>("shop-merchant-scroll");
+            VisualElement merchantFrame = root.Q<VisualElement>("shop-merchant-frame");
+            Assert.IsNotNull(merchantFrame, "商店缺少无滚动背包框架");
+            Assert.IsNull(root.Q<ScrollView>("shop-merchant-scroll"), "商人背包不应继续使用 ScrollView");
             Button selectedButton = FindButton(merchantList, "状态测试装备 3");
             Assert.IsNotNull(selectedButton, "未生成可用于滚动验收的商店按钮");
-            Keyboard keyboard = InputSystem.AddDevice<Keyboard>();
             yield return FocusAfterScheduledRestore(root, selectedButton);
-            PressAndRelease(keyboard.enterKey);
+            InvokeButton(selectedButton);
             yield return null;
             Assert.AreEqual("phase1_shop_item_3", shop.SelectedItem.InstanceId, "Submit 未固定当前选择");
 
@@ -111,21 +112,18 @@ namespace DarkFlare.Tests
             string expectedNeighborId = selectedIndex + 1 < shop.LastSnapshot.MerchantItems.Count
                 ? shop.LastSnapshot.MerchantItems[selectedIndex + 1].Item.InstanceId
                 : shop.LastSnapshot.MerchantItems[selectedIndex - 1].Item.InstanceId;
-            merchantScroll.scrollOffset = new Vector2(0f, 140f);
-            yield return null;
             Button buyButton = root.Q<Button>("shop-buy");
             buyButton.Focus();
             yield return null;
-            PressAndRelease(keyboard.enterKey);
+            InvokeButton(buyButton);
             yield return null;
             yield return null;
 
             Assert.AreEqual(ShopItemSource.Merchant, shop.SelectedSource, "购买后离开了原来源列");
             Assert.AreEqual(expectedNeighborId, shop.SelectedItem.InstanceId, "购买后未选择原索引邻近项");
-            Assert.Greater(merchantScroll.scrollOffset.y, 0f, "购买后滚动位置跳回顶部");
             Label feedback = root.Q<Label>("shop-feedback");
             StringAssert.Contains("已购买", feedback.text, "交易反馈在刷新帧内被覆盖");
-            VisualElement detailRoot = root.Q<VisualElement>("shop-item-detail");
+            VisualElement detailRoot = root.Q<VisualElement>("item-tooltip");
             Label detailName = detailRoot.Q<Label>("item-detail-name");
             Assert.AreEqual(shop.SelectedItem.BaseDefinition.DisplayName, detailName.text, "详情未跟随邻近选择");
             AssertFocusedSelectedItem(root, shop.SelectedItem.BaseDefinition.DisplayName);
@@ -136,7 +134,6 @@ namespace DarkFlare.Tests
             yield return null;
             yield return null;
             Assert.AreEqual(expectedNeighborId, shop.SelectedItem.InstanceId, "页签往返后选择丢失");
-            Assert.Greater(merchantScroll.scrollOffset.y, 0f, "页签往返后滚动位置丢失");
 
             architecture.GetUtility<GameInput>().SwitchToGameplay();
             yield return null;
@@ -144,7 +141,6 @@ namespace DarkFlare.Tests
             yield return null;
             yield return null;
             Assert.AreEqual(expectedNeighborId, shop.SelectedItem.InstanceId, "关闭重开后选择丢失");
-            Assert.Greater(merchantScroll.scrollOffset.y, 0f, "关闭重开后滚动位置丢失");
 
             Vector2Int[] resolutions =
             {
@@ -169,20 +165,27 @@ namespace DarkFlare.Tests
                     {
                         "game-menu-panel",
                         "shop-page",
-                        "shop-merchant-scroll",
-                        "shop-player-scroll",
-                        "shop-item-detail",
+                        "shop-merchant-frame",
+                        "shop-merchant-list",
+                        "inventory-grid",
+                        "item-tooltip",
                         "shop-buy",
                         "shop-sell",
                         "game-menu-close",
                     });
-                    AssertElementsInsideContainer(root, "shop-details", new[]
+                    AssertElementsInsideContainer(root, "shop-page", new[]
                     {
                         "shop-actions",
                         "shop-buy",
                         "shop-sell",
                     });
-                    AssertButtonRow(root, "shop-buy", "shop-sell");
+                    AssertWorkbenchShare(root);
+                    AssertMerchantBackpack(root);
+
+                    if (resolution.x >= 1920)
+                    {
+                        AssertElementsDoNotOverlap(root, "item-tooltip", "game-menu-panel");
+                    }
 
                     Assert.IsTrue(architecture.SendCommand(new OpenGameMenuCommand(crafting)), "无法打开打造页布局验收");
                     yield return null;
@@ -191,14 +194,14 @@ namespace DarkFlare.Tests
                     {
                         "game-menu-panel",
                         "crafting-page",
-                        "crafting-item-scroll",
                         "crafting-affix-scroll",
-                        "crafting-item-detail",
+                        "inventory-grid",
+                        "item-tooltip",
                         "crafting-add-affix",
                         "crafting-remove-reroll",
                         "game-menu-close",
                     });
-                    AssertElementsInsideContainer(root, "crafting-details", new[]
+                    AssertElementsInsideContainer(root, "crafting-page", new[]
                     {
                         "crafting-actions",
                         "crafting-add-affix",
@@ -206,8 +209,7 @@ namespace DarkFlare.Tests
                         "crafting-remove-reroll",
                         "crafting-upgrade-affix",
                     });
-                    AssertButtonRow(root, "crafting-add-affix", "crafting-reroll-all");
-                    AssertButtonRow(root, "crafting-remove-reroll", "crafting-upgrade-affix");
+                    AssertWorkbenchShare(root);
                 }
             }
             finally
@@ -272,13 +274,25 @@ namespace DarkFlare.Tests
         {
             for (int i = 0; i < list.childCount; i++)
             {
-                if (list[i] is Button button && GetButtonContentText(button).Contains(text))
+                if (list[i] is Button button
+                    && button.userData is ItemInstance item
+                    && item.BaseDefinition != null
+                    && item.BaseDefinition.DisplayName.Contains(text))
                 {
                     return button;
                 }
             }
 
             return null;
+        }
+
+        static void InvokeButton(Button button)
+        {
+            MethodInfo invoke = typeof(Clickable).GetMethod(
+                "Invoke",
+                BindingFlags.Instance | BindingFlags.NonPublic)
+                ?? throw new System.MissingMethodException(typeof(Clickable).FullName, "Invoke");
+            invoke.Invoke(button.clickable, new object[] { null });
         }
 
         static int FindSnapshotIndex(IReadOnlyList<ShopItemSnapshot> items, string instanceId)
@@ -307,6 +321,11 @@ namespace DarkFlare.Tests
         static string GetButtonContentText(Button button)
         {
             string content = button.text;
+
+            if (button.userData is ItemInstance item && item.BaseDefinition != null)
+            {
+                content += $" {item.BaseDefinition.DisplayName}";
+            }
             List<Label> labels = button.Query<Label>().ToList();
 
             for (int i = 0; i < labels.Count; i++)
@@ -355,6 +374,62 @@ namespace DarkFlare.Tests
                 Assert.GreaterOrEqual(bounds.yMin, rootBounds.yMin - 1f, $"{names[i]} 超出上边界");
                 Assert.LessOrEqual(bounds.xMax, rootBounds.xMax + 1f, $"{names[i]} 超出右边界");
                 Assert.LessOrEqual(bounds.yMax, rootBounds.yMax + 1f, $"{names[i]} 超出下边界");
+            }
+
+
+            Rect gridFrame = root.Q<VisualElement>("inventory-grid-frame").worldBound;
+            Rect grid = root.Q<VisualElement>("inventory-grid").worldBound;
+            Assert.GreaterOrEqual(grid.xMin, gridFrame.xMin - 1f, "背包格超出左边界");
+            Assert.GreaterOrEqual(grid.yMin, gridFrame.yMin - 1f, "背包格超出上边界");
+            Assert.LessOrEqual(grid.xMax, gridFrame.xMax + 1f, "背包格超出右边界");
+            Assert.LessOrEqual(grid.yMax, gridFrame.yMax + 1f, "背包格超出下边界");
+        }
+
+        static void AssertElementsDoNotOverlap(VisualElement root, string firstName, string secondName)
+        {
+            VisualElement first = root.Q<VisualElement>(firstName);
+            VisualElement second = root.Q<VisualElement>(secondName);
+            Assert.IsNotNull(first, $"缺少 UI 元素 {firstName}");
+            Assert.IsNotNull(second, $"缺少 UI 元素 {secondName}");
+            Assert.IsFalse(first.worldBound.Overlaps(second.worldBound), $"{firstName} 遮挡了 {secondName}");
+        }
+
+        static void AssertWorkbenchShare(VisualElement root)
+        {
+            Rect content = root.Q<VisualElement>("game-menu-content").worldBound;
+            Rect workbench = root.Q<VisualElement>("item-workbench-shared").worldBound;
+            Rect equipment = root.Q<VisualElement>("inventory-equipment").worldBound;
+            Rect inventory = root.Q<VisualElement>("inventory-grid-frame").worldBound;
+            Assert.LessOrEqual(
+                workbench.width,
+                content.width * 0.5f + 1f,
+                "商店或打造界面的装备/背包列超过内容区一半");
+            Assert.LessOrEqual(equipment.yMax, inventory.yMin + 1f, "装备区没有位于背包上方");
+        }
+
+        static void AssertMerchantBackpack(VisualElement root)
+        {
+            VisualElement frame = root.Q<VisualElement>("shop-merchant-frame");
+            VisualElement merchantGrid = root.Q<VisualElement>("shop-merchant-list");
+            VisualElement playerGrid = root.Q<VisualElement>("inventory-grid");
+            Assert.IsNull(root.Q<ScrollView>("shop-merchant-scroll"), "商人背包不应出现滚动容器");
+            Assert.AreEqual(playerGrid.worldBound.width, merchantGrid.worldBound.width, 1f, "商人背包应与玩家背包使用相同列宽");
+            Assert.GreaterOrEqual(merchantGrid.worldBound.height, playerGrid.worldBound.height - 1f, "商人背包不应小于玩家背包");
+            Assert.GreaterOrEqual(merchantGrid.worldBound.xMin, frame.worldBound.xMin - 1f, "商人网格超出框架左边界");
+            Assert.GreaterOrEqual(merchantGrid.worldBound.yMin, frame.worldBound.yMin - 1f, "商人网格超出框架上边界");
+            Assert.LessOrEqual(merchantGrid.worldBound.xMax, frame.worldBound.xMax + 1f, "商人网格超出框架右边界");
+            Assert.LessOrEqual(merchantGrid.worldBound.yMax, frame.worldBound.yMax + 1f, "商人网格超出框架下边界");
+
+            List<Button> buttons = merchantGrid.Query<Button>(className: "shop-item").ToList();
+
+            for (int i = 0; i < buttons.Count; i++)
+            {
+                Button button = buttons[i];
+                VisualElement icon = button.Q<VisualElement>(className: "shop-item-icon");
+                Assert.IsNotNull(icon, "商人物品格缺少图标");
+                Assert.IsNull(button.Q<Label>(), "商人物品格不应在图标旁显示名称或价格");
+                Assert.AreEqual(button.worldBound.center.x, icon.worldBound.center.x, 1f, "商人物品图标没有水平居中");
+                Assert.AreEqual(button.worldBound.center.y, icon.worldBound.center.y, 1f, "商人物品图标没有垂直居中");
             }
         }
 

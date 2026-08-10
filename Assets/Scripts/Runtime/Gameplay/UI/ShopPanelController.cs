@@ -6,10 +6,19 @@ namespace DarkFlare
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(UIDocument))]
+    [RequireComponent(typeof(InventoryPanelController))]
     public class ShopPanelController : MonoBehaviour, IController
     {
+        const int MerchantGridWidth = 10;
+        const int MerchantGridMinimumHeight = 6;
+        const float CellSize = 48f;
+        const float CellGap = 4f;
+
         [SerializeField]
         UIDocument _document;
+
+        [SerializeField]
+        InventoryPanelController _inventoryPanel;
 
         readonly List<IUnRegister> _eventRegistrations = new List<IUnRegister>();
         readonly Dictionary<ItemInstance, Button> _merchantButtons = new Dictionary<ItemInstance, Button>();
@@ -17,10 +26,9 @@ namespace DarkFlare
         readonly ShopViewState _viewState = new ShopViewState();
 
         VisualElement _page;
+        VisualElement _merchantFrame;
         VisualElement _merchantList;
         VisualElement _playerList;
-        ScrollView _merchantScroll;
-        ScrollView _playerScroll;
         Label _goldLabel;
         Label _merchantEmptyLabel;
         Label _playerEmptyLabel;
@@ -54,7 +62,7 @@ namespace DarkFlare
 
         public void RefreshShop()
         {
-            if (_merchantList == null || _playerList == null)
+            if (_merchantList == null)
             {
                 return;
             }
@@ -64,16 +72,10 @@ namespace DarkFlare
             LastSnapshot = this.SendQuery(new GetShopSnapshotQuery());
             _goldLabel.text = $"持有金币  {LastSnapshot.Gold}";
             _merchantList.Clear();
-            _playerList.Clear();
             _merchantButtons.Clear();
-            _playerButtons.Clear();
 
             BuildList(LastSnapshot.MerchantItems, _merchantList, _merchantButtons);
-            BuildList(LastSnapshot.PlayerItems, _playerList, _playerButtons);
             _merchantEmptyLabel.style.display = LastSnapshot.MerchantItems.Count == 0
-                ? DisplayStyle.Flex
-                : DisplayStyle.None;
-            _playerEmptyLabel.style.display = LastSnapshot.PlayerItems.Count == 0
                 ? DisplayStyle.Flex
                 : DisplayStyle.None;
             ResolveSelection();
@@ -107,13 +109,15 @@ namespace DarkFlare
 
         public bool FocusDefault()
         {
-            if (_selectedItem == null || _viewState.FocusTarget == ShopFocusTarget.CloseFallback)
+            if (_selectedSource == ShopItemSource.Merchant
+                && _selectedItem != null
+                && _merchantButtons.TryGetValue(_selectedItem, out Button merchantButton))
             {
-                return false;
+                merchantButton.Focus();
+                return true;
             }
 
-            ScheduleRestoreLayout(_refreshGeneration);
-            return true;
+            return _inventoryPanel != null && _inventoryPanel.FocusDefault();
         }
 
         void Awake()
@@ -131,6 +135,7 @@ namespace DarkFlare
             }
 
             RegisterEvents();
+            _inventoryPanel.SelectionChanged += OnInventorySelectionChanged;
             RefreshShop();
             SetVisible(IsVisible);
             Debug.Log("[ShopPanelController] 商店面板初始化完成", this);
@@ -148,6 +153,11 @@ namespace DarkFlare
                 _sellButton.clicked -= OnSellClicked;
             }
 
+            if (_inventoryPanel != null)
+            {
+                _inventoryPanel.SelectionChanged -= OnInventorySelectionChanged;
+            }
+
             for (int i = 0; i < _eventRegistrations.Count; i++)
             {
                 _eventRegistrations[i].UnRegister();
@@ -159,10 +169,9 @@ namespace DarkFlare
             _viewState.Reset();
             _refreshGeneration++;
             _page = null;
+            _merchantFrame = null;
             _merchantList = null;
             _playerList = null;
-            _merchantScroll = null;
-            _playerScroll = null;
             _goldLabel = null;
             _merchantEmptyLabel = null;
             _playerEmptyLabel = null;
@@ -194,48 +203,45 @@ namespace DarkFlare
             {
                 _document = gameObject.AddComponent<UIDocument>();
             }
+
+            if (_inventoryPanel == null)
+            {
+                _inventoryPanel = GetComponent<InventoryPanelController>();
+            }
         }
 
         bool BindVisualTree()
         {
-            if (_document == null)
+            if (_document == null || _inventoryPanel == null)
             {
-                Debug.LogError("[ShopPanelController] 缺少 UIDocument，无法初始化商店", this);
+                Debug.LogError("[ShopPanelController] 缺少 UIDocument 或共享背包控制器", this);
                 return false;
             }
 
             VisualElement root = _document.rootVisualElement;
             _page = root.Q<VisualElement>("shop-page");
+            _merchantFrame = root.Q<VisualElement>("shop-merchant-frame");
             _merchantList = root.Q<VisualElement>("shop-merchant-list");
-            _playerList = root.Q<VisualElement>("shop-player-list");
-            _merchantScroll = root.Q<ScrollView>("shop-merchant-scroll");
-            _playerScroll = root.Q<ScrollView>("shop-player-scroll");
             _goldLabel = root.Q<Label>("shop-gold");
             _merchantEmptyLabel = root.Q<Label>("shop-merchant-empty");
-            _playerEmptyLabel = root.Q<Label>("shop-player-empty");
             _selectedSourceLabel = root.Q<Label>("shop-selected-source");
             _selectedPriceLabel = root.Q<Label>("shop-selected-price");
             _feedbackLabel = root.Q<Label>("shop-feedback");
             _buyButton = root.Q<Button>("shop-buy");
             _sellButton = root.Q<Button>("shop-sell");
-            _detailView = new ItemDetailView(root.Q<VisualElement>("shop-item-detail"));
 
             if (_page == null
+                || _merchantFrame == null
                 || _merchantList == null
-                || _playerList == null
-                || _merchantScroll == null
-                || _playerScroll == null
                 || _goldLabel == null
                 || _merchantEmptyLabel == null
-                || _playerEmptyLabel == null
                 || _selectedSourceLabel == null
                 || _selectedPriceLabel == null
                 || _feedbackLabel == null
                 || _buyButton == null
-                || _sellButton == null
-                || !_detailView.IsValid)
+                || _sellButton == null)
             {
-                Debug.LogError("[ShopPanelController] 商店 UXML 缺少必要的命名元素", this);
+                Debug.LogError("[ShopPanelController] 商店 UXML 缺少格子背包所需的命名元素", this);
                 return false;
             }
 
@@ -260,17 +266,56 @@ namespace DarkFlare
             VisualElement list,
             Dictionary<ItemInstance, Button> buttons)
         {
+            List<Vector2Int> sizes = new List<Vector2Int>(items.Count);
+
+            for (int i = 0; i < items.Count; i++)
+            {
+                sizes.Add(items[i].Detail.GridSize);
+            }
+
+            IReadOnlyList<RectInt> placements = MerchantGridLayout.Pack(
+                MerchantGridWidth,
+                sizes,
+                out int rowCount);
+            int height = Mathf.Max(MerchantGridMinimumHeight, rowCount);
+            float step = CellSize + CellGap;
+            list.style.width = MerchantGridWidth * CellSize + (MerchantGridWidth - 1) * CellGap;
+            list.style.height = height * CellSize + (height - 1) * CellGap;
+
+            for (int y = 0; y < height; y++)
+            {
+                for (int x = 0; x < MerchantGridWidth; x++)
+                {
+                    VisualElement cell = new VisualElement
+                    {
+                        pickingMode = PickingMode.Ignore,
+                    };
+                    cell.AddToClassList("shop-grid-cell");
+                    cell.style.left = x * step;
+                    cell.style.top = y * step;
+                    cell.style.width = CellSize;
+                    cell.style.height = CellSize;
+                    list.Add(cell);
+                }
+            }
+
             for (int i = 0; i < items.Count; i++)
             {
                 ShopItemSnapshot item = items[i];
+                RectInt placement = placements[i];
                 Button button = new Button(() => SelectItem(item.Item, item.Source));
+                button.name = $"shop-item-{item.Detail.InstanceId}";
                 button.text = string.Empty;
-                button.tooltip = $"{item.DisplayName} · {ItemDetailFormatter.GetItemTypeText(item.Type)} · {item.AffixCount} 条词缀";
+                button.userData = item.Item;
                 button.AddToClassList("shop-item");
                 button.AddToClassList(item.Source == ShopItemSource.Merchant
                     ? "shop-item--merchant"
                     : "shop-item--player");
                 button.AddToClassList(GetRarityClass(item.Rarity));
+                button.style.left = placement.x * step;
+                button.style.top = placement.y * step;
+                button.style.width = placement.width * CellSize + (placement.width - 1) * CellGap;
+                button.style.height = placement.height * CellSize + (placement.height - 1) * CellGap;
 
                 VisualElement icon = new VisualElement
                 {
@@ -278,13 +323,7 @@ namespace DarkFlare
                 };
                 icon.AddToClassList("shop-item-icon");
                 ItemVisualPresenter.ApplyIcon(icon, item.Detail.IconGuid);
-                Label summary = new Label($"{item.DisplayName}\n{ItemDetailFormatter.GetRarityText(item.Rarity)} · {item.Price} 金币")
-                {
-                    pickingMode = PickingMode.Ignore,
-                };
-                summary.AddToClassList("shop-item-summary");
                 button.Add(icon);
-                button.Add(summary);
                 button.RegisterCallback<PointerEnterEvent>(_ => PreviewItem(item.Item, item.Source));
                 button.RegisterCallback<PointerLeaveEvent>(_ => EndPreview(item.Item));
                 button.RegisterCallback<FocusInEvent>(_ => PreviewItem(item.Item, item.Source));
@@ -303,6 +342,23 @@ namespace DarkFlare
             _viewState.FocusTarget = ShopFocusTarget.Item;
             _viewState.ClearFeedback();
             UpdateSelectedListState(source, item);
+            RefreshSelection();
+        }
+
+        void OnInventorySelectionChanged(ItemInstance item)
+        {
+            if (!IsVisible || _isTransactionInProgress || item == null)
+            {
+                return;
+            }
+
+            _selectedItem = item;
+            _selectedSource = ShopItemSource.Player;
+            _previewItem = null;
+            _viewState.ActiveSource = ShopItemSource.Player;
+            _viewState.FocusTarget = ShopFocusTarget.Item;
+            _viewState.ClearFeedback();
+            UpdateSelectedListState(ShopItemSource.Player, item);
             RefreshSelection();
         }
 
@@ -331,13 +387,13 @@ namespace DarkFlare
 
             if (!TryGetSelectedSnapshot(out ShopItemSnapshot selected))
             {
-                _detailView.Clear();
                 _selectedSourceLabel.text = "来源：-";
                 _selectedPriceLabel.text = "价格：-";
                 _feedbackLabel.text = _viewState.HasFeedback ? _viewState.Feedback : "商店和背包均为空";
                 _buyButton.SetEnabled(false);
                 _sellButton.SetEnabled(false);
                 _viewState.FocusTarget = ShopFocusTarget.CloseFallback;
+                _inventoryPanel.RestoreTooltip();
                 return;
             }
 
@@ -368,11 +424,23 @@ namespace DarkFlare
 
             if (TryFindSnapshot(item, source, out ShopItemSnapshot snapshot))
             {
-                _detailView.Show(snapshot.Detail, ItemVisualPresenter.GetSprite(snapshot.Detail.IconGuid));
+                if (source == ShopItemSource.Merchant
+                    && _merchantButtons.TryGetValue(item, out Button button))
+                {
+                    _inventoryPanel.ShowExternalTooltip(
+                        item,
+                        button,
+                        $"商人库存 · 买入 {snapshot.Price} 金币");
+                }
+                else
+                {
+                    _inventoryPanel.ShowSelectedTooltip($"玩家背包 · 卖出 {snapshot.Price} 金币");
+                }
+
                 return;
             }
 
-            _detailView.Clear();
+            _inventoryPanel.RestoreTooltip();
         }
 
         bool TryGetSelectedSnapshot(out ShopItemSnapshot selected)
@@ -471,16 +539,6 @@ namespace DarkFlare
 
         void CaptureViewState()
         {
-            if (_merchantScroll != null)
-            {
-                _viewState.Merchant.ScrollOffset = _merchantScroll.scrollOffset;
-            }
-
-            if (_playerScroll != null)
-            {
-                _viewState.Player.ScrollOffset = _playerScroll.scrollOffset;
-            }
-
             if (_selectedItem != null)
             {
                 UpdateSelectedListState(_selectedSource, _selectedItem);
@@ -613,9 +671,6 @@ namespace DarkFlare
                 return;
             }
 
-            _merchantScroll.scrollOffset = _viewState.Merchant.ScrollOffset;
-            _playerScroll.scrollOffset = _viewState.Player.ScrollOffset;
-
             if (_viewState.FocusTarget == ShopFocusTarget.BuyAction && _buyButton.enabledSelf)
             {
                 _buyButton.Focus();
@@ -628,17 +683,17 @@ namespace DarkFlare
                 return;
             }
 
-            Dictionary<ItemInstance, Button> buttons = _selectedSource == ShopItemSource.Merchant
-                ? _merchantButtons
-                : _playerButtons;
+            if (_selectedSource == ShopItemSource.Player)
+            {
+                _inventoryPanel.FocusDefault();
+                return;
+            }
 
-            if (_selectedItem == null || !buttons.TryGetValue(_selectedItem, out Button button))
+            if (_selectedItem == null || !_merchantButtons.TryGetValue(_selectedItem, out Button button))
             {
                 return;
             }
 
-            ScrollView scroll = _selectedSource == ShopItemSource.Merchant ? _merchantScroll : _playerScroll;
-            scroll.ScrollTo(button);
             button.Focus();
         }
 

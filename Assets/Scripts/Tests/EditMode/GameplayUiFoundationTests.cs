@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 using DarkFlare;
 using NUnit.Framework;
@@ -64,34 +65,40 @@ public class GameplayUiFoundationTests
     }
 
     [Test]
-    public void HudSnapshot_ReflectsPlayerGoldAndWeapon()
+    public void HudSnapshot_ReflectsPlayerGoldAndEffectiveAttributes()
     {
         InventoryModel inventory = _architecture.GetModel<InventoryModel>();
         inventory.AddGold(25);
-        CombatActor player = CreatePlayer();
-        ItemInstance weapon = CreateItem("hud_weapon", "测试长剑");
-        Assert.IsTrue(inventory.TryAddItem(weapon));
-        EquipmentChangedEvent equipmentEvent = default;
-        int equipmentEventCount = 0;
-        _architecture.RegisterEvent<EquipmentChangedEvent>(e =>
-        {
-            equipmentEvent = e;
-            equipmentEventCount++;
-        });
-
-        bool equipped = _architecture.SendCommand(new EquipItemCommand(player, weapon));
+        CreatePlayer();
         HudSnapshot snapshot = _architecture.SendQuery(new GetHudSnapshotQuery());
 
-        Assert.IsTrue(equipped);
         Assert.IsTrue(snapshot.HasPlayer);
         Assert.AreEqual(100f, snapshot.CurrentHealth);
         Assert.AreEqual(100f, snapshot.MaxHealth);
         Assert.AreEqual(1f, snapshot.HealthNormalized);
         Assert.AreEqual(25, snapshot.Gold);
-        StringAssert.Contains("测试长剑", snapshot.WeaponSummary);
-        Assert.AreEqual(1, equipmentEventCount);
-        Assert.AreSame(player, equipmentEvent.Actor);
-        Assert.AreSame(weapon, equipmentEvent.CurrentWeapon);
+        Assert.AreEqual(42f, snapshot.Attributes.Armor);
+        Assert.AreEqual(18f, snapshot.Attributes.Evasion);
+        Assert.AreEqual(5f, snapshot.Attributes.MoveSpeed);
+        Assert.AreEqual(7.5f, snapshot.Attributes.CriticalChance);
+        Assert.AreEqual(75f, snapshot.Attributes.FireResistance, "HUD 应显示伤害管线实际使用的抗性上限");
+        Assert.AreEqual(12f, snapshot.Attributes.ColdResistance);
+        Assert.AreEqual(-15f, snapshot.Attributes.LightningResistance);
+        Assert.AreEqual(-100f, snapshot.Attributes.ChaosResistance, "HUD 应显示伤害管线实际使用的抗性下限");
+    }
+
+    [Test]
+    public void HudUxml_UsesAttributeWindowAndDoesNotShowEquipment()
+    {
+        string path = Path.GetFullPath(Path.Combine(Application.dataPath, "../Assets/UI/Hud.uxml"));
+        string uxml = File.ReadAllText(path);
+
+        StringAssert.Contains("name=\"attribute-card\"", uxml);
+        StringAssert.Contains("name=\"attribute-armor\"", uxml);
+        StringAssert.Contains("name=\"attribute-chaos-resistance\"", uxml);
+        StringAssert.DoesNotContain("weapon-card", uxml);
+        StringAssert.DoesNotContain("weapon-label", uxml);
+        StringAssert.DoesNotContain("weapon-icon", uxml);
     }
 
     [Test]
@@ -455,7 +462,16 @@ public class GameplayUiFoundationTests
         GameObject playerObject = new GameObject("HudTestPlayer");
         playerObject.SetActive(false);
         CombatActor actor = playerObject.AddComponent<CombatActor>();
-        actor.Configure("hud_test_player", ActorTeam.Player, 100f, new StatBlock(), TagSet.Empty);
+        StatBlock stats = new StatBlock();
+        stats.SetValue(StatIds.Armor, 42f);
+        stats.SetValue(StatIds.Evasion, 18f);
+        stats.SetValue(StatIds.MoveSpeed, 5f);
+        stats.SetValue(StatIds.CriticalChance, 7.5f);
+        stats.SetValue(StatIds.FireResistance, 90f);
+        stats.SetValue(StatIds.ColdResistance, 12f);
+        stats.SetValue(StatIds.LightningResistance, -15f);
+        stats.SetValue(StatIds.ChaosResistance, -120f);
+        actor.Configure("hud_test_player", ActorTeam.Player, 100f, stats, TagSet.Empty);
         _objects.Add(playerObject);
         playerObject.SetActive(true);
         _architecture.GetSystem<CombatSystem>().RegisterActor(actor);

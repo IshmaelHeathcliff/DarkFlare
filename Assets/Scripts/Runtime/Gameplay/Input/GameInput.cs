@@ -19,6 +19,12 @@ namespace DarkFlare
 
         public event Action InteractPerformed;
 
+        public event Action RearrangePerformed;
+
+        public event Action<Vector2> NavigatePerformed;
+
+        public event Func<bool> CancelRequested;
+
         public event Action<GameInputMode> ModeChanged;
 
         public GameInputMode CurrentMode { get; private set; }
@@ -34,6 +40,8 @@ namespace DarkFlare
             _actions = new InputSystem_Actions();
             _actions.Player.Interact.performed += OnInteract;
             _actions.Player.ToggleMenu.performed += OnToggleMenu;
+            _actions.UI.Navigate.performed += OnNavigate;
+            _actions.UI.Rearrange.performed += OnRearrange;
             _actions.UI.Cancel.performed += OnCancel;
             SwitchToGameplay();
         }
@@ -57,6 +65,8 @@ namespace DarkFlare
 
             _actions.Player.Interact.performed -= OnInteract;
             _actions.Player.ToggleMenu.performed -= OnToggleMenu;
+            _actions.UI.Navigate.performed -= OnNavigate;
+            _actions.UI.Rearrange.performed -= OnRearrange;
             _actions.UI.Cancel.performed -= OnCancel;
             _actions.Disable();
 
@@ -70,6 +80,9 @@ namespace DarkFlare
             }
 
             InteractPerformed = null;
+            RearrangePerformed = null;
+            NavigatePerformed = null;
+            CancelRequested = null;
             ModeChanged = null;
             _disposed = true;
         }
@@ -113,9 +126,45 @@ namespace DarkFlare
             InteractPerformed?.Invoke();
         }
 
+        void OnNavigate(InputAction.CallbackContext context)
+        {
+            NavigatePerformed?.Invoke(context.ReadValue<Vector2>());
+        }
+
+        void OnRearrange(InputAction.CallbackContext context)
+        {
+            RearrangePerformed?.Invoke();
+        }
+
         void OnCancel(InputAction.CallbackContext context)
         {
+            if (TryHandleCancelRequest())
+            {
+                return;
+            }
+
             SwitchToGameplay();
+        }
+
+        bool TryHandleCancelRequest()
+        {
+            if (CancelRequested == null)
+            {
+                return false;
+            }
+
+            bool handled = false;
+            Delegate[] callbacks = CancelRequested.GetInvocationList();
+
+            for (int i = 0; i < callbacks.Length; i++)
+            {
+                if (callbacks[i] is Func<bool> callback && callback())
+                {
+                    handled = true;
+                }
+            }
+
+            return handled;
         }
     }
 }

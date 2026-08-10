@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace DarkFlare
 {
     public class InventoryModel : AbstractModel
@@ -25,6 +27,56 @@ namespace DarkFlare
             }
 
             return added;
+        }
+
+        public bool TryAddItemAt(ItemInstance item, Vector2Int origin)
+        {
+            bool added = Grid.TryAddAt(item, origin);
+
+            if (added)
+            {
+                this.SendEvent(new InventoryChangedEvent(
+                    item,
+                    InventoryChangeType.Added,
+                    default,
+                    Grid.Placements[item]));
+            }
+
+            return added;
+        }
+
+        public bool TryMoveItem(ItemInstance item, Vector2Int origin)
+        {
+            if (item == null || !Grid.Placements.TryGetValue(item, out RectInt previousPlacement))
+            {
+                return false;
+            }
+
+            if (!Grid.CanMove(item, origin, out ItemInstance exchangedItem))
+            {
+                return false;
+            }
+
+            RectInt exchangedPreviousPlacement = exchangedItem != null
+                ? Grid.Placements[exchangedItem]
+                : default;
+
+            if (!Grid.TryMove(item, origin, out exchangedItem))
+            {
+                return false;
+            }
+
+            NotifyItemMoved(item, previousPlacement, Grid.Placements[item]);
+
+            if (exchangedItem != null)
+            {
+                NotifyItemMoved(
+                    exchangedItem,
+                    exchangedPreviousPlacement,
+                    Grid.Placements[exchangedItem]);
+            }
+
+            return true;
         }
 
         public bool RemoveItem(ItemInstance item)
@@ -63,9 +115,22 @@ namespace DarkFlare
             return Grid.CanExchange(itemToRemove, itemToAdd);
         }
 
+        public bool CanExchangeItemAt(ItemInstance itemToRemove, ItemInstance itemToAdd, Vector2Int origin)
+        {
+            return Grid.CanExchangeAt(itemToRemove, itemToAdd, origin);
+        }
+
         public bool TryExchangeItemWithoutEvents(ItemInstance itemToRemove, ItemInstance itemToAdd)
         {
             return Grid.TryExchange(itemToRemove, itemToAdd);
+        }
+
+        public bool TryExchangeItemAtWithoutEvents(
+            ItemInstance itemToRemove,
+            ItemInstance itemToAdd,
+            Vector2Int origin)
+        {
+            return Grid.TryExchangeAt(itemToRemove, itemToAdd, origin);
         }
 
         public bool CanAddItem(ItemInstance item)
@@ -73,9 +138,19 @@ namespace DarkFlare
             return Grid.CanAdd(item);
         }
 
+        public bool CanAddItemAt(ItemInstance item, Vector2Int origin)
+        {
+            return Grid.CanAddAt(item, origin);
+        }
+
         public bool TryAddItemWithoutEvents(ItemInstance item)
         {
             return Grid.TryAdd(item);
+        }
+
+        public bool TryAddItemAtWithoutEvents(ItemInstance item, Vector2Int origin)
+        {
+            return Grid.TryAddAt(item, origin);
         }
 
         public bool RemoveItemWithoutEvents(ItemInstance item)
@@ -86,6 +161,15 @@ namespace DarkFlare
         public void NotifyItemChanged(ItemInstance item, InventoryChangeType changeType)
         {
             this.SendEvent(new InventoryChangedEvent(item, changeType));
+        }
+
+        public void NotifyItemMoved(ItemInstance item, RectInt previousPlacement, RectInt currentPlacement)
+        {
+            this.SendEvent(new InventoryChangedEvent(
+                item,
+                InventoryChangeType.Moved,
+                previousPlacement,
+                currentPlacement));
         }
 
         public void AddGold(int amount)

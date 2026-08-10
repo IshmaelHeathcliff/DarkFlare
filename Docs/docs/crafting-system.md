@@ -46,6 +46,8 @@
 
 `CraftingPanelController` 实现 `IController`，只发送 `CraftItemCommand`，并订阅 `InventoryChangedEvent`、`GoldChangedEvent`、`ItemCraftedEvent` 重新查询快照。它不直接读取或修改 Model。
 
+alpha 0.1.0 后，打造页不再生成独立物品列表，而是直接使用共享玩家 10×6 格子背包的固定选择。物品详情由唯一顶层浮窗显示，打造上下文只保留词缀、容量、价值、金币成本和四项操作；在打造页面整理背包不会隐式触发打造。
+
 ## 价值联动边界
 
 当前 `ItemValueCalculator` 只按基础价值、稀有度和词缀数量计算价值。因此添加词缀会改变价值与出售价；只改变词缀类型或数值的重随、移除重随和提升数值通常不会改变交易价值。词缀 tier 或具体数值进入价值公式留给后续经济系统迭代。

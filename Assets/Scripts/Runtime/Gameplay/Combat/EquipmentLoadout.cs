@@ -53,5 +53,43 @@ namespace DarkFlare
 
             return _items.Remove(slot);
         }
+
+        public bool TryMove(EquipmentSlot sourceSlot, EquipmentSlot targetSlot)
+        {
+            if (sourceSlot == targetSlot)
+            {
+                return false;
+            }
+
+            ItemInstance sourceItem = Get(sourceSlot);
+
+            if (sourceItem == null
+                || sourceItem.BaseDefinition == null
+                || !sourceItem.BaseDefinition.CanEquipTo(targetSlot))
+            {
+                return false;
+            }
+
+            ItemInstance targetItem = Get(targetSlot);
+
+            if (targetItem != null
+                && (targetItem.BaseDefinition == null || !targetItem.BaseDefinition.CanEquipTo(sourceSlot)))
+            {
+                return false;
+            }
+
+            _items[targetSlot] = sourceItem;
+
+            if (targetItem != null)
+            {
+                _items[sourceSlot] = targetItem;
+            }
+            else
+            {
+                _items.Remove(sourceSlot);
+            }
+
+            return true;
+        }
     }
 }

@@ -76,13 +76,11 @@ Button:disabled {
   -unity-background-scale-mode: scale-to-fit;
 }
 
-.shop-item,
 .crafting-item {
   flex-direction: row;
   align-items: center;
 }
 
-.shop-item-icon,
 .crafting-item-icon {
   width: 48px;
   height: 48px;
@@ -91,7 +89,6 @@ Button:disabled {
   -unity-background-scale-mode: scale-to-fit;
 }
 
-.shop-item-summary,
 .crafting-item-summary {
   flex-grow: 1;
   white-space: normal;
@@ -196,29 +193,6 @@ Button:disabled {
 
 .hud-card-content--compact {
   align-items: flex-end;
-}
-
-.hud-weapon-icon {
-  width: 52px;
-  height: 52px;
-  margin-right: 14px;
-  flex-shrink: 0;
-  -unity-background-scale-mode: scale-to-fit;
-  background-color: rgba(10, 13, 18, 0.7);
-  border-left-width: 2px;
-  border-right-width: 2px;
-  border-top-width: 2px;
-  border-bottom-width: 2px;
-  border-left-color: rgb(121, 101, 68);
-  border-right-color: rgb(121, 101, 68);
-  border-top-color: rgb(121, 101, 68);
-  border-bottom-color: rgb(121, 101, 68);
-  border-radius: 6px;
-}
-
-.hud-weapon-icon--empty {
-  background-image: url("project://database/Assets/Art/Sprites/UI/Icons/ui_icon_weapon_empty.png?fileID=21300000&guid=c5307ddfd39bc1b45bb06c2390fda280&type=3");
-  opacity: 0.55;
 }
 
 .game-menu-tab,

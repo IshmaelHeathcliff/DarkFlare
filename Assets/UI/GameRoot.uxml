@@ -1,15 +1,18 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
-    <ui:Style src="project://database/Assets/UI/Theme.uss" />
-  <ui:Style src="project://database/Assets/UI/Hud.uss?fileID=7433441132597879392&amp;guid=d225eb57055fd094795854125058bc2b&amp;type=3#Hud" />
-  <ui:Style src="project://database/Assets/UI/GameMenu.uss?fileID=7433441132597879392&amp;guid=b4d4f2a63cd70ac488b7a48eb4b04c9e&amp;type=3#GameMenu" />
-  <ui:Style src="project://database/Assets/UI/Inventory.uss?fileID=7433441132597879392&amp;guid=b18b5c9f65901f24c9fcc14f669c79e5&amp;type=3#Inventory" />
-  <ui:Style src="project://database/Assets/UI/Shop.uss?fileID=7433441132597879392&amp;guid=fc59b910bf3e0bd488ca734ba8394fab&amp;type=3#Shop" />
-  <ui:Style src="project://database/Assets/UI/Crafting.uss?fileID=7433441132597879392&amp;guid=a2906192d36f52048a633db31ced5424&amp;type=3#Crafting" />
-  <ui:Style src="project://database/Assets/UI/ItemDetail.uss?fileID=7433441132597879392&amp;guid=e67c7a2d23b3a244d8a8ef35a84af7a0&amp;type=3#ItemDetail" />
-  <ui:Template name="Hud" src="project://database/Assets/UI/Hud.uxml?fileID=9197481963319205126&amp;guid=15c85499aee872d4eb028c5b82b83699&amp;type=3#Hud" />
-  <ui:Template name="Inventory" src="project://database/Assets/UI/Inventory.uxml?fileID=9197481963319205126&amp;guid=ab631162532b45f4ea91902aba703eb2&amp;type=3#Inventory" />
-  <ui:Template name="Shop" src="project://database/Assets/UI/Shop.uxml?fileID=9197481963319205126&amp;guid=d13ce3c56db30db43bc3649e9d12d8a6&amp;type=3#Shop" />
-  <ui:Template name="Crafting" src="project://database/Assets/UI/Crafting.uxml?fileID=9197481963319205126&amp;guid=123852e1d21f9bc4a8ccae84cfb7d656&amp;type=3#Crafting" />
+  <ui:Style src="project://database/Assets/UI/Theme.uss" />
+  <ui:Style src="project://database/Assets/UI/Hud.uss" />
+  <ui:Style src="project://database/Assets/UI/GameMenu.uss" />
+  <ui:Style src="project://database/Assets/UI/ItemWorkbench.uss" />
+  <ui:Style src="project://database/Assets/UI/Inventory.uss" />
+  <ui:Style src="project://database/Assets/UI/Shop.uss" />
+  <ui:Style src="project://database/Assets/UI/Crafting.uss" />
+  <ui:Style src="project://database/Assets/UI/ItemDetail.uss" />
+  <ui:Template name="Hud" src="project://database/Assets/UI/Hud.uxml" />
+  <ui:Template name="ItemWorkbench" src="project://database/Assets/UI/ItemWorkbench.uxml" />
+  <ui:Template name="Inventory" src="project://database/Assets/UI/Inventory.uxml" />
+  <ui:Template name="Shop" src="project://database/Assets/UI/Shop.uxml" />
+  <ui:Template name="Crafting" src="project://database/Assets/UI/Crafting.uxml" />
+  <ui:Template name="ItemDetail" src="project://database/Assets/UI/ItemDetail.uxml" />
   <ui:VisualElement name="game-ui-root" class="game-ui-root" picking-mode="Ignore">
     <ui:Instance template="Hud" />
     <ui:VisualElement name="game-menu-overlay" class="game-menu-overlay" picking-mode="Position">
@@ -17,7 +20,7 @@
         <ui:VisualElement class="game-menu-header">
           <ui:VisualElement class="game-menu-heading">
             <ui:Label text="营地整备" class="game-menu-title" />
-            <ui:Label text="GAME MENU" class="game-menu-kicker" />
+            <ui:Label text="ITEM WORKBENCH" class="game-menu-kicker" />
           </ui:VisualElement>
           <ui:VisualElement class="game-menu-tabs">
             <ui:Button name="game-menu-inventory-tab" class="game-menu-tab">
@@ -39,11 +42,21 @@
           </ui:Button>
         </ui:VisualElement>
         <ui:VisualElement name="game-menu-content" class="game-menu-content">
-          <ui:Instance template="Inventory" class="inventory-template" />
-          <ui:Instance template="Shop" class="shop-template" />
-          <ui:Instance template="Crafting" class="crafting-template" />
+          <ui:Instance template="ItemWorkbench" class="item-workbench-template" />
+          <ui:VisualElement name="game-menu-context-stack" class="game-menu-context-stack">
+            <ui:Instance template="Inventory" class="inventory-template" />
+            <ui:Instance template="Shop" class="shop-template" />
+            <ui:Instance template="Crafting" class="crafting-template" />
+          </ui:VisualElement>
         </ui:VisualElement>
       </ui:VisualElement>
+      <ui:VisualElement name="item-tooltip-layer" class="item-tooltip-layer" picking-mode="Ignore">
+        <ui:VisualElement name="item-tooltip" class="item-tooltip ui-panel-frame" picking-mode="Ignore">
+          <ui:Instance template="ItemDetail" name="item-tooltip-detail" class="item-tooltip-detail" />
+          <ui:Label name="item-tooltip-context" text="" class="item-tooltip-context" />
+        </ui:VisualElement>
+      </ui:VisualElement>
+      <ui:VisualElement name="item-drag-layer" class="item-drag-layer" picking-mode="Ignore" />
     </ui:VisualElement>
   </ui:VisualElement>
 </ui:UXML>

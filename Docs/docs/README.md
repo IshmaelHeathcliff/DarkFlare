@@ -6,6 +6,7 @@
 - [目录结构](./project-structure.md)
 - [首版玩法循环](./gameplay-loop.md)
 - [输入与运行时 UI](./input-ui-system.md)
+- [物品 UI 工作台](./item-ui-workbench.md)
 - [装备系统](./equipment-system.md)
 - [属性定义与调用关系](./stat-system.md)
 - [随机化与掉落规则](./randomization-system.md)

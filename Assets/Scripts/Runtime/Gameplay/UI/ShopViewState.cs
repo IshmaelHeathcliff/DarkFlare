@@ -18,13 +18,10 @@ namespace DarkFlare
 
         public int FallbackIndex { get; set; }
 
-        public Vector2 ScrollOffset { get; set; }
-
         public void Reset()
         {
             SelectedInstanceId = string.Empty;
             FallbackIndex = 0;
-            ScrollOffset = Vector2.zero;
         }
     }
 

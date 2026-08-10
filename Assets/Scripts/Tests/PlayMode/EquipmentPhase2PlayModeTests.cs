@@ -100,6 +100,8 @@ namespace DarkFlare.Tests
             yield return null;
             yield return null;
             VisualElement root = document.rootVisualElement;
+            Assert.IsNotNull(root.Q<VisualElement>("attribute-card"), "HUD 缺少当前属性窗口");
+            Assert.IsNull(root.Q<VisualElement>("weapon-card"), "HUD 不应继续显示当前装备");
             InventoryPanelController panel = menu.GetComponent<InventoryPanelController>();
             Keyboard keyboard = InputSystem.AddDevice<Keyboard>();
             Gamepad gamepad = InputSystem.AddDevice<Gamepad>();
@@ -158,6 +160,9 @@ namespace DarkFlare.Tests
                     AssertLayoutInsideRoot(root, new[]
                     {
                         "game-menu-panel",
+                        "attribute-card",
+                        "attribute-armor",
+                        "attribute-chaos-resistance",
                         "inventory-page",
                         "inventory-grid",
                         "inventory-equipment",
@@ -165,7 +170,7 @@ namespace DarkFlare.Tests
                         "inventory-slot-armor",
                         "inventory-slot-ring-left",
                         "inventory-slot-ring-right",
-                        "inventory-item-detail",
+                        "item-tooltip",
                         "inventory-actions",
                         "inventory-equip",
                         "inventory-unequip",
@@ -309,9 +314,9 @@ namespace DarkFlare.Tests
                     continue;
                 }
 
-                Label label = button.Q<Label>();
-
-                if (label != null && label.text == displayName)
+                if (button.userData is ItemInstance item
+                    && item.BaseDefinition != null
+                    && item.BaseDefinition.DisplayName == displayName)
                 {
                     return button;
                 }
@@ -359,6 +364,14 @@ namespace DarkFlare.Tests
                 Assert.LessOrEqual(bounds.xMax, rootBounds.xMax + 1f, $"{names[i]} 超出右边界");
                 Assert.LessOrEqual(bounds.yMax, rootBounds.yMax + 1f, $"{names[i]} 超出下边界");
             }
+
+
+            Rect gridFrame = root.Q<VisualElement>("inventory-grid-frame").worldBound;
+            Rect grid = root.Q<VisualElement>("inventory-grid").worldBound;
+            Assert.GreaterOrEqual(grid.xMin, gridFrame.xMin - 1f, "背包格超出左边界");
+            Assert.GreaterOrEqual(grid.yMin, gridFrame.yMin - 1f, "背包格超出上边界");
+            Assert.LessOrEqual(grid.xMax, gridFrame.xMax + 1f, "背包格超出右边界");
+            Assert.LessOrEqual(grid.yMax, gridFrame.yMax + 1f, "背包格超出下边界");
         }
 
         static void SetField(object target, string fieldName, object value)

@@ -1,38 +1,19 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
-  <ui:Template name="ItemDetail" src="project://database/Assets/UI/ItemDetail.uxml?fileID=9197481963319205126&amp;guid=6976f322ca12d3a458c3e7b9eb151dfb&amp;type=3#ItemDetail" />
-  <ui:VisualElement name="inventory-page" class="inventory-page" picking-mode="Position">
-    <ui:VisualElement class="inventory-body">
-      <ui:VisualElement class="inventory-grid-section">
-        <ui:Label text="物品格  10 × 6" class="inventory-section-title" />
-        <ui:VisualElement class="inventory-grid-frame">
-          <ui:VisualElement name="inventory-grid" class="inventory-grid" picking-mode="Position" />
-          <ui:Label name="inventory-empty" text="背包为空" class="inventory-empty" />
-        </ui:VisualElement>
-        <ui:Label text="方向键 / 左摇杆移动焦点 · Enter / A 选择" class="inventory-help" />
-      </ui:VisualElement>
-      <ui:VisualElement name="inventory-equipment" class="inventory-equipment">
-        <ui:Label text="装备栏" class="inventory-section-title" />
-        <ui:Button name="inventory-slot-weapon" text="武器 · 空" class="inventory-equipment-slot" />
-        <ui:Button name="inventory-slot-armor" text="护甲 · 空" class="inventory-equipment-slot" />
-        <ui:Button name="inventory-slot-ring-left" text="左戒指 · 空" class="inventory-equipment-slot" />
-        <ui:Button name="inventory-slot-ring-right" text="右戒指 · 空" class="inventory-equipment-slot" />
-        <ui:Label text="饰品需先选择左或右戒指槽" class="inventory-equipment-help" />
-      </ui:VisualElement>
-      <ui:VisualElement class="inventory-details">
-        <ui:Label text="装备详情" class="inventory-section-title" />
-        <ui:Label name="inventory-target-slot" text="目标槽位：未选择" class="inventory-target-slot" />
-        <ui:VisualElement class="inventory-divider" />
-        <ui:Instance template="ItemDetail" name="inventory-item-detail" class="inventory-item-detail" />
-        <ui:Label text="装备比较" class="inventory-comparison-title" />
-        <ui:ScrollView name="inventory-comparison-scroll" class="inventory-comparison-scroll" mode="Vertical">
-          <ui:Label name="inventory-comparison" text="选择候选物品和目标槽位后显示" class="inventory-comparison" />
-        </ui:ScrollView>
-        <ui:Label name="inventory-feedback" text="选择一个物品查看详情" class="inventory-feedback" />
-        <ui:VisualElement name="inventory-actions" class="inventory-actions">
-          <ui:Button name="inventory-equip" text="装备 / 替换" class="inventory-action inventory-equip" />
-          <ui:Button name="inventory-unequip" text="卸下" class="inventory-action inventory-unequip" />
-        </ui:VisualElement>
-      </ui:VisualElement>
+  <ui:VisualElement name="inventory-page" class="inventory-page item-context-panel ui-panel-frame" picking-mode="Position">
+    <ui:VisualElement class="item-context-header">
+      <ui:Label text="装备信息" class="item-context-title" />
+      <ui:Label text="INVENTORY" class="item-context-kicker" />
     </ui:VisualElement>
+    <ui:Label name="inventory-target-slot" text="目标槽位：未选择" class="inventory-target-slot" />
+    <ui:Label text="装备比较" class="item-context-subtitle" />
+    <ui:ScrollView name="inventory-comparison-scroll" class="inventory-comparison-scroll" mode="Vertical">
+      <ui:Label name="inventory-comparison" text="选择候选物品和目标槽位后显示" class="inventory-comparison" />
+    </ui:ScrollView>
+    <ui:Label name="inventory-feedback" text="选择物品或装备槽查看操作" class="inventory-feedback" />
+    <ui:VisualElement name="inventory-actions" class="inventory-actions">
+      <ui:Button name="inventory-equip" text="装备 / 替换" class="item-context-action item-context-action--primary inventory-equip" />
+      <ui:Button name="inventory-unequip" text="卸下" class="item-context-action inventory-unequip" />
+    </ui:VisualElement>
+    <ui:Label text="拖拽可精确整理；按钮操作仍会自动寻找空位" class="item-context-help" />
   </ui:VisualElement>
 </ui:UXML>

@@ -1,9 +1,12 @@
+using UnityEngine;
+
 namespace DarkFlare
 {
     public enum InventoryChangeType
     {
         Added,
-        Removed
+        Removed,
+        Moved
     }
 
     public enum TradeOperation
@@ -31,10 +34,25 @@ namespace DarkFlare
 
         public InventoryChangeType ChangeType { get; }
 
+        public RectInt PreviousPlacement { get; }
+
+        public RectInt CurrentPlacement { get; }
+
         public InventoryChangedEvent(ItemInstance item, InventoryChangeType changeType)
+            : this(item, changeType, default, default)
+        {
+        }
+
+        public InventoryChangedEvent(
+            ItemInstance item,
+            InventoryChangeType changeType,
+            RectInt previousPlacement,
+            RectInt currentPlacement)
         {
             Item = item;
             ChangeType = changeType;
+            PreviousPlacement = previousPlacement;
+            CurrentPlacement = currentPlacement;
         }
     }
 

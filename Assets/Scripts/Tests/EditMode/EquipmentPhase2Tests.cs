@@ -176,11 +176,15 @@ public class EquipmentPhase2Tests
         Assert.IsTrue(_architecture.SendCommand(new EquipItemCommand(player, weapon, EquipmentSlot.Weapon)));
 
         Assert.AreEqual(72f, player.Stats.GetValue(StatIds.Armor), 0.001f);
+        HudSnapshot equippedHud = _architecture.SendQuery(new GetHudSnapshotQuery());
+        Assert.AreEqual(72f, equippedHud.Attributes.Armor, 0.001f);
         Assert.AreEqual(2, player.Modifiers.Count);
         CollectionAssert.DoesNotContain((System.Collections.ICollection)player.Modifiers, localDamage);
 
         Assert.IsTrue(_architecture.SendCommand(new UnequipItemCommand(player, EquipmentSlot.RingLeft)));
         Assert.AreEqual(60f, player.Stats.GetValue(StatIds.Armor), 0.001f);
+        HudSnapshot unequippedHud = _architecture.SendQuery(new GetHudSnapshotQuery());
+        Assert.AreEqual(60f, unequippedHud.Attributes.Armor, 0.001f);
         Assert.AreEqual(1, player.Modifiers.Count);
     }
 

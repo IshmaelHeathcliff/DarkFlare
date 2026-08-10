@@ -6,6 +6,7 @@ namespace DarkFlare
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(UIDocument))]
+    [RequireComponent(typeof(InventoryPanelController))]
     public class CraftingPanelController : MonoBehaviour, IController
     {
         const string SelectedItemClass = "crafting-item--selected";
@@ -18,6 +19,9 @@ namespace DarkFlare
 
         [SerializeField]
         UIDocument _document;
+
+        [SerializeField]
+        InventoryPanelController _inventoryPanel;
 
         VisualElement _page;
         VisualElement _itemList;
@@ -50,12 +54,11 @@ namespace DarkFlare
 
         public void RefreshCrafting()
         {
-            if (_itemList == null)
+            if (_affixList == null)
             {
                 return;
             }
 
-            CaptureItemState();
             AffixInstance previousAffix = _selectedAffix;
             LastSnapshot = this.SendQuery(new GetCraftingSnapshotQuery());
             _selectedItem = null;
@@ -63,29 +66,15 @@ namespace DarkFlare
             _selectedAffix = null;
             _itemButtons.Clear();
             _affixButtons.Clear();
-            _itemList.Clear();
             _affixList.Clear();
 
             for (int i = 0; i < LastSnapshot.Items.Count; i++)
             {
-                CraftingItemSnapshot item = LastSnapshot.Items[i];
-                Button button = CreateItemButton(item);
-                _itemList.Add(button);
-                _itemButtons.Add(item.Item, button);
-
-            }
-
-            int selectedIndex = ItemSelectionResolver.ResolveIndex(
-                LastSnapshot.Items,
-                _itemViewState.SelectedInstanceId,
-                _itemViewState.FallbackIndex,
-                item => item.Detail.InstanceId);
-
-            if (selectedIndex >= 0)
-            {
-                _selectedItem = LastSnapshot.Items[selectedIndex].Item;
-                _itemViewState.SelectedInstanceId = _selectedItem.InstanceId;
-                _itemViewState.FallbackIndex = selectedIndex;
+                if (LastSnapshot.Items[i].Item == _inventoryPanel.SelectedItem)
+                {
+                    _selectedItem = LastSnapshot.Items[i].Item;
+                    break;
+                }
             }
 
             BuildAffixList(previousAffix);
@@ -111,13 +100,7 @@ namespace DarkFlare
 
         public bool FocusDefault()
         {
-            if (_selectedItem == null || !_itemButtons.TryGetValue(_selectedItem, out Button button))
-            {
-                return false;
-            }
-
-            button.Focus();
-            return true;
+            return _inventoryPanel != null && _inventoryPanel.FocusDefault();
         }
 
         void Awake()
@@ -135,6 +118,7 @@ namespace DarkFlare
             }
 
             RegisterEvents();
+            _inventoryPanel.SelectionChanged += OnInventorySelectionChanged;
             RefreshCrafting();
             SetVisible(IsVisible);
             Debug.Log("[CraftingPanelController] 打造面板初始化完成", this);
@@ -143,6 +127,11 @@ namespace DarkFlare
         void OnDisable()
         {
             UnbindButtons();
+
+            if (_inventoryPanel != null)
+            {
+                _inventoryPanel.SelectionChanged -= OnInventorySelectionChanged;
+            }
 
             for (int i = 0; i < _eventRegistrations.Count; i++)
             {
@@ -191,21 +180,24 @@ namespace DarkFlare
             {
                 _document = gameObject.AddComponent<UIDocument>();
             }
+
+            if (_inventoryPanel == null)
+            {
+                _inventoryPanel = GetComponent<InventoryPanelController>();
+            }
         }
 
         bool BindVisualTree()
         {
-            if (_document == null)
+            if (_document == null || _inventoryPanel == null)
             {
-                Debug.LogError("[CraftingPanelController] 缺少 UIDocument，无法初始化打造面板", this);
+                Debug.LogError("[CraftingPanelController] 缺少 UIDocument 或共享背包控制器", this);
                 return false;
             }
 
             VisualElement root = _document.rootVisualElement;
             _page = root.Q<VisualElement>("crafting-page");
-            _itemList = root.Q<VisualElement>("crafting-item-list");
             _affixList = root.Q<VisualElement>("crafting-affix-list");
-            _itemEmptyLabel = root.Q<Label>("crafting-item-empty");
             _affixEmptyLabel = root.Q<Label>("crafting-affix-empty");
             _goldLabel = root.Q<Label>("crafting-gold");
             _selectedCapacityLabel = root.Q<Label>("crafting-selected-capacity");
@@ -213,16 +205,13 @@ namespace DarkFlare
             _selectedAffixLabel = root.Q<Label>("crafting-selected-affix");
             _selectedAffixDetailLabel = root.Q<Label>("crafting-selected-affix-detail");
             _feedbackLabel = root.Q<Label>("crafting-feedback");
-            _detailView = new ItemDetailView(root.Q<VisualElement>("crafting-item-detail"));
             _addAffixButton = root.Q<Button>("crafting-add-affix");
             _rerollAllButton = root.Q<Button>("crafting-reroll-all");
             _removeRerollButton = root.Q<Button>("crafting-remove-reroll");
             _upgradeAffixButton = root.Q<Button>("crafting-upgrade-affix");
 
             if (_page == null
-                || _itemList == null
                 || _affixList == null
-                || _itemEmptyLabel == null
                 || _affixEmptyLabel == null
                 || _goldLabel == null
                 || _selectedCapacityLabel == null
@@ -230,13 +219,12 @@ namespace DarkFlare
                 || _selectedAffixLabel == null
                 || _selectedAffixDetailLabel == null
                 || _feedbackLabel == null
-                || !_detailView.IsValid
                 || _addAffixButton == null
                 || _rerollAllButton == null
                 || _removeRerollButton == null
                 || _upgradeAffixButton == null)
             {
-                Debug.LogError("[CraftingPanelController] 打造 UXML 缺少必要的命名元素", this);
+                Debug.LogError("[CraftingPanelController] 打造 UXML 缺少共享背包工作台所需的命名元素", this);
                 return false;
             }
 
@@ -319,6 +307,18 @@ namespace DarkFlare
             _selectedAffix = null;
             BuildAffixList(null);
             RefreshSelection();
+        }
+
+        void OnInventorySelectionChanged(ItemInstance item)
+        {
+            if (!IsVisible)
+            {
+                return;
+            }
+
+            _selectedItem = item;
+            _selectedAffix = null;
+            RefreshCrafting();
         }
 
         void CaptureItemState()
@@ -410,13 +410,6 @@ namespace DarkFlare
             _rerollAllButton.text = $"重随全部 · {LastSnapshot.RerollAllCost} 金币";
             _removeRerollButton.text = $"移除并重随 · {LastSnapshot.RemoveRerollCost} 金币";
             _upgradeAffixButton.text = $"提升数值 · {LastSnapshot.UpgradeAffixCost} 金币";
-            _itemEmptyLabel.style.display = LastSnapshot.Items.Count == 0 ? DisplayStyle.Flex : DisplayStyle.None;
-
-            foreach (KeyValuePair<ItemInstance, Button> entry in _itemButtons)
-            {
-                entry.Value.EnableInClassList(SelectedItemClass, entry.Key == _selectedItem);
-            }
-
             foreach (KeyValuePair<AffixInstance, Button> entry in _affixButtons)
             {
                 entry.Value.EnableInClassList(SelectedAffixClass, entry.Key == _selectedAffix);
@@ -450,12 +443,16 @@ namespace DarkFlare
         void ShowEmptySelection()
         {
             _affixEmptyLabel.style.display = DisplayStyle.Flex;
-            _detailView.Clear();
+            _inventoryPanel.RestoreTooltip();
             _selectedCapacityLabel.text = "词缀容量：-";
             _selectedValueLabel.text = "物品价值：-";
             _selectedAffixLabel.text = "未选择词缀";
             _selectedAffixDetailLabel.text = "选择词缀后可移除重随或提升数值";
-            _feedbackLabel.text = LastSnapshot.IsConfigured ? "背包中没有可打造物品" : "打造配置尚未加载";
+            _feedbackLabel.text = !LastSnapshot.IsConfigured
+                ? "打造配置尚未加载"
+                : LastSnapshot.Items.Count == 0
+                    ? "背包中没有可打造物品"
+                    : "从玩家背包选择要打造的物品";
             SetActionEnabled(_addAffixButton, false);
             SetActionEnabled(_rerollAllButton, false);
             SetActionEnabled(_removeRerollButton, false);
@@ -473,12 +470,11 @@ namespace DarkFlare
                     continue;
                 }
 
-                ItemDetailSnapshot detail = LastSnapshot.Items[i].Detail;
-                _detailView.Show(detail, ItemVisualPresenter.GetSprite(detail.IconGuid));
+                _inventoryPanel.ShowSelectedTooltip("打造候选 · 所有操作需明确确认");
                 return;
             }
 
-            _detailView.Clear();
+            _inventoryPanel.RestoreTooltip();
         }
 
         void RefreshActions(CraftingItemSnapshot item)

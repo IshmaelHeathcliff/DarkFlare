@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -10,6 +11,25 @@ namespace DarkFlare
     {
         const float CellSize = 48f;
         const float CellGap = 4f;
+        const float DragThreshold = 6f;
+        const string DropValidClass = "inventory-cell--drop-valid";
+        const string DropInvalidClass = "inventory-cell--drop-invalid";
+        const string SlotDropValidClass = "inventory-equipment-slot--drop-valid";
+        const string SlotDropInvalidClass = "inventory-equipment-slot--drop-invalid";
+
+        enum DragSourceKind
+        {
+            None,
+            Inventory,
+            Equipment
+        }
+
+        enum DropTargetKind
+        {
+            None,
+            Inventory,
+            Equipment
+        }
 
         [SerializeField]
         UIDocument _document;
@@ -18,19 +38,44 @@ namespace DarkFlare
         readonly Dictionary<ItemInstance, Button> _itemButtons = new Dictionary<ItemInstance, Button>();
         readonly Dictionary<EquipmentSlot, Button> _slotButtons = new Dictionary<EquipmentSlot, Button>();
         readonly ItemListViewState _selectionState = new ItemListViewState();
+        readonly List<VisualElement> _gridCells = new List<VisualElement>();
 
         VisualElement _page;
+        VisualElement _workbench;
         VisualElement _grid;
+        VisualElement _gridFrame;
+        VisualElement _dragLayer;
+        VisualElement _menuPanel;
         Label _emptyLabel;
         Label _targetSlotLabel;
         Label _comparisonLabel;
         Label _feedbackLabel;
         Button _equipButton;
         Button _unequipButton;
-        ItemDetailView _detailView;
+        ItemTooltipView _tooltip;
+        GameInput _gameInput;
         ItemInstance _selectedItem;
         ItemInstance _previewItem;
+        VisualElement _previewAnchor;
         EquipmentSlot? _targetSlot;
+        DragSourceKind _dragSourceKind;
+        DropTargetKind _dropTargetKind;
+        ItemInstance _dragItem;
+        EquipmentSlot _dragSourceSlot;
+        EquipmentSlot _dropTargetSlot;
+        Button _dragSourceButton;
+        Vector2 _pointerDownPosition;
+        Vector2Int _dragGrabOffset;
+        Vector2Int _dropOrigin;
+        Vector2Int _keyboardTargetOrigin;
+        int _dragPointerId = -1;
+        bool _pointerPending;
+        bool _isDragging;
+        bool _isKeyboardDrag;
+        bool _dropValid;
+        bool _endingDrag;
+        bool _suppressTooltipUntilPreview;
+        VisualElement _dragGhost;
 
         public InventorySnapshot LastSnapshot { get; private set; }
 
@@ -41,6 +86,12 @@ namespace DarkFlare
         public bool IsVisible { get; private set; }
 
         public bool IsOpen => IsVisible;
+
+        public bool IsDragging => _isDragging;
+
+        public bool IsPointerPending => _pointerPending;
+
+        public event Action<ItemInstance> SelectionChanged;
 
         public IArchitecture GetArchitecture()
         {
@@ -54,6 +105,8 @@ namespace DarkFlare
                 return;
             }
 
+            ItemInstance previousSelection = _selectedItem;
+            CancelDrag(false);
             CaptureSelectionState();
             InventorySnapshot snapshot = this.SendQuery(new GetInventorySnapshotQuery());
             LastSnapshot = snapshot;
@@ -64,6 +117,7 @@ namespace DarkFlare
             _selectedItem = null;
             _previewItem = null;
             _itemButtons.Clear();
+            _gridCells.Clear();
             _grid.Clear();
             BuildGrid(snapshot);
 
@@ -91,6 +145,11 @@ namespace DarkFlare
 
             ResolveTargetSlotForSelectedItem(false);
             RefreshSelection();
+
+            if (previousSelection != _selectedItem)
+            {
+                SelectionChanged?.Invoke(_selectedItem);
+            }
         }
 
         public void SetVisible(bool visible)
@@ -106,8 +165,44 @@ namespace DarkFlare
 
             if (visible)
             {
+                _suppressTooltipUntilPreview = false;
                 RefreshInventory();
             }
+            else
+            {
+                CancelDrag(false);
+            }
+        }
+
+        public void ShowExternalTooltip(ItemInstance item, VisualElement anchor, string context)
+        {
+            if (!_isDragging)
+            {
+                _suppressTooltipUntilPreview = false;
+                _tooltip?.Show(item, anchor, context);
+            }
+        }
+
+        public void RestoreTooltip()
+        {
+            RefreshDetail();
+        }
+
+        public void ShowSelectedTooltip(string context)
+        {
+            if (!_isDragging && !_suppressTooltipUntilPreview && _selectedItem != null)
+            {
+                _tooltip?.Show(_selectedItem, GetItemAnchor(_selectedItem), context);
+            }
+            else if (_suppressTooltipUntilPreview)
+            {
+                _tooltip?.Hide();
+            }
+        }
+
+        public bool CancelActiveDrag()
+        {
+            return CancelDrag(true);
         }
 
         public bool FocusDefault()
@@ -140,6 +235,15 @@ namespace DarkFlare
                 return;
             }
 
+            _gameInput = this.GetUtility<GameInput>();
+
+            if (_gameInput != null)
+            {
+                _gameInput.RearrangePerformed += OnRearrangePerformed;
+                _gameInput.NavigatePerformed += OnNavigatePerformed;
+                _gameInput.CancelRequested += OnCancelRequested;
+            }
+
             RegisterEvents();
             RefreshInventory();
             SetVisible(IsVisible);
@@ -148,7 +252,15 @@ namespace DarkFlare
 
         void OnDisable()
         {
+            CancelDrag(false);
             UnbindButtons();
+
+            if (_gameInput != null)
+            {
+                _gameInput.RearrangePerformed -= OnRearrangePerformed;
+                _gameInput.NavigatePerformed -= OnNavigatePerformed;
+                _gameInput.CancelRequested -= OnCancelRequested;
+            }
 
             for (int i = 0; i < _eventRegistrations.Count; i++)
             {
@@ -158,19 +270,28 @@ namespace DarkFlare
             _eventRegistrations.Clear();
             _itemButtons.Clear();
             _slotButtons.Clear();
+            _gridCells.Clear();
             _selectionState.Reset();
             _page = null;
+            _workbench = null;
             _grid = null;
+            _gridFrame = null;
+            _dragLayer = null;
+            _menuPanel = null;
             _emptyLabel = null;
             _targetSlotLabel = null;
             _comparisonLabel = null;
             _feedbackLabel = null;
             _equipButton = null;
             _unequipButton = null;
-            _detailView = null;
+            _tooltip = null;
+            _gameInput = null;
             _selectedItem = null;
             _previewItem = null;
+            _previewAnchor = null;
             _targetSlot = null;
+            _suppressTooltipUntilPreview = false;
+            SelectionChanged = null;
             IsVisible = false;
         }
 
@@ -202,14 +323,22 @@ namespace DarkFlare
 
             VisualElement root = _document.rootVisualElement;
             _page = root.Q<VisualElement>("inventory-page");
+            _workbench = root.Q<VisualElement>("item-workbench-shared");
             _grid = root.Q<VisualElement>("inventory-grid");
+            _gridFrame = root.Q<VisualElement>("inventory-grid-frame");
+            _dragLayer = root.Q<VisualElement>("item-drag-layer");
+            _menuPanel = root.Q<VisualElement>("game-menu-panel");
             _emptyLabel = root.Q<Label>("inventory-empty");
             _targetSlotLabel = root.Q<Label>("inventory-target-slot");
             _comparisonLabel = root.Q<Label>("inventory-comparison");
             _feedbackLabel = root.Q<Label>("inventory-feedback");
             _equipButton = root.Q<Button>("inventory-equip");
             _unequipButton = root.Q<Button>("inventory-unequip");
-            _detailView = new ItemDetailView(root.Q<VisualElement>("inventory-item-detail"));
+            _tooltip = new ItemTooltipView(
+                root.Q<VisualElement>("item-tooltip"),
+                root.Q<VisualElement>("item-tooltip-layer"),
+                _menuPanel,
+                root.Q<Label>("item-tooltip-context"));
             _slotButtons.Clear();
             AddSlotButton(root, EquipmentSlot.Weapon, "inventory-slot-weapon");
             AddSlotButton(root, EquipmentSlot.Armor, "inventory-slot-armor");
@@ -217,7 +346,11 @@ namespace DarkFlare
             AddSlotButton(root, EquipmentSlot.RingRight, "inventory-slot-ring-right");
 
             if (_page == null
+                || _workbench == null
                 || _grid == null
+                || _gridFrame == null
+                || _dragLayer == null
+                || _menuPanel == null
                 || _emptyLabel == null
                 || _targetSlotLabel == null
                 || _comparisonLabel == null
@@ -225,7 +358,7 @@ namespace DarkFlare
                 || _equipButton == null
                 || _unequipButton == null
                 || _slotButtons.Count != EquipmentSlots.All.Count
-                || !_detailView.IsValid)
+                || !_tooltip.IsValid)
             {
                 Debug.LogError("[InventoryPanelController] 背包 UXML 缺少四槽装备面板所需的命名元素", this);
                 return false;
@@ -237,6 +370,13 @@ namespace DarkFlare
             _slotButtons[EquipmentSlot.Armor].clicked += OnArmorSlotClicked;
             _slotButtons[EquipmentSlot.RingLeft].clicked += OnRingLeftSlotClicked;
             _slotButtons[EquipmentSlot.RingRight].clicked += OnRingRightSlotClicked;
+            RegisterSlotDragCallbacks(EquipmentSlot.Weapon);
+            RegisterSlotDragCallbacks(EquipmentSlot.Armor);
+            RegisterSlotDragCallbacks(EquipmentSlot.RingLeft);
+            RegisterSlotDragCallbacks(EquipmentSlot.RingRight);
+            _workbench.RegisterCallback<PointerMoveEvent>(OnDragPointerMove, TrickleDown.TrickleDown);
+            _workbench.RegisterCallback<PointerUpEvent>(OnDragPointerUp, TrickleDown.TrickleDown);
+            _workbench.RegisterCallback<PointerCancelEvent>(OnDragPointerCancel, TrickleDown.TrickleDown);
             return true;
         }
 
@@ -281,6 +421,24 @@ namespace DarkFlare
             {
                 ringRight.clicked -= OnRingRightSlotClicked;
             }
+
+            foreach (Button button in _slotButtons.Values)
+            {
+                button.UnregisterCallback<PointerDownEvent>(OnEquipmentPointerDown, TrickleDown.TrickleDown);
+                button.UnregisterCallback<PointerMoveEvent>(OnDragPointerMove, TrickleDown.TrickleDown);
+                button.UnregisterCallback<PointerUpEvent>(OnDragPointerUp, TrickleDown.TrickleDown);
+                button.UnregisterCallback<PointerEnterEvent>(OnEquipmentPointerEnter);
+                button.UnregisterCallback<PointerLeaveEvent>(OnEquipmentPointerLeave);
+                button.UnregisterCallback<FocusInEvent>(OnEquipmentFocusIn);
+                button.UnregisterCallback<FocusOutEvent>(OnEquipmentFocusOut);
+            }
+
+            if (_workbench != null)
+            {
+                _workbench.UnregisterCallback<PointerMoveEvent>(OnDragPointerMove, TrickleDown.TrickleDown);
+                _workbench.UnregisterCallback<PointerUpEvent>(OnDragPointerUp, TrickleDown.TrickleDown);
+                _workbench.UnregisterCallback<PointerCancelEvent>(OnDragPointerCancel, TrickleDown.TrickleDown);
+            }
         }
 
         void RegisterEvents()
@@ -315,6 +473,7 @@ namespace DarkFlare
                     cell.style.width = CellSize;
                     cell.style.height = CellSize;
                     _grid.Add(cell);
+                    _gridCells.Add(cell);
                 }
             }
         }
@@ -323,8 +482,9 @@ namespace DarkFlare
         {
             float step = CellSize + CellGap;
             Button button = new Button(() => SelectItem(item.Item));
+            button.name = $"inventory-item-{item.Detail.InstanceId}";
             button.text = string.Empty;
-            button.tooltip = $"{item.DisplayName} · {ItemDetailFormatter.GetRarityText(item.Rarity)} · {item.AffixCount} 条词缀";
+            button.userData = item.Item;
             button.AddToClassList("inventory-item");
             button.AddToClassList(GetRarityClass(item.Rarity));
             button.style.position = Position.Absolute;
@@ -339,34 +499,43 @@ namespace DarkFlare
             };
             icon.AddToClassList("inventory-item-icon");
             ItemVisualPresenter.ApplyIcon(icon, item.Detail.IconGuid);
-
-            Label label = new Label(item.DisplayName)
-            {
-                pickingMode = PickingMode.Ignore,
-            };
-            label.AddToClassList("inventory-item-label");
             button.Add(icon);
-            button.Add(label);
-            button.RegisterCallback<PointerEnterEvent>(_ => PreviewItem(item.Item));
+            button.RegisterCallback<PointerEnterEvent>(_ => PreviewItem(item.Item, button));
             button.RegisterCallback<PointerLeaveEvent>(_ => EndPreview(item.Item));
-            button.RegisterCallback<FocusInEvent>(_ => PreviewItem(item.Item));
+            button.RegisterCallback<FocusInEvent>(_ => PreviewItem(item.Item, button));
             button.RegisterCallback<FocusOutEvent>(_ => EndPreview(item.Item));
+            button.RegisterCallback<PointerDownEvent>(
+                evt => OnInventoryPointerDown(evt, item, button),
+                TrickleDown.TrickleDown);
+            button.RegisterCallback<PointerMoveEvent>(OnDragPointerMove, TrickleDown.TrickleDown);
+            button.RegisterCallback<PointerUpEvent>(OnDragPointerUp, TrickleDown.TrickleDown);
             return button;
         }
 
         void SelectItem(ItemInstance item)
         {
+            ItemInstance previous = _selectedItem;
+            _suppressTooltipUntilPreview = false;
             _selectedItem = item;
             _previewItem = null;
+            _previewAnchor = null;
             CaptureSelectionState();
             ResolveTargetSlotForSelectedItem(true);
             RefreshSelection();
+
+            if (previous != _selectedItem)
+            {
+                SelectionChanged?.Invoke(_selectedItem);
+            }
         }
 
         void SelectSlot(EquipmentSlot slot)
         {
+            ItemInstance previous = _selectedItem;
+            _suppressTooltipUntilPreview = false;
             _targetSlot = slot;
             _previewItem = null;
+            _previewAnchor = null;
 
             if (_selectedItem != null && !IsCompatible(_selectedItem, slot))
             {
@@ -375,6 +544,11 @@ namespace DarkFlare
             }
 
             RefreshSelection();
+
+            if (previous != _selectedItem)
+            {
+                SelectionChanged?.Invoke(_selectedItem);
+            }
         }
 
         void ResolveTargetSlotForSelectedItem(bool clearAmbiguousRingTarget)
@@ -428,21 +602,35 @@ namespace DarkFlare
             }
         }
 
-        void PreviewItem(ItemInstance item)
+        void PreviewItem(ItemInstance item, VisualElement anchor)
         {
+            if (_isDragging || _suppressTooltipUntilPreview)
+            {
+                return;
+            }
+
             _previewItem = item;
+            _previewAnchor = anchor;
             RefreshDetail();
             RefreshComparison();
         }
 
         void EndPreview(ItemInstance item)
         {
+            if (_suppressTooltipUntilPreview)
+            {
+                _suppressTooltipUntilPreview = false;
+                _tooltip.Hide();
+                return;
+            }
+
             if (_previewItem != item)
             {
                 return;
             }
 
             _previewItem = null;
+            _previewAnchor = null;
             RefreshDetail();
             RefreshComparison();
         }
@@ -508,7 +696,9 @@ namespace DarkFlare
                     continue;
                 }
 
-                button.text = snapshot.Summary;
+                button.text = snapshot.Item != null
+                    ? snapshot.SlotName
+                    : $"{snapshot.SlotName} · 空";
                 VisualElement icon = button.Q<VisualElement>("equipment-slot-icon");
 
                 if (icon == null)
@@ -535,12 +725,26 @@ namespace DarkFlare
 
         void RefreshDetail()
         {
+            if (_isDragging)
+            {
+                _tooltip.Hide();
+                return;
+            }
+
+            if (_suppressTooltipUntilPreview && _previewItem == null)
+            {
+                _tooltip.Hide();
+                return;
+            }
+
             ItemInstance item = _previewItem != null ? _previewItem : _selectedItem;
 
             if (item != null)
             {
-                ItemDetailSnapshot detail = ItemDetailSnapshotFactory.Create(item);
-                _detailView.Show(detail, ItemVisualPresenter.GetSprite(detail.IconGuid));
+                VisualElement anchor = _previewItem != null
+                    ? _previewAnchor
+                    : GetItemAnchor(item);
+                _tooltip.Show(item, anchor, BuildTooltipContext(item));
                 return;
             }
 
@@ -548,11 +752,14 @@ namespace DarkFlare
                 && TryGetSlotSnapshot(_targetSlot.Value, out EquipmentSlotSnapshot slotSnapshot)
                 && slotSnapshot.Item != null)
             {
-                _detailView.Show(slotSnapshot.Detail, ItemVisualPresenter.GetSprite(slotSnapshot.Detail.IconGuid));
+                _tooltip.Show(
+                    slotSnapshot.Item,
+                    _slotButtons[_targetSlot.Value],
+                    $"已装备 · {slotSnapshot.SlotName}");
                 return;
             }
 
-            _detailView.Clear();
+            _tooltip.Hide();
         }
 
         void RefreshComparison()
@@ -698,6 +905,697 @@ namespace DarkFlare
         void OnRingRightSlotClicked()
         {
             SelectSlot(EquipmentSlot.RingRight);
+        }
+
+        void RegisterSlotDragCallbacks(EquipmentSlot slot)
+        {
+            Button button = _slotButtons[slot];
+            button.RegisterCallback<PointerDownEvent>(OnEquipmentPointerDown, TrickleDown.TrickleDown);
+            button.RegisterCallback<PointerMoveEvent>(OnDragPointerMove, TrickleDown.TrickleDown);
+            button.RegisterCallback<PointerUpEvent>(OnDragPointerUp, TrickleDown.TrickleDown);
+            button.RegisterCallback<PointerEnterEvent>(OnEquipmentPointerEnter);
+            button.RegisterCallback<PointerLeaveEvent>(OnEquipmentPointerLeave);
+            button.RegisterCallback<FocusInEvent>(OnEquipmentFocusIn);
+            button.RegisterCallback<FocusOutEvent>(OnEquipmentFocusOut);
+        }
+
+        void OnInventoryPointerDown(
+            PointerDownEvent evt,
+            InventoryItemSnapshot snapshot,
+            Button button)
+        {
+            if (evt.button != 0 || _pointerPending || _isDragging || !LastSnapshot.HasPlayer)
+            {
+                return;
+            }
+
+            Vector2Int size = snapshot.Detail.GridSize;
+            float step = CellSize + CellGap;
+            Vector2 localPosition = evt.localPosition;
+            Vector2Int grabOffset = new Vector2Int(
+                Mathf.Clamp(Mathf.FloorToInt(localPosition.x / step), 0, Mathf.Max(0, size.x - 1)),
+                Mathf.Clamp(Mathf.FloorToInt(localPosition.y / step), 0, Mathf.Max(0, size.y - 1)));
+            BeginPointerDrag(
+                evt,
+                DragSourceKind.Inventory,
+                snapshot.Item,
+                default,
+                button,
+                grabOffset);
+        }
+
+        void OnEquipmentPointerDown(PointerDownEvent evt)
+        {
+            if (evt.button != 0
+                || _pointerPending
+                || _isDragging
+                || !LastSnapshot.HasPlayer
+                || evt.currentTarget is not Button button
+                || !TryGetSlotForButton(button, out EquipmentSlot slot)
+                || !TryGetSlotSnapshot(slot, out EquipmentSlotSnapshot snapshot)
+                || snapshot.Item == null)
+            {
+                return;
+            }
+
+            BeginPointerDrag(
+                evt,
+                DragSourceKind.Equipment,
+                snapshot.Item,
+                slot,
+                button,
+                Vector2Int.zero);
+        }
+
+        void BeginPointerDrag(
+            PointerDownEvent evt,
+            DragSourceKind sourceKind,
+            ItemInstance item,
+            EquipmentSlot sourceSlot,
+            Button button,
+            Vector2Int grabOffset)
+        {
+            _dragSourceKind = sourceKind;
+            _dragItem = item;
+            _dragSourceSlot = sourceSlot;
+            _dragSourceButton = button;
+            _dragGrabOffset = grabOffset;
+            _pointerDownPosition = evt.position;
+            _dragPointerId = evt.pointerId;
+            _pointerPending = true;
+        }
+
+        void OnDragPointerMove(PointerMoveEvent evt)
+        {
+            if (_dragPointerId != evt.pointerId || (!_pointerPending && !_isDragging))
+            {
+                return;
+            }
+
+            Vector2 position = evt.position;
+
+            if (_pointerPending
+                && !_isDragging
+                && Vector2.Distance(position, _pointerDownPosition) >= DragThreshold)
+            {
+                StartPointerDrag(position);
+            }
+
+            if (!_isDragging || _isKeyboardDrag)
+            {
+                return;
+            }
+
+            UpdateDragGhost(position);
+            ResolvePointerDrop(position);
+            evt.StopPropagation();
+            evt.PreventDefault();
+        }
+
+        void OnDragPointerUp(PointerUpEvent evt)
+        {
+            if (evt.target != _workbench || _dragPointerId != evt.pointerId)
+            {
+                return;
+            }
+
+            if (!_isDragging)
+            {
+                ReleasePointerCapture();
+                ResetDragState();
+                return;
+            }
+
+            ResolvePointerDrop(evt.position);
+            DropTargetKind targetKind = _dropTargetKind;
+            EquipmentSlot targetSlot = _dropTargetSlot;
+            Vector2Int targetOrigin = _dropOrigin;
+            bool valid = _dropValid;
+            ItemInstance item = _dragItem;
+            DragSourceKind sourceKind = _dragSourceKind;
+            EquipmentSlot sourceSlot = _dragSourceSlot;
+            FinishDragVisuals();
+            ExecuteDrop(sourceKind, item, sourceSlot, targetKind, targetSlot, targetOrigin, valid);
+            evt.StopPropagation();
+            evt.PreventDefault();
+        }
+
+        void OnDragPointerCancel(PointerCancelEvent evt)
+        {
+            if (_dragPointerId != evt.pointerId)
+            {
+                return;
+            }
+
+            if (_pointerPending || _isDragging)
+            {
+                CancelDrag(false);
+            }
+        }
+
+        void StartPointerDrag(Vector2 position)
+        {
+            _pointerPending = false;
+            _isDragging = true;
+            _isKeyboardDrag = false;
+            _workbench?.CapturePointer(_dragPointerId);
+            _dragSourceButton.EnableInClassList("inventory-item--drag-source", true);
+            _tooltip.Hide();
+            CreateDragGhost();
+            UpdateDragGhost(position);
+            ResolvePointerDrop(position);
+        }
+
+        void CreateDragGhost()
+        {
+            if (_dragLayer == null || _dragItem == null || _dragItem.BaseDefinition == null)
+            {
+                return;
+            }
+
+            Vector2Int size = _dragItem.BaseDefinition.GridSize;
+            _dragGhost = new VisualElement
+            {
+                pickingMode = PickingMode.Ignore,
+            };
+            _dragGhost.AddToClassList("item-drag-ghost");
+            _dragGhost.style.width = size.x * CellSize + (size.x - 1) * CellGap;
+            _dragGhost.style.height = size.y * CellSize + (size.y - 1) * CellGap;
+            ItemDetailSnapshot detail = ItemDetailSnapshotFactory.Create(_dragItem);
+            ItemVisualPresenter.ApplyIcon(_dragGhost, detail.IconGuid);
+            _dragLayer.Add(_dragGhost);
+            _dragGhost.BringToFront();
+        }
+
+        void UpdateDragGhost(Vector2 position)
+        {
+            if (_dragGhost == null || _dragLayer == null)
+            {
+                return;
+            }
+
+            float step = CellSize + CellGap;
+            Vector2 localPosition = _dragLayer.WorldToLocal(position);
+            _dragGhost.style.left = localPosition.x - _dragGrabOffset.x * step - CellSize * 0.5f;
+            _dragGhost.style.top = localPosition.y - _dragGrabOffset.y * step - CellSize * 0.5f;
+        }
+
+        void ResolvePointerDrop(Vector2 position)
+        {
+            ClearDropVisuals();
+
+            foreach (KeyValuePair<EquipmentSlot, Button> entry in _slotButtons)
+            {
+                if (!entry.Value.worldBound.Contains(position))
+                {
+                    continue;
+                }
+
+                ResolveEquipmentDrop(entry.Key);
+                return;
+            }
+
+            if (_grid == null || !_grid.worldBound.Contains(position))
+            {
+                _dropTargetKind = DropTargetKind.None;
+                _dropValid = false;
+                return;
+            }
+
+            float step = CellSize + CellGap;
+            Vector2 localPosition = _grid.WorldToLocal(position);
+            Vector2Int origin = new Vector2Int(
+                Mathf.FloorToInt(localPosition.x / step) - _dragGrabOffset.x,
+                Mathf.FloorToInt(localPosition.y / step) - _dragGrabOffset.y);
+            ResolveInventoryDrop(origin);
+        }
+
+        void ResolveEquipmentDrop(EquipmentSlot slot)
+        {
+            ClearDropVisuals();
+            _dropTargetKind = DropTargetKind.Equipment;
+            _dropTargetSlot = slot;
+            _dropValid = _dragSourceKind == DragSourceKind.Inventory
+                ? this.SendQuery(new CanEquipItemFromGridQuery(LastSnapshot.Player, _dragItem, slot))
+                : this.SendQuery(new CanMoveEquippedItemQuery(LastSnapshot.Player, _dragSourceSlot, slot));
+
+            if (_slotButtons.TryGetValue(slot, out Button button))
+            {
+                button.EnableInClassList(SlotDropValidClass, _dropValid);
+                button.EnableInClassList(SlotDropInvalidClass, !_dropValid);
+            }
+        }
+
+        void ResolveInventoryDrop(Vector2Int origin)
+        {
+            ClearDropVisuals();
+            _dropTargetKind = DropTargetKind.Inventory;
+            _dropOrigin = origin;
+            _dropValid = _dragSourceKind == DragSourceKind.Inventory
+                ? this.SendQuery(new CanMoveInventoryItemQuery(_dragItem, origin))
+                : this.SendQuery(new CanUnequipItemToGridQuery(LastSnapshot.Player, _dragSourceSlot, origin));
+            HighlightGridFootprint(origin, _dropValid);
+        }
+
+        void HighlightGridFootprint(Vector2Int origin, bool valid)
+        {
+            if (_dragItem == null || _dragItem.BaseDefinition == null)
+            {
+                return;
+            }
+
+            Vector2Int size = _dragItem.BaseDefinition.GridSize;
+            string className = valid ? DropValidClass : DropInvalidClass;
+
+            for (int y = 0; y < size.y; y++)
+            {
+                for (int x = 0; x < size.x; x++)
+                {
+                    int cellX = origin.x + x;
+                    int cellY = origin.y + y;
+
+                    if (cellX < 0
+                        || cellY < 0
+                        || cellX >= LastSnapshot.Width
+                        || cellY >= LastSnapshot.Height)
+                    {
+                        continue;
+                    }
+
+                    int index = cellY * LastSnapshot.Width + cellX;
+
+                    if (index >= 0 && index < _gridCells.Count)
+                    {
+                        _gridCells[index].AddToClassList(className);
+                    }
+                }
+            }
+        }
+
+        void ExecuteDrop(
+            DragSourceKind sourceKind,
+            ItemInstance item,
+            EquipmentSlot sourceSlot,
+            DropTargetKind targetKind,
+            EquipmentSlot targetSlot,
+            Vector2Int targetOrigin,
+            bool valid)
+        {
+            _suppressTooltipUntilPreview = true;
+
+            if (!valid || item == null)
+            {
+                _feedbackLabel.text = "无法放置到目标位置";
+                RestoreTooltip();
+                return;
+            }
+
+            bool completed = false;
+
+            if (sourceKind == DragSourceKind.Inventory && targetKind == DropTargetKind.Inventory)
+            {
+                _selectionState.SelectedInstanceId = item.InstanceId;
+                completed = this.SendCommand(new MoveInventoryItemCommand(item, targetOrigin));
+            }
+            else if (sourceKind == DragSourceKind.Inventory && targetKind == DropTargetKind.Equipment)
+            {
+                _targetSlot = targetSlot;
+                completed = this.SendCommand(new EquipItemFromGridCommand(LastSnapshot.Player, item, targetSlot));
+            }
+            else if (sourceKind == DragSourceKind.Equipment && targetKind == DropTargetKind.Inventory)
+            {
+                _selectionState.SelectedInstanceId = item.InstanceId;
+                completed = this.SendCommand(new UnequipItemToGridCommand(
+                    LastSnapshot.Player,
+                    sourceSlot,
+                    targetOrigin));
+            }
+            else if (sourceKind == DragSourceKind.Equipment && targetKind == DropTargetKind.Equipment)
+            {
+                _targetSlot = targetSlot;
+                completed = this.SendCommand(new MoveEquippedItemCommand(
+                    LastSnapshot.Player,
+                    sourceSlot,
+                    targetSlot));
+            }
+
+            if (!completed)
+            {
+                _feedbackLabel.text = "整理失败，背包或装备状态已变化";
+                RefreshInventory();
+                return;
+            }
+
+            _feedbackLabel.text = "物品位置已更新";
+            RefreshInventory();
+        }
+
+        void OnRearrangePerformed()
+        {
+            if (_workbench == null || _workbench.panel == null || !LastSnapshot.HasPlayer)
+            {
+                return;
+            }
+
+            if (_isDragging)
+            {
+                if (!_isKeyboardDrag)
+                {
+                    return;
+                }
+
+                DropTargetKind targetKind = _dropTargetKind;
+                EquipmentSlot targetSlot = _dropTargetSlot;
+                Vector2Int targetOrigin = _dropOrigin;
+                bool valid = _dropValid;
+                ItemInstance item = _dragItem;
+                DragSourceKind sourceKind = _dragSourceKind;
+                EquipmentSlot sourceSlot = _dragSourceSlot;
+                FinishDragVisuals();
+                ExecuteDrop(sourceKind, item, sourceSlot, targetKind, targetSlot, targetOrigin, valid);
+                return;
+            }
+
+            Focusable focused = _workbench.panel.focusController.focusedElement;
+
+            if (focused is not VisualElement focusedElement)
+            {
+                return;
+            }
+
+            foreach (KeyValuePair<ItemInstance, Button> entry in _itemButtons)
+            {
+                if (entry.Value != focusedElement)
+                {
+                    continue;
+                }
+
+                if (TryGetItemSnapshot(entry.Key, out InventoryItemSnapshot snapshot))
+                {
+                    StartKeyboardDrag(
+                        DragSourceKind.Inventory,
+                        entry.Key,
+                        default,
+                        entry.Value,
+                        snapshot.Placement.position);
+                }
+
+                return;
+            }
+
+            if (TryGetSlotForButton(focusedElement, out EquipmentSlot slot)
+                && TryGetSlotSnapshot(slot, out EquipmentSlotSnapshot slotSnapshot)
+                && slotSnapshot.Item != null)
+            {
+                StartKeyboardDrag(
+                    DragSourceKind.Equipment,
+                    slotSnapshot.Item,
+                    slot,
+                    _slotButtons[slot],
+                    Vector2Int.zero);
+            }
+        }
+
+        void StartKeyboardDrag(
+            DragSourceKind sourceKind,
+            ItemInstance item,
+            EquipmentSlot sourceSlot,
+            Button sourceButton,
+            Vector2Int sourceOrigin)
+        {
+            _dragSourceKind = sourceKind;
+            _dragItem = item;
+            _dragSourceSlot = sourceSlot;
+            _dragSourceButton = sourceButton;
+            _keyboardTargetOrigin = sourceOrigin;
+            _dropTargetKind = DropTargetKind.None;
+            _dropValid = false;
+            _isDragging = true;
+            _isKeyboardDrag = true;
+            sourceButton.EnableInClassList("inventory-item--drag-source", true);
+            _tooltip.Hide();
+            _feedbackLabel.text = "已拿起物品：方向键选择位置，再按整理键放下";
+        }
+
+        void OnNavigatePerformed(Vector2 direction)
+        {
+            if (!_isDragging || !_isKeyboardDrag || direction.sqrMagnitude < 0.25f)
+            {
+                return;
+            }
+
+            Vector2Int delta = Mathf.Abs(direction.x) >= Mathf.Abs(direction.y)
+                ? new Vector2Int(direction.x > 0f ? 1 : -1, 0)
+                : new Vector2Int(0, direction.y > 0f ? -1 : 1);
+
+            if (_dropTargetKind == DropTargetKind.Equipment)
+            {
+                if (delta.x > 0)
+                {
+                    _keyboardTargetOrigin = Vector2Int.zero;
+                    ResolveInventoryDrop(_keyboardTargetOrigin);
+                }
+                else if (TryFindCompatibleSlot(_dropTargetSlot, delta, out EquipmentSlot nextSlot))
+                {
+                    ResolveEquipmentDrop(nextSlot);
+                }
+            }
+            else
+            {
+                Vector2Int candidate = _dropTargetKind == DropTargetKind.Inventory
+                    ? _keyboardTargetOrigin + delta
+                    : GetKeyboardStartOrigin() + delta;
+
+                if (candidate.x < 0 && TryFindCompatibleSlot(_dragSourceSlot, delta, out EquipmentSlot slot))
+                {
+                    ResolveEquipmentDrop(slot);
+                }
+                else
+                {
+                    _keyboardTargetOrigin = candidate;
+                    ClearDropVisuals();
+                    ResolveInventoryDrop(candidate);
+                }
+            }
+
+            _dragSourceButton?.Focus();
+        }
+
+        Vector2Int GetKeyboardStartOrigin()
+        {
+            if (_dragSourceKind == DragSourceKind.Inventory
+                && TryGetItemSnapshot(_dragItem, out InventoryItemSnapshot snapshot))
+            {
+                return snapshot.Placement.position;
+            }
+
+            return Vector2Int.zero;
+        }
+
+        bool TryFindCompatibleSlot(
+            EquipmentSlot current,
+            Vector2Int direction,
+            out EquipmentSlot result)
+        {
+            int startIndex = 0;
+
+            for (int i = 0; i < EquipmentSlots.All.Count; i++)
+            {
+                if (EquipmentSlots.All[i] == current)
+                {
+                    startIndex = i;
+                    break;
+                }
+            }
+
+            int step = direction.y < 0 || direction.x > 0 ? 1 : -1;
+
+            for (int offset = 1; offset <= EquipmentSlots.All.Count; offset++)
+            {
+                int index = (startIndex + step * offset + EquipmentSlots.All.Count) % EquipmentSlots.All.Count;
+                EquipmentSlot candidate = EquipmentSlots.All[index];
+
+                if (_dragSourceKind == DragSourceKind.Inventory
+                    ? IsCompatible(_dragItem, candidate)
+                    : candidate != _dragSourceSlot && IsCompatible(_dragItem, candidate))
+                {
+                    result = candidate;
+                    return true;
+                }
+            }
+
+            result = default;
+            return false;
+        }
+
+        bool OnCancelRequested()
+        {
+            return CancelDrag(true);
+        }
+
+        bool CancelDrag(bool showFeedback)
+        {
+            bool hadDrag = _pointerPending || _isDragging;
+
+            if (!hadDrag)
+            {
+                return false;
+            }
+
+            _suppressTooltipUntilPreview = true;
+            FinishDragVisuals();
+
+            if (showFeedback && _feedbackLabel != null)
+            {
+                _feedbackLabel.text = "已取消物品整理";
+            }
+
+            RestoreTooltip();
+            return true;
+        }
+
+        void FinishDragVisuals()
+        {
+            _endingDrag = true;
+            ReleasePointerCapture();
+            _dragSourceButton?.EnableInClassList("inventory-item--drag-source", false);
+            _dragGhost?.RemoveFromHierarchy();
+            ClearDropVisuals();
+            ResetDragState();
+            _endingDrag = false;
+        }
+
+        void ReleasePointerCapture()
+        {
+            if (_workbench != null
+                && _dragPointerId >= 0
+                && _workbench.HasPointerCapture(_dragPointerId))
+            {
+                _workbench.ReleasePointer(_dragPointerId);
+            }
+        }
+
+        void ResetDragState()
+        {
+            _dragSourceKind = DragSourceKind.None;
+            _dropTargetKind = DropTargetKind.None;
+            _dragItem = null;
+            _dragSourceSlot = default;
+            _dropTargetSlot = default;
+            _dragSourceButton = null;
+            _dragPointerId = -1;
+            _pointerPending = false;
+            _isDragging = false;
+            _isKeyboardDrag = false;
+            _dropValid = false;
+            _dragGhost = null;
+        }
+
+        void ClearDropVisuals()
+        {
+            for (int i = 0; i < _gridCells.Count; i++)
+            {
+                _gridCells[i].RemoveFromClassList(DropValidClass);
+                _gridCells[i].RemoveFromClassList(DropInvalidClass);
+            }
+
+            foreach (Button button in _slotButtons.Values)
+            {
+                button.RemoveFromClassList(SlotDropValidClass);
+                button.RemoveFromClassList(SlotDropInvalidClass);
+            }
+        }
+
+        void OnEquipmentPointerEnter(PointerEnterEvent evt)
+        {
+            PreviewEquipment(evt.currentTarget);
+        }
+
+        void OnEquipmentPointerLeave(PointerLeaveEvent evt)
+        {
+            EndEquipmentPreview(evt.currentTarget);
+        }
+
+        void OnEquipmentFocusIn(FocusInEvent evt)
+        {
+            PreviewEquipment(evt.currentTarget);
+        }
+
+        void OnEquipmentFocusOut(FocusOutEvent evt)
+        {
+            EndEquipmentPreview(evt.currentTarget);
+        }
+
+        void PreviewEquipment(object target)
+        {
+            if (target is VisualElement element
+                && TryGetSlotForButton(element, out EquipmentSlot slot)
+                && TryGetSlotSnapshot(slot, out EquipmentSlotSnapshot snapshot)
+                && snapshot.Item != null)
+            {
+                PreviewItem(snapshot.Item, element);
+            }
+        }
+
+        void EndEquipmentPreview(object target)
+        {
+            if (target is VisualElement element
+                && TryGetSlotForButton(element, out EquipmentSlot slot)
+                && TryGetSlotSnapshot(slot, out EquipmentSlotSnapshot snapshot)
+                && snapshot.Item != null)
+            {
+                EndPreview(snapshot.Item);
+            }
+        }
+
+        bool TryGetSlotForButton(VisualElement element, out EquipmentSlot slot)
+        {
+            foreach (KeyValuePair<EquipmentSlot, Button> entry in _slotButtons)
+            {
+                if (entry.Value == element)
+                {
+                    slot = entry.Key;
+                    return true;
+                }
+            }
+
+            slot = default;
+            return false;
+        }
+
+        bool TryGetItemSnapshot(ItemInstance item, out InventoryItemSnapshot snapshot)
+        {
+            for (int i = 0; i < LastSnapshot.Items.Count; i++)
+            {
+                if (LastSnapshot.Items[i].Item == item)
+                {
+                    snapshot = LastSnapshot.Items[i];
+                    return true;
+                }
+            }
+
+            snapshot = default;
+            return false;
+        }
+
+        VisualElement GetItemAnchor(ItemInstance item)
+        {
+            if (item != null && _itemButtons.TryGetValue(item, out Button button))
+            {
+                return button;
+            }
+
+            return _workbench;
+        }
+
+        string BuildTooltipContext(ItemInstance item)
+        {
+            if (_targetSlot.HasValue && IsCompatible(item, _targetSlot.Value))
+            {
+                return $"候选装备 · {EquipmentSlots.GetDisplayName(_targetSlot.Value)}";
+            }
+
+            return "玩家背包";
         }
 
         static bool IsCompatible(ItemInstance item, EquipmentSlot slot)

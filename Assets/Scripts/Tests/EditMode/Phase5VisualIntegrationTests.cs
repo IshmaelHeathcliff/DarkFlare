@@ -321,22 +321,17 @@ namespace DarkFlare.Tests
         }
 
         [Test]
-        public void InventoryNineSlice_UsesIndependentAssetsAndSafeInsets()
+        public void ItemWorkbench_UsesThinScalableFramesWithoutLegacyNineSlice()
         {
-            string uss = File.ReadAllText(GetAbsolutePath("Assets/UI/Inventory.uss"));
+            string workbench = File.ReadAllText(GetAbsolutePath("Assets/UI/ItemWorkbench.uss"));
+            string menu = File.ReadAllText(GetAbsolutePath("Assets/UI/GameMenu.uss"));
 
-            for (int i = 0; i < UiFramePaths.Length; i++)
-            {
-                StringAssert.Contains(UiFramePaths[i], uss);
-            }
-
-            StringAssert.Contains("-unity-slice-left: 98;", uss);
-            StringAssert.Contains("-unity-slice-right: 98;", uss);
-            StringAssert.Contains("-unity-slice-top: 98;", uss);
-            StringAssert.Contains("-unity-slice-bottom: 98;", uss);
-            StringAssert.Contains("-unity-slice-left: 78;", uss);
-            StringAssert.Contains("-unity-slice-left: 157;", uss);
-            StringAssert.DoesNotContain("SpriteSheets/Phase5", uss);
+            StringAssert.Contains(".ui-panel-frame", workbench);
+            StringAssert.Contains("border-left-width: 1px;", workbench);
+            StringAssert.Contains("border-left-width: 1px;", menu);
+            StringAssert.DoesNotContain("background-image", workbench);
+            StringAssert.DoesNotContain("-unity-slice-", workbench);
+            StringAssert.DoesNotContain("SpriteSheets/Phase5", workbench);
         }
 
         [Test]
@@ -401,6 +396,7 @@ namespace DarkFlare.Tests
         {
             string theme = File.ReadAllText(GetAbsolutePath("Assets/UI/Theme.uss"));
             string inventory = File.ReadAllText(GetAbsolutePath("Assets/UI/Inventory.uss"));
+            string workbench = File.ReadAllText(GetAbsolutePath("Assets/UI/ItemWorkbench.uss"));
 
             for (int i = 0; i < UiIconPaths.Length; i++)
             {
@@ -412,13 +408,9 @@ namespace DarkFlare.Tests
                 StringAssert.Contains(UiIconPaths[i], theme);
             }
 
-            for (int i = 0; i < UiFramePaths.Length; i++)
-            {
-                StringAssert.Contains(UiFramePaths[i], inventory);
-            }
-
             StringAssert.DoesNotContain("SpriteSheets/Phase5", theme);
             StringAssert.DoesNotContain("SpriteSheets/Phase5", inventory);
+            StringAssert.DoesNotContain("background-image", workbench);
 
             GameObject lootPickup = AssetDatabase.LoadAssetAtPath<GameObject>(
                 "Assets/Prefabs/Loot/LootPickup.prefab");
