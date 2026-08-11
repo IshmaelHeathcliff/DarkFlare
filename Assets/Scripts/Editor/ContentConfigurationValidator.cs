@@ -175,6 +175,13 @@ namespace DarkFlare.Editor
             ValidateTraders(traders, items, issues);
             ValidateCrafting(craftingDefinitions, affixes, issues);
 
+            List<string> physicsIssues = GameplayPhysicsConfigurationValidator.Validate();
+
+            for (int i = 0; i < physicsIssues.Count; i++)
+            {
+                AddError(issues, null, physicsIssues[i]);
+            }
+
             return issues
                 .OrderBy(issue => issue.Severity)
                 .ThenBy(issue => issue.AssetPath, StringComparer.Ordinal)

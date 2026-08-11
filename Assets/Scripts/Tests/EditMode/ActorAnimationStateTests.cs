@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Reflection;
 using DarkFlare;
 using NUnit.Framework;
 using UnityEditor;
@@ -13,6 +14,14 @@ namespace DarkFlare.Tests
         const string MonsterControllerPath = "Assets/Art/Animations/Controllers/Monster_Basic.controller";
         const string PlayerPrefabPath = "Assets/Prefabs/Combat/Player.prefab";
         const string MonsterPrefabPath = "Assets/Prefabs/Combat/Monster_Basic.prefab";
+
+        static readonly string[] RightFacingSourcePrefabPaths =
+        {
+            PlayerPrefabPath,
+            "Assets/Prefabs/Combat/Monster_Swift.prefab",
+            "Assets/Prefabs/Combat/Monster_Heavy.prefab",
+        };
+
         [TestCase(PlayerControllerPath)]
         [TestCase(MonsterControllerPath)]
         public void AnimatorController_ContainsReachableCombatStates(string path)
@@ -55,6 +64,30 @@ namespace DarkFlare.Tests
             SerializedObject serializedMonster = new SerializedObject(monster);
             float delay = serializedMonster.FindProperty("_deathDespawnDelay").floatValue;
             Assert.GreaterOrEqual(delay, 0.6f);
+        }
+
+        [Test]
+        public void ActorPrefabs_DeclareSourceFacingAndPreviewRightByDefault()
+        {
+            for (int i = 0; i < RightFacingSourcePrefabPaths.Length; i++)
+            {
+                AssertFacingContract(RightFacingSourcePrefabPaths[i], true);
+            }
+
+            AssertFacingContract(MonsterPrefabPath, false);
+        }
+
+        [Test]
+        public void ActorAnimatorController_ResolvesHorizontalFlipFromSourceFacing()
+        {
+            MethodInfo method = typeof(ActorAnimatorController).GetMethod(
+                "ResolveFlipX",
+                BindingFlags.Static | BindingFlags.NonPublic);
+            Assert.IsNotNull(method);
+            Assert.IsFalse((bool)method.Invoke(null, new object[] { true, 1f }));
+            Assert.IsTrue((bool)method.Invoke(null, new object[] { true, -1f }));
+            Assert.IsTrue((bool)method.Invoke(null, new object[] { false, 1f }));
+            Assert.IsFalse((bool)method.Invoke(null, new object[] { false, -1f }));
         }
 
         static void AssertParameter(
@@ -102,6 +135,22 @@ namespace DarkFlare.Tests
             CombatActor actor = prefab.GetComponent<CombatActor>();
             SerializedObject serializedActor = new SerializedObject(actor);
             return serializedActor.FindProperty("_hideVisualOnDeath").boolValue;
+        }
+
+        static void AssertFacingContract(string prefabPath, bool sourceFacesRight)
+        {
+            GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
+            Assert.IsNotNull(prefab, prefabPath);
+            ActorAnimatorController controller = prefab.GetComponent<ActorAnimatorController>();
+            SpriteRenderer renderer = prefab.GetComponent<SpriteRenderer>();
+            Assert.IsNotNull(controller, prefabPath);
+            Assert.IsNotNull(renderer, prefabPath);
+            SerializedObject serializedController = new SerializedObject(controller);
+            Assert.AreEqual(
+                sourceFacesRight,
+                serializedController.FindProperty("_sourceFacesRight").boolValue,
+                prefabPath);
+            Assert.AreEqual(!sourceFacesRight, renderer.flipX, $"{prefabPath} 的默认预览朝向错误");
         }
 
     }

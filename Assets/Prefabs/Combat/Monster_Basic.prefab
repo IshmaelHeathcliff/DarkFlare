@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8314479863685156941}
   - component: {fileID: 8378234280263568941}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: HealthBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -102,7 +102,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6980589548518985250}
   - component: {fileID: 7857931343156505862}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -201,7 +201,7 @@ GameObject:
   - component: {fileID: 3538043287078835149}
   - component: {fileID: 3012531206755517350}
   - component: {fileID: 351697575189817587}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Monster_Basic
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -275,7 +275,7 @@ SpriteRenderer:
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: d549cbfefa6926d47ae67fee259ee1b6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
+  m_FlipX: 1
   m_FlipY: 0
   m_DrawMode: 0
   m_Size: {x: 0.64, y: 0.64}
@@ -411,6 +411,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.ActorAnimatorController
   _animator: {fileID: 6775311135369419563}
   _renderer: {fileID: 3808907934225930387}
+  _sourceFacesRight: 0
   _movementThreshold: 0.05
 --- !u!114 &3012531206755517350
 MonoBehaviour:

@@ -52,7 +52,7 @@ namespace DarkFlare
 
         void FixedUpdate()
         {
-            if (_actor == null || !_actor.IsAlive)
+            if (_actor == null || !_actor.IsAlive || _definition == null || _instance == null)
             {
                 return;
             }
@@ -66,7 +66,7 @@ namespace DarkFlare
             }
 
             Vector2 offset = target.transform.position - transform.position;
-            Vector2 direction = offset.sqrMagnitude > 0.001f ? offset.normalized : Vector2.zero;
+            Vector2 direction = GetMoveDirection(target, offset);
             _rigidbody.linearVelocity = direction * GetMoveSpeed();
             TryDealContactDamage(target, offset.magnitude);
         }
@@ -102,6 +102,37 @@ namespace DarkFlare
         float GetMoveSpeed()
         {
             return _actor.Stats.GetValue(StatIds.MoveSpeed);
+        }
+
+        Vector2 GetMoveDirection(CombatActor target, Vector2 targetOffset)
+        {
+            Vector2 pursuit = MonsterSteeringCalculator.GetPursuitDirection(
+                targetOffset,
+                _definition.ContactStopDistance);
+            Vector2 separation = Vector2.zero;
+            IReadOnlyList<CombatActor> monsters = this.SendQuery(new GetActorsByTeamQuery(ActorTeam.Monster));
+            Vector2 selfPosition = transform.position;
+
+            for (int i = 0; i < monsters.Count; i++)
+            {
+                CombatActor neighbor = monsters[i];
+
+                if (neighbor == null || neighbor == _actor || !neighbor.IsAlive || neighbor == target)
+                {
+                    continue;
+                }
+
+                separation += MonsterSteeringCalculator.GetSeparationContribution(
+                    selfPosition,
+                    neighbor.transform.position,
+                    _definition.SeparationRadius,
+                    _instance.Seed);
+            }
+
+            return MonsterSteeringCalculator.Combine(
+                pursuit,
+                separation,
+                _definition.SeparationWeight);
         }
 
         void TryDealContactDamage(CombatActor target, float distance)

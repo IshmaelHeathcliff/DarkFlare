@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2528007188402527002}
   - component: {fileID: 7148547630135055656}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: HealthBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -102,7 +102,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2144354582860435940}
   - component: {fileID: 4429200096845552938}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -201,7 +201,7 @@ GameObject:
   - component: {fileID: 3538043287078835149}
   - component: {fileID: 3641997443734678276}
   - component: {fileID: 8975848878643778423}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Monster_Heavy
   m_TagString: Untagged
   m_Icon: {fileID: 0}

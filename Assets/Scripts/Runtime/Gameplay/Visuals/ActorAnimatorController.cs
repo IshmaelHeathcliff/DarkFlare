@@ -20,6 +20,10 @@ namespace DarkFlare
         SpriteRenderer _renderer;
 
         [SerializeField]
+        [Tooltip("源动画未翻转时是否朝向右侧")]
+        bool _sourceFacesRight = true;
+
+        [SerializeField]
         [Min(0f)]
         float _movementThreshold = 0.05f;
 
@@ -34,6 +38,7 @@ namespace DarkFlare
         void Awake()
         {
             EnsureComponents();
+            ApplyDefaultFacing();
         }
 
         void OnEnable()
@@ -57,13 +62,14 @@ namespace DarkFlare
 
             if (_renderer != null && Mathf.Abs(velocity.x) > _movementThreshold)
             {
-                _renderer.flipX = velocity.x < 0f;
+                _renderer.flipX = ResolveFlipX(_sourceFacesRight, velocity.x);
             }
         }
 
         void OnValidate()
         {
             EnsureComponents();
+            ApplyDefaultFacing();
         }
 
         void EnsureComponents()
@@ -80,6 +86,19 @@ namespace DarkFlare
 
             _rigidbody = GetComponent<Rigidbody2D>();
             _actor = GetComponent<CombatActor>();
+        }
+
+        void ApplyDefaultFacing()
+        {
+            if (_renderer != null)
+            {
+                _renderer.flipX = !_sourceFacesRight;
+            }
+        }
+
+        static bool ResolveFlipX(bool sourceFacesRight, float horizontalVelocity)
+        {
+            return sourceFacesRight ? horizontalVelocity < 0f : horizontalVelocity > 0f;
         }
 
         void OnActorAttacked(ActorAttackedEvent e)

@@ -101,6 +101,22 @@ namespace DarkFlare
         float _contactDamageRadius = 0.75f;
 
         [SerializeField]
+        [MinValue(0f)]
+        [LabelText("接近停止距离")]
+        float _contactStopDistance = 0.6f;
+
+        [SerializeField]
+        [MinValue(0.01f)]
+        [LabelText("软分离半径")]
+        float _separationRadius = 0.8f;
+
+        [SerializeField]
+        [MinValue(0f)]
+        [MaxValue(2f)]
+        [LabelText("软分离权重")]
+        float _separationWeight = 0.65f;
+
+        [SerializeField]
         [LabelText("自定义角色标签")]
         List<TagDefinition> _tags = new List<TagDefinition>();
 
@@ -145,6 +161,12 @@ namespace DarkFlare
         public float ContactDamageInterval => _contactDamageInterval;
 
         public float ContactDamageRadius => _contactDamageRadius;
+
+        public float ContactStopDistance => _contactStopDistance;
+
+        public float SeparationRadius => _separationRadius;
+
+        public float SeparationWeight => _separationWeight;
 
         public IReadOnlyList<TagDefinition> Tags => _tags;
 

@@ -35,6 +35,9 @@ MonoBehaviour:
   _healthMultiplierRange: {x: 0.85, y: 1.15}
   _contactDamageInterval: 0.75
   _contactDamageRadius: 0.75
+  _contactStopDistance: 0.6
+  _separationRadius: 0.8
+  _separationWeight: 0.65
   _tags: []
   _contactDamages:
   - _damageType: 0

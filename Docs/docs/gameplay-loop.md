@@ -90,12 +90,21 @@
 
 完整规格、资产与验收截图见 [视觉规范](./visual-style.md) 和 [视觉资产清单](./visual-assets.md)。
 
+## alpha 0.1.3 碰撞与怪群安全
+
+- 玩家、怪物和世界阻挡分别使用 `PlayerActor`、`MonsterActor`、`WorldObstacle` Layer。玩家—怪物、怪物—怪物和玩家—玩家不产生 2D 实体接触；两类 Actor 仍与世界阻挡及 `Default` 层交互。
+- `Player.prefab` 与三个怪物 Prefab 的整个层级已迁移到对应 Actor Layer；`Main.unity/WorldBounds` 是 `WorldObstacle` 上的闭合非 Trigger `EdgeCollider2D`。
+- 怪物移动在 `0.6` 距离内停止追逐，并使用半径 `0.8`、权重 `0.65` 的同阵营软分离。完全重叠时由怪物实例种子产生稳定退让方向，合成速度不会超过配置移速。
+- 接触伤害仍由中心距离与每只怪物自己的攻击间隔驱动，不依赖碰撞回调。三种怪物分别以 `0.75 / 0.55 / 1.0` 秒独立尝试；没有受击无敌帧、玩家全局伤害冷却或同帧合并。
+- 永久配置校验覆盖 Layer、Physics2D Matrix、Actor Prefab、`WorldBounds` 和怪物移动参数；精准迁移复跑后目标资产哈希保持不变。
+
 ## 模块边界
 
 | 模块 | 主要入口 | 当前职责 |
 | --- | --- | --- |
 | 启动与生成 | `CombatPrototypeBootstrap`、`SpawnSystem`、`MonsterSpawner` | 预热资源、初始化配置、生成玩家 / 怪物 / 投射物 |
 | 战斗 | `CombatModel`、`CombatSystem`、`DamageCalculator`、`AttackSnapshotFactory` | Actor 注册、攻击快照、伤害结算与生死状态 |
+| 怪物移动与碰撞 | `MonsterController`、`MonsterSteeringCalculator`、`GameplayPhysicsLayers` | 接近停止、同阵营软分离、角色与世界的 Layer 碰撞合同 |
 | 随机化 | `GameplayRandomSystem`、`MonsterInstanceData` | 根种子、独立通道、怪物实例生命与可复现调试 |
 | 掉落与物品 | `LootSystem`、`LootTableDefinition`、`ItemGenerator` | 死亡掉落、物品实例生成和世界掉落物创建 |
 | 背包与装备 | `InventoryModel`、`InventoryGrid`、`EquipmentModel`、`EquipmentSystem` | 10×6 格子占用、四槽穿戴、原子替换 / 卸下和装备效果聚合 |
@@ -109,7 +118,7 @@
 
 ## 场景与配置
 
-- `Assets/Scenes/Main.unity`：唯一构建场景，包含战斗启动器、刷怪器、`WorldBounds`、`GroundGrid` 下的 5×5 基础 Tilemap 与稀疏细节 Tilemap、营地与边界装饰、`UIRoot`、唯一 `EventSystem`、商人与打造台 Prefab。
+- `Assets/Scenes/Main.unity`：唯一构建场景，包含战斗启动器、刷怪器、`WorldObstacle` 层的 `WorldBounds`、`GroundGrid` 下的 5×5 基础 Tilemap 与稀疏细节 Tilemap、营地与边界装饰、`UIRoot`、唯一 `EventSystem`、商人与打造台 Prefab。
 - `Assets/Data/Preset/Actors/玩家.asset`：玩家属性与 Prefab 引用。
 - `Assets/Data/Preset/Skills/基础投射物技能.asset`：首版投射物技能。
 - `Assets/Data/Preset/Monsters/`：三种怪物定义与 `基础刷怪表.asset`。
@@ -137,6 +146,7 @@ Prefab 通过 Addressables 预热和实例化，首版不使用 `Resources` 或�
 - 阶段 5 全量 EditMode 92/92 通过；PlayMode 12 项中 10 项通过、2 项 Input System 上游用例按原标记跳过、0 失败。Core、Runtime、Editor、EditMode 与 PlayMode 五个项目程序集编译通过；七件装备图标预热、三种怪物 Animator、战斗反馈与三档 UI 渲染通过，最终 Play Console 为 0 错误、0 警告。
 - 阶段 6 全量 EditMode 98/98 通过；PlayMode 12 项中 10 项通过、2 项 Input System 上游既有用例按标记跳过、0 失败。五个项目程序集顺序编译均为 0 警告、0 错误，Unity Console 为 0 错误、0 警告。Main 重复进入前后 Addressables 缓存稳定为 6 个 Prefab 与 7 个 Sprite，停止战斗发射源后临时伤害数字、冲击和投射物均清零。
 - 双层地表专项验收为 EditMode 19/19、PlayMode 1/1 通过；基础层 25 格、细节层 11 格、两层无 Collider，视觉覆盖继续保持 `-20..20`，`WorldBounds` 保持 `-16..16`。
+- alpha 0.1.3 全量 EditMode 148/148 通过；PlayMode 17 项中 15 项通过、2 项 Input System 上游既有用例按标记跳过、0 失败。12 只怪物四方向脱困、WorldObstacle 阻挡、Default Trigger 与迁移幂等性专项均通过。
 
 以上数据是首版收尾时的验证记录；后续改动仍应重新运行相关测试和 Play 流程。
 

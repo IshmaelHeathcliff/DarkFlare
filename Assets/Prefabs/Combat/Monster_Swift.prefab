@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1418927207026479014}
   - component: {fileID: 7421851296077956689}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: HealthBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -102,7 +102,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3217933311054017478}
   - component: {fileID: 5843546052399464117}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -201,7 +201,7 @@ GameObject:
   - component: {fileID: 3538043287078835149}
   - component: {fileID: 6998558286824512590}
   - component: {fileID: 3092236459437633144}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Monster_Swift
   m_TagString: Untagged
   m_Icon: {fileID: 0}

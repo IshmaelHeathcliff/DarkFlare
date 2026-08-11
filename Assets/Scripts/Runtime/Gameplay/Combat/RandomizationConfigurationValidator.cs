@@ -24,6 +24,32 @@ namespace DarkFlare
                 issues.Add("生命倍率范围上下限倒置");
             }
 
+            if (definition.ContactDamageInterval < 0.05f)
+            {
+                issues.Add("碰撞伤害间隔不能小于 0.05 秒");
+            }
+
+            if (definition.ContactDamageRadius < 0.05f)
+            {
+                issues.Add("碰撞伤害半径不能小于 0.05");
+            }
+
+            if (definition.ContactStopDistance < 0f
+                || definition.ContactStopDistance > definition.ContactDamageRadius)
+            {
+                issues.Add("接近停止距离必须位于 0 到碰撞伤害半径之间");
+            }
+
+            if (definition.SeparationRadius <= 0f)
+            {
+                issues.Add("软分离半径必须大于 0");
+            }
+
+            if (definition.SeparationWeight < 0f || definition.SeparationWeight > 2f)
+            {
+                issues.Add("软分离权重必须位于 0 到 2 之间");
+            }
+
             ValidateDamageRolls(definition.ContactDamages, "碰撞伤害", issues, true);
             ValidateCombatStats(
                 definition.Accuracy,

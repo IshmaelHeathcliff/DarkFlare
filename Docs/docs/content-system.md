@@ -54,11 +54,11 @@
 
 ## 怪物、刷怪与掉落
 
-| 怪物 | ID | 基础生命 | 移速 | 接触伤害 | 间隔 | 掉落率 | 刷怪权重 |
-| --- | --- | ---: | ---: | --- | ---: | ---: | ---: |
-| 荒原游魂 | `wasteland_wraith` | 52 | 2.6 | `6–10` | 0.75s | 35% | 55 |
-| 裂爪猎犬 | `razor_hound` | 36 | 3.6 | `4–7` | 0.55s | 30% | 30 |
-| 铁壳尸傀 | `iron_husk` | 96 | 1.7 | `10–14` | 1.0s | 45% | 15 |
+| 怪物 | ID | 基础生命 | 移速 | 接触伤害 | 半径 / 间隔 | 掉落率 | 刷怪权重 |
+| --- | --- | ---: | ---: | --- | --- | ---: | ---: |
+| 荒原游魂 | `wasteland_wraith` | 52 | 2.6 | `6–10` | `0.75 / 0.75s` | 35% | 55 |
+| 裂爪猎犬 | `razor_hound` | 36 | 3.6 | `4–7` | `0.75 / 0.55s` | 30% | 30 |
+| 铁壳尸傀 | `iron_husk` | 96 | 1.7 | `10–14` | `0.75 / 1.0s` | 45% | 15 |
 
 正式基础战斗属性：
 
@@ -68,7 +68,7 @@
 | 裂爪猎犬 | 110 | 30 | 8% | 50% | 0 | 0% |
 | 铁壳尸傀 | 80 | 5 | 3% | 50% | 40 | 0% |
 
-三者使用独立 `MonsterDefinition`、掉落表、Addressable Prefab、Sprite 和 Animator Controller，并保持统一的移动、攻击、受伤与死亡参数契约。三张掉落表都覆盖七件装备和十二词条，装备顺序统一为大剑、战斧、皮甲、板甲、铁指环、翡翠戒指、黑曜戒指：
+三者使用独立 `MonsterDefinition`、掉落表、Addressable Prefab、Sprite 和 Animator Controller，并保持统一的移动、攻击、受伤与死亡参数契约。移动参数统一为停止距离 `0.6`、软分离半径 `0.8`、软分离权重 `0.65`；接触攻击按表中的独立间隔执行，没有玩家全局受伤冷却。三张掉落表都覆盖七件装备和十二词条，装备顺序统一为大剑、战斧、皮甲、板甲、铁指环、翡翠戒指、黑曜戒指：
 
 | 掉落表 | 条目权重 |
 | --- | --- |
@@ -87,6 +87,7 @@
 - 标签兼容、每件装备候选数量和池覆盖。
 - 刷怪、掉落、商店和打造池的空项、权重与内容覆盖。
 - 怪物 Prefab 的独立 GUID、Addressables 注册和运行组件。
+- 怪物移动范围、停止距离、软分离参数，以及 Actor Layer、Physics2D Matrix 和 `WorldBounds` 合同。
 - 正式装备图标的非空、唯一、Addressables 注册、Sprite 类型、64 PPU、Point Filter 和无压缩导入规格。
 
 `MonsterSpawnDefinition.Rules`、`LootTableDefinition.AffixPool` 与 `TraderDefinition.Stock` 提供只读检查入口，不改变运行时事务接口。阶段 4 的一次性安装与迁移脚本已在正式资产落地并通过验收后移除，后续内容维护统一通过配置中心直接编辑正式资产。
@@ -100,5 +101,6 @@
 - Runtime、Editor、EditMode 与 PlayMode 四个程序集编译 0 警告、0 错误；三个怪物 Addressable Prefab 在 Main 预热中均成功加载，最终 Console 无错误。
 - 阶段 5 全量 EditMode 92/92 通过；PlayMode 12 项中 10 项通过、2 项 Input System 上游用例按原标记跳过。七个图标、三种怪物 Prefab 与 Animator 契约、Addressables 图标预热、缓存和释放路径均通过专项检查。
 - 阶段 6 全量 EditMode 98/98 通过；PlayMode 12 项中 10 项通过、2 项 Input System 上游既有用例跳过、0 失败。正式七件装备的交易 / 打造 / 四槽流程、三种怪物与十二词条池继续通过整合回归。
+- alpha 0.1.3 全量 EditMode 148/148 通过；PlayMode 17 项中 15 项通过、2 项 Input System 上游既有用例跳过、0 失败。三种怪物的 Layer、独立接触间隔、停止与软分离配置均由永久校验和专项测试覆盖。
 
 随机种子与掉落判定见 [随机化与掉落规则](./randomization-system.md)，装备事务见 [装备系统](./equipment-system.md)，词条计算语义见 [伤害系统与词条系统设计](./damage-affix-system.md)。

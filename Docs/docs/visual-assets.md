@@ -41,6 +41,7 @@
 - 迁移使用每个旧家族唯一的完整画布等比因子，并把旧对齐信息烘焙进像素；不得逐帧 fit-to-canvas。
 - 128×128 是为容纳玩家、荒原游魂和裂爪猎犬约 103–106 px 宽的 Attack Release 帧，避免 96×96 裁切。
 - Player、Basic、Swift、Heavy、Merchant 根 Scale 继续保留 `0.80 / 0.75 / 0.90 / 0.75 / 0.80`，因为根节点同时承载 Collider 和子节点。该例外不能用于新资产。
+- 文件名中的 `_se_` 统一表示运行时默认朝右。当前荒原游魂的既有 12 帧源像素实际朝左，因此 `Monster_Basic.prefab` 显式配置 `ActorAnimatorController._sourceFacesRight = false` 并在默认预览中水平翻转；移动时按该家族合同反向解析 `flipX`。该例外只属于整个 Basic 家族，禁止逐帧修改 Pivot、Transform 或单独翻转。未来若重制为原生朝右，必须一次性更新全族与 Prefab 合同。
 
 ### 投射物、图标与 UI
 

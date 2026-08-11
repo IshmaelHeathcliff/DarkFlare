@@ -2,7 +2,7 @@
 
 ## 覆盖类型
 
-本文覆盖 `alpha 0.1.2` 直接改变的四类配置：
+本文覆盖 `alpha 0.1.2–0.1.3` 直接改变的四类配置：
 
 - `CharacterDefinition`
 - `MonsterDefinition`
@@ -60,12 +60,17 @@
 | `_maxHealth` / `_moveSpeed` | `float` | 未引用角色定义时生效 |
 | 战斗属性字段 | `float` | 未引用角色定义时生效；见通用合同 |
 | `_healthMultiplierRange` | `Vector2` | 两端大于 0，且下限不大于上限 |
-| `_contactDamageInterval` / `_contactDamageRadius` | `float` | 必须为正数 |
+| `_contactDamageInterval` / `_contactDamageRadius` | `float` | 必须为正数；分别控制每只怪物独立的攻击尝试间隔与中心距离 |
+| `_contactStopDistance` | `float` | `0..ContactDamageRadius`；进入该距离后关闭追逐分量 |
+| `_separationRadius` | `float` | 必须大于 0；只读取存活的同阵营怪物 |
+| `_separationWeight` | `float` | `0..2`；与追逐方向组合后仍受移动速度上限约束 |
 | `_tags` | `List<TagDefinition>` | 只保存不能由 Monster 阵营推导的 Actor 标签 |
 | `_contactDamages` | `List<DamageRollDefinition>` | 必须非空；没有代码级固定伤害回退 |
 | `_lootTable` | `LootTableDefinition` | 正式怪物必填 |
 
-`CreateInstanceData(seed)` 只随机生命倍率并复制基础 `StatBlock`；共享资产不在运行时改写。接触攻击使用攻击根种子的 `BaseDamageSeed` 掷点。
+`CreateInstanceData(seed)` 只随机生命倍率并复制基础 `StatBlock`；共享资产不在运行时改写。实例种子同时为完全重叠时的软分离提供稳定方向，不消费帧随机数。正式三种怪物的停止距离、软分离半径和权重统一为 `0.6 / 0.8 / 0.65`。
+
+接触攻击不依赖物理碰撞回调，继续由每只 `MonsterController` 按中心距离独立计时。荒原游魂、裂爪猎犬、铁壳尸傀的尝试间隔分别为 `0.75 / 0.55 / 1.0` 秒；未命中或闪避也只消费当前怪物自己的冷却。本阶段没有玩家受击无敌帧、全局伤害冷却或同帧伤害合并。
 
 ## ItemBaseDefinition
 
@@ -109,6 +114,6 @@
 ## 校验与迁移
 
 - Inspector 使用 `EquipmentConfigurationValidator` 与 `RandomizationConfigurationValidator` 输出上下文 Warning。
-- 配置中心内容校验会检查正式角色、技能、装备和怪物资产。
+- 配置中心内容校验会检查正式角色、技能、装备和怪物资产；`GameplayPhysicsConfigurationValidator` 还会检查正式 Layer、碰撞矩阵、Actor Prefab 层级和 `WorldBounds`。
 - 新增字段或改变伤害来源时，应通过 Editor API / Unity MCP 精准迁移并保留 GUID。
-- 正式提交前至少运行 `Alpha012DamageResolutionTests`、`RandomizationPhase3Tests`、`Phase4ContentTests` 和 Main PlayMode 集成测试。
+- 正式提交前至少运行 `Alpha012DamageResolutionTests`、`Alpha013CollisionSafetyTests`、`RandomizationPhase3Tests`、`Phase4ContentTests` 和 Main PlayMode 集成测试。
