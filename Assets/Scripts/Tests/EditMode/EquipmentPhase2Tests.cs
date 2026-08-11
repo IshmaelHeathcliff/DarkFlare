@@ -268,17 +268,16 @@ public class EquipmentPhase2Tests
     }
 
     [Test]
-    public void AttackSnapshot_UsesSkillFallbackWithoutWeapon_AndExcludesLocalItemFromSkillSource()
+    public void AttackSnapshot_RejectsMissingWeapon_AndExcludesLocalItemFromSkillSource()
     {
         CombatActor attacker = CreateActor("fallback_attacker", ActorTeam.Player, new StatBlock());
         ProjectileSkillDefinition weaponSkill = CreateSkill(ProjectileDamageSource.EquippedWeapon);
-        AttackSnapshot fallback = AttackSnapshotFactory.CreateProjectile(
+        AttackSnapshot missingWeapon = AttackSnapshotFactory.CreateProjectile(
             attacker,
             weaponSkill,
             _architecture.GetModel<EquipmentModel>(),
             7);
-        Assert.AreEqual(12f, fallback.BaseDamages[0].Amount);
-        Assert.IsEmpty(fallback.SourceItemId);
+        Assert.IsNull(missingWeapon);
 
         ModifierInstance localDamage = CreateModifier(
             StatIds.Damage,
@@ -424,6 +423,10 @@ public class EquipmentPhase2Tests
 
     DamageResult Calculate(AttackSnapshot attack, CombatActor defender)
     {
+        HitResolution resolution = HitResolutionCalculator.Resolve(
+            attack.AttackerStats,
+            defender.Stats,
+            attack.RandomRolls);
         DamageContext context = new DamageContext(
             attack.AttackerId,
             defender.ActorId,
@@ -431,18 +434,22 @@ public class EquipmentPhase2Tests
             attack.SourceItemId,
             attack.RandomSeed,
             attack.BaseDamages,
-            attack.ContextTags,
+            attack.TagContext,
             attack.AttackerStats,
             defender.Stats,
             attack.AttackerModifiers,
             defender.Modifiers,
-            attack.IsHit,
-            attack.IsCritical);
+            resolution);
         return DamageCalculator.Calculate(context);
     }
 
     CombatActor CreateActor(string id, ActorTeam team, StatBlock stats)
     {
+        if (stats.GetValue(StatIds.Accuracy) <= 0f)
+        {
+            stats.SetValue(StatIds.Accuracy, 100f);
+        }
+
         GameObject gameObject = new GameObject(id);
         gameObject.SetActive(false);
         CombatActor actor = gameObject.AddComponent<CombatActor>();
@@ -497,6 +504,15 @@ public class EquipmentPhase2Tests
         ProjectileSkillDefinition skill = CreateScriptableObject<ProjectileSkillDefinition>();
         SetField(skill, "_id", "test_projectile");
         SetField(skill, "_damageSource", source);
+
+        if (source == ProjectileDamageSource.Skill)
+        {
+            DamageRollDefinition damage = new DamageRollDefinition();
+            SetField(damage, "_damageType", DamageType.Physical);
+            SetField(damage, "_amountRange", new Vector2(12f, 12f));
+            SetField(skill, "_baseDamages", new List<DamageRollDefinition> { damage });
+        }
+
         return skill;
     }
 

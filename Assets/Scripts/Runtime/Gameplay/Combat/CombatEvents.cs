@@ -12,6 +12,13 @@ namespace DarkFlare
         public DamageResult Result;
     }
 
+    public struct DamageResolvedEvent
+    {
+        public CombatActor Actor;
+
+        public DamageResult Result;
+    }
+
     public struct ActorHealedEvent
     {
         public CombatActor Actor;

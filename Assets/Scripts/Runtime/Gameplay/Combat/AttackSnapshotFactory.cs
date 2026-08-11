@@ -4,44 +4,62 @@ namespace DarkFlare
 {
     public static class AttackSnapshotFactory
     {
+        public static bool CanCreateProjectile(
+            CombatActor attacker,
+            ProjectileSkillDefinition skill,
+            EquipmentModel equipment)
+        {
+            if (attacker == null || skill == null)
+            {
+                return false;
+            }
+
+            if (skill.DamageSource == ProjectileDamageSource.Skill)
+            {
+                return skill.BaseDamages.Count > 0;
+            }
+
+            if (equipment == null)
+            {
+                return false;
+            }
+
+            ItemInstance weapon = equipment.GetWeapon(attacker);
+            return IsValidWeapon(weapon);
+        }
+
         public static AttackSnapshot CreateProjectile(
             CombatActor attacker,
             ProjectileSkillDefinition skill,
             EquipmentModel equipment,
             int randomSeed)
         {
-            if (attacker == null || skill == null)
+            if (!CanCreateProjectile(attacker, skill, equipment))
             {
                 return null;
             }
 
+            AttackRandomRolls rolls = AttackRandomRolls.FromRootSeed(randomSeed);
             ItemInstance sourceWeapon = null;
             List<DamagePacket> baseDamages;
             TagSet sourceItemTags = TagSet.Empty;
             List<ModifierInstance> modifiers = new List<ModifierInstance>(attacker.Modifiers);
 
-            if (skill.DamageSource == ProjectileDamageSource.EquippedWeapon && equipment != null)
+            if (skill.DamageSource == ProjectileDamageSource.EquippedWeapon)
             {
-                ItemInstance weapon = equipment.GetItem(attacker, EquipmentSlot.Weapon);
-
-                if (weapon != null
-                    && weapon.BaseDefinition != null
-                    && weapon.BaseDefinition.CanEquipTo(EquipmentSlot.Weapon)
-                    && weapon.BaseDefinition.BaseDamages.Count > 0)
-                {
-                    sourceWeapon = weapon;
-                    baseDamages = weapon.CreateBaseDamagePackets(randomSeed);
-                    sourceItemTags = weapon.Tags;
-                    modifiers.AddRange(EquipmentEffectResolver.CollectLocalWeaponModifiers(weapon));
-                }
-                else
-                {
-                    baseDamages = skill.CreateDamagePackets(randomSeed);
-                }
+                sourceWeapon = equipment.GetWeapon(attacker);
+                baseDamages = sourceWeapon.CreateBaseDamagePackets(rolls.BaseDamageSeed);
+                sourceItemTags = sourceWeapon.Tags;
+                modifiers.AddRange(EquipmentEffectResolver.CollectLocalWeaponModifiers(sourceWeapon));
             }
             else
             {
-                baseDamages = skill.CreateDamagePackets(randomSeed);
+                baseDamages = skill.CreateDamagePackets(rolls.BaseDamageSeed);
+            }
+
+            if (baseDamages.Count == 0)
+            {
+                return null;
             }
 
             CombatTagContext tagContext = new CombatTagContext(
@@ -60,6 +78,15 @@ namespace DarkFlare
                 tagContext,
                 attacker.Stats,
                 modifiers);
+        }
+
+        static bool IsValidWeapon(ItemInstance weapon)
+        {
+            return weapon != null
+                && weapon.BaseDefinition != null
+                && weapon.BaseDefinition.ItemType == ItemType.Weapon
+                && weapon.BaseDefinition.CanEquipTo(EquipmentSlot.Weapon)
+                && weapon.BaseDefinition.BaseDamages.Count > 0;
         }
 
         public static AttackSnapshot CreateImmediate(

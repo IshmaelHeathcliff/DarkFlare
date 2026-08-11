@@ -37,6 +37,56 @@ namespace DarkFlare
         float _moveSpeed = 2.6f;
 
         [SerializeField]
+        [MinValue(0)]
+        [HideIf(nameof(HasCharacterDefinition))]
+        [LabelText("命中值")]
+        float _accuracy = 90f;
+
+        [SerializeField]
+        [MinValue(0)]
+        [HideIf(nameof(HasCharacterDefinition))]
+        [LabelText("闪避值")]
+        float _evasion = 15f;
+
+        [SerializeField]
+        [Range(0f, 100f)]
+        [HideIf(nameof(HasCharacterDefinition))]
+        [LabelText("暴击率")]
+        float _criticalChance = 5f;
+
+        [SerializeField]
+        [MinValue(0)]
+        [HideIf(nameof(HasCharacterDefinition))]
+        [LabelText("暴击伤害")]
+        float _criticalDamage = 50f;
+
+        [SerializeField]
+        [MinValue(0)]
+        [HideIf(nameof(HasCharacterDefinition))]
+        [LabelText("护甲")]
+        float _armor;
+
+        [SerializeField]
+        [HideIf(nameof(HasCharacterDefinition))]
+        [LabelText("火焰抗性")]
+        float _fireResistance;
+
+        [SerializeField]
+        [HideIf(nameof(HasCharacterDefinition))]
+        [LabelText("冰霜抗性")]
+        float _coldResistance;
+
+        [SerializeField]
+        [HideIf(nameof(HasCharacterDefinition))]
+        [LabelText("闪电抗性")]
+        float _lightningResistance;
+
+        [SerializeField]
+        [HideIf(nameof(HasCharacterDefinition))]
+        [LabelText("混沌抗性")]
+        float _chaosResistance;
+
+        [SerializeField]
         [LabelText("生命倍率范围")]
         Vector2 _healthMultiplierRange = Vector2.one;
 
@@ -72,6 +122,24 @@ namespace DarkFlare
 
         public float MoveSpeed => _character != null ? _character.MoveSpeed : _moveSpeed;
 
+        public float Accuracy => _character != null ? _character.Accuracy : _accuracy;
+
+        public float Evasion => _character != null ? _character.Evasion : _evasion;
+
+        public float CriticalChance => _character != null ? _character.CriticalChance : _criticalChance;
+
+        public float CriticalDamage => _character != null ? _character.CriticalDamage : _criticalDamage;
+
+        public float Armor => _character != null ? _character.Armor : _armor;
+
+        public float FireResistance => _character != null ? _character.FireResistance : _fireResistance;
+
+        public float ColdResistance => _character != null ? _character.ColdResistance : _coldResistance;
+
+        public float LightningResistance => _character != null ? _character.LightningResistance : _lightningResistance;
+
+        public float ChaosResistance => _character != null ? _character.ChaosResistance : _chaosResistance;
+
         public Vector2 HealthMultiplierRange => _healthMultiplierRange;
 
         public float ContactDamageInterval => _contactDamageInterval;
@@ -98,6 +166,15 @@ namespace DarkFlare
             StatBlock stats = new StatBlock();
             stats.SetValue(StatIds.MaxHealth, _maxHealth);
             stats.SetValue(StatIds.MoveSpeed, _moveSpeed);
+            stats.SetValue(StatIds.Accuracy, _accuracy);
+            stats.SetValue(StatIds.Evasion, _evasion);
+            stats.SetValue(StatIds.CriticalChance, _criticalChance);
+            stats.SetValue(StatIds.CriticalDamage, _criticalDamage);
+            stats.SetValue(StatIds.Armor, _armor);
+            stats.SetValue(StatIds.FireResistance, _fireResistance);
+            stats.SetValue(StatIds.ColdResistance, _coldResistance);
+            stats.SetValue(StatIds.LightningResistance, _lightningResistance);
+            stats.SetValue(StatIds.ChaosResistance, _chaosResistance);
             return stats;
         }
 
@@ -121,11 +198,6 @@ namespace DarkFlare
             for (int i = 0; i < _contactDamages.Count; i++)
             {
                 packets.Add(_contactDamages[i].CreatePacket(random));
-            }
-
-            if (packets.Count == 0)
-            {
-                packets.Add(new DamagePacket(DamageType.Physical, 8f, TagSet.Empty));
             }
 
             return packets;

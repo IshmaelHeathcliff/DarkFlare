@@ -9,10 +9,10 @@
 | `TagDefinition` | `Assets/Data/Preset/Tags` | [完整](./combat-tags.md) | [战斗标签系统](../combat-tag-system.md) |
 | `StatDefinition` | `Assets/Data/Preset/Stats` | 骨架已登记 | [属性系统](../stat-system.md) |
 | `AffixDefinition` | `Assets/Data/Preset/Affixes` | 标签相关字段已覆盖，其余待补全 | [伤害与词条](../damage-affix-system.md) |
-| `ItemBaseDefinition` | `Assets/Data/Preset/Items` | 骨架已登记 | [装备系统](../equipment-system.md) |
-| `CharacterDefinition` | `Assets/Data/Preset/Actors` | 骨架已登记 | [玩法循环](../gameplay-loop.md) |
-| `ProjectileSkillDefinition` | `Assets/Data/Preset/Skills` | 标签相关字段已覆盖，其余待补全 | [伤害与词条](../damage-affix-system.md) |
-| `MonsterDefinition` | `Assets/Data/Preset/Monsters` | 标签相关字段已覆盖，其余待补全 | [首批内容池](../content-system.md) |
+| `ItemBaseDefinition` | `Assets/Data/Preset/Items` | [完整](./combat-content.md#itembasedefinition) | [装备系统](../equipment-system.md) |
+| `CharacterDefinition` | `Assets/Data/Preset/Actors` | [完整](./combat-content.md#characterdefinition) | [玩法循环](../gameplay-loop.md) |
+| `ProjectileSkillDefinition` | `Assets/Data/Preset/Skills` | [完整](./combat-content.md#projectileskilldefinition) | [伤害与词条](../damage-affix-system.md) |
+| `MonsterDefinition` | `Assets/Data/Preset/Monsters` | [完整](./combat-content.md#monsterdefinition) | [首批内容池](../content-system.md) |
 | `MonsterSpawnDefinition` | `Assets/Data/Preset/Monsters` | 骨架已登记 | [首批内容池](../content-system.md) |
 | `LootTableDefinition` | `Assets/Data/Preset/Loot` | 骨架已登记 | [随机化与掉落](../randomization-system.md) |
 | `TraderDefinition` | `Assets/Data/Preset/Traders` | 骨架已登记 | [首批内容池](../content-system.md) |

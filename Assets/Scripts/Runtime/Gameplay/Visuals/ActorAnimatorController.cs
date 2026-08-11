@@ -95,7 +95,11 @@ namespace DarkFlare
 
         void OnActorDamaged(ActorDamagedEvent e)
         {
-            if (e.Actor != _actor || _actor == null || !_actor.IsAlive || !e.Result.IsHit)
+            if (e.Actor != _actor
+                || _actor == null
+                || !_actor.IsAlive
+                || e.Result == null
+                || !e.Result.DidDealDamage)
             {
                 return;
             }

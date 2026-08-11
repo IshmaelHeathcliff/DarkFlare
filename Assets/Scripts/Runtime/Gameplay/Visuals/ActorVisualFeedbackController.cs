@@ -82,6 +82,7 @@ namespace DarkFlare
             }
 
             _registrations.Add(this.RegisterEvent<ActorDamagedEvent>(OnActorDamaged));
+            _registrations.Add(this.RegisterEvent<DamageResolvedEvent>(OnDamageResolved));
             _registrations.Add(this.RegisterEvent<ActorHealedEvent>(OnActorHealed));
             _registrations.Add(this.RegisterEvent<ActorDiedEvent>(OnActorDied));
             _registrations.Add(this.RegisterEvent<ActorRevivedEvent>(OnActorRevived));
@@ -99,7 +100,7 @@ namespace DarkFlare
 
         void OnActorDamaged(ActorDamagedEvent e)
         {
-            if (e.Actor != _actor || e.Result == null || !e.Result.IsHit)
+            if (e.Actor != _actor || e.Result == null || !e.Result.DidDealDamage)
             {
                 return;
             }
@@ -109,12 +110,39 @@ namespace DarkFlare
                 transform.position,
                 e.Result.TotalDamage,
                 _actor.Team,
-                CombatTextKind.Damage);
+                e.Result.IsCritical ? CombatTextKind.CriticalDamage : CombatTextKind.Damage);
 
             if (_monsterHealthBar != null)
             {
                 _monsterHealthBar.Refresh(_actor);
             }
+        }
+
+        void OnDamageResolved(DamageResolvedEvent e)
+        {
+            if (e.Actor != _actor || e.Result == null || e.Result.DidDealDamage)
+            {
+                return;
+            }
+
+            CombatTextKind kind;
+
+            switch (e.Result.Outcome)
+            {
+                case HitOutcome.Missed:
+                    kind = CombatTextKind.Missed;
+                    break;
+                case HitOutcome.Evaded:
+                    kind = CombatTextKind.Evaded;
+                    break;
+                case HitOutcome.NoDamage:
+                    kind = CombatTextKind.NoDamage;
+                    break;
+                default:
+                    return;
+            }
+
+            DamageNumberVisual.Spawn(transform.position, 0f, _actor.Team, kind);
         }
 
         void OnActorHealed(ActorHealedEvent e)

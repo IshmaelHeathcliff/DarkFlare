@@ -8,7 +8,13 @@ namespace DarkFlare
         {
             if (!context.IsHit)
             {
-                return new DamageResult(false, context.IsCritical, new Dictionary<DamageType, float>(), new Dictionary<DamageType, float>());
+                return DamageResult.CreateWithoutDamage(new HitResolution(
+                    context.Outcome,
+                    context.HitChance,
+                    context.HitRoll,
+                    context.CriticalChance,
+                    context.CriticalRoll,
+                    false));
             }
 
             List<DamagePacket> packets = new List<DamagePacket>(context.BaseDamages);
@@ -23,13 +29,23 @@ namespace DarkFlare
             }
 
             Dictionary<DamageType, float> beforeDefense = SumByType(packets);
-            Dictionary<DamageType, float> afterDefense = ApplyDefense(
+            Dictionary<DamageType, float> afterTargetTaken = ApplyTargetTaken(
                 packets,
-                context.DefenderStats,
                 context.DefenderModifiers,
                 context.TagContext);
+            Dictionary<DamageType, DamageTypeBreakdown> breakdowns = ApplyDefense(
+                beforeDefense,
+                afterTargetTaken,
+                context.DefenderStats);
 
-            return new DamageResult(true, context.IsCritical, beforeDefense, afterDefense);
+            return new DamageResult(
+                HitOutcome.Hit,
+                context.IsCritical,
+                context.HitChance,
+                context.HitRoll,
+                context.CriticalChance,
+                context.CriticalRoll,
+                breakdowns);
         }
 
         static List<DamagePacket> ApplyConversion(
@@ -271,9 +287,8 @@ namespace DarkFlare
             return result;
         }
 
-        static Dictionary<DamageType, float> ApplyDefense(
+        static Dictionary<DamageType, float> ApplyTargetTaken(
             IEnumerable<DamagePacket> packets,
-            StatBlock defenderStats,
             IEnumerable<ModifierInstance> defenderModifiers,
             CombatTagContext tagContext)
         {
@@ -297,19 +312,46 @@ namespace DarkFlare
                 damageByType[packet.DamageType] += amount;
             }
 
-            Dictionary<DamageType, float> result = new Dictionary<DamageType, float>();
+            return damageByType;
+        }
 
-            foreach (KeyValuePair<DamageType, float> pair in damageByType)
+        static Dictionary<DamageType, DamageTypeBreakdown> ApplyDefense(
+            IReadOnlyDictionary<DamageType, float> beforeDefense,
+            IReadOnlyDictionary<DamageType, float> afterTargetTaken,
+            StatBlock defenderStats)
+        {
+            Dictionary<DamageType, DamageTypeBreakdown> result = new Dictionary<DamageType, DamageTypeBreakdown>();
+
+            foreach (KeyValuePair<DamageType, float> pair in beforeDefense)
             {
-                float amount = pair.Value;
-                amount = ApplyResistance(amount, pair.Key, defenderStats);
+                float takenAmount = afterTargetTaken.TryGetValue(pair.Key, out float storedAmount)
+                    ? storedAmount
+                    : 0f;
+                float effectiveResistance = GetEffectiveResistance(pair.Key, defenderStats);
+                float armor = pair.Key == DamageType.Physical
+                    ? Max(0f, defenderStats.GetValue(StatIds.Armor))
+                    : 0f;
+                float armorReduction = 0f;
+                float finalAmount = takenAmount;
 
                 if (pair.Key == DamageType.Physical)
                 {
-                    amount = ApplyArmor(amount, defenderStats.GetValue(StatIds.Armor));
+                    armorReduction = GetArmorReduction(takenAmount, armor);
+                    finalAmount = takenAmount * (1f - armorReduction);
+                }
+                else
+                {
+                    finalAmount = takenAmount * (1f - effectiveResistance / 100f);
                 }
 
-                result[pair.Key] = amount < 0f ? 0f : amount;
+                result[pair.Key] = new DamageTypeBreakdown(
+                    pair.Key,
+                    pair.Value,
+                    takenAmount,
+                    effectiveResistance,
+                    armor,
+                    armorReduction,
+                    Max(0f, finalAmount));
             }
 
             return result;
@@ -348,28 +390,26 @@ namespace DarkFlare
             return multiplier;
         }
 
-        static float ApplyResistance(float amount, DamageType damageType, StatBlock defenderStats)
+        static float GetEffectiveResistance(DamageType damageType, StatBlock defenderStats)
         {
             string resistanceStatId = GetResistanceStatId(damageType);
 
             if (string.IsNullOrEmpty(resistanceStatId))
             {
-                return amount;
+                return 0f;
             }
 
-            float resistance = Clamp(defenderStats.GetValue(resistanceStatId), -100f, 75f);
-            return amount * (1f - resistance / 100f);
+            return Clamp(defenderStats.GetValue(resistanceStatId), -100f, 75f);
         }
 
-        static float ApplyArmor(float amount, float armor)
+        static float GetArmorReduction(float amount, float armor)
         {
             if (amount <= 0f || armor <= 0f)
             {
-                return amount;
+                return 0f;
             }
 
-            float reduction = armor / (armor + amount * 10f);
-            return amount * (1f - reduction);
+            return armor / (armor + amount * 10f);
         }
 
         static string GetDamageStatId(DamageType damageType)
@@ -450,6 +490,11 @@ namespace DarkFlare
         static float Clamp01(float value)
         {
             return Clamp(value, 0f, 1f);
+        }
+
+        static float Max(float left, float right)
+        {
+            return left > right ? left : right;
         }
     }
 }

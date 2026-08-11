@@ -1235,7 +1235,7 @@ TilemapRenderer:
   m_SortingOrder: -100
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
-  m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
+  m_ChunkCullingBounds: {x: 3.5, y: 3.5, z: 0}
   m_MaxChunkCount: 16
   m_MaxFrameAge: 16
   m_SortOrder: 0
@@ -1666,7 +1666,7 @@ TilemapRenderer:
   m_SortingOrder: -99
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
-  m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
+  m_ChunkCullingBounds: {x: 3.5, y: 3.5, z: 0}
   m_MaxChunkCount: 16
   m_MaxFrameAge: 16
   m_SortOrder: 0
@@ -2203,6 +2203,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DarkFlare.CombatPrototypeBootstrap
   _playerCharacter: {fileID: 11400000, guid: 6d95f9ebf5769094c9a2130370d9c383, type: 2}
   _playerSkill: {fileID: 11400000, guid: 3b9429a30637ee84fabab25134b3a361, type: 2}
+  _startingWeapon: {fileID: 11400000, guid: 97909e3c17a4418428112ff92c410eb5, type: 2}
   _monsterSpawnDefinition: {fileID: 11400000, guid: e6e50e930e299ea4095e6de9ae5035f9, type: 2}
   _lootPickupPrefab:
     m_AssetGUID: 07152fe41aa52d740b4d1df2049f9f3d

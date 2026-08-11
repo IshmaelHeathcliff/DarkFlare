@@ -70,6 +70,51 @@ namespace DarkFlare
             return true;
         }
 
+        public bool GrantAndEquipStartingWeapon(
+            CombatActor actor,
+            ItemBaseDefinition weaponDefinition)
+        {
+            if (actor == null
+                || weaponDefinition == null
+                || weaponDefinition.ItemType != ItemType.Weapon
+                || !weaponDefinition.CanEquipTo(EquipmentSlot.Weapon)
+                || weaponDefinition.BaseDamages.Count == 0)
+            {
+                return false;
+            }
+
+            EquipmentModel equipment = this.GetModel<EquipmentModel>();
+            ItemInstance equippedWeapon = equipment.GetWeapon(actor);
+
+            if (equippedWeapon != null
+                && equippedWeapon.BaseDefinition != null
+                && equippedWeapon.BaseDefinition.ItemType == ItemType.Weapon)
+            {
+                return true;
+            }
+
+            string instanceId = $"starting_weapon_{actor.ActorId}";
+            ItemInstance item = weaponDefinition.CreateInstance(
+                instanceId,
+                1,
+                0,
+                ItemRarity.Normal);
+            InventoryModel inventory = this.GetModel<InventoryModel>();
+
+            if (!inventory.TryAddItemWithoutEvents(item))
+            {
+                return false;
+            }
+
+            if (Equip(actor, item, EquipmentSlot.Weapon))
+            {
+                return true;
+            }
+
+            inventory.RemoveItemWithoutEvents(item);
+            return false;
+        }
+
         public bool Unequip(CombatActor actor, EquipmentSlot slot)
         {
             if (actor == null)

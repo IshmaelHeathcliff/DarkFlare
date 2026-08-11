@@ -51,7 +51,12 @@ namespace DarkFlare
 
             result = this.SendCommand(new ApplyDamageCommand(_attack, target));
             _initialized = false;
-            ProjectileImpactVisual.Spawn(transform.position, _renderer != null ? _renderer.sprite : null);
+
+            if (result != null && result.IsHit)
+            {
+                ProjectileImpactVisual.Spawn(transform.position, _renderer != null ? _renderer.sprite : null);
+            }
+
             Destroy(gameObject);
             return true;
         }

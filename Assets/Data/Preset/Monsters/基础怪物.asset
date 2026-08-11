@@ -23,6 +23,15 @@ MonoBehaviour:
     m_EditorAssetChanged: 0
   _maxHealth: 52
   _moveSpeed: 2.6
+  _accuracy: 90
+  _evasion: 15
+  _criticalChance: 5
+  _criticalDamage: 50
+  _armor: 0
+  _fireResistance: 0
+  _coldResistance: 0
+  _lightningResistance: 0
+  _chaosResistance: 0
   _healthMultiplierRange: {x: 0.85, y: 1.15}
   _contactDamageInterval: 0.75
   _contactDamageRadius: 0.75

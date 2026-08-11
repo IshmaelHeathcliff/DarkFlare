@@ -7,7 +7,11 @@ namespace DarkFlare
     public enum CombatTextKind
     {
         Damage,
-        Healing
+        CriticalDamage,
+        Healing,
+        Missed,
+        Evaded,
+        NoDamage
     }
 
     [DisallowMultipleComponent]
@@ -23,12 +27,12 @@ namespace DarkFlare
             ActorTeam team,
             CombatTextKind kind)
         {
-            GameObject instance = new GameObject(kind == CombatTextKind.Healing ? "HealingNumber" : "DamageNumber");
+            GameObject instance = new GameObject(GetObjectName(kind));
             instance.transform.position = worldPosition + new Vector3(0f, 0.5f, 0f);
             TextMeshPro label = instance.AddComponent<TextMeshPro>();
             label.text = FormatText(amount, kind);
             label.alignment = TextAlignmentOptions.Center;
-            label.fontSize = 3.2f;
+            label.fontSize = GetFontSize(kind);
             label.fontStyle = FontStyles.Bold;
             label.color = GetColor(team, kind);
             label.outlineColor = new Color(0.05f, 0.06f, 0.08f, 0.92f);
@@ -42,6 +46,21 @@ namespace DarkFlare
 
         public static string FormatText(float amount, CombatTextKind kind)
         {
+            if (kind == CombatTextKind.Missed)
+            {
+                return "未命中";
+            }
+
+            if (kind == CombatTextKind.Evaded)
+            {
+                return "闪避";
+            }
+
+            if (kind == CombatTextKind.NoDamage)
+            {
+                return "无伤害";
+            }
+
             string prefix = kind == CombatTextKind.Healing ? "+" : "-";
             return $"{prefix}{Mathf.Abs(amount):0.#}";
         }
@@ -55,9 +74,46 @@ namespace DarkFlare
                     : new Color(0.34f, 0.76f, 0.65f, 1f);
             }
 
+            if (kind == CombatTextKind.Missed || kind == CombatTextKind.Evaded || kind == CombatTextKind.NoDamage)
+            {
+                return team == ActorTeam.Player
+                    ? new Color(0.72f, 0.82f, 0.94f, 1f)
+                    : new Color(0.84f, 0.8f, 0.69f, 1f);
+            }
+
+            if (kind == CombatTextKind.CriticalDamage)
+            {
+                return team == ActorTeam.Player
+                    ? new Color(1f, 0.5f, 0.32f, 1f)
+                    : new Color(1f, 0.9f, 0.36f, 1f);
+            }
+
             return team == ActorTeam.Player
                 ? new Color(1f, 0.32f, 0.27f, 1f)
                 : new Color(1f, 0.79f, 0.39f, 1f);
+        }
+
+        static string GetObjectName(CombatTextKind kind)
+        {
+            return kind switch
+            {
+                CombatTextKind.Healing => "HealingNumber",
+                CombatTextKind.CriticalDamage => "CriticalDamageNumber",
+                CombatTextKind.Missed => "MissedText",
+                CombatTextKind.Evaded => "EvadedText",
+                CombatTextKind.NoDamage => "NoDamageText",
+                _ => "DamageNumber",
+            };
+        }
+
+        static float GetFontSize(CombatTextKind kind)
+        {
+            if (kind == CombatTextKind.CriticalDamage)
+            {
+                return 3.8f;
+            }
+
+            return kind == CombatTextKind.Damage || kind == CombatTextKind.Healing ? 3.2f : 2.6f;
         }
 
         void OnDisable()

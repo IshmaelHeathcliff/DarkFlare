@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: "\u73A9\u5BB6"
   m_EditorClassIdentifier: Assembly-CSharp::DarkFlare.CharacterDefinition
   _id: player
-  _displayName: 玩家
+  _displayName: "\u73A9\u5BB6"
   _prefab:
     m_AssetGUID: 942c099ccdd7eed428f0ac0b1694f6ff
     m_SubObjectName:
@@ -23,6 +23,10 @@ MonoBehaviour:
   _maxHealth: 100
   _moveSpeed: 5
   _armor: 0
+  _accuracy: 100
+  _evasion: 20
+  _criticalChance: 5
+  _criticalDamage: 50
   _fireResistance: 0
   _coldResistance: 0
   _lightningResistance: 0

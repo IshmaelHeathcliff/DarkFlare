@@ -26,6 +26,12 @@ namespace DarkFlare
                 "基础伤害",
                 issues,
                 definition.ItemType == ItemType.Weapon);
+
+            if (definition.ItemType != ItemType.Weapon && definition.BaseDamages.Count > 0)
+            {
+                issues.Add("只有武器可以配置物品基础伤害");
+            }
+
             return issues;
         }
 

@@ -26,9 +26,19 @@ namespace DarkFlare
 
         public StatBlock DefenderStats { get; }
 
-        public bool IsHit { get; }
+        public HitOutcome Outcome { get; }
+
+        public bool IsHit => Outcome == HitOutcome.Hit || Outcome == HitOutcome.NoDamage;
 
         public bool IsCritical { get; }
+
+        public float HitChance { get; }
+
+        public float HitRoll { get; }
+
+        public float CriticalChance { get; }
+
+        public float CriticalRoll { get; }
 
         public IReadOnlyList<DamagePacket> BaseDamages => _baseDamages;
 
@@ -62,8 +72,12 @@ namespace DarkFlare
                 defenderStats,
                 attackerModifiers,
                 defenderModifiers,
-                isHit,
-                isCritical)
+                isHit ? HitOutcome.Hit : HitOutcome.Missed,
+                isCritical,
+                isHit ? 1f : 0f,
+                0f,
+                isCritical ? 1f : 0f,
+                0f)
         {
         }
 
@@ -81,6 +95,79 @@ namespace DarkFlare
             IEnumerable<ModifierInstance> defenderModifiers,
             bool isHit = true,
             bool isCritical = false)
+            : this(
+                attackerId,
+                defenderId,
+                skillId,
+                sourceItemId,
+                randomSeed,
+                baseDamages,
+                tagContext,
+                attackerStats,
+                defenderStats,
+                attackerModifiers,
+                defenderModifiers,
+                isHit ? HitOutcome.Hit : HitOutcome.Missed,
+                isCritical,
+                isHit ? 1f : 0f,
+                0f,
+                isCritical ? 1f : 0f,
+                0f)
+        {
+        }
+
+        public DamageContext(
+            string attackerId,
+            string defenderId,
+            string skillId,
+            string sourceItemId,
+            int randomSeed,
+            IEnumerable<DamagePacket> baseDamages,
+            CombatTagContext tagContext,
+            StatBlock attackerStats,
+            StatBlock defenderStats,
+            IEnumerable<ModifierInstance> attackerModifiers,
+            IEnumerable<ModifierInstance> defenderModifiers,
+            HitResolution resolution)
+            : this(
+                attackerId,
+                defenderId,
+                skillId,
+                sourceItemId,
+                randomSeed,
+                baseDamages,
+                tagContext,
+                attackerStats,
+                defenderStats,
+                attackerModifiers,
+                defenderModifiers,
+                resolution.Outcome,
+                resolution.IsCritical,
+                resolution.HitChance,
+                resolution.HitRoll,
+                resolution.CriticalChance,
+                resolution.CriticalRoll)
+        {
+        }
+
+        DamageContext(
+            string attackerId,
+            string defenderId,
+            string skillId,
+            string sourceItemId,
+            int randomSeed,
+            IEnumerable<DamagePacket> baseDamages,
+            CombatTagContext tagContext,
+            StatBlock attackerStats,
+            StatBlock defenderStats,
+            IEnumerable<ModifierInstance> attackerModifiers,
+            IEnumerable<ModifierInstance> defenderModifiers,
+            HitOutcome outcome,
+            bool isCritical,
+            float hitChance,
+            float hitRoll,
+            float criticalChance,
+            float criticalRoll)
         {
             AttackerId = attackerId;
             DefenderId = defenderId;
@@ -108,8 +195,12 @@ namespace DarkFlare
             _defenderModifiers = defenderModifiers != null
                 ? new List<ModifierInstance>(defenderModifiers)
                 : new List<ModifierInstance>();
-            IsHit = isHit;
-            IsCritical = isCritical;
+            Outcome = outcome;
+            IsCritical = isCritical && IsHit;
+            HitChance = hitChance;
+            HitRoll = hitRoll;
+            CriticalChance = criticalChance;
+            CriticalRoll = criticalRoll;
         }
     }
 }

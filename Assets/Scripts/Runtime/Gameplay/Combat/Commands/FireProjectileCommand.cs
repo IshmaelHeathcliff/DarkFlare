@@ -24,12 +24,25 @@ namespace DarkFlare
                 return;
             }
 
+            EquipmentModel equipment = this.GetModel<EquipmentModel>();
+
+            if (!AttackSnapshotFactory.CanCreateProjectile(_owner, _skill, equipment))
+            {
+                return;
+            }
+
             int seed = this.GetSystem<GameplayRandomSystem>().NextSeed(GameplayRandomChannel.PlayerAttack);
             AttackSnapshot attack = AttackSnapshotFactory.CreateProjectile(
                 _owner,
                 _skill,
-                this.GetModel<EquipmentModel>(),
+                equipment,
                 seed);
+
+            if (attack == null)
+            {
+                return;
+            }
+
             ProjectileController projectile = this.GetSystem<SpawnSystem>().SpawnProjectile(
                 _skill,
                 _position,

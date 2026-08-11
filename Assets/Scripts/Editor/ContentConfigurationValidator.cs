@@ -152,6 +152,7 @@ namespace DarkFlare.Editor
             List<TagDefinition> tags = LoadAssets<TagDefinition>($"{PresetRoot}/Tags");
             List<AffixDefinition> affixes = LoadAssets<AffixDefinition>($"{PresetRoot}/Affixes");
             List<ItemBaseDefinition> items = LoadAssets<ItemBaseDefinition>($"{PresetRoot}/Items");
+            List<CharacterDefinition> characters = LoadAssets<CharacterDefinition>($"{PresetRoot}/Actors");
             List<ProjectileSkillDefinition> skills = LoadAssets<ProjectileSkillDefinition>($"{PresetRoot}/Skills");
             List<MonsterDefinition> monsters = LoadAssets<MonsterDefinition>($"{PresetRoot}/Monsters");
             List<MonsterSpawnDefinition> spawnDefinitions = LoadAssets<MonsterSpawnDefinition>($"{PresetRoot}/Monsters");
@@ -166,6 +167,7 @@ namespace DarkFlare.Editor
             ValidateTags(tags, issues);
             ValidateAffixes(affixes, items, issues);
             ValidateItems(items, affixes, issues);
+            ValidateCharacters(characters, issues);
             ValidateSkills(skills, issues);
             ValidateMonsters(monsters, issues);
             ValidateSpawnDefinitions(spawnDefinitions, monsters, issues);
@@ -537,6 +539,29 @@ namespace DarkFlare.Editor
                     DerivedSkillTagIds,
                     issues);
                 ValidateDamageRollTags(skill, skill.BaseDamages, "基础伤害", issues);
+
+                List<string> baseIssues = RandomizationConfigurationValidator.Validate(skill);
+
+                for (int issueIndex = 0; issueIndex < baseIssues.Count; issueIndex++)
+                {
+                    AddError(issues, skill, baseIssues[issueIndex]);
+                }
+            }
+        }
+
+        static void ValidateCharacters(
+            IReadOnlyList<CharacterDefinition> characters,
+            List<ContentValidationIssue> issues)
+        {
+            for (int i = 0; i < characters.Count; i++)
+            {
+                CharacterDefinition character = characters[i];
+                List<string> baseIssues = RandomizationConfigurationValidator.Validate(character);
+
+                for (int issueIndex = 0; issueIndex < baseIssues.Count; issueIndex++)
+                {
+                    AddError(issues, character, baseIssues[issueIndex]);
+                }
             }
         }
 

@@ -16,15 +16,19 @@ namespace DarkFlare
 
         public string SourceItemId { get; }
 
-        public int RandomSeed { get; }
+        public int RandomSeed => RandomRolls.RootSeed;
+
+        public AttackRandomRolls RandomRolls { get; }
+
+        public int BaseDamageSeed => RandomRolls.BaseDamageSeed;
+
+        public float HitRoll => RandomRolls.HitRoll;
+
+        public float CriticalRoll => RandomRolls.CriticalRoll;
 
         public CombatTagContext TagContext { get; }
 
         public TagSet ContextTags => TagContext.LegacyTags;
-
-        public bool IsHit { get; }
-
-        public bool IsCritical { get; }
 
         public IReadOnlyList<DamagePacket> BaseDamages => _baseDamages;
 
@@ -41,9 +45,7 @@ namespace DarkFlare
             IEnumerable<DamagePacket> baseDamages,
             TagSet contextTags,
             StatBlock attackerStats,
-            IEnumerable<ModifierInstance> attackerModifiers,
-            bool isHit = true,
-            bool isCritical = false)
+            IEnumerable<ModifierInstance> attackerModifiers)
             : this(
                 attackerId,
                 attackerTeam,
@@ -53,9 +55,7 @@ namespace DarkFlare
                 baseDamages,
                 new CombatTagContext(attackTags: contextTags, legacyTags: contextTags),
                 attackerStats,
-                attackerModifiers,
-                isHit,
-                isCritical)
+                attackerModifiers)
         {
         }
 
@@ -68,15 +68,13 @@ namespace DarkFlare
             IEnumerable<DamagePacket> baseDamages,
             CombatTagContext tagContext,
             StatBlock attackerStats,
-            IEnumerable<ModifierInstance> attackerModifiers,
-            bool isHit = true,
-            bool isCritical = false)
+            IEnumerable<ModifierInstance> attackerModifiers)
         {
             AttackerId = string.IsNullOrWhiteSpace(attackerId) ? "environment" : attackerId;
             AttackerTeam = attackerTeam;
             SkillId = skillId ?? string.Empty;
             SourceItemId = sourceItemId ?? string.Empty;
-            RandomSeed = randomSeed;
+            RandomRolls = AttackRandomRolls.FromRootSeed(randomSeed);
             _baseDamages = CloneDamagePackets(baseDamages).AsReadOnly();
             TagContext = CloneTagContext(tagContext);
             _attackerStats = attackerStats != null ? attackerStats.Clone() : new StatBlock();
@@ -84,8 +82,6 @@ namespace DarkFlare
                 ? new List<ModifierInstance>(attackerModifiers)
                 : new List<ModifierInstance>();
             _attackerModifiers = modifiers.AsReadOnly();
-            IsHit = isHit;
-            IsCritical = isCritical;
         }
 
         static List<DamagePacket> CloneDamagePackets(IEnumerable<DamagePacket> packets)

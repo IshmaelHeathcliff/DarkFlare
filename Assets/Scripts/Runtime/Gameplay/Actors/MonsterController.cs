@@ -111,9 +111,16 @@ namespace DarkFlare
                 return;
             }
 
+            if (_definition.ContactDamages.Count == 0)
+            {
+                Debug.LogError($"[MonsterController] {_definition.Id} 没有可用的碰撞伤害配置", _definition);
+                return;
+            }
+
             _lastContactDamageTime = Time.time;
             int seed = this.GetSystem<GameplayRandomSystem>().NextSeed(GameplayRandomChannel.MonsterAttack);
-            List<DamagePacket> packets = _definition.CreateContactDamagePackets(seed);
+            AttackRandomRolls rolls = AttackRandomRolls.FromRootSeed(seed);
+            List<DamagePacket> packets = _definition.CreateContactDamagePackets(rolls.BaseDamageSeed);
             this.SendCommand(new NotifyActorAttackCommand(_actor));
             this.SendCommand(new ApplyDamageCommand(_actor, target, "monster_contact", packets, seed));
         }

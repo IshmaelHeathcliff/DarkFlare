@@ -25,6 +25,13 @@ namespace DarkFlare
             }
 
             ValidateDamageRolls(definition.ContactDamages, "碰撞伤害", issues, true);
+            ValidateCombatStats(
+                definition.Accuracy,
+                definition.Evasion,
+                definition.CriticalChance,
+                definition.CriticalDamage,
+                definition.Armor,
+                issues);
             return issues;
         }
 
@@ -38,7 +45,35 @@ namespace DarkFlare
                 return issues;
             }
 
-            ValidateDamageRolls(definition.BaseDamages, "基础伤害", issues, true);
+            bool requiresSkillDamage = definition.DamageSource == ProjectileDamageSource.Skill;
+            ValidateDamageRolls(definition.BaseDamages, "基础伤害", issues, requiresSkillDamage);
+
+            if (definition.DamageSource == ProjectileDamageSource.EquippedWeapon
+                && definition.BaseDamages.Count > 0)
+            {
+                issues.Add("武器来源技能不能配置技能基础伤害");
+            }
+
+            return issues;
+        }
+
+        public static List<string> Validate(CharacterDefinition definition)
+        {
+            List<string> issues = new List<string>();
+
+            if (definition == null)
+            {
+                issues.Add("角色定义为空");
+                return issues;
+            }
+
+            ValidateCombatStats(
+                definition.Accuracy,
+                definition.Evasion,
+                definition.CriticalChance,
+                definition.CriticalDamage,
+                definition.Armor,
+                issues);
             return issues;
         }
 
@@ -129,6 +164,40 @@ namespace DarkFlare
                 {
                     issues.Add($"{label} {i} 的范围上下限倒置");
                 }
+            }
+        }
+
+        static void ValidateCombatStats(
+            float accuracy,
+            float evasion,
+            float criticalChance,
+            float criticalDamage,
+            float armor,
+            List<string> issues)
+        {
+            if (accuracy <= 0f)
+            {
+                issues.Add("命中值必须大于 0");
+            }
+
+            if (evasion < 0f)
+            {
+                issues.Add("闪避值不能为负数");
+            }
+
+            if (criticalChance < 0f || criticalChance > 100f)
+            {
+                issues.Add("暴击率必须位于 0 到 100 之间");
+            }
+
+            if (criticalDamage < 0f)
+            {
+                issues.Add("暴击伤害不能为负数");
+            }
+
+            if (armor < 0f)
+            {
+                issues.Add("护甲不能为负数");
             }
         }
     }

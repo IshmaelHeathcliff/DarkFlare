@@ -77,20 +77,27 @@ namespace DarkFlare.Tests
                 "Assets/Data/Preset/Skills/基础投射物技能.asset");
             MonsterDefinition monster = AssetDatabase.LoadAssetAtPath<MonsterDefinition>(
                 "Assets/Data/Preset/Monsters/基础怪物.asset");
+            ItemBaseDefinition greatSword = AssetDatabase.LoadAssetAtPath<ItemBaseDefinition>(
+                "Assets/Data/Preset/Items/001大剑.asset");
 
             Assert.IsNotNull(skill);
             Assert.IsNotNull(monster);
+            Assert.IsNotNull(greatSword);
+            Assert.AreEqual(ProjectileDamageSource.EquippedWeapon, skill.DamageSource);
+            Assert.IsEmpty(skill.BaseDamages);
+            ItemInstance weapon = greatSword.CreateInstance("random_test_weapon", 1, 1, ItemRarity.Normal);
 
             for (int seed = 0; seed < 100; seed++)
             {
-                List<DamagePacket> firstPlayerRoll = skill.CreateDamagePackets(seed);
-                List<DamagePacket> replayPlayerRoll = skill.CreateDamagePackets(seed);
-                List<DamagePacket> firstMonsterRoll = monster.CreateContactDamagePackets(seed);
-                List<DamagePacket> replayMonsterRoll = monster.CreateContactDamagePackets(seed);
+                AttackRandomRolls rolls = AttackRandomRolls.FromRootSeed(seed);
+                List<DamagePacket> firstPlayerRoll = weapon.CreateBaseDamagePackets(rolls.BaseDamageSeed);
+                List<DamagePacket> replayPlayerRoll = weapon.CreateBaseDamagePackets(rolls.BaseDamageSeed);
+                List<DamagePacket> firstMonsterRoll = monster.CreateContactDamagePackets(rolls.BaseDamageSeed);
+                List<DamagePacket> replayMonsterRoll = monster.CreateContactDamagePackets(rolls.BaseDamageSeed);
 
                 Assert.AreEqual(1, firstPlayerRoll.Count);
                 Assert.AreEqual(1, firstMonsterRoll.Count);
-                Assert.That(firstPlayerRoll[0].Amount, Is.InRange(10f, 14f));
+                Assert.That(firstPlayerRoll[0].Amount, Is.InRange(20f, 40f));
                 Assert.That(firstMonsterRoll[0].Amount, Is.InRange(6f, 10f));
                 Assert.AreEqual(firstPlayerRoll[0].Amount, replayPlayerRoll[0].Amount);
                 Assert.AreEqual(firstMonsterRoll[0].Amount, replayMonsterRoll[0].Amount);
@@ -180,7 +187,7 @@ namespace DarkFlare.Tests
             Assert.IsEmpty(RandomizationConfigurationValidator.Validate(monster));
             Assert.IsEmpty(RandomizationConfigurationValidator.Validate(lootTable));
             Assert.IsEmpty(EquipmentConfigurationValidator.Validate(greatSword));
-            Assert.AreEqual(new Vector2(10f, 14f), skill.BaseDamages[0].AmountRange);
+            Assert.IsEmpty(skill.BaseDamages);
             Assert.AreEqual(new Vector2(6f, 10f), monster.ContactDamages[0].AmountRange);
             Assert.AreEqual(new Vector2(0.85f, 1.15f), monster.HealthMultiplierRange);
             Assert.AreEqual(0.35f, lootTable.DropChance);

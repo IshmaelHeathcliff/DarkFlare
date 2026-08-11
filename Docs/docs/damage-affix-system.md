@@ -373,7 +373,8 @@ Assets/Data/Preset/
 - `ItemGenerator`：基于物品基底、词条池、权重和随机种子生成物品实例。
 - `TagSet`、`TagQueryDefinition`、`TagQuery`、`CombatTagContext`：不可变标签集合、结构化查询和作用域上下文。
 - `ModifierInstance`、`StatBlock`、`StatAggregator`：运行时词条和属性聚合结构。
-- `DamageContext`、`DamagePacket`、`DamageResult`、`DamageCalculator`：纯 C# 命中伤害计算管线；伤害包区分最终类型、缩放血统和自定义标签。
+- `AttackRandomRolls`、`HitResolutionCalculator`：从攻击根种子派生具名子流，并纯逻辑计算命中、闪避和暴击。
+- `DamageContext`、`DamagePacket`、`DamageResult`、`DamageCalculator`：纯 C# 命中伤害计算管线；伤害包区分最终类型、缩放血统和自定义标签，结果按类型解释承伤、防御和最终值。
 - `EquipmentEffectResolver`、`CombatStatResolver`：从四槽分流 LocalItem 与角色效果，并聚合护甲、抗性等有效属性。
 - `CombatActor`：从有效属性读取 `max_health`，穿脱装备时按最大生命变化保持当前生命比例，并由装备事件触发 HUD 刷新。
 - `AttackSnapshot`、`AttackSnapshotFactory`：在攻击发起时冻结来源角色、技能、来源物品、本次攻击、随机伤害包、攻击者属性和修改器。
@@ -391,7 +392,9 @@ Assets/Data/Preset/
 - 目标承伤倍率
 - 元素和混沌抗性
 - 物理护甲减伤
-- 武器基础伤害来源、10–14 空手技能配置与 12 点代码级空配置保护
+- `Missed / Evaded / Hit / NoDamage` 结果与一次攻击级暴击判定
+- 武器 / 技能基础伤害严格所有权；空手武器技能不再回退到技能或代码常量
+- 开局初始大剑在刷怪器启用前原子授予并装备
 - 发射时攻击快照；投射物命中时只读取当前防御者快照
 - `LocalItem` 仅作用于武器本地伤害，伤害修改器不会在属性层重复计算
 - 转换和额外获得伤害保留来源类型血统并补充最终类型语义；物理转火焰可同时匹配 Damage 作用域的 `physical` 与 `fire`，防御只读取最终类型。
@@ -399,7 +402,7 @@ Assets/Data/Preset/
 
 阶段 4 已配置 12 个当前管线实际支持的词条，不加入 `Chance`、`Trigger`、`Limit`、暴击率、命中或闪避配置。完整 ID、范围、权重和装备兼容见[首批内容池](./content-system.md)。
 
-阶段 6 整体验收继续覆盖正式装备打造、四槽换装、发射时攻击快照和固定种子伤害重放；全量 EditMode 98/98、PlayMode 0 失败，伤害与词条事务未发生回退。
+`ActorDamagedEvent` 只表示实际正数生命损失；未命中、闪避和无伤害通过统一结算结果事件驱动文字反馈，不触发 Hit 动画、闪白或 `-0`。
 
 暂缓实现：
 

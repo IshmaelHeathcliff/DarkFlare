@@ -41,11 +41,23 @@ namespace DarkFlare
 
         public DamageResult ApplyDamage(AttackSnapshot attack, CombatActor defender)
         {
-            if (attack == null || defender == null || !defender.IsAlive)
+            if (attack == null)
             {
-                return new DamageResult(false, false, new Dictionary<DamageType, float>(), new Dictionary<DamageType, float>());
+                return DamageResult.CreateWithoutDamage(HitResolutionCalculator.Invalid(
+                    AttackRandomRolls.FromRootSeed(0)));
             }
 
+            if (defender == null
+                || !defender.IsAlive
+                || attack.AttackerTeam == defender.Team)
+            {
+                return DamageResult.CreateWithoutDamage(HitResolutionCalculator.Invalid(attack.RandomRolls));
+            }
+
+            HitResolution resolution = HitResolutionCalculator.Resolve(
+                attack.AttackerStats,
+                defender.Stats,
+                attack.RandomRolls);
             DamageContext context = new DamageContext(
                 attack.AttackerId,
                 defender.ActorId,
@@ -58,18 +70,17 @@ namespace DarkFlare
                 defender.Stats,
                 attack.AttackerModifiers,
                 defender.Modifiers,
-                attack.IsHit,
-                attack.IsCritical);
+                resolution);
 
             DamageResult result = DamageCalculator.Calculate(context);
-            bool justDied = defender.ReceiveDamage(result);
+            bool justDied = result.DidDealDamage && defender.ReceiveDamage(result);
+            this.SendEvent(new DamageResolvedEvent { Actor = defender, Result = result });
 
-            if (result.IsHit)
+            if (result.DidDealDamage)
             {
                 Debug.Log($"[CombatSystem] {context.AttackerId} 对 {defender.ActorId} 造成 {result.TotalDamage:0.#} 点伤害");
+                this.SendEvent(new ActorDamagedEvent { Actor = defender, Result = result });
             }
-
-            this.SendEvent(new ActorDamagedEvent { Actor = defender, Result = result });
 
             if (justDied)
             {

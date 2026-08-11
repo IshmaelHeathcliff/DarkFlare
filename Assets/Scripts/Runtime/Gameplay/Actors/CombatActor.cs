@@ -74,7 +74,7 @@ namespace DarkFlare
 
         public bool ReceiveDamage(DamageResult result)
         {
-            if (!_isAlive || !result.IsHit)
+            if (!_isAlive || result == null || !result.DidDealDamage)
             {
                 return false;
             }

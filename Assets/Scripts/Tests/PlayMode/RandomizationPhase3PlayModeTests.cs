@@ -141,7 +141,9 @@ namespace DarkFlare.Tests
                 result.PlayerDamages.Add(FormatDamage(playerAttack.BaseDamages));
 
                 int monsterSeed = randomSystem.NextSeed(GameplayRandomChannel.MonsterAttack);
-                result.MonsterDamages.Add(FormatDamage(monsterDefinition.CreateContactDamagePackets(monsterSeed)));
+                AttackRandomRolls monsterRolls = AttackRandomRolls.FromRootSeed(monsterSeed);
+                result.MonsterDamages.Add(FormatDamage(monsterDefinition.CreateContactDamagePackets(
+                    monsterRolls.BaseDamageSeed)));
 
                 int lootSeed = randomSystem.NextSeed(GameplayRandomChannel.Loot);
                 ItemInstance item = monsterDefinition.LootTable.GenerateLoot(

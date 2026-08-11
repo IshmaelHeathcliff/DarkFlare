@@ -16,6 +16,9 @@ namespace DarkFlare
         ProjectileSkillDefinition _playerSkill;
 
         [SerializeField]
+        ItemBaseDefinition _startingWeapon;
+
+        [SerializeField]
         MonsterSpawnDefinition _monsterSpawnDefinition;
 
         [SerializeField]
@@ -53,6 +56,11 @@ namespace DarkFlare
 
         async UniTaskVoid Start()
         {
+            if (_monsterSpawner != null)
+            {
+                _monsterSpawner.gameObject.SetActive(false);
+            }
+
             this.GetSystem<GameplayRandomSystem>().Configure(_useFixedRandomSeed, _fixedRandomSeed);
             Debug.Log("[CombatPrototypeBootstrap] 开始预热资源");
             CancellationToken token = this.GetCancellationTokenOnDestroy();
@@ -66,11 +74,18 @@ namespace DarkFlare
             Vector3 spawnPosition = _playerSpawnPoint != null ? _playerSpawnPoint.position : transform.position;
             CombatActor player = this.SendCommand(new SpawnPlayerCommand(_playerCharacter, _playerSkill, spawnPosition));
             Debug.Log($"[CombatPrototypeBootstrap] 玩家生成结果: {(player != null ? player.ActorId : "null")}");
+            bool startingWeaponReady = player != null
+                && this.SendCommand(new GrantStartingWeaponCommand(player, _startingWeapon));
 
-            if (_monsterSpawner != null)
+            if (startingWeaponReady && _monsterSpawner != null)
             {
                 _monsterSpawner.gameObject.SetActive(true);
                 Debug.Log("[CombatPrototypeBootstrap] 已启用刷怪器");
+            }
+            else if (!startingWeaponReady)
+            {
+                string weaponId = _startingWeapon != null ? _startingWeapon.Id : "null";
+                Debug.LogError($"[CombatPrototypeBootstrap] 初始武器装备失败，刷怪器保持关闭：{weaponId}", this);
             }
 
             this.GetSystem<TradingSystem>().SetupMerchant(_trader);
@@ -108,6 +123,8 @@ namespace DarkFlare
         {
             List<AssetReferenceSprite> icons = new List<AssetReferenceSprite>();
             HashSet<string> iconGuids = new HashSet<string>();
+
+            AddItemIcon(_startingWeapon, icons, iconGuids);
 
             if (_trader != null)
             {

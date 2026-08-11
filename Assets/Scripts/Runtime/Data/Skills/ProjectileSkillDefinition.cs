@@ -98,11 +98,6 @@ namespace DarkFlare
                 packets.Add(_baseDamages[i].CreatePacket(random));
             }
 
-            if (packets.Count == 0)
-            {
-                packets.Add(new DamagePacket(DamageType.Physical, 12f, TagSet.Empty));
-            }
-
             return packets;
         }
 
