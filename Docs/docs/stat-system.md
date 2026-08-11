@@ -17,7 +17,7 @@ flowchart LR
   E --> G["CombatActor"]
   F -->|"SetModifiers"| G
   G -->|"CombatStatResolver + StatAggregator"| H["Actor 有效 StatBlock"]
-  H --> I["移动、生命与 HUD"]
+  H --> I["移动、生命 / 法力、恢复与 HUD"]
   H --> J["AttackSnapshot"]
   C --> J
   J --> K["DamageCalculator"]
@@ -30,17 +30,20 @@ flowchart LR
 2. 物品基底和词条通过 `StatModifierDefinition` 引用 `StatDefinition`；生成实例时只把 `StatDefinition.Id` 复制到 `ModifierInstance.StatId`。
 3. 换装后，`EquipmentEffectResolver` 从完整 Loadout 收集修改器，`CombatActor.SetModifiers` 通过 `CombatStatResolver` 和 `StatAggregator` 重建有效属性。
 4. 非伤害类 `GlobalActor` 修改器在属性聚合层处理 `Flat`、`Increase`、`More` 和 `Override`。伤害类属性由 `DamageCalculator` 单独处理，避免在聚合层和伤害管线重复应用。
-5. 攻击发起时，`AttackSnapshotFactory` 冻结攻击者属性、修改器和具名随机子流；命中时 `HitResolutionCalculator` 读取目标闪避，再由 `DamageCalculator` 计算类型伤害、暴击、护甲和抗性。
-6. `ItemDetailSnapshotFactory` 从原始 `StatDefinition` 读取中文名和百分比标记，再交给 `ItemDetailFormatter` 生成背包、商店和打造 UI 文本。
+5. `CombatActor` 保存当前生命与当前法力；`CombatSystem` 统一提交伤害、治疗、法力消耗和恢复，`ResourceRegenerationSystem` 按有效恢复属性推进被动恢复。
+6. 攻击发起时，`AttackSnapshotFactory` 冻结攻击者属性、修改器和具名随机子流；命中时 `HitResolutionCalculator` 读取目标闪避，再由 `DamageCalculator` 计算类型伤害、暴击、护甲和抗性。
+7. `ItemDetailSnapshotFactory` 从原始 `StatDefinition` 读取中文名和百分比标记，再交给 `ItemDetailFormatter` 生成背包、商店和打造 UI 文本。
 
-背包右侧的当前属性卡不再维护局部白名单。`HudAttributeSnapshot.Values` 按 `StatIds.All` 生成完整、有序的显示快照，当前 21 项全部可见；抗性沿用伤害结算边界，其他百分比语义与 `StatDefinition` 保持一致。
+背包右侧的当前属性卡不再维护局部白名单。`HudAttributeSnapshot.Values` 按 `StatIds.All` 生成完整、有序的显示快照，当前 23 项全部可见；抗性沿用伤害结算边界，其他百分比语义与 `StatDefinition` 保持一致。
 
 ## 当前属性清单
 
 | 分组 | 稳定 ID | 中文名 | 当前运行时用途 |
 | --- | --- | --- | --- |
 | 生存 | `max_health` | 最大生命 | `CombatActor.MaxHealth`、当前生命比例和 HUD |
-| 生存 | `mana` | 魔力 | 已登记，可参与通用聚合；资源消耗流程尚未接入 |
+| 生存 | `mana` | 最大法力 | `CombatActor.MaxMana`、当前法力比例、技能耗蓝和 HUD |
+| 生存 | `health_regeneration` | 生命恢复 | 每秒固定生命恢复，由 `ResourceRegenerationSystem` 消费 |
+| 生存 | `mana_regeneration` | 法力恢复 | 每秒固定法力恢复，由 `ResourceRegenerationSystem` 消费 |
 | 基础 | `strength` | 力量 | 已登记，可参与通用聚合；派生规则尚未接入 |
 | 基础 | `dexterity` | 敏捷 | 已登记，可参与通用聚合；派生规则尚未接入 |
 | 基础 | `intelligence` | 智力 | 已登记，可参与通用聚合；派生规则尚未接入 |
@@ -66,6 +69,10 @@ flowchart LR
 - `StatDefinition.IsPercent` 只影响配置说明和 UI 格式，不决定修改器算法。
 - `ModifierOperation.Flat` 使用直接数值；`Increase` 使用同类加算百分比；`More` 使用逐项独立乘算；`Override` 覆盖当前值。
 - `critical_damage` 保存的是额外百分比，不是最终倍率，因此默认值为 `0`。
+- `mana` 沿用稳定 ID，但语义固定为最大法力；当前法力是 `CombatActor` 运行时状态，不是另一项属性。
+- `health_regeneration` 与 `mana_regeneration` 都是每秒固定值，不是百分比；恢复量为属性值乘以实际推进的游戏时间。
+- 当前生命和法力始终裁剪到 `0..Max`。有效上限变化时保持原比例；旧法力上限为零而新上限大于零时初始化为满法力，新上限为零时当前法力归零。
+- 配置完成与复活将生命、法力恢复到当前有效上限；死亡、禁用、注销和菜单暂停期间不推进被动恢复。
 - 命中率为 `clamp(accuracy / (accuracy + evasion), 0.05, 0.95)`；命中值不大于 0 时使用最低 5%。
 - 暴击率按百分比裁剪到 `0–100%`；只有命中攻击可暴击，同一攻击的所有伤害类型共享一次暴击结论。
 - 抗性资产范围与当前伤害公式一致；`DamageCalculator` 仍会在结算时执行最终裁剪。
@@ -78,7 +85,7 @@ flowchart LR
 - 单资产：稳定 ID 非空、使用小写 `snake_case`、已登记到 `StatIds`、中文名非空、默认值和范围有效。
 - 完整集合：额外检查重复 ID，以及 `StatIds.All` 是否缺少对应 `StatDefinition` 资产。
 
-`StatDefinition.OnValidate` 会在 Inspector 修改时输出单资产 Warning；EditMode 测试会扫描 `Assets/Data/Preset/Stats`，保证当前 21 个运行时 ID 与 21 个配置资产一一对应。
+`StatDefinition.OnValidate` 会在 Inspector 修改时输出单资产 Warning；EditMode 测试会扫描 `Assets/Data/Preset/Stats`，保证当前 23 个运行时 ID 与 23 个配置资产一一对应。
 
 属性专项测试覆盖完整资产集合、命中 / 闪避边界、暴击伤害百分比语义和非法配置诊断。
 

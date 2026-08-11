@@ -17,10 +17,12 @@ namespace DarkFlare
         public const string Evasion = "evasion";
         public const string FireResistance = "fire_resistance";
         public const string FireDamage = "fire_damage";
+        public const string HealthRegeneration = "health_regeneration";
         public const string Intelligence = "intelligence";
         public const string LightningResistance = "lightning_resistance";
         public const string LightningDamage = "lightning_damage";
         public const string Mana = "mana";
+        public const string ManaRegeneration = "mana_regeneration";
         public const string MaxHealth = "max_health";
         public const string MoveSpeed = "move_speed";
         public const string PhysicalDamage = "physical_damage";
@@ -30,6 +32,8 @@ namespace DarkFlare
         {
             MaxHealth,
             Mana,
+            HealthRegeneration,
+            ManaRegeneration,
             Strength,
             Dexterity,
             Intelligence,

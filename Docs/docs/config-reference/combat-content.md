@@ -2,14 +2,15 @@
 
 ## 覆盖类型
 
-本文覆盖 `alpha 0.1.2–0.1.3` 直接改变的四类配置：
+本文覆盖 `alpha 0.1.2–0.1.4` 直接改变的五类配置：
 
+- `StatDefinition`
 - `CharacterDefinition`
 - `MonsterDefinition`
 - `ItemBaseDefinition`
 - `ProjectileSkillDefinition`
 
-正式示例分别位于 `Assets/Data/Preset/Actors`、`Monsters`、`Items` 和 `Skills`。嵌套伤害范围统一使用 `DamageRollDefinition`。
+正式示例分别位于 `Assets/Data/Preset/Stats`、`Actors`、`Monsters`、`Items` 和 `Skills`。嵌套伤害范围统一使用 `DamageRollDefinition`。
 
 ## 通用战斗属性
 
@@ -23,6 +24,9 @@
 | `_criticalDamage` | `float` | 不得小于 0；表示额外百分比，`50` 即总倍率 `150%` |
 | `_armor` | `float` | 不得小于 0；只降低物理命中伤害 |
 | 四类 `_...Resistance` | `float` | 结算时裁剪到 `-100–75`，只作用于对应类型 |
+| `_mana` | `float` | 不得小于 0；写入稳定 ID `mana`，表示最大法力 |
+| `_healthRegeneration` | `float` | 不得小于 0；每秒固定生命恢复 |
+| `_manaRegeneration` | `float` | 不得小于 0；每秒固定法力恢复 |
 
 正式基础值：
 
@@ -32,6 +36,22 @@
 | 荒原游魂 | 90 | 15 | 5 | 50 | 0 | 0 |
 | 裂爪猎犬 | 110 | 30 | 8 | 50 | 0 | 0 |
 | 铁壳尸傀 | 80 | 5 | 3 | 50 | 40 | 0 |
+
+资源基础值用于验证链路，不代表最终平衡：玩家为 `100` 最大法力、每秒 `1` 生命恢复、每秒 `5` 法力恢复；三种正式怪物三项均显式保存为 `0`。
+
+## StatDefinition
+
+创建菜单：`DarkFlare/Data/Stats/Stat Definition`。
+
+| 字段 | 类型 | 合同 |
+| --- | --- | --- |
+| `_id` | `string` | 必填、小写 `snake_case`，且必须存在于 `StatIds.All` |
+| `_displayName` / `_description` | `string` | 中文显示元数据；正式属性显示名必填 |
+| `_category` | `StatCategory` | 只用于配置与显示分组 |
+| `_defaultValue` / `_minValue` / `_maxValue` | `float` | 范围有序；不会自动注入或裁剪运行时 `StatBlock` |
+| `_isPercent` | `bool` | 只决定配置说明和 UI 格式，不改变修改器算法 |
+
+`Assets/Data/Preset/Stats` 必须与 `StatIds.All` 一一对应。当前共 23 项；`mana` 的显示名为“最大法力”，新增 `health_regeneration` 与 `mana_regeneration`。稳定 ID、显示语义和完整消费者见[属性定义与调用关系](../stat-system.md)。
 
 ## CharacterDefinition
 
@@ -43,6 +63,8 @@
 | `_displayName` | `string` | 正式内容必填 | Inspector / UI |
 | `_prefab` | `AssetReferenceGameObject` | 正式玩家必填 | `SpawnSystem` |
 | `_maxHealth` | `float` | 至少 1 | `CreateStats` / `CombatActor` |
+| `_mana` | `float` | 不得小于 0 | `CreateStats` / `CombatActor.MaxMana` |
+| `_healthRegeneration` / `_manaRegeneration` | `float` | 不得小于 0，单位为每秒固定值 | `ResourceRegenerationSystem` |
 | `_moveSpeed` | `float` | 不得小于 0 | `PlayerController` |
 | 战斗属性字段 | `float` | 见“通用战斗属性” | `CreateStats` |
 
@@ -58,6 +80,7 @@
 | `_character` | `CharacterDefinition` | 可选；非空时角色基础值由它提供 |
 | `_prefab` | `AssetReferenceGameObject` | 正式怪物必填且 GUID 独立 |
 | `_maxHealth` / `_moveSpeed` | `float` | 未引用角色定义时生效 |
+| `_mana` / 两类 `_...Regeneration` | `float` | 未引用角色定义时生效；均不得小于 0 |
 | 战斗属性字段 | `float` | 未引用角色定义时生效；见通用合同 |
 | `_healthMultiplierRange` | `Vector2` | 两端大于 0，且下限不大于上限 |
 | `_contactDamageInterval` / `_contactDamageRadius` | `float` | 必须为正数；分别控制每只怪物独立的攻击尝试间隔与中心距离 |
@@ -98,8 +121,9 @@
 | `_tags` | `List<TagDefinition>` | 不重复填写自动派生的 `projectile` |
 | `_damageSource` | `ProjectileDamageSource` | `Skill` 或 `EquippedWeapon` |
 | `_baseDamages` | `List<DamageRollDefinition>` | `Skill` 必须非空；`EquippedWeapon` 必须为空 |
+| `_manaCost` | `float` | 不得小于 0；正式基础投射物为 `8` |
 
-`EquippedWeapon` 找不到有效 Weapon 槽来源时，攻击构建失败，不生成投射物、不发送攻击事件，也不消耗 `PlayerAttack` 根种子。`Skill` 来源只读取自己的配置伤害；两种来源都没有固定 `12` 点保护。
+`EquippedWeapon` 找不到有效 Weapon 槽来源时，攻击构建失败，不生成投射物、不发送攻击事件，也不消耗 `PlayerAttack` 根种子。法力不足同样在取随机种子前拒绝释放；只有投射物成功生成后才提交一次耗蓝和攻击事件。`Skill` 来源只读取自己的配置伤害；两种来源都没有固定 `12` 点保护。
 
 ## DamageRollDefinition
 
@@ -114,6 +138,6 @@
 ## 校验与迁移
 
 - Inspector 使用 `EquipmentConfigurationValidator` 与 `RandomizationConfigurationValidator` 输出上下文 Warning。
-- 配置中心内容校验会检查正式角色、技能、装备和怪物资产；`GameplayPhysicsConfigurationValidator` 还会检查正式 Layer、碰撞矩阵、Actor Prefab 层级和 `WorldBounds`。
+- 配置中心内容校验会检查 23 份正式属性、角色、技能、装备和怪物资产，并拒绝负法力、负恢复或负技能耗蓝；`GameplayPhysicsConfigurationValidator` 还会检查正式 Layer、碰撞矩阵、Actor Prefab 层级和 `WorldBounds`。
 - 新增字段或改变伤害来源时，应通过 Editor API / Unity MCP 精准迁移并保留 GUID。
-- 正式提交前至少运行 `Alpha012DamageResolutionTests`、`Alpha013CollisionSafetyTests`、`RandomizationPhase3Tests`、`Phase4ContentTests` 和 Main PlayMode 集成测试。
+- 正式提交前至少运行 `Alpha012DamageResolutionTests`、`Alpha013CollisionSafetyTests`、`Alpha014ResourceSystemTests`、`RandomizationPhase3Tests`、`Phase4ContentTests` 和 Main PlayMode 集成测试。

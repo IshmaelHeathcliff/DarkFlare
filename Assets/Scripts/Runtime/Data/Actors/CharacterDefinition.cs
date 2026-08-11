@@ -26,6 +26,21 @@ namespace DarkFlare
 
         [SerializeField]
         [MinValue(0)]
+        [LabelText("最大法力")]
+        float _mana;
+
+        [SerializeField]
+        [MinValue(0)]
+        [LabelText("生命恢复/秒")]
+        float _healthRegeneration;
+
+        [SerializeField]
+        [MinValue(0)]
+        [LabelText("法力恢复/秒")]
+        float _manaRegeneration;
+
+        [SerializeField]
+        [MinValue(0)]
         [LabelText("移动速度")]
         float _moveSpeed = 5f;
 
@@ -78,6 +93,12 @@ namespace DarkFlare
 
         public float MaxHealth => _maxHealth;
 
+        public float Mana => _mana;
+
+        public float HealthRegeneration => _healthRegeneration;
+
+        public float ManaRegeneration => _manaRegeneration;
+
         public float MoveSpeed => _moveSpeed;
 
         public float Armor => _armor;
@@ -102,6 +123,9 @@ namespace DarkFlare
         {
             StatBlock stats = new StatBlock();
             stats.SetValue(StatIds.MaxHealth, _maxHealth);
+            stats.SetValue(StatIds.Mana, _mana);
+            stats.SetValue(StatIds.HealthRegeneration, _healthRegeneration);
+            stats.SetValue(StatIds.ManaRegeneration, _manaRegeneration);
             stats.SetValue(StatIds.MoveSpeed, _moveSpeed);
             stats.SetValue(StatIds.Armor, _armor);
             stats.SetValue(StatIds.Accuracy, _accuracy);

@@ -17,8 +17,10 @@ namespace DarkFlare.Tests
 
         public override void Setup()
         {
-            base.Setup();
+            // InputTestFixture 会替换全局 Input System。旧架构必须先在原管理器中释放，
+            // 否则真实设备的状态监视器会残留并在测试结束后触发空引用。
             GameArchitecture.Interface.Deinit();
+            base.Setup();
             _architecture = GameArchitecture.Interface;
         }
 

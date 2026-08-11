@@ -7,7 +7,7 @@
 | 配置类型 | 当前示例目录 | 字段参考状态 | 现有模块文档 |
 | --- | --- | --- | --- |
 | `TagDefinition` | `Assets/Data/Preset/Tags` | [完整](./combat-tags.md) | [战斗标签系统](../combat-tag-system.md) |
-| `StatDefinition` | `Assets/Data/Preset/Stats` | 骨架已登记 | [属性系统](../stat-system.md) |
+| `StatDefinition` | `Assets/Data/Preset/Stats` | [完整](./combat-content.md#statdefinition) | [属性系统](../stat-system.md) |
 | `AffixDefinition` | `Assets/Data/Preset/Affixes` | 标签相关字段已覆盖，其余待补全 | [伤害与词条](../damage-affix-system.md) |
 | `ItemBaseDefinition` | `Assets/Data/Preset/Items` | [完整](./combat-content.md#itembasedefinition) | [装备系统](../equipment-system.md) |
 | `CharacterDefinition` | `Assets/Data/Preset/Actors` | [完整](./combat-content.md#characterdefinition) | [玩法循环](../gameplay-loop.md) |

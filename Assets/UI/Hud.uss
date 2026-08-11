@@ -104,3 +104,35 @@
     color: white;
     -unity-font-style: bold;
 }
+
+.hud-caption--resource {
+    margin-top: 8px;
+}
+
+#mana-bar {
+    height: 24px;
+    margin-top: 3px;
+}
+
+#mana-bar .unity-progress-bar__background {
+    background-color: rgb(42, 48, 53);
+    border-radius: 5px;
+}
+
+#mana-bar .unity-progress-bar__progress {
+    background-color: rgb(45, 105, 184);
+    border-radius: 5px;
+}
+
+#mana-bar .unity-progress-bar__title {
+    color: white;
+    -unity-font-style: bold;
+}
+
+.skill-status-label {
+    display: none;
+    margin-top: 7px;
+    color: rgb(242, 180, 92);
+    font-size: 13px;
+    -unity-font-style: bold;
+}

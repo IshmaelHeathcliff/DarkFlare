@@ -3,6 +3,29 @@ using UnityEngine;
 
 namespace DarkFlare
 {
+    public readonly struct CombatResourceSnapshot
+    {
+        public float CurrentHealth { get; }
+
+        public float MaxHealth { get; }
+
+        public float CurrentMana { get; }
+
+        public float MaxMana { get; }
+
+        public CombatResourceSnapshot(
+            float currentHealth,
+            float maxHealth,
+            float currentMana,
+            float maxMana)
+        {
+            CurrentHealth = currentHealth;
+            MaxHealth = maxHealth;
+            CurrentMana = currentMana;
+            MaxMana = maxMana;
+        }
+    }
+
     [DisallowMultipleComponent]
     public class CombatActor : MonoBehaviour, IController
     {
@@ -27,6 +50,7 @@ namespace DarkFlare
         StatBlock _stats = new StatBlock();
         TagSet _tags = TagSet.Empty;
         float _currentHealth;
+        float _currentMana;
         bool _isAlive;
 
         public string ActorId => string.IsNullOrWhiteSpace(_actorId) ? name : _actorId;
@@ -36,6 +60,16 @@ namespace DarkFlare
         public float MaxHealth => GetEffectiveMaxHealth();
 
         public float CurrentHealth => _currentHealth;
+
+        public float MaxMana => Mathf.Max(0f, _stats.GetValue(StatIds.Mana));
+
+        public float CurrentMana => _currentMana;
+
+        public CombatResourceSnapshot Resources => new CombatResourceSnapshot(
+            CurrentHealth,
+            MaxHealth,
+            CurrentMana,
+            MaxMana);
 
         public bool IsAlive => _isAlive;
 
@@ -60,6 +94,7 @@ namespace DarkFlare
             RebuildStats();
             _tags = CombatTagResolver.ResolveActorTags(team, tags);
             _currentHealth = MaxHealth;
+            _currentMana = MaxMana;
 
             if (!_isAlive)
             {
@@ -102,11 +137,43 @@ namespace DarkFlare
             return _currentHealth - previousHealth;
         }
 
+        public bool CanSpendMana(float amount)
+        {
+            return _isAlive && amount >= 0f && _currentMana + 0.0001f >= amount;
+        }
+
+        public bool TrySpendMana(float amount)
+        {
+            if (!CanSpendMana(amount))
+            {
+                return false;
+            }
+
+            _currentMana = Mathf.Max(0f, _currentMana - amount);
+            return true;
+        }
+
+        public float ReceiveMana(float amount)
+        {
+            if (!_isAlive || amount <= 0f)
+            {
+                return 0f;
+            }
+
+            float previousMana = _currentMana;
+            _currentMana = Mathf.Min(MaxMana, _currentMana + amount);
+            return _currentMana - previousMana;
+        }
+
         public void SetModifiers(IEnumerable<ModifierInstance> modifiers)
         {
             float previousMaxHealth = MaxHealth;
             float healthRatio = previousMaxHealth > 0f
                 ? Mathf.Clamp01(_currentHealth / previousMaxHealth)
+                : 1f;
+            float previousMaxMana = MaxMana;
+            float manaRatio = previousMaxMana > 0f
+                ? Mathf.Clamp01(_currentMana / previousMaxMana)
                 : 1f;
             _modifiers.Clear();
 
@@ -117,6 +184,11 @@ namespace DarkFlare
 
             RebuildStats();
             _currentHealth = MaxHealth * healthRatio;
+            _currentMana = MaxMana <= 0f
+                ? 0f
+                : previousMaxMana > 0f
+                    ? MaxMana * manaRatio
+                    : MaxMana;
         }
 
         public void Revive(Vector3 position)
@@ -124,6 +196,7 @@ namespace DarkFlare
             CacheComponents();
             transform.position = position;
             _currentHealth = MaxHealth;
+            _currentMana = MaxMana;
             _isAlive = true;
             SetPresentationEnabled(true);
         }
@@ -132,6 +205,7 @@ namespace DarkFlare
         {
             CacheComponents();
             _currentHealth = MaxHealth;
+            _currentMana = MaxMana;
             _isAlive = true;
         }
 

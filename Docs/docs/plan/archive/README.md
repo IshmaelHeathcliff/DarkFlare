@@ -36,5 +36,6 @@
 | [战斗标签系统改进计划](./combat-tag-system-improvement-plan.md) | alpha 0.1.1 | [战斗标签系统](../../combat-tag-system.md)、[标签配置参考](../../config-reference/combat-tags.md)、[伤害系统与词条系统设计](../../damage-affix-system.md) |
 | [alpha 0.1.2 伤害判定与武器伤害源执行计划](./alpha-0.1.2-damage-resolution-plan.md) | alpha 0.1.2 | [伤害系统与词条系统设计](../../damage-affix-system.md)、[属性系统](../../stat-system.md)、[装备系统](../../equipment-system.md)、[战斗内容配置参考](../../config-reference/combat-content.md) |
 | [alpha 0.1.3 碰撞与怪群安全执行计划](./alpha-0.1.3-collision-safety-plan.md) | alpha 0.1.3 | [首版玩法循环](../../gameplay-loop.md)、[战斗内容配置参考](../../config-reference/combat-content.md)、[首批内容池](../../content-system.md) |
+| [alpha 0.1.4 法力、耗蓝与恢复执行计划](./alpha-0.1.4-resource-system-plan.md) | alpha 0.1.4 | [属性系统](../../stat-system.md)、[首版玩法循环](../../gameplay-loop.md)、[输入与运行时 UI](../../input-ui-system.md)、[战斗内容配置参考](../../config-reference/combat-content.md) |
 
 最近归档日期：2026-08-11。

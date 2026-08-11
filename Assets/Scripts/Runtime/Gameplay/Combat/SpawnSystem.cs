@@ -53,7 +53,12 @@ namespace DarkFlare
 
             GameObject instance = Object.Instantiate(prefab, position, Quaternion.identity);
             PlayerController controller = instance.GetComponent<PlayerController>();
+            CombatResourceSnapshot previousResources = controller.Actor.Resources;
             controller.Configure(definition, skill);
+            this.GetSystem<CombatSystem>().PublishResourceChanges(
+                controller.Actor,
+                previousResources,
+                ActorResourceChangeReason.Configure);
             return controller.Actor;
         }
 
@@ -79,7 +84,12 @@ namespace DarkFlare
             MonsterController controller = instance.GetComponent<MonsterController>();
             int instanceSeed = random.Next(int.MinValue, int.MaxValue);
             MonsterInstanceData instanceData = definition.CreateInstanceData(instanceSeed);
+            CombatResourceSnapshot previousResources = controller.Actor.Resources;
             controller.Configure(definition, instanceData);
+            this.GetSystem<CombatSystem>().PublishResourceChanges(
+                controller.Actor,
+                previousResources,
+                ActorResourceChangeReason.Configure);
             Debug.Log(
                 $"[SpawnSystem] 生成怪物 {definition.Id}，生成种子 {seed}，实例种子 {instanceSeed}，最大生命 {instanceData.MaxHealth:0.##}");
             return controller;

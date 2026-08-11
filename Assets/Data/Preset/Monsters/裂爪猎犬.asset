@@ -22,6 +22,9 @@ MonoBehaviour:
     m_SubObjectGUID:
     m_EditorAssetChanged: 0
   _maxHealth: 36
+  _mana: 0
+  _healthRegeneration: 0
+  _manaRegeneration: 0
   _moveSpeed: 3.6
   _accuracy: 110
   _evasion: 30

@@ -376,7 +376,7 @@ Assets/Data/Preset/
 - `AttackRandomRolls`、`HitResolutionCalculator`：从攻击根种子派生具名子流，并纯逻辑计算命中、闪避和暴击。
 - `DamageContext`、`DamagePacket`、`DamageResult`、`DamageCalculator`：纯 C# 命中伤害计算管线；伤害包区分最终类型、缩放血统和自定义标签，结果按类型解释承伤、防御和最终值。
 - `EquipmentEffectResolver`、`CombatStatResolver`：从四槽分流 LocalItem 与角色效果，并聚合护甲、抗性等有效属性。
-- `CombatActor`：从有效属性读取 `max_health`，穿脱装备时按最大生命变化保持当前生命比例，并由装备事件触发 HUD 刷新。
+- `CombatActor`：从有效属性读取 `max_health` 与 `mana`，保存当前生命 / 法力；穿脱装备时按资源上限变化保持当前比例，并由资源和装备事件触发 HUD 刷新。
 - `AttackSnapshot`、`AttackSnapshotFactory`：在攻击发起时冻结来源角色、技能、来源物品、本次攻击、随机伤害包、攻击者属性和修改器。
 - `GameplayRandomSystem`：提供根种子与独立随机通道，隔离生成位置、怪物实例、玩家攻击、怪物攻击和掉落序列。
 - `ContentConfigurationValidator`：校验首批标签、词条、装备、怪物与各内容池，并检查 Addressable Prefab。

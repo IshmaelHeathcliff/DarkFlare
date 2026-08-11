@@ -33,6 +33,11 @@ namespace DarkFlare
         float _cooldown = 0.6f;
 
         [SerializeField]
+        [MinValue(0)]
+        [LabelText("法力消耗")]
+        float _manaCost;
+
+        [SerializeField]
         [MinValue(0.1f)]
         [LabelText("锁敌范围")]
         float _targetRange = 10f;
@@ -71,6 +76,8 @@ namespace DarkFlare
         public AssetReferenceGameObject Prefab => _projectilePrefab;
 
         public float Cooldown => _cooldown;
+
+        public float ManaCost => _manaCost;
 
         public float TargetRange => _targetRange;
 

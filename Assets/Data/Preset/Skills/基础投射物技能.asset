@@ -21,6 +21,7 @@ MonoBehaviour:
     m_SubObjectGUID: 
     m_EditorAssetChanged: 0
   _cooldown: 0.6
+  _manaCost: 8
   _targetRange: 10
   _projectileSpeed: 12
   _projectileRadius: 0.16

@@ -76,6 +76,9 @@ public class GameplayUiFoundationTests
         Assert.AreEqual(100f, snapshot.CurrentHealth);
         Assert.AreEqual(100f, snapshot.MaxHealth);
         Assert.AreEqual(1f, snapshot.HealthNormalized);
+        Assert.AreEqual(100f, snapshot.CurrentMana);
+        Assert.AreEqual(100f, snapshot.MaxMana);
+        Assert.AreEqual(1f, snapshot.ManaNormalized);
         Assert.AreEqual(25, snapshot.Gold);
         Assert.AreEqual(42f, snapshot.Attributes.Armor);
         Assert.AreEqual(18f, snapshot.Attributes.Evasion);
@@ -512,6 +515,9 @@ public class GameplayUiFoundationTests
         CombatActor actor = playerObject.AddComponent<CombatActor>();
         StatBlock stats = new StatBlock();
         stats.SetValue(StatIds.Armor, 42f);
+        stats.SetValue(StatIds.Mana, 100f);
+        stats.SetValue(StatIds.HealthRegeneration, 1f);
+        stats.SetValue(StatIds.ManaRegeneration, 5f);
         stats.SetValue(StatIds.Evasion, 18f);
         stats.SetValue(StatIds.MoveSpeed, 5f);
         stats.SetValue(StatIds.CriticalChance, 7.5f);

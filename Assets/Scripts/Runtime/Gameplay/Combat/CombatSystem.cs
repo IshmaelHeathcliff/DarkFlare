@@ -73,7 +73,9 @@ namespace DarkFlare
                 resolution);
 
             DamageResult result = DamageCalculator.Calculate(context);
+            CombatResourceSnapshot previousResources = defender.Resources;
             bool justDied = result.DidDealDamage && defender.ReceiveDamage(result);
+            PublishResourceChanges(defender, previousResources, ActorResourceChangeReason.Damage);
             this.SendEvent(new DamageResolvedEvent { Actor = defender, Result = result });
 
             if (result.DidDealDamage)
@@ -93,11 +95,94 @@ namespace DarkFlare
 
         public float ApplyHealing(CombatActor actor, float amount)
         {
+            return ApplyHealing(actor, amount, ActorResourceChangeReason.Healing, true);
+        }
+
+        public float ApplyHealthRegeneration(CombatActor actor, float amount)
+        {
+            return ApplyHealing(actor, amount, ActorResourceChangeReason.Regeneration, false);
+        }
+
+        public bool TrySpendMana(CombatActor actor, float amount)
+        {
+            if (actor == null || amount < 0f || !actor.CanSpendMana(amount))
+            {
+                return false;
+            }
+
+            CombatResourceSnapshot previousResources = actor.Resources;
+
+            if (!actor.TrySpendMana(amount))
+            {
+                return false;
+            }
+
+            PublishResourceChanges(actor, previousResources, ActorResourceChangeReason.SkillCost);
+            return true;
+        }
+
+        public float RestoreMana(
+            CombatActor actor,
+            float amount,
+            ActorResourceChangeReason reason = ActorResourceChangeReason.Restore)
+        {
             if (actor == null || !actor.IsAlive || amount <= 0f)
             {
                 return 0f;
             }
 
+            CombatResourceSnapshot previousResources = actor.Resources;
+            float restoredAmount = actor.ReceiveMana(amount);
+
+            if (restoredAmount > 0f)
+            {
+                PublishResourceChanges(actor, previousResources, reason);
+            }
+
+            return restoredAmount;
+        }
+
+        public void PublishResourceChanges(
+            CombatActor actor,
+            CombatResourceSnapshot previousResources,
+            ActorResourceChangeReason reason)
+        {
+            if (actor == null)
+            {
+                return;
+            }
+
+            CombatResourceSnapshot currentResources = actor.Resources;
+            PublishResourceChange(
+                actor,
+                ActorResourceType.Health,
+                previousResources.CurrentHealth,
+                currentResources.CurrentHealth,
+                previousResources.MaxHealth,
+                currentResources.MaxHealth,
+                reason);
+            PublishResourceChange(
+                actor,
+                ActorResourceType.Mana,
+                previousResources.CurrentMana,
+                currentResources.CurrentMana,
+                previousResources.MaxMana,
+                currentResources.MaxMana,
+                reason);
+        }
+
+        float ApplyHealing(
+            CombatActor actor,
+            float amount,
+            ActorResourceChangeReason reason,
+            bool sendHealingFeedback)
+        {
+            if (actor == null || !actor.IsAlive || amount <= 0f)
+            {
+                return 0f;
+            }
+
+            CombatResourceSnapshot previousResources = actor.Resources;
             float healedAmount = actor.ReceiveHealing(amount);
 
             if (healedAmount <= 0f)
@@ -105,16 +190,49 @@ namespace DarkFlare
                 return 0f;
             }
 
-            Debug.Log($"[CombatSystem] {actor.ActorId} 恢复 {healedAmount:0.#} 点生命");
-            this.SendEvent(new ActorHealedEvent { Actor = actor, Amount = healedAmount });
+            PublishResourceChanges(actor, previousResources, reason);
+
+            if (sendHealingFeedback)
+            {
+                Debug.Log($"[CombatSystem] {actor.ActorId} 恢复 {healedAmount:0.#} 点生命");
+                this.SendEvent(new ActorHealedEvent { Actor = actor, Amount = healedAmount });
+            }
+
             return healedAmount;
         }
 
         public void Revive(CombatActor actor, Vector3 position)
         {
+            CombatResourceSnapshot previousResources = actor.Resources;
             actor.Revive(position);
+            PublishResourceChanges(actor, previousResources, ActorResourceChangeReason.Revive);
             Debug.Log($"[CombatSystem] {actor.ActorId} 复活");
             this.SendEvent(new ActorRevivedEvent { Actor = actor });
+        }
+
+        void PublishResourceChange(
+            CombatActor actor,
+            ActorResourceType resourceType,
+            float previousValue,
+            float currentValue,
+            float previousMaximum,
+            float currentMaximum,
+            ActorResourceChangeReason reason)
+        {
+            if (Mathf.Approximately(previousValue, currentValue)
+                && Mathf.Approximately(previousMaximum, currentMaximum))
+            {
+                return;
+            }
+
+            this.SendEvent(new ActorResourceChangedEvent(
+                actor,
+                resourceType,
+                previousValue,
+                currentValue,
+                previousMaximum,
+                currentMaximum,
+                reason));
         }
 
     }

@@ -6,6 +6,9 @@
         <ui:VisualElement class="hud-card-content" picking-mode="Ignore">
           <ui:Label text="生命" class="hud-caption" picking-mode="Ignore" />
           <ui:ProgressBar name="health-bar" title="等待玩家..." low-value="0" high-value="1" value="0" picking-mode="Ignore" />
+          <ui:Label text="法力" class="hud-caption hud-caption--resource" picking-mode="Ignore" />
+          <ui:ProgressBar name="mana-bar" title="等待玩家..." low-value="0" high-value="1" value="0" picking-mode="Ignore" />
+          <ui:Label name="skill-status-label" text="" class="skill-status-label" picking-mode="Ignore" />
         </ui:VisualElement>
       </ui:VisualElement>
       <ui:VisualElement name="gold-card" class="hud-card gold-card hud-card--row" picking-mode="Ignore">

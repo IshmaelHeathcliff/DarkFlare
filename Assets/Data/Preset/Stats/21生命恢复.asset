@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e3e87c3f4a5cdce4497984cafdc034de, type: 3}
-  m_Name: "01\u9B54\u529B"
-  m_EditorClassIdentifier: Assembly-CSharp::DarkFlare.StatDefinition
-  _id: mana
-  _displayName: "\u6700\u5927\u6CD5\u529B"
+  m_Name: "21\u751F\u547D\u6062\u590D"
+  m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.StatDefinition
+  _id: health_regeneration
+  _displayName: "\u751F\u547D\u6062\u590D"
   _category: 0
   _defaultValue: 0
   _minValue: 0
   _maxValue: 999999
   _isPercent: 0
-  _description: "\u89D2\u8272\u7684\u6CD5\u529B\u4E0A\u9650\uFF1B\u7A7F\u8131\u88C5\u5907\u65F6\u6309\u6BD4\u4F8B\u4FDD\u7559\u5F53\u524D\u6CD5\u529B\u3002"
+  _description: "\u89D2\u8272\u6BCF\u79D2\u6062\u590D\u7684\u56FA\u5B9A\u751F\u547D\u503C\uFF1B\u6B7B\u4EA1\u3001\u7981\u7528\u548C\u6E38\u620F\u6682\u505C\u671F\u95F4\u4E0D\u6062\u590D\u3002"

@@ -12,6 +12,7 @@ namespace DarkFlare
             this.RegisterSystem(new GameplayRandomSystem());
             this.RegisterSystem(new EquipmentSystem());
             this.RegisterSystem(new CombatSystem());
+            this.RegisterSystem(new ResourceRegenerationSystem());
             this.RegisterSystem(new SpawnSystem());
             this.RegisterSystem(new LootSystem());
             this.RegisterSystem(new TradingSystem());

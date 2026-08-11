@@ -32,7 +32,9 @@ namespace DarkFlare
         static readonly AttributeDefinition[] Definitions =
         {
             new AttributeDefinition(StatIds.MaxHealth, "最大生命"),
-            new AttributeDefinition(StatIds.Mana, "魔力"),
+            new AttributeDefinition(StatIds.Mana, "最大法力"),
+            new AttributeDefinition(StatIds.HealthRegeneration, "生命恢复"),
+            new AttributeDefinition(StatIds.ManaRegeneration, "法力恢复"),
             new AttributeDefinition(StatIds.Strength, "力量"),
             new AttributeDefinition(StatIds.Dexterity, "敏捷"),
             new AttributeDefinition(StatIds.Intelligence, "智力"),
@@ -141,6 +143,10 @@ namespace DarkFlare
 
         public float MaxHealth { get; }
 
+        public float CurrentMana { get; }
+
+        public float MaxMana { get; }
+
         public int Gold { get; }
 
         public HudAttributeSnapshot Attributes { get; }
@@ -149,16 +155,24 @@ namespace DarkFlare
             ? Mathf.Clamp01(CurrentHealth / MaxHealth)
             : 0f;
 
+        public float ManaNormalized => HasPlayer && MaxMana > 0f
+            ? Mathf.Clamp01(CurrentMana / MaxMana)
+            : 0f;
+
         public HudSnapshot(
             bool hasPlayer,
             float currentHealth,
             float maxHealth,
+            float currentMana,
+            float maxMana,
             int gold,
             HudAttributeSnapshot attributes)
         {
             HasPlayer = hasPlayer;
             CurrentHealth = currentHealth;
             MaxHealth = maxHealth;
+            CurrentMana = currentMana;
+            MaxMana = maxMana;
             Gold = gold;
             Attributes = attributes;
         }
@@ -173,13 +187,15 @@ namespace DarkFlare
 
             if (player == null)
             {
-                return new HudSnapshot(false, 0f, 0f, gold, new HudAttributeSnapshot(null));
+                return new HudSnapshot(false, 0f, 0f, 0f, 0f, gold, new HudAttributeSnapshot(null));
             }
 
             return new HudSnapshot(
                 true,
                 player.CurrentHealth,
                 player.MaxHealth,
+                player.CurrentMana,
+                player.MaxMana,
                 gold,
                 new HudAttributeSnapshot(player.Stats));
         }

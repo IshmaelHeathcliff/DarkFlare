@@ -33,6 +33,24 @@ namespace DarkFlare
         [SerializeField]
         [MinValue(0)]
         [HideIf(nameof(HasCharacterDefinition))]
+        [LabelText("最大法力")]
+        float _mana;
+
+        [SerializeField]
+        [MinValue(0)]
+        [HideIf(nameof(HasCharacterDefinition))]
+        [LabelText("生命恢复/秒")]
+        float _healthRegeneration;
+
+        [SerializeField]
+        [MinValue(0)]
+        [HideIf(nameof(HasCharacterDefinition))]
+        [LabelText("法力恢复/秒")]
+        float _manaRegeneration;
+
+        [SerializeField]
+        [MinValue(0)]
+        [HideIf(nameof(HasCharacterDefinition))]
         [LabelText("移动速度")]
         float _moveSpeed = 2.6f;
 
@@ -136,6 +154,16 @@ namespace DarkFlare
 
         public float MaxHealth => _character != null ? _character.MaxHealth : _maxHealth;
 
+        public float Mana => _character != null ? _character.Mana : _mana;
+
+        public float HealthRegeneration => _character != null
+            ? _character.HealthRegeneration
+            : _healthRegeneration;
+
+        public float ManaRegeneration => _character != null
+            ? _character.ManaRegeneration
+            : _manaRegeneration;
+
         public float MoveSpeed => _character != null ? _character.MoveSpeed : _moveSpeed;
 
         public float Accuracy => _character != null ? _character.Accuracy : _accuracy;
@@ -187,6 +215,9 @@ namespace DarkFlare
 
             StatBlock stats = new StatBlock();
             stats.SetValue(StatIds.MaxHealth, _maxHealth);
+            stats.SetValue(StatIds.Mana, _mana);
+            stats.SetValue(StatIds.HealthRegeneration, _healthRegeneration);
+            stats.SetValue(StatIds.ManaRegeneration, _manaRegeneration);
             stats.SetValue(StatIds.MoveSpeed, _moveSpeed);
             stats.SetValue(StatIds.Accuracy, _accuracy);
             stats.SetValue(StatIds.Evasion, _evasion);

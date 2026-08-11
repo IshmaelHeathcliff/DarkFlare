@@ -150,6 +150,7 @@ namespace DarkFlare.Editor
         {
             List<ContentValidationIssue> issues = new List<ContentValidationIssue>();
             List<TagDefinition> tags = LoadAssets<TagDefinition>($"{PresetRoot}/Tags");
+            List<StatDefinition> stats = LoadAssets<StatDefinition>($"{PresetRoot}/Stats");
             List<AffixDefinition> affixes = LoadAssets<AffixDefinition>($"{PresetRoot}/Affixes");
             List<ItemBaseDefinition> items = LoadAssets<ItemBaseDefinition>($"{PresetRoot}/Items");
             List<CharacterDefinition> characters = LoadAssets<CharacterDefinition>($"{PresetRoot}/Actors");
@@ -161,10 +162,12 @@ namespace DarkFlare.Editor
             List<CraftingDefinition> craftingDefinitions = LoadAssets<CraftingDefinition>($"{PresetRoot}/Crafting");
 
             ValidateExpectedIds(tags, ExpectedTagIds, tag => tag.Id, "标签", false, issues);
+            ValidateExpectedIds(stats, StatIds.All, stat => stat.Id, "属性", true, issues);
             ValidateExpectedIds(affixes, ExpectedAffixIds, affix => affix.Id, "词条", true, issues);
             ValidateExpectedIds(items, ExpectedItemIds, item => item.Id, "装备", true, issues);
             ValidateExpectedIds(monsters, ExpectedMonsterIds, monster => monster.Id, "怪物", true, issues);
             ValidateTags(tags, issues);
+            ValidateStats(stats, issues);
             ValidateAffixes(affixes, items, issues);
             ValidateItems(items, affixes, issues);
             ValidateCharacters(characters, issues);
@@ -254,6 +257,16 @@ namespace DarkFlare.Editor
             if (requireExactCount && assets.Count != expectedIds.Count)
             {
                 AddError(issues, null, $"正式{label}数量应为 {expectedIds.Count}，当前为 {assets.Count}");
+            }
+        }
+
+        static void ValidateStats(IReadOnlyList<StatDefinition> stats, List<ContentValidationIssue> issues)
+        {
+            List<string> statIssues = StatConfigurationValidator.Validate(stats);
+
+            for (int i = 0; i < statIssues.Count; i++)
+            {
+                AddError(issues, null, statIssues[i]);
             }
         }
 
@@ -549,6 +562,11 @@ namespace DarkFlare.Editor
 
                 List<string> baseIssues = RandomizationConfigurationValidator.Validate(skill);
 
+                if (skill.ManaCost <= 0f)
+                {
+                    AddError(issues, skill, "正式投射物技能的法力消耗必须大于 0");
+                }
+
                 for (int issueIndex = 0; issueIndex < baseIssues.Count; issueIndex++)
                 {
                     AddError(issues, skill, baseIssues[issueIndex]);
@@ -564,6 +582,16 @@ namespace DarkFlare.Editor
             {
                 CharacterDefinition character = characters[i];
                 List<string> baseIssues = RandomizationConfigurationValidator.Validate(character);
+
+                if (character.Mana <= 0f)
+                {
+                    AddError(issues, character, "正式角色的最大法力必须大于 0");
+                }
+
+                if (character.HealthRegeneration <= 0f || character.ManaRegeneration <= 0f)
+                {
+                    AddError(issues, character, "正式角色必须配置正数生命恢复与法力恢复");
+                }
 
                 for (int issueIndex = 0; issueIndex < baseIssues.Count; issueIndex++)
                 {

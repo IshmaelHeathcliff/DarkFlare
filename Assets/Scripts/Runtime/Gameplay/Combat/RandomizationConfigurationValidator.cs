@@ -58,6 +58,11 @@ namespace DarkFlare
                 definition.CriticalDamage,
                 definition.Armor,
                 issues);
+            ValidateResourceStats(
+                definition.Mana,
+                definition.HealthRegeneration,
+                definition.ManaRegeneration,
+                issues);
             return issues;
         }
 
@@ -80,6 +85,11 @@ namespace DarkFlare
                 issues.Add("武器来源技能不能配置技能基础伤害");
             }
 
+            if (definition.ManaCost < 0f)
+            {
+                issues.Add("法力消耗不能为负数");
+            }
+
             return issues;
         }
 
@@ -99,6 +109,11 @@ namespace DarkFlare
                 definition.CriticalChance,
                 definition.CriticalDamage,
                 definition.Armor,
+                issues);
+            ValidateResourceStats(
+                definition.Mana,
+                definition.HealthRegeneration,
+                definition.ManaRegeneration,
                 issues);
             return issues;
         }
@@ -224,6 +239,28 @@ namespace DarkFlare
             if (armor < 0f)
             {
                 issues.Add("护甲不能为负数");
+            }
+        }
+
+        static void ValidateResourceStats(
+            float mana,
+            float healthRegeneration,
+            float manaRegeneration,
+            List<string> issues)
+        {
+            if (mana < 0f)
+            {
+                issues.Add("最大法力不能为负数");
+            }
+
+            if (healthRegeneration < 0f)
+            {
+                issues.Add("生命恢复不能为负数");
+            }
+
+            if (manaRegeneration < 0f)
+            {
+                issues.Add("法力恢复不能为负数");
             }
         }
     }

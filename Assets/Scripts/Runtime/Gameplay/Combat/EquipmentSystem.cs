@@ -269,10 +269,15 @@ namespace DarkFlare
             return true;
         }
 
-        static void RebuildActorEffects(CombatActor actor, EquipmentLoadout loadout)
+        void RebuildActorEffects(CombatActor actor, EquipmentLoadout loadout)
         {
+            CombatResourceSnapshot previousResources = actor.Resources;
             List<ModifierInstance> modifiers = EquipmentEffectResolver.CollectActorModifiers(loadout);
             actor.SetModifiers(modifiers);
+            this.GetSystem<CombatSystem>().PublishResourceChanges(
+                actor,
+                previousResources,
+                ActorResourceChangeReason.MaximumChanged);
         }
 
         static void RollbackEquipInventory(

@@ -31,7 +31,7 @@
 
 1. `CombatPrototypeBootstrap` 先配置并记录随机根种子，再预热玩家、怪物、投射物、掉落物 Addressable Prefab 和七件装备图标，初始化商人、打造配置与玩家初始金币。
 2. `SpawnSystem` 生成玩家，`MonsterSpawner` 使用独立位置与实例种子持续生成怪物；相机随后绑定玩家。
-3. 玩家和怪物统一注册到 `CombatModel`，攻击通过 Command 进入 `CombatSystem` 和 `DamageCalculator`；投射物生成或怪物接触攻击成功后发送 `ActorAttackedEvent`，伤害、死亡与复活沿用 `ActorDamagedEvent`、`ActorDiedEvent`、`ActorRevivedEvent` 驱动 Animator。
+3. 玩家和怪物统一注册到 `CombatModel`，攻击通过 Command 进入 `CombatSystem` 和 `DamageCalculator`；投射物生成或怪物接触攻击成功后发送 `ActorAttackedEvent`，伤害、死亡与复活沿用 `ActorDamagedEvent`、`ActorDiedEvent`、`ActorRevivedEvent` 驱动 Animator。生命 / 法力变化另由统一资源事件驱动 HUD 与调试。
 4. 怪物死亡后，`LootSystem` 先执行表级掉落概率，成功后才按条目权重生成 `ItemInstance` 并实例化世界掉落物。
 5. 玩家触碰掉落物时，`PickupLootCommand` 尝试把物品放入 10×6 背包；背包无空间时保留世界掉落物。
 6. 玩家可在背包内选择物品和目标槽并发送 `EquipItemCommand`，也可通过 `UnequipItemCommand` 卸下。`EquipmentSystem` 原子提交背包与四槽状态，并从完整 Loadout 重建角色装备效果。
@@ -98,12 +98,21 @@
 - 接触伤害仍由中心距离与每只怪物自己的攻击间隔驱动，不依赖碰撞回调。三种怪物分别以 `0.75 / 0.55 / 1.0` 秒独立尝试；没有受击无敌帧、玩家全局伤害冷却或同帧合并。
 - 永久配置校验覆盖 Layer、Physics2D Matrix、Actor Prefab、`WorldBounds` 和怪物移动参数；精准迁移复跑后目标资产哈希保持不变。
 
+## alpha 0.1.4 法力、耗蓝与恢复
+
+- `CombatActor` 正式保存当前生命和当前法力，上限分别读取 `max_health` 与 `mana`；出生和复活恢复满值，上限变化时保持当前比例。
+- 玩家基线为 `100` 最大法力、每秒 `1` 生命恢复和每秒 `5` 法力恢复。基础投射物每次成功生成消耗 `8` 点法力；伤害来源无效或法力不足时不生成投射物、不发送攻击事件，也不消费玩家攻击随机种子。
+- `ResourceRegenerationSystem` 以单一可取消 UniTask 每 `0.25` 秒推进存活且启用的 Actor。菜单暂停、死亡、禁用和注销期间不恢复，恢复游戏后不补算暂停时间。
+- 伤害、主动治疗、被动恢复、法力消耗 / 恢复、上限变化和复活都发送带原因的统一资源事件。被动生命恢复不复用主动治疗事件，避免持续产生治疗飘字。
+- HUD 在生命条下显示当前 / 最大法力；法力不足时给出所需数值，下次成功释放时清除。背包属性详情按稳定顺序显示全部 23 项属性。
+
 ## 模块边界
 
 | 模块 | 主要入口 | 当前职责 |
 | --- | --- | --- |
 | 启动与生成 | `CombatPrototypeBootstrap`、`SpawnSystem`、`MonsterSpawner` | 预热资源、初始化配置、生成玩家 / 怪物 / 投射物 |
 | 战斗 | `CombatModel`、`CombatSystem`、`DamageCalculator`、`AttackSnapshotFactory` | Actor 注册、攻击快照、伤害结算与生死状态 |
+| 资源 | `CombatActor`、`CombatSystem`、`ResourceRegenerationSystem` | 当前生命 / 法力、资源变更事件、技能耗蓝与统一恢复节拍 |
 | 怪物移动与碰撞 | `MonsterController`、`MonsterSteeringCalculator`、`GameplayPhysicsLayers` | 接近停止、同阵营软分离、角色与世界的 Layer 碰撞合同 |
 | 随机化 | `GameplayRandomSystem`、`MonsterInstanceData` | 根种子、独立通道、怪物实例生命与可复现调试 |
 | 掉落与物品 | `LootSystem`、`LootTableDefinition`、`ItemGenerator` | 死亡掉落、物品实例生成和世界掉落物创建 |
@@ -121,6 +130,7 @@
 - `Assets/Scenes/Main.unity`：唯一构建场景，包含战斗启动器、刷怪器、`WorldObstacle` 层的 `WorldBounds`、`GroundGrid` 下的 5×5 基础 Tilemap 与稀疏细节 Tilemap、营地与边界装饰、`UIRoot`、唯一 `EventSystem`、商人与打造台 Prefab。
 - `Assets/Data/Preset/Actors/玩家.asset`：玩家属性与 Prefab 引用。
 - `Assets/Data/Preset/Skills/基础投射物技能.asset`：首版投射物技能。
+- `Assets/Data/Preset/Stats/`：与 `StatIds.All` 一一对应的 23 份属性定义。
 - `Assets/Data/Preset/Monsters/`：三种怪物定义与 `基础刷怪表.asset`。
 - `Assets/Data/Preset/Loot/`：三张怪物掉落表、七件装备条目与完整词条池。
 - `Assets/Data/Preset/Traders/基础商人.asset`：商人库存与买卖倍率。
@@ -147,6 +157,7 @@ Prefab 通过 Addressables 预热和实例化，首版不使用 `Resources` 或�
 - 阶段 6 全量 EditMode 98/98 通过；PlayMode 12 项中 10 项通过、2 项 Input System 上游既有用例按标记跳过、0 失败。五个项目程序集顺序编译均为 0 警告、0 错误，Unity Console 为 0 错误、0 警告。Main 重复进入前后 Addressables 缓存稳定为 6 个 Prefab 与 7 个 Sprite，停止战斗发射源后临时伤害数字、冲击和投射物均清零。
 - 双层地表专项验收为 EditMode 19/19、PlayMode 1/1 通过；基础层 25 格、细节层 11 格、两层无 Collider，视觉覆盖继续保持 `-20..20`，`WorldBounds` 保持 `-16..16`。
 - alpha 0.1.3 全量 EditMode 148/148 通过；PlayMode 17 项中 15 项通过、2 项 Input System 上游既有用例按标记跳过、0 失败。12 只怪物四方向脱困、WorldObstacle 阻挡、Default Trigger 与迁移幂等性专项均通过。
+- alpha 0.1.4 专项 EditMode 6/6、Main PlayMode 1/1 通过；全量 EditMode 156/156 通过，PlayMode 18 项中 16 项通过、2 项 Input System 上游既有用例按标记跳过、0 失败。四个相关程序集构建零错误，三档 UI 布局回归通过，真实 Main 停止后的 Console 为零错误。
 
 以上数据是首版收尾时的验证记录；后续改动仍应重新运行相关测试和 Play 流程。
 

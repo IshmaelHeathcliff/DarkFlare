@@ -14,7 +14,9 @@ namespace DarkFlare
         readonly List<IUnRegister> _eventRegistrations = new List<IUnRegister>();
 
         ProgressBar _healthBar;
+        ProgressBar _manaBar;
         Label _goldLabel;
+        Label _skillStatusLabel;
 
         public HudSnapshot LastSnapshot { get; private set; }
 
@@ -25,7 +27,7 @@ namespace DarkFlare
 
         public void RefreshHud()
         {
-            if (_healthBar == null || _goldLabel == null)
+            if (_healthBar == null || _manaBar == null || _goldLabel == null || _skillStatusLabel == null)
             {
                 return;
             }
@@ -35,6 +37,10 @@ namespace DarkFlare
             _healthBar.value = snapshot.HealthNormalized;
             _healthBar.title = snapshot.HasPlayer
                 ? $"{snapshot.CurrentHealth:0.#} / {snapshot.MaxHealth:0.#}"
+                : "等待玩家...";
+            _manaBar.value = snapshot.ManaNormalized;
+            _manaBar.title = snapshot.HasPlayer
+                ? $"{snapshot.CurrentMana:0.#} / {snapshot.MaxMana:0.#}"
                 : "等待玩家...";
             _goldLabel.text = $"金币 {snapshot.Gold}";
         }
@@ -60,7 +66,9 @@ namespace DarkFlare
 
             _eventRegistrations.Clear();
             _healthBar = null;
+            _manaBar = null;
             _goldLabel = null;
+            _skillStatusLabel = null;
         }
 
         void OnValidate()
@@ -90,9 +98,9 @@ namespace DarkFlare
 
             _eventRegistrations.Add(this.RegisterEvent<ActorRegisteredEvent>(_ => RefreshHud()));
             _eventRegistrations.Add(this.RegisterEvent<ActorUnregisteredEvent>(_ => RefreshHud()));
-            _eventRegistrations.Add(this.RegisterEvent<ActorDamagedEvent>(_ => RefreshHud()));
-            _eventRegistrations.Add(this.RegisterEvent<ActorHealedEvent>(_ => RefreshHud()));
-            _eventRegistrations.Add(this.RegisterEvent<ActorRevivedEvent>(_ => RefreshHud()));
+            _eventRegistrations.Add(this.RegisterEvent<ActorResourceChangedEvent>(_ => RefreshHud()));
+            _eventRegistrations.Add(this.RegisterEvent<SkillCastRejectedEvent>(OnSkillCastRejected));
+            _eventRegistrations.Add(this.RegisterEvent<ActorAttackedEvent>(OnActorAttacked));
             _eventRegistrations.Add(this.RegisterEvent<GoldChangedEvent>(_ => RefreshHud()));
             _eventRegistrations.Add(this.RegisterEvent<EquipmentChangedEvent>(_ => RefreshHud()));
         }
@@ -107,18 +115,47 @@ namespace DarkFlare
 
             VisualElement root = _document.rootVisualElement;
             _healthBar = root.Q<ProgressBar>("health-bar");
+            _manaBar = root.Q<ProgressBar>("mana-bar");
             _goldLabel = root.Q<Label>("gold-label");
+            _skillStatusLabel = root.Q<Label>("skill-status-label");
 
-            if (_healthBar == null || _goldLabel == null)
+            if (_healthBar == null || _manaBar == null || _goldLabel == null || _skillStatusLabel == null)
             {
-                Debug.LogError("[HudController] HUD UXML 缺少生命或金币元素", this);
+                Debug.LogError("[HudController] HUD UXML 缺少生命、法力、技能状态或金币元素", this);
                 return;
             }
 
             _healthBar.lowValue = 0f;
             _healthBar.highValue = 1f;
+            _manaBar.lowValue = 0f;
+            _manaBar.highValue = 1f;
+            _skillStatusLabel.style.display = DisplayStyle.None;
             RefreshHud();
             Debug.Log("[HudController] HUD 初始化完成", this);
+        }
+
+        void OnSkillCastRejected(SkillCastRejectedEvent e)
+        {
+            if (_skillStatusLabel == null
+                || e.Actor == null
+                || e.Actor.Team != ActorTeam.Player
+                || e.Reason != SkillCastRejectionReason.InsufficientMana)
+            {
+                return;
+            }
+
+            _skillStatusLabel.text = $"法力不足（需要 {e.RequiredMana:0.#}）";
+            _skillStatusLabel.style.display = DisplayStyle.Flex;
+        }
+
+        void OnActorAttacked(ActorAttackedEvent e)
+        {
+            if (_skillStatusLabel == null || e.Actor == null || e.Actor.Team != ActorTeam.Player)
+            {
+                return;
+            }
+
+            _skillStatusLabel.style.display = DisplayStyle.None;
         }
     }
 }
