@@ -14,4 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DarkFlare.TagDefinition
   _id: damage
   _displayName: "\u4F24\u5BB3"
+  _domain: 5
+  _usage: 1
   _description: "\u4F24\u5BB3\u5305\u4E0E\u4F24\u5BB3\u6548\u679C\u7684\u901A\u7528\u6807\u7B7E\u3002"

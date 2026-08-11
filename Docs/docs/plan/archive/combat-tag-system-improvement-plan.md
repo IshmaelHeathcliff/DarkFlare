@@ -1,8 +1,11 @@
 # 战斗标签使用规范与改进计划
 
-> 状态：待实施
+> 状态：已完成并归档
 > 评估日期：2026-08-07
-> 相关模块：[伤害系统与词条系统设计](../damage-affix-system.md)、[首批内容池](../content-system.md)、[装备系统](../equipment-system.md)
+> 完成日期：2026-08-11
+> 相关模块：[战斗标签系统](../../combat-tag-system.md)、[标签配置参考](../../config-reference/combat-tags.md)、[伤害系统与词条系统设计](../../damage-affix-system.md)、[首批内容池](../../content-system.md)、[装备系统](../../equipment-system.md)
+
+本文保留 `alpha 0.1.1` 实施时的分析、迁移步骤和验收标准。当前运行时契约与维护边界以[战斗标签系统](../../combat-tag-system.md)和[标签配置参考](../../config-reference/combat-tags.md)为准。
 
 ## 目标与边界
 

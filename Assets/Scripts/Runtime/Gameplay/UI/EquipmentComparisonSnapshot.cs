@@ -118,8 +118,7 @@ namespace DarkFlare
                 ModifierInstance modifier = detail.Modifier;
 
                 if (modifier == null
-                    || !modifier.RequiredTags.IsEmpty
-                    || !modifier.BlockedTags.IsEmpty
+                    || modifier.Query.HasConditions
                     || !IsComparableOperation(modifier.Operation))
                 {
                     continue;

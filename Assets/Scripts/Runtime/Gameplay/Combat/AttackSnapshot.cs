@@ -18,7 +18,9 @@ namespace DarkFlare
 
         public int RandomSeed { get; }
 
-        public TagSet ContextTags { get; }
+        public CombatTagContext TagContext { get; }
+
+        public TagSet ContextTags => TagContext.LegacyTags;
 
         public bool IsHit { get; }
 
@@ -42,6 +44,33 @@ namespace DarkFlare
             IEnumerable<ModifierInstance> attackerModifiers,
             bool isHit = true,
             bool isCritical = false)
+            : this(
+                attackerId,
+                attackerTeam,
+                skillId,
+                sourceItemId,
+                randomSeed,
+                baseDamages,
+                new CombatTagContext(attackTags: contextTags, legacyTags: contextTags),
+                attackerStats,
+                attackerModifiers,
+                isHit,
+                isCritical)
+        {
+        }
+
+        public AttackSnapshot(
+            string attackerId,
+            ActorTeam attackerTeam,
+            string skillId,
+            string sourceItemId,
+            int randomSeed,
+            IEnumerable<DamagePacket> baseDamages,
+            CombatTagContext tagContext,
+            StatBlock attackerStats,
+            IEnumerable<ModifierInstance> attackerModifiers,
+            bool isHit = true,
+            bool isCritical = false)
         {
             AttackerId = string.IsNullOrWhiteSpace(attackerId) ? "environment" : attackerId;
             AttackerTeam = attackerTeam;
@@ -49,7 +78,7 @@ namespace DarkFlare
             SourceItemId = sourceItemId ?? string.Empty;
             RandomSeed = randomSeed;
             _baseDamages = CloneDamagePackets(baseDamages).AsReadOnly();
-            ContextTags = contextTags != null ? new TagSet(contextTags.Ids) : TagSet.Empty;
+            TagContext = CloneTagContext(tagContext);
             _attackerStats = attackerStats != null ? attackerStats.Clone() : new StatBlock();
             List<ModifierInstance> modifiers = attackerModifiers != null
                 ? new List<ModifierInstance>(attackerModifiers)
@@ -70,11 +99,31 @@ namespace DarkFlare
 
             foreach (DamagePacket packet in packets)
             {
-                TagSet tags = packet.Tags != null ? new TagSet(packet.Tags.Ids) : TagSet.Empty;
-                result.Add(new DamagePacket(packet.DamageType, packet.Amount, tags));
+                result.Add(new DamagePacket(
+                    packet.CurrentType,
+                    packet.Amount,
+                    packet.ScalingTypes,
+                    packet.CustomTags));
             }
 
             return result;
+        }
+
+        static CombatTagContext CloneTagContext(CombatTagContext context)
+        {
+            if (context == null)
+            {
+                return CombatTagContext.Empty;
+            }
+
+            return new CombatTagContext(
+                context.SourceActorTags,
+                context.TargetActorTags,
+                context.SkillTags,
+                context.SourceItemTags,
+                context.AttackTags,
+                context.DamageTags,
+                context.LegacyTags);
         }
     }
 }

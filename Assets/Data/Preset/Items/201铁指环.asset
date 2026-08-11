@@ -28,8 +28,7 @@ MonoBehaviour:
   _maxSuffixCount: 3
   _gridSize: {x: 1, y: 1}
   _weight: 1
-  _tags:
-  - {fileID: 11400000, guid: f4100000000000000000000000000004, type: 2}
+  _tags: []
   _baseDamages: []
   _implicitModifiers:
   - _stat: {fileID: 11400000, guid: 82e204183d947d249b17fb3c9ade3530, type: 2}
@@ -38,5 +37,10 @@ MonoBehaviour:
     _valueRange: {x: 8, y: 14}
     _fromDamageType: 0
     _toDamageType: 1
+    _condition:
+      _scopeMask: 0
+      _requiredAll: []
+      _requiredAny: []
+      _blockedAny: []
     _requiredTags: []
     _blockedTags: []

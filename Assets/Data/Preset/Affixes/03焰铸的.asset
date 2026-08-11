@@ -18,9 +18,15 @@ MonoBehaviour:
   _groupId: elemental_extra
   _minItemLevel: 1
   _weight: 60
-  _allowedItemTags:
-  - {fileID: 11400000, guid: f4100000000000000000000000000002, type: 2}
-  - {fileID: 11400000, guid: f4100000000000000000000000000004, type: 2}
+  _spawnQuery:
+    _scopeMask: 8
+    _requiredAll: []
+    _requiredAny:
+    - {fileID: 11400000, guid: f4100000000000000000000000000002, type: 2}
+    - {fileID: 11400000, guid: f4100000000000000000000000000004, type: 2}
+    _blockedAny: []
+  _modifierTags: []
+  _allowedItemTags: []
   _blockedItemTags: []
   _modifiers:
   - _stat: {fileID: 0}
@@ -29,6 +35,11 @@ MonoBehaviour:
     _valueRange: {x: 8, y: 12}
     _fromDamageType: 0
     _toDamageType: 1
-    _requiredTags:
-    - {fileID: 11400000, guid: f4100000000000000000000000000007, type: 2}
+    _condition:
+      _scopeMask: 32
+      _requiredAll:
+      - {fileID: 11400000, guid: f4100000000000000000000000000007, type: 2}
+      _requiredAny: []
+      _blockedAny: []
+    _requiredTags: []
     _blockedTags: []

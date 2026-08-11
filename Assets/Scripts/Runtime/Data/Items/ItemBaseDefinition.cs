@@ -35,7 +35,7 @@ namespace DarkFlare
         Vector2 _amountRange;
 
         [SerializeField]
-        [LabelText("伤害标签")]
+        [LabelText("自定义伤害标签")]
         List<TagDefinition> _tags = new List<TagDefinition>();
 
         public DamageType DamageType => _damageType;
@@ -53,7 +53,11 @@ namespace DarkFlare
                 amount = _amountRange.x + (float)random.NextDouble() * (_amountRange.y - _amountRange.x);
             }
 
-            return new DamagePacket(_damageType, amount, TagSet.FromDefinitions(_tags));
+            return new DamagePacket(
+                _damageType,
+                amount,
+                DamagePacket.ToMask(_damageType),
+                TagSet.FromDefinitions(_tags));
         }
     }
 
@@ -110,7 +114,7 @@ namespace DarkFlare
         float _weight;
 
         [SerializeField]
-        [LabelText("物品标签")]
+        [LabelText("自定义物品生成标签")]
         List<TagDefinition> _tags = new List<TagDefinition>();
 
         [SerializeField]
@@ -149,7 +153,10 @@ namespace DarkFlare
 
         public IReadOnlyList<StatModifierDefinition> ImplicitModifiers => _implicitModifiers;
 
-        public TagSet RuntimeTags => TagSet.FromDefinitions(_tags);
+        public TagSet RuntimeTags => CombatTagResolver.ResolveItemSpawnTags(
+            _itemType,
+            _allowedEquipmentSlots,
+            TagSet.FromDefinitions(_tags));
 
         public bool CanEquipTo(EquipmentSlot slot)
         {

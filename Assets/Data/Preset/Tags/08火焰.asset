@@ -14,4 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.TagDefinition
   _id: fire
   _displayName: "\u706B\u7130"
+  _domain: 5
+  _usage: 1
   _description: "\u706B\u7130\u4F24\u5BB3\u6807\u7B7E\u3002"

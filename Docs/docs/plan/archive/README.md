@@ -33,5 +33,6 @@
 | [alpha 0.1 美术资产单图迁移计划](./alpha-0.1-art-asset-migration-plan.md) | alpha 0.1 规划前置准备 | [美术资产生成规范](../../visual-asset-generation.md)、[视觉资产清单](../../visual-assets.md)、[视觉规范](../../visual-style.md) |
 | [alpha 0.1.0 物品 UI 工作台重构计划](./alpha-0.1.0-item-ui-workbench-plan.md) | alpha 0.1.0 | [物品 UI 工作台](../../item-ui-workbench.md)、[输入与运行时 UI](../../input-ui-system.md)、[装备系统](../../equipment-system.md)、[打造系统](../../crafting-system.md) |
 | [alpha 0.1.0 地表双网格 Tilemap 计划](./alpha-0.1.0-ground-double-tilemap-plan.md) | alpha 0.1.0 | [双层地表 Tilemap](../../ground-tilemap.md)、[视觉资产清单](../../visual-assets.md)、[视觉规范](../../visual-style.md) |
+| [战斗标签系统改进计划](./combat-tag-system-improvement-plan.md) | alpha 0.1.1 | [战斗标签系统](../../combat-tag-system.md)、[标签配置参考](../../config-reference/combat-tags.md)、[伤害系统与词条系统设计](../../damage-affix-system.md) |
 
-最近归档日期：2026-08-10。
+最近归档日期：2026-08-11。

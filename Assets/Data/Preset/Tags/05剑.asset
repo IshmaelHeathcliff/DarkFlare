@@ -14,4 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.TagDefinition
   _id: sword
   _displayName: "\u5251"
+  _domain: 0
+  _usage: 1
   _description: "\u5251\u7C7B\u6B66\u5668\u6807\u7B7E\u3002"

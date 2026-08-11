@@ -78,12 +78,15 @@ namespace DarkFlare
 
         [SerializeField]
         [ShowIf(nameof(UsesTags))]
-        [LabelText("必须标签")]
+        [LabelText("战斗标签条件")]
+        TagQueryDefinition _condition = new TagQueryDefinition();
+
+        [SerializeField]
+        [HideInInspector]
         List<TagDefinition> _requiredTags = new List<TagDefinition>();
 
         [SerializeField]
-        [ShowIf(nameof(UsesTags))]
-        [LabelText("禁止标签")]
+        [HideInInspector]
         List<TagDefinition> _blockedTags = new List<TagDefinition>();
 
         [ShowInInspector]
@@ -104,9 +107,15 @@ namespace DarkFlare
 
         public DamageType ToDamageType => _toDamageType;
 
-        public IReadOnlyList<TagDefinition> RequiredTags => _requiredTags;
+        public TagQueryDefinition Condition => _condition;
 
-        public IReadOnlyList<TagDefinition> BlockedTags => _blockedTags;
+        public IReadOnlyList<TagDefinition> RequiredTags => _condition != null && _condition.HasConditions
+            ? _condition.RequiredAll
+            : _requiredTags;
+
+        public IReadOnlyList<TagDefinition> BlockedTags => _condition != null && _condition.HasConditions
+            ? _condition.BlockedAny
+            : _blockedTags;
 
         bool UsesStat => _operation == ModifierOperation.Flat
             || _operation == ModifierOperation.Increase
@@ -136,6 +145,17 @@ namespace DarkFlare
             }
 
             string statId = _stat != null ? _stat.Id : string.Empty;
+            if (_condition != null && _condition.HasConditions)
+            {
+                return new ModifierInstance(
+                    statId,
+                    _operation,
+                    _scope,
+                    value,
+                    _fromDamageType,
+                    _toDamageType,
+                    _condition.CreateQuery());
+            }
 
             return new ModifierInstance(
                 statId,
@@ -179,11 +199,19 @@ namespace DarkFlare
         int _weight = 100;
 
         [SerializeField]
-        [LabelText("可出现物品标签")]
+        [LabelText("物品生成查询")]
+        TagQueryDefinition _spawnQuery = new TagQueryDefinition();
+
+        [SerializeField]
+        [LabelText("词条自身标签")]
+        List<TagDefinition> _modifierTags = new List<TagDefinition>();
+
+        [SerializeField]
+        [HideInInspector]
         List<TagDefinition> _allowedItemTags = new List<TagDefinition>();
 
         [SerializeField]
-        [LabelText("禁止物品标签")]
+        [HideInInspector]
         List<TagDefinition> _blockedItemTags = new List<TagDefinition>();
 
         [SerializeField]
@@ -202,9 +230,17 @@ namespace DarkFlare
 
         public int Weight => _weight;
 
-        public IReadOnlyList<TagDefinition> AllowedItemTags => _allowedItemTags;
+        public TagQueryDefinition SpawnQuery => _spawnQuery;
 
-        public IReadOnlyList<TagDefinition> BlockedItemTags => _blockedItemTags;
+        public IReadOnlyList<TagDefinition> ModifierTags => _modifierTags;
+
+        public IReadOnlyList<TagDefinition> AllowedItemTags => _spawnQuery != null && _spawnQuery.HasConditions
+            ? _spawnQuery.RequiredAny
+            : _allowedItemTags;
+
+        public IReadOnlyList<TagDefinition> BlockedItemTags => _spawnQuery != null && _spawnQuery.HasConditions
+            ? _spawnQuery.BlockedAny
+            : _blockedItemTags;
 
         public IReadOnlyList<StatModifierDefinition> Modifiers => _modifiers;
 
@@ -213,6 +249,12 @@ namespace DarkFlare
             if (itemLevel < _minItemLevel)
             {
                 return false;
+            }
+
+            if (_spawnQuery != null && _spawnQuery.HasConditions)
+            {
+                CombatTagContext context = new CombatTagContext(sourceItemTags: itemTags);
+                return _spawnQuery.CreateQuery().Matches(context);
             }
 
             TagSet allowedTags = TagSet.FromDefinitions(_allowedItemTags);

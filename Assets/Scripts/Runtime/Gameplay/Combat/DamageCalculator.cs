@@ -13,9 +13,9 @@ namespace DarkFlare
 
             List<DamagePacket> packets = new List<DamagePacket>(context.BaseDamages);
 
-            packets = ApplyConversion(packets, context.AttackerModifiers, context.ContextTags);
-            packets = ApplyGainAsExtra(packets, context.AttackerModifiers, context.ContextTags);
-            packets = ApplyAttackerScaling(packets, context.AttackerStats, context.AttackerModifiers, context.ContextTags);
+            packets = ApplyConversion(packets, context.AttackerModifiers, context.TagContext);
+            packets = ApplyGainAsExtra(packets, context.AttackerModifiers, context.TagContext);
+            packets = ApplyAttackerScaling(packets, context.AttackerStats, context.AttackerModifiers, context.TagContext);
 
             if (context.IsCritical)
             {
@@ -23,12 +23,19 @@ namespace DarkFlare
             }
 
             Dictionary<DamageType, float> beforeDefense = SumByType(packets);
-            Dictionary<DamageType, float> afterDefense = ApplyDefense(beforeDefense, context.DefenderStats, context.DefenderModifiers, context.ContextTags);
+            Dictionary<DamageType, float> afterDefense = ApplyDefense(
+                packets,
+                context.DefenderStats,
+                context.DefenderModifiers,
+                context.TagContext);
 
             return new DamageResult(true, context.IsCritical, beforeDefense, afterDefense);
         }
 
-        static List<DamagePacket> ApplyConversion(List<DamagePacket> packets, IEnumerable<ModifierInstance> modifiers, TagSet contextTags)
+        static List<DamagePacket> ApplyConversion(
+            List<DamagePacket> packets,
+            IEnumerable<ModifierInstance> modifiers,
+            CombatTagContext tagContext)
         {
             List<DamagePacket> result = new List<DamagePacket>();
             List<ModifierInstance> conversionModifiers = new List<ModifierInstance>();
@@ -48,14 +55,14 @@ namespace DarkFlare
             for (int i = 0; i < packets.Count; i++)
             {
                 DamagePacket packet = packets[i];
-                TagSet tags = contextTags.Union(packet.Tags);
+                CombatTagContext packetContext = WithDamagePacket(tagContext, packet);
                 float totalConversion = 0f;
 
                 for (int j = 0; j < conversionModifiers.Count; j++)
                 {
                     ModifierInstance modifier = conversionModifiers[j];
 
-                    if (modifier.FromDamageType == packet.DamageType && modifier.Matches(tags))
+                    if (modifier.FromDamageType == packet.DamageType && modifier.Matches(packetContext))
                     {
                         totalConversion += modifier.Value;
                     }
@@ -79,7 +86,7 @@ namespace DarkFlare
                         continue;
                     }
 
-                    if (!modifier.Matches(tags))
+                    if (!modifier.Matches(packetContext))
                     {
                         continue;
                     }
@@ -87,7 +94,7 @@ namespace DarkFlare
                     float ratio = Clamp01(modifier.Value * scale / 100f);
                     float convertedAmount = packet.Amount * ratio;
                     convertedTotal += convertedAmount;
-                    result.Add(new DamagePacket(modifier.ToDamageType, convertedAmount, packet.Tags));
+                    result.Add(packet.WithCurrentType(modifier.ToDamageType, convertedAmount));
                 }
 
                 result.Add(packet.WithAmount(packet.Amount - convertedTotal));
@@ -96,7 +103,10 @@ namespace DarkFlare
             return result;
         }
 
-        static List<DamagePacket> ApplyGainAsExtra(List<DamagePacket> packets, IEnumerable<ModifierInstance> modifiers, TagSet contextTags)
+        static List<DamagePacket> ApplyGainAsExtra(
+            List<DamagePacket> packets,
+            IEnumerable<ModifierInstance> modifiers,
+            CombatTagContext tagContext)
         {
             List<DamagePacket> result = new List<DamagePacket>(packets);
 
@@ -114,13 +124,13 @@ namespace DarkFlare
                 for (int i = 0; i < packets.Count; i++)
                 {
                     DamagePacket packet = packets[i];
-                    TagSet tags = contextTags.Union(packet.Tags);
+                    CombatTagContext packetContext = WithDamagePacket(tagContext, packet);
 
                     if (packet.DamageType == modifier.FromDamageType
                         && packet.Amount > 0f
-                        && modifier.Matches(tags))
+                        && modifier.Matches(packetContext))
                     {
-                        result.Add(new DamagePacket(modifier.ToDamageType, packet.Amount * ratio, packet.Tags));
+                        result.Add(packet.WithCurrentType(modifier.ToDamageType, packet.Amount * ratio));
                     }
                 }
             }
@@ -132,18 +142,18 @@ namespace DarkFlare
             List<DamagePacket> packets,
             StatBlock attackerStats,
             IEnumerable<ModifierInstance> modifiers,
-            TagSet contextTags)
+            CombatTagContext tagContext)
         {
             List<DamagePacket> result = new List<DamagePacket>(packets.Count);
 
             for (int i = 0; i < packets.Count; i++)
             {
                 DamagePacket packet = packets[i];
-                TagSet tags = contextTags.Union(packet.Tags);
+                CombatTagContext packetContext = WithDamagePacket(tagContext, packet);
                 float amount = packet.Amount;
-                amount += GetFlatDamage(attackerStats, modifiers, tags, packet.DamageType);
-                amount *= 1f + GetIncreasedDamage(modifiers, tags, packet.DamageType) / 100f;
-                amount *= GetMoreDamageMultiplier(modifiers, tags, packet.DamageType);
+                amount += GetFlatDamage(attackerStats, modifiers, packetContext, packet.DamageType);
+                amount *= 1f + GetIncreasedDamage(modifiers, packetContext, packet.DamageType) / 100f;
+                amount *= GetMoreDamageMultiplier(modifiers, packetContext, packet.DamageType);
                 result.Add(packet.WithAmount(amount));
             }
 
@@ -153,7 +163,7 @@ namespace DarkFlare
         static float GetFlatDamage(
             StatBlock stats,
             IEnumerable<ModifierInstance> modifiers,
-            TagSet tags,
+            CombatTagContext tagContext,
             DamageType damageType)
         {
             string typedDamageStatId = GetDamageStatId(damageType);
@@ -164,7 +174,7 @@ namespace DarkFlare
                 if (modifier == null
                     || modifier.Operation != ModifierOperation.Flat
                     || !IsAttackerModifier(modifier)
-                    || !modifier.Matches(tags))
+                    || !modifier.Matches(tagContext))
                 {
                     continue;
                 }
@@ -178,7 +188,10 @@ namespace DarkFlare
             return value;
         }
 
-        static float GetIncreasedDamage(IEnumerable<ModifierInstance> modifiers, TagSet tags, DamageType damageType)
+        static float GetIncreasedDamage(
+            IEnumerable<ModifierInstance> modifiers,
+            CombatTagContext tagContext,
+            DamageType damageType)
         {
             float value = 0f;
 
@@ -187,7 +200,7 @@ namespace DarkFlare
                 if (modifier == null
                     || modifier.Operation != ModifierOperation.Increase
                     || !IsAttackerModifier(modifier)
-                    || !modifier.Matches(tags))
+                    || !modifier.Matches(tagContext))
                 {
                     continue;
                 }
@@ -201,7 +214,10 @@ namespace DarkFlare
             return value;
         }
 
-        static float GetMoreDamageMultiplier(IEnumerable<ModifierInstance> modifiers, TagSet tags, DamageType damageType)
+        static float GetMoreDamageMultiplier(
+            IEnumerable<ModifierInstance> modifiers,
+            CombatTagContext tagContext,
+            DamageType damageType)
         {
             float multiplier = 1f;
 
@@ -210,7 +226,7 @@ namespace DarkFlare
                 if (modifier == null
                     || modifier.Operation != ModifierOperation.More
                     || !IsAttackerModifier(modifier)
-                    || !modifier.Matches(tags))
+                    || !modifier.Matches(tagContext))
                 {
                     continue;
                 }
@@ -256,17 +272,36 @@ namespace DarkFlare
         }
 
         static Dictionary<DamageType, float> ApplyDefense(
-            Dictionary<DamageType, float> damageByType,
+            IEnumerable<DamagePacket> packets,
             StatBlock defenderStats,
             IEnumerable<ModifierInstance> defenderModifiers,
-            TagSet contextTags)
+            CombatTagContext tagContext)
         {
+            Dictionary<DamageType, float> damageByType = new Dictionary<DamageType, float>();
+
+            foreach (DamagePacket packet in packets)
+            {
+                float amount = packet.Amount;
+                CombatTagContext packetContext = WithDamagePacket(tagContext, packet);
+                amount *= GetTakenDamageMultiplier(
+                    packet.DamageType,
+                    defenderModifiers,
+                    packetContext,
+                    tagContext);
+
+                if (!damageByType.ContainsKey(packet.DamageType))
+                {
+                    damageByType[packet.DamageType] = 0f;
+                }
+
+                damageByType[packet.DamageType] += amount;
+            }
+
             Dictionary<DamageType, float> result = new Dictionary<DamageType, float>();
 
             foreach (KeyValuePair<DamageType, float> pair in damageByType)
             {
                 float amount = pair.Value;
-                amount *= GetTakenDamageMultiplier(pair.Key, defenderModifiers, contextTags);
                 amount = ApplyResistance(amount, pair.Key, defenderStats);
 
                 if (pair.Key == DamageType.Physical)
@@ -280,13 +315,23 @@ namespace DarkFlare
             return result;
         }
 
-        static float GetTakenDamageMultiplier(DamageType damageType, IEnumerable<ModifierInstance> modifiers, TagSet contextTags)
+        static float GetTakenDamageMultiplier(
+            DamageType damageType,
+            IEnumerable<ModifierInstance> modifiers,
+            CombatTagContext packetTagContext,
+            CombatTagContext baseTagContext)
         {
             float multiplier = 1f;
 
             foreach (ModifierInstance modifier in modifiers)
             {
-                if (modifier == null || modifier.Scope != ModifierScope.TargetTaken || !modifier.Matches(contextTags))
+                CombatTagContext queryContext = modifier != null && modifier.UsesLegacyTagMatching
+                    ? baseTagContext
+                    : packetTagContext;
+
+                if (modifier == null
+                    || modifier.Scope != ModifierScope.TargetTaken
+                    || !modifier.Matches(queryContext))
                 {
                     continue;
                 }
@@ -382,6 +427,14 @@ namespace DarkFlare
             return modifier.Scope == ModifierScope.GlobalActor
                 || modifier.Scope == ModifierScope.Skill
                 || modifier.Scope == ModifierScope.LocalItem;
+        }
+
+        static CombatTagContext WithDamagePacket(CombatTagContext context, DamagePacket packet)
+        {
+            CombatTagContext safeContext = context ?? CombatTagContext.Empty;
+            return safeContext.WithDamageTags(
+                CombatTagResolver.ResolveDamageTags(packet),
+                packet.CustomTags);
         }
 
         static float Clamp(float value, float min, float max)

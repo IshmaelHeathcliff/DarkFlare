@@ -18,6 +18,22 @@ namespace DarkFlare
             CombatActor defender,
             string skillId,
             IEnumerable<DamagePacket> baseDamages,
+            int randomSeed)
+        {
+            _defender = defender;
+            _attack = AttackSnapshotFactory.CreateImmediate(
+                attacker,
+                skillId,
+                string.Empty,
+                baseDamages,
+                randomSeed);
+        }
+
+        public ApplyDamageCommand(
+            CombatActor attacker,
+            CombatActor defender,
+            string skillId,
+            IEnumerable<DamagePacket> baseDamages,
             TagSet contextTags,
             int randomSeed)
         {

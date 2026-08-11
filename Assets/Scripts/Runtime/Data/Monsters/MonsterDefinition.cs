@@ -51,7 +51,7 @@ namespace DarkFlare
         float _contactDamageRadius = 0.75f;
 
         [SerializeField]
-        [LabelText("怪物标签")]
+        [LabelText("自定义角色标签")]
         List<TagDefinition> _tags = new List<TagDefinition>();
 
         [SerializeField]
@@ -77,6 +77,8 @@ namespace DarkFlare
         public float ContactDamageInterval => _contactDamageInterval;
 
         public float ContactDamageRadius => _contactDamageRadius;
+
+        public IReadOnlyList<TagDefinition> Tags => _tags;
 
         public TagSet RuntimeTags => TagSet.FromDefinitions(_tags);
 

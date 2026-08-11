@@ -22,18 +22,9 @@
 
 ### 标签
 
-标签用于匹配词条条件和伤害范围。
+标签用于匹配词条生成条件和战斗修改器，但不同语义域不会再进入同一个任意并集。`TagDefinition` 保存稳定 ID、中文名、Domain、使用状态与说明；`CombatTagContext` 分离来源角色、目标角色、技能、来源物品、本次攻击和当前伤害包。
 
-当前正式标签：
-
-- 通用：`damage`
-- 装备：`weapon`、`armor`、`ring`
-- 武器子类：`sword`、`axe`
-- 伤害：`physical`、`fire`、`cold`、`lightning`、`chaos`
-- 技能来源：`projectile`、`melee`
-- 角色：`monster`
-
-建议首版用 `TagDefinition` 配置资产保存稳定 ID 和中文名，不把所有标签写死成枚举。运行时可以把标签映射成整数位或哈希集合来提升性能。
+物品类别、角色阵营、技能类型和伤害类型优先由强类型字段派生。当前正式查询消费 `weapon`、`armor`、`ring` 和 `physical`；其余既有定义在出现真实消费者前标记为预留。完整合同见[战斗标签系统](./combat-tag-system.md)。
 
 ### 属性
 
@@ -138,7 +129,7 @@
 - 命中 ID
 - 随机种子
 - 伤害包列表
-- 上下文标签
+- 结构化 `CombatTagContext`
 - 攻击者快照属性
 - 防御者快照属性
 - 是否暴击
@@ -150,7 +141,7 @@
 
 首版推荐按固定顺序执行：
 
-1. 收集攻击者、技能、装备、目标和场景标签。
+1. 分别冻结来源角色、技能、来源物品和本次攻击标签。
 2. 生成基础伤害包，例如武器物理伤害或技能基础火焰伤害。
 3. 应用局部物品词条，得到最终武器基础伤害。
 4. 应用技能倍率和附加基础伤害。
@@ -159,7 +150,7 @@
 7. 汇总 `Increase` 与 `Reduced`，按匹配标签加总。
 8. 逐个应用 `More` 与 `Less` 乘区。
 9. 计算命中、闪避、格挡和暴击。
-10. 应用目标承受伤害变化、抗性、穿透、护甲和其他减伤。
+10. 命中时补入目标角色，按包派生伤害标签，再应用目标承受伤害变化、抗性、穿透、护甲和其他减伤。
 11. 分配到护盾、生命或其他资源。
 12. 发送命中、受伤、击杀、掉落等事件。
 
@@ -374,17 +365,18 @@ Assets/Data/Preset/
 
 已完成第一版代码底座：
 
-- `TagDefinition`：标签配置资产。
+- `TagDefinition`：带 Domain 与使用状态的标签配置资产。
 - `StatDefinition`：属性配置资产。
 - `AffixDefinition`：词条配置资产，包含修改器、作用域、权重和物品标签筛选。
 - `ItemBaseDefinition`：物品基底配置资产，包含标签、基础伤害、隐式修改器和格子信息。
 - `ItemInstance`：运行时物品实例，支持隐式、前缀、后缀和修改器收集。
 - `ItemGenerator`：基于物品基底、词条池、权重和随机种子生成物品实例。
-- `TagSet`、`ModifierInstance`、`StatBlock`、`StatAggregator`：运行时标签、词条和属性聚合结构。
-- `DamageContext`、`DamagePacket`、`DamageResult`、`DamageCalculator`：纯 C# 命中伤害计算管线。
+- `TagSet`、`TagQueryDefinition`、`TagQuery`、`CombatTagContext`：不可变标签集合、结构化查询和作用域上下文。
+- `ModifierInstance`、`StatBlock`、`StatAggregator`：运行时词条和属性聚合结构。
+- `DamageContext`、`DamagePacket`、`DamageResult`、`DamageCalculator`：纯 C# 命中伤害计算管线；伤害包区分最终类型、缩放血统和自定义标签。
 - `EquipmentEffectResolver`、`CombatStatResolver`：从四槽分流 LocalItem 与角色效果，并聚合护甲、抗性等有效属性。
 - `CombatActor`：从有效属性读取 `max_health`，穿脱装备时按最大生命变化保持当前生命比例，并由装备事件触发 HUD 刷新。
-- `AttackSnapshot`、`AttackSnapshotFactory`：在攻击发起时冻结来源物品、随机伤害包、标签、攻击者属性和修改器。
+- `AttackSnapshot`、`AttackSnapshotFactory`：在攻击发起时冻结来源角色、技能、来源物品、本次攻击、随机伤害包、攻击者属性和修改器。
 - `GameplayRandomSystem`：提供根种子与独立随机通道，隔离生成位置、怪物实例、玩家攻击、怪物攻击和掉落序列。
 - `ContentConfigurationValidator`：校验首批标签、词条、装备、怪物与各内容池，并检查 Addressable Prefab。
 
@@ -402,7 +394,8 @@ Assets/Data/Preset/
 - 武器基础伤害来源、10–14 空手技能配置与 12 点代码级空配置保护
 - 发射时攻击快照；投射物命中时只读取当前防御者快照
 - `LocalItem` 仅作用于武器本地伤害，伤害修改器不会在属性层重复计算
-- 转换和额外获得伤害会合并技能上下文与当前伤害包标签；物理伤害包上的 `physical` 条件可正确匹配。
+- 转换和额外获得伤害保留来源类型血统并补充最终类型语义；物理转火焰可同时匹配 Damage 作用域的 `physical` 与 `fire`，防御只读取最终类型。
+- 旧平面 `TagSet` 查询保留隔离的兼容通道，不会读取目标标签或自动派生的伤害血统。
 
 阶段 4 已配置 12 个当前管线实际支持的词条，不加入 `Chance`、`Trigger`、`Limit`、暴击率、命中或闪避配置。完整 ID、范围、权重和装备兼容见[首批内容池](./content-system.md)。
 

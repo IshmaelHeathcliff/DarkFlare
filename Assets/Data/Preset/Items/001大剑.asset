@@ -28,15 +28,9 @@ MonoBehaviour:
   _maxSuffixCount: 3
   _gridSize: {x: 2, y: 3}
   _weight: 10
-  _tags:
-  - {fileID: 11400000, guid: f4100000000000000000000000000002, type: 2}
-  - {fileID: 11400000, guid: f4100000000000000000000000000005, type: 2}
-  - {fileID: 11400000, guid: f4100000000000000000000000000007, type: 2}
-  - {fileID: 11400000, guid: f410000000000000000000000000000d, type: 2}
+  _tags: []
   _baseDamages:
   - _damageType: 0
     _amountRange: {x: 20, y: 40}
-    _tags:
-    - {fileID: 11400000, guid: 221659ee469b58e48a9edbfb24b56196, type: 2}
-    - {fileID: 11400000, guid: f4100000000000000000000000000007, type: 2}
+    _tags: []
   _implicitModifiers: []

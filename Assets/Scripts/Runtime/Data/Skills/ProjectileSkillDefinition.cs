@@ -53,7 +53,7 @@ namespace DarkFlare
         float _projectileLifetime = 2f;
 
         [SerializeField]
-        [LabelText("技能标签")]
+        [LabelText("自定义技能标签")]
         List<TagDefinition> _tags = new List<TagDefinition>();
 
         [SerializeField]
@@ -80,7 +80,9 @@ namespace DarkFlare
 
         public float ProjectileLifetime => _projectileLifetime;
 
-        public TagSet RuntimeTags => TagSet.FromDefinitions(_tags);
+        public IReadOnlyList<TagDefinition> Tags => _tags;
+
+        public TagSet RuntimeTags => CombatTagResolver.ResolveProjectileSkillTags(TagSet.FromDefinitions(_tags));
 
         public ProjectileDamageSource DamageSource => _damageSource;
 

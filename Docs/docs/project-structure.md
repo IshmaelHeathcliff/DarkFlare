@@ -207,7 +207,7 @@ Addressables 的配置目录，包含资源组、模板和构建器配置。后�
 
 - `Core/QFramework.cs`（`DarkFlare.Core` 程序集）
 - `GameArchitecture.cs`（位于 `Runtime/` 根，组合根；已注册 `GameInput`、`CombatModel`/`EquipmentModel`/`InventoryModel`/`EconomyModel`、`CombatSystem`/`SpawnSystem`/`LootSystem`/`TradingSystem`/`CraftingSystem`/`GameplayPauseSystem` 与 `PrefabAssetLoader`）
-- `Data/Tags/TagDefinition.cs`
+- `Data/Tags/TagDefinition.cs`、`Data/Tags/TagQueryDefinition.cs`（标签目录元数据与结构化查询）
 - `Data/Stats/StatDefinition.cs`
 - `Data/Actors/CharacterDefinition.cs`
 - `Data/Affixes/AffixDefinition.cs`
@@ -218,8 +218,8 @@ Addressables 的配置目录，包含资源组、模板和构建器配置。后�
 - `Data/Monsters/MonsterSpawnDefinition.cs`
 - `Data/Trading/TraderDefinition.cs`
 - `Data/Crafting/CraftingDefinition.cs`
-- `Editor/ConfigCenterWindow.cs`
-- `Gameplay/Combat`：`CombatModel.cs`、`CombatSystem.cs`、`SpawnSystem.cs`、`LootSystem.cs`、`EquipmentModel.cs`、`PrefabAssetLoader.cs`、`CombatEvents.cs`、`Commands/`（`RegisterActorCommand`/`UnregisterActorCommand`/`ApplyDamageCommand`/`ReviveActorCommand`/`SpawnPlayerCommand`/`SpawnMonsterCommand`/`FireProjectileCommand`/`PickupLootCommand`/`EquipItemCommand`/`BuyItemCommand`/`SellItemCommand`/`CraftItemCommand`）、`Queries/`（`GetClosestActorQuery`/`GetItemPriceQuery`/`GetCraftingCostQuery`），以及原有的 `DamageCalculator`/`StatBlock`/`TagSet` 等纯逻辑。注：Command/Query 目前统一放在 `Combat/Commands`、`Combat/Queries` 下，含交易、打造等非战斗动作
+- `Editor/ConfigCenterWindow.cs`、`Editor/ContentConfigurationValidator.cs`
+- `Gameplay/Combat`：`CombatModel.cs`、`CombatSystem.cs`、`SpawnSystem.cs`、`LootSystem.cs`、`EquipmentModel.cs`、`PrefabAssetLoader.cs`、`CombatEvents.cs`、`CombatTagContext.cs`、`CombatTagResolver.cs`、`Commands/`（`RegisterActorCommand`/`UnregisterActorCommand`/`ApplyDamageCommand`/`ReviveActorCommand`/`SpawnPlayerCommand`/`SpawnMonsterCommand`/`FireProjectileCommand`/`PickupLootCommand`/`EquipItemCommand`/`BuyItemCommand`/`SellItemCommand`/`CraftItemCommand`）、`Queries/`（`GetClosestActorQuery`/`GetItemPriceQuery`/`GetCraftingCostQuery`），以及 `DamageCalculator`/`DamagePacket`/`StatBlock`/`TagSet` 等纯逻辑。注：Command/Query 目前统一放在 `Combat/Commands`、`Combat/Queries` 下，含交易、打造等非战斗动作
 - `Gameplay/Items`：`ItemInstance.cs`、`ItemGenerationOptions.cs`、`ItemGenerator.cs`（物品随机生成的纯逻辑，由 `LootSystem` 调用）
 - `Gameplay/Inventory`：`InventoryGrid.cs`（纯逻辑二维格子占用、精确移动与单目标交换）、`InventoryModel.cs`（玩家背包 + 金币）、`MoveInventoryItemCommand.cs`（整理事务入口）
 - `Gameplay/Trading`：`ItemValueCalculator.cs`（纯逻辑价值/买卖价计算）、`EconomyModel.cs`（商人库存 + 买卖倍率）、`TradingSystem.cs`（买卖/价格/商人 seeding）
@@ -239,7 +239,7 @@ Addressables 的配置目录，包含资源组、模板和构建器配置。后�
 - `Gameplay/UI/GetCraftingSnapshotQuery.cs`、`CraftingPanelController.cs`：复用共享玩家背包选择、词缀选择、四种打造操作与事件刷新控制器
 - `Gameplay/UI/GameMenuAccess.cs`、`GameMenuController.cs`：背包 / 商店 / 打造情境访问范围、共享菜单遮罩、关闭和 Gameplay/UI 输入路由
 - `Gameplay/UI/InteractionPromptController.cs`：显示当前世界交互目标，并在 UI 模式或目标失效时隐藏
-- `Tests/EditMode/MonsterSpawnDefinitionTests.cs`、`LootTableDefinitionTests.cs`、`DamageCalculatorTests.cs`、`InventoryGridTests.cs`、`ItemValueCalculatorTests.cs`、`CraftingOperationsTests.cs`、`GameInputTests.cs`、`GameplayUiFoundationTests.cs`：EditMode 测试，覆盖纯逻辑、原子换装、交易和打造事务语义、键鼠 / 手柄输入、Action Map 切换、交互消息、暂停及 HUD/背包/商店/打造快照。归属 `DarkFlare.Tests.EditMode` 程序集
+- `Tests/EditMode/Alpha01TagMigrationCharacterizationTests.cs` 与既有 EditMode 测试：覆盖标签查询、域隔离、物品—词条候选矩阵、伤害血统、旧接口兼容、纯逻辑、原子换装、交易和打造事务语义、键鼠 / 手柄输入、Action Map 切换、交互消息、暂停及 HUD/背包/商店/打造快照。归属 `DarkFlare.Tests.EditMode` 程序集
 
 `UI`、`Utilities` 目前主要是占位，为后续模块扩展预留。
 

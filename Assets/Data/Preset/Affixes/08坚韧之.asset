@@ -18,9 +18,15 @@ MonoBehaviour:
   _groupId: maximum_health_increase
   _minItemLevel: 1
   _weight: 80
-  _allowedItemTags:
-  - {fileID: 11400000, guid: f4100000000000000000000000000003, type: 2}
-  - {fileID: 11400000, guid: f4100000000000000000000000000004, type: 2}
+  _spawnQuery:
+    _scopeMask: 8
+    _requiredAll: []
+    _requiredAny:
+    - {fileID: 11400000, guid: f4100000000000000000000000000003, type: 2}
+    - {fileID: 11400000, guid: f4100000000000000000000000000004, type: 2}
+    _blockedAny: []
+  _modifierTags: []
+  _allowedItemTags: []
   _blockedItemTags: []
   _modifiers:
   - _stat: {fileID: 11400000, guid: f44056e439bbcaa4eb1d3fc790dff43a, type: 2}
@@ -29,5 +35,10 @@ MonoBehaviour:
     _valueRange: {x: 8, y: 15}
     _fromDamageType: 0
     _toDamageType: 1
+    _condition:
+      _scopeMask: 0
+      _requiredAll: []
+      _requiredAny: []
+      _blockedAny: []
     _requiredTags: []
     _blockedTags: []

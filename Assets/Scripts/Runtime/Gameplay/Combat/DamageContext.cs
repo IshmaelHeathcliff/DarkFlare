@@ -18,7 +18,9 @@ namespace DarkFlare
 
         public int RandomSeed { get; }
 
-        public TagSet ContextTags { get; }
+        public CombatTagContext TagContext { get; }
+
+        public TagSet ContextTags => TagContext.LegacyTags;
 
         public StatBlock AttackerStats { get; }
 
@@ -48,21 +50,66 @@ namespace DarkFlare
             IEnumerable<ModifierInstance> defenderModifiers,
             bool isHit = true,
             bool isCritical = false)
+            : this(
+                attackerId,
+                defenderId,
+                skillId,
+                sourceItemId,
+                randomSeed,
+                baseDamages,
+                new CombatTagContext(attackTags: contextTags, legacyTags: contextTags),
+                attackerStats,
+                defenderStats,
+                attackerModifiers,
+                defenderModifiers,
+                isHit,
+                isCritical)
+        {
+        }
+
+        public DamageContext(
+            string attackerId,
+            string defenderId,
+            string skillId,
+            string sourceItemId,
+            int randomSeed,
+            IEnumerable<DamagePacket> baseDamages,
+            CombatTagContext tagContext,
+            StatBlock attackerStats,
+            StatBlock defenderStats,
+            IEnumerable<ModifierInstance> attackerModifiers,
+            IEnumerable<ModifierInstance> defenderModifiers,
+            bool isHit = true,
+            bool isCritical = false)
         {
             AttackerId = attackerId;
             DefenderId = defenderId;
             SkillId = skillId;
             SourceItemId = sourceItemId;
             RandomSeed = randomSeed;
-            _baseDamages = new List<DamagePacket>(baseDamages);
-            ContextTags = contextTags ?? TagSet.Empty;
+            _baseDamages = baseDamages != null
+                ? new List<DamagePacket>(baseDamages)
+                : new List<DamagePacket>();
+            TagContext = tagContext != null
+                ? new CombatTagContext(
+                    tagContext.SourceActorTags,
+                    tagContext.TargetActorTags,
+                    tagContext.SkillTags,
+                    tagContext.SourceItemTags,
+                    tagContext.AttackTags,
+                    tagContext.DamageTags,
+                    tagContext.LegacyTags)
+                : CombatTagContext.Empty;
             AttackerStats = attackerStats != null ? attackerStats.Clone() : new StatBlock();
             DefenderStats = defenderStats != null ? defenderStats.Clone() : new StatBlock();
-            _attackerModifiers = new List<ModifierInstance>(attackerModifiers);
-            _defenderModifiers = new List<ModifierInstance>(defenderModifiers);
+            _attackerModifiers = attackerModifiers != null
+                ? new List<ModifierInstance>(attackerModifiers)
+                : new List<ModifierInstance>();
+            _defenderModifiers = defenderModifiers != null
+                ? new List<ModifierInstance>(defenderModifiers)
+                : new List<ModifierInstance>();
             IsHit = isHit;
             IsCritical = isCritical;
         }
     }
 }
-

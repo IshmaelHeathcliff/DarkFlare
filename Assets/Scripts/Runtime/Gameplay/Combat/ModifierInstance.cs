@@ -14,9 +14,15 @@ namespace DarkFlare
 
         public DamageType ToDamageType { get; }
 
-        public TagSet RequiredTags { get; }
+        public TagQuery Query { get; }
 
-        public TagSet BlockedTags { get; }
+        public bool UsesLegacyTagMatching { get; }
+
+        public TagSet RequiredTags => Query.RequiredAll;
+
+        public TagSet RequiredAnyTags => Query.RequiredAny;
+
+        public TagSet BlockedTags => Query.BlockedAny;
 
         public ModifierInstance(
             string statId,
@@ -27,6 +33,51 @@ namespace DarkFlare
             DamageType toDamageType,
             TagSet requiredTags,
             TagSet blockedTags)
+            : this(
+                statId,
+                operation,
+                scope,
+                value,
+                fromDamageType,
+                toDamageType,
+                new TagQuery(
+                    CombatTagScope.All,
+                    requiredTags,
+                    TagSet.Empty,
+                    blockedTags),
+                true)
+        {
+        }
+
+        public ModifierInstance(
+            string statId,
+            ModifierOperation operation,
+            ModifierScope scope,
+            float value,
+            DamageType fromDamageType,
+            DamageType toDamageType,
+            TagQuery query)
+            : this(
+                statId,
+                operation,
+                scope,
+                value,
+                fromDamageType,
+                toDamageType,
+                query,
+                false)
+        {
+        }
+
+        ModifierInstance(
+            string statId,
+            ModifierOperation operation,
+            ModifierScope scope,
+            float value,
+            DamageType fromDamageType,
+            DamageType toDamageType,
+            TagQuery query,
+            bool usesLegacyTagMatching)
         {
             StatId = statId;
             Operation = operation;
@@ -34,19 +85,23 @@ namespace DarkFlare
             Value = value;
             FromDamageType = fromDamageType;
             ToDamageType = toDamageType;
-            RequiredTags = requiredTags;
-            BlockedTags = blockedTags;
+            Query = query ?? TagQuery.Empty;
+            UsesLegacyTagMatching = usesLegacyTagMatching;
         }
 
         public bool Matches(TagSet contextTags)
         {
-            if (!RequiredTags.IsEmpty && !contextTags.ContainsAll(RequiredTags))
+            return Query.Matches(contextTags);
+        }
+
+        public bool Matches(CombatTagContext context)
+        {
+            if (UsesLegacyTagMatching)
             {
-                return false;
+                return Query.Matches(context != null ? context.LegacyTags : TagSet.Empty);
             }
 
-            return BlockedTags.IsEmpty || !contextTags.ContainsAny(BlockedTags);
+            return Query.Matches(context);
         }
     }
 }
-

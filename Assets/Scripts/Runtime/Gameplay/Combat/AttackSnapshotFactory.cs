@@ -17,7 +17,7 @@ namespace DarkFlare
 
             ItemInstance sourceWeapon = null;
             List<DamagePacket> baseDamages;
-            TagSet contextTags = skill.RuntimeTags;
+            TagSet sourceItemTags = TagSet.Empty;
             List<ModifierInstance> modifiers = new List<ModifierInstance>(attacker.Modifiers);
 
             if (skill.DamageSource == ProjectileDamageSource.EquippedWeapon && equipment != null)
@@ -31,7 +31,7 @@ namespace DarkFlare
                 {
                     sourceWeapon = weapon;
                     baseDamages = weapon.CreateBaseDamagePackets(randomSeed);
-                    contextTags = contextTags.Union(weapon.Tags);
+                    sourceItemTags = weapon.Tags;
                     modifiers.AddRange(EquipmentEffectResolver.CollectLocalWeaponModifiers(weapon));
                 }
                 else
@@ -44,6 +44,12 @@ namespace DarkFlare
                 baseDamages = skill.CreateDamagePackets(randomSeed);
             }
 
+            CombatTagContext tagContext = new CombatTagContext(
+                sourceActorTags: attacker.Tags,
+                skillTags: skill.RuntimeTags,
+                sourceItemTags: sourceItemTags,
+                legacyTags: skill.RuntimeTags.Union(sourceItemTags));
+
             return new AttackSnapshot(
                 attacker.ActorId,
                 attacker.Team,
@@ -51,7 +57,7 @@ namespace DarkFlare
                 sourceWeapon != null ? sourceWeapon.InstanceId : string.Empty,
                 randomSeed,
                 baseDamages,
-                contextTags,
+                tagContext,
                 attacker.Stats,
                 modifiers);
         }
@@ -64,6 +70,47 @@ namespace DarkFlare
             TagSet contextTags,
             int randomSeed)
         {
+            CombatTagContext tagContext = new CombatTagContext(
+                sourceActorTags: attacker != null ? attacker.Tags : TagSet.Empty,
+                attackTags: contextTags,
+                legacyTags: contextTags);
+            return CreateImmediate(
+                attacker,
+                skillId,
+                sourceItemId,
+                baseDamages,
+                tagContext,
+                randomSeed);
+        }
+
+        public static AttackSnapshot CreateImmediate(
+            CombatActor attacker,
+            string skillId,
+            string sourceItemId,
+            IEnumerable<DamagePacket> baseDamages,
+            int randomSeed)
+        {
+            TagSet actorTags = attacker != null ? attacker.Tags : TagSet.Empty;
+            CombatTagContext tagContext = new CombatTagContext(
+                sourceActorTags: actorTags,
+                legacyTags: actorTags);
+            return CreateImmediate(
+                attacker,
+                skillId,
+                sourceItemId,
+                baseDamages,
+                tagContext,
+                randomSeed);
+        }
+
+        static AttackSnapshot CreateImmediate(
+            CombatActor attacker,
+            string skillId,
+            string sourceItemId,
+            IEnumerable<DamagePacket> baseDamages,
+            CombatTagContext tagContext,
+            int randomSeed)
+        {
             return new AttackSnapshot(
                 attacker != null ? attacker.ActorId : "environment",
                 attacker != null ? attacker.Team : default,
@@ -71,7 +118,7 @@ namespace DarkFlare
                 sourceItemId,
                 randomSeed,
                 baseDamages,
-                contextTags,
+                tagContext,
                 attacker != null ? attacker.Stats : null,
                 attacker != null ? attacker.Modifiers : null);
         }

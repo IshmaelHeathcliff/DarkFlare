@@ -8,18 +8,16 @@
 
 ## 标签
 
-当前标签共 14 个：
+当前标签目录仍包含 14 个稳定 ID，但按 Domain 和使用状态管理：
 
-| 类别 | 稳定 ID |
-| --- | --- |
-| 通用 | `damage` |
-| 装备 | `weapon`、`armor`、`ring` |
-| 武器子类 | `sword`、`axe` |
-| 伤害类型 | `physical`、`fire`、`cold`、`lightning`、`chaos` |
-| 技能来源 | `projectile`、`melee` |
-| 角色 | `monster` |
+| Domain | Active | Reserved |
+| --- | --- | --- |
+| `ItemSpawn` | `weapon`、`armor`、`ring` | `sword`、`axe` |
+| `Damage` | `physical` | `damage`、`fire`、`cold`、`lightning`、`chaos` |
+| `Skill` | — | `projectile`、`melee` |
+| `Actor` | — | `monster` |
 
-技能上下文提供 `projectile`，基础物理伤害包提供 `damage` 与 `physical`。伤害词条匹配时会合并技能上下文标签和当前伤害包标签，因此要求 `physical` 的元素额外伤害能够正确作用于物理伤害包。
+`weapon`、`armor`、`ring` 由物品类型与装备槽派生；`projectile` 由投射物技能类型派生；`monster` 由角色阵营派生；伤害类型标签由 `DamagePacket` 的最终类型与缩放血统派生。正式资产不再重复手填这些事实。详细字段合同见[标签配置参考](./config-reference/combat-tags.md)。
 
 ## 词条池
 
@@ -75,6 +73,8 @@
 配置中心新增“内容校验”页，可重新扫描、显示错误资产与原因，并直接打开或定位资产。`ContentConfigurationValidator` 检查：
 
 - 预期数量、稳定 ID 格式与重复 ID。
+- 标签 Domain、使用状态、引用位置、查询作用域与新旧字段混用。
+- 物品类别、角色阵营、技能类型和伤害类型的重复手填标签。
 - 中文名、词条组、权重、范围、Operation 与 Scope。
 - 标签兼容、每件装备候选数量和池覆盖。
 - 刷怪、掉落、商店和打造池的空项、权重与内容覆盖。

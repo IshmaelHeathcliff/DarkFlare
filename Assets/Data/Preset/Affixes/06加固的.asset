@@ -18,8 +18,14 @@ MonoBehaviour:
   _groupId: armor_flat
   _minItemLevel: 1
   _weight: 100
-  _allowedItemTags:
-  - {fileID: 11400000, guid: f4100000000000000000000000000003, type: 2}
+  _spawnQuery:
+    _scopeMask: 8
+    _requiredAll: []
+    _requiredAny:
+    - {fileID: 11400000, guid: f4100000000000000000000000000003, type: 2}
+    _blockedAny: []
+  _modifierTags: []
+  _allowedItemTags: []
   _blockedItemTags: []
   _modifiers:
   - _stat: {fileID: 11400000, guid: e47d955253dbdbc40929575da1be8771, type: 2}
@@ -28,5 +34,10 @@ MonoBehaviour:
     _valueRange: {x: 15, y: 30}
     _fromDamageType: 0
     _toDamageType: 1
+    _condition:
+      _scopeMask: 0
+      _requiredAll: []
+      _requiredAny: []
+      _blockedAny: []
     _requiredTags: []
     _blockedTags: []

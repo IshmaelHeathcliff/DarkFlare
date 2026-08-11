@@ -14,4 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.TagDefinition
   _id: chaos
   _displayName: "\u6DF7\u6C8C"
+  _domain: 5
+  _usage: 1
   _description: "\u6DF7\u6C8C\u4F24\u5BB3\u6807\u7B7E\u3002"

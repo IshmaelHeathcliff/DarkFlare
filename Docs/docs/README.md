@@ -13,7 +13,9 @@
 - [首批内容池](./content-system.md)
 - [打造系统](./crafting-system.md)
 - [伤害系统与词条系统设计](./damage-affix-system.md)
+- [战斗标签系统](./combat-tag-system.md)
 - [配置中心](./config-center.md)
+- [配置参考索引](./config-reference/README.md)
 - [美术资产生成规范](./visual-asset-generation.md)
 - [视觉规范](./visual-style.md)
 - [视觉资产清单](./visual-assets.md)
@@ -23,7 +25,6 @@
 ## 进行中的计划
 
 - [alpha 0.1 开发计划](./plan/alpha-0.1-plan.md)
-- [战斗标签系统改进计划](./plan/combat-tag-system-improvement-plan.md)（`alpha 0.1.1` 实施依据）
 
 ## 说明
 

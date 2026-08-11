@@ -64,6 +64,54 @@ namespace DarkFlare.Editor
             "monster",
         };
 
+        static readonly Dictionary<string, ExpectedTagMetadata> ExpectedTags =
+            new Dictionary<string, ExpectedTagMetadata>(StringComparer.Ordinal)
+            {
+                { "damage", TagMetadata(CombatTagDomain.Damage, CombatTagUsage.Reserved) },
+                { "weapon", TagMetadata(CombatTagDomain.ItemSpawn, CombatTagUsage.Active) },
+                { "armor", TagMetadata(CombatTagDomain.ItemSpawn, CombatTagUsage.Active) },
+                { "ring", TagMetadata(CombatTagDomain.ItemSpawn, CombatTagUsage.Active) },
+                { "sword", TagMetadata(CombatTagDomain.ItemSpawn, CombatTagUsage.Reserved) },
+                { "axe", TagMetadata(CombatTagDomain.ItemSpawn, CombatTagUsage.Reserved) },
+                { "physical", TagMetadata(CombatTagDomain.Damage, CombatTagUsage.Active) },
+                { "fire", TagMetadata(CombatTagDomain.Damage, CombatTagUsage.Reserved) },
+                { "cold", TagMetadata(CombatTagDomain.Damage, CombatTagUsage.Reserved) },
+                { "lightning", TagMetadata(CombatTagDomain.Damage, CombatTagUsage.Reserved) },
+                { "chaos", TagMetadata(CombatTagDomain.Damage, CombatTagUsage.Reserved) },
+                { "projectile", TagMetadata(CombatTagDomain.Skill, CombatTagUsage.Reserved) },
+                { "melee", TagMetadata(CombatTagDomain.Skill, CombatTagUsage.Reserved) },
+                { "monster", TagMetadata(CombatTagDomain.Actor, CombatTagUsage.Reserved) },
+            };
+
+        static readonly HashSet<string> ForbiddenItemCustomTagIds = new HashSet<string>(StringComparer.Ordinal)
+        {
+            "weapon",
+            "armor",
+            "ring",
+            "sword",
+            "axe",
+        };
+
+        static readonly HashSet<string> DerivedDamageTagIds = new HashSet<string>(StringComparer.Ordinal)
+        {
+            "damage",
+            "physical",
+            "fire",
+            "cold",
+            "lightning",
+            "chaos",
+        };
+
+        static readonly HashSet<string> DerivedSkillTagIds = new HashSet<string>(StringComparer.Ordinal)
+        {
+            "projectile",
+        };
+
+        static readonly HashSet<string> DerivedActorTagIds = new HashSet<string>(StringComparer.Ordinal)
+        {
+            "monster",
+        };
+
         static readonly string[] ExpectedAffixIds =
         {
             "sharp",
@@ -104,19 +152,21 @@ namespace DarkFlare.Editor
             List<TagDefinition> tags = LoadAssets<TagDefinition>($"{PresetRoot}/Tags");
             List<AffixDefinition> affixes = LoadAssets<AffixDefinition>($"{PresetRoot}/Affixes");
             List<ItemBaseDefinition> items = LoadAssets<ItemBaseDefinition>($"{PresetRoot}/Items");
+            List<ProjectileSkillDefinition> skills = LoadAssets<ProjectileSkillDefinition>($"{PresetRoot}/Skills");
             List<MonsterDefinition> monsters = LoadAssets<MonsterDefinition>($"{PresetRoot}/Monsters");
             List<MonsterSpawnDefinition> spawnDefinitions = LoadAssets<MonsterSpawnDefinition>($"{PresetRoot}/Monsters");
             List<LootTableDefinition> lootTables = LoadAssets<LootTableDefinition>($"{PresetRoot}/Loot");
             List<TraderDefinition> traders = LoadAssets<TraderDefinition>($"{PresetRoot}/Traders");
             List<CraftingDefinition> craftingDefinitions = LoadAssets<CraftingDefinition>($"{PresetRoot}/Crafting");
 
-            ValidateExpectedIds(tags, ExpectedTagIds, tag => tag.Id, "标签", issues);
-            ValidateExpectedIds(affixes, ExpectedAffixIds, affix => affix.Id, "词条", issues);
-            ValidateExpectedIds(items, ExpectedItemIds, item => item.Id, "装备", issues);
-            ValidateExpectedIds(monsters, ExpectedMonsterIds, monster => monster.Id, "怪物", issues);
+            ValidateExpectedIds(tags, ExpectedTagIds, tag => tag.Id, "标签", false, issues);
+            ValidateExpectedIds(affixes, ExpectedAffixIds, affix => affix.Id, "词条", true, issues);
+            ValidateExpectedIds(items, ExpectedItemIds, item => item.Id, "装备", true, issues);
+            ValidateExpectedIds(monsters, ExpectedMonsterIds, monster => monster.Id, "怪物", true, issues);
             ValidateTags(tags, issues);
             ValidateAffixes(affixes, items, issues);
             ValidateItems(items, affixes, issues);
+            ValidateSkills(skills, issues);
             ValidateMonsters(monsters, issues);
             ValidateSpawnDefinitions(spawnDefinitions, monsters, issues);
             ValidateLootTables(lootTables, items, affixes, issues);
@@ -153,6 +203,7 @@ namespace DarkFlare.Editor
             IReadOnlyList<string> expectedIds,
             Func<T, string> getId,
             string label,
+            bool requireExactCount,
             List<ContentValidationIssue> issues) where T : UnityEngine.Object
         {
             Dictionary<string, T> byId = new Dictionary<string, T>(StringComparer.Ordinal);
@@ -187,13 +238,13 @@ namespace DarkFlare.Editor
             {
                 if (!byId.ContainsKey(expectedIds[i]))
                 {
-                    AddError(issues, null, $"缺少阶段 4 {label}：{expectedIds[i]}");
+                    AddError(issues, null, $"缺少正式{label}：{expectedIds[i]}");
                 }
             }
 
-            if (assets.Count != expectedIds.Count)
+            if (requireExactCount && assets.Count != expectedIds.Count)
             {
-                AddError(issues, null, $"阶段 4 {label}数量应为 {expectedIds.Count}，当前为 {assets.Count}");
+                AddError(issues, null, $"正式{label}数量应为 {expectedIds.Count}，当前为 {assets.Count}");
             }
         }
 
@@ -201,9 +252,31 @@ namespace DarkFlare.Editor
         {
             for (int i = 0; i < tags.Count; i++)
             {
-                if (string.IsNullOrWhiteSpace(tags[i].DisplayName))
+                TagDefinition tag = tags[i];
+
+                if (string.IsNullOrWhiteSpace(tag.DisplayName))
                 {
-                    AddError(issues, tags[i], "标签中文名不能为空");
+                    AddError(issues, tag, "标签中文名不能为空");
+                }
+
+                if (string.IsNullOrWhiteSpace(tag.Description))
+                {
+                    AddError(issues, tag, "标签说明不能为空");
+                }
+
+                if (!ExpectedTags.TryGetValue(tag.Id, out ExpectedTagMetadata expected))
+                {
+                    continue;
+                }
+
+                if (tag.Domain != expected.Domain)
+                {
+                    AddError(issues, tag, $"标签 Domain 应为 {expected.Domain}，当前为 {tag.Domain}");
+                }
+
+                if (tag.Usage != expected.Usage)
+                {
+                    AddError(issues, tag, $"标签使用状态应为 {expected.Usage}，当前为 {tag.Usage}");
                 }
             }
         }
@@ -237,10 +310,33 @@ namespace DarkFlare.Editor
                     AddError(issues, affix, "词条权重必须大于 0");
                 }
 
-                if (affix.AllowedItemTags.Count == 0)
+                if (affix.SpawnQuery == null || !affix.SpawnQuery.HasConditions)
                 {
-                    AddError(issues, affix, "词条至少需要一个可出现物品标签");
+                    AddError(issues, affix, "词条必须使用 SpawnQuery 声明物品兼容条件");
                 }
+                else
+                {
+                    ValidateQuery(
+                        affix,
+                        affix.SpawnQuery,
+                        "SpawnQuery",
+                        CombatTagScope.SourceItem,
+                        issues);
+                }
+
+                if (affix.SpawnQuery == null || affix.SpawnQuery.RequiredAny.Count == 0)
+                {
+                    AddError(issues, affix, "SpawnQuery 至少需要一个 RequiredAny 物品标签");
+                }
+
+                ValidateTagReferences(
+                    affix,
+                    affix.ModifierTags,
+                    CombatTagDomain.Modifier,
+                    "ModifierTags",
+                    null,
+                    issues);
+                ValidateLegacyAffixFields(affix, issues);
 
                 if (affix.Modifiers.Count == 0)
                 {
@@ -315,6 +411,16 @@ namespace DarkFlare.Editor
             {
                 AddError(issues, affix, $"修改器 {modifierIndex} 的来源与目标伤害类型不能相同");
             }
+
+            if (modifier.Condition != null && modifier.Condition.HasConditions)
+            {
+                ValidateQuery(
+                    affix,
+                    modifier.Condition,
+                    $"修改器 {modifierIndex} Condition",
+                    null,
+                    issues);
+            }
         }
 
         static void ValidateItems(
@@ -334,6 +440,14 @@ namespace DarkFlare.Editor
                     AddError(issues, item, "装备中文名不能为空");
                 }
 
+                ValidateTagReferences(
+                    item,
+                    item.Tags,
+                    CombatTagDomain.ItemSpawn,
+                    "自定义物品生成标签",
+                    ForbiddenItemCustomTagIds,
+                    issues);
+                ValidateDamageRollTags(item, item.BaseDamages, "基础伤害", issues);
                 ValidateItemIcon(item, iconGuids, settings, issues);
 
                 List<string> baseIssues = EquipmentConfigurationValidator.Validate(item);
@@ -341,19 +455,6 @@ namespace DarkFlare.Editor
                 for (int issueIndex = 0; issueIndex < baseIssues.Count; issueIndex++)
                 {
                     AddError(issues, item, baseIssues[issueIndex]);
-                }
-
-                string requiredTag = item.ItemType switch
-                {
-                    ItemType.Weapon => "weapon",
-                    ItemType.Armor => "armor",
-                    ItemType.Accessory => "ring",
-                    _ => string.Empty,
-                };
-
-                if (!string.IsNullOrEmpty(requiredTag) && !item.RuntimeTags.Contains(requiredTag))
-                {
-                    AddError(issues, item, $"装备缺少类别标签：{requiredTag}");
                 }
 
                 int candidateCount = 0;
@@ -421,6 +522,24 @@ namespace DarkFlare.Editor
             }
         }
 
+        static void ValidateSkills(
+            IReadOnlyList<ProjectileSkillDefinition> skills,
+            List<ContentValidationIssue> issues)
+        {
+            for (int i = 0; i < skills.Count; i++)
+            {
+                ProjectileSkillDefinition skill = skills[i];
+                ValidateTagReferences(
+                    skill,
+                    skill.Tags,
+                    CombatTagDomain.Skill,
+                    "自定义技能标签",
+                    DerivedSkillTagIds,
+                    issues);
+                ValidateDamageRollTags(skill, skill.BaseDamages, "基础伤害", issues);
+            }
+        }
+
         static void ValidateMonsters(
             IReadOnlyList<MonsterDefinition> monsters,
             List<ContentValidationIssue> issues)
@@ -437,10 +556,14 @@ namespace DarkFlare.Editor
                     AddError(issues, monster, "怪物中文名不能为空");
                 }
 
-                if (!monster.RuntimeTags.Contains("monster"))
-                {
-                    AddError(issues, monster, "怪物缺少 monster 标签");
-                }
+                ValidateTagReferences(
+                    monster,
+                    monster.Tags,
+                    CombatTagDomain.Actor,
+                    "自定义角色标签",
+                    DerivedActorTagIds,
+                    issues);
+                ValidateDamageRollTags(monster, monster.ContactDamages, "碰撞伤害", issues);
 
                 if (monster.LootTable == null)
                 {
@@ -652,6 +775,232 @@ namespace DarkFlare.Editor
             }
         }
 
+        static ExpectedTagMetadata TagMetadata(CombatTagDomain domain, CombatTagUsage usage)
+        {
+            return new ExpectedTagMetadata(domain, usage);
+        }
+
+        static void ValidateTagReferences(
+            UnityEngine.Object owner,
+            IReadOnlyList<TagDefinition> tags,
+            CombatTagDomain expectedDomain,
+            string label,
+            ISet<string> forbiddenIds,
+            List<ContentValidationIssue> issues)
+        {
+            if (tags == null)
+            {
+                return;
+            }
+
+            HashSet<string> seen = new HashSet<string>(StringComparer.Ordinal);
+
+            for (int i = 0; i < tags.Count; i++)
+            {
+                TagDefinition tag = tags[i];
+
+                if (tag == null)
+                {
+                    AddError(issues, owner, $"{label} {i} 为空引用");
+                    continue;
+                }
+
+                if (!seen.Add(tag.Id))
+                {
+                    AddError(issues, owner, $"{label} 重复引用标签：{tag.Id}");
+                }
+
+                if (tag.Domain != expectedDomain)
+                {
+                    AddError(
+                        issues,
+                        owner,
+                        $"{label} 的 {tag.Id} 属于 {tag.Domain}，此处只允许 {expectedDomain}");
+                }
+
+                if (tag.Usage == CombatTagUsage.Reserved)
+                {
+                    AddError(issues, owner, $"{label} 不得消费预留标签：{tag.Id}");
+                }
+
+                if (forbiddenIds != null && forbiddenIds.Contains(tag.Id))
+                {
+                    AddError(issues, owner, $"{label} 不得手填可派生或当前预留的标签：{tag.Id}");
+                }
+            }
+        }
+
+        static void ValidateDamageRollTags(
+            UnityEngine.Object owner,
+            IReadOnlyList<DamageRollDefinition> damages,
+            string label,
+            List<ContentValidationIssue> issues)
+        {
+            if (damages == null)
+            {
+                return;
+            }
+
+            for (int i = 0; i < damages.Count; i++)
+            {
+                DamageRollDefinition damage = damages[i];
+
+                if (damage == null)
+                {
+                    AddError(issues, owner, $"{label} {i} 为空");
+                    continue;
+                }
+
+                ValidateTagReferences(
+                    owner,
+                    damage.Tags,
+                    CombatTagDomain.Damage,
+                    $"{label} {i} 自定义伤害标签",
+                    DerivedDamageTagIds,
+                    issues);
+            }
+        }
+
+        static void ValidateQuery(
+            UnityEngine.Object owner,
+            TagQueryDefinition query,
+            string label,
+            CombatTagScope? requiredScope,
+            List<ContentValidationIssue> issues)
+        {
+            if (query == null)
+            {
+                AddError(issues, owner, $"{label} 不能为空");
+                return;
+            }
+
+            if (query.HasConditions && query.ScopeMask == CombatTagScope.None)
+            {
+                AddError(issues, owner, $"{label} 有条件但 Scope 为空");
+            }
+
+            if (requiredScope.HasValue && query.ScopeMask != requiredScope.Value)
+            {
+                AddError(issues, owner, $"{label} Scope 必须为 {requiredScope.Value}，当前为 {query.ScopeMask}");
+            }
+
+            Dictionary<string, string> required = new Dictionary<string, string>(StringComparer.Ordinal);
+            ValidateQueryList(owner, query, query.RequiredAll, $"{label}.RequiredAll", required, issues);
+            ValidateQueryList(owner, query, query.RequiredAny, $"{label}.RequiredAny", required, issues);
+
+            HashSet<string> blocked = new HashSet<string>(StringComparer.Ordinal);
+            ValidateQueryList(owner, query, query.BlockedAny, $"{label}.BlockedAny", null, issues, blocked);
+
+            foreach (KeyValuePair<string, string> pair in required)
+            {
+                if (blocked.Contains(pair.Key))
+                {
+                    AddError(issues, owner, $"{label} 的 {pair.Key} 同时是必要条件和阻止条件");
+                }
+            }
+        }
+
+        static void ValidateQueryList(
+            UnityEngine.Object owner,
+            TagQueryDefinition query,
+            IReadOnlyList<TagDefinition> tags,
+            string label,
+            Dictionary<string, string> requiredLocations,
+            List<ContentValidationIssue> issues,
+            HashSet<string> destination = null)
+        {
+            if (tags == null)
+            {
+                return;
+            }
+
+            HashSet<string> local = new HashSet<string>(StringComparer.Ordinal);
+
+            for (int i = 0; i < tags.Count; i++)
+            {
+                TagDefinition tag = tags[i];
+
+                if (tag == null)
+                {
+                    AddError(issues, owner, $"{label} {i} 为空引用");
+                    continue;
+                }
+
+                if (!local.Add(tag.Id))
+                {
+                    AddError(issues, owner, $"{label} 重复引用标签：{tag.Id}");
+                }
+
+                if (requiredLocations != null
+                    && requiredLocations.TryGetValue(tag.Id, out string previousLocation))
+                {
+                    AddError(issues, owner, $"{tag.Id} 同时出现在 {previousLocation} 与 {label}");
+                }
+                else
+                {
+                    requiredLocations?.Add(tag.Id, label);
+                }
+
+                destination?.Add(tag.Id);
+
+                if (!CombatTagScopeRules.SupportsDomain(query.ScopeMask, tag.Domain))
+                {
+                    AddError(
+                        issues,
+                        owner,
+                        $"{label} 的 {tag.Id} 属于 {tag.Domain}，与 Scope {query.ScopeMask} 不相容");
+                }
+
+                if (tag.Usage == CombatTagUsage.Reserved)
+                {
+                    AddError(issues, owner, $"{label} 不得消费预留标签：{tag.Id}");
+                }
+            }
+        }
+
+        static void ValidateLegacyAffixFields(
+            AffixDefinition affix,
+            List<ContentValidationIssue> issues)
+        {
+            SerializedObject serialized = new SerializedObject(affix);
+            ValidateLegacyList(serialized.FindProperty("_allowedItemTags"), affix, "旧 AllowedItemTags", issues);
+            ValidateLegacyList(serialized.FindProperty("_blockedItemTags"), affix, "旧 BlockedItemTags", issues);
+
+            SerializedProperty modifiers = serialized.FindProperty("_modifiers");
+
+            if (modifiers == null || !modifiers.isArray)
+            {
+                return;
+            }
+
+            for (int i = 0; i < modifiers.arraySize; i++)
+            {
+                SerializedProperty modifier = modifiers.GetArrayElementAtIndex(i);
+                ValidateLegacyList(
+                    modifier.FindPropertyRelative("_requiredTags"),
+                    affix,
+                    $"修改器 {i} 旧 RequiredTags",
+                    issues);
+                ValidateLegacyList(
+                    modifier.FindPropertyRelative("_blockedTags"),
+                    affix,
+                    $"修改器 {i} 旧 BlockedTags",
+                    issues);
+            }
+        }
+
+        static void ValidateLegacyList(
+            SerializedProperty property,
+            UnityEngine.Object owner,
+            string label,
+            List<ContentValidationIssue> issues)
+        {
+            if (property != null && property.isArray && property.arraySize > 0)
+            {
+                AddError(issues, owner, $"{label} 必须在结构化查询迁移后清空");
+            }
+        }
+
         static bool IsSupportedOperation(ModifierOperation operation)
         {
             return operation == ModifierOperation.Flat
@@ -676,6 +1025,19 @@ namespace DarkFlare.Editor
             string message)
         {
             issues.Add(new ContentValidationIssue(ContentValidationSeverity.Error, asset, message));
+        }
+
+        readonly struct ExpectedTagMetadata
+        {
+            public CombatTagDomain Domain { get; }
+
+            public CombatTagUsage Usage { get; }
+
+            public ExpectedTagMetadata(CombatTagDomain domain, CombatTagUsage usage)
+            {
+                Domain = domain;
+                Usage = usage;
+            }
         }
     }
 }

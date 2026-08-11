@@ -53,7 +53,7 @@ namespace DarkFlare
                 attack.SourceItemId,
                 attack.RandomSeed,
                 attack.BaseDamages,
-                attack.ContextTags,
+                attack.TagContext.WithTargetActorTags(defender.Tags),
                 attack.AttackerStats,
                 defender.Stats,
                 attack.AttackerModifiers,

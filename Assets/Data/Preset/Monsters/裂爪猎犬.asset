@@ -26,12 +26,9 @@ MonoBehaviour:
   _healthMultiplierRange: {x: 0.85, y: 1.15}
   _contactDamageInterval: 0.55
   _contactDamageRadius: 0.75
-  _tags:
-  - {fileID: 11400000, guid: f410000000000000000000000000000e, type: 2}
+  _tags: []
   _contactDamages:
   - _damageType: 0
     _amountRange: {x: 4, y: 7}
-    _tags:
-    - {fileID: 11400000, guid: 221659ee469b58e48a9edbfb24b56196, type: 2}
-    - {fileID: 11400000, guid: f4100000000000000000000000000007, type: 2}
+    _tags: []
   _lootTable: {fileID: 11400000, guid: f4400000000000000000000000000002, type: 2}

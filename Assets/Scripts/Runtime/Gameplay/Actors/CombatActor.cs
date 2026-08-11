@@ -58,7 +58,7 @@ namespace DarkFlare
             _baseStats = stats != null ? stats.Clone() : new StatBlock();
             _baseStats.SetValue(StatIds.MaxHealth, _maxHealth);
             RebuildStats();
-            _tags = tags ?? TagSet.Empty;
+            _tags = CombatTagResolver.ResolveActorTags(team, tags);
             _currentHealth = MaxHealth;
 
             if (!_isAlive)

@@ -115,7 +115,7 @@ namespace DarkFlare
             int seed = this.GetSystem<GameplayRandomSystem>().NextSeed(GameplayRandomChannel.MonsterAttack);
             List<DamagePacket> packets = _definition.CreateContactDamagePackets(seed);
             this.SendCommand(new NotifyActorAttackCommand(_actor));
-            this.SendCommand(new ApplyDamageCommand(_actor, target, "monster_contact", packets, _actor.Tags, seed));
+            this.SendCommand(new ApplyDamageCommand(_actor, target, "monster_contact", packets, seed));
         }
 
         void OnActorDied(ActorDiedEvent e)

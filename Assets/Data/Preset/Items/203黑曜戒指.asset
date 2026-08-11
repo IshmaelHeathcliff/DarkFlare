@@ -28,8 +28,7 @@ MonoBehaviour:
   _maxSuffixCount: 3
   _gridSize: {x: 1, y: 1}
   _weight: 1
-  _tags:
-  - {fileID: 11400000, guid: f4100000000000000000000000000004, type: 2}
+  _tags: []
   _baseDamages: []
   _implicitModifiers:
   - _stat: {fileID: 11400000, guid: eac0a016975684141b04624e26243f12, type: 2}
@@ -38,6 +37,11 @@ MonoBehaviour:
     _valueRange: {x: 5, y: 10}
     _fromDamageType: 0
     _toDamageType: 1
+    _condition:
+      _scopeMask: 0
+      _requiredAll: []
+      _requiredAny: []
+      _blockedAny: []
     _requiredTags: []
     _blockedTags: []
   - _stat: {fileID: 11400000, guid: 7cc0c9fbd9db5e74aad4d2e8aa356e70, type: 2}
@@ -46,6 +50,11 @@ MonoBehaviour:
     _valueRange: {x: 5, y: 10}
     _fromDamageType: 0
     _toDamageType: 1
+    _condition:
+      _scopeMask: 0
+      _requiredAll: []
+      _requiredAny: []
+      _blockedAny: []
     _requiredTags: []
     _blockedTags: []
   - _stat: {fileID: 11400000, guid: 24432569e4f308040965ce8fd9a32874, type: 2}
@@ -54,6 +63,11 @@ MonoBehaviour:
     _valueRange: {x: 5, y: 10}
     _fromDamageType: 0
     _toDamageType: 1
+    _condition:
+      _scopeMask: 0
+      _requiredAll: []
+      _requiredAny: []
+      _blockedAny: []
     _requiredTags: []
     _blockedTags: []
   - _stat: {fileID: 11400000, guid: eb3a1ac12d075964d8a5476e6808ee97, type: 2}
@@ -62,5 +76,10 @@ MonoBehaviour:
     _valueRange: {x: 5, y: 10}
     _fromDamageType: 0
     _toDamageType: 1
+    _condition:
+      _scopeMask: 0
+      _requiredAll: []
+      _requiredAny: []
+      _blockedAny: []
     _requiredTags: []
     _blockedTags: []

@@ -25,12 +25,9 @@ MonoBehaviour:
   _projectileSpeed: 12
   _projectileRadius: 0.16
   _projectileLifetime: 2
-  _tags:
-  - {fileID: 11400000, guid: f410000000000000000000000000000c, type: 2}
+  _tags: []
   _damageSource: 1
   _baseDamages:
   - _damageType: 0
     _amountRange: {x: 10, y: 14}
-    _tags:
-    - {fileID: 11400000, guid: 221659ee469b58e48a9edbfb24b56196, type: 2}
-    - {fileID: 11400000, guid: f4100000000000000000000000000007, type: 2}
+    _tags: []
