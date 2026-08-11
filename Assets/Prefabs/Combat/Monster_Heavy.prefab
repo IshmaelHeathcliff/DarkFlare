@@ -411,6 +411,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.ActorAnimatorController
   _animator: {fileID: 6775311135369419563}
   _renderer: {fileID: 3808907934225930387}
+  _sourceFacesRight: 1
   _movementThreshold: 0.05
 --- !u!114 &3641997443734678276
 MonoBehaviour:
