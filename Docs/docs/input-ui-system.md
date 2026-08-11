@@ -31,6 +31,14 @@
 
 `Look` 与 `Attack` 仍作为后续手动瞄准和攻击入口保留；当前战斗原型继续使用自动攻击逻辑。
 
+### 编辑器进入 Play Mode 约束
+
+当前输入与 QFramework 生命周期的可提交基线要求 `ProjectSettings/EditorSettings.asset` 中的 `EnterPlayModeOptions` 保持为 `0`，即不启用 `DisableDomainReload` 或 `DisableSceneReload`。关闭 Domain Reload 会保留静态架构和输入对象状态，曾导致进入 Play Mode 后移动输入失效。
+
+为加快专项测试，可以在测试期间临时调整 Enter Play Mode Options，但该值只属于本地测试环境，不是可提交的项目配置。测试完成、失败或中止后都必须恢复为 `0`，再回归验证首次运行、停止后再次运行、键盘 / 手柄移动、Gameplay / UI Action Map 切换及菜单关闭后恢复移动。
+
+提交前必须检查 `ProjectSettings/EditorSettings.asset` 的实际值和 Git diff：`EnterPlayModeOptions` 非 `0` 时禁止提交；只有测试产生的 Editor Settings 变动或 Unity 自动格式化差异也不得直接纳入提交。若未来希望持久启用快速进入 Play Mode，必须先完成 `GameArchitecture` 静态状态、`GameInput` Action 生命周期和场景对象重建的专项审计，并独立评审该配置变更。
+
 ## UI 组成
 
 `Assets/UI/GameRoot.uxml` 组合 HUD、共享菜单遮罩和三个功能模板：
