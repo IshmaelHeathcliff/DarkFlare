@@ -47,3 +47,16 @@ MonoBehaviour:
     _amountRange: {x: 10, y: 14}
     _tags: []
   _lootTable: {fileID: 11400000, guid: f4400000000000000000000000000003, type: 2}
+  _affixPool:
+  - {fileID: 11400000, guid: 2d9fc044649c00d4199f21b512631355, type: 2}
+  - {fileID: 11400000, guid: 5b6e0b47283faa2418205f5ba233936d, type: 2}
+  - {fileID: 11400000, guid: 571b89198e664c34587e7951867599f7, type: 2}
+  - {fileID: 11400000, guid: 3d1e5c0cfa383f347a65c8235cbac9ed, type: 2}
+  - {fileID: 11400000, guid: a0c4783a0050541498df007f2cb700c1, type: 2}
+  - {fileID: 11400000, guid: f39f3dac59918a94e9941384f4d2c89b, type: 2}
+  - {fileID: 11400000, guid: b3c150c95ba9b844abdc1d8bd44b05c0, type: 2}
+  - {fileID: 11400000, guid: 72a30cb2c69f1e648b4452651aeeb759, type: 2}
+  - {fileID: 11400000, guid: 02f61be227fdf3b4c92b96f04190964e, type: 2}
+  - {fileID: 11400000, guid: ab0f93e452bfa1e4689f420959b86184, type: 2}
+  _minimumAffixCount: 0
+  _maximumAffixCount: 2

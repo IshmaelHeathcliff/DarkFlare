@@ -16,7 +16,7 @@ flowchart LR
   C --> F["EquipmentEffectResolver"]
   E --> G["CombatActor"]
   F -->|"SetModifiers"| G
-  G -->|"CombatStatResolver + StatAggregator"| H["Actor 有效 StatBlock"]
+  G -->|"直接聚合 + PrimaryAttributeResolver"| H["Actor 有效 StatBlock"]
   H --> I["移动、生命 / 法力、恢复与 HUD"]
   H --> J["AttackSnapshot"]
   C --> J
@@ -28,8 +28,8 @@ flowchart LR
 
 1. `CharacterDefinition.CreateStats` 和 `MonsterDefinition.CreateStats` 使用 `StatIds` 创建角色基础 `StatBlock`。
 2. 物品基底和词条通过 `StatModifierDefinition` 引用 `StatDefinition`；生成实例时只把 `StatDefinition.Id` 复制到 `ModifierInstance.StatId`。
-3. 换装后，`EquipmentEffectResolver` 从完整 Loadout 收集修改器，`CombatActor.SetModifiers` 通过 `CombatStatResolver` 和 `StatAggregator` 重建有效属性。
-4. 非伤害类 `GlobalActor` 修改器在属性聚合层处理 `Flat`、`Increase`、`More` 和 `Override`。伤害类属性由 `DamageCalculator` 单独处理，避免在聚合层和伤害管线重复应用。
+3. 换装后，`EquipmentEffectResolver` 从完整 Loadout 收集修改器；怪物生成后，`MonsterInstanceData.Modifiers` 提供实例词条修改器；两者都通过 `CombatActor.SetModifiers` 和 `CombatStatResolver` 重建有效属性。
+4. 非伤害类 `GlobalActor` 修改器先由 `StatAggregator` 处理 `Flat`、`Increase`、`More` 和 `Override`，再由 `PrimaryAttributeResolver` 按聚合后的力量、敏捷和智力派生最终属性。伤害类属性仍由 `DamageCalculator` 单独处理，避免在聚合层和伤害管线重复应用。
 5. `CombatActor` 保存当前生命与当前法力；`CombatSystem` 统一提交伤害、治疗、法力消耗和恢复，`ResourceRegenerationSystem` 按有效恢复属性推进被动恢复。
 6. 攻击发起时，`AttackSnapshotFactory` 冻结攻击者属性、修改器和具名随机子流；命中时 `HitResolutionCalculator` 读取目标闪避，再由 `DamageCalculator` 计算类型伤害、暴击、护甲和抗性。
 7. `ItemDetailSnapshotFactory` 从原始 `StatDefinition` 读取中文名和百分比标记，再交给 `ItemDetailFormatter` 生成背包、商店和打造 UI 文本。
@@ -44,9 +44,9 @@ flowchart LR
 | 生存 | `mana` | 最大法力 | `CombatActor.MaxMana`、当前法力比例、技能耗蓝和 HUD |
 | 生存 | `health_regeneration` | 生命恢复 | 每秒固定生命恢复，由 `ResourceRegenerationSystem` 消费 |
 | 生存 | `mana_regeneration` | 法力恢复 | 每秒固定法力恢复，由 `ResourceRegenerationSystem` 消费 |
-| 基础 | `strength` | 力量 | 已登记，可参与通用聚合；派生规则尚未接入 |
-| 基础 | `dexterity` | 敏捷 | 已登记，可参与通用聚合；派生规则尚未接入 |
-| 基础 | `intelligence` | 智力 | 已登记，可参与通用聚合；派生规则尚未接入 |
+| 基础 | `strength` | 力量 | 每 1 点派生 2 点最大生命 |
+| 基础 | `dexterity` | 敏捷 | 每 1 点派生 1 点命中和 1 点闪避 |
+| 基础 | `intelligence` | 智力 | 每 1 点派生 2 点最大法力 |
 | 通用伤害 | `damage` | 伤害 | 修改器匹配所有伤害类型 |
 | 类型伤害 | `physical_damage` | 物理伤害 | 物理伤害包的固定值和增伤匹配 |
 | 类型伤害 | `fire_damage` | 火焰伤害 | 火焰伤害包的固定值和增伤匹配 |
@@ -66,6 +66,9 @@ flowchart LR
 
 ## 数值语义
 
+- 主属性处理顺序固定为“基础属性 → 非伤害 `GlobalActor` 直接修改器 → 主属性派生 → 最终属性”。派生常量集中在 `PrimaryAttributeResolver`，UI 和 Controller 不重复实现公式。
+- 每次有效属性重建都从 `CombatActor` 保存的基础属性重新开始；`PrimaryAttributeResolver` 返回新 `StatBlock`，不会修改直接聚合结果或把上次派生值再次作为输入。
+- 初版力量不派生伤害或护甲，敏捷不派生移动速度或暴击，智力不派生元素伤害或恢复。
 - `StatDefinition.IsPercent` 只影响配置说明和 UI 格式，不决定修改器算法。
 - `ModifierOperation.Flat` 使用直接数值；`Increase` 使用同类加算百分比；`More` 使用逐项独立乘算；`Override` 覆盖当前值。
 - `critical_damage` 保存的是额外百分比，不是最终倍率，因此默认值为 `0`。
@@ -87,7 +90,7 @@ flowchart LR
 
 `StatDefinition.OnValidate` 会在 Inspector 修改时输出单资产 Warning；EditMode 测试会扫描 `Assets/Data/Preset/Stats`，保证当前 23 个运行时 ID 与 23 个配置资产一一对应。
 
-属性专项测试覆盖完整资产集合、命中 / 闪避边界、暴击伤害百分比语义和非法配置诊断。
+属性专项测试覆盖完整资产集合、主属性派生顺序、重复重建、资源比例保持、命中 / 闪避边界、暴击伤害百分比语义和非法配置诊断。
 
 新增属性时必须同步完成：
 

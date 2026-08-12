@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d2ae069e06d127145ae40593b5a85bd2, type: 3}
-  m_Name: "07\u529B\u91CF\u4E4B"
+  m_Name: "19\u98CE\u66B4\u89E6\u53CA\u7684"
   m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.AffixDefinition
-  _id: of_power
-  _displayName: "\u529B\u91CF\u4E4B"
-  _affixType: 1
-  _groupId: global_damage_increase
+  _id: storm_touched
+  _displayName: "\u98CE\u66B4\u89E6\u53CA\u7684"
+  _affixType: 0
+  _groupId: elemental_extra
   _minItemLevel: 1
-  _weight: 80
+  _weight: 60
   _spawnQuery:
     _scopeMask: 8
     _requiredAll: []
@@ -29,12 +29,26 @@ MonoBehaviour:
   _allowedItemTags: []
   _blockedItemTags: []
   _modifiers:
-  - _stat: {fileID: 11400000, guid: 82e204183d947d249b17fb3c9ade3530, type: 2}
+  - _stat: {fileID: 0}
+    _operation: 5
+    _scope: 1
+    _valueRange: {x: 8, y: 12}
+    _fromDamageType: 0
+    _toDamageType: 3
+    _condition:
+      _scopeMask: 32
+      _requiredAll:
+      - {fileID: 11400000, guid: f4100000000000000000000000000007, type: 2}
+      _requiredAny: []
+      _blockedAny: []
+    _requiredTags: []
+    _blockedTags: []
+  - _stat: {fileID: 11400000, guid: 67a70c5bcee7475aa1e50b40d456e959, type: 2}
     _operation: 1
     _scope: 1
     _valueRange: {x: 8, y: 15}
     _fromDamageType: 0
-    _toDamageType: 1
+    _toDamageType: 3
     _condition:
       _scopeMask: 0
       _requiredAll: []

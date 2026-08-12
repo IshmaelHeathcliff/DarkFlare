@@ -25,6 +25,19 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f420000000000000000000000000000a, type: 2}
   - {fileID: 11400000, guid: f420000000000000000000000000000b, type: 2}
   - {fileID: 11400000, guid: f420000000000000000000000000000c, type: 2}
+  - {fileID: 11400000, guid: c65011fa0b6601a49933e31f990b8c7a, type: 2}
+  - {fileID: 11400000, guid: 900d194e4e811864b9a088e1339a6ecd, type: 2}
+  - {fileID: 11400000, guid: 2bbf598a5386170489baafe48b91f6e7, type: 2}
+  - {fileID: 11400000, guid: 9f2d90c8564aa6e489309cb129bbbbd6, type: 2}
+  - {fileID: 11400000, guid: 02e60a2874a0d0f4ea0f5f989b63b288, type: 2}
+  - {fileID: 11400000, guid: 1a31dc091035d874d9e237f20d3ececa, type: 2}
+  - {fileID: 11400000, guid: 559ae34d12bd17b4fbea1f6bb330f379, type: 2}
+  - {fileID: 11400000, guid: 9fd6aea129ff39c40b526402024ebe4e, type: 2}
+  - {fileID: 11400000, guid: 0d4c45bb1c5f11848b5974d995428992, type: 2}
+  - {fileID: 11400000, guid: 9697d812c486c944b86b3a85d30b577f, type: 2}
+  - {fileID: 11400000, guid: 983b6c7363af7a443b8e055139d937a7, type: 2}
+  - {fileID: 11400000, guid: 4fd4c9f01022c40409eae231a90e09bd, type: 2}
+  - {fileID: 11400000, guid: 02b8849223b2aaf48b686cf15ad2f0de, type: 2}
   _addAffixCost: 20
   _rerollAllCost: 40
   _removeRerollCost: 30

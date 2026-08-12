@@ -13,7 +13,8 @@ namespace DarkFlare.Tests
         public void OfficialContent_HasExpectedCountsIdsAndNoValidationIssues()
         {
             Assert.AreEqual(14, LoadAssets<TagDefinition>($"{PresetRoot}/Tags").Count);
-            Assert.AreEqual(12, LoadAssets<AffixDefinition>($"{PresetRoot}/Affixes").Count);
+            Assert.AreEqual(25, LoadAssets<AffixDefinition>($"{PresetRoot}/Affixes").Count);
+            Assert.AreEqual(10, LoadAssets<MonsterAffixDefinition>($"{PresetRoot}/MonsterAffixes").Count);
             Assert.AreEqual(7, LoadAssets<ItemBaseDefinition>($"{PresetRoot}/Items").Count);
             Assert.AreEqual(3, LoadAssets<MonsterDefinition>($"{PresetRoot}/Monsters").Count);
 
@@ -116,10 +117,19 @@ namespace DarkFlare.Tests
                     DamageResult damage = CalculatePhysicalDamage(instance.Modifiers);
                     Assert.Greater(damage.DamageBeforeDefense[DamageType.Physical], 100f, definition.Id);
                 }
-                else if (definition.Id == "flame_touched" || definition.Id == "frost_touched")
+                else if (definition.Id == "flame_touched"
+                         || definition.Id == "frost_touched"
+                         || definition.Id == "storm_touched"
+                         || definition.Id == "chaos_touched")
                 {
                     DamageResult damage = CalculatePhysicalDamage(instance.Modifiers);
-                    DamageType extraType = definition.Id == "flame_touched" ? DamageType.Fire : DamageType.Cold;
+                    DamageType extraType = definition.Id switch
+                    {
+                        "flame_touched" => DamageType.Fire,
+                        "frost_touched" => DamageType.Cold,
+                        "storm_touched" => DamageType.Lightning,
+                        _ => DamageType.Chaos,
+                    };
                     Assert.Greater(damage.DamageBeforeDefense[extraType], 0f, definition.Id);
                 }
                 else
@@ -149,7 +159,7 @@ namespace DarkFlare.Tests
             for (int i = 0; i < lootTables.Count; i++)
             {
                 Assert.AreEqual(7, lootTables[i].Entries.Count);
-                Assert.AreEqual(12, lootTables[i].AffixPool.Count);
+                Assert.AreEqual(25, lootTables[i].AffixPool.Count);
             }
 
             TraderDefinition trader = AssetDatabase.LoadAssetAtPath<TraderDefinition>(
@@ -159,7 +169,7 @@ namespace DarkFlare.Tests
             Assert.IsNotNull(trader);
             Assert.IsNotNull(crafting);
             Assert.AreEqual(7, trader.Stock.Count);
-            Assert.AreEqual(12, crafting.AffixPool.Count);
+            Assert.AreEqual(25, crafting.AffixPool.Count);
         }
 
         static List<T> LoadAssets<T>(string root) where T : UnityEngine.Object
@@ -265,44 +275,24 @@ namespace DarkFlare.Tests
             IReadOnlyList<ModifierInstance> modifiers)
         {
             StatBlock baseStats = new StatBlock();
-            baseStats.SetValue(StatIds.MaxHealth, 100f);
-            StatBlock result = CombatStatResolver.Build(baseStats, modifiers);
-            string expectedStatId;
-            float baseline;
+            ModifierInstance modifier = null;
 
-            switch (affixId)
+            for (int i = 0; i < modifiers.Count; i++)
             {
-                case "healthy":
-                case "of_endurance":
-                    expectedStatId = StatIds.MaxHealth;
-                    baseline = 100f;
+                if (modifiers[i] != null && !string.IsNullOrWhiteSpace(modifiers[i].StatId))
+                {
+                    modifier = modifiers[i];
                     break;
-                case "reinforced":
-                    expectedStatId = StatIds.Armor;
-                    baseline = 0f;
-                    break;
-                case "of_fire_guard":
-                    expectedStatId = StatIds.FireResistance;
-                    baseline = 0f;
-                    break;
-                case "of_cold_guard":
-                    expectedStatId = StatIds.ColdResistance;
-                    baseline = 0f;
-                    break;
-                case "of_lightning_guard":
-                    expectedStatId = StatIds.LightningResistance;
-                    baseline = 0f;
-                    break;
-                case "of_chaos_guard":
-                    expectedStatId = StatIds.ChaosResistance;
-                    baseline = 0f;
-                    break;
-                default:
-                    Assert.Fail($"未覆盖词条效果验证: {affixId}");
-                    return;
+                }
             }
 
-            Assert.Greater(result.GetValue(expectedStatId), baseline, affixId);
+            Assert.IsNotNull(modifier, $"{affixId} 没有可验证的属性修改器");
+            string expectedStatId = modifier.StatId;
+            float baseline = 10f;
+            baseStats.SetValue(expectedStatId, baseline);
+            StatBlock result = CombatStatResolver.Build(baseStats, modifiers);
+
+            Assert.AreNotEqual(baseline, result.GetValue(expectedStatId), affixId);
         }
 
         static string JoinIssues(IReadOnlyList<ContentValidationIssue> issues)

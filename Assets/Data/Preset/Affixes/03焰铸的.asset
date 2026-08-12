@@ -43,3 +43,16 @@ MonoBehaviour:
       _blockedAny: []
     _requiredTags: []
     _blockedTags: []
+  - _stat: {fileID: 11400000, guid: 5402df8516564c5982113e3b6aefe618, type: 2}
+    _operation: 1
+    _scope: 1
+    _valueRange: {x: 8, y: 15}
+    _fromDamageType: 0
+    _toDamageType: 1
+    _condition:
+      _scopeMask: 0
+      _requiredAll: []
+      _requiredAny: []
+      _blockedAny: []
+    _requiredTags: []
+    _blockedTags: []

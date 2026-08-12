@@ -321,6 +321,8 @@ Assets/Data/Preset/
     StatDefinition.asset
   Affixes/
     AffixDefinition.asset
+  MonsterAffixes/
+    MonsterAffixDefinition.asset
   Items/
     ItemBaseDefinition.asset
   Skills/
@@ -371,6 +373,7 @@ Assets/Data/Preset/
 - `ItemBaseDefinition`：物品基底配置资产，包含标签、基础伤害、隐式修改器和格子信息。
 - `ItemInstance`：运行时物品实例，支持隐式、前缀、后缀和修改器收集。
 - `ItemGenerator`：基于物品基底、词条池、权重和随机种子生成物品实例。
+- `MonsterAffixDefinition`、`MonsterAffixInstance`、`MonsterAffixGenerator`：独立于物品前后缀的怪物词条定义、掷值与同组无放回选择。
 - `TagSet`、`TagQueryDefinition`、`TagQuery`、`CombatTagContext`：不可变标签集合、结构化查询和作用域上下文。
 - `ModifierInstance`、`StatBlock`、`StatAggregator`：运行时词条和属性聚合结构。
 - `AttackRandomRolls`、`HitResolutionCalculator`：从攻击根种子派生具名子流，并纯逻辑计算命中、闪避和暴击。
@@ -380,6 +383,7 @@ Assets/Data/Preset/
 - `AttackSnapshot`、`AttackSnapshotFactory`：在攻击发起时冻结来源角色、技能、来源物品、本次攻击、随机伤害包、攻击者属性和修改器。
 - `GameplayRandomSystem`：提供根种子与独立随机通道，隔离生成位置、怪物实例、玩家攻击、怪物攻击和掉落序列。
 - `ContentConfigurationValidator`：校验首批标签、词条、装备、怪物与各内容池，并检查 Addressable Prefab。
+- `MonsterAffixVisual`：最多显示两条配置颜色的世界名称；零词条、死亡或禁用时隐藏，不依赖受伤后生命条。
 
 已实现的伤害计算内容：
 
@@ -400,7 +404,7 @@ Assets/Data/Preset/
 - 转换和额外获得伤害保留来源类型血统并补充最终类型语义；物理转火焰可同时匹配 Damage 作用域的 `physical` 与 `fire`，防御只读取最终类型。
 - 旧平面 `TagSet` 查询保留隔离的兼容通道，不会读取目标标签或自动派生的伤害血统。
 
-阶段 4 已配置 12 个当前管线实际支持的词条，不加入 `Chance`、`Trigger`、`Limit`、暴击率、命中或闪避配置。完整 ID、范围、权重和装备兼容见[首批内容池](./content-system.md)。
+当前正式物品池为 25 个词条，覆盖 `StatIds.All` 的 23 项公开属性；修改器必须同时具备合法物品候选和当前运行时消费者。怪物池另有 10 个独立词条，只允许 `GlobalActor` 的 Flat / Increase / More，或从物理伤害获得元素伤害的 `GainAsExtra`。完整 ID、范围、权重和内容池见[首批内容池](./content-system.md)。
 
 `ActorDamagedEvent` 只表示实际正数生命损失；未命中、闪避和无伤害通过统一结算结果事件驱动文字反馈，不触发 Hit 动画、闪白或 `-0`。
 

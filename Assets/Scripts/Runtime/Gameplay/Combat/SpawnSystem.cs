@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Globalization;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -91,8 +92,56 @@ namespace DarkFlare
                 previousResources,
                 ActorResourceChangeReason.Configure);
             Debug.Log(
-                $"[SpawnSystem] 生成怪物 {definition.Id}，生成种子 {seed}，实例种子 {instanceSeed}，最大生命 {instanceData.MaxHealth:0.##}");
+                $"[SpawnSystem] 生成怪物 {definition.Id}，生成种子 {seed}，实例根种子 {instanceSeed}，"
+                + $"词条 {DescribeAffixes(instanceData)}，最终属性 {DescribeMonsterStats(instanceData.EffectiveStats)}");
             return controller;
+        }
+
+        static string DescribeAffixes(MonsterInstanceData instance)
+        {
+            if (instance == null || instance.Affixes.Count == 0)
+            {
+                return "无";
+            }
+
+            List<string> affixes = new List<string>(instance.Affixes.Count);
+
+            for (int affixIndex = 0; affixIndex < instance.Affixes.Count; affixIndex++)
+            {
+                MonsterAffixInstance affix = instance.Affixes[affixIndex];
+                List<string> values = new List<string>(affix.Modifiers.Count);
+
+                for (int modifierIndex = 0; modifierIndex < affix.Modifiers.Count; modifierIndex++)
+                {
+                    ModifierInstance modifier = affix.Modifiers[modifierIndex];
+                    string target = modifier.Operation == ModifierOperation.GainAsExtra
+                        ? $"{modifier.FromDamageType}->{modifier.ToDamageType}"
+                        : modifier.StatId;
+                    values.Add(
+                        $"{target}:{modifier.Operation}={modifier.Value.ToString("0.##", CultureInfo.InvariantCulture)}");
+                }
+
+                affixes.Add($"{affix.Definition.Id}[{string.Join(",", values)}]");
+            }
+
+            return string.Join(";", affixes);
+        }
+
+        static string DescribeMonsterStats(StatBlock stats)
+        {
+            return $"生命={FormatStat(stats, StatIds.MaxHealth)},"
+                + $"护甲={FormatStat(stats, StatIds.Armor)},"
+                + $"闪避={FormatStat(stats, StatIds.Evasion)},"
+                + $"移速={FormatStat(stats, StatIds.MoveSpeed)},"
+                + $"火抗={FormatStat(stats, StatIds.FireResistance)},"
+                + $"冰抗={FormatStat(stats, StatIds.ColdResistance)},"
+                + $"电抗={FormatStat(stats, StatIds.LightningResistance)}";
+        }
+
+        static string FormatStat(StatBlock stats, string statId)
+        {
+            float value = stats != null ? stats.GetValue(statId) : 0f;
+            return value.ToString("0.##", CultureInfo.InvariantCulture);
         }
 
         public ProjectileController SpawnProjectile(

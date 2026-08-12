@@ -2,7 +2,7 @@
 
 ## 当前范围
 
-阶段 3 为首版战斗建立统一、可复现的随机种子链，覆盖怪物生成位置、怪物实例生命、玩家攻击、怪物攻击和掉落。阶段 4 已在同一规则上接入三种怪物、三张掉落表和完整首批装备 / 词条池。
+统一随机种子链覆盖怪物生成位置、怪物实例生命与词条、玩家攻击、怪物攻击和掉落。`alpha 0.1.5` 在既有 `MonsterInstance` 顶层通道内增加实例子流，没有新增或推进其他顶层随机序列。
 
 当前正式数值为：
 
@@ -40,7 +40,7 @@ GameplayRandomSystem.Configure(bool useFixedSeed, int fixedSeed)
 
 某个通道新增随机调用不会推进其他通道，因此增加刷怪位置重试不会改变后续攻击或掉落结果。
 
-## 怪物实例生命
+## 怪物实例生命与词条
 
 `MonsterDefinition` 仍保存共享基础配置，不在运行时改写资产。生成流程为：
 
@@ -51,13 +51,19 @@ MonsterSpawner
     └── SpawnMonsterCommand / SpawnSystem
         ├── 选择怪物定义
         └── MonsterDefinition.CreateInstanceData(seed)
+            ├── HealthSeed -> 生命倍率
+            ├── AffixCountSeed -> 词条数量 `0–2`
+            ├── AffixSelectionSeed -> 按权重、同组无放回选择
+            ├── 每个词条 ID 派生独立 ValueSeed -> 修改器掷值
             └── MonsterInstanceData
-                ├── Seed
-                ├── MaxHealth
-                └── Stats
+                ├── BaseMaxHealth / BaseStats
+                ├── Affixes / Modifiers
+                └── EffectiveStats / MaxHealth
 ```
 
-`CreateInstanceData` 根据生命倍率生成实例最大生命，并同步覆盖实例 `StatBlock` 中的 `max_health`。`MonsterController.Configure` 只消费实例数据，不修改 `MonsterDefinition`。
+`MonsterInstanceRandomSeeds` 使用稳定混合和稳定字符串哈希派生子种子。词条内部增加随机调用不会改变生命、选择或其他词条的值；同一根种子会重放相同生命、词条 ID、掷值和最终属性。`MonsterController.Configure` 只消费实例数据，不修改共享 `MonsterDefinition`。
+
+`MonsterAffixGenerator` 只接受正权重定义，按权重选择后移除同 `GroupId` 的全部候选。正式三种怪物使用完整 10 词条池与 `0–2` 数量范围；配置验证会拒绝负数量、倒置范围、空池、重复引用或上限超过可用互斥组数量。
 
 ## 攻击随机
 
@@ -111,5 +117,6 @@ MonsterSpawner
 - Runtime、Editor、EditMode 与 PlayMode 程序集编译 0 警告、0 错误。
 - 阶段 4 将固定种子验证扩展到 Main 前 12 个实例；两次运行的怪物类型、实例生命、玩家 / 怪物伤害和掉落序列一致，并覆盖三种怪物。
 - 阶段 6 全量 PlayMode 继续 0 失败；固定种子重放、默认随机种子变化、怪物生成与掉落路径均通过整合回归。
+- alpha 0.1.5 怪物词条随机合同专项 6/6、Main 随机化 PlayMode 2/2 通过。固定根种子 `24681357` 连续两次得到相同的前 12 个怪物定义、生命、词条 ID / 掷值、玩家 / 怪物攻击和掉落序列；默认随机启动仍会更换根种子。
 
 装备伤害快照见 [装备系统](./equipment-system.md)，完整池配置见 [首批内容池](./content-system.md)，伤害计算与词条语义见 [伤害系统与词条系统设计](./damage-affix-system.md)，配置字段见[角色、物品与攻击配置参考](./config-reference/combat-content.md)。

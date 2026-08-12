@@ -146,6 +146,20 @@ namespace DarkFlare
         [LabelText("掉落表")]
         LootTableDefinition _lootTable;
 
+        [SerializeField]
+        [LabelText("怪物词条池")]
+        List<MonsterAffixDefinition> _affixPool = new List<MonsterAffixDefinition>();
+
+        [SerializeField]
+        [MinValue(0)]
+        [LabelText("最少怪物词条")]
+        int _minimumAffixCount;
+
+        [SerializeField]
+        [MinValue(0)]
+        [LabelText("最多怪物词条")]
+        int _maximumAffixCount;
+
         public string Id => _id;
 
         public string DisplayName => _displayName;
@@ -204,6 +218,12 @@ namespace DarkFlare
 
         public IReadOnlyList<DamageRollDefinition> ContactDamages => _contactDamages;
 
+        public IReadOnlyList<MonsterAffixDefinition> AffixPool => _affixPool;
+
+        public int MinimumAffixCount => _minimumAffixCount;
+
+        public int MaximumAffixCount => _maximumAffixCount;
+
         bool HasCharacterDefinition => _character != null;
 
         public StatBlock CreateStats()
@@ -233,14 +253,39 @@ namespace DarkFlare
 
         public MonsterInstanceData CreateInstanceData(int seed)
         {
-            System.Random random = new System.Random(seed);
+            MonsterInstanceRandomSeeds randomSeeds = new MonsterInstanceRandomSeeds(seed);
+            System.Random random = new System.Random(randomSeeds.HealthSeed);
             float minimumMultiplier = Mathf.Max(0.01f, Mathf.Min(_healthMultiplierRange.x, _healthMultiplierRange.y));
             float maximumMultiplier = Mathf.Max(minimumMultiplier, Mathf.Max(_healthMultiplierRange.x, _healthMultiplierRange.y));
             float multiplier = Mathf.Lerp(minimumMultiplier, maximumMultiplier, (float)random.NextDouble());
-            float maxHealth = Mathf.Max(1f, MaxHealth * multiplier);
-            StatBlock stats = CreateStats();
-            stats.SetValue(StatIds.MaxHealth, maxHealth);
-            return new MonsterInstanceData(seed, maxHealth, stats);
+            float baseMaxHealth = Mathf.Max(1f, MaxHealth * multiplier);
+            StatBlock baseStats = CreateStats();
+            baseStats.SetValue(StatIds.MaxHealth, baseMaxHealth);
+            List<MonsterAffixInstance> affixes = MonsterAffixGenerator.Generate(
+                _affixPool,
+                _minimumAffixCount,
+                _maximumAffixCount,
+                randomSeeds);
+            List<ModifierInstance> modifiers = new List<ModifierInstance>();
+
+            for (int affixIndex = 0; affixIndex < affixes.Count; affixIndex++)
+            {
+                IReadOnlyList<ModifierInstance> affixModifiers = affixes[affixIndex].Modifiers;
+
+                for (int modifierIndex = 0; modifierIndex < affixModifiers.Count; modifierIndex++)
+                {
+                    modifiers.Add(affixModifiers[modifierIndex]);
+                }
+            }
+
+            StatBlock effectiveStats = CombatStatResolver.Build(baseStats, modifiers);
+            return new MonsterInstanceData(
+                randomSeeds,
+                baseMaxHealth,
+                baseStats,
+                effectiveStats,
+                affixes,
+                modifiers);
         }
 
         public List<DamagePacket> CreateContactDamagePackets(int seed)

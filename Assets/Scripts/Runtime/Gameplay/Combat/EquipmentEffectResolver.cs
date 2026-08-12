@@ -104,7 +104,8 @@ namespace DarkFlare
                 }
             }
 
-            return StatAggregator.Build(baseStats, statModifiers, TagSet.Empty);
+            StatBlock directStats = StatAggregator.Build(baseStats, statModifiers, TagSet.Empty);
+            return PrimaryAttributeResolver.Apply(directStats);
         }
 
         public static bool IsDamageStat(string statId)

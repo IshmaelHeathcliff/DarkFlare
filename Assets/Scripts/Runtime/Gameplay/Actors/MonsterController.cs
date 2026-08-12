@@ -14,6 +14,7 @@ namespace DarkFlare
         Rigidbody2D _rigidbody;
         CircleCollider2D _collider;
         CombatActor _actor;
+        MonsterAffixVisual _affixVisual;
         MonsterDefinition _definition;
         MonsterInstanceData _instance;
         float _lastContactDamageTime = -999f;
@@ -81,6 +82,7 @@ namespace DarkFlare
             _rigidbody = GetComponent<Rigidbody2D>();
             _collider = GetComponent<CircleCollider2D>();
             _actor = GetComponent<CombatActor>();
+            _affixVisual = GetComponent<MonsterAffixVisual>();
 
             if (_rigidbody != null)
             {
@@ -96,7 +98,18 @@ namespace DarkFlare
 
         void ApplyDefinition()
         {
-            _actor.Configure(_definition.Id, ActorTeam.Monster, _instance.MaxHealth, _instance.Stats, _definition.RuntimeTags);
+            _actor.Configure(
+                _definition.Id,
+                ActorTeam.Monster,
+                _instance.BaseMaxHealth,
+                _instance.BaseStats,
+                _definition.RuntimeTags);
+            _actor.SetModifiers(_instance.Modifiers);
+
+            if (_affixVisual != null)
+            {
+                _affixVisual.Configure(_instance);
+            }
         }
 
         float GetMoveSpeed()

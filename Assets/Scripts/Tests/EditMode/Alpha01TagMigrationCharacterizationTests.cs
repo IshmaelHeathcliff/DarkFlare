@@ -17,19 +17,52 @@ namespace DarkFlare.Tests
                 {
                     "great_sword",
                     new ExpectedCandidates(
-                        new[] { "flame_touched", "frost_touched", "sharp", "tempered" },
-                        new[] { "of_power" })
+                        new[]
+                        {
+                            "chaos_touched",
+                            "deft",
+                            "flame_touched",
+                            "frost_touched",
+                            "learned",
+                            "mighty",
+                            "sharp",
+                            "storm_touched",
+                            "tempered",
+                        },
+                        new[] { "accurate", "deadly", "of_power", "of_ruin" })
                 },
                 {
                     "war_axe",
                     new ExpectedCandidates(
-                        new[] { "flame_touched", "frost_touched", "sharp", "tempered" },
-                        new[] { "of_power" })
+                        new[]
+                        {
+                            "chaos_touched",
+                            "deft",
+                            "flame_touched",
+                            "frost_touched",
+                            "learned",
+                            "mighty",
+                            "sharp",
+                            "storm_touched",
+                            "tempered",
+                        },
+                        new[] { "accurate", "deadly", "of_power", "of_ruin" })
                 },
                 {
                     "leather_armor",
                     new ExpectedCandidates(
-                        new[] { "healthy", "reinforced" },
+                        new[]
+                        {
+                            "arcane_reserve",
+                            "deft",
+                            "elusive",
+                            "healthy",
+                            "learned",
+                            "meditative",
+                            "mighty",
+                            "regenerating",
+                            "reinforced",
+                        },
                         new[]
                         {
                             "of_chaos_guard",
@@ -37,12 +70,24 @@ namespace DarkFlare.Tests
                             "of_endurance",
                             "of_fire_guard",
                             "of_lightning_guard",
+                            "of_swiftness",
                         })
                 },
                 {
                     "plate_armor",
                     new ExpectedCandidates(
-                        new[] { "healthy", "reinforced" },
+                        new[]
+                        {
+                            "arcane_reserve",
+                            "deft",
+                            "elusive",
+                            "healthy",
+                            "learned",
+                            "meditative",
+                            "mighty",
+                            "regenerating",
+                            "reinforced",
+                        },
                         new[]
                         {
                             "of_chaos_guard",
@@ -50,48 +95,103 @@ namespace DarkFlare.Tests
                             "of_endurance",
                             "of_fire_guard",
                             "of_lightning_guard",
+                            "of_swiftness",
                         })
                 },
                 {
                     "iron_ring",
                     new ExpectedCandidates(
-                        new[] { "flame_touched", "frost_touched", "healthy" },
                         new[]
                         {
+                            "arcane_reserve",
+                            "chaos_touched",
+                            "deft",
+                            "elusive",
+                            "flame_touched",
+                            "frost_touched",
+                            "healthy",
+                            "learned",
+                            "meditative",
+                            "mighty",
+                            "regenerating",
+                            "storm_touched",
+                        },
+                        new[]
+                        {
+                            "accurate",
+                            "deadly",
                             "of_chaos_guard",
                             "of_cold_guard",
                             "of_endurance",
                             "of_fire_guard",
                             "of_lightning_guard",
                             "of_power",
+                            "of_ruin",
+                            "of_swiftness",
                         })
                 },
                 {
                     "jade_ring",
                     new ExpectedCandidates(
-                        new[] { "flame_touched", "frost_touched", "healthy" },
                         new[]
                         {
+                            "arcane_reserve",
+                            "chaos_touched",
+                            "deft",
+                            "elusive",
+                            "flame_touched",
+                            "frost_touched",
+                            "healthy",
+                            "learned",
+                            "meditative",
+                            "mighty",
+                            "regenerating",
+                            "storm_touched",
+                        },
+                        new[]
+                        {
+                            "accurate",
+                            "deadly",
                             "of_chaos_guard",
                             "of_cold_guard",
                             "of_endurance",
                             "of_fire_guard",
                             "of_lightning_guard",
                             "of_power",
+                            "of_ruin",
+                            "of_swiftness",
                         })
                 },
                 {
                     "obsidian_ring",
                     new ExpectedCandidates(
-                        new[] { "flame_touched", "frost_touched", "healthy" },
                         new[]
                         {
+                            "arcane_reserve",
+                            "chaos_touched",
+                            "deft",
+                            "elusive",
+                            "flame_touched",
+                            "frost_touched",
+                            "healthy",
+                            "learned",
+                            "meditative",
+                            "mighty",
+                            "regenerating",
+                            "storm_touched",
+                        },
+                        new[]
+                        {
+                            "accurate",
+                            "deadly",
                             "of_chaos_guard",
                             "of_cold_guard",
                             "of_endurance",
                             "of_fire_guard",
                             "of_lightning_guard",
                             "of_power",
+                            "of_ruin",
+                            "of_swiftness",
                         })
                 },
             };
@@ -207,7 +307,7 @@ namespace DarkFlare.Tests
         }
 
         [Test]
-        public void OfficialAffixCompatibility_MatchesPreMigrationCandidateMatrix()
+        public void OfficialAffixCompatibility_MatchesFrozenCandidateMatrix()
         {
             List<AffixDefinition> affixes = LoadAssets<AffixDefinition>($"{PresetRoot}/Affixes");
             List<ItemBaseDefinition> items = LoadAssets<ItemBaseDefinition>($"{PresetRoot}/Items");

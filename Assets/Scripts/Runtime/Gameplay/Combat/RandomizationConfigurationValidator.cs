@@ -63,6 +63,10 @@ namespace DarkFlare
                 definition.HealthRegeneration,
                 definition.ManaRegeneration,
                 issues);
+            issues.AddRange(MonsterAffixConfigurationValidator.ValidatePool(
+                definition.AffixPool,
+                definition.MinimumAffixCount,
+                definition.MaximumAffixCount));
             return issues;
         }
 

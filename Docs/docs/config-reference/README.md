@@ -13,6 +13,7 @@
 | `CharacterDefinition` | `Assets/Data/Preset/Actors` | [完整](./combat-content.md#characterdefinition) | [玩法循环](../gameplay-loop.md) |
 | `ProjectileSkillDefinition` | `Assets/Data/Preset/Skills` | [完整](./combat-content.md#projectileskilldefinition) | [伤害与词条](../damage-affix-system.md) |
 | `MonsterDefinition` | `Assets/Data/Preset/Monsters` | [完整](./combat-content.md#monsterdefinition) | [首批内容池](../content-system.md) |
+| `MonsterAffixDefinition` | `Assets/Data/Preset/MonsterAffixes` | [完整](./combat-content.md#monsteraffixdefinition) | [伤害与词条](../damage-affix-system.md) |
 | `MonsterSpawnDefinition` | `Assets/Data/Preset/Monsters` | 骨架已登记 | [首批内容池](../content-system.md) |
 | `LootTableDefinition` | `Assets/Data/Preset/Loot` | 骨架已登记 | [随机化与掉落](../randomization-system.md) |
 | `TraderDefinition` | `Assets/Data/Preset/Traders` | 骨架已登记 | [首批内容池](../content-system.md) |
@@ -29,7 +30,7 @@
 - Inspector、内容校验与常见错误；
 - 字段迁移和旧资产默认行为。
 
-`alpha 0.1.1` 建立索引和标签字段参考。后续每个改变配置结构的阶段负责补全受影响类型；`alpha 0.1.6` 增加自动覆盖检查并完成封板。
+`alpha 0.1.1` 建立索引和标签字段参考。后续每个改变配置结构的阶段负责补全受影响类型；`alpha 0.1.7` 增加自动覆盖检查并完成封板。
 
 ## 通用约定
 

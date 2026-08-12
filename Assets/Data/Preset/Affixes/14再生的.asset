@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2ae069e06d127145ae40593b5a85bd2, type: 3}
+  m_Name: "14\u518D\u751F\u7684"
+  m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.AffixDefinition
+  _id: regenerating
+  _displayName: "\u518D\u751F\u7684"
+  _affixType: 0
+  _groupId: health_regeneration_flat
+  _minItemLevel: 1
+  _weight: 80
+  _spawnQuery:
+    _scopeMask: 8
+    _requiredAll: []
+    _requiredAny:
+    - {fileID: 11400000, guid: f4100000000000000000000000000003, type: 2}
+    - {fileID: 11400000, guid: f4100000000000000000000000000004, type: 2}
+    _blockedAny: []
+  _modifierTags: []
+  _allowedItemTags: []
+  _blockedItemTags: []
+  _modifiers:
+  - _stat: {fileID: 11400000, guid: 2375615e0be31524bbbe11a2ff314c0f, type: 2}
+    _operation: 0
+    _scope: 1
+    _valueRange: {x: 0.5, y: 1.5}
+    _fromDamageType: 0
+    _toDamageType: 1
+    _condition:
+      _scopeMask: 0
+      _requiredAll: []
+      _requiredAny: []
+      _blockedAny: []
+    _requiredTags: []
+    _blockedTags: []

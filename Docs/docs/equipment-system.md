@@ -45,7 +45,7 @@
 
 - `LocalItem` 只允许进入 Weapon 槽物品的本地伤害解析。
 - `GlobalActor`、`Skill`、`TargetTaken` 等已支持 Scope 进入角色修改器集合。
-- 护甲、抗性等非伤害属性由 `CombatStatResolver` 聚合到 Actor 有效属性。
+- 护甲、抗性等非伤害属性由 `CombatStatResolver` 聚合到 Actor 有效属性；直接修改器处理完成后，再统一派生力量对应的最大生命、敏捷对应的命中 / 闪避和智力对应的最大法力。
 - 最大生命统一使用稳定 ID `max_health`。`CombatActor.MaxHealth`、当前生命和 HUD 均读取聚合后的有效属性；穿脱装备时保持当前生命比例，避免通过反复换装恢复生命。
 - 基础伤害、类型伤害、转换、额外获得、Increase 和 More 仍由伤害管线按标签处理，不能在静态属性层重复应用。
 - 非武器上的 `LocalItem` 会被忽略并给出配置 Warning。

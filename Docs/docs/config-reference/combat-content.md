@@ -2,15 +2,16 @@
 
 ## 覆盖类型
 
-本文覆盖 `alpha 0.1.2–0.1.4` 直接改变的五类配置：
+本文覆盖 `alpha 0.1.2–0.1.5` 直接改变的六类配置：
 
 - `StatDefinition`
 - `CharacterDefinition`
 - `MonsterDefinition`
+- `MonsterAffixDefinition`
 - `ItemBaseDefinition`
 - `ProjectileSkillDefinition`
 
-正式示例分别位于 `Assets/Data/Preset/Stats`、`Actors`、`Monsters`、`Items` 和 `Skills`。嵌套伤害范围统一使用 `DamageRollDefinition`。
+正式示例分别位于 `Assets/Data/Preset/Stats`、`Actors`、`Monsters`、`MonsterAffixes`、`Items` 和 `Skills`。嵌套伤害范围统一使用 `DamageRollDefinition`，物品和怪物词条共用 `StatModifierDefinition` 的计算语义，但不共用生成领域模型。
 
 ## 通用战斗属性
 
@@ -90,10 +91,28 @@
 | `_tags` | `List<TagDefinition>` | 只保存不能由 Monster 阵营推导的 Actor 标签 |
 | `_contactDamages` | `List<DamageRollDefinition>` | 必须非空；没有代码级固定伤害回退 |
 | `_lootTable` | `LootTableDefinition` | 正式怪物必填 |
+| `_affixPool` | `List<MonsterAffixDefinition>` | 正式三种怪物都引用完整 10 词条池；不得为空引用或重复引用 |
+| `_minimumAffixCount` / `_maximumAffixCount` | `int` | 非负且有序；正式配置固定为 `0 / 2`，上限不得超过可用互斥组数量 |
 
-`CreateInstanceData(seed)` 只随机生命倍率并复制基础 `StatBlock`；共享资产不在运行时改写。实例种子同时为完全重叠时的软分离提供稳定方向，不消费帧随机数。正式三种怪物的停止距离、软分离半径和权重统一为 `0.6 / 0.8 / 0.65`。
+`CreateInstanceData(seed)` 从实例根种子派生生命、词条数量、选择和逐词条数值子种子，生成 `BaseStats`、不可变词条 / 修改器和 `EffectiveStats`；共享资产不在运行时改写。根种子同时为完全重叠时的软分离提供稳定方向，不消费帧随机数。正式三种怪物的停止距离、软分离半径和权重统一为 `0.6 / 0.8 / 0.65`。
 
 接触攻击不依赖物理碰撞回调，继续由每只 `MonsterController` 按中心距离独立计时。荒原游魂、裂爪猎犬、铁壳尸傀的尝试间隔分别为 `0.75 / 0.55 / 1.0` 秒；未命中或闪避也只消费当前怪物自己的冷却。本阶段没有玩家受击无敌帧、全局伤害冷却或同帧伤害合并。
+
+## MonsterAffixDefinition
+
+创建菜单：`DarkFlare/Data/Monsters/Monster Affix Definition`。正式资产位于 `Assets/Data/Preset/MonsterAffixes`。
+
+| 字段 | 类型 | 合同 |
+| --- | --- | --- |
+| `_id` / `_displayName` | `string` | 稳定小写 `snake_case` ID 与世界显示短名称，均必填 |
+| `_groupId` | `string` | 必填；同组在单个实例中最多生成一次 |
+| `_weight` | `int` | 必须大于 0；用于池内加权选择 |
+| `_displayColor` | `Color` | Alpha 必须大于 0；用于世界词条标签 |
+| `_modifiers` | `List<StatModifierDefinition>` | 至少一项；只允许当前管线可消费的怪物修改器 |
+
+怪物词条修改器只允许 `ModifierScope.GlobalActor`。防御、生命和移动只使用 Flat / Increase / More；元素攻击只使用 `GainAsExtra`，来源固定为 Physical，目标限 Fire / Cold / Lightning。禁止 LocalItem、物品 SpawnQuery、前后缀容量、Override、Conversion、Chance、Trigger 和 Limit。
+
+初版 10 项正式内容为三种元素附伤、三种元素抗性、最大生命、护甲、闪避和移动速度。`MonsterAffixGenerator` 按权重无放回选择，并在选择一项后移除同组所有候选；每项数值由根种子和稳定词条 ID 单独派生。
 
 ## ItemBaseDefinition
 
@@ -138,6 +157,6 @@
 ## 校验与迁移
 
 - Inspector 使用 `EquipmentConfigurationValidator` 与 `RandomizationConfigurationValidator` 输出上下文 Warning。
-- 配置中心内容校验会检查 23 份正式属性、角色、技能、装备和怪物资产，并拒绝负法力、负恢复或负技能耗蓝；`GameplayPhysicsConfigurationValidator` 还会检查正式 Layer、碰撞矩阵、Actor Prefab 层级和 `WorldBounds`。
+- 配置中心内容校验会检查 23 份正式属性、25 个物品词条、10 个怪物词条、角色、技能、装备和怪物资产，并拒绝不可消费修改器、非法词条池、负法力、负恢复或负技能耗蓝；`GameplayPhysicsConfigurationValidator` 还会检查正式 Layer、碰撞矩阵、Actor Prefab 完整层级和 `WorldBounds`。
 - 新增字段或改变伤害来源时，应通过 Editor API / Unity MCP 精准迁移并保留 GUID。
-- 正式提交前至少运行 `Alpha012DamageResolutionTests`、`Alpha013CollisionSafetyTests`、`Alpha014ResourceSystemTests`、`RandomizationPhase3Tests`、`Phase4ContentTests` 和 Main PlayMode 集成测试。
+- 正式提交前至少运行 `Alpha012DamageResolutionTests`、`Alpha013CollisionSafetyTests`、`Alpha014ResourceSystemTests`、`Alpha015MonsterAffixTests`、`Alpha015MonsterAffixContentTests`、`RandomizationPhase3Tests`、`Phase4ContentTests` 和 Main PlayMode 集成测试。

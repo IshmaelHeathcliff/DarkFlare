@@ -11,7 +11,7 @@
 
 玩家可在场景内持续战斗和获取物品，通过 Tab / 手柄 Start 打开随身背包，也可接近商人或打造台后使用 E / 手柄北键进入对应功能。菜单打开时暂停玩法模拟，关闭后恢复战斗与 Gameplay 输入。
 
-当前成果用于验证战斗、物品、经济与构筑之间的闭环，仍是单场景功能原型。装备已扩展为武器、护甲、左戒指和右戒指四槽，正式内容池包含七件装备、十二词条和三种怪物；地图、商人、打造台、三种怪物、七件装备与运行时 UI 已完成首版视觉接入。
+当前成果用于验证战斗、物品、经济与构筑之间的闭环，仍是单场景功能原型。装备已扩展为武器、护甲、左戒指和右戒指四槽，正式内容池包含七件装备、25 个物品词条、10 个怪物词条和三种怪物；地图、商人、打造台、三种怪物、七件装备与运行时 UI 已完成首版视觉接入。
 
 ## 阶段 0 视觉切片
 
@@ -72,9 +72,9 @@
 ## 阶段 4 标签、词条与内容池
 
 - 稳定 ID 已统一为小写 `snake_case`，词条目录从 `Afflixes` 迁移为 `Affixes`。
-- 正式内容达到 14 标签、12 个可观察生效词条、2 武器、2 护甲、3 戒指。
+- 正式内容达到 14 标签、25 个可观察生效的物品词条、10 个独立怪物词条、2 武器、2 护甲、3 戒指。
 - 荒原游魂、裂爪猎犬和铁壳尸傀使用独立定义、掉落表与 Addressable Prefab，并按 `55 / 30 / 15` 进入现有刷怪池。
-- 商人库存覆盖七件普通装备，打造与三张掉落表覆盖十二词条；掉落装备生成一前缀一后缀。
+- 商人库存覆盖七件普通装备，打造与三张掉落表覆盖 25 个物品词条；掉落装备生成一前缀一后缀。三份正式怪物定义各自显式引用完整 10 词条池。
 - 配置中心新增内容校验页，检查 ID、范围、兼容、池覆盖、Prefab 和 Addressables。
 
 完整内容清单见 [首批内容池](./content-system.md)。
@@ -106,6 +106,14 @@
 - 伤害、主动治疗、被动恢复、法力消耗 / 恢复、上限变化和复活都发送带原因的统一资源事件。被动生命恢复不复用主动治疗事件，避免持续产生治疗飘字。
 - HUD 在生命条下显示当前 / 最大法力；法力不足时给出所需数值，下次成功释放时清除。背包属性详情按稳定顺序显示全部 23 项属性。
 
+## alpha 0.1.5 全属性与怪物词条
+
+- 25 个正式物品词条覆盖 `StatIds.All` 的 23 项公开属性；力量、敏捷和智力统一在直接修改器聚合后派生生命、命中 / 闪避和法力。
+- 三种怪物按实例根种子从 10 项独立怪物词条中生成 `0–2` 条。生命、数量、选择和逐词条数值使用互不扰动的确定性子流。
+- 防御、生命和移速词条由 `CombatActor.Stats` 消费；元素附伤由接触攻击快照携带，不在 `MonsterController` 中添加专用伤害分支。
+- 带词条怪物默认显示最多两行配置颜色的世界名称；零词条、死亡或禁用时隐藏，受伤后生命条仍独立工作。
+- `SpawnSystem` 记录实例根种子、词条 ID / 掷值和最终关键属性，便于固定种子复现。
+
 ## 模块边界
 
 | 模块 | 主要入口 | 当前职责 |
@@ -114,14 +122,14 @@
 | 战斗 | `CombatModel`、`CombatSystem`、`DamageCalculator`、`AttackSnapshotFactory` | Actor 注册、攻击快照、伤害结算与生死状态 |
 | 资源 | `CombatActor`、`CombatSystem`、`ResourceRegenerationSystem` | 当前生命 / 法力、资源变更事件、技能耗蓝与统一恢复节拍 |
 | 怪物移动与碰撞 | `MonsterController`、`MonsterSteeringCalculator`、`GameplayPhysicsLayers` | 接近停止、同阵营软分离、角色与世界的 Layer 碰撞合同 |
-| 随机化 | `GameplayRandomSystem`、`MonsterInstanceData` | 根种子、独立通道、怪物实例生命与可复现调试 |
+| 随机化 | `GameplayRandomSystem`、`MonsterInstanceRandomSeeds`、`MonsterAffixGenerator` | 根种子、独立通道、怪物实例生命 / 词条与可复现调试 |
 | 掉落与物品 | `LootSystem`、`LootTableDefinition`、`ItemGenerator` | 死亡掉落、物品实例生成和世界掉落物创建 |
 | 背包与装备 | `InventoryModel`、`InventoryGrid`、`EquipmentModel`、`EquipmentSystem` | 10×6 格子占用、四槽穿戴、原子替换 / 卸下和装备效果聚合 |
 | 交易 | `EconomyModel`、`TradingSystem`、`ItemValueCalculator` | 单商人库存、买卖价格与事务提交 |
 | 打造 | `CraftingSystem`、`CraftingOperations` | 四种词条操作、金币成本、失败回滚与完成事件 |
 | 输入与 UI | `GameInput`、`GameMenuController`、各面板 Controller | 键鼠 / 手柄输入、HUD、背包、商店和打造交互 |
 | 世界交互 | `PlayerInteractionController`、`WorldInteractionTarget`、`GameplayPauseSystem` | 最近目标选择、情境菜单请求、交互提示与菜单暂停 |
-| 视觉表现 | `SpriteAssetLoader`、`ItemVisualPresenter`、`ActorVisualFeedbackController`、`WorldInteractionVisual` | 动态图标、战斗反馈、交互高亮和临时表现清理 |
+| 视觉表现 | `SpriteAssetLoader`、`ItemVisualPresenter`、`ActorVisualFeedbackController`、`MonsterAffixVisual`、`WorldInteractionVisual` | 动态图标、战斗反馈、怪物词条辨识、交互高亮和临时表现清理 |
 
 各场景 Controller 实现 `IController`，通过 Command 修改 Model / System，通过 Query 获取只读快照，并注册 Event 刷新表现。Controller 不直接修改 Model，也不直接发送领域 Event。
 
@@ -132,6 +140,7 @@
 - `Assets/Data/Preset/Skills/基础投射物技能.asset`：首版投射物技能。
 - `Assets/Data/Preset/Stats/`：与 `StatIds.All` 一一对应的 23 份属性定义。
 - `Assets/Data/Preset/Monsters/`：三种怪物定义与 `基础刷怪表.asset`。
+- `Assets/Data/Preset/MonsterAffixes/`：10 个独立怪物词条定义。
 - `Assets/Data/Preset/Loot/`：三张怪物掉落表、七件装备条目与完整词条池。
 - `Assets/Data/Preset/Traders/基础商人.asset`：商人库存与买卖倍率。
 - `Assets/Data/Preset/Crafting/基础打造配置.asset`：打造成本与可用词条池。
@@ -158,6 +167,7 @@ Prefab 通过 Addressables 预热和实例化，首版不使用 `Resources` 或�
 - 双层地表专项验收为 EditMode 19/19、PlayMode 1/1 通过；基础层 25 格、细节层 11 格、两层无 Collider，视觉覆盖继续保持 `-20..20`，`WorldBounds` 保持 `-16..16`。
 - alpha 0.1.3 全量 EditMode 148/148 通过；PlayMode 17 项中 15 项通过、2 项 Input System 上游既有用例按标记跳过、0 失败。12 只怪物四方向脱困、WorldObstacle 阻挡、Default Trigger 与迁移幂等性专项均通过。
 - alpha 0.1.4 专项 EditMode 6/6、Main PlayMode 1/1 通过；全量 EditMode 156/156 通过，PlayMode 18 项中 16 项通过、2 项 Input System 上游既有用例按标记跳过、0 失败。四个相关程序集构建零错误，三档 UI 布局回归通过，真实 Main 停止后的 Console 为零错误。
+- alpha 0.1.5 主属性专项 6/6、怪物词条纯领域专项 6/6、正式内容专项 13/13、怪物词条表现 PlayMode 2/2 通过；全量 EditMode 176/176 通过，PlayMode 20 项中 18 项通过、2 项 Input System 上游既有用例按标记跳过、0 失败。Main 固定种子 `24681357` 的前 12 个怪物、词条、攻击与掉落双次重放一致，四个相关程序集构建零错误。
 
 以上数据是首版收尾时的验证记录；后续改动仍应重新运行相关测试和 Play 流程。
 
@@ -165,7 +175,7 @@ Prefab 通过 Addressables 预热和实例化，首版不使用 `Resources` 或�
 
 - 仅有 `Main.unity` 单场景，没有安全区、撤离、场景切换或存档闭环。
 - 背包只实现矩形格子占用，没有拖拽换位、旋转、堆叠和重量。
-- 装备已实现武器、护甲和双戒指槽，以及替换和卸下；首批七件装备和十二词条已接入，但尚无耐久、套装、纸娃娃和词条等级段。
+- 装备已实现武器、护甲和双戒指槽，以及替换和卸下；首批七件装备和 25 个物品词条已接入，但尚无耐久、套装、纸娃娃和词条等级段。
 - 交易只维护单个共享商人库存；卖出物品不进入商人库存，也没有回购。
 - 打造只消耗金币，尚无配方、材料、锁定词缀或批量操作。
 - 首版视觉已覆盖地图、玩家、三种怪物、投射物、掉落、七件装备、商人、打造台、HUD 与三个菜单；`PrototypeSquare` 仅保留为调试回退，不再表达主要可玩对象。当前仍不包含音效、音乐、纸娃娃或镜头震动。

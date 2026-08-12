@@ -126,6 +126,19 @@ namespace DarkFlare.Editor
             "of_cold_guard",
             "of_lightning_guard",
             "of_chaos_guard",
+            "arcane_reserve",
+            "regenerating",
+            "meditative",
+            "mighty",
+            "deft",
+            "learned",
+            "storm_touched",
+            "chaos_touched",
+            "deadly",
+            "of_ruin",
+            "accurate",
+            "elusive",
+            "of_swiftness",
         };
 
         static readonly string[] ExpectedItemIds =
@@ -146,6 +159,20 @@ namespace DarkFlare.Editor
             "iron_husk",
         };
 
+        static readonly string[] ExpectedMonsterAffixIds =
+        {
+            "monster_flame_touched",
+            "monster_frost_touched",
+            "monster_storm_touched",
+            "monster_fire_guarded",
+            "monster_cold_guarded",
+            "monster_lightning_guarded",
+            "monster_robust",
+            "monster_armored",
+            "monster_elusive",
+            "monster_swift",
+        };
+
         public static List<ContentValidationIssue> Scan()
         {
             List<ContentValidationIssue> issues = new List<ContentValidationIssue>();
@@ -156,6 +183,8 @@ namespace DarkFlare.Editor
             List<CharacterDefinition> characters = LoadAssets<CharacterDefinition>($"{PresetRoot}/Actors");
             List<ProjectileSkillDefinition> skills = LoadAssets<ProjectileSkillDefinition>($"{PresetRoot}/Skills");
             List<MonsterDefinition> monsters = LoadAssets<MonsterDefinition>($"{PresetRoot}/Monsters");
+            List<MonsterAffixDefinition> monsterAffixes = LoadAssets<MonsterAffixDefinition>(
+                $"{PresetRoot}/MonsterAffixes");
             List<MonsterSpawnDefinition> spawnDefinitions = LoadAssets<MonsterSpawnDefinition>($"{PresetRoot}/Monsters");
             List<LootTableDefinition> lootTables = LoadAssets<LootTableDefinition>($"{PresetRoot}/Loot");
             List<TraderDefinition> traders = LoadAssets<TraderDefinition>($"{PresetRoot}/Traders");
@@ -166,13 +195,22 @@ namespace DarkFlare.Editor
             ValidateExpectedIds(affixes, ExpectedAffixIds, affix => affix.Id, "词条", true, issues);
             ValidateExpectedIds(items, ExpectedItemIds, item => item.Id, "装备", true, issues);
             ValidateExpectedIds(monsters, ExpectedMonsterIds, monster => monster.Id, "怪物", true, issues);
+            ValidateExpectedIds(
+                monsterAffixes,
+                ExpectedMonsterAffixIds,
+                affix => affix.Id,
+                "怪物词条",
+                true,
+                issues);
             ValidateTags(tags, issues);
             ValidateStats(stats, issues);
             ValidateAffixes(affixes, items, issues);
+            ValidateAffixStatCoverage(affixes, issues);
             ValidateItems(items, affixes, issues);
             ValidateCharacters(characters, issues);
             ValidateSkills(skills, issues);
-            ValidateMonsters(monsters, issues);
+            ValidateMonsterAffixes(monsterAffixes, issues);
+            ValidateMonsters(monsters, monsterAffixes, issues);
             ValidateSpawnDefinitions(spawnDefinitions, monsters, issues);
             ValidateLootTables(lootTables, items, affixes, issues);
             ValidateTraders(traders, items, issues);
@@ -443,6 +481,69 @@ namespace DarkFlare.Editor
                     null,
                     issues);
             }
+
+            if (modifier.Stat != null && !IsConsumableStatModifier(modifier))
+            {
+                AddError(
+                    issues,
+                    affix,
+                    $"修改器 {modifierIndex} 的 {modifier.Stat.Id} / {modifier.Operation} / {modifier.Scope} 没有当前运行时消费者");
+            }
+        }
+
+        static void ValidateAffixStatCoverage(
+            IReadOnlyList<AffixDefinition> affixes,
+            List<ContentValidationIssue> issues)
+        {
+            HashSet<string> covered = new HashSet<string>(StringComparer.Ordinal);
+
+            for (int affixIndex = 0; affixIndex < affixes.Count; affixIndex++)
+            {
+                AffixDefinition affix = affixes[affixIndex];
+
+                for (int modifierIndex = 0; modifierIndex < affix.Modifiers.Count; modifierIndex++)
+                {
+                    StatModifierDefinition modifier = affix.Modifiers[modifierIndex];
+
+                    if (modifier != null && modifier.Stat != null && IsConsumableStatModifier(modifier))
+                    {
+                        covered.Add(modifier.Stat.Id);
+                    }
+                }
+            }
+
+            for (int i = 0; i < StatIds.All.Count; i++)
+            {
+                string statId = StatIds.All[i];
+
+                if (!covered.Contains(statId))
+                {
+                    AddError(issues, null, $"正式物品词条缺少可消费属性覆盖：{statId}");
+                }
+            }
+        }
+
+        static bool IsConsumableStatModifier(StatModifierDefinition modifier)
+        {
+            if (modifier == null || modifier.Stat == null)
+            {
+                return false;
+            }
+
+            bool supportedOperation = modifier.Operation == ModifierOperation.Flat
+                || modifier.Operation == ModifierOperation.Increase
+                || modifier.Operation == ModifierOperation.More;
+
+            if (CombatStatResolver.IsDamageStat(modifier.Stat.Id))
+            {
+                return supportedOperation
+                    && (modifier.Scope == ModifierScope.LocalItem
+                        || modifier.Scope == ModifierScope.GlobalActor
+                        || modifier.Scope == ModifierScope.Skill);
+            }
+
+            return (supportedOperation || modifier.Operation == ModifierOperation.Override)
+                && modifier.Scope == ModifierScope.GlobalActor;
         }
 
         static void ValidateItems(
@@ -600,8 +701,35 @@ namespace DarkFlare.Editor
             }
         }
 
+        static void ValidateMonsterAffixes(
+            IReadOnlyList<MonsterAffixDefinition> affixes,
+            List<ContentValidationIssue> issues)
+        {
+            for (int i = 0; i < affixes.Count; i++)
+            {
+                MonsterAffixDefinition affix = affixes[i];
+                List<string> baseIssues = MonsterAffixConfigurationValidator.Validate(affix);
+
+                for (int issueIndex = 0; issueIndex < baseIssues.Count; issueIndex++)
+                {
+                    AddError(issues, affix, baseIssues[issueIndex]);
+                }
+
+                if (!StableIdPattern.IsMatch(affix.GroupId))
+                {
+                    AddError(issues, affix, $"怪物词条组必须使用小写 snake_case：{affix.GroupId}");
+                }
+
+                if (affix.DisplayColor.a <= 0f)
+                {
+                    AddError(issues, affix, "怪物词条显示颜色必须可见");
+                }
+            }
+        }
+
         static void ValidateMonsters(
             IReadOnlyList<MonsterDefinition> monsters,
+            IReadOnlyList<MonsterAffixDefinition> monsterAffixes,
             List<ContentValidationIssue> issues)
         {
             HashSet<string> prefabGuids = new HashSet<string>(StringComparer.Ordinal);
@@ -637,6 +765,18 @@ namespace DarkFlare.Editor
                     AddError(issues, monster, baseIssues[issueIndex]);
                 }
 
+                if (monster.MinimumAffixCount != 0 || monster.MaximumAffixCount != 2)
+                {
+                    AddError(issues, monster, "正式怪物的词条数量范围必须为 0–2");
+                }
+
+                ValidateCoverage(
+                    monster,
+                    new HashSet<MonsterAffixDefinition>(monster.AffixPool),
+                    monsterAffixes,
+                    "怪物词条池缺少词条",
+                    issues);
+
                 string guid = monster.Prefab != null ? monster.Prefab.AssetGUID : string.Empty;
 
                 if (string.IsNullOrWhiteSpace(guid))
@@ -661,11 +801,12 @@ namespace DarkFlare.Editor
 
                 if (prefab.GetComponent<MonsterController>() == null
                     || prefab.GetComponent<CombatActor>() == null
+                    || prefab.GetComponent<MonsterAffixVisual>() == null
                     || prefab.GetComponent<Animator>() == null
                     || prefab.GetComponent<Rigidbody2D>() == null
                     || prefab.GetComponent<Collider2D>() == null)
                 {
-                    AddError(issues, prefab, "怪物 Prefab 缺少运行组件或 Animator");
+                    AddError(issues, prefab, "怪物 Prefab 缺少运行组件、词条表现或 Animator");
                 }
 
                 if (settings == null || settings.FindAssetEntry(guid) == null)
