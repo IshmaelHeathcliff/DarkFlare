@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "family": "projectile-arcane-flight-pilot",
+  "alpha_threshold": 8,
+  "canvas": { "width": 96, "height": 96 },
+  "alpha_required": true,
+  "generation_canvas": { "width": 1254, "height": 1254 },
+  "export_transform": { "uniform_scale": 0.0765550239, "alignment": "source-canvas-centered", "resampling": "lanczos" },
+  "unity_import": { "pixels_per_unit": 64, "pivot": [0.5, 0.5], "filter": "Point", "mesh": "FullRect" },
+  "assets": [
+    { "name": "flight_00", "image": "../../../../../../Assets/Art/Sprites/Effects/Projectile/Arcane/Flight/effect_projectile_arcane_flight_e_00.png", "visible_width": [52, 60], "visible_height": [18, 26], "alpha_coverage": [0.06, 0.10], "visual_center_x": [50, 54], "visual_center_y": [46, 50], "edge_clearance": 12 }
+  ],
+  "groups": []
+}

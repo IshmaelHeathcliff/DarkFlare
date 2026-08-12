@@ -1,8 +1,8 @@
 # alpha 0.1.7 多帧特效、稳定世界层级与综合验收执行计划
 
-> 状态：执行中；阶段 A 已完成，下一步阶段 B
+> 状态：执行中；阶段 B 已完成，下一步进入阶段 C 运行时接入
 > 建立日期：2026-08-12
-> 最近更新：2026-08-12
+> 最近更新：2026-08-13
 > 所属版本：`alpha 0.1`
 > 前置阶段：`alpha 0.1.6` 已完成
 > 计划完成后：封板并归档 `alpha 0.1`
@@ -55,6 +55,7 @@
 - 文件序号固定两位补零；导入、Animation Clip、Prefab 引用和旧依赖清理全部自动验证。
 - 先生成并审计 Pilot，再扩展家族。Pilot 一旦通过即成为不可变身份 / 光向 / 材质 / 轮廓参考；后续帧只允许参考 Pilot 和上一张已通过帧。
 - 每张图生成后立即执行 `audit_sprite_assets.py`，失败即停止该家族；不通过放宽合同、修改 Pivot、修改 Transform Scale 或人工切图绕过失败。
+- 当前内置图像生成器实际输出 1254×1254 源画布；四个特效家族在首张 Pilot 处理前共同冻结唯一一次整画布导出变换：以 Lanczos 等比缩放至 96×96，比例 `16/209`（约 `0.0765550239`），不得裁切、重排或按主体边界逐图缩放。生产目录只保留导出的 96×96 透明 PNG，源图用于 Pilot 复核与后续逐帧参考。
 
 ### 家族 A：奥术投射物飞行
 
@@ -226,6 +227,17 @@ ProjectileController.TryHit
 - 创建并校验 Flight、Impact、Hit、Critical Hit Animation Clip；本阶段只建立资产和绑定候选，不切换正式玩法入口。
 
 验收：23/23 PNG 和四个 Clip 合同通过，0 errors / 0 warnings；不存在 SpriteSheet、人工切图、逐帧缩放或未验收批量扩展。
+
+#### 阶段 B 完成记录
+
+- 用户确认飞行 00、命中峰值 03、普通受击峰值 02、暴击受击峰值 03 四张 Pilot 后，已按“不可变 Pilot + 上一张通过帧”逐张完成其余 19 帧；生成、退回和量化记录见[特效 Pilot 与逐帧生成记录](../assets/visual-assets/alpha-0.1.7/pilot-generation.md)。
+- 四个家族共 23 张 96×96 RGBA 独立 PNG，完整 family audit 合计 23 assets / 0 errors / 0 warnings；原生并排检查确认飞行相位稳定、命中独立扩张收束、普通受击保持斩痕、暴击始终保持交叉重斩。
+- 发现并退回飞行污染帧及其派生链；对几何、覆盖率、中心或连续性不合格的单帧逐项重生成，没有放宽 manifest、修改 Pivot、按主体缩放或使用 SpriteSheet 补救。
+- 目录级自动 Importer 合同精准覆盖 23 张 Sprite；Unity 验证均为 Single、64 PPU、Center、Full Rect、Point、Uncompressed、MipMap Off、Clamp，预检缺失帧由 23 降为 0。
+- 新增幂等候选 Clip 构建器并生成 Flight、Impact、Default Hit、Critical Hit 四个 Clip；帧序、FPS、Loop 与末帧保持合同通过。阶段 B 未修改 Prefab、场景或运行时入口。
+- `DarkFlare.Tests.Alpha017BaselineTests` EditMode 定向测试更新为 8 项并 8/8 通过，覆盖 23 张 Sprite Importer、四个 Clip、四份 manifest 与预检零缺帧。
+
+验收：阶段 B 通过；阶段 C 才接入 Prefab、对象池、Tint 和运行时生命周期。
 
 ### 阶段 C：接入多帧特效与生命周期
 

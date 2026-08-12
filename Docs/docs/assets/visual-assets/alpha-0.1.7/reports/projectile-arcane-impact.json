@@ -1,0 +1,191 @@
+{
+  "manifest": "E:\\PARA\\Projects\\Unity\\DarkfFlare\\UnityProject\\Docs\\docs\\assets\\visual-assets\\alpha-0.1.7\\manifests\\projectile-arcane-impact.json",
+  "family": "projectile-arcane-impact",
+  "canvas": [
+    96,
+    96
+  ],
+  "errors": [],
+  "assets": [
+    {
+      "name": "impact_00",
+      "image": "E:\\PARA\\Projects\\Unity\\DarkfFlare\\UnityProject\\Assets\\Art\\Sprites\\Effects\\Projectile\\Arcane\\Impact\\effect_projectile_arcane_impact_00.png",
+      "canvas": [
+        96,
+        96
+      ],
+      "visible_bbox": [
+        35,
+        34,
+        61,
+        62
+      ],
+      "visible_width": 26,
+      "visible_height": 28,
+      "margins": {
+        "left": 35,
+        "top": 34,
+        "right": 35,
+        "bottom": 34
+      },
+      "alpha_coverage": 0.026475694444444444,
+      "visual_center": [
+        47.99865218425434,
+        47.988186791405695
+      ],
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "name": "impact_01",
+      "image": "E:\\PARA\\Projects\\Unity\\DarkfFlare\\UnityProject\\Assets\\Art\\Sprites\\Effects\\Projectile\\Arcane\\Impact\\effect_projectile_arcane_impact_01.png",
+      "canvas": [
+        96,
+        96
+      ],
+      "visible_bbox": [
+        28,
+        29,
+        68,
+        67
+      ],
+      "visible_width": 40,
+      "visible_height": 38,
+      "margins": {
+        "left": 28,
+        "top": 29,
+        "right": 28,
+        "bottom": 29
+      },
+      "alpha_coverage": 0.059136284722222224,
+      "visual_center": [
+        48.0844081345645,
+        48.073453489017595
+      ],
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "name": "impact_02",
+      "image": "E:\\PARA\\Projects\\Unity\\DarkfFlare\\UnityProject\\Assets\\Art\\Sprites\\Effects\\Projectile\\Arcane\\Impact\\effect_projectile_arcane_impact_02.png",
+      "canvas": [
+        96,
+        96
+      ],
+      "visible_bbox": [
+        22,
+        24,
+        74,
+        72
+      ],
+      "visible_width": 52,
+      "visible_height": 48,
+      "margins": {
+        "left": 22,
+        "top": 24,
+        "right": 22,
+        "bottom": 24
+      },
+      "alpha_coverage": 0.1159939236111111,
+      "visual_center": [
+        47.72596933200447,
+        48.31406477023019
+      ],
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "name": "impact_03",
+      "image": "E:\\PARA\\Projects\\Unity\\DarkfFlare\\UnityProject\\Assets\\Art\\Sprites\\Effects\\Projectile\\Arcane\\Impact\\effect_projectile_arcane_impact_03.png",
+      "canvas": [
+        96,
+        96
+      ],
+      "visible_bbox": [
+        20,
+        16,
+        76,
+        80
+      ],
+      "visible_width": 56,
+      "visible_height": 64,
+      "margins": {
+        "left": 20,
+        "top": 16,
+        "right": 20,
+        "bottom": 16
+      },
+      "alpha_coverage": 0.20963541666666666,
+      "visual_center": [
+        48.02975568094399,
+        48.03694929304157
+      ],
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "name": "impact_04",
+      "image": "E:\\PARA\\Projects\\Unity\\DarkfFlare\\UnityProject\\Assets\\Art\\Sprites\\Effects\\Projectile\\Arcane\\Impact\\effect_projectile_arcane_impact_04.png",
+      "canvas": [
+        96,
+        96
+      ],
+      "visible_bbox": [
+        26,
+        23,
+        70,
+        73
+      ],
+      "visible_width": 44,
+      "visible_height": 50,
+      "margins": {
+        "left": 26,
+        "top": 23,
+        "right": 26,
+        "bottom": 23
+      },
+      "alpha_coverage": 0.08506944444444445,
+      "visual_center": [
+        48.071550844388845,
+        47.973329602440444
+      ],
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "name": "impact_05",
+      "image": "E:\\PARA\\Projects\\Unity\\DarkfFlare\\UnityProject\\Assets\\Art\\Sprites\\Effects\\Projectile\\Arcane\\Impact\\effect_projectile_arcane_impact_05.png",
+      "canvas": [
+        96,
+        96
+      ],
+      "visible_bbox": [
+        31,
+        30,
+        66,
+        65
+      ],
+      "visible_width": 35,
+      "visible_height": 35,
+      "margins": {
+        "left": 31,
+        "top": 30,
+        "right": 30,
+        "bottom": 31
+      },
+      "alpha_coverage": 0.05067274305555555,
+      "visual_center": [
+        48.07200915665848,
+        48.26159511644881
+      ],
+      "errors": [],
+      "warnings": []
+    }
+  ],
+  "summary": {
+    "assets": 6,
+    "errors": 0,
+    "warnings": 0,
+    "passed": true
+  }
+}

@@ -1,0 +1,162 @@
+{
+  "manifest": "E:\\PARA\\Projects\\Unity\\DarkfFlare\\UnityProject\\Docs\\docs\\assets\\visual-assets\\alpha-0.1.7\\manifests\\actor-hit-default.json",
+  "family": "actor-hit-default",
+  "canvas": [
+    96,
+    96
+  ],
+  "errors": [],
+  "assets": [
+    {
+      "name": "hit_00",
+      "image": "E:\\PARA\\Projects\\Unity\\DarkfFlare\\UnityProject\\Assets\\Art\\Sprites\\Effects\\Hit\\effect_hit_default_00.png",
+      "canvas": [
+        96,
+        96
+      ],
+      "visible_bbox": [
+        36,
+        36,
+        59,
+        62
+      ],
+      "visible_width": 23,
+      "visible_height": 26,
+      "margins": {
+        "left": 36,
+        "top": 36,
+        "right": 37,
+        "bottom": 34
+      },
+      "alpha_coverage": 0.028211805555555556,
+      "visual_center": [
+        46.78392669054139,
+        49.802275121129135
+      ],
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "name": "hit_01",
+      "image": "E:\\PARA\\Projects\\Unity\\DarkfFlare\\UnityProject\\Assets\\Art\\Sprites\\Effects\\Hit\\effect_hit_default_01.png",
+      "canvas": [
+        96,
+        96
+      ],
+      "visible_bbox": [
+        27,
+        28,
+        69,
+        70
+      ],
+      "visible_width": 42,
+      "visible_height": 42,
+      "margins": {
+        "left": 27,
+        "top": 28,
+        "right": 27,
+        "bottom": 26
+      },
+      "alpha_coverage": 0.0666232638888889,
+      "visual_center": [
+        47.86884839615739,
+        49.60414552206513
+      ],
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "name": "hit_02",
+      "image": "E:\\PARA\\Projects\\Unity\\DarkfFlare\\UnityProject\\Assets\\Art\\Sprites\\Effects\\Hit\\effect_hit_default_02.png",
+      "canvas": [
+        96,
+        96
+      ],
+      "visible_bbox": [
+        19,
+        18,
+        75,
+        74
+      ],
+      "visible_width": 56,
+      "visible_height": 56,
+      "margins": {
+        "left": 19,
+        "top": 18,
+        "right": 21,
+        "bottom": 22
+      },
+      "alpha_coverage": 0.09917534722222222,
+      "visual_center": [
+        49.20261147744336,
+        49.193138343017566
+      ],
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "name": "hit_03",
+      "image": "E:\\PARA\\Projects\\Unity\\DarkfFlare\\UnityProject\\Assets\\Art\\Sprites\\Effects\\Hit\\effect_hit_default_03.png",
+      "canvas": [
+        96,
+        96
+      ],
+      "visible_bbox": [
+        26,
+        23,
+        72,
+        75
+      ],
+      "visible_width": 46,
+      "visible_height": 52,
+      "margins": {
+        "left": 26,
+        "top": 23,
+        "right": 24,
+        "bottom": 21
+      },
+      "alpha_coverage": 0.0769314236111111,
+      "visual_center": [
+        47.900510937790784,
+        48.866657079533724
+      ],
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "name": "hit_04",
+      "image": "E:\\PARA\\Projects\\Unity\\DarkfFlare\\UnityProject\\Assets\\Art\\Sprites\\Effects\\Hit\\effect_hit_default_04.png",
+      "canvas": [
+        96,
+        96
+      ],
+      "visible_bbox": [
+        31,
+        30,
+        63,
+        66
+      ],
+      "visible_width": 32,
+      "visible_height": 36,
+      "margins": {
+        "left": 31,
+        "top": 30,
+        "right": 33,
+        "bottom": 30
+      },
+      "alpha_coverage": 0.026041666666666668,
+      "visual_center": [
+        47.69559689021289,
+        47.731296471215096
+      ],
+      "errors": [],
+      "warnings": []
+    }
+  ],
+  "summary": {
+    "assets": 5,
+    "errors": 0,
+    "warnings": 0,
+    "passed": true
+  }
+}

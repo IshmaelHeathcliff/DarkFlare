@@ -1,0 +1,191 @@
+{
+  "manifest": "E:\\PARA\\Projects\\Unity\\DarkfFlare\\UnityProject\\Docs\\docs\\assets\\visual-assets\\alpha-0.1.7\\manifests\\projectile-arcane-flight.json",
+  "family": "projectile-arcane-flight",
+  "canvas": [
+    96,
+    96
+  ],
+  "errors": [],
+  "assets": [
+    {
+      "name": "flight_00",
+      "image": "E:\\PARA\\Projects\\Unity\\DarkfFlare\\UnityProject\\Assets\\Art\\Sprites\\Effects\\Projectile\\Arcane\\Flight\\effect_projectile_arcane_flight_e_00.png",
+      "canvas": [
+        96,
+        96
+      ],
+      "visible_bbox": [
+        18,
+        37,
+        78,
+        63
+      ],
+      "visible_width": 60,
+      "visible_height": 26,
+      "margins": {
+        "left": 18,
+        "top": 37,
+        "right": 18,
+        "bottom": 33
+      },
+      "alpha_coverage": 0.09809027777777778,
+      "visual_center": [
+        51.13385801058063,
+        49.708079752524924
+      ],
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "name": "flight_01",
+      "image": "E:\\PARA\\Projects\\Unity\\DarkfFlare\\UnityProject\\Assets\\Art\\Sprites\\Effects\\Projectile\\Arcane\\Flight\\effect_projectile_arcane_flight_e_01.png",
+      "canvas": [
+        96,
+        96
+      ],
+      "visible_bbox": [
+        18,
+        37,
+        77,
+        63
+      ],
+      "visible_width": 59,
+      "visible_height": 26,
+      "margins": {
+        "left": 18,
+        "top": 37,
+        "right": 19,
+        "bottom": 33
+      },
+      "alpha_coverage": 0.0978732638888889,
+      "visual_center": [
+        51.063685525590344,
+        49.73125153964362
+      ],
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "name": "flight_02",
+      "image": "E:\\PARA\\Projects\\Unity\\DarkfFlare\\UnityProject\\Assets\\Art\\Sprites\\Effects\\Projectile\\Arcane\\Flight\\effect_projectile_arcane_flight_e_02.png",
+      "canvas": [
+        96,
+        96
+      ],
+      "visible_bbox": [
+        18,
+        37,
+        78,
+        63
+      ],
+      "visible_width": 60,
+      "visible_height": 26,
+      "margins": {
+        "left": 18,
+        "top": 37,
+        "right": 18,
+        "bottom": 33
+      },
+      "alpha_coverage": 0.09765625,
+      "visual_center": [
+        51.367988910215395,
+        49.80948911163242
+      ],
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "name": "flight_03",
+      "image": "E:\\PARA\\Projects\\Unity\\DarkfFlare\\UnityProject\\Assets\\Art\\Sprites\\Effects\\Projectile\\Arcane\\Flight\\effect_projectile_arcane_flight_e_03.png",
+      "canvas": [
+        96,
+        96
+      ],
+      "visible_bbox": [
+        18,
+        37,
+        77,
+        63
+      ],
+      "visible_width": 59,
+      "visible_height": 26,
+      "margins": {
+        "left": 18,
+        "top": 37,
+        "right": 19,
+        "bottom": 33
+      },
+      "alpha_coverage": 0.09733072916666667,
+      "visual_center": [
+        50.97228145602106,
+        49.83375483529811
+      ],
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "name": "flight_04",
+      "image": "E:\\PARA\\Projects\\Unity\\DarkfFlare\\UnityProject\\Assets\\Art\\Sprites\\Effects\\Projectile\\Arcane\\Flight\\effect_projectile_arcane_flight_e_04.png",
+      "canvas": [
+        96,
+        96
+      ],
+      "visible_bbox": [
+        18,
+        37,
+        77,
+        63
+      ],
+      "visible_width": 59,
+      "visible_height": 26,
+      "margins": {
+        "left": 18,
+        "top": 37,
+        "right": 19,
+        "bottom": 33
+      },
+      "alpha_coverage": 0.09635416666666667,
+      "visual_center": [
+        50.956394893142665,
+        49.89891662167105
+      ],
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "name": "flight_05",
+      "image": "E:\\PARA\\Projects\\Unity\\DarkfFlare\\UnityProject\\Assets\\Art\\Sprites\\Effects\\Projectile\\Arcane\\Flight\\effect_projectile_arcane_flight_e_05.png",
+      "canvas": [
+        96,
+        96
+      ],
+      "visible_bbox": [
+        18,
+        37,
+        77,
+        63
+      ],
+      "visible_width": 59,
+      "visible_height": 26,
+      "margins": {
+        "left": 18,
+        "top": 37,
+        "right": 19,
+        "bottom": 33
+      },
+      "alpha_coverage": 0.09906684027777778,
+      "visual_center": [
+        50.774539310704505,
+        49.76036007649181
+      ],
+      "errors": [],
+      "warnings": []
+    }
+  ],
+  "summary": {
+    "assets": 6,
+    "errors": 0,
+    "warnings": 0,
+    "passed": true
+  }
+}

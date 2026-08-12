@@ -112,6 +112,8 @@ namespace DarkFlare.Tests
 
                 StringAssert.Contains("\"schema_version\": 1", json);
                 StringAssert.Contains("\"canvas\": { \"width\": 96, \"height\": 96 }", json);
+                StringAssert.Contains("\"generation_canvas\": { \"width\": 1254, \"height\": 1254 }", json);
+                StringAssert.Contains("\"uniform_scale\": 0.0765550239", json);
                 StringAssert.Contains("\"pixels_per_unit\": 64", json);
                 StringAssert.Contains($"\"frames_per_second\": {family.FramesPerSecond}", json);
                 StringAssert.Contains($"\"loop\": {family.Loop.ToString().ToLowerInvariant()}", json);
@@ -135,6 +137,83 @@ namespace DarkFlare.Tests
                 Alpha017VisualMigrationPreflight.GetExpectedEffectFramePaths(),
                 manifestPaths);
             Assert.AreEqual(23, manifestPaths.Count);
+        }
+
+        [Test]
+        public void EffectFrames_AreImportedAsIndependentContractSprites()
+        {
+            IReadOnlyList<string> paths = Alpha017VisualMigrationPreflight.GetExpectedEffectFramePaths();
+
+            Assert.AreEqual(23, paths.Count);
+
+            for (int i = 0; i < paths.Count; i++)
+            {
+                string path = paths[i];
+                Assert.IsTrue(File.Exists(path), path);
+                Assert.IsTrue(Alpha017EffectAssetPostprocessor.IsEffectPath(path), path);
+
+                TextureImporter importer = AssetImporter.GetAtPath(path) as TextureImporter;
+                Assert.IsNotNull(importer, path);
+                Assert.AreEqual(TextureImporterType.Sprite, importer.textureType, path);
+                Assert.AreEqual(SpriteImportMode.Single, importer.spriteImportMode, path);
+                Assert.AreEqual(64f, importer.spritePixelsPerUnit, 0.001f, path);
+                Assert.AreEqual(FilterMode.Point, importer.filterMode, path);
+                Assert.AreEqual(TextureImporterCompression.Uncompressed, importer.textureCompression, path);
+                Assert.IsFalse(importer.crunchedCompression, path);
+                Assert.IsFalse(importer.mipmapEnabled, path);
+                Assert.AreEqual(TextureImporterNPOTScale.None, importer.npotScale, path);
+                Assert.AreEqual(TextureWrapMode.Clamp, importer.wrapMode, path);
+                Assert.AreEqual(TextureImporterAlphaSource.FromInput, importer.alphaSource, path);
+                Assert.IsTrue(importer.alphaIsTransparency, path);
+                Assert.IsTrue(importer.sRGBTexture, path);
+                Assert.IsFalse(importer.isReadable, path);
+
+                TextureImporterSettings settings = new TextureImporterSettings();
+                importer.ReadTextureSettings(settings);
+                Assert.AreEqual(SpriteMeshType.FullRect, settings.spriteMeshType, path);
+                Assert.AreEqual((int)SpriteAlignment.Custom, settings.spriteAlignment, path);
+                Assert.AreEqual(new Vector2(0.5f, 0.5f), settings.spritePivot, path);
+                Assert.AreEqual(Vector4.zero, settings.spriteBorder, path);
+                Assert.IsFalse(settings.spriteGenerateFallbackPhysicsShape, path);
+                Assert.IsNotNull(AssetDatabase.LoadAssetAtPath<Sprite>(path), path);
+            }
+        }
+
+        [Test]
+        public void EffectClips_BindEveryIndependentFrameInContractOrder()
+        {
+            for (int familyIndex = 0; familyIndex < Alpha017VisualMigrationPreflight.EffectFamilies.Count; familyIndex++)
+            {
+                Alpha017EffectFamilyContract family = Alpha017VisualMigrationPreflight.EffectFamilies[familyIndex];
+                string clipPath = Alpha017EffectAnimationBuilder.GetClipPath(family.Id);
+                AnimationClip clip = AssetDatabase.LoadAssetAtPath<AnimationClip>(clipPath);
+
+                Assert.IsNotNull(clip, clipPath);
+                Assert.AreEqual(family.FramesPerSecond, clip.frameRate, clipPath);
+                Assert.AreEqual(family.Loop, AnimationUtility.GetAnimationClipSettings(clip).loopTime, clipPath);
+
+                EditorCurveBinding[] bindings = AnimationUtility.GetObjectReferenceCurveBindings(clip);
+                Assert.AreEqual(1, bindings.Length, clipPath);
+                Assert.AreEqual(typeof(SpriteRenderer), bindings[0].type, clipPath);
+                Assert.AreEqual("m_Sprite", bindings[0].propertyName, clipPath);
+
+                ObjectReferenceKeyframe[] keys = AnimationUtility.GetObjectReferenceCurve(clip, bindings[0]);
+                Assert.AreEqual(family.FrameCount + 1, keys.Length, clipPath);
+
+                for (int frameIndex = 0; frameIndex < family.FrameCount; frameIndex++)
+                {
+                    Sprite expected = AssetDatabase.LoadAssetAtPath<Sprite>(family.GetFramePath(frameIndex));
+                    Assert.AreSame(expected, keys[frameIndex].value, family.GetFramePath(frameIndex));
+                    Assert.AreEqual(frameIndex / (float)family.FramesPerSecond, keys[frameIndex].time, 0.0001f);
+                }
+
+                Assert.AreSame(keys[family.FrameCount - 1].value, keys[family.FrameCount].value, clipPath);
+                Assert.AreEqual(
+                    family.FrameCount / (float)family.FramesPerSecond,
+                    keys[family.FrameCount].time,
+                    0.0001f,
+                    clipPath);
+            }
         }
 
         [Test]
@@ -175,11 +254,11 @@ namespace DarkFlare.Tests
             Assert.IsTrue(report.WorldTargets.All(target => target.RendererCount > 0));
             Assert.IsTrue(report.WorldTargets.All(target => target.DefaultRendererCount == target.RendererCount));
             Assert.IsTrue(report.WorldTargets.Where(target => target.RequiresSortingGroup).All(target => target.SortingGroupCount == 0));
-            Assert.AreEqual(23, report.MissingEffectFrames.Count);
+            Assert.AreEqual(0, report.MissingEffectFrames.Count);
             Assert.AreEqual(4, report.Issues.Count(issue => issue.Code == "sorting-layer-missing"));
             Assert.AreEqual(15, report.Issues.Count(issue => issue.Code == "sorting-group-missing"));
             Assert.AreEqual(18, report.Issues.Count(issue => issue.Code == "default-renderer"));
-            Assert.AreEqual(23, report.Issues.Count(issue => issue.Code == "effect-frame-missing"));
+            Assert.AreEqual(0, report.Issues.Count(issue => issue.Code == "effect-frame-missing"));
             Assert.IsFalse(report.Issues.Any(issue => issue.Code == "target-missing"));
             Assert.Throws<InvalidOperationException>(() =>
                 Alpha017VisualMigrationPreflight.Capture(Alpha017MigrationPhase.Apply));
