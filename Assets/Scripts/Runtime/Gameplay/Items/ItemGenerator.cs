@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace DarkFlare
@@ -14,99 +15,55 @@ namespace DarkFlare
                 throw new System.ArgumentNullException(nameof(baseDefinition));
             }
 
-            System.Random random = new System.Random(options.Seed);
-            ItemInstance item = baseDefinition.CreateInstance(options.InstanceId, options.ItemLevel, options.Seed, options.Rarity);
-            int prefixCount = Clamp(options.PrefixCount, 0, baseDefinition.MaxPrefixCount);
-            int suffixCount = Clamp(options.SuffixCount, 0, baseDefinition.MaxSuffixCount);
+            if (!ItemRarityRules.IsNormalGenerationValid(
+                    options.Rarity,
+                    options.PrefixCount,
+                    options.SuffixCount))
+            {
+                throw new ArgumentOutOfRangeException(
+                    nameof(options),
+                    $"{options.Rarity} 不能生成 {options.PrefixCount} 前缀 / {options.SuffixCount} 后缀");
+            }
 
-            AddAffixes(item, affixPool, AffixType.Prefix, prefixCount, random);
-            AddAffixes(item, affixPool, AffixType.Suffix, suffixCount, random);
+            ItemInstance item = baseDefinition.CreateInstance(options.InstanceId, options.ItemLevel, options.Seed, options.Rarity);
+            List<AffixType?> requestedTypes = new List<AffixType?>(options.PrefixCount + options.SuffixCount);
+
+            for (int i = 0; i < options.PrefixCount; i++)
+            {
+                requestedTypes.Add(AffixType.Prefix);
+            }
+
+            for (int i = 0; i < options.SuffixCount; i++)
+            {
+                requestedTypes.Add(AffixType.Suffix);
+            }
+
+            bool generated = AffixGenerationUtility.TryGenerate(
+                item,
+                affixPool,
+                options.Rarity,
+                Array.Empty<AffixInstance>(),
+                Array.Empty<AffixInstance>(),
+                requestedTypes,
+                options.Seed,
+                options.Seed,
+                out List<AffixInstance> affixes);
+
+            if (!generated)
+            {
+                throw new InvalidOperationException(
+                    $"{baseDefinition.Id} 无法完整生成 {options.PrefixCount} 前缀 / {options.SuffixCount} 后缀");
+            }
+
+            for (int i = 0; i < affixes.Count; i++)
+            {
+                if (!item.TryAddAffix(affixes[i]))
+                {
+                    throw new InvalidOperationException($"{baseDefinition.Id} 生成词缀时提交失败");
+                }
+            }
 
             return item;
-        }
-
-        static void AddAffixes(
-            ItemInstance item,
-            IEnumerable<AffixDefinition> affixPool,
-            AffixType affixType,
-            int count,
-            System.Random random)
-        {
-            List<AffixDefinition> candidates = CollectCandidates(item, affixPool, affixType);
-
-            for (int i = 0; i < count && candidates.Count > 0; i++)
-            {
-                AffixDefinition selected = PickWeighted(candidates, random);
-
-                if (selected == null)
-                {
-                    return;
-                }
-
-                item.TryAddAffix(selected.CreateInstance(random));
-                candidates.Remove(selected);
-                candidates = CollectCandidates(item, candidates, affixType);
-            }
-        }
-
-        static List<AffixDefinition> CollectCandidates(ItemInstance item, IEnumerable<AffixDefinition> affixPool, AffixType affixType)
-        {
-            List<AffixDefinition> candidates = new List<AffixDefinition>();
-
-            foreach (AffixDefinition affix in affixPool)
-            {
-                if (affix == null || affix.AffixType != affixType || affix.Weight <= 0)
-                {
-                    continue;
-                }
-
-                if (affix.CanApplyTo(item.Tags, item.ItemLevel))
-                {
-                    candidates.Add(affix);
-                }
-            }
-
-            return candidates;
-        }
-
-        static AffixDefinition PickWeighted(List<AffixDefinition> candidates, System.Random random)
-        {
-            int totalWeight = 0;
-
-            for (int i = 0; i < candidates.Count; i++)
-            {
-                totalWeight += candidates[i].Weight;
-            }
-
-            if (totalWeight <= 0)
-            {
-                return null;
-            }
-
-            int roll = random.Next(0, totalWeight);
-            int current = 0;
-
-            for (int i = 0; i < candidates.Count; i++)
-            {
-                current += candidates[i].Weight;
-
-                if (roll < current)
-                {
-                    return candidates[i];
-                }
-            }
-
-            return candidates[candidates.Count - 1];
-        }
-
-        static int Clamp(int value, int min, int max)
-        {
-            if (value < min)
-            {
-                return min;
-            }
-
-            return value > max ? max : value;
         }
     }
 }

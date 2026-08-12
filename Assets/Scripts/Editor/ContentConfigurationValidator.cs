@@ -214,7 +214,7 @@ namespace DarkFlare.Editor
             ValidateSpawnDefinitions(spawnDefinitions, monsters, issues);
             ValidateLootTables(lootTables, items, affixes, issues);
             ValidateTraders(traders, items, issues);
-            ValidateCrafting(craftingDefinitions, affixes, issues);
+            ValidateCrafting(craftingDefinitions, affixes, items, issues);
 
             List<string> physicsIssues = GameplayPhysicsConfigurationValidator.Validate();
 
@@ -941,6 +941,7 @@ namespace DarkFlare.Editor
         static void ValidateCrafting(
             IReadOnlyList<CraftingDefinition> craftingDefinitions,
             IReadOnlyList<AffixDefinition> affixes,
+            IReadOnlyList<ItemBaseDefinition> items,
             List<ContentValidationIssue> issues)
         {
             if (craftingDefinitions.Count != 1)
@@ -951,12 +952,82 @@ namespace DarkFlare.Editor
             for (int i = 0; i < craftingDefinitions.Count; i++)
             {
                 CraftingDefinition definition = craftingDefinitions[i];
+                HashSet<AffixDefinition> pool = new HashSet<AffixDefinition>();
+
+                for (int affixIndex = 0; affixIndex < definition.AffixPool.Count; affixIndex++)
+                {
+                    AffixDefinition affix = definition.AffixPool[affixIndex];
+
+                    if (affix == null)
+                    {
+                        AddError(issues, definition, $"打造池词条 {affixIndex} 为空");
+                    }
+                    else if (!pool.Add(affix))
+                    {
+                        AddError(issues, definition, $"打造池重复引用词条：{affix.Id}");
+                    }
+                }
+
                 ValidateCoverage(
                     definition,
-                    new HashSet<AffixDefinition>(definition.AffixPool),
+                    pool,
                     affixes,
                     "打造池缺少词条",
                     issues);
+
+                if (definition.NormalToMagicCost != 15
+                    || definition.MagicToRareCost != 60
+                    || definition.RareToUniqueCost != 160
+                    || definition.ResetToNormalCost != 20
+                    || definition.RerollAffixesCost != 40
+                    || definition.AddAffixCost != 60
+                    || definition.RemoveAffixCost != 60
+                    || definition.RerollAffixValuesCost != 80)
+                {
+                    AddError(issues, definition, "打造基础价格必须使用 alpha 0.1.6 冻结值");
+                }
+
+                if (!Mathf.Approximately(definition.PrecisionMultiplier, 3f))
+                {
+                    AddError(issues, definition, "前缀/后缀精准操作溢价必须为任意范围的 3 倍");
+                }
+
+                for (int itemIndex = 0; itemIndex < items.Count; itemIndex++)
+                {
+                    ValidateCraftingPoolCapacity(definition, items[itemIndex], pool, issues);
+                }
+            }
+        }
+
+        static void ValidateCraftingPoolCapacity(
+            CraftingDefinition definition,
+            ItemBaseDefinition item,
+            IReadOnlyCollection<AffixDefinition> pool,
+            List<ContentValidationIssue> issues)
+        {
+            HashSet<string> prefixGroups = new HashSet<string>(StringComparer.Ordinal);
+            HashSet<string> suffixGroups = new HashSet<string>(StringComparer.Ordinal);
+
+            foreach (AffixDefinition affix in pool)
+            {
+                if (affix == null || !affix.CanApplyTo(item.RuntimeTags, 1))
+                {
+                    continue;
+                }
+
+                HashSet<string> groups = affix.AffixType == AffixType.Prefix
+                    ? prefixGroups
+                    : suffixGroups;
+                groups.Add(string.IsNullOrWhiteSpace(affix.GroupId) ? affix.Id : affix.GroupId);
+            }
+
+            if (prefixGroups.Count < 3 || suffixGroups.Count < 3)
+            {
+                AddError(
+                    issues,
+                    definition,
+                    $"打造池无法为 {item.Id} 支持传奇容量："
+                    + $"兼容前缀组 {prefixGroups.Count}/3，后缀组 {suffixGroups.Count}/3");
             }
         }
 

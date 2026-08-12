@@ -12,194 +12,332 @@ public class CraftingOperationsTests
     [TearDown]
     public void TearDown()
     {
-        foreach (Object obj in _created)
+        for (int i = 0; i < _created.Count; i++)
         {
-            Object.DestroyImmediate(obj);
+            Object.DestroyImmediate(_created[i]);
         }
 
         _created.Clear();
     }
 
-    [Test]
-    public void AddRandomAffix_AddsOne_ThenFailsWhenFull()
+    [TestCase(ItemRarity.Normal, 0, 0, 0, 0)]
+    [TestCase(ItemRarity.Magic, 1, 1, 1, 2)]
+    [TestCase(ItemRarity.Rare, 3, 3, 2, 6)]
+    [TestCase(ItemRarity.Unique, 3, 3, 4, 6)]
+    public void RarityRules_AreGlobalAndStable(
+        ItemRarity rarity,
+        int maxPrefixes,
+        int maxSuffixes,
+        int minimumTotal,
+        int maximumTotal)
     {
-        ItemInstance item = CreateItem(maxPrefix: 2);
-        List<AffixDefinition> pool = new List<AffixDefinition> { CreatePrefixAffix(10f, 30f) };
-        System.Random random = new System.Random(1);
+        ItemAffixLimits limits = ItemRarityRules.GetLimits(rarity);
 
-        Assert.IsTrue(CraftingOperations.AddRandomAffix(item, pool, random));
-        Assert.AreEqual(1, item.Prefixes.Count);
-
-        Assert.IsTrue(CraftingOperations.AddRandomAffix(item, pool, random));
-        Assert.AreEqual(2, item.Prefixes.Count);
-
-        Assert.IsFalse(CraftingOperations.AddRandomAffix(item, pool, random));
-        Assert.AreEqual(2, item.Prefixes.Count);
+        Assert.AreEqual(maxPrefixes, limits.MaxPrefixCount);
+        Assert.AreEqual(maxSuffixes, limits.MaxSuffixCount);
+        Assert.AreEqual(minimumTotal, limits.MinimumTotalCount);
+        Assert.AreEqual(maximumTotal, limits.MaximumTotalCount);
     }
 
     [Test]
-    public void RerollAllAffixes_KeepsCount_AndFailsOnEmptyItem()
+    public void UpgradeRarity_AdvancesSequentiallyAndMeetsMinimums()
     {
-        ItemInstance item = CreateItem(maxPrefix: 3);
-        List<AffixDefinition> pool = new List<AffixDefinition> { CreatePrefixAffix(10f, 30f) };
-        System.Random random = new System.Random(2);
+        ItemInstance item = CreateItem(ItemRarity.Normal);
+        List<AffixDefinition> pool = CreatePool();
 
-        Assert.IsFalse(CraftingOperations.RerollAllAffixes(item, pool, random));
+        CraftingResult magic = CraftingOperations.TryCraft(
+            CraftOperation.UpgradeRarity,
+            CraftingAffixScope.Any,
+            item,
+            pool,
+            10);
+        Assert.IsTrue(magic.Succeeded);
+        AssertNormalState(item, ItemRarity.Magic);
+        int magicCount = CountAffixes(item);
 
-        CraftingOperations.AddRandomAffix(item, pool, random);
-        CraftingOperations.AddRandomAffix(item, pool, random);
-        int before = item.Prefixes.Count + item.Suffixes.Count;
+        CraftingResult rare = CraftingOperations.TryCraft(
+            CraftOperation.UpgradeRarity,
+            CraftingAffixScope.Any,
+            item,
+            pool,
+            11);
+        Assert.IsTrue(rare.Succeeded);
+        Assert.AreEqual(magicCount + 1, CountAffixes(item));
+        AssertNormalState(item, ItemRarity.Rare);
 
-        Assert.IsTrue(CraftingOperations.RerollAllAffixes(item, pool, random));
-        Assert.AreEqual(before, item.Prefixes.Count + item.Suffixes.Count);
+        CraftingResult unique = CraftingOperations.TryCraft(
+            CraftOperation.UpgradeRarity,
+            CraftingAffixScope.Any,
+            item,
+            pool,
+            12);
+        Assert.IsTrue(unique.Succeeded);
+        AssertNormalState(item, ItemRarity.Unique);
+        Assert.GreaterOrEqual(CountAffixes(item), 4);
+
+        CraftingResult maximum = CraftingOperations.TryCraft(
+            CraftOperation.UpgradeRarity,
+            CraftingAffixScope.Any,
+            item,
+            pool,
+            13);
+        Assert.IsFalse(maximum.Succeeded);
+        Assert.AreEqual(CraftingFailureReason.MaximumRarity, maximum.FailureReason);
     }
 
     [Test]
-    public void RemoveAndRerollAffix_ReplacesTarget_KeepsCount()
+    public void ResetToNormal_RemovesAllAffixesAndRarity()
     {
-        ItemInstance item = CreateItem(maxPrefix: 3);
-        List<AffixDefinition> pool = new List<AffixDefinition> { CreatePrefixAffix(10f, 30f) };
-        System.Random random = new System.Random(3);
+        ItemInstance item = CreateItem(ItemRarity.Rare);
+        Add(item, CreateAffix(AffixType.Prefix, "p", 10f, 20f), 1);
+        Add(item, CreateAffix(AffixType.Suffix, "s", 10f, 20f), 2);
 
-        CraftingOperations.AddRandomAffix(item, pool, random);
-        AffixInstance target = item.Prefixes[0];
-
-        Assert.IsTrue(CraftingOperations.RemoveAndRerollAffix(item, target, pool, random));
-        Assert.AreEqual(1, item.Prefixes.Count);
-        Assert.IsFalse(item.Prefixes.Contains(target));
-    }
-
-    [Test]
-    public void RerollAllAffixes_RollsBack_WhenPoolCannotReplaceAffixes()
-    {
-        ItemInstance item = CreateItem(maxPrefix: 3);
-        List<AffixDefinition> pool = new List<AffixDefinition> { CreatePrefixAffix(10f, 30f) };
-        System.Random random = new System.Random(31);
-        Assert.IsTrue(CraftingOperations.AddRandomAffix(item, pool, random));
-        AffixInstance original = item.Prefixes[0];
-
-        bool rerolled = CraftingOperations.RerollAllAffixes(
+        CraftingResult result = CraftingOperations.TryCraft(
+            CraftOperation.ResetToNormal,
+            CraftingAffixScope.Any,
             item,
             new List<AffixDefinition>(),
-            random);
+            20);
 
-        Assert.IsFalse(rerolled);
-        Assert.AreEqual(1, item.Prefixes.Count);
-        Assert.AreSame(original, item.Prefixes[0]);
+        Assert.IsTrue(result.Succeeded);
+        Assert.AreEqual(ItemRarity.Normal, item.Rarity);
+        Assert.AreEqual(0, CountAffixes(item));
     }
 
     [Test]
-    public void RemoveAndRerollAffix_RollsBack_WhenPoolCannotReplaceTarget()
+    public void RerollPrefix_PreservesSuffixAndBuildsNormalTotal()
     {
-        ItemInstance item = CreateItem(maxPrefix: 3);
-        List<AffixDefinition> pool = new List<AffixDefinition> { CreatePrefixAffix(10f, 30f) };
-        System.Random random = new System.Random(32);
-        Assert.IsTrue(CraftingOperations.AddRandomAffix(item, pool, random));
-        AffixInstance original = item.Prefixes[0];
-
-        bool rerolled = CraftingOperations.RemoveAndRerollAffix(
+        ItemInstance item = CreateItem(ItemRarity.Rare);
+        Add(item, CreateAffix(AffixType.Prefix, "old_prefix", 10f, 20f), 1);
+        AffixInstance preservedSuffix = Add(
             item,
-            original,
-            new List<AffixDefinition>(),
-            random);
+            CreateAffix(AffixType.Suffix, "old_suffix", 10f, 20f),
+            2);
 
-        Assert.IsFalse(rerolled);
+        CraftingResult result = CraftingOperations.TryCraft(
+            CraftOperation.RerollAffixes,
+            CraftingAffixScope.Prefix,
+            item,
+            CreatePool(),
+            30);
+
+        Assert.IsTrue(result.Succeeded);
+        Assert.AreSame(preservedSuffix, item.Suffixes[0]);
+        Assert.GreaterOrEqual(item.Prefixes.Count, 1);
+        AssertNormalState(item, ItemRarity.Rare);
+    }
+
+    [Test]
+    public void AddAndRemove_RespectScopeCapacityAndRemovalMayBreakMinimum()
+    {
+        ItemInstance item = CreateItem(ItemRarity.Magic);
+        List<AffixDefinition> pool = CreatePool();
+
+        CraftingResult addPrefix = CraftingOperations.TryCraft(
+            CraftOperation.AddAffix,
+            CraftingAffixScope.Prefix,
+            item,
+            pool,
+            40);
+        Assert.IsTrue(addPrefix.Succeeded);
         Assert.AreEqual(1, item.Prefixes.Count);
-        Assert.AreSame(original, item.Prefixes[0]);
+
+        CraftingResult fullPrefix = CraftingOperations.TryCraft(
+            CraftOperation.AddAffix,
+            CraftingAffixScope.Prefix,
+            item,
+            pool,
+            41);
+        Assert.IsFalse(fullPrefix.Succeeded);
+        Assert.AreEqual(CraftingFailureReason.NoCapacity, fullPrefix.FailureReason);
+
+        CraftingResult removePrefix = CraftingOperations.TryCraft(
+            CraftOperation.RemoveAffix,
+            CraftingAffixScope.Prefix,
+            item,
+            pool,
+            42);
+        Assert.IsTrue(removePrefix.Succeeded);
+        Assert.AreEqual(ItemRarity.Magic, item.Rarity);
+        Assert.AreEqual(0, CountAffixes(item));
     }
 
     [Test]
-    public void RemoveAndRerollAffix_ReturnsFalse_WhenTargetNotOnItem()
+    public void RerollValues_KeepsDefinitionAndMayMoveEitherDirection()
     {
-        ItemInstance item = CreateItem(maxPrefix: 3);
-        List<AffixDefinition> pool = new List<AffixDefinition> { CreatePrefixAffix(10f, 30f) };
-        AffixInstance stray = CreatePrefixAffix(10f, 30f).CreateInstance(new System.Random(9));
+        ItemInstance item = CreateItem(ItemRarity.Magic);
+        AffixDefinition definition = CreateAffix(AffixType.Prefix, "variable", 1f, 100f);
+        AffixInstance previous = Add(item, definition, 5);
 
-        Assert.IsFalse(CraftingOperations.RemoveAndRerollAffix(item, stray, pool, new System.Random(4)));
+        CraftingResult result = CraftingOperations.TryCraft(
+            CraftOperation.RerollAffixValues,
+            CraftingAffixScope.Prefix,
+            item,
+            new List<AffixDefinition> { definition },
+            50);
+
+        Assert.IsTrue(result.Succeeded);
+        Assert.AreSame(previous, result.PreviousAffectedAffix);
+        Assert.AreNotSame(previous, result.CurrentAffectedAffix);
+        Assert.AreSame(definition, item.Prefixes[0].Definition);
     }
 
     [Test]
-    public void UpgradeAffix_NeverLowersValue()
+    public void FailedCraft_IsAtomic()
     {
-        ItemInstance item = CreateItem(maxPrefix: 3);
-        List<AffixDefinition> pool = new List<AffixDefinition> { CreatePrefixAffix(1f, 100f) };
-        System.Random random = new System.Random(5);
+        ItemInstance item = CreateItem(ItemRarity.Rare);
+        AffixInstance original = Add(
+            item,
+            CreateAffix(AffixType.Suffix, "original", 10f, 20f),
+            1);
+        int revision = item.Revision;
 
-        CraftingOperations.AddRandomAffix(item, pool, random);
-        float initial = SumValue(item.Prefixes[0]);
-        float previous = initial;
+        CraftingResult result = CraftingOperations.TryCraft(
+            CraftOperation.AddAffix,
+            CraftingAffixScope.Prefix,
+            item,
+            new List<AffixDefinition>(),
+            60);
 
-        for (int i = 0; i < 50; i++)
-        {
-            bool upgraded = CraftingOperations.UpgradeAffix(item, item.Prefixes[0], random);
-            float current = SumValue(item.Prefixes[0]);
-            Assert.GreaterOrEqual(current, previous);
-
-            if (upgraded)
-            {
-                Assert.Greater(current, previous);
-            }
-            else
-            {
-                Assert.AreEqual(previous, current);
-            }
-
-            previous = current;
-        }
-
-        Assert.GreaterOrEqual(previous, initial);
+        Assert.IsFalse(result.Succeeded);
+        Assert.AreEqual(CraftingFailureReason.NoLegalAffix, result.FailureReason);
+        Assert.AreEqual(revision, item.Revision);
+        Assert.AreSame(original, item.Suffixes[0]);
     }
 
     [Test]
-    public void UpgradeAffix_ReturnsFalse_WhenValueDoesNotIncrease()
+    public void SameRootSeed_ProducesSameDefinitionsAndValues()
     {
-        ItemInstance item = CreateItem(maxPrefix: 3);
-        List<AffixDefinition> pool = new List<AffixDefinition> { CreatePrefixAffix(20f, 20f) };
-        System.Random random = new System.Random(33);
-        Assert.IsTrue(CraftingOperations.AddRandomAffix(item, pool, random));
-        AffixInstance original = item.Prefixes[0];
+        ItemInstance first = CreateItem(ItemRarity.Normal, "first");
+        ItemInstance second = CreateItem(ItemRarity.Normal, "second");
+        List<AffixDefinition> pool = CreatePool();
 
-        bool upgraded = CraftingOperations.UpgradeAffix(item, original, random);
+        CraftingResult firstResult = CraftingOperations.TryCraft(
+            CraftOperation.UpgradeRarity,
+            CraftingAffixScope.Any,
+            first,
+            pool,
+            777);
+        CraftingResult secondResult = CraftingOperations.TryCraft(
+            CraftOperation.UpgradeRarity,
+            CraftingAffixScope.Any,
+            second,
+            pool,
+            777);
 
-        Assert.IsFalse(upgraded);
-        Assert.AreSame(original, item.Prefixes[0]);
-        Assert.AreEqual(20f, SumValue(item.Prefixes[0]));
+        Assert.IsTrue(firstResult.Succeeded);
+        Assert.IsTrue(secondResult.Succeeded);
+        CollectionAssert.AreEqual(Describe(first), Describe(second));
     }
 
-    static float SumValue(AffixInstance affix)
+    [Test]
+    public void CraftingDefinition_PreciseScopesCostExactlyThreeTimesAny()
     {
-        float sum = 0f;
-
-        for (int i = 0; i < affix.Modifiers.Count; i++)
-        {
-            sum += affix.Modifiers[i].Value;
-        }
-
-        return sum;
-    }
-
-    ItemInstance CreateItem(int maxPrefix)
-    {
-        ItemBaseDefinition definition = ScriptableObject.CreateInstance<ItemBaseDefinition>();
-        typeof(ItemBaseDefinition).GetField("_id", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(definition, "test");
-        typeof(ItemBaseDefinition).GetField("_maxPrefixCount", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(definition, maxPrefix);
+        CraftingDefinition definition = ScriptableObject.CreateInstance<CraftingDefinition>();
         _created.Add(definition);
 
-        return new ItemInstance("test", definition, ItemRarity.Normal, 1, 0, new List<ModifierInstance>());
+        Assert.AreEqual(15, definition.GetCost(
+            CraftOperation.UpgradeRarity,
+            CraftingAffixScope.Any,
+            ItemRarity.Normal));
+        Assert.AreEqual(60, definition.GetCost(
+            CraftOperation.UpgradeRarity,
+            CraftingAffixScope.Any,
+            ItemRarity.Magic));
+        Assert.AreEqual(160, definition.GetCost(
+            CraftOperation.UpgradeRarity,
+            CraftingAffixScope.Any,
+            ItemRarity.Rare));
+        Assert.AreEqual(40, definition.GetCost(
+            CraftOperation.RerollAffixes,
+            CraftingAffixScope.Any,
+            ItemRarity.Rare));
+        Assert.AreEqual(120, definition.GetCost(
+            CraftOperation.RerollAffixes,
+            CraftingAffixScope.Prefix,
+            ItemRarity.Rare));
+        Assert.AreEqual(240, definition.GetCost(
+            CraftOperation.RerollAffixValues,
+            CraftingAffixScope.Suffix,
+            ItemRarity.Rare));
     }
 
-    AffixDefinition CreatePrefixAffix(float valueMin, float valueMax)
+    ItemInstance CreateItem(ItemRarity rarity, string id = "item")
+    {
+        ItemBaseDefinition definition = ScriptableObject.CreateInstance<ItemBaseDefinition>();
+        SetField(definition, "_id", id);
+        SetField(definition, "_displayName", id);
+        _created.Add(definition);
+        return new ItemInstance(id, definition, rarity, 10, 0, new List<ModifierInstance>());
+    }
+
+    List<AffixDefinition> CreatePool()
+    {
+        List<AffixDefinition> pool = new List<AffixDefinition>();
+
+        for (int i = 0; i < 4; i++)
+        {
+            pool.Add(CreateAffix(AffixType.Prefix, $"prefix_{i}", 1f + i, 20f + i));
+            pool.Add(CreateAffix(AffixType.Suffix, $"suffix_{i}", 1f + i, 20f + i));
+        }
+
+        return pool;
+    }
+
+    AffixDefinition CreateAffix(
+        AffixType type,
+        string id,
+        float valueMin,
+        float valueMax)
     {
         StatModifierDefinition modifier = new StatModifierDefinition();
-        typeof(StatModifierDefinition).GetField("_operation", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(modifier, ModifierOperation.Increase);
-        typeof(StatModifierDefinition).GetField("_valueRange", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(modifier, new Vector2(valueMin, valueMax));
-
+        SetField(modifier, "_operation", ModifierOperation.Increase);
+        SetField(modifier, "_valueRange", new Vector2(valueMin, valueMax));
         AffixDefinition affix = ScriptableObject.CreateInstance<AffixDefinition>();
-        typeof(AffixDefinition).GetField("_affixType", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(affix, AffixType.Prefix);
-        typeof(AffixDefinition).GetField("_minItemLevel", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(affix, 1);
-        typeof(AffixDefinition).GetField("_weight", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(affix, 100);
-        typeof(AffixDefinition).GetField("_modifiers", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(affix, new List<StatModifierDefinition> { modifier });
+        SetField(affix, "_id", id);
+        SetField(affix, "_displayName", id);
+        SetField(affix, "_affixType", type);
+        SetField(affix, "_groupId", id);
+        SetField(affix, "_minItemLevel", 1);
+        SetField(affix, "_weight", 100);
+        SetField(affix, "_modifiers", new List<StatModifierDefinition> { modifier });
         _created.Add(affix);
         return affix;
+    }
+
+    static AffixInstance Add(ItemInstance item, AffixDefinition definition, int seed)
+    {
+        AffixInstance affix = definition.CreateInstance(new System.Random(seed));
+        Assert.IsTrue(item.TryAddAffix(affix));
+        return affix;
+    }
+
+    static int CountAffixes(ItemInstance item)
+    {
+        return item.Prefixes.Count + item.Suffixes.Count;
+    }
+
+    static void AssertNormalState(ItemInstance item, ItemRarity rarity)
+    {
+        ItemAffixLimits limits = ItemRarityRules.GetLimits(rarity);
+        Assert.AreEqual(rarity, item.Rarity);
+        Assert.LessOrEqual(item.Prefixes.Count, limits.MaxPrefixCount);
+        Assert.LessOrEqual(item.Suffixes.Count, limits.MaxSuffixCount);
+        Assert.That(CountAffixes(item), Is.InRange(limits.MinimumTotalCount, limits.MaximumTotalCount));
+    }
+
+    static List<string> Describe(ItemInstance item)
+    {
+        return item.Prefixes
+            .Concat(item.Suffixes)
+            .Select(affix => $"{affix.Definition.Id}:{string.Join(",", affix.Modifiers.Select(modifier => modifier.Value.ToString("R")))}")
+            .ToList();
+    }
+
+    static void SetField(object target, string fieldName, object value)
+    {
+        FieldInfo field = target.GetType().GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Instance);
+        Assert.IsNotNull(field, fieldName);
+        field.SetValue(target, value);
     }
 }

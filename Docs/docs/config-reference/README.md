@@ -15,9 +15,9 @@
 | `MonsterDefinition` | `Assets/Data/Preset/Monsters` | [完整](./combat-content.md#monsterdefinition) | [首批内容池](../content-system.md) |
 | `MonsterAffixDefinition` | `Assets/Data/Preset/MonsterAffixes` | [完整](./combat-content.md#monsteraffixdefinition) | [伤害与词条](../damage-affix-system.md) |
 | `MonsterSpawnDefinition` | `Assets/Data/Preset/Monsters` | 骨架已登记 | [首批内容池](../content-system.md) |
-| `LootTableDefinition` | `Assets/Data/Preset/Loot` | 骨架已登记 | [随机化与掉落](../randomization-system.md) |
+| `LootTableDefinition` | `Assets/Data/Preset/Loot` | [完整](./combat-content.md#loottabledefinition) | [随机化与掉落](../randomization-system.md) |
 | `TraderDefinition` | `Assets/Data/Preset/Traders` | 骨架已登记 | [首批内容池](../content-system.md) |
-| `CraftingDefinition` | `Assets/Data/Preset/Crafting` | 骨架已登记 | [打造系统](../crafting-system.md) |
+| `CraftingDefinition` | `Assets/Data/Preset/Crafting` | [完整](./combat-content.md#craftingdefinition) | [打造系统](../crafting-system.md) |
 
 ## 每类配置的交付要求
 

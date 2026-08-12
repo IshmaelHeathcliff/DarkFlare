@@ -2,28 +2,27 @@ using System.Collections.Generic;
 
 namespace DarkFlare
 {
-    public readonly struct CraftingAffixSnapshot
+    public readonly struct CraftingActionSnapshot
     {
-        public AffixInstance Affix { get; }
+        public CraftOperation Operation { get; }
 
-        public AffixType Type { get; }
+        public CraftingAffixScope Scope { get; }
 
-        public string DisplayName { get; }
+        public CraftingFailureReason FailureReason { get; }
 
-        public string ModifierSummary { get; }
+        public int Cost { get; }
 
-        public float TotalValue { get; }
+        public bool IsAvailable => FailureReason == CraftingFailureReason.None;
 
-        public AffixDetailSnapshot Detail { get; }
-
-        public CraftingAffixSnapshot(AffixDetailSnapshot detail)
+        public CraftingActionSnapshot(
+            CraftOperation operation,
+            CraftingAffixScope scope,
+            CraftingEvaluation evaluation)
         {
-            Detail = detail;
-            Affix = detail.Affix;
-            Type = detail.Type;
-            DisplayName = detail.DisplayName;
-            ModifierSummary = detail.ModifierSummary;
-            TotalValue = detail.TotalValue;
+            Operation = operation;
+            Scope = scope;
+            FailureReason = evaluation.FailureReason;
+            Cost = evaluation.Cost;
         }
     }
 
@@ -51,15 +50,19 @@ namespace DarkFlare
 
         public int MaxSuffixCount { get; }
 
-        public IReadOnlyList<CraftingAffixSnapshot> Affixes { get; }
+        public int MinimumTotalCount { get; }
 
-        public bool HasAffixCapacity => PrefixCount < MaxPrefixCount || SuffixCount < MaxSuffixCount;
+        public int MaximumTotalCount { get; }
 
-        public CraftingItemSnapshot(ItemInstance item, int sellPrice)
+        public IReadOnlyList<CraftingActionSnapshot> Actions { get; }
+
+        public CraftingItemSnapshot(
+            ItemInstance item,
+            int sellPrice,
+            CraftingSystem crafting)
         {
             Item = item;
             Detail = ItemDetailSnapshotFactory.Create(item);
-            ItemBaseDefinition definition = item.BaseDefinition;
             DisplayName = Detail.DisplayName;
             Type = Detail.Type;
             Rarity = Detail.Rarity;
@@ -67,21 +70,70 @@ namespace DarkFlare
             SellPrice = sellPrice;
             PrefixCount = item.Prefixes.Count;
             SuffixCount = item.Suffixes.Count;
-            MaxPrefixCount = definition != null ? definition.MaxPrefixCount : 0;
-            MaxSuffixCount = definition != null ? definition.MaxSuffixCount : 0;
-            List<CraftingAffixSnapshot> affixes = new List<CraftingAffixSnapshot>(PrefixCount + SuffixCount);
+            ItemAffixLimits limits = ItemRarityRules.GetLimits(item.Rarity);
+            MaxPrefixCount = limits.MaxPrefixCount;
+            MaxSuffixCount = limits.MaxSuffixCount;
+            MinimumTotalCount = limits.MinimumTotalCount;
+            MaximumTotalCount = limits.MaximumTotalCount;
+            Actions = BuildActions(item, crafting);
+        }
 
-            for (int i = 0; i < Detail.Prefixes.Count; i++)
+        public bool TryGetAction(
+            CraftOperation operation,
+            CraftingAffixScope scope,
+            out CraftingActionSnapshot action)
+        {
+            for (int i = 0; i < Actions.Count; i++)
             {
-                affixes.Add(new CraftingAffixSnapshot(Detail.Prefixes[i]));
+                if (Actions[i].Operation == operation && Actions[i].Scope == scope)
+                {
+                    action = Actions[i];
+                    return true;
+                }
             }
 
-            for (int i = 0; i < Detail.Suffixes.Count; i++)
-            {
-                affixes.Add(new CraftingAffixSnapshot(Detail.Suffixes[i]));
-            }
+            action = default;
+            return false;
+        }
 
-            Affixes = affixes;
+        static IReadOnlyList<CraftingActionSnapshot> BuildActions(
+            ItemInstance item,
+            CraftingSystem crafting)
+        {
+            List<CraftingActionSnapshot> actions = new List<CraftingActionSnapshot>(14)
+            {
+                CreateAction(CraftOperation.UpgradeRarity, CraftingAffixScope.Any, item, crafting),
+                CreateAction(CraftOperation.ResetToNormal, CraftingAffixScope.Any, item, crafting),
+            };
+
+            AddScopedActions(actions, CraftOperation.RerollAffixes, item, crafting);
+            AddScopedActions(actions, CraftOperation.AddAffix, item, crafting);
+            AddScopedActions(actions, CraftOperation.RemoveAffix, item, crafting);
+            AddScopedActions(actions, CraftOperation.RerollAffixValues, item, crafting);
+            return actions.AsReadOnly();
+        }
+
+        static void AddScopedActions(
+            List<CraftingActionSnapshot> actions,
+            CraftOperation operation,
+            ItemInstance item,
+            CraftingSystem crafting)
+        {
+            actions.Add(CreateAction(operation, CraftingAffixScope.Any, item, crafting));
+            actions.Add(CreateAction(operation, CraftingAffixScope.Prefix, item, crafting));
+            actions.Add(CreateAction(operation, CraftingAffixScope.Suffix, item, crafting));
+        }
+
+        static CraftingActionSnapshot CreateAction(
+            CraftOperation operation,
+            CraftingAffixScope scope,
+            ItemInstance item,
+            CraftingSystem crafting)
+        {
+            return new CraftingActionSnapshot(
+                operation,
+                scope,
+                crafting.Evaluate(operation, scope, item));
         }
     }
 
@@ -93,50 +145,14 @@ namespace DarkFlare
 
         public IReadOnlyList<CraftingItemSnapshot> Items { get; }
 
-        public int AddAffixCost { get; }
-
-        public int RerollAllCost { get; }
-
-        public int RemoveRerollCost { get; }
-
-        public int UpgradeAffixCost { get; }
-
         public CraftingSnapshot(
             bool isConfigured,
             int gold,
-            IReadOnlyList<CraftingItemSnapshot> items,
-            int addAffixCost,
-            int rerollAllCost,
-            int removeRerollCost,
-            int upgradeAffixCost)
+            IReadOnlyList<CraftingItemSnapshot> items)
         {
             IsConfigured = isConfigured;
             Gold = gold;
             Items = items;
-            AddAffixCost = addAffixCost;
-            RerollAllCost = rerollAllCost;
-            RemoveRerollCost = removeRerollCost;
-            UpgradeAffixCost = upgradeAffixCost;
-        }
-
-        public int GetCost(CraftOperation operation)
-        {
-            if (operation == CraftOperation.AddAffix)
-            {
-                return AddAffixCost;
-            }
-
-            if (operation == CraftOperation.RerollAll)
-            {
-                return RerollAllCost;
-            }
-
-            if (operation == CraftOperation.RemoveReroll)
-            {
-                return RemoveRerollCost;
-            }
-
-            return UpgradeAffixCost;
         }
     }
 
@@ -153,17 +169,10 @@ namespace DarkFlare
             for (int i = 0; i < inventorySnapshot.Items.Count; i++)
             {
                 ItemInstance item = inventorySnapshot.Items[i].Item;
-                items.Add(new CraftingItemSnapshot(item, trading.GetSellPrice(item)));
+                items.Add(new CraftingItemSnapshot(item, trading.GetSellPrice(item), crafting));
             }
 
-            return new CraftingSnapshot(
-                crafting.IsConfigured,
-                inventory.Gold,
-                items,
-                crafting.GetCost(CraftOperation.AddAffix),
-                crafting.GetCost(CraftOperation.RerollAll),
-                crafting.GetCost(CraftOperation.RemoveReroll),
-                crafting.GetCost(CraftOperation.UpgradeAffix));
+            return new CraftingSnapshot(crafting.IsConfigured, inventory.Gold, items);
         }
     }
 }

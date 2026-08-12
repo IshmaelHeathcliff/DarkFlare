@@ -2,7 +2,7 @@
 
 ## 覆盖类型
 
-本文覆盖 `alpha 0.1.2–0.1.5` 直接改变的六类配置：
+本文覆盖 `alpha 0.1.2–0.1.6` 直接改变的八类配置：
 
 - `StatDefinition`
 - `CharacterDefinition`
@@ -10,6 +10,8 @@
 - `MonsterAffixDefinition`
 - `ItemBaseDefinition`
 - `ProjectileSkillDefinition`
+- `LootTableDefinition`
+- `CraftingDefinition`
 
 正式示例分别位于 `Assets/Data/Preset/Stats`、`Actors`、`Monsters`、`MonsterAffixes`、`Items` 和 `Skills`。嵌套伤害范围统一使用 `DamageRollDefinition`，物品和怪物词条共用 `StatModifierDefinition` 的计算语义，但不共用生成领域模型。
 
@@ -118,7 +120,9 @@
 
 创建菜单：`DarkFlare/Data/Items/Item Base Definition`。
 
-除既有 ID、名称、图标、槽位、价格、格子、词条容量与隐式修改器外，基础伤害遵循严格所有权：
+除既有 ID、名称、图标、槽位、价格、格子与隐式修改器外，基础伤害遵循严格所有权：
+
+- 显式词缀容量不再是基底字段，统一由 `ItemRarityRules` 根据实例稀有度决定。
 
 - `ItemType.Weapon` 的 `_baseDamages` 必须非空。
 - Armor、Accessory、Material、Currency 的 `_baseDamages` 必须为空。
@@ -143,6 +147,46 @@
 | `_manaCost` | `float` | 不得小于 0；正式基础投射物为 `8` |
 
 `EquippedWeapon` 找不到有效 Weapon 槽来源时，攻击构建失败，不生成投射物、不发送攻击事件，也不消耗 `PlayerAttack` 根种子。法力不足同样在取随机种子前拒绝释放；只有投射物成功生成后才提交一次耗蓝和攻击事件。`Skill` 来源只读取自己的配置伤害；两种来源都没有固定 `12` 点保护。
+
+## LootTableDefinition
+
+创建菜单：`DarkFlare/Data/Loot/Loot Table Definition`。正式资产位于 `Assets/Data/Preset/Loot`。
+
+| 字段 | 类型 | 默认 / 合同 |
+| --- | --- | --- |
+| `_dropChance` | `float` | 默认 `1`，合法范围 `0–1` |
+| `_entries` | `List<LootTableEntry>` | 必须非空，正式三张表覆盖全部七件装备 |
+| `_affixPool` | `List<AffixDefinition>` | 正式表引用完整 25 物品词条，不得缺失 |
+
+`LootTableEntry` 字段：
+
+| 字段 | 类型 | 合同 |
+| --- | --- | --- |
+| `_item` | `ItemBaseDefinition` | 正权重条目必填 |
+| `_weight` | `int` | 不得为负；大于零才参与抽取 |
+| `_rarity` | `ItemRarity` | 与词缀数量共同满足 `ItemRarityRules` |
+| `_prefixCount` / `_suffixCount` | `int` | 非负、各侧不超过容量，且总数位于正常生成范围 |
+
+调用方提供 `System.Random`。掉落概率、条目选择和物品生成种子依次消费该随机流；`ItemGenerator` 再由种子确定性派生定义与数值。非法数量不会被 Clamp：Inspector 和内容扫描报告错误，运行时返回空掉落并记录上下文。
+
+## CraftingDefinition
+
+创建菜单：`DarkFlare/Data/Crafting/Crafting Definition`。正式资产为 `Assets/Data/Preset/Crafting/基础打造配置.asset`。
+
+| 字段 | 类型 | 正式值 / 合同 |
+| --- | --- | --- |
+| `_affixPool` | `List<AffixDefinition>` | 完整 25 词条；无空引用、重复引用；每件装备至少兼容 3 前缀组和 3 后缀组 |
+| `_normalToMagicCost` | `int` | `15`，不得为负 |
+| `_magicToRareCost` | `int` | `60`，不得为负 |
+| `_rareToUniqueCost` | `int` | `160`，不得为负 |
+| `_resetToNormalCost` | `int` | `20`，不得为负 |
+| `_rerollAffixesCost` | `int` | `40`，不得为负 |
+| `_addAffixCost` | `int` | `60`，不得为负 |
+| `_removeAffixCost` | `int` | `60`，不得为负 |
+| `_rerollAffixValuesCost` | `int` | `80`，不得为负 |
+| `_precisionMultiplier` | `float` | 固定 `3`；前缀 / 后缀精准范围统一乘此倍率 |
+
+配置只保存操作族基础价，不重复序列化 14 个变体。`GetCost` 按当前稀有度选择升阶成本，并对四类带范围操作使用 `CeilToInt(baseCost × precisionMultiplier)`。随机状态不存于配置对象，由 `GameplayRandomSystem` 的 Crafting 通道提供。
 
 ## DamageRollDefinition
 

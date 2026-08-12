@@ -223,7 +223,7 @@ Addressables 的配置目录，包含资源组、模板和构建器配置。后�
 - `Gameplay/Items`：`ItemInstance.cs`、`ItemGenerationOptions.cs`、`ItemGenerator.cs`（物品随机生成的纯逻辑，由 `LootSystem` 调用）
 - `Gameplay/Inventory`：`InventoryGrid.cs`（纯逻辑二维格子占用、精确移动与单目标交换）、`InventoryModel.cs`（玩家背包 + 金币）、`MoveInventoryItemCommand.cs`（整理事务入口）
 - `Gameplay/Trading`：`ItemValueCalculator.cs`（纯逻辑价值/买卖价计算）、`EconomyModel.cs`（商人库存 + 买卖倍率）、`TradingSystem.cs`（买卖/价格/商人 seeding）
-- `Gameplay/Crafting`：`CraftingOperations.cs`（纯逻辑四种词条操作）、`CraftingSystem.cs`（打造金币成本 + seeding，无 Model）
+- `Gameplay/Crafting`：`CraftingOperations.cs`（六类随机打造与原子提交）、`CraftingModels.cs`（操作 / 范围 / 结构化结果）、`CraftingRandomSeeds.cs`（独立子种子）、`CraftingSystem.cs`（背包、金币和随机根种子，无 Model）
 - `Gameplay/Actors`：`CombatActor.cs`、`PlayerController.cs`、`MonsterController.cs`、`ActorTeam.cs`
 - `Gameplay/Skills`：`ProjectileController.cs`
 - `Gameplay/Spawning`：`MonsterSpawner.cs`
@@ -236,7 +236,7 @@ Addressables 的配置目录，包含资源组、模板和构建器配置。后�
 - `Gameplay/UI/GetInventorySnapshotQuery.cs`、`InventoryPanelController.cs`：只读背包快照、共享 10×6 格子、四槽装备、拖拽与拿起 / 放置控制器
 - `Gameplay/UI/ItemTooltipView.cs`、`ItemDragQueries.cs`、`MerchantGridLayout.cs`：唯一物品浮窗、拖拽目标只读查询和商人确定性虚拟格子排布
 - `Gameplay/UI/GetShopSnapshotQuery.cs`、`ShopPanelController.cs`：只读商店快照、商人格子与共享玩家背包的买卖交互控制器
-- `Gameplay/UI/GetCraftingSnapshotQuery.cs`、`CraftingPanelController.cs`：复用共享玩家背包选择、词缀选择、四种打造操作与事件刷新控制器
+- `Gameplay/UI/GetCraftingSnapshotQuery.cs`、`CraftingPanelController.cs`：复用共享玩家背包选择，提供稀有度、任意 / 前缀 / 后缀范围和 14 个随机打造变体，不保留具体词条选择
 - `Gameplay/UI/GameMenuAccess.cs`、`GameMenuController.cs`：背包 / 商店 / 打造情境访问范围、共享菜单遮罩、关闭和 Gameplay/UI 输入路由
 - `Gameplay/UI/InteractionPromptController.cs`：显示当前世界交互目标，并在 UI 模式或目标失效时隐藏
 - `Tests/EditMode/Alpha01TagMigrationCharacterizationTests.cs` 与既有 EditMode 测试：覆盖标签查询、域隔离、物品—词条候选矩阵、伤害血统、旧接口兼容、纯逻辑、原子换装、交易和打造事务语义、键鼠 / 手柄输入、Action Map 切换、交互消息、暂停及 HUD/背包/商店/打造快照。归属 `DarkFlare.Tests.EditMode` 程序集

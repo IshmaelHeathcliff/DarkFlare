@@ -1,21 +1,24 @@
 namespace DarkFlare
 {
-    public class CraftItemCommand : AbstractCommand<bool>
+    public class CraftItemCommand : AbstractCommand<CraftingResult>
     {
         readonly CraftOperation _operation;
+        readonly CraftingAffixScope _scope;
         readonly ItemInstance _item;
-        readonly AffixInstance _targetAffix;
 
-        public CraftItemCommand(CraftOperation operation, ItemInstance item, AffixInstance targetAffix = null)
+        public CraftItemCommand(
+            CraftOperation operation,
+            CraftingAffixScope scope,
+            ItemInstance item)
         {
             _operation = operation;
+            _scope = scope;
             _item = item;
-            _targetAffix = targetAffix;
         }
 
-        protected override bool OnExecute()
+        protected override CraftingResult OnExecute()
         {
-            return this.GetSystem<CraftingSystem>().Craft(_operation, _item, _targetAffix);
+            return this.GetSystem<CraftingSystem>().Craft(_operation, _scope, _item);
         }
     }
 }

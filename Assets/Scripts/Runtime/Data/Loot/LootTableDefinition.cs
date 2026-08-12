@@ -84,9 +84,32 @@ namespace DarkFlare
                 return null;
             }
 
+            if (!ItemRarityRules.IsNormalGenerationValid(
+                    entry.Rarity,
+                    entry.PrefixCount,
+                    entry.SuffixCount))
+            {
+                Debug.LogError(
+                    $"[LootTableDefinition] {name} 的掉落条目配置非法："
+                    + $"{entry.Item.Id} / {entry.Rarity} / 前缀 {entry.PrefixCount} / 后缀 {entry.SuffixCount}",
+                    this);
+                return null;
+            }
+
             int seed = random.Next(int.MinValue, int.MaxValue);
             ItemGenerationOptions options = new ItemGenerationOptions(instanceId, itemLevel, seed, entry.Rarity, entry.PrefixCount, entry.SuffixCount);
-            return ItemGenerator.Generate(entry.Item, _affixPool, options);
+
+            try
+            {
+                return ItemGenerator.Generate(entry.Item, _affixPool, options);
+            }
+            catch (InvalidOperationException exception)
+            {
+                Debug.LogError(
+                    $"[LootTableDefinition] {name} 无法生成完整掉落：{exception.Message}",
+                    this);
+                return null;
+            }
         }
 
         bool ShouldDrop(System.Random random)

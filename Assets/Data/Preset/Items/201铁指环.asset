@@ -24,8 +24,6 @@ MonoBehaviour:
   _allowedEquipmentSlots: 12
   _defaultRarity: 0
   _baseValue: 20
-  _maxPrefixCount: 3
-  _maxSuffixCount: 3
   _gridSize: {x: 1, y: 1}
   _weight: 1
   _tags: []

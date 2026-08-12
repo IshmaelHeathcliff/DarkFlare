@@ -95,16 +95,6 @@ namespace DarkFlare
         int _baseValue;
 
         [SerializeField]
-        [MinValue(0)]
-        [LabelText("最大前缀")]
-        int _maxPrefixCount = 3;
-
-        [SerializeField]
-        [MinValue(0)]
-        [LabelText("最大后缀")]
-        int _maxSuffixCount = 3;
-
-        [SerializeField]
         [LabelText("格子尺寸")]
         Vector2Int _gridSize = Vector2Int.one;
 
@@ -138,10 +128,6 @@ namespace DarkFlare
         public ItemRarity DefaultRarity => _defaultRarity;
 
         public int BaseValue => _baseValue;
-
-        public int MaxPrefixCount => _maxPrefixCount;
-
-        public int MaxSuffixCount => _maxSuffixCount;
 
         public Vector2Int GridSize => _gridSize;
 

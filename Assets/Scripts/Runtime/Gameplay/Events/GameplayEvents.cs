@@ -106,14 +106,15 @@ namespace DarkFlare
 
     public readonly struct ItemCraftedEvent
     {
-        public CraftOperation Operation { get; }
+        public CraftingResult Result { get; }
 
-        public ItemInstance Item { get; }
+        public CraftOperation Operation => Result.Operation;
 
-        public ItemCraftedEvent(CraftOperation operation, ItemInstance item)
+        public ItemInstance Item => Result.Item;
+
+        public ItemCraftedEvent(CraftingResult result)
         {
-            Operation = operation;
-            Item = item;
+            Result = result;
         }
     }
 

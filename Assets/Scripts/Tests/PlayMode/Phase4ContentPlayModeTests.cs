@@ -64,8 +64,16 @@ namespace DarkFlare.Tests
             }
 
             Assert.AreEqual(0, weapon.Prefixes.Count + weapon.Suffixes.Count);
-            Assert.IsTrue(architecture.SendCommand(new CraftItemCommand(CraftOperation.AddAffix, weapon)));
-            Assert.AreEqual(1, weapon.Prefixes.Count + weapon.Suffixes.Count, "打造未向正式武器添加兼容词条");
+            CraftingResult crafted = architecture.SendCommand(new CraftItemCommand(
+                CraftOperation.UpgradeRarity,
+                CraftingAffixScope.Any,
+                weapon));
+            Assert.IsTrue(crafted.Succeeded, $"正式武器提升稀有度失败：{crafted.FailureReason}");
+            Assert.AreEqual(ItemRarity.Magic, weapon.Rarity);
+            Assert.That(
+                weapon.Prefixes.Count + weapon.Suffixes.Count,
+                Is.InRange(1, 2),
+                "打造未生成符合魔法物品规则的兼容词条");
 
             EquipmentModel equipment = architecture.GetModel<EquipmentModel>();
             CombatActor actor = player.Actor;

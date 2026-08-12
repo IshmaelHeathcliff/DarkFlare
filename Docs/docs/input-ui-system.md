@@ -78,7 +78,7 @@ alpha 0.1.0 的 HUD 移除武器卡片和属性详情，只保留生命、金币
 | `CraftingPanelController` | `GetCraftingSnapshotQuery` | `CraftItemCommand` | 打造、金币、背包事件 |
 | `InteractionPromptController` | 交互焦点消息 | 无 | 焦点、输入模式和 Actor 状态变化 |
 
-所有格子、词缀列表和详情都来自只读快照。操作成功后由对应 System / Model 发送领域 Event，再触发 HUD 和面板重新查询；失败分支不伪造成功事件。
+所有格子和详情都来自只读快照。打造页不再维护词缀列表，而是取得当前物品 14 个操作变体的成本、可用性和失败原因；操作成功后由对应 System / Model 发送领域 Event，再触发 HUD 和面板重新查询，失败分支不伪造成功事件。
 
 ## 菜单上下文
 

@@ -31,6 +31,15 @@ public class ItemWorkbenchStructureTests
         StringAssert.DoesNotContain("shop-item-detail", shop);
         StringAssert.DoesNotContain("crafting-item-list", crafting);
         StringAssert.DoesNotContain("crafting-item-detail", crafting);
+        StringAssert.DoesNotContain("ScrollView", crafting);
+        StringAssert.DoesNotContain("crafting-affix-list", crafting);
+        StringAssert.Contains("name=\"crafting-scope-any\"", crafting);
+        StringAssert.Contains("name=\"crafting-scope-prefix\"", crafting);
+        StringAssert.Contains("name=\"crafting-scope-suffix\"", crafting);
+        StringAssert.Contains("name=\"crafting-reroll-affixes\"", crafting);
+        StringAssert.Contains("name=\"crafting-add-affix\"", crafting);
+        StringAssert.Contains("name=\"crafting-remove-affix\"", crafting);
+        StringAssert.Contains("name=\"crafting-reroll-values\"", crafting);
         StringAssert.Contains("name=\"inventory-grid\"", workbench);
         StringAssert.Contains("name=\"inventory-slot-ring-left\"", workbench);
         StringAssert.Contains("name=\"inventory-slot-ring-right\"", workbench);

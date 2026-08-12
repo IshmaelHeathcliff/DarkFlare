@@ -38,5 +38,6 @@
 | [alpha 0.1.3 碰撞与怪群安全执行计划](./alpha-0.1.3-collision-safety-plan.md) | alpha 0.1.3 | [首版玩法循环](../../gameplay-loop.md)、[战斗内容配置参考](../../config-reference/combat-content.md)、[首批内容池](../../content-system.md) |
 | [alpha 0.1.4 法力、耗蓝与恢复执行计划](./alpha-0.1.4-resource-system-plan.md) | alpha 0.1.4 | [属性系统](../../stat-system.md)、[首版玩法循环](../../gameplay-loop.md)、[输入与运行时 UI](../../input-ui-system.md)、[战斗内容配置参考](../../config-reference/combat-content.md) |
 | [alpha 0.1.5 全属性与怪物词条执行计划](./alpha-0.1.5-affix-monster-plan.md) | alpha 0.1.5 | [属性系统](../../stat-system.md)、[伤害系统与词条系统设计](../../damage-affix-system.md)、[随机化与掉落规则](../../randomization-system.md)、[首批内容池](../../content-system.md) |
+| [alpha 0.1.6 基础随机打造执行计划](./alpha-0.1.6-random-crafting-plan.md) | alpha 0.1.6 | [打造系统](../../crafting-system.md)、[随机化与掉落规则](../../randomization-system.md)、[战斗内容配置参考](../../config-reference/combat-content.md) |
 
 最近归档日期：2026-08-12。

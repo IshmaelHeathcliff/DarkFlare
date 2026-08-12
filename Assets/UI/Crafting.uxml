@@ -5,22 +5,30 @@
       <ui:Label text="FORGE" class="item-context-kicker" />
     </ui:VisualElement>
     <ui:Label name="crafting-gold" text="持有金币  0" class="crafting-gold" />
-    <ui:Label name="crafting-selected-capacity" text="词缀容量：-" class="crafting-summary-line" />
-    <ui:Label name="crafting-selected-value" text="当前价值：-" class="crafting-summary-line" />
-    <ui:Label text="当前词缀" class="item-context-subtitle" />
-    <ui:ScrollView name="crafting-affix-scroll" class="crafting-affix-scroll" mode="Vertical">
-      <ui:VisualElement name="crafting-affix-list" class="crafting-affix-list" />
-    </ui:ScrollView>
-    <ui:Label name="crafting-affix-empty" text="当前物品没有词缀" class="crafting-empty" />
-    <ui:Label name="crafting-selected-affix" text="选中词缀：-" class="crafting-selected-affix" />
-    <ui:Label name="crafting-selected-affix-detail" text="词缀详情：-" class="crafting-selected-affix-detail" />
+    <ui:VisualElement class="crafting-selection-card">
+      <ui:Label name="crafting-selected-rarity" text="未选择物品" class="crafting-selected-rarity" />
+      <ui:Label name="crafting-selected-capacity" text="词缀容量：-" class="crafting-summary-line" />
+      <ui:Label name="crafting-selected-value" text="物品价值：-" class="crafting-summary-line" />
+    </ui:VisualElement>
+    <ui:Label text="稀有度" class="item-context-subtitle" />
+    <ui:VisualElement class="crafting-rarity-actions">
+      <ui:Button name="crafting-upgrade-rarity" text="提升稀有度" class="item-context-action item-context-action--primary" />
+      <ui:Button name="crafting-reset-normal" text="还原为普通" class="item-context-action" />
+    </ui:VisualElement>
+    <ui:Label text="操作范围" class="item-context-subtitle" />
+    <ui:VisualElement class="crafting-scope-actions">
+      <ui:Button name="crafting-scope-any" text="任意" class="crafting-scope" />
+      <ui:Button name="crafting-scope-prefix" text="前缀 · 3×" class="crafting-scope" />
+      <ui:Button name="crafting-scope-suffix" text="后缀 · 3×" class="crafting-scope" />
+    </ui:VisualElement>
     <ui:Label name="crafting-feedback" text="从玩家背包选择要打造的物品" class="crafting-feedback" />
     <ui:VisualElement name="crafting-actions" class="crafting-actions">
-      <ui:Button name="crafting-add-affix" text="添加词缀" class="item-context-action item-context-action--primary" />
-      <ui:Button name="crafting-reroll-all" text="重随全部" class="item-context-action" />
-      <ui:Button name="crafting-remove-reroll" text="移除并重随" class="item-context-action" />
-      <ui:Button name="crafting-upgrade-affix" text="提升数值" class="item-context-action" />
+      <ui:Button name="crafting-reroll-affixes" text="随机全部词缀" class="item-context-action" />
+      <ui:Button name="crafting-add-affix" text="随机增加一条" class="item-context-action" />
+      <ui:Button name="crafting-remove-affix" text="随机移除一条" class="item-context-action" />
+      <ui:Button name="crafting-reroll-values" text="重随一条数值" class="item-context-action" />
     </ui:VisualElement>
-    <ui:Label text="拖放不会触发打造；所有操作需明确确认" class="item-context-help" />
+    <ui:Label name="crafting-result" text="" class="crafting-result" />
+    <ui:Label text="所有打造均为随机结果；失败不会扣除金币，也不会改变物品" class="item-context-help" />
   </ui:VisualElement>
 </ui:UXML>

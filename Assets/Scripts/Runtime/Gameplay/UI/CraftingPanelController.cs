@@ -9,13 +9,9 @@ namespace DarkFlare
     [RequireComponent(typeof(InventoryPanelController))]
     public class CraftingPanelController : MonoBehaviour, IController
     {
-        const string SelectedItemClass = "crafting-item--selected";
-        const string SelectedAffixClass = "crafting-affix--selected";
+        const string SelectedScopeClass = "crafting-scope--selected";
 
-        readonly Dictionary<ItemInstance, Button> _itemButtons = new Dictionary<ItemInstance, Button>();
-        readonly Dictionary<AffixInstance, Button> _affixButtons = new Dictionary<AffixInstance, Button>();
         readonly List<IUnRegister> _eventRegistrations = new List<IUnRegister>();
-        readonly ItemListViewState _itemViewState = new ItemListViewState();
 
         [SerializeField]
         UIDocument _document;
@@ -24,24 +20,24 @@ namespace DarkFlare
         InventoryPanelController _inventoryPanel;
 
         VisualElement _page;
-        VisualElement _itemList;
-        VisualElement _affixList;
-        Label _itemEmptyLabel;
-        Label _affixEmptyLabel;
         Label _goldLabel;
+        Label _selectedRarityLabel;
         Label _selectedCapacityLabel;
         Label _selectedValueLabel;
-        Label _selectedAffixLabel;
-        Label _selectedAffixDetailLabel;
         Label _feedbackLabel;
-        ItemDetailView _detailView;
+        Label _resultLabel;
+        Button _upgradeRarityButton;
+        Button _resetNormalButton;
+        Button _scopeAnyButton;
+        Button _scopePrefixButton;
+        Button _scopeSuffixButton;
+        Button _rerollAffixesButton;
         Button _addAffixButton;
-        Button _rerollAllButton;
-        Button _removeRerollButton;
-        Button _upgradeAffixButton;
+        Button _removeAffixButton;
+        Button _rerollValuesButton;
         ItemInstance _selectedItem;
-        ItemInstance _previewItem;
-        AffixInstance _selectedAffix;
+        CraftingAffixScope _scope = CraftingAffixScope.Any;
+        string _resultText = string.Empty;
 
         public CraftingSnapshot LastSnapshot { get; private set; }
 
@@ -54,30 +50,13 @@ namespace DarkFlare
 
         public void RefreshCrafting()
         {
-            if (_affixList == null)
+            if (_page == null)
             {
                 return;
             }
 
-            AffixInstance previousAffix = _selectedAffix;
             LastSnapshot = this.SendQuery(new GetCraftingSnapshotQuery());
-            _selectedItem = null;
-            _previewItem = null;
-            _selectedAffix = null;
-            _itemButtons.Clear();
-            _affixButtons.Clear();
-            _affixList.Clear();
-
-            for (int i = 0; i < LastSnapshot.Items.Count; i++)
-            {
-                if (LastSnapshot.Items[i].Item == _inventoryPanel.SelectedItem)
-                {
-                    _selectedItem = LastSnapshot.Items[i].Item;
-                    break;
-                }
-            }
-
-            BuildAffixList(previousAffix);
+            _selectedItem = FindInventorySelection();
             RefreshSelection();
         }
 
@@ -94,6 +73,7 @@ namespace DarkFlare
 
             if (visible)
             {
+                _resultText = string.Empty;
                 RefreshCrafting();
             }
         }
@@ -121,7 +101,7 @@ namespace DarkFlare
             _inventoryPanel.SelectionChanged += OnInventorySelectionChanged;
             RefreshCrafting();
             SetVisible(IsVisible);
-            Debug.Log("[CraftingPanelController] 打造面板初始化完成", this);
+            Debug.Log("[CraftingPanelController] 随机打造工作台初始化完成", this);
         }
 
         void OnDisable()
@@ -139,28 +119,8 @@ namespace DarkFlare
             }
 
             _eventRegistrations.Clear();
-            _itemButtons.Clear();
-            _affixButtons.Clear();
-            _itemViewState.Reset();
             _page = null;
-            _itemList = null;
-            _affixList = null;
-            _itemEmptyLabel = null;
-            _affixEmptyLabel = null;
-            _goldLabel = null;
-            _selectedCapacityLabel = null;
-            _selectedValueLabel = null;
-            _selectedAffixLabel = null;
-            _selectedAffixDetailLabel = null;
-            _feedbackLabel = null;
-            _detailView = null;
-            _addAffixButton = null;
-            _rerollAllButton = null;
-            _removeRerollButton = null;
-            _upgradeAffixButton = null;
             _selectedItem = null;
-            _previewItem = null;
-            _selectedAffix = null;
             IsVisible = false;
         }
 
@@ -197,65 +157,76 @@ namespace DarkFlare
 
             VisualElement root = _document.rootVisualElement;
             _page = root.Q<VisualElement>("crafting-page");
-            _affixList = root.Q<VisualElement>("crafting-affix-list");
-            _affixEmptyLabel = root.Q<Label>("crafting-affix-empty");
             _goldLabel = root.Q<Label>("crafting-gold");
+            _selectedRarityLabel = root.Q<Label>("crafting-selected-rarity");
             _selectedCapacityLabel = root.Q<Label>("crafting-selected-capacity");
             _selectedValueLabel = root.Q<Label>("crafting-selected-value");
-            _selectedAffixLabel = root.Q<Label>("crafting-selected-affix");
-            _selectedAffixDetailLabel = root.Q<Label>("crafting-selected-affix-detail");
             _feedbackLabel = root.Q<Label>("crafting-feedback");
+            _resultLabel = root.Q<Label>("crafting-result");
+            _upgradeRarityButton = root.Q<Button>("crafting-upgrade-rarity");
+            _resetNormalButton = root.Q<Button>("crafting-reset-normal");
+            _scopeAnyButton = root.Q<Button>("crafting-scope-any");
+            _scopePrefixButton = root.Q<Button>("crafting-scope-prefix");
+            _scopeSuffixButton = root.Q<Button>("crafting-scope-suffix");
+            _rerollAffixesButton = root.Q<Button>("crafting-reroll-affixes");
             _addAffixButton = root.Q<Button>("crafting-add-affix");
-            _rerollAllButton = root.Q<Button>("crafting-reroll-all");
-            _removeRerollButton = root.Q<Button>("crafting-remove-reroll");
-            _upgradeAffixButton = root.Q<Button>("crafting-upgrade-affix");
+            _removeAffixButton = root.Q<Button>("crafting-remove-affix");
+            _rerollValuesButton = root.Q<Button>("crafting-reroll-values");
 
             if (_page == null
-                || _affixList == null
-                || _affixEmptyLabel == null
                 || _goldLabel == null
+                || _selectedRarityLabel == null
                 || _selectedCapacityLabel == null
                 || _selectedValueLabel == null
-                || _selectedAffixLabel == null
-                || _selectedAffixDetailLabel == null
                 || _feedbackLabel == null
+                || _resultLabel == null
+                || _upgradeRarityButton == null
+                || _resetNormalButton == null
+                || _scopeAnyButton == null
+                || _scopePrefixButton == null
+                || _scopeSuffixButton == null
+                || _rerollAffixesButton == null
                 || _addAffixButton == null
-                || _rerollAllButton == null
-                || _removeRerollButton == null
-                || _upgradeAffixButton == null)
+                || _removeAffixButton == null
+                || _rerollValuesButton == null)
             {
-                Debug.LogError("[CraftingPanelController] 打造 UXML 缺少共享背包工作台所需的命名元素", this);
+                Debug.LogError("[CraftingPanelController] 打造 UXML 缺少随机打造工作台所需元素", this);
                 return false;
             }
 
-            _addAffixButton.clicked += OnAddAffixClicked;
-            _rerollAllButton.clicked += OnRerollAllClicked;
-            _removeRerollButton.clicked += OnRemoveRerollClicked;
-            _upgradeAffixButton.clicked += OnUpgradeAffixClicked;
+            BindButtons();
             return true;
+        }
+
+        void BindButtons()
+        {
+            _upgradeRarityButton.clicked += OnUpgradeRarityClicked;
+            _resetNormalButton.clicked += OnResetNormalClicked;
+            _scopeAnyButton.clicked += OnScopeAnyClicked;
+            _scopePrefixButton.clicked += OnScopePrefixClicked;
+            _scopeSuffixButton.clicked += OnScopeSuffixClicked;
+            _rerollAffixesButton.clicked += OnRerollAffixesClicked;
+            _addAffixButton.clicked += OnAddAffixClicked;
+            _removeAffixButton.clicked += OnRemoveAffixClicked;
+            _rerollValuesButton.clicked += OnRerollValuesClicked;
         }
 
         void UnbindButtons()
         {
-            if (_addAffixButton != null)
+            if (_upgradeRarityButton == null)
             {
-                _addAffixButton.clicked -= OnAddAffixClicked;
+                return;
             }
 
-            if (_rerollAllButton != null)
-            {
-                _rerollAllButton.clicked -= OnRerollAllClicked;
-            }
-
-            if (_removeRerollButton != null)
-            {
-                _removeRerollButton.clicked -= OnRemoveRerollClicked;
-            }
-
-            if (_upgradeAffixButton != null)
-            {
-                _upgradeAffixButton.clicked -= OnUpgradeAffixClicked;
-            }
+            _upgradeRarityButton.clicked -= OnUpgradeRarityClicked;
+            _resetNormalButton.clicked -= OnResetNormalClicked;
+            _scopeAnyButton.clicked -= OnScopeAnyClicked;
+            _scopePrefixButton.clicked -= OnScopePrefixClicked;
+            _scopeSuffixButton.clicked -= OnScopeSuffixClicked;
+            _rerollAffixesButton.clicked -= OnRerollAffixesClicked;
+            _addAffixButton.clicked -= OnAddAffixClicked;
+            _removeAffixButton.clicked -= OnRemoveAffixClicked;
+            _rerollValuesButton.clicked -= OnRerollValuesClicked;
         }
 
         void RegisterEvents()
@@ -270,44 +241,6 @@ namespace DarkFlare
             _eventRegistrations.Add(this.RegisterEvent<ItemCraftedEvent>(_ => RefreshCrafting()));
         }
 
-        Button CreateItemButton(CraftingItemSnapshot item)
-        {
-            Button button = new Button(() => SelectItem(item.Item));
-            int affixCount = item.PrefixCount + item.SuffixCount;
-            button.text = string.Empty;
-            button.tooltip = $"{item.DisplayName} · 售价 {item.SellPrice} · 前缀 {item.PrefixCount}/{item.MaxPrefixCount} · 后缀 {item.SuffixCount}/{item.MaxSuffixCount}";
-            button.AddToClassList("crafting-item");
-            button.AddToClassList(GetRarityClass(item.Rarity));
-
-            VisualElement icon = new VisualElement
-            {
-                pickingMode = PickingMode.Ignore,
-            };
-            icon.AddToClassList("crafting-item-icon");
-            ItemVisualPresenter.ApplyIcon(icon, item.Detail.IconGuid);
-            Label summary = new Label($"{item.DisplayName}\n{ItemDetailFormatter.GetRarityText(item.Rarity)} · {affixCount} 条 · 价值 {item.Value}")
-            {
-                pickingMode = PickingMode.Ignore,
-            };
-            summary.AddToClassList("crafting-item-summary");
-            button.Add(icon);
-            button.Add(summary);
-            button.RegisterCallback<PointerEnterEvent>(_ => PreviewItem(item.Item));
-            button.RegisterCallback<PointerLeaveEvent>(_ => EndPreview(item.Item));
-            button.RegisterCallback<FocusInEvent>(_ => PreviewItem(item.Item));
-            button.RegisterCallback<FocusOutEvent>(_ => EndPreview(item.Item));
-            return button;
-        }
-
-        void SelectItem(ItemInstance item)
-        {
-            _selectedItem = item;
-            CaptureItemState();
-            _selectedAffix = null;
-            BuildAffixList(null);
-            RefreshSelection();
-        }
-
         void OnInventorySelectionChanged(ItemInstance item)
         {
             if (!IsVisible)
@@ -316,103 +249,35 @@ namespace DarkFlare
             }
 
             _selectedItem = item;
-            _selectedAffix = null;
+            _resultText = string.Empty;
             RefreshCrafting();
         }
 
-        void CaptureItemState()
+        ItemInstance FindInventorySelection()
         {
-            if (_selectedItem == null)
-            {
-                return;
-            }
-
-            _itemViewState.SelectedInstanceId = _selectedItem.InstanceId;
-
-            if (LastSnapshot.Items == null)
-            {
-                return;
-            }
+            ItemInstance selected = _inventoryPanel.SelectedItem;
 
             for (int i = 0; i < LastSnapshot.Items.Count; i++)
             {
-                if (LastSnapshot.Items[i].Item == _selectedItem)
+                if (LastSnapshot.Items[i].Item == selected)
                 {
-                    _itemViewState.FallbackIndex = i;
-                    return;
-                }
-            }
-        }
-
-        void PreviewItem(ItemInstance item)
-        {
-            _previewItem = item;
-            RefreshDetail();
-        }
-
-        void EndPreview(ItemInstance item)
-        {
-            if (_previewItem != item)
-            {
-                return;
-            }
-
-            _previewItem = null;
-            RefreshDetail();
-        }
-
-        void BuildAffixList(AffixInstance previousAffix)
-        {
-            _affixButtons.Clear();
-            _affixList.Clear();
-
-            if (!TryGetSelectedItem(out CraftingItemSnapshot item))
-            {
-                return;
-            }
-
-            for (int i = 0; i < item.Affixes.Count; i++)
-            {
-                CraftingAffixSnapshot affix = item.Affixes[i];
-                Button button = new Button(() => SelectAffix(affix.Affix));
-                button.text = $"{ItemDetailFormatter.GetAffixTypeText(affix.Type)} · {affix.DisplayName}\n{affix.ModifierSummary}";
-                button.tooltip = $"{affix.DisplayName} · 总数值 {affix.TotalValue:0.##}";
-                button.AddToClassList("crafting-affix");
-                button.AddToClassList(affix.Type == AffixType.Prefix
-                    ? "crafting-affix--prefix"
-                    : "crafting-affix--suffix");
-                _affixList.Add(button);
-                _affixButtons.Add(affix.Affix, button);
-
-                if (affix.Affix == previousAffix)
-                {
-                    _selectedAffix = affix.Affix;
+                    return selected;
                 }
             }
 
-            if (_selectedAffix == null && item.Affixes.Count > 0)
-            {
-                _selectedAffix = item.Affixes[0].Affix;
-            }
-        }
-
-        void SelectAffix(AffixInstance affix)
-        {
-            _selectedAffix = affix;
-            RefreshSelection();
+            return null;
         }
 
         void RefreshSelection()
         {
             _goldLabel.text = $"持有金币  {LastSnapshot.Gold}";
-            _addAffixButton.text = $"添加词缀 · {LastSnapshot.AddAffixCost} 金币";
-            _rerollAllButton.text = $"重随全部 · {LastSnapshot.RerollAllCost} 金币";
-            _removeRerollButton.text = $"移除并重随 · {LastSnapshot.RemoveRerollCost} 金币";
-            _upgradeAffixButton.text = $"提升数值 · {LastSnapshot.UpgradeAffixCost} 金币";
-            foreach (KeyValuePair<AffixInstance, Button> entry in _affixButtons)
-            {
-                entry.Value.EnableInClassList(SelectedAffixClass, entry.Key == _selectedAffix);
-            }
+            _scopeAnyButton.EnableInClassList(SelectedScopeClass, _scope == CraftingAffixScope.Any);
+            _scopePrefixButton.EnableInClassList(SelectedScopeClass, _scope == CraftingAffixScope.Prefix);
+            _scopeSuffixButton.EnableInClassList(SelectedScopeClass, _scope == CraftingAffixScope.Suffix);
+            _resultLabel.text = _resultText;
+            _resultLabel.style.display = string.IsNullOrEmpty(_resultText)
+                ? DisplayStyle.None
+                : DisplayStyle.Flex;
 
             if (!TryGetSelectedItem(out CraftingItemSnapshot item))
             {
@@ -420,101 +285,77 @@ namespace DarkFlare
                 return;
             }
 
-            _affixEmptyLabel.style.display = item.Affixes.Count == 0 ? DisplayStyle.Flex : DisplayStyle.None;
-            RefreshDetail();
-            _selectedCapacityLabel.text = $"词缀容量：前缀 {item.PrefixCount}/{item.MaxPrefixCount} · 后缀 {item.SuffixCount}/{item.MaxSuffixCount}";
+            int totalCount = item.PrefixCount + item.SuffixCount;
+            _selectedRarityLabel.text = $"{item.DisplayName} · {ItemDetailFormatter.GetRarityText(item.Rarity)}";
+            _selectedCapacityLabel.text = $"词缀：前缀 {item.PrefixCount}/{item.MaxPrefixCount} · 后缀 {item.SuffixCount}/{item.MaxSuffixCount} · 总数 {totalCount}/{item.MinimumTotalCount}-{item.MaximumTotalCount}";
             _selectedValueLabel.text = $"物品价值：{item.Value} · 出售价：{item.SellPrice}";
+            RefreshButton(_upgradeRarityButton, item, CraftOperation.UpgradeRarity, CraftingAffixScope.Any, "提升稀有度");
+            RefreshButton(_resetNormalButton, item, CraftOperation.ResetToNormal, CraftingAffixScope.Any, "还原为普通");
+            RefreshButton(_rerollAffixesButton, item, CraftOperation.RerollAffixes, _scope, "随机全部词缀");
+            RefreshButton(_addAffixButton, item, CraftOperation.AddAffix, _scope, "随机增加一条");
+            RefreshButton(_removeAffixButton, item, CraftOperation.RemoveAffix, _scope, "随机移除一条");
+            RefreshButton(_rerollValuesButton, item, CraftOperation.RerollAffixValues, _scope, "重随一条数值");
 
-            if (TryGetSelectedAffix(item, out CraftingAffixSnapshot affix))
-            {
-                _selectedAffixLabel.text = $"{ItemDetailFormatter.GetAffixTypeText(affix.Type)} · {affix.DisplayName}";
-                _selectedAffixDetailLabel.text = $"{affix.ModifierSummary} · 总数值 {affix.TotalValue:0.##}";
-            }
-            else
-            {
-                _selectedAffixLabel.text = "未选择词缀";
-                _selectedAffixDetailLabel.text = "添加词缀不需要选择现有词缀";
-            }
-
-            RefreshActions(item);
+            _feedbackLabel.text = !LastSnapshot.IsConfigured
+                ? "打造配置尚未加载"
+                : _scope == CraftingAffixScope.Any
+                    ? "任意范围：从全部可用前后缀中随机，按基础价格结算"
+                    : $"精准{GetScopeText(_scope)}：只影响{GetScopeText(_scope)}，价格为任意范围的 3 倍";
         }
 
         void ShowEmptySelection()
         {
-            _affixEmptyLabel.style.display = DisplayStyle.Flex;
-            _inventoryPanel.RestoreTooltip();
+            _selectedRarityLabel.text = "未选择物品";
             _selectedCapacityLabel.text = "词缀容量：-";
             _selectedValueLabel.text = "物品价值：-";
-            _selectedAffixLabel.text = "未选择词缀";
-            _selectedAffixDetailLabel.text = "选择词缀后可移除重随或提升数值";
             _feedbackLabel.text = !LastSnapshot.IsConfigured
                 ? "打造配置尚未加载"
                 : LastSnapshot.Items.Count == 0
                     ? "背包中没有可打造物品"
                     : "从玩家背包选择要打造的物品";
-            SetActionEnabled(_addAffixButton, false);
-            SetActionEnabled(_rerollAllButton, false);
-            SetActionEnabled(_removeRerollButton, false);
-            SetActionEnabled(_upgradeAffixButton, false);
+            SetAllActionsEnabled(false);
+            SetButtonTextWithoutCost();
         }
 
-        void RefreshDetail()
+        void RefreshButton(
+            Button button,
+            CraftingItemSnapshot item,
+            CraftOperation operation,
+            CraftingAffixScope scope,
+            string label)
         {
-            ItemInstance item = _previewItem;
-
-            for (int i = 0; i < LastSnapshot.Items.Count; i++)
+            if (!item.TryGetAction(operation, scope, out CraftingActionSnapshot action))
             {
-                if (LastSnapshot.Items[i].Item != item)
-                {
-                    continue;
-                }
-
-                _inventoryPanel.ShowPlayerTooltip(
-                    item,
-                    "打造候选 · 所有操作需明确确认");
+                button.text = label;
+                button.SetEnabled(false);
                 return;
             }
 
-            _inventoryPanel.RestoreTooltip();
+            button.text = $"{label} · {action.Cost} 金币";
+            button.tooltip = action.IsAvailable
+                ? $"{label}，消耗 {action.Cost} 金币"
+                : GetFailureText(action.FailureReason);
+            button.SetEnabled(action.IsAvailable);
         }
 
-        void RefreshActions(CraftingItemSnapshot item)
+        void SetAllActionsEnabled(bool enabled)
         {
-            bool configured = LastSnapshot.IsConfigured;
-            bool hasAffix = item.Affixes.Count > 0;
-            bool hasSelectedAffix = _selectedAffix != null;
-            SetActionEnabled(
-                _addAffixButton,
-                configured && item.HasAffixCapacity && CanAfford(CraftOperation.AddAffix));
-            SetActionEnabled(
-                _rerollAllButton,
-                configured && hasAffix && CanAfford(CraftOperation.RerollAll));
-            SetActionEnabled(
-                _removeRerollButton,
-                configured && hasSelectedAffix && CanAfford(CraftOperation.RemoveReroll));
-            SetActionEnabled(
-                _upgradeAffixButton,
-                configured && hasSelectedAffix && CanAfford(CraftOperation.UpgradeAffix));
+            _upgradeRarityButton.SetEnabled(enabled);
+            _resetNormalButton.SetEnabled(enabled);
+            _rerollAffixesButton.SetEnabled(enabled);
+            _addAffixButton.SetEnabled(enabled);
+            _removeAffixButton.SetEnabled(enabled);
+            _rerollValuesButton.SetEnabled(enabled);
+        }
 
-            if (!configured)
-            {
-                _feedbackLabel.text = "打造配置尚未加载";
-            }
-            else if (!CanAfford(CraftOperation.AddAffix)
-                && !CanAfford(CraftOperation.RerollAll)
-                && !CanAfford(CraftOperation.RemoveReroll)
-                && !CanAfford(CraftOperation.UpgradeAffix))
-            {
-                _feedbackLabel.text = "金币不足，无法进行打造";
-            }
-            else if (!hasAffix)
-            {
-                _feedbackLabel.text = "当前没有词缀，可先添加一个随机词缀";
-            }
-            else
-            {
-                _feedbackLabel.text = "选择打造方式；移除重随和提升数值会作用于选中词缀";
-            }
+        void SetButtonTextWithoutCost()
+        {
+            _upgradeRarityButton.text = "提升稀有度";
+            _resetNormalButton.text = "还原为普通";
+            _rerollAffixesButton.text = "随机全部词缀";
+            _addAffixButton.text = "随机增加一条";
+            _removeAffixButton.text = "随机移除一条";
+            _rerollValuesButton.text = "重随一条数值";
         }
 
         bool TryGetSelectedItem(out CraftingItemSnapshot selected)
@@ -532,47 +373,59 @@ namespace DarkFlare
             return false;
         }
 
-        bool TryGetSelectedAffix(CraftingItemSnapshot item, out CraftingAffixSnapshot selected)
+        void OnUpgradeRarityClicked()
         {
-            for (int i = 0; i < item.Affixes.Count; i++)
-            {
-                if (item.Affixes[i].Affix == _selectedAffix)
-                {
-                    selected = item.Affixes[i];
-                    return true;
-                }
-            }
-
-            selected = default;
-            return false;
+            Craft(CraftOperation.UpgradeRarity, CraftingAffixScope.Any);
         }
 
-        bool CanAfford(CraftOperation operation)
+        void OnResetNormalClicked()
         {
-            return LastSnapshot.Gold >= LastSnapshot.GetCost(operation);
+            Craft(CraftOperation.ResetToNormal, CraftingAffixScope.Any);
+        }
+
+        void OnScopeAnyClicked()
+        {
+            SetScope(CraftingAffixScope.Any);
+        }
+
+        void OnScopePrefixClicked()
+        {
+            SetScope(CraftingAffixScope.Prefix);
+        }
+
+        void OnScopeSuffixClicked()
+        {
+            SetScope(CraftingAffixScope.Suffix);
+        }
+
+        void OnRerollAffixesClicked()
+        {
+            Craft(CraftOperation.RerollAffixes, _scope);
         }
 
         void OnAddAffixClicked()
         {
-            Craft(CraftOperation.AddAffix, null);
+            Craft(CraftOperation.AddAffix, _scope);
         }
 
-        void OnRerollAllClicked()
+        void OnRemoveAffixClicked()
         {
-            Craft(CraftOperation.RerollAll, null);
+            Craft(CraftOperation.RemoveAffix, _scope);
         }
 
-        void OnRemoveRerollClicked()
+        void OnRerollValuesClicked()
         {
-            Craft(CraftOperation.RemoveReroll, _selectedAffix);
+            Craft(CraftOperation.RerollAffixValues, _scope);
         }
 
-        void OnUpgradeAffixClicked()
+        void SetScope(CraftingAffixScope scope)
         {
-            Craft(CraftOperation.UpgradeAffix, _selectedAffix);
+            _scope = scope;
+            _resultText = string.Empty;
+            RefreshSelection();
         }
 
-        void Craft(CraftOperation operation, AffixInstance targetAffix)
+        void Craft(CraftOperation operation, CraftingAffixScope scope)
         {
             if (_selectedItem == null)
             {
@@ -580,57 +433,86 @@ namespace DarkFlare
                 return;
             }
 
-            string itemName = _selectedItem.BaseDefinition != null
-                ? _selectedItem.BaseDefinition.DisplayName
-                : _selectedItem.InstanceId;
-            bool crafted = this.SendCommand(new CraftItemCommand(operation, _selectedItem, targetAffix));
+            CraftingResult result = this.SendCommand(new CraftItemCommand(operation, scope, _selectedItem));
+            _resultText = result.Succeeded
+                ? BuildSuccessText(result)
+                : $"未生效：{GetFailureText(result.FailureReason)}";
             RefreshCrafting();
-
-            if (!crafted)
-            {
-                _feedbackLabel.text = "打造未生效：请检查金币、词缀容量和可用词缀池";
-                FocusDefault();
-                return;
-            }
-
-            _feedbackLabel.text = $"{itemName}：{GetOperationText(operation)}完成";
             FocusDefault();
         }
 
-        static void SetActionEnabled(Button button, bool enabled)
+        static string BuildSuccessText(CraftingResult result)
         {
-            button.SetEnabled(enabled);
+            int previousCount = result.PreviousPrefixes.Count + result.PreviousSuffixes.Count;
+            int currentCount = result.CurrentPrefixes.Count + result.CurrentSuffixes.Count;
+            return $"完成：{GetOperationText(result.Operation)} · {GetScopeText(result.Scope)} · 花费 {result.Cost} 金币\n"
+                + $"{ItemDetailFormatter.GetRarityText(result.PreviousRarity)} {previousCount} 条 → "
+                + $"{ItemDetailFormatter.GetRarityText(result.CurrentRarity)} {currentCount} 条";
         }
 
         static string GetOperationText(CraftOperation operation)
         {
             switch (operation)
             {
+                case CraftOperation.UpgradeRarity:
+                    return "提升稀有度";
+                case CraftOperation.ResetToNormal:
+                    return "还原普通";
+                case CraftOperation.RerollAffixes:
+                    return "随机全部词缀";
                 case CraftOperation.AddAffix:
-                    return "添加词缀";
-                case CraftOperation.RerollAll:
-                    return "重随全部";
-                case CraftOperation.RemoveReroll:
-                    return "移除并重随";
-                case CraftOperation.UpgradeAffix:
-                    return "提升数值";
+                    return "增加词缀";
+                case CraftOperation.RemoveAffix:
+                    return "移除词缀";
+                case CraftOperation.RerollAffixValues:
+                    return "重随数值";
                 default:
                     return operation.ToString();
             }
         }
 
-        static string GetRarityClass(ItemRarity rarity)
+        static string GetScopeText(CraftingAffixScope scope)
         {
-            switch (rarity)
+            switch (scope)
             {
-                case ItemRarity.Magic:
-                    return "crafting-item--magic";
-                case ItemRarity.Rare:
-                    return "crafting-item--rare";
-                case ItemRarity.Unique:
-                    return "crafting-item--unique";
+                case CraftingAffixScope.Prefix:
+                    return "前缀";
+                case CraftingAffixScope.Suffix:
+                    return "后缀";
                 default:
-                    return "crafting-item--normal";
+                    return "任意";
+            }
+        }
+
+        static string GetFailureText(CraftingFailureReason reason)
+        {
+            switch (reason)
+            {
+                case CraftingFailureReason.NotConfigured:
+                    return "打造配置尚未加载";
+                case CraftingFailureReason.ItemMissing:
+                case CraftingFailureReason.ItemNotInInventory:
+                    return "物品不在玩家背包中";
+                case CraftingFailureReason.InsufficientGold:
+                    return "金币不足";
+                case CraftingFailureReason.MaximumRarity:
+                    return "已达到最高稀有度";
+                case CraftingFailureReason.NoChange:
+                    return "当前状态无需执行该操作";
+                case CraftingFailureReason.NoCapacity:
+                    return "当前范围已达到词缀容量";
+                case CraftingFailureReason.ScopeHasNoAffix:
+                    return "当前范围没有可操作词缀";
+                case CraftingFailureReason.NoVariableAffix:
+                    return "当前范围没有可重随数值的词缀";
+                case CraftingFailureReason.NoLegalAffix:
+                    return "词缀池没有合法候选";
+                case CraftingFailureReason.CannotBuildCompleteResult:
+                    return "词缀池无法生成满足稀有度规则的完整结果";
+                case CraftingFailureReason.CommitFailed:
+                    return "状态提交失败，未扣除金币";
+                default:
+                    return "当前操作不可用";
             }
         }
     }

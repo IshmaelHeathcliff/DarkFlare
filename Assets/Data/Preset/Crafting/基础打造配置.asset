@@ -38,7 +38,12 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 983b6c7363af7a443b8e055139d937a7, type: 2}
   - {fileID: 11400000, guid: 4fd4c9f01022c40409eae231a90e09bd, type: 2}
   - {fileID: 11400000, guid: 02b8849223b2aaf48b686cf15ad2f0de, type: 2}
-  _addAffixCost: 20
-  _rerollAllCost: 40
-  _removeRerollCost: 30
-  _upgradeCost: 25
+  _normalToMagicCost: 15
+  _magicToRareCost: 60
+  _rareToUniqueCost: 160
+  _resetToNormalCost: 20
+  _rerollAffixesCost: 40
+  _addAffixCost: 60
+  _removeAffixCost: 60
+  _rerollAffixValuesCost: 80
+  _precisionMultiplier: 3

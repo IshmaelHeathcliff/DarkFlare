@@ -207,20 +207,21 @@ namespace DarkFlare.Tests
                     {
                         "game-menu-panel",
                         "crafting-page",
-                        "crafting-affix-scroll",
+                        "crafting-selected-rarity",
                         "inventory-grid",
                         "item-tooltip",
                         "crafting-add-affix",
-                        "crafting-remove-reroll",
+                        "crafting-remove-affix",
                         "game-menu-close",
                     });
                     AssertElementsInsideContainer(root, "crafting-page", new[]
                     {
                         "crafting-actions",
                         "crafting-add-affix",
-                        "crafting-reroll-all",
-                        "crafting-remove-reroll",
-                        "crafting-upgrade-affix",
+                        "crafting-reroll-affixes",
+                        "crafting-remove-affix",
+                        "crafting-upgrade-rarity",
+                        "crafting-reroll-values",
                     });
                     AssertWorkbenchShare(root);
 

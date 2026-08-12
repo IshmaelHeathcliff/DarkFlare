@@ -11,6 +11,7 @@ namespace DarkFlare
         PlayerAttack,
         MonsterAttack,
         Loot,
+        Crafting,
     }
 
     public class GameplayRandomSystem : AbstractSystem

@@ -12,7 +12,7 @@ namespace DarkFlare
 
         public ItemBaseDefinition BaseDefinition { get; }
 
-        public ItemRarity Rarity { get; }
+        public ItemRarity Rarity { get; private set; }
 
         public int ItemLevel { get; }
 
@@ -21,6 +21,8 @@ namespace DarkFlare
         public int Quality { get; set; }
 
         public float Durability { get; set; } = 1f;
+
+        public int Revision { get; private set; }
 
         public IReadOnlyList<ModifierInstance> ImplicitModifiers => _implicitModifiers;
 
@@ -67,23 +69,25 @@ namespace DarkFlare
 
             if (affix.Definition.AffixType == AffixType.Prefix)
             {
-                if (_prefixes.Count >= BaseDefinition.MaxPrefixCount)
+                if (_prefixes.Count >= ItemRarityRules.GetLimits(Rarity).MaxPrefixCount)
                 {
                     return false;
                 }
 
                 _prefixes.Add(affix);
+                Revision++;
                 return true;
             }
 
             if (affix.Definition.AffixType == AffixType.Suffix)
             {
-                if (_suffixes.Count >= BaseDefinition.MaxSuffixCount)
+                if (_suffixes.Count >= ItemRarityRules.GetLimits(Rarity).MaxSuffixCount)
                 {
                     return false;
                 }
 
                 _suffixes.Add(affix);
+                Revision++;
                 return true;
             }
 
@@ -97,13 +101,59 @@ namespace DarkFlare
                 return false;
             }
 
-            return _prefixes.Remove(affix) || _suffixes.Remove(affix);
+            bool removed = _prefixes.Remove(affix) || _suffixes.Remove(affix);
+
+            if (removed)
+            {
+                Revision++;
+            }
+
+            return removed;
         }
 
         public void ClearAffixes()
         {
+            if (_prefixes.Count == 0 && _suffixes.Count == 0)
+            {
+                return;
+            }
+
             _prefixes.Clear();
             _suffixes.Clear();
+            Revision++;
+        }
+
+        internal bool TryApplyAffixState(
+            int expectedRevision,
+            ItemRarity rarity,
+            IReadOnlyList<AffixInstance> prefixes,
+            IReadOnlyList<AffixInstance> suffixes)
+        {
+            if (Revision != expectedRevision
+                || BaseDefinition == null
+                || prefixes == null
+                || suffixes == null
+                || !ItemRarityRules.IsWithinCapacity(rarity, prefixes.Count, suffixes.Count))
+            {
+                return false;
+            }
+
+            HashSet<string> groups = new HashSet<string>(System.StringComparer.Ordinal);
+            HashSet<AffixDefinition> definitions = new HashSet<AffixDefinition>();
+
+            if (!ValidateAffixes(prefixes, AffixType.Prefix, groups, definitions)
+                || !ValidateAffixes(suffixes, AffixType.Suffix, groups, definitions))
+            {
+                return false;
+            }
+
+            Rarity = rarity;
+            _prefixes.Clear();
+            _prefixes.AddRange(prefixes);
+            _suffixes.Clear();
+            _suffixes.AddRange(suffixes);
+            Revision++;
+            return true;
         }
 
         public List<ModifierInstance> CollectModifiers()
@@ -164,6 +214,36 @@ namespace DarkFlare
             }
 
             return false;
+        }
+
+        bool ValidateAffixes(
+            IReadOnlyList<AffixInstance> affixes,
+            AffixType expectedType,
+            HashSet<string> groups,
+            HashSet<AffixDefinition> definitions)
+        {
+            for (int i = 0; i < affixes.Count; i++)
+            {
+                AffixInstance affix = affixes[i];
+
+                if (affix == null
+                    || affix.Definition == null
+                    || affix.Definition.AffixType != expectedType
+                    || !affix.Definition.CanApplyTo(Tags, ItemLevel)
+                    || !definitions.Add(affix.Definition))
+                {
+                    return false;
+                }
+
+                string groupId = affix.Definition.GroupId;
+
+                if (!string.IsNullOrWhiteSpace(groupId) && !groups.Add(groupId))
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         static void AddAffixModifiers(IEnumerable<AffixInstance> affixes, List<ModifierInstance> modifiers)

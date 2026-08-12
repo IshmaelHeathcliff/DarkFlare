@@ -160,6 +160,21 @@ namespace DarkFlare
                     issues.Add($"掉落条目 {i} 的权重不能为负数");
                 }
 
+                if (entry.Item == null)
+                {
+                    issues.Add($"掉落条目 {i} 缺少物品");
+                }
+
+                if (!ItemRarityRules.IsNormalGenerationValid(
+                        entry.Rarity,
+                        entry.PrefixCount,
+                        entry.SuffixCount))
+                {
+                    issues.Add(
+                        $"掉落条目 {i} 的 {entry.Rarity} 词缀数量非法："
+                        + $"前缀 {entry.PrefixCount}，后缀 {entry.SuffixCount}");
+                }
+
                 if (entry.Item != null && entry.Weight > 0)
                 {
                     hasPositiveWeight = true;

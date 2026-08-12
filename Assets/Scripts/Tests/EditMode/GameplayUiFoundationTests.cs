@@ -342,7 +342,7 @@ public class GameplayUiFoundationTests
         AffixDefinition affixDefinition = CreateScriptableObject<AffixDefinition>();
         SetField(craftingDefinition, "_affixPool", new List<AffixDefinition> { affixDefinition });
         SetField(craftingDefinition, "_addAffixCost", 0);
-        ItemInstance item = CreateItem("craft_item", "打造测试物品");
+        ItemInstance item = CreateItem("craft_item", "打造测试物品", rarity: ItemRarity.Magic);
         InventoryModel inventory = _architecture.GetModel<InventoryModel>();
         Assert.IsTrue(inventory.TryAddItem(item));
         ItemCraftedEvent craftedEvent = default;
@@ -355,9 +355,12 @@ public class GameplayUiFoundationTests
         CraftingSystem crafting = _architecture.GetSystem<CraftingSystem>();
         crafting.Setup(craftingDefinition);
 
-        bool crafted = crafting.Craft(CraftOperation.AddAffix, item, null);
+        CraftingResult result = crafting.Craft(
+            CraftOperation.AddAffix,
+            CraftingAffixScope.Any,
+            item);
 
-        Assert.IsTrue(crafted);
+        Assert.IsTrue(result.Succeeded);
         Assert.AreEqual(1, eventCount);
         Assert.AreEqual(CraftOperation.AddAffix, craftedEvent.Operation);
         Assert.AreSame(item, craftedEvent.Item);
@@ -377,24 +380,31 @@ public class GameplayUiFoundationTests
         _architecture.RegisterEvent<ItemCraftedEvent>(_ => eventCount++);
         _architecture.GetSystem<CraftingSystem>().Setup(craftingDefinition);
 
-        bool crafted = _architecture.SendCommand(new CraftItemCommand(CraftOperation.AddAffix, item));
+        CraftingResult result = _architecture.SendCommand(new CraftItemCommand(
+            CraftOperation.AddAffix,
+            CraftingAffixScope.Any,
+            item));
 
-        Assert.IsFalse(crafted);
+        Assert.IsFalse(result.Succeeded);
         Assert.AreEqual(100, inventory.Gold);
         Assert.AreEqual(0, item.Prefixes.Count + item.Suffixes.Count);
         Assert.AreEqual(0, eventCount);
     }
 
     [Test]
-    public void CraftingSnapshot_ContainsCostsItemsAndAffixDetails()
+    public void CraftingSnapshot_ContainsItemsAndAllFourteenActionVariants()
     {
         CraftingDefinition craftingDefinition = CreateScriptableObject<CraftingDefinition>();
         SetField(craftingDefinition, "_addAffixCost", 20);
-        SetField(craftingDefinition, "_rerollAllCost", 40);
-        SetField(craftingDefinition, "_removeRerollCost", 30);
-        SetField(craftingDefinition, "_upgradeCost", 25);
+        SetField(craftingDefinition, "_rerollAffixesCost", 40);
+        SetField(craftingDefinition, "_removeAffixCost", 60);
+        SetField(craftingDefinition, "_rerollAffixValuesCost", 80);
         AffixDefinition affixDefinition = CreateAffixDefinition("测试增伤", 20f, 20f);
-        ItemInstance item = CreateItem("craft_snapshot_item", "快照大剑", baseValue: 10);
+        ItemInstance item = CreateItem(
+            "craft_snapshot_item",
+            "快照大剑",
+            baseValue: 10,
+            rarity: ItemRarity.Magic);
         Assert.IsTrue(item.TryAddAffix(affixDefinition.CreateInstance(new System.Random(1))));
         InventoryModel inventory = _architecture.GetModel<InventoryModel>();
         inventory.AddGold(100);
@@ -405,30 +415,36 @@ public class GameplayUiFoundationTests
 
         Assert.IsTrue(snapshot.IsConfigured);
         Assert.AreEqual(100, snapshot.Gold);
-        Assert.AreEqual(20, snapshot.AddAffixCost);
-        Assert.AreEqual(40, snapshot.RerollAllCost);
-        Assert.AreEqual(30, snapshot.RemoveRerollCost);
-        Assert.AreEqual(25, snapshot.UpgradeAffixCost);
         Assert.AreEqual(1, snapshot.Items.Count);
         Assert.AreSame(item, snapshot.Items[0].Item);
         Assert.AreEqual("快照大剑", snapshot.Items[0].DisplayName);
-        Assert.AreEqual(12, snapshot.Items[0].Value);
-        Assert.AreEqual(4, snapshot.Items[0].SellPrice);
-        Assert.AreEqual(1, snapshot.Items[0].Affixes.Count);
-        Assert.AreEqual("测试增伤", snapshot.Items[0].Affixes[0].DisplayName);
-        StringAssert.Contains("伤害", snapshot.Items[0].Affixes[0].ModifierSummary);
-        StringAssert.DoesNotContain("damage", snapshot.Items[0].Affixes[0].ModifierSummary);
-        StringAssert.Contains("20", snapshot.Items[0].Affixes[0].ModifierSummary);
-        Assert.AreEqual(20f, snapshot.Items[0].Affixes[0].TotalValue);
+        Assert.AreEqual(25, snapshot.Items[0].Value);
+        Assert.AreEqual(10, snapshot.Items[0].SellPrice);
+        Assert.AreEqual(14, snapshot.Items[0].Actions.Count);
+        Assert.IsTrue(snapshot.Items[0].TryGetAction(
+            CraftOperation.AddAffix,
+            CraftingAffixScope.Suffix,
+            out CraftingActionSnapshot preciseAdd));
+        Assert.AreEqual(60, preciseAdd.Cost);
+        Assert.AreEqual(CraftingFailureReason.NoLegalAffix, preciseAdd.FailureReason);
+        Assert.IsTrue(snapshot.Items[0].TryGetAction(
+            CraftOperation.RerollAffixValues,
+            CraftingAffixScope.Prefix,
+            out CraftingActionSnapshot preciseValues));
+        Assert.AreEqual(240, preciseValues.Cost);
+        Assert.AreEqual(CraftingFailureReason.NoVariableAffix, preciseValues.FailureReason);
     }
 
     [Test]
-    public void CraftingSystem_DoesNotCharge_WhenUpgradeCannotImprove()
+    public void CraftingSystem_DoesNotCharge_WhenFixedValueCannotReroll()
     {
         CraftingDefinition craftingDefinition = CreateScriptableObject<CraftingDefinition>();
-        SetField(craftingDefinition, "_upgradeCost", 25);
+        SetField(craftingDefinition, "_rerollAffixValuesCost", 25);
         AffixDefinition affixDefinition = CreateAffixDefinition("固定增伤", 20f, 20f);
-        ItemInstance item = CreateItem("fixed_upgrade_item", "固定数值物品");
+        ItemInstance item = CreateItem(
+            "fixed_upgrade_item",
+            "固定数值物品",
+            rarity: ItemRarity.Magic);
         AffixInstance affix = affixDefinition.CreateInstance(new System.Random(1));
         Assert.IsTrue(item.TryAddAffix(affix));
         InventoryModel inventory = _architecture.GetModel<InventoryModel>();
@@ -438,9 +454,13 @@ public class GameplayUiFoundationTests
         _architecture.RegisterEvent<ItemCraftedEvent>(_ => eventCount++);
         _architecture.GetSystem<CraftingSystem>().Setup(craftingDefinition);
 
-        bool crafted = _architecture.SendCommand(new CraftItemCommand(CraftOperation.UpgradeAffix, item, affix));
+        CraftingResult result = _architecture.SendCommand(new CraftItemCommand(
+            CraftOperation.RerollAffixValues,
+            CraftingAffixScope.Prefix,
+            item));
 
-        Assert.IsFalse(crafted);
+        Assert.IsFalse(result.Succeeded);
+        Assert.AreEqual(CraftingFailureReason.NoVariableAffix, result.FailureReason);
         Assert.AreEqual(100, inventory.Gold);
         Assert.AreSame(affix, item.Prefixes[0]);
         Assert.AreEqual(0, eventCount);
@@ -537,7 +557,8 @@ public class GameplayUiFoundationTests
         string displayName,
         ItemType itemType = ItemType.Weapon,
         Vector2Int? gridSize = null,
-        int baseValue = 0)
+        int baseValue = 0,
+        ItemRarity rarity = ItemRarity.Normal)
     {
         ItemBaseDefinition definition = CreateScriptableObject<ItemBaseDefinition>();
         SetField(definition, "_id", instanceId);
@@ -546,7 +567,7 @@ public class GameplayUiFoundationTests
         SetField(definition, "_allowedEquipmentSlots", GetAllowedSlots(itemType));
         SetField(definition, "_gridSize", gridSize ?? Vector2Int.one);
         SetField(definition, "_baseValue", baseValue);
-        return definition.CreateInstance(instanceId, 1, 1, ItemRarity.Normal);
+        return definition.CreateInstance(instanceId, 1, 1, rarity);
     }
 
     static EquipmentSlotMask GetAllowedSlots(ItemType itemType)

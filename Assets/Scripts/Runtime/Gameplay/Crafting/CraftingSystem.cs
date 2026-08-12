@@ -2,18 +2,8 @@ using UnityEngine;
 
 namespace DarkFlare
 {
-    public enum CraftOperation
-    {
-        AddAffix,
-        RerollAll,
-        RemoveReroll,
-        UpgradeAffix
-    }
-
     public class CraftingSystem : AbstractSystem
     {
-        readonly System.Random _random = new System.Random();
-
         CraftingDefinition _definition;
 
         public bool IsConfigured => _definition != null;
@@ -27,91 +17,125 @@ namespace DarkFlare
             _definition = definition;
         }
 
-        public int GetCost(CraftOperation operation)
+        public int GetCost(
+            CraftOperation operation,
+            CraftingAffixScope scope,
+            ItemRarity currentRarity)
         {
-            if (_definition == null)
-            {
-                return 0;
-            }
-
-            if (operation == CraftOperation.AddAffix)
-            {
-                return _definition.AddAffixCost;
-            }
-
-            if (operation == CraftOperation.RerollAll)
-            {
-                return _definition.RerollAllCost;
-            }
-
-            if (operation == CraftOperation.RemoveReroll)
-            {
-                return _definition.RemoveRerollCost;
-            }
-
-            return _definition.UpgradeCost;
+            return _definition != null ? _definition.GetCost(operation, scope, currentRarity) : 0;
         }
 
-        public bool Craft(CraftOperation operation, ItemInstance item, AffixInstance targetAffix)
+        public CraftingEvaluation Evaluate(
+            CraftOperation operation,
+            CraftingAffixScope scope,
+            ItemInstance item)
         {
-            if (_definition == null || item == null)
+            int cost = GetCost(operation, scope, item != null ? item.Rarity : ItemRarity.Normal);
+
+            if (_definition == null)
             {
-                return false;
+                return new CraftingEvaluation(CraftingFailureReason.NotConfigured, cost);
+            }
+
+            if (item == null)
+            {
+                return new CraftingEvaluation(CraftingFailureReason.ItemMissing, cost);
             }
 
             InventoryModel inventory = this.GetModel<InventoryModel>();
 
             if (!inventory.Grid.Placements.ContainsKey(item))
             {
-                Debug.Log($"[CraftingSystem] 打造失败：物品不在玩家背包中（{DescribeItem(item)}）");
-                return false;
+                return new CraftingEvaluation(CraftingFailureReason.ItemNotInInventory, cost);
             }
 
-            int cost = GetCost(operation);
+            CraftingFailureReason domainFailure = CraftingOperations.Evaluate(
+                operation,
+                scope,
+                item,
+                _definition.AffixPool);
 
-            if (inventory.Gold < cost)
+            if (domainFailure != CraftingFailureReason.None)
             {
-                Debug.Log($"[CraftingSystem] 打造失败：金币不足（需要 {cost}，持有 {inventory.Gold}）");
-                return false;
+                return new CraftingEvaluation(domainFailure, cost);
             }
 
-            bool applied = Apply(operation, item, targetAffix);
-
-            if (!applied)
-            {
-                Debug.Log($"[CraftingSystem] 打造无效：{operation} 未能作用于 {DescribeItem(item)}");
-                return false;
-            }
-
-            inventory.TrySpendGold(cost);
-            this.SendEvent(new ItemCraftedEvent(operation, item));
-            Debug.Log($"[CraftingSystem] {operation} 成功，花费 {cost} 金币，{DescribeItem(item)} 当前词条 {item.Prefixes.Count + item.Suffixes.Count} 条，剩余金币 {inventory.Gold}");
-            return true;
+            return inventory.Gold >= cost
+                ? new CraftingEvaluation(CraftingFailureReason.None, cost)
+                : new CraftingEvaluation(CraftingFailureReason.InsufficientGold, cost);
         }
 
-        bool Apply(CraftOperation operation, ItemInstance item, AffixInstance targetAffix)
+        public CraftingResult Craft(
+            CraftOperation operation,
+            CraftingAffixScope scope,
+            ItemInstance item)
         {
-            if (operation == CraftOperation.AddAffix)
+            InventoryModel inventory = this.GetModel<InventoryModel>();
+            CraftingEvaluation evaluation = Evaluate(operation, scope, item);
+
+            if (!evaluation.IsAvailable)
             {
-                return CraftingOperations.AddRandomAffix(item, _definition.AffixPool, _random);
+                Debug.Log(
+                    $"[CraftingSystem] 打造不可用：{evaluation.FailureReason}，{DescribeItem(item)}");
+                return CraftingResult.Failure(
+                    operation,
+                    scope,
+                    item,
+                    evaluation.FailureReason,
+                    evaluation.Cost,
+                    inventory.Gold);
             }
 
-            if (operation == CraftOperation.RerollAll)
+            int rootSeed = this.GetSystem<GameplayRandomSystem>().NextSeed(GameplayRandomChannel.Crafting);
+            CraftingResult result = CraftingOperations.TryCraft(
+                operation,
+                scope,
+                item,
+                _definition.AffixPool,
+                rootSeed);
+
+            if (!result.Succeeded)
             {
-                return CraftingOperations.RerollAllAffixes(item, _definition.AffixPool, _random);
+                Debug.Log(
+                    $"[CraftingSystem] 打造失败：{result.FailureReason}，根种子 {rootSeed}，{DescribeItem(item)}");
+                return result.WithEconomy(evaluation.Cost, inventory.Gold);
             }
 
-            if (operation == CraftOperation.RemoveReroll)
+            if (!inventory.TrySpendGold(evaluation.Cost))
             {
-                return CraftingOperations.RemoveAndRerollAffix(item, targetAffix, _definition.AffixPool, _random);
+                item.TryApplyAffixState(
+                    item.Revision,
+                    result.PreviousRarity,
+                    result.PreviousPrefixes,
+                    result.PreviousSuffixes);
+                return CraftingResult.Failure(
+                    operation,
+                    scope,
+                    item,
+                    CraftingFailureReason.CommitFailed,
+                    evaluation.Cost,
+                    inventory.Gold,
+                    rootSeed);
             }
 
-            return CraftingOperations.UpgradeAffix(item, targetAffix, _random);
+            CraftingResult committed = result.WithEconomy(evaluation.Cost, inventory.Gold);
+            this.SendEvent(new ItemCraftedEvent(committed));
+            Debug.Log(
+                $"[CraftingSystem] {operation}/{scope} 成功，根种子 {rootSeed}，花费 {evaluation.Cost}，"
+                + $"{DescribeItem(item)} 当前词条 {item.Prefixes.Count + item.Suffixes.Count} 条，剩余金币 {inventory.Gold}");
+            return committed;
         }
 
         static string DescribeItem(ItemInstance item)
         {
-            return item.BaseDefinition != null ? $"{item.BaseDefinition.DisplayName}[{item.Rarity}]" : item.InstanceId;
+            if (item == null)
+            {
+                return "<null>";
+            }
+
+            return item.BaseDefinition != null
+                ? $"{item.BaseDefinition.DisplayName}[{item.Rarity}]"
+                : item.InstanceId;
         }
     }
 }

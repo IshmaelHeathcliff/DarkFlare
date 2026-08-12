@@ -7,77 +7,85 @@
   -unity-font-style: bold;
 }
 
+.crafting-selection-card {
+  min-height: 90px;
+  padding: 9px;
+  background-color: rgb(23, 27, 34);
+  border-left-width: 2px;
+  border-left-color: rgb(151, 116, 61);
+}
+
+.crafting-selected-rarity {
+  min-height: 28px;
+  color: rgb(218, 193, 147);
+  -unity-font-style: bold;
+}
+
 .crafting-summary-line {
-  min-height: 25px;
-  padding-left: 6px;
+  min-height: 24px;
+  white-space: normal;
   color: rgb(178, 184, 193);
 }
 
-.crafting-affix-scroll {
-  flex-grow: 1;
-  min-height: 160px;
-  padding: 5px;
-  background-color: rgb(23, 27, 34);
+.crafting-rarity-actions,
+.crafting-scope-actions,
+.crafting-actions {
+  flex-direction: row;
+  flex-wrap: wrap;
 }
 
-.crafting-affix {
-  min-height: 46px;
-  margin-bottom: 5px;
-  white-space: normal;
-  -unity-text-align: middle-left;
-  color: rgb(203, 208, 215);
-  background-color: rgb(33, 38, 46);
-  border-left-width: 2px;
-  border-left-color: rgb(105, 109, 119);
+.crafting-rarity-actions .item-context-action {
+  width: 48%;
+  margin-left: 1%;
+  margin-right: 1%;
 }
 
-.crafting-affix:hover,
-.crafting-affix:focus,
-.crafting-affix--selected {
-  background-color: rgb(58, 48, 34);
-  border-left-color: rgb(204, 158, 79);
+.crafting-scope {
+  width: 31.33%;
+  min-height: 34px;
+  margin-left: 1%;
+  margin-right: 1%;
+  color: rgb(180, 185, 194);
+  background-color: rgb(35, 39, 47);
+  border-left-color: rgb(66, 72, 82);
+  border-right-color: rgb(66, 72, 82);
+  border-top-color: rgb(66, 72, 82);
+  border-bottom-color: rgb(66, 72, 82);
 }
 
-.crafting-affix--prefix {
-  border-left-color: rgb(81, 130, 205);
-}
-
-.crafting-affix--suffix {
-  border-left-color: rgb(171, 105, 187);
-}
-
-.crafting-empty {
-  min-height: 24px;
-  color: rgb(105, 111, 123);
-  -unity-font-style: italic;
-}
-
-.crafting-selected-affix,
-.crafting-selected-affix-detail {
-  min-height: 27px;
-  padding: 5px;
-  white-space: normal;
-  color: rgb(183, 188, 197);
-}
-
-.crafting-selected-affix {
-  color: rgb(218, 193, 147);
+.crafting-scope:hover,
+.crafting-scope:focus,
+.crafting-scope--selected {
+  color: rgb(242, 214, 160);
+  background-color: rgb(61, 49, 31);
+  border-left-color: rgb(196, 151, 78);
+  border-right-color: rgb(196, 151, 78);
+  border-top-color: rgb(196, 151, 78);
+  border-bottom-color: rgb(196, 151, 78);
 }
 
 .crafting-feedback {
   min-height: 48px;
-  margin-top: 4px;
+  margin-top: 8px;
+  padding: 7px;
   white-space: normal;
   color: rgb(155, 162, 174);
-}
-
-.crafting-actions {
-  flex-direction: row;
-  flex-wrap: wrap;
+  background-color: rgb(20, 23, 29);
 }
 
 .crafting-actions .item-context-action {
   width: 48%;
   margin-left: 1%;
   margin-right: 1%;
+}
+
+.crafting-result {
+  min-height: 58px;
+  margin-top: 8px;
+  padding: 8px;
+  white-space: normal;
+  color: rgb(153, 205, 158);
+  background-color: rgb(23, 32, 28);
+  border-left-width: 2px;
+  border-left-color: rgb(75, 137, 85);
 }
