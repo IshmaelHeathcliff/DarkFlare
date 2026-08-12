@@ -12,7 +12,6 @@ namespace DarkFlare.Editor
 {
     public sealed class ConfigCenterWindow : OdinMenuEditorWindow
     {
-        const string ConfigMenuPrefix = "DarkFlare/Data/";
         const string DefaultConfigRoot = "Assets/Data/Preset";
 
         [MenuItem("DarkFlare/配置中心")]
@@ -83,55 +82,18 @@ namespace DarkFlare.Editor
         static List<ConfigTypeInfo> FindConfigTypes()
         {
             List<ConfigTypeInfo> result = new List<ConfigTypeInfo>();
-            Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            IReadOnlyList<Type> types = ConfigurationTypeDiscovery.FindTopLevelTypes();
 
-            for (int i = 0; i < assemblies.Length; i++)
+            for (int i = 0; i < types.Count; i++)
             {
-                Type[] types = GetTypesSafely(assemblies[i]);
-
-                for (int j = 0; j < types.Length; j++)
-                {
-                    Type type = types[j];
-
-                    if (!IsCreatableConfigType(type))
-                    {
-                        continue;
-                    }
-
-                    CreateAssetMenuAttribute createMenu = type.GetCustomAttribute<CreateAssetMenuAttribute>();
-                    result.Add(new ConfigTypeInfo(type, createMenu.menuName, createMenu.fileName));
-                }
+                Type type = types[i];
+                CreateAssetMenuAttribute createMenu = type.GetCustomAttribute<CreateAssetMenuAttribute>();
+                result.Add(new ConfigTypeInfo(type, createMenu.menuName, createMenu.fileName));
             }
 
             return result
                 .OrderBy(item => item.DisplayName, StringComparer.Ordinal)
                 .ToList();
-        }
-
-        static Type[] GetTypesSafely(Assembly assembly)
-        {
-            try
-            {
-                return assembly.GetTypes();
-            }
-            catch (ReflectionTypeLoadException exception)
-            {
-                return exception.Types.Where(type => type != null).ToArray();
-            }
-        }
-
-        static bool IsCreatableConfigType(Type type)
-        {
-            if (type == null || type.IsAbstract || !typeof(ScriptableObject).IsAssignableFrom(type))
-            {
-                return false;
-            }
-
-            CreateAssetMenuAttribute createMenu = type.GetCustomAttribute<CreateAssetMenuAttribute>();
-
-            return createMenu != null
-                && !string.IsNullOrWhiteSpace(createMenu.menuName)
-                && createMenu.menuName.StartsWith(ConfigMenuPrefix, StringComparison.Ordinal);
         }
 
         static List<ScriptableObject> FindAssets(Type type)
@@ -168,7 +130,7 @@ namespace DarkFlare.Editor
                 }
             }
 
-            string relativeMenuPath = configType.MenuName.Substring(ConfigMenuPrefix.Length);
+            string relativeMenuPath = configType.MenuName.Substring(ConfigurationTypeDiscovery.ConfigMenuPrefix.Length);
             string category = relativeMenuPath.Split('/')[0];
 
             if (string.IsNullOrWhiteSpace(category))

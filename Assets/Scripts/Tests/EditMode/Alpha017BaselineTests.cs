@@ -1,0 +1,296 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Text.RegularExpressions;
+using DarkFlare.Editor;
+using NUnit.Framework;
+using UnityEditor;
+using UnityEngine;
+
+namespace DarkFlare.Tests
+{
+    public sealed class Alpha017BaselineTests
+    {
+        const string ManifestRoot = "Docs/docs/assets/visual-assets/alpha-0.1.7/manifests";
+
+        static readonly string[] ExpectedTopLevelTypes =
+        {
+            "DarkFlare.AffixDefinition",
+            "DarkFlare.CharacterDefinition",
+            "DarkFlare.CraftingDefinition",
+            "DarkFlare.ItemBaseDefinition",
+            "DarkFlare.LootTableDefinition",
+            "DarkFlare.MonsterAffixDefinition",
+            "DarkFlare.MonsterDefinition",
+            "DarkFlare.MonsterSpawnDefinition",
+            "DarkFlare.ProjectileSkillDefinition",
+            "DarkFlare.StatDefinition",
+            "DarkFlare.TagDefinition",
+            "DarkFlare.TraderDefinition",
+        };
+
+        static readonly string[] ExpectedNestedTypes =
+        {
+            "DarkFlare.DamageRollDefinition",
+            "DarkFlare.LootTableEntry",
+            "DarkFlare.MonsterSpawnRule",
+            "DarkFlare.StatModifierDefinition",
+            "DarkFlare.TagQueryDefinition",
+            "DarkFlare.TraderStockEntry",
+        };
+
+        readonly List<UnityEngine.Object> _objects = new List<UnityEngine.Object>();
+
+        IArchitecture _architecture;
+
+        [SetUp]
+        public void SetUp()
+        {
+            GameArchitecture.Interface.Deinit();
+            _architecture = GameArchitecture.Interface;
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            for (int i = _objects.Count - 1; i >= 0; i--)
+            {
+                if (_objects[i] != null)
+                {
+                    UnityEngine.Object.DestroyImmediate(_objects[i]);
+                }
+            }
+
+            _objects.Clear();
+            _architecture?.Deinit();
+            _architecture = null;
+        }
+
+        [Test]
+        public void ConfigurationDiscovery_FreezesTwelveTopLevelAndSixNestedStructures()
+        {
+            IReadOnlyList<Type> topLevelTypes = ConfigurationTypeDiscovery.FindTopLevelTypes();
+            IReadOnlyList<Type> nestedTypes = ConfigurationTypeDiscovery.FindNestedSerializedTypes(topLevelTypes);
+
+            CollectionAssert.AreEqual(
+                ExpectedTopLevelTypes,
+                topLevelTypes.Select(type => type.FullName).ToArray());
+            CollectionAssert.AreEqual(
+                ExpectedNestedTypes,
+                nestedTypes.Select(type => type.FullName).ToArray());
+            Assert.AreEqual(123, ConfigurationTypeDiscovery.CountSerializedFields(topLevelTypes));
+            Assert.AreEqual(27, ConfigurationTypeDiscovery.CountSerializedFields(nestedTypes));
+            Assert.AreEqual(
+                150,
+                ConfigurationTypeDiscovery.CountSerializedFields(topLevelTypes)
+                + ConfigurationTypeDiscovery.CountSerializedFields(nestedTypes));
+
+            for (int i = 0; i < topLevelTypes.Count; i++)
+            {
+                CreateAssetMenuAttribute menu = topLevelTypes[i].GetCustomAttribute<CreateAssetMenuAttribute>();
+                Assert.IsNotNull(menu, topLevelTypes[i].FullName);
+                StringAssert.StartsWith(ConfigurationTypeDiscovery.ConfigMenuPrefix, menu.menuName);
+            }
+        }
+
+        [Test]
+        public void EffectManifests_FreezeTwentyThreeIndependentSingleSpriteFrames()
+        {
+            IReadOnlyList<Alpha017EffectFamilyContract> families = Alpha017VisualMigrationPreflight.EffectFamilies;
+            HashSet<string> manifestPaths = new HashSet<string>(StringComparer.Ordinal);
+
+            Assert.AreEqual(4, families.Count);
+
+            for (int familyIndex = 0; familyIndex < families.Count; familyIndex++)
+            {
+                Alpha017EffectFamilyContract family = families[familyIndex];
+                string manifestPath = Path.Combine(ManifestRoot, $"{family.Id}.json");
+                Assert.IsTrue(File.Exists(manifestPath), manifestPath);
+                string json = File.ReadAllText(manifestPath);
+
+                StringAssert.Contains("\"schema_version\": 1", json);
+                StringAssert.Contains("\"canvas\": { \"width\": 96, \"height\": 96 }", json);
+                StringAssert.Contains("\"pixels_per_unit\": 64", json);
+                StringAssert.Contains($"\"frames_per_second\": {family.FramesPerSecond}", json);
+                StringAssert.Contains($"\"loop\": {family.Loop.ToString().ToLowerInvariant()}", json);
+                Assert.IsFalse(json.Contains("SpriteSheet", StringComparison.OrdinalIgnoreCase));
+
+                MatchCollection images = Regex.Matches(json, "\\\"image\\\"\\s*:\\s*\\\"([^\\\"]+)\\\"");
+                Assert.AreEqual(family.FrameCount, images.Count, family.Id);
+
+                for (int frameIndex = 0; frameIndex < images.Count; frameIndex++)
+                {
+                    string relativeImagePath = images[frameIndex].Groups[1].Value.Replace('\\', '/');
+                    int assetsIndex = relativeImagePath.IndexOf("Assets/", StringComparison.Ordinal);
+                    Assert.GreaterOrEqual(assetsIndex, 0, relativeImagePath);
+                    string assetPath = relativeImagePath.Substring(assetsIndex);
+                    Assert.AreEqual(family.GetFramePath(frameIndex), assetPath);
+                    Assert.IsTrue(manifestPaths.Add(assetPath), $"重复帧路径：{assetPath}");
+                }
+            }
+
+            CollectionAssert.AreEquivalent(
+                Alpha017VisualMigrationPreflight.GetExpectedEffectFramePaths(),
+                manifestPaths);
+            Assert.AreEqual(23, manifestPaths.Count);
+        }
+
+        [Test]
+        public void ProjectileReference_FreezesImporterAndRuntimeVisibleSize()
+        {
+            Alpha017VisualBaselineReport report = Alpha017VisualMigrationPreflight.Capture(
+                Alpha017MigrationPhase.Preflight);
+            Alpha017ProjectileBaselineSnapshot projectile = report.Projectile;
+
+            Assert.IsTrue(projectile.Exists);
+            Assert.AreEqual(96, projectile.CanvasWidth);
+            Assert.AreEqual(96, projectile.CanvasHeight);
+            Assert.AreEqual(64f, projectile.PixelsPerUnit);
+            Assert.AreEqual(SpriteImportMode.Single, projectile.SpriteMode);
+            Assert.AreEqual(SpriteMeshType.FullRect, projectile.MeshType);
+            Assert.AreEqual(FilterMode.Point, projectile.FilterMode);
+            Assert.AreEqual(TextureImporterCompression.Uncompressed, projectile.Compression);
+            Assert.IsFalse(projectile.MipmapEnabled);
+            Assert.AreEqual(TextureWrapMode.Clamp, projectile.WrapMode);
+            Assert.AreEqual(new Vector2(0.5f, 0.5f), projectile.Pivot);
+            Assert.AreEqual(new Vector3(0.25f, 0.25f, 1f), projectile.PrefabRootScale);
+            Assert.AreEqual(0.21875f, projectile.VisibleWorldSize.x, 0.00001f);
+            Assert.AreEqual(0.0859375f, projectile.VisibleWorldSize.y, 0.00001f);
+        }
+
+        [Test]
+        public void VisualMigrationPreflight_UsesOnlyNamedTargetsAndCapturesKnownGaps()
+        {
+            Alpha017VisualBaselineReport report = Alpha017VisualMigrationPreflight.Capture(
+                Alpha017MigrationPhase.Preflight);
+
+            Assert.AreEqual(Alpha017MigrationPhase.Preflight, report.Phase);
+            CollectionAssert.AreEqual(new[] { "Default" }, report.SortingLayers);
+            Assert.AreEqual(18, report.WorldTargets.Count);
+            Assert.AreEqual(8, report.WorldTargets.Count(target => target.Kind == Alpha017WorldTargetKind.Prefab));
+            Assert.AreEqual(10, report.WorldTargets.Count(target => target.Kind == Alpha017WorldTargetKind.SceneObject));
+            Assert.IsTrue(report.WorldTargets.All(target => target.Exists));
+            Assert.IsTrue(report.WorldTargets.All(target => target.RendererCount > 0));
+            Assert.IsTrue(report.WorldTargets.All(target => target.DefaultRendererCount == target.RendererCount));
+            Assert.IsTrue(report.WorldTargets.Where(target => target.RequiresSortingGroup).All(target => target.SortingGroupCount == 0));
+            Assert.AreEqual(23, report.MissingEffectFrames.Count);
+            Assert.AreEqual(4, report.Issues.Count(issue => issue.Code == "sorting-layer-missing"));
+            Assert.AreEqual(15, report.Issues.Count(issue => issue.Code == "sorting-group-missing"));
+            Assert.AreEqual(18, report.Issues.Count(issue => issue.Code == "default-renderer"));
+            Assert.AreEqual(23, report.Issues.Count(issue => issue.Code == "effect-frame-missing"));
+            Assert.IsFalse(report.Issues.Any(issue => issue.Code == "target-missing"));
+            Assert.Throws<InvalidOperationException>(() =>
+                Alpha017VisualMigrationPreflight.Capture(Alpha017MigrationPhase.Apply));
+        }
+
+        [Test]
+        public void CombatEvents_ResolveBeforeDamage_AndNonDamageOutcomesNeverEmitDamage()
+        {
+            List<string> eventOrder = new List<string>();
+            _architecture.RegisterEvent<DamageResolvedEvent>(_ => eventOrder.Add("resolved"));
+            _architecture.RegisterEvent<ActorDamagedEvent>(_ => eventOrder.Add("damaged"));
+            CombatActor attacker = CreateActor("alpha017_attacker", ActorTeam.Player, 100f, 0f);
+            CombatSystem combat = _architecture.GetSystem<CombatSystem>();
+
+            CombatActor hitDefender = CreateActor("alpha017_hit", ActorTeam.Monster, 0f, 0f);
+            DamageResult hit = combat.ApplyDamage(CreateAttack(attacker, FindSeed(roll => roll < 0.5f), 10f), hitDefender);
+            Assert.IsTrue(hit.DidDealDamage);
+            CollectionAssert.AreEqual(new[] { "resolved", "damaged" }, eventOrder);
+
+            eventOrder.Clear();
+            CombatActor noDamageDefender = CreateActor("alpha017_no_damage", ActorTeam.Monster, 0f, 0f);
+            float noDamageHealth = noDamageDefender.CurrentHealth;
+            DamageResult noDamage = combat.ApplyDamage(
+                CreateAttack(attacker, FindSeed(roll => roll < 0.5f), null),
+                noDamageDefender);
+            Assert.AreEqual(HitOutcome.NoDamage, noDamage.Outcome);
+            Assert.AreEqual(noDamageHealth, noDamageDefender.CurrentHealth);
+            CollectionAssert.AreEqual(new[] { "resolved" }, eventOrder);
+
+            eventOrder.Clear();
+            CombatActor missedDefender = CreateActor("alpha017_missed", ActorTeam.Monster, 0f, 0f);
+            float missedHealth = missedDefender.CurrentHealth;
+            DamageResult missed = combat.ApplyDamage(
+                CreateAttack(attacker, FindSeed(roll => roll >= 0.95f), 10f),
+                missedDefender);
+            Assert.AreEqual(HitOutcome.Missed, missed.Outcome);
+            Assert.AreEqual(missedHealth, missedDefender.CurrentHealth);
+            CollectionAssert.AreEqual(new[] { "resolved" }, eventOrder);
+
+            eventOrder.Clear();
+            CombatActor evadedDefender = CreateActor("alpha017_evaded", ActorTeam.Monster, 0f, 100f);
+            float evadedHealth = evadedDefender.CurrentHealth;
+            DamageResult evaded = combat.ApplyDamage(
+                CreateAttack(attacker, FindSeed(roll => roll >= 0.5f && roll < 0.95f), 10f),
+                evadedDefender);
+            Assert.AreEqual(HitOutcome.Evaded, evaded.Outcome);
+            Assert.AreEqual(evadedHealth, evadedDefender.CurrentHealth);
+            CollectionAssert.AreEqual(new[] { "resolved" }, eventOrder);
+        }
+
+        [Test]
+        public void CombatText_FreezesEnemyTeamAndOutcomeSemantics()
+        {
+            Assert.AreEqual("-12", DamageNumberVisual.FormatText(12f, CombatTextKind.Damage));
+            Assert.AreEqual("+12", DamageNumberVisual.FormatText(12f, CombatTextKind.Healing));
+            Assert.AreEqual("未命中", DamageNumberVisual.FormatText(0f, CombatTextKind.Missed));
+            Assert.AreEqual("闪避", DamageNumberVisual.FormatText(0f, CombatTextKind.Evaded));
+            Assert.AreEqual("无伤害", DamageNumberVisual.FormatText(0f, CombatTextKind.NoDamage));
+            Assert.AreNotEqual(
+                DamageNumberVisual.GetColor(ActorTeam.Player, CombatTextKind.Damage),
+                DamageNumberVisual.GetColor(ActorTeam.Monster, CombatTextKind.Damage));
+            Assert.AreNotEqual(
+                DamageNumberVisual.GetColor(ActorTeam.Player, CombatTextKind.Damage),
+                DamageNumberVisual.GetColor(ActorTeam.Player, CombatTextKind.Healing));
+            Assert.AreNotEqual(
+                DamageNumberVisual.GetColor(ActorTeam.Monster, CombatTextKind.Damage),
+                DamageNumberVisual.GetColor(ActorTeam.Monster, CombatTextKind.CriticalDamage));
+        }
+
+        CombatActor CreateActor(string id, ActorTeam team, float accuracy, float evasion)
+        {
+            GameObject actorObject = new GameObject(id);
+            _objects.Add(actorObject);
+            CombatActor actor = actorObject.AddComponent<CombatActor>();
+            StatBlock stats = new StatBlock();
+            stats.SetValue(StatIds.Accuracy, accuracy);
+            stats.SetValue(StatIds.Evasion, evasion);
+            actor.Configure(id, team, 100f, stats, TagSet.Empty);
+            return actor;
+        }
+
+        static AttackSnapshot CreateAttack(CombatActor attacker, int seed, float? damage)
+        {
+            IReadOnlyList<DamagePacket> packets = damage.HasValue
+                ? new[] { new DamagePacket(DamageType.Physical, damage.Value, TagSet.Empty) }
+                : Array.Empty<DamagePacket>();
+
+            return new AttackSnapshot(
+                attacker.ActorId,
+                attacker.Team,
+                "alpha017_baseline",
+                string.Empty,
+                seed,
+                packets,
+                TagSet.Empty,
+                attacker.Stats,
+                Array.Empty<ModifierInstance>());
+        }
+
+        static int FindSeed(Func<float, bool> predicate)
+        {
+            for (int seed = 0; seed < 100000; seed++)
+            {
+                if (predicate(AttackRandomRolls.FromRootSeed(seed).HitRoll))
+                {
+                    return seed;
+                }
+            }
+
+            Assert.Fail("找不到满足命中随机条件的种子");
+            return 0;
+        }
+    }
+}

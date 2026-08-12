@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "family": "actor-hit-default",
+  "alpha_threshold": 8,
+  "canvas": { "width": 96, "height": 96 },
+  "alpha_required": true,
+  "export_transform": { "uniform_scale": 1, "alignment": "canvas-centered" },
+  "unity_import": { "pixels_per_unit": 64, "pivot": [0.5, 0.5], "filter": "Point", "mesh": "FullRect" },
+  "animation": { "frames_per_second": 20, "loop": false, "tintable": true },
+  "assets": [
+    { "name": "hit_00", "image": "../../../../../../Assets/Art/Sprites/Effects/Hit/effect_hit_default_00.png", "visible_width": [18, 28], "visible_height": [18, 28], "alpha_coverage": [0.02, 0.08], "visual_center_x": [46, 50], "visual_center_y": [46, 50], "edge_clearance": 30 },
+    { "name": "hit_01", "image": "../../../../../../Assets/Art/Sprites/Effects/Hit/effect_hit_default_01.png", "visible_width": [30, 42], "visible_height": [30, 42], "alpha_coverage": [0.04, 0.12], "visual_center_x": [46, 50], "visual_center_y": [46, 50], "edge_clearance": 24 },
+    { "name": "hit_02", "image": "../../../../../../Assets/Art/Sprites/Effects/Hit/effect_hit_default_02.png", "visible_width": [48, 60], "visible_height": [48, 60], "alpha_coverage": [0.08, 0.20], "visual_center_x": [46, 50], "visual_center_y": [46, 50], "edge_clearance": 14 },
+    { "name": "hit_03", "image": "../../../../../../Assets/Art/Sprites/Effects/Hit/effect_hit_default_03.png", "visible_width": [38, 52], "visible_height": [38, 52], "alpha_coverage": [0.05, 0.15], "visual_center_x": [46, 50], "visual_center_y": [46, 50], "edge_clearance": 20 },
+    { "name": "hit_04", "image": "../../../../../../Assets/Art/Sprites/Effects/Hit/effect_hit_default_04.png", "visible_width": [20, 36], "visible_height": [20, 36], "alpha_coverage": [0.02, 0.09], "visual_center_x": [46, 50], "visual_center_y": [46, 50], "edge_clearance": 26 }
+  ],
+  "groups": []
+}

@@ -25,6 +25,7 @@
 ## 进行中的计划
 
 - [alpha 0.1 开发计划](./plan/alpha-0.1-plan.md)
+- [alpha 0.1.7 多帧特效、稳定世界层级与综合验收](./plan/alpha-0.1.7-effects-sorting-acceptance-plan.md)
 
 ## 说明
 

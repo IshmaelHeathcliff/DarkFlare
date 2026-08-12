@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "family": "projectile-arcane-impact",
+  "alpha_threshold": 8,
+  "canvas": { "width": 96, "height": 96 },
+  "alpha_required": true,
+  "export_transform": { "uniform_scale": 1, "alignment": "canvas-centered" },
+  "unity_import": { "pixels_per_unit": 64, "pivot": [0.5, 0.5], "filter": "Point", "mesh": "FullRect" },
+  "animation": { "frames_per_second": 24, "loop": false, "direction": "radial" },
+  "assets": [
+    { "name": "impact_00", "image": "../../../../../../Assets/Art/Sprites/Effects/Projectile/Arcane/Impact/effect_projectile_arcane_impact_00.png", "visible_width": [20, 28], "visible_height": [20, 28], "alpha_coverage": [0.02, 0.08], "visual_center_x": [46, 50], "visual_center_y": [46, 50], "edge_clearance": 30 },
+    { "name": "impact_01", "image": "../../../../../../Assets/Art/Sprites/Effects/Projectile/Arcane/Impact/effect_projectile_arcane_impact_01.png", "visible_width": [30, 40], "visible_height": [30, 40], "alpha_coverage": [0.04, 0.12], "visual_center_x": [46, 50], "visual_center_y": [46, 50], "edge_clearance": 24 },
+    { "name": "impact_02", "image": "../../../../../../Assets/Art/Sprites/Effects/Projectile/Arcane/Impact/effect_projectile_arcane_impact_02.png", "visible_width": [44, 54], "visible_height": [44, 54], "alpha_coverage": [0.08, 0.18], "visual_center_x": [46, 50], "visual_center_y": [46, 50], "edge_clearance": 19 },
+    { "name": "impact_03", "image": "../../../../../../Assets/Art/Sprites/Effects/Projectile/Arcane/Impact/effect_projectile_arcane_impact_03.png", "visible_width": [56, 64], "visible_height": [56, 64], "alpha_coverage": [0.12, 0.24], "visual_center_x": [46, 50], "visual_center_y": [46, 50], "edge_clearance": 12 },
+    { "name": "impact_04", "image": "../../../../../../Assets/Art/Sprites/Effects/Projectile/Arcane/Impact/effect_projectile_arcane_impact_04.png", "visible_width": [44, 56], "visible_height": [44, 56], "alpha_coverage": [0.06, 0.16], "visual_center_x": [46, 50], "visual_center_y": [46, 50], "edge_clearance": 18 },
+    { "name": "impact_05", "image": "../../../../../../Assets/Art/Sprites/Effects/Projectile/Arcane/Impact/effect_projectile_arcane_impact_05.png", "visible_width": [24, 40], "visible_height": [24, 40], "alpha_coverage": [0.02, 0.10], "visual_center_x": [46, 50], "visual_center_y": [46, 50], "edge_clearance": 26 }
+  ],
+  "groups": []
+}
