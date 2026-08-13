@@ -1,6 +1,6 @@
 # alpha 0.1.7 多帧特效、稳定世界层级与综合验收执行计划
 
-> 状态：执行中；阶段 B 已完成，下一步进入阶段 C 运行时接入
+> 状态：已完成并归档
 > 建立日期：2026-08-12
 > 最近更新：2026-08-13
 > 所属版本：`alpha 0.1`
@@ -230,7 +230,7 @@ ProjectileController.TryHit
 
 #### 阶段 B 完成记录
 
-- 用户确认飞行 00、命中峰值 03、普通受击峰值 02、暴击受击峰值 03 四张 Pilot 后，已按“不可变 Pilot + 上一张通过帧”逐张完成其余 19 帧；生成、退回和量化记录见[特效 Pilot 与逐帧生成记录](../assets/visual-assets/alpha-0.1.7/pilot-generation.md)。
+- 用户确认飞行 00、命中峰值 03、普通受击峰值 02、暴击受击峰值 03 四张 Pilot 后，已按“不可变 Pilot + 上一张通过帧”逐张完成其余 19 帧；生成、退回和量化记录见[特效 Pilot 与逐帧生成记录](../../assets/visual-assets/alpha-0.1.7/pilot-generation.md)。
 - 四个家族共 23 张 96×96 RGBA 独立 PNG，完整 family audit 合计 23 assets / 0 errors / 0 warnings；原生并排检查确认飞行相位稳定、命中独立扩张收束、普通受击保持斩痕、暴击始终保持交叉重斩。
 - 发现并退回飞行污染帧及其派生链；对几何、覆盖率、中心或连续性不合格的单帧逐项重生成，没有放宽 manifest、修改 Pivot、按主体缩放或使用 SpriteSheet 补救。
 - 目录级自动 Importer 合同精准覆盖 23 张 Sprite；Unity 验证均为 Single、64 PPU、Center、Full Rect、Point、Uncompressed、MipMap Off、Clamp，预检缺失帧由 23 降为 0。
@@ -249,6 +249,17 @@ ProjectileController.TryHit
 
 验收：一次攻击只结算一次；五类伤害 Tint、普通 / 暴击、未命中 / 闪避 / 无伤害 / 治疗语义正确；高频播放后活动对象和句柄不增长，取消与场景退出无残留。
 
+#### 阶段 C 完成记录
+
+- `Projectile_Default.prefab` 保留原物理根、`0.25` 根 Scale、Collider、速度和寿命合同，将飞行表现迁入单位 Scale 的 `Visual` 子节点并绑定 6 帧循环 Controller；命中改为独立 `Projectile_Arcane_Impact.prefab`，不再复用在途 Sprite。
+- 新增统一 `VisualEffectPool` 与 `PooledSpriteEffect`：每个 Prefab 预热 4 个、硬上限 24 个，0.25 秒自动回收；池在 `GameArchitecture.Deinit()` 统一释放，饱和时只丢弃纯视觉请求，不影响伤害结算。
+- 玩家和三种怪物 Prefab 均建立唯一 `HitEffectAnchor`，普通 / 暴击分别绑定独立 Prefab；`ActorVisualFeedbackController` 只在实际正伤害事件上请求受击动画，原闪白 Tween 已移除。
+- 五类主伤害 Tint 集中在 `CombatEffectPalette`，以最终伤害最大类型决定颜色，同值按物理、火焰、冰霜、闪电、混沌稳定优先；未命中、闪避、无伤害和治疗均不会误播角色受击动画。
+- 精准依赖扫描确认零消费者后，已删除旧 `projectile_arcane.png`、`ProjectileImpactVisual` 及旧静态投射物 manifest；正式运行时只保留 23 张独立多帧 Sprite、四个 Controller 和三个特效 Prefab。
+- Unity EditMode 定向合同 15/15 通过；对象池 PlayMode 合同已验证预热、24 实例上限、自动回收、复用与架构退出释放 2/2 通过。正式 Main 冒烟中三类特效先预热 12 个，战斗峰值后池内 18 个均回收到 inactive，退出后池根与实例均为 0；相关程序集构建与 Console 均无项目代码错误，提交基线恢复 `EnterPlayModeOptions = 0`。
+
+验收：阶段 C 通过；阶段 D 开始建立统一 Sorting Layer、整体排序边界与稳定 Y 排序身份。
+
 ### 阶段 D：建立稳定世界层级
 
 - 通过 Unity MCP / Editor API 创建四个 Sorting Layer，并更新 `GroundTilemapSetup` 的未来生成合同。
@@ -259,6 +270,17 @@ ProjectileController.TryHit
 
 验收：全部目标零 `Default` 遗留、每个逻辑对象唯一 Group 和 Participant；上下交叉、同点重叠、水平翻转、死亡复活、动态生成和对象池复用连续帧稳定。
 
+#### 阶段 D 完成记录
+
+- 已建立 `Ground → WorldObject → WorldEffect → WorldInfo` 四层正式合同；双层 Tilemap 使用 `0 / 10`，飞行 / 命中受击使用 `0 / 10`，战斗文字使用 `WorldInfo / 0`。
+- 七个正式世界 Prefab 与 Main 八个场景物件均拥有唯一 `SortingGroup`、`WorldSortParticipant`、`SortAnchor` 和稳定身份；对象内部按稀有度环、描边、主体、火焰、血条和文字冻结相对 Order。
+- `WorldSortingSystem` 使用 `1/64` Y 量化、类别优先级和 StableSortId 序号比较，只在排序键变化时重排；Main 只有一个集中 Runner，统一取消且无逐帧临时集合。
+- 玩家、怪物和掉落物延迟到运行时配置完成后注册真实身份；Main 冒烟中 14 个活动对象获得 14 个唯一 ID 与 14 个唯一 Order，同点 Tie Breaker、上下交叉、翻转、禁用 / 启用和 ID 复用均通过。
+- 永久验证入口精准覆盖 18 个目标并接入 `ContentConfigurationValidator`，当前为 18 targets / 0 issues、内容扫描 0 issue；一次性迁移入口已清理。
+- 世界排序 EditMode 9/9、PlayMode 1/1 通过；四个相关程序集构建均为 0 error，正式 Main 连续运行 Console 为 0 error。测试后 `EnterPlayModeOptions` 已恢复并确认保持 `0`。
+
+验收：阶段 D 通过；阶段 E 开始建立配置类型—章节映射与 150 字段逐项覆盖。
+
 ### 阶段 E：配置文档逐字段封板
 
 - 建立类型—章节 manifest 和精准覆盖扫描器；复用配置中心发现规则，不维护第二份类型白名单。
@@ -267,6 +289,16 @@ ProjectileController.TryHit
 - 更新配置索引和旧 `combat-content.md` 兼容入口，检查所有 `Docs/docs` 内部链接。
 
 验收：运行时反射集合与文档映射完全一致；18/18 结构、150/150 当前字段通过，且新增一个临时测试字段或类型时测试会准确失败。
+
+#### 阶段 E 完成记录
+
+- 已以 `ConfigurationTypeDiscovery` 为唯一类型与字段发现入口，建立 `coverage-manifest.json`；manifest 只保存完整类型名、职责文档与 H2 锚点，不复制字段清单。
+- 已将 12 个顶层配置与 6 个可达嵌套结构拆入标签与查询、属性与词缀、角色与怪物、物品与掉落、技能、交易与打造六份字段合同；当前 18/18 类型、150/150 序列化字段覆盖通过。
+- 每个字段均以独立表格行记录类型、默认值、范围、必填性、所有权、消费者、随机与迁移；四个兼容字段明确要求正式资产保持为空。
+- 覆盖扫描只读取 manifest 登记的 Markdown，已接入 `ContentConfigurationValidator`，配置中心能显示错误码、类型、字段和文档路径，不会扫描字体、贴图或其他无关资源。
+- EditMode 4/4 通过；除正式覆盖外，合成用例已证明新增字段、过期字段、重复映射、孤立类型和错误 H2 锚点都会准确失败。
+
+验收：阶段 E 通过；阶段 F 开始执行 alpha 0.1 精准/全量回归、Main 实机、工程门禁、文档总结与计划归档。
 
 ### 阶段 F：alpha 0.1 综合验收、文档与归档
 
@@ -279,6 +311,18 @@ ProjectileController.TryHit
 - 检查并恢复 `EditorSettings.EnterPlayModeOptions = 0`，确认 `ProjectSettings/EditorSettings.asset` 无提交差异。
 
 验收：所有自动化、Main 实机、视觉、输入、资源生命周期、配置文档和工程门禁通过；没有临时迁移入口、测试资产、旧特效依赖或无关序列化变动。
+
+#### 阶段 F 完成记录
+
+- 全量 EditMode 为 208/208 通过；全量 PlayMode 为 21 项通过、0 失败，另有 2 项 Input System 上游已知忽略测试。五个项目程序集 `DarkFlare.Core`、`DarkFlare.Runtime`、`DarkFlare.Editor`、`DarkFlare.Tests.EditMode`、`DarkFlare.Tests.PlayMode` 均为 0 errors。
+- 23 张 alpha 0.1.7 特效帧与 alpha 0.1 全量视觉资产审计保持 0 errors / 0 warnings；确定性资产生成复跑为 `generated=80 changed=0`。
+- 正式 Main 冒烟覆盖自动攻击、投射物与受击表现、敌我战斗文字、掉落和菜单入口；活动世界对象为 27/27 唯一 StableSortId、27/27 唯一 Order、0 个非法 Group，特效峰值后为 16 total / 0 active / 16 available。
+- 排序稳态以 1024 次未变化 Tick 测得 0 B managed allocation；Global Light 2D 已显式照亮 `Default`、`Ground`、`WorldObject`、`WorldEffect`、`WorldInfo`，避免拆层后正式 Sprite 变黑。
+- 1280×720、1920×1080、2560×1440 已复核 HUD、背包 / 装备 / 属性、商店、打造及左右物品浮窗；自动布局边界测试和人工截图均未发现遮挡、超框、滚动条或错误浮窗位置。
+- 特效池根保持默认 `HideFlags.None`，由架构释放与场景卸载双重兜底，不再因 `DontSave*` 标志在退出 PlayMode 后进入无效场景；架构反初始化后池统计与实际根对象均归零。
+- 提交基线已恢复 `EnterPlayModeOptions = 0`，`ProjectSettings/EditorSettings.asset` 无测试配置差异；用户恢复目录保持未修改且不纳入本阶段成果。
+
+验收：阶段 F 通过，`alpha 0.1` 完成封板并归档。
 
 ## 验收矩阵
 
@@ -335,4 +379,4 @@ ProjectileController.TryHit
 - 四层世界渲染合同、单对象 SortingGroup、接地点排序和稳定 Tie Breaker 覆盖全部正式世界对象。
 - 12 个顶层配置、6 个嵌套结构及当前 150 个字段有完整参考，新增 / 过期内容可被自动检测。
 - alpha 0.1 全量战斗、资源、词条、打造、UI、输入、视觉、场景、资源生命周期与文档验收通过。
-- 本计划归档，`alpha-0.1-plan.md` 标记完成，提交基线中 `EnterPlayModeOptions = 0` 且无无关 ProjectSettings 或 `Docs/design/` 变动。
+- 本计划与 `alpha-0.1-plan.md` 已归档，提交基线中 `EnterPlayModeOptions = 0` 且无无关 ProjectSettings 或 `Docs/design/` 变动。

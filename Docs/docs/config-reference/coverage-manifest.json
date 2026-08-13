@@ -1,0 +1,95 @@
+{
+  "schemaVersion": 1,
+  "entries": [
+    {
+      "type": "DarkFlare.TagDefinition",
+      "document": "Docs/docs/config-reference/tags-and-queries.md",
+      "anchor": "tagdefinition"
+    },
+    {
+      "type": "DarkFlare.TagQueryDefinition",
+      "document": "Docs/docs/config-reference/tags-and-queries.md",
+      "anchor": "tagquerydefinition"
+    },
+    {
+      "type": "DarkFlare.StatDefinition",
+      "document": "Docs/docs/config-reference/stats-and-affixes.md",
+      "anchor": "statdefinition"
+    },
+    {
+      "type": "DarkFlare.AffixDefinition",
+      "document": "Docs/docs/config-reference/stats-and-affixes.md",
+      "anchor": "affixdefinition"
+    },
+    {
+      "type": "DarkFlare.StatModifierDefinition",
+      "document": "Docs/docs/config-reference/stats-and-affixes.md",
+      "anchor": "statmodifierdefinition"
+    },
+    {
+      "type": "DarkFlare.CharacterDefinition",
+      "document": "Docs/docs/config-reference/actors-and-monsters.md",
+      "anchor": "characterdefinition"
+    },
+    {
+      "type": "DarkFlare.MonsterDefinition",
+      "document": "Docs/docs/config-reference/actors-and-monsters.md",
+      "anchor": "monsterdefinition"
+    },
+    {
+      "type": "DarkFlare.MonsterAffixDefinition",
+      "document": "Docs/docs/config-reference/actors-and-monsters.md",
+      "anchor": "monsteraffixdefinition"
+    },
+    {
+      "type": "DarkFlare.MonsterSpawnDefinition",
+      "document": "Docs/docs/config-reference/actors-and-monsters.md",
+      "anchor": "monsterspawndefinition"
+    },
+    {
+      "type": "DarkFlare.MonsterSpawnRule",
+      "document": "Docs/docs/config-reference/actors-and-monsters.md",
+      "anchor": "monsterspawnrule"
+    },
+    {
+      "type": "DarkFlare.ItemBaseDefinition",
+      "document": "Docs/docs/config-reference/items-and-loot.md",
+      "anchor": "itembasedefinition"
+    },
+    {
+      "type": "DarkFlare.DamageRollDefinition",
+      "document": "Docs/docs/config-reference/items-and-loot.md",
+      "anchor": "damagerolldefinition"
+    },
+    {
+      "type": "DarkFlare.LootTableDefinition",
+      "document": "Docs/docs/config-reference/items-and-loot.md",
+      "anchor": "loottabledefinition"
+    },
+    {
+      "type": "DarkFlare.LootTableEntry",
+      "document": "Docs/docs/config-reference/items-and-loot.md",
+      "anchor": "loottableentry"
+    },
+    {
+      "type": "DarkFlare.ProjectileSkillDefinition",
+      "document": "Docs/docs/config-reference/skills.md",
+      "anchor": "projectileskilldefinition"
+    },
+    {
+      "type": "DarkFlare.TraderDefinition",
+      "document": "Docs/docs/config-reference/trade-and-crafting.md",
+      "anchor": "traderdefinition"
+    },
+    {
+      "type": "DarkFlare.TraderStockEntry",
+      "document": "Docs/docs/config-reference/trade-and-crafting.md",
+      "anchor": "traderstockentry"
+    },
+    {
+      "type": "DarkFlare.CraftingDefinition",
+      "document": "Docs/docs/config-reference/trade-and-crafting.md",
+      "anchor": "craftingdefinition"
+    }
+  ]
+}

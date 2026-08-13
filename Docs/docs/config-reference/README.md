@@ -1,41 +1,57 @@
 # 配置参考索引
 
-## 覆盖范围
+## 封板状态
 
-本目录登记所有 `CreateAssetMenu.menuName` 以 `DarkFlare/Data/` 开头的配置类型。新增配置类型或嵌套序列化结构时，必须同步更新本索引和对应字段参考。
+`alpha 0.1.7` 阶段 E 已建立配置发现、文档映射与字段覆盖闭环：
 
-| 配置类型 | 当前示例目录 | 字段参考状态 | 现有模块文档 |
-| --- | --- | --- | --- |
-| `TagDefinition` | `Assets/Data/Preset/Tags` | [完整](./combat-tags.md) | [战斗标签系统](../combat-tag-system.md) |
-| `StatDefinition` | `Assets/Data/Preset/Stats` | [完整](./combat-content.md#statdefinition) | [属性系统](../stat-system.md) |
-| `AffixDefinition` | `Assets/Data/Preset/Affixes` | 标签相关字段已覆盖，其余待补全 | [伤害与词条](../damage-affix-system.md) |
-| `ItemBaseDefinition` | `Assets/Data/Preset/Items` | [完整](./combat-content.md#itembasedefinition) | [装备系统](../equipment-system.md) |
-| `CharacterDefinition` | `Assets/Data/Preset/Actors` | [完整](./combat-content.md#characterdefinition) | [玩法循环](../gameplay-loop.md) |
-| `ProjectileSkillDefinition` | `Assets/Data/Preset/Skills` | [完整](./combat-content.md#projectileskilldefinition) | [伤害与词条](../damage-affix-system.md) |
-| `MonsterDefinition` | `Assets/Data/Preset/Monsters` | [完整](./combat-content.md#monsterdefinition) | [首批内容池](../content-system.md) |
-| `MonsterAffixDefinition` | `Assets/Data/Preset/MonsterAffixes` | [完整](./combat-content.md#monsteraffixdefinition) | [伤害与词条](../damage-affix-system.md) |
-| `MonsterSpawnDefinition` | `Assets/Data/Preset/Monsters` | 骨架已登记 | [首批内容池](../content-system.md) |
-| `LootTableDefinition` | `Assets/Data/Preset/Loot` | [完整](./combat-content.md#loottabledefinition) | [随机化与掉落](../randomization-system.md) |
-| `TraderDefinition` | `Assets/Data/Preset/Traders` | 骨架已登记 | [首批内容池](../content-system.md) |
-| `CraftingDefinition` | `Assets/Data/Preset/Crafting` | [完整](./combat-content.md#craftingdefinition) | [打造系统](../crafting-system.md) |
+- 发现入口：所有 `CreateAssetMenu.menuName` 以 `DarkFlare/Data/` 开头的顶层配置，以及它们可达的 Unity 嵌套序列化类型；
+- 当前基线：12 个顶层类型、6 个嵌套类型，共 18 类、150 个序列化字段；
+- 映射真值：[coverage-manifest.json](./coverage-manifest.json) 只登记完整类型名、职责文档和 H2 锚点；
+- 字段真值：Editor 反射实时读取 Unity 序列化字段，manifest 不复制字段列表；
+- 文档要求：每个字段必须在对应类型 H2 章节中拥有独立表格行。
+
+配置中心“内容校验”会同时运行覆盖扫描。新增配置类型、可达嵌套类型或序列化字段而未登记时，提交前会得到明确错误；删除或重命名字段后，旧文档行也会以 stale 错误阻止通过。
+
+## 六份职责文档
+
+| 职责 | 类型 | 字段数 | 字段参考 | 模块说明 |
+| --- | --- | ---: | --- | --- |
+| 标签与查询 | `TagDefinition`、`TagQueryDefinition` | 9 | [完整](./tags-and-queries.md) | [战斗标签系统](../combat-tag-system.md) |
+| 属性与词缀 | `StatDefinition`、`AffixDefinition`、`StatModifierDefinition` | 28 | [完整](./stats-and-affixes.md) | [属性系统](../stat-system.md)、[伤害与词缀](../damage-affix-system.md) |
+| 角色与怪物 | `CharacterDefinition`、`MonsterDefinition`、`MonsterAffixDefinition`、`MonsterSpawnDefinition`、`MonsterSpawnRule` | 59 | [完整](./actors-and-monsters.md) | [玩法循环](../gameplay-loop.md)、[首批内容池](../content-system.md) |
+| 物品与掉落 | `ItemBaseDefinition`、`DamageRollDefinition`、`LootTableDefinition`、`LootTableEntry` | 23 | [完整](./items-and-loot.md) | [装备系统](../equipment-system.md)、[随机化与掉落](../randomization-system.md) |
+| 技能 | `ProjectileSkillDefinition` | 12 | [完整](./skills.md) | [伤害与词缀](../damage-affix-system.md) |
+| 交易与打造 | `TraderDefinition`、`TraderStockEntry`、`CraftingDefinition` | 19 | [完整](./trade-and-crafting.md) | [打造系统](../crafting-system.md)、[首批内容池](../content-system.md) |
+
+旧 [标签配置参考](./combat-tags.md) 与 [角色、物品与攻击配置参考](./combat-content.md) 保留为阶段迁移摘要；新增或修改字段只维护上表六份封板合同。
 
 ## 每类配置的交付要求
 
-完整字段参考至少记录：
+每个类型章节必须记录：
 
-- 资产用途、创建菜单和正式示例；
-- 每个序列化字段的类型、默认值、合法范围和必填性；
-- 稳定 ID、资产引用和资源所有权；
-- 运行时读取者、随机种子和可复现性；
-- Inspector、内容校验与常见错误；
-- 字段迁移和旧资产默认行为。
+- 资产用途、创建菜单、正式示例与所属目录；
+- 每个序列化字段的精确名称、类型、CLR/显式默认值、范围与必填性；
+- 稳定 ID、资产引用、单一数据所有者和实际运行时消费者；
+- 随机流、根种子、列表顺序与可复现性边界；
+- Inspector、内容校验、常见错误和失败行为；
+- 旧资产默认、兼容字段、重命名和删除迁移。
 
-`alpha 0.1.1` 建立索引和标签字段参考。后续每个改变配置结构的阶段负责补全受影响类型；`alpha 0.1.7` 增加自动覆盖检查并完成封板。
+兼容字段也必须单独成行，并明确“正式资产必须为空”；不能以兼容读取存在为由继续生产新数据。
+
+## 变更流程
+
+1. 用 `ConfigurationTypeDiscovery` 确认新增类型是否会被配置中心发现。
+2. 顶层或嵌套类型新增时，在 `coverage-manifest.json` 登记唯一职责文档与 H2 锚点。
+3. 为每个新增 `[SerializeField]` 字段增加独立表格行，写明默认、范围、所有权、消费者与迁移。
+4. 运行 `ConfigurationDocumentationCoverageTests` 和配置中心内容校验。
+5. 删除/改名字段时移除 stale 行；字段迁移完成前不得只修改文档或只修改代码。
+
+覆盖扫描只读取 manifest 指定的 Markdown，不做全盘资源扫描，也不会读取字体、贴图或 `Docs/design`。
 
 ## 通用约定
 
-- 稳定 ID 使用小写 ASCII `snake_case`，一旦进入存档、Addressables 或跨资产引用便不得随意修改。
+- 稳定 ID 使用小写 ASCII `snake_case`；进入实例、存档、Addressables 或跨资产引用后不得随意修改。
 - 正式配置放在 `Assets/Data/Preset` 对应分类目录；测试临时资产不得进入正式内容池。
-- 随机结果必须由调用方提供种子，禁止在配置对象内部隐式使用全局随机状态。
-- 配置资产由 Addressables 或显式资产引用持有；运行时不得使用 `Resources.Load`。
-- 正式提交前运行配置中心“内容校验”和相关 EditMode 测试。
+- 随机结果由调用方提供种子；配置对象不得隐式使用全局随机状态或在运行时写回共享资产。
+- 资源通过 Addressables 或显式资产引用持有；运行时不得使用 `Resources.Load`。
+- 正式提交前运行配置中心“内容校验”、相关 EditMode/PlayMode 测试，并确认 `ProjectSettings/EditorSettings.asset` 无差异且 `EnterPlayModeOptions` 为 `0`。

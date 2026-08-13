@@ -139,7 +139,8 @@ namespace DarkFlare
             _label.color = Color.white;
             _label.outlineColor = new Color(0.02f, 0.025f, 0.035f, 0.95f);
             _label.outlineWidth = 0.2f;
-            _label.sortingOrder = 70;
+            _label.renderer.sortingLayerName = "WorldObject";
+            _label.sortingOrder = 30;
             _label.textWrappingMode = TextWrappingModes.NoWrap;
             _label.richText = true;
         }

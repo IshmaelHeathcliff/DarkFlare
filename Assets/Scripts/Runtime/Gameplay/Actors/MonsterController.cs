@@ -15,6 +15,7 @@ namespace DarkFlare
         CircleCollider2D _collider;
         CombatActor _actor;
         MonsterAffixVisual _affixVisual;
+        WorldSortParticipant _sortParticipant;
         MonsterDefinition _definition;
         MonsterInstanceData _instance;
         float _lastContactDamageTime = -999f;
@@ -39,6 +40,9 @@ namespace DarkFlare
             _definition = definition;
             _instance = instance;
             ApplyDefinition();
+            _sortParticipant?.ConfigureIdentity(
+                WorldSortCategory.Monster,
+                $"{_definition.Id}_{unchecked((uint)_instance.Seed):x8}");
         }
 
         void Awake()
@@ -83,6 +87,7 @@ namespace DarkFlare
             _collider = GetComponent<CircleCollider2D>();
             _actor = GetComponent<CombatActor>();
             _affixVisual = GetComponent<MonsterAffixVisual>();
+            _sortParticipant = GetComponent<WorldSortParticipant>();
 
             if (_rigidbody != null)
             {

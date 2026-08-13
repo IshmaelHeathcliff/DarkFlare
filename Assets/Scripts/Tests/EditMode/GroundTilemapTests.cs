@@ -91,8 +91,10 @@ namespace DarkFlare.Tests
                 TilemapRenderer detailRenderer = detailTilemap.GetComponent<TilemapRenderer>();
                 Assert.IsNotNull(baseRenderer);
                 Assert.IsNotNull(detailRenderer);
-                Assert.AreEqual(-100, baseRenderer.sortingOrder);
-                Assert.AreEqual(-99, detailRenderer.sortingOrder);
+                Assert.AreEqual("Ground", baseRenderer.sortingLayerName);
+                Assert.AreEqual("Ground", detailRenderer.sortingLayerName);
+                Assert.AreEqual(0, baseRenderer.sortingOrder);
+                Assert.AreEqual(10, detailRenderer.sortingOrder);
             }
             finally
             {

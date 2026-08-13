@@ -26,7 +26,7 @@ namespace DarkFlare.Tests
         const string UiFrameRoot = "Assets/Art/Sprites/UI/Frames";
         const string WorldPropRoot = "Assets/Art/Sprites/Environment/WorldProps";
         const string GroundBaseRoot = "Assets/Art/Sprites/Environment/GroundTiles/Base";
-        const string ProjectilePath = "Assets/Art/Sprites/Effects/projectile_arcane.png";
+        const string ProjectilePath = "Assets/Art/Sprites/Effects/Projectile/Arcane/Flight/effect_projectile_arcane_flight_e_00.png";
         const string LootRarityEffectPath = "Assets/Art/Sprites/Effects/effect_loot_rarity_ring.png";
         const string GroundSlicePath = "Assets/Art/Sprites/Environment/VisualSlice/ground_slice.png";
         const string HealthBarBackgroundPath = "Assets/Art/Sprites/UI/Phase5/world_health_bar_background.png";

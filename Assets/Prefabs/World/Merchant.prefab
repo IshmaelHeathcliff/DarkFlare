@@ -77,9 +77,9 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 9
+  m_SortingLayerID: 1001002
+  m_SortingLayer: 2
+  m_SortingOrder: -10
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: af4a834b7db913f48813b02ca3d7b26c, type: 3}
   m_Color: {r: 1, g: 0.72, b: 0.25, a: 0.65}
@@ -172,9 +172,9 @@ MeshRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 9
+  m_SortingLayerID: 1001002
+  m_SortingLayer: 2
+  m_SortingOrder: 30
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &2322580944358186766
@@ -187,7 +187,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -197,7 +197,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text:
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 24db15881baef0448b5f8d170676bf1d, type: 2}
   m_sharedMaterial: {fileID: 8719198604984635941, guid: 24db15881baef0448b5f8d170676bf1d, type: 2}
@@ -353,9 +353,9 @@ MeshRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 8
+  m_SortingLayerID: 1001002
+  m_SortingLayer: 2
+  m_SortingOrder: 30
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &3367824576698429426
@@ -368,7 +368,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -467,6 +467,8 @@ GameObject:
   - component: {fileID: 8658540533506281815}
   - component: {fileID: 4513292145189885175}
   - component: {fileID: 1946828003632272351}
+  - component: {fileID: 7867599462043557527}
+  - component: {fileID: 2115406104608054463}
   m_Layer: 0
   m_Name: Merchant
   m_TagString: Untagged
@@ -490,6 +492,7 @@ Transform:
   - {fileID: 4965377903091213708}
   - {fileID: 6909134620251266427}
   - {fileID: 6050969232753354439}
+  - {fileID: 4034346582453660787}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1205266193641635074
@@ -537,9 +540,9 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 10
+  m_SortingLayerID: 1001002
+  m_SortingLayer: 2
+  m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: af4a834b7db913f48813b02ca3d7b26c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -568,7 +571,7 @@ Animator:
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
-  m_WarningMessage:
+  m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
@@ -619,7 +622,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 789a548ac8c15d24c97a5fd7c0c3bba7, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.WorldInteractionTarget
   _displayName: "\u6D41\u6D6A\u5546\u4EBA"
   _menuPage: 1
@@ -635,10 +638,71 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6dabe048f4e53b347abe6dcb5f1d8111, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.WorldInteractionVisual
   _target: {fileID: 4513292145189885175}
   _mainRenderer: {fileID: 1205266193641635074}
   _outlineRenderer: {fileID: 5102571805779313026}
   _nameplate: {fileID: 3367824576698429426}
   _focusPrompt: {fileID: 2322580944358186766}
+--- !u!210 &7867599462043557527
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6185918381708444027}
+  m_Enabled: 1
+  m_SortingLayerID: 1001002
+  m_SortingLayer: 2
+  m_SortingOrder: 0
+  m_SortAtRoot: 0
+  m_Sort3DAs2D: 0
+--- !u!114 &2115406104608054463
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6185918381708444027}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 377aa173fc0145e44b22ba4fe99c14c0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.WorldSortParticipant
+  _category: 1
+  _stableSortId: world_merchant
+  _sortAnchor: {fileID: 4034346582453660787}
+  _sortingGroup: {fileID: 7867599462043557527}
+  _requiresRuntimeIdentity: 0
+--- !u!1 &8918229277545373199
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4034346582453660787}
+  m_Layer: 0
+  m_Name: SortAnchor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4034346582453660787
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8918229277545373199}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.125, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6505152553140702087}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

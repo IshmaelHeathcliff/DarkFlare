@@ -11,6 +11,7 @@ namespace DarkFlare
 
         CircleCollider2D _collider;
         ItemInstance _item;
+        WorldSortParticipant _sortParticipant;
 
         public ItemInstance Item => _item;
 
@@ -26,6 +27,11 @@ namespace DarkFlare
             EnsureComponents();
             _item = item;
             _visual?.Bind(item);
+
+            if (_sortParticipant != null && item != null)
+            {
+                _sortParticipant.ConfigureIdentity(WorldSortCategory.Loot, item.InstanceId);
+            }
         }
 
         void Awake()
@@ -70,6 +76,11 @@ namespace DarkFlare
             if (_visual == null)
             {
                 _visual = GetComponent<LootPickupVisual>();
+            }
+
+            if (_sortParticipant == null)
+            {
+                _sortParticipant = GetComponent<WorldSortParticipant>();
             }
 
             if (_collider != null)

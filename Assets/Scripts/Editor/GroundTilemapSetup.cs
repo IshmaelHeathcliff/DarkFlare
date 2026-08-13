@@ -225,8 +225,8 @@ namespace DarkFlare.Editor
             grid.cellLayout = GridLayout.CellLayout.Rectangle;
             grid.cellSwizzle = GridLayout.CellSwizzle.XYZ;
 
-            Tilemap baseTilemap = CreateLayer(root.transform, "GroundBaseTilemap", -100);
-            Tilemap detailTilemap = CreateLayer(root.transform, "GroundDetailTilemap", -99);
+            Tilemap baseTilemap = CreateLayer(root.transform, "GroundBaseTilemap", 0);
+            Tilemap detailTilemap = CreateLayer(root.transform, "GroundDetailTilemap", 10);
 
             for (int y = 0; y < MapSize; y++)
             {
@@ -262,7 +262,7 @@ namespace DarkFlare.Editor
             tilemap.orientation = Tilemap.Orientation.XY;
 
             TilemapRenderer renderer = layer.GetComponent<TilemapRenderer>();
-            renderer.sortingLayerName = "Default";
+            renderer.sortingLayerName = "Ground";
             renderer.sortingOrder = sortingOrder;
             renderer.mode = TilemapRenderer.Mode.Chunk;
             renderer.detectChunkCullingBounds = TilemapRenderer.DetectChunkCullingBounds.Auto;

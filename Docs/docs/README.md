@@ -20,14 +20,14 @@
 - [视觉规范](./visual-style.md)
 - [视觉资产清单](./visual-assets.md)
 - [双层地表 Tilemap](./ground-tilemap.md)
+- [世界渲染与稳定层级](./world-rendering.md)
 - [已完成计划归档](./plan/archive/README.md)
 
 ## 进行中的计划
 
-- [alpha 0.1 开发计划](./plan/alpha-0.1-plan.md)
-- [alpha 0.1.7 多帧特效、稳定世界层级与综合验收](./plan/alpha-0.1.7-effects-sorting-acceptance-plan.md)
+当前没有执行中的版本计划。`alpha 0.1` 与 `alpha 0.1.7` 已完成并移入[已完成计划归档](./plan/archive/README.md)。
 
 ## 说明
 
-当前项目已完成首版单场景最小循环及初步体验优化，正式进入 alpha 阶段，当前版本从 `alpha 0.1` 开始规划。文档以现有目录、包依赖和脚本入口为准整理；已完成的执行计划统一保存在 `Docs/docs/plan/archive/`。
+当前项目已完成首版单场景最小循环、初步体验优化与 `alpha 0.1` 封板。文档以现有目录、包依赖和脚本入口为准整理；已完成的执行计划统一保存在 `Docs/docs/plan/archive/`。
 后续新增系统、配置或流程时，应优先更新对应文档，避免 `Docs/docs/` 与实现脱节。游戏设计文档位于 `Docs/design/`，不属于 Agent 的常规维护范围。

@@ -85,7 +85,7 @@
 - 七件正式装备使用独立 Addressable 图标，世界掉落、背包、四个装备槽、商店、打造和详情从同一物品基底解析视觉；HUD 不再消费装备图标。
 - `SpriteAssetLoader` 统一负责图标去重预热、缓存、取消清理与释放，`GameArchitecture.Deinit()` 与 Prefab Loader 一并释放资源。
 - 地图在 5×5 基础 Tilemap、稀疏细节 Tilemap 和 `WorldBounds` 上布置营地、路径、边界装饰与火盆，不改变生成、碰撞、交互或 AI 规则。
-- 商人与打造台改为独立 Prefab，通过 `WorldInteractionVisual` 响应既有焦点消息；战斗表现增加命中闪白、伤害数字、怪物血条、死亡淡出和投射物冲击。
+- 商人与打造台改为独立 Prefab，通过 `WorldInteractionVisual` 响应既有焦点消息；战斗表现包含伤害数字、怪物血条、死亡淡出，以及独立的投射物飞行、命中、普通受击和暴击受击多帧动画，旧命中闪白与静态 Sprite 缩放冲击已移除。
 - `Theme.uss` 统一 HUD 与三个菜单的图标、稀有度、按钮和焦点状态，继续复用唯一 `UIDocument` 和 `EventSystem`。
 
 完整规格、资产与验收截图见 [视觉规范](./visual-style.md) 和 [视觉资产清单](./visual-assets.md)。
@@ -129,7 +129,7 @@
 | 打造 | `CraftingSystem`、`CraftingOperations` | 四种词条操作、金币成本、失败回滚与完成事件 |
 | 输入与 UI | `GameInput`、`GameMenuController`、各面板 Controller | 键鼠 / 手柄输入、HUD、背包、商店和打造交互 |
 | 世界交互 | `PlayerInteractionController`、`WorldInteractionTarget`、`GameplayPauseSystem` | 最近目标选择、情境菜单请求、交互提示与菜单暂停 |
-| 视觉表现 | `SpriteAssetLoader`、`ItemVisualPresenter`、`ActorVisualFeedbackController`、`MonsterAffixVisual`、`WorldInteractionVisual` | 动态图标、战斗反馈、怪物词条辨识、交互高亮和临时表现清理 |
+| 视觉表现 | `SpriteAssetLoader`、`ItemVisualPresenter`、`ActorVisualFeedbackController`、`VisualEffectPool`、`MonsterAffixVisual`、`WorldInteractionVisual` | 动态图标、多帧战斗反馈、有界特效回收、怪物词条辨识、交互高亮和临时表现清理 |
 
 各场景 Controller 实现 `IController`，通过 Command 修改 Model / System，通过 Query 获取只读快照，并注册 Event 刷新表现。Controller 不直接修改 Model，也不直接发送领域 Event。
 
@@ -165,6 +165,9 @@ Prefab 通过 Addressables 预热和实例化，首版不使用 `Resources` 或�
 - 阶段 5 全量 EditMode 92/92 通过；PlayMode 12 项中 10 项通过、2 项 Input System 上游用例按原标记跳过、0 失败。Core、Runtime、Editor、EditMode 与 PlayMode 五个项目程序集编译通过；七件装备图标预热、三种怪物 Animator、战斗反馈与三档 UI 渲染通过，最终 Play Console 为 0 错误、0 警告。
 - 阶段 6 全量 EditMode 98/98 通过；PlayMode 12 项中 10 项通过、2 项 Input System 上游既有用例按标记跳过、0 失败。五个项目程序集顺序编译均为 0 警告、0 错误，Unity Console 为 0 错误、0 警告。Main 重复进入前后 Addressables 缓存稳定为 6 个 Prefab 与 7 个 Sprite，停止战斗发射源后临时伤害数字、冲击和投射物均清零。
 - 双层地表专项验收为 EditMode 19/19、PlayMode 1/1 通过；基础层 25 格、细节层 11 格、两层无 Collider，视觉覆盖继续保持 `-20..20`，`WorldBounds` 保持 `-16..16`。
+- alpha 0.1.7 阶段 C 已将 23 张独立特效帧接入正式投射物与四类战斗 Actor；EditMode 运行时合同 15/15、对象池 PlayMode 合同 2/2 通过，每类特效预热 4 个且活动上限 24。Main 战斗冒烟确认实例可回收，退出后池根与实例均为 0，Console 为 0 错误。
+- alpha 0.1.7 阶段 D 已将地表、世界对象、世界特效与战斗信息拆入四个正式 Sorting Layer；七个 Prefab 和 Main 八个场景物件使用单一整体边界与接地点排序。Main 冒烟中 14 个活动对象的稳定 ID / Order 均唯一，同点与上下交叉顺序稳定，详见[世界渲染与稳定层级](./world-rendering.md)。
+- alpha 0.1.7 综合验收为 EditMode 208/208；PlayMode 21 项通过、0 失败，另有 2 项 Input System 上游已知忽略测试。正式 Main 中 27 个活动对象的 StableSortId / Order 均唯一，排序稳态 1024 次 Tick 为 0 B managed allocation；特效池峰值后全部回收，退出 PlayMode 不再残留池根。
 - alpha 0.1.3 全量 EditMode 148/148 通过；PlayMode 17 项中 15 项通过、2 项 Input System 上游既有用例按标记跳过、0 失败。12 只怪物四方向脱困、WorldObstacle 阻挡、Default Trigger 与迁移幂等性专项均通过。
 - alpha 0.1.4 专项 EditMode 6/6、Main PlayMode 1/1 通过；全量 EditMode 156/156 通过，PlayMode 18 项中 16 项通过、2 项 Input System 上游既有用例按标记跳过、0 失败。四个相关程序集构建零错误，三档 UI 布局回归通过，真实 Main 停止后的 Console 为零错误。
 - alpha 0.1.5 主属性专项 6/6、怪物词条纯领域专项 6/6、正式内容专项 13/13、怪物词条表现 PlayMode 2/2 通过；全量 EditMode 176/176 通过，PlayMode 20 项中 18 项通过、2 项 Input System 上游既有用例按标记跳过、0 失败。Main 固定种子 `24681357` 的前 12 个怪物、词条、攻击与掉落双次重放一致，四个相关程序集构建零错误。
@@ -174,7 +177,7 @@ Prefab 通过 Addressables 预热和实例化，首版不使用 `Resources` 或�
 ## 当前边界
 
 - 仅有 `Main.unity` 单场景，没有安全区、撤离、场景切换或存档闭环。
-- 背包只实现矩形格子占用，没有拖拽换位、旋转、堆叠和重量。
+- 背包已实现矩形格子占用、物品与装备栏之间的拖拽整理；当前仍没有物品旋转、堆叠和重量。
 - 装备已实现武器、护甲和双戒指槽，以及替换和卸下；首批七件装备和 25 个物品词条已接入，但尚无耐久、套装、纸娃娃和词条等级段。
 - 交易只维护单个共享商人库存；卖出物品不进入商人库存，也没有回购。
 - 打造只消耗金币，尚无配方、材料、锁定词缀或批量操作。

@@ -17,9 +17,17 @@ namespace DarkFlare
         [SerializeField]
         MonsterHealthBarVisual _monsterHealthBar;
 
+        [SerializeField]
+        Transform _hitEffectAnchor;
+
+        [SerializeField]
+        GameObject _defaultHitEffectPrefab;
+
+        [SerializeField]
+        GameObject _criticalHitEffectPrefab;
+
         readonly List<IUnRegister> _registrations = new List<IUnRegister>();
 
-        Tween _flashTween;
         Tween _deathTween;
         Color _baseColor = Color.white;
 
@@ -36,6 +44,10 @@ namespace DarkFlare
             {
                 _baseColor = _renderer.color;
             }
+
+            VisualEffectPool effectPool = this.GetUtility<VisualEffectPool>();
+            effectPool.Prewarm(_defaultHitEffectPrefab);
+            effectPool.Prewarm(_criticalHitEffectPrefab);
         }
 
         void OnEnable()
@@ -72,6 +84,11 @@ namespace DarkFlare
             {
                 _monsterHealthBar = GetComponent<MonsterHealthBarVisual>();
             }
+
+            if (_hitEffectAnchor == null)
+            {
+                _hitEffectAnchor = transform.Find("HitEffectAnchor");
+            }
         }
 
         void RegisterEvents()
@@ -105,7 +122,7 @@ namespace DarkFlare
                 return;
             }
 
-            Flash();
+            PlayHitEffect(e.Result);
             DamageNumberVisual.Spawn(
                 transform.position,
                 e.Result.TotalDamage,
@@ -194,39 +211,23 @@ namespace DarkFlare
             RestoreVisuals();
         }
 
-        void Flash()
+        void PlayHitEffect(DamageResult result)
         {
-            if (_renderer == null)
+            if (!CombatEffectPalette.ShouldPlayActorHit(result))
             {
                 return;
             }
 
-            StopTween(ref _flashTween);
-            Color current = _renderer.color;
-            Color flash = Color.white;
-            flash.a = current.a;
-            _flashTween = Tween.Color(_renderer, current, flash, 0.04f, Ease.OutQuad)
-                .OnComplete(this, controller =>
-                {
-                    if (controller == null || controller._renderer == null)
-                    {
-                        return;
-                    }
-
-                    Color target = controller._baseColor;
-                    target.a = controller._renderer.color.a;
-                    controller._flashTween = Tween.Color(
-                        controller._renderer,
-                        controller._renderer.color,
-                        target,
-                        0.04f,
-                        Ease.InQuad);
-                });
+            GameObject prefab = result.IsCritical ? _criticalHitEffectPrefab : _defaultHitEffectPrefab;
+            Vector3 position = _hitEffectAnchor != null ? _hitEffectAnchor.position : transform.position;
+            this.GetUtility<VisualEffectPool>().TryPlay(
+                prefab,
+                position,
+                CombatEffectPalette.GetHitTint(result));
         }
 
         void StopTweens()
         {
-            StopTween(ref _flashTween);
             StopTween(ref _deathTween);
         }
 

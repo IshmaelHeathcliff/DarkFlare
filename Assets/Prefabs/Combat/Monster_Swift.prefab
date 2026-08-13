@@ -81,9 +81,9 @@ MeshRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 70
+  m_SortingLayerID: 1001002
+  m_SortingLayer: 2
+  m_SortingOrder: 30
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &5255700056704725812
@@ -96,7 +96,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -106,7 +106,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text:
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 24db15881baef0448b5f8d170676bf1d, type: 2}
   m_sharedMaterial: {fileID: 8719198604984635941, guid: 24db15881baef0448b5f8d170676bf1d, type: 2}
@@ -181,6 +181,37 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_renderer: {fileID: 1864636489942929783}
   m_maskType: 0
+--- !u!1 &2206143947933861519
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3211051235028295703}
+  m_Layer: 7
+  m_Name: SortAnchor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3211051235028295703
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2206143947933861519}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.125, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 622295999561625480}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3582585676339209252
 GameObject:
   m_ObjectHideFlags: 0
@@ -259,9 +290,9 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 30
+  m_SortingLayerID: 1001002
+  m_SortingLayer: 2
+  m_SortingOrder: 20
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 44b389de85692154f840720246295a62, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -350,9 +381,9 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 31
+  m_SortingLayerID: 1001002
+  m_SortingLayer: 2
+  m_SortingOrder: 21
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 2c416f5d6b7a7a344ab08b28787fe901, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -364,6 +395,37 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!1 &7196170578768725305
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 113176314406756828}
+  m_Layer: 7
+  m_Name: HitEffectAnchor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &113176314406756828
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7196170578768725305}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.8125, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 622295999561625480}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7825265559056196060
 GameObject:
   m_ObjectHideFlags: 0
@@ -383,6 +445,8 @@ GameObject:
   - component: {fileID: 6998558286824512590}
   - component: {fileID: 3092236459437633144}
   - component: {fileID: 2332014915366843878}
+  - component: {fileID: 6823659541115091175}
+  - component: {fileID: 9094493762082865036}
   m_Layer: 7
   m_Name: Monster_Swift
   m_TagString: Untagged
@@ -405,6 +469,8 @@ Transform:
   m_Children:
   - {fileID: 1418927207026479014}
   - {fileID: 7494069275408721391}
+  - {fileID: 113176314406756828}
+  - {fileID: 3211051235028295703}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &3808907934225930387
@@ -452,9 +518,9 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 10
+  m_SortingLayerID: 1001002
+  m_SortingLayer: 2
+  m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: d403478264ddbfb458993d499f9b9ccb, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -625,6 +691,9 @@ MonoBehaviour:
   _actor: {fileID: 8846293484581082715}
   _renderer: {fileID: 3808907934225930387}
   _monsterHealthBar: {fileID: 6998558286824512590}
+  _hitEffectAnchor: {fileID: 113176314406756828}
+  _defaultHitEffectPrefab: {fileID: 4606996313625279501, guid: 53a8be6ebd6ec1b499e355ffbb2b1c2a, type: 3}
+  _criticalHitEffectPrefab: {fileID: 8173754273728878949, guid: 90b3770d63e2b9b4b8087f4c5699fa3d, type: 3}
 --- !u!114 &2332014915366843878
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -635,9 +704,39 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f7a82e0722617d145abc3f58193056d7, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.MonsterAffixVisual
   _actor: {fileID: 8846293484581082715}
   _label: {fileID: 5255700056704725812}
   _labelLocalPosition: {x: 0, y: 1.1, z: 0}
   _fontSize: 1.65
+--- !u!210 &6823659541115091175
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7825265559056196060}
+  m_Enabled: 1
+  m_SortingLayerID: 1001002
+  m_SortingLayer: 2
+  m_SortingOrder: 0
+  m_SortAtRoot: 0
+  m_Sort3DAs2D: 0
+--- !u!114 &9094493762082865036
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7825265559056196060}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 377aa173fc0145e44b22ba4fe99c14c0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.WorldSortParticipant
+  _category: 3
+  _stableSortId: monster_swift_prefab
+  _sortAnchor: {fileID: 3211051235028295703}
+  _sortingGroup: {fileID: 6823659541115091175}
+  _requiresRuntimeIdentity: 1

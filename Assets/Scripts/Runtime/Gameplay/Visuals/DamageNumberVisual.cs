@@ -37,7 +37,8 @@ namespace DarkFlare
             label.color = GetColor(team, kind);
             label.outlineColor = new Color(0.05f, 0.06f, 0.08f, 0.92f);
             label.outlineWidth = 0.18f;
-            label.sortingOrder = 80;
+            label.renderer.sortingLayerName = "WorldInfo";
+            label.sortingOrder = 0;
             DamageNumberVisual visual = instance.AddComponent<DamageNumberVisual>();
             visual._label = label;
             visual.Play();

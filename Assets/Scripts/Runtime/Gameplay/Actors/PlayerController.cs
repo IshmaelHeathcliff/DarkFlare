@@ -20,6 +20,7 @@ namespace DarkFlare
         Rigidbody2D _rigidbody;
         CircleCollider2D _collider;
         CombatActor _actor;
+        WorldSortParticipant _sortParticipant;
         CharacterDefinition _definition;
         ProjectileSkillDefinition _defaultSkill;
         GameInput _gameInput;
@@ -40,6 +41,7 @@ namespace DarkFlare
             _defaultSkill = skill;
             _spawnPosition = transform.position;
             _actor.ConfigureFromCharacter(_definition, ActorTeam.Player);
+            _sortParticipant?.ConfigureIdentity(WorldSortCategory.Player, _actor.ActorId);
             AutoCastLoop(_skillLoopCancellation.Token).Forget();
         }
 
@@ -104,6 +106,7 @@ namespace DarkFlare
             _rigidbody = GetComponent<Rigidbody2D>();
             _collider = GetComponent<CircleCollider2D>();
             _actor = GetComponent<CombatActor>();
+            _sortParticipant = GetComponent<WorldSortParticipant>();
 
             if (_rigidbody != null)
             {

@@ -223,6 +223,28 @@ namespace DarkFlare.Editor
                 AddError(issues, null, physicsIssues[i]);
             }
 
+            Alpha017VisualBaselineReport worldSorting = Alpha017VisualMigrationPreflight.Capture(
+                Alpha017MigrationPhase.Validate);
+
+            for (int i = 0; i < worldSorting.Issues.Count; i++)
+            {
+                Alpha017MigrationIssue issue = worldSorting.Issues[i];
+                AddError(issues, null, $"世界排序 [{issue.Code}] {issue.Path}：{issue.Message}");
+            }
+
+            ConfigurationDocumentationCoverageReport documentation =
+                ConfigurationDocumentationCoverage.ScanOfficial();
+
+            for (int i = 0; i < documentation.Issues.Count; i++)
+            {
+                ConfigurationDocumentationCoverageIssue issue = documentation.Issues[i];
+                string field = string.IsNullOrEmpty(issue.FieldName) ? string.Empty : $".{issue.FieldName}";
+                AddError(
+                    issues,
+                    null,
+                    $"配置文档 [{issue.Code}] {issue.DocumentPath} | {issue.TypeName}{field}：{issue.Message}");
+            }
+
             return issues
                 .OrderBy(issue => issue.Severity)
                 .ThenBy(issue => issue.AssetPath, StringComparer.Ordinal)

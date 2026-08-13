@@ -81,9 +81,9 @@ MeshRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 70
+  m_SortingLayerID: 1001002
+  m_SortingLayer: 2
+  m_SortingOrder: 30
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &857577131181119205
@@ -96,7 +96,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -106,7 +106,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text:
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 24db15881baef0448b5f8d170676bf1d, type: 2}
   m_sharedMaterial: {fileID: 8719198604984635941, guid: 24db15881baef0448b5f8d170676bf1d, type: 2}
@@ -259,9 +259,9 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 30
+  m_SortingLayerID: 1001002
+  m_SortingLayer: 2
+  m_SortingOrder: 20
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 44b389de85692154f840720246295a62, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -350,9 +350,9 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 31
+  m_SortingLayerID: 1001002
+  m_SortingLayer: 2
+  m_SortingOrder: 21
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 2c416f5d6b7a7a344ab08b28787fe901, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -364,6 +364,68 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!1 &7268472955073385126
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7401586230181448648}
+  m_Layer: 7
+  m_Name: HitEffectAnchor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7401586230181448648
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7268472955073385126}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.8125, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 622295999561625480}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &7355169745028937337
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5809708221050769057}
+  m_Layer: 7
+  m_Name: SortAnchor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5809708221050769057
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7355169745028937337}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.125, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 622295999561625480}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7825265559056196060
 GameObject:
   m_ObjectHideFlags: 0
@@ -383,6 +445,8 @@ GameObject:
   - component: {fileID: 3641997443734678276}
   - component: {fileID: 8975848878643778423}
   - component: {fileID: 5445408794761627134}
+  - component: {fileID: 4355383956479143118}
+  - component: {fileID: 6817504433302251290}
   m_Layer: 7
   m_Name: Monster_Heavy
   m_TagString: Untagged
@@ -405,6 +469,8 @@ Transform:
   m_Children:
   - {fileID: 2528007188402527002}
   - {fileID: 8790036665965551858}
+  - {fileID: 7401586230181448648}
+  - {fileID: 5809708221050769057}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &3808907934225930387
@@ -452,9 +518,9 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 10
+  m_SortingLayerID: 1001002
+  m_SortingLayer: 2
+  m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 966a37eed0a35bc428138425e531dc86, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -625,6 +691,9 @@ MonoBehaviour:
   _actor: {fileID: 8846293484581082715}
   _renderer: {fileID: 3808907934225930387}
   _monsterHealthBar: {fileID: 3641997443734678276}
+  _hitEffectAnchor: {fileID: 7401586230181448648}
+  _defaultHitEffectPrefab: {fileID: 4606996313625279501, guid: 53a8be6ebd6ec1b499e355ffbb2b1c2a, type: 3}
+  _criticalHitEffectPrefab: {fileID: 8173754273728878949, guid: 90b3770d63e2b9b4b8087f4c5699fa3d, type: 3}
 --- !u!114 &5445408794761627134
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -635,9 +704,39 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f7a82e0722617d145abc3f58193056d7, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.MonsterAffixVisual
   _actor: {fileID: 8846293484581082715}
   _label: {fileID: 857577131181119205}
   _labelLocalPosition: {x: 0, y: 1.1, z: 0}
   _fontSize: 1.65
+--- !u!210 &4355383956479143118
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7825265559056196060}
+  m_Enabled: 1
+  m_SortingLayerID: 1001002
+  m_SortingLayer: 2
+  m_SortingOrder: 0
+  m_SortAtRoot: 0
+  m_Sort3DAs2D: 0
+--- !u!114 &6817504433302251290
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7825265559056196060}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 377aa173fc0145e44b22ba4fe99c14c0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.WorldSortParticipant
+  _category: 3
+  _stableSortId: monster_heavy_prefab
+  _sortAnchor: {fileID: 5809708221050769057}
+  _sortingGroup: {fileID: 4355383956479143118}
+  _requiresRuntimeIdentity: 1

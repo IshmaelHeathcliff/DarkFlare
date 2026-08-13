@@ -6,11 +6,11 @@
 
 ```text
 GroundGrid                    Grid，位置 (-20, -20, 0)，Cell Size (8, 8, 0)
-├── GroundBaseTilemap         5×5 全覆盖，Sorting Order -100
-└── GroundDetailTilemap       11 格稀疏细节，Sorting Order -99
+├── GroundBaseTilemap         5×5 全覆盖，Ground / Sorting Order 0
+└── GroundDetailTilemap       11 格稀疏细节，Ground / Sorting Order 10
 ```
 
-两层都使用 Default Sorting Layer、Sprite Lit 材质和 Chunk 渲染，不包含 `TilemapCollider2D`。基础层覆盖 `-20..20`，`WorldBounds` 继续保持 `-16..16`。
+两层都使用正式 `Ground` Sorting Layer、Sprite Lit 材质和 Chunk 渲染，不包含 `TilemapCollider2D`。基础层覆盖 `-20..20`，`WorldBounds` 继续保持 `-16..16`。
 
 ## 资产家族
 

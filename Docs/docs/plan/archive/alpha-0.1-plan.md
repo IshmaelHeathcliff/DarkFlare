@@ -1,9 +1,9 @@
 # alpha 0.1 开发计划
 
-> 状态：开发中
+> 状态：已完成并归档
 > 建立日期：2026-08-09
 > 最近更新：2026-08-13
-> 当前阶段：`alpha 0.1.7` 阶段 B 已完成；下一步进入阶段 C 多帧特效运行时接入
+> 完成日期：2026-08-13
 > 前置条件：首版单场景最小循环、初步体验优化与 `alpha 0.1.0` 物品 UI 工作台已完成
 
 ## 版本定位
@@ -12,7 +12,7 @@
 
 已完成的 `alpha 0.1.0` 保留为本版本的物品交互与信息展示基础。后续阶段不重做该 UI，而是在现有装备、背包、属性详情和浮动信息窗口上接入新增属性、词条与战斗结果。
 
-此前暂缓的战斗标签改进已在 `alpha 0.1.1` 完成，实施记录归档于[战斗标签系统改进计划](./archive/combat-tag-system-improvement-plan.md)，当前契约见[战斗标签系统](../combat-tag-system.md)。
+此前暂缓的战斗标签改进已在 `alpha 0.1.1` 完成，实施记录归档于[战斗标签系统改进计划](./combat-tag-system-improvement-plan.md)，当前契约见[战斗标签系统](../../combat-tag-system.md)。
 
 ## 当前基线与剩余缺口
 
@@ -25,7 +25,7 @@
 - 玩家、怪物与世界阻挡已完成 Layer 分层；角色之间不产生实体阻挡，怪物使用停止距离与稳定软分离，接触伤害仍由每只怪物按独立攻击间隔持续结算。
 - 当前投射物命中特效复用投射物静态 Sprite 做缩放淡出，角色受击主要是闪白；尚无独立多帧技能和受击特效。
 - 当前打造允许在 UI 中选择具体词条执行“移除并重随”和“提升数值”；该定向路径不符合后续随机打造定位，需要同时重构领域命令、随机选择与打造 UI。
-- 配置中心可发现 `DarkFlare/Data` 下的配置类型，但缺少覆盖全部配置类型、序列化字段、校验和运行时消费者的统一参考文档。
+- 配置中心已复用 `DarkFlare/Data` 类型发现入口完成文档封板，当前 12 个顶层类型、6 个嵌套结构和 150 个序列化字段全部由 manifest、六份职责文档与覆盖扫描闭环保护。
 
 ## 范围解释
 
@@ -83,14 +83,14 @@
 
 | 阶段 | 状态 | 核心目标 | 主要依赖 |
 | --- | --- | --- | --- |
-| `alpha 0.1.0` | 已完成 | 统一物品工作台、浮动详情、装备与背包拖拽、商店 / 打造格子化 | [归档计划](./archive/alpha-0.1.0-item-ui-workbench-plan.md) · [模块文档](../item-ui-workbench.md) |
-| `alpha 0.1.1` | 已完成 | 按既有指南重构标签域、查询与伤害类型血统 | [模块文档](../combat-tag-system.md) · [归档计划](./archive/combat-tag-system-improvement-plan.md) |
-| `alpha 0.1.2` | 已完成 | 武器基础伤害约束；命中、闪避、暴击、护甲与五类伤害闭环 | [模块文档](../damage-affix-system.md) · [归档计划](./archive/alpha-0.1.2-damage-resolution-plan.md) |
-| `alpha 0.1.3` | 已完成 | 角色碰撞分层、怪群脱困与稳定软分离 | [归档计划](./archive/alpha-0.1.3-collision-safety-plan.md) · [模块文档](../gameplay-loop.md) |
-| `alpha 0.1.4` | 已完成 | 当前法力、技能耗蓝、生命恢复和法力恢复 | [归档计划](./archive/alpha-0.1.4-resource-system-plan.md) · [属性系统](../stat-system.md) |
-| `alpha 0.1.5` | 已完成 | 23 属性物品词条覆盖与可复现怪物词条 | [归档计划](./archive/alpha-0.1.5-affix-monster-plan.md) · [首批内容池](../content-system.md) |
-| `alpha 0.1.6` | 已完成 | 四档稀有度容量、基础通货式随机打造、精准范围成本与无定向 UI | [归档计划](./archive/alpha-0.1.6-random-crafting-plan.md) · [打造系统](../crafting-system.md) |
-| `alpha 0.1.7` | 执行中（阶段 A 已完成） | 多帧技能 / 受击特效、稳定世界对象层级、配置文档封板与版本综合验收 | [执行计划](./alpha-0.1.7-effects-sorting-acceptance-plan.md) |
+| `alpha 0.1.0` | 已完成 | 统一物品工作台、浮动详情、装备与背包拖拽、商店 / 打造格子化 | [归档计划](./alpha-0.1.0-item-ui-workbench-plan.md) · [模块文档](../../item-ui-workbench.md) |
+| `alpha 0.1.1` | 已完成 | 按既有指南重构标签域、查询与伤害类型血统 | [模块文档](../../combat-tag-system.md) · [归档计划](./combat-tag-system-improvement-plan.md) |
+| `alpha 0.1.2` | 已完成 | 武器基础伤害约束；命中、闪避、暴击、护甲与五类伤害闭环 | [模块文档](../../damage-affix-system.md) · [归档计划](./alpha-0.1.2-damage-resolution-plan.md) |
+| `alpha 0.1.3` | 已完成 | 角色碰撞分层、怪群脱困与稳定软分离 | [归档计划](./alpha-0.1.3-collision-safety-plan.md) · [模块文档](../../gameplay-loop.md) |
+| `alpha 0.1.4` | 已完成 | 当前法力、技能耗蓝、生命恢复和法力恢复 | [归档计划](./alpha-0.1.4-resource-system-plan.md) · [属性系统](../../stat-system.md) |
+| `alpha 0.1.5` | 已完成 | 23 属性物品词条覆盖与可复现怪物词条 | [归档计划](./alpha-0.1.5-affix-monster-plan.md) · [首批内容池](../../content-system.md) |
+| `alpha 0.1.6` | 已完成 | 四档稀有度容量、基础通货式随机打造、精准范围成本与无定向 UI | [归档计划](./alpha-0.1.6-random-crafting-plan.md) · [打造系统](../../crafting-system.md) |
+| `alpha 0.1.7` | 已完成 | 多帧技能 / 受击特效、稳定世界对象层级、配置文档封板与版本综合验收 | [归档计划](./alpha-0.1.7-effects-sorting-acceptance-plan.md) |
 
 ## alpha 0.1.1：标签契约重构
 
@@ -113,7 +113,7 @@
 - 生产路径不再把不同语义域标签无条件合并为一个平面集合。
 - 标签查询失败时能输出域、必要条件、任一条件和阻止条件。
 - 旧资产的重复标签被验证器识别，并有明确迁移结果。
-- 详细实施按[归档的战斗标签系统改进计划](./archive/combat-tag-system-improvement-plan.md)完成。
+- 详细实施按[归档的战斗标签系统改进计划](./combat-tag-system-improvement-plan.md)完成。
 
 ### 完成记录
 
@@ -156,7 +156,7 @@
 - 玩家、三种怪物、基础投射物和相关内容约束已迁移；配置参考与受影响模块文档已同步。
 - 全量 EditMode `141/141`、PlayMode `11/11` 通过，四个相关程序集均以零错误、零警告完成构建。
 
-详细公式、配置迁移和验收记录见[已归档的 alpha 0.1.2 执行计划](./archive/alpha-0.1.2-damage-resolution-plan.md)。
+详细公式、配置迁移和验收记录见[已归档的 alpha 0.1.2 执行计划](./alpha-0.1.2-damage-resolution-plan.md)。
 
 ## alpha 0.1.3：碰撞与怪群安全
 
@@ -188,11 +188,11 @@
 - 定向测试 EditMode `6/6`、PlayMode `2/2` 通过；12 只怪物在四个主方向上的玩家位移均达到无阻挡基线的 90%，世界阻挡与 Default Trigger 回归通过。
 - 全量 EditMode `148/148` 通过；PlayMode `17` 项中 `15` 项通过、`2` 项为 Input System 上游既有忽略、零失败。
 
-详细合同、迁移与验收记录见[已归档的 alpha 0.1.3 执行计划](./archive/alpha-0.1.3-collision-safety-plan.md)。
+详细合同、迁移与验收记录见[已归档的 alpha 0.1.3 执行计划](./alpha-0.1.3-collision-safety-plan.md)。
 
 ## alpha 0.1.4：法力、耗蓝与恢复
 
-详细实施边界、资源合同、迁移步骤和验收记录见[已归档的 alpha 0.1.4 法力、耗蓝与恢复执行计划](./archive/alpha-0.1.4-resource-system-plan.md)。
+详细实施边界、资源合同、迁移步骤和验收记录见[已归档的 alpha 0.1.4 法力、耗蓝与恢复执行计划](./alpha-0.1.4-resource-system-plan.md)。
 
 ### 目标
 
@@ -224,7 +224,7 @@
 
 ## alpha 0.1.5：全属性与怪物词条
 
-详细领域合同、内容矩阵、执行切片和验收记录见[已归档的 alpha 0.1.5 全属性与怪物词条执行计划](./archive/alpha-0.1.5-affix-monster-plan.md)。
+详细领域合同、内容矩阵、执行切片和验收记录见[已归档的 alpha 0.1.5 全属性与怪物词条执行计划](./alpha-0.1.5-affix-monster-plan.md)。
 
 ### 目标
 
@@ -258,7 +258,7 @@
 
 ## alpha 0.1.6：基础随机打造重构
 
-详细领域合同、随机子流、执行阶段和验收记录见[已归档的 alpha 0.1.6 基础随机打造执行计划](./archive/alpha-0.1.6-random-crafting-plan.md)。
+详细领域合同、随机子流、执行阶段和验收记录见[已归档的 alpha 0.1.6 基础随机打造执行计划](./alpha-0.1.6-random-crafting-plan.md)。
 
 ### 目标
 
@@ -288,7 +288,7 @@
 
 ## alpha 0.1.7：多帧特效、稳定世界层级与综合验收
 
-详细资产合同、世界排序键、配置文档覆盖基线、执行切片和提交门禁见[alpha 0.1.7 多帧特效、稳定世界层级与综合验收执行计划](./alpha-0.1.7-effects-sorting-acceptance-plan.md)。
+详细资产合同、世界排序键、配置文档覆盖基线、执行切片和提交门禁见[已归档的 alpha 0.1.7 多帧特效、稳定世界层级与综合验收执行计划](./alpha-0.1.7-effects-sorting-acceptance-plan.md)。
 
 ### 目标
 
@@ -299,7 +299,7 @@
 - 将投射物飞行、命中爆发和角色受击拆为职责独立的特效族。
 - 技能命中和受击特效使用多帧动画；暴击、未命中和闪避结果只触发与语义一致的反馈。
 - 命中爆发不再复用当前投射物 Sprite；特效生命周期不反向驱动伤害逻辑。
-- 每个动画帧为独立固定画布 PNG，遵守[美术资产生成规范](../visual-asset-generation.md)，不生成 SpriteSheet、不依赖人工切图、不在运行时缩放修补画面占比。
+- 每个动画帧为独立固定画布 PNG，遵守[美术资产生成规范](../../visual-asset-generation.md)，不生成 SpriteSheet、不依赖人工切图、不在运行时缩放修补画面占比。
 - 冻结每个特效家族的画布、PPU、Pivot、主体占比、视觉中心、帧数、帧率、方向和命名合同，并逐帧自动审计。
 - 特效完成播放、目标销毁、场景退出和取消时均能释放；高频战斗下不产生持续增长的对象或 Addressables 句柄。
 - 冻结正式 Sorting Layer 与 Order 分段合同，至少区分地表、世界对象、世界特效和世界信息；不再让角色、交互物和特效共同依赖 `Default` Layer 中零散的绝对 Order。
@@ -361,4 +361,4 @@
 
 ## 下一步
 
-接入 Flight、Impact、Default Hit 与 Critical Hit 四个候选 Clip：为投射物、命中和角色受击建立统一帧播放器与有界对象池，保持伤害结算、Collider、物理根 Scale 和攻击快照不变，并在替代路径验证后清理旧静态复用与闪白实现。
+`alpha 0.1` 已完成。后续版本目标不在本归档计划中提前定义，应基于当前模块文档另行建立计划。

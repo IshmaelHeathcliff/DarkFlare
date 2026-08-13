@@ -9,12 +9,14 @@ namespace DarkFlare
     [RequireComponent(typeof(CircleCollider2D))]
     public class ProjectileController : MonoBehaviour, IController
     {
+        [SerializeField]
+        GameObject _impactEffectPrefab;
+
         Rigidbody2D _rigidbody;
         CircleCollider2D _collider;
         AttackSnapshot _attack;
         Vector2 _direction;
         bool _initialized;
-        SpriteRenderer _renderer;
 
         public IArchitecture GetArchitecture()
         {
@@ -52,9 +54,12 @@ namespace DarkFlare
             result = this.SendCommand(new ApplyDamageCommand(_attack, target));
             _initialized = false;
 
-            if (result != null && result.IsHit)
+            if (CombatEffectPalette.ShouldPlayProjectileImpact(result))
             {
-                ProjectileImpactVisual.Spawn(transform.position, _renderer != null ? _renderer.sprite : null);
+                this.GetUtility<VisualEffectPool>().TryPlay(
+                    _impactEffectPrefab,
+                    transform.position,
+                    CombatEffectPalette.ArcaneProjectileTint);
             }
 
             Destroy(gameObject);
@@ -64,6 +69,7 @@ namespace DarkFlare
         void Awake()
         {
             EnsureComponents();
+            this.GetUtility<VisualEffectPool>().Prewarm(_impactEffectPrefab);
         }
 
         void OnValidate()
@@ -86,8 +92,6 @@ namespace DarkFlare
         {
             _rigidbody = GetComponent<Rigidbody2D>();
             _collider = GetComponent<CircleCollider2D>();
-            _renderer = GetComponentInChildren<SpriteRenderer>();
-
             if (_rigidbody != null)
             {
                 _rigidbody.gravityScale = 0f;

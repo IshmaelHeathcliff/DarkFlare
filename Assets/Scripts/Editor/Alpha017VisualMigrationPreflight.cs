@@ -78,6 +78,12 @@ namespace DarkFlare.Editor
 
         public int SortingGroupCount { get; }
 
+        public int ParticipantCount { get; }
+
+        public int MissingAnchorCount { get; }
+
+        public int InvalidStableIdCount { get; }
+
         public Alpha017WorldTargetSnapshot(
             Alpha017WorldTargetKind kind,
             string path,
@@ -85,7 +91,10 @@ namespace DarkFlare.Editor
             bool exists,
             int rendererCount,
             int defaultRendererCount,
-            int sortingGroupCount)
+            int sortingGroupCount,
+            int participantCount,
+            int missingAnchorCount,
+            int invalidStableIdCount)
         {
             Kind = kind;
             Path = path;
@@ -94,6 +103,9 @@ namespace DarkFlare.Editor
             RendererCount = rendererCount;
             DefaultRendererCount = defaultRendererCount;
             SortingGroupCount = sortingGroupCount;
+            ParticipantCount = participantCount;
+            MissingAnchorCount = missingAnchorCount;
+            InvalidStableIdCount = invalidStableIdCount;
         }
     }
 
@@ -206,12 +218,12 @@ namespace DarkFlare.Editor
     public static class Alpha017VisualMigrationPreflight
     {
         public const string MainScenePath = "Assets/Scenes/Main.unity";
-        public const string ProjectileSpritePath = "Assets/Art/Sprites/Effects/projectile_arcane.png";
+        public const string ProjectileSpritePath = "Assets/Art/Sprites/Effects/Projectile/Arcane/Flight/effect_projectile_arcane_flight_e_00.png";
         public const string ProjectilePrefabPath = "Assets/Prefabs/Combat/Projectile_Default.prefab";
         public const int EffectCanvasSize = 96;
         public const int EffectPixelsPerUnit = 64;
-        public const int ProjectileVisibleWidthPixels = 56;
-        public const int ProjectileVisibleHeightPixels = 22;
+        public const int ProjectileVisibleWidthPixels = 60;
+        public const int ProjectileVisibleHeightPixels = 26;
 
         static readonly string[] ExpectedSortingLayerNamesData =
         {
@@ -296,6 +308,19 @@ namespace DarkFlare.Editor
                 Alpha017MigrationIssue issue = report.Issues[i];
                 Debug.Log($"[Alpha017Preflight] {issue.Code} | {issue.Path} | {issue.Message}");
             }
+        }
+
+        [MenuItem("DarkFlare/Alpha 0.1.7/阶段 D/验证世界排序合同")]
+        public static void RunMenuValidation()
+        {
+            Alpha017VisualBaselineReport report = Capture(Alpha017MigrationPhase.Validate);
+
+            if (report.Issues.Count > 0)
+            {
+                throw new InvalidOperationException($"世界排序合同验证失败，Issues={report.Issues.Count}");
+            }
+
+            Debug.Log($"[Alpha017WorldSortingValidation] targets={report.WorldTargets.Count}, issues=0");
         }
 
         public static Alpha017VisualBaselineReport Capture(Alpha017MigrationPhase phase)
@@ -415,18 +440,34 @@ namespace DarkFlare.Editor
         {
             if (root == null)
             {
-                return new Alpha017WorldTargetSnapshot(kind, path, requiresSortingGroup, false, 0, 0, 0);
+                return new Alpha017WorldTargetSnapshot(kind, path, requiresSortingGroup, false, 0, 0, 0, 0, 0, 0);
             }
 
             Renderer[] renderers = root.GetComponentsInChildren<Renderer>(true);
             SortingGroup[] sortingGroups = root.GetComponentsInChildren<SortingGroup>(true);
+            WorldSortParticipant[] participants = root.GetComponentsInChildren<WorldSortParticipant>(true);
             int defaultRendererCount = 0;
+            int missingAnchorCount = 0;
+            int invalidStableIdCount = 0;
 
             for (int i = 0; i < renderers.Length; i++)
             {
                 if (string.Equals(renderers[i].sortingLayerName, "Default", StringComparison.Ordinal))
                 {
                     defaultRendererCount++;
+                }
+            }
+
+            for (int i = 0; i < participants.Length; i++)
+            {
+                if (participants[i].SortAnchor == null)
+                {
+                    missingAnchorCount++;
+                }
+
+                if (string.IsNullOrWhiteSpace(participants[i].StableSortId))
+                {
+                    invalidStableIdCount++;
                 }
             }
 
@@ -437,7 +478,10 @@ namespace DarkFlare.Editor
                 true,
                 renderers.Length,
                 defaultRendererCount,
-                sortingGroups.Length);
+                sortingGroups.Length,
+                participants.Length,
+                missingAnchorCount,
+                invalidStableIdCount);
         }
 
         static List<string> CaptureMissingEffectFrames()
@@ -509,18 +553,31 @@ namespace DarkFlare.Editor
             IReadOnlyList<string> missingEffectFrames)
         {
             List<Alpha017MigrationIssue> result = new List<Alpha017MigrationIssue>();
+            int previousLayerIndex = -1;
 
             for (int i = 0; i < ExpectedSortingLayerNamesData.Length; i++)
             {
                 string expectedLayer = ExpectedSortingLayerNamesData[i];
+                int layerIndex = IndexOfOrdinal(sortingLayers, expectedLayer);
 
-                if (!ContainsOrdinal(sortingLayers, expectedLayer))
+                if (layerIndex < 0)
                 {
                     result.Add(new Alpha017MigrationIssue(
                         "sorting-layer-missing",
                         expectedLayer,
                         "正式 Sorting Layer 尚未建立"));
+                    continue;
                 }
+
+                if (layerIndex <= previousLayerIndex)
+                {
+                    result.Add(new Alpha017MigrationIssue(
+                        "sorting-layer-order",
+                        expectedLayer,
+                        "正式 Sorting Layer 前后顺序不符合 Ground → WorldObject → WorldEffect → WorldInfo"));
+                }
+
+                previousLayerIndex = layerIndex;
             }
 
             for (int i = 0; i < targets.Count; i++)
@@ -539,6 +596,30 @@ namespace DarkFlare.Editor
                         "sorting-group-missing",
                         target.Path,
                         $"要求一个 SortingGroup，当前为 {target.SortingGroupCount}"));
+                }
+
+                if (target.RequiresSortingGroup && target.ParticipantCount != 1)
+                {
+                    result.Add(new Alpha017MigrationIssue(
+                        "sort-participant-invalid",
+                        target.Path,
+                        $"要求一个 WorldSortParticipant，当前为 {target.ParticipantCount}"));
+                }
+
+                if (target.RequiresSortingGroup && target.MissingAnchorCount > 0)
+                {
+                    result.Add(new Alpha017MigrationIssue(
+                        "sort-anchor-missing",
+                        target.Path,
+                        $"有 {target.MissingAnchorCount} 个 Participant 缺少 SortAnchor"));
+                }
+
+                if (target.RequiresSortingGroup && target.InvalidStableIdCount > 0)
+                {
+                    result.Add(new Alpha017MigrationIssue(
+                        "stable-sort-id-invalid",
+                        target.Path,
+                        $"有 {target.InvalidStableIdCount} 个 Participant 缺少 StableSortId"));
                 }
 
                 if (target.DefaultRendererCount > 0)
@@ -561,17 +642,17 @@ namespace DarkFlare.Editor
             return result;
         }
 
-        static bool ContainsOrdinal(IReadOnlyList<string> values, string expected)
+        static int IndexOfOrdinal(IReadOnlyList<string> values, string expected)
         {
             for (int i = 0; i < values.Count; i++)
             {
                 if (string.Equals(values[i], expected, StringComparison.Ordinal))
                 {
-                    return true;
+                    return i;
                 }
             }
 
-            return false;
+            return -1;
         }
 
         static GameObject FindSceneObject(Scene scene, string hierarchyPath)

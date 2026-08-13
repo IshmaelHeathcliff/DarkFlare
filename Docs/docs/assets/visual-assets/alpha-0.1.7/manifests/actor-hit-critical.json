@@ -8,6 +8,7 @@
   "export_transform": { "uniform_scale": 0.0765550239, "alignment": "canvas-centered", "resampling": "lanczos" },
   "unity_import": { "pixels_per_unit": 64, "pivot": [0.5, 0.5], "filter": "Point", "mesh": "FullRect" },
   "animation": { "frames_per_second": 24, "loop": false, "tintable": true },
+  "tint_palette": { "physical": [1.0, 0.9, 0.76, 1.0], "fire": [1.0, 0.36, 0.18, 1.0], "cold": [0.32, 0.82, 1.0, 1.0], "lightning": [1.0, 0.84, 0.24, 1.0], "chaos": [0.72, 0.34, 1.0, 1.0] },
   "assets": [
     { "name": "critical_00", "image": "../../../../../../Assets/Art/Sprites/Effects/Hit/effect_hit_critical_00.png", "visible_width": [24, 34], "visible_height": [24, 34], "alpha_coverage": [0.03, 0.09], "visual_center_x": [46, 50], "visual_center_y": [46, 50], "edge_clearance": 28 },
     { "name": "critical_01", "image": "../../../../../../Assets/Art/Sprites/Effects/Hit/effect_hit_critical_01.png", "visible_width": [38, 50], "visible_height": [38, 50], "alpha_coverage": [0.05, 0.14], "visual_center_x": [46, 50], "visual_center_y": [46, 50], "edge_clearance": 21 },

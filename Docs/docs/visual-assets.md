@@ -2,7 +2,7 @@
 
 ## 当前状态
 
-- 状态：alpha 单图迁移、双层地表 Tile 与掉落稀有度环已完成；当前共 99 个独立 PNG，旧 SpriteSheet 已清理。
+- 状态：alpha 单图迁移、双层地表 Tile、掉落稀有度环与 alpha 0.1.7 多帧战斗特效已完成；当前共 121 个独立 PNG，旧 SpriteSheet 与旧静态投射物已清理。
 - 生产规范：[美术资产生成规范](./visual-asset-generation.md)
 - 视觉规范：[视觉规范](./visual-style.md)
 - 已归档计划：[alpha 0.1 美术资产单图迁移计划](./plan/archive/alpha-0.1-art-asset-migration-plan.md)
@@ -20,7 +20,7 @@
 | 裂爪猎犬动画帧 | 12 | 128×128 / 64 | `Assets/Art/Sprites/Monsters/Swift/` | Monster Swift Animator |
 | 铁壳尸傀动画帧 | 12 | 128×128 / 64 | `Assets/Art/Sprites/Monsters/Heavy/` | Monster Heavy Animator |
 | 商人动画帧 | 4 | 128×128 / 64 | `Assets/Art/Sprites/NPCs/Merchant/` | Merchant Idle Animator |
-| 投射物 | 1 | 96×96 / 64 | `Assets/Art/Sprites/Effects/projectile_arcane.png` | 飞行投射物与命中表现 |
+| 投射物与受击特效 | 23 | 96×96 / 64 | `Assets/Art/Sprites/Effects/Projectile/Arcane/`、`Assets/Art/Sprites/Effects/Hit/` | 飞行循环、独立命中、普通受击与暴击受击 |
 | 掉落稀有度环 | 1 | 96×96 / 100 | `Assets/Art/Sprites/Effects/effect_loot_rarity_ring.png` | 世界掉落旋转圆环，由运行时按稀有度着色 |
 | 装备图标 | 7 | 96×96 / 64 | `Assets/Art/Sprites/Items/Equipment/` | Addressables、世界掉落和全部物品 UI |
 | 固定 UI 图标 | 12 | 96×96 / 64 | `Assets/Art/Sprites/UI/Icons/` | HUD、菜单、装备空槽、缺失图标 |
@@ -68,12 +68,12 @@
 - 静态合同：`Docs/docs/assets/visual-assets/alpha-0.1/manifests/`
 - 机器报告：运行审计时生成到 `Temp/VisualAssetAudits/alpha-0.1/reports/`，不纳入版本控制。
 
-当前 17 份静态合同覆盖 93/93 个非 Sheet 合同 PNG，无重复、无遗漏。新增六张地表 Tile 使用独立 Pilot / Family 合同和边缘审计；所有审计均未通过放宽阈值或逐图缩放资产。
+当前 20 份正式静态 family 合同覆盖 115/115 个非地表 Tile PNG，无重复、无遗漏；六张地表 Tile 使用独立 Pilot / Family 合同和边缘审计。alpha 0.1.7 另保留四份已确认 Pilot 合同作为逐帧生成依据，不重复计入正式覆盖；所有审计均未通过放宽阈值或逐图缩放资产。
 
 关键量化结果：
 
 - 固定 UI 图标视觉中心：x=48.116–48.283、y=48.110–48.397。
-- 投射物主体：56×22，视觉中心 `(51.725, 48.390)`，四边留白 20 / 37 / 20 / 37 px。
+- 奥术投射物飞行帧可见范围为 52–60×18–26 px，视觉中心合同为 x=50–54、y=46–50，边缘留白不低于 12 px。
 - 掉落稀有度环主体：80×80，视觉中心 `(48.016, 48.178)`，四边留白均为 8 px。
 - 角色帧底部边距 3–5 px；Idle / Move 稳定组差异全部在冻结上限内。
 - 世界物件最小边缘留白 12 px。
@@ -83,7 +83,9 @@
 
 - 21 个 Animation Clip 引用 52 张独立角色 / NPC 帧；Animator Controller 的状态、参数和帧时间不变。
 - Player、三类 Monster、Merchant Prefab 的根 Sprite 引用各自 Idle 00。
-- `Projectile_Default.prefab` 原路径和 Addressables key 保持不变。
+- `Projectile_Default.prefab` 原路径、Addressables key、物理根和 `0.25` 根 Scale 保持不变；飞行 Sprite 位于单位 Scale 的 `Visual` 子节点，由 6 帧循环 Controller 驱动。
+- 投射物命中、普通受击和暴击受击使用三个独立特效 Prefab；`VisualEffectPool` 对每类预热 4 个、最多保留 24 个活动实例，0.25 秒后自动回收并在架构退出时统一释放。池根保持默认 `HideFlags.None`，由架构释放与场景卸载双重兜底；禁止使用会在 PlayMode 退出后进入无效场景的 `DontSave*` 标志。
+- 玩家与三种怪物均通过独立 `HitEffectAnchor` 放置受击表现；五类主伤害 Tint 由统一色板解析，未命中、闪避、无伤害与治疗不会误播角色受击动画。
 - 七个 Item ScriptableObject 与 Addressables 继续引用原装备图标 GUID。
 - `SpriteAssetLoader` 与 `PrefabAssetLoader` 通过 `AssetReference.ReleaseAsset()` 释放并清空内部 OperationHandle，重复进入场景或复跑测试不会复用失效句柄。
 - `LootPickup.prefab`、`CraftingStation.prefab`、三种怪物血条和 `Main.unity` 通过独立 Sprite 绑定。
@@ -94,7 +96,7 @@
 
 ## 迁移验收结果
 
-- `Assets/Art` 当前有 99 张 PNG、0 个 `Sprite Mode: Multiple`，`Assets/Art/SpriteSheets/` 已删除。
+- `Assets/Art` 当前有 121 张 PNG、0 个 `Sprite Mode: Multiple`，`Assets/Art/SpriteSheets/` 已删除。
 - 80 个旧 sub-sprite 的 75 个消费者已全部重绑，5 个未消费语义资产仍保留。
 - 全部 PNG Importer 与画布、PPU、Pivot、Border、Point、None、Full Rect、Mipmap Off、Wrap 合同一致。
 - 对 Animation、Prefab、Scene、USS、ScriptableObject 和 Addressables 的精准扫描未发现旧 Sheet GUID、路径或 fileID。
@@ -104,6 +106,9 @@
 - 全量 PlayMode 的一次串行运行仍可触发既有测试顺序波动，失败用例单独复跑通过，不涉及旧 Sheet 引用。
 - 运行时世界、角色、怪物、商人、打造台和 HUD 已在 16:9 画面复核；截图见 [`main-runtime-2560x1440.png`](./assets/visual-assets/alpha-0.1/acceptance/main-runtime-2560x1440.png)。
 - 双层地表专项的 19 项 EditMode 与 1 项 PlayMode 验收通过；5×5 基础层、11 格细节层、无 Collider、排序和 40×40 视觉覆盖均由自动化校验。
+- alpha 0.1.7 四个特效家族共 23 张 Sprite 的量化审计为 23 assets / 0 errors / 0 warnings；运行时定向合同验证飞行绑定、三个特效 Prefab、四个受击锚点、五类 Tint、命中语义和有界对象池均通过。正式 Main 中三类池预热 12 个，战斗后 18 个实例全部回收，退出后池根和实例均为 0；旧静态投射物与动态缩放冲击实现零依赖后已删除。
+- 正式渲染已拆分为 `Ground`、`WorldObject`、`WorldEffect`、`WorldInfo`；七个世界 Prefab 与 Main 八个场景物件使用唯一 SortingGroup 和显式接地点，投射物 / 命中受击 / 战斗文字进入专用层，精准验证为 18 targets / 0 issues。完整合同见[世界渲染与稳定层级](./world-rendering.md)。
+- alpha 0.1 综合验收为 EditMode 208/208、PlayMode 21 通过 / 0 失败 / 2 个上游忽略项；五个项目程序集均为 0 errors。三档 16:9 分辨率的 HUD、物品工作台、商店、打造与物品浮窗人工 / 自动边界验收通过。
 
 ## 掉落稀有度环生成记录
 

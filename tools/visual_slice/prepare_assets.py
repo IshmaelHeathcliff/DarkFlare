@@ -54,11 +54,6 @@ def standalone_asset(
 def build_standalone_assets() -> list[dict[str, object]]:
     assets = [
         standalone_asset(
-            "Assets/Art/Sprites/Effects/projectile_arcane.png",
-            (96, 96),
-            64.0,
-        ),
-        standalone_asset(
             "Assets/Art/Sprites/Effects/effect_loot_rarity_ring.png",
             (96, 96),
             100.0,
@@ -782,14 +777,6 @@ def center_existing_icon(path: Path, check: bool) -> bool:
 
 def process_existing_singles(check: bool) -> int:
     changed = 0
-    changed += int(
-        pad_existing_image(
-            ART / "Sprites" / "Effects" / "projectile_arcane.png",
-            (64, 64),
-            (96, 96),
-            check,
-        )
-    )
     changed += int(
         pad_existing_image(
             ART / "Sprites" / "UI" / "Phase5" / "world_health_bar_fill.png",

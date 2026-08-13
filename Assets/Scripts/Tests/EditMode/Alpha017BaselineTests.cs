@@ -217,7 +217,7 @@ namespace DarkFlare.Tests
         }
 
         [Test]
-        public void ProjectileReference_FreezesImporterAndRuntimeVisibleSize()
+        public void ProjectileFlight_FreezesImporterAndRuntimeVisibleSize()
         {
             Alpha017VisualBaselineReport report = Alpha017VisualMigrationPreflight.Capture(
                 Alpha017MigrationPhase.Preflight);
@@ -235,31 +235,31 @@ namespace DarkFlare.Tests
             Assert.AreEqual(TextureWrapMode.Clamp, projectile.WrapMode);
             Assert.AreEqual(new Vector2(0.5f, 0.5f), projectile.Pivot);
             Assert.AreEqual(new Vector3(0.25f, 0.25f, 1f), projectile.PrefabRootScale);
-            Assert.AreEqual(0.21875f, projectile.VisibleWorldSize.x, 0.00001f);
-            Assert.AreEqual(0.0859375f, projectile.VisibleWorldSize.y, 0.00001f);
+            Assert.AreEqual(0.234375f, projectile.VisibleWorldSize.x, 0.00001f);
+            Assert.AreEqual(0.1015625f, projectile.VisibleWorldSize.y, 0.00001f);
         }
 
         [Test]
-        public void VisualMigrationPreflight_UsesOnlyNamedTargetsAndCapturesKnownGaps()
+        public void VisualMigrationValidation_UsesOnlyNamedTargetsAndHasNoRemainingGap()
         {
             Alpha017VisualBaselineReport report = Alpha017VisualMigrationPreflight.Capture(
-                Alpha017MigrationPhase.Preflight);
+                Alpha017MigrationPhase.Validate);
 
-            Assert.AreEqual(Alpha017MigrationPhase.Preflight, report.Phase);
-            CollectionAssert.AreEqual(new[] { "Default" }, report.SortingLayers);
+            Assert.AreEqual(Alpha017MigrationPhase.Validate, report.Phase);
+            CollectionAssert.AreEqual(
+                new[] { "Default", "Ground", "WorldObject", "WorldEffect", "WorldInfo" },
+                report.SortingLayers);
             Assert.AreEqual(18, report.WorldTargets.Count);
             Assert.AreEqual(8, report.WorldTargets.Count(target => target.Kind == Alpha017WorldTargetKind.Prefab));
             Assert.AreEqual(10, report.WorldTargets.Count(target => target.Kind == Alpha017WorldTargetKind.SceneObject));
             Assert.IsTrue(report.WorldTargets.All(target => target.Exists));
             Assert.IsTrue(report.WorldTargets.All(target => target.RendererCount > 0));
-            Assert.IsTrue(report.WorldTargets.All(target => target.DefaultRendererCount == target.RendererCount));
-            Assert.IsTrue(report.WorldTargets.Where(target => target.RequiresSortingGroup).All(target => target.SortingGroupCount == 0));
+            Assert.IsTrue(report.WorldTargets.All(target => target.DefaultRendererCount == 0));
+            Assert.IsTrue(report.WorldTargets
+                .Where(target => target.RequiresSortingGroup)
+                .All(target => target.SortingGroupCount == 1));
             Assert.AreEqual(0, report.MissingEffectFrames.Count);
-            Assert.AreEqual(4, report.Issues.Count(issue => issue.Code == "sorting-layer-missing"));
-            Assert.AreEqual(15, report.Issues.Count(issue => issue.Code == "sorting-group-missing"));
-            Assert.AreEqual(18, report.Issues.Count(issue => issue.Code == "default-renderer"));
-            Assert.AreEqual(0, report.Issues.Count(issue => issue.Code == "effect-frame-missing"));
-            Assert.IsFalse(report.Issues.Any(issue => issue.Code == "target-missing"));
+            Assert.AreEqual(0, report.Issues.Count);
             Assert.Throws<InvalidOperationException>(() =>
                 Alpha017VisualMigrationPreflight.Capture(Alpha017MigrationPhase.Apply));
         }

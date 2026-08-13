@@ -81,9 +81,9 @@ MeshRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 9
+  m_SortingLayerID: 1001002
+  m_SortingLayer: 2
+  m_SortingOrder: 30
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &2728514532313649333
@@ -96,7 +96,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -106,7 +106,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text:
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 24db15881baef0448b5f8d170676bf1d, type: 2}
   m_sharedMaterial: {fileID: 8719198604984635941, guid: 24db15881baef0448b5f8d170676bf1d, type: 2}
@@ -181,6 +181,37 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_renderer: {fileID: 7374677240943734347}
   m_maskType: 0
+--- !u!1 &2437611150178875833
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2218755350979620270}
+  m_Layer: 0
+  m_Name: SortAnchor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2218755350979620270
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2437611150178875833}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.9944751, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5042733347450057501}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4878501319314444388
 GameObject:
   m_ObjectHideFlags: 0
@@ -194,6 +225,8 @@ GameObject:
   - component: {fileID: 7757464088414671887}
   - component: {fileID: 680936006809702920}
   - component: {fileID: 7767140963100992215}
+  - component: {fileID: 1907775202236784951}
+  - component: {fileID: 3587044593235012082}
   m_Layer: 0
   m_Name: CraftingStation
   m_TagString: Untagged
@@ -218,6 +251,7 @@ Transform:
   - {fileID: 1918740534790284796}
   - {fileID: 8502220221145037149}
   - {fileID: 5299137480155315850}
+  - {fileID: 2218755350979620270}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &6012625204702320894
@@ -265,9 +299,9 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 10
+  m_SortingLayerID: 1001002
+  m_SortingLayer: 2
+  m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 6c8a8411784122c47afc00b15a781f57, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -325,7 +359,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 789a548ac8c15d24c97a5fd7c0c3bba7, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.WorldInteractionTarget
   _displayName: "\u8425\u5730\u6253\u9020\u53F0"
   _menuPage: 2
@@ -341,13 +375,43 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6dabe048f4e53b347abe6dcb5f1d8111, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.WorldInteractionVisual
   _target: {fileID: 680936006809702920}
   _mainRenderer: {fileID: 6012625204702320894}
   _outlineRenderer: {fileID: 1492137518061869544}
   _nameplate: {fileID: 5088932618000557802}
   _focusPrompt: {fileID: 2728514532313649333}
+--- !u!210 &1907775202236784951
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4878501319314444388}
+  m_Enabled: 1
+  m_SortingLayerID: 1001002
+  m_SortingLayer: 2
+  m_SortingOrder: 0
+  m_SortAtRoot: 0
+  m_Sort3DAs2D: 0
+--- !u!114 &3587044593235012082
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4878501319314444388}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 377aa173fc0145e44b22ba4fe99c14c0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.WorldSortParticipant
+  _category: 1
+  _stableSortId: world_crafting_station
+  _sortAnchor: {fileID: 2218755350979620270}
+  _sortingGroup: {fileID: 1907775202236784951}
+  _requiresRuntimeIdentity: 0
 --- !u!1 &6427351211886868454
 GameObject:
   m_ObjectHideFlags: 0
@@ -429,9 +493,9 @@ MeshRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 8
+  m_SortingLayerID: 1001002
+  m_SortingLayer: 2
+  m_SortingOrder: 30
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &5088932618000557802
@@ -444,7 +508,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -606,9 +670,9 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 9
+  m_SortingLayerID: 1001002
+  m_SortingLayer: 2
+  m_SortingOrder: -10
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 6c8a8411784122c47afc00b15a781f57, type: 3}
   m_Color: {r: 1, g: 0.72, b: 0.25, a: 0.65}
@@ -697,9 +761,9 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 12
+  m_SortingLayerID: 1001002
+  m_SortingLayer: 2
+  m_SortingOrder: 10
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 3f40ddf5e4ecf1441a455bbe7cbe2b39, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
