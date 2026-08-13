@@ -21,9 +21,9 @@ MonoBehaviour:
     m_SubObjectGUID:
     m_EditorAssetChanged: 0
   _maxHealth: 100
-  _mana: 100
+  _mana: 200
   _healthRegeneration: 1
-  _manaRegeneration: 5
+  _manaRegeneration: 0
   _moveSpeed: 5
   _armor: 0
   _accuracy: 100

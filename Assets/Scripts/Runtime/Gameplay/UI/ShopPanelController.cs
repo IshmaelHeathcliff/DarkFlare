@@ -136,6 +136,7 @@ namespace DarkFlare
 
             RegisterEvents();
             _inventoryPanel.SelectionChanged += OnInventorySelectionChanged;
+            _inventoryPanel.ContextActionRequested += OnInventoryContextActionRequested;
             RefreshShop();
             SetVisible(IsVisible);
             Debug.Log("[ShopPanelController] 商店面板初始化完成", this);
@@ -156,6 +157,7 @@ namespace DarkFlare
             if (_inventoryPanel != null)
             {
                 _inventoryPanel.SelectionChanged -= OnInventorySelectionChanged;
+                _inventoryPanel.ContextActionRequested -= OnInventoryContextActionRequested;
             }
 
             for (int i = 0; i < _eventRegistrations.Count; i++)
@@ -361,6 +363,30 @@ namespace DarkFlare
             RefreshSelection();
         }
 
+        void OnInventoryContextActionRequested(ItemInstance item)
+        {
+            if (!IsVisible || _isTransactionInProgress || item == null)
+            {
+                return;
+            }
+
+            if (!TryFindSnapshot(item, ShopItemSource.Player, out ShopItemSnapshot selected))
+            {
+                SetFeedback("出售失败：物品已不在背包中");
+                return;
+            }
+
+            _selectedItem = item;
+            _selectedSource = ShopItemSource.Player;
+            _previewItem = null;
+            _viewState.ActiveSource = ShopItemSource.Player;
+            _viewState.FocusTarget = ShopFocusTarget.Item;
+            _viewState.ClearFeedback();
+            UpdateSelectedListState(ShopItemSource.Player, item);
+            RefreshSelection();
+            SellItem(selected);
+        }
+
         void PreviewItem(ItemInstance item, ShopItemSource source)
         {
             _previewItem = item;
@@ -507,6 +533,17 @@ namespace DarkFlare
 
             if (!TryGetSelectedSnapshot(out ShopItemSnapshot selected)
                 || selected.Source != ShopItemSource.Player)
+            {
+                SetFeedback("请选择背包中的物品");
+                return;
+            }
+
+            SellItem(selected);
+        }
+
+        void SellItem(ShopItemSnapshot selected)
+        {
+            if (selected.Source != ShopItemSource.Player)
             {
                 SetFeedback("请选择背包中的物品");
                 return;

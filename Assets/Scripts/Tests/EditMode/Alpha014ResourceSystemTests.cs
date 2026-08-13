@@ -93,20 +93,20 @@ namespace DarkFlare.Tests
         [Test]
         public void ResourceRegeneration_UsesElapsedTimeAndStopsWhenPausedOrDead()
         {
-            CombatActor actor = CreateActor("regeneration", 100f, 100f, 2f, 5f);
+            CombatActor actor = CreateActor("regeneration", 100f, 200f, 2f, 3f);
             actor.ReceiveDamage(CreateDamageResult(30f));
-            Assert.IsTrue(actor.TrySpendMana(50f));
+            Assert.IsTrue(actor.TrySpendMana(100f));
             ResourceRegenerationSystem regeneration = _architecture.GetSystem<ResourceRegenerationSystem>();
 
             regeneration.AdvanceRegeneration(2f);
 
             Assert.AreEqual(74f, actor.CurrentHealth, 0.001f);
-            Assert.AreEqual(60f, actor.CurrentMana, 0.001f);
+            Assert.AreEqual(126f, actor.CurrentMana, 0.001f, "应恢复最大法力的 5%/秒并叠加固定恢复");
 
             _architecture.GetSystem<GameplayPauseSystem>().SetPaused(true);
             regeneration.AdvanceRegeneration(10f);
             Assert.AreEqual(74f, actor.CurrentHealth, 0.001f);
-            Assert.AreEqual(60f, actor.CurrentMana, 0.001f);
+            Assert.AreEqual(126f, actor.CurrentMana, 0.001f);
             _architecture.GetSystem<GameplayPauseSystem>().SetPaused(false);
 
             actor.ReceiveDamage(CreateDamageResult(999f));
@@ -165,9 +165,15 @@ namespace DarkFlare.Tests
             Assert.AreEqual(23, stats.Count);
             CollectionAssert.AreEquivalent(StatIds.All, stats.Select(definition => definition.Id));
             Assert.IsEmpty(StatConfigurationValidator.Validate(stats));
-            Assert.AreEqual(100f, player.Mana, 0.001f);
+            Assert.AreEqual(200f, player.Mana, 0.001f);
             Assert.AreEqual(1f, player.HealthRegeneration, 0.001f);
-            Assert.AreEqual(5f, player.ManaRegeneration, 0.001f);
+            Assert.AreEqual(0f, player.ManaRegeneration, 0.001f);
+            Assert.AreEqual(
+                10f,
+                ResourceRegenerationSystem.CalculateManaRegenerationPerSecond(
+                    player.Mana,
+                    player.ManaRegeneration),
+                0.001f);
             Assert.AreEqual(8f, skill.ManaCost, 0.001f);
         }
 

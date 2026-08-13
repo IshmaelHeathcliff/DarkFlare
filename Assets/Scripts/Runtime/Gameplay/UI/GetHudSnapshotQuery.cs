@@ -89,9 +89,13 @@ namespace DarkFlare
             for (int i = 0; i < Definitions.Length; i++)
             {
                 AttributeDefinition definition = Definitions[i];
-                float value = IsResistance(definition.StatId)
-                    ? GetResistance(stats, definition.StatId)
-                    : GetNonNegative(stats, definition.StatId);
+                float value = definition.StatId == StatIds.ManaRegeneration
+                    ? ResourceRegenerationSystem.CalculateManaRegenerationPerSecond(
+                        GetNonNegative(stats, StatIds.Mana),
+                        GetNonNegative(stats, StatIds.ManaRegeneration))
+                    : IsResistance(definition.StatId)
+                        ? GetResistance(stats, definition.StatId)
+                        : GetNonNegative(stats, definition.StatId);
                 _values[i] = new HudAttributeValue(
                     definition.StatId,
                     definition.DisplayName,

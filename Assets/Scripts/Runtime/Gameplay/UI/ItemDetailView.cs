@@ -10,6 +10,7 @@ namespace DarkFlare
         const string MagicClass = "item-detail--magic";
         const string RareClass = "item-detail--rare";
         const string UniqueClass = "item-detail--unique";
+        const string DenseClass = "item-detail--dense";
 
         readonly VisualElement _root;
         readonly VisualElement _icon;
@@ -60,6 +61,7 @@ namespace DarkFlare
             }
 
             ApplyRarityClass(detail.Rarity);
+            _root.EnableInClassList(DenseClass, detail.AffixCount >= 4);
             _icon.EnableInClassList("item-icon--missing", detail.Item != null && icon == null);
             _icon.style.backgroundImage = icon != null
                 ? new StyleBackground(icon)
@@ -141,16 +143,23 @@ namespace DarkFlare
             for (int i = 0; i < affixes.Count; i++)
             {
                 AffixDetailSnapshot affix = affixes[i];
-                Label title = AddLine(
-                    container,
-                    $"{ItemDetailFormatter.GetAffixTypeText(affix.Type)} · {affix.DisplayName}",
-                    "item-detail-affix-name");
-                title.tooltip = affix.DisplayName;
+                VisualElement entry = new VisualElement
+                {
+                    pickingMode = PickingMode.Ignore,
+                };
+                entry.AddToClassList("item-detail-affix");
+                container.Add(entry);
 
                 for (int j = 0; j < affix.Modifiers.Count; j++)
                 {
-                    AddLine(container, affix.Modifiers[j].DisplayText, "item-detail-modifier");
+                    AddLine(entry, affix.Modifiers[j].DisplayText, "item-detail-affix-content");
                 }
+
+                Label name = AddLine(
+                    entry,
+                    $"{ItemDetailFormatter.GetAffixTypeText(affix.Type)} · {affix.DisplayName}",
+                    "item-detail-affix-name");
+                name.tooltip = affix.DisplayName;
             }
         }
 

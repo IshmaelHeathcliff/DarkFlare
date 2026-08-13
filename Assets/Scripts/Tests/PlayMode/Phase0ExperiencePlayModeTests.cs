@@ -193,6 +193,27 @@ namespace DarkFlare.Tests
                 grid.worldBound.xMin + targetOrigin.x * step + 24f,
                 grid.worldBound.yMin + targetOrigin.y * step + 24f);
             Mouse mouse = InputSystem.AddDevice<Mouse>();
+            Vector2 itemScreenPosition = PanelToScreen(root, itemButton.worldBound.center);
+            Set(mouse.position, itemScreenPosition);
+            yield return null;
+            Press(mouse.leftButton);
+            yield return null;
+            Assert.IsTrue(panel.IsPointerPending, "鼠标按下后未进入拖拽候选状态");
+            Release(mouse.leftButton);
+            yield return null;
+            yield return null;
+            Assert.IsFalse(panel.IsPointerPending, "鼠标单击松开后仍残留拖拽候选状态");
+            Assert.IsFalse(panel.IsDragging, "鼠标单击不应拿起物品");
+            Assert.AreEqual(
+                before.Placement.position,
+                FindInventoryItem(architecture, weapon).Placement.position,
+                "鼠标单击不应移动物品");
+            Assert.IsNotNull(
+                root.Q<VisualElement>(className: "inventory-item--selected"),
+                "鼠标单击应只选择背包物品");
+            Assert.IsNull(
+                root.Q<VisualElement>(className: "inventory-equipment-slot--selected"),
+                "选择背包物品时不应同时高亮装备槽");
             yield return DragPointer(mouse, root, itemButton.worldBound.center, targetPoint, panel);
 
             InventoryItemSnapshot moved = FindInventoryItem(architecture, weapon);

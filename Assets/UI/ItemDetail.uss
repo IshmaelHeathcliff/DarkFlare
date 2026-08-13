@@ -94,13 +94,83 @@
 }
 
 .item-detail-affix-name {
-  margin-top: 3px;
-  -unity-font-style: bold;
-  color: rgb(215, 219, 225);
+  min-height: 14px;
+  margin-top: 0;
+  padding-left: 9px;
+  font-size: 9px;
+  color: rgb(126, 134, 145);
 }
 
 .item-detail-modifier {
   color: rgb(137, 188, 163);
+}
+
+.item-detail-affix {
+  margin-top: 3px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  border-bottom-width: 1px;
+  border-bottom-color: rgba(68, 73, 81, 0.55);
+}
+
+.item-detail-affix-content {
+  min-height: 19px;
+  padding-left: 9px;
+  padding-right: 5px;
+  white-space: normal;
+  font-size: 12px;
+  -unity-font-style: bold;
+  color: rgb(151, 211, 178);
+}
+
+.item-detail--dense .item-detail-header {
+  min-height: 54px;
+  margin-bottom: 4px;
+}
+
+.item-detail--dense .item-detail-icon {
+  width: 48px;
+  height: 48px;
+  margin-right: 10px;
+}
+
+.item-detail--dense .item-detail-name {
+  min-height: 26px;
+  font-size: 19px;
+}
+
+.item-detail--dense .item-detail-meta,
+.item-detail--dense .item-detail-group-title {
+  min-height: 18px;
+}
+
+.item-detail--dense .item-detail-group-title {
+  margin-top: 4px;
+  margin-bottom: 1px;
+  font-size: 10px;
+}
+
+.item-detail--dense .item-detail-base,
+.item-detail--dense .item-detail-modifier,
+.item-detail--dense .item-detail-empty {
+  min-height: 18px;
+  font-size: 11px;
+}
+
+.item-detail--dense .item-detail-affix {
+  margin-top: 1px;
+  padding-top: 1px;
+  padding-bottom: 1px;
+}
+
+.item-detail--dense .item-detail-affix-content {
+  min-height: 17px;
+  font-size: 11px;
+}
+
+.item-detail--dense .item-detail-affix-name {
+  min-height: 12px;
+  font-size: 8px;
 }
 
 .item-detail-empty {

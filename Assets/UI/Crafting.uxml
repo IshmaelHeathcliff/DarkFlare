@@ -6,9 +6,19 @@
     </ui:VisualElement>
     <ui:Label name="crafting-gold" text="持有金币  0" class="crafting-gold" />
     <ui:VisualElement class="crafting-selection-card">
-      <ui:Label name="crafting-selected-rarity" text="未选择物品" class="crafting-selected-rarity" />
-      <ui:Label name="crafting-selected-capacity" text="词缀容量：-" class="crafting-summary-line" />
-      <ui:Label name="crafting-selected-value" text="物品价值：-" class="crafting-summary-line" />
+      <ui:Button name="crafting-input-slot" class="crafting-input-slot">
+        <ui:VisualElement name="crafting-input-icon" class="crafting-input-icon" picking-mode="Ignore" />
+        <ui:Label name="crafting-input-name" text="空打造槽" class="crafting-input-name" picking-mode="Ignore" />
+      </ui:Button>
+      <ui:VisualElement class="crafting-target-summary">
+        <ui:Label name="crafting-selected-rarity" text="打造槽为空" class="crafting-selected-rarity" />
+        <ui:Label name="crafting-selected-capacity" text="词缀容量：-" class="crafting-summary-line" />
+        <ui:Label name="crafting-selected-value" text="物品价值：-" class="crafting-summary-line" />
+        <ui:VisualElement class="crafting-slot-actions">
+          <ui:Button name="crafting-slot-place" text="先选择背包物品" class="crafting-slot-action" />
+          <ui:Button name="crafting-slot-remove" text="取回物品" class="crafting-slot-action" />
+        </ui:VisualElement>
+      </ui:VisualElement>
     </ui:VisualElement>
     <ui:Label text="稀有度" class="item-context-subtitle" />
     <ui:VisualElement class="crafting-rarity-actions">
@@ -21,7 +31,7 @@
       <ui:Button name="crafting-scope-prefix" text="前缀 · 3×" class="crafting-scope" />
       <ui:Button name="crafting-scope-suffix" text="后缀 · 3×" class="crafting-scope" />
     </ui:VisualElement>
-    <ui:Label name="crafting-feedback" text="从玩家背包选择要打造的物品" class="crafting-feedback" />
+    <ui:Label name="crafting-feedback" text="将背包物品拖入打造槽；也可以先选中，再按放入" class="crafting-feedback" />
     <ui:VisualElement name="crafting-actions" class="crafting-actions">
       <ui:Button name="crafting-reroll-affixes" text="随机全部词缀" class="item-context-action" />
       <ui:Button name="crafting-add-affix" text="随机增加一条" class="item-context-action" />

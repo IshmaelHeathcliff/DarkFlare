@@ -43,7 +43,7 @@ flowchart LR
 | 生存 | `max_health` | 最大生命 | `CombatActor.MaxHealth`、当前生命比例和 HUD |
 | 生存 | `mana` | 最大法力 | `CombatActor.MaxMana`、当前法力比例、技能耗蓝和 HUD |
 | 生存 | `health_regeneration` | 生命恢复 | 每秒固定生命恢复，由 `ResourceRegenerationSystem` 消费 |
-| 生存 | `mana_regeneration` | 法力恢复 | 每秒固定法力恢复，由 `ResourceRegenerationSystem` 消费 |
+| 生存 | `mana_regeneration` | 法力恢复 | 在基础恢复之外追加的每秒固定值；实际总恢复由 `ResourceRegenerationSystem` 计算 |
 | 基础 | `strength` | 力量 | 每 1 点派生 2 点最大生命 |
 | 基础 | `dexterity` | 敏捷 | 每 1 点派生 1 点命中和 1 点闪避 |
 | 基础 | `intelligence` | 智力 | 每 1 点派生 2 点最大法力 |
@@ -73,7 +73,8 @@ flowchart LR
 - `ModifierOperation.Flat` 使用直接数值；`Increase` 使用同类加算百分比；`More` 使用逐项独立乘算；`Override` 覆盖当前值。
 - `critical_damage` 保存的是额外百分比，不是最终倍率，因此默认值为 `0`。
 - `mana` 沿用稳定 ID，但语义固定为最大法力；当前法力是 `CombatActor` 运行时状态，不是另一项属性。
-- `health_regeneration` 与 `mana_regeneration` 都是每秒固定值，不是百分比；恢复量为属性值乘以实际推进的游戏时间。
+- 基础法力恢复固定为最大法力的 `5%/秒`；`mana_regeneration` 保持每秒固定加成语义。实际法力恢复为 `MaxMana × 0.05 + max(0, mana_regeneration)`，再乘以实际推进的游戏时间。属性面板显示该最终每秒值。
+- `health_regeneration` 仍是每秒固定值，恢复量为属性值乘以实际推进的游戏时间。
 - 当前生命和法力始终裁剪到 `0..Max`。有效上限变化时保持原比例；旧法力上限为零而新上限大于零时初始化为满法力，新上限为零时当前法力归零。
 - 配置完成与复活将生命、法力恢复到当前有效上限；死亡、禁用、注销和菜单暂停期间不推进被动恢复。
 - 命中率为 `clamp(accuracy / (accuracy + evasion), 0.05, 0.95)`；命中值不大于 0 时使用最低 5%。

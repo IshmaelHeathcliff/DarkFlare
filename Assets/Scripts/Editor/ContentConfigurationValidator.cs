@@ -711,9 +711,9 @@ namespace DarkFlare.Editor
                     AddError(issues, character, "正式角色的最大法力必须大于 0");
                 }
 
-                if (character.HealthRegeneration <= 0f || character.ManaRegeneration <= 0f)
+                if (character.HealthRegeneration <= 0f)
                 {
-                    AddError(issues, character, "正式角色必须配置正数生命恢复与法力恢复");
+                    AddError(issues, character, "正式角色必须配置正数生命恢复");
                 }
 
                 for (int issueIndex = 0; issueIndex < baseIssues.Count; issueIndex++)

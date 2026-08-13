@@ -11,11 +11,13 @@ namespace DarkFlare
     {
         const float CellSize = 48f;
         const float CellGap = 4f;
-        const float DragThreshold = 6f;
+        const float DragThreshold = 10f;
         const string DropValidClass = "inventory-cell--drop-valid";
         const string DropInvalidClass = "inventory-cell--drop-invalid";
         const string SlotDropValidClass = "inventory-equipment-slot--drop-valid";
         const string SlotDropInvalidClass = "inventory-equipment-slot--drop-invalid";
+        const string ExternalDropValidClass = "inventory-external-drop--valid";
+        const string ExternalDropInvalidClass = "inventory-external-drop--invalid";
 
         enum DragSourceKind
         {
@@ -25,6 +27,14 @@ namespace DarkFlare
         }
 
         enum DropTargetKind
+        {
+            None,
+            Inventory,
+            Equipment,
+            External
+        }
+
+        enum SelectionHighlightSource
         {
             None,
             Inventory,
@@ -74,7 +84,11 @@ namespace DarkFlare
         bool _dropValid;
         bool _endingDrag;
         bool _suppressTooltipUntilPreview;
+        SelectionHighlightSource _selectionHighlightSource;
         VisualElement _dragGhost;
+        VisualElement _externalDropTarget;
+        Func<ItemInstance, bool> _externalDropValidator;
+        Action<ItemInstance> _externalDropHandler;
 
         public InventorySnapshot LastSnapshot { get; private set; }
 
@@ -91,6 +105,29 @@ namespace DarkFlare
         public bool IsPointerPending => _pointerPending;
 
         public event Action<ItemInstance> SelectionChanged;
+
+        public event Action<ItemInstance> ContextActionRequested;
+
+        public void ConfigureExternalDropTarget(
+            VisualElement target,
+            Func<ItemInstance, bool> validator,
+            Action<ItemInstance> handler)
+        {
+            ClearExternalDropTarget();
+            _externalDropTarget = target;
+            _externalDropValidator = validator;
+            _externalDropHandler = handler;
+        }
+
+        public void ClearExternalDropTarget(VisualElement target)
+        {
+            if (target != null && target != _externalDropTarget)
+            {
+                return;
+            }
+
+            ClearExternalDropTarget();
+        }
 
         public IArchitecture GetArchitecture()
         {
@@ -255,6 +292,7 @@ namespace DarkFlare
         void OnDisable()
         {
             CancelDrag(false);
+            ClearExternalDropTarget();
             UnbindButtons();
 
             if (_gameInput != null)
@@ -292,7 +330,9 @@ namespace DarkFlare
             _previewItem = null;
             _targetSlot = null;
             _suppressTooltipUntilPreview = false;
+            _selectionHighlightSource = SelectionHighlightSource.None;
             SelectionChanged = null;
+            ContextActionRequested = null;
             IsVisible = false;
         }
 
@@ -510,6 +550,9 @@ namespace DarkFlare
                 TrickleDown.TrickleDown);
             button.RegisterCallback<PointerMoveEvent>(OnDragPointerMove, TrickleDown.TrickleDown);
             button.RegisterCallback<PointerUpEvent>(OnDragPointerUp, TrickleDown.TrickleDown);
+            button.RegisterCallback<PointerUpEvent>(
+                evt => OnInventoryContextPointerUp(evt, item.Item),
+                TrickleDown.TrickleDown);
             return button;
         }
 
@@ -518,6 +561,7 @@ namespace DarkFlare
             ItemInstance previous = _selectedItem;
             _suppressTooltipUntilPreview = false;
             _selectedItem = item;
+            _selectionHighlightSource = SelectionHighlightSource.Inventory;
             CaptureSelectionState();
             ResolveTargetSlotForSelectedItem(true);
             RefreshSelection();
@@ -533,6 +577,7 @@ namespace DarkFlare
             ItemInstance previous = _selectedItem;
             _suppressTooltipUntilPreview = false;
             _targetSlot = slot;
+            _selectionHighlightSource = SelectionHighlightSource.Equipment;
 
             if (_selectedItem != null && !IsCompatible(_selectedItem, slot))
             {
@@ -632,7 +677,10 @@ namespace DarkFlare
         {
             foreach (KeyValuePair<ItemInstance, Button> entry in _itemButtons)
             {
-                entry.Value.EnableInClassList("inventory-item--selected", entry.Key == _selectedItem);
+                entry.Value.EnableInClassList(
+                    "inventory-item--selected",
+                    _selectionHighlightSource == SelectionHighlightSource.Inventory
+                    && entry.Key == _selectedItem);
             }
 
             RefreshEquipmentSlots();
@@ -724,7 +772,10 @@ namespace DarkFlare
                 button.tooltip = snapshot.Item != null
                     ? $"{snapshot.Detail.DisplayName} · {ItemDetailFormatter.GetRarityText(snapshot.Detail.Rarity)}"
                     : $"{snapshot.SlotName}为空";
-                button.EnableInClassList("inventory-equipment-slot--selected", _targetSlot == snapshot.Slot);
+                button.EnableInClassList(
+                    "inventory-equipment-slot--selected",
+                    _selectionHighlightSource == SelectionHighlightSource.Equipment
+                    && _targetSlot == snapshot.Slot);
                 button.EnableInClassList("inventory-equipment-slot--filled", snapshot.Item != null);
             }
         }
@@ -890,6 +941,7 @@ namespace DarkFlare
 
             EquipmentSlot slot = _targetSlot.Value;
             string selectedName = _selectedItem.BaseDefinition.DisplayName;
+            _selectionHighlightSource = SelectionHighlightSource.Equipment;
             bool equipped = this.SendCommand(new EquipItemCommand(LastSnapshot.Player, _selectedItem, slot));
 
             if (!equipped)
@@ -919,6 +971,7 @@ namespace DarkFlare
             EquipmentSlot slot = _targetSlot.Value;
             ItemInstance item = snapshot.Item;
             string displayName = snapshot.Detail.DisplayName;
+            _selectionHighlightSource = SelectionHighlightSource.Equipment;
             bool unequipped = this.SendCommand(new UnequipItemCommand(LastSnapshot.Player, slot));
 
             if (!unequipped)
@@ -1026,6 +1079,18 @@ namespace DarkFlare
                 Vector2Int.zero);
         }
 
+        void OnInventoryContextPointerUp(PointerUpEvent evt, ItemInstance item)
+        {
+            if (evt.button != 1 || _isDragging || item == null)
+            {
+                return;
+            }
+
+            SelectItem(item);
+            ContextActionRequested?.Invoke(item);
+            evt.StopPropagation();
+        }
+
         void BeginPointerDrag(
             PointerDownEvent evt,
             DragSourceKind sourceKind,
@@ -1051,6 +1116,12 @@ namespace DarkFlare
                 return;
             }
 
+            if (_pointerPending && (evt.pressedButtons & 1) == 0)
+            {
+                ResetDragState();
+                return;
+            }
+
             Vector2 position = evt.position;
 
             if (_pointerPending
@@ -1073,7 +1144,7 @@ namespace DarkFlare
 
         void OnDragPointerUp(PointerUpEvent evt)
         {
-            if (evt.target != _workbench || _dragPointerId != evt.pointerId)
+            if (_dragPointerId != evt.pointerId)
             {
                 return;
             }
@@ -1174,6 +1245,12 @@ namespace DarkFlare
                 return;
             }
 
+            if (_externalDropTarget != null && _externalDropTarget.worldBound.Contains(position))
+            {
+                ResolveExternalDrop();
+                return;
+            }
+
             if (_grid == null || !_grid.worldBound.Contains(position))
             {
                 _dropTargetKind = DropTargetKind.None;
@@ -1214,6 +1291,18 @@ namespace DarkFlare
                 ? this.SendQuery(new CanMoveInventoryItemQuery(_dragItem, origin))
                 : this.SendQuery(new CanUnequipItemToGridQuery(LastSnapshot.Player, _dragSourceSlot, origin));
             HighlightGridFootprint(origin, _dropValid);
+        }
+
+        void ResolveExternalDrop()
+        {
+            ClearDropVisuals();
+            _dropTargetKind = DropTargetKind.External;
+            _dropValid = _dragSourceKind == DragSourceKind.Inventory
+                && _dragItem != null
+                && _externalDropValidator != null
+                && _externalDropValidator(_dragItem);
+            _externalDropTarget.EnableInClassList(ExternalDropValidClass, _dropValid);
+            _externalDropTarget.EnableInClassList(ExternalDropInvalidClass, !_dropValid);
         }
 
         void HighlightGridFootprint(Vector2Int origin, bool valid)
@@ -1273,16 +1362,19 @@ namespace DarkFlare
 
             if (sourceKind == DragSourceKind.Inventory && targetKind == DropTargetKind.Inventory)
             {
+                _selectionHighlightSource = SelectionHighlightSource.Inventory;
                 _selectionState.SelectedInstanceId = item.InstanceId;
                 completed = this.SendCommand(new MoveInventoryItemCommand(item, targetOrigin));
             }
             else if (sourceKind == DragSourceKind.Inventory && targetKind == DropTargetKind.Equipment)
             {
+                _selectionHighlightSource = SelectionHighlightSource.Equipment;
                 _targetSlot = targetSlot;
                 completed = this.SendCommand(new EquipItemFromGridCommand(LastSnapshot.Player, item, targetSlot));
             }
             else if (sourceKind == DragSourceKind.Equipment && targetKind == DropTargetKind.Inventory)
             {
+                _selectionHighlightSource = SelectionHighlightSource.Inventory;
                 _selectionState.SelectedInstanceId = item.InstanceId;
                 completed = this.SendCommand(new UnequipItemToGridCommand(
                     LastSnapshot.Player,
@@ -1291,11 +1383,19 @@ namespace DarkFlare
             }
             else if (sourceKind == DragSourceKind.Equipment && targetKind == DropTargetKind.Equipment)
             {
+                _selectionHighlightSource = SelectionHighlightSource.Equipment;
                 _targetSlot = targetSlot;
                 completed = this.SendCommand(new MoveEquippedItemCommand(
                     LastSnapshot.Player,
                     sourceSlot,
                     targetSlot));
+            }
+            else if (sourceKind == DragSourceKind.Inventory
+                     && targetKind == DropTargetKind.External
+                     && _externalDropHandler != null)
+            {
+                _externalDropHandler(item);
+                completed = true;
             }
 
             if (!completed)
@@ -1305,8 +1405,14 @@ namespace DarkFlare
                 return;
             }
 
-            _feedbackLabel.text = "物品位置已更新";
-            RefreshInventory();
+            _feedbackLabel.text = targetKind == DropTargetKind.External
+                ? "已放入打造槽"
+                : "物品位置已更新";
+
+            if (targetKind != DropTargetKind.External)
+            {
+                RefreshInventory();
+            }
         }
 
         void OnRearrangePerformed()
@@ -1563,6 +1669,25 @@ namespace DarkFlare
                 button.RemoveFromClassList(SlotDropValidClass);
                 button.RemoveFromClassList(SlotDropInvalidClass);
             }
+
+            if (_externalDropTarget != null)
+            {
+                _externalDropTarget.RemoveFromClassList(ExternalDropValidClass);
+                _externalDropTarget.RemoveFromClassList(ExternalDropInvalidClass);
+            }
+        }
+
+        void ClearExternalDropTarget()
+        {
+            if (_externalDropTarget != null)
+            {
+                _externalDropTarget.RemoveFromClassList(ExternalDropValidClass);
+                _externalDropTarget.RemoveFromClassList(ExternalDropInvalidClass);
+            }
+
+            _externalDropTarget = null;
+            _externalDropValidator = null;
+            _externalDropHandler = null;
         }
 
         void OnEquipmentPointerEnter(PointerEnterEvent evt)

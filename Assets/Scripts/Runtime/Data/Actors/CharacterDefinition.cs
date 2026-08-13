@@ -36,7 +36,7 @@ namespace DarkFlare
 
         [SerializeField]
         [MinValue(0)]
-        [LabelText("法力恢复/秒")]
+        [LabelText("额外法力恢复/秒")]
         float _manaRegeneration;
 
         [SerializeField]

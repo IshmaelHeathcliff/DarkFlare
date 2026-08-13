@@ -14,7 +14,7 @@
 | `_maxHealth` | `float` / `100` | 至少 `1` | `CreateStats` 写入最大生命，`CombatActor` 初始化资源 |
 | `_mana` | `float` / `0` | 不得小于 `0` | 写入最大法力；旧资产默认零，正式资产应显式保存 |
 | `_healthRegeneration` | `float` / `0` | 不得小于 `0`；单位为每秒固定值 | `ResourceRegenerationSystem` 消费 |
-| `_manaRegeneration` | `float` / `0` | 不得小于 `0`；单位为每秒固定值 | `ResourceRegenerationSystem` 消费 |
+| `_manaRegeneration` | `float` / `0` | 不得小于 `0`；单位为额外每秒固定值 | `ResourceRegenerationSystem` 在 `5%` 最大法力/秒的基础恢复上叠加 |
 | `_moveSpeed` | `float` / `5` | 不得小于 `0` | 玩家/角色移动控制器消费 |
 | `_armor` | `float` / `0` | 不得小于 `0` | 物理伤害减免公式消费 |
 | `_accuracy` | `float` / `100` | 必须大于 `0` | 命中率计算消费 |
@@ -39,7 +39,7 @@
 | `_maxHealth` | `float` / `24` | 无 `_character` 时至少 `1` | 内联基础生命；有引用时隐藏且不生效 |
 | `_mana` | `float` / `0` | 无 `_character` 时不得小于 `0` | 内联最大法力；旧资产缺字段按零解释 |
 | `_healthRegeneration` | `float` / `0` | 无 `_character` 时不得小于 `0` | 内联每秒生命恢复 |
-| `_manaRegeneration` | `float` / `0` | 无 `_character` 时不得小于 `0` | 内联每秒法力恢复 |
+| `_manaRegeneration` | `float` / `0` | 无 `_character` 时不得小于 `0` | 内联额外每秒固定法力恢复；基础恢复为最大法力的 `5%/秒` |
 | `_moveSpeed` | `float` / `2.6` | 无 `_character` 时不得小于 `0` | `MonsterController` 追逐与软分离最终速度上限 |
 | `_accuracy` | `float` / `90` | 无 `_character` 时必须大于 `0` | 接触攻击命中计算 |
 | `_evasion` | `float` / `15` | 无 `_character` 时不得小于 `0` | 受击闪避计算 |
@@ -104,4 +104,3 @@
 - 怪物实例根种子派生生命、词条数量、选择和逐词条数值；完全重叠时的稳定分离方向不消费帧随机数。
 - `_character` 从空改为引用或反向迁移时，必须确认唯一基础属性所有者；隐藏字段不是并行叠加来源。
 - 新增怪物数值字段时同步更新 `CreateStats`、实例快照、验证器、本文独立字段行与覆盖测试。
-

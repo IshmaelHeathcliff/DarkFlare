@@ -86,6 +86,60 @@ public class ItemWorkbenchStructureTests
     }
 
     [Test]
+    public void PointerInteraction_RequiresDragAndExposesShopContextSale()
+    {
+        string inventoryController = Read("Assets/Scripts/Runtime/Gameplay/UI/InventoryPanelController.cs");
+        string shopController = Read("Assets/Scripts/Runtime/Gameplay/UI/ShopPanelController.cs");
+
+        StringAssert.Contains("const float DragThreshold = 10f;", inventoryController);
+        StringAssert.Contains("if (_pointerPending && (evt.pressedButtons & 1) == 0)", inventoryController);
+        StringAssert.DoesNotContain("evt.target != _workbench || _dragPointerId", inventoryController);
+        StringAssert.Contains("ContextActionRequested?.Invoke(item);", inventoryController);
+        StringAssert.Contains("_inventoryPanel.ContextActionRequested += OnInventoryContextActionRequested;", shopController);
+        StringAssert.Contains("SellItem(selected);", shopController);
+    }
+
+    [Test]
+    public void Crafting_RequiresAnExplicitInputSlotTarget()
+    {
+        string crafting = Read("Assets/UI/Crafting.uxml");
+        string craftingStyle = Read("Assets/UI/Crafting.uss");
+        string craftingController = Read("Assets/Scripts/Runtime/Gameplay/UI/CraftingPanelController.cs");
+        string inventoryController = Read("Assets/Scripts/Runtime/Gameplay/UI/InventoryPanelController.cs");
+
+        StringAssert.Contains("name=\"crafting-input-slot\"", crafting);
+        StringAssert.Contains("name=\"crafting-slot-place\"", crafting);
+        StringAssert.Contains("name=\"crafting-slot-remove\"", crafting);
+        StringAssert.Contains("inventory-external-drop--valid", craftingStyle);
+        StringAssert.Contains("ConfigureExternalDropTarget(", craftingController);
+        StringAssert.Contains("public ItemInstance SlottedItem => _slottedItem;", craftingController);
+        StringAssert.Contains("new CraftItemCommand(operation, scope, _slottedItem)", craftingController);
+        StringAssert.DoesNotContain("new CraftItemCommand(operation, scope, _candidateItem)", craftingController);
+        StringAssert.Contains("DropTargetKind.External", inventoryController);
+        StringAssert.Contains("_externalDropHandler(item);", inventoryController);
+    }
+
+    [Test]
+    public void ItemDetail_PrioritizesAffixContentAndUsesDenseLayout()
+    {
+        string detailView = Read("Assets/Scripts/Runtime/Gameplay/UI/ItemDetailView.cs");
+        string detailStyle = Read("Assets/UI/ItemDetail.uss");
+        int content = detailView.IndexOf("\"item-detail-affix-content\"", StringComparison.Ordinal);
+        int name = detailView.IndexOf("\"item-detail-affix-name\"", StringComparison.Ordinal);
+
+        Assert.GreaterOrEqual(content, 0);
+        Assert.Greater(name, content, "词条内容必须先于弱化后的词条名显示");
+        StringAssert.Contains("detail.AffixCount >= 4", detailView);
+        StringAssert.IsMatch(
+            @"\.item-detail-affix-name\s*\{[^}]*font-size:\s*9px;",
+            detailStyle);
+        StringAssert.IsMatch(
+            @"\.item-detail-affix-content\s*\{[^}]*font-size:\s*12px;[^}]*-unity-font-style:\s*bold;",
+            detailStyle);
+        StringAssert.Contains(".item-detail--dense .item-detail-affix-content", detailStyle);
+    }
+
+    [Test]
     public void EquipmentSlots_RespectBackpackGridFootprints()
     {
         string style = Read("Assets/UI/ItemWorkbench.uss");

@@ -31,7 +31,7 @@
 | 四类 `_...Resistance` | `float` | 结算时裁剪到 `-100–75`，只作用于对应类型 |
 | `_mana` | `float` | 不得小于 0；写入稳定 ID `mana`，表示最大法力 |
 | `_healthRegeneration` | `float` | 不得小于 0；每秒固定生命恢复 |
-| `_manaRegeneration` | `float` | 不得小于 0；每秒固定法力恢复 |
+| `_manaRegeneration` | `float` | 不得小于 0；基础 `5%` 最大法力/秒之外的固定加成 |
 
 正式基础值：
 
@@ -42,7 +42,7 @@
 | 裂爪猎犬 | 110 | 30 | 8 | 50 | 0 | 0 |
 | 铁壳尸傀 | 80 | 5 | 3 | 50 | 40 | 0 |
 
-资源基础值用于验证链路，不代表最终平衡：玩家为 `100` 最大法力、每秒 `1` 生命恢复、每秒 `5` 法力恢复；三种正式怪物三项均显式保存为 `0`。
+资源基础值用于验证链路，不代表最终平衡：玩家为 `200` 最大法力、每秒 `1` 生命恢复、额外固定法力恢复 `0`，因此实际基础法力恢复为 `10/秒`；三种正式怪物三项均显式保存为 `0`。
 
 ## StatDefinition
 
@@ -69,7 +69,7 @@
 | `_prefab` | `AssetReferenceGameObject` | 正式玩家必填 | `SpawnSystem` |
 | `_maxHealth` | `float` | 至少 1 | `CreateStats` / `CombatActor` |
 | `_mana` | `float` | 不得小于 0 | `CreateStats` / `CombatActor.MaxMana` |
-| `_healthRegeneration` / `_manaRegeneration` | `float` | 不得小于 0，单位为每秒固定值 | `ResourceRegenerationSystem` |
+| `_healthRegeneration` / `_manaRegeneration` | `float` | 不得小于 0；前者为每秒固定生命恢复，后者为额外每秒固定法力恢复 | `ResourceRegenerationSystem`；法力另有最大法力 `5%/秒` 的基础恢复 |
 | `_moveSpeed` | `float` | 不得小于 0 | `PlayerController` |
 | 战斗属性字段 | `float` | 见“通用战斗属性” | `CreateStats` |
 

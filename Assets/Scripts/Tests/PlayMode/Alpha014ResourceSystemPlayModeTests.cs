@@ -68,7 +68,7 @@ namespace DarkFlare.Tests
             player.enabled = false;
             spawner.enabled = false;
             pause.SetPaused(true);
-            Assert.AreEqual(100f, actor.CurrentMana, 0.001f);
+            Assert.AreEqual(200f, actor.CurrentMana, 0.001f);
 
             SkillCastResult firstCast = architecture.SendCommand(new FireProjectileCommand(
                 actor,
@@ -78,17 +78,17 @@ namespace DarkFlare.Tests
 
             Assert.IsTrue(firstCast.IsSuccess);
             Assert.IsNotNull(firstCast.Projectile);
-            Assert.AreEqual(92f, actor.CurrentMana, 0.001f);
-            Assert.AreEqual(92f, hud.LastSnapshot.CurrentMana, 0.001f);
+            Assert.AreEqual(192f, actor.CurrentMana, 0.001f);
+            Assert.AreEqual(192f, hud.LastSnapshot.CurrentMana, 0.001f);
             Object.Destroy(firstCast.Projectile.gameObject);
             UIDocument document = hud.GetComponent<UIDocument>();
             ProgressBar manaBar = document.rootVisualElement.Q<ProgressBar>("mana-bar");
             Label skillStatus = document.rootVisualElement.Q<Label>("skill-status-label");
             Assert.IsNotNull(manaBar);
             Assert.IsNotNull(skillStatus);
-            Assert.AreEqual("92 / 100", manaBar.title);
+            Assert.AreEqual("192 / 200", manaBar.title);
 
-            Assert.IsTrue(combat.TrySpendMana(actor, 91f));
+            Assert.IsTrue(combat.TrySpendMana(actor, 191f));
             SkillCastResult rejectedCast = architecture.SendCommand(new FireProjectileCommand(
                 actor,
                 skill,
@@ -102,7 +102,7 @@ namespace DarkFlare.Tests
             regeneration.AdvanceRegeneration(2f);
             Assert.AreEqual(1f, actor.CurrentMana, 0.001f, "暂停期间不应恢复法力");
             pause.SetPaused(false);
-            regeneration.AdvanceRegeneration(1.4f);
+            regeneration.AdvanceRegeneration(0.7f);
             Assert.AreEqual(8f, actor.CurrentMana, 0.001f);
 
             SkillCastResult recoveredCast = architecture.SendCommand(new FireProjectileCommand(

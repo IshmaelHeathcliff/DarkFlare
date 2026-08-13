@@ -8,6 +8,7 @@ namespace DarkFlare
     public sealed class ResourceRegenerationSystem : AbstractSystem
     {
         public const float TickInterval = 0.25f;
+        public const float BaseManaRegenerationRate = 0.05f;
 
         CancellationTokenSource _loopCancellation;
 
@@ -50,13 +51,23 @@ namespace DarkFlare
                 }
 
                 float healthRegeneration = Math.Max(0f, actor.Stats.GetValue(StatIds.HealthRegeneration));
-                float manaRegeneration = Math.Max(0f, actor.Stats.GetValue(StatIds.ManaRegeneration));
+                float manaRegeneration = CalculateManaRegenerationPerSecond(
+                    actor.MaxMana,
+                    actor.Stats.GetValue(StatIds.ManaRegeneration));
                 combatSystem.ApplyHealthRegeneration(actor, healthRegeneration * elapsedSeconds);
                 combatSystem.RestoreMana(
                     actor,
                     manaRegeneration * elapsedSeconds,
                     ActorResourceChangeReason.Regeneration);
             }
+        }
+
+        public static float CalculateManaRegenerationPerSecond(
+            float maxMana,
+            float flatManaRegeneration)
+        {
+            return Math.Max(0f, maxMana) * BaseManaRegenerationRate
+                + Math.Max(0f, flatManaRegeneration);
         }
 
         async UniTaskVoid RegenerationLoop(CancellationToken token)

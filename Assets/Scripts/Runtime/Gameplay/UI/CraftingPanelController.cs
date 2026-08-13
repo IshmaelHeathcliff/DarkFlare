@@ -10,6 +10,7 @@ namespace DarkFlare
     public class CraftingPanelController : MonoBehaviour, IController
     {
         const string SelectedScopeClass = "crafting-scope--selected";
+        const string FilledSlotClass = "crafting-input-slot--filled";
 
         readonly List<IUnRegister> _eventRegistrations = new List<IUnRegister>();
 
@@ -26,6 +27,11 @@ namespace DarkFlare
         Label _selectedValueLabel;
         Label _feedbackLabel;
         Label _resultLabel;
+        Button _inputSlotButton;
+        VisualElement _inputSlotIcon;
+        Label _inputSlotNameLabel;
+        Button _placeInSlotButton;
+        Button _removeFromSlotButton;
         Button _upgradeRarityButton;
         Button _resetNormalButton;
         Button _scopeAnyButton;
@@ -35,11 +41,14 @@ namespace DarkFlare
         Button _addAffixButton;
         Button _removeAffixButton;
         Button _rerollValuesButton;
-        ItemInstance _selectedItem;
+        ItemInstance _candidateItem;
+        ItemInstance _slottedItem;
         CraftingAffixScope _scope = CraftingAffixScope.Any;
         string _resultText = string.Empty;
 
         public CraftingSnapshot LastSnapshot { get; private set; }
+
+        public ItemInstance SlottedItem => _slottedItem;
 
         public bool IsVisible { get; private set; }
 
@@ -56,7 +65,8 @@ namespace DarkFlare
             }
 
             LastSnapshot = this.SendQuery(new GetCraftingSnapshotQuery());
-            _selectedItem = FindInventorySelection();
+            _candidateItem = FindSnapshotItem(_inventoryPanel.SelectedItem);
+            _slottedItem = FindSnapshotItem(_slottedItem);
             RefreshSelection();
         }
 
@@ -80,6 +90,12 @@ namespace DarkFlare
 
         public bool FocusDefault()
         {
+            if (_slottedItem != null && _inputSlotButton != null)
+            {
+                _inputSlotButton.Focus();
+                return true;
+            }
+
             return _inventoryPanel != null && _inventoryPanel.FocusDefault();
         }
 
@@ -99,6 +115,10 @@ namespace DarkFlare
 
             RegisterEvents();
             _inventoryPanel.SelectionChanged += OnInventorySelectionChanged;
+            _inventoryPanel.ConfigureExternalDropTarget(
+                _inputSlotButton,
+                CanAcceptCraftingItem,
+                PlaceInCraftingSlot);
             RefreshCrafting();
             SetVisible(IsVisible);
             Debug.Log("[CraftingPanelController] 随机打造工作台初始化完成", this);
@@ -111,6 +131,7 @@ namespace DarkFlare
             if (_inventoryPanel != null)
             {
                 _inventoryPanel.SelectionChanged -= OnInventorySelectionChanged;
+                _inventoryPanel.ClearExternalDropTarget(_inputSlotButton);
             }
 
             for (int i = 0; i < _eventRegistrations.Count; i++)
@@ -120,7 +141,8 @@ namespace DarkFlare
 
             _eventRegistrations.Clear();
             _page = null;
-            _selectedItem = null;
+            _candidateItem = null;
+            _slottedItem = null;
             IsVisible = false;
         }
 
@@ -163,6 +185,11 @@ namespace DarkFlare
             _selectedValueLabel = root.Q<Label>("crafting-selected-value");
             _feedbackLabel = root.Q<Label>("crafting-feedback");
             _resultLabel = root.Q<Label>("crafting-result");
+            _inputSlotButton = root.Q<Button>("crafting-input-slot");
+            _inputSlotIcon = root.Q<VisualElement>("crafting-input-icon");
+            _inputSlotNameLabel = root.Q<Label>("crafting-input-name");
+            _placeInSlotButton = root.Q<Button>("crafting-slot-place");
+            _removeFromSlotButton = root.Q<Button>("crafting-slot-remove");
             _upgradeRarityButton = root.Q<Button>("crafting-upgrade-rarity");
             _resetNormalButton = root.Q<Button>("crafting-reset-normal");
             _scopeAnyButton = root.Q<Button>("crafting-scope-any");
@@ -180,6 +207,11 @@ namespace DarkFlare
                 || _selectedValueLabel == null
                 || _feedbackLabel == null
                 || _resultLabel == null
+                || _inputSlotButton == null
+                || _inputSlotIcon == null
+                || _inputSlotNameLabel == null
+                || _placeInSlotButton == null
+                || _removeFromSlotButton == null
                 || _upgradeRarityButton == null
                 || _resetNormalButton == null
                 || _scopeAnyButton == null
@@ -200,6 +232,13 @@ namespace DarkFlare
 
         void BindButtons()
         {
+            _inputSlotButton.clicked += OnInputSlotClicked;
+            _inputSlotButton.RegisterCallback<PointerEnterEvent>(OnInputSlotPointerEnter);
+            _inputSlotButton.RegisterCallback<PointerLeaveEvent>(OnInputSlotPointerLeave);
+            _inputSlotButton.RegisterCallback<FocusInEvent>(OnInputSlotFocusIn);
+            _inputSlotButton.RegisterCallback<FocusOutEvent>(OnInputSlotFocusOut);
+            _placeInSlotButton.clicked += OnPlaceInSlotClicked;
+            _removeFromSlotButton.clicked += OnRemoveFromSlotClicked;
             _upgradeRarityButton.clicked += OnUpgradeRarityClicked;
             _resetNormalButton.clicked += OnResetNormalClicked;
             _scopeAnyButton.clicked += OnScopeAnyClicked;
@@ -213,6 +252,25 @@ namespace DarkFlare
 
         void UnbindButtons()
         {
+            if (_inputSlotButton != null)
+            {
+                _inputSlotButton.clicked -= OnInputSlotClicked;
+                _inputSlotButton.UnregisterCallback<PointerEnterEvent>(OnInputSlotPointerEnter);
+                _inputSlotButton.UnregisterCallback<PointerLeaveEvent>(OnInputSlotPointerLeave);
+                _inputSlotButton.UnregisterCallback<FocusInEvent>(OnInputSlotFocusIn);
+                _inputSlotButton.UnregisterCallback<FocusOutEvent>(OnInputSlotFocusOut);
+            }
+
+            if (_placeInSlotButton != null)
+            {
+                _placeInSlotButton.clicked -= OnPlaceInSlotClicked;
+            }
+
+            if (_removeFromSlotButton != null)
+            {
+                _removeFromSlotButton.clicked -= OnRemoveFromSlotClicked;
+            }
+
             if (_upgradeRarityButton == null)
             {
                 return;
@@ -248,20 +306,25 @@ namespace DarkFlare
                 return;
             }
 
-            _selectedItem = item;
+            _candidateItem = item;
             _resultText = string.Empty;
             RefreshCrafting();
         }
 
-        ItemInstance FindInventorySelection()
+        ItemInstance FindSnapshotItem(ItemInstance item)
         {
-            ItemInstance selected = _inventoryPanel.SelectedItem;
+            if (item == null)
+            {
+                return null;
+            }
 
             for (int i = 0; i < LastSnapshot.Items.Count; i++)
             {
-                if (LastSnapshot.Items[i].Item == selected)
+                ItemInstance snapshotItem = LastSnapshot.Items[i].Item;
+
+                if (snapshotItem == item || snapshotItem.InstanceId == item.InstanceId)
                 {
-                    return selected;
+                    return snapshotItem;
                 }
             }
 
@@ -278,10 +341,11 @@ namespace DarkFlare
             _resultLabel.style.display = string.IsNullOrEmpty(_resultText)
                 ? DisplayStyle.None
                 : DisplayStyle.Flex;
+            RefreshInputSlot();
 
-            if (!TryGetSelectedItem(out CraftingItemSnapshot item))
+            if (!TryGetSlottedItem(out CraftingItemSnapshot item))
             {
-                ShowEmptySelection();
+                ShowEmptySlot();
                 return;
             }
 
@@ -303,16 +367,40 @@ namespace DarkFlare
                     : $"精准{GetScopeText(_scope)}：只影响{GetScopeText(_scope)}，价格为任意范围的 3 倍";
         }
 
-        void ShowEmptySelection()
+        void RefreshInputSlot()
         {
-            _selectedRarityLabel.text = "未选择物品";
+            bool hasSlottedItem = _slottedItem != null;
+            _inputSlotButton.EnableInClassList(FilledSlotClass, hasSlottedItem);
+            _inputSlotNameLabel.text = hasSlottedItem
+                ? _slottedItem.BaseDefinition.DisplayName
+                : "空打造槽";
+            _inputSlotButton.tooltip = hasSlottedItem
+                ? "打造目标已锁定；悬停查看详情，使用取回按钮清空"
+                : "将背包物品拖入这里，或选中物品后使用放入按钮";
+            ItemVisualPresenter.ApplyIcon(
+                _inputSlotIcon,
+                hasSlottedItem ? ItemDetailSnapshotFactory.Create(_slottedItem).IconGuid : string.Empty);
+            _placeInSlotButton.SetEnabled(_candidateItem != null && _candidateItem != _slottedItem);
+            _placeInSlotButton.text = _candidateItem == null
+                ? "先选择背包物品"
+                : _candidateItem == _slottedItem
+                    ? "已放入打造槽"
+                    : "放入打造槽";
+            _removeFromSlotButton.SetEnabled(hasSlottedItem);
+        }
+
+        void ShowEmptySlot()
+        {
+            _selectedRarityLabel.text = "打造槽为空";
             _selectedCapacityLabel.text = "词缀容量：-";
             _selectedValueLabel.text = "物品价值：-";
             _feedbackLabel.text = !LastSnapshot.IsConfigured
                 ? "打造配置尚未加载"
                 : LastSnapshot.Items.Count == 0
                     ? "背包中没有可打造物品"
-                    : "从玩家背包选择要打造的物品";
+                    : _candidateItem == null
+                        ? "将背包物品拖入打造槽；也可以先选中，再按放入"
+                        : $"已选择 {_candidateItem.BaseDefinition.DisplayName}；放入打造槽后才能打造";
             SetAllActionsEnabled(false);
             SetButtonTextWithoutCost();
         }
@@ -358,11 +446,11 @@ namespace DarkFlare
             _rerollValuesButton.text = "重随一条数值";
         }
 
-        bool TryGetSelectedItem(out CraftingItemSnapshot selected)
+        bool TryGetSlottedItem(out CraftingItemSnapshot selected)
         {
             for (int i = 0; i < LastSnapshot.Items.Count; i++)
             {
-                if (LastSnapshot.Items[i].Item == _selectedItem)
+                if (LastSnapshot.Items[i].Item == _slottedItem)
                 {
                     selected = LastSnapshot.Items[i];
                     return true;
@@ -371,6 +459,90 @@ namespace DarkFlare
 
             selected = default;
             return false;
+        }
+
+        bool CanAcceptCraftingItem(ItemInstance item)
+        {
+            return IsVisible && FindSnapshotItem(item) != null;
+        }
+
+        void PlaceInCraftingSlot(ItemInstance item)
+        {
+            ItemInstance snapshotItem = FindSnapshotItem(item);
+
+            if (!IsVisible || snapshotItem == null)
+            {
+                return;
+            }
+
+            _candidateItem = snapshotItem;
+            _slottedItem = snapshotItem;
+            _resultText = string.Empty;
+            RefreshSelection();
+        }
+
+        void RemoveFromCraftingSlot()
+        {
+            if (_slottedItem == null)
+            {
+                return;
+            }
+
+            _slottedItem = null;
+            _resultText = string.Empty;
+            _inventoryPanel.ShowPlayerTooltip(null, string.Empty);
+            RefreshSelection();
+        }
+
+        void OnInputSlotClicked()
+        {
+            if (_slottedItem == null)
+            {
+                PlaceInCraftingSlot(_candidateItem);
+            }
+        }
+
+        void OnPlaceInSlotClicked()
+        {
+            PlaceInCraftingSlot(_candidateItem);
+        }
+
+        void OnRemoveFromSlotClicked()
+        {
+            RemoveFromCraftingSlot();
+        }
+
+        void OnInputSlotPointerEnter(PointerEnterEvent evt)
+        {
+            PreviewSlottedItem();
+        }
+
+        void OnInputSlotPointerLeave(PointerLeaveEvent evt)
+        {
+            EndSlottedItemPreview();
+        }
+
+        void OnInputSlotFocusIn(FocusInEvent evt)
+        {
+            PreviewSlottedItem();
+        }
+
+        void OnInputSlotFocusOut(FocusOutEvent evt)
+        {
+            EndSlottedItemPreview();
+        }
+
+        void PreviewSlottedItem()
+        {
+            if (_slottedItem != null)
+            {
+                _inventoryPanel.ShowPlayerTooltip(_slottedItem, "打造槽中的物品");
+            }
+        }
+
+        void EndSlottedItemPreview()
+        {
+            _inventoryPanel.ShowPlayerTooltip(null, string.Empty);
         }
 
         void OnUpgradeRarityClicked()
@@ -427,13 +599,13 @@ namespace DarkFlare
 
         void Craft(CraftOperation operation, CraftingAffixScope scope)
         {
-            if (_selectedItem == null)
+            if (_slottedItem == null)
             {
-                _feedbackLabel.text = "请先选择背包物品";
+                _feedbackLabel.text = "请先将物品放入打造槽";
                 return;
             }
 
-            CraftingResult result = this.SendCommand(new CraftItemCommand(operation, scope, _selectedItem));
+            CraftingResult result = this.SendCommand(new CraftItemCommand(operation, scope, _slottedItem));
             _resultText = result.Succeeded
                 ? BuildSuccessText(result)
                 : $"未生效：{GetFailureText(result.FailureReason)}";

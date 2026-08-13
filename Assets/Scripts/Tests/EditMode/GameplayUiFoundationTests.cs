@@ -89,6 +89,7 @@ public class GameplayUiFoundationTests
         Assert.AreEqual(-15f, snapshot.Attributes.LightningResistance);
         Assert.AreEqual(-100f, snapshot.Attributes.ChaosResistance, "HUD 应显示伤害管线实际使用的抗性下限");
         Assert.AreEqual(StatIds.All.Count, snapshot.Attributes.Values.Count, "属性面板快照必须覆盖全部已登记属性");
+        Assert.AreEqual(10f, snapshot.Attributes.Values[3].Value, 0.001f, "属性面板应显示基础百分比与固定加成之和");
 
         for (int i = 0; i < StatIds.All.Count; i++)
         {

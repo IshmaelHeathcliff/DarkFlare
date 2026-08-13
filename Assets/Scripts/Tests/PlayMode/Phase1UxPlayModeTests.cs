@@ -104,6 +104,8 @@ namespace DarkFlare.Tests
             Assert.IsNull(root.Q<ScrollView>("shop-merchant-scroll"), "商人背包不应继续使用 ScrollView");
             Button selectedButton = FindButton(merchantList, "状态测试装备 3");
             Assert.IsNotNull(selectedButton, "未生成可用于滚动验收的商店按钮");
+            ItemInstance purchasedItem = selectedButton.userData as ItemInstance;
+            Assert.IsNotNull(purchasedItem, "商店按钮缺少物品实例");
             yield return FocusAfterScheduledRestore(root, selectedButton);
             InvokeButton(selectedButton);
             yield return null;
@@ -207,6 +209,9 @@ namespace DarkFlare.Tests
                     {
                         "game-menu-panel",
                         "crafting-page",
+                        "crafting-input-slot",
+                        "crafting-slot-place",
+                        "crafting-slot-remove",
                         "crafting-selected-rarity",
                         "inventory-grid",
                         "item-tooltip",
@@ -217,6 +222,9 @@ namespace DarkFlare.Tests
                     AssertElementsInsideContainer(root, "crafting-page", new[]
                     {
                         "crafting-actions",
+                        "crafting-input-slot",
+                        "crafting-slot-place",
+                        "crafting-slot-remove",
                         "crafting-add-affix",
                         "crafting-reroll-affixes",
                         "crafting-remove-affix",
@@ -230,6 +238,39 @@ namespace DarkFlare.Tests
                         AssertTooltipSide(root, false);
                     }
                 }
+
+                Assert.IsTrue(architecture.SendCommand(new OpenGameMenuCommand(merchant)), "无法打开商店右键出售验收");
+                yield return null;
+                yield return null;
+                VisualElement tooltip = root.Q<VisualElement>("item-tooltip");
+                VisualElement tooltipDetail = root.Q<VisualElement>("item-tooltip-detail");
+                ItemDetailView denseDetailView = new ItemDetailView(tooltipDetail);
+                denseDetailView.Show(CreateDenseDetail(purchasedItem), null);
+                tooltip.style.display = DisplayStyle.Flex;
+                tooltip.style.visibility = Visibility.Visible;
+                yield return null;
+                yield return null;
+                VisualElement suffixList = root.Q<VisualElement>("item-detail-suffix-list");
+                VisualElement lastAffix = suffixList[suffixList.childCount - 1];
+                Assert.IsTrue(tooltipDetail.ClassListContains("item-detail--dense"), "六词缀详情未进入紧凑排版");
+                Assert.LessOrEqual(
+                    lastAffix.worldBound.yMax,
+                    tooltip.worldBound.yMax - 8f,
+                    "六词缀详情内容仍然溢出物品信息栏");
+                Button purchasedInventoryButton = FindItemButton(root, purchasedItem, "inventory-item");
+                Assert.IsNotNull(purchasedInventoryButton, "购买后玩家背包未生成对应物品按钮");
+                int goldBeforeSale = architecture.SendQuery(new GetShopSnapshotQuery()).Gold;
+                Mouse mouse = InputSystem.AddDevice<Mouse>();
+                yield return RightClickPointer(mouse, root, purchasedInventoryButton.worldBound.center);
+                InventorySnapshot afterContextSale = architecture.SendQuery(new GetInventorySnapshotQuery());
+                Assert.IsFalse(ContainsItem(afterContextSale, purchasedItem), "商店界面右键点击未直接卖出背包物品");
+                Assert.Greater(
+                    architecture.SendQuery(new GetShopSnapshotQuery()).Gold,
+                    goldBeforeSale,
+                    "右键出售后金币没有增加");
+                StringAssert.Contains("已出售", feedback.text, "右键出售没有显示交易反馈");
+                Assert.AreEqual(ShopItemSource.Merchant, shop.SelectedSource, "右键出售后没有恢复到商人库存选择");
+                Assert.AreEqual(expectedNeighborId, shop.SelectedItem.InstanceId, "右键出售后商人库存邻近选择丢失");
             }
             finally
             {
@@ -237,6 +278,98 @@ namespace DarkFlare.Tests
                 architecture.GetUtility<GameInput>().SwitchToGameplay();
             }
 
+            yield return null;
+        }
+
+        [UnityTest]
+        public IEnumerator Crafting_OnlyUsesItemsPlacedInTheInputSlot()
+        {
+            yield return SceneManager.LoadSceneAsync("Main", LoadSceneMode.Single);
+            GameMenuController menu = null;
+            UIDocument document = null;
+            float timeout = Time.realtimeSinceStartup + 15f;
+
+            while ((menu == null || document == null || document.rootVisualElement.panel == null)
+                   && Time.realtimeSinceStartup < timeout)
+            {
+                menu = Object.FindAnyObjectByType<GameMenuController>();
+                document = menu != null ? menu.GetComponent<UIDocument>() : null;
+                yield return null;
+            }
+
+            Assert.IsNotNull(menu, "Main 场景未初始化 GameMenuController");
+            Assert.IsNotNull(document, "UIRoot 缺少 UIDocument");
+            IArchitecture architecture = menu.GetArchitecture();
+            InventorySnapshot setupInventory = default;
+            timeout = Time.realtimeSinceStartup + 15f;
+
+            while (!setupInventory.HasPlayer && Time.realtimeSinceStartup < timeout)
+            {
+                setupInventory = architecture.SendQuery(new GetInventorySnapshotQuery());
+                yield return null;
+            }
+
+            Assert.IsTrue(setupInventory.HasPlayer, "Main 场景未完成玩家初始化");
+            ItemBaseDefinition definition = CreateItemDefinition(
+                "phase1_crafting_slot",
+                "打造槽测试武器");
+            ItemInstance item = definition.CreateInstance(
+                "phase1_crafting_slot_item",
+                1,
+                101,
+                ItemRarity.Normal);
+            InventoryModel inventory = architecture.GetModel<InventoryModel>();
+            inventory.AddGold(10000);
+            Assert.IsTrue(inventory.TryAddItem(item), "无法添加打造槽验收物品");
+            WorldInteractionTarget craftingTarget = FindTarget(GameMenuPage.Crafting);
+            Assert.IsNotNull(craftingTarget, "Main 场景缺少打造台交互目标");
+            Assert.IsTrue(
+                architecture.SendCommand(new OpenGameMenuCommand(craftingTarget)),
+                "无法打开打造页");
+            yield return null;
+            yield return null;
+
+            VisualElement root = document.rootVisualElement;
+            InventoryPanelController inventoryPanel = menu.GetComponent<InventoryPanelController>();
+            CraftingPanelController craftingPanel = menu.GetComponent<CraftingPanelController>();
+            Button itemButton = FindItemButton(root, item, "inventory-item");
+            Button inputSlot = root.Q<Button>("crafting-input-slot");
+            Button placeButton = root.Q<Button>("crafting-slot-place");
+            Button removeButton = root.Q<Button>("crafting-slot-remove");
+            Button upgradeButton = root.Q<Button>("crafting-upgrade-rarity");
+            Assert.IsNotNull(itemButton, "玩家背包未生成打造槽验收物品按钮");
+            Assert.IsNotNull(inputSlot, "打造页缺少打造槽");
+
+            InvokeButton(itemButton);
+            yield return null;
+            Assert.IsNull(craftingPanel.SlottedItem, "点击背包物品不应直接成为打造目标");
+            Assert.IsFalse(upgradeButton.enabledSelf, "打造槽为空时不应启用打造操作");
+
+            InvokeButton(placeButton);
+            yield return null;
+            Assert.AreSame(item, craftingPanel.SlottedItem, "显式放入按钮未锁定打造目标");
+            Assert.IsTrue(upgradeButton.enabledSelf, "普通物品放入槽位后应允许提升稀有度");
+
+            InvokeButton(removeButton);
+            yield return null;
+            Assert.IsNull(craftingPanel.SlottedItem, "取回按钮未清空打造槽");
+            Assert.IsFalse(upgradeButton.enabledSelf, "取回物品后仍错误启用打造操作");
+
+            Mouse mouse = InputSystem.AddDevice<Mouse>();
+            yield return DragPointer(
+                mouse,
+                root,
+                itemButton.worldBound.center,
+                inputSlot.worldBound.center,
+                inventoryPanel);
+            Assert.AreSame(item, craftingPanel.SlottedItem, "从背包拖入打造槽未锁定打造目标");
+
+            Assert.IsTrue(inventory.RemoveItem(item), "无法移除打造槽验收物品");
+            yield return null;
+            yield return null;
+            Assert.IsNull(craftingPanel.SlottedItem, "物品离开背包后打造槽未自动失效");
+            Assert.IsFalse(upgradeButton.enabledSelf, "失效打造目标仍允许执行打造");
+            architecture.GetUtility<GameInput>().SwitchToGameplay();
             yield return null;
         }
 
@@ -270,7 +403,7 @@ namespace DarkFlare.Tests
             SetField(definition, "_itemType", ItemType.Weapon);
             SetField(definition, "_allowedEquipmentSlots", EquipmentSlotMask.Weapon);
             SetField(definition, "_gridSize", Vector2Int.one);
-            SetField(definition, "_baseValue", 1);
+            SetField(definition, "_baseValue", 100);
             return definition;
         }
 
@@ -303,6 +436,127 @@ namespace DarkFlare.Tests
             }
 
             return null;
+        }
+
+        IEnumerator DragPointer(
+            Mouse mouse,
+            VisualElement root,
+            Vector2 source,
+            Vector2 destination,
+            InventoryPanelController panel)
+        {
+            Vector2 sourceScreen = PanelToScreen(root, source);
+            Vector2 destinationScreen = PanelToScreen(root, destination);
+            Set(mouse.position, sourceScreen);
+            yield return null;
+            Press(mouse.leftButton);
+            yield return null;
+            Assert.IsTrue(panel.IsPointerPending, "PointerDown 未建立拖拽候选");
+            Set(mouse.position, Vector2.Lerp(sourceScreen, destinationScreen, 0.35f));
+            yield return null;
+            Assert.IsTrue(panel.IsDragging, "Pointer 移动超过阈值后未进入拖拽状态");
+            Set(mouse.position, destinationScreen);
+            yield return null;
+            Release(mouse.leftButton);
+            yield return null;
+            yield return null;
+            Assert.IsFalse(panel.IsDragging, "Pointer 抬起后拖拽状态未结束");
+        }
+
+        IEnumerator RightClickPointer(Mouse mouse, VisualElement root, Vector2 panelPosition)
+        {
+            Set(mouse.position, PanelToScreen(root, panelPosition));
+            yield return null;
+            Press(mouse.rightButton);
+            yield return null;
+            Release(mouse.rightButton);
+            yield return null;
+            yield return null;
+        }
+
+        static Vector2 PanelToScreen(VisualElement root, Vector2 point)
+        {
+            Rect bounds = root.worldBound;
+            float normalizedX = (point.x - bounds.xMin) / bounds.width;
+            float normalizedY = (point.y - bounds.yMin) / bounds.height;
+            return new Vector2(normalizedX * Screen.width, (1f - normalizedY) * Screen.height);
+        }
+
+        static Button FindItemButton(VisualElement root, ItemInstance item, string className)
+        {
+            List<Button> buttons = root.Query<Button>(className: className).ToList();
+
+            for (int i = 0; i < buttons.Count; i++)
+            {
+                if (buttons[i].userData == item)
+                {
+                    return buttons[i];
+                }
+            }
+
+            return null;
+        }
+
+        static bool ContainsItem(InventorySnapshot snapshot, ItemInstance item)
+        {
+            for (int i = 0; i < snapshot.Items.Count; i++)
+            {
+                if (snapshot.Items[i].Item == item)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        static ItemDetailSnapshot CreateDenseDetail(ItemInstance item)
+        {
+            List<AffixDetailSnapshot> prefixes = new List<AffixDetailSnapshot>();
+            List<AffixDetailSnapshot> suffixes = new List<AffixDetailSnapshot>();
+
+            for (int i = 0; i < 3; i++)
+            {
+                List<ModifierDetailSnapshot> prefixModifiers = new List<ModifierDetailSnapshot>
+                {
+                    new ModifierDetailSnapshot(null, "护甲", $"护甲提高 {20 + i}%"),
+                };
+                List<ModifierDetailSnapshot> suffixModifiers = new List<ModifierDetailSnapshot>
+                {
+                    new ModifierDetailSnapshot(null, "额外火焰伤害", $"获得等同于物理伤害 {10 + i}% 的额外火焰伤害"),
+                };
+                prefixes.Add(new AffixDetailSnapshot(
+                    null,
+                    AffixType.Prefix,
+                    $"测试前缀 {i + 1}",
+                    prefixModifiers,
+                    prefixModifiers[0].DisplayText,
+                    0f));
+                suffixes.Add(new AffixDetailSnapshot(
+                    null,
+                    AffixType.Suffix,
+                    $"测试后缀 {i + 1}",
+                    suffixModifiers,
+                    suffixModifiers[0].DisplayText,
+                    0f));
+            }
+
+            return new ItemDetailSnapshot(
+                item,
+                item.InstanceId,
+                item.BaseDefinition.DisplayName,
+                string.Empty,
+                item.BaseDefinition.ItemType,
+                ItemRarity.Unique,
+                item.ItemLevel,
+                item.BaseDefinition.GridSize,
+                item.BaseDefinition.Weight,
+                item.BaseDefinition.BaseValue,
+                item.BaseDefinition.BaseValue,
+                new List<DamageDetailSnapshot>(),
+                new List<ModifierDetailSnapshot>(),
+                prefixes,
+                suffixes);
         }
 
         static void InvokeButton(Button button)
