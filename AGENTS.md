@@ -65,6 +65,7 @@
 
 ### MCP
 
+- 需要使用unity mcp时，如果mcp没有开启，需要先尝试开启mcp，否则停下来并提示
 - 使用 unityMCP 进行 UI 创建与布局
 - 需要美术资源时，调用image gen、 mcp 或 skill 生成
 - 不能在 Unity Editor 已打开场景时直接修改场景文件，可通过 unityMCP 或脚本修改
