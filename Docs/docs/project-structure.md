@@ -149,7 +149,7 @@ Addressables 的配置目录，包含资源组、模板和构建器配置。后�
 项目数据目录，当前分为：
 
 - `Preset`：适合放预设型配置资源
-- `Saves`：适合放存档或运行期持久化数据
+- `Saves`：当前为空；后续只可放 Editor 存档夹具或样例，正式运行时存档必须写入 `Application.persistentDataPath`
 
 ### `Assets/Plugins`
 
@@ -181,7 +181,7 @@ Addressables 的配置目录，包含资源组、模板和构建器配置。后�
 
 ### `Assets/Scripts`
 
-代码目录已按 **程序集（asmdef）** 分层，共四个程序集：
+代码目录已按 **程序集（asmdef）** 分层，共五个程序集：
 
 | 程序集 | 目录 | 平台 | 依赖 |
 | --- | --- | --- | --- |
@@ -283,6 +283,8 @@ Unity 包管理目录。当前关键依赖包括：
 - `com.kyrylokuzyk.primetween`
 - `com.unity.addressables`
 - `com.unity.inputsystem`
+- `com.unity.localization`
+- `com.unity.pipeline`
 - `com.unity.ugui`
 - `com.unity.render-pipelines.universal`
 

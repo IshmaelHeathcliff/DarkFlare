@@ -57,6 +57,7 @@
 - 性能敏感的大量数据优先使用 DOTS 处理
 - 在 Windows 上优先使用 PowerShell 7
 - 不要使用过时 Unity API
+- 使用 Unity Localization 处理本地化
 
 ### Unity UI
 

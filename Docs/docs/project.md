@@ -2,9 +2,9 @@
 
 ## 项目状态
 
-`DarkFlare` 已完成首版单场景最小循环、初步体验优化与 `alpha 0.1` 封板。现有基线可以在 `Main.unity` 中完成战斗、掉落、拾取、四槽装备、交易、打造和返回战斗的完整循环。
+`DarkFlare` 已完成首版单场景最小循环、初步体验优化与 `alpha 0.1` 封板，现已进入 `alpha 0.2` 基础设施规划。现有基线可以在 `Main.unity` 中完成战斗、掉落、拾取、四槽装备、交易、打造和返回战斗的完整循环。
 
-alpha 版本内的阶段使用三段式名称：`alpha 0.1` 的首个阶段为 `alpha 0.1.0`，后续依次为 `alpha 0.1.1`、`alpha 0.1.2`。已完成版本记录见[归档的 alpha 0.1 开发计划](./plan/archive/alpha-0.1-plan.md)。
+alpha 版本内的阶段使用三段式名称：`alpha 0.1` 的首个阶段为 `alpha 0.1.0`，后续依次为 `alpha 0.1.1`、`alpha 0.1.2`；`alpha 0.2` 同样从 `alpha 0.2.0` 开始。已完成版本记录见[归档的 alpha 0.1 开发计划](./plan/archive/alpha-0.1-plan.md)，当前版本见[alpha 0.2 基础设施开发计划](./plan/alpha-0.2-plan.md)。
 
 ## 游戏定位
 
@@ -17,6 +17,7 @@ alpha 版本内的阶段使用三段式名称：`alpha 0.1` 的首个阶段为 `
 - UniTask 异步
 - Addressables 资源加载
 - Input System 键鼠 / 手柄输入
+- Unity Localization `1.5.12`（当前仅安装包，运行时接入列入 `alpha 0.2`）
 - UI Toolkit 运行时界面
 - Odin Inspector 配置与 Editor 工具
 - PrimeTween 动画补间
@@ -31,7 +32,8 @@ alpha 版本内的阶段使用三段式名称：`alpha 0.1` 的首个阶段为 `
 - `Assets/Scripts/Runtime/Core/QFramework.cs`：独立 `DarkFlare.Core` 程序集。
 - `Assets/Scripts/Runtime/GameArchitecture.cs`：组合根，注册输入 Utility、战斗 / 装备 / 背包 / 经济 Model，以及战斗、生成、掉落、交易、打造 System。
 - `Assets/Scripts/Runtime/`：`DarkFlare.Runtime` 程序集。
-- `Assets/Scripts/Tests/EditMode/`：`DarkFlare.Tests.EditMode`，初步体验优化收尾时全量 98/98 通过。
+- `Assets/Scripts/Tests/EditMode/`：`DarkFlare.Tests.EditMode`，`alpha 0.2` 规划基线全量 `212/212` 通过。
+- `Assets/Scripts/Tests/PlayMode/`：`DarkFlare.Tests.PlayMode`，规划基线 `24` 项中 `22` 项通过、`2` 项因 Input System 上游问题忽略、零失败。
 
 ### 玩法模块
 
@@ -65,7 +67,8 @@ alpha 版本内的阶段使用三段式名称：`alpha 0.1` 的首个阶段为 `
 
 首版已经完成“战斗 → 拾取 → 装备 / 交易 / 打造 → 再战斗”的人手循环，但仍是用于验证系统闭环的功能原型：
 
-- 仅有 `Main.unity` 单场景，没有撤离、场景切换或存档闭环。
+- 仅有 `Main.unity` 单场景，没有启动场景、统一场景切换或存档闭环。
+- Unity Localization 包已经安装，但没有 Locale、String Table、运行时切换服务或玩家可见文本迁移。
 - 背包没有拖拽换位、旋转、堆叠和重量；装备已实现武器、护甲、左戒指和右戒指四槽，但没有耐久、套装、纸娃娃或唯一装备特效。
 - 交易没有回购或多商人独立库存；打造没有配方、材料和批量操作。
 - 战斗内容密度、场景规模和 UI 功能深度仍属于原型基线；现有首批视觉不视为最终美术质量。
