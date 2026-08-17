@@ -1,0 +1,7 @@
+sandbox_mode = "danger-full-access"
+web_search = "live"
+  [mcp_servers.rider]
+    url = "http://127.0.0.1:64482/stream"
+
+[mcp_servers.rider.tools.get_solution_projects]
+approval_mode = "approve"
