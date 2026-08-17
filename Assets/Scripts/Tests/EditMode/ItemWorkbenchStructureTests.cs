@@ -117,6 +117,20 @@ public class ItemWorkbenchStructureTests
         StringAssert.DoesNotContain("new CraftItemCommand(operation, scope, _candidateItem)", craftingController);
         StringAssert.Contains("DropTargetKind.External", inventoryController);
         StringAssert.Contains("_externalDropHandler(item);", inventoryController);
+        StringAssert.IsMatch(
+            @"\.crafting-input-slot\s*\{[^}]*width:\s*100px;[^}]*height:\s*152px;",
+            craftingStyle);
+        StringAssert.Contains("SetExternalSlotItem(_slottedItem);", craftingController);
+    }
+
+    [Test]
+    public void ContextTemplate_OnlyKeepsTheActivePageInLayout()
+    {
+        string menuController = Read("Assets/Scripts/Runtime/Gameplay/UI/GameMenuController.cs");
+
+        StringAssert.Contains("SetTemplateVisible(_inventoryTemplate, showInventory);", menuController);
+        StringAssert.Contains("SetTemplateVisible(_shopTemplate, showShop);", menuController);
+        StringAssert.Contains("SetTemplateVisible(_craftingTemplate, showCrafting);", menuController);
     }
 
     [Test]

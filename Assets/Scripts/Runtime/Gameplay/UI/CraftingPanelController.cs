@@ -66,7 +66,14 @@ namespace DarkFlare
 
             LastSnapshot = this.SendQuery(new GetCraftingSnapshotQuery());
             _candidateItem = FindSnapshotItem(_inventoryPanel.SelectedItem);
+            ItemInstance previousSlottedItem = _slottedItem;
             _slottedItem = FindSnapshotItem(_slottedItem);
+
+            if (previousSlottedItem != null && _slottedItem == null)
+            {
+                _inventoryPanel.SetExternalSlotItem(null);
+            }
+
             RefreshSelection();
         }
 
@@ -132,6 +139,7 @@ namespace DarkFlare
             {
                 _inventoryPanel.SelectionChanged -= OnInventorySelectionChanged;
                 _inventoryPanel.ClearExternalDropTarget(_inputSlotButton);
+                _inventoryPanel.SetExternalSlotItem(null);
             }
 
             for (int i = 0; i < _eventRegistrations.Count; i++)
@@ -478,6 +486,7 @@ namespace DarkFlare
             _candidateItem = snapshotItem;
             _slottedItem = snapshotItem;
             _resultText = string.Empty;
+            _inventoryPanel.SetExternalSlotItem(_slottedItem);
             RefreshSelection();
         }
 
@@ -490,6 +499,7 @@ namespace DarkFlare
 
             _slottedItem = null;
             _resultText = string.Empty;
+            _inventoryPanel.SetExternalSlotItem(null);
             _inventoryPanel.ShowPlayerTooltip(null, string.Empty);
             RefreshSelection();
         }

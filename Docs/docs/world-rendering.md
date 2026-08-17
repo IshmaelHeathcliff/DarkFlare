@@ -41,7 +41,7 @@ Main 的 Global Light 2D 必须同时包含 `Default`、`Ground`、`WorldObject`
 - 掉落物：`ItemInstance.InstanceId`。
 - 商人、工作台和场景物件：Prefab / Main 中显式语义 ID。
 
-玩家、怪物和掉落 Prefab 使用运行时身份门禁，在 Controller 完成配置前不会用 Prefab 占位 ID 注册，避免同类动态实例产生短暂冲突。重复或空 ID 会记录错误并拒绝注册，不回退到 Instance ID 或生成顺序。
+玩家、怪物和掉落 Prefab 使用运行时身份门禁，在 Controller 完成配置前不会用 Prefab 占位 ID 注册，避免同类动态实例产生短暂冲突。重复或空 ID 会记录警告并拒绝注册，不回退到 Instance ID 或生成顺序。
 
 ## 生命周期与入口
 

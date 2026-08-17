@@ -7,6 +7,7 @@
         "DarkFlare.Editor",
         "UniTask",
         "Unity.Addressables",
+        "Unity.ResourceManager",
         "Unity.TextMeshPro",
         "Unity.InputSystem",
         "Unity.InputSystem.TestFramework",

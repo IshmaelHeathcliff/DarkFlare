@@ -44,6 +44,7 @@ namespace DarkFlare
         ShopItemSource _previewSource;
         int _refreshGeneration;
         bool _isTransactionInProgress;
+        bool _isPlayerPreviewActive;
 
         public ShopSnapshot LastSnapshot { get; private set; }
 
@@ -90,6 +91,8 @@ namespace DarkFlare
             {
                 CaptureViewState();
                 _refreshGeneration++;
+                _isPlayerPreviewActive = false;
+                _inventoryPanel.SetSelectionHighlightSuppressed(false);
             }
 
             IsVisible = visible;
@@ -137,6 +140,8 @@ namespace DarkFlare
             RegisterEvents();
             _inventoryPanel.SelectionChanged += OnInventorySelectionChanged;
             _inventoryPanel.ContextActionRequested += OnInventoryContextActionRequested;
+            _inventoryPanel.NavigationBoundaryRequested += OnInventoryNavigationBoundaryRequested;
+            _inventoryPanel.PreviewChanged += OnInventoryPreviewChanged;
             RefreshShop();
             SetVisible(IsVisible);
             Debug.Log("[ShopPanelController] 商店面板初始化完成", this);
@@ -158,6 +163,9 @@ namespace DarkFlare
             {
                 _inventoryPanel.SelectionChanged -= OnInventorySelectionChanged;
                 _inventoryPanel.ContextActionRequested -= OnInventoryContextActionRequested;
+                _inventoryPanel.NavigationBoundaryRequested -= OnInventoryNavigationBoundaryRequested;
+                _inventoryPanel.PreviewChanged -= OnInventoryPreviewChanged;
+                _inventoryPanel.SetSelectionHighlightSuppressed(false);
             }
 
             for (int i = 0; i < _eventRegistrations.Count; i++)
@@ -186,6 +194,7 @@ namespace DarkFlare
             _selectedItem = null;
             _previewItem = null;
             _isTransactionInProgress = false;
+            _isPlayerPreviewActive = false;
             IsVisible = false;
         }
 
@@ -337,6 +346,11 @@ namespace DarkFlare
 
         void SelectItem(ItemInstance item, ShopItemSource source)
         {
+            if (source == ShopItemSource.Merchant)
+            {
+                _inventoryPanel.ClearSelection();
+            }
+
             _selectedItem = item;
             _selectedSource = source;
             _viewState.ActiveSource = source;
@@ -344,6 +358,61 @@ namespace DarkFlare
             _viewState.ClearFeedback();
             UpdateSelectedListState(source, item);
             RefreshSelection();
+        }
+
+        void OnInventoryNavigationBoundaryRequested(Vector2 direction)
+        {
+            if (!IsVisible
+                || direction.x <= 0f
+                || Mathf.Abs(direction.x) < Mathf.Abs(direction.y)
+                || _merchantButtons.Count == 0
+                || _page == null)
+            {
+                return;
+            }
+
+            float sourceY = 0f;
+
+            if (_page.panel?.focusController.focusedElement is VisualElement focusedElement)
+            {
+                sourceY = focusedElement.worldBound.center.y;
+            }
+
+            _page.schedule.Execute(() => FocusMerchantFromInventory(sourceY));
+        }
+
+        void FocusMerchantFromInventory(float sourceY)
+        {
+            if (!IsVisible || _merchantButtons.Count == 0)
+            {
+                return;
+            }
+
+            Button target = null;
+            float left = float.MaxValue;
+            float verticalDistance = float.MaxValue;
+
+            foreach (Button button in _merchantButtons.Values)
+            {
+                float buttonLeft = button.worldBound.xMin;
+                float buttonVerticalDistance = Mathf.Abs(button.worldBound.center.y - sourceY);
+
+                if (buttonLeft < left - 1f
+                    || Mathf.Abs(buttonLeft - left) <= 1f && buttonVerticalDistance < verticalDistance)
+                {
+                    target = button;
+                    left = buttonLeft;
+                    verticalDistance = buttonVerticalDistance;
+                }
+            }
+
+            if (target?.userData is not ItemInstance item)
+            {
+                return;
+            }
+
+            SelectItem(item, ShopItemSource.Merchant);
+            target.Focus();
         }
 
         void OnInventorySelectionChanged(ItemInstance item)
@@ -361,6 +430,17 @@ namespace DarkFlare
             _viewState.ClearFeedback();
             UpdateSelectedListState(ShopItemSource.Player, item);
             RefreshSelection();
+        }
+
+        void OnInventoryPreviewChanged(ItemInstance item)
+        {
+            if (!IsVisible)
+            {
+                return;
+            }
+
+            _isPlayerPreviewActive = item != null;
+            RefreshSelectionClasses();
         }
 
         void OnInventoryContextActionRequested(ItemInstance item)
@@ -391,6 +471,8 @@ namespace DarkFlare
         {
             _previewItem = item;
             _previewSource = source;
+            _inventoryPanel.SetSelectionHighlightSuppressed(source == ShopItemSource.Merchant);
+            RefreshSelectionClasses();
             RefreshDetail();
         }
 
@@ -402,13 +484,14 @@ namespace DarkFlare
             }
 
             _previewItem = null;
+            _inventoryPanel.SetSelectionHighlightSuppressed(false);
+            RefreshSelectionClasses();
             RefreshDetail();
         }
 
         void RefreshSelection()
         {
-            SetSelectedClass(_merchantButtons, _selectedSource == ShopItemSource.Merchant ? _selectedItem : null);
-            SetSelectedClass(_playerButtons, _selectedSource == ShopItemSource.Player ? _selectedItem : null);
+            RefreshSelectionClasses();
 
             if (!TryGetSelectedSnapshot(out ShopItemSnapshot selected))
             {
@@ -440,6 +523,29 @@ namespace DarkFlare
                     ? "确认购买后，物品将尝试放入背包"
                     : $"金币不足，还需要 {selected.Price - LastSnapshot.Gold}"
                 : "出售后物品会离开背包，首版不提供回购";
+        }
+
+        void RefreshSelectionClasses()
+        {
+            ItemInstance merchantItem = null;
+
+            if (!_isPlayerPreviewActive)
+            {
+                merchantItem = _previewItem != null && _previewSource == ShopItemSource.Merchant
+                    ? _previewItem
+                    : _selectedSource == ShopItemSource.Merchant
+                        ? _selectedItem
+                        : null;
+            }
+
+            SetSelectedClass(_merchantButtons, merchantItem);
+            SetSelectedClass(
+                _playerButtons,
+                _previewItem != null && _previewSource == ShopItemSource.Player
+                    ? _previewItem
+                    : _selectedSource == ShopItemSource.Player
+                        ? _selectedItem
+                        : null);
         }
 
         void RefreshDetail()

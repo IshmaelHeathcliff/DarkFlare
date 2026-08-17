@@ -145,8 +145,6 @@
   border-bottom-color: rgb(78, 72, 61);
 }
 
-.inventory-equipment-slot:hover,
-.inventory-equipment-slot:focus,
 .inventory-equipment-slot--selected {
   color: rgb(249, 235, 207);
   background-color: rgb(54, 46, 34);
@@ -346,8 +344,6 @@
   border-bottom-color: rgb(103, 106, 112);
 }
 
-.inventory-item:hover,
-.inventory-item:focus,
 .inventory-item--selected {
   background-color: rgb(51, 43, 32);
   border-left-width: 2px;

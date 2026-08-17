@@ -11,6 +11,9 @@ using UnityEditor;
 using UnityEditor.Animations;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.AddressableAssets.ResourceLocators;
+using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
 using UnityEngine.UIElements;
@@ -19,6 +22,7 @@ namespace DarkFlare.Tests
 {
     public class Phase5VisualIntegrationTests
     {
+        const string AddressableSettingsPath = "Assets/AddressableAssetsData/AddressableAssetSettings.asset";
         const string ItemRoot = "Assets/Data/Preset/Items";
         const string ProductionSpriteRoot = "Assets/Art/Sprites";
         const string ActorClipRoot = "Assets/Art/Animations/Clips";
@@ -571,6 +575,17 @@ namespace DarkFlare.Tests
         [UnityTest]
         public IEnumerator SpriteAssetLoader_DeduplicatesCachesCancelsAndReleasesSafely()
         {
+            UnityEngine.Object addressableSettings = AssetDatabase.LoadMainAssetAtPath(AddressableSettingsPath);
+            Assert.IsNotNull(addressableSettings);
+            SerializedObject serializedSettings = new SerializedObject(addressableSettings);
+            Assert.AreEqual(
+                0f,
+                serializedSettings.FindProperty("m_simulatedLoadDelay").floatValue,
+                "EditMode 下 Fast Mode 的模拟延迟必须为 0，否则 Addressables 的延迟调度不会推进。");
+
+            AsyncOperationHandle<IResourceLocator> initializationHandle = Addressables.InitializeAsync(false);
+            Assert.IsNotNull(initializationHandle.WaitForCompletion());
+
             ItemBaseDefinition item = LoadAssets<ItemBaseDefinition>(ItemRoot)[0];
             SpriteAssetLoader loader = new SpriteAssetLoader();
 
@@ -591,7 +606,7 @@ namespace DarkFlare.Tests
             loader.ReleaseAll();
             loader.ReleaseAll();
             LogAssert.Expect(
-                LogType.Error,
+                LogType.Warning,
                 new Regex("图标未预热或加载失败"));
             Assert.IsNull(loader.GetSprite(item.Icon.AssetGUID));
 
@@ -609,6 +624,7 @@ namespace DarkFlare.Tests
             Assert.IsTrue(cancelled);
             cancelledLoader.ReleaseAll();
             cancellation.Dispose();
+            Addressables.Release(initializationHandle);
         }
 
         static void AssertMonsterVisualContract(GameObject prefab)

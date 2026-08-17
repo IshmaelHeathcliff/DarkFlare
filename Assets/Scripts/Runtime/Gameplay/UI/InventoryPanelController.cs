@@ -66,6 +66,7 @@ namespace DarkFlare
         GameInput _gameInput;
         ItemInstance _selectedItem;
         ItemInstance _previewItem;
+        ItemInstance _externalSlotItem;
         EquipmentSlot? _targetSlot;
         DragSourceKind _dragSourceKind;
         DropTargetKind _dropTargetKind;
@@ -84,6 +85,7 @@ namespace DarkFlare
         bool _dropValid;
         bool _endingDrag;
         bool _suppressTooltipUntilPreview;
+        bool _selectionHighlightSuppressed;
         SelectionHighlightSource _selectionHighlightSource;
         VisualElement _dragGhost;
         VisualElement _externalDropTarget;
@@ -107,6 +109,64 @@ namespace DarkFlare
         public event Action<ItemInstance> SelectionChanged;
 
         public event Action<ItemInstance> ContextActionRequested;
+
+        public event Action<Vector2> NavigationBoundaryRequested;
+
+        public event Action<ItemInstance> PreviewChanged;
+
+        public void SetSelectionHighlightSuppressed(bool suppressed)
+        {
+            if (_selectionHighlightSuppressed == suppressed)
+            {
+                return;
+            }
+
+            _selectionHighlightSuppressed = suppressed;
+            RefreshSelectionHighlights();
+        }
+
+        public bool IsInExternalSlot(ItemInstance item)
+        {
+            return IsSameItem(_externalSlotItem, item);
+        }
+
+        public void SetExternalSlotItem(ItemInstance item)
+        {
+            if (IsSameItem(_externalSlotItem, item))
+            {
+                return;
+            }
+
+            _externalSlotItem = item;
+            RefreshInventory();
+        }
+
+        public void ClearSelection()
+        {
+            ItemInstance previous = _selectedItem;
+            bool hadPreview = _previewItem != null;
+            _selectedItem = null;
+            _previewItem = null;
+            _targetSlot = null;
+            _selectionHighlightSource = SelectionHighlightSource.None;
+            _selectionState.Reset();
+            _suppressTooltipUntilPreview = false;
+
+            if (_grid != null)
+            {
+                RefreshSelection();
+            }
+
+            if (previous != null)
+            {
+                SelectionChanged?.Invoke(null);
+            }
+
+            if (hadPreview)
+            {
+                PreviewChanged?.Invoke(null);
+            }
+        }
 
         public void ConfigureExternalDropTarget(
             VisualElement target,
@@ -144,10 +204,26 @@ namespace DarkFlare
             ItemInstance previousSelection = _selectedItem;
             CancelDrag(false);
             CaptureSelectionState();
+
+            if (IsInExternalSlot(previousSelection))
+            {
+                _selectionState.Reset();
+            }
+
             InventorySnapshot snapshot = this.SendQuery(new GetInventorySnapshotQuery());
             LastSnapshot = snapshot;
             RefreshAttributes();
-            _emptyLabel.style.display = snapshot.Items.Count == 0
+            List<InventoryItemSnapshot> visibleItems = new List<InventoryItemSnapshot>(snapshot.Items.Count);
+
+            for (int i = 0; i < snapshot.Items.Count; i++)
+            {
+                if (!IsInExternalSlot(snapshot.Items[i].Item))
+                {
+                    visibleItems.Add(snapshot.Items[i]);
+                }
+            }
+
+            _emptyLabel.style.display = visibleItems.Count == 0
                 ? DisplayStyle.Flex
                 : DisplayStyle.None;
 
@@ -158,9 +234,9 @@ namespace DarkFlare
             _grid.Clear();
             BuildGrid(snapshot);
 
-            for (int i = 0; i < snapshot.Items.Count; i++)
+            for (int i = 0; i < visibleItems.Count; i++)
             {
-                InventoryItemSnapshot item = snapshot.Items[i];
+                InventoryItemSnapshot item = visibleItems[i];
                 Button button = CreateItemButton(item);
                 _grid.Add(button);
                 _itemButtons.Add(item.Item, button);
@@ -170,14 +246,14 @@ namespace DarkFlare
             int selectedIndex = string.IsNullOrEmpty(_selectionState.SelectedInstanceId)
                 ? -1
                 : ItemSelectionResolver.ResolveIndex(
-                    snapshot.Items,
+                    visibleItems,
                     _selectionState.SelectedInstanceId,
                     _selectionState.FallbackIndex,
                     item => item.Detail.InstanceId);
 
             if (selectedIndex >= 0)
             {
-                _selectedItem = snapshot.Items[selectedIndex].Item;
+                _selectedItem = visibleItems[selectedIndex].Item;
                 _selectionState.SelectedInstanceId = _selectedItem.InstanceId;
                 _selectionState.FallbackIndex = selectedIndex;
             }
@@ -328,11 +404,15 @@ namespace DarkFlare
             _gameInput = null;
             _selectedItem = null;
             _previewItem = null;
+            _externalSlotItem = null;
             _targetSlot = null;
             _suppressTooltipUntilPreview = false;
+            _selectionHighlightSuppressed = false;
             _selectionHighlightSource = SelectionHighlightSource.None;
             SelectionChanged = null;
             ContextActionRequested = null;
+            NavigationBoundaryRequested = null;
+            PreviewChanged = null;
             IsVisible = false;
         }
 
@@ -652,7 +732,9 @@ namespace DarkFlare
             }
 
             _previewItem = item;
+            RefreshSelectionHighlights();
             RefreshDetail();
+            PreviewChanged?.Invoke(item);
         }
 
         void EndPreview(ItemInstance item)
@@ -670,20 +752,15 @@ namespace DarkFlare
             }
 
             _previewItem = null;
+            RefreshSelectionHighlights();
             RefreshDetail();
+            PreviewChanged?.Invoke(null);
         }
 
         void RefreshSelection()
         {
-            foreach (KeyValuePair<ItemInstance, Button> entry in _itemButtons)
-            {
-                entry.Value.EnableInClassList(
-                    "inventory-item--selected",
-                    _selectionHighlightSource == SelectionHighlightSource.Inventory
-                    && entry.Key == _selectedItem);
-            }
-
             RefreshEquipmentSlots();
+            RefreshSelectionHighlights();
             RefreshDetail();
             RefreshTargetSlotLabel();
 
@@ -772,12 +849,73 @@ namespace DarkFlare
                 button.tooltip = snapshot.Item != null
                     ? $"{snapshot.Detail.DisplayName} · {ItemDetailFormatter.GetRarityText(snapshot.Detail.Rarity)}"
                     : $"{snapshot.SlotName}为空";
-                button.EnableInClassList(
-                    "inventory-equipment-slot--selected",
-                    _selectionHighlightSource == SelectionHighlightSource.Equipment
-                    && _targetSlot == snapshot.Slot);
                 button.EnableInClassList("inventory-equipment-slot--filled", snapshot.Item != null);
             }
+        }
+
+        void RefreshSelectionHighlights()
+        {
+            ItemInstance highlightedInventoryItem = null;
+            EquipmentSlot? highlightedEquipmentSlot = null;
+
+            if (_selectionHighlightSuppressed)
+            {
+                highlightedInventoryItem = null;
+                highlightedEquipmentSlot = null;
+            }
+            else if (_previewItem != null)
+            {
+                if (_itemButtons.ContainsKey(_previewItem))
+                {
+                    highlightedInventoryItem = _previewItem;
+                }
+                else if (TryGetEquipmentSlot(_previewItem, out EquipmentSlot previewSlot))
+                {
+                    highlightedEquipmentSlot = previewSlot;
+                }
+            }
+            else if (_selectionHighlightSource == SelectionHighlightSource.Inventory)
+            {
+                highlightedInventoryItem = _selectedItem;
+            }
+            else if (_selectionHighlightSource == SelectionHighlightSource.Equipment)
+            {
+                highlightedEquipmentSlot = _targetSlot;
+            }
+
+            foreach (KeyValuePair<ItemInstance, Button> entry in _itemButtons)
+            {
+                entry.Value.EnableInClassList(
+                    "inventory-item--selected",
+                    entry.Key == highlightedInventoryItem);
+            }
+
+            foreach (KeyValuePair<EquipmentSlot, Button> entry in _slotButtons)
+            {
+                entry.Value.EnableInClassList(
+                    "inventory-equipment-slot--selected",
+                    highlightedEquipmentSlot == entry.Key);
+            }
+        }
+
+        bool TryGetEquipmentSlot(ItemInstance item, out EquipmentSlot slot)
+        {
+            if (LastSnapshot.EquipmentSlots != null)
+            {
+                for (int i = 0; i < LastSnapshot.EquipmentSlots.Count; i++)
+                {
+                    EquipmentSlotSnapshot snapshot = LastSnapshot.EquipmentSlots[i];
+
+                    if (snapshot.Item == item)
+                    {
+                        slot = snapshot.Slot;
+                        return true;
+                    }
+                }
+            }
+
+            slot = default;
+            return false;
         }
 
         void RefreshDetail()
@@ -1504,7 +1642,18 @@ namespace DarkFlare
 
         void OnNavigatePerformed(Vector2 direction)
         {
-            if (!_isDragging || !_isKeyboardDrag || direction.sqrMagnitude < 0.25f)
+            if (direction.sqrMagnitude < 0.25f)
+            {
+                return;
+            }
+
+            if (!_isDragging)
+            {
+                RequestBoundaryNavigation(direction);
+                return;
+            }
+
+            if (!_isKeyboardDrag)
             {
                 return;
             }
@@ -1544,6 +1693,62 @@ namespace DarkFlare
             }
 
             _dragSourceButton?.Focus();
+        }
+
+        void RequestBoundaryNavigation(Vector2 direction)
+        {
+            if (direction.x <= 0f
+                || Mathf.Abs(direction.x) < Mathf.Abs(direction.y)
+                || _workbench == null
+                || _workbench.panel == null)
+            {
+                return;
+            }
+
+            Focusable focused = _workbench.panel.focusController.focusedElement;
+
+            if (focused is not VisualElement focusedElement)
+            {
+                return;
+            }
+
+            Button focusedButton = null;
+
+            foreach (Button button in _itemButtons.Values)
+            {
+                if (button == focusedElement)
+                {
+                    focusedButton = button;
+                    break;
+                }
+            }
+
+            if (focusedButton == null)
+            {
+                return;
+            }
+
+            float focusedCenter = focusedButton.worldBound.center.x;
+
+            foreach (Button button in _itemButtons.Values)
+            {
+                if (button != focusedButton && button.worldBound.center.x > focusedCenter + 1f)
+                {
+                    return;
+                }
+            }
+
+            NavigationBoundaryRequested?.Invoke(direction);
+        }
+
+        static bool IsSameItem(ItemInstance first, ItemInstance second)
+        {
+            if (first == null || second == null)
+            {
+                return first == second;
+            }
+
+            return first == second || first.InstanceId == second.InstanceId;
         }
 
         Vector2Int GetKeyboardStartOrigin()

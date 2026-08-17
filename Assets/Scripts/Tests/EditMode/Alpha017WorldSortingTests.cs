@@ -127,11 +127,11 @@ namespace DarkFlare.Tests
             WorldSortParticipant first = CreateParticipant("stable", WorldSortCategory.StaticProp, 0f);
             WorldSortParticipant duplicate = CreateParticipant("duplicate", WorldSortCategory.StaticProp, 0f, false);
             duplicate.ConfigureIdentity(WorldSortCategory.StaticProp, "stable");
-            LogAssert.Expect(LogType.Error, "[WorldSortingSystem] StableSortId 重复：stable");
+            LogAssert.Expect(LogType.Warning, "[WorldSortingSystem] StableSortId 重复：stable");
             Assert.IsFalse(system.Register(duplicate));
             WorldSortParticipant empty = CreateParticipant("empty", WorldSortCategory.StaticProp, 0f, false);
             empty.ConfigureIdentity(WorldSortCategory.StaticProp, string.Empty);
-            LogAssert.Expect(LogType.Error, "[WorldSortingSystem] StableSortId 不能为空");
+            LogAssert.Expect(LogType.Warning, "[WorldSortingSystem] StableSortId 不能为空");
             Assert.IsFalse(system.Register(empty));
 
             Assert.IsNotNull(first);

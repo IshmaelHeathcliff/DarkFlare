@@ -28,6 +28,9 @@ namespace DarkFlare
         IUnRegister _openRequestRegistration;
         VisualElement _overlay;
         VisualElement _panel;
+        VisualElement _inventoryTemplate;
+        VisualElement _shopTemplate;
+        VisualElement _craftingTemplate;
         Button _inventoryTab;
         Button _shopTab;
         Button _craftingTab;
@@ -143,6 +146,9 @@ namespace DarkFlare
             _gameInput = null;
             _overlay = null;
             _panel = null;
+            _inventoryTemplate = null;
+            _shopTemplate = null;
+            _craftingTemplate = null;
             _inventoryTab = null;
             _shopTab = null;
             _craftingTab = null;
@@ -193,6 +199,9 @@ namespace DarkFlare
             VisualElement root = _document.rootVisualElement;
             _overlay = root.Q<VisualElement>("game-menu-overlay");
             _panel = root.Q<VisualElement>("game-menu-panel");
+            _inventoryTemplate = root.Q<VisualElement>(className: "inventory-template");
+            _shopTemplate = root.Q<VisualElement>(className: "shop-template");
+            _craftingTemplate = root.Q<VisualElement>(className: "crafting-template");
             _inventoryTab = root.Q<Button>("game-menu-inventory-tab");
             _shopTab = root.Q<Button>("game-menu-shop-tab");
             _craftingTab = root.Q<Button>("game-menu-crafting-tab");
@@ -200,6 +209,9 @@ namespace DarkFlare
 
             if (_overlay == null
                 || _panel == null
+                || _inventoryTemplate == null
+                || _shopTemplate == null
+                || _craftingTemplate == null
                 || _inventoryTab == null
                 || _shopTab == null
                 || _craftingTab == null
@@ -242,6 +254,7 @@ namespace DarkFlare
 
             if (isOpen)
             {
+                _inventoryPanel?.ClearSelection();
                 ApplyPage();
                 return;
             }
@@ -267,6 +280,9 @@ namespace DarkFlare
             bool showInventory = CurrentPage == GameMenuPage.Inventory;
             bool showShop = CurrentPage == GameMenuPage.Shop;
             bool showCrafting = CurrentPage == GameMenuPage.Crafting;
+            SetTemplateVisible(_inventoryTemplate, showInventory);
+            SetTemplateVisible(_shopTemplate, showShop);
+            SetTemplateVisible(_craftingTemplate, showCrafting);
             _inventoryPanel?.CancelActiveDrag();
             _inventoryPanel?.SetVisible(showInventory);
 
@@ -331,6 +347,14 @@ namespace DarkFlare
             }
 
             button.RemoveFromClassList(ActiveTabClass);
+        }
+
+        static void SetTemplateVisible(VisualElement template, bool visible)
+        {
+            if (template != null)
+            {
+                template.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
+            }
         }
     }
 }

@@ -132,6 +132,34 @@ namespace DarkFlare.Tests
             Assert.AreEqual(shop.SelectedItem.BaseDefinition.DisplayName, detailName.text, "详情未跟随邻近选择");
             AssertFocusedSelectedItem(root, shop.SelectedItem.BaseDefinition.DisplayName);
 
+            List<Button> playerButtons = root.Query<Button>(className: "inventory-item").ToList();
+            Assert.IsNotEmpty(playerButtons, "购买后玩家背包没有可用于跨栏导航的物品");
+            Button rightmostPlayerButton = playerButtons[0];
+
+            for (int i = 1; i < playerButtons.Count; i++)
+            {
+                if (playerButtons[i].worldBound.center.x > rightmostPlayerButton.worldBound.center.x)
+                {
+                    rightmostPlayerButton = playerButtons[i];
+                }
+            }
+
+            rightmostPlayerButton.Focus();
+            yield return null;
+            Assert.AreEqual(1, CountItemSelectionHighlights(root), "玩家背包取得焦点后出现多个物品高亮");
+            Keyboard keyboard = InputSystem.AddDevice<Keyboard>();
+            Press(keyboard.rightArrowKey);
+            yield return null;
+            Release(keyboard.rightArrowKey);
+            yield return null;
+            yield return null;
+            Assert.IsInstanceOf<Button>(root.focusController.focusedElement, "背包向右导航后焦点丢失");
+            Button navigatedButton = (Button)root.focusController.focusedElement;
+            Assert.IsTrue(navigatedButton.ClassListContains("shop-item"), "背包最右侧向右未进入商人背包");
+            Assert.AreEqual(ShopItemSource.Merchant, shop.SelectedSource, "跨栏导航后未切换到商人物品选择");
+            Assert.AreEqual(1, CountItemSelectionHighlights(root), "跨栏导航后玩家和商人物品同时高亮");
+            expectedNeighborId = shop.SelectedItem.InstanceId;
+
             menu.OpenPage(GameMenuPage.Inventory);
             yield return null;
             menu.OpenPage(GameMenuPage.Shop);
@@ -339,6 +367,8 @@ namespace DarkFlare.Tests
             Button upgradeButton = root.Q<Button>("crafting-upgrade-rarity");
             Assert.IsNotNull(itemButton, "玩家背包未生成打造槽验收物品按钮");
             Assert.IsNotNull(inputSlot, "打造页缺少打造槽");
+            Assert.AreEqual(100f, inputSlot.worldBound.width, 1f, "打造槽宽度不是 2 格");
+            Assert.AreEqual(152f, inputSlot.worldBound.height, 1f, "打造槽高度不是 3 格");
 
             InvokeButton(itemButton);
             yield return null;
@@ -349,11 +379,16 @@ namespace DarkFlare.Tests
             yield return null;
             Assert.AreSame(item, craftingPanel.SlottedItem, "显式放入按钮未锁定打造目标");
             Assert.IsTrue(upgradeButton.enabledSelf, "普通物品放入槽位后应允许提升稀有度");
+            Assert.IsNull(
+                FindItemButton(root, item, "inventory-item"),
+                "放入打造槽后物品仍重复显示在玩家背包");
 
             InvokeButton(removeButton);
             yield return null;
             Assert.IsNull(craftingPanel.SlottedItem, "取回按钮未清空打造槽");
             Assert.IsFalse(upgradeButton.enabledSelf, "取回物品后仍错误启用打造操作");
+            itemButton = FindItemButton(root, item, "inventory-item");
+            Assert.IsNotNull(itemButton, "取回打造物品后没有恢复背包显示");
 
             Mouse mouse = InputSystem.AddDevice<Mouse>();
             yield return DragPointer(
@@ -508,6 +543,13 @@ namespace DarkFlare.Tests
             }
 
             return false;
+        }
+
+        static int CountItemSelectionHighlights(VisualElement root)
+        {
+            return root.Query<VisualElement>(className: "inventory-item--selected").ToList().Count
+                + root.Query<VisualElement>(className: "inventory-equipment-slot--selected").ToList().Count
+                + root.Query<VisualElement>(className: "shop-item--selected").ToList().Count;
         }
 
         static ItemDetailSnapshot CreateDenseDetail(ItemInstance item)
@@ -693,6 +735,27 @@ namespace DarkFlare.Tests
                 content.width * 0.5f + 1f,
                 "商店或打造界面的装备/背包列超过内容区一半");
             Assert.LessOrEqual(equipment.yMax, inventory.yMin + 1f, "装备区没有位于背包上方");
+
+            VisualElement[] pages =
+            {
+                root.Q<VisualElement>("inventory-page"),
+                root.Q<VisualElement>("shop-page"),
+                root.Q<VisualElement>("crafting-page"),
+            };
+            VisualElement activePage = null;
+
+            for (int i = 0; i < pages.Length; i++)
+            {
+                if (pages[i].resolvedStyle.display == DisplayStyle.Flex)
+                {
+                    activePage = pages[i];
+                    break;
+                }
+            }
+
+            Assert.IsNotNull(activePage, "没有找到当前显示的物品上下文页");
+            Assert.AreEqual(workbench.yMin, activePage.worldBound.yMin, 1f, "背包与上下文顶部未对齐");
+            Assert.AreEqual(workbench.yMax, activePage.worldBound.yMax, 1f, "背包与上下文底部未对齐");
         }
 
         static void AssertMerchantBackpack(VisualElement root)

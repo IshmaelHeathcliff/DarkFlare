@@ -87,7 +87,8 @@
 - 投射物命中、普通受击和暴击受击使用三个独立特效 Prefab；`VisualEffectPool` 对每类预热 4 个、最多保留 24 个活动实例，0.25 秒后自动回收并在架构退出时统一释放。池根保持默认 `HideFlags.None`，由架构释放与场景卸载双重兜底；禁止使用会在 PlayMode 退出后进入无效场景的 `DontSave*` 标志。
 - 玩家与三种怪物均通过独立 `HitEffectAnchor` 放置受击表现；五类主伤害 Tint 由统一色板解析，未命中、闪避、无伤害与治疗不会误播角色受击动画。
 - 七个 Item ScriptableObject 与 Addressables 继续引用原装备图标 GUID。
-- `SpriteAssetLoader` 与 `PrefabAssetLoader` 通过 `AssetReference.ReleaseAsset()` 释放并清空内部 OperationHandle，重复进入场景或复跑测试不会复用失效句柄。
+- `SpriteAssetLoader` 通过 `Addressables.LoadAssetAsync()` 持有独立 OperationHandle，并用 `Addressables.Release()` 释放；`PrefabAssetLoader` 通过 `AssetReference.ReleaseAsset()` 释放并清空内部 OperationHandle。重复进入场景或复跑测试不会复用失效句柄。
+- Addressables 编辑器 Fast Mode 的模拟加载延迟固定为 `0`；EditMode 集成测试先同步完成 Addressables 初始化，加载器也会在创建资源操作前检查已取消的 Token，避免非 PlayMode PlayerLoop 导致长时间等待。
 - `LootPickup.prefab`、`CraftingStation.prefab`、三种怪物血条和 `Main.unity` 通过独立 Sprite 绑定。
 - `LootPickup.prefab` 的 Halo 独立绑定掉落稀有度环，并由 `LootPickupVisual` 驱动持续旋转及四档稀有度着色。
 - `Main.unity` 通过六个独立 `Tile` 资产构成 `GroundBaseTilemap` 与 `GroundDetailTilemap`；旧 `ground_slice.png` 不再参与运行时绑定。
@@ -103,6 +104,7 @@
 - 确定性生成检查为 `generated=80 changed=0`；16 份合同覆盖 92/92 个 PNG，结果为 0 errors / 0 warnings。
 - 五个项目程序集均编译成功，Unity Console 清理后为 0 errors / 0 warnings；EditMode 104/104 通过。
 - `Phase5VisualIntegrationTests` 17/17 通过；受 Addressables 加载器影响的 PlayMode 冒烟用例 1/1 通过。
+- Addressables 加载器冷启动定向测试体耗时 `0.216s`，完整 EditMode 212/212 通过，总耗时 `9.08s`。
 - 全量 PlayMode 的一次串行运行仍可触发既有测试顺序波动，失败用例单独复跑通过，不涉及旧 Sheet 引用。
 - 运行时世界、角色、怪物、商人、打造台和 HUD 已在 16:9 画面复核；截图见 [`main-runtime-2560x1440.png`](./assets/visual-assets/alpha-0.1/acceptance/main-runtime-2560x1440.png)。
 - 双层地表专项的 19 项 EditMode 与 1 项 PlayMode 验收通过；5×5 基础层、11 格细节层、无 Collider、排序和 40×40 视觉覆盖均由自动化校验。

@@ -11,11 +11,13 @@ namespace DarkFlare
     public class SpriteAssetLoader : IUtility
     {
         readonly Dictionary<string, Sprite> _spriteCache = new Dictionary<string, Sprite>();
-        readonly Dictionary<string, AssetReferenceSprite> _references = new Dictionary<string, AssetReferenceSprite>();
+        readonly Dictionary<string, AsyncOperationHandle<Sprite>> _handles = new Dictionary<string, AsyncOperationHandle<Sprite>>();
         readonly HashSet<string> _loadingGuids = new HashSet<string>();
 
         public async UniTask PreloadAsync(IEnumerable<AssetReferenceSprite> references, CancellationToken token)
         {
+            token.ThrowIfCancellationRequested();
+
             if (references == null)
             {
                 return;
@@ -55,21 +57,21 @@ namespace DarkFlare
                 return sprite;
             }
 
-            Debug.LogError($"[SpriteAssetLoader] 图标未预热或加载失败: {iconGuid}");
+            Debug.LogWarning($"[SpriteAssetLoader] 图标未预热或加载失败: {iconGuid}");
             return null;
         }
 
         public void ReleaseAll()
         {
-            foreach (AssetReferenceSprite reference in _references.Values)
+            foreach (AsyncOperationHandle<Sprite> handle in _handles.Values)
             {
-                if (reference.OperationHandle.IsValid())
+                if (handle.IsValid())
                 {
-                    reference.ReleaseAsset();
+                    Addressables.Release(handle);
                 }
             }
 
-            _references.Clear();
+            _handles.Clear();
             _spriteCache.Clear();
             _loadingGuids.Clear();
         }
@@ -77,27 +79,33 @@ namespace DarkFlare
         async UniTask LoadOneAsync(AssetReferenceSprite reference, CancellationToken token)
         {
             string guid = reference.AssetGUID;
-            AsyncOperationHandle<Sprite> handle = reference.LoadAssetAsync<Sprite>();
+            AsyncOperationHandle<Sprite> handle = default;
 
             try
             {
-                await UniTask.WaitUntil(() => handle.IsDone, cancellationToken: token);
+                handle = Addressables.LoadAssetAsync<Sprite>(reference.RuntimeKey);
+                await handle.ToUniTask(cancellationToken: token);
 
                 if (handle.Status != AsyncOperationStatus.Succeeded || handle.Result == null)
                 {
                     Debug.LogError($"[SpriteAssetLoader] 图标加载失败: {guid}");
-                    ReleaseFailedReference(reference);
+                    ReleaseHandle(handle);
                     return;
                 }
 
-                _references[guid] = reference;
+                _handles[guid] = handle;
                 _spriteCache[guid] = handle.Result;
                 Debug.Log($"[SpriteAssetLoader] 图标加载完成: {guid} -> {handle.Result.name}");
             }
             catch (OperationCanceledException)
             {
-                ReleaseFailedReference(reference);
+                ReleaseHandle(handle);
                 throw;
+            }
+            catch (Exception exception)
+            {
+                Debug.LogError($"[SpriteAssetLoader] 图标加载异常: {guid}\n{exception.Message}");
+                ReleaseHandle(handle);
             }
             finally
             {
@@ -105,11 +113,11 @@ namespace DarkFlare
             }
         }
 
-        static void ReleaseFailedReference(AssetReferenceSprite reference)
+        static void ReleaseHandle(AsyncOperationHandle<Sprite> handle)
         {
-            if (reference.OperationHandle.IsValid())
+            if (handle.IsValid())
             {
-                reference.ReleaseAsset();
+                Addressables.Release(handle);
             }
         }
     }
