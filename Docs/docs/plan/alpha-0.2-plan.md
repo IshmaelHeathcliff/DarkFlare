@@ -1,10 +1,10 @@
 # alpha 0.2 基础设施开发计划
 
-> 状态：计划已建立，待执行
+> 状态：`alpha 0.2.0` 已完成，`alpha 0.2.1` 待开始
 > 建立日期：2026-08-17
 > 最近更新：2026-08-18
 > 基线提交：`713cd17`
-> 前置条件：`alpha 0.1` 已完成并归档；当前 EditMode `212/212` 通过，PlayMode `24` 项中 `22` 项通过、`2` 项因 Input System 上游问题忽略、零失败
+> 计划建立时前置基线：`alpha 0.1` 已完成并归档；EditMode `212/212` 通过，PlayMode `24` 项中 `22` 项通过、`2` 项因 Input System 上游问题忽略、零失败
 > 约束契约：[alpha 0.2 基础设施约束契约](./alpha-0.2-infrastructure-contract.md)
 
 ## 版本定位
@@ -22,14 +22,14 @@
 ## 当前基线与主要缺口
 
 - 当前只有 `Main.unity`，没有启动场景、游戏状态机、统一加载流程或失败恢复页。
-- `GameArchitecture` 已注册主要 Model、System 和 Utility，但初始化由场景触发，尚无明确的应用 / 会话 / 场景作用域与统一反初始化入口。
-- `CombatPrototypeBootstrap.Start` 同时承担资源预热、随机初始化、新游戏发放、玩家生成、商人 / 打造配置和摄像机绑定；新游戏与读档职责尚未分离。
+- `alpha 0.2.0` 已建立场景加载前的唯一 `ApplicationHost`、Application / Profile / Session / Scene / Component 作用域及 `GameArchitectureProvider` 独占入口；当前单场景兼容请求采用 latest-wins，场景预置组件只绑定同场景且已 Running 的有效 Session，完整游戏状态机与通用 SceneFlow 仍未建立。
+- `CombatPrototypeBootstrap` 已收缩为场景配置与宿主请求入口，新游戏逻辑由可回滚的 `NewGameSessionInitializer` 执行；Restore 初始化器与正式读档职责仍待 `alpha 0.2.2`。
 - `Assets/Data/Saves` 为空，运行时代码没有正式存档路径、DTO、槽位、校验、备份、迁移或损坏恢复。
 - 现有背包、装备、经济和物品实例包含运行时对象引用或以对象作为字典键，不能直接序列化为稳定存档。
 - Unity Localization `1.5.12` 已安装，但没有 Locale、String Table、运行时语言服务或玩家可见文本迁移。
 - 用户设置、输入重绑定、按键图标、音频服务、全局异常处理和结构化日志尚未建立。
-- Addressables 已用于 Prefab 和 Sprite 加载，但当前内容主要位于本地默认组，缺少分组、标签和句柄生命周期验证。
-- 运行时代码仍存在直接 `Debug.Log*` 调用；文件 IO、场景加载、可见字符串等规则尚无自动约束。
+- Addressables 已用于 Prefab 和 Sprite 加载，Prefab GUID 单飞与精确句柄释放已有自动验证；当前内容主要位于本地默认组，仍缺少完整分组、标签和跨加载器治理。
+- 运行时代码仍存在直接 `Debug.Log*` 调用，可见字符串规则尚未启用；直接业务文件 IO、`PlayerPrefs` 和散落场景加载已由 `alpha 0.2.0` 策略测试冻结。
 
 ## 交付层级
 
@@ -64,7 +64,7 @@
 
 | 阶段 | 状态 | 核心目标 | 主要交付 |
 | --- | --- | --- | --- |
-| `alpha 0.2.0` | 待开始 | 建立应用宿主、作用域、生命周期和首批规范验证 | AppHost、作用域所有权、启动状态、统一取消、基础设施策略测试 |
+| `alpha 0.2.0` | 已完成 | 建立应用宿主、作用域、生命周期和首批规范验证 | [模块文档](../infrastructure/application-lifecycle.md) · [归档计划](./archive/alpha-0.2.0-application-lifecycle-plan.md) |
 | `alpha 0.2.1` | 待开始 | 建立稳定身份、内容目录和版本迁移底座 | ContentId、内容注册表、SchemaVersion、Migration Pipeline、DTO 映射约束 |
 | `alpha 0.2.2` | 待开始 | 完成本地存档、读档和损坏恢复闭环 | 存档 DTO、槽位、原子写入、备份、校验、迁移、自动保存与继续游戏 |
 | `alpha 0.2.3` | 待开始 | 完成用户设置和运行时本地化 | Settings、Locale、String Tables、字体回退、伪本地化、硬编码扫描 |
@@ -74,6 +74,8 @@
 | `alpha 0.2.7` | 待开始 | 完成跨模块回归、故障演练和文档封板 | 综合验收记录、迁移样本、模块文档、计划归档 |
 
 ## alpha 0.2.0：应用宿主、作用域与规范验证
+
+当前实现与使用边界见[应用生命周期与会话作用域](../infrastructure/application-lifecycle.md)；现状审计、冻结决策、执行切片、实际偏差和验收证据见[归档执行计划](./archive/alpha-0.2.0-application-lifecycle-plan.md)。
 
 ### 目标
 
@@ -95,8 +97,17 @@
 - 连续执行新游戏 → 退出会话 → 再次新游戏，不重复注册 Model、事件、输入或 Addressables 句柄。
 - 应用关闭或测试 TearDown 后，架构、输入和异步任务均已释放，Console 无新增异常。
 - 新游戏与读档入口互斥，且不会重复发放初始武器、金币或商人库存。
-- 新增直接文件 IO、`PlayerPrefs`、场景加载、散落日志等违规代码时，本地策略测试能够失败。
+- 新增直接文件 IO、`PlayerPrefs`、场景加载等本阶段已启用规则的违规代码时，本地策略测试能够失败；日志规则留在 `alpha 0.2.6` 启用。
 - `Main.unity` 不再决定应用服务的初始化顺序。
+
+### 完成记录
+
+- `ApplicationBootstrap` 已在 `BeforeSceneLoad` 创建唯一 `ApplicationHost`；`GameArchitectureProvider` 是架构的唯一正式所有者，并以所有者 lease 与单调 generation 隔离连续 Session。
+- NewGame 初始化、取消和失败回滚已经事务化；当前场景卸载、直接重载与快速重复请求由 latest-wins 协调器处理，场景预置组件通过 `SceneSessionBinding` 等待有效 Running Session。
+- 长期任务已纳入只跟踪活动任务的作用域 TaskGroup；默认停止时限为 10 秒，`Abandoned` 为不可逆终态并向祖先粘性传播，污染作用域拒绝新任务、子作用域和场景组件重绑。迟到 continuation 不得改写状态、回调新作用域或访问下一代架构。
+- Prefab Addressables GUID 单飞、精确句柄释放、保存原始所有者的 `SessionObjectRegistry` 注销与首批策略扫描已经落地。
+- 最终验证为 Unity 编译 0 error、EditMode `255/255`、项目自有 PlayMode `45/45`；PlayMode 完整运行 `49` 项中 `47` 项通过、`0` 失败，另有 `2` 项 Input System 包集成测试因上游 issue 1252825 跳过。最终修复后两次真实 Play / 退出均达到 Application `Ready`、Session `Running`、有效 lease、宿主 / 玩家 / 已提交刷怪器各 `1` 个，退出 Console Error 为 0。
+- 本阶段未实现存档、本地化或 `alpha 0.2.4` 的完整 SceneFlow。
 
 ## alpha 0.2.1：稳定身份、内容目录与迁移框架
 

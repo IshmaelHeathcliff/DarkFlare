@@ -10,19 +10,8 @@ namespace DarkFlare
         public const float TickInterval = 0.25f;
         public const float BaseManaRegenerationRate = 0.05f;
 
-        CancellationTokenSource _loopCancellation;
-
         protected override void OnInit()
         {
-            _loopCancellation = new CancellationTokenSource();
-            RegenerationLoop(_loopCancellation.Token).Forget();
-        }
-
-        protected override void OnDeinit()
-        {
-            _loopCancellation?.Cancel();
-            _loopCancellation?.Dispose();
-            _loopCancellation = null;
         }
 
         public void AdvanceRegeneration(float elapsedSeconds)
@@ -70,7 +59,7 @@ namespace DarkFlare
                 + Math.Max(0f, flatManaRegeneration);
         }
 
-        async UniTaskVoid RegenerationLoop(CancellationToken token)
+        public async UniTask RunAsync(CancellationToken token)
         {
             while (!token.IsCancellationRequested)
             {

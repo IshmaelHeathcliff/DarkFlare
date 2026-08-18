@@ -19,7 +19,7 @@ namespace DarkFlare
 
         public IArchitecture GetArchitecture()
         {
-            return GameArchitecture.Interface;
+            return GameArchitectureProvider.RequireCurrent();
         }
 
         void Awake()
@@ -56,7 +56,7 @@ namespace DarkFlare
             _actorRevivedRegistration = null;
             _gameInput = null;
             _targets.Clear();
-            SetFocusedTarget(null);
+            SetFocusedTarget(null, false);
         }
 
         void OnTriggerEnter2D(Collider2D other)
@@ -123,7 +123,7 @@ namespace DarkFlare
             SetFocusedTarget(closest);
         }
 
-        void SetFocusedTarget(WorldInteractionTarget target)
+        void SetFocusedTarget(WorldInteractionTarget target, bool notifyArchitecture = true)
         {
             if (_focusedTarget == target)
             {
@@ -131,7 +131,11 @@ namespace DarkFlare
             }
 
             _focusedTarget = target;
-            this.SendCommand(new SetInteractionFocusCommand(target));
+
+            if (notifyArchitecture)
+            {
+                this.SendCommand(new SetInteractionFocusCommand(target));
+            }
         }
 
         void OnInteractPerformed()

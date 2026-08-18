@@ -14,6 +14,8 @@ namespace DarkFlare
 
         readonly List<IUnRegister> _eventRegistrations = new List<IUnRegister>();
 
+        SceneSessionBinding _sessionBinding;
+
         [SerializeField]
         UIDocument _document;
 
@@ -54,7 +56,7 @@ namespace DarkFlare
 
         public IArchitecture GetArchitecture()
         {
-            return GameArchitecture.Interface;
+            return _sessionBinding.RequireArchitecture();
         }
 
         public void RefreshCrafting()
@@ -114,10 +116,36 @@ namespace DarkFlare
         void OnEnable()
         {
             EnsureComponents();
+            _sessionBinding ??= new SceneSessionBinding(
+                this,
+                BindSession,
+                UnbindSession);
+            _sessionBinding.Enable();
+        }
+
+        void OnDisable()
+        {
+            _sessionBinding?.Disable();
+        }
+
+        SceneSessionBindResult BindSession(IArchitecture architecture)
+        {
+            if (_document == null || _document.panelSettings == null)
+            {
+                Debug.LogError("[CraftingPanelController] 缺少 UIDocument 或 PanelSettings，无法初始化打造", this);
+                return SceneSessionBindResult.Failed;
+            }
+
+            VisualElement root = _document.rootVisualElement;
+
+            if (root == null || root.panel == null)
+            {
+                return SceneSessionBindResult.Retry;
+            }
 
             if (!BindVisualTree())
             {
-                return;
+                return SceneSessionBindResult.Failed;
             }
 
             RegisterEvents();
@@ -129,9 +157,10 @@ namespace DarkFlare
             RefreshCrafting();
             SetVisible(IsVisible);
             Debug.Log("[CraftingPanelController] 随机打造工作台初始化完成", this);
+            return SceneSessionBindResult.Success;
         }
 
-        void OnDisable()
+        void UnbindSession()
         {
             UnbindButtons();
 

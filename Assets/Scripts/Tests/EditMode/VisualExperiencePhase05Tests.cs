@@ -14,6 +14,13 @@ namespace DarkFlare.Tests
         const string LootPrefabPath = "Assets/Prefabs/Loot/LootPickup.prefab";
 
         readonly List<Object> _objects = new List<Object>();
+        readonly GameArchitectureTestFixture _fixture = new GameArchitectureTestFixture();
+
+        [SetUp]
+        public void SetUp()
+        {
+            _fixture.Start();
+        }
 
         [TearDown]
         public void TearDown()
@@ -27,6 +34,7 @@ namespace DarkFlare.Tests
             }
 
             _objects.Clear();
+            _fixture.Stop();
         }
 
         [Test]

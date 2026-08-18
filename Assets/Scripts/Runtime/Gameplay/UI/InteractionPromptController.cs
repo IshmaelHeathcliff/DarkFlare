@@ -10,6 +10,7 @@ namespace DarkFlare
         [SerializeField]
         UIDocument _document;
 
+        SceneSessionBinding _sessionBinding;
         GameInput _gameInput;
         IUnRegister _focusRegistration;
         VisualElement _prompt;
@@ -20,9 +21,11 @@ namespace DarkFlare
 
         public bool IsVisible { get; private set; }
 
+        public int SessionBindCount => _sessionBinding?.BindCount ?? 0;
+
         public IArchitecture GetArchitecture()
         {
-            return GameArchitecture.Interface;
+            return _sessionBinding.RequireArchitecture();
         }
 
         void Awake()
@@ -33,26 +36,53 @@ namespace DarkFlare
         void OnEnable()
         {
             EnsureComponents();
+            _sessionBinding ??= new SceneSessionBinding(
+                this,
+                BindSession,
+                UnbindSession);
+            _sessionBinding.Enable();
+        }
+
+        void OnDisable()
+        {
+            _sessionBinding?.Disable();
+        }
+
+        SceneSessionBindResult BindSession(IArchitecture architecture)
+        {
+            if (_document == null || _document.panelSettings == null)
+            {
+                Debug.LogError("[InteractionPromptController] 缺少 UIDocument 或 PanelSettings，无法初始化交互提示", this);
+                return SceneSessionBindResult.Failed;
+            }
+
+            VisualElement root = _document.rootVisualElement;
+
+            if (root == null || root.panel == null)
+            {
+                return SceneSessionBindResult.Retry;
+            }
 
             if (!BindVisualTree())
             {
-                return;
+                return SceneSessionBindResult.Failed;
             }
 
-            _gameInput = this.GetUtility<GameInput>();
+            _gameInput = architecture.GetUtility<GameInput>();
 
             if (_gameInput == null)
             {
                 Debug.LogError("[InteractionPromptController] 缺少 GameInput，无法显示交互提示", this);
-                return;
+                return SceneSessionBindResult.Failed;
             }
 
             _focusRegistration = this.RegisterEvent<InteractionFocusChangedEvent>(OnFocusChanged);
             _gameInput.ModeChanged += OnInputModeChanged;
             RefreshPrompt();
+            return SceneSessionBindResult.Success;
         }
 
-        void OnDisable()
+        void UnbindSession()
         {
             if (_gameInput != null)
             {

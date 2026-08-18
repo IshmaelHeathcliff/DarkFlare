@@ -15,12 +15,16 @@ namespace DarkFlare
         Rigidbody2D _rigidbody;
         CircleCollider2D _collider;
         AttackSnapshot _attack;
+        IArchitecture _architecture;
+        SessionObjectRegistry _sessionObjects;
         Vector2 _direction;
+        LifecycleScope _lifetimeScope;
         bool _initialized;
+        uint _lifetimeVersion;
 
         public IArchitecture GetArchitecture()
         {
-            return GameArchitecture.Interface;
+            return _architecture ?? GameArchitectureProvider.RequireCurrent();
         }
 
         public void Init(
@@ -35,7 +39,16 @@ namespace DarkFlare
             transform.right = _direction;
             _collider.radius = skill.ProjectileRadius;
             _rigidbody.linearVelocity = _direction * skill.ProjectileSpeed;
-            DestroyAfterDelay(skill.ProjectileLifetime, this.GetCancellationTokenOnDestroy()).Forget();
+            _lifetimeScope?.BeginStop();
+            _lifetimeScope = ComponentLifecycle.CreateScope(
+                this,
+                "projectile-lifetime",
+                this.GetCancellationTokenOnDestroy());
+            uint version = ++_lifetimeVersion;
+            _lifetimeScope.Tasks.Run(
+                "destroy-after-lifetime",
+                token => DestroyAfterDelayAsync(skill.ProjectileLifetime, version, token),
+                failurePolicy: LifecycleTaskFailurePolicy.ReportAndStopScope);
         }
 
         public bool TryHit(CombatActor target, out DamageResult result)
@@ -69,12 +82,27 @@ namespace DarkFlare
         void Awake()
         {
             EnsureComponents();
+            _architecture = GameArchitectureProvider.RequireCurrent();
+            _sessionObjects = this.GetUtility<SessionObjectRegistry>();
             this.GetUtility<VisualEffectPool>().Prewarm(_impactEffectPrefab);
         }
 
         void OnValidate()
         {
             EnsureComponents();
+        }
+
+        void OnDisable()
+        {
+            _initialized = false;
+            _lifetimeVersion++;
+            _lifetimeScope?.BeginStop();
+            _lifetimeScope = null;
+        }
+
+        void OnDestroy()
+        {
+            _sessionObjects?.Unregister(gameObject);
         }
 
         void OnTriggerEnter2D(Collider2D other)
@@ -106,11 +134,15 @@ namespace DarkFlare
             }
         }
 
-        async UniTaskVoid DestroyAfterDelay(float lifetime, CancellationToken token)
+        async UniTask DestroyAfterDelayAsync(
+            float lifetime,
+            uint version,
+            CancellationToken token)
         {
             await UniTask.Delay(System.TimeSpan.FromSeconds(lifetime), cancellationToken: token);
+            token.ThrowIfCancellationRequested();
 
-            if (this != null)
+            if (this != null && version == _lifetimeVersion)
             {
                 Destroy(gameObject);
             }

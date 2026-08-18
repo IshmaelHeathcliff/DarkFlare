@@ -2505,6 +2505,7 @@ MonoBehaviour:
   _startingGold: 100
   _playerSpawnPoint: {fileID: 0}
   _monsterSpawner: {fileID: 800447565}
+  _cameraFollowTarget: {fileID: 519420033}
   _useFixedRandomSeed: 0
   _fixedRandomSeed: 12345
 --- !u!4 &1630975849

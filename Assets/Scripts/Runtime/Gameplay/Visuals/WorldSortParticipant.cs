@@ -23,6 +23,8 @@ namespace DarkFlare
         bool _requiresRuntimeIdentity;
 
         WorldSortKey _sortKey;
+        WorldSortingSystem _sortingSystem;
+        ApplicationHost _host;
         bool _registered;
         bool _runtimeIdentityConfigured;
 
@@ -38,12 +40,12 @@ namespace DarkFlare
 
         public IArchitecture GetArchitecture()
         {
-            return GameArchitecture.Interface;
+            return GameArchitectureProvider.RequireCurrent();
         }
 
         public void ConfigureIdentity(WorldSortCategory category, string stableSortId)
         {
-            WorldSortingSystem sortingSystem = this.GetUtility<WorldSortingSystem>();
+            WorldSortingSystem sortingSystem = ResolveSortingSystem();
 
             if (_registered)
             {
@@ -66,23 +68,35 @@ namespace DarkFlare
         {
             EnsureComponents();
 
+            if (ApplicationHost.TryGetCurrent(out ApplicationHost host))
+            {
+                _host = host;
+                _host.SessionRunning += OnSessionRunning;
+            }
+
             if (_requiresRuntimeIdentity && !_runtimeIdentityConfigured)
             {
                 return;
             }
 
-            _registered = this.GetUtility<WorldSortingSystem>().Register(this);
+            TryRegister();
         }
 
         void OnDisable()
         {
-            if (!_registered)
+            if (_host != null)
             {
-                return;
+                _host.SessionRunning -= OnSessionRunning;
+                _host = null;
             }
 
-            this.GetUtility<WorldSortingSystem>().Unregister(this);
+            if (_registered)
+            {
+                _sortingSystem?.Unregister(this);
+            }
+
             _registered = false;
+            _sortingSystem = null;
         }
 
         void OnValidate()
@@ -119,6 +133,33 @@ namespace DarkFlare
             }
         }
 
+        void OnSessionRunning(GameSessionHost session)
+        {
+            if (session.IsBoundToScene(gameObject.scene))
+            {
+                TryRegister();
+            }
+        }
+
+        void TryRegister()
+        {
+            if (_registered)
+            {
+                return;
+            }
+
+            if (_host != null
+                && (_host.CurrentSession == null
+                    || _host.CurrentSession.SceneScope.State != LifecycleScopeState.Active
+                    || (_host.CurrentSession.HasBoundScene
+                        && !_host.CurrentSession.IsBoundToScene(gameObject.scene))))
+            {
+                return;
+            }
+
+            _registered = ResolveSortingSystem().Register(this);
+        }
+
         void EnsureComponents()
         {
             if (_sortingGroup == null)
@@ -131,6 +172,12 @@ namespace DarkFlare
                 Transform anchor = transform.Find("SortAnchor");
                 _sortAnchor = anchor != null ? anchor : transform;
             }
+        }
+
+        WorldSortingSystem ResolveSortingSystem()
+        {
+            _sortingSystem ??= this.GetUtility<WorldSortingSystem>();
+            return _sortingSystem;
         }
     }
 }

@@ -18,6 +18,10 @@ namespace DarkFlare
         WorldSortParticipant _sortParticipant;
         MonsterDefinition _definition;
         MonsterInstanceData _instance;
+        IArchitecture _architecture;
+        SessionObjectRegistry _sessionObjects;
+        LifecycleScope _componentScope;
+        bool _despawnScheduled;
         float _lastContactDamageTime = -999f;
 
         [SerializeField]
@@ -32,7 +36,7 @@ namespace DarkFlare
 
         public IArchitecture GetArchitecture()
         {
-            return GameArchitecture.Interface;
+            return _architecture ?? GameArchitectureProvider.RequireCurrent();
         }
 
         public void Configure(MonsterDefinition definition, MonsterInstanceData instance)
@@ -52,7 +56,35 @@ namespace DarkFlare
 
         void OnEnable()
         {
-            this.RegisterEvent<ActorDiedEvent>(OnActorDied).UnRegisterWhenGameObjectDestroyed(gameObject);
+            if (_architecture == null)
+            {
+                _architecture = GameArchitectureProvider.RequireCurrent();
+                _sessionObjects = this.GetUtility<SessionObjectRegistry>();
+            }
+
+            _componentScope = ComponentLifecycle.CreateScope(
+                this,
+                "enabled",
+                this.GetCancellationTokenOnDestroy());
+            _despawnScheduled = false;
+            this.RegisterEvent<ActorDiedEvent>(OnActorDied).UnRegisterWhenDisabled(this);
+        }
+
+        void OnDisable()
+        {
+            _componentScope?.BeginStop();
+            _componentScope = null;
+            _despawnScheduled = false;
+
+            if (_rigidbody != null)
+            {
+                _rigidbody.linearVelocity = Vector2.zero;
+            }
+        }
+
+        void OnDestroy()
+        {
+            _sessionObjects?.Unregister(gameObject);
         }
 
         void FixedUpdate()
@@ -181,20 +213,25 @@ namespace DarkFlare
                 return;
             }
 
-            DespawnAfterDeathAnimation(this.GetCancellationTokenOnDestroy()).Forget();
+            if (_despawnScheduled || _componentScope == null)
+            {
+                return;
+            }
+
+            _despawnScheduled = true;
+            _componentScope.Tasks.Run(
+                "death-despawn",
+                DespawnAfterDeathAnimationAsync,
+                failurePolicy: LifecycleTaskFailurePolicy.ReportAndStopScope);
         }
 
-        async UniTaskVoid DespawnAfterDeathAnimation(CancellationToken token)
+        async UniTask DespawnAfterDeathAnimationAsync(CancellationToken token)
         {
-            bool cancelled = await UniTask.Delay(
-                    System.TimeSpan.FromSeconds(_deathDespawnDelay),
-                    cancellationToken: token)
-                .SuppressCancellationThrow();
-
-            if (!cancelled)
-            {
-                Destroy(gameObject);
-            }
+            await UniTask.Delay(
+                System.TimeSpan.FromSeconds(_deathDespawnDelay),
+                cancellationToken: token);
+            token.ThrowIfCancellationRequested();
+            Destroy(gameObject);
         }
     }
 }

@@ -12,12 +12,26 @@ namespace DarkFlare.Tests
     {
         const float SetupTimeoutSeconds = 20f;
 
+        readonly GameArchitectureTestFixture _fixture = new GameArchitectureTestFixture();
+
+        [UnitySetUp]
+        public IEnumerator SetUp()
+        {
+            yield return _fixture.Restart();
+        }
+
+        [UnityTearDown]
+        public IEnumerator TearDown()
+        {
+            yield return _fixture.Restart();
+        }
+
         [UnityTest]
         public IEnumerator MainScene_OfficialEquipmentCompletesTradeCraftAndFourSlotFlow()
         {
             yield return SceneManager.LoadSceneAsync("Main", LoadSceneMode.Single);
 
-            IArchitecture architecture = GameArchitecture.Interface;
+            IArchitecture architecture = GameArchitectureProvider.RequireCurrent();
             EconomyModel economy = architecture.GetModel<EconomyModel>();
             CraftingSystem crafting = architecture.GetSystem<CraftingSystem>();
             PlayerController player = null;

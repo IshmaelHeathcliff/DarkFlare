@@ -33,7 +33,7 @@ namespace DarkFlare
 
         public IArchitecture GetArchitecture()
         {
-            return GameArchitecture.Interface;
+            return GameArchitectureProvider.RequireCurrent();
         }
 
         void Awake()

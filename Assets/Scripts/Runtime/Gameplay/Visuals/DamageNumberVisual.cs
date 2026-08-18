@@ -20,6 +20,7 @@ namespace DarkFlare
         Tween _moveTween;
         Tween _fadeTween;
         TextMeshPro _label;
+        SessionObjectRegistry _sessionObjects;
 
         public static DamageNumberVisual Spawn(
             Vector3 worldPosition,
@@ -41,6 +42,13 @@ namespace DarkFlare
             label.sortingOrder = 0;
             DamageNumberVisual visual = instance.AddComponent<DamageNumberVisual>();
             visual._label = label;
+
+            if (GameArchitectureProvider.TryGetCurrent(out IArchitecture architecture))
+            {
+                visual._sessionObjects = architecture.GetUtility<SessionObjectRegistry>();
+                visual._sessionObjects.Register(instance);
+            }
+
             visual.Play();
             return visual;
         }
@@ -120,6 +128,11 @@ namespace DarkFlare
         void OnDisable()
         {
             StopTweens();
+        }
+
+        void OnDestroy()
+        {
+            _sessionObjects?.Unregister(gameObject);
         }
 
         void Play()

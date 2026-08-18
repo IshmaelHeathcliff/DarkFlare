@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "exceptions": [
+    {
+      "ruleId": "runtime-initialize-hook",
+      "path": "Assets/Scripts/Runtime/Core/QFramework.cs",
+      "reason": "QFramework 外部框架通过 ComparerAutoRegister 在场景加载前注册比较器，项目生命周期不接管该钩子。",
+      "removeByStage": "external-framework-replacement"
+    },
+    {
+      "ruleId": "dont-destroy-on-load",
+      "path": "Assets/Scripts/Runtime/Core/QFramework.cs",
+      "reason": "QFramework 外部框架的场景事件注销辅助对象需要跨场景存活，不属于项目 ApplicationHost。",
+      "removeByStage": "external-framework-replacement"
+    }
+  ]
+}

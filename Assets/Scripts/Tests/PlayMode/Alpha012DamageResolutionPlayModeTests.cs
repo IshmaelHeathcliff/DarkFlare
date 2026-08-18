@@ -15,6 +15,20 @@ namespace DarkFlare.Tests
             "_playerSkill",
             BindingFlags.Instance | BindingFlags.NonPublic);
 
+        readonly GameArchitectureTestFixture _fixture = new GameArchitectureTestFixture();
+
+        [UnitySetUp]
+        public IEnumerator SetUp()
+        {
+            yield return _fixture.Restart();
+        }
+
+        [UnityTearDown]
+        public IEnumerator TearDown()
+        {
+            yield return _fixture.Restart();
+        }
+
         [UnityTest]
         public IEnumerator MainScene_EquipsStartingWeaponBeforeSpawnerAndSupportsUnequipRecovery()
         {
@@ -45,7 +59,7 @@ namespace DarkFlare.Tests
             Assert.AreEqual(ProjectileDamageSource.EquippedWeapon, skill.DamageSource);
             Assert.IsEmpty(skill.BaseDamages, "武器来源技能不应保留技能基础伤害");
 
-            IArchitecture architecture = GameArchitecture.Interface;
+            IArchitecture architecture = GameArchitectureProvider.RequireCurrent();
             EquipmentModel equipment = architecture.GetModel<EquipmentModel>();
             InventoryModel inventory = architecture.GetModel<InventoryModel>();
             ItemInstance startingWeapon = equipment.GetWeapon(player.Actor);

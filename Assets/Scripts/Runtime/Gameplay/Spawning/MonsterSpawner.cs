@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
@@ -23,13 +22,20 @@ namespace DarkFlare
         float _spawnBoundsPadding = 0.5f;
 
         readonly List<MonsterController> _aliveMonsters = new List<MonsterController>();
-        CancellationTokenSource _spawnCancellation;
+        LifecycleScope _spawnScope;
+        IArchitecture _architecture;
+        bool _isSpawning;
+        uint _spawnVersion;
 
         public Collider2D WorldBounds => _worldBounds;
 
+        public MonsterSpawnDefinition SpawnDefinition => _spawnDefinition;
+
+        public bool IsSpawning => _isSpawning;
+
         public IArchitecture GetArchitecture()
         {
-            return GameArchitecture.Interface;
+            return _architecture ?? GameArchitectureProvider.RequireCurrent();
         }
 
         public void SetWorldBounds(Collider2D worldBounds)
@@ -37,40 +43,113 @@ namespace DarkFlare
             _worldBounds = worldBounds;
         }
 
-        void OnEnable()
+        public void PrepareForInitialization(MonsterSpawnDefinition spawnDefinition)
         {
-            _spawnCancellation = new CancellationTokenSource();
-            SpawnLoop(_spawnCancellation.Token).Forget();
+            StopSpawning();
+            _spawnDefinition = spawnDefinition;
+
+            if (gameObject.activeSelf)
+            {
+                gameObject.SetActive(false);
+            }
+        }
+
+        public void BeginSpawning()
+        {
+            if (_isSpawning)
+            {
+                return;
+            }
+
+            if (_spawnDefinition == null)
+            {
+                throw new System.InvalidOperationException("MonsterSpawner 缺少生成定义");
+            }
+
+            if (!isActiveAndEnabled)
+            {
+                throw new System.InvalidOperationException("MonsterSpawner 必须先启用再开始生成");
+            }
+
+            _spawnScope = ComponentLifecycle.CreateScope(
+                this,
+                "spawn-loop",
+                this.GetCancellationTokenOnDestroy());
+            _architecture = GameArchitectureProvider.RequireCurrent();
+            _isSpawning = true;
+            uint version = ++_spawnVersion;
+            IArchitecture architecture = _architecture;
+            _spawnScope.Tasks.Run(
+                "spawn-loop",
+                token => SpawnLoopAsync(version, architecture, token),
+                failurePolicy: LifecycleTaskFailurePolicy.ReportAndStopScope);
+        }
+
+        public void StopSpawning()
+        {
+            _isSpawning = false;
+            _spawnVersion++;
+            _spawnScope?.BeginStop();
+            _spawnScope = null;
         }
 
         void OnDisable()
         {
-            _spawnCancellation?.Cancel();
-            _spawnCancellation?.Dispose();
-            _spawnCancellation = null;
+            StopSpawning();
         }
 
-        async UniTaskVoid SpawnLoop(CancellationToken token)
+        async UniTask SpawnLoopAsync(
+            uint version,
+            IArchitecture architecture,
+            System.Threading.CancellationToken token)
         {
-            while (!token.IsCancellationRequested)
+            try
             {
-                CleanupAliveList();
+                await UniTask.Yield(PlayerLoopTiming.Update, token);
 
-                if (_aliveMonsters.Count < _spawnDefinition.MaxAliveCount)
+                while (!token.IsCancellationRequested)
                 {
-                    SpawnOne();
+                    CleanupAliveList();
+
+                    if (_aliveMonsters.Count < _spawnDefinition.MaxAliveCount)
+                    {
+                        SpawnOne(architecture);
+                    }
+
+                    await UniTask.Delay(
+                        System.TimeSpan.FromSeconds(_spawnDefinition.SpawnInterval),
+                        cancellationToken: token);
+                }
+            }
+            catch (System.OperationCanceledException) when (token.IsCancellationRequested)
+            {
+                throw;
+            }
+            catch
+            {
+                if (ApplicationHost.TryGetCurrent(out ApplicationHost host))
+                {
+                    host.RequestCurrentSessionStop("monster-spawner-failure");
                 }
 
-                await UniTask.Delay(System.TimeSpan.FromSeconds(_spawnDefinition.SpawnInterval), cancellationToken: token);
+                throw;
+            }
+            finally
+            {
+                if (version == _spawnVersion)
+                {
+                    _isSpawning = false;
+                    _spawnScope = null;
+                }
             }
         }
 
-        void SpawnOne()
+        void SpawnOne(IArchitecture architecture)
         {
-            GameplayRandomSystem randomSystem = this.GetSystem<GameplayRandomSystem>();
+            GameplayRandomSystem randomSystem = architecture.GetSystem<GameplayRandomSystem>();
             int positionSeed = randomSystem.NextSeed(GameplayRandomChannel.SpawnPosition);
             int monsterSeed = randomSystem.NextSeed(GameplayRandomChannel.MonsterInstance);
-            MonsterController monster = this.SendCommand(
+            MonsterController monster = architecture.SendCommand(
                 new SpawnMonsterCommand(_spawnDefinition, monsterSeed, GetSpawnPosition(new System.Random(positionSeed))));
 
             if (monster != null)

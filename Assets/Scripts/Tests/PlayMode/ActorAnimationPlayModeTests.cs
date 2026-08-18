@@ -10,6 +10,20 @@ namespace DarkFlare.Tests
 {
     public class ActorAnimationPlayModeTests
     {
+        readonly GameArchitectureTestFixture _fixture = new GameArchitectureTestFixture();
+
+        [UnitySetUp]
+        public IEnumerator SetUp()
+        {
+            yield return _fixture.Restart();
+        }
+
+        [UnityTearDown]
+        public IEnumerator TearDown()
+        {
+            yield return _fixture.Restart();
+        }
+
         [UnityTest]
         public IEnumerator MainScene_ActorEventsSwitchAttackHitDeathAndRevive()
         {
@@ -38,7 +52,7 @@ namespace DarkFlare.Tests
             Animator animator = player.GetComponent<Animator>();
             SpriteRenderer renderer = player.GetComponent<SpriteRenderer>();
             Collider2D collider = player.GetComponent<Collider2D>();
-            IArchitecture architecture = GameArchitecture.Interface;
+            IArchitecture architecture = GameArchitectureProvider.RequireCurrent();
 
             Assert.IsNotNull(animator);
             Assert.IsNotNull(renderer);

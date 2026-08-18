@@ -24,7 +24,12 @@ namespace DarkFlare
         CharacterDefinition _definition;
         ProjectileSkillDefinition _defaultSkill;
         GameInput _gameInput;
-        CancellationTokenSource _skillLoopCancellation;
+        IArchitecture _architecture;
+        SessionObjectRegistry _sessionObjects;
+        LifecycleScope _componentScope;
+        bool _autoCastRunning;
+        bool _respawnScheduled;
+        uint _enableVersion;
         Vector2 _lastAimDirection = Vector2.right;
         Vector3 _spawnPosition;
 
@@ -32,7 +37,7 @@ namespace DarkFlare
 
         public IArchitecture GetArchitecture()
         {
-            return GameArchitecture.Interface;
+            return _architecture ?? GameArchitectureProvider.RequireCurrent();
         }
 
         public void Configure(CharacterDefinition definition, ProjectileSkillDefinition skill)
@@ -42,31 +47,45 @@ namespace DarkFlare
             _spawnPosition = transform.position;
             _actor.ConfigureFromCharacter(_definition, ActorTeam.Player);
             _sortParticipant?.ConfigureIdentity(WorldSortCategory.Player, _actor.ActorId);
-            AutoCastLoop(_skillLoopCancellation.Token).Forget();
+            TryStartAutoCast();
         }
 
         void Awake()
         {
             EnsureComponents();
+            _architecture = GameArchitectureProvider.RequireCurrent();
             _gameInput = this.GetUtility<GameInput>();
+            _sessionObjects = this.GetUtility<SessionObjectRegistry>();
         }
 
         void OnEnable()
         {
-            this.RegisterEvent<ActorDiedEvent>(OnActorDied).UnRegisterWhenGameObjectDestroyed(gameObject);
-            _skillLoopCancellation = new CancellationTokenSource();
+            _enableVersion++;
+            _componentScope = ComponentLifecycle.CreateScope(
+                this,
+                "enabled",
+                this.GetCancellationTokenOnDestroy());
+            this.RegisterEvent<ActorDiedEvent>(OnActorDied).UnRegisterWhenDisabled(this);
+            TryStartAutoCast();
         }
 
         void OnDisable()
         {
-            _skillLoopCancellation?.Cancel();
-            _skillLoopCancellation?.Dispose();
-            _skillLoopCancellation = null;
+            _enableVersion++;
+            _componentScope?.BeginStop();
+            _componentScope = null;
+            _autoCastRunning = false;
+            _respawnScheduled = false;
 
             if (_rigidbody != null)
             {
                 _rigidbody.linearVelocity = Vector2.zero;
             }
+        }
+
+        void OnDestroy()
+        {
+            _sessionObjects?.Unregister(gameObject);
         }
 
         void FixedUpdate()
@@ -130,11 +149,44 @@ namespace DarkFlare
             return _actor.Stats.GetValue(StatIds.MoveSpeed);
         }
 
-        async UniTaskVoid AutoCastLoop(CancellationToken token)
+        void TryStartAutoCast()
+        {
+            if (_autoCastRunning
+                || _defaultSkill == null
+                || !isActiveAndEnabled
+                || _componentScope == null
+                || _componentScope.State != LifecycleScopeState.Active)
+            {
+                return;
+            }
+
+            _autoCastRunning = true;
+            uint version = _enableVersion;
+            _componentScope.Tasks.Run(
+                "auto-cast",
+                async token =>
+                {
+                    try
+                    {
+                        await AutoCastLoopAsync(token);
+                    }
+                    finally
+                    {
+                        if (version == _enableVersion)
+                        {
+                            _autoCastRunning = false;
+                        }
+                    }
+                },
+                failurePolicy: LifecycleTaskFailurePolicy.ReportAndStopScope);
+        }
+
+        async UniTask AutoCastLoopAsync(CancellationToken token)
         {
             while (!token.IsCancellationRequested)
             {
                 await UniTask.Delay(System.TimeSpan.FromSeconds(_defaultSkill.Cooldown), cancellationToken: token);
+                token.ThrowIfCancellationRequested();
                 TryFireProjectile();
             }
         }
@@ -170,12 +222,36 @@ namespace DarkFlare
                 return;
             }
 
-            RespawnAfterDelay(this.GetCancellationTokenOnDestroy()).Forget();
+            if (_respawnScheduled || _componentScope == null)
+            {
+                return;
+            }
+
+            _respawnScheduled = true;
+            uint version = _enableVersion;
+            _componentScope.Tasks.Run(
+                "respawn-delay",
+                async token =>
+                {
+                    try
+                    {
+                        await RespawnAfterDelayAsync(token);
+                    }
+                    finally
+                    {
+                        if (version == _enableVersion)
+                        {
+                            _respawnScheduled = false;
+                        }
+                    }
+                },
+                failurePolicy: LifecycleTaskFailurePolicy.ReportAndStopScope);
         }
 
-        async UniTaskVoid RespawnAfterDelay(CancellationToken token)
+        async UniTask RespawnAfterDelayAsync(CancellationToken token)
         {
             await UniTask.Delay(System.TimeSpan.FromSeconds(_respawnDelay), cancellationToken: token);
+            token.ThrowIfCancellationRequested();
             this.SendCommand(new ReviveActorCommand(_actor, _spawnPosition));
         }
     }

@@ -10,18 +10,19 @@ namespace DarkFlare.Tests
     public sealed class Alpha017WorldSortingPlayModeTests
     {
         readonly List<GameObject> _objects = new List<GameObject>();
+        readonly GameArchitectureTestFixture _fixture = new GameArchitectureTestFixture();
 
         IArchitecture _architecture;
 
-        [SetUp]
-        public void SetUp()
+        [UnitySetUp]
+        public IEnumerator SetUp()
         {
-            GameArchitecture.Interface.Deinit();
-            _architecture = GameArchitecture.Interface;
+            yield return _fixture.Restart();
+            _architecture = _fixture.Architecture;
         }
 
-        [TearDown]
-        public void TearDown()
+        [UnityTearDown]
+        public IEnumerator TearDown()
         {
             for (int i = _objects.Count - 1; i >= 0; i--)
             {
@@ -32,8 +33,8 @@ namespace DarkFlare.Tests
             }
 
             _objects.Clear();
-            _architecture?.Deinit();
             _architecture = null;
+            yield return _fixture.Restart();
         }
 
         [UnityTest]

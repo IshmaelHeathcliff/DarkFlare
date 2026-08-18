@@ -1,0 +1,365 @@
+using System;
+using System.Collections;
+using System.Text.RegularExpressions;
+using System.Threading;
+using Cysharp.Threading.Tasks;
+using NUnit.Framework;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.TestTools;
+
+namespace DarkFlare.Tests
+{
+    public sealed class ApplicationLifecyclePlayModeTests
+    {
+        const float TimeoutSeconds = 20f;
+
+        readonly GameArchitectureTestFixture _fixture = new GameArchitectureTestFixture();
+
+        [UnitySetUp]
+        public IEnumerator SetUp()
+        {
+            yield return _fixture.Restart();
+        }
+
+        [UnityTearDown]
+        public IEnumerator TearDown()
+        {
+            Time.timeScale = 1f;
+            yield return _fixture.Restart();
+        }
+
+        [UnityTest]
+        public IEnumerator MainColdStart_HasUniqueHostArchitecturePlayerAndCommittedSpawner()
+        {
+            yield return SceneManager.LoadSceneAsync("Main", LoadSceneMode.Single);
+            yield return WaitForRunningSession();
+
+            ApplicationHost host = ApplicationHost.Current;
+            ApplicationHost[] hosts = UnityEngine.Object.FindObjectsByType<ApplicationHost>(
+                FindObjectsInactive.Include,
+                FindObjectsSortMode.None);
+            PlayerController[] players = UnityEngine.Object.FindObjectsByType<PlayerController>(
+                FindObjectsInactive.Exclude,
+                FindObjectsSortMode.None);
+            MonsterSpawner spawner = UnityEngine.Object.FindAnyObjectByType<MonsterSpawner>();
+
+            Assert.AreEqual(1, hosts.Length, "冷启动后必须只有一个 ApplicationHost");
+            Assert.AreEqual(1, players.Length, "冷启动后必须只有一个有效玩家");
+            Assert.IsNotNull(host.CurrentSession);
+            Assert.AreEqual(GameSessionState.Running, host.CurrentSession.State);
+            Assert.AreSame(
+                host.CurrentSession.Architecture,
+                GameArchitectureProvider.RequireCurrent());
+            Assert.IsNotNull(spawner);
+            Assert.IsTrue(spawner.gameObject.activeInHierarchy);
+            Assert.IsTrue(spawner.IsSpawning, "刷怪器必须只在初始化事务提交后进入运行状态");
+        }
+
+        [UnityTest]
+        public IEnumerator ExternalInitializationCancellation_RollsBackAndNeverCommits()
+        {
+            ApplicationHost host = ApplicationHost.Current;
+            BlockingInitializer initializer = new BlockingInitializer();
+            LifecycleScope cancellationOwner = LifecycleScope.CreateRoot(
+                "PlayMode-InitializationCancellation");
+            UniTask<LifecycleResult> initialization = host.InitializeCurrentSessionAsync(
+                initializer,
+                cancellationOwner.Token);
+
+            Assert.IsTrue(initializer.Started);
+            cancellationOwner.BeginStop();
+            LifecycleResult result = default;
+            yield return initialization.ToCoroutine(value => result = value);
+            yield return cancellationOwner.StopAsync().ToCoroutine();
+
+            Assert.AreEqual(LifecycleResultCode.Cancelled, result.Code);
+            Assert.IsFalse(initializer.Committed);
+            Assert.AreEqual(1, initializer.RollbackCount);
+            Assert.IsNotNull(host.CurrentSession);
+            Assert.AreEqual(GameSessionState.None, host.CurrentSession.State);
+            Assert.IsFalse(GameArchitectureProvider.HasCurrent);
+        }
+
+        [UnityTest]
+        public IEnumerator ConcurrentInitializationRequest_IsRejectedSynchronously()
+        {
+            ApplicationHost host = ApplicationHost.Current;
+            BlockingInitializer initializer = new BlockingInitializer();
+            LifecycleScope cancellationOwner = LifecycleScope.CreateRoot(
+                "PlayMode-ConcurrentInitialization");
+            bool callbackReceived = false;
+            LifecycleResult callbackResult = default;
+            LifecycleResult firstSubmission = host.BeginCurrentSessionInitialization(
+                initializer,
+                cancellationOwner.Token,
+                result =>
+                {
+                    callbackResult = result;
+                    callbackReceived = true;
+                });
+            LifecycleResult secondSubmission = host.BeginCurrentSessionInitialization(
+                new BlockingInitializer());
+
+            Assert.IsTrue(firstSubmission.IsSuccess, firstSubmission.Message);
+            Assert.AreEqual(
+                LifecycleResultCode.OperationInProgress,
+                secondSubmission.Code);
+            cancellationOwner.BeginStop();
+            float timeout = Time.realtimeSinceStartup + TimeoutSeconds;
+
+            while (!callbackReceived && Time.realtimeSinceStartup < timeout)
+            {
+                yield return null;
+            }
+
+            yield return cancellationOwner.StopAsync().ToCoroutine();
+            Assert.IsTrue(callbackReceived, "首个初始化请求取消后未返回结果");
+            Assert.AreEqual(LifecycleResultCode.Cancelled, callbackResult.Code);
+            Assert.AreEqual(1, initializer.RollbackCount);
+            Assert.IsFalse(GameArchitectureProvider.HasCurrent);
+        }
+
+        [UnityTest]
+        public IEnumerator PreCancelledInitializationRequest_ReturnsCallbackExactlyOnce()
+        {
+            ApplicationHost host = ApplicationHost.Current;
+            BlockingInitializer initializer = new BlockingInitializer();
+            LifecycleScope cancellationOwner = LifecycleScope.CreateRoot(
+                "PlayMode-PreCancelledInitialization");
+            CancellationToken cancelledToken = cancellationOwner.Token;
+            cancellationOwner.BeginStop();
+            int callbackCount = 0;
+            LifecycleResult callbackResult = default;
+            LifecycleResult submission = host.BeginCurrentSessionInitialization(
+                initializer,
+                cancelledToken,
+                result =>
+                {
+                    callbackCount++;
+                    callbackResult = result;
+                });
+
+            Assert.IsTrue(submission.IsSuccess, submission.Message);
+            float timeout = Time.realtimeSinceStartup + TimeoutSeconds;
+
+            while (callbackCount == 0 && Time.realtimeSinceStartup < timeout)
+            {
+                yield return null;
+            }
+
+            yield return cancellationOwner.StopAsync().ToCoroutine();
+            Assert.AreEqual(1, callbackCount);
+            Assert.AreEqual(LifecycleResultCode.Cancelled, callbackResult.Code);
+            Assert.IsFalse(initializer.Started);
+        }
+
+        [UnityTest]
+        public IEnumerator InvalidNewGameConfiguration_RollsBackWithoutRuntimeObjects()
+        {
+            LogAssert.Expect(
+                LogType.Error,
+                new Regex("\\[ApplicationHost\\] 生命周期任务失败:.*initialize:new-game"));
+            ApplicationHost host = ApplicationHost.Current;
+            GameplaySceneConfiguration configuration = new GameplaySceneConfiguration(
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                0,
+                Vector3.zero,
+                null,
+                null,
+                false,
+                0);
+            LifecycleResult result = default;
+            yield return host.InitializeCurrentSessionAsync(
+                    new NewGameSessionInitializer(configuration))
+                .ToCoroutine(value => result = value);
+
+            Assert.AreEqual(LifecycleResultCode.Failed, result.Code);
+            Assert.IsInstanceOf<GameplaySceneConfigurationException>(result.Exception);
+            Assert.IsNotNull(host.CurrentSession);
+            Assert.AreEqual(GameSessionState.None, host.CurrentSession.State);
+            Assert.IsFalse(GameArchitectureProvider.HasCurrent);
+            Assert.AreEqual(0, UnityEngine.Object.FindObjectsByType<PlayerController>(
+                FindObjectsInactive.Include,
+                FindObjectsSortMode.None).Length);
+            Assert.AreEqual(0, UnityEngine.Object.FindObjectsByType<MonsterController>(
+                FindObjectsInactive.Include,
+                FindObjectsSortMode.None).Length);
+        }
+
+        [UnityTest]
+        public IEnumerator ConcurrentStop_IsIdempotentAndClearsOnlyTheCapturedSession()
+        {
+            ApplicationHost host = ApplicationHost.Current;
+            UniTask<LifecycleResult> firstStop = host.StopCurrentSessionAsync();
+            UniTask<LifecycleResult> secondStop = host.StopCurrentSessionAsync();
+            LifecycleResult firstResult = default;
+            LifecycleResult secondResult = default;
+
+            yield return firstStop.ToCoroutine(value => firstResult = value);
+            yield return secondStop.ToCoroutine(value => secondResult = value);
+
+            Assert.IsTrue(firstResult.IsSuccess, firstResult.Message);
+            Assert.IsTrue(secondResult.IsSuccess, secondResult.Message);
+            Assert.IsNull(host.CurrentSession);
+            Assert.IsFalse(GameArchitectureProvider.HasCurrent);
+        }
+
+        [UnityTest]
+        public IEnumerator ThreeSessionRestarts_DoNotDuplicateHostPlayerOrArchitecture()
+        {
+            int previousGeneration = GameArchitectureProvider.Generation - 1;
+
+            for (int i = 0; i < 3; i++)
+            {
+                if (i > 0)
+                {
+                    yield return _fixture.Restart();
+                }
+
+                yield return SceneManager.LoadSceneAsync("Main", LoadSceneMode.Single);
+                yield return WaitForRunningSession();
+
+                Assert.Greater(GameArchitectureProvider.Generation, previousGeneration);
+                previousGeneration = GameArchitectureProvider.Generation;
+                Assert.AreEqual(1, UnityEngine.Object.FindObjectsByType<ApplicationHost>(
+                    FindObjectsInactive.Include,
+                    FindObjectsSortMode.None).Length);
+                Assert.AreEqual(1, UnityEngine.Object.FindObjectsByType<PlayerController>(
+                    FindObjectsInactive.Exclude,
+                    FindObjectsSortMode.None).Length);
+            }
+        }
+
+        [UnityTest]
+        public IEnumerator DirectMainReload_CoordinatesStopCreateBindAndInitialize()
+        {
+            yield return SceneManager.LoadSceneAsync("Main", LoadSceneMode.Single);
+            yield return WaitForRunningSession();
+            int firstGeneration = GameArchitectureProvider.Generation;
+
+            yield return SceneManager.LoadSceneAsync("Main", LoadSceneMode.Single);
+            yield return WaitForRunningSession();
+
+            Assert.Greater(GameArchitectureProvider.Generation, firstGeneration);
+            Assert.AreEqual(1, UnityEngine.Object.FindObjectsByType<ApplicationHost>(
+                FindObjectsInactive.Include,
+                FindObjectsSortMode.None).Length);
+            Assert.AreEqual(1, UnityEngine.Object.FindObjectsByType<PlayerController>(
+                FindObjectsInactive.Exclude,
+                FindObjectsSortMode.None).Length);
+            Assert.AreEqual(GameSessionState.Running, ApplicationHost.Current.CurrentSession.State);
+        }
+
+        [UnityTest]
+        public IEnumerator UnloadingBoundMainScene_StopsSessionAndReleasesArchitecture()
+        {
+            yield return SceneManager.LoadSceneAsync("Main", LoadSceneMode.Single);
+            yield return WaitForRunningSession();
+
+            Scene mainScene = SceneManager.GetSceneByName("Main");
+            Scene emptyScene = SceneManager.CreateScene("LifecycleEmptyScene");
+            SceneManager.SetActiveScene(emptyScene);
+            yield return SceneManager.UnloadSceneAsync(mainScene);
+            yield return WaitForNoCurrentSession();
+
+            Assert.IsFalse(GameArchitectureProvider.HasCurrent);
+            Assert.AreEqual(0, UnityEngine.Object.FindObjectsByType<PlayerController>(
+                FindObjectsInactive.Include,
+                FindObjectsSortMode.None).Length);
+        }
+
+        [UnityTest]
+        public IEnumerator DestroyedSessionObject_UnregistersFromRegistry()
+        {
+            SessionObjectRegistry registry = GameArchitectureProvider.RequireCurrent()
+                .GetUtility<SessionObjectRegistry>();
+            int countBefore = registry.Count;
+            DamageNumberVisual visual = DamageNumberVisual.Spawn(
+                Vector3.zero,
+                10f,
+                ActorTeam.Player,
+                CombatTextKind.Damage);
+
+            Assert.AreEqual(countBefore + 1, registry.Count);
+            UnityEngine.Object.Destroy(visual.gameObject);
+            yield return null;
+
+            Assert.AreEqual(countBefore, registry.Count);
+        }
+
+        static IEnumerator WaitForRunningSession()
+        {
+            float timeout = Time.realtimeSinceStartup + TimeoutSeconds;
+
+            while (Time.realtimeSinceStartup < timeout)
+            {
+                if (ApplicationHost.TryGetCurrent(out ApplicationHost host)
+                    && host.CurrentSession != null
+                    && host.CurrentSession.State == GameSessionState.Running)
+                {
+                    yield break;
+                }
+
+                yield return null;
+            }
+
+            Assert.Fail("Session 未在时限内进入 Running");
+        }
+
+        static IEnumerator WaitForNoCurrentSession()
+        {
+            float timeout = Time.realtimeSinceStartup + TimeoutSeconds;
+
+            while (Time.realtimeSinceStartup < timeout)
+            {
+                if (ApplicationHost.TryGetCurrent(out ApplicationHost host)
+                    && host.CurrentSession == null)
+                {
+                    yield break;
+                }
+
+                yield return null;
+            }
+
+            Assert.Fail("场景卸载后 Session 未在时限内停止");
+        }
+
+        sealed class BlockingInitializer : IGameSessionInitializer
+        {
+            public string Name => "blocking-test";
+
+            public bool Started { get; private set; }
+
+            public bool Committed { get; private set; }
+
+            public int RollbackCount { get; private set; }
+
+            public async UniTask InitializeAsync(
+                SessionInitializationContext context,
+                CancellationToken token)
+            {
+                Started = true;
+                await UniTask.Delay(
+                    TimeSpan.FromSeconds(TimeoutSeconds),
+                    DelayType.Realtime,
+                    cancellationToken: token);
+                Committed = true;
+            }
+
+            public UniTask RollbackAsync(
+                SessionInitializationContext context,
+                CancellationToken token)
+            {
+                RollbackCount++;
+                return UniTask.CompletedTask;
+            }
+        }
+    }
+}

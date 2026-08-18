@@ -29,12 +29,27 @@ namespace DarkFlare.Tests
             "_playerSkill",
             BindingFlags.Instance | BindingFlags.NonPublic);
 
+        readonly GameArchitectureTestFixture _fixture = new GameArchitectureTestFixture();
+
+        [UnitySetUp]
+        public IEnumerator SetUp()
+        {
+            yield return _fixture.Restart();
+        }
+
+        [UnityTearDown]
+        public IEnumerator TearDown()
+        {
+            yield return _fixture.Restart();
+        }
+
         [UnityTest]
         public IEnumerator MainScene_SameFixedSeedReplaysMonsterHealthDamageAndLoot()
         {
             RunSnapshot first = null;
             yield return CaptureMainRun(snapshot => first = snapshot);
 
+            yield return _fixture.Restart();
             RunSnapshot second = null;
             yield return CaptureMainRun(snapshot => second = snapshot);
 
@@ -60,14 +75,19 @@ namespace DarkFlare.Tests
             Assert.IsNotNull(firstBootstrap);
             Assert.IsNotNull(UseFixedSeedField, "未找到固定种子开关字段");
             Assert.IsFalse((bool)UseFixedSeedField.GetValue(firstBootstrap), "Main 场景的固定种子开关应默认关闭");
-            int firstRootSeed = GameArchitecture.Interface.GetSystem<GameplayRandomSystem>().RootSeed;
+            int firstRootSeed = GameArchitectureProvider.RequireCurrent()
+                .GetSystem<GameplayRandomSystem>()
+                .RootSeed;
 
+            yield return _fixture.Restart();
             yield return SceneManager.LoadSceneAsync("Main", LoadSceneMode.Single);
             yield return null;
             CombatPrototypeBootstrap secondBootstrap = UnityEngine.Object.FindAnyObjectByType<CombatPrototypeBootstrap>();
             Assert.IsNotNull(secondBootstrap);
             Assert.IsFalse((bool)UseFixedSeedField.GetValue(secondBootstrap), "Main 场景的固定种子开关应默认关闭");
-            int secondRootSeed = GameArchitecture.Interface.GetSystem<GameplayRandomSystem>().RootSeed;
+            int secondRootSeed = GameArchitectureProvider.RequireCurrent()
+                .GetSystem<GameplayRandomSystem>()
+                .RootSeed;
 
             Assert.AreNotEqual(firstRootSeed, secondRootSeed, "关闭固定种子后，不同 Main 启动应生成不同根种子");
             Debug.Log($"[Phase3RandomizationPlayMode] 随机启动根种子已变化: {firstRootSeed} -> {secondRootSeed}");
@@ -125,11 +145,13 @@ namespace DarkFlare.Tests
             }
 
             Assert.AreEqual(MonsterSampleCount, monsters.Count, "Main 场景未在时限内生成足够的怪物样本");
-            GameplayRandomSystem randomSystem = GameArchitecture.Interface.GetSystem<GameplayRandomSystem>();
+            GameplayRandomSystem randomSystem = GameArchitectureProvider.RequireCurrent()
+                .GetSystem<GameplayRandomSystem>();
             randomSystem.Configure(true, FixedSeed);
 
             RunSnapshot result = new RunSnapshot(monsters);
-            EquipmentModel equipment = GameArchitecture.Interface.GetModel<EquipmentModel>();
+            EquipmentModel equipment = GameArchitectureProvider.RequireCurrent()
+                .GetModel<EquipmentModel>();
             MonsterDefinition monsterDefinition = FindMonsterDefinition("wasteland_wraith");
             Assert.IsNotNull(monsterDefinition, "Main 场景未生成用于伤害和掉落复现的荒原游魂");
             Assert.IsNotNull(monsterDefinition.LootTable, "Main 场景怪物未配置掉落表");

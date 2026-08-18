@@ -11,7 +11,7 @@
 
 玩家可在场景内持续战斗和获取物品，通过 Tab / 手柄 Start 打开随身背包，也可接近商人或打造台后使用 E / 手柄北键进入对应功能。菜单打开时暂停玩法模拟，关闭后恢复战斗与 Gameplay 输入。
 
-当前成果用于验证战斗、物品、经济与构筑之间的闭环，仍是单场景功能原型。装备已扩展为武器、护甲、左戒指和右戒指四槽，正式内容池包含七件装备、25 个物品词条、10 个怪物词条和三种怪物；地图、商人、打造台、三种怪物、七件装备与运行时 UI 已完成首版视觉接入。
+当前成果用于验证战斗、物品、经济与构筑之间的闭环，仍是单场景功能原型。`alpha 0.2.0` 已为该循环补上唯一应用宿主、Session 作用域、新游戏事务和统一退出，不代表存档、本地化或完整 SceneFlow 已完成。装备已扩展为武器、护甲、左戒指和右戒指四槽，正式内容池包含七件装备、25 个物品词条、10 个怪物词条和三种怪物；地图、商人、打造台、三种怪物、七件装备与运行时 UI 已完成首版视觉接入。
 
 ## 阶段 0 视觉切片
 
@@ -29,13 +29,19 @@
 
 ## 启动与运行流程
 
-1. `CombatPrototypeBootstrap` 先配置并记录随机根种子，再预热玩家、怪物、投射物、掉落物 Addressable Prefab 和七件装备图标，初始化商人、打造配置与玩家初始金币。
-2. `SpawnSystem` 生成玩家，`MonsterSpawner` 使用独立位置与实例种子持续生成怪物；相机随后绑定玩家。
-3. 玩家和怪物统一注册到 `CombatModel`，攻击通过 Command 进入 `CombatSystem` 和 `DamageCalculator`；投射物生成或怪物接触攻击成功后发送 `ActorAttackedEvent`，伤害、死亡与复活沿用 `ActorDamagedEvent`、`ActorDiedEvent`、`ActorRevivedEvent` 驱动 Animator。生命 / 法力变化另由统一资源事件驱动 HUD 与调试。
-4. 怪物死亡后，`LootSystem` 先执行表级掉落概率，成功后才按条目权重生成 `ItemInstance` 并实例化世界掉落物。
-5. 玩家触碰掉落物时，`PickupLootCommand` 尝试把物品放入 10×6 背包；背包无空间时保留世界掉落物。
-6. 玩家可在背包内选择物品和目标槽并发送 `EquipItemCommand`，也可通过 `UnequipItemCommand` 卸下。`EquipmentSystem` 原子提交背包与四槽状态，并从完整 Loadout 重建角色装备效果。
-7. 玩家接近商人或打造台后，可在对应菜单上下文中买卖、打造和装备；关闭菜单后继续战斗，验证金币、物品、词条和伤害变化。
+1. `ApplicationBootstrap` 在 `BeforeSceneLoad` 创建唯一 `ApplicationHost`。宿主建立 Application / Profile 作用域和待初始化 Session，`GameArchitectureProvider` 为该 Session 创建唯一 `GameArchitecture`。
+2. `Main.unity` 中的 `CombatPrototypeBootstrap` 组装 `GameplaySceneConfiguration`，请求宿主绑定当前场景并运行 `NewGameSessionInitializer`；Bootstrap 不再直接创建或销毁架构。
+3. 初始化事务先验证场景与配置，保持刷怪器关闭并配置随机根种子，再并行预热玩家、怪物、投射物、掉落物 Addressable Prefab 和七件装备图标。Prefab 的同一 GUID 并发请求共享单飞任务；图标在单次预热请求内按 GUID 去重，加载器保存并精确释放实际句柄。
+4. 事务通过 `SpawnSystem` 生成玩家，发放并装备初始武器，初始化商人、打造配置和初始金币，绑定摄像机并把 Session 运行时对象登记到 `SessionObjectRegistry`；最后提交并启用 `MonsterSpawner`，Session 进入 `Running`。
+5. 玩家和怪物统一注册到 `CombatModel`，攻击通过 Command 进入 `CombatSystem` 和 `DamageCalculator`；投射物生成或怪物接触攻击成功后发送 `ActorAttackedEvent`，伤害、死亡与复活沿用 `ActorDamagedEvent`、`ActorDiedEvent`、`ActorRevivedEvent` 驱动 Animator。生命 / 法力变化另由统一资源事件驱动 HUD 与调试。
+6. 怪物死亡后，`LootSystem` 先执行表级掉落概率，成功后才按条目权重生成 `ItemInstance` 并实例化世界掉落物。
+7. 玩家触碰掉落物时，`PickupLootCommand` 尝试把物品放入 10×6 背包；背包无空间时保留世界掉落物。
+8. 玩家可在背包内选择物品和目标槽并发送 `EquipItemCommand`，也可通过 `UnequipItemCommand` 卸下。`EquipmentSystem` 原子提交背包与四槽状态，并从完整 Loadout 重建角色装备效果。
+9. 玩家接近商人或打造台后，可在对应菜单上下文中买卖、打造和装备；关闭菜单后继续战斗，验证金币、物品、词条和伤害变化。
+
+初始化被取消或失败时，事务会停止刷怪、解除场景绑定、撤销本次初始状态并释放已经登记的对象与资源，未提交的玩家和初始发放不会残留。绑定场景卸载时，宿主按 Component / Scene / Session 顺序取消任务并清理对象，再销毁架构。直接重新加载 `Main` 也通过同一宿主串行停止旧 Session、创建并绑定新 Session；这只是当前单场景兼容合同，不是通用 SceneFlow。
+
+完整生命周期、异常和停止超时规则见[应用生命周期与会话作用域](./infrastructure/application-lifecycle.md)。
 
 ## 阶段 1 UX 快速改进
 
@@ -118,7 +124,7 @@
 
 | 模块 | 主要入口 | 当前职责 |
 | --- | --- | --- |
-| 启动与生成 | `CombatPrototypeBootstrap`、`SpawnSystem`、`MonsterSpawner` | 预热资源、初始化配置、生成玩家 / 怪物 / 投射物 |
+| 生命周期、启动与生成 | `ApplicationHost`、`GameArchitectureProvider`、`NewGameSessionInitializer`、`CombatPrototypeBootstrap`、`SpawnSystem`、`MonsterSpawner` | 拥有作用域与架构，执行可回滚的新游戏事务，预热资源并生成玩家 / 怪物 / 投射物 |
 | 战斗 | `CombatModel`、`CombatSystem`、`DamageCalculator`、`AttackSnapshotFactory` | Actor 注册、攻击快照、伤害结算与生死状态 |
 | 资源 | `CombatActor`、`CombatSystem`、`ResourceRegenerationSystem` | 当前生命 / 法力、资源变更事件、技能耗蓝与统一恢复节拍 |
 | 怪物移动与碰撞 | `MonsterController`、`MonsterSteeringCalculator`、`GameplayPhysicsLayers` | 接近停止、同阵营软分离、角色与世界的 Layer 碰撞合同 |
@@ -171,12 +177,13 @@ Prefab 通过 Addressables 预热和实例化，首版不使用 `Resources` 或�
 - alpha 0.1.3 全量 EditMode 148/148 通过；PlayMode 17 项中 15 项通过、2 项 Input System 上游既有用例按标记跳过、0 失败。12 只怪物四方向脱困、WorldObstacle 阻挡、Default Trigger 与迁移幂等性专项均通过。
 - alpha 0.1.4 专项 EditMode 6/6、Main PlayMode 1/1 通过；全量 EditMode 156/156 通过，PlayMode 18 项中 16 项通过、2 项 Input System 上游既有用例按标记跳过、0 失败。四个相关程序集构建零错误，三档 UI 布局回归通过，真实 Main 停止后的 Console 为零错误。
 - alpha 0.1.5 主属性专项 6/6、怪物词条纯领域专项 6/6、正式内容专项 13/13、怪物词条表现 PlayMode 2/2 通过；全量 EditMode 176/176 通过，PlayMode 20 项中 18 项通过、2 项 Input System 上游既有用例按标记跳过、0 失败。Main 固定种子 `24681357` 的前 12 个怪物、词条、攻击与掉落双次重放一致，四个相关程序集构建零错误。
+- alpha 0.2.0 全量 EditMode `255/255`、项目自有 PlayMode `45/45` 通过，Unity 脚本编译 0 error。PlayMode 完整运行共 `49` 项，`47` 项通过、`0` 失败，另有 `2` 项 Input System 包集成测试因上游 issue 1252825 按既有标记跳过。latest-wins 场景请求、挂起回滚有界收敛、后代 Abandoned 污点隔离、同场景 Running Session 组件绑定、架构 lease / generation 隔离和旧 Registry 精确注销专项均通过。最终修复后两次真实 Play 均达到 Application `Ready`、Session `Running` 且 lease 有效，宿主、玩家和已提交刷怪器每次各 `1` 个；每次退出后的 Console Error 均为 0。
 
 以上数据是首版收尾时的验证记录；后续改动仍应重新运行相关测试和 Play 流程。
 
 ## 当前边界
 
-- 仅有 `Main.unity` 单场景，没有安全区、撤离、场景切换或存档闭环。
+- 仅有 `Main.unity` 单场景；生命周期宿主能处理该场景卸载和直接重载，但没有安全区、撤离、完整场景流或存档闭环。
 - 背包已实现矩形格子占用、物品与装备栏之间的拖拽整理；当前仍没有物品旋转、堆叠和重量。
 - 装备已实现武器、护甲和双戒指槽，以及替换和卸下；首批七件装备和 25 个物品词条已接入，但尚无耐久、套装、纸娃娃和词条等级段。
 - 交易只维护单个共享商人库存；卖出物品不进入商人库存，也没有回购。

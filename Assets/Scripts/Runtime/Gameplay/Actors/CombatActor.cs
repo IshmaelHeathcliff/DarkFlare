@@ -46,6 +46,7 @@ namespace DarkFlare
 
         Rigidbody2D _rigidbody;
         SpriteRenderer _renderer;
+        IArchitecture _architecture;
         StatBlock _baseStats = new StatBlock();
         StatBlock _stats = new StatBlock();
         TagSet _tags = TagSet.Empty;
@@ -81,7 +82,7 @@ namespace DarkFlare
 
         public IArchitecture GetArchitecture()
         {
-            return GameArchitecture.Interface;
+            return _architecture ?? GameArchitectureProvider.RequireCurrent();
         }
 
         public void Configure(string actorId, ActorTeam team, float maxHealth, StatBlock stats, TagSet tags)
@@ -211,12 +212,14 @@ namespace DarkFlare
 
         void OnEnable()
         {
-            this.SendCommand(new RegisterActorCommand(this));
+            _architecture = GameArchitectureProvider.RequireCurrent();
+            _architecture.SendCommand(new RegisterActorCommand(this));
         }
 
         void OnDisable()
         {
-            this.SendCommand(new UnregisterActorCommand(this));
+            _architecture?.SendCommand(new UnregisterActorCommand(this));
+            _architecture = null;
         }
 
         void OnValidate()

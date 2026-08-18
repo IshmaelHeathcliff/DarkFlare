@@ -2,12 +2,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using DarkFlare;
+using DarkFlare.Tests;
 using NUnit.Framework;
 using UnityEngine;
 
 public class GameplayUiFoundationTests
 {
     readonly List<Object> _objects = new List<Object>();
+    readonly GameArchitectureTestFixture _architectureFixture = new GameArchitectureTestFixture();
 
     IArchitecture _architecture;
     float _originalTimeScale;
@@ -16,8 +18,7 @@ public class GameplayUiFoundationTests
     public void SetUp()
     {
         _originalTimeScale = Time.timeScale;
-        GameArchitecture.Interface.Deinit();
-        _architecture = GameArchitecture.Interface;
+        _architecture = _architectureFixture.Start();
     }
 
     [TearDown]
@@ -32,7 +33,7 @@ public class GameplayUiFoundationTests
         }
 
         _objects.Clear();
-        _architecture.Deinit();
+        _architectureFixture.Stop();
         _architecture = null;
         Time.timeScale = _originalTimeScale;
     }

@@ -50,6 +50,7 @@ namespace DarkFlare
         readonly ItemListViewState _selectionState = new ItemListViewState();
         readonly List<VisualElement> _gridCells = new List<VisualElement>();
 
+        SceneSessionBinding _sessionBinding;
         VisualElement _page;
         VisualElement _workbench;
         VisualElement _grid;
@@ -138,7 +139,11 @@ namespace DarkFlare
             }
 
             _externalSlotItem = item;
-            RefreshInventory();
+
+            if (_sessionBinding != null && _sessionBinding.IsBound)
+            {
+                RefreshInventory();
+            }
         }
 
         public void ClearSelection()
@@ -191,7 +196,7 @@ namespace DarkFlare
 
         public IArchitecture GetArchitecture()
         {
-            return GameArchitecture.Interface;
+            return _sessionBinding.RequireArchitecture();
         }
 
         public void RefreshInventory()
@@ -344,13 +349,39 @@ namespace DarkFlare
         void OnEnable()
         {
             EnsureComponents();
+            _sessionBinding ??= new SceneSessionBinding(
+                this,
+                BindSession,
+                UnbindSession);
+            _sessionBinding.Enable();
+        }
+
+        void OnDisable()
+        {
+            _sessionBinding?.Disable();
+        }
+
+        SceneSessionBindResult BindSession(IArchitecture architecture)
+        {
+            if (_document == null || _document.panelSettings == null)
+            {
+                Debug.LogError("[InventoryPanelController] 缺少 UIDocument 或 PanelSettings，无法初始化背包", this);
+                return SceneSessionBindResult.Failed;
+            }
+
+            VisualElement root = _document.rootVisualElement;
+
+            if (root == null || root.panel == null)
+            {
+                return SceneSessionBindResult.Retry;
+            }
 
             if (!BindVisualTree())
             {
-                return;
+                return SceneSessionBindResult.Failed;
             }
 
-            _gameInput = this.GetUtility<GameInput>();
+            _gameInput = architecture.GetUtility<GameInput>();
 
             if (_gameInput != null)
             {
@@ -363,9 +394,10 @@ namespace DarkFlare
             RefreshInventory();
             SetVisible(IsVisible);
             Debug.Log("[InventoryPanelController] 背包与四槽装备面板初始化完成", this);
+            return SceneSessionBindResult.Success;
         }
 
-        void OnDisable()
+        void UnbindSession()
         {
             CancelDrag(false);
             ClearExternalDropTarget();

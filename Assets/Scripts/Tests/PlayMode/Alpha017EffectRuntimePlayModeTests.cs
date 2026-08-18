@@ -9,13 +9,14 @@ namespace DarkFlare.Tests
     public sealed class Alpha017EffectRuntimePlayModeTests
     {
         GameObject _effectPrefab;
+        readonly GameArchitectureTestFixture _fixture = new GameArchitectureTestFixture();
         IArchitecture _architecture;
 
-        [SetUp]
-        public void SetUp()
+        [UnitySetUp]
+        public IEnumerator SetUp()
         {
-            GameArchitecture.Interface.Deinit();
-            _architecture = GameArchitecture.Interface;
+            yield return _fixture.Restart();
+            _architecture = _fixture.Architecture;
             _effectPrefab = new GameObject("Alpha017PoolTestEffect");
             _effectPrefab.SetActive(false);
             _effectPrefab.AddComponent<SpriteRenderer>();
@@ -23,16 +24,17 @@ namespace DarkFlare.Tests
             _effectPrefab.AddComponent<PooledSpriteEffect>();
         }
 
-        [TearDown]
-        public void TearDown()
+        [UnityTearDown]
+        public IEnumerator TearDown()
         {
-            _architecture?.Deinit();
             _architecture = null;
 
             if (_effectPrefab != null)
             {
                 Object.DestroyImmediate(_effectPrefab);
             }
+
+            yield return _fixture.Restart();
         }
 
         [UnityTest]
@@ -69,7 +71,7 @@ namespace DarkFlare.Tests
             Assert.IsNotNull(rootField);
             Transform poolRoot = (Transform)rootField.GetValue(pool);
             Assert.IsNotNull(poolRoot);
-            _architecture.Deinit();
+            yield return _fixture.StopCurrent();
             _architecture = null;
             Assert.AreEqual(0, pool.GetStats(_effectPrefab).Total);
             float destroyTimeout = Time.realtimeSinceStartup + 1f;

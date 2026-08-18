@@ -12,6 +12,8 @@ namespace DarkFlare
         CircleCollider2D _collider;
         ItemInstance _item;
         WorldSortParticipant _sortParticipant;
+        IArchitecture _architecture;
+        SessionObjectRegistry _sessionObjects;
 
         public ItemInstance Item => _item;
 
@@ -19,7 +21,7 @@ namespace DarkFlare
 
         public IArchitecture GetArchitecture()
         {
-            return GameArchitecture.Interface;
+            return _architecture ?? GameArchitectureProvider.RequireCurrent();
         }
 
         public void Init(ItemInstance item)
@@ -37,11 +39,18 @@ namespace DarkFlare
         void Awake()
         {
             EnsureComponents();
+            _architecture = GameArchitectureProvider.RequireCurrent();
+            _sessionObjects = this.GetUtility<SessionObjectRegistry>();
         }
 
         void OnValidate()
         {
             EnsureComponents();
+        }
+
+        void OnDestroy()
+        {
+            _sessionObjects?.Unregister(gameObject);
         }
 
         void OnTriggerEnter2D(Collider2D other)

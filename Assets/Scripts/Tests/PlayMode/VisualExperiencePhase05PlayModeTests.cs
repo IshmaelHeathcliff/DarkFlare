@@ -10,21 +10,19 @@ namespace DarkFlare.Tests
 {
     public class VisualExperiencePhase05PlayModeTests
     {
-        IArchitecture _architecture;
+        readonly GameArchitectureTestFixture _fixture = new GameArchitectureTestFixture();
 
-        [SetUp]
-        public void SetUp()
+        [UnitySetUp]
+        public IEnumerator SetUp()
         {
-            GameArchitecture.Interface.Deinit();
-            _architecture = GameArchitecture.Interface;
+            yield return _fixture.Restart();
         }
 
-        [TearDown]
-        public void TearDown()
+        [UnityTearDown]
+        public IEnumerator TearDown()
         {
             Time.timeScale = 1f;
-            _architecture?.Deinit();
-            _architecture = null;
+            yield return _fixture.Restart();
         }
 
         [UnityTest]

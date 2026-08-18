@@ -58,9 +58,11 @@ namespace DarkFlare
             {
                 for (int i = 0; i < _rules.Count; i++)
                 {
-                    if (_rules[i].Monster != null)
+                    MonsterSpawnRule rule = _rules[i];
+
+                    if (rule != null && rule.Monster != null)
                     {
-                        yield return _rules[i].Monster;
+                        yield return rule.Monster;
                     }
                 }
             }
@@ -72,9 +74,11 @@ namespace DarkFlare
 
             for (int i = 0; i < _rules.Count; i++)
             {
-                if (_rules[i].Monster != null && _rules[i].Weight > 0)
+                MonsterSpawnRule rule = _rules[i];
+
+                if (rule != null && rule.Monster != null && rule.Weight > 0)
                 {
-                    totalWeight += _rules[i].Weight;
+                    totalWeight += rule.Weight;
                 }
             }
 
@@ -89,7 +93,7 @@ namespace DarkFlare
             {
                 MonsterSpawnRule rule = _rules[i];
 
-                if (rule.Monster == null || rule.Weight <= 0)
+                if (rule == null || rule.Monster == null || rule.Weight <= 0)
                 {
                     continue;
                 }

@@ -21,6 +21,7 @@ namespace DarkFlare
         float _duration = 0.25f;
 
         Action<PooledSpriteEffect> _completed;
+        LifecycleScope _playScope;
         uint _playVersion;
 
         public float Duration => _duration;
@@ -36,6 +37,8 @@ namespace DarkFlare
 
         void OnDisable()
         {
+            _playScope?.BeginStop();
+            _playScope = null;
             _playVersion++;
             _completed = null;
         }
@@ -57,19 +60,20 @@ namespace DarkFlare
             _animator.Rebind();
             _animator.Update(0f);
             uint version = ++_playVersion;
-            ReturnAfterDelayAsync(version, this.GetCancellationTokenOnDestroy()).Forget();
+            _playScope?.BeginStop();
+            _playScope = ComponentLifecycle.CreateScope(
+                this,
+                "effect-playback",
+                this.GetCancellationTokenOnDestroy());
+            _playScope.Tasks.Run(
+                "return-after-delay",
+                token => ReturnAfterDelayAsync(version, token));
         }
 
-        async UniTaskVoid ReturnAfterDelayAsync(uint version, CancellationToken token)
+        async UniTask ReturnAfterDelayAsync(uint version, CancellationToken token)
         {
-            try
-            {
-                await UniTask.Delay(TimeSpan.FromSeconds(_duration), cancellationToken: token);
-            }
-            catch (OperationCanceledException)
-            {
-                return;
-            }
+            await UniTask.Delay(TimeSpan.FromSeconds(_duration), cancellationToken: token);
+            token.ThrowIfCancellationRequested();
 
             if (this == null || version != _playVersion || !gameObject.activeSelf)
             {

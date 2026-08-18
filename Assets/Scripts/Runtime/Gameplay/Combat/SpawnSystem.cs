@@ -53,7 +53,16 @@ namespace DarkFlare
             }
 
             GameObject instance = Object.Instantiate(prefab, position, Quaternion.identity);
+            this.GetUtility<SessionObjectRegistry>().Register(instance);
             PlayerController controller = instance.GetComponent<PlayerController>();
+
+            if (controller == null)
+            {
+                Debug.LogError("[SpawnSystem] 玩家 Prefab 缺少 PlayerController");
+                this.GetUtility<SessionObjectRegistry>().Release(instance);
+                return null;
+            }
+
             CombatResourceSnapshot previousResources = controller.Actor.Resources;
             controller.Configure(definition, skill);
             this.GetSystem<CombatSystem>().PublishResourceChanges(
@@ -82,7 +91,16 @@ namespace DarkFlare
             }
 
             GameObject instance = Object.Instantiate(prefab, position, Quaternion.identity);
+            this.GetUtility<SessionObjectRegistry>().Register(instance);
             MonsterController controller = instance.GetComponent<MonsterController>();
+
+            if (controller == null)
+            {
+                Debug.LogError($"[SpawnSystem] 怪物 Prefab 缺少 MonsterController: {definition.Id}");
+                this.GetUtility<SessionObjectRegistry>().Release(instance);
+                return null;
+            }
+
             int instanceSeed = random.Next(int.MinValue, int.MaxValue);
             MonsterInstanceData instanceData = definition.CreateInstanceData(instanceSeed);
             CombatResourceSnapshot previousResources = controller.Actor.Resources;
@@ -159,7 +177,16 @@ namespace DarkFlare
             }
 
             GameObject instance = Object.Instantiate(prefab, position, Quaternion.identity);
+            this.GetUtility<SessionObjectRegistry>().Register(instance);
             ProjectileController controller = instance.GetComponent<ProjectileController>();
+
+            if (controller == null)
+            {
+                Debug.LogError($"[SpawnSystem] 投射物 Prefab 缺少 ProjectileController: {skill.Id}");
+                this.GetUtility<SessionObjectRegistry>().Release(instance);
+                return null;
+            }
+
             controller.Init(skill, direction, attack);
             return controller;
         }

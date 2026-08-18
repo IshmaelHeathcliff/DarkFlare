@@ -5,6 +5,7 @@ namespace DarkFlare
         protected override void Init()
         {
             this.RegisterUtility(new GameInput());
+            this.RegisterUtility(new SessionObjectRegistry());
             this.RegisterModel(new CombatModel());
             this.RegisterModel(new EquipmentModel());
             this.RegisterModel(new InventoryModel());
@@ -26,6 +27,7 @@ namespace DarkFlare
 
         protected override void OnDeinit()
         {
+            this.GetUtility<SessionObjectRegistry>().ReleaseAllImmediate();
             this.GetUtility<WorldSortingSystem>().ReleaseAll();
             this.GetUtility<VisualEffectPool>().ReleaseAll();
             this.GetUtility<SpriteAssetLoader>().ReleaseAll();

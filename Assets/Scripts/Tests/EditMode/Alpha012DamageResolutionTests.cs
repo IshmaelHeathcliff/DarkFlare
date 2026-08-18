@@ -8,14 +8,14 @@ namespace DarkFlare.Tests
     public sealed class Alpha012DamageResolutionTests
     {
         readonly List<Object> _objects = new List<Object>();
+        readonly GameArchitectureTestFixture _architectureFixture = new GameArchitectureTestFixture();
 
         IArchitecture _architecture;
 
         [SetUp]
         public void SetUp()
         {
-            GameArchitecture.Interface.Deinit();
-            _architecture = GameArchitecture.Interface;
+            _architecture = _architectureFixture.Start();
         }
 
         [TearDown]
@@ -30,7 +30,7 @@ namespace DarkFlare.Tests
             }
 
             _objects.Clear();
-            _architecture.Deinit();
+            _architectureFixture.Stop();
             _architecture = null;
         }
 

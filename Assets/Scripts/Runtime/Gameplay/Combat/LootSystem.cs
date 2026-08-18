@@ -87,7 +87,16 @@ namespace DarkFlare
             }
 
             GameObject instance = Object.Instantiate(prefab, position, Quaternion.identity);
+            this.GetUtility<SessionObjectRegistry>().Register(instance);
             LootPickupController controller = instance.GetComponent<LootPickupController>();
+
+            if (controller == null)
+            {
+                Debug.LogError("[LootSystem] 拾取物 Prefab 缺少 LootPickupController");
+                this.GetUtility<SessionObjectRegistry>().Release(instance);
+                return;
+            }
+
             controller.Init(item);
         }
 

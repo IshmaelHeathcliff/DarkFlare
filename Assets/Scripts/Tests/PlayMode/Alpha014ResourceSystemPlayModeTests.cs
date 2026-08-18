@@ -16,15 +16,28 @@ namespace DarkFlare.Tests
             "_playerSkill",
             BindingFlags.Instance | BindingFlags.NonPublic);
 
-        [TearDown]
-        public void TearDown()
-        {
-            GameplayPauseSystem pauseSystem = GameArchitecture.Interface.GetSystem<GameplayPauseSystem>();
+        readonly GameArchitectureTestFixture _fixture = new GameArchitectureTestFixture();
 
-            if (pauseSystem.IsPaused)
+        [UnitySetUp]
+        public IEnumerator SetUp()
+        {
+            yield return _fixture.Restart();
+        }
+
+        [UnityTearDown]
+        public IEnumerator TearDown()
+        {
+            if (GameArchitectureProvider.TryGetCurrent(out IArchitecture architecture))
             {
-                pauseSystem.SetPaused(false);
+                GameplayPauseSystem pauseSystem = architecture.GetSystem<GameplayPauseSystem>();
+
+                if (pauseSystem.IsPaused)
+                {
+                    pauseSystem.SetPaused(false);
+                }
             }
+
+            yield return _fixture.Restart();
         }
 
         [UnityTest]
@@ -60,7 +73,7 @@ namespace DarkFlare.Tests
             Assert.IsNotNull(skill);
             Assert.AreEqual(8f, skill.ManaCost, 0.001f);
 
-            IArchitecture architecture = GameArchitecture.Interface;
+            IArchitecture architecture = GameArchitectureProvider.RequireCurrent();
             CombatActor actor = player.Actor;
             CombatSystem combat = architecture.GetSystem<CombatSystem>();
             ResourceRegenerationSystem regeneration = architecture.GetSystem<ResourceRegenerationSystem>();

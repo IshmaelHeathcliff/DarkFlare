@@ -13,6 +13,7 @@ namespace DarkFlare
 
         readonly List<IUnRegister> _eventRegistrations = new List<IUnRegister>();
 
+        SceneSessionBinding _sessionBinding;
         ProgressBar _healthBar;
         ProgressBar _manaBar;
         Label _goldLabel;
@@ -20,9 +21,11 @@ namespace DarkFlare
 
         public HudSnapshot LastSnapshot { get; private set; }
 
+        public int SessionBindCount => _sessionBinding?.BindCount ?? 0;
+
         public IArchitecture GetArchitecture()
         {
-            return GameArchitecture.Interface;
+            return _sessionBinding.RequireArchitecture();
         }
 
         public void RefreshHud()
@@ -53,11 +56,43 @@ namespace DarkFlare
         void OnEnable()
         {
             EnsureComponents();
-            RegisterEvents();
-            BindVisualTree();
+            _sessionBinding ??= new SceneSessionBinding(
+                this,
+                BindSession,
+                UnbindSession);
+            _sessionBinding.Enable();
         }
 
         void OnDisable()
+        {
+            _sessionBinding?.Disable();
+        }
+
+        SceneSessionBindResult BindSession(IArchitecture architecture)
+        {
+            if (_document == null || _document.panelSettings == null)
+            {
+                Debug.LogError("[HudController] 缺少 UIDocument 或 PanelSettings，无法初始化 HUD", this);
+                return SceneSessionBindResult.Failed;
+            }
+
+            VisualElement root = _document.rootVisualElement;
+
+            if (root == null || root.panel == null)
+            {
+                return SceneSessionBindResult.Retry;
+            }
+
+            if (!BindVisualTree())
+            {
+                return SceneSessionBindResult.Failed;
+            }
+
+            RegisterEvents();
+            return SceneSessionBindResult.Success;
+        }
+
+        void UnbindSession()
         {
             for (int i = 0; i < _eventRegistrations.Count; i++)
             {
@@ -105,12 +140,12 @@ namespace DarkFlare
             _eventRegistrations.Add(this.RegisterEvent<EquipmentChangedEvent>(_ => RefreshHud()));
         }
 
-        void BindVisualTree()
+        bool BindVisualTree()
         {
             if (_document == null)
             {
                 Debug.LogError("[HudController] 缺少 UIDocument，无法初始化 HUD", this);
-                return;
+                return false;
             }
 
             VisualElement root = _document.rootVisualElement;
@@ -122,7 +157,7 @@ namespace DarkFlare
             if (_healthBar == null || _manaBar == null || _goldLabel == null || _skillStatusLabel == null)
             {
                 Debug.LogError("[HudController] HUD UXML 缺少生命、法力、技能状态或金币元素", this);
-                return;
+                return false;
             }
 
             _healthBar.lowValue = 0f;
@@ -132,6 +167,7 @@ namespace DarkFlare
             _skillStatusLabel.style.display = DisplayStyle.None;
             RefreshHud();
             Debug.Log("[HudController] HUD 初始化完成", this);
+            return true;
         }
 
         void OnSkillCastRejected(SkillCastRejectedEvent e)

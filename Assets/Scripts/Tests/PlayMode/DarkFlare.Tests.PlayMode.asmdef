@@ -4,6 +4,8 @@
     "references": [
         "DarkFlare.Runtime",
         "DarkFlare.Core",
+        "UniTask",
+        "Unity.Addressables",
         "Unity.InputSystem",
         "Unity.InputSystem.TestFramework",
         "UnityEngine.TestRunner",

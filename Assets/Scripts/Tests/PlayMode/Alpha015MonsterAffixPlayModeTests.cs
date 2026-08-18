@@ -11,15 +11,15 @@ namespace DarkFlare.Tests
     public sealed class Alpha015MonsterAffixPlayModeTests
     {
         readonly List<Object> _objects = new List<Object>();
+        readonly GameArchitectureTestFixture _fixture = new GameArchitectureTestFixture();
 
         IArchitecture _architecture;
 
         [UnitySetUp]
         public IEnumerator SetUp()
         {
-            GameArchitecture.Interface.Deinit();
-            _architecture = GameArchitecture.Interface;
-            yield return null;
+            yield return _fixture.Restart();
+            _architecture = _fixture.Architecture;
         }
 
         [UnityTearDown]
@@ -35,8 +35,8 @@ namespace DarkFlare.Tests
 
             _objects.Clear();
             yield return null;
-            _architecture?.Deinit();
             _architecture = null;
+            yield return _fixture.Restart();
         }
 
         [UnityTest]

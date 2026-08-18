@@ -9,6 +9,8 @@ DarkFlare/
     README.md
     design/
     docs/
+      infrastructure/
+        application-lifecycle.md
   Packages/
   ProjectSettings/
   tools/
@@ -63,6 +65,18 @@ Assets/
       Core/                           # 程序集 DarkFlare.Core（仅 QFramework）
         DarkFlare.Core.asmdef
         QFramework.cs
+      Infrastructure/
+        Lifecycle/
+          ApplicationBootstrap.cs
+          ApplicationHost.cs
+          ComponentLifecycle.cs
+          GameArchitectureProvider.cs
+          GameSessionHost.cs
+          LifecycleModels.cs
+          LifecycleScope.cs
+          LifecycleTaskGroup.cs
+          SceneSessionBinding.cs
+          SessionObjectRegistry.cs
       Data/
         Actors/
         Affixes/
@@ -77,6 +91,9 @@ Assets/
       Gameplay/
         Actors/
         Bootstrap/
+          CombatPrototypeBootstrap.cs
+          GameplaySceneConfiguration.cs
+          NewGameSessionInitializer.cs
         Combat/
           Commands/
           Queries/
@@ -101,10 +118,20 @@ Assets/
     Tests/
       EditMode/                       # 程序集 DarkFlare.Tests.EditMode
         DarkFlare.Tests.EditMode.asmdef
+        AbandonedGenerationIsolationTests.cs
+        ApplicationLifecycleTests.cs
+        ArchitectureExceptionSafetyTests.cs
         GroundTilemapTests.cs
+        InfrastructurePolicyExceptions.json
+        InfrastructurePolicyTests.cs
         Phase5VisualIntegrationTests.cs
+        PrefabAssetLoaderTests.cs
       PlayMode/                       # 程序集 DarkFlare.Tests.PlayMode
         DarkFlare.Tests.PlayMode.asmdef
+        ApplicationHostSceneTransitionPlayModeTests.cs
+        ApplicationLifecyclePlayModeTests.cs
+        SceneSessionComponentBindingPlayModeTests.cs
+        SessionObjectRegistryOwnershipPlayModeTests.cs
   Settings/
     Scenes/
     UI/
@@ -177,7 +204,7 @@ Addressables 的配置目录，包含资源组、模板和构建器配置。后�
 
 同时 `ProjectSettings/EditorBuildSettings.asset` 里当前也只注册了这个场景。
 
-`Main.unity` 当前包含常驻 `UIRoot`（`UIDocument` + HUD / 菜单 / 背包 / 商店 / 打造 / 交互提示控制器）、唯一 `EventSystem`，以及可交互的 `Merchant` 与 `CraftingStation` 原型对象。视觉地表位于 `GroundGrid`，包含 5×5 全覆盖的 `GroundBaseTilemap` 和 11 格稀疏的 `GroundDetailTilemap`；两层均不带 Collider，玩法边界仍由独立 `WorldBounds` 提供。`InputSystemUIInputModule` 引用项目 `InputSystem_Actions.inputactions` 的 `UI` action map。
+`Main.unity` 当前包含常驻 `UIRoot`（`UIDocument` + HUD / 菜单 / 背包 / 商店 / 打造 / 交互提示控制器）、唯一 `EventSystem`，以及可交互的 `Merchant` 与 `CraftingStation` 原型对象。视觉地表位于 `GroundGrid`，包含 5×5 全覆盖的 `GroundBaseTilemap` 和 11 格稀疏的 `GroundDetailTilemap`；两层均不带 Collider，玩法边界仍由独立 `WorldBounds` 提供。`InputSystemUIInputModule` 引用项目 `InputSystem_Actions.inputactions` 的 `UI` action map。唯一 `ApplicationHost` 不序列化在场景中，而由 `ApplicationBootstrap` 在 `BeforeSceneLoad` 创建。
 
 ### `Assets/Scripts`
 
@@ -189,24 +216,26 @@ Addressables 的配置目录，包含资源组、模板和构建器配置。后�
 | `DarkFlare.Runtime` | `Runtime/` | 全部 | `DarkFlare.Core`、`UniTask`、`Unity.InputSystem`、`Unity.Addressables`、`Unity.ResourceManager` |
 | `DarkFlare.Editor` | `Editor/` | 仅 Editor | `DarkFlare.Runtime`、`DarkFlare.Core` |
 | `DarkFlare.Tests.EditMode` | `Tests/EditMode/` | 仅 Editor | `DarkFlare.Runtime`、`DarkFlare.Core`、`Unity.InputSystem`、`Unity.InputSystem.TestFramework`、`UnityEngine.TestRunner`、`UnityEditor.TestRunner`、`nunit.framework.dll` |
-| `DarkFlare.Tests.PlayMode` | `Tests/PlayMode/` | 全部 | 同 EditMode；覆盖场景循环、输入、装备、随机化与运行时资源加载 |
+| `DarkFlare.Tests.PlayMode` | `Tests/PlayMode/` | 全部 | `DarkFlare.Runtime`、`DarkFlare.Core`、`UniTask` 及 Unity 测试依赖；覆盖场景循环、生命周期、输入、装备、随机化与运行时资源加载 |
 
 依赖方向单向向上、无环：`Core ← Runtime ← {Editor, Tests}`。`GameArchitecture.cs` 作为组合根依赖全部玩法模块，因此位于 `Runtime/` 根而非 `Core/`。测试程序集带 `defineConstraints: ["UNITY_INCLUDE_TESTS"]`，仅在测试运行时参与编译，不进入 Player 包。Odin 等预编译 DLL 默认对所有程序集可见，无需在 asmdef 中显式引用。
 
 `Runtime/` 下的子目录职责：
 
 - `Core`：基础架构与全局入口（独立成 `DarkFlare.Core` 程序集）
+- `Infrastructure`：应用宿主、作用域、Session、统一任务取消、架构所有权与运行时对象登记
 - `Data`：数据定义与配置类型
 - `Gameplay`：玩法逻辑
 - `UI`：界面逻辑（占位）
 - `Utilities`：通用工具（占位）
 
-> 下列文件清单中，`Core/`、`Data/`、`Gameplay/`、`UI/`、`Utilities/` 路径均相对 `Scripts/Runtime/`；`Editor/` 相对 `Scripts/`；测试相对 `Scripts/Tests/`。
+> 下列文件清单中，`Core/`、`Infrastructure/`、`Data/`、`Gameplay/`、`UI/`、`Utilities/` 路径均相对 `Scripts/Runtime/`；`Editor/` 相对 `Scripts/`；测试相对 `Scripts/Tests/`。
 
 当前代码已覆盖以下基础层：
 
 - `Core/QFramework.cs`（`DarkFlare.Core` 程序集）
-- `GameArchitecture.cs`（位于 `Runtime/` 根，组合根；已注册 `GameInput`、`CombatModel`/`EquipmentModel`/`InventoryModel`/`EconomyModel`、`CombatSystem`/`SpawnSystem`/`LootSystem`/`TradingSystem`/`CraftingSystem`/`GameplayPauseSystem` 与 `PrefabAssetLoader`）
+- `Infrastructure/Lifecycle`：`ApplicationBootstrap.cs`、`ApplicationHost.cs`、`GameSessionHost.cs`、`GameArchitectureProvider.cs`、`LifecycleScope.cs`、`LifecycleTaskGroup.cs`、`LifecycleModels.cs`、`ComponentLifecycle.cs`、`SceneSessionBinding.cs`、`SessionObjectRegistry.cs`；实现唯一宿主、Application / Profile / Session / Scene / Component 作用域、NewGame 事务边界、latest-wins 场景协调、lease / generation 隔离、场景组件重绑、统一取消和运行时对象精确注销
+- `GameArchitecture.cs`（位于 `Runtime/` 根，Session 组合根；由 `GameArchitectureProvider` 独占创建与销毁，已注册 `GameInput`、`CombatModel`/`EquipmentModel`/`InventoryModel`/`EconomyModel`、`CombatSystem`/`SpawnSystem`/`LootSystem`/`TradingSystem`/`CraftingSystem`/`GameplayPauseSystem`、`PrefabAssetLoader` 与 `SessionObjectRegistry`）
 - `Data/Tags/TagDefinition.cs`、`Data/Tags/TagQueryDefinition.cs`（标签目录元数据与结构化查询）
 - `Data/Stats/StatDefinition.cs`
 - `Data/Actors/CharacterDefinition.cs`
@@ -228,7 +257,7 @@ Addressables 的配置目录，包含资源组、模板和构建器配置。后�
 - `Gameplay/Skills`：`ProjectileController.cs`
 - `Gameplay/Spawning`：`MonsterSpawner.cs`
 - `Gameplay/Loot`：`LootPickupController.cs`
-- `Gameplay/Bootstrap`：`CombatPrototypeBootstrap.cs`、`CameraFollowTarget.cs`
+- `Gameplay/Bootstrap`：`CombatPrototypeBootstrap.cs`、`GameplaySceneConfiguration.cs`、`NewGameSessionInitializer.cs`、`CameraFollowTarget.cs`；Bootstrap 只组装场景配置并请求宿主，Initializer 负责可回滚的新游戏事务
 - `Gameplay/Input`：`GameInput.cs`（输入封装、Gameplay/UI Action Map 切换与交互事件）、`InputSystem_Actions.cs`（由输入资产自动生成的 C# 包装类）
 - `Gameplay/Interaction`：`WorldInteractionTarget.cs`、`PlayerInteractionController.cs`、`GameplayPauseSystem.cs` 与 `Commands/`，负责最近世界目标、情境菜单请求和集中暂停
 - `Gameplay/Events/GameplayEvents.cs`：金币、背包、装备、打造、交易、交互焦点、菜单请求、暂停和 Actor 注册 / 注销领域事件
@@ -239,11 +268,17 @@ Addressables 的配置目录，包含资源组、模板和构建器配置。后�
 - `Gameplay/UI/GetCraftingSnapshotQuery.cs`、`CraftingPanelController.cs`：复用共享玩家背包选择，提供稀有度、任意 / 前缀 / 后缀范围和 14 个随机打造变体，不保留具体词条选择
 - `Gameplay/UI/GameMenuAccess.cs`、`GameMenuController.cs`：背包 / 商店 / 打造情境访问范围、共享菜单遮罩、关闭和 Gameplay/UI 输入路由
 - `Gameplay/UI/InteractionPromptController.cs`：显示当前世界交互目标，并在 UI 模式或目标失效时隐藏
+- `Tests/EditMode/ApplicationLifecycleTests.cs`、`ArchitectureExceptionSafetyTests.cs`、`AbandonedGenerationIsolationTests.cs`、`PrefabAssetLoaderTests.cs`：覆盖作用域停止 / 超时、活动任务跟踪、后代 `Abandoned` 污点传播、旧 generation 隔离、架构初始化与反初始化异常安全、Prefab Addressables GUID 单飞和精确句柄
+- `Tests/EditMode/InfrastructurePolicyTests.cs` 与 `InfrastructurePolicyExceptions.json`：扫描架构直连、未登记异步、直接文件 IO / PlayerPrefs / 场景加载，并用正反向夹具验证规则
 - `Tests/EditMode/Alpha01TagMigrationCharacterizationTests.cs` 与既有 EditMode 测试：覆盖标签查询、域隔离、物品—词条候选矩阵、伤害血统、旧接口兼容、纯逻辑、原子换装、交易和打造事务语义、键鼠 / 手柄输入、Action Map 切换、交互消息、暂停及 HUD/背包/商店/打造快照。归属 `DarkFlare.Tests.EditMode` 程序集
+- `Tests/PlayMode/ApplicationLifecyclePlayModeTests.cs`：覆盖冷启动唯一性、取消回滚、并发请求、连续 Session、场景卸载和直接 `Main` 重载
+- `Tests/PlayMode/ApplicationHostSceneTransitionPlayModeTests.cs`：覆盖每 generation 一次 `SessionRunning` 通知、回滚中的重载、三次快速请求 latest-wins、挂起回滚 / 作用域超时有界收敛，以及受控停止 / Shutdown / Emergency 终态隔离
+- `Tests/PlayMode/SceneSessionComponentBindingPlayModeTests.cs`：覆盖 `Main → Main`、无 Provider 空场景进入 `Main`、延迟绑定三态、绑定异常回滚，以及 poisoned Scene 拒绝重绑 / 重试
+- `Tests/PlayMode/SessionObjectRegistryOwnershipPlayModeTests.cs`：覆盖旧对象延迟销毁只注销其原始 Registry，不影响新 Session
 
 `UI`、`Utilities` 目前主要是占位，为后续模块扩展预留。
 
-**首版单场景循环已完成**：当前已覆盖输入、UIToolkit 根 / HUD、背包装备、商店、打造与场景交互入口。运行流程见 [`gameplay-loop.md`](gameplay-loop.md)，输入与 UI 结构见 [`input-ui-system.md`](input-ui-system.md)；完成过程保存在 [`plan/archive/`](plan/archive/README.md)。
+**首版单场景循环和 `alpha 0.2.0` 生命周期底座已完成**：当前已覆盖输入、UIToolkit 根 / HUD、背包装备、商店、打造、场景交互入口，以及唯一应用宿主、Session 重建和失败回滚。运行流程见 [`gameplay-loop.md`](gameplay-loop.md)，生命周期见[应用生命周期与会话作用域](infrastructure/application-lifecycle.md)，输入与 UI 结构见 [`input-ui-system.md`](input-ui-system.md)；完成过程保存在 [`plan/archive/`](plan/archive/README.md)。
 
 ### `Assets/Settings`
 
@@ -299,7 +334,8 @@ Unity 工程级设置目录，包括版本、构建场景、图形设置等。
 - 资源目录、代码目录、设置目录已经先分层
 - 代码已按程序集（asmdef）拆分为 `Core`/`Runtime`/`Editor`/`Tests` 四层，编译与测试边界清晰
 - 插件和核心依赖已经接入
-- 代码架构入口已经就位
+- 代码架构入口和唯一生命周期所有者已经就位
 - 战斗、掉落、背包、交易、打造、输入、HUD、情境菜单与世界交互入口已有首版可运行内容
+- 存档、本地化与完整 SceneFlow 尚未实现，仍是后续 `alpha 0.2` 阶段重点
 
 因此，后续工作重点不在“再拆目录”，而在把每一层真正填上首批可运行内容。

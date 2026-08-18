@@ -25,6 +25,7 @@ namespace DarkFlare
         readonly Dictionary<ItemInstance, Button> _playerButtons = new Dictionary<ItemInstance, Button>();
         readonly ShopViewState _viewState = new ShopViewState();
 
+        SceneSessionBinding _sessionBinding;
         VisualElement _page;
         VisualElement _merchantFrame;
         VisualElement _merchantList;
@@ -58,7 +59,7 @@ namespace DarkFlare
 
         public IArchitecture GetArchitecture()
         {
-            return GameArchitecture.Interface;
+            return _sessionBinding.RequireArchitecture();
         }
 
         public void RefreshShop()
@@ -131,10 +132,36 @@ namespace DarkFlare
         void OnEnable()
         {
             EnsureComponents();
+            _sessionBinding ??= new SceneSessionBinding(
+                this,
+                BindSession,
+                UnbindSession);
+            _sessionBinding.Enable();
+        }
+
+        void OnDisable()
+        {
+            _sessionBinding?.Disable();
+        }
+
+        SceneSessionBindResult BindSession(IArchitecture architecture)
+        {
+            if (_document == null || _document.panelSettings == null)
+            {
+                Debug.LogError("[ShopPanelController] 缺少 UIDocument 或 PanelSettings，无法初始化商店", this);
+                return SceneSessionBindResult.Failed;
+            }
+
+            VisualElement root = _document.rootVisualElement;
+
+            if (root == null || root.panel == null)
+            {
+                return SceneSessionBindResult.Retry;
+            }
 
             if (!BindVisualTree())
             {
-                return;
+                return SceneSessionBindResult.Failed;
             }
 
             RegisterEvents();
@@ -145,9 +172,10 @@ namespace DarkFlare
             RefreshShop();
             SetVisible(IsVisible);
             Debug.Log("[ShopPanelController] 商店面板初始化完成", this);
+            return SceneSessionBindResult.Success;
         }
 
-        void OnDisable()
+        void UnbindSession()
         {
             if (_buyButton != null)
             {

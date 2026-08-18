@@ -7,12 +7,6 @@ public class Alpha015PrimaryAttributeTests
 {
     readonly List<Object> _objects = new List<Object>();
 
-    [SetUp]
-    public void SetUp()
-    {
-        GameArchitecture.Interface.Deinit();
-    }
-
     [TearDown]
     public void TearDown()
     {
@@ -25,7 +19,6 @@ public class Alpha015PrimaryAttributeTests
         }
 
         _objects.Clear();
-        GameArchitecture.Interface.Deinit();
     }
 
     [Test]

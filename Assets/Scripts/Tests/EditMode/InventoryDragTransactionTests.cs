@@ -1,20 +1,21 @@
 using System.Collections.Generic;
 using System.Reflection;
 using DarkFlare;
+using DarkFlare.Tests;
 using NUnit.Framework;
 using UnityEngine;
 
 public class InventoryDragTransactionTests
 {
     readonly List<Object> _objects = new List<Object>();
+    readonly GameArchitectureTestFixture _architectureFixture = new GameArchitectureTestFixture();
 
     IArchitecture _architecture;
 
     [SetUp]
     public void SetUp()
     {
-        GameArchitecture.Interface.Deinit();
-        _architecture = GameArchitecture.Interface;
+        _architecture = _architectureFixture.Start();
     }
 
     [TearDown]
@@ -29,7 +30,7 @@ public class InventoryDragTransactionTests
         }
 
         _objects.Clear();
-        _architecture.Deinit();
+        _architectureFixture.Stop();
         _architecture = null;
     }
 

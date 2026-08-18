@@ -11,22 +11,25 @@ using UnityEngine.UIElements;
 
 namespace DarkFlare.Tests
 {
-    public class Phase1UxPlayModeTests : InputTestFixture
+    public class Phase1UxPlayModeTests
     {
         readonly List<Object> _objects = new List<Object>();
+        readonly InputTestFixture _inputFixture = new InputTestFixture();
+        readonly GameArchitectureTestFixture _fixture = new GameArchitectureTestFixture();
 
         IArchitecture _architecture;
 
-        public override void Setup()
+        [UnitySetUp]
+        public IEnumerator Setup()
         {
-            // InputTestFixture 会替换全局 Input System。旧架构必须先在原管理器中释放，
-            // 否则真实设备的状态监视器会残留并在测试结束后触发空引用。
-            GameArchitecture.Interface.Deinit();
-            base.Setup();
-            _architecture = GameArchitecture.Interface;
+            yield return _fixture.StopCurrent();
+            _inputFixture.Setup();
+            yield return _fixture.Restart();
+            _architecture = _fixture.Architecture;
         }
 
-        public override void TearDown()
+        [UnityTearDown]
+        public IEnumerator TearDown()
         {
             for (int i = _objects.Count - 1; i >= 0; i--)
             {
@@ -38,9 +41,10 @@ namespace DarkFlare.Tests
 
             _objects.Clear();
             Time.timeScale = 1f;
-            _architecture?.Deinit();
             _architecture = null;
-            base.TearDown();
+            yield return _fixture.StopCurrent();
+            _inputFixture.TearDown();
+            yield return _fixture.Restart();
         }
 
         [UnityTest]
@@ -148,9 +152,9 @@ namespace DarkFlare.Tests
             yield return null;
             Assert.AreEqual(1, CountItemSelectionHighlights(root), "玩家背包取得焦点后出现多个物品高亮");
             Keyboard keyboard = InputSystem.AddDevice<Keyboard>();
-            Press(keyboard.rightArrowKey);
+            _inputFixture.Press(keyboard.rightArrowKey);
             yield return null;
-            Release(keyboard.rightArrowKey);
+            _inputFixture.Release(keyboard.rightArrowKey);
             yield return null;
             yield return null;
             Assert.IsInstanceOf<Button>(root.focusController.focusedElement, "背包向右导航后焦点丢失");
@@ -482,17 +486,17 @@ namespace DarkFlare.Tests
         {
             Vector2 sourceScreen = PanelToScreen(root, source);
             Vector2 destinationScreen = PanelToScreen(root, destination);
-            Set(mouse.position, sourceScreen);
+            _inputFixture.Set(mouse.position, sourceScreen);
             yield return null;
-            Press(mouse.leftButton);
+            _inputFixture.Press(mouse.leftButton);
             yield return null;
             Assert.IsTrue(panel.IsPointerPending, "PointerDown 未建立拖拽候选");
-            Set(mouse.position, Vector2.Lerp(sourceScreen, destinationScreen, 0.35f));
+            _inputFixture.Set(mouse.position, Vector2.Lerp(sourceScreen, destinationScreen, 0.35f));
             yield return null;
             Assert.IsTrue(panel.IsDragging, "Pointer 移动超过阈值后未进入拖拽状态");
-            Set(mouse.position, destinationScreen);
+            _inputFixture.Set(mouse.position, destinationScreen);
             yield return null;
-            Release(mouse.leftButton);
+            _inputFixture.Release(mouse.leftButton);
             yield return null;
             yield return null;
             Assert.IsFalse(panel.IsDragging, "Pointer 抬起后拖拽状态未结束");
@@ -500,11 +504,11 @@ namespace DarkFlare.Tests
 
         IEnumerator RightClickPointer(Mouse mouse, VisualElement root, Vector2 panelPosition)
         {
-            Set(mouse.position, PanelToScreen(root, panelPosition));
+            _inputFixture.Set(mouse.position, PanelToScreen(root, panelPosition));
             yield return null;
-            Press(mouse.rightButton);
+            _inputFixture.Press(mouse.rightButton);
             yield return null;
-            Release(mouse.rightButton);
+            _inputFixture.Release(mouse.rightButton);
             yield return null;
             yield return null;
         }

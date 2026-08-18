@@ -28,6 +28,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.ExceptionServices;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -65,6 +66,8 @@ public interface IArchitecture
 public abstract class Architecture<T> : IArchitecture where T : Architecture<T>, new()
 {
     bool _mInited = false;
+    bool _mDeinitStarted;
+    ICanInit _mInitializingMember;
 
 
     public static Action<T> OnRegisterPatch = architecture => { };
@@ -84,27 +87,70 @@ public abstract class Architecture<T> : IArchitecture where T : Architecture<T>,
 
     static void MakeSureArchitecture()
     {
-        if (MArchitecture == null)
+        if (MArchitecture != null)
         {
-            MArchitecture = new T();
-            MArchitecture.Init();
+            return;
+        }
 
-            OnRegisterPatch?.Invoke(MArchitecture);
+        T architecture = new T();
+        MArchitecture = architecture;
 
-            foreach (IModel model in MArchitecture._mContainer.GetInstancesByType<IModel>().Where(m => !m.Initialized))
+        try
+        {
+            architecture.Init();
+            OnRegisterPatch?.Invoke(architecture);
+
+            IModel[] models = architecture._mContainer
+                .GetInstancesByType<IModel>()
+                .Where(model => !model.Initialized)
+                .ToArray();
+
+            for (int i = 0; i < models.Length; i++)
             {
-                model.Init();
-                model.Initialized = true;
+                architecture.InitializeMember(models[i]);
             }
 
-            foreach (ISystem system in MArchitecture._mContainer.GetInstancesByType<ISystem>()
-                         .Where(m => !m.Initialized))
+            ISystem[] systems = architecture._mContainer
+                .GetInstancesByType<ISystem>()
+                .Where(system => !system.Initialized)
+                .ToArray();
+
+            for (int i = 0; i < systems.Length; i++)
             {
-                system.Init();
-                system.Initialized = true;
+                architecture.InitializeMember(systems[i]);
             }
 
-            MArchitecture._mInited = true;
+            architecture._mInited = true;
+        }
+        catch (Exception initializationException)
+        {
+            Exception cleanupException = null;
+
+            try
+            {
+                architecture.Deinit();
+            }
+            catch (Exception exception)
+            {
+                cleanupException = exception;
+            }
+            finally
+            {
+                if (ReferenceEquals(MArchitecture, architecture))
+                {
+                    MArchitecture = null;
+                }
+            }
+
+            if (cleanupException != null)
+            {
+                throw new AggregateException(
+                    $"{typeof(T).Name} 初始化失败，且回滚期间发生错误",
+                    initializationException,
+                    cleanupException).Flatten();
+            }
+
+            throw;
         }
     }
 
@@ -112,17 +158,139 @@ public abstract class Architecture<T> : IArchitecture where T : Architecture<T>,
 
     public void Deinit()
     {
-        OnDeinit();
-        foreach (ISystem system in _mContainer.GetInstancesByType<ISystem>().Where(s => s.Initialized))
-            system.Deinit();
-        foreach (IModel model in _mContainer.GetInstancesByType<IModel>().Where(m => m.Initialized))
-            model.Deinit();
-        _mContainer.Clear();
-        MArchitecture = null;
+        if (_mDeinitStarted)
+        {
+            return;
+        }
+
+        _mDeinitStarted = true;
+        List<Exception> failures = new List<Exception>();
+        ISystem[] systems = Array.Empty<ISystem>();
+        IModel[] models = Array.Empty<IModel>();
+
+        try
+        {
+            CaptureFailure(
+                failures,
+                () => systems = _mContainer.GetInstancesByType<ISystem>().ToArray());
+            CaptureFailure(
+                failures,
+                () => models = _mContainer.GetInstancesByType<IModel>().ToArray());
+            CaptureFailure(failures, OnDeinit);
+
+            ICanInit initializingMember = _mInitializingMember;
+
+            if (initializingMember != null)
+            {
+                DeinitializeMember(initializingMember, failures);
+            }
+
+            for (int i = 0; i < systems.Length; i++)
+            {
+                ISystem system = systems[i];
+
+                if (!ReferenceEquals(system, initializingMember) && system.Initialized)
+                {
+                    DeinitializeMember(system, failures);
+                }
+            }
+
+            for (int i = 0; i < models.Length; i++)
+            {
+                IModel model = models[i];
+
+                if (!ReferenceEquals(model, initializingMember) && model.Initialized)
+                {
+                    DeinitializeMember(model, failures);
+                }
+            }
+        }
+        finally
+        {
+            _mInited = false;
+            _mInitializingMember = null;
+
+            try
+            {
+                _mContainer.Clear();
+            }
+            catch (Exception exception)
+            {
+                failures.Add(exception);
+            }
+            finally
+            {
+                if (ReferenceEquals(MArchitecture, this))
+                {
+                    MArchitecture = null;
+                }
+            }
+        }
+
+        ThrowDeinitFailures(failures);
     }
 
     protected virtual void OnDeinit()
     {
+    }
+
+    void InitializeMember(ICanInit member)
+    {
+        _mInitializingMember = member;
+        member.Init();
+        member.Initialized = true;
+        _mInitializingMember = null;
+    }
+
+    static void DeinitializeMember(ICanInit member, List<Exception> failures)
+    {
+        try
+        {
+            member.Deinit();
+        }
+        catch (Exception exception)
+        {
+            failures.Add(exception);
+        }
+        finally
+        {
+            try
+            {
+                member.Initialized = false;
+            }
+            catch (Exception exception)
+            {
+                failures.Add(exception);
+            }
+        }
+    }
+
+    static void CaptureFailure(List<Exception> failures, Action operation)
+    {
+        try
+        {
+            operation();
+        }
+        catch (Exception exception)
+        {
+            failures.Add(exception);
+        }
+    }
+
+    static void ThrowDeinitFailures(List<Exception> failures)
+    {
+        if (failures.Count == 0)
+        {
+            return;
+        }
+
+        if (failures.Count == 1)
+        {
+            ExceptionDispatchInfo.Capture(failures[0]).Throw();
+            return;
+        }
+
+        throw new AggregateException($"{typeof(T).Name} 反初始化期间发生多个错误", failures);
     }
 
     IocContainer _mContainer = new IocContainer();
@@ -134,8 +302,7 @@ public abstract class Architecture<T> : IArchitecture where T : Architecture<T>,
 
         if (_mInited)
         {
-            system.Init();
-            system.Initialized = true;
+            InitializeMember(system);
         }
     }
 
@@ -146,8 +313,7 @@ public abstract class Architecture<T> : IArchitecture where T : Architecture<T>,
 
         if (_mInited)
         {
-            model.Init();
-            model.Initialized = true;
+            InitializeMember(model);
         }
     }
 

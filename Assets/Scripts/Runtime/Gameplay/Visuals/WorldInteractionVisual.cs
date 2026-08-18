@@ -25,14 +25,17 @@ namespace DarkFlare
 
         readonly List<IUnRegister> _registrations = new List<IUnRegister>();
 
+        SceneSessionBinding _sessionBinding;
         bool _focused;
         bool _paused;
 
         public bool IsFocused => _focused && !_paused;
 
+        public int SessionBindCount => _sessionBinding?.BindCount ?? 0;
+
         public IArchitecture GetArchitecture()
         {
-            return GameArchitecture.Interface;
+            return _sessionBinding.RequireArchitecture();
         }
 
         void Awake()
@@ -43,11 +46,26 @@ namespace DarkFlare
 
         void OnEnable()
         {
-            RegisterEvents();
-            ApplyState();
+            _sessionBinding ??= new SceneSessionBinding(
+                this,
+                BindSession,
+                UnbindSession);
+            _sessionBinding.Enable();
         }
 
         void OnDisable()
+        {
+            _sessionBinding?.Disable();
+        }
+
+        SceneSessionBindResult BindSession(IArchitecture architecture)
+        {
+            RegisterEvents();
+            ApplyState();
+            return SceneSessionBindResult.Success;
+        }
+
+        void UnbindSession()
         {
             UnregisterEvents();
             _focused = false;

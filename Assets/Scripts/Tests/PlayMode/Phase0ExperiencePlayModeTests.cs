@@ -11,25 +11,30 @@ using UnityEngine.UIElements;
 
 namespace DarkFlare.Tests
 {
-    public class Phase0ExperiencePlayModeTests : InputTestFixture
+    public class Phase0ExperiencePlayModeTests
     {
+        readonly InputTestFixture _inputFixture = new InputTestFixture();
+        readonly GameArchitectureTestFixture _fixture = new GameArchitectureTestFixture();
+
         IArchitecture _architecture;
 
-        public override void Setup()
+        [UnitySetUp]
+        public IEnumerator Setup()
         {
-            // InputTestFixture 会替换全局 Input System。旧架构必须先在原管理器中释放，
-            // 否则真实设备的状态监视器会残留并在测试结束后触发空引用。
-            GameArchitecture.Interface.Deinit();
-            base.Setup();
-            _architecture = GameArchitecture.Interface;
+            yield return _fixture.StopCurrent();
+            _inputFixture.Setup();
+            yield return _fixture.Restart();
+            _architecture = _fixture.Architecture;
         }
 
-        public override void TearDown()
+        [UnityTearDown]
+        public IEnumerator TearDown()
         {
             Time.timeScale = 1f;
-            _architecture?.Deinit();
             _architecture = null;
-            base.TearDown();
+            yield return _fixture.StopCurrent();
+            _inputFixture.TearDown();
+            yield return _fixture.Restart();
         }
 
         [UnityTest]
@@ -43,7 +48,10 @@ namespace DarkFlare.Tests
             UIDocument document = null;
             float timeout = Time.realtimeSinceStartup + 15f;
 
-            while ((menu == null || document == null || document.rootVisualElement.panel == null)
+            while ((menu == null
+                    || menu.SessionBindCount == 0
+                    || document == null
+                    || document.rootVisualElement.panel == null)
                    && Time.realtimeSinceStartup < timeout)
             {
                 menu = UnityEngine.Object.FindAnyObjectByType<GameMenuController>();
@@ -77,19 +85,19 @@ namespace DarkFlare.Tests
             Keyboard keyboard = InputSystem.AddDevice<Keyboard>();
             Gamepad gamepad = InputSystem.AddDevice<Gamepad>();
 
-            PressAndRelease(keyboard.tabKey);
+            _inputFixture.PressAndRelease(keyboard.tabKey);
             yield return null;
             AssertMenuOpen(menu, document, "键盘 Tab");
 
-            PressAndRelease(keyboard.escapeKey);
+            _inputFixture.PressAndRelease(keyboard.escapeKey);
             yield return null;
             AssertMenuClosed(menu, document, "键盘 Esc");
 
-            PressAndRelease(gamepad.startButton);
+            _inputFixture.PressAndRelease(gamepad.startButton);
             yield return null;
             AssertMenuOpen(menu, document, "手柄 Start");
 
-            PressAndRelease(gamepad.buttonEast);
+            _inputFixture.PressAndRelease(gamepad.buttonEast);
             yield return null;
             AssertMenuClosed(menu, document, "手柄 B");
 
@@ -136,6 +144,7 @@ namespace DarkFlare.Tests
             float timeout = Time.realtimeSinceStartup + 15f;
 
             while ((menu == null
+                    || menu.SessionBindCount == 0
                     || document == null
                     || document.rootVisualElement.panel == null
                     || !inventory.HasPlayer
@@ -146,7 +155,7 @@ namespace DarkFlare.Tests
                 menu = UnityEngine.Object.FindAnyObjectByType<GameMenuController>();
                 document = menu != null ? menu.GetComponent<UIDocument>() : null;
 
-                if (menu != null)
+                if (menu != null && menu.SessionBindCount > 0)
                 {
                     IArchitecture current = menu.GetArchitecture();
                     inventory = current.SendQuery(new GetInventorySnapshotQuery());
@@ -194,12 +203,12 @@ namespace DarkFlare.Tests
                 grid.worldBound.yMin + targetOrigin.y * step + 24f);
             Mouse mouse = InputSystem.AddDevice<Mouse>();
             Vector2 itemScreenPosition = PanelToScreen(root, itemButton.worldBound.center);
-            Set(mouse.position, itemScreenPosition);
+            _inputFixture.Set(mouse.position, itemScreenPosition);
             yield return null;
-            Press(mouse.leftButton);
+            _inputFixture.Press(mouse.leftButton);
             yield return null;
             Assert.IsTrue(panel.IsPointerPending, "鼠标按下后未进入拖拽候选状态");
-            Release(mouse.leftButton);
+            _inputFixture.Release(mouse.leftButton);
             yield return null;
             yield return null;
             Assert.IsFalse(panel.IsPointerPending, "鼠标单击松开后仍残留拖拽候选状态");
@@ -235,13 +244,13 @@ namespace DarkFlare.Tests
             Assert.IsNull(unequipped.CurrentWeapon, "从装备槽拖回背包后武器仍处于装备状态");
             Assert.IsTrue(ContainsItem(unequipped, weapon), "从装备槽拖回背包后武器未回到背包");
             itemButton = FindInventoryButton(root, weapon.BaseDefinition.DisplayName);
-            Set(mouse.position, PanelToScreen(root, root.worldBound.max - new Vector2(12f, 12f)));
+            _inputFixture.Set(mouse.position, PanelToScreen(root, root.worldBound.max - new Vector2(12f, 12f)));
             yield return null;
             Assert.AreEqual(
                 DisplayStyle.None,
                 root.Q<VisualElement>("item-tooltip").resolvedStyle.display,
                 "鼠标离开所有物品后提示窗仍然可见");
-            Set(mouse.position, PanelToScreen(root, itemButton.worldBound.center));
+            _inputFixture.Set(mouse.position, PanelToScreen(root, itemButton.worldBound.center));
             yield return null;
             yield return null;
             VisualElement tooltip = root.Q<VisualElement>("item-tooltip");
@@ -271,22 +280,22 @@ namespace DarkFlare.Tests
         {
             Vector2 sourceScreen = PanelToScreen(root, source);
             Vector2 destinationScreen = PanelToScreen(root, destination);
-            Set(mouse.position, sourceScreen);
+            _inputFixture.Set(mouse.position, sourceScreen);
             yield return null;
-            Press(mouse.leftButton);
+            _inputFixture.Press(mouse.leftButton);
             yield return null;
             VisualElement picked = root.panel.Pick(source);
             Assert.IsTrue(
                 panel.IsPointerPending,
                 $"PointerDown 未进入待拖拽状态；picked={picked?.name ?? "null"}，mouse={mouse.position.ReadValue()}，source={sourceScreen}");
-            Set(mouse.position, Vector2.Lerp(sourceScreen, destinationScreen, 0.35f));
+            _inputFixture.Set(mouse.position, Vector2.Lerp(sourceScreen, destinationScreen, 0.35f));
             yield return null;
             Assert.IsTrue(
                 panel.IsDragging,
                 $"Pointer 移动超过阈值后未进入拖拽状态；pending={panel.IsPointerPending}");
-            Set(mouse.position, destinationScreen);
+            _inputFixture.Set(mouse.position, destinationScreen);
             yield return null;
-            Release(mouse.leftButton);
+            _inputFixture.Release(mouse.leftButton);
             yield return null;
             yield return null;
             Assert.IsFalse(panel.IsDragging, "Pointer 抬起后拖拽状态未结束");

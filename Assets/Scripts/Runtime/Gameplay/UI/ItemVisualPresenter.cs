@@ -9,7 +9,9 @@ namespace DarkFlare
 
         public static Sprite GetSprite(string iconGuid)
         {
-            return GameArchitecture.Interface.GetUtility<SpriteAssetLoader>().GetSprite(iconGuid);
+            return GameArchitectureProvider.RequireCurrent()
+                .GetUtility<SpriteAssetLoader>()
+                .GetSprite(iconGuid);
         }
 
         public static void ApplyIcon(VisualElement element, string iconGuid)

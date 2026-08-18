@@ -11,6 +11,7 @@
 - [随机化与掉落规则](../../randomization-system.md)
 - [首批内容池](../../content-system.md)
 - [打造系统](../../crafting-system.md)
+- [应用生命周期与会话作用域](../../infrastructure/application-lifecycle.md)
 
 ## 归档清单
 
@@ -41,5 +42,6 @@
 | [alpha 0.1.6 基础随机打造执行计划](./alpha-0.1.6-random-crafting-plan.md) | alpha 0.1.6 | [打造系统](../../crafting-system.md)、[随机化与掉落规则](../../randomization-system.md)、[战斗内容配置参考](../../config-reference/combat-content.md) |
 | [alpha 0.1.7 多帧特效、稳定世界层级与综合验收执行计划](./alpha-0.1.7-effects-sorting-acceptance-plan.md) | alpha 0.1.7 | [视觉资产清单](../../visual-assets.md)、[世界渲染与稳定层级](../../world-rendering.md)、[配置参考索引](../../config-reference/README.md) |
 | [alpha 0.1 开发计划](./alpha-0.1-plan.md) | alpha 0.1.0–0.1.7 | [首版玩法循环](../../gameplay-loop.md)、[伤害系统与词条系统设计](../../damage-affix-system.md)、[打造系统](../../crafting-system.md)、[世界渲染与稳定层级](../../world-rendering.md) |
+| [alpha 0.2.0 应用宿主、作用域与规范验证执行计划](./alpha-0.2.0-application-lifecycle-plan.md) | alpha 0.2.0 | [应用生命周期与会话作用域](../../infrastructure/application-lifecycle.md) |
 
-最近归档日期：2026-08-13。
+最近归档日期：2026-08-18。

@@ -12,22 +12,25 @@ using UnityEngine.UIElements;
 
 namespace DarkFlare.Tests
 {
-    public class EquipmentPhase2PlayModeTests : InputTestFixture
+    public class EquipmentPhase2PlayModeTests
     {
         readonly List<Object> _objects = new List<Object>();
+        readonly InputTestFixture _inputFixture = new InputTestFixture();
+        readonly GameArchitectureTestFixture _fixture = new GameArchitectureTestFixture();
 
         IArchitecture _architecture;
 
-        public override void Setup()
+        [UnitySetUp]
+        public IEnumerator Setup()
         {
-            // InputTestFixture 会替换全局 Input System。旧架构必须先在原管理器中释放，
-            // 否则真实设备的状态监视器会残留并在测试结束后触发空引用。
-            GameArchitecture.Interface.Deinit();
-            base.Setup();
-            _architecture = GameArchitecture.Interface;
+            yield return _fixture.StopCurrent();
+            _inputFixture.Setup();
+            yield return _fixture.Restart();
+            _architecture = _fixture.Architecture;
         }
 
-        public override void TearDown()
+        [UnityTearDown]
+        public IEnumerator TearDown()
         {
             for (int i = _objects.Count - 1; i >= 0; i--)
             {
@@ -39,9 +42,10 @@ namespace DarkFlare.Tests
 
             _objects.Clear();
             Time.timeScale = 1f;
-            _architecture?.Deinit();
             _architecture = null;
-            base.TearDown();
+            yield return _fixture.StopCurrent();
+            _inputFixture.TearDown();
+            yield return _fixture.Restart();
         }
 
         [UnityTest]
@@ -233,7 +237,7 @@ namespace DarkFlare.Tests
             Assert.IsNotNull(button);
             button.Focus();
             yield return null;
-            PressAndRelease(submitControl);
+            _inputFixture.PressAndRelease(submitControl);
             yield return null;
             yield return null;
         }

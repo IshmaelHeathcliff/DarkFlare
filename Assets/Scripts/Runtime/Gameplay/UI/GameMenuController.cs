@@ -24,6 +24,7 @@ namespace DarkFlare
         [SerializeField]
         CraftingPanelController _craftingPanel;
 
+        SceneSessionBinding _sessionBinding;
         GameInput _gameInput;
         IUnRegister _openRequestRegistration;
         VisualElement _overlay;
@@ -42,9 +43,11 @@ namespace DarkFlare
 
         public bool IsOpen => _gameInput != null && _gameInput.CurrentMode == GameInputMode.UI;
 
+        public int SessionBindCount => _sessionBinding?.BindCount ?? 0;
+
         public IArchitecture GetArchitecture()
         {
-            return GameArchitecture.Interface;
+            return _sessionBinding.RequireArchitecture();
         }
 
         public void OpenPage(GameMenuPage page)
@@ -83,33 +86,63 @@ namespace DarkFlare
         void OnEnable()
         {
             EnsureComponents();
+            _sessionBinding ??= new SceneSessionBinding(
+                this,
+                BindSession,
+                UnbindSession);
+            _sessionBinding.Enable();
+        }
+
+        void OnDisable()
+        {
+            if (_sessionBinding != null
+                && _sessionBinding.IsBound
+                && _gameInput != null
+                && _gameInput.IsUiEnabled)
+            {
+                _gameInput.SwitchToGameplay();
+            }
+
+            _sessionBinding?.Disable();
+        }
+
+        SceneSessionBindResult BindSession(IArchitecture architecture)
+        {
+            if (_document == null || _document.panelSettings == null)
+            {
+                Debug.LogError("[GameMenuController] 缺少 UIDocument 或 PanelSettings，无法初始化菜单", this);
+                return SceneSessionBindResult.Failed;
+            }
+
+            VisualElement root = _document.rootVisualElement;
+
+            if (root == null || root.panel == null)
+            {
+                return SceneSessionBindResult.Retry;
+            }
 
             if (!BindVisualTree())
             {
-                return;
+                return SceneSessionBindResult.Failed;
             }
 
-            _gameInput = this.GetUtility<GameInput>();
+            _gameInput = architecture.GetUtility<GameInput>();
 
             if (_gameInput == null)
             {
                 Debug.LogError("[GameMenuController] 缺少 GameInput，无法控制菜单", this);
-                return;
+                return SceneSessionBindResult.Failed;
             }
 
             _openRequestRegistration = this.RegisterEvent<GameMenuOpenRequestedEvent>(OnMenuOpenRequested);
             _gameInput.ModeChanged += OnInputModeChanged;
             ApplyInputMode(_gameInput.CurrentMode);
             Debug.Log("[GameMenuController] 游戏菜单初始化完成", this);
+            return SceneSessionBindResult.Success;
         }
 
-        void OnDisable()
+        void UnbindSession()
         {
-            if (_gameInput != null && _gameInput.IsUiEnabled)
-            {
-                _gameInput.SwitchToGameplay();
-            }
-
             if (_gameInput != null)
             {
                 _gameInput.ModeChanged -= OnInputModeChanged;
