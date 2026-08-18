@@ -61,7 +61,7 @@ namespace DarkFlare
 
             int lootSeed = this.GetSystem<GameplayRandomSystem>().NextSeed(GameplayRandomChannel.Loot);
             System.Random random = new System.Random(lootSeed);
-            string instanceId = $"loot_{unchecked((uint)lootSeed):x8}";
+            ItemInstanceId instanceId = this.GetUtility<IItemInstanceIdGenerator>().Next();
 
             // 怪物/区域等级体系还没做，先固定用 1 级掉落
             ItemInstance item = lootTable.GenerateLoot(random, instanceId, 1);
@@ -73,10 +73,13 @@ namespace DarkFlare
             }
 
             Debug.Log($"[LootSystem] {e.Actor.ActorId} 生成 {DescribeItem(item)}，掉落种子 {lootSeed}，物品种子 {item.Seed}");
-            SpawnPickup(item, e.Actor.transform.position);
+            SpawnPickup(
+                this.GetUtility<IRunInstanceIdGenerator>().NextWorldDropId(),
+                item,
+                e.Actor.transform.position);
         }
 
-        void SpawnPickup(ItemInstance item, Vector3 position)
+        void SpawnPickup(WorldDropId worldDropId, ItemInstance item, Vector3 position)
         {
             GameObject prefab = this.GetUtility<PrefabAssetLoader>().GetPrefab(_pickupPrefabReference);
 
@@ -97,7 +100,7 @@ namespace DarkFlare
                 return;
             }
 
-            controller.Init(item);
+            controller.Init(worldDropId, item);
         }
 
         static string DescribeItem(ItemInstance item)

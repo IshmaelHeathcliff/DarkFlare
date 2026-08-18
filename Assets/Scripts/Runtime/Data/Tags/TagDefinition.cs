@@ -33,8 +33,9 @@ namespace DarkFlare
         Reserved
     }
 
+    [ContentDefinition(ContentNamespaces.Tag)]
     [CreateAssetMenu(menuName = "DarkFlare/Data/Tags/Tag Definition", fileName = "TagDefinition")]
-    public class TagDefinition : ScriptableObject
+    public class TagDefinition : ScriptableObject, IContentDefinition
     {
         [SerializeField]
         [LabelText("稳定ID")]

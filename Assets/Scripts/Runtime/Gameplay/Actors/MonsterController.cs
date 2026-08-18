@@ -46,7 +46,7 @@ namespace DarkFlare
             ApplyDefinition();
             _sortParticipant?.ConfigureIdentity(
                 WorldSortCategory.Monster,
-                $"{_definition.Id}_{unchecked((uint)_instance.Seed):x8}");
+                _instance.Id.Value);
         }
 
         void Awake()

@@ -2,7 +2,7 @@
 
 ## 项目状态
 
-`DarkFlare` 已完成首版单场景最小循环、初步体验优化、`alpha 0.1` 封板和 `alpha 0.2.0` 应用生命周期底座，现正继续推进 `alpha 0.2` 基础设施。现有基线可以在 `Main.unity` 中完成战斗、掉落、拾取、四槽装备、交易、打造和返回战斗的完整循环，并能安全停止、重建当前玩法 Session。
+`DarkFlare` 已完成首版单场景最小循环、初步体验优化、`alpha 0.1` 封板，以及 `alpha 0.2.0–0.2.1` 应用生命周期、稳定身份、内容目录和迁移底座，现正进入 `alpha 0.2.2` 本地存档闭环。现有基线可以在 `Main.unity` 中完成战斗、掉落、拾取、四槽装备、交易、打造和返回战斗的完整循环，并能安全停止、重建当前玩法 Session。
 
 alpha 版本内的阶段使用三段式名称：`alpha 0.1` 的首个阶段为 `alpha 0.1.0`，后续依次为 `alpha 0.1.1`、`alpha 0.1.2`；`alpha 0.2` 同样从 `alpha 0.2.0` 开始。已完成版本记录见[计划归档](./plan/archive/README.md)，当前版本见[alpha 0.2 基础设施开发计划](./plan/alpha-0.2-plan.md)。
 
@@ -34,12 +34,15 @@ alpha 版本内的阶段使用三段式名称：`alpha 0.1` 的首个阶段为 `
 - `Assets/Scripts/Runtime/Infrastructure/Lifecycle/ApplicationHost.cs`：拥有 Application / Profile / Session / Scene 生命周期和统一取消入口，以 latest-wins 协调当前单场景兼容请求。
 - `Assets/Scripts/Runtime/Infrastructure/Lifecycle/GameArchitectureProvider.cs`：`GameArchitecture` 的唯一正式创建、访问与销毁入口，以所有者 lease 和单调 generation 隔离连续 Session。
 - `Assets/Scripts/Runtime/Infrastructure/Lifecycle/SceneSessionBinding.cs`：让场景预置组件只绑定同场景且已 Running、lease 有效的 Session。
+- `Assets/Scripts/Runtime/Infrastructure/Content/`：`ContentId`、内容类型登记、目录资产与不可变运行时目录。
+- `Assets/Scripts/Runtime/Infrastructure/Identity/StableInstanceIds.cs`：玩家、物品、运行、怪物、世界掉落和存档槽位的强类型身份与受控生成器。
+- `Assets/Scripts/Runtime/Infrastructure/Persistence/`：纯 DTO、运行时映射器、四类版本合同和内存 JSON 迁移管线。
 - `Assets/Scripts/Runtime/GameArchitecture.cs`：Session 组合根，注册输入 Utility、战斗 / 装备 / 背包 / 经济 Model，战斗、生成、掉落、交易、打造 System，以及 `SessionObjectRegistry`。
 - `Assets/Scripts/Runtime/`：`DarkFlare.Runtime` 程序集。
-- `Assets/Scripts/Tests/EditMode/`：`DarkFlare.Tests.EditMode`，`alpha 0.2.0` 完成基线全量 `255/255` 通过。
-- `Assets/Scripts/Tests/PlayMode/`：`DarkFlare.Tests.PlayMode`，`alpha 0.2.0` 项目自有测试 `45/45` 通过；完整运行 `49` 项中 `47` 项通过、`0` 失败，另有 `2` 项 Input System 包集成测试因上游 issue 1252825 跳过。
+- `Assets/Scripts/Tests/EditMode/`：`DarkFlare.Tests.EditMode`，`alpha 0.2.1` 完成基线全量 `287/287` 通过。
+- `Assets/Scripts/Tests/PlayMode/`：`DarkFlare.Tests.PlayMode`，项目自有测试 `45/45` 通过；完整运行 `49` 项中 `47` 项通过、`0` 失败，另有 `2` 项 Input System 包集成测试因上游 issue 1252825 跳过。
 
-生命周期的职责、状态、事务和禁止事项见[应用生命周期与会话作用域](./infrastructure/application-lifecycle.md)。
+生命周期的职责、状态、事务和禁止事项见[应用生命周期与会话作用域](./infrastructure/application-lifecycle.md)；内容、实例身份、DTO 与迁移规则见[稳定身份、内容目录与迁移框架](./infrastructure/content-identity-migration.md)。
 
 ### 玩法模块
 
@@ -64,7 +67,7 @@ alpha 版本内的阶段使用三段式名称：`alpha 0.1` 的首个阶段为 `
 
 ## 当前资源与配置
 
-- `Assets/Data/Preset` 已有玩家、技能、怪物、刷怪、掉落、物品、词条、商人和打造配置。
+- `Assets/Data/Preset` 已有玩家、技能、怪物、刷怪、掉落、物品、词条、商人和打造配置；唯一正式内容目录 `core` v1 收录 90 个配置。
 - 玩家、怪物、投射物和掉落物 Prefab 位于 `Assets/Prefabs`，通过 Addressables 加载。
 - Prefab Addressables 加载按 GUID 建立跨调用单飞任务；Sprite 在单次预热请求内按 GUID 去重，加载器保存并精确释放实际句柄。
 - `Assets/UI` 已有 `GameRoot`、`Hud`、`Inventory`、`Shop`、`Crafting` 的 UXML / USS。
@@ -75,13 +78,13 @@ alpha 版本内的阶段使用三段式名称：`alpha 0.1` 的首个阶段为 `
 首版已经完成“战斗 → 拾取 → 装备 / 交易 / 打造 → 再战斗”的人手循环，但仍是用于验证系统闭环的功能原型：
 
 - 仅有 `Main.unity` 单场景；应用宿主可按 latest-wins 协调该场景卸载、直接重载和快速重复请求，但尚无 Boot / FrontEnd / Loading 状态机或完整 SceneFlow。
-- 当前没有正式存档路径、DTO、槽位、原子写入、备份、迁移或读档闭环。
+- 当前已有纯 DTO、分离对象图 Mapper 和内存迁移管线，但没有正式存档路径、序列化封装、槽位、原子写入、备份或读档提交闭环。
 - Unity Localization 包已经安装，但没有 Locale、String Table、运行时切换服务或玩家可见文本迁移。
 - 背包没有拖拽换位、旋转、堆叠和重量；装备已实现武器、护甲、左戒指和右戒指四槽，但没有耐久、套装、纸娃娃或唯一装备特效。
 - 交易没有回购或多商人独立库存；打造没有配方、材料和批量操作。
 - 战斗内容密度、场景规模和 UI 功能深度仍属于原型基线；现有首批视觉不视为最终美术质量。
 
-完整流程与模块边界见 [`gameplay-loop.md`](./gameplay-loop.md)，生命周期见[应用生命周期与会话作用域](./infrastructure/application-lifecycle.md)，输入、菜单和场景交互结构见 [`input-ui-system.md`](./input-ui-system.md)。
+完整流程与模块边界见 [`gameplay-loop.md`](./gameplay-loop.md)，生命周期见[应用生命周期与会话作用域](./infrastructure/application-lifecycle.md)，稳定身份和迁移见[稳定身份、内容目录与迁移框架](./infrastructure/content-identity-migration.md)，输入、菜单和场景交互结构见 [`input-ui-system.md`](./input-ui-system.md)。
 
 ## 文档维护约定
 

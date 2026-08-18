@@ -190,6 +190,8 @@ namespace DarkFlare.Editor
             List<TraderDefinition> traders = LoadAssets<TraderDefinition>($"{PresetRoot}/Traders");
             List<CraftingDefinition> craftingDefinitions = LoadAssets<CraftingDefinition>($"{PresetRoot}/Crafting");
 
+            ValidateRegisteredDefinitions(issues);
+            ValidateOfficialCatalog(issues);
             ValidateExpectedIds(tags, ExpectedTagIds, tag => tag.Id, "标签", false, issues);
             ValidateExpectedIds(stats, StatIds.All, stat => stat.Id, "属性", true, issues);
             ValidateExpectedIds(affixes, ExpectedAffixIds, affix => affix.Id, "词条", true, issues);
@@ -268,6 +270,104 @@ namespace DarkFlare.Editor
             }
 
             return assets;
+        }
+
+        static void ValidateRegisteredDefinitions(List<ContentValidationIssue> issues)
+        {
+            List<ScriptableObject> assets = LoadAssets<ScriptableObject>(PresetRoot);
+            Dictionary<ContentId, ScriptableObject> byId = new Dictionary<ContentId, ScriptableObject>();
+
+            for (int i = 0; i < assets.Count; i++)
+            {
+                ScriptableObject asset = assets[i];
+
+                if (asset is not IContentDefinition definition)
+                {
+                    continue;
+                }
+
+                if (!ContentDefinitionRegistry.TryGet(asset.GetType(), out ContentDefinitionMetadata metadata))
+                {
+                    AddError(issues, asset, $"内容类型未在统一注册表中登记：{asset.GetType().FullName}");
+                    continue;
+                }
+
+                if (!ContentId.TryCreate(metadata.Namespace, definition.Id, out ContentId contentId))
+                {
+                    AddError(
+                        issues,
+                        asset,
+                        $"内容 ID 必须使用规范格式：{metadata.Namespace}:{definition.Id}");
+                    continue;
+                }
+
+                if (byId.TryGetValue(contentId, out ScriptableObject duplicate))
+                {
+                    AddError(
+                        issues,
+                        asset,
+                        $"内容 ID 重复：{contentId}，首次出现于 {AssetDatabase.GetAssetPath(duplicate)}");
+                    continue;
+                }
+
+                byId.Add(contentId, asset);
+            }
+        }
+
+        static void ValidateOfficialCatalog(List<ContentValidationIssue> issues)
+        {
+            List<ContentCatalogDefinition> definitions = LoadAssets<ContentCatalogDefinition>(PresetRoot);
+
+            if (definitions.Count != 1)
+            {
+                AddError(issues, null, $"正式内容目录应为 1 个，当前为 {definitions.Count}");
+                return;
+            }
+
+            ContentCatalogDefinition definition = definitions[0];
+            ContentCatalogBuildResult result = ContentCatalog.Build(definition);
+
+            for (int i = 0; i < result.Issues.Count; i++)
+            {
+                ContentCatalogIssue issue = result.Issues[i];
+                AddError(issues, issue.Context != null ? issue.Context : definition, issue.Message);
+            }
+
+            if (!result.Succeeded)
+            {
+                return;
+            }
+
+            List<ScriptableObject> assets = LoadAssets<ScriptableObject>(PresetRoot);
+            int registeredCount = 0;
+
+            for (int i = 0; i < assets.Count; i++)
+            {
+                ScriptableObject asset = assets[i];
+
+                if (asset is not IContentDefinition)
+                {
+                    continue;
+                }
+
+                registeredCount++;
+
+                if (!result.Catalog.Contains(asset))
+                {
+                    AddError(
+                        issues,
+                        asset,
+                        $"正式内容未加入内容目录：{AssetDatabase.GetAssetPath(asset)}");
+                }
+            }
+
+            if (result.Catalog.Count != registeredCount)
+            {
+                AddError(
+                    issues,
+                    definition,
+                    $"内容目录条目数量应为 {registeredCount}，当前为 {result.Catalog.Count}");
+            }
         }
 
         static void ValidateExpectedIds<T>(

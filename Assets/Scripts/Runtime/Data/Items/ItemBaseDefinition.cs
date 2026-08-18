@@ -61,8 +61,9 @@ namespace DarkFlare
         }
     }
 
+    [ContentDefinition(ContentNamespaces.Item)]
     [CreateAssetMenu(menuName = "DarkFlare/Data/Items/Item Base Definition", fileName = "ItemBaseDefinition")]
-    public class ItemBaseDefinition : ScriptableObject
+    public class ItemBaseDefinition : ScriptableObject, IContentDefinition
     {
         [SerializeField]
         [LabelText("稳定ID")]
@@ -157,6 +158,11 @@ namespace DarkFlare
 
         public ItemInstance CreateInstance(string instanceId, int itemLevel, int seed, ItemRarity rarity)
         {
+            return CreateInstance(ItemInstanceId.FromLegacy(instanceId), itemLevel, seed, rarity);
+        }
+
+        public ItemInstance CreateInstance(ItemInstanceId id, int itemLevel, int seed, ItemRarity rarity)
+        {
             System.Random random = new System.Random(seed);
             List<ModifierInstance> implicitModifiers = new List<ModifierInstance>(_implicitModifiers.Count);
 
@@ -165,7 +171,7 @@ namespace DarkFlare
                 implicitModifiers.Add(_implicitModifiers[i].CreateInstance(random));
             }
 
-            return new ItemInstance(instanceId, this, rarity, itemLevel, seed, implicitModifiers);
+            return new ItemInstance(id, this, rarity, itemLevel, seed, implicitModifiers);
         }
 
         void OnValidate()

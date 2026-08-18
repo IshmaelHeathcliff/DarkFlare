@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d27920449c4ad146bddb933874b457d, type: 3}
   m_Name: "\u57FA\u7840\u5237\u602A\u8868"
   m_EditorClassIdentifier: Assembly-CSharp::DarkFlare.MonsterSpawnDefinition
+  _id: main
   _spawnInterval: 1.5
   _maxAliveCount: 12
   _spawnRadius: 8

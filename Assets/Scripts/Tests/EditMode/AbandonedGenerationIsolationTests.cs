@@ -135,7 +135,8 @@ namespace DarkFlare.Tests
                 {
                     typeof(LifecycleScope),
                     typeof(int),
-                    typeof(Action<GameSessionHost, string>)
+                    typeof(Action<GameSessionHost, string>),
+                    typeof(IItemInstanceIdGenerator)
                 },
                 null);
 
@@ -144,6 +145,7 @@ namespace DarkFlare.Tests
             {
                 profileScope,
                 1,
+                null,
                 null
             });
         }

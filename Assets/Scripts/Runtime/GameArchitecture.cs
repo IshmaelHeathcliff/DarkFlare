@@ -6,6 +6,8 @@ namespace DarkFlare
         {
             this.RegisterUtility(new GameInput());
             this.RegisterUtility(new SessionObjectRegistry());
+            this.RegisterUtility<IItemInstanceIdGenerator>(new UuidItemInstanceIdGenerator());
+            this.RegisterUtility<IRunInstanceIdGenerator>(RunInstanceIdGenerator.Create());
             this.RegisterModel(new CombatModel());
             this.RegisterModel(new EquipmentModel());
             this.RegisterModel(new InventoryModel());

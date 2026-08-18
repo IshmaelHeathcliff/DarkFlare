@@ -22,7 +22,7 @@ namespace DarkFlare.Tests
         {
             ConfigurationDocumentationCoverageReport report = ConfigurationDocumentationCoverage.ScanOfficial();
             Assert.AreEqual(18, report.TypeCount);
-            Assert.AreEqual(150, report.SerializedFieldCount);
+            Assert.AreEqual(153, report.SerializedFieldCount);
             Assert.AreEqual(report.SerializedFieldCount, report.CoveredFieldCount);
             Assert.IsTrue(report.Passed, FormatIssues(report.Issues));
         }

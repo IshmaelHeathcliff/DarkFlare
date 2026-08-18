@@ -80,10 +80,10 @@ namespace DarkFlare.Tests
             CollectionAssert.AreEqual(
                 ExpectedNestedTypes,
                 nestedTypes.Select(type => type.FullName).ToArray());
-            Assert.AreEqual(123, ConfigurationTypeDiscovery.CountSerializedFields(topLevelTypes));
+            Assert.AreEqual(126, ConfigurationTypeDiscovery.CountSerializedFields(topLevelTypes));
             Assert.AreEqual(27, ConfigurationTypeDiscovery.CountSerializedFields(nestedTypes));
             Assert.AreEqual(
-                150,
+                153,
                 ConfigurationTypeDiscovery.CountSerializedFields(topLevelTypes)
                 + ConfigurationTypeDiscovery.CountSerializedFields(nestedTypes));
 

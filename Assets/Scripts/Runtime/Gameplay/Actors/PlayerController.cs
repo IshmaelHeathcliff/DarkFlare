@@ -35,6 +35,10 @@ namespace DarkFlare
 
         public CombatActor Actor => _actor;
 
+        public PlayerId Id => PlayerId.LocalPlayer;
+
+        public CharacterDefinition Definition => _definition;
+
         public IArchitecture GetArchitecture()
         {
             return _architecture ?? GameArchitectureProvider.RequireCurrent();

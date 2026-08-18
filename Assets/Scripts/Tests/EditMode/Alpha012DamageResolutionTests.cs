@@ -267,7 +267,7 @@ namespace DarkFlare.Tests
             Assert.IsNotNull(equipped);
             Assert.AreEqual(ItemRarity.Normal, equipped.Rarity);
             Assert.AreEqual(1, equipped.ItemLevel);
-            Assert.AreEqual("starting_weapon_startup_player", equipped.InstanceId);
+            Assert.IsTrue(equipped.Id.IsCanonical);
             Assert.IsFalse(_architecture.GetModel<InventoryModel>().Grid.Placements.ContainsKey(equipped));
 
             Assert.IsTrue(_architecture.SendCommand(new GrantStartingWeaponCommand(actor, weapon)));

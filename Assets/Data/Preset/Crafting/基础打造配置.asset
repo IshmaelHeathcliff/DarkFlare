@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d3744f227dd24c4f9216a64a005d27a, type: 3}
   m_Name: "\u57FA\u7840\u6253\u9020\u914D\u7F6E"
   m_EditorClassIdentifier: Assembly-CSharp::DarkFlare.CraftingDefinition
+  _id: default
   _affixPool:
   - {fileID: 11400000, guid: de8f44ef4c5945044bd186a92f9deb34, type: 2}
   - {fileID: 11400000, guid: f4200000000000000000000000000002, type: 2}

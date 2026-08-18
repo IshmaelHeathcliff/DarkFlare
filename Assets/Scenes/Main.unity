@@ -2490,6 +2490,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b34bb3c6664ea042b2134eac4a0a2e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DarkFlare.CombatPrototypeBootstrap
+  _contentCatalog: {fileID: 11400000, guid: 1cd1a659ad593e848bb84f65634abf94, type: 2}
   _playerCharacter: {fileID: 11400000, guid: 6d95f9ebf5769094c9a2130370d9c383, type: 2}
   _playerSkill: {fileID: 11400000, guid: 3b9429a30637ee84fabab25134b3a361, type: 2}
   _startingWeapon: {fileID: 11400000, guid: 97909e3c17a4418428112ff92c410eb5, type: 2}

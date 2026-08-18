@@ -5,8 +5,9 @@ using UnityEngine.AddressableAssets;
 
 namespace DarkFlare
 {
+    [ContentDefinition(ContentNamespaces.Monster)]
     [CreateAssetMenu(menuName = "DarkFlare/Data/Monsters/Monster Definition", fileName = "MonsterDefinition")]
-    public class MonsterDefinition : ScriptableObject
+    public class MonsterDefinition : ScriptableObject, IContentDefinition
     {
         [SerializeField]
         [LabelText("稳定ID")]
@@ -253,6 +254,11 @@ namespace DarkFlare
 
         public MonsterInstanceData CreateInstanceData(int seed)
         {
+            return CreateInstanceData(MonsterInstanceId.FromLegacySeed(seed), seed);
+        }
+
+        public MonsterInstanceData CreateInstanceData(MonsterInstanceId id, int seed)
+        {
             MonsterInstanceRandomSeeds randomSeeds = new MonsterInstanceRandomSeeds(seed);
             System.Random random = new System.Random(randomSeeds.HealthSeed);
             float minimumMultiplier = Mathf.Max(0.01f, Mathf.Min(_healthMultiplierRange.x, _healthMultiplierRange.y));
@@ -280,6 +286,7 @@ namespace DarkFlare
 
             StatBlock effectiveStats = CombatStatResolver.Build(baseStats, modifiers);
             return new MonsterInstanceData(
+                id,
                 randomSeeds,
                 baseMaxHealth,
                 baseStats,

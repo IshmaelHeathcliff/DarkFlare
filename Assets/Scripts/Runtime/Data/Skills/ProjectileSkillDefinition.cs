@@ -12,8 +12,9 @@ namespace DarkFlare
         EquippedWeapon
     }
 
+    [ContentDefinition(ContentNamespaces.Skill)]
     [CreateAssetMenu(menuName = "DarkFlare/Data/Skills/Projectile Skill Definition", fileName = "ProjectileSkillDefinition")]
-    public class ProjectileSkillDefinition : ScriptableObject
+    public class ProjectileSkillDefinition : ScriptableObject, IContentDefinition
     {
         [SerializeField]
         [LabelText("稳定ID")]

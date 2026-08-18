@@ -7,6 +7,7 @@ namespace DarkFlare
     public sealed class GameplaySceneConfiguration
     {
         public GameplaySceneConfiguration(
+            ContentCatalogDefinition contentCatalog,
             CharacterDefinition playerCharacter,
             ProjectileSkillDefinition playerSkill,
             ItemBaseDefinition startingWeapon,
@@ -21,6 +22,7 @@ namespace DarkFlare
             bool useFixedRandomSeed,
             int fixedRandomSeed)
         {
+            ContentCatalogDefinition = contentCatalog;
             PlayerCharacter = playerCharacter;
             PlayerSkill = playerSkill;
             StartingWeapon = startingWeapon;
@@ -35,6 +37,8 @@ namespace DarkFlare
             UseFixedRandomSeed = useFixedRandomSeed;
             FixedRandomSeed = fixedRandomSeed;
         }
+
+        public ContentCatalogDefinition ContentCatalogDefinition { get; }
 
         public CharacterDefinition PlayerCharacter { get; }
 
@@ -62,9 +66,10 @@ namespace DarkFlare
 
         public int FixedRandomSeed { get; }
 
-        public IReadOnlyList<string> Validate()
+        public IReadOnlyList<string> Validate(ContentCatalog catalog)
         {
             List<string> errors = new List<string>();
+            RequireAsset(ContentCatalogDefinition, "内容目录", errors);
             RequireAsset(PlayerCharacter, "玩家定义", errors);
             RequireAddressable(PlayerCharacter != null ? PlayerCharacter.Prefab : null, "玩家 Prefab", errors);
             RequireAsset(PlayerSkill, "玩家默认技能", errors);
@@ -74,6 +79,20 @@ namespace DarkFlare
             RequireAddressable(LootPickupPrefab, "掉落物 Prefab", errors);
             RequireAsset(Trader, "商人定义", errors);
             RequireAsset(CraftingDefinition, "打造定义", errors);
+
+            if (catalog == null)
+            {
+                errors.Add("Application 尚未安装内容目录");
+            }
+            else
+            {
+                RequireCatalogEntry(PlayerCharacter, "玩家定义", catalog, errors);
+                RequireCatalogEntry(PlayerSkill, "玩家默认技能", catalog, errors);
+                RequireCatalogEntry(StartingWeapon, "初始武器", catalog, errors);
+                RequireCatalogEntry(MonsterSpawnDefinition, "怪物生成定义", catalog, errors);
+                RequireCatalogEntry(Trader, "商人定义", catalog, errors);
+                RequireCatalogEntry(CraftingDefinition, "打造定义", catalog, errors);
+            }
 
             if (StartingGold < 0)
             {
@@ -123,6 +142,17 @@ namespace DarkFlare
                     {
                         errors.Add("怪物生成规则包含空怪物引用");
                         continue;
+                    }
+
+                    RequireCatalogEntry(rule.Monster, $"怪物定义: {rule.Monster.Id}", catalog, errors);
+
+                    if (rule.Monster.LootTable != null)
+                    {
+                        RequireCatalogEntry(
+                            rule.Monster.LootTable,
+                            $"怪物掉落表: {rule.Monster.Id}",
+                            catalog,
+                            errors);
                     }
 
                     if (rule.Weight > 0)
@@ -199,6 +229,18 @@ namespace DarkFlare
             if (asset == null)
             {
                 errors.Add($"{displayName} 未配置");
+            }
+        }
+
+        static void RequireCatalogEntry(
+            ScriptableObject asset,
+            string displayName,
+            ContentCatalog catalog,
+            List<string> errors)
+        {
+            if (asset != null && catalog != null && !catalog.Contains(asset))
+            {
+                errors.Add($"{displayName} 不在正式内容目录中");
             }
         }
 

@@ -7,6 +7,8 @@ namespace DarkFlare
         readonly IReadOnlyList<MonsterAffixInstance> _affixes;
         readonly IReadOnlyList<ModifierInstance> _modifiers;
 
+        public MonsterInstanceId Id { get; }
+
         public int Seed => RandomSeeds.RootSeed;
 
         public MonsterInstanceRandomSeeds RandomSeeds { get; }
@@ -27,6 +29,7 @@ namespace DarkFlare
 
         public MonsterInstanceData(int seed, float maxHealth, StatBlock stats)
             : this(
+                MonsterInstanceId.FromLegacySeed(seed),
                 new MonsterInstanceRandomSeeds(seed),
                 maxHealth,
                 stats,
@@ -43,7 +46,27 @@ namespace DarkFlare
             StatBlock effectiveStats,
             IEnumerable<MonsterAffixInstance> affixes,
             IEnumerable<ModifierInstance> modifiers)
+            : this(
+                MonsterInstanceId.FromLegacySeed(randomSeeds.RootSeed),
+                randomSeeds,
+                baseMaxHealth,
+                baseStats,
+                effectiveStats,
+                affixes,
+                modifiers)
         {
+        }
+
+        public MonsterInstanceData(
+            MonsterInstanceId id,
+            MonsterInstanceRandomSeeds randomSeeds,
+            float baseMaxHealth,
+            StatBlock baseStats,
+            StatBlock effectiveStats,
+            IEnumerable<MonsterAffixInstance> affixes,
+            IEnumerable<ModifierInstance> modifiers)
+        {
+            Id = id;
             RandomSeeds = randomSeeds;
             BaseMaxHealth = baseMaxHealth;
             BaseStats = baseStats != null ? baseStats.Clone() : new StatBlock();

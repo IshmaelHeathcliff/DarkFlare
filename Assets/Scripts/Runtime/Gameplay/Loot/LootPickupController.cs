@@ -11,11 +11,14 @@ namespace DarkFlare
 
         CircleCollider2D _collider;
         ItemInstance _item;
+        WorldDropId _id;
         WorldSortParticipant _sortParticipant;
         IArchitecture _architecture;
         SessionObjectRegistry _sessionObjects;
 
         public ItemInstance Item => _item;
+
+        public WorldDropId Id => _id;
 
         public LootPickupVisual Visual => _visual;
 
@@ -26,13 +29,19 @@ namespace DarkFlare
 
         public void Init(ItemInstance item)
         {
+            Init(WorldDropId.FromLegacyItem(item.Id), item);
+        }
+
+        public void Init(WorldDropId id, ItemInstance item)
+        {
             EnsureComponents();
+            _id = id;
             _item = item;
             _visual?.Bind(item);
 
             if (_sortParticipant != null && item != null)
             {
-                _sortParticipant.ConfigureIdentity(WorldSortCategory.Loot, item.InstanceId);
+                _sortParticipant.ConfigureIdentity(WorldSortCategory.Loot, id.Value);
             }
         }
 

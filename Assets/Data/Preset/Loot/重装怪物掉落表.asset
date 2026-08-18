@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a952f8294be8a50479e3c63741a91292, type: 3}
   m_Name: "\u91CD\u88C5\u602A\u7269\u6389\u843D\u8868"
   m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.LootTableDefinition
+  _id: iron_husk
   _dropChance: 0.45
   _entries:
   - _item: {fileID: 11400000, guid: 97909e3c17a4418428112ff92c410eb5, type: 2}

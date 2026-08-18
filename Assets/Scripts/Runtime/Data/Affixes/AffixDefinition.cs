@@ -169,8 +169,9 @@ namespace DarkFlare
         }
     }
 
+    [ContentDefinition(ContentNamespaces.Affix)]
     [CreateAssetMenu(menuName = "DarkFlare/Data/Affixes/Affix Definition", fileName = "AffixDefinition")]
-    public class AffixDefinition : ScriptableObject
+    public class AffixDefinition : ScriptableObject, IContentDefinition
     {
         [SerializeField]
         [LabelText("稳定ID")]

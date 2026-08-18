@@ -14,8 +14,9 @@ namespace DarkFlare
         Crafting
     }
 
+    [ContentDefinition(ContentNamespaces.Stat)]
     [CreateAssetMenu(menuName = "DarkFlare/Data/Stats/Stat Definition", fileName = "StatDefinition")]
-    public class StatDefinition : ScriptableObject
+    public class StatDefinition : ScriptableObject, IContentDefinition
     {
         [SerializeField]
         [LabelText("稳定ID")]

@@ -22,9 +22,14 @@ namespace DarkFlare
         public int Weight => _weight;
     }
 
+    [ContentDefinition(ContentNamespaces.Spawn)]
     [CreateAssetMenu(menuName = "DarkFlare/Data/Monsters/Monster Spawn Definition", fileName = "MonsterSpawnDefinition")]
-    public class MonsterSpawnDefinition : ScriptableObject
+    public class MonsterSpawnDefinition : ScriptableObject, IContentDefinition
     {
+        [SerializeField]
+        [LabelText("稳定ID")]
+        string _id = string.Empty;
+
         [SerializeField]
         [MinValue(0.1f)]
         [LabelText("生成间隔")]
@@ -43,6 +48,8 @@ namespace DarkFlare
         [SerializeField]
         [LabelText("怪物池")]
         List<MonsterSpawnRule> _rules = new List<MonsterSpawnRule>();
+
+        public string Id => _id;
 
         public float SpawnInterval => _spawnInterval;
 

@@ -5,7 +5,7 @@
 `alpha 0.1.7` 阶段 E 已建立配置发现、文档映射与字段覆盖闭环：
 
 - 发现入口：所有 `CreateAssetMenu.menuName` 以 `DarkFlare/Data/` 开头的顶层配置，以及它们可达的 Unity 嵌套序列化类型；
-- 当前基线：12 个顶层类型、6 个嵌套类型，共 18 类、150 个序列化字段；
+- 当前基线：12 个顶层类型、6 个嵌套类型，共 18 类、153 个序列化字段；
 - 映射真值：[coverage-manifest.json](./coverage-manifest.json) 只登记完整类型名、职责文档和 H2 锚点；
 - 字段真值：Editor 反射实时读取 Unity 序列化字段，manifest 不复制字段列表；
 - 文档要求：每个字段必须在对应类型 H2 章节中拥有独立表格行。

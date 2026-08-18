@@ -19,6 +19,9 @@ namespace DarkFlare
         LifecycleScope _profileScope;
         GameSessionHost _session;
         GameSessionHost _controlledStopSession;
+        ContentCatalogDefinition _contentCatalogDefinition;
+        ContentCatalog _contentCatalog;
+        IItemInstanceIdGenerator _itemInstanceIds;
         GameSessionHost _lastNotifiedSession;
         SceneSessionInitializationRequest _activeSceneRequest;
         SceneSessionInitializationRequest _pendingSceneRequest;
@@ -59,6 +62,10 @@ namespace DarkFlare
 
         public LifecycleScope CurrentSceneScope => _session?.SceneScope;
 
+        public ContentCatalog ContentCatalog => _contentCatalog;
+
+        public ContentCatalogDefinition ContentCatalogDefinition => _contentCatalogDefinition;
+
         public event Action<GameSessionHost> SessionRunning;
 
         public static bool TryGetCurrent(out ApplicationHost host)
@@ -71,6 +78,76 @@ namespace DarkFlare
         {
             sceneScope = s_current != null ? s_current.CurrentSceneScope : null;
             return sceneScope != null && sceneScope.State == LifecycleScopeState.Active;
+        }
+
+        public LifecycleResult InstallContentCatalog(ContentCatalogDefinition definition)
+        {
+            if (State == ApplicationLifecycleState.ShuttingDown
+                || State == ApplicationLifecycleState.Shutdown)
+            {
+                return LifecycleResult.Failure(
+                    LifecycleResultCode.ApplicationShuttingDown,
+                    "Application 正在关闭");
+            }
+
+            if (State != ApplicationLifecycleState.Booting
+                && State != ApplicationLifecycleState.Ready)
+            {
+                return LifecycleResult.Failure(
+                    LifecycleResultCode.InvalidState,
+                    $"Application 当前状态 {State} 不允许安装内容目录");
+            }
+
+            if (_contentCatalog != null)
+            {
+                if (ReferenceEquals(_contentCatalogDefinition, definition))
+                {
+                    return LifecycleResult.AlreadyCompleted(
+                        $"内容目录 {_contentCatalog.CatalogId} 已安装");
+                }
+
+                ContentCatalogBuildResult candidate = ContentCatalog.Build(definition);
+
+                if (!candidate.Succeeded)
+                {
+                    return CreateContentCatalogBuildFailure(candidate);
+                }
+
+                return candidate.Catalog.CatalogId == _contentCatalog.CatalogId
+                    && candidate.Catalog.Version.Equals(_contentCatalog.Version)
+                    ? LifecycleResult.AlreadyCompleted(
+                        $"内容目录 {_contentCatalog.CatalogId} v{_contentCatalog.ContentVersion} 已安装")
+                    : LifecycleResult.Failure(
+                        LifecycleResultCode.InvalidState,
+                        $"Application 已安装不可替换的内容目录 {_contentCatalog.CatalogId} "
+                        + $"v{_contentCatalog.ContentVersion}");
+            }
+
+            ContentCatalogBuildResult buildResult = ContentCatalog.Build(definition);
+
+            if (!buildResult.Succeeded)
+            {
+                return CreateContentCatalogBuildFailure(buildResult);
+            }
+
+            _contentCatalogDefinition = definition;
+            _contentCatalog = buildResult.Catalog;
+            return LifecycleResult.Success(
+                $"内容目录 {_contentCatalog.CatalogId} v{_contentCatalog.ContentVersion} 已安装");
+        }
+
+        static LifecycleResult CreateContentCatalogBuildFailure(ContentCatalogBuildResult buildResult)
+        {
+            List<string> issues = new List<string>(buildResult.Issues.Count);
+
+            for (int i = 0; i < buildResult.Issues.Count; i++)
+            {
+                issues.Add(buildResult.Issues[i].Message);
+            }
+
+            return LifecycleResult.Failure(
+                LifecycleResultCode.ValidationFailed,
+                $"内容目录安装失败: {string.Join("；", issues)}");
         }
 
         public LifecycleResult CreatePendingSession()
@@ -105,7 +182,8 @@ namespace DarkFlare
                 _session = new GameSessionHost(
                     _profileScope,
                     _sessionSequence,
-                    OnControlledSessionStopRequested);
+                    OnControlledSessionStopRequested,
+                    _itemInstanceIds);
                 _controlledStopSession = null;
                 return LifecycleResult.Success("待初始化 Session 已创建");
             }
@@ -160,7 +238,17 @@ namespace DarkFlare
                     "没有可初始化的 Session");
             }
 
-            LifecycleResult result = await session.InitializeAsync(initializer, externalToken);
+            if (initializer is IRequiresContentCatalog && _contentCatalog == null)
+            {
+                return LifecycleResult.Failure(
+                    LifecycleResultCode.ValidationFailed,
+                    $"Session initializer {initializer.Name} 需要先安装内容目录");
+            }
+
+            LifecycleResult result = await session.InitializeAsync(
+                initializer,
+                _contentCatalog,
+                externalToken);
 
             if (result.IsSuccess)
             {
@@ -420,6 +508,7 @@ namespace DarkFlare
                     OnLifecycleTaskFailure);
                 ProfileId = DefaultProfileId;
                 _profileScope = _applicationScope.CreateChild($"Profile-{ProfileId}");
+                _itemInstanceIds = new UuidItemInstanceIdGenerator();
                 LifecycleResult sessionResult = CreatePendingSession();
 
                 if (!sessionResult.IsSuccess)
@@ -936,6 +1025,9 @@ namespace DarkFlare
             _sceneTransitionInProgress = false;
             CompleteOutstandingSceneRequests(true);
             SessionRunning = null;
+            _contentCatalog = null;
+            _contentCatalogDefinition = null;
+            _itemInstanceIds = null;
             ProfileId = null;
             State = ApplicationLifecycleState.Shutdown;
 
@@ -1018,6 +1110,9 @@ namespace DarkFlare
             _sceneTransitionInProgress = false;
             CompleteOutstandingSceneRequests(true);
             SessionRunning = null;
+            _contentCatalog = null;
+            _contentCatalogDefinition = null;
+            _itemInstanceIds = null;
             ProfileId = null;
             State = ApplicationLifecycleState.Shutdown;
             LifecycleResult result = sessionResult.IsSuccess

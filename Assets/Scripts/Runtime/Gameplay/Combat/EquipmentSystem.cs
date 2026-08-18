@@ -93,7 +93,7 @@ namespace DarkFlare
                 return true;
             }
 
-            string instanceId = $"starting_weapon_{actor.ActorId}";
+            ItemInstanceId instanceId = this.GetUtility<IItemInstanceIdGenerator>().Next();
             ItemInstance item = weaponDefinition.CreateInstance(
                 instanceId,
                 1,

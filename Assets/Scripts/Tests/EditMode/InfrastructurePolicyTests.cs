@@ -64,6 +64,15 @@ namespace DarkFlare.Tests
                 {
                     "Assets/Scripts/Runtime/Infrastructure/Lifecycle/LifecycleScope.cs",
                     "Assets/Scripts/Runtime/Infrastructure/Lifecycle/LifecycleTaskGroup.cs",
+                }),
+            new PolicyRule(
+                "runtime-guid-generation-owner",
+                @"\b(?:(?:System\s*\.\s*)?Guid)\s*\.\s*NewGuid\s*\(",
+                new[] { RuntimeRoot },
+                new[]
+                {
+                    "Assets/Scripts/Runtime/Infrastructure/Identity/StableInstanceIds.cs",
+                    "Assets/Scripts/Runtime/Gameplay/Combat/GameplayRandomSystem.cs",
                 })
         };
 
@@ -76,6 +85,7 @@ namespace DarkFlare.Tests
         [TestCase("unitask-void")]
         [TestCase("naked-forget")]
         [TestCase("cancellation-token-source-owner")]
+        [TestCase("runtime-guid-generation-owner")]
         public void SourcePolicy_HasNoUnregisteredViolations(string ruleId)
         {
             PolicyContext context = CreateContext();
@@ -166,6 +176,10 @@ namespace DarkFlare.Tests
             "cancellation-token-source-owner",
             "var cancellation = new CancellationTokenSource();",
             "CancellationTokenSource")]
+        [TestCase(
+            "runtime-guid-generation-owner",
+            "var id = Guid.NewGuid();",
+            "Guid.NewGuid")]
         public void PolicyRule_DetectsExecutableProbeAndIgnoresText(
             string ruleId,
             string executableProbe,

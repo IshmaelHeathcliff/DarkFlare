@@ -102,7 +102,9 @@ namespace DarkFlare
             }
 
             int instanceSeed = random.Next(int.MinValue, int.MaxValue);
-            MonsterInstanceData instanceData = definition.CreateInstanceData(instanceSeed);
+            MonsterInstanceData instanceData = definition.CreateInstanceData(
+                this.GetUtility<IRunInstanceIdGenerator>().NextMonsterId(),
+                instanceSeed);
             CombatResourceSnapshot previousResources = controller.Actor.Resources;
             controller.Configure(definition, instanceData);
             this.GetSystem<CombatSystem>().PublishResourceChanges(

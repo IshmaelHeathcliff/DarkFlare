@@ -175,7 +175,7 @@ Addressables 的配置目录，包含资源组、模板和构建器配置。后�
 
 项目数据目录，当前分为：
 
-- `Preset`：适合放预设型配置资源
+- `Preset`：适合放预设型配置资源；其中 `Content/正式内容目录.asset` 是 Application 级唯一正式内容目录
 - `Saves`：当前为空；后续只可放 Editor 存档夹具或样例，正式运行时存档必须写入 `Application.persistentDataPath`
 
 ### `Assets/Plugins`
@@ -213,9 +213,9 @@ Addressables 的配置目录，包含资源组、模板和构建器配置。后�
 | 程序集 | 目录 | 平台 | 依赖 |
 | --- | --- | --- | --- |
 | `DarkFlare.Core` | `Runtime/Core/` | 全部 | 无（仅 `QFramework.cs`，稳定框架层，隔离后迭代玩法不再重编框架） |
-| `DarkFlare.Runtime` | `Runtime/` | 全部 | `DarkFlare.Core`、`UniTask`、`Unity.InputSystem`、`Unity.Addressables`、`Unity.ResourceManager` |
+| `DarkFlare.Runtime` | `Runtime/` | 全部 | `DarkFlare.Core`、`UniTask`、`Unity.InputSystem`、`Unity.Addressables`、`Unity.ResourceManager`、`Unity.Newtonsoft.Json` |
 | `DarkFlare.Editor` | `Editor/` | 仅 Editor | `DarkFlare.Runtime`、`DarkFlare.Core` |
-| `DarkFlare.Tests.EditMode` | `Tests/EditMode/` | 仅 Editor | `DarkFlare.Runtime`、`DarkFlare.Core`、`Unity.InputSystem`、`Unity.InputSystem.TestFramework`、`UnityEngine.TestRunner`、`UnityEditor.TestRunner`、`nunit.framework.dll` |
+| `DarkFlare.Tests.EditMode` | `Tests/EditMode/` | 仅 Editor | `DarkFlare.Runtime`、`DarkFlare.Core`、`Unity.InputSystem`、`Unity.InputSystem.TestFramework`、`Unity.Newtonsoft.Json`、`UnityEngine.TestRunner`、`UnityEditor.TestRunner`、`nunit.framework.dll`、`Newtonsoft.Json.dll` |
 | `DarkFlare.Tests.PlayMode` | `Tests/PlayMode/` | 全部 | `DarkFlare.Runtime`、`DarkFlare.Core`、`UniTask` 及 Unity 测试依赖；覆盖场景循环、生命周期、输入、装备、随机化与运行时资源加载 |
 
 依赖方向单向向上、无环：`Core ← Runtime ← {Editor, Tests}`。`GameArchitecture.cs` 作为组合根依赖全部玩法模块，因此位于 `Runtime/` 根而非 `Core/`。测试程序集带 `defineConstraints: ["UNITY_INCLUDE_TESTS"]`，仅在测试运行时参与编译，不进入 Player 包。Odin 等预编译 DLL 默认对所有程序集可见，无需在 asmdef 中显式引用。
@@ -223,7 +223,7 @@ Addressables 的配置目录，包含资源组、模板和构建器配置。后�
 `Runtime/` 下的子目录职责：
 
 - `Core`：基础架构与全局入口（独立成 `DarkFlare.Core` 程序集）
-- `Infrastructure`：应用宿主、作用域、Session、统一任务取消、架构所有权与运行时对象登记
+- `Infrastructure`：应用宿主、作用域、Session、统一任务取消、架构所有权、内容目录、稳定实例身份、DTO 与迁移
 - `Data`：数据定义与配置类型
 - `Gameplay`：玩法逻辑
 - `UI`：界面逻辑（占位）
@@ -235,6 +235,9 @@ Addressables 的配置目录，包含资源组、模板和构建器配置。后�
 
 - `Core/QFramework.cs`（`DarkFlare.Core` 程序集）
 - `Infrastructure/Lifecycle`：`ApplicationBootstrap.cs`、`ApplicationHost.cs`、`GameSessionHost.cs`、`GameArchitectureProvider.cs`、`LifecycleScope.cs`、`LifecycleTaskGroup.cs`、`LifecycleModels.cs`、`ComponentLifecycle.cs`、`SceneSessionBinding.cs`、`SessionObjectRegistry.cs`；实现唯一宿主、Application / Profile / Session / Scene / Component 作用域、NewGame 事务边界、latest-wins 场景协调、lease / generation 隔离、场景组件重绑、统一取消和运行时对象精确注销
+- `Infrastructure/Content`：`ContentId.cs`、`ContentDefinitionMetadata.cs`、`ContentCatalogDefinition.cs`、`ContentCatalog.cs`；实现 12 类内容登记、规范 ContentId、目录验证及不可变强类型查询
+- `Infrastructure/Identity/StableInstanceIds.cs`：实现 Player / Item / Run / Monster / WorldDrop / SaveSlot 强类型 ID，以及 Profile / Session 所有的可注入生成器
+- `Infrastructure/Persistence`：`IdentityDtos.cs`、`RuntimeStateMapper.cs`、`VersionContracts.cs`、`JsonMigrationPipeline.cs`；实现纯 DTO、分离对象图映射、独立版本域和逐级内存 JSON 迁移
 - `GameArchitecture.cs`（位于 `Runtime/` 根，Session 组合根；由 `GameArchitectureProvider` 独占创建与销毁，已注册 `GameInput`、`CombatModel`/`EquipmentModel`/`InventoryModel`/`EconomyModel`、`CombatSystem`/`SpawnSystem`/`LootSystem`/`TradingSystem`/`CraftingSystem`/`GameplayPauseSystem`、`PrefabAssetLoader` 与 `SessionObjectRegistry`）
 - `Data/Tags/TagDefinition.cs`、`Data/Tags/TagQueryDefinition.cs`（标签目录元数据与结构化查询）
 - `Data/Stats/StatDefinition.cs`
@@ -270,6 +273,7 @@ Addressables 的配置目录，包含资源组、模板和构建器配置。后�
 - `Gameplay/UI/InteractionPromptController.cs`：显示当前世界交互目标，并在 UI 模式或目标失效时隐藏
 - `Tests/EditMode/ApplicationLifecycleTests.cs`、`ArchitectureExceptionSafetyTests.cs`、`AbandonedGenerationIsolationTests.cs`、`PrefabAssetLoaderTests.cs`：覆盖作用域停止 / 超时、活动任务跟踪、后代 `Abandoned` 污点传播、旧 generation 隔离、架构初始化与反初始化异常安全、Prefab Addressables GUID 单飞和精确句柄
 - `Tests/EditMode/InfrastructurePolicyTests.cs` 与 `InfrastructurePolicyExceptions.json`：扫描架构直连、未登记异步、直接文件 IO / PlayerPrefs / 场景加载，并用正反向夹具验证规则
+- `Tests/EditMode/ContentIdentityTests.cs`、`InstanceIdentityAndDtoTests.cs`、`MigrationPipelineTests.cs`：覆盖内容目录完整性、强类型实例 ID、DTO 纯度与对象图 round-trip、迁移链和失败输入不变
 - `Tests/EditMode/Alpha01TagMigrationCharacterizationTests.cs` 与既有 EditMode 测试：覆盖标签查询、域隔离、物品—词条候选矩阵、伤害血统、旧接口兼容、纯逻辑、原子换装、交易和打造事务语义、键鼠 / 手柄输入、Action Map 切换、交互消息、暂停及 HUD/背包/商店/打造快照。归属 `DarkFlare.Tests.EditMode` 程序集
 - `Tests/PlayMode/ApplicationLifecyclePlayModeTests.cs`：覆盖冷启动唯一性、取消回滚、并发请求、连续 Session、场景卸载和直接 `Main` 重载
 - `Tests/PlayMode/ApplicationHostSceneTransitionPlayModeTests.cs`：覆盖每 generation 一次 `SessionRunning` 通知、回滚中的重载、三次快速请求 latest-wins、挂起回滚 / 作用域超时有界收敛，以及受控停止 / Shutdown / Emergency 终态隔离
@@ -278,7 +282,7 @@ Addressables 的配置目录，包含资源组、模板和构建器配置。后�
 
 `UI`、`Utilities` 目前主要是占位，为后续模块扩展预留。
 
-**首版单场景循环和 `alpha 0.2.0` 生命周期底座已完成**：当前已覆盖输入、UIToolkit 根 / HUD、背包装备、商店、打造、场景交互入口，以及唯一应用宿主、Session 重建和失败回滚。运行流程见 [`gameplay-loop.md`](gameplay-loop.md)，生命周期见[应用生命周期与会话作用域](infrastructure/application-lifecycle.md)，输入与 UI 结构见 [`input-ui-system.md`](input-ui-system.md)；完成过程保存在 [`plan/archive/`](plan/archive/README.md)。
+**首版单场景循环和 `alpha 0.2.0–0.2.1` 基础设施已完成**：当前已覆盖输入、UIToolkit 根 / HUD、背包装备、商店、打造、场景交互入口，以及唯一应用宿主、Session 重建、稳定身份、内容目录、DTO 与内存迁移。运行流程见 [`gameplay-loop.md`](gameplay-loop.md)，生命周期见[应用生命周期与会话作用域](infrastructure/application-lifecycle.md)，身份与迁移见[稳定身份、内容目录与迁移框架](infrastructure/content-identity-migration.md)，输入与 UI 结构见 [`input-ui-system.md`](input-ui-system.md)；完成过程保存在 [`plan/archive/`](plan/archive/README.md)。
 
 ### `Assets/Settings`
 

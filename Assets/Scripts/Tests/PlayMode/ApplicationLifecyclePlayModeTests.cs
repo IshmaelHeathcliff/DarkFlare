@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading;
 using Cysharp.Threading.Tasks;
@@ -48,6 +49,30 @@ namespace DarkFlare.Tests
             Assert.AreEqual(1, players.Length, "冷启动后必须只有一个有效玩家");
             Assert.IsNotNull(host.CurrentSession);
             Assert.AreEqual(GameSessionState.Running, host.CurrentSession.State);
+            Assert.IsNotNull(host.ContentCatalog);
+            Assert.AreEqual("core", host.ContentCatalog.CatalogId);
+            Assert.AreEqual(1, host.ContentCatalog.ContentVersion);
+            Assert.AreEqual(90, host.ContentCatalog.Count);
+
+            ContentCatalogDefinition installedDefinition = host.ContentCatalogDefinition;
+            ContentCatalogDefinition equivalentCatalog = UnityEngine.Object.Instantiate(
+                installedDefinition);
+            LifecycleResult repeatedCatalog = host.InstallContentCatalog(equivalentCatalog);
+            Assert.AreEqual(LifecycleResultCode.AlreadyCompleted, repeatedCatalog.Code);
+            Assert.AreSame(installedDefinition, host.ContentCatalogDefinition);
+
+            ContentCatalogDefinition futureCatalog = UnityEngine.Object.Instantiate(
+                installedDefinition);
+            FieldInfo contentVersionField = typeof(ContentCatalogDefinition).GetField(
+                "_contentVersion",
+                BindingFlags.Instance | BindingFlags.NonPublic);
+            Assert.IsNotNull(contentVersionField);
+            contentVersionField.SetValue(futureCatalog, host.ContentCatalog.ContentVersion + 1);
+            LifecycleResult replacementCatalog = host.InstallContentCatalog(futureCatalog);
+            Assert.AreEqual(LifecycleResultCode.InvalidState, replacementCatalog.Code);
+            Assert.AreSame(installedDefinition, host.ContentCatalogDefinition);
+            UnityEngine.Object.Destroy(equivalentCatalog);
+            UnityEngine.Object.Destroy(futureCatalog);
             Assert.AreSame(
                 host.CurrentSession.Architecture,
                 GameArchitectureProvider.RequireCurrent());
@@ -161,7 +186,12 @@ namespace DarkFlare.Tests
                 LogType.Error,
                 new Regex("\\[ApplicationHost\\] 生命周期任务失败:.*initialize:new-game"));
             ApplicationHost host = ApplicationHost.Current;
+            ContentCatalogDefinition contentCatalog =
+                ScriptableObject.CreateInstance<ContentCatalogDefinition>();
+            LifecycleResult catalogResult = host.InstallContentCatalog(contentCatalog);
+            Assert.IsTrue(catalogResult.IsSuccess, catalogResult.Message);
             GameplaySceneConfiguration configuration = new GameplaySceneConfiguration(
+                contentCatalog,
                 null,
                 null,
                 null,
@@ -191,6 +221,7 @@ namespace DarkFlare.Tests
             Assert.AreEqual(0, UnityEngine.Object.FindObjectsByType<MonsterController>(
                 FindObjectsInactive.Include,
                 FindObjectsSortMode.None).Length);
+            UnityEngine.Object.Destroy(contentCatalog);
         }
 
         [UnityTest]

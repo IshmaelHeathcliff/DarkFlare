@@ -8,7 +8,9 @@ namespace DarkFlare
         readonly List<AffixInstance> _prefixes;
         readonly List<AffixInstance> _suffixes;
 
-        public string InstanceId { get; }
+        public ItemInstanceId Id { get; }
+
+        public string InstanceId => Id.Value;
 
         public ItemBaseDefinition BaseDefinition { get; }
 
@@ -39,8 +41,30 @@ namespace DarkFlare
             int itemLevel,
             int seed,
             IEnumerable<ModifierInstance> implicitModifiers)
+            : this(
+                ItemInstanceId.FromLegacy(instanceId),
+                baseDefinition,
+                rarity,
+                itemLevel,
+                seed,
+                implicitModifiers)
         {
-            InstanceId = instanceId;
+        }
+
+        public ItemInstance(
+            ItemInstanceId id,
+            ItemBaseDefinition baseDefinition,
+            ItemRarity rarity,
+            int itemLevel,
+            int seed,
+            IEnumerable<ModifierInstance> implicitModifiers)
+        {
+            if (string.IsNullOrWhiteSpace(id.Value))
+            {
+                throw new System.ArgumentException("物品实例 ID 不能为空", nameof(id));
+            }
+
+            Id = id;
             BaseDefinition = baseDefinition;
             Rarity = rarity;
             ItemLevel = itemLevel;

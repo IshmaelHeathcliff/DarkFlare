@@ -84,6 +84,7 @@
 
 | 字段 | 类型 / CLR 默认 | 必填、范围与稳定性 | 所有权、消费者、迁移 |
 | --- | --- | --- | --- |
+| `_id` | `string` / 空 | 必填；小写 `snake_case`；正式值为 `main` | 完整内容 ID 为 `spawn:main`；存档与迁移只保存该稳定 ID，不保存资产路径或显示名 |
 | `_spawnInterval` | `float` / `1.5` | 至少 `0.1` 秒 | `MonsterSpawner` 的生成节奏；不是每个怪物的攻击间隔 |
 | `_maxAliveCount` | `int` / `12` | 至少 `1` | 生成器统计当前存活数并限流 |
 | `_spawnRadius` | `float` / `8` | 至少 `0.1` 世界单位 | 生成位置计算消费；仍须落入 WorldBounds |

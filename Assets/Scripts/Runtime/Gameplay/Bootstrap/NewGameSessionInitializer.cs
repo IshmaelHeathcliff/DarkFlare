@@ -18,7 +18,7 @@ namespace DarkFlare
         public IReadOnlyList<string> Errors { get; }
     }
 
-    public sealed class NewGameSessionInitializer : IGameSessionInitializer
+    public sealed class NewGameSessionInitializer : IGameSessionInitializer, IRequiresContentCatalog
     {
         readonly GameplaySceneConfiguration _configuration;
 
@@ -38,7 +38,7 @@ namespace DarkFlare
         {
             _configuration.MonsterSpawner?.PrepareForInitialization(
                 _configuration.MonsterSpawnDefinition);
-            IReadOnlyList<string> validationErrors = _configuration.Validate();
+            IReadOnlyList<string> validationErrors = _configuration.Validate(context.ContentCatalog);
 
             if (validationErrors.Count > 0)
             {

@@ -102,7 +102,9 @@ namespace DarkFlare
 
             economy.SetMultipliers(trader.BuyMultiplier, trader.SellMultiplier);
 
-            foreach (ItemInstance item in trader.CreateStock(new System.Random()))
+            foreach (ItemInstance item in trader.CreateStock(
+                         new System.Random(),
+                         this.GetUtility<IItemInstanceIdGenerator>()))
             {
                 economy.AddStock(item);
             }

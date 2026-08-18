@@ -25,7 +25,7 @@ namespace DarkFlare
                     $"{options.Rarity} 不能生成 {options.PrefixCount} 前缀 / {options.SuffixCount} 后缀");
             }
 
-            ItemInstance item = baseDefinition.CreateInstance(options.InstanceId, options.ItemLevel, options.Seed, options.Rarity);
+            ItemInstance item = baseDefinition.CreateInstance(options.Id, options.ItemLevel, options.Seed, options.Rarity);
             List<AffixType?> requestedTypes = new List<AffixType?>(options.PrefixCount + options.SuffixCount);
 
             for (int i = 0; i < options.PrefixCount; i++)

@@ -42,9 +42,14 @@ namespace DarkFlare
         public int SuffixCount => _suffixCount;
     }
 
+    [ContentDefinition(ContentNamespaces.Loot)]
     [CreateAssetMenu(menuName = "DarkFlare/Data/Loot/Loot Table Definition", fileName = "LootTableDefinition")]
-    public class LootTableDefinition : ScriptableObject
+    public class LootTableDefinition : ScriptableObject, IContentDefinition
     {
+        [SerializeField]
+        [LabelText("稳定ID")]
+        string _id = string.Empty;
+
         [SerializeField]
         [Range(0f, 1f)]
         [LabelText("掉落概率")]
@@ -57,6 +62,8 @@ namespace DarkFlare
         [SerializeField]
         [LabelText("词条池")]
         List<AffixDefinition> _affixPool = new List<AffixDefinition>();
+
+        public string Id => _id;
 
         public float DropChance => _dropChance;
 
@@ -71,6 +78,11 @@ namespace DarkFlare
         }
 
         public ItemInstance GenerateLoot(System.Random random, string instanceId, int itemLevel)
+        {
+            return GenerateLoot(random, ItemInstanceId.FromLegacy(instanceId), itemLevel);
+        }
+
+        public ItemInstance GenerateLoot(System.Random random, ItemInstanceId instanceId, int itemLevel)
         {
             if (!ShouldDrop(random))
             {

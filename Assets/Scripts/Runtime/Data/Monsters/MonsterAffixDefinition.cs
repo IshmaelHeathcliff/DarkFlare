@@ -4,8 +4,9 @@ using UnityEngine;
 
 namespace DarkFlare
 {
+    [ContentDefinition(ContentNamespaces.MonsterAffix)]
     [CreateAssetMenu(menuName = "DarkFlare/Data/Monsters/Monster Affix Definition", fileName = "MonsterAffixDefinition")]
-    public class MonsterAffixDefinition : ScriptableObject
+    public class MonsterAffixDefinition : ScriptableObject, IContentDefinition
     {
         [SerializeField]
         [LabelText("稳定ID")]

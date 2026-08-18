@@ -306,12 +306,13 @@ namespace DarkFlare.Tests
                 {
                     typeof(LifecycleScope),
                     typeof(int),
-                    typeof(System.Action<GameSessionHost, string>)
+                    typeof(System.Action<GameSessionHost, string>),
+                    typeof(IItemInstanceIdGenerator)
                 },
                 null);
             Assert.IsNotNull(constructor, "未找到 GameSessionHost 内部构造函数");
             return (GameSessionHost)constructor.Invoke(
-                new object[] { profileScope, sequence, null });
+                new object[] { profileScope, sequence, null, null });
         }
 
         static void ResetArchitectureProvider()

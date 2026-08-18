@@ -14,16 +14,22 @@ namespace DarkFlare
         UniTask RollbackAsync(SessionInitializationContext context, CancellationToken token);
     }
 
+    public interface IRequiresContentCatalog
+    {
+    }
+
     public sealed class SessionInitializationContext
     {
         internal SessionInitializationContext(
             IArchitecture architecture,
             LifecycleScope sessionScope,
-            LifecycleScope sceneScope)
+            LifecycleScope sceneScope,
+            ContentCatalog contentCatalog)
         {
             Architecture = architecture;
             SessionScope = sessionScope;
             SceneScope = sceneScope;
+            ContentCatalog = contentCatalog;
         }
 
         public IArchitecture Architecture { get; }
@@ -31,6 +37,8 @@ namespace DarkFlare
         public LifecycleScope SessionScope { get; }
 
         public LifecycleScope SceneScope { get; }
+
+        public ContentCatalog ContentCatalog { get; }
     }
 
     public sealed class GameSessionHost
@@ -46,12 +54,12 @@ namespace DarkFlare
 
         readonly IArchitecture _architecture;
         readonly GameArchitectureSessionLease _architectureLease;
-        readonly SessionInitializationContext _initializationContext;
         readonly Action<GameSessionHost, string> _controlledStopRequested;
         readonly UniTaskCompletionSource _rollbackRequested = new UniTaskCompletionSource();
         readonly RollbackOutcome _rollbackOutcome = new RollbackOutcome();
 
         IGameSessionInitializer _initializer;
+        SessionInitializationContext _initializationContext;
         UniTask<LifecycleResult> _initializationTask;
         LifecycleTaskHandle _rollbackHandle;
         bool _stopStarted;
@@ -63,7 +71,8 @@ namespace DarkFlare
         internal GameSessionHost(
             LifecycleScope profileScope,
             int sequence,
-            Action<GameSessionHost, string> controlledStopRequested)
+            Action<GameSessionHost, string> controlledStopRequested,
+            IItemInstanceIdGenerator itemInstanceIds = null)
         {
             _controlledStopRequested = controlledStopRequested;
             SessionScope = profileScope.CreateChild($"Session-{sequence}");
@@ -73,10 +82,11 @@ namespace DarkFlare
             {
                 _architectureLease = GameArchitectureProvider.StartOwnedSession(SessionScope);
                 _architecture = _architectureLease.Architecture;
-                _initializationContext = new SessionInitializationContext(
-                    _architecture,
-                    SessionScope,
-                    SceneScope);
+
+                if (itemInstanceIds != null)
+                {
+                    _architecture.RegisterUtility<IItemInstanceIdGenerator>(itemInstanceIds);
+                }
                 State = GameSessionState.Created;
                 StartSessionTasks();
             }
@@ -153,6 +163,14 @@ namespace DarkFlare
             IGameSessionInitializer initializer,
             CancellationToken externalToken = default)
         {
+            return InitializeAsync(initializer, null, externalToken);
+        }
+
+        internal UniTask<LifecycleResult> InitializeAsync(
+            IGameSessionInitializer initializer,
+            ContentCatalog contentCatalog,
+            CancellationToken externalToken = default)
+        {
             if (initializer == null)
             {
                 return UniTask.FromResult(LifecycleResult.Failure(
@@ -187,6 +205,11 @@ namespace DarkFlare
                     "Session 作用域已开始停止，不能再启动初始化"));
             }
 
+            _initializationContext = new SessionInitializationContext(
+                _architecture,
+                SessionScope,
+                SceneScope,
+                contentCatalog);
             _initializer = initializer;
             State = GameSessionState.Initializing;
             LifecycleTaskHandle handle;

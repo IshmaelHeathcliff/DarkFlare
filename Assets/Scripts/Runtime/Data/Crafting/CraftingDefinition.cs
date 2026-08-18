@@ -4,9 +4,14 @@ using UnityEngine;
 
 namespace DarkFlare
 {
+    [ContentDefinition(ContentNamespaces.Crafting)]
     [CreateAssetMenu(menuName = "DarkFlare/Data/Crafting/Crafting Definition", fileName = "CraftingDefinition")]
-    public class CraftingDefinition : ScriptableObject
+    public class CraftingDefinition : ScriptableObject, IContentDefinition
     {
+        [SerializeField]
+        [LabelText("稳定ID")]
+        string _id = string.Empty;
+
         [SerializeField]
         [LabelText("词条池")]
         List<AffixDefinition> _affixPool = new List<AffixDefinition>();
@@ -55,6 +60,8 @@ namespace DarkFlare
         [MinValue(1f)]
         [LabelText("精准范围倍率")]
         float _precisionMultiplier = 3f;
+
+        public string Id => _id;
 
         public IReadOnlyList<AffixDefinition> AffixPool => _affixPool;
 

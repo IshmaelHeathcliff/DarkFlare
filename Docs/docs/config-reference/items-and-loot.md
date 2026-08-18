@@ -41,6 +41,7 @@
 
 | 字段 | 类型 / CLR 默认 | 必填、范围与稳定性 | 所有权、消费者、迁移 |
 | --- | --- | --- | --- |
+| `_id` | `string` / 空 | 必填；小写 `snake_case`；正式值与对应怪物稳定 ID 一致 | 完整内容 ID 使用 `loot:<local_id>`；存档与迁移不依赖资产路径或中文名 |
 | `_dropChance` | `float` / `1` | `0–1` | `GenerateLoot` 首先消费调用方随机流判定是否掉落；`0/1` 不产生边界歧义 |
 | `_entries` | `List<LootTableEntry>` / 空 | 正式表必须非空，至少一个正权重有效物品；不得含无意义重复项 | `PickEntry` 按整数相对权重选择；列表顺序会影响同一随机流映射 |
 | `_affixPool` | `List<AffixDefinition>` / 空 | 生成非普通物品时必须能完整满足条目指定数量；无空/重复引用 | `ItemGenerator` 进行合法候选过滤和确定性词缀生成 |
@@ -63,4 +64,3 @@
 - Inspector 与配置中心拒绝负权重、非法稀有度数量、候选池不足、非武器基础伤害和 Weapon 空伤害。
 - 单图图标应原位保留 GUID；更换 GUID 时必须同步 `AssetReferenceSprite` 与 Addressables，并验证预热失败日志。
 - 修改 `_gridSize`、`_itemType` 或稳定 ID 时需要显式迁移现有实例/存档，不能依赖 CLR 默认值。
-

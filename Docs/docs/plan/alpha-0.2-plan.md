@@ -1,6 +1,6 @@
 # alpha 0.2 基础设施开发计划
 
-> 状态：`alpha 0.2.0` 已完成，`alpha 0.2.1` 待开始
+> 状态：`alpha 0.2.0–0.2.1` 已完成，下一阶段 `alpha 0.2.2`
 > 建立日期：2026-08-17
 > 最近更新：2026-08-18
 > 基线提交：`713cd17`
@@ -24,8 +24,9 @@
 - 当前只有 `Main.unity`，没有启动场景、游戏状态机、统一加载流程或失败恢复页。
 - `alpha 0.2.0` 已建立场景加载前的唯一 `ApplicationHost`、Application / Profile / Session / Scene / Component 作用域及 `GameArchitectureProvider` 独占入口；当前单场景兼容请求采用 latest-wins，场景预置组件只绑定同场景且已 Running 的有效 Session，完整游戏状态机与通用 SceneFlow 仍未建立。
 - `CombatPrototypeBootstrap` 已收缩为场景配置与宿主请求入口，新游戏逻辑由可回滚的 `NewGameSessionInitializer` 执行；Restore 初始化器与正式读档职责仍待 `alpha 0.2.2`。
-- `Assets/Data/Saves` 为空，运行时代码没有正式存档路径、DTO、槽位、校验、备份、迁移或损坏恢复。
-- 现有背包、装备、经济和物品实例包含运行时对象引用或以对象作为字典键，不能直接序列化为稳定存档。
+- `alpha 0.2.1` 已建立纯 DTO、分离对象图 Mapper、四类版本合同和内存迁移管线；`Assets/Data/Saves` 仍为空，正式存档路径、序列化封装、槽位、校验、备份和损坏恢复待 `alpha 0.2.2`。
+- 现有背包、装备、经济和物品实例仍可在玩法内使用对象引用，但持久化边界已统一转换为 ContentId 与强类型实例 ID；正式保存和 Restore 提交事务尚未实现。
+- Application 级唯一内容目录 `core` v1 已收录 90 个正式配置，并由配置验证器冻结零空值、零重复、零遗漏。
 - Unity Localization `1.5.12` 已安装，但没有 Locale、String Table、运行时语言服务或玩家可见文本迁移。
 - 用户设置、输入重绑定、按键图标、音频服务、全局异常处理和结构化日志尚未建立。
 - Addressables 已用于 Prefab 和 Sprite 加载，Prefab GUID 单飞与精确句柄释放已有自动验证；当前内容主要位于本地默认组，仍缺少完整分组、标签和跨加载器治理。
@@ -65,7 +66,7 @@
 | 阶段 | 状态 | 核心目标 | 主要交付 |
 | --- | --- | --- | --- |
 | `alpha 0.2.0` | 已完成 | 建立应用宿主、作用域、生命周期和首批规范验证 | [模块文档](../infrastructure/application-lifecycle.md) · [归档计划](./archive/alpha-0.2.0-application-lifecycle-plan.md) |
-| `alpha 0.2.1` | 待开始 | 建立稳定身份、内容目录和版本迁移底座 | ContentId、内容注册表、SchemaVersion、Migration Pipeline、DTO 映射约束 |
+| `alpha 0.2.1` | 已完成 | 建立稳定身份、内容目录和版本迁移底座 | [模块文档](../infrastructure/content-identity-migration.md) · [归档计划](./archive/alpha-0.2.1-content-identity-migration-plan.md) |
 | `alpha 0.2.2` | 待开始 | 完成本地存档、读档和损坏恢复闭环 | 存档 DTO、槽位、原子写入、备份、校验、迁移、自动保存与继续游戏 |
 | `alpha 0.2.3` | 待开始 | 完成用户设置和运行时本地化 | Settings、Locale、String Tables、字体回退、伪本地化、硬编码扫描 |
 | `alpha 0.2.4` | 待开始 | 建立游戏状态、场景加载和通用 UI 外壳 | Boot / Loading / InGame 状态、SceneFlow、Loading UI、Page / Modal / Toast |
@@ -111,6 +112,8 @@
 
 ## alpha 0.2.1：稳定身份、内容目录与迁移框架
 
+当前实现与使用边界见[稳定身份、内容目录与迁移框架](../infrastructure/content-identity-migration.md)；审计基线、冻结决策、执行切片和验收证据见[归档执行计划](./archive/alpha-0.2.1-content-identity-migration-plan.md)。
+
 ### 目标
 
 让所有持久化数据只依赖稳定业务身份，并为配置、设置和存档的版本演进提供同一套可测试迁移机制。
@@ -133,6 +136,15 @@
 - 旧版本样本只能按已登记迁移链升级，不允许在业务加载器里散落版本 `if` 分支。
 - 相同 DTO 经映射到运行时再映射回 DTO 后，持久字段保持等价。
 - 内容被删除或改名时，加载结果可解释、可测试且不会静默生成错误状态。
+
+### 完成记录
+
+- 已登记 12 个内容命名空间；唯一目录 `core` v1 收录 90 个正式配置，配置验证达到非法 ID 0、重复 0、空 ID 0、遗漏 0、未登记类型 0。
+- 已接入 Profile 物品 ID 生成器与 Session Run ID 生成器，玩法中的物品、怪物和世界掉落使用各自强类型身份。
+- 已建立物品、背包、装备、商人和 Actor 纯 DTO，以及提交前验证完整引用闭包的 `RuntimeStateMapper`。
+- 已建立四类版本值对象和只接受唯一完整 `N → N+1` 链的内存 JSON 迁移管线。
+- 最终验证为 Unity 编译 0 error、EditMode `287/287`、项目自有 PlayMode `45/45`；PlayMode 完整运行 49 项中 47 项通过、0 失败，2 项 Input System 包测试因上游 issue 1252825 跳过。
+- 本阶段未实现文件存储、正式序列化封装、备份、存档槽位或 Restore Session。
 
 ## alpha 0.2.2：本地存档闭环
 

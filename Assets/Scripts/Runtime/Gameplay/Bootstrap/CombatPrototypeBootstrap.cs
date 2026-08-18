@@ -8,6 +8,9 @@ namespace DarkFlare
     public class CombatPrototypeBootstrap : MonoBehaviour, IController
     {
         [SerializeField]
+        ContentCatalogDefinition _contentCatalog;
+
+        [SerializeField]
         CharacterDefinition _playerCharacter;
 
         [SerializeField]
@@ -57,8 +60,20 @@ namespace DarkFlare
 
         void Start()
         {
+            ApplicationHost host = ApplicationHost.Current;
+            LifecycleResult catalogResult = host.InstallContentCatalog(_contentCatalog);
+
+            if (!catalogResult.IsSuccess)
+            {
+                Debug.LogError(
+                    $"[CombatPrototypeBootstrap] 无法安装内容目录: {catalogResult.Message}",
+                    this);
+                return;
+            }
+
             Vector3 spawnPosition = _playerSpawnPoint != null ? _playerSpawnPoint.position : transform.position;
             GameplaySceneConfiguration configuration = new GameplaySceneConfiguration(
+                _contentCatalog,
                 _playerCharacter,
                 _playerSkill,
                 _startingWeapon,
@@ -72,7 +87,6 @@ namespace DarkFlare
                 ResolveCameraFollowTarget(),
                 _useFixedRandomSeed,
                 _fixedRandomSeed);
-            ApplicationHost host = ApplicationHost.Current;
             LifecycleResult request = host.BeginSceneSessionInitialization(
                 gameObject.scene,
                 new NewGameSessionInitializer(configuration),

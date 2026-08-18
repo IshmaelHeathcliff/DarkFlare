@@ -35,8 +35,9 @@ namespace DarkFlare
         public int Count => _count;
     }
 
+    [ContentDefinition(ContentNamespaces.Trader)]
     [CreateAssetMenu(menuName = "DarkFlare/Data/Trading/Trader Definition", fileName = "TraderDefinition")]
-    public class TraderDefinition : ScriptableObject
+    public class TraderDefinition : ScriptableObject, IContentDefinition
     {
         [SerializeField]
         [LabelText("稳定ID")]
@@ -70,8 +71,15 @@ namespace DarkFlare
 
         public IReadOnlyList<TraderStockEntry> Stock => _stock;
 
-        public IEnumerable<ItemInstance> CreateStock(System.Random random)
+        public IEnumerable<ItemInstance> CreateStock(
+            System.Random random,
+            IItemInstanceIdGenerator instanceIds)
         {
+            if (instanceIds == null)
+            {
+                throw new System.ArgumentNullException(nameof(instanceIds));
+            }
+
             for (int i = 0; i < _stock.Count; i++)
             {
                 TraderStockEntry entry = _stock[i];
@@ -84,7 +92,7 @@ namespace DarkFlare
                 for (int c = 0; c < entry.Count; c++)
                 {
                     int seed = random.Next(int.MinValue, int.MaxValue);
-                    string instanceId = $"{_id}_{entry.Item.Id}_{i}_{c}_{System.Guid.NewGuid():N}";
+                    ItemInstanceId instanceId = instanceIds.Next();
                     yield return entry.Item.CreateInstance(instanceId, entry.ItemLevel, seed, entry.Rarity);
                 }
             }

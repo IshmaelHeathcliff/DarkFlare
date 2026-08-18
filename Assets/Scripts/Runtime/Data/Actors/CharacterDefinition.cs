@@ -4,8 +4,9 @@ using UnityEngine.AddressableAssets;
 
 namespace DarkFlare
 {
+    [ContentDefinition(ContentNamespaces.Actor)]
     [CreateAssetMenu(menuName = "DarkFlare/Data/Actors/Character Definition", fileName = "CharacterDefinition")]
-    public class CharacterDefinition : ScriptableObject
+    public class CharacterDefinition : ScriptableObject, IContentDefinition
     {
         [SerializeField]
         [LabelText("稳定ID")]
