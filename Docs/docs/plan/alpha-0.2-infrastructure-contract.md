@@ -2,6 +2,7 @@
 
 > 状态：规划期强制契约
 > 建立日期：2026-08-17
+> 最近更新：2026-08-18
 > 适用范围：`alpha 0.2` 全部实现、迁移、测试和后续新增运行时代码
 > 上位计划：[alpha 0.2 基础设施开发计划](./alpha-0.2-plan.md)
 
@@ -29,21 +30,16 @@
 | 音频 | AudioMixer、分类音量、播放、并发和释放 | 最小可用闭环 |
 | 可访问性 | 文本 / 动效等真实可消费设置 | 最小可用闭环 |
 | 平台生命周期 | 失焦、挂起、恢复、退出、限时 Flush | 最小可用闭环 |
-| 资源 | Addressables 地址、分组、加载、释放、验证、构建 | 最小可用闭环 |
-| 可观测性 | 结构化日志、异常、诊断摘要、故障上下文 | 完整交付 |
-| 性能 | Marker、耗时 / 分配 / 句柄预算与回归 | 最小可用闭环 |
-| 构建发布 | PlayerSettings、Build Profile、版本、产物、报告 | 完整交付 |
-| 工程质量 | 本地 CI、测试门禁、策略扫描、例外清单 | 完整交付 |
-| 开发工具 | 存档查看 / 校验、Locale 预览、状态诊断 | 最小可用闭环 |
-| 环境管理 | Development / Release 配置和功能开关 | 最小可用闭环 |
-| 用户数据 | 删除 / 重置本地数据、诊断导出边界 | 完整交付 |
-| 延期能力 | 云存档、账号、联网、远程配置、热更新、分析、Mod | 仅登记扩展点 |
+| 资源 | Addressables 地址、分组、加载、释放和验证 | 最小可用闭环 |
+| 错误处理 | 结构化日志、异常捕获、玩家错误反馈和恢复动作 | 完整交付 |
+| 规范执行 | 本地自动测试、策略扫描、验证器和例外清单 | 完整交付 |
+| 用户数据 | 删除和重置本地设置 / 存档 | 完整交付 |
 
 ## 作用域与所有权
 
 | 作用域 | 典型状态 | 创建 | 释放 |
 | --- | --- | --- | --- |
-| Application | Logger、Settings、Localization、BuildInfo、SceneFlow、根 Cancellation | 进程启动一次 | 应用关闭 |
+| Application | Logger、Settings、Localization、SceneFlow、根 Cancellation | 进程启动一次 | 应用关闭 |
 | Profile | 当前槽位元数据、Profile 状态、Save Coordinator | 选择新游戏 / 继续游戏 | 返回前台或切换槽位 |
 | Session | QFramework 玩法架构、随机状态、玩家 / 背包 / 装备 / 经济、Session Cancellation | 创建新游戏或成功恢复存档 | 离开当前游戏 |
 | Scene | 场景对象、摄像机、场景 UI、刷怪器、场景 Addressables 句柄 | 场景加载事务 | 场景卸载事务 |
@@ -77,7 +73,7 @@
 - 运行时实例必须有独立实例 ID。内容 ID 回答“是什么”，实例 ID 回答“是哪一个”。
 - ID 规则必须集中验证，禁止各模块自行改变大小写、前缀或空白处理。
 - 显示文本和本地化 Key 均不得作为业务身份。
-- `GameVersion`、`BuildVersion`、`ContentVersion`、`SaveSchemaVersion`、`SettingsSchemaVersion` 分开维护，禁止用一个整数替代全部版本。
+- `GameVersion`、`ContentVersion`、`SaveSchemaVersion`、`SettingsSchemaVersion` 分开维护，禁止用一个整数替代全部版本。
 - 迁移只允许逐级、确定性执行。业务代码不得长期保留散落的旧版本兼容分支。
 - 未知未来 Schema 必须拒绝加载，不得尝试按当前格式猜测解析。
 
@@ -117,9 +113,9 @@
 - 内容 ID 与本地化 Key 分离；配置可引用 Key，但存档只保存内容 ID。
 - 句子禁止通过多个翻译片段拼接；使用参数化条目和文化感知格式。
 - Runtime Locale 切换必须通过 Localization Service，业务模块不散落直接修改全局 Locale。
-- 缺失翻译在开发构建中必须显著记录，Release 使用冻结 fallback，并仍保留诊断事件。
-- 字体和 fallback 是本地化交付的一部分；新增 Locale 前必须验证字形覆盖与布局预算。
-- Pseudo Locale 只用于测试，不作为用户正式选项或存入 Release 默认设置。
+- 缺失翻译必须显著记录，并使用冻结的 fallback 保持界面可操作。
+- 字体和 fallback 是本地化交付的一部分；新增 Locale 前必须验证字形覆盖与布局容纳能力。
+- Pseudo Locale 只用于测试，不作为用户正式选项或写入用户设置。
 
 ## 用户设置规范
 
@@ -127,7 +123,7 @@
 - 每个设置项必须定义类型、默认值、范围、平台适用性、是否需要重启和至少一个消费者。
 - 没有运行时消费者的设置不得显示为已支持。
 - 设置修改先校验并应用，再原子持久化；应用失败必须回滚 UI 表示或给出明确错误。
-- Settings Schema 使用独立迁移链；损坏时回退默认值并保留有限诊断副本。
+- Settings Schema 使用独立迁移链；损坏时回退默认值并保留有限损坏副本。
 - Locale、输入绑定、音量和可访问性均使用同一 Settings Service，不各自创建私有文件。
 
 ## 场景、状态与 UI 规范
@@ -166,14 +162,13 @@
 - 可访问性项必须记录实际消费者、目标范围和测试方式；禁止只保存但不应用。
 - 降低动态效果等设置必须能够覆盖 PrimeTween、特效或镜头表现的统一入口，而不是在各 Controller 写分支。
 
-## 日志、异常与诊断规范
+## 日志、异常与玩家错误规范
 
 - 生产 Runtime 只通过 Logger 记录；除 Logger Adapter 外禁止直接 `Debug.Log*`。
 - 日志必须使用稳定事件 ID 和类别，不依赖只适合人工搜索的自由文本。
 - 关键事务必须携带必要上下文，例如状态、Session、槽位、ContentId 或 InstanceId，但不得记录完整存档和敏感系统路径。
-- 玩家错误码与内部异常分离。玩家看到本地化消息，诊断记录原始异常链。
+- 玩家错误码与内部异常分离。玩家看到本地化消息，日志记录原始异常链。
 - 全局异常捕获必须防递归，且不能把进程级致命错误错误标记为已恢复。
-- 诊断导出默认只包含版本、平台、设置摘要、存档 Header、最近日志和资源计数；导出完整用户数据必须另行确认。
 
 ## Addressables 与资源规范
 
@@ -181,22 +176,13 @@
 - 地址使用稳定命名规范，但地址不是存档身份。
 - 每次加载必须有与所有者绑定的释放路径；Asset Handle 与 Instance Handle 不得混用。
 - 预热列表由内容或场景依赖声明，不允许 Bootstrap 手工无限追加隐式依赖。
-- Addressables 分组、Label、重复地址、缺失引用和构建结果必须自动验证。
-- 远程 Catalog、热更新和下载缓存不在 alpha 0.2 启用；相关配置保持关闭并登记未来扩展点。
-
-## 构建、环境与功能开关规范
-
-- 构建必须来自统一入口，并输出机器可读结果、日志、版本信息和失败码。
-- Development 与 Release 配置显式分离；不得通过检查 `Application.isEditor` 代替全部环境策略。
-- 功能开关必须集中定义、可查询、可记录来源；正式构建不允许未登记调试开关。
-- 版本信息必须能在运行时诊断中读取，至少包含游戏版本、构建号、Git SHA、内容版本和 Schema。
-- 任何测试、迁移、配置、本地化、Addressables 或 Player 构建失败都必须使质量门禁失败。
+- Addressables 分组、Label、重复地址和缺失引用必须自动验证。
 
 ## 禁止 API 与唯一入口
 
 | 禁止直接使用 | 唯一入口 | 允许例外 |
 | --- | --- | --- |
-| `File` / `Directory` / 原始存档路径 | Save / Settings Storage | Editor 工具、构建脚本、Logger 文件 Sink；必须在白名单目录 |
+| `File` / `Directory` / 原始存档路径 | Save / Settings Storage | Editor 测试夹具工具；必须在白名单目录 |
 | `PlayerPrefs` | Settings / Save Service | 无默认例外 |
 | `SceneManager.Load*` / `Unload*` | Scene Flow Service | Scene Flow 实现与测试 Adapter |
 | 玩家可见字符串字面量 | Localization Service / String Table | 日志、测试、Editor 技术 UI |
@@ -208,9 +194,9 @@
 | 保存 `UnityEngine.Object` / GUID / 路径 | ContentId + InstanceId DTO | 无 |
 | 无所有者 `UniTaskVoid` / `.Forget()` | 受监控异步运行器 | 框架要求的事件桥接，仍必须被监控 |
 
-## 自动执行矩阵
+## 本地自动验证矩阵
 
-| 规则 | 主要门禁 |
+| 规则 | 主要验证 |
 | --- | --- |
 | 只有 Storage 访问运行时文件 | Runtime 源码策略扫描 + Storage 单元测试 |
 | 禁止 gameplay PlayerPrefs | Runtime 源码策略扫描 |
@@ -236,8 +222,8 @@
 - 数据结构、稳定 ID、Schema、默认值和迁移规则。
 - 主线程 / 后台线程边界。
 - 错误分类、玩家反馈、日志事件和恢复动作。
-- 配置、Editor 工具、开发调试入口和 Release 行为。
-- 自动测试、性能预算、已知限制和扩展方式。
+- 配置、Editor 辅助入口和运行时行为。
+- 自动测试、已知限制和扩展方式。
 - 禁止事项、唯一入口和策略扫描覆盖。
 
 ## 契约完成定义
@@ -246,4 +232,3 @@
 - “最小可用闭环”能力均有真实消费者、设置 / 生命周期接入和自动测试。
 - 禁止 API 扫描零未登记违规；临时白名单均有可追踪去向。
 - 后续新增模块无需自行发明存档、本地化、场景、输入、时间、随机、日志和资源规则。
-
