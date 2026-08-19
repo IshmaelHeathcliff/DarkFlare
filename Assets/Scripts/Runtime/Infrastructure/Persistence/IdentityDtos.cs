@@ -102,6 +102,10 @@ namespace DarkFlare
         public string TraderContentId { get; set; } = string.Empty;
 
         public List<string> OrderedItemInstanceIds { get; set; } = new List<string>();
+
+        public float BuyMultiplier { get; set; } = 1.5f;
+
+        public float SellMultiplier { get; set; } = 0.4f;
     }
 
     public enum ActorIdentityKind

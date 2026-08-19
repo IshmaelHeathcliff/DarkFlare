@@ -79,14 +79,17 @@ namespace DarkFlare
                 e.Actor.transform.position);
         }
 
-        void SpawnPickup(WorldDropId worldDropId, ItemInstance item, Vector3 position)
+        public LootPickupController SpawnRestoredPickup(
+            WorldDropId worldDropId,
+            ItemInstance item,
+            Vector3 position)
         {
             GameObject prefab = this.GetUtility<PrefabAssetLoader>().GetPrefab(_pickupPrefabReference);
 
             if (prefab == null)
             {
                 Debug.LogError("[LootSystem] 拾取物 Prefab 未加载");
-                return;
+                return null;
             }
 
             GameObject instance = Object.Instantiate(prefab, position, Quaternion.identity);
@@ -97,10 +100,16 @@ namespace DarkFlare
             {
                 Debug.LogError("[LootSystem] 拾取物 Prefab 缺少 LootPickupController");
                 this.GetUtility<SessionObjectRegistry>().Release(instance);
-                return;
+                return null;
             }
 
             controller.Init(worldDropId, item);
+            return controller;
+        }
+
+        void SpawnPickup(WorldDropId worldDropId, ItemInstance item, Vector3 position)
+        {
+            SpawnRestoredPickup(worldDropId, item, position);
         }
 
         static string DescribeItem(ItemInstance item)

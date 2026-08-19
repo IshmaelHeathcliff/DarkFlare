@@ -26,12 +26,17 @@ namespace DarkFlare
         IArchitecture _architecture;
         bool _isSpawning;
         uint _spawnVersion;
+        float _nextSpawnAttemptTime;
 
         public Collider2D WorldBounds => _worldBounds;
 
         public MonsterSpawnDefinition SpawnDefinition => _spawnDefinition;
 
         public bool IsSpawning => _isSpawning;
+
+        public float NextSpawnRemainingSeconds => _isSpawning
+            ? Mathf.Max(0f, _nextSpawnAttemptTime - Time.time)
+            : 0f;
 
         public IArchitecture GetArchitecture()
         {
@@ -47,6 +52,7 @@ namespace DarkFlare
         {
             StopSpawning();
             _spawnDefinition = spawnDefinition;
+            _aliveMonsters.Clear();
 
             if (gameObject.activeSelf)
             {
@@ -55,6 +61,11 @@ namespace DarkFlare
         }
 
         public void BeginSpawning()
+        {
+            BeginSpawning(0f);
+        }
+
+        public void BeginSpawning(float initialDelaySeconds)
         {
             if (_isSpawning)
             {
@@ -71,6 +82,13 @@ namespace DarkFlare
                 throw new System.InvalidOperationException("MonsterSpawner 必须先启用再开始生成");
             }
 
+            if (float.IsNaN(initialDelaySeconds)
+                || float.IsInfinity(initialDelaySeconds)
+                || initialDelaySeconds < 0f)
+            {
+                throw new System.ArgumentOutOfRangeException(nameof(initialDelaySeconds));
+            }
+
             _spawnScope = ComponentLifecycle.CreateScope(
                 this,
                 "spawn-loop",
@@ -81,14 +99,23 @@ namespace DarkFlare
             IArchitecture architecture = _architecture;
             _spawnScope.Tasks.Run(
                 "spawn-loop",
-                token => SpawnLoopAsync(version, architecture, token),
+                token => SpawnLoopAsync(version, architecture, initialDelaySeconds, token),
                 failurePolicy: LifecycleTaskFailurePolicy.ReportAndStopScope);
+        }
+
+        public void RegisterRestoredMonster(MonsterController monster)
+        {
+            if (monster != null && !_aliveMonsters.Contains(monster))
+            {
+                _aliveMonsters.Add(monster);
+            }
         }
 
         public void StopSpawning()
         {
             _isSpawning = false;
             _spawnVersion++;
+            _nextSpawnAttemptTime = 0f;
             _spawnScope?.BeginStop();
             _spawnScope = null;
         }
@@ -101,11 +128,23 @@ namespace DarkFlare
         async UniTask SpawnLoopAsync(
             uint version,
             IArchitecture architecture,
+            float initialDelaySeconds,
             System.Threading.CancellationToken token)
         {
             try
             {
-                await UniTask.Yield(PlayerLoopTiming.Update, token);
+                if (initialDelaySeconds > 0f)
+                {
+                    _nextSpawnAttemptTime = Time.time + initialDelaySeconds;
+                    await UniTask.Delay(
+                        System.TimeSpan.FromSeconds(initialDelaySeconds),
+                        cancellationToken: token);
+                }
+                else
+                {
+                    _nextSpawnAttemptTime = Time.time;
+                    await UniTask.Yield(PlayerLoopTiming.Update, token);
+                }
 
                 while (!token.IsCancellationRequested)
                 {
@@ -116,6 +155,7 @@ namespace DarkFlare
                         SpawnOne(architecture);
                     }
 
+                    _nextSpawnAttemptTime = Time.time + _spawnDefinition.SpawnInterval;
                     await UniTask.Delay(
                         System.TimeSpan.FromSeconds(_spawnDefinition.SpawnInterval),
                         cancellationToken: token);
@@ -140,6 +180,7 @@ namespace DarkFlare
                 {
                     _isSpawning = false;
                     _spawnScope = null;
+                    _nextSpawnAttemptTime = 0f;
                 }
             }
         }

@@ -49,6 +49,14 @@
             <ui:Instance template="Crafting" class="crafting-template" />
           </ui:VisualElement>
         </ui:VisualElement>
+        <ui:VisualElement name="game-menu-save-bar" class="game-menu-save-bar">
+          <ui:VisualElement class="game-menu-save-actions">
+            <ui:Button name="game-menu-save" text="保存进度" class="game-menu-save-action game-menu-save-action--primary" />
+            <ui:Button name="game-menu-continue" text="读取自动存档" class="game-menu-save-action" />
+            <ui:Button name="game-menu-new-game" text="开始新游戏" class="game-menu-save-action" />
+          </ui:VisualElement>
+          <ui:Label name="game-menu-save-status" text="正在检查自动存档…" class="game-menu-save-status" />
+        </ui:VisualElement>
       </ui:VisualElement>
       <ui:VisualElement name="item-tooltip-layer" class="item-tooltip-layer" picking-mode="Ignore">
         <ui:VisualElement name="item-tooltip" class="item-tooltip ui-panel-frame" picking-mode="Ignore">

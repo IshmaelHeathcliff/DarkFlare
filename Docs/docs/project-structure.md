@@ -11,6 +11,8 @@ DarkFlare/
     docs/
       infrastructure/
         application-lifecycle.md
+        content-identity-migration.md
+        local-save.md
   Packages/
   ProjectSettings/
   tools/
@@ -66,6 +68,8 @@ Assets/
         DarkFlare.Core.asmdef
         QFramework.cs
       Infrastructure/
+        Content/
+        Identity/
         Lifecycle/
           ApplicationBootstrap.cs
           ApplicationHost.cs
@@ -77,6 +81,21 @@ Assets/
           LifecycleTaskGroup.cs
           SceneSessionBinding.cs
           SessionObjectRegistry.cs
+        Persistence/
+          IdentityDtos.cs
+          JsonMigrationPipeline.cs
+          LocalSaveStorage.cs
+          RestoreGameSessionInitializer.cs
+          RuntimeStateMapper.cs
+          SaveCoordinator.cs
+          SaveDataValidator.cs
+          SaveDtos.cs
+          SavePathProvider.cs
+          SaveRestorePreparer.cs
+          SaveSerializer.cs
+          SessionSaveFacade.cs
+          SessionSnapshotSource.cs
+          VersionContracts.cs
       Data/
         Actors/
         Affixes/
@@ -124,13 +143,19 @@ Assets/
         GroundTilemapTests.cs
         InfrastructurePolicyExceptions.json
         InfrastructurePolicyTests.cs
+        LocalSaveStorageTests.cs
         Phase5VisualIntegrationTests.cs
         PrefabAssetLoaderTests.cs
+        SaveCoordinatorTests.cs
+        SaveDataContractTests.cs
+        SaveRestorePreparerTests.cs
+        SaveSerializerTests.cs
       PlayMode/                       # 程序集 DarkFlare.Tests.PlayMode
         DarkFlare.Tests.PlayMode.asmdef
         ApplicationHostSceneTransitionPlayModeTests.cs
         ApplicationLifecyclePlayModeTests.cs
         SceneSessionComponentBindingPlayModeTests.cs
+        SaveCaptureRestorePlayModeTests.cs
         SessionObjectRegistryOwnershipPlayModeTests.cs
   Settings/
     Scenes/
@@ -176,7 +201,7 @@ Addressables 的配置目录，包含资源组、模板和构建器配置。后�
 项目数据目录，当前分为：
 
 - `Preset`：适合放预设型配置资源；其中 `Content/正式内容目录.asset` 是 Application 级唯一正式内容目录
-- `Saves`：当前为空；后续只可放 Editor 存档夹具或样例，正式运行时存档必须写入 `Application.persistentDataPath`
+- `Saves`：当前为空；只可放 Editor 历史 Schema / 损坏夹具或样例，正式运行时存档写入 `Application.persistentDataPath/DarkFlare/Saves`
 
 ### `Assets/Plugins`
 
@@ -223,7 +248,7 @@ Addressables 的配置目录，包含资源组、模板和构建器配置。后�
 `Runtime/` 下的子目录职责：
 
 - `Core`：基础架构与全局入口（独立成 `DarkFlare.Core` 程序集）
-- `Infrastructure`：应用宿主、作用域、Session、统一任务取消、架构所有权、内容目录、稳定实例身份、DTO 与迁移
+- `Infrastructure`：应用宿主、作用域、Session、统一任务取消、架构所有权、内容目录、稳定实例身份、DTO / 迁移、本地存储和 Restore
 - `Data`：数据定义与配置类型
 - `Gameplay`：玩法逻辑
 - `UI`：界面逻辑（占位）
@@ -237,7 +262,7 @@ Addressables 的配置目录，包含资源组、模板和构建器配置。后�
 - `Infrastructure/Lifecycle`：`ApplicationBootstrap.cs`、`ApplicationHost.cs`、`GameSessionHost.cs`、`GameArchitectureProvider.cs`、`LifecycleScope.cs`、`LifecycleTaskGroup.cs`、`LifecycleModels.cs`、`ComponentLifecycle.cs`、`SceneSessionBinding.cs`、`SessionObjectRegistry.cs`；实现唯一宿主、Application / Profile / Session / Scene / Component 作用域、NewGame 事务边界、latest-wins 场景协调、lease / generation 隔离、场景组件重绑、统一取消和运行时对象精确注销
 - `Infrastructure/Content`：`ContentId.cs`、`ContentDefinitionMetadata.cs`、`ContentCatalogDefinition.cs`、`ContentCatalog.cs`；实现 12 类内容登记、规范 ContentId、目录验证及不可变强类型查询
 - `Infrastructure/Identity/StableInstanceIds.cs`：实现 Player / Item / Run / Monster / WorldDrop / SaveSlot 强类型 ID，以及 Profile / Session 所有的可注入生成器
-- `Infrastructure/Persistence`：`IdentityDtos.cs`、`RuntimeStateMapper.cs`、`VersionContracts.cs`、`JsonMigrationPipeline.cs`；实现纯 DTO、分离对象图映射、独立版本域和逐级内存 JSON 迁移
+- `Infrastructure/Persistence`：`IdentityDtos.cs`、`RuntimeStateMapper.cs`、`VersionContracts.cs`、`JsonMigrationPipeline.cs`、`SaveDtos.cs`、`SaveDataValidator.cs`、`SaveSerializer.cs`、`SavePathProvider.cs`、`LocalSaveStorage.cs`、`SessionSnapshotSource.cs`、`SaveRestorePreparer.cs`、`RestoreGameSessionInitializer.cs`、`SaveCoordinator.cs`、`SessionSaveFacade.cs`；实现纯 DTO、分离对象图映射、独立版本域、逐级迁移、确定性 JSON、代际文件存储、损坏回退、Session 快照 / 恢复和 Profile 级单写者协调
 - `GameArchitecture.cs`（位于 `Runtime/` 根，Session 组合根；由 `GameArchitectureProvider` 独占创建与销毁，已注册 `GameInput`、`CombatModel`/`EquipmentModel`/`InventoryModel`/`EconomyModel`、`CombatSystem`/`SpawnSystem`/`LootSystem`/`TradingSystem`/`CraftingSystem`/`GameplayPauseSystem`、`PrefabAssetLoader` 与 `SessionObjectRegistry`）
 - `Data/Tags/TagDefinition.cs`、`Data/Tags/TagQueryDefinition.cs`（标签目录元数据与结构化查询）
 - `Data/Stats/StatDefinition.cs`
@@ -260,7 +285,7 @@ Addressables 的配置目录，包含资源组、模板和构建器配置。后�
 - `Gameplay/Skills`：`ProjectileController.cs`
 - `Gameplay/Spawning`：`MonsterSpawner.cs`
 - `Gameplay/Loot`：`LootPickupController.cs`
-- `Gameplay/Bootstrap`：`CombatPrototypeBootstrap.cs`、`GameplaySceneConfiguration.cs`、`NewGameSessionInitializer.cs`、`CameraFollowTarget.cs`；Bootstrap 只组装场景配置并请求宿主，Initializer 负责可回滚的新游戏事务
+- `Gameplay/Bootstrap`：`CombatPrototypeBootstrap.cs`、`GameplaySceneConfiguration.cs`、`NewGameSessionInitializer.cs`、`CameraFollowTarget.cs`；Bootstrap 只组装场景配置并请求宿主，NewGame initializer 负责可回滚的新游戏事务，Restore initializer 位于 `Infrastructure/Persistence`
 - `Gameplay/Input`：`GameInput.cs`（输入封装、Gameplay/UI Action Map 切换与交互事件）、`InputSystem_Actions.cs`（由输入资产自动生成的 C# 包装类）
 - `Gameplay/Interaction`：`WorldInteractionTarget.cs`、`PlayerInteractionController.cs`、`GameplayPauseSystem.cs` 与 `Commands/`，负责最近世界目标、情境菜单请求和集中暂停
 - `Gameplay/Events/GameplayEvents.cs`：金币、背包、装备、打造、交易、交互焦点、菜单请求、暂停和 Actor 注册 / 注销领域事件
@@ -269,20 +294,22 @@ Addressables 的配置目录，包含资源组、模板和构建器配置。后�
 - `Gameplay/UI/ItemTooltipView.cs`、`ItemDragQueries.cs`、`MerchantGridLayout.cs`：唯一物品浮窗、拖拽目标只读查询和商人确定性虚拟格子排布
 - `Gameplay/UI/GetShopSnapshotQuery.cs`、`ShopPanelController.cs`：只读商店快照、商人格子与共享玩家背包的买卖交互控制器
 - `Gameplay/UI/GetCraftingSnapshotQuery.cs`、`CraftingPanelController.cs`：复用共享玩家背包选择，提供稀有度、任意 / 前缀 / 后缀范围和 14 个随机打造变体，不保留具体词条选择
-- `Gameplay/UI/GameMenuAccess.cs`、`GameMenuController.cs`：背包 / 商店 / 打造情境访问范围、共享菜单遮罩、关闭和 Gameplay/UI 输入路由
+- `Gameplay/UI/GameMenuAccess.cs`、`GameMenuController.cs`：背包 / 商店 / 打造情境访问范围、共享菜单遮罩、`auto` 保存 / 继续 / 新游戏、关闭和 Gameplay/UI 输入路由
 - `Gameplay/UI/InteractionPromptController.cs`：显示当前世界交互目标，并在 UI 模式或目标失效时隐藏
 - `Tests/EditMode/ApplicationLifecycleTests.cs`、`ArchitectureExceptionSafetyTests.cs`、`AbandonedGenerationIsolationTests.cs`、`PrefabAssetLoaderTests.cs`：覆盖作用域停止 / 超时、活动任务跟踪、后代 `Abandoned` 污点传播、旧 generation 隔离、架构初始化与反初始化异常安全、Prefab Addressables GUID 单飞和精确句柄
 - `Tests/EditMode/InfrastructurePolicyTests.cs` 与 `InfrastructurePolicyExceptions.json`：扫描架构直连、未登记异步、直接文件 IO / PlayerPrefs / 场景加载，并用正反向夹具验证规则
 - `Tests/EditMode/ContentIdentityTests.cs`、`InstanceIdentityAndDtoTests.cs`、`MigrationPipelineTests.cs`：覆盖内容目录完整性、强类型实例 ID、DTO 纯度与对象图 round-trip、迁移链和失败输入不变
+- `Tests/EditMode/SaveDataContractTests.cs`、`SaveSerializerTests.cs`、`LocalSaveStorageTests.cs`、`SaveRestorePreparerTests.cs`、`SaveCoordinatorTests.cs`：覆盖完整存档 DTO、校验、SHA-256 / 迁移、临时写和两代文件、损坏回退、内容预检、请求合并、Flush 超时与异常结算
 - `Tests/EditMode/Alpha01TagMigrationCharacterizationTests.cs` 与既有 EditMode 测试：覆盖标签查询、域隔离、物品—词条候选矩阵、伤害血统、旧接口兼容、纯逻辑、原子换装、交易和打造事务语义、键鼠 / 手柄输入、Action Map 切换、交互消息、暂停及 HUD/背包/商店/打造快照。归属 `DarkFlare.Tests.EditMode` 程序集
 - `Tests/PlayMode/ApplicationLifecyclePlayModeTests.cs`：覆盖冷启动唯一性、取消回滚、并发请求、连续 Session、场景卸载和直接 `Main` 重载
 - `Tests/PlayMode/ApplicationHostSceneTransitionPlayModeTests.cs`：覆盖每 generation 一次 `SessionRunning` 通知、回滚中的重载、三次快速请求 latest-wins、挂起回滚 / 作用域超时有界收敛，以及受控停止 / Shutdown / Emergency 终态隔离
 - `Tests/PlayMode/SceneSessionComponentBindingPlayModeTests.cs`：覆盖 `Main → Main`、无 Provider 空场景进入 `Main`、延迟绑定三态、绑定异常回滚，以及 poisoned Scene 拒绝重绑 / 重试
 - `Tests/PlayMode/SessionObjectRegistryOwnershipPlayModeTests.cs`：覆盖旧对象延迟销毁只注销其原始 Registry，不影响新 Session
+- `Tests/PlayMode/SaveCaptureRestorePlayModeTests.cs`：覆盖 Main 完整快照 / Restore、保存 → Continue → NewGame → Continue 旧档保留和菜单操作入口
 
 `UI`、`Utilities` 目前主要是占位，为后续模块扩展预留。
 
-**首版单场景循环和 `alpha 0.2.0–0.2.1` 基础设施已完成**：当前已覆盖输入、UIToolkit 根 / HUD、背包装备、商店、打造、场景交互入口，以及唯一应用宿主、Session 重建、稳定身份、内容目录、DTO 与内存迁移。运行流程见 [`gameplay-loop.md`](gameplay-loop.md)，生命周期见[应用生命周期与会话作用域](infrastructure/application-lifecycle.md)，身份与迁移见[稳定身份、内容目录与迁移框架](infrastructure/content-identity-migration.md)，输入与 UI 结构见 [`input-ui-system.md`](input-ui-system.md)；完成过程保存在 [`plan/archive/`](plan/archive/README.md)。
+**首版单场景循环和 `alpha 0.2.0–0.2.2` 基础设施已完成**：当前已覆盖输入、UIToolkit 根 / HUD、背包装备、商店、打造、场景交互入口，以及唯一应用宿主、Session 重建、稳定身份、内容目录、DTO / 迁移和 `auto` 本地存档 / Restore。运行流程见 [`gameplay-loop.md`](gameplay-loop.md)，生命周期见[应用生命周期与会话作用域](infrastructure/application-lifecycle.md)，身份与迁移见[稳定身份、内容目录与迁移框架](infrastructure/content-identity-migration.md)，持久化见[本地存档与 Session 恢复](infrastructure/local-save.md)，输入与 UI 结构见 [`input-ui-system.md`](input-ui-system.md)；完成过程保存在 [`plan/archive/`](plan/archive/README.md)。
 
 ### `Assets/Settings`
 
@@ -340,6 +367,6 @@ Unity 工程级设置目录，包括版本、构建场景、图形设置等。
 - 插件和核心依赖已经接入
 - 代码架构入口和唯一生命周期所有者已经就位
 - 战斗、掉落、背包、交易、打造、输入、HUD、情境菜单与世界交互入口已有首版可运行内容
-- 存档、本地化与完整 SceneFlow 尚未实现，仍是后续 `alpha 0.2` 阶段重点
+- `auto` 本地存档与 Restore 已实现；用户设置、本地化、手动槽位 UI、云同步与完整 SceneFlow 仍是后续 `alpha 0.2` 阶段重点
 
 因此，后续工作重点不在“再拆目录”，而在把每一层真正填上首批可运行内容。

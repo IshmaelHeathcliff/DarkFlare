@@ -121,6 +121,8 @@ namespace DarkFlare
 
         public bool HasBoundScene => _sceneBound;
 
+        public Scene BoundScene => _sceneBound ? _boundScene : default;
+
         public bool IsBoundToScene(Scene scene)
         {
             return _sceneBound

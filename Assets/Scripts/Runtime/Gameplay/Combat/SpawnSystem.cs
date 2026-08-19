@@ -19,6 +19,19 @@ namespace DarkFlare
             MonsterSpawnDefinition spawnDefinition,
             CancellationToken token)
         {
+            await PreloadAsync(
+                player,
+                playerSkill,
+                spawnDefinition != null ? spawnDefinition.AllMonsters : null,
+                token);
+        }
+
+        public async UniTask PreloadAsync(
+            CharacterDefinition player,
+            ProjectileSkillDefinition playerSkill,
+            IEnumerable<MonsterDefinition> monsters,
+            CancellationToken token)
+        {
             List<AssetReferenceGameObject> references = new List<AssetReferenceGameObject>();
 
             if (player != null)
@@ -31,11 +44,14 @@ namespace DarkFlare
                 references.Add(playerSkill.Prefab);
             }
 
-            if (spawnDefinition != null)
+            if (monsters != null)
             {
-                foreach (MonsterDefinition monster in spawnDefinition.AllMonsters)
+                foreach (MonsterDefinition monster in monsters)
                 {
-                    references.Add(monster.Prefab);
+                    if (monster != null)
+                    {
+                        references.Add(monster.Prefab);
+                    }
                 }
             }
 
@@ -44,22 +60,10 @@ namespace DarkFlare
 
         public CombatActor SpawnPlayer(CharacterDefinition definition, ProjectileSkillDefinition skill, Vector3 position)
         {
-            GameObject prefab = this.GetUtility<PrefabAssetLoader>().GetPrefab(definition.Prefab);
-
-            if (prefab == null)
-            {
-                Debug.LogError("[SpawnSystem] 玩家 Prefab 未加载");
-                return null;
-            }
-
-            GameObject instance = Object.Instantiate(prefab, position, Quaternion.identity);
-            this.GetUtility<SessionObjectRegistry>().Register(instance);
-            PlayerController controller = instance.GetComponent<PlayerController>();
+            PlayerController controller = InstantiatePlayer(definition, position);
 
             if (controller == null)
             {
-                Debug.LogError("[SpawnSystem] 玩家 Prefab 缺少 PlayerController");
-                this.GetUtility<SessionObjectRegistry>().Release(instance);
                 return null;
             }
 
@@ -70,6 +74,22 @@ namespace DarkFlare
                 previousResources,
                 ActorResourceChangeReason.Configure);
             return controller.Actor;
+        }
+
+        public PlayerController SpawnRestoredPlayer(
+            CharacterDefinition definition,
+            ProjectileSkillDefinition skill,
+            Vector3 position)
+        {
+            PlayerController controller = InstantiatePlayer(definition, position);
+
+            if (controller == null)
+            {
+                return null;
+            }
+
+            controller.ConfigureForRestore(definition, skill);
+            return controller;
         }
 
         public MonsterController SpawnMonster(MonsterSpawnDefinition spawnDefinition, int seed, Vector3 position)
@@ -114,6 +134,85 @@ namespace DarkFlare
             Debug.Log(
                 $"[SpawnSystem] 生成怪物 {definition.Id}，生成种子 {seed}，实例根种子 {instanceSeed}，"
                 + $"词条 {DescribeAffixes(instanceData)}，最终属性 {DescribeMonsterStats(instanceData.EffectiveStats)}");
+            return controller;
+        }
+
+        public MonsterController SpawnRestoredMonster(
+            MonsterDefinition definition,
+            MonsterInstanceData instanceData,
+            Vector3 position,
+            CombatResourceSnapshot resources,
+            float contactDamageCooldownRemainingSeconds)
+        {
+            if (definition == null || instanceData == null)
+            {
+                return null;
+            }
+
+            MonsterController controller = InstantiateMonster(definition, position);
+
+            if (controller == null)
+            {
+                return null;
+            }
+
+            CombatResourceSnapshot previousResources = controller.Actor.Resources;
+            controller.Configure(definition, instanceData);
+            controller.RestoreRuntime(resources, contactDamageCooldownRemainingSeconds);
+            this.GetSystem<CombatSystem>().PublishResourceChanges(
+                controller.Actor,
+                previousResources,
+                ActorResourceChangeReason.Configure);
+            return controller;
+        }
+
+        PlayerController InstantiatePlayer(CharacterDefinition definition, Vector3 position)
+        {
+            GameObject prefab = definition != null
+                ? this.GetUtility<PrefabAssetLoader>().GetPrefab(definition.Prefab)
+                : null;
+
+            if (prefab == null)
+            {
+                Debug.LogError("[SpawnSystem] 玩家 Prefab 未加载");
+                return null;
+            }
+
+            GameObject instance = Object.Instantiate(prefab, position, Quaternion.identity);
+            this.GetUtility<SessionObjectRegistry>().Register(instance);
+            PlayerController controller = instance.GetComponent<PlayerController>();
+
+            if (controller == null)
+            {
+                Debug.LogError("[SpawnSystem] 玩家 Prefab 缺少 PlayerController");
+                this.GetUtility<SessionObjectRegistry>().Release(instance);
+                return null;
+            }
+
+            return controller;
+        }
+
+        MonsterController InstantiateMonster(MonsterDefinition definition, Vector3 position)
+        {
+            GameObject prefab = this.GetUtility<PrefabAssetLoader>().GetPrefab(definition.Prefab);
+
+            if (prefab == null)
+            {
+                Debug.LogError($"[SpawnSystem] 怪物 Prefab 未加载: {definition.Id}");
+                return null;
+            }
+
+            GameObject instance = Object.Instantiate(prefab, position, Quaternion.identity);
+            this.GetUtility<SessionObjectRegistry>().Register(instance);
+            MonsterController controller = instance.GetComponent<MonsterController>();
+
+            if (controller == null)
+            {
+                Debug.LogError($"[SpawnSystem] 怪物 Prefab 缺少 MonsterController: {definition.Id}");
+                this.GetUtility<SessionObjectRegistry>().Release(instance);
+                return null;
+            }
+
             return controller;
         }
 

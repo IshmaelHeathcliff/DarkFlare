@@ -391,7 +391,7 @@ namespace DarkFlare
             return item;
         }
 
-        static List<ModifierInstanceDto> MapModifiersToDto(
+        internal static List<ModifierInstanceDto> MapModifiersToDto(
             IReadOnlyList<ModifierInstance> modifiers,
             ContentCatalog catalog,
             string path,
@@ -469,7 +469,7 @@ namespace DarkFlare
             return result;
         }
 
-        static List<ModifierInstance> RestoreModifiers(
+        internal static List<ModifierInstance> RestoreModifiers(
             IReadOnlyList<ModifierInstanceDto> dtos,
             ContentCatalog catalog,
             string path,
@@ -827,7 +827,7 @@ namespace DarkFlare
             return new TagSet(localIds);
         }
 
-        static string ResolveOptionalLocalId<T>(
+        internal static string ResolveOptionalLocalId<T>(
             string raw,
             ContentCatalog catalog,
             string path,
@@ -843,7 +843,7 @@ namespace DarkFlare
             return definition != null ? definition.Id : string.Empty;
         }
 
-        static string MapOptionalLocalContentId(
+        internal static string MapOptionalLocalContentId(
             string contentNamespace,
             string localId,
             ContentCatalog catalog,
@@ -874,7 +874,7 @@ namespace DarkFlare
             return contentId.ToString();
         }
 
-        static T Resolve<T>(
+        internal static T Resolve<T>(
             string raw,
             ContentCatalog catalog,
             string path,
@@ -914,7 +914,7 @@ namespace DarkFlare
             return contentId.ToString();
         }
 
-        static string GetContentId(
+        internal static string GetContentId(
             ScriptableObject definition,
             ContentCatalog catalog,
             string path,

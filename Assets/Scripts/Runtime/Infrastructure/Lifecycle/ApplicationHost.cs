@@ -12,6 +12,7 @@ namespace DarkFlare
     {
         const string DefaultProfileId = "local-default";
         const string StopTimeoutOperationName = "stop-timeout";
+        static readonly TimeSpan SaveFlushTimeout = TimeSpan.FromSeconds(5);
 
         static ApplicationHost s_current;
 
@@ -22,6 +23,11 @@ namespace DarkFlare
         ContentCatalogDefinition _contentCatalogDefinition;
         ContentCatalog _contentCatalog;
         IItemInstanceIdGenerator _itemInstanceIds;
+        ISavePathProvider _savePathProvider;
+        ISaveSerializer _saveSerializer;
+        ILocalSaveStorage _saveStorage;
+        SaveCoordinator _saveCoordinator;
+        SessionSaveFacade _sessionSaveFacade;
         GameSessionHost _lastNotifiedSession;
         SceneSessionInitializationRequest _activeSceneRequest;
         SceneSessionInitializationRequest _pendingSceneRequest;
@@ -29,6 +35,8 @@ namespace DarkFlare
         bool _ownsSingleton;
         bool _shutdownStarted;
         bool _sceneTransitionInProgress;
+        bool _quitGateArmed;
+        bool _allowQuit;
         UniTaskCompletionSource<LifecycleResult> _shutdownCompletion;
         UniTask _shutdownRunner;
         int _sessionSequence;
@@ -65,6 +73,10 @@ namespace DarkFlare
         public ContentCatalog ContentCatalog => _contentCatalog;
 
         public ContentCatalogDefinition ContentCatalogDefinition => _contentCatalogDefinition;
+
+        public SaveCoordinator SaveCoordinator => _saveCoordinator;
+
+        public SessionSaveFacade SessionSaveFacade => _sessionSaveFacade;
 
         public event Action<GameSessionHost> SessionRunning;
 
@@ -132,6 +144,7 @@ namespace DarkFlare
 
             _contentCatalogDefinition = definition;
             _contentCatalog = buildResult.Catalog;
+            EnsureSaveCoordinator();
             return LifecycleResult.Success(
                 $"内容目录 {_contentCatalog.CatalogId} v{_contentCatalog.ContentVersion} 已安装");
         }
@@ -412,6 +425,8 @@ namespace DarkFlare
                 return LifecycleResult.AlreadyCompleted("当前没有 Session");
             }
 
+            _saveCoordinator?.UnbindSession(session);
+            _sessionSaveFacade = null;
             LifecycleResult result = await session.StopAsync();
 
             if (ReferenceEquals(_session, session)
@@ -438,7 +453,6 @@ namespace DarkFlare
             _shutdownStarted = true;
             _shutdownCompletion = new UniTaskCompletionSource<LifecycleResult>();
             State = ApplicationLifecycleState.ShuttingDown;
-            _applicationScope?.BeginStop();
             _shutdownRunner = CompleteShutdownAsync().Preserve();
         }
 
@@ -463,6 +477,7 @@ namespace DarkFlare
 
             s_current = this;
             _ownsSingleton = true;
+            Application.wantsToQuit += OnWantsToQuit;
             DontDestroyOnLoad(gameObject);
             Boot();
         }
@@ -479,6 +494,8 @@ namespace DarkFlare
                 return;
             }
 
+            Application.wantsToQuit -= OnWantsToQuit;
+
             BeginShutdown();
 
             if (State != ApplicationLifecycleState.Shutdown)
@@ -490,6 +507,22 @@ namespace DarkFlare
             {
                 s_current = null;
             }
+        }
+
+        bool OnWantsToQuit()
+        {
+            if (_allowQuit || State == ApplicationLifecycleState.Shutdown)
+            {
+                return true;
+            }
+
+            if (!_quitGateArmed)
+            {
+                _quitGateArmed = true;
+                BeginShutdown();
+            }
+
+            return false;
         }
 
         void Boot()
@@ -509,6 +542,9 @@ namespace DarkFlare
                 ProfileId = DefaultProfileId;
                 _profileScope = _applicationScope.CreateChild($"Profile-{ProfileId}");
                 _itemInstanceIds = new UuidItemInstanceIdGenerator();
+                _savePathProvider = new PersistentSavePathProvider();
+                _saveSerializer = new NewtonsoftSaveSerializer();
+                _saveStorage = new LocalSaveStorage(_savePathProvider, _saveSerializer);
                 LifecycleResult sessionResult = CreatePendingSession();
 
                 if (!sessionResult.IsSuccess)
@@ -952,6 +988,7 @@ namespace DarkFlare
 
             _lastNotifiedSession = session;
             _lastNotifiedSessionGeneration = generation;
+            BindSaveSnapshotSource(session);
 
             Delegate[] callbacks = SessionRunning?.GetInvocationList();
 
@@ -977,8 +1014,24 @@ namespace DarkFlare
         {
             Exception shutdownException = null;
 
+            if (_saveCoordinator != null)
+            {
+                SaveOperationResult flushResult = await _saveCoordinator.CloseAndFlushAsync(
+                    SaveCoordinator.AutoSlot,
+                    SaveFlushTimeout);
+
+                if (!flushResult.Succeeded)
+                {
+                    shutdownException = CombineShutdownException(
+                        shutdownException,
+                        flushResult.Exception ?? new InvalidOperationException(
+                            $"存档 Flush 失败：{flushResult.ErrorCode}"));
+                }
+            }
+
             if (_session != null)
             {
+                _saveCoordinator?.UnbindSession(_session);
                 LifecycleResult sessionResult = await _session.StopAsync();
 
                 if (!sessionResult.IsSuccess)
@@ -1028,6 +1081,11 @@ namespace DarkFlare
             _contentCatalog = null;
             _contentCatalogDefinition = null;
             _itemInstanceIds = null;
+            _saveCoordinator = null;
+            _sessionSaveFacade = null;
+            _saveStorage = null;
+            _saveSerializer = null;
+            _savePathProvider = null;
             ProfileId = null;
             State = ApplicationLifecycleState.Shutdown;
 
@@ -1095,10 +1153,17 @@ namespace DarkFlare
             }
 
             _shutdownCompletion.TrySetResult(result);
+
+            if (_quitGateArmed && !_allowQuit)
+            {
+                _allowQuit = true;
+                Application.Quit();
+            }
         }
 
         void EmergencyShutdown()
         {
+            _saveCoordinator?.EmergencyClose();
             LifecycleResult sessionResult = _session != null
                 ? _session.EmergencyStop()
                 : LifecycleResult.AlreadyCompleted();
@@ -1113,6 +1178,11 @@ namespace DarkFlare
             _contentCatalog = null;
             _contentCatalogDefinition = null;
             _itemInstanceIds = null;
+            _saveCoordinator = null;
+            _sessionSaveFacade = null;
+            _saveStorage = null;
+            _saveSerializer = null;
+            _savePathProvider = null;
             ProfileId = null;
             State = ApplicationLifecycleState.Shutdown;
             LifecycleResult result = sessionResult.IsSuccess
@@ -1122,6 +1192,84 @@ namespace DarkFlare
                     "Application 应急关闭发生错误",
                     sessionResult.Exception);
             _shutdownCompletion?.TrySetResult(result);
+        }
+
+        void EnsureSaveCoordinator()
+        {
+            if (_saveCoordinator != null || _profileScope == null || _contentCatalog == null)
+            {
+                return;
+            }
+
+            if (_saveStorage == null)
+            {
+                throw new InvalidOperationException("Application 存档存储服务尚未创建");
+            }
+
+            _saveCoordinator = new SaveCoordinator(
+                _profileScope,
+                _saveStorage,
+                _contentCatalog,
+                Application.version);
+        }
+
+        void BindSaveSnapshotSource(GameSessionHost session)
+        {
+            if (_saveCoordinator == null || !session.HasBoundScene)
+            {
+                return;
+            }
+
+            MonsterSpawner spawner = FindSceneComponent<MonsterSpawner>(session.BoundScene);
+            CombatPrototypeBootstrap bootstrap = FindSceneComponent<CombatPrototypeBootstrap>(
+                session.BoundScene);
+
+            if (spawner == null || bootstrap == null)
+            {
+                Debug.LogWarning(
+                    "[ApplicationHost] 当前 Session 场景缺少 Bootstrap 或 MonsterSpawner，存档入口不可用",
+                    this);
+                return;
+            }
+
+            try
+            {
+                _saveCoordinator.BindSession(
+                    session,
+                    new SessionSnapshotSource(session, _contentCatalog, spawner));
+                _sessionSaveFacade = new SessionSaveFacade(
+                    this,
+                    session,
+                    _saveCoordinator,
+                    session.BoundScene,
+                    bootstrap.CreateSceneConfiguration());
+            }
+            catch (Exception exception)
+            {
+                Debug.LogException(exception, this);
+            }
+        }
+
+        static T FindSceneComponent<T>(Scene scene) where T : Component
+        {
+            if (!scene.IsValid() || !scene.isLoaded)
+            {
+                return null;
+            }
+
+            GameObject[] roots = scene.GetRootGameObjects();
+
+            for (int i = 0; i < roots.Length; i++)
+            {
+                T component = roots[i].GetComponentInChildren<T>(true);
+
+                if (component != null)
+                {
+                    return component;
+                }
+            }
+
+            return null;
         }
 
         void CompleteOutstandingSceneRequests(bool cancelled)

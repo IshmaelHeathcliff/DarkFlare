@@ -65,5 +65,20 @@ namespace DarkFlare
                 _loadouts.Remove(actor);
             }
         }
+
+        public void RestoreLoadout(CombatActor actor, EquipmentLoadout loadout)
+        {
+            if (actor == null)
+            {
+                throw new System.ArgumentNullException(nameof(actor));
+            }
+
+            if (loadout == null)
+            {
+                throw new System.ArgumentNullException(nameof(loadout));
+            }
+
+            _loadouts[actor] = loadout;
+        }
     }
 }

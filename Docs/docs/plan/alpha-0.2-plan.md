@@ -1,9 +1,9 @@
 # alpha 0.2 基础设施开发计划
 
-> 状态：`alpha 0.2.0–0.2.1` 已完成，下一阶段 `alpha 0.2.2`
+> 状态：`alpha 0.2.0–0.2.2` 已完成；下一阶段 `alpha 0.2.3`
 > 建立日期：2026-08-17
-> 最近更新：2026-08-18
-> 基线提交：`713cd17`
+> 最近更新：2026-08-19
+> 基线提交：`21360c7`
 > 计划建立时前置基线：`alpha 0.1` 已完成并归档；EditMode `212/212` 通过，PlayMode `24` 项中 `22` 项通过、`2` 项因 Input System 上游问题忽略、零失败
 > 约束契约：[alpha 0.2 基础设施约束契约](./alpha-0.2-infrastructure-contract.md)
 
@@ -23,9 +23,9 @@
 
 - 当前只有 `Main.unity`，没有启动场景、游戏状态机、统一加载流程或失败恢复页。
 - `alpha 0.2.0` 已建立场景加载前的唯一 `ApplicationHost`、Application / Profile / Session / Scene / Component 作用域及 `GameArchitectureProvider` 独占入口；当前单场景兼容请求采用 latest-wins，场景预置组件只绑定同场景且已 Running 的有效 Session，完整游戏状态机与通用 SceneFlow 仍未建立。
-- `CombatPrototypeBootstrap` 已收缩为场景配置与宿主请求入口，新游戏逻辑由可回滚的 `NewGameSessionInitializer` 执行；Restore 初始化器与正式读档职责仍待 `alpha 0.2.2`。
-- `alpha 0.2.1` 已建立纯 DTO、分离对象图 Mapper、四类版本合同和内存迁移管线；`Assets/Data/Saves` 仍为空，正式存档路径、序列化封装、槽位、校验、备份和损坏恢复待 `alpha 0.2.2`。
-- 现有背包、装备、经济和物品实例仍可在玩法内使用对象引用，但持久化边界已统一转换为 ContentId 与强类型实例 ID；正式保存和 Restore 提交事务尚未实现。
+- `CombatPrototypeBootstrap` 已收缩为场景配置与宿主请求入口；新游戏与恢复分别由可回滚的 `NewGameSessionInitializer` 和 `RestoreGameSessionInitializer` 执行。
+- `alpha 0.2.1` 建立的纯 DTO、分离对象图 Mapper、版本合同和迁移管线已在 `alpha 0.2.2` 接入确定性 JSON、`Application.persistentDataPath` 代际存储、损坏回退和退出 Flush；`Assets/Data/Saves` 继续不存放正式玩家数据。
+- 背包、装备、经济和物品实例仍可在玩法内使用对象引用，持久化边界统一转换为 ContentId 与强类型实例 ID；`auto` 保存和 Restore Session 已有真实菜单消费者。
 - Application 级唯一内容目录 `core` v1 已收录 90 个正式配置，并由配置验证器冻结零空值、零重复、零遗漏。
 - Unity Localization `1.5.12` 已安装，但没有 Locale、String Table、运行时语言服务或玩家可见文本迁移。
 - 用户设置、输入重绑定、按键图标、音频服务、全局异常处理和结构化日志尚未建立。
@@ -67,7 +67,7 @@
 | --- | --- | --- | --- |
 | `alpha 0.2.0` | 已完成 | 建立应用宿主、作用域、生命周期和首批规范验证 | [模块文档](../infrastructure/application-lifecycle.md) · [归档计划](./archive/alpha-0.2.0-application-lifecycle-plan.md) |
 | `alpha 0.2.1` | 已完成 | 建立稳定身份、内容目录和版本迁移底座 | [模块文档](../infrastructure/content-identity-migration.md) · [归档计划](./archive/alpha-0.2.1-content-identity-migration-plan.md) |
-| `alpha 0.2.2` | 待开始 | 完成本地存档、读档和损坏恢复闭环 | 存档 DTO、槽位、原子写入、备份、校验、迁移、自动保存与继续游戏 |
+| `alpha 0.2.2` | 已完成 | 完成本地存档、读档和损坏恢复闭环 | [模块文档](../infrastructure/local-save.md) · [归档计划](./archive/alpha-0.2.2-local-save-plan.md) |
 | `alpha 0.2.3` | 待开始 | 完成用户设置和运行时本地化 | Settings、Locale、String Tables、字体回退、伪本地化、硬编码扫描 |
 | `alpha 0.2.4` | 待开始 | 建立游戏状态、场景加载和通用 UI 外壳 | Boot / Loading / InGame 状态、SceneFlow、Loading UI、Page / Modal / Toast |
 | `alpha 0.2.5` | 待开始 | 接入输入、音频、可访问性和平台生命周期 | 重绑定、输入图标、AudioMixer 服务、可访问性设置、挂起 / 退出策略 |
@@ -148,6 +148,8 @@
 
 ## alpha 0.2.2：本地存档闭环
 
+当前实现与使用边界见[本地存档与 Session 恢复](../infrastructure/local-save.md)；冻结的数据合同、代际存储方案、生命周期顺序、实际偏差和验收证据见[归档执行计划](./archive/alpha-0.2.2-local-save-plan.md)。
+
 ### 目标
 
 提供可恢复、可迁移且错误可定位的本地存档，并让当前最小循环能够真正“保存 → 重启会话 → 继续”。
@@ -180,6 +182,15 @@
 - 模拟写入中断、主文件损坏和最新备份损坏时，系统按契约恢复或安全拒绝，不产生半加载状态。
 - 旧 Schema 样本迁移成功，新 Schema 未知版本被安全拒绝，原文件始终可恢复。
 - 连续快速触发保存不会并行写同一槽位，退出 Flush 有明确成功、超时或失败结果。
+
+### 完成记录
+
+- 已冻结 `darkflare-save` V1 / Save Schema 1，完整保存 Profile、物品关系图、四槽装备、金币、玩家状态、随机通道、实例序号、刷怪进度、存活怪物、世界掉落和商人库存。
+- `NewtonsoftSaveSerializer` 生成确定性 UTF-8 JSON 与 Payload SHA-256；`LocalSaveStorage` 使用同目录临时文件、严格递增提交代际、读后验证和两份有效代际保留，当前损坏可回退 Backup。
+- Profile 级 `SaveCoordinator` 实现 generation-bound 快照、Dirty revision、单写者与密集请求合并；`SessionSaveFacade` 为菜单提供 `auto` 保存、继续和不覆盖旧档的新游戏入口。
+- `ApplicationHost` 已接入 Restore Session、退出前 5 秒有界 Flush 和桌面 quit gate；预检失败不停止当前 Session，Restore 失败沿用初始化事务回滚。
+- 最终验证为 Unity 编译 0 error、EditMode `310/310`、项目自有 PlayMode `48/48`；PlayMode 完整运行 52 项中 50 项通过、0 失败，2 项 Input System 包测试因上游 issue 1252825 跳过。两次真实 Play / 退出回到唯一宿主、Running Session、玩家和菜单绑定基线，最终 Console Error 为 0。
+- 本阶段未实现 Settings、Locale、手动槽位 / Profile UI、云同步或完整 SceneFlow；这些边界分别由后续阶段处理。
 
 ## alpha 0.2.3：用户设置与本地化
 

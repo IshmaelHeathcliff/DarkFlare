@@ -27,9 +27,9 @@ flowchart TB
 
 | 作用域 | 所有者 | 主要内容 | 结束时机 |
 | --- | --- | --- | --- |
-| Application | `ApplicationHost` | 应用状态、场景请求协调、根取消 | 应用退出或测试清理 |
-| Profile | `ApplicationHost` | 当前档案的生命周期位置 | 应用退出；正式档案切换尚未实现 |
-| Session | `GameSessionHost` | `GameArchitecture`、玩法 Model / System、随机状态、运行时对象 | 离开当前游戏或绑定场景卸载 |
+| Application | `ApplicationHost` | 应用状态、场景请求协调、内容目录、存档路径 / 序列化 / Storage、根取消 | 应用退出或测试清理 |
+| Profile | `ApplicationHost` | 当前档案生命周期、SaveCoordinator | 应用退出；正式档案切换尚未实现 |
+| Session | `GameSessionHost` | `GameArchitecture`、玩法 Model / System、随机状态、运行时对象、generation-bound 存档 Facade | 离开当前游戏或绑定场景卸载 |
 | Scene | `GameSessionHost` | 初始化事务、场景任务、场景绑定 | 场景卸载或 Session 停止 |
 | Component | `ComponentLifecycle` | 单个组件的长期任务和局部取消 | 组件在禁用时主动停止、销毁 Token 取消或上级作用域停止 |
 
@@ -77,12 +77,14 @@ sequenceDiagram
   Provider->>Provider: Deinit 并清除当前架构
 ```
 
-`ApplicationBootstrap` 在场景脚本前创建唯一宿主。宿主同一时间只允许一个 Session，并以 latest-wins 处理场景请求。初始化成功后才广播 `SessionRunning`；正常停止必须先收敛 Scene、回滚初始化并停止 Session，最后才能销毁架构。
+`ApplicationBootstrap` 在场景脚本前创建唯一宿主。宿主同一时间只允许一个 Session，并以 latest-wins 处理场景请求。初始化成功后才广播 `SessionRunning`；正常停止必须先解绑当前存档快照入口、收敛 Scene、回滚初始化并停止 Session，最后才能销毁架构。
 
 - Application：`None → Booting → Ready → ShuttingDown → Shutdown`；启动失败进入 `Failed`。
 - Session：`Created → Initializing → Running → Stopping → None`；初始化失败或取消进入 `RollingBack`，无法安全收敛则进入 `Abandoned`。
 
-新游戏事务为 `验证 → 预热 → 写状态 → 创建并登记对象 → 绑定场景 → 提交刷怪`；失败或取消只逆序撤销已经完成的步骤。
+新游戏事务为 `验证 → 预热 → 写状态 → 创建并登记对象 → 绑定场景 → 提交刷怪`；Restore 事务在旧 Session 存活时完成文件和内容预检，再执行 `预热 → 重建完整状态 → 绑定场景 → 提交刷怪`。两者失败或取消都只逆序撤销已经完成的步骤。
+
+正常桌面关闭进入 `ShuttingDown` 后先关闭存档请求入口、等待读取并执行最终 Capture / 有界 Flush，再依次停止 Session、Profile 和 Application 作用域。第一次 `Application.wantsToQuit` 会被门禁延后，关闭流程完成后只放行一次；应急销毁不等待，只保证已经原子提交的存档代际仍有效。
 
 ## 依赖与注入关系
 
@@ -145,10 +147,10 @@ flowchart LR
 ## 当前限制
 
 - 当前只保证唯一构建场景 `Main.unity` 的启动与直接重载安全；latest-wins 不是通用 SceneFlow。
-- 当前只有内存中的 `local-default` Profile，不支持正式档案切换、存档槽、序列化、备份、迁移或恢复。
-- 当前只有 `NewGameSessionInitializer`；读档必须使用独立 Restore initializer，不能复用新游戏发放流程伪装恢复。
+- 当前仍只有 `local-default` Profile；已支持 `auto` 槽位、序列化、两代备份、迁移和 Restore，但没有正式档案切换、手动槽位管理或云同步。
+- 新游戏与读档分别使用 `NewGameSessionInitializer` 和 `RestoreGameSessionInitializer`，禁止复用新游戏发放流程伪装恢复。
 - 尚未实现 Boot / FrontEnd / Loading / Recovering / FatalError 状态机。
 - Unity Localization、应用级结构化日志、统一玩家错误反馈和完整 Addressables 治理不属于本模块。
 - 一旦进入 `Abandoned`，本次运行不得继续创建 Session；应终止运行或执行测试静态重置。
 
-本模块的边界是提供可靠的生命周期、所有权和注入时机；稳定身份、内容目录和迁移合同见[稳定身份、内容目录与迁移框架](./content-identity-migration.md)，存档文件、场景流、本地化与资源治理继续建立在这些基础之上。历史验收范围和测试记录见顶部归档计划。
+本模块的边界是提供可靠的生命周期、所有权和注入时机；稳定身份、内容目录和迁移合同见[稳定身份、内容目录与迁移框架](./content-identity-migration.md)，已落地的文件格式、保存与 Restore 顺序见[本地存档与 Session 恢复](./local-save.md)，场景流、本地化与资源治理继续建立在这些基础之上。历史验收范围和测试记录见顶部归档计划。

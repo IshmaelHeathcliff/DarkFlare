@@ -38,9 +38,21 @@ namespace DarkFlare.Tests
                 Array.Empty<string>()),
             new PolicyRule(
                 "business-file-io",
-                @"\b(?:(?:System\s*\.\s*)?IO\s*\.\s*)?(?:File|Directory)\s*\.",
+                @"\b(?:(?:(?:System\s*\.\s*)?IO\s*\.\s*)?(?:File|Directory)\s*\."
+                    + @"|new\s+(?:(?:System\s*\.\s*)?IO\s*\.\s*)?(?:FileStream|FileInfo)\s*\()",
                 new[] { RuntimeRoot },
-                Array.Empty<string>()),
+                new[]
+                {
+                    "Assets/Scripts/Runtime/Infrastructure/Persistence/LocalSaveStorage.cs",
+                }),
+            new PolicyRule(
+                "persistent-data-path",
+                @"\bApplication\s*\.\s*persistentDataPath\b",
+                new[] { RuntimeRoot },
+                new[]
+                {
+                    "Assets/Scripts/Runtime/Infrastructure/Persistence/SavePathProvider.cs",
+                }),
             new PolicyRule(
                 "business-scene-loading",
                 @"\bSceneManager\s*\.\s*(?:Load\w*|Unload\w*)\s*\(",
@@ -81,6 +93,7 @@ namespace DarkFlare.Tests
         [TestCase("dont-destroy-on-load")]
         [TestCase("player-prefs")]
         [TestCase("business-file-io")]
+        [TestCase("persistent-data-path")]
         [TestCase("business-scene-loading")]
         [TestCase("unitask-void")]
         [TestCase("naked-forget")]
@@ -160,6 +173,10 @@ namespace DarkFlare.Tests
             "business-file-io",
             "System.IO.File.WriteAllText(path, value);",
             "File.WriteAllText")]
+        [TestCase(
+            "persistent-data-path",
+            "return Application.persistentDataPath;",
+            "Application.persistentDataPath")]
         [TestCase(
             "business-scene-loading",
             "SceneManager.LoadScene(sceneName);",

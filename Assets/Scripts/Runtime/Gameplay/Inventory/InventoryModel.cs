@@ -17,6 +17,22 @@ namespace DarkFlare
             Grid = new InventoryGrid(DefaultWidth, DefaultHeight);
         }
 
+        public void RestoreState(InventoryGrid grid, int gold)
+        {
+            if (grid == null)
+            {
+                throw new System.ArgumentNullException(nameof(grid));
+            }
+
+            if (gold < 0)
+            {
+                throw new System.ArgumentOutOfRangeException(nameof(gold));
+            }
+
+            Grid = grid;
+            Gold = gold;
+        }
+
         public bool TryAddItem(ItemInstance item)
         {
             bool added = Grid.TryAdd(item);

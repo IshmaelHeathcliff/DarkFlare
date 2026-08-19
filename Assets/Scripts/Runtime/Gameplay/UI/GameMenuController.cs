@@ -1,3 +1,5 @@
+using System;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -36,6 +38,13 @@ namespace DarkFlare
         Button _shopTab;
         Button _craftingTab;
         Button _closeButton;
+        Button _saveButton;
+        Button _continueButton;
+        Button _newGameButton;
+        Label _saveStatus;
+        SessionSaveFacade _saveFacade;
+        bool _saveOperationBusy;
+        bool _hasAutoSave;
 
         public GameMenuAccess AvailablePages { get; private set; } = GameMenuAccess.Inventory;
 
@@ -44,6 +53,12 @@ namespace DarkFlare
         public bool IsOpen => _gameInput != null && _gameInput.CurrentMode == GameInputMode.UI;
 
         public int SessionBindCount => _sessionBinding?.BindCount ?? 0;
+
+        public bool IsSaveOperationBusy => _saveOperationBusy;
+
+        public bool CanContinueAutoSave => _hasAutoSave && !_saveOperationBusy;
+
+        public string SaveStatusText => _saveStatus?.text ?? string.Empty;
 
         public IArchitecture GetArchitecture()
         {
@@ -134,6 +149,12 @@ namespace DarkFlare
                 return SceneSessionBindResult.Failed;
             }
 
+            _saveFacade = ResolveSaveFacade();
+            _saveOperationBusy = false;
+            _hasAutoSave = false;
+            RefreshSaveControls();
+            ScheduleAutoSaveProbe();
+
             _openRequestRegistration = this.RegisterEvent<GameMenuOpenRequestedEvent>(OnMenuOpenRequested);
             _gameInput.ModeChanged += OnInputModeChanged;
             ApplyInputMode(_gameInput.CurrentMode);
@@ -171,6 +192,21 @@ namespace DarkFlare
                 _closeButton.clicked -= OnCloseClicked;
             }
 
+            if (_saveButton != null)
+            {
+                _saveButton.clicked -= OnSaveClicked;
+            }
+
+            if (_continueButton != null)
+            {
+                _continueButton.clicked -= OnContinueClicked;
+            }
+
+            if (_newGameButton != null)
+            {
+                _newGameButton.clicked -= OnNewGameClicked;
+            }
+
             if (_panel != null)
             {
                 _panel.UnregisterCallback<GeometryChangedEvent>(OnPanelGeometryChanged);
@@ -186,6 +222,13 @@ namespace DarkFlare
             _shopTab = null;
             _craftingTab = null;
             _closeButton = null;
+            _saveButton = null;
+            _continueButton = null;
+            _newGameButton = null;
+            _saveStatus = null;
+            _saveFacade = null;
+            _saveOperationBusy = false;
+            _hasAutoSave = false;
         }
 
         void OnValidate()
@@ -239,6 +282,10 @@ namespace DarkFlare
             _shopTab = root.Q<Button>("game-menu-shop-tab");
             _craftingTab = root.Q<Button>("game-menu-crafting-tab");
             _closeButton = root.Q<Button>("game-menu-close");
+            _saveButton = root.Q<Button>("game-menu-save");
+            _continueButton = root.Q<Button>("game-menu-continue");
+            _newGameButton = root.Q<Button>("game-menu-new-game");
+            _saveStatus = root.Q<Label>("game-menu-save-status");
 
             if (_overlay == null
                 || _panel == null
@@ -248,7 +295,11 @@ namespace DarkFlare
                 || _inventoryTab == null
                 || _shopTab == null
                 || _craftingTab == null
-                || _closeButton == null)
+                || _closeButton == null
+                || _saveButton == null
+                || _continueButton == null
+                || _newGameButton == null
+                || _saveStatus == null)
             {
                 Debug.LogError("[GameMenuController] 菜单 UXML 缺少必要的命名元素", this);
                 return false;
@@ -258,6 +309,9 @@ namespace DarkFlare
             _shopTab.clicked += OnShopTabClicked;
             _craftingTab.clicked += OnCraftingTabClicked;
             _closeButton.clicked += OnCloseClicked;
+            _saveButton.clicked += OnSaveClicked;
+            _continueButton.clicked += OnContinueClicked;
+            _newGameButton.clicked += OnNewGameClicked;
             _panel.RegisterCallback<GeometryChangedEvent>(OnPanelGeometryChanged);
             return true;
         }
@@ -288,6 +342,7 @@ namespace DarkFlare
             if (isOpen)
             {
                 _inventoryPanel?.ClearSelection();
+                RefreshSaveControls();
                 ApplyPage();
                 return;
             }
@@ -356,6 +411,214 @@ namespace DarkFlare
         {
             _inventoryPanel?.CancelActiveDrag();
             _gameInput?.SwitchToGameplay();
+        }
+
+        void OnSaveClicked()
+        {
+            RunSaveOperation(
+                "save-auto",
+                facade => facade.SaveAutoAsync(),
+                _saveButton);
+        }
+
+        void OnContinueClicked()
+        {
+            if (!_hasAutoSave)
+            {
+                return;
+            }
+
+            RunSaveOperation(
+                "continue-auto",
+                facade => facade.ContinueAutoAsync(),
+                _continueButton);
+        }
+
+        void OnNewGameClicked()
+        {
+            RunSaveOperation(
+                "new-game",
+                facade => facade.StartNewGameAsync(),
+                _newGameButton);
+        }
+
+        SessionSaveFacade ResolveSaveFacade()
+        {
+            if (!ApplicationHost.TryGetCurrent(out ApplicationHost host))
+            {
+                return null;
+            }
+
+            SessionSaveFacade facade = host.SessionSaveFacade;
+            return facade != null
+                && facade.ArchitectureGeneration == host.CurrentSession?.ArchitectureGeneration
+                ? facade
+                : null;
+        }
+
+        void ScheduleAutoSaveProbe()
+        {
+            SessionSaveFacade facade = _saveFacade;
+
+            if (facade == null
+                || !ApplicationHost.TryGetCurrent(out ApplicationHost host)
+                || host.ApplicationScope == null
+                || !host.ApplicationScope.CanAcceptWork)
+            {
+                SetSaveStatus("存档服务当前不可用");
+                RefreshSaveControls();
+                return;
+            }
+
+            SetSaveOperationBusy(true, "正在检查自动存档…");
+
+            try
+            {
+                host.ApplicationScope.Tasks.Run(
+                    "game-menu-probe-auto-save",
+                    async token =>
+                    {
+                        SaveOperationResult result = await facade.ProbeAutoSaveAsync(token);
+
+                        if (!ReferenceEquals(_saveFacade, facade))
+                        {
+                            return;
+                        }
+
+                        _hasAutoSave = result.Succeeded;
+                        SetSaveOperationBusy(
+                            false,
+                            result.Succeeded
+                                ? result.RecoverySource == SaveRecoverySource.Backup
+                                    ? "自动存档可用（将从备份恢复）"
+                                    : "自动存档可用"
+                                : DescribeSaveResult(result));
+                    },
+                    failurePolicy: LifecycleTaskFailurePolicy.Report);
+            }
+            catch (Exception exception)
+            {
+                Debug.LogException(exception, this);
+                SetSaveOperationBusy(false, "无法检查自动存档");
+            }
+        }
+
+        void RunSaveOperation(
+            string operationName,
+            Func<SessionSaveFacade, UniTask<SaveOperationResult>> operation,
+            Button focusTarget)
+        {
+            SessionSaveFacade facade = _saveFacade;
+
+            if (_saveOperationBusy || facade == null || operation == null)
+            {
+                return;
+            }
+
+            if (!ApplicationHost.TryGetCurrent(out ApplicationHost host)
+                || host.ApplicationScope == null
+                || !host.ApplicationScope.CanAcceptWork)
+            {
+                SetSaveStatus("存档服务当前不可用");
+                return;
+            }
+
+            SetSaveOperationBusy(true, "正在处理存档请求…");
+
+            try
+            {
+                host.ApplicationScope.Tasks.Run(
+                    $"game-menu-{operationName}",
+                    async _ =>
+                    {
+                        SaveOperationResult result = await operation(facade);
+
+                        if (!ReferenceEquals(_saveFacade, facade))
+                        {
+                            return;
+                        }
+
+                        if (result.Succeeded && result.Operation == SaveOperation.Save)
+                        {
+                            _hasAutoSave = true;
+                        }
+
+                        SetSaveOperationBusy(false, DescribeSaveResult(result));
+
+                        if (focusTarget != null && focusTarget.enabledSelf)
+                        {
+                            focusTarget.Focus();
+                        }
+                    },
+                    failurePolicy: LifecycleTaskFailurePolicy.Report);
+            }
+            catch (Exception exception)
+            {
+                Debug.LogException(exception, this);
+                SetSaveOperationBusy(false, "无法提交存档请求");
+            }
+        }
+
+        void SetSaveOperationBusy(bool busy, string status)
+        {
+            _saveOperationBusy = busy;
+            SetSaveStatus(status);
+            RefreshSaveControls();
+        }
+
+        void RefreshSaveControls()
+        {
+            bool available = _saveFacade != null && !_saveOperationBusy;
+            _saveButton?.SetEnabled(available);
+            _continueButton?.SetEnabled(available && _hasAutoSave);
+            _newGameButton?.SetEnabled(available);
+        }
+
+        void SetSaveStatus(string status)
+        {
+            if (_saveStatus != null)
+            {
+                _saveStatus.text = status ?? string.Empty;
+            }
+        }
+
+        static string DescribeSaveResult(SaveOperationResult result)
+        {
+            if (result == null)
+            {
+                return "存档操作没有返回结果";
+            }
+
+            if (result.Succeeded)
+            {
+                return result.Operation switch
+                {
+                    SaveOperation.Save => "进度已保存",
+                    SaveOperation.Continue => result.RecoverySource == SaveRecoverySource.Backup
+                        ? "已从备份恢复进度"
+                        : "已恢复自动存档",
+                    SaveOperation.NewGame => "新游戏已开始",
+                    _ => "存档已就绪",
+                };
+            }
+
+            return result.ErrorCode switch
+            {
+                SaveErrorCode.SlotNotFound => "尚无自动存档",
+                SaveErrorCode.NoValidGeneration => "自动存档已损坏",
+                SaveErrorCode.OperationInProgress => "已有存档操作正在进行",
+                SaveErrorCode.SessionUnavailable => "当前游戏状态不可存档",
+                SaveErrorCode.SnapshotUnavailable => "无法取得当前进度",
+                SaveErrorCode.Cancelled => "存档操作已取消",
+                SaveErrorCode.ContentVersionMismatch => "存档内容版本不兼容",
+                SaveErrorCode.ContentMissing => "存档引用的内容缺失",
+                SaveErrorCode.FutureSchemaUnsupported => "存档来自更高版本",
+                SaveErrorCode.ChecksumMismatch => "存档完整性校验失败",
+                SaveErrorCode.PermissionDenied => "没有存档目录写入权限",
+                SaveErrorCode.StorageFull => "存储空间不足",
+                SaveErrorCode.FlushTimedOut => "存档写入超时",
+                _ => $"存档操作失败（{result.ErrorCode}）",
+            };
         }
 
         void OnPanelGeometryChanged(GeometryChangedEvent evt)

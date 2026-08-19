@@ -10,6 +10,21 @@ namespace DarkFlare
 
         public int Count => _objects.Count;
 
+        public IReadOnlyList<GameObject> CaptureObjects()
+        {
+            List<GameObject> result = new List<GameObject>(_objects.Count);
+
+            foreach (GameObject instance in _objects)
+            {
+                if (instance != null)
+                {
+                    result.Add(instance);
+                }
+            }
+
+            return result.AsReadOnly();
+        }
+
         public void Register(GameObject instance)
         {
             if (instance != null)

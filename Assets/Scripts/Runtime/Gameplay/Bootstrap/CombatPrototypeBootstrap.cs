@@ -71,8 +71,25 @@ namespace DarkFlare
                 return;
             }
 
-            Vector3 spawnPosition = _playerSpawnPoint != null ? _playerSpawnPoint.position : transform.position;
-            GameplaySceneConfiguration configuration = new GameplaySceneConfiguration(
+            GameplaySceneConfiguration configuration = CreateSceneConfiguration();
+            LifecycleResult request = host.BeginSceneSessionInitialization(
+                gameObject.scene,
+                new NewGameSessionInitializer(configuration),
+                this.GetCancellationTokenOnDestroy(),
+                OnInitializationCompleted);
+
+            if (!request.IsSuccess)
+            {
+                Debug.LogError($"[CombatPrototypeBootstrap] 无法提交初始化请求: {request.Message}", this);
+            }
+        }
+
+        public GameplaySceneConfiguration CreateSceneConfiguration()
+        {
+            Vector3 spawnPosition = _playerSpawnPoint != null
+                ? _playerSpawnPoint.position
+                : transform.position;
+            return new GameplaySceneConfiguration(
                 _contentCatalog,
                 _playerCharacter,
                 _playerSkill,
@@ -87,16 +104,6 @@ namespace DarkFlare
                 ResolveCameraFollowTarget(),
                 _useFixedRandomSeed,
                 _fixedRandomSeed);
-            LifecycleResult request = host.BeginSceneSessionInitialization(
-                gameObject.scene,
-                new NewGameSessionInitializer(configuration),
-                this.GetCancellationTokenOnDestroy(),
-                OnInitializationCompleted);
-
-            if (!request.IsSuccess)
-            {
-                Debug.LogError($"[CombatPrototypeBootstrap] 无法提交初始化请求: {request.Message}", this);
-            }
         }
 
         CameraFollowTarget ResolveCameraFollowTarget()

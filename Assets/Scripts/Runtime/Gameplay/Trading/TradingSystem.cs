@@ -100,7 +100,11 @@ namespace DarkFlare
                 return;
             }
 
-            economy.SetMultipliers(trader.BuyMultiplier, trader.SellMultiplier);
+            economy.RestoreState(
+                trader,
+                System.Array.Empty<ItemInstance>(),
+                trader.BuyMultiplier,
+                trader.SellMultiplier);
 
             foreach (ItemInstance item in trader.CreateStock(
                          new System.Random(),

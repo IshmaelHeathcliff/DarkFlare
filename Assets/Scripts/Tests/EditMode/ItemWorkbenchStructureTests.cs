@@ -62,7 +62,7 @@ public class ItemWorkbenchStructureTests
         StringAssert.Contains("flex-direction: column;", style);
         StringAssert.Contains("max-width: 49%;", style);
         StringAssert.Contains("width: 1160px;", menuStyle);
-        StringAssert.Contains("height: 940px;", menuStyle);
+        StringAssert.Contains("height: 1004px;", menuStyle);
         StringAssert.Contains("width: 360px;", menuStyle);
         StringAssert.Contains("height: 680px;", menuStyle);
         StringAssert.Contains("\"name\": \"Rearrange\"", actions);

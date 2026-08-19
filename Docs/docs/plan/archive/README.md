@@ -13,6 +13,7 @@
 - [打造系统](../../crafting-system.md)
 - [应用生命周期与会话作用域](../../infrastructure/application-lifecycle.md)
 - [稳定身份、内容目录与迁移框架](../../infrastructure/content-identity-migration.md)
+- [本地存档与 Session 恢复](../../infrastructure/local-save.md)
 
 ## 归档清单
 
@@ -45,5 +46,6 @@
 | [alpha 0.1 开发计划](./alpha-0.1-plan.md) | alpha 0.1.0–0.1.7 | [首版玩法循环](../../gameplay-loop.md)、[伤害系统与词条系统设计](../../damage-affix-system.md)、[打造系统](../../crafting-system.md)、[世界渲染与稳定层级](../../world-rendering.md) |
 | [alpha 0.2.0 应用宿主、作用域与规范验证执行计划](./alpha-0.2.0-application-lifecycle-plan.md) | alpha 0.2.0 | [应用生命周期与会话作用域](../../infrastructure/application-lifecycle.md) |
 | [alpha 0.2.1 稳定身份、内容目录与迁移框架执行计划](./alpha-0.2.1-content-identity-migration-plan.md) | alpha 0.2.1 | [稳定身份、内容目录与迁移框架](../../infrastructure/content-identity-migration.md) |
+| [alpha 0.2.2 本地存档闭环执行计划](./alpha-0.2.2-local-save-plan.md) | alpha 0.2.2 | [本地存档与 Session 恢复](../../infrastructure/local-save.md) |
 
-最近归档日期：2026-08-18。
+最近归档日期：2026-08-19。

@@ -304,7 +304,7 @@ namespace DarkFlare
                 {
                     step.Apply(working);
                     version = step.ToVersion;
-                    working[_versionPropertyName] = version;
+                    SetVersion(working, version);
                     completed.Add(step.Id);
                 }
                 catch (Exception exception)
@@ -327,6 +327,27 @@ namespace DarkFlare
                 string.Empty,
                 null,
                 completed.AsReadOnly());
+        }
+
+        void SetVersion(JObject document, int version)
+        {
+            string[] segments = _versionPropertyName.Split('.');
+            JObject owner = document;
+
+            for (int i = 0; i < segments.Length - 1; i++)
+            {
+                if (owner[segments[i]] is JObject child)
+                {
+                    owner = child;
+                    continue;
+                }
+
+                child = new JObject();
+                owner[segments[i]] = child;
+                owner = child;
+            }
+
+            owner[segments[segments.Length - 1]] = version;
         }
 
         static JsonMigrationResult Failure(
@@ -360,7 +381,10 @@ namespace DarkFlare
 
         public void Apply(JObject document)
         {
-            if (document["items"] is not JArray items)
+            JArray items = document["items"] as JArray
+                ?? document["payload"]?["items"] as JArray;
+
+            if (items == null)
             {
                 return;
             }

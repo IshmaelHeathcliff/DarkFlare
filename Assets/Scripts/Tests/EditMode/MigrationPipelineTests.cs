@@ -91,6 +91,26 @@ namespace DarkFlare.Tests
         }
 
         [Test]
+        public void SaveDocumentMigration_UpdatesNestedHeaderAndPayloadItems()
+        {
+            JsonMigrationPipeline pipeline = new JsonMigrationPipeline(
+                BuildRegistry(1, new LegacySaveV0ToV1Migration()),
+                "header.saveSchemaVersion");
+            JObject input = JObject.Parse(
+                "{\"header\":{\"saveSchemaVersion\":0},\"payload\":{\"items\":[{\"baseItemId\":\"great_sword\"}]}}");
+
+            JsonMigrationResult result = pipeline.Migrate(input, 0);
+
+            Assert.IsTrue(result.Succeeded);
+            Assert.AreEqual(1, result.Document["header"]?["saveSchemaVersion"]?.Value<int>());
+            Assert.AreEqual(
+                "item:great_sword",
+                result.Document["payload"]?["items"]?[0]?["baseContentId"]?.Value<string>());
+            Assert.IsNull(result.Document["payload"]?["items"]?[0]?["baseItemId"]);
+            Assert.AreEqual(0, input["header"]?["saveSchemaVersion"]?.Value<int>());
+        }
+
+        [Test]
         public void CurrentVersion_IsIdempotentSuccessButStillReturnsDetachedCopy()
         {
             JsonMigrationPipeline pipeline = new JsonMigrationPipeline(BuildRegistry(

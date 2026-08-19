@@ -202,6 +202,45 @@ namespace DarkFlare
             SetPresentationEnabled(true);
         }
 
+        public void RestoreResources(CombatResourceSnapshot resources, bool isAlive)
+        {
+            if (!IsFinite(resources.CurrentHealth)
+                || !IsFinite(resources.MaxHealth)
+                || !IsFinite(resources.CurrentMana)
+                || !IsFinite(resources.MaxMana)
+                || resources.MaxHealth <= 0f
+                || resources.CurrentHealth < 0f
+                || resources.CurrentHealth > resources.MaxHealth
+                || resources.MaxMana < 0f
+                || resources.CurrentMana < 0f
+                || resources.CurrentMana > resources.MaxMana
+                || isAlive && resources.CurrentHealth <= 0f
+                || !isAlive && resources.CurrentHealth != 0f)
+            {
+                throw new System.ArgumentException("恢复的战斗资源非法", nameof(resources));
+            }
+
+            if (Mathf.Abs(MaxHealth - resources.MaxHealth) > 0.001f
+                || Mathf.Abs(MaxMana - resources.MaxMana) > 0.001f)
+            {
+                throw new System.InvalidOperationException(
+                    $"恢复资源上限与已解析定义不一致：生命 {resources.MaxHealth}/{MaxHealth}，"
+                    + $"法力 {resources.MaxMana}/{MaxMana}");
+            }
+
+            CacheComponents();
+            _currentHealth = resources.CurrentHealth;
+            _currentMana = resources.CurrentMana;
+            _isAlive = isAlive;
+
+            if (!isAlive && _rigidbody != null)
+            {
+                _rigidbody.linearVelocity = Vector2.zero;
+            }
+
+            SetPresentationEnabled(isAlive);
+        }
+
         void Awake()
         {
             CacheComponents();
@@ -292,6 +331,11 @@ namespace DarkFlare
                     _colliders[i].enabled = enabled;
                 }
             }
+        }
+
+        static bool IsFinite(float value)
+        {
+            return !float.IsNaN(value) && !float.IsInfinity(value);
         }
     }
 }

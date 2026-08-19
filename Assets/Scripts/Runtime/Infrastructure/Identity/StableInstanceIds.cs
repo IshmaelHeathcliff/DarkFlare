@@ -124,6 +124,28 @@ namespace DarkFlare
             Value = value;
         }
 
+        public static RunId Parse(string value)
+        {
+            if (!TryParse(value, out RunId result))
+            {
+                throw new FormatException($"非法 RunId：{value}");
+            }
+
+            return result;
+        }
+
+        public static bool TryParse(string value, out RunId result)
+        {
+            if (!ItemInstanceId.TryParse(value, out _))
+            {
+                result = default;
+                return false;
+            }
+
+            result = new RunId(value);
+            return true;
+        }
+
         public bool Equals(RunId other) => string.Equals(Value, other.Value, StringComparison.Ordinal);
 
         public override bool Equals(object obj) => obj is RunId other && Equals(other);
@@ -141,6 +163,10 @@ namespace DarkFlare
     {
         public string Value { get; }
 
+        public RunId RunId { get; }
+
+        public long Sequence { get; }
+
         internal MonsterInstanceId(RunId runId, long sequence)
         {
             if (sequence <= 0)
@@ -148,7 +174,31 @@ namespace DarkFlare
                 throw new ArgumentOutOfRangeException(nameof(sequence));
             }
 
+            RunId = runId;
+            Sequence = sequence;
             Value = $"{runId.Value}:monster:{sequence.ToString(CultureInfo.InvariantCulture)}";
+        }
+
+        public static MonsterInstanceId Parse(string value)
+        {
+            if (!TryParse(value, out MonsterInstanceId result))
+            {
+                throw new FormatException($"非法 MonsterInstanceId：{value}");
+            }
+
+            return result;
+        }
+
+        public static bool TryParse(string value, out MonsterInstanceId result)
+        {
+            if (!RunScopedInstanceIdParser.TryParse(value, "monster", out RunId runId, out long sequence))
+            {
+                result = default;
+                return false;
+            }
+
+            result = new MonsterInstanceId(runId, sequence);
+            return true;
         }
 
         internal static MonsterInstanceId FromLegacySeed(int seed)
@@ -175,6 +225,10 @@ namespace DarkFlare
     {
         public string Value { get; }
 
+        public RunId RunId { get; }
+
+        public long Sequence { get; }
+
         internal WorldDropId(RunId runId, long sequence)
         {
             if (sequence <= 0)
@@ -182,7 +236,31 @@ namespace DarkFlare
                 throw new ArgumentOutOfRangeException(nameof(sequence));
             }
 
+            RunId = runId;
+            Sequence = sequence;
             Value = $"{runId.Value}:drop:{sequence.ToString(CultureInfo.InvariantCulture)}";
+        }
+
+        public static WorldDropId Parse(string value)
+        {
+            if (!TryParse(value, out WorldDropId result))
+            {
+                throw new FormatException($"非法 WorldDropId：{value}");
+            }
+
+            return result;
+        }
+
+        public static bool TryParse(string value, out WorldDropId result)
+        {
+            if (!RunScopedInstanceIdParser.TryParse(value, "drop", out RunId runId, out long sequence))
+            {
+                result = default;
+                return false;
+            }
+
+            result = new WorldDropId(runId, sequence);
+            return true;
         }
 
         internal static WorldDropId FromLegacyItem(ItemInstanceId itemId)
@@ -216,6 +294,23 @@ namespace DarkFlare
             }
 
             Value = value;
+        }
+
+        public static SaveSlotId Parse(string value)
+        {
+            return new SaveSlotId(value);
+        }
+
+        public static bool TryParse(string value, out SaveSlotId result)
+        {
+            if (!ContentId.IsValidSegment(value))
+            {
+                result = default;
+                return false;
+            }
+
+            result = new SaveSlotId(value);
+            return true;
         }
 
         public bool Equals(SaveSlotId other) => string.Equals(Value, other.Value, StringComparison.Ordinal);
@@ -278,21 +373,64 @@ namespace DarkFlare
     {
         RunId RunId { get; }
 
+        RunInstanceIdState CaptureState();
+
         MonsterInstanceId NextMonsterId();
 
         WorldDropId NextWorldDropId();
     }
 
+    public readonly struct RunInstanceIdState
+    {
+        public RunId RunId { get; }
+
+        public long NextMonsterSequence { get; }
+
+        public long NextWorldDropSequence { get; }
+
+        public RunInstanceIdState(
+            RunId runId,
+            long nextMonsterSequence,
+            long nextWorldDropSequence)
+        {
+            if (!DarkFlare.RunId.TryParse(runId.Value, out _))
+            {
+                throw new ArgumentException("RunInstanceIdState 必须引用有效 RunId", nameof(runId));
+            }
+
+            if (nextMonsterSequence <= 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(nextMonsterSequence));
+            }
+
+            if (nextWorldDropSequence <= 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(nextWorldDropSequence));
+            }
+
+            RunId = runId;
+            NextMonsterSequence = nextMonsterSequence;
+            NextWorldDropSequence = nextWorldDropSequence;
+        }
+    }
+
     public sealed class RunInstanceIdGenerator : IRunInstanceIdGenerator
     {
-        long _monsterSequence;
-        long _worldDropSequence;
+        long _nextMonsterSequence;
+        long _nextWorldDropSequence;
 
         public RunId RunId { get; }
 
         public RunInstanceIdGenerator(RunId runId)
+            : this(new RunInstanceIdState(runId, 1, 1))
         {
-            RunId = runId;
+        }
+
+        public RunInstanceIdGenerator(RunInstanceIdState state)
+        {
+            RunId = state.RunId;
+            _nextMonsterSequence = state.NextMonsterSequence;
+            _nextWorldDropSequence = state.NextWorldDropSequence;
         }
 
         public static RunInstanceIdGenerator Create()
@@ -300,16 +438,67 @@ namespace DarkFlare
             return new RunInstanceIdGenerator(new RunId(Guid.NewGuid().ToString("N")));
         }
 
+        public RunInstanceIdState CaptureState()
+        {
+            return new RunInstanceIdState(
+                RunId,
+                _nextMonsterSequence,
+                _nextWorldDropSequence);
+        }
+
         public MonsterInstanceId NextMonsterId()
         {
-            _monsterSequence++;
-            return new MonsterInstanceId(RunId, _monsterSequence);
+            MonsterInstanceId result = new MonsterInstanceId(RunId, _nextMonsterSequence);
+            _nextMonsterSequence = checked(_nextMonsterSequence + 1);
+            return result;
         }
 
         public WorldDropId NextWorldDropId()
         {
-            _worldDropSequence++;
-            return new WorldDropId(RunId, _worldDropSequence);
+            WorldDropId result = new WorldDropId(RunId, _nextWorldDropSequence);
+            _nextWorldDropSequence = checked(_nextWorldDropSequence + 1);
+            return result;
+        }
+    }
+
+    static class RunScopedInstanceIdParser
+    {
+        public static bool TryParse(
+            string value,
+            string expectedKind,
+            out RunId runId,
+            out long sequence)
+        {
+            runId = default;
+            sequence = 0;
+
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                return false;
+            }
+
+            string[] segments = value.Split(':');
+
+            if (segments.Length != 3
+                || !string.Equals(segments[1], expectedKind, StringComparison.Ordinal)
+                || !RunId.TryParse(segments[0], out runId)
+                || !long.TryParse(
+                    segments[2],
+                    NumberStyles.None,
+                    CultureInfo.InvariantCulture,
+                    out sequence)
+                || sequence <= 0
+                || !string.Equals(
+                    segments[2],
+                    sequence.ToString(CultureInfo.InvariantCulture),
+                    StringComparison.Ordinal))
+            {
+                runId = default;
+                sequence = 0;
+                return false;
+            }
+
+            return true;
         }
     }
 

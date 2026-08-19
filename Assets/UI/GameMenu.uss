@@ -14,7 +14,7 @@
   position: relative;
   width: 1160px;
   max-width: 92%;
-  height: 940px;
+  height: 1004px;
   max-height: 96%;
   padding: 16px;
   color: rgb(224, 226, 231);
@@ -128,6 +128,67 @@
   flex-grow: 1;
   min-height: 0;
   flex-direction: row;
+}
+
+.game-menu-save-bar {
+  min-height: 54px;
+  margin-top: 10px;
+  padding-top: 9px;
+  flex-direction: row;
+  align-items: center;
+  border-top-width: 1px;
+  border-top-color: rgb(61, 60, 58);
+}
+
+.game-menu-save-actions {
+  flex-direction: row;
+}
+
+.game-menu-save-action {
+  min-width: 142px;
+  height: 36px;
+  margin-right: 7px;
+  color: rgb(215, 218, 223);
+  background-color: rgb(42, 46, 54);
+  border-left-color: rgb(74, 79, 89);
+  border-right-color: rgb(74, 79, 89);
+  border-top-color: rgb(74, 79, 89);
+  border-bottom-color: rgb(74, 79, 89);
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+}
+
+.game-menu-save-action:hover,
+.game-menu-save-action:focus {
+  color: white;
+  background-color: rgb(60, 65, 75);
+  border-left-color: rgb(184, 143, 75);
+  border-right-color: rgb(184, 143, 75);
+  border-top-color: rgb(184, 143, 75);
+  border-bottom-color: rgb(184, 143, 75);
+}
+
+.game-menu-save-action--primary {
+  color: rgb(31, 25, 17);
+  background-color: rgb(205, 163, 88);
+  border-left-color: rgb(231, 196, 130);
+  border-right-color: rgb(231, 196, 130);
+  border-top-color: rgb(231, 196, 130);
+  border-bottom-color: rgb(231, 196, 130);
+}
+
+.game-menu-save-action:disabled {
+  opacity: 0.38;
+}
+
+.game-menu-save-status {
+  flex-grow: 1;
+  margin-left: 10px;
+  white-space: normal;
+  -unity-text-align: middle-right;
+  color: rgb(166, 170, 179);
 }
 
 .game-menu-context-stack {
@@ -290,6 +351,15 @@
   flex-grow: 1;
   min-width: 0;
   margin-left: 8px;
+}
+
+.game-menu-panel--compact .game-menu-save-action {
+  min-width: 112px;
+  margin-right: 4px;
+}
+
+.game-menu-panel--compact .game-menu-save-status {
+  font-size: 10px;
 }
 
 .game-menu-panel--compact .item-context-panel {

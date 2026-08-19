@@ -34,6 +34,12 @@ namespace DarkFlare
 
         public MonsterInstanceData Instance => _instance;
 
+        public float ContactDamageCooldownRemainingSeconds => _definition != null
+            ? Mathf.Max(
+                0f,
+                _lastContactDamageTime + _definition.ContactDamageInterval - Time.time)
+            : 0f;
+
         public IArchitecture GetArchitecture()
         {
             return _architecture ?? GameArchitectureProvider.RequireCurrent();
@@ -47,6 +53,22 @@ namespace DarkFlare
             _sortParticipant?.ConfigureIdentity(
                 WorldSortCategory.Monster,
                 _instance.Id.Value);
+        }
+
+        public void RestoreRuntime(
+            CombatResourceSnapshot resources,
+            float contactDamageCooldownRemainingSeconds)
+        {
+            if (contactDamageCooldownRemainingSeconds < 0f)
+            {
+                throw new System.ArgumentOutOfRangeException(
+                    nameof(contactDamageCooldownRemainingSeconds));
+            }
+
+            _actor.RestoreResources(resources, true);
+            _lastContactDamageTime = Time.time
+                + contactDamageCooldownRemainingSeconds
+                - _definition.ContactDamageInterval;
         }
 
         void Awake()

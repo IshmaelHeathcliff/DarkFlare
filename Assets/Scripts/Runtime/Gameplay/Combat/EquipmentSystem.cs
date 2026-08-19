@@ -115,6 +115,22 @@ namespace DarkFlare
             return false;
         }
 
+        public void RestoreLoadout(CombatActor actor, EquipmentLoadout loadout)
+        {
+            if (actor == null)
+            {
+                throw new System.ArgumentNullException(nameof(actor));
+            }
+
+            if (loadout == null)
+            {
+                throw new System.ArgumentNullException(nameof(loadout));
+            }
+
+            this.GetModel<EquipmentModel>().RestoreLoadout(actor, loadout);
+            actor.SetModifiers(EquipmentEffectResolver.CollectActorModifiers(loadout));
+        }
+
         public bool Unequip(CombatActor actor, EquipmentSlot slot)
         {
             if (actor == null)

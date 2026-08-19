@@ -12,7 +12,7 @@
 - 用不同强类型 ID 标识玩家、物品、怪物、世界掉落和存档槽位，不复用 Unity Instance ID。
 - 用纯 DTO、显式 Mapper 和逐版本 Migration Pipeline 隔离运行时对象图与持久化数据。
 
-本阶段只提供内存中的身份、DTO、映射和 JSON 迁移能力，不负责文件路径、序列化格式、存档槽位、原子写入、备份、自动保存或 Restore Session。这些属于 `alpha 0.2.2`。
+本模块自身只定义身份、DTO、映射和 JSON 迁移能力，不拥有文件或 Session 流程。`alpha 0.2.2` 已在这些合同之上实现文件路径、序列化格式、存档槽位、代际提交、备份、保存协调和 Restore Session，见[本地存档与 Session 恢复](./local-save.md)。
 
 ## 内容身份
 
@@ -99,7 +99,7 @@
 - 未来版本、缺链和步骤异常返回结构化失败。
 - 失败不修改调用方输入，也不返回部分文档。
 
-当前示例迁移 `LegacySaveV0ToV1Migration` 将旧 `baseItemId` 规范化为 `item:<local_id>` 的 `baseContentId`。正式文件加载与备份回退将在存档模块中组装。
+当前迁移 `LegacySaveV0ToV1Migration` 将旧 `baseItemId` 规范化为 `item:<local_id>` 的 `baseContentId`。正式文件加载、校验和备份回退已经由本地存档模块组装，Migration 仍保持纯内存且不直接访问文件。
 
 ## 扩展规范
 
