@@ -1,5 +1,7 @@
 sandbox_mode = "danger-full-access"
 web_search = "live"
+approval_policy = "never"
+model_reasoning_summary = "detailed"
   [mcp_servers.rider]
     url = "http://127.0.0.1:64482/stream"
 
