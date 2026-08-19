@@ -67,6 +67,12 @@ namespace DarkFlare
             string localeCode,
             IList<object> arguments,
             CancellationToken cancellationToken);
+
+        string GetString(
+            string tableName,
+            string entryKey,
+            string localeCode,
+            IList<object> arguments);
     }
 
     public sealed class UnityLocalizationRuntime : ILocalizationRuntime
@@ -121,6 +127,21 @@ namespace DarkFlare
                     .GetTableAsync(preloadTables[i], locale)
                     .ToUniTask(cancellationToken: cancellationToken);
             }
+
+            if (!string.Equals(
+                    localeCode,
+                    SimplifiedChineseLocaleCode,
+                    StringComparison.OrdinalIgnoreCase))
+            {
+                Locale fallbackLocale = FindLocale(SimplifiedChineseLocaleCode);
+
+                for (int i = 0; i < preloadTables.Count; i++)
+                {
+                    await LocalizationSettings.StringDatabase
+                        .GetTableAsync(preloadTables[i], fallbackLocale)
+                        .ToUniTask(cancellationToken: cancellationToken);
+                }
+            }
         }
 
         public async UniTask<string> GetStringAsync(
@@ -143,6 +164,32 @@ namespace DarkFlare
                     locale);
             await tableOperation.ToUniTask(cancellationToken: cancellationToken);
             StringTable table = tableOperation.Result;
+            StringTableEntry entry = table?.GetEntry(entryKey);
+
+            if (entry == null || string.IsNullOrWhiteSpace(entry.Value))
+            {
+                return string.Empty;
+            }
+
+            return arguments == null || arguments.Count == 0
+                ? entry.GetLocalizedString()
+                : entry.GetLocalizedString(arguments);
+        }
+
+        public string GetString(
+            string tableName,
+            string entryKey,
+            string localeCode,
+            IList<object> arguments)
+        {
+            Locale locale = FindLocale(localeCode);
+
+            if (locale == null)
+            {
+                return string.Empty;
+            }
+
+            StringTable table = LocalizationSettings.StringDatabase.GetTable(tableName, locale);
             StringTableEntry entry = table?.GetEntry(entryKey);
 
             if (entry == null || string.IsNullOrWhiteSpace(entry.Value))
@@ -433,6 +480,44 @@ namespace DarkFlare
                     SimplifiedChineseLocaleCode,
                     arguments,
                     cancellationToken);
+            }
+
+            return string.IsNullOrWhiteSpace(value)
+                ? $"[{tableName}.{entryKey}]"
+                : value;
+        }
+
+        public string GetString(
+            string tableName,
+            string entryKey,
+            IList<object> arguments = null)
+        {
+            if (!_initialized || _closed)
+            {
+                return $"[{tableName}.{entryKey}]";
+            }
+
+            string value = _runtime.GetString(
+                tableName,
+                entryKey,
+                CurrentLocaleCode,
+                arguments);
+
+            if (!string.IsNullOrWhiteSpace(value))
+            {
+                return value;
+            }
+
+            if (!string.Equals(
+                    CurrentLocaleCode,
+                    SimplifiedChineseLocaleCode,
+                    StringComparison.OrdinalIgnoreCase))
+            {
+                value = _runtime.GetString(
+                    tableName,
+                    entryKey,
+                    SimplifiedChineseLocaleCode,
+                    arguments);
             }
 
             return string.IsNullOrWhiteSpace(value)

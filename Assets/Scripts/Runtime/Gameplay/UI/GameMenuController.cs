@@ -29,6 +29,19 @@ namespace DarkFlare
             "settings.language.en",
         };
 
+        readonly struct LocalizedMessage
+        {
+            public string Key { get; }
+
+            public IList<object> Arguments { get; }
+
+            public LocalizedMessage(string key, params object[] arguments)
+            {
+                Key = key;
+                Arguments = arguments;
+            }
+        }
+
         [SerializeField]
         UIDocument _document;
 
@@ -66,6 +79,8 @@ namespace DarkFlare
         bool _hasAutoSave;
         bool _languageOperationBusy;
         bool _updatingLanguageChoice;
+        string _saveStatusKey = string.Empty;
+        IList<object> _saveStatusArguments;
 
         public GameMenuAccess AvailablePages { get; private set; } = GameMenuAccess.Inventory;
 
@@ -560,6 +575,7 @@ namespace DarkFlare
         void OnLocaleChanged(string localeCode)
         {
             ScheduleLanguageRefresh();
+            RefreshSaveStatusText();
         }
 
         void ScheduleLanguageRefresh()
@@ -673,12 +689,12 @@ namespace DarkFlare
                 || host.ApplicationScope == null
                 || !host.ApplicationScope.CanAcceptWork)
             {
-                SetSaveStatus("存档服务当前不可用");
+                SetSaveStatus("save.status.service_unavailable");
                 RefreshSaveControls();
                 return;
             }
 
-            SetSaveOperationBusy(true, "正在检查自动存档…");
+            SetSaveOperationBusy(true, "save.status.checking");
 
             try
             {
@@ -698,8 +714,8 @@ namespace DarkFlare
                             false,
                             result.Succeeded
                                 ? result.RecoverySource == SaveRecoverySource.Backup
-                                    ? "自动存档可用（将从备份恢复）"
-                                    : "自动存档可用"
+                                    ? new LocalizedMessage("save.status.available_backup")
+                                    : new LocalizedMessage("save.status.available")
                                 : DescribeSaveResult(result));
                     },
                     failurePolicy: LifecycleTaskFailurePolicy.Report);
@@ -707,7 +723,7 @@ namespace DarkFlare
             catch (Exception exception)
             {
                 Debug.LogException(exception, this);
-                SetSaveOperationBusy(false, "无法检查自动存档");
+                SetSaveOperationBusy(false, "save.status.probe_failed");
             }
         }
 
@@ -727,11 +743,11 @@ namespace DarkFlare
                 || host.ApplicationScope == null
                 || !host.ApplicationScope.CanAcceptWork)
             {
-                SetSaveStatus("存档服务当前不可用");
+                SetSaveStatus("save.status.service_unavailable");
                 return;
             }
 
-            SetSaveOperationBusy(true, "正在处理存档请求…");
+            SetSaveOperationBusy(true, "save.status.processing");
 
             try
             {
@@ -763,11 +779,18 @@ namespace DarkFlare
             catch (Exception exception)
             {
                 Debug.LogException(exception, this);
-                SetSaveOperationBusy(false, "无法提交存档请求");
+                SetSaveOperationBusy(false, "save.status.submit_failed");
             }
         }
 
-        void SetSaveOperationBusy(bool busy, string status)
+        void SetSaveOperationBusy(bool busy, string statusKey)
+        {
+            _saveOperationBusy = busy;
+            SetSaveStatus(statusKey);
+            RefreshSaveControls();
+        }
+
+        void SetSaveOperationBusy(bool busy, LocalizedMessage status)
         {
             _saveOperationBusy = busy;
             SetSaveStatus(status);
@@ -782,50 +805,67 @@ namespace DarkFlare
             _newGameButton?.SetEnabled(available);
         }
 
-        void SetSaveStatus(string status)
+        void SetSaveStatus(string statusKey, params object[] arguments)
         {
-            if (_saveStatus != null)
-            {
-                _saveStatus.text = status ?? string.Empty;
-            }
+            SetSaveStatus(new LocalizedMessage(statusKey, arguments));
         }
 
-        static string DescribeSaveResult(SaveOperationResult result)
+        void SetSaveStatus(LocalizedMessage status)
+        {
+            _saveStatusKey = status.Key ?? string.Empty;
+            _saveStatusArguments = status.Arguments;
+            RefreshSaveStatusText();
+        }
+
+        void RefreshSaveStatusText()
+        {
+            if (_saveStatus == null || string.IsNullOrEmpty(_saveStatusKey))
+            {
+                return;
+            }
+
+            _saveStatus.text = _localizationService?.GetString(
+                "ui",
+                _saveStatusKey,
+                _saveStatusArguments) ?? $"[ui.{_saveStatusKey}]";
+        }
+
+        static LocalizedMessage DescribeSaveResult(SaveOperationResult result)
         {
             if (result == null)
             {
-                return "存档操作没有返回结果";
+                return new LocalizedMessage("save.status.no_result");
             }
 
             if (result.Succeeded)
             {
                 return result.Operation switch
                 {
-                    SaveOperation.Save => "进度已保存",
+                    SaveOperation.Save => new LocalizedMessage("save.status.save_succeeded"),
                     SaveOperation.Continue => result.RecoverySource == SaveRecoverySource.Backup
-                        ? "已从备份恢复进度"
-                        : "已恢复自动存档",
-                    SaveOperation.NewGame => "新游戏已开始",
-                    _ => "存档已就绪",
+                        ? new LocalizedMessage("save.status.continue_backup")
+                        : new LocalizedMessage("save.status.continue_succeeded"),
+                    SaveOperation.NewGame => new LocalizedMessage("save.status.new_game_succeeded"),
+                    _ => new LocalizedMessage("save.status.ready"),
                 };
             }
 
             return result.ErrorCode switch
             {
-                SaveErrorCode.SlotNotFound => "尚无自动存档",
-                SaveErrorCode.NoValidGeneration => "自动存档已损坏",
-                SaveErrorCode.OperationInProgress => "已有存档操作正在进行",
-                SaveErrorCode.SessionUnavailable => "当前游戏状态不可存档",
-                SaveErrorCode.SnapshotUnavailable => "无法取得当前进度",
-                SaveErrorCode.Cancelled => "存档操作已取消",
-                SaveErrorCode.ContentVersionMismatch => "存档内容版本不兼容",
-                SaveErrorCode.ContentMissing => "存档引用的内容缺失",
-                SaveErrorCode.FutureSchemaUnsupported => "存档来自更高版本",
-                SaveErrorCode.ChecksumMismatch => "存档完整性校验失败",
-                SaveErrorCode.PermissionDenied => "没有存档目录写入权限",
-                SaveErrorCode.StorageFull => "存储空间不足",
-                SaveErrorCode.FlushTimedOut => "存档写入超时",
-                _ => $"存档操作失败（{result.ErrorCode}）",
+                SaveErrorCode.SlotNotFound => new LocalizedMessage("save.error.slot_not_found"),
+                SaveErrorCode.NoValidGeneration => new LocalizedMessage("save.error.no_valid_generation"),
+                SaveErrorCode.OperationInProgress => new LocalizedMessage("save.error.operation_in_progress"),
+                SaveErrorCode.SessionUnavailable => new LocalizedMessage("save.error.session_unavailable"),
+                SaveErrorCode.SnapshotUnavailable => new LocalizedMessage("save.error.snapshot_unavailable"),
+                SaveErrorCode.Cancelled => new LocalizedMessage("save.error.cancelled"),
+                SaveErrorCode.ContentVersionMismatch => new LocalizedMessage("save.error.content_version_mismatch"),
+                SaveErrorCode.ContentMissing => new LocalizedMessage("save.error.content_missing"),
+                SaveErrorCode.FutureSchemaUnsupported => new LocalizedMessage("save.error.future_schema_unsupported"),
+                SaveErrorCode.ChecksumMismatch => new LocalizedMessage("save.error.checksum_mismatch"),
+                SaveErrorCode.PermissionDenied => new LocalizedMessage("save.error.permission_denied"),
+                SaveErrorCode.StorageFull => new LocalizedMessage("save.error.storage_full"),
+                SaveErrorCode.FlushTimedOut => new LocalizedMessage("save.error.flush_timed_out"),
+                _ => new LocalizedMessage("save.error.unknown", result.ErrorCode),
             };
         }
 

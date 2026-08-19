@@ -57,6 +57,12 @@ namespace DarkFlare.Tests
             return VerifyFallbackAsync().ToCoroutine();
         }
 
+        [UnityTest]
+        public IEnumerator PreloadedString_SynchronousLookupUsesSameFallbackContract()
+        {
+            return VerifySynchronousFallbackAsync().ToCoroutine();
+        }
+
         async UniTask VerifyExplicitInitializationAsync()
         {
             SettingsService settings = CreateSettingsService();
@@ -129,6 +135,24 @@ namespace DarkFlare.Tests
 
             Assert.AreEqual("已知", fallback);
             Assert.AreEqual("[ui.missing]", placeholder);
+        }
+
+        async UniTask VerifySynchronousFallbackAsync()
+        {
+            SettingsService settings = CreateSettingsService();
+            Assert.IsTrue(settings.Initialize().Succeeded);
+            Assert.IsTrue((await settings.UpdateAsync(
+                settings.Current.WithLanguage(UserLanguagePreference.English))).Succeeded);
+            FakeLocalizationRuntime runtime = new FakeLocalizationRuntime
+            {
+                AutomaticLocaleCode = LocalizationService.EnglishLocaleCode,
+            };
+            runtime.SetString("ui", "known", LocalizationService.SimplifiedChineseLocaleCode, "已知");
+            LocalizationService service = new LocalizationService(settings, runtime);
+            Assert.IsTrue((await service.InitializeAsync(CancellationToken.None)).Succeeded);
+
+            Assert.AreEqual("已知", service.GetString("ui", "known"));
+            Assert.AreEqual("[ui.missing]", service.GetString("ui", "missing"));
         }
 
         SettingsService CreateSettingsService()
@@ -214,6 +238,16 @@ namespace DarkFlare.Tests
                 cancellationToken.ThrowIfCancellationRequested();
                 _strings.TryGetValue(Key(tableName, entryKey, localeCode), out string value);
                 return UniTask.FromResult(value ?? string.Empty);
+            }
+
+            public string GetString(
+                string tableName,
+                string entryKey,
+                string localeCode,
+                IList<object> arguments)
+            {
+                _strings.TryGetValue(Key(tableName, entryKey, localeCode), out string value);
+                return value ?? string.Empty;
             }
 
             public void BlockLocale(string localeCode)

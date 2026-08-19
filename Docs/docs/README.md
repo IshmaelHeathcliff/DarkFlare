@@ -32,7 +32,7 @@
 - [alpha 0.2 基础设施约束契约](./plan/alpha-0.2-infrastructure-contract.md)
 - [alpha 0.2.3 用户设置与本地化执行计划](./plan/alpha-0.2.3-settings-localization-plan.md)
 
-`alpha 0.2.0–0.2.2` 已完成，当前实现见[应用生命周期与会话作用域](./infrastructure/application-lifecycle.md)、[稳定身份、内容目录与迁移框架](./infrastructure/content-identity-migration.md)和[本地存档与 Session 恢复](./infrastructure/local-save.md)，执行计划已移入[已完成计划归档](./plan/archive/README.md)。`alpha 0.2.3` 用户设置与本地化正在实施：Settings、Localization 启动门禁、语言入口与静态 UXML 迁移已完成，动态反馈、内容与字体仍待完成。
+`alpha 0.2.0–0.2.2` 已完成，当前实现见[应用生命周期与会话作用域](./infrastructure/application-lifecycle.md)、[稳定身份、内容目录与迁移框架](./infrastructure/content-identity-migration.md)和[本地存档与 Session 恢复](./infrastructure/local-save.md)，执行计划已移入[已完成计划归档](./plan/archive/README.md)。`alpha 0.2.3` 用户设置与本地化正在实施：Settings、Localization 启动门禁、语言入口、静态 UXML、Game Menu 与 HUD 动态文本已完成，其余动态反馈、内容与字体仍待完成。
 
 ## 说明
 

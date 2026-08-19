@@ -110,7 +110,13 @@ namespace DarkFlare.Tests
             Assert.AreEqual(SkillCastStatus.InsufficientMana, rejectedCast.Status);
             Assert.AreEqual(1f, actor.CurrentMana, 0.001f);
             Assert.AreEqual(DisplayStyle.Flex, skillStatus.style.display.value);
-            StringAssert.Contains("需要 8", skillStatus.text);
+            Assert.IsTrue(ApplicationHost.TryGetCurrent(out ApplicationHost host));
+            Assert.AreEqual(
+                host.Localization.GetString(
+                    "ui",
+                    "hud.skill.insufficient_mana",
+                    new object[] { skill.ManaCost }),
+                skillStatus.text);
 
             regeneration.AdvanceRegeneration(2f);
             Assert.AreEqual(1f, actor.CurrentMana, 0.001f, "暂停期间不应恢复法力");

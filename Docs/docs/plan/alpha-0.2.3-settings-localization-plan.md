@@ -1,6 +1,6 @@
 # alpha 0.2.3 用户设置与本地化执行计划
 
-> 状态：实施中（切片 0–2 已完成；切片 3 已完成静态 UXML 迁移）
+> 状态：实施中（切片 0–2 已完成；切片 3 已完成静态 UXML、Game Menu 与 HUD 动态文本迁移）
 > 建立日期：2026-08-19
 > 最近更新：2026-08-19
 > 实施基线：`ebce6b9`（`alpha 0.2.2` 已完成）
@@ -29,8 +29,8 @@ Settings Schema 在本阶段覆盖语言、音频、输入、显示和可访问�
 - Settings V1 已实现语言、音频、输入、显示和可访问性域的 DTO、范围校验、确定性 JSON、SHA-256、`0 → 1` 迁移、独立路径、原子提交、单份备份、损坏副本与并发互斥；Application Host 已在 Profile / Session 前初始化 Settings。
 - Localization 已建立 `zh-Hans`、`en`、`qps-ploc`，以及 `ui`、`system`、`items`、`stats`、`affixes`、`monsters` 六张职责表。Application 只有在首屏表预热完成后才进入 Ready，启动期场景 Session 请求会排队等待。
 - Localization Service 已实现显式语言优先、系统语言自动选择、`zh-Hans` 故障回退、latest-wins 切换、失败回滚和结构化结果；现有 Game Menu 已增加可聚焦的语言下拉框，只有语言设置对玩家开放。
-- 7 份 UXML 的 74 个初扫候选已完成迁移：45 个静态文本使用 Localization 1.5.12 原生 UI Toolkit Binding，29 个动态文本入口清空字面量并进入显式策略白名单。`ui` 表当前有 78 个中英双语 Key，缺失、空翻译和孤儿条目检查为零。
-- 当前新增专项验证共 19 项通过；主场景真实冷启动专项通过，确认首份静态绑定文本在 Application Ready 后非空。动态 Controller 反馈、配置内容、字体 fallback、Pseudo / 三分辨率布局与全量回归仍未完成，不能据此宣布 `alpha 0.2.3` 完成。
+- 7 份 UXML 的 74 个初扫候选已完成迁移：45 个静态文本使用 Localization 1.5.12 原生 UI Toolkit Binding，29 个动态文本入口清空字面量并进入显式策略白名单。Game Menu 存档状态和 HUD 动态文本已迁移，切换 Locale 时可按当前状态重绘；`ui` 表当前有 108 个中英双语 Key，缺失、空翻译和孤儿条目检查为零。
+- 当前新增专项验证共 20 项通过；主场景真实冷启动、菜单存档入口与 HUD 法力反馈专项通过。背包、商店、打造、物品详情和交互提示等动态 Controller 文本、配置内容、字体 fallback、Pseudo / 三分辨率布局与全量回归仍未完成，不能据此宣布 `alpha 0.2.3` 完成。
 
 ## 目标
 

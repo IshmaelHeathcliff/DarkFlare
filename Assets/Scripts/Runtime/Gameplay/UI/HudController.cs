@@ -18,6 +18,9 @@ namespace DarkFlare
         ProgressBar _manaBar;
         Label _goldLabel;
         Label _skillStatusLabel;
+        LocalizationService _localizationService;
+        float _lastRequiredMana;
+        bool _showsInsufficientMana;
 
         public HudSnapshot LastSnapshot { get; private set; }
 
@@ -40,12 +43,12 @@ namespace DarkFlare
             _healthBar.value = snapshot.HealthNormalized;
             _healthBar.title = snapshot.HasPlayer
                 ? $"{snapshot.CurrentHealth:0.#} / {snapshot.MaxHealth:0.#}"
-                : "等待玩家...";
+                : Localize("hud.waiting_player");
             _manaBar.value = snapshot.ManaNormalized;
             _manaBar.title = snapshot.HasPlayer
                 ? $"{snapshot.CurrentMana:0.#} / {snapshot.MaxMana:0.#}"
-                : "等待玩家...";
-            _goldLabel.text = $"金币 {snapshot.Gold}";
+                : Localize("hud.waiting_player");
+            _goldLabel.text = Localize("hud.gold", snapshot.Gold);
         }
 
         void Awake()
@@ -88,6 +91,8 @@ namespace DarkFlare
                 return SceneSessionBindResult.Failed;
             }
 
+            BindLocalization();
+            RefreshHud();
             RegisterEvents();
             return SceneSessionBindResult.Success;
         }
@@ -100,6 +105,13 @@ namespace DarkFlare
             }
 
             _eventRegistrations.Clear();
+
+            if (_localizationService != null)
+            {
+                _localizationService.LocaleChanged -= OnLocaleChanged;
+                _localizationService = null;
+            }
+
             _healthBar = null;
             _manaBar = null;
             _goldLabel = null;
@@ -180,7 +192,11 @@ namespace DarkFlare
                 return;
             }
 
-            _skillStatusLabel.text = $"法力不足（需要 {e.RequiredMana:0.#}）";
+            _lastRequiredMana = e.RequiredMana;
+            _showsInsufficientMana = true;
+            _skillStatusLabel.text = Localize(
+                "hud.skill.insufficient_mana",
+                _lastRequiredMana);
             _skillStatusLabel.style.display = DisplayStyle.Flex;
         }
 
@@ -191,7 +207,47 @@ namespace DarkFlare
                 return;
             }
 
+            _showsInsufficientMana = false;
             _skillStatusLabel.style.display = DisplayStyle.None;
+        }
+
+        void BindLocalization()
+        {
+            if (!ApplicationHost.TryGetCurrent(out ApplicationHost host)
+                || ReferenceEquals(_localizationService, host.Localization))
+            {
+                return;
+            }
+
+            if (_localizationService != null)
+            {
+                _localizationService.LocaleChanged -= OnLocaleChanged;
+            }
+
+            _localizationService = host.Localization;
+
+            if (_localizationService != null)
+            {
+                _localizationService.LocaleChanged += OnLocaleChanged;
+            }
+        }
+
+        void OnLocaleChanged(string localeCode)
+        {
+            RefreshHud();
+
+            if (_showsInsufficientMana && _skillStatusLabel != null)
+            {
+                _skillStatusLabel.text = Localize(
+                    "hud.skill.insufficient_mana",
+                    _lastRequiredMana);
+            }
+        }
+
+        string Localize(string entryKey, params object[] arguments)
+        {
+            return _localizationService?.GetString("ui", entryKey, arguments)
+                ?? $"[ui.{entryKey}]";
         }
     }
 }

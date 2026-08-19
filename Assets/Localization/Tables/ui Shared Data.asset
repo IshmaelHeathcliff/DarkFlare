@@ -327,6 +327,126 @@ MonoBehaviour:
     m_Key: item.detail.suffix.title
     m_Metadata:
       m_Items: []
+  - m_Id: 6820708999168
+    m_Key: save.status.service_unavailable
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6820763525120
+    m_Key: save.status.checking
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6820763525121
+    m_Key: save.status.available_backup
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6820763525122
+    m_Key: save.status.available
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6820763525123
+    m_Key: save.status.probe_failed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6820763525124
+    m_Key: save.status.processing
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6820763525125
+    m_Key: save.status.submit_failed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6820763525126
+    m_Key: save.status.no_result
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6820763525127
+    m_Key: save.status.save_succeeded
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6820763525128
+    m_Key: save.status.continue_backup
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6820763525129
+    m_Key: save.status.continue_succeeded
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6820763525130
+    m_Key: save.status.new_game_succeeded
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6820763525131
+    m_Key: save.status.ready
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6820763525132
+    m_Key: save.error.slot_not_found
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6820763525133
+    m_Key: save.error.no_valid_generation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6820763525134
+    m_Key: save.error.operation_in_progress
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6820763525135
+    m_Key: save.error.session_unavailable
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6820763525136
+    m_Key: save.error.snapshot_unavailable
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6820763525137
+    m_Key: save.error.cancelled
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6820763525138
+    m_Key: save.error.content_version_mismatch
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6820763525139
+    m_Key: save.error.content_missing
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6820763525140
+    m_Key: save.error.future_schema_unsupported
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6820763525141
+    m_Key: save.error.checksum_mismatch
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6820763525142
+    m_Key: save.error.permission_denied
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6820763525143
+    m_Key: save.error.storage_full
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6820763525144
+    m_Key: save.error.flush_timed_out
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6820763525145
+    m_Key: save.error.unknown
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7274033569792
+    m_Key: hud.waiting_player
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7274079707136
+    m_Key: hud.gold
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7274079707137
+    m_Key: hud.skill.insufficient_mana
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

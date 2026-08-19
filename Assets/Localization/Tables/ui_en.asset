@@ -333,6 +333,126 @@ MonoBehaviour:
     m_Localized: Suffixes
     m_Metadata:
       m_Items: []
+  - m_Id: 6820708999168
+    m_Localized: Save service is currently unavailable
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6820763525120
+    m_Localized: "Checking autosave\u2026"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6820763525121
+    m_Localized: Autosave available (will recover from backup)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6820763525122
+    m_Localized: Autosave available
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6820763525123
+    m_Localized: Could not check autosave
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6820763525124
+    m_Localized: "Processing save request\u2026"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6820763525125
+    m_Localized: Could not submit save request
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6820763525126
+    m_Localized: Save operation returned no result
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6820763525127
+    m_Localized: Progress saved
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6820763525128
+    m_Localized: Progress recovered from backup
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6820763525129
+    m_Localized: Autosave restored
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6820763525130
+    m_Localized: New game started
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6820763525131
+    m_Localized: Save is ready
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6820763525132
+    m_Localized: No autosave found
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6820763525133
+    m_Localized: Autosave is corrupted
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6820763525134
+    m_Localized: Another save operation is in progress
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6820763525135
+    m_Localized: The current game state cannot be saved
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6820763525136
+    m_Localized: Could not capture current progress
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6820763525137
+    m_Localized: Save operation cancelled
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6820763525138
+    m_Localized: Save content version is incompatible
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6820763525139
+    m_Localized: Content referenced by the save is missing
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6820763525140
+    m_Localized: Save was created by a newer version
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6820763525141
+    m_Localized: Save integrity check failed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6820763525142
+    m_Localized: No permission to write to the save directory
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6820763525143
+    m_Localized: Not enough storage space
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6820763525144
+    m_Localized: Save write timed out
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6820763525145
+    m_Localized: Save operation failed ({0})
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7274033569792
+    m_Localized: "Waiting for player\u2026"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7274079707136
+    m_Localized: Gold {0}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7274079707137
+    m_Localized: Not enough mana (requires {0:0.#})
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []
