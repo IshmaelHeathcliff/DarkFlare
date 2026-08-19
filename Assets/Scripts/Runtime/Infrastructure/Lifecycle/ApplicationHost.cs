@@ -23,6 +23,11 @@ namespace DarkFlare
         ContentCatalogDefinition _contentCatalogDefinition;
         ContentCatalog _contentCatalog;
         IItemInstanceIdGenerator _itemInstanceIds;
+        ISettingsPathProvider _settingsPathProvider;
+        ISettingsSerializer _settingsSerializer;
+        ILocalSettingsStorage _settingsStorage;
+        SettingsService _settingsService;
+        LocalizationService _localizationService;
         ISavePathProvider _savePathProvider;
         ISaveSerializer _saveSerializer;
         ILocalSaveStorage _saveStorage;
@@ -73,6 +78,10 @@ namespace DarkFlare
         public ContentCatalog ContentCatalog => _contentCatalog;
 
         public ContentCatalogDefinition ContentCatalogDefinition => _contentCatalogDefinition;
+
+        public SettingsService Settings => _settingsService;
+
+        public LocalizationService Localization => _localizationService;
 
         public SaveCoordinator SaveCoordinator => _saveCoordinator;
 
@@ -355,7 +364,8 @@ namespace DarkFlare
                     "只能为已经加载的有效场景提交 Session 初始化");
             }
 
-            if (State != ApplicationLifecycleState.Ready
+            if ((State != ApplicationLifecycleState.Booting
+                    && State != ApplicationLifecycleState.Ready)
                 || _applicationScope == null
                 || _applicationScope.State != LifecycleScopeState.Active)
             {
@@ -385,12 +395,37 @@ namespace DarkFlare
                     CreateSceneRequestCancellationResult(supersededPending));
             }
 
+            if (State == ApplicationLifecycleState.Booting)
+            {
+                return LifecycleResult.Success("场景 Session 初始化请求已排队等待 Application Ready");
+            }
+
+            return StartSceneInitializationCoordinator();
+        }
+
+        LifecycleResult StartSceneInitializationCoordinator()
+        {
+            if (_pendingSceneRequest == null)
+            {
+                return LifecycleResult.AlreadyCompleted("当前没有待执行的场景 Session 初始化请求");
+            }
+
+            if (State != ApplicationLifecycleState.Ready
+                || _applicationScope == null
+                || _applicationScope.State != LifecycleScopeState.Active)
+            {
+                return LifecycleResult.Failure(
+                    LifecycleResultCode.InvalidState,
+                    $"Application 当前状态 {State} 不允许启动场景 Session 协调器");
+            }
+
             if (_sceneTransitionInProgress)
             {
                 return LifecycleResult.Success("场景 Session 初始化请求已更新");
             }
 
             _sceneTransitionInProgress = true;
+            SceneSessionInitializationRequest request = _pendingSceneRequest;
 
             try
             {
@@ -539,12 +574,55 @@ namespace DarkFlare
                 _applicationScope = LifecycleScope.CreateRoot(
                     "Application",
                     OnLifecycleTaskFailure);
+                _settingsPathProvider = new PersistentSettingsPathProvider();
+                _settingsSerializer = new NewtonsoftSettingsSerializer();
+                _settingsStorage = new LocalSettingsStorage(
+                    _settingsPathProvider,
+                    _settingsSerializer);
+                _settingsService = new SettingsService(_settingsStorage);
+                SettingsOperationResult settingsResult = _settingsService.Initialize();
+
+                if (!settingsResult.Succeeded)
+                {
+                    throw new InvalidOperationException(
+                        $"用户设置初始化失败：{settingsResult.Code}",
+                        settingsResult.Exception);
+                }
+
+                _localizationService = new LocalizationService(_settingsService);
+                _applicationScope.Tasks.Run(
+                    "application-bootstrap",
+                    CompleteBootAsync,
+                    failurePolicy: LifecycleTaskFailurePolicy.Report);
+            }
+            catch (Exception exception)
+            {
+                FailBoot(exception);
+            }
+        }
+
+        async UniTask CompleteBootAsync(CancellationToken cancellationToken)
+        {
+            try
+            {
+                LocalizationOperationResult localizationResult =
+                    await _localizationService.InitializeAsync(cancellationToken);
+
+                if (!localizationResult.Succeeded)
+                {
+                    throw new InvalidOperationException(
+                        $"本地化初始化失败：{localizationResult.Code}",
+                        localizationResult.Exception);
+                }
+
+                cancellationToken.ThrowIfCancellationRequested();
                 ProfileId = DefaultProfileId;
                 _profileScope = _applicationScope.CreateChild($"Profile-{ProfileId}");
                 _itemInstanceIds = new UuidItemInstanceIdGenerator();
                 _savePathProvider = new PersistentSavePathProvider();
                 _saveSerializer = new NewtonsoftSaveSerializer();
                 _saveStorage = new LocalSaveStorage(_savePathProvider, _saveSerializer);
+                EnsureSaveCoordinator();
                 LifecycleResult sessionResult = CreatePendingSession();
 
                 if (!sessionResult.IsSuccess)
@@ -553,15 +631,36 @@ namespace DarkFlare
                 }
 
                 State = ApplicationLifecycleState.Ready;
+                LifecycleResult coordinatorResult = StartSceneInitializationCoordinator();
+
+                if (!coordinatorResult.IsSuccess
+                    && coordinatorResult.Code != LifecycleResultCode.AlreadyCompleted)
+                {
+                    CompletePendingSceneRequest(false);
+                    Debug.LogError(
+                        $"[ApplicationHost] 场景 Session 协调器启动失败：{coordinatorResult.Message}",
+                        this);
+                }
+            }
+            catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+            {
             }
             catch (Exception exception)
             {
-                State = ApplicationLifecycleState.Failed;
-                Debug.LogException(exception, this);
-                _session?.BeginStop();
-                _profileScope?.BeginStop();
-                _applicationScope?.BeginStop();
+                FailBoot(exception);
             }
+        }
+
+        void FailBoot(Exception exception)
+        {
+            State = ApplicationLifecycleState.Failed;
+            Debug.LogException(exception, this);
+            _session?.BeginStop();
+            _profileScope?.BeginStop();
+            _localizationService?.Close();
+            _settingsService?.Close();
+            _applicationScope?.BeginStop();
+            CompletePendingSceneRequest(false);
         }
 
         void OnLifecycleTaskFailure(LifecycleTaskFailure failure)
@@ -1059,6 +1158,9 @@ namespace DarkFlare
                 _profileScope = null;
             }
 
+            _localizationService?.Close();
+            _settingsService?.Close();
+
             if (_applicationScope != null)
             {
                 LifecycleScope applicationScope = _applicationScope;
@@ -1081,6 +1183,11 @@ namespace DarkFlare
             _contentCatalog = null;
             _contentCatalogDefinition = null;
             _itemInstanceIds = null;
+            _localizationService = null;
+            _settingsService = null;
+            _settingsStorage = null;
+            _settingsSerializer = null;
+            _settingsPathProvider = null;
             _saveCoordinator = null;
             _sessionSaveFacade = null;
             _saveStorage = null;
@@ -1164,6 +1271,8 @@ namespace DarkFlare
         void EmergencyShutdown()
         {
             _saveCoordinator?.EmergencyClose();
+            _localizationService?.Close();
+            _settingsService?.Close();
             LifecycleResult sessionResult = _session != null
                 ? _session.EmergencyStop()
                 : LifecycleResult.AlreadyCompleted();
@@ -1178,6 +1287,11 @@ namespace DarkFlare
             _contentCatalog = null;
             _contentCatalogDefinition = null;
             _itemInstanceIds = null;
+            _localizationService = null;
+            _settingsService = null;
+            _settingsStorage = null;
+            _settingsSerializer = null;
+            _settingsPathProvider = null;
             _saveCoordinator = null;
             _sessionSaveFacade = null;
             _saveStorage = null;

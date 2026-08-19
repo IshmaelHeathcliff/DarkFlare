@@ -1,0 +1,340 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
+  m_Name: ui Shared Data
+  m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.SharedTableData
+  m_TableCollectionName: ui
+  m_TableCollectionNameGuidString: d78e71da38651da4487c070d86279ba7
+  m_Entries:
+  - m_Id: 2066735104
+    m_Key: settings.language.auto
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2125455360
+    m_Key: settings.language.zh_hans
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2133843968
+    m_Key: settings.language.en
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2382955012096
+    m_Key: settings.language.label
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111658377216
+    m_Key: crafting.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903168
+    m_Key: crafting.kicker
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903169
+    m_Key: crafting.gold.initial
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903170
+    m_Key: crafting.slot.empty_name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903171
+    m_Key: crafting.slot.empty_state
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903172
+    m_Key: crafting.capacity.empty
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903173
+    m_Key: crafting.value.empty
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903174
+    m_Key: crafting.action.select_inventory
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903175
+    m_Key: crafting.action.return
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903176
+    m_Key: crafting.rarity.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903177
+    m_Key: crafting.action.upgrade_rarity
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903178
+    m_Key: crafting.action.reset_normal
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903179
+    m_Key: crafting.scope.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903180
+    m_Key: crafting.scope.any
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903181
+    m_Key: crafting.scope.prefix
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903182
+    m_Key: crafting.scope.suffix
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903183
+    m_Key: crafting.feedback.place_item
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903184
+    m_Key: crafting.action.reroll_affixes
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903185
+    m_Key: crafting.action.add_affix
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903186
+    m_Key: crafting.action.remove_affix
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903187
+    m_Key: crafting.action.reroll_values
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903188
+    m_Key: crafting.help.random
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903189
+    m_Key: menu.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903190
+    m_Key: menu.kicker
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903191
+    m_Key: menu.tab.inventory
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903192
+    m_Key: menu.tab.shop
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903193
+    m_Key: menu.tab.crafting
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903194
+    m_Key: menu.close
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903195
+    m_Key: menu.save.action
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903196
+    m_Key: menu.continue.action
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903197
+    m_Key: menu.new_game.action
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903198
+    m_Key: menu.save.probing
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903199
+    m_Key: hud.health
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903200
+    m_Key: hud.mana
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903201
+    m_Key: hud.resources
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903202
+    m_Key: hud.gold.initial
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903203
+    m_Key: hud.interaction.initial
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903204
+    m_Key: inventory.stats.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903205
+    m_Key: inventory.stats.kicker
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903206
+    m_Key: inventory.actions.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903207
+    m_Key: inventory.target.none
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903208
+    m_Key: inventory.feedback.select
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903209
+    m_Key: inventory.equip.action
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903210
+    m_Key: inventory.unequip.action
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903211
+    m_Key: inventory.help.drag
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903212
+    m_Key: workbench.equipment.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903213
+    m_Key: workbench.equipment.kicker
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903214
+    m_Key: equipment.slot.weapon.empty
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903215
+    m_Key: equipment.slot.armor.empty
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903216
+    m_Key: equipment.slot.ring_left.empty
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903217
+    m_Key: equipment.slot.ring_right.empty
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903218
+    m_Key: equipment.future.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903219
+    m_Key: workbench.equipment.help
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903220
+    m_Key: workbench.inventory.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903221
+    m_Key: workbench.inventory.size
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903222
+    m_Key: workbench.inventory.empty
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903223
+    m_Key: workbench.inventory.help
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903224
+    m_Key: shop.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903225
+    m_Key: shop.kicker
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903226
+    m_Key: shop.gold.initial
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903227
+    m_Key: shop.merchant.empty
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903228
+    m_Key: shop.source.empty
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903229
+    m_Key: shop.price.empty
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903230
+    m_Key: shop.feedback.select
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903231
+    m_Key: shop.buy.action
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903232
+    m_Key: shop.sell.action
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903233
+    m_Key: shop.help.readonly
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903234
+    m_Key: item.detail.none
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903235
+    m_Key: item.detail.meta.empty
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903236
+    m_Key: item.detail.base.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903237
+    m_Key: item.detail.base.empty
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903238
+    m_Key: item.detail.inherent.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903239
+    m_Key: item.detail.prefix.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903240
+    m_Key: item.detail.suffix.title
+    m_Metadata:
+      m_Items: []
+  m_Metadata:
+    m_Items: []
+  m_KeyGenerator:
+    rid: 6738608143192817783
+  references:
+    version: 2
+    RefIds:
+    - rid: 6738608143192817783
+      type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
+      data:
+        m_CustomEpoch: 1787151504397

@@ -9,6 +9,7 @@
         "Unity.InputSystem",
         "Unity.Addressables",
         "Unity.ResourceManager",
+        "Unity.Localization",
         "Unity.Newtonsoft.Json"
     ],
     "includePlatforms": [],

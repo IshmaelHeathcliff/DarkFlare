@@ -6,7 +6,9 @@
         "DarkFlare.Core",
         "Unity.TextMeshPro",
         "Unity.Addressables",
-        "Unity.Addressables.Editor"
+        "Unity.Addressables.Editor",
+        "Unity.Localization",
+        "Unity.Localization.Editor"
     ],
     "includePlatforms": [
         "Editor"

@@ -1,19 +1,43 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:l="UnityEngine.Localization" editor-extension-mode="False">
   <ui:VisualElement name="inventory-page" class="inventory-page item-context-panel ui-panel-frame" picking-mode="Position">
     <ui:VisualElement class="item-context-header">
-      <ui:Label text="当前属性" class="item-context-title" />
-      <ui:Label text="CHARACTER" class="item-context-kicker" />
+      <ui:Label text="" class="item-context-title">
+        <Bindings>
+          <l:LocalizedString property="text" table="ui" entry="inventory.stats.title" />
+        </Bindings>
+      </ui:Label>
+      <ui:Label text="" class="item-context-kicker">
+        <Bindings>
+          <l:LocalizedString property="text" table="ui" entry="inventory.stats.kicker" />
+        </Bindings>
+      </ui:Label>
     </ui:VisualElement>
     <ui:VisualElement name="inventory-attribute-card" class="inventory-attribute-card">
       <ui:VisualElement name="inventory-attribute-grid" class="inventory-attribute-grid" />
     </ui:VisualElement>
-    <ui:Label text="装备操作" class="item-context-subtitle" />
-    <ui:Label name="inventory-target-slot" text="操作槽位：未选择" class="inventory-target-slot" />
-    <ui:Label name="inventory-feedback" text="选择物品或装备槽查看操作" class="inventory-feedback" />
+    <ui:Label text="" class="item-context-subtitle">
+      <Bindings>
+        <l:LocalizedString property="text" table="ui" entry="inventory.actions.title" />
+      </Bindings>
+    </ui:Label>
+    <ui:Label name="inventory-target-slot" text="" class="inventory-target-slot" />
+    <ui:Label name="inventory-feedback" text="" class="inventory-feedback" />
     <ui:VisualElement name="inventory-actions" class="inventory-actions">
-      <ui:Button name="inventory-equip" text="装备 / 替换" class="item-context-action item-context-action--primary inventory-equip" />
-      <ui:Button name="inventory-unequip" text="卸下" class="item-context-action inventory-unequip" />
+      <ui:Button name="inventory-equip" text="" class="item-context-action item-context-action--primary inventory-equip">
+        <Bindings>
+          <l:LocalizedString property="text" table="ui" entry="inventory.equip.action" />
+        </Bindings>
+      </ui:Button>
+      <ui:Button name="inventory-unequip" text="" class="item-context-action inventory-unequip">
+        <Bindings>
+          <l:LocalizedString property="text" table="ui" entry="inventory.unequip.action" />
+        </Bindings>
+      </ui:Button>
     </ui:VisualElement>
-    <ui:Label text="拖拽可精确整理；按钮操作仍会自动寻找空位" class="item-context-help" />
+    <ui:Label text="" class="item-context-help">
+      <Bindings>
+        <l:LocalizedString property="text" table="ui" entry="inventory.help.drag" />
+      </Bindings>
+    </ui:Label>
   </ui:VisualElement>
 </ui:UXML>

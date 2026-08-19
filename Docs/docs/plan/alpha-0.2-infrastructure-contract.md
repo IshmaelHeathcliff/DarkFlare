@@ -6,7 +6,7 @@
 > 适用范围：`alpha 0.2` 全部实现、迁移、测试和后续新增运行时代码
 > 上位计划：[alpha 0.2 基础设施开发计划](./alpha-0.2-plan.md)
 > 已落地模块：[应用生命周期与会话作用域](../infrastructure/application-lifecycle.md)（`alpha 0.2.0`）、[稳定身份、内容目录与迁移框架](../infrastructure/content-identity-migration.md)（`alpha 0.2.1`）、[本地存档与 Session 恢复](../infrastructure/local-save.md)（`alpha 0.2.2`）
-> 下一阶段：`alpha 0.2.3` 用户设置与本地化，待建立独立执行计划
+> 当前阶段：[`alpha 0.2.3` 用户设置与本地化](./alpha-0.2.3-settings-localization-plan.md)，实施中
 
 ## 使用方式
 

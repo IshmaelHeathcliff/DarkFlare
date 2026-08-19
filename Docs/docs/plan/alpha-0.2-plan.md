@@ -1,6 +1,6 @@
 # alpha 0.2 基础设施开发计划
 
-> 状态：`alpha 0.2.0–0.2.2` 已完成；下一阶段 `alpha 0.2.3`
+> 状态：`alpha 0.2.0–0.2.2` 已完成；`alpha 0.2.3` 实施中
 > 建立日期：2026-08-17
 > 最近更新：2026-08-19
 > 基线提交：`21360c7`
@@ -68,7 +68,7 @@
 | `alpha 0.2.0` | 已完成 | 建立应用宿主、作用域、生命周期和首批规范验证 | [模块文档](../infrastructure/application-lifecycle.md) · [归档计划](./archive/alpha-0.2.0-application-lifecycle-plan.md) |
 | `alpha 0.2.1` | 已完成 | 建立稳定身份、内容目录和版本迁移底座 | [模块文档](../infrastructure/content-identity-migration.md) · [归档计划](./archive/alpha-0.2.1-content-identity-migration-plan.md) |
 | `alpha 0.2.2` | 已完成 | 完成本地存档、读档和损坏恢复闭环 | [模块文档](../infrastructure/local-save.md) · [归档计划](./archive/alpha-0.2.2-local-save-plan.md) |
-| `alpha 0.2.3` | 待开始 | 完成用户设置和运行时本地化 | Settings、Locale、String Tables、字体回退、伪本地化、硬编码扫描 |
+| `alpha 0.2.3` | 实施中 | 完成用户设置和运行时本地化 | [执行计划](./alpha-0.2.3-settings-localization-plan.md) · Settings / Localization 启动门禁与静态 UXML 已完成；动态反馈、内容、字体和布局待完成 |
 | `alpha 0.2.4` | 待开始 | 建立游戏状态、场景加载和通用 UI 外壳 | Boot / Loading / InGame 状态、SceneFlow、Loading UI、Page / Modal / Toast |
 | `alpha 0.2.5` | 待开始 | 接入输入、音频、可访问性和平台生命周期 | 重绑定、输入图标、AudioMixer 服务、可访问性设置、挂起 / 退出策略 |
 | `alpha 0.2.6` | 待开始 | 建立日志、错误处理和资源生命周期治理 | Logger、异常捕获、玩家错误反馈、Addressables 规则与句柄验证 |
@@ -193,6 +193,8 @@
 - 本阶段未实现 Settings、Locale、手动槽位 / Profile UI、云同步或完整 SceneFlow；这些边界分别由后续阶段处理。
 
 ## alpha 0.2.3：用户设置与本地化
+
+冻结的数据合同、启动顺序、文本迁移范围、实施切片和验收矩阵见[独立执行计划](./alpha-0.2.3-settings-localization-plan.md)。
 
 ### 目标
 

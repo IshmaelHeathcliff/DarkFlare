@@ -1,23 +1,47 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:l="UnityEngine.Localization" editor-extension-mode="False">
   <ui:VisualElement name="shop-page" class="shop-page item-context-panel ui-panel-frame" picking-mode="Position">
     <ui:VisualElement class="item-context-header">
-      <ui:Label text="商人背包" class="item-context-title" />
-      <ui:Label text="TRADE" class="item-context-kicker" />
+      <ui:Label text="" class="item-context-title">
+        <Bindings>
+          <l:LocalizedString property="text" table="ui" entry="shop.title" />
+        </Bindings>
+      </ui:Label>
+      <ui:Label text="" class="item-context-kicker">
+        <Bindings>
+          <l:LocalizedString property="text" table="ui" entry="shop.kicker" />
+        </Bindings>
+      </ui:Label>
     </ui:VisualElement>
-    <ui:Label name="shop-gold" text="持有金币  0" class="shop-gold" />
+    <ui:Label name="shop-gold" text="" class="shop-gold" />
     <ui:VisualElement name="shop-merchant-frame" class="shop-merchant-frame">
       <ui:VisualElement name="shop-merchant-list" class="shop-merchant-grid" picking-mode="Position" />
-      <ui:Label name="shop-merchant-empty" text="商人背包为空" class="shop-empty" picking-mode="Ignore" />
+      <ui:Label name="shop-merchant-empty" text="" class="shop-empty" picking-mode="Ignore">
+        <Bindings>
+          <l:LocalizedString property="text" table="ui" entry="shop.merchant.empty" />
+        </Bindings>
+      </ui:Label>
     </ui:VisualElement>
     <ui:VisualElement class="shop-selection-summary">
-      <ui:Label name="shop-selected-source" text="来源：-" class="shop-detail-line" />
-      <ui:Label name="shop-selected-price" text="价格：-" class="shop-price" />
+      <ui:Label name="shop-selected-source" text="" class="shop-detail-line" />
+      <ui:Label name="shop-selected-price" text="" class="shop-price" />
     </ui:VisualElement>
-    <ui:Label name="shop-feedback" text="选择商人物品购买，或选择玩家背包物品出售" class="shop-feedback" />
+    <ui:Label name="shop-feedback" text="" class="shop-feedback" />
     <ui:VisualElement name="shop-actions" class="shop-actions">
-      <ui:Button name="shop-buy" text="购买商人物品" class="item-context-action item-context-action--primary shop-buy" />
-      <ui:Button name="shop-sell" text="出售背包物品" class="item-context-action shop-sell" />
+      <ui:Button name="shop-buy" text="" class="item-context-action item-context-action--primary shop-buy">
+        <Bindings>
+          <l:LocalizedString property="text" table="ui" entry="shop.buy.action" />
+        </Bindings>
+      </ui:Button>
+      <ui:Button name="shop-sell" text="" class="item-context-action shop-sell">
+        <Bindings>
+          <l:LocalizedString property="text" table="ui" entry="shop.sell.action" />
+        </Bindings>
+      </ui:Button>
     </ui:VisualElement>
-    <ui:Label text="商人格只读；拖放不会触发交易" class="item-context-help" />
+    <ui:Label text="" class="item-context-help">
+      <Bindings>
+        <l:LocalizedString property="text" table="ui" entry="shop.help.readonly" />
+      </Bindings>
+    </ui:Label>
   </ui:VisualElement>
 </ui:UXML>

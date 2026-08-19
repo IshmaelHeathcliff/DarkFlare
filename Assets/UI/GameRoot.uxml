@@ -1,4 +1,4 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:l="UnityEngine.Localization" editor-extension-mode="False">
   <ui:Style src="project://database/Assets/UI/Theme.uss" />
   <ui:Style src="project://database/Assets/UI/Hud.uss" />
   <ui:Style src="project://database/Assets/UI/GameMenu.uss" />
@@ -19,26 +19,50 @@
       <ui:VisualElement name="game-menu-panel" class="game-menu-panel" picking-mode="Position">
         <ui:VisualElement class="game-menu-header">
           <ui:VisualElement class="game-menu-heading">
-            <ui:Label text="营地整备" class="game-menu-title" />
-            <ui:Label text="ITEM WORKBENCH" class="game-menu-kicker" />
+            <ui:Label text="" class="game-menu-title">
+              <Bindings>
+                <l:LocalizedString property="text" table="ui" entry="menu.title" />
+              </Bindings>
+            </ui:Label>
+            <ui:Label text="" class="game-menu-kicker">
+              <Bindings>
+                <l:LocalizedString property="text" table="ui" entry="menu.kicker" />
+              </Bindings>
+            </ui:Label>
           </ui:VisualElement>
           <ui:VisualElement class="game-menu-tabs">
             <ui:Button name="game-menu-inventory-tab" class="game-menu-tab">
               <ui:VisualElement class="ui-icon ui-icon--inventory game-menu-tab-icon" picking-mode="Ignore" />
-              <ui:Label text="背包" class="game-menu-tab-label" picking-mode="Ignore" />
+              <ui:Label text="" class="game-menu-tab-label" picking-mode="Ignore">
+                <Bindings>
+                  <l:LocalizedString property="text" table="ui" entry="menu.tab.inventory" />
+                </Bindings>
+              </ui:Label>
             </ui:Button>
             <ui:Button name="game-menu-shop-tab" class="game-menu-tab">
               <ui:VisualElement class="ui-icon ui-icon--shop game-menu-tab-icon" picking-mode="Ignore" />
-              <ui:Label text="商店" class="game-menu-tab-label" picking-mode="Ignore" />
+              <ui:Label text="" class="game-menu-tab-label" picking-mode="Ignore">
+                <Bindings>
+                  <l:LocalizedString property="text" table="ui" entry="menu.tab.shop" />
+                </Bindings>
+              </ui:Label>
             </ui:Button>
             <ui:Button name="game-menu-crafting-tab" class="game-menu-tab">
               <ui:VisualElement class="ui-icon ui-icon--crafting game-menu-tab-icon" picking-mode="Ignore" />
-              <ui:Label text="打造" class="game-menu-tab-label" picking-mode="Ignore" />
+              <ui:Label text="" class="game-menu-tab-label" picking-mode="Ignore">
+                <Bindings>
+                  <l:LocalizedString property="text" table="ui" entry="menu.tab.crafting" />
+                </Bindings>
+              </ui:Label>
             </ui:Button>
           </ui:VisualElement>
           <ui:Button name="game-menu-close" class="game-menu-close">
             <ui:VisualElement class="ui-icon ui-icon--close game-menu-close-icon" picking-mode="Ignore" />
-            <ui:Label text="关闭  Esc / B" picking-mode="Ignore" />
+            <ui:Label text="" picking-mode="Ignore">
+              <Bindings>
+                <l:LocalizedString property="text" table="ui" entry="menu.close" />
+              </Bindings>
+            </ui:Label>
           </ui:Button>
         </ui:VisualElement>
         <ui:VisualElement name="game-menu-content" class="game-menu-content">
@@ -51,11 +75,31 @@
         </ui:VisualElement>
         <ui:VisualElement name="game-menu-save-bar" class="game-menu-save-bar">
           <ui:VisualElement class="game-menu-save-actions">
-            <ui:Button name="game-menu-save" text="保存进度" class="game-menu-save-action game-menu-save-action--primary" />
-            <ui:Button name="game-menu-continue" text="读取自动存档" class="game-menu-save-action" />
-            <ui:Button name="game-menu-new-game" text="开始新游戏" class="game-menu-save-action" />
+            <ui:Button name="game-menu-save" text="" class="game-menu-save-action game-menu-save-action--primary">
+              <Bindings>
+                <l:LocalizedString property="text" table="ui" entry="menu.save.action" />
+              </Bindings>
+            </ui:Button>
+            <ui:Button name="game-menu-continue" text="" class="game-menu-save-action">
+              <Bindings>
+                <l:LocalizedString property="text" table="ui" entry="menu.continue.action" />
+              </Bindings>
+            </ui:Button>
+            <ui:Button name="game-menu-new-game" text="" class="game-menu-save-action">
+              <Bindings>
+                <l:LocalizedString property="text" table="ui" entry="menu.new_game.action" />
+              </Bindings>
+            </ui:Button>
           </ui:VisualElement>
-          <ui:Label name="game-menu-save-status" text="正在检查自动存档…" class="game-menu-save-status" />
+          <ui:Label name="game-menu-save-status" text="" class="game-menu-save-status" />
+          <ui:VisualElement name="game-menu-language" class="game-menu-language">
+            <ui:Label name="game-menu-language-label" text="" class="game-menu-language-label">
+              <Bindings>
+                <l:LocalizedString property="text" table="ui" entry="settings.language.label" />
+              </Bindings>
+            </ui:Label>
+            <ui:DropdownField name="game-menu-language-dropdown" class="game-menu-language-dropdown" />
+          </ui:VisualElement>
         </ui:VisualElement>
       </ui:VisualElement>
       <ui:VisualElement name="item-tooltip-layer" class="item-tooltip-layer" picking-mode="Ignore">

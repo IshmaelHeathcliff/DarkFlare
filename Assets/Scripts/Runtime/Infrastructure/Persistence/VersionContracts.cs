@@ -82,6 +82,8 @@ namespace DarkFlare
 
     public readonly struct SettingsSchemaVersion : IEquatable<SettingsSchemaVersion>, IComparable<SettingsSchemaVersion>
     {
+        public static SettingsSchemaVersion Current => new SettingsSchemaVersion(1);
+
         public int Value { get; }
 
         public SettingsSchemaVersion(int value)

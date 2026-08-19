@@ -8,6 +8,7 @@ using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
+using UnityEngine.UIElements;
 
 namespace DarkFlare.Tests
 {
@@ -44,12 +45,19 @@ namespace DarkFlare.Tests
                 FindObjectsInactive.Exclude,
                 FindObjectsSortMode.None);
             MonsterSpawner spawner = UnityEngine.Object.FindAnyObjectByType<MonsterSpawner>();
+            UIDocument uiDocument = UnityEngine.Object.FindAnyObjectByType<UIDocument>();
+            Label localizedMenuTitle = uiDocument?.rootVisualElement.Q<Label>(
+                className: "game-menu-title");
 
             Assert.AreEqual(1, hosts.Length, "冷启动后必须只有一个 ApplicationHost");
             Assert.AreEqual(1, players.Length, "冷启动后必须只有一个有效玩家");
             Assert.IsNotNull(host.CurrentSession);
             Assert.AreEqual(GameSessionState.Running, host.CurrentSession.State);
             Assert.IsNotNull(host.ContentCatalog);
+            Assert.IsNotNull(localizedMenuTitle);
+            Assert.IsFalse(
+                string.IsNullOrWhiteSpace(localizedMenuTitle.text),
+                "Application Ready 后静态本地化绑定必须已经产生首份文本");
             Assert.AreEqual("core", host.ContentCatalog.CatalogId);
             Assert.AreEqual(1, host.ContentCatalog.ContentVersion);
             Assert.AreEqual(90, host.ContentCatalog.Count);

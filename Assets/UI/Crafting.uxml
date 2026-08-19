@@ -1,44 +1,80 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:l="UnityEngine.Localization" editor-extension-mode="False">
   <ui:VisualElement name="crafting-page" class="crafting-page item-context-panel ui-panel-frame" picking-mode="Position">
     <ui:VisualElement class="item-context-header">
-      <ui:Label text="打造" class="item-context-title" />
-      <ui:Label text="FORGE" class="item-context-kicker" />
+      <ui:Label text="" class="item-context-title">
+        <Bindings>
+          <l:LocalizedString property="text" table="ui" entry="crafting.title" />
+        </Bindings>
+      </ui:Label>
+      <ui:Label text="" class="item-context-kicker">
+        <Bindings>
+          <l:LocalizedString property="text" table="ui" entry="crafting.kicker" />
+        </Bindings>
+      </ui:Label>
     </ui:VisualElement>
-    <ui:Label name="crafting-gold" text="持有金币  0" class="crafting-gold" />
+    <ui:Label name="crafting-gold" text="" class="crafting-gold" />
     <ui:VisualElement class="crafting-selection-card">
       <ui:Button name="crafting-input-slot" class="crafting-input-slot">
         <ui:VisualElement name="crafting-input-icon" class="crafting-input-icon" picking-mode="Ignore" />
-        <ui:Label name="crafting-input-name" text="空打造槽" class="crafting-input-name" picking-mode="Ignore" />
+        <ui:Label name="crafting-input-name" text="" class="crafting-input-name" picking-mode="Ignore" />
       </ui:Button>
       <ui:VisualElement class="crafting-target-summary">
-        <ui:Label name="crafting-selected-rarity" text="打造槽为空" class="crafting-selected-rarity" />
-        <ui:Label name="crafting-selected-capacity" text="词缀容量：-" class="crafting-summary-line" />
-        <ui:Label name="crafting-selected-value" text="物品价值：-" class="crafting-summary-line" />
+        <ui:Label name="crafting-selected-rarity" text="" class="crafting-selected-rarity" />
+        <ui:Label name="crafting-selected-capacity" text="" class="crafting-summary-line" />
+        <ui:Label name="crafting-selected-value" text="" class="crafting-summary-line" />
         <ui:VisualElement class="crafting-slot-actions">
-          <ui:Button name="crafting-slot-place" text="先选择背包物品" class="crafting-slot-action" />
-          <ui:Button name="crafting-slot-remove" text="取回物品" class="crafting-slot-action" />
+          <ui:Button name="crafting-slot-place" text="" class="crafting-slot-action" />
+          <ui:Button name="crafting-slot-remove" text="" class="crafting-slot-action">
+            <Bindings>
+              <l:LocalizedString property="text" table="ui" entry="crafting.action.return" />
+            </Bindings>
+          </ui:Button>
         </ui:VisualElement>
       </ui:VisualElement>
     </ui:VisualElement>
-    <ui:Label text="稀有度" class="item-context-subtitle" />
+    <ui:Label text="" class="item-context-subtitle">
+      <Bindings>
+        <l:LocalizedString property="text" table="ui" entry="crafting.rarity.title" />
+      </Bindings>
+    </ui:Label>
     <ui:VisualElement class="crafting-rarity-actions">
-      <ui:Button name="crafting-upgrade-rarity" text="提升稀有度" class="item-context-action item-context-action--primary" />
-      <ui:Button name="crafting-reset-normal" text="还原为普通" class="item-context-action" />
+      <ui:Button name="crafting-upgrade-rarity" text="" class="item-context-action item-context-action--primary" />
+      <ui:Button name="crafting-reset-normal" text="" class="item-context-action" />
     </ui:VisualElement>
-    <ui:Label text="操作范围" class="item-context-subtitle" />
+    <ui:Label text="" class="item-context-subtitle">
+      <Bindings>
+        <l:LocalizedString property="text" table="ui" entry="crafting.scope.title" />
+      </Bindings>
+    </ui:Label>
     <ui:VisualElement class="crafting-scope-actions">
-      <ui:Button name="crafting-scope-any" text="任意" class="crafting-scope" />
-      <ui:Button name="crafting-scope-prefix" text="前缀 · 3×" class="crafting-scope" />
-      <ui:Button name="crafting-scope-suffix" text="后缀 · 3×" class="crafting-scope" />
+      <ui:Button name="crafting-scope-any" text="" class="crafting-scope">
+        <Bindings>
+          <l:LocalizedString property="text" table="ui" entry="crafting.scope.any" />
+        </Bindings>
+      </ui:Button>
+      <ui:Button name="crafting-scope-prefix" text="" class="crafting-scope">
+        <Bindings>
+          <l:LocalizedString property="text" table="ui" entry="crafting.scope.prefix" />
+        </Bindings>
+      </ui:Button>
+      <ui:Button name="crafting-scope-suffix" text="" class="crafting-scope">
+        <Bindings>
+          <l:LocalizedString property="text" table="ui" entry="crafting.scope.suffix" />
+        </Bindings>
+      </ui:Button>
     </ui:VisualElement>
-    <ui:Label name="crafting-feedback" text="将背包物品拖入打造槽；也可以先选中，再按放入" class="crafting-feedback" />
+    <ui:Label name="crafting-feedback" text="" class="crafting-feedback" />
     <ui:VisualElement name="crafting-actions" class="crafting-actions">
-      <ui:Button name="crafting-reroll-affixes" text="随机全部词缀" class="item-context-action" />
-      <ui:Button name="crafting-add-affix" text="随机增加一条" class="item-context-action" />
-      <ui:Button name="crafting-remove-affix" text="随机移除一条" class="item-context-action" />
-      <ui:Button name="crafting-reroll-values" text="重随一条数值" class="item-context-action" />
+      <ui:Button name="crafting-reroll-affixes" text="" class="item-context-action" />
+      <ui:Button name="crafting-add-affix" text="" class="item-context-action" />
+      <ui:Button name="crafting-remove-affix" text="" class="item-context-action" />
+      <ui:Button name="crafting-reroll-values" text="" class="item-context-action" />
     </ui:VisualElement>
     <ui:Label name="crafting-result" text="" class="crafting-result" />
-    <ui:Label text="所有打造均为随机结果；失败不会扣除金币，也不会改变物品" class="item-context-help" />
+    <ui:Label text="" class="item-context-help">
+      <Bindings>
+        <l:LocalizedString property="text" table="ui" entry="crafting.help.random" />
+      </Bindings>
+    </ui:Label>
   </ui:VisualElement>
 </ui:UXML>

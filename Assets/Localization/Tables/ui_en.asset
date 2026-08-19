@@ -1,0 +1,338 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: ui_en
+  m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.StringTable
+  m_LocaleId:
+    m_Code: en
+  m_SharedData: {fileID: 11400000, guid: d78e71da38651da4487c070d86279ba7, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 2066735104
+    m_Localized: Auto
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2125455360
+    m_Localized: Simplified Chinese
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2133843968
+    m_Localized: English
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2382955012096
+    m_Localized: Language
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111658377216
+    m_Localized: Crafting
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903168
+    m_Localized: FORGE
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903169
+    m_Localized: Gold  0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903170
+    m_Localized: Empty Crafting Slot
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903171
+    m_Localized: Crafting slot is empty
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903172
+    m_Localized: 'Affix capacity: -'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903173
+    m_Localized: 'Item value: -'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903174
+    m_Localized: Select an inventory item first
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903175
+    m_Localized: Return Item
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903176
+    m_Localized: Rarity
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903177
+    m_Localized: Upgrade Rarity
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903178
+    m_Localized: Reset to Normal
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903179
+    m_Localized: Operation Scope
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903180
+    m_Localized: Any
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903181
+    m_Localized: "Prefix \xB7 3\xD7"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903182
+    m_Localized: "Suffix \xB7 3\xD7"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903183
+    m_Localized: Drag an inventory item into the crafting slot, or select it and
+      choose Place.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903184
+    m_Localized: Reroll All Affixes
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903185
+    m_Localized: Add a Random Affix
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903186
+    m_Localized: Remove a Random Affix
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903187
+    m_Localized: Reroll One Value
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903188
+    m_Localized: All crafting outcomes are random. Failed attempts cost no gold and
+      do not change the item.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903189
+    m_Localized: Camp Preparation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903190
+    m_Localized: ITEM WORKBENCH
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903191
+    m_Localized: Inventory
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903192
+    m_Localized: Shop
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903193
+    m_Localized: Crafting
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903194
+    m_Localized: Close  Esc / B
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903195
+    m_Localized: Save Progress
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903196
+    m_Localized: Load Auto Save
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903197
+    m_Localized: Start New Game
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903198
+    m_Localized: "Checking auto save\u2026"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903199
+    m_Localized: Health
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903200
+    m_Localized: Mana
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903201
+    m_Localized: Resources
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903202
+    m_Localized: Gold 0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903203
+    m_Localized: "E / Y \xB7 Interact"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903204
+    m_Localized: Current Stats
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903205
+    m_Localized: CHARACTER
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903206
+    m_Localized: Equipment Actions
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903207
+    m_Localized: 'Target Slot: None'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903208
+    m_Localized: Select an item or equipment slot to view actions.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903209
+    m_Localized: Equip / Replace
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903210
+    m_Localized: Unequip
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903211
+    m_Localized: Drag for precise placement; button actions still find free space
+      automatically.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903212
+    m_Localized: Equipment
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903213
+    m_Localized: EQUIPMENT
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903214
+    m_Localized: "Weapon \xB7 Empty"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903215
+    m_Localized: "Armor \xB7 Empty"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903216
+    m_Localized: "Left Ring \xB7 Empty"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903217
+    m_Localized: "Right Ring \xB7 Empty"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903218
+    m_Localized: Reserved
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903219
+    m_Localized: Drag equipment, or use the arrange action to pick up and place.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903220
+    m_Localized: Player Inventory
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903221
+    m_Localized: "10 \xD7 6"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903222
+    m_Localized: Inventory is empty
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903223
+    m_Localized: "Drag to arrange \xB7 Space / X pick up or place \xB7 Esc / B cancel"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903224
+    m_Localized: Merchant Inventory
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903225
+    m_Localized: TRADE
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903226
+    m_Localized: Gold  0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903227
+    m_Localized: Merchant inventory is empty
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903228
+    m_Localized: 'Source: -'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903229
+    m_Localized: 'Price: -'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903230
+    m_Localized: Select a merchant item to buy, or an inventory item to sell.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903231
+    m_Localized: Buy Merchant Item
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903232
+    m_Localized: Sell Inventory Item
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903233
+    m_Localized: The merchant grid is read-only; dragging does not trade.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903234
+    m_Localized: No item selected
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903235
+    m_Localized: 'Type and Rarity: -'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903236
+    m_Localized: Base
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903237
+    m_Localized: 'Base Stats: -'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903238
+    m_Localized: Inherent
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903239
+    m_Localized: Prefixes
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4111712903240
+    m_Localized: Suffixes
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []

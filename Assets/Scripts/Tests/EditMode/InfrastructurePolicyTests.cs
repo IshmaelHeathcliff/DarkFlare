@@ -52,6 +52,7 @@ namespace DarkFlare.Tests
                 new[]
                 {
                     "Assets/Scripts/Runtime/Infrastructure/Persistence/SavePathProvider.cs",
+                    "Assets/Scripts/Runtime/Infrastructure/Settings/SettingsPathProvider.cs",
                 }),
             new PolicyRule(
                 "business-scene-loading",

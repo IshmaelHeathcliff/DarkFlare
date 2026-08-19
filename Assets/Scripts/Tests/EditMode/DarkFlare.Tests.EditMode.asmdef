@@ -8,6 +8,8 @@
         "UniTask",
         "Unity.Addressables",
         "Unity.ResourceManager",
+        "Unity.Localization",
+        "Unity.Localization.Editor",
         "Unity.TextMeshPro",
         "Unity.InputSystem",
         "Unity.InputSystem.TestFramework",
