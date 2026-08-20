@@ -31,8 +31,9 @@
 
 - [alpha 0.2 基础设施开发计划](./plan/alpha-0.2-plan.md)
 - [alpha 0.2 基础设施约束契约](./plan/alpha-0.2-infrastructure-contract.md)
+- [alpha 0.2.4 游戏状态、场景流与 UI 外壳执行计划](./plan/alpha-0.2.4-game-state-scene-flow-ui-shell-plan.md)
 
-`alpha 0.2.0–0.2.3` 已完成，当前实现见[应用生命周期与会话作用域](./infrastructure/application-lifecycle.md)、[稳定身份、内容目录与迁移框架](./infrastructure/content-identity-migration.md)、[本地存档与 Session 恢复](./infrastructure/local-save.md)和[用户设置与本地化](./infrastructure/user-settings-localization.md)，阶段执行计划已移入[已完成计划归档](./plan/archive/README.md)。下一阶段为 `alpha 0.2.4` 游戏状态、场景流与 UI 外壳。
+`alpha 0.2.0–0.2.3` 已完成，当前实现见[应用生命周期与会话作用域](./infrastructure/application-lifecycle.md)、[稳定身份、内容目录与迁移框架](./infrastructure/content-identity-migration.md)、[本地存档与 Session 恢复](./infrastructure/local-save.md)和[用户设置与本地化](./infrastructure/user-settings-localization.md)，阶段执行计划已移入[已完成计划归档](./plan/archive/README.md)。`alpha 0.2.4` 已完成规划、待实施，执行边界见[游戏状态、场景流与 UI 外壳执行计划](./plan/alpha-0.2.4-game-state-scene-flow-ui-shell-plan.md)。
 
 ## 说明
 

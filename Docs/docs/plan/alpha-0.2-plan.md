@@ -1,6 +1,6 @@
 # alpha 0.2 基础设施开发计划
 
-> 状态：`alpha 0.2.0–0.2.3` 已完成；下一阶段为 `alpha 0.2.4`
+> 状态：`alpha 0.2.0–0.2.3` 已完成；`alpha 0.2.4` 已规划、待实施
 > 建立日期：2026-08-17
 > 最近更新：2026-08-20
 > 基线提交：`21360c7`
@@ -69,7 +69,7 @@
 | `alpha 0.2.1` | 已完成 | 建立稳定身份、内容目录和版本迁移底座 | [模块文档](../infrastructure/content-identity-migration.md) · [归档计划](./archive/alpha-0.2.1-content-identity-migration-plan.md) |
 | `alpha 0.2.2` | 已完成 | 完成本地存档、读档和损坏恢复闭环 | [模块文档](../infrastructure/local-save.md) · [归档计划](./archive/alpha-0.2.2-local-save-plan.md) |
 | `alpha 0.2.3` | 已完成 | 完成用户设置和运行时本地化 | [模块文档](../infrastructure/user-settings-localization.md) · [归档计划](./archive/alpha-0.2.3-settings-localization-plan.md) |
-| `alpha 0.2.4` | 下一阶段 | 建立游戏状态、场景加载和通用 UI 外壳 | Boot / Loading / InGame 状态、SceneFlow、Loading UI、Page / Modal / Toast |
+| `alpha 0.2.4` | 已规划，待实施 | 建立游戏状态、场景加载和通用 UI 外壳 | [执行计划](./alpha-0.2.4-game-state-scene-flow-ui-shell-plan.md) · Bootstrap / Main 双场景、SceneFlow、Application UI Shell、Time Service |
 | `alpha 0.2.5` | 待开始 | 接入输入、音频、可访问性和平台生命周期 | 重绑定、输入图标、AudioMixer 服务、可访问性设置、挂起 / 退出策略 |
 | `alpha 0.2.6` | 待开始 | 建立日志、错误处理和资源生命周期治理 | Logger、异常捕获、玩家错误反馈、Addressables 规则与句柄验证 |
 | `alpha 0.2.7` | 待开始 | 完成跨模块回归、故障演练和文档封板 | 综合验收记录、迁移样本、模块文档、计划归档 |
@@ -232,6 +232,8 @@
 - 最终验证为 Unity 编译 0 error、EditMode `334/334`、项目自有 PlayMode `48/48`；完整 PlayMode 52 项中 50 项通过、0 失败，2 项 Input System 包集成测试因上游 issue 1252825 跳过。
 
 ## alpha 0.2.4：游戏状态、场景流与 UI 外壳
+
+冻结架构、迁移顺序、实施切片和验收矩阵见[独立执行计划](./alpha-0.2.4-game-state-scene-flow-ui-shell-plan.md)。
 
 ### 目标
 

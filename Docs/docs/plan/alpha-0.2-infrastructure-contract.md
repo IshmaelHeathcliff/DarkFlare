@@ -6,7 +6,7 @@
 > 适用范围：`alpha 0.2` 全部实现、迁移、测试和后续新增运行时代码
 > 上位计划：[alpha 0.2 基础设施开发计划](./alpha-0.2-plan.md)
 > 已落地模块：[应用生命周期与会话作用域](../infrastructure/application-lifecycle.md)（`alpha 0.2.0`）、[稳定身份、内容目录与迁移框架](../infrastructure/content-identity-migration.md)（`alpha 0.2.1`）、[本地存档与 Session 恢复](../infrastructure/local-save.md)（`alpha 0.2.2`）、[用户设置与本地化](../infrastructure/user-settings-localization.md)（`alpha 0.2.3`）
-> 下一阶段：`alpha 0.2.4` 游戏状态、场景流与 UI 外壳
+> 当前阶段：[alpha 0.2.4 游戏状态、场景流与 UI 外壳](./alpha-0.2.4-game-state-scene-flow-ui-shell-plan.md)，已规划、待实施
 
 ## 使用方式
 
