@@ -28,7 +28,7 @@ namespace DarkFlare.Tests
         [UnityTest]
         public IEnumerator MainScene_UsesSharedBoundsAndKeepsCameraOnGround()
         {
-            yield return SceneManager.LoadSceneAsync("Main", LoadSceneMode.Single);
+            yield return _fixture.EnterMain();
             PlayerController player = null;
             CameraFollowTarget follow = null;
             MonsterSpawner spawner = null;

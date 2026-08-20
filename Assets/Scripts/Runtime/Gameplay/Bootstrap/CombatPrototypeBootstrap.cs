@@ -1,4 +1,3 @@
-using Cysharp.Threading.Tasks;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -58,32 +57,6 @@ namespace DarkFlare
             return GameArchitectureProvider.RequireCurrent();
         }
 
-        void Start()
-        {
-            ApplicationHost host = ApplicationHost.Current;
-            LifecycleResult catalogResult = host.InstallContentCatalog(_contentCatalog);
-
-            if (!catalogResult.IsSuccess)
-            {
-                Debug.LogError(
-                    $"[CombatPrototypeBootstrap] 无法安装内容目录: {catalogResult.Message}",
-                    this);
-                return;
-            }
-
-            GameplaySceneConfiguration configuration = CreateSceneConfiguration();
-            LifecycleResult request = host.BeginSceneSessionInitialization(
-                gameObject.scene,
-                new NewGameSessionInitializer(configuration),
-                this.GetCancellationTokenOnDestroy(),
-                OnInitializationCompleted);
-
-            if (!request.IsSuccess)
-            {
-                Debug.LogError($"[CombatPrototypeBootstrap] 无法提交初始化请求: {request.Message}", this);
-            }
-        }
-
         public GameplaySceneConfiguration CreateSceneConfiguration()
         {
             Vector3 spawnPosition = _playerSpawnPoint != null
@@ -117,23 +90,5 @@ namespace DarkFlare
             return mainCamera != null ? mainCamera.GetComponent<CameraFollowTarget>() : null;
         }
 
-        void OnInitializationCompleted(LifecycleResult result)
-        {
-            if (result.Code == LifecycleResultCode.Cancelled)
-            {
-                return;
-            }
-
-            if (result.IsSuccess)
-            {
-                Debug.Log($"[CombatPrototypeBootstrap] {result.Message}", this);
-                return;
-            }
-
-            Debug.LogError(
-                $"[CombatPrototypeBootstrap] Session 初始化未完成: {result.Code} - {result.Message}\n"
-                + result.Exception,
-                this);
-        }
     }
 }

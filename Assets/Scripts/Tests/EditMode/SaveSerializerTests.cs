@@ -57,6 +57,23 @@ namespace DarkFlare.Tests
         }
 
         [Test]
+        public void Serialize_NormalizesSinglePrecisionNumbersBeforeChecksum()
+        {
+            SaveDocumentDto document = SaveDataContractTests.CreateValidDocument();
+            document.Payload.Run.Player.Position.X =
+                System.BitConverter.Int32BitsToSingle(-1032990722);
+
+            SaveSerializationResult serialized = _serializer.Serialize(document);
+            Assert.IsTrue(serialized.Succeeded, Describe(serialized));
+            SaveDeserializationResult restored = _serializer.Deserialize(serialized.Bytes);
+
+            Assert.IsTrue(restored.Succeeded, Describe(restored));
+            Assert.AreEqual(
+                document.Payload.Run.Player.Position.X,
+                restored.Document.Payload.Run.Player.Position.X);
+        }
+
+        [Test]
         public void Deserialize_RejectsTamperingFutureSchemaDuplicatePropertiesAndDeepJson()
         {
             SaveSerializationResult serialized = _serializer.Serialize(

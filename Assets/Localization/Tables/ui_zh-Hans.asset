@@ -979,6 +979,166 @@ MonoBehaviour:
     m_Metadata:
       m_Items:
       - rid: 6738608143192817844
+  - m_Id: 300000000000001
+    m_Localized: "暗焰"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000002
+    m_Localized: "在余烬熄灭前，再度踏入黑暗。"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000003
+    m_Localized: "继续游戏"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000004
+    m_Localized: "新游戏"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000005
+    m_Localized: "退出游戏"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000006
+    m_Localized: "操作未完成"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000007
+    m_Localized: "重试"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000008
+    m_Localized: "取消"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000009
+    m_Localized: "无法安全恢复"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000010
+    m_Localized: "已返回主界面"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000011
+    m_Localized: "正在准备"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000012
+    m_Localized: "正在读取存档"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000013
+    m_Localized: "正在加载场景"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000014
+    m_Localized: "正在激活场景"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000015
+    m_Localized: "正在启动游戏"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000016
+    m_Localized: "正在保存进度"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000017
+    m_Localized: "正在停止当前游戏"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000018
+    m_Localized: "正在卸载场景"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000019
+    m_Localized: "正在恢复安全状态"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000020
+    m_Localized: "当前状态不允许执行此操作。"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000021
+    m_Localized: "操作已取消。"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000022
+    m_Localized: "操作已被更新请求替代。"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000023
+    m_Localized: "场景流配置无效。"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000024
+    m_Localized: "目标场景未加入构建设置。"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000025
+    m_Localized: "场景加载失败。"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000026
+    m_Localized: "场景激活失败。"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000027
+    m_Localized: "目标场景缺少玩法入口。"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000028
+    m_Localized: "目标场景包含多个玩法入口。"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000029
+    m_Localized: "存档无法用于继续游戏。"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000030
+    m_Localized: "保存失败，仍留在当前游戏。"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000031
+    m_Localized: "游戏会话启动失败。"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000032
+    m_Localized: "游戏会话停止失败。"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000033
+    m_Localized: "场景卸载失败。"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000034
+    m_Localized: "操作超时。"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000035
+    m_Localized: "应用服务暂不可用。"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000036
+    m_Localized: "清理失败，无法证明当前状态安全。"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000037
+    m_Localized: "返回主界面"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000038
+    m_Localized: "返回主界面？"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000039
+    m_Localized: "当前进度会先保存，然后结束本次游戏。"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000040
+    m_Localized: "保存并返回"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:

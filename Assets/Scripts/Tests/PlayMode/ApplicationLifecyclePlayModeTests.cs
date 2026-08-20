@@ -34,7 +34,7 @@ namespace DarkFlare.Tests
         [UnityTest]
         public IEnumerator MainColdStart_HasUniqueHostArchitecturePlayerAndCommittedSpawner()
         {
-            yield return SceneManager.LoadSceneAsync("Main", LoadSceneMode.Single);
+            yield return _fixture.EnterMain();
             yield return WaitForRunningSession();
 
             ApplicationHost host = ApplicationHost.Current;
@@ -45,7 +45,11 @@ namespace DarkFlare.Tests
                 FindObjectsInactive.Exclude,
                 FindObjectsSortMode.None);
             MonsterSpawner spawner = UnityEngine.Object.FindAnyObjectByType<MonsterSpawner>();
-            UIDocument uiDocument = UnityEngine.Object.FindAnyObjectByType<UIDocument>();
+            GameMenuController gameMenu =
+                UnityEngine.Object.FindAnyObjectByType<GameMenuController>();
+            UIDocument uiDocument = gameMenu != null
+                ? gameMenu.GetComponent<UIDocument>()
+                : null;
             Label localizedMenuTitle = uiDocument?.rootVisualElement.Q<Label>(
                 className: "game-menu-title");
 
@@ -262,7 +266,7 @@ namespace DarkFlare.Tests
                     yield return _fixture.Restart();
                 }
 
-                yield return SceneManager.LoadSceneAsync("Main", LoadSceneMode.Single);
+                yield return _fixture.EnterMain();
                 yield return WaitForRunningSession();
 
                 Assert.Greater(GameArchitectureProvider.Generation, previousGeneration);
@@ -279,11 +283,11 @@ namespace DarkFlare.Tests
         [UnityTest]
         public IEnumerator DirectMainReload_CoordinatesStopCreateBindAndInitialize()
         {
-            yield return SceneManager.LoadSceneAsync("Main", LoadSceneMode.Single);
+            yield return _fixture.EnterMain();
             yield return WaitForRunningSession();
             int firstGeneration = GameArchitectureProvider.Generation;
 
-            yield return SceneManager.LoadSceneAsync("Main", LoadSceneMode.Single);
+            yield return _fixture.EnterMain();
             yield return WaitForRunningSession();
 
             Assert.Greater(GameArchitectureProvider.Generation, firstGeneration);
@@ -299,7 +303,7 @@ namespace DarkFlare.Tests
         [UnityTest]
         public IEnumerator UnloadingBoundMainScene_StopsSessionAndReleasesArchitecture()
         {
-            yield return SceneManager.LoadSceneAsync("Main", LoadSceneMode.Single);
+            yield return _fixture.EnterMain();
             yield return WaitForRunningSession();
 
             Scene mainScene = SceneManager.GetSceneByName("Main");

@@ -2,9 +2,9 @@
 
 ## 模块职责
 
-输入与运行时 UI 模块负责统一键鼠 / 手柄输入、Gameplay / UI 模式切换、HUD 展示、背包 / 商店 / 打造菜单、存档操作区，以及场景交互提示和菜单暂停。
+输入与运行时 UI 模块负责统一键鼠 / 手柄输入、Gameplay / UI 模式切换、HUD 展示、背包 / 商店 / 打造菜单、当前 Session 保存区，以及场景交互提示和菜单暂停。Application 级 FrontEnd、场景 Busy、Modal、Toast 与 Fatal 由独立 Shell 管理。
 
-首版复用一个 `UIDocument`、一个 `PanelSettings` 和唯一 `EventSystem`。界面 Controller 通过 Query、Command 与领域 Event 接入 QFramework，不直接修改运行时 Model。
+Main 玩法 UI 复用一个 `UIDocument` 和一个 `PanelSettings`；常驻 Bootstrap 持有 Application Shell 与唯一 `EventSystem`。界面 Controller 通过 Query、Command 与领域 Event 接入 QFramework，不直接修改运行时 Model。
 
 ## 输入层
 
@@ -53,6 +53,8 @@
 
 `Main.unity/UIRoot` 挂载 `UIDocument`、`GameMenuController`、四个数据显示 Controller 和 `InteractionPromptController`。`InputSystemUIInputModule` 引用同一份 Input Actions 的 `UI` Action Map。
 
+`Bootstrap.unity` 挂载 `ApplicationShell.uxml/.uss` 和唯一 EventSystem。Shell 负责 FrontEnd Page、Busy、Modal、Toast、Fatal 与跨场景焦点；Main 不再序列化 EventSystem，隐藏的 Application 层不得抢占玩法 UI 焦点。
+
 阶段 0 为背包页接入深石板面板、普通 / 焦点 / 禁用格子纹理和大剑武器图标。纹理通过 USS 静态引用，动态按钮只增加表现子元素；选择、装备、事件刷新和默认焦点逻辑不变。视觉状态同时使用边框形状、亮度和局部色彩，手柄焦点不依赖鼠标悬停。
 
 阶段 1 抽取了共用 `ItemDetailSnapshot`、`ItemDetailFormatter` 和 `ItemDetailView`。背包、商店、打造现在显示一致的基础伤害、隐式、前缀和后缀中文详情；鼠标悬停与手柄焦点只临时预览，点击或 Submit 固定选择。背包和打造按 `InstanceId + 后备索引` 恢复固定选择。
@@ -66,6 +68,8 @@
 alpha 0.1.0 将三套物品页面合并为共享工作台：扩容后的四槽装备区位于共享玩家列上方，10×6 背包位于下方；该列在商店和打造中最大占内容区 49%，右侧上下文获得主要空间。商店使用更大的固定 10×6 商人背包且不显示滚动条，玩家与商人格内只保留图标。装备区保留两个非交互扩展位置，但不提前增加领域槽位。48 px 背包格与 4 px 间隔同时作为装备槽尺寸基准：武器/护甲和打造槽为 100×152，左右戒指为 60×60 方形；背包面板压缩为 408 px，装备区取得共享列的剩余高度。三个右侧模板仅当前页参与布局，因此背包、商店、打造与共享玩家列始终等高。运行时只有一个顶层 `ItemTooltipView`，以 360×680 固定展开且不使用滚动条，顶部与主面板对齐；玩家/打造内容停靠左侧，商人内容停靠右侧。拖放后等待指针离开并再次主动预览再显示，整个浮窗子树输入穿透；显示时先隐藏完成几何定位，再切换为可见。菜单每次重新打开都会清空玩家物品选择，默认焦点落在当前页签，没有物品预览时隐藏浮窗。`alpha 0.2.2` 在原 940 px 内容区下增加 64 px 存档栏，因此主面板总高为 1160×1004；面板与槽位继续使用统一 1 px USS 细边框。
 
 `alpha 0.2.3` 已将 Game Menu、HUD、背包 / 四槽装备、商店、打造、共享物品详情和场景交互提示的动态界面文本接入 Application 级 Localization Service。快照只传递属性 ID、数值、装备槽、伤害与修改器等语义数据，Controller / View 在当前 Locale 下解析显示文本；Locale 变化只重绘现有状态，不重新查询或改动背包、装备、拖拽、交易、打造和焦点。商店反馈保存 `LocalizedMessage`，打造结果保存领域 `CraftingResult`，避免缓存旧语言字符串。交互提示通过 `GameInput` 从 Input System 配置生成键盘 / 手柄绑定显示文本，完整设备图标留到 `alpha 0.2.5`。
+
+`alpha 0.2.4` 把 Continue、NewGame 和语言入口迁到无 Session 的 FrontEnd；游戏菜单保留 Save、Return FrontEnd 和 Close。Scene Flow 事务由 Application Busy 阻断底层输入，确认返回与可恢复错误使用 Modal，非阻塞结果使用 Toast；键鼠和手柄共享同一焦点恢复合同。
 
 同阶段已补齐正式内容名称和字体链：UI Toolkit 使用动态 `GameCjkFont` 并回退 `GameLatinFont`，TextMesh Pro 使用 `QiushuiShotai SDF` 并回退 `LiberationSans SDF`。`Phase1UxPlayModeTests` 对 `zh-Hans`、`en`、`qps-ploc` 分别在 1280×720、1920×1080、2560×1440 验证关键区域边界、重叠、文本测量与可操作性。设置存储、Key 和字体维护规则见[用户设置与本地化](./infrastructure/user-settings-localization.md)。
 
@@ -82,14 +86,14 @@ alpha 0.1.0 的 HUD 移除武器卡片和属性详情，只保留生命、金币
 | `InventoryPanelController` | `GetInventorySnapshotQuery`、`GetHudSnapshotQuery` | 背包移动、精确装备 / 卸下与戒指交换 Commands | 背包、装备、Actor 事件 |
 | `ShopPanelController` | `GetShopSnapshotQuery` | `BuyItemCommand`、`SellItemCommand` | 交易、金币、背包事件 |
 | `CraftingPanelController` | `GetCraftingSnapshotQuery` | 槽内目标的 `CraftItemCommand` | 打造、金币、背包事件 |
-| `GameMenuController` | 当前 Session 的 `SessionSaveFacade` 与槽位探测 | 保存 `auto`、Continue、NewGame | Session 绑定、存档操作完成和 Busy 状态 |
+| `GameMenuController` | 当前 Session 的 `SessionSaveFacade` | 保存 `auto`、请求返回 FrontEnd | Session 绑定、存档操作完成和 Busy 状态 |
 | `InteractionPromptController` | 交互焦点消息 | 无 | 焦点、输入模式和 Actor 状态变化 |
 
 所有格子和详情都来自只读快照。打造页不再维护词缀列表，而是取得槽内物品 14 个操作变体的成本、可用性和失败原因；背包选择仅作为详情与“放入”候选，不能直接执行打造。鼠标拖入或键盘 / 手柄确认“放入打造槽”后才锁定目标，取回或目标离开背包时立即禁用全部操作。操作成功后由对应 System / Model 发送领域 Event，再触发 HUD 和面板重新查询，失败分支不伪造成功事件。
 
 ## 菜单上下文
 
-`GameMenuController` 统一管理遮罩、页签、存档操作区、关闭行为和默认焦点。`GameMenuAccess` 按打开来源限制功能：
+`GameMenuController` 统一管理遮罩、页签、当前 Session 保存、返回确认请求、关闭行为和默认焦点。`GameMenuAccess` 按打开来源限制功能：
 
 | 来源 | 可用页面 | 初始页面 |
 | --- | --- | --- |
@@ -97,15 +101,15 @@ alpha 0.1.0 的 HUD 移除武器卡片和属性详情，只保留生命、金币
 | 商人交互 | 背包、商店 | 商店 |
 | 打造台交互 | 背包、打造 | 打造 |
 
-不可用页签保留可见但禁用，避免玩家在任意位置远程交易或打造。保存、继续和新游戏位于所有上下文共享的底栏；Continue 只有探测到有效 `auto` 时启用，任一操作 Busy 时三项统一禁用。关闭菜单后访问范围恢复为随身背包上下文。
+不可用页签保留可见但禁用，避免玩家在任意位置远程交易或打造。保存与返回前台位于所有上下文共享的底栏；保存 Busy 时局部按钮禁用，跨场景 Busy 由 Application Shell 接管。关闭菜单后访问范围恢复为随身背包上下文。
 
 ## 世界交互与暂停
 
 1. `PlayerInteractionController` 维护进入触发范围的 `WorldInteractionTarget`，按距离选择最近有效目标。
 2. 焦点变化通过 `SetInteractionFocusCommand` 发布消息，`InteractionPromptController` 使用本地化模板显示 `{当前绑定显示文本} · {目标名称}`。
 3. 玩家触发交互后，`OpenGameMenuCommand` 请求打开目标对应的菜单上下文。
-4. `GameMenuController` 切换到 UI 模式，并通过 `SetGameplayPausedCommand` 请求 `GameplayPauseSystem` 暂停玩法时间。
-5. 取消、关闭、对象禁用或销毁时恢复原时间倍率和 Gameplay 输入；目标仍有效时重新显示提示。
+4. `GameMenuController` 切换到 UI 模式，并通过 `SetGameplayPausedCommand` 请求 `GameplayPauseSystem` 获取 Application `GameTimeService` 的菜单 pause lease。
+5. 取消、关闭、对象禁用或销毁时释放 lease、恢复 Gameplay 输入；返回 FrontEnd 会由 Scene Flow 强制清理全部 pause lease。
 
 `Main.unity` 中的 `Merchant` 与 `CraftingStation` 使用独立触发范围。动态生成的玩家通过 Player Prefab 上的 `PlayerInteractionController` 接入交互，不依赖场景预放玩家。
 
@@ -125,6 +129,7 @@ alpha 0.1.0 的 HUD 移除武器卡片和属性详情，只保留生命、金币
 - alpha 0.1.0 修正后的领域、输入和 UI 结构 EditMode 为 9/9，相关 PlayMode 4/4。真实 Mouse 已覆盖背包换位、拖拽装备和装备拖回；1280×720、1920×1080、2560×1440 均通过纵向布局、共享列占比和边界验收。
 - alpha 0.1.4 的法力 HUD 与资源事件专项 EditMode 6/6、Main PlayMode 1/1 通过；全量 PlayMode 继续通过三档布局回归，1280×720 真实 Main 中生命 / 法力条无越界，停止运行后 Console 为零错误。
 - alpha 0.2.3 完成三语言 × 三分辨率布局矩阵；项目自有 PlayMode `48/48`、完整 PlayMode 52 项中 50 项通过、0 失败，2 项 Input System 上游用例按原标记跳过。
+- alpha 0.2.4 完成 Application Shell、FrontEnd、Busy / Modal / Toast / Fatal、返回确认和焦点隔离；EditMode `360/360`、项目 PlayMode `52/52`，完整 PlayMode 54 项中 52 项通过、0 失败，仍只跳过相同 2 项上游用例。
 
 以上数据是首版收尾时的验证记录；修改输入资产、菜单路由、UXML 或场景组件后，应重新验证键鼠与手柄两条路径。
 
@@ -136,4 +141,4 @@ alpha 0.1.0 的 HUD 移除武器卡片和属性详情，只保留生命、金币
 - `Attack`、`Look` 尚未接入手动战斗操作。
 - PlayMode 已包含角色动画状态与阶段 0 背包体验两项项目测试；包内测试另有上游不稳定用例按原标记跳过。
 
-完整工作台结构见[物品 UI 工作台](./item-ui-workbench.md)，存档入口与错误语义见[本地存档与 Session 恢复](./infrastructure/local-save.md)，设置与语言见[用户设置与本地化](./infrastructure/user-settings-localization.md)，玩法链见[首版玩法循环](./gameplay-loop.md)，装备规则见[装备系统](./equipment-system.md)，打造页的数据和事务规则见[打造系统](./crafting-system.md)。
+完整工作台结构见[物品 UI 工作台](./item-ui-workbench.md)，场景状态和应用 Shell 见[游戏状态、场景流与应用 UI 外壳](./infrastructure/game-state-scene-flow-ui-shell.md)，存档入口与错误语义见[本地存档与 Session 恢复](./infrastructure/local-save.md)，设置与语言见[用户设置与本地化](./infrastructure/user-settings-localization.md)，玩法链见[首版玩法循环](./gameplay-loop.md)，装备规则见[装备系统](./equipment-system.md)，打造页的数据和事务规则见[打造系统](./crafting-system.md)。

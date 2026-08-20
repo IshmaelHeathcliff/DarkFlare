@@ -1,18 +1,50 @@
 # alpha 0.2.4 游戏状态、场景流与 UI 外壳执行计划
 
-> 状态：规划完成，待实施
+> 状态：已完成，归档于 2026-08-21
 > 建立日期：2026-08-20
 > 规划基线：`16d67c6`（`alpha 0.2.3` 完成提交）
 > 实施前置：`alpha 0.2.3` 已独立提交；后续实现不得回写或混入上一阶段
-> 上位计划：[alpha 0.2 基础设施开发计划](./alpha-0.2-plan.md)
-> 强制契约：[alpha 0.2 基础设施约束契约](./alpha-0.2-infrastructure-contract.md)
-> 前置模块：[应用生命周期与会话作用域](../infrastructure/application-lifecycle.md)、[本地存档与 Session 恢复](../infrastructure/local-save.md)、[用户设置与本地化](../infrastructure/user-settings-localization.md)、[输入与运行时 UI](../input-ui-system.md)
+> 上位计划：[alpha 0.2 基础设施开发计划](../alpha-0.2-plan.md)
+> 强制契约：[alpha 0.2 基础设施约束契约](../alpha-0.2-infrastructure-contract.md)
+> 前置模块：[应用生命周期与会话作用域](../../infrastructure/application-lifecycle.md)、[本地存档与 Session 恢复](../../infrastructure/local-save.md)、[用户设置与本地化](../../infrastructure/user-settings-localization.md)、[输入与运行时 UI](../../input-ui-system.md)
 
 ## 阶段结论
 
 本阶段在现有 `ApplicationHost`、latest-wins Session 初始化协调器、Restore 事务和 Settings / Localization 启动门禁之上，增加唯一的游戏流状态机、真实场景加载服务和应用级 UI 外壳。现有生命周期底座继续负责 Session 创建、初始化、回滚、停止和 generation 隔离；新的 Scene Flow 负责“加载哪个场景、何时激活、使用何种 Session initializer、失败后回到哪里”。两者不得合并为新的巨型宿主，也不得出现两个可以直接调用 `SceneManager` 的入口。
 
 本阶段采用最小双场景拓扑：常驻 `Bootstrap.unity` 提供 FrontEnd、Loading、Modal、Toast、Busy Overlay 和唯一 EventSystem；`Main.unity` 作为 additive 玩法场景加载与卸载。新游戏、继续游戏、返回前台和加载失败重试全部经过同一 `SceneFlowService`。完整多地图、选角、Profile 管理、手动槽位、云同步、输入重绑定、全局异常捕获和 Addressables 场景治理不在本阶段扩张。
+
+## 实施进度
+
+- [x] 切片 0：特征测试与合同冻结
+- [x] 切片 1：Scene Flow、Scene Loader 与 Time Service 纯底座
+- [x] 切片 2：Bootstrap 场景与 Application UI Shell
+- [x] 切片 3：新游戏、继续游戏与 Main additive 加载
+- [x] 切片 4：暂停、返回前台与场景退出
+- [x] 切片 5：恢复、故障演练与 UI 栈收口
+- [x] 切片 6：策略、全量回归与文档归档
+
+### 切片 0 完成记录（2026-08-20）
+
+- 实施起点为纯规划提交 `23edf13`；工作区开始时干净，`alpha 0.2.3` 未与本阶段实现混合。
+- 新增纯运行时合同 `GameFlowState`、稳定 `SceneId`、`SceneFlowRequest`、`SceneFlowPhase`、`SceneFlowProgress`、`SceneFlowResult`、`SceneFlowErrorCode`、Flags 恢复动作和精确状态转换规则；合同不依赖 `SceneManager`，可在 EditMode 独立验证。
+- 现有 latest-wins Session 协调、SessionSaveFacade Save / Continue / NewGame、GameMenu 存档入口、暂停幂等与 Main 直接启动行为继续由既有 PlayMode / EditMode 特征测试保护；新增基线测试记录 Build Settings 当前仍只有 Main，并锁定待迁移入口。
+- `business-scene-loading` 策略现同时扫描 Runtime 与 Tests，并覆盖 Load / Unload / SetActiveScene。未来唯一 Runtime 白名单已预留给 `UnitySceneLoader`；13 份现有 PlayMode 文件使用机器可读精确例外，12 份在切片 3 移除，场景绑定故障测试在切片 6 复核。
+- 修正字体覆盖回归对动态 atlas 缓存的隐式依赖，改为通过 FontEngine 直接验证秋水书体与 Liberation Sans 源字体 glyph；资产重导入后仍可重复执行。
+- Unity 编译 0 error；策略专项 `25/25`、字体源覆盖专项 `1/1`、全量 EditMode `343/343`、关键旧路径 PlayMode `3/3` 通过。本切片未修改场景、Build Settings、运行时暂停或 Session 行为。
+
+### 阶段完成记录（2026-08-21）
+
+- `Bootstrap.unity` 已成为 build index 0 的常驻场景，`Main.unity` 为 index 1 additive 玩法场景；唯一 EventSystem 移到 Bootstrap，Main 保持原世界与玩法 UI。
+- `SceneFlowService`、`UnitySceneLoader`、`SceneFlowConfiguration` 和 `GameTimeService` 已落地；Runtime 场景 API 与 `Time.timeScale` 均只有一个策略允许入口。
+- Application Shell 已提供 FrontEnd、Busy、Modal、Toast 与 Fatal 真实消费者。NewGame、Continue、语言和退出位于 FrontEnd；游戏菜单收缩为 Save、Return FrontEnd 与 Close。
+- NewGame / Continue 从无 Session 的 FrontEnd 统一进入 Main；Continue 在加载前准备 Restore。返回前台强制先保存，再停止 Session、激活 Bootstrap、卸载 Main和释放 pause lease。
+- latest-wins、显式取消、超时、配置 / 初始化 / 保存 / 停止 / 卸载失败、恢复与 FatalError 均有结构化结果和故障测试；同步转发加载进度，避免完成后的旧进度重新显示 Busy 并抢焦点。
+- PlayMode 输入测试使用一次隔离、退出 PlayMode 统一恢复的 Input Test Fixture Guard，避免多个测试反复重置 Input System 时污染常驻 UI Module。
+- 存档规范 JSON 在校验前归一 Single 浮点表示，修复实际随机化快照往返时的伪 checksum mismatch；Storage 验证失败保留可诊断异常链。
+- 最终验证：Unity 编译 0 error；EditMode `360/360`；项目 PlayMode `52/52`；完整 PlayMode 54 项中 52 项通过、0 失败，2 项仍为 Input System 上游 issue 1252825 的既有跳过。三语言 × 三分辨率、三次完整循环与故障路径均通过。
+- Bootstrap 真实 Play 后 Application `Ready`、Flow `FrontEnd`、Application Shell 存在、Main 未加载且无 Session，Console Error 为 0。`EnterPlayModeOptions` 已恢复为禁用状态。
+- 当前实现总结见[游戏状态、场景流与应用 UI 外壳](../../infrastructure/game-state-scene-flow-ui-shell.md)，上位计划已推进到 `alpha 0.2.5`。
 
 ## 已确认基线
 
@@ -24,7 +56,7 @@
 - `SessionSaveFacade` 当前同时负责 Save、Continue 和 NewGame；后两者只能在已有 Running Session 中工作，FrontEnd 没有可用入口。
 - Runtime 没有业务 `SceneManager.Load*` / `Unload*` 调用，现有策略测试已经冻结这一基线；`GameSessionHost` 只订阅 `sceneUnloaded` 处理外部卸载。
 - `GameplayPauseSystem` 是 Runtime 中唯一直接写 `Time.timeScale` 的项目模块，共有暂停、恢复和 Deinit 恢复三个写入点。
-- 当前只有技术态 `ApplicationLifecycleState` 和 `GameSessionState`，没有独立 `Boot / FrontEnd / Loading / InGame / Paused / Recovering / FatalError` 游戏流状态。
+- 规划基线只有技术态 `ApplicationLifecycleState` 和 `GameSessionState`；切片 0 已新增独立 `Boot / FrontEnd / Loading / InGame / Paused / Recovering / FatalError` 合同，但尚未接入运行时服务。
 - 当前 UI 没有通用 Page、Modal、Toast、Busy Overlay 或焦点栈；`GameMenuController` 自行维护 Save / Language busy 标记，并把 Input Mode 变化直接映射为玩法暂停。
 - `alpha 0.2.3` 完成基线为 EditMode `334/334`、项目 PlayMode `48/48`、完整 PlayMode 52 项中 50 项通过、0 失败、2 项因 Input System 上游 issue 1252825 跳过。
 - 规划开始时工作区含 186 个 `alpha 0.2.3` 变更；现已由 `16d67c6` 独立提交，0.2.4 具备清晰实施边界。
@@ -160,7 +192,7 @@ Paused 中确认返回
 ### latest-wins、取消与 Unity AsyncOperation
 
 - Scene Flow 使用一个 active request + 一个 latest pending request；新请求替代旧 pending，并取消 active 的可取消步骤。
-- 每个请求恰好完成一次。被替代请求返回 `Cancelled`，最新请求最终执行或返回自己的失败结果。
+- 每个请求恰好完成一次。玩家或上级 Token 显式取消返回 `Cancelled`；被更新请求替代返回 `Superseded`；最新请求最终执行或返回自己的失败结果。
 - Unity `AsyncOperation` 本身不视为可硬取消。取消发生在加载开始后时，服务记录 superseded，等待操作进入可清理状态，禁止创建 Session，随后卸载残留 Scene，再执行最新请求。
 - `allowSceneActivation` 只用于将“加载完成”和“允许激活”分开；取消后仍必须完成 Unity 要求的激活 / 清理步骤，不能把停在未激活状态的操作永久悬挂。
 - 取消按钮只在 Prepare、Load 和可补偿阶段启用；Session commit、最终保存和 Scene unload 关键区间显示不可取消 Busy。
@@ -312,7 +344,7 @@ Paused 中确认返回
 - **伪进度误导玩家**：只报告真实 phase 和可测量子进度，不生成综合百分比。
 - **0.2.4 扩张为完整前端产品**：只交付一个 FrontEnd Page 与三个通用覆盖层的真实闭环，视觉复用现有 Theme。
 - **测试继续直接加载 Main 绕过正式路径**：共用 SceneFlow fixture；只有底层 loader 与故障注入测试登记精确例外。
-- **0.2.3 未提交导致阶段混杂**：实施第一步必须先提交当前完成工作，再记录 0.2.4 实施基线。
+- **阶段提交混杂**：`alpha 0.2.3` 已由 `16d67c6` 独立提交，0.2.4 规划为 `23edf13`；后续实现只允许包含本阶段变更。
 
 ## 预计文件边界
 

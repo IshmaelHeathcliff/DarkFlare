@@ -153,7 +153,7 @@ namespace DarkFlare.Tests
         }
 
         [UnityTest]
-        public IEnumerator MainReloadDuringPreviousRollback_LatestBootstrapEventuallyRuns()
+        public IEnumerator MainReloadDuringPreviousRollback_LatestInitializationEventuallyRuns()
         {
             ApplicationHost host = ApplicationHost.Current;
             Scene previousScene = CreateScene("ReloadPrevious");
@@ -179,22 +179,46 @@ namespace DarkFlare.Tests
             yield return SceneManager.LoadSceneAsync("Main", LoadSceneMode.Single);
             yield return null;
 
+            Scene mainScene = SceneManager.GetSceneByName("Main");
+            CombatPrototypeBootstrap bootstrap =
+                UnityEngine.Object.FindAnyObjectByType<CombatPrototypeBootstrap>();
+            Assert.IsNotNull(bootstrap);
+            GameplaySceneConfiguration configuration = bootstrap.CreateSceneConfiguration();
+            LifecycleResult catalog = host.InstallContentCatalog(
+                configuration.ContentCatalogDefinition);
+            Assert.IsTrue(catalog.IsSuccess, catalog.Message);
+            IGameSessionInitializer latestInitializer = host.CreateSessionInitializer(
+                GameStartIntent.NewGame,
+                configuration,
+                null);
+            int latestCallbackCount = 0;
+            LifecycleResult latestResult = default;
+            LifecycleResult latestSubmission = host.BeginSceneSessionInitialization(
+                mainScene,
+                latestInitializer,
+                onCompleted: result =>
+                {
+                    latestCallbackCount++;
+                    latestResult = result;
+                });
+            Assert.IsTrue(latestSubmission.IsSuccess, latestSubmission.Message);
+
             Assert.IsTrue(
                 previousInitializer.RollbackStarted,
                 "旧场景卸载后必须先进入受控回滚");
             Assert.AreEqual(0, previousCallbackCount, "回滚闸门释放前旧请求不应提前完成");
             previousInitializer.ReleaseRollback();
             yield return WaitForCondition(
-                () => host.CurrentSession != null
-                    && host.CurrentSession.State == GameSessionState.Running
-                    && host.CurrentSession.IsBoundToScene(SceneManager.GetSceneByName("Main")),
-                "旧 Bootstrap 取消后，最新 Main 未最终取得 Running Session");
-            yield return WaitForCondition(
-                () => previousCallbackCount == 1,
-                "旧场景请求未返回取消结果");
+                () => previousCallbackCount == 1 && latestCallbackCount == 1,
+                "场景初始化请求未各自完成一次");
 
             Assert.AreEqual(LifecycleResultCode.Cancelled, previousResult.Code);
+            Assert.IsTrue(latestResult.IsSuccess, latestResult.Message);
             Assert.AreEqual(1, previousCallbackCount);
+            Assert.AreEqual(1, latestCallbackCount);
+            Assert.IsNotNull(host.CurrentSession);
+            Assert.AreEqual(GameSessionState.Running, host.CurrentSession.State);
+            Assert.IsTrue(host.CurrentSession.IsBoundToScene(mainScene));
             Assert.Greater(host.CurrentSession.ArchitectureGeneration, generationBeforeReload);
             Assert.AreEqual(1, UnityEngine.Object.FindObjectsByType<ApplicationHost>(
                 FindObjectsInactive.Include,

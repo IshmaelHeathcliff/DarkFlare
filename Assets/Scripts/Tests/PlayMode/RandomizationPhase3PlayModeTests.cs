@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
+using Cysharp.Threading.Tasks;
 using DarkFlare;
 using NUnit.Framework;
 using UnityEngine;
@@ -49,6 +50,15 @@ namespace DarkFlare.Tests
             RunSnapshot first = null;
             yield return CaptureMainRun(snapshot => first = snapshot);
 
+            SaveOperationResult saveProbe = null;
+            yield return ApplicationHost.Current.SessionSaveFacade.SaveAutoAsync()
+                .ToCoroutine(result => saveProbe = result);
+            Assert.IsNotNull(saveProbe);
+            Assert.IsTrue(
+                saveProbe.Succeeded,
+                $"随机化验收后的 Session 不可保存: {saveProbe.ErrorCode}: "
+                + saveProbe.Exception);
+
             yield return _fixture.Restart();
             RunSnapshot second = null;
             yield return CaptureMainRun(snapshot => second = snapshot);
@@ -69,7 +79,7 @@ namespace DarkFlare.Tests
         [UnityTest]
         public IEnumerator MainScene_DefaultRandomSeedChangesBetweenRuns()
         {
-            yield return SceneManager.LoadSceneAsync("Main", LoadSceneMode.Single);
+            yield return _fixture.EnterMain();
             yield return null;
             CombatPrototypeBootstrap firstBootstrap = UnityEngine.Object.FindAnyObjectByType<CombatPrototypeBootstrap>();
             Assert.IsNotNull(firstBootstrap);
@@ -80,7 +90,7 @@ namespace DarkFlare.Tests
                 .RootSeed;
 
             yield return _fixture.Restart();
-            yield return SceneManager.LoadSceneAsync("Main", LoadSceneMode.Single);
+            yield return _fixture.EnterMain();
             yield return null;
             CombatPrototypeBootstrap secondBootstrap = UnityEngine.Object.FindAnyObjectByType<CombatPrototypeBootstrap>();
             Assert.IsNotNull(secondBootstrap);
@@ -93,11 +103,18 @@ namespace DarkFlare.Tests
             Debug.Log($"[Phase3RandomizationPlayMode] 随机启动根种子已变化: {firstRootSeed} -> {secondRootSeed}");
         }
 
-        static IEnumerator CaptureMainRun(Action<RunSnapshot> onCompleted)
+        IEnumerator CaptureMainRun(Action<RunSnapshot> onCompleted)
         {
             SceneManager.sceneLoaded += ConfigureBootstrapSeed;
-            yield return SceneManager.LoadSceneAsync("Main", LoadSceneMode.Single);
-            SceneManager.sceneLoaded -= ConfigureBootstrapSeed;
+
+            try
+            {
+                yield return _fixture.EnterMain();
+            }
+            finally
+            {
+                SceneManager.sceneLoaded -= ConfigureBootstrapSeed;
+            }
 
             CombatPrototypeBootstrap bootstrap = UnityEngine.Object.FindAnyObjectByType<CombatPrototypeBootstrap>();
             Assert.IsNotNull(bootstrap, "Main 场景缺少 CombatPrototypeBootstrap");
@@ -175,6 +192,17 @@ namespace DarkFlare.Tests
                 result.Loot.Add(item == null ? "none" : $"{item.BaseDefinition.Id}:{item.Seed}");
             }
 
+            player.enabled = true;
+            MonsterController[] frozenMonsters =
+                UnityEngine.Object.FindObjectsByType<MonsterController>(
+                    FindObjectsInactive.Exclude,
+                    FindObjectsSortMode.None);
+
+            for (int i = 0; i < frozenMonsters.Length; i++)
+            {
+                frozenMonsters[i].enabled = true;
+            }
+
             onCompleted(result);
         }
 
@@ -195,6 +223,11 @@ namespace DarkFlare.Tests
 
         static void ConfigureBootstrapSeed(Scene scene, LoadSceneMode mode)
         {
+            if (scene.name != "Main")
+            {
+                return;
+            }
+
             CombatPrototypeBootstrap bootstrap = UnityEngine.Object.FindAnyObjectByType<CombatPrototypeBootstrap>(FindObjectsInactive.Include);
             Assert.IsNotNull(bootstrap, $"场景 {scene.name} 缺少 CombatPrototypeBootstrap");
             Assert.IsNotNull(UseFixedSeedField, "未找到固定种子开关字段");

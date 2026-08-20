@@ -1,6 +1,6 @@
 # 应用生命周期与会话作用域
 
-> 状态：`alpha 0.2.0` 已完成；最近更新：2026-08-18
+> 状态：`alpha 0.2.0` 已完成；最近更新：2026-08-21
 >
 > 参考：[归档计划](../plan/archive/alpha-0.2.0-application-lifecycle-plan.md) · [基础设施约束契约](../plan/alpha-0.2-infrastructure-contract.md)
 
@@ -27,7 +27,7 @@ flowchart TB
 
 | 作用域 | 所有者 | 主要内容 | 结束时机 |
 | --- | --- | --- | --- |
-| Application | `ApplicationHost` | 应用状态、场景请求协调、内容目录、存档路径 / 序列化 / Storage、根取消 | 应用退出或测试清理 |
+| Application | `ApplicationHost` | 应用状态、Scene Flow、Time Service、内容目录、存档路径 / 序列化 / Storage、根取消 | 应用退出或测试清理 |
 | Profile | `ApplicationHost` | 当前档案生命周期、SaveCoordinator | 应用退出；正式档案切换尚未实现 |
 | Session | `GameSessionHost` | `GameArchitecture`、玩法 Model / System、随机状态、运行时对象、generation-bound 存档 Facade | 离开当前游戏或绑定场景卸载 |
 | Scene | `GameSessionHost` | 初始化事务、场景任务、场景绑定 | 场景卸载或 Session 停止 |
@@ -52,6 +52,7 @@ sequenceDiagram
   participant Unity
   participant Bootstrap as ApplicationBootstrap
   participant App as ApplicationHost
+  participant Flow as SceneFlowService
   participant Session as GameSessionHost
   participant Provider as GameArchitectureProvider
   participant Init as IGameSessionInitializer
@@ -61,23 +62,25 @@ sequenceDiagram
   Unity->>Bootstrap: SubsystemRegistration / BeforeSceneLoad
   Bootstrap->>App: 创建唯一宿主
   App->>App: 创建 Application、Profile 作用域
+  Flow->>Flow: 加载并激活 Main，选择 initializer
+  Flow->>App: StartSessionAsync(scene, initializer)
   App->>Session: 创建待初始化 Session
   Session->>Provider: StartOwnedSession(SessionScope)
   Provider-->>Session: Architecture + generation lease
-  Component->>App: 请求当前场景的新游戏初始化
   App->>Session: 绑定 Scene 并开始初始化
   Session->>Init: InitializeAsync(context, token)
   Init-->>Session: 初始化完成
   Session-->>App: Running
   App-->>Binding: SessionRunning(session)
   Binding->>Component: Bind(IArchitecture)
-  Unity-->>Session: 绑定场景卸载
+  Flow->>App: StopCurrentSessionAsync
   Session->>Session: Component → Scene → Session 停止与回滚
   Session->>Provider: StopOwnedSession(lease)
   Provider->>Provider: Deinit 并清除当前架构
+  Flow->>Flow: 激活 Bootstrap 并卸载 Main
 ```
 
-`ApplicationBootstrap` 在场景脚本前创建唯一宿主。宿主同一时间只允许一个 Session，并以 latest-wins 处理场景请求。初始化成功后才广播 `SessionRunning`；正常停止必须先解绑当前存档快照入口、收敛 Scene、回滚初始化并停止 Session，最后才能销毁架构。
+`ApplicationBootstrap` 在场景脚本前创建唯一宿主。宿主同一时间只允许一个 Session；`SceneFlowService` 负责 active + latest pending 场景请求，宿主的 Session 协调器继续保证已加载场景的初始化 exactly-once。初始化成功后才广播 `SessionRunning`；正常停止必须先解绑当前存档快照入口、收敛 Scene、回滚初始化并停止 Session，最后才能销毁架构。
 
 - Application：`None → Booting → Ready → ShuttingDown → Shutdown`；启动失败进入 `Failed`。
 - Session：`Created → Initializing → Running → Stopping → None`；初始化失败或取消进入 `RollingBack`，无法安全收敛则进入 `Abandoned`。
@@ -146,11 +149,10 @@ flowchart LR
 
 ## 当前限制
 
-- 当前只保证唯一构建场景 `Main.unity` 的启动与直接重载安全；latest-wins 不是通用 SceneFlow。
+- 当前 Scene Flow 已覆盖 Bootstrap / Main 的启动、NewGame、Continue、取消、恢复和返回前台；生命周期模块仍不自行加载或卸载场景。
 - 当前仍只有 `local-default` Profile；已支持 `auto` 槽位、序列化、两代备份、迁移和 Restore，但没有正式档案切换、手动槽位管理或云同步。
 - 新游戏与读档分别使用 `NewGameSessionInitializer` 和 `RestoreGameSessionInitializer`，禁止复用新游戏发放流程伪装恢复。
-- 尚未实现 Boot / FrontEnd / Loading / Recovering / FatalError 状态机。
-- Settings / Unity Localization 已由独立模块落地；SceneFlow / UI 错误外壳、应用级结构化日志和完整 Addressables 治理仍不属于本模块。
+- Game Flow 状态、场景事务和 UI 错误外壳已由独立模块落地；应用级结构化日志和完整 Addressables 治理仍不属于本模块。
 - 一旦进入 `Abandoned`，本次运行不得继续创建 Session；应终止运行或执行测试静态重置。
 
-本模块的边界是提供可靠的生命周期、所有权和注入时机；稳定身份、内容目录和迁移合同见[稳定身份、内容目录与迁移框架](./content-identity-migration.md)，已落地的文件格式、保存与 Restore 顺序见[本地存档与 Session 恢复](./local-save.md)，本地化见[用户设置与本地化](./user-settings-localization.md)，场景流与资源治理继续建立在这些基础之上。历史验收范围和测试记录见顶部归档计划。
+本模块的边界是提供可靠的生命周期、所有权和注入时机；稳定身份、内容目录和迁移合同见[稳定身份、内容目录与迁移框架](./content-identity-migration.md)，文件格式、保存与 Restore 顺序见[本地存档与 Session 恢复](./local-save.md)，本地化见[用户设置与本地化](./user-settings-localization.md)，场景状态与 UI 外壳见[游戏状态、场景流与应用 UI 外壳](./game-state-scene-flow-ui-shell.md)。历史验收范围和测试记录见顶部归档计划。

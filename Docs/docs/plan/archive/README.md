@@ -15,6 +15,7 @@
 - [稳定身份、内容目录与迁移框架](../../infrastructure/content-identity-migration.md)
 - [本地存档与 Session 恢复](../../infrastructure/local-save.md)
 - [用户设置与本地化](../../infrastructure/user-settings-localization.md)
+- [游戏状态、场景流与应用 UI 外壳](../../infrastructure/game-state-scene-flow-ui-shell.md)
 
 ## 归档清单
 
@@ -49,5 +50,6 @@
 | [alpha 0.2.1 稳定身份、内容目录与迁移框架执行计划](./alpha-0.2.1-content-identity-migration-plan.md) | alpha 0.2.1 | [稳定身份、内容目录与迁移框架](../../infrastructure/content-identity-migration.md) |
 | [alpha 0.2.2 本地存档闭环执行计划](./alpha-0.2.2-local-save-plan.md) | alpha 0.2.2 | [本地存档与 Session 恢复](../../infrastructure/local-save.md) |
 | [alpha 0.2.3 用户设置与本地化执行计划](./alpha-0.2.3-settings-localization-plan.md) | alpha 0.2.3 | [用户设置与本地化](../../infrastructure/user-settings-localization.md) |
+| [alpha 0.2.4 游戏状态、场景流与 UI 外壳执行计划](./alpha-0.2.4-game-state-scene-flow-ui-shell-plan.md) | alpha 0.2.4 | [游戏状态、场景流与应用 UI 外壳](../../infrastructure/game-state-scene-flow-ui-shell.md) |
 
-最近归档日期：2026-08-20。
+最近归档日期：2026-08-21。

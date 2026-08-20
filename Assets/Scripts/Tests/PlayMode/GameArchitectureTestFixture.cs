@@ -6,12 +6,40 @@ namespace DarkFlare.Tests
 {
     internal sealed class GameArchitectureTestFixture
     {
+        readonly SceneFlowPlayModeFixture _sceneFlowFixture = new SceneFlowPlayModeFixture();
         LifecycleScope _standaloneScope;
 
         public IArchitecture Architecture { get; private set; }
 
         public IEnumerator Restart()
         {
+            if (ApplicationHost.TryGetCurrent(out ApplicationHost divergentHost)
+                && divergentHost.SceneFlow != null
+                && (divergentHost.SceneFlow.State == GameFlowState.FatalError
+                    || ((divergentHost.SceneFlow.State == GameFlowState.InGame
+                            || divergentHost.SceneFlow.State == GameFlowState.Paused)
+                        && divergentHost.CurrentSession == null)))
+            {
+                yield return _sceneFlowFixture.EnterFrontEnd();
+            }
+
+            if (ApplicationHost.TryGetCurrent(out ApplicationHost currentHost)
+                && currentHost.SceneFlow != null
+                && (currentHost.SceneFlow.State == GameFlowState.InGame
+                    || currentHost.SceneFlow.State == GameFlowState.Paused))
+            {
+                SceneFlowResult returnResult = null;
+                yield return currentHost.SceneFlow.RequestAsync(
+                        SceneFlowRequest.ReturnToFrontEnd())
+                    .ToCoroutine(result => returnResult = result);
+                Assert.IsNotNull(returnResult, "Scene Flow 返回空结果");
+                Assert.IsTrue(
+                    returnResult.Succeeded,
+                    $"{returnResult.ErrorCode} @ {returnResult.Phase}: "
+                    + returnResult.Exception);
+                Architecture = null;
+            }
+
             yield return StopCurrent();
 
             if (ApplicationHost.TryGetCurrent(out ApplicationHost host))
@@ -26,6 +54,12 @@ namespace DarkFlare.Tests
             }
 
             Architecture = GameArchitectureProvider.RequireCurrent();
+        }
+
+        public IEnumerator EnterMain(GameStartIntent intent = GameStartIntent.NewGame)
+        {
+            yield return _sceneFlowFixture.EnterMain(intent);
+            Architecture = ApplicationHost.Current.CurrentSession.Architecture;
         }
 
         public IEnumerator StopCurrent()

@@ -76,13 +76,13 @@ namespace DarkFlare.Tests
         [UnityTest]
         public IEnumerator MainToMain_PreplacedConsumersBindNewSessionExactlyOnce()
         {
-            yield return SceneManager.LoadSceneAsync("Main", LoadSceneMode.Single);
+            yield return _fixture.EnterMain();
             yield return WaitForRunningSession();
 
             IArchitecture firstArchitecture = ApplicationHost.Current.CurrentSession.Architecture;
             GameInput firstInput = firstArchitecture.GetUtility<GameInput>();
 
-            yield return SceneManager.LoadSceneAsync("Main", LoadSceneMode.Single);
+            yield return _fixture.EnterMain();
             yield return WaitForRunningSession();
 
             IArchitecture secondArchitecture = ApplicationHost.Current.CurrentSession.Architecture;
@@ -121,6 +121,14 @@ namespace DarkFlare.Tests
             yield return SceneManager.LoadSceneAsync("Main", LoadSceneMode.Additive);
             mainScene = SceneManager.GetSceneByName("Main");
             SceneManager.SetActiveScene(mainScene);
+            yield return null;
+            Assert.IsFalse(GameArchitectureProvider.HasCurrent);
+            SceneFlowResult startResult = null;
+            yield return host.SceneFlow.RequestAsync(
+                    SceneFlowRequest.StartGame(GameStartIntent.NewGame))
+                .ToCoroutine(result => startResult = result);
+            Assert.IsNotNull(startResult);
+            Assert.IsTrue(startResult.Succeeded, startResult.Exception?.ToString());
             yield return WaitForRunningSession();
 
             IArchitecture architecture = ApplicationHost.Current.CurrentSession.Architecture;
@@ -134,7 +142,7 @@ namespace DarkFlare.Tests
         [UnityTest]
         public IEnumerator RetryResult_DoesNotExposeFalseBindingAndBindsExactlyOnceAfterLaterFrame()
         {
-            yield return SceneManager.LoadSceneAsync("Main", LoadSceneMode.Single);
+            yield return _fixture.EnterMain();
             yield return WaitForRunningSession();
 
             HudController owner = Object.FindAnyObjectByType<HudController>();
@@ -187,7 +195,7 @@ namespace DarkFlare.Tests
         [UnityTest]
         public IEnumerator BindingException_RollsBackWithoutReportingSuccess()
         {
-            yield return SceneManager.LoadSceneAsync("Main", LoadSceneMode.Single);
+            yield return _fixture.EnterMain();
             yield return WaitForRunningSession();
 
             HudController owner = Object.FindAnyObjectByType<HudController>();
@@ -212,7 +220,7 @@ namespace DarkFlare.Tests
         [UnityTest]
         public IEnumerator TaintedScene_DisableEnableDoesNotRebindOrScheduleRetry()
         {
-            yield return SceneManager.LoadSceneAsync("Main", LoadSceneMode.Single);
+            yield return _fixture.EnterMain();
             yield return WaitForRunningSession();
 
             ApplicationHost applicationHost = ApplicationHost.Current;

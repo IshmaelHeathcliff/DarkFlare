@@ -935,6 +935,166 @@ MonoBehaviour:
     m_Key: loot.label
     m_Metadata:
       m_Items: []
+  - m_Id: 300000000000001
+    m_Key: flow.front.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000002
+    m_Key: flow.front.subtitle
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000003
+    m_Key: flow.front.continue
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000004
+    m_Key: flow.front.new_game
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000005
+    m_Key: flow.front.quit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000006
+    m_Key: flow.modal.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000007
+    m_Key: flow.modal.retry
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000008
+    m_Key: flow.modal.cancel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000009
+    m_Key: flow.fatal.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000010
+    m_Key: flow.toast.returned_front_end
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000011
+    m_Key: flow.phase.preparing
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000012
+    m_Key: flow.phase.preparing_save
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000013
+    m_Key: flow.phase.loading_scene
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000014
+    m_Key: flow.phase.activating_scene
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000015
+    m_Key: flow.phase.starting_session
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000016
+    m_Key: flow.phase.saving_before_exit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000017
+    m_Key: flow.phase.stopping_session
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000018
+    m_Key: flow.phase.unloading_scene
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000019
+    m_Key: flow.phase.recovering
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000020
+    m_Key: flow.error.invalid_state
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000021
+    m_Key: flow.error.cancelled
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000022
+    m_Key: flow.error.superseded
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000023
+    m_Key: flow.error.configuration_invalid
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000024
+    m_Key: flow.error.scene_not_in_build
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000025
+    m_Key: flow.error.load_failed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000026
+    m_Key: flow.error.activation_failed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000027
+    m_Key: flow.error.entry_missing
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000028
+    m_Key: flow.error.entry_duplicate
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000029
+    m_Key: flow.error.save_prepare_failed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000030
+    m_Key: flow.error.save_before_exit_failed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000031
+    m_Key: flow.error.session_start_failed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000032
+    m_Key: flow.error.session_stop_failed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000033
+    m_Key: flow.error.unload_failed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000034
+    m_Key: flow.error.timeout
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000035
+    m_Key: flow.error.application_unavailable
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000036
+    m_Key: flow.error.fatal_cleanup_failed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000037
+    m_Key: menu.return_front_end
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000038
+    m_Key: menu.return_confirm.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000039
+    m_Key: menu.return_confirm.message
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000040
+    m_Key: menu.return_confirm.confirm
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

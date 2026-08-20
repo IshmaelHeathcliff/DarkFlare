@@ -36,7 +36,7 @@ namespace DarkFlare.Tests
         [UnityTest]
         public IEnumerator MainSession_CapturePrepareRestorePreservesStateWithoutNewGameGrant()
         {
-            yield return SceneManager.LoadSceneAsync("Main", LoadSceneMode.Single);
+            yield return _fixture.EnterMain();
             yield return WaitForRunningSession();
             ApplicationHost host = ApplicationHost.Current;
             GameSessionHost oldSession = host.CurrentSession;
@@ -148,15 +148,12 @@ namespace DarkFlare.Tests
         }
 
         [UnityTest]
-        public IEnumerator SessionFacade_SaveContinueNewGameContinuePreservesCommittedAutoSlot()
+        public IEnumerator SessionFacade_SaveIsSessionScopedAndCrossSessionMethodsAreRemoved()
         {
-            yield return SceneManager.LoadSceneAsync("Main", LoadSceneMode.Single);
-            yield return WaitForRunningSession();
+            yield return _fixture.EnterMain();
             ApplicationHost host = ApplicationHost.Current;
-            GameSessionHost firstSession = host.CurrentSession;
-            CombatPrototypeBootstrap bootstrap = UnityEngine.Object.FindAnyObjectByType<CombatPrototypeBootstrap>();
+            GameSessionHost session = host.CurrentSession;
             MonsterSpawner spawner = UnityEngine.Object.FindAnyObjectByType<MonsterSpawner>();
-            Assert.IsNotNull(bootstrap);
             Assert.IsNotNull(spawner);
             LocalSaveStorage storage = new LocalSaveStorage(
                 new MemorySavePathProvider("C:/DarkFlare-FacadePlayModeTests"),
@@ -168,85 +165,29 @@ namespace DarkFlare.Tests
                 host.ContentCatalog,
                 "test");
             _testCoordinator.BindSession(
-                firstSession,
-                new SessionSnapshotSource(firstSession, host.ContentCatalog, spawner));
-            SessionSaveFacade firstFacade = new SessionSaveFacade(
+                session,
+                new SessionSnapshotSource(session, host.ContentCatalog, spawner));
+            SessionSaveFacade facade = new SessionSaveFacade(
                 host,
-                firstSession,
+                session,
                 _testCoordinator,
-                SceneManager.GetActiveScene(),
-                bootstrap.CreateSceneConfiguration());
-            InventoryModel firstInventory = firstSession.Architecture.GetModel<InventoryModel>();
-            firstInventory.AddGold(41);
-            int savedGold = firstInventory.Gold;
-            string savedRunId = firstSession.Architecture
-                .GetUtility<IRunInstanceIdGenerator>()
-                .CaptureState()
-                .RunId
-                .Value;
+                SceneManager.GetActiveScene());
+            InventoryModel inventory = session.Architecture.GetModel<InventoryModel>();
+            inventory.AddGold(41);
+            int savedGold = inventory.Gold;
             SaveOperationResult saveResult = null;
-            yield return firstFacade.SaveAutoAsync().ToCoroutine(result => saveResult = result);
+            yield return facade.SaveAutoAsync().ToCoroutine(result => saveResult = result);
             Assert.IsTrue(saveResult.Succeeded, saveResult.Exception?.ToString());
-            firstInventory.AddGold(99);
-            SaveOperationResult continueResult = null;
-            yield return firstFacade.ContinueAutoAsync().ToCoroutine(result => continueResult = result);
-            Assert.IsTrue(continueResult.Succeeded, continueResult.Exception?.ToString());
-            Assert.AreEqual(SaveRecoverySource.Current, continueResult.RecoverySource);
-            Assert.AreEqual(savedGold, host.CurrentSession.Architecture.GetModel<InventoryModel>().Gold);
-            Assert.AreEqual(
-                savedRunId,
-                host.CurrentSession.Architecture.GetUtility<IRunInstanceIdGenerator>()
-                    .CaptureState()
-                    .RunId
-                    .Value);
-            GameSessionHost restoredSession = host.CurrentSession;
-            MonsterSpawner restoredSpawner = UnityEngine.Object.FindAnyObjectByType<MonsterSpawner>();
-            _testCoordinator.BindSession(
-                restoredSession,
-                new SessionSnapshotSource(restoredSession, host.ContentCatalog, restoredSpawner));
-            SessionSaveFacade restoredFacade = new SessionSaveFacade(
-                host,
-                restoredSession,
-                _testCoordinator,
-                SceneManager.GetActiveScene(),
-                bootstrap.CreateSceneConfiguration());
-            SaveOperationResult newGameResult = null;
-            yield return restoredFacade.StartNewGameAsync().ToCoroutine(result => newGameResult = result);
-            Assert.IsTrue(newGameResult.Succeeded, newGameResult.Exception?.ToString());
-            string newRunId = host.CurrentSession.Architecture
-                .GetUtility<IRunInstanceIdGenerator>()
-                .CaptureState()
-                .RunId
-                .Value;
-            Assert.AreNotEqual(savedRunId, newRunId);
-            GameSessionHost newGameSession = host.CurrentSession;
-            MonsterSpawner newGameSpawner = UnityEngine.Object.FindAnyObjectByType<MonsterSpawner>();
-            _testCoordinator.BindSession(
-                newGameSession,
-                new SessionSnapshotSource(newGameSession, host.ContentCatalog, newGameSpawner));
-            SessionSaveFacade newGameFacade = new SessionSaveFacade(
-                host,
-                newGameSession,
-                _testCoordinator,
-                SceneManager.GetActiveScene(),
-                bootstrap.CreateSceneConfiguration());
-            SaveOperationResult secondContinue = null;
-            yield return newGameFacade.ContinueAutoAsync().ToCoroutine(result => secondContinue = result);
-            Assert.IsTrue(secondContinue.Succeeded, secondContinue.Exception?.ToString());
-            Assert.AreEqual(savedGold, host.CurrentSession.Architecture.GetModel<InventoryModel>().Gold);
-            Assert.AreEqual(
-                savedRunId,
-                host.CurrentSession.Architecture.GetUtility<IRunInstanceIdGenerator>()
-                    .CaptureState()
-                    .RunId
-                .Value);
+            Assert.AreEqual(savedGold, inventory.Gold);
+            Assert.IsTrue(facade.IsAvailable);
+            Assert.IsNull(typeof(SessionSaveFacade).GetMethod("ContinueAutoAsync"));
+            Assert.IsNull(typeof(SessionSaveFacade).GetMethod("StartNewGameAsync"));
         }
 
         [UnityTest]
         public IEnumerator GameMenu_SaveActionsArePresentFocusableAndReflectSlotProbe()
         {
-            yield return SceneManager.LoadSceneAsync("Main", LoadSceneMode.Single);
-            yield return WaitForRunningSession();
+            yield return _fixture.EnterMain();
             GameMenuController menu = UnityEngine.Object.FindAnyObjectByType<GameMenuController>();
             UIDocument document = menu != null ? menu.GetComponent<UIDocument>() : null;
             Assert.IsNotNull(menu);
@@ -262,23 +203,23 @@ namespace DarkFlare.Tests
             Assert.IsFalse(menu.IsSaveOperationBusy, "自动存档探测超时");
             VisualElement root = document.rootVisualElement;
             Button save = root.Q<Button>("game-menu-save");
-            Button continueButton = root.Q<Button>("game-menu-continue");
-            Button newGame = root.Q<Button>("game-menu-new-game");
+            Button returnFrontEnd = root.Q<Button>("game-menu-return-front-end");
             Label status = root.Q<Label>("game-menu-save-status");
             Assert.IsNotNull(save);
-            Assert.IsNotNull(continueButton);
-            Assert.IsNotNull(newGame);
+            Assert.IsNotNull(returnFrontEnd);
             Assert.IsNotNull(status);
             Assert.IsTrue(save.enabledSelf);
-            Assert.IsTrue(newGame.enabledSelf);
-            Assert.AreEqual(menu.CanContinueAutoSave, continueButton.enabledSelf);
+            Assert.IsTrue(returnFrontEnd.enabledSelf);
+            Assert.IsNull(root.Q<Button>("game-menu-continue"));
+            Assert.IsNull(root.Q<Button>("game-menu-new-game"));
+            Assert.IsNull(root.Q<DropdownField>("game-menu-language-dropdown"));
             Assert.IsFalse(string.IsNullOrWhiteSpace(status.text));
             save.Focus();
             yield return null;
             Assert.AreSame(save, root.focusController.focusedElement);
-            newGame.Focus();
+            returnFrontEnd.Focus();
             yield return null;
-            Assert.AreSame(newGame, root.focusController.focusedElement);
+            Assert.AreSame(returnFrontEnd, root.focusController.focusedElement);
         }
 
         static SaveDocumentDto CreateDocument(SavePayloadDto payload, ContentCatalog catalog)

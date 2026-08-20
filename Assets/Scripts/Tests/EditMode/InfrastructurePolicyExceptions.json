@@ -24,6 +24,30 @@
       "path": "Assets/Scripts/Runtime/Infrastructure/Settings/LocalizationService.cs",
       "reason": "语言切换需要原子替换并取消上一请求，所有权封装在 LocalizationService，Close 时统一取消。",
       "removeByStage": "localization-switch-coordinator-extraction"
+    },
+    {
+      "ruleId": "business-scene-loading",
+      "path": "Assets/Scripts/Tests/PlayMode/SceneFlowPlayModeFixture.cs",
+      "reason": "PlayMode Test Runner 从临时测试场景启动；共享夹具只负责以 Single 模式建立正式 Bootstrap 起点，后续玩法场景全部通过 Scene Flow。",
+      "removeByStage": "test-runner-bootstrap-hook"
+    },
+    {
+      "ruleId": "business-scene-loading",
+      "path": "Assets/Scripts/Tests/PlayMode/ApplicationHostSceneTransitionPlayModeTests.cs",
+      "reason": "ApplicationHost 底层 Session 协调故障测试需要用 Single 重载与卸载临时 Scene 来验证旧 Session 回滚，不承担业务场景流。",
+      "removeByStage": "application-host-test-adapter"
+    },
+    {
+      "ruleId": "business-scene-loading",
+      "path": "Assets/Scripts/Tests/PlayMode/ApplicationLifecyclePlayModeTests.cs",
+      "reason": "场景卸载触发 Session 停止的底层特征测试需要显式激活并卸载隔离 Scene。",
+      "removeByStage": "application-host-test-adapter"
+    },
+    {
+      "ruleId": "business-scene-loading",
+      "path": "Assets/Scripts/Tests/PlayMode/SceneSessionComponentBindingPlayModeTests.cs",
+      "reason": "SceneSessionBinding 的空场景、污染场景与卸载故障测试需要直接管理测试 Scene。",
+      "removeByStage": "scene-session-binding-test-adapter"
     }
   ]
 }

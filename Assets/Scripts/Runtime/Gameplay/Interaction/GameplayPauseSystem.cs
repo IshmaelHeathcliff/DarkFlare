@@ -1,12 +1,12 @@
-using UnityEngine;
-
 namespace DarkFlare
 {
     public class GameplayPauseSystem : AbstractSystem
     {
-        float _previousTimeScale = 1f;
+        const string MenuPauseOwner = "gameplay-menu";
 
-        public bool IsPaused { get; private set; }
+        GamePauseLease _menuPauseLease;
+
+        public bool IsPaused => _menuPauseLease != null && !_menuPauseLease.IsReleased;
 
         public void SetPaused(bool paused)
         {
@@ -17,17 +17,15 @@ namespace DarkFlare
 
             if (paused)
             {
-                _previousTimeScale = Time.timeScale;
-                Time.timeScale = 0f;
+                _menuPauseLease = ResolveTimeService().AcquirePause(MenuPauseOwner);
             }
             else
             {
-                Time.timeScale = _previousTimeScale;
+                _menuPauseLease.Dispose();
+                _menuPauseLease = null;
             }
 
-            IsPaused = paused;
             this.SendEvent(new GameplayPauseChangedEvent(paused));
-            Debug.Log($"[GameplayPauseSystem] 游戏暂停状态切换为 {paused}");
         }
 
         protected override void OnInit()
@@ -36,11 +34,15 @@ namespace DarkFlare
 
         protected override void OnDeinit()
         {
-            if (IsPaused)
-            {
-                Time.timeScale = _previousTimeScale;
-                IsPaused = false;
-            }
+            _menuPauseLease?.Dispose();
+            _menuPauseLease = null;
+        }
+
+        static GameTimeService ResolveTimeService()
+        {
+            return ApplicationHost.TryGetCurrent(out ApplicationHost host)
+                ? host.GameTime
+                : GameTimeService.Shared;
         }
     }
 }

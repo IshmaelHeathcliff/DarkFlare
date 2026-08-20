@@ -56,9 +56,20 @@ namespace DarkFlare.Tests
                 }),
             new PolicyRule(
                 "business-scene-loading",
-                @"\bSceneManager\s*\.\s*(?:Load\w*|Unload\w*)\s*\(",
+                @"\bSceneManager\s*\.\s*(?:Load\w*|Unload\w*|SetActiveScene)\s*\(",
+                new[] { RuntimeRoot, TestsRoot },
+                new[]
+                {
+                    "Assets/Scripts/Runtime/Infrastructure/Flow/UnitySceneLoader.cs",
+                }),
+            new PolicyRule(
+                "runtime-time-scale-owner",
+                @"\bTime\s*\.\s*timeScale\s*=",
                 new[] { RuntimeRoot },
-                Array.Empty<string>()),
+                new[]
+                {
+                    "Assets/Scripts/Runtime/Infrastructure/Time/GameTimeService.cs",
+                }),
             new PolicyRule(
                 "unitask-void",
                 @"\bUniTaskVoid\b",
@@ -77,6 +88,8 @@ namespace DarkFlare.Tests
                 {
                     "Assets/Scripts/Runtime/Infrastructure/Lifecycle/LifecycleScope.cs",
                     "Assets/Scripts/Runtime/Infrastructure/Lifecycle/LifecycleTaskGroup.cs",
+                    "Assets/Scripts/Runtime/Infrastructure/Flow/SceneFlowService.cs",
+                    "Assets/Scripts/Runtime/Infrastructure/UI/ApplicationFrontEndController.cs",
                 }),
             new PolicyRule(
                 "runtime-guid-generation-owner",
@@ -96,6 +109,7 @@ namespace DarkFlare.Tests
         [TestCase("business-file-io")]
         [TestCase("persistent-data-path")]
         [TestCase("business-scene-loading")]
+        [TestCase("runtime-time-scale-owner")]
         [TestCase("unitask-void")]
         [TestCase("naked-forget")]
         [TestCase("cancellation-token-source-owner")]
@@ -182,6 +196,14 @@ namespace DarkFlare.Tests
             "business-scene-loading",
             "SceneManager.LoadScene(sceneName);",
             "SceneManager.LoadScene")]
+        [TestCase(
+            "business-scene-loading",
+            "SceneManager.SetActiveScene(scene);",
+            "SceneManager.SetActiveScene")]
+        [TestCase(
+            "runtime-time-scale-owner",
+            "Time.timeScale = 0f;",
+            "Time.timeScale =")]
         [TestCase(
             "unitask-void",
             "UniTaskVoid RunAsync() { }",

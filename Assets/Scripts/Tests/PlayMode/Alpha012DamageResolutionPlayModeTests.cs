@@ -32,7 +32,7 @@ namespace DarkFlare.Tests
         [UnityTest]
         public IEnumerator MainScene_EquipsStartingWeaponBeforeSpawnerAndSupportsUnequipRecovery()
         {
-            yield return SceneManager.LoadSceneAsync("Main", LoadSceneMode.Single);
+            yield return _fixture.EnterMain();
             PlayerController player = null;
             MonsterSpawner spawner = null;
             CombatPrototypeBootstrap bootstrap = null;

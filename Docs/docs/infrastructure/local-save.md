@@ -1,11 +1,11 @@
 # 本地存档与 Session 恢复
 
 > 状态：`alpha 0.2.2` 已实现
-> 最近更新：2026-08-19
+> 最近更新：2026-08-21
 
 ## 模块目标
 
-本模块为当前 `Main` 单场景玩法提供可验证的本地存档闭环：运行中捕获一致快照、提交 `auto` 槽位、在停止旧 Session 前完成读档预检、以独立 Restore 事务重建 Session，并在应用退出前有界 Flush。
+本模块为当前 Main 玩法 Session 提供可验证的本地存档闭环：运行中捕获一致快照、提交 `auto` 槽位、在加载 Main 前完成读档预检、以独立 Restore 事务建立 Session，并在返回前台或应用退出前完成受控保存。
 
 正式存档只写入 `Application.persistentDataPath/DarkFlare/Saves`。玩法 Model、System、Command、Controller 和 Session Initializer 不直接访问文件；UI 只调用当前 Session 的 `SessionSaveFacade`。
 
@@ -21,7 +21,7 @@
 | 恢复预检 | `SaveRestorePreparer` | 使用当前 `ContentCatalog` 解析稳定 ID，构造不接触旧 Session 的 `PreparedRestore` |
 | 恢复提交 | `RestoreGameSessionInitializer` | 预热资源、重建状态、提交新 Session；失败时按初始化事务回滚 |
 | 协调 | `SaveCoordinator` | Profile 级单写者、Dirty revision、请求合并、PrepareContinue 和退出 Flush |
-| 玩家入口 | `SessionSaveFacade`、`GameMenuController` | 对当前 generation 暴露保存、继续、新游戏与稳定错误反馈 |
+| 玩家入口 | `SessionSaveFacade`、`GameMenuController` | 对当前 generation 暴露保存与稳定错误反馈；跨 Session 操作由 Scene Flow 负责 |
 
 `ApplicationHost` 拥有 PathProvider、Serializer、Storage 和 Profile 级 Coordinator；每个 Running Session 只绑定一个 generation-bound Snapshot Source 与 Facade。Session 停止时先解绑这些入口，再释放场景与架构。
 
@@ -37,7 +37,7 @@ V1 文件格式固定为：
 - Header 包含游戏版本、内容目录 ID / 版本、槽位、提交序号、UTC 创建 / 更新时间、Payload SHA-256 和显示摘要
 - Payload 分为 `ProfileSaveData` 与 `RunSaveData`，所有引用使用稳定 ContentId 或强类型实例 ID
 
-Serializer 使用项目已有 `Unity.Newtonsoft.Json`。写出前先把 Payload 转为按属性名 Ordinal 排序的规范 JSON，再计算小写 SHA-256；Header 不参与校验值。读取顺序为格式 / 槽位 / 提交序号检查、Payload 校验、Schema 兼容与逐级迁移、强类型验证。当前登记了历史 `0 → 1` 迁移；未来 Schema 会被安全拒绝。
+Serializer 使用项目已有 `Unity.Newtonsoft.Json`。写出前先把 Payload 转为按属性名 Ordinal 排序的规范 JSON，并把 Single 数值归一为 double 表示，再计算小写 SHA-256；这避免同一浮点值在 Single / Double 文本往返后产生伪校验失败。Header 不参与校验值。读取顺序为格式 / 槽位 / 提交序号检查、Payload 校验、Schema 兼容与逐级迁移、强类型验证。当前登记了历史 `0 → 1` 迁移；未来 Schema 会被安全拒绝。
 
 禁止把 `UnityEngine.Object`、Asset GUID、Addressables 地址、资源路径、场景对象引用、显示文本或本地化 Key 写入存档身份。
 
@@ -87,14 +87,14 @@ Application.persistentDataPath/
 ### 继续游戏
 
 1. Coordinator 先等待已经接受的写事务收敛，再在线程池加载、校验、迁移并准备恢复图。
-2. 文件、Schema、Payload 或 ContentId 预检失败时，不停止当前 Session。
-3. 预检成功后，Facade 才请求 `ApplicationHost` 以 `RestoreGameSessionInitializer` 重建当前场景 Session。
+2. 文件、Schema、Payload 或 ContentId 预检失败时，Scene Flow 留在 FrontEnd，不加载 Main。
+3. 预检成功后，Scene Flow additive 加载 Main，并让 `ApplicationHost` 使用 `RestoreGameSessionInitializer` 创建 Session。
 4. Restore 事务预热资源、重建玩家 / 怪物 / 掉落 / 商人 / 随机 / 生成器状态，最后提交刷怪器并进入 Running。
 5. 初始化取消或失败沿用 Session 事务回滚，不能部分提交或回写旧 generation。
 
 ### 新游戏
 
-`StartNewGameAsync` 使用当前场景配置重建 NewGame Session。它不会预先删除或覆盖 `auto` 槽位，因此新 Run 在第一次成功保存前仍可继续旧档。
+FrontEnd 通过 Scene Flow 使用 Main 场景配置创建 NewGame Session。新游戏不会预先删除或覆盖 `auto` 槽位，因此新 Run 在第一次成功保存前仍可继续旧档。
 
 ### 退出
 
@@ -119,28 +119,27 @@ Application.persistentDataPath/
 
 ## 运行时入口
 
-当前玩家入口位于游戏菜单底部：
+当前玩家入口分为两处：
 
-- 保存：写入 `auto`。
-- 继续：只有探测到有效 `auto` 时可用。
-- 新游戏：重建当前 Main Session，不删除旧档。
-- Busy 期间三个按钮统一禁用，并显示稳定中文反馈。
+- Main 游戏菜单保存按钮通过 `SessionSaveFacade` 写入 `auto`。
+- FrontEnd 的 Continue 只有 Profile 级预检确认 `auto` 有效时可用；NewGame 不删除旧档。
+- 返回 FrontEnd 必须先完成 `SaveBeforeExitAsync`；失败时保留当前 Session，并由 Application Shell 提供重试 / 取消。
 
-这些按钮同时支持鼠标、键盘和手柄焦点。相关文本已在 `alpha 0.2.3` 迁入 Unity Localization String Table。
+这些按钮同时支持鼠标、键盘和手柄焦点，文本来自 Unity Localization String Table。
 
 ## 验证证据
 
 - Unity `6000.4.3f1` 重编译：0 error。
-- EditMode 全量：`310/310` 通过。
-- 项目自有 PlayMode：`48/48` 通过。
-- 完整 PlayMode：52 项中 50 项通过、0 失败；2 项 Input System 包集成测试因上游 issue 1252825 跳过。
+- EditMode 全量：`360/360` 通过。
+- 项目自有 PlayMode：`52/52` 通过。
+- 完整 PlayMode：54 项中 52 项通过、0 失败；2 项 Input System 包集成测试因既有 issue 1252825 跳过。
 - 存档专项覆盖 DTO / 校验、确定性序列化 / SHA-256 / 迁移、Storage 中断 / 损坏 / 备份、恢复准备、Coordinator 合并 / 超时 / 异常结算，以及 Main Session 捕获与恢复。
 - 两次真实 Play 均达到 Application `Ready`、Session `Running`、存档 Facade 有效、玩家 1 个、菜单绑定 1 次；第二次退出后 Console Error 为 0。
 
 ## 当前边界
 
 - UI 只有一个 `auto` 槽位，没有手动槽位列表、删除、重命名、Profile 选择或云同步。
-- 仍只有 `Main` 单场景，没有 Boot / FrontEnd / Loading 和正式 SceneFlow。
-- Settings 文件与 Locale 服务已在 `alpha 0.2.3` 落地；统一 Logger、Toast / 错误页和移动平台挂起恢复仍未实现，其中 UI 错误外壳由 `alpha 0.2.4` 负责。
+- Bootstrap / Main Scene Flow 与 Application Shell 已落地；仍没有 Profile 选择、手动槽位或云同步。
+- Settings、Locale、Toast / Modal / Fatal 错误外壳已落地；统一 Logger 和移动平台挂起恢复仍未实现。
 - 退出门禁只完成当前桌面流程；平台差异由 `alpha 0.2.5` 处理。
 - Settings 已使用独立路径域、Schema 和服务，未写入游戏存档；存档 Storage 原语继续只服务 Save Domain。

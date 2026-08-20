@@ -11,6 +11,7 @@ using UnityEditor;
 using UnityEditor.Localization;
 using UnityEngine;
 using UnityEngine.Localization.Tables;
+using UnityEngine.TextCore.LowLevel;
 using UnityEngine.TextCore.Text;
 using UnityEngine.UIElements;
 
@@ -41,6 +42,15 @@ namespace DarkFlare.Tests
         static readonly HashSet<string> DynamicTextElements = new HashSet<string>(
             StringComparer.Ordinal)
         {
+            "front-end-brand",
+            "front-end-version",
+            "application-toast-message",
+            "application-modal-title",
+            "application-modal-message",
+            "application-modal-retry",
+            "application-modal-cancel",
+            "application-busy-label",
+            "application-fatal-message",
             "game-menu-save-status",
             "item-tooltip-context",
             "crafting-gold",
@@ -381,17 +391,14 @@ namespace DarkFlare.Tests
             }
 
             string uniqueCharacters = new string(characters.ToString().Distinct().ToArray());
-            bool covered = cjk.HasCharacters(
+            uint[] missingCharacters = FindMissingSourceFontCharacters(
                 uniqueCharacters,
-                out uint[] missingCharacters,
-                true,
-                false);
-            Assert.IsTrue(
-                covered,
-                    "字体链缺少字符：" + string.Join(
-                        ", ",
-                        (missingCharacters ?? Array.Empty<uint>())
-                        .Select(character => $"U+{character:X4}")));
+                new[] { cjk, latin });
+            Assert.IsEmpty(
+                missingCharacters,
+                "字体链缺少字符：" + string.Join(
+                    ", ",
+                    missingCharacters.Select(character => $"U+{character:X4}")));
 
             TMP_FontAsset qiushui = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(
                 "Assets/TextMesh Pro/Resources/Fonts & Materials/QiushuiShotai SDF.asset");
@@ -514,6 +521,50 @@ namespace DarkFlare.Tests
                     $"{path}: 期望 {expectedTable}/{expectedKey}，实际 "
                     + $"{reference.TableName}/{reference.EntryKey}");
             }
+        }
+
+        static uint[] FindMissingSourceFontCharacters(
+            string characters,
+            IReadOnlyList<FontAsset> fontAssets)
+        {
+            Assert.AreEqual(FontEngineError.Success, FontEngine.InitializeFontEngine());
+            HashSet<uint> missingCharacters = characters
+                .Where(character => !char.IsControl(character))
+                .Select(character => (uint)character)
+                .ToHashSet();
+
+            for (int fontIndex = 0; fontIndex < fontAssets.Count; fontIndex++)
+            {
+                FontAsset fontAsset = fontAssets[fontIndex];
+                Assert.IsNotNull(fontAsset);
+                Assert.IsNotNull(fontAsset.sourceFontFile, $"{fontAsset.name} 缺少源字体");
+                Assert.AreEqual(
+                    FontEngineError.Success,
+                    FontEngine.LoadFontFace(fontAsset.sourceFontFile),
+                    $"无法载入源字体：{fontAsset.sourceFontFile.name}");
+
+                try
+                {
+                    uint[] remaining = missingCharacters.ToArray();
+
+                    for (int characterIndex = 0; characterIndex < remaining.Length; characterIndex++)
+                    {
+                        uint unicode = remaining[characterIndex];
+
+                        if (FontEngine.TryGetGlyphIndex(unicode, out uint glyphIndex)
+                            && glyphIndex != 0)
+                        {
+                            missingCharacters.Remove(unicode);
+                        }
+                    }
+                }
+                finally
+                {
+                    FontEngine.UnloadFontFace();
+                }
+            }
+
+            return missingCharacters.OrderBy(character => character).ToArray();
         }
 
         static void ValidateTable(

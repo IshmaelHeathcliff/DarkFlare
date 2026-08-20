@@ -24,7 +24,8 @@ namespace DarkFlare.Tests
         public IEnumerator Setup()
         {
             yield return _fixture.StopCurrent();
-            _inputFixture.Setup();
+            yield return null;
+            InputTestFixtureGuard.Setup(_inputFixture);
             yield return _fixture.Restart();
             _architecture = _fixture.Architecture;
         }
@@ -44,7 +45,8 @@ namespace DarkFlare.Tests
             Time.timeScale = 1f;
             _architecture = null;
             yield return _fixture.StopCurrent();
-            _inputFixture.TearDown();
+            yield return null;
+            InputTestFixtureGuard.TearDown(_inputFixture);
             yield return _fixture.Restart();
         }
 
@@ -53,7 +55,7 @@ namespace DarkFlare.Tests
         {
             int originalWidth = Screen.width;
             int originalHeight = Screen.height;
-            yield return SceneManager.LoadSceneAsync("Main", LoadSceneMode.Single);
+            yield return _fixture.EnterMain();
             GameMenuController menu = null;
             UIDocument document = null;
             float timeout = Time.realtimeSinceStartup + 15f;
@@ -368,7 +370,7 @@ namespace DarkFlare.Tests
         [UnityTest]
         public IEnumerator Crafting_OnlyUsesItemsPlacedInTheInputSlot()
         {
-            yield return SceneManager.LoadSceneAsync("Main", LoadSceneMode.Single);
+            yield return _fixture.EnterMain();
             GameMenuController menu = null;
             UIDocument document = null;
             float timeout = Time.realtimeSinceStartup + 15f;

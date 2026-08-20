@@ -1,8 +1,8 @@
 # alpha 0.2 基础设施开发计划
 
-> 状态：`alpha 0.2.0–0.2.3` 已完成；`alpha 0.2.4` 已规划、待实施
+> 状态：`alpha 0.2.0–0.2.4` 已完成；`alpha 0.2.5` 待开始
 > 建立日期：2026-08-17
-> 最近更新：2026-08-20
+> 最近更新：2026-08-21
 > 基线提交：`21360c7`
 > 计划建立时前置基线：`alpha 0.1` 已完成并归档；EditMode `212/212` 通过，PlayMode `24` 项中 `22` 项通过、`2` 项因 Input System 上游问题忽略、零失败
 > 约束契约：[alpha 0.2 基础设施约束契约](./alpha-0.2-infrastructure-contract.md)
@@ -21,9 +21,9 @@
 
 ## 当前基线与主要缺口
 
-- 当前只有 `Main.unity`，没有启动场景、游戏状态机、统一加载流程或失败恢复页。
-- `alpha 0.2.0` 已建立场景加载前的唯一 `ApplicationHost`、Application / Profile / Session / Scene / Component 作用域及 `GameArchitectureProvider` 独占入口；当前单场景兼容请求采用 latest-wins，场景预置组件只绑定同场景且已 Running 的有效 Session，完整游戏状态机与通用 SceneFlow 仍未建立。
-- `CombatPrototypeBootstrap` 已收缩为场景配置与宿主请求入口；新游戏与恢复分别由可回滚的 `NewGameSessionInitializer` 和 `RestoreGameSessionInitializer` 执行。
+- 当前使用常驻 `Bootstrap.unity` 与 additive `Main.unity`；Game Flow、Scene Flow、Application Shell、失败恢复和统一 Time Service 已由 `alpha 0.2.4` 落地。
+- `ApplicationHost`、Application / Profile / Session / Scene / Component 作用域及 `GameArchitectureProvider` 独占入口已建立；Scene Flow 负责 latest-wins 场景请求，场景预置组件只绑定同场景且已 Running 的有效 Session。
+- `CombatPrototypeBootstrap` 已收缩为 Main 场景配置提供者；新游戏与恢复分别由可回滚的 `NewGameSessionInitializer` 和 `RestoreGameSessionInitializer` 执行。
 - `alpha 0.2.1` 建立的纯 DTO、分离对象图 Mapper、版本合同和迁移管线已在 `alpha 0.2.2` 接入确定性 JSON、`Application.persistentDataPath` 代际存储、损坏回退和退出 Flush；`Assets/Data/Saves` 继续不存放正式玩家数据。
 - 背包、装备、经济和物品实例仍可在玩法内使用对象引用，持久化边界统一转换为 ContentId 与强类型实例 ID；`auto` 保存和 Restore Session 已有真实菜单消费者。
 - Application 级唯一内容目录 `core` v1 已收录 90 个正式配置，并由配置验证器冻结零空值、零重复、零遗漏。
@@ -69,7 +69,7 @@
 | `alpha 0.2.1` | 已完成 | 建立稳定身份、内容目录和版本迁移底座 | [模块文档](../infrastructure/content-identity-migration.md) · [归档计划](./archive/alpha-0.2.1-content-identity-migration-plan.md) |
 | `alpha 0.2.2` | 已完成 | 完成本地存档、读档和损坏恢复闭环 | [模块文档](../infrastructure/local-save.md) · [归档计划](./archive/alpha-0.2.2-local-save-plan.md) |
 | `alpha 0.2.3` | 已完成 | 完成用户设置和运行时本地化 | [模块文档](../infrastructure/user-settings-localization.md) · [归档计划](./archive/alpha-0.2.3-settings-localization-plan.md) |
-| `alpha 0.2.4` | 已规划，待实施 | 建立游戏状态、场景加载和通用 UI 外壳 | [执行计划](./alpha-0.2.4-game-state-scene-flow-ui-shell-plan.md) · Bootstrap / Main 双场景、SceneFlow、Application UI Shell、Time Service |
+| `alpha 0.2.4` | 已完成 | 建立游戏状态、场景加载和通用 UI 外壳 | [模块文档](../infrastructure/game-state-scene-flow-ui-shell.md) · [归档计划](./archive/alpha-0.2.4-game-state-scene-flow-ui-shell-plan.md) |
 | `alpha 0.2.5` | 待开始 | 接入输入、音频、可访问性和平台生命周期 | 重绑定、输入图标、AudioMixer 服务、可访问性设置、挂起 / 退出策略 |
 | `alpha 0.2.6` | 待开始 | 建立日志、错误处理和资源生命周期治理 | Logger、异常捕获、玩家错误反馈、Addressables 规则与句柄验证 |
 | `alpha 0.2.7` | 待开始 | 完成跨模块回归、故障演练和文档封板 | 综合验收记录、迁移样本、模块文档、计划归档 |
@@ -233,7 +233,7 @@
 
 ## alpha 0.2.4：游戏状态、场景流与 UI 外壳
 
-冻结架构、迁移顺序、实施切片和验收矩阵见[独立执行计划](./alpha-0.2.4-game-state-scene-flow-ui-shell-plan.md)。
+当前实现与使用边界见[游戏状态、场景流与应用 UI 外壳](../infrastructure/game-state-scene-flow-ui-shell.md)；冻结架构、迁移顺序、实施切片和验收矩阵见[归档执行计划](./archive/alpha-0.2.4-game-state-scene-flow-ui-shell-plan.md)。
 
 ### 目标
 
@@ -257,6 +257,13 @@
 - 任一步骤失败都能回滚到可交互状态，错误包含阶段、原因和可用恢复动作。
 - Page / Modal 的打开关闭保持手柄与键鼠焦点，Modal 阻止底层输入，Toast 不抢占焦点。
 - 项目运行时代码除 Scene Flow 实现外不存在直接场景加载调用。
+
+### 完成结果
+
+- Bootstrap index 0 常驻、Main index 1 additive 的双场景拓扑已落地；Application Shell 持有唯一 EventSystem，冷启动稳定停在无 Session 的 FrontEnd。
+- Scene Flow 已统一 NewGame、Continue、Cancel / Supersede、Retry、暂停和保存后返回前台，并以结构化 phase、错误码和恢复动作完成失败补偿。
+- `GameTimeService` 成为唯一 `Time.timeScale` 写入点；`SessionSaveFacade` 收缩为当前 Session 保存入口，跨 Session 恢复前移到 Profile / Scene Flow。
+- 最终验证为 Unity 编译和真实 Bootstrap Play 0 error、EditMode `360/360`、项目 PlayMode `52/52`；完整 PlayMode 54 项中 52 项通过、0 失败，2 项 Input System 包测试因既有 issue 1252825 跳过。
 
 ## alpha 0.2.5：输入、音频、可访问性与平台生命周期
 

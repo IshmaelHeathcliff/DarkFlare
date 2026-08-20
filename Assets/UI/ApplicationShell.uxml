@@ -1,0 +1,84 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:l="UnityEngine.Localization" editor-extension-mode="False">
+  <ui:Style src="project://database/Assets/UI/Theme.uss" />
+  <ui:Style src="project://database/Assets/UI/ApplicationShell.uss" />
+  <ui:VisualElement name="application-shell" class="application-shell" picking-mode="Ignore">
+    <ui:VisualElement name="application-front-end" class="application-layer application-front-end" picking-mode="Position">
+      <ui:VisualElement class="front-end-vignette" picking-mode="Ignore" />
+      <ui:VisualElement class="front-end-panel">
+        <ui:Label name="front-end-brand" class="front-end-kicker" />
+        <ui:Label class="front-end-title" text="">
+          <Bindings>
+            <l:LocalizedString property="text" table="ui" entry="flow.front.title" />
+          </Bindings>
+        </ui:Label>
+        <ui:Label class="front-end-subtitle" text="">
+          <Bindings>
+            <l:LocalizedString property="text" table="ui" entry="flow.front.subtitle" />
+          </Bindings>
+        </ui:Label>
+        <ui:VisualElement class="front-end-actions">
+          <ui:Button name="front-end-continue" class="front-end-action front-end-action--primary" text="">
+            <Bindings>
+              <l:LocalizedString property="text" table="ui" entry="flow.front.continue" />
+            </Bindings>
+          </ui:Button>
+          <ui:Button name="front-end-new-game" class="front-end-action" text="">
+            <Bindings>
+              <l:LocalizedString property="text" table="ui" entry="flow.front.new_game" />
+            </Bindings>
+          </ui:Button>
+          <ui:DropdownField name="front-end-language" class="front-end-language" />
+          <ui:Button name="front-end-quit" class="front-end-action front-end-action--quiet" text="">
+            <Bindings>
+              <l:LocalizedString property="text" table="ui" entry="flow.front.quit" />
+            </Bindings>
+          </ui:Button>
+        </ui:VisualElement>
+      </ui:VisualElement>
+      <ui:Label name="front-end-version" class="front-end-version" />
+    </ui:VisualElement>
+
+    <ui:VisualElement name="application-toast" class="application-layer application-toast" picking-mode="Ignore">
+      <ui:Label name="application-toast-message" class="application-toast-message" />
+    </ui:VisualElement>
+
+    <ui:VisualElement name="application-modal" class="application-layer application-blocker application-modal" picking-mode="Position">
+      <ui:VisualElement class="application-dialog">
+        <ui:Label name="application-modal-title" class="application-dialog-title" />
+        <ui:Label name="application-modal-message" class="application-dialog-message" />
+        <ui:VisualElement class="application-dialog-actions">
+          <ui:Button name="application-modal-retry" class="application-dialog-action application-dialog-action--primary" />
+          <ui:Button name="application-modal-cancel" class="application-dialog-action" />
+        </ui:VisualElement>
+      </ui:VisualElement>
+    </ui:VisualElement>
+
+    <ui:VisualElement name="application-busy" class="application-layer application-blocker application-busy" picking-mode="Position">
+      <ui:VisualElement class="application-busy-card">
+        <ui:Label name="application-busy-label" class="application-busy-label" />
+        <ui:ProgressBar name="application-busy-progress" class="application-busy-progress" low-value="0" high-value="100" value="0" />
+        <ui:Button name="application-busy-cancel" class="application-busy-cancel" text="">
+          <Bindings>
+            <l:LocalizedString property="text" table="ui" entry="flow.modal.cancel" />
+          </Bindings>
+        </ui:Button>
+      </ui:VisualElement>
+    </ui:VisualElement>
+
+    <ui:VisualElement name="application-fatal" class="application-layer application-blocker application-fatal" picking-mode="Position">
+      <ui:VisualElement class="application-dialog application-dialog--fatal">
+        <ui:Label class="application-dialog-title" text="">
+          <Bindings>
+            <l:LocalizedString property="text" table="ui" entry="flow.fatal.title" />
+          </Bindings>
+        </ui:Label>
+        <ui:Label name="application-fatal-message" class="application-dialog-message" />
+        <ui:Button name="application-fatal-quit" class="application-dialog-action application-dialog-action--primary" text="">
+          <Bindings>
+            <l:LocalizedString property="text" table="ui" entry="flow.front.quit" />
+          </Bindings>
+        </ui:Button>
+      </ui:VisualElement>
+    </ui:VisualElement>
+  </ui:VisualElement>
+</ui:UXML>

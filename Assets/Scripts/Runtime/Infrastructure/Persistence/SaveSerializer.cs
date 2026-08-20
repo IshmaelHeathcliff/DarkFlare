@@ -442,6 +442,14 @@ namespace DarkFlare
                 return result;
             }
 
+            if (token is JValue valueToken
+                && valueToken.Type == JTokenType.Float)
+            {
+                return new JValue(Convert.ToDouble(
+                    valueToken.Value,
+                    CultureInfo.InvariantCulture));
+            }
+
             return token.DeepClone();
         }
 

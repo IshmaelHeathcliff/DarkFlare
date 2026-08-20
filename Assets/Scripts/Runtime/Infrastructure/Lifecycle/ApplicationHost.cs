@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 namespace DarkFlare
 {
     [DisallowMultipleComponent]
-    public sealed class ApplicationHost : MonoBehaviour
+    public sealed class ApplicationHost : MonoBehaviour, ISceneFlowApplication
     {
         const string DefaultProfileId = "local-default";
         const string StopTimeoutOperationName = "stop-timeout";
@@ -33,6 +33,10 @@ namespace DarkFlare
         ILocalSaveStorage _saveStorage;
         SaveCoordinator _saveCoordinator;
         SessionSaveFacade _sessionSaveFacade;
+        SceneFlowConfiguration _sceneFlowConfiguration;
+        SceneFlowService _sceneFlowService;
+        ApplicationShellController _applicationShellController;
+        GameTimeService _gameTimeService;
         GameSessionHost _lastNotifiedSession;
         SceneSessionInitializationRequest _activeSceneRequest;
         SceneSessionInitializationRequest _pendingSceneRequest;
@@ -87,7 +91,165 @@ namespace DarkFlare
 
         public SessionSaveFacade SessionSaveFacade => _sessionSaveFacade;
 
+        public SceneFlowService SceneFlow => _sceneFlowService;
+
+        public ApplicationShellController ApplicationShell => _applicationShellController;
+
+        public GameTimeService GameTime => _gameTimeService ?? GameTimeService.Shared;
+
+        bool ISceneFlowApplication.IsReady => State == ApplicationLifecycleState.Ready;
+
+        public void RegisterApplicationShell(ApplicationShellController controller)
+        {
+            _applicationShellController = controller
+                ?? throw new ArgumentNullException(nameof(controller));
+        }
+
+        public void UnregisterApplicationShell(ApplicationShellController controller)
+        {
+            if (ReferenceEquals(_applicationShellController, controller))
+            {
+                _applicationShellController = null;
+            }
+        }
+
         public event Action<GameSessionHost> SessionRunning;
+
+        public LifecycleResult ConfigureSceneFlow(SceneFlowConfiguration configuration)
+        {
+            if (configuration == null)
+            {
+                return LifecycleResult.Failure(
+                    LifecycleResultCode.ValidationFailed,
+                    "Scene Flow 配置不能为空");
+            }
+
+            if (State != ApplicationLifecycleState.Ready
+                || _applicationScope == null
+                || !_applicationScope.CanAcceptWork)
+            {
+                return LifecycleResult.Failure(
+                    State == ApplicationLifecycleState.ShuttingDown
+                        || State == ApplicationLifecycleState.Shutdown
+                        ? LifecycleResultCode.ApplicationShuttingDown
+                        : LifecycleResultCode.InvalidState,
+                    $"Application 当前状态 {State} 不允许配置 Scene Flow");
+            }
+
+            if (_sceneFlowService != null)
+            {
+                return ReferenceEquals(_sceneFlowConfiguration, configuration)
+                    ? LifecycleResult.AlreadyCompleted("Scene Flow 已配置")
+                    : LifecycleResult.Failure(
+                        LifecycleResultCode.InvalidState,
+                        "Scene Flow 配置在 Application 生命周期内不可替换");
+            }
+
+            try
+            {
+                _sceneFlowConfiguration = configuration;
+                _sceneFlowService = new SceneFlowService(
+                    this,
+                    configuration,
+                    new UnitySceneLoader(),
+                    GameTime,
+                    _applicationScope.Token);
+                return LifecycleResult.Success("Scene Flow 已配置");
+            }
+            catch (Exception exception)
+            {
+                _sceneFlowConfiguration = null;
+                _sceneFlowService = null;
+                return LifecycleResult.Failure(
+                    LifecycleResultCode.ValidationFailed,
+                    "Scene Flow 配置失败",
+                    exception);
+            }
+        }
+
+        public async UniTask<SceneFlowContinuePreparation> PrepareContinueAsync(
+            CancellationToken cancellationToken)
+        {
+            if (_saveCoordinator == null)
+            {
+                return SceneFlowContinuePreparation.Failure(
+                    new InvalidOperationException("Save Coordinator 尚未就绪"));
+            }
+
+            PrepareContinueResult result = await _saveCoordinator.PrepareContinueAsync(
+                SaveCoordinator.AutoSlot,
+                cancellationToken);
+            return result.Succeeded
+                ? SceneFlowContinuePreparation.Success(result.PreparedRestore)
+                : SceneFlowContinuePreparation.Failure(result.OperationResult.Exception);
+        }
+
+        public IGameSessionInitializer CreateSessionInitializer(
+            GameStartIntent intent,
+            GameplaySceneConfiguration configuration,
+            SceneFlowContinuePreparation preparation)
+        {
+            if (configuration == null)
+            {
+                return null;
+            }
+
+            switch (intent)
+            {
+                case GameStartIntent.NewGame:
+                    return new NewGameSessionInitializer(configuration);
+                case GameStartIntent.Continue:
+                    return preparation?.PreparedRestore != null
+                        ? new RestoreGameSessionInitializer(
+                            configuration,
+                            preparation.PreparedRestore)
+                        : null;
+                default:
+                    return null;
+            }
+        }
+
+        public async UniTask<LifecycleResult> StartSessionAsync(
+            Scene scene,
+            IGameSessionInitializer initializer,
+            CancellationToken cancellationToken)
+        {
+            UniTaskCompletionSource<LifecycleResult> completion =
+                new UniTaskCompletionSource<LifecycleResult>();
+            LifecycleResult submitted = BeginSceneSessionInitialization(
+                scene,
+                initializer,
+                cancellationToken,
+                result => completion.TrySetResult(result));
+
+            return submitted.IsSuccess ? await completion.Task : submitted;
+        }
+
+        public async UniTask<SaveOperationResult> SaveBeforeExitAsync(
+            CancellationToken cancellationToken)
+        {
+            SessionSaveFacade facade = _sessionSaveFacade;
+
+            if (facade == null || !facade.IsAvailable)
+            {
+                return SaveOperationResult.Failure(
+                    SaveOperation.Save,
+                    SaveCoordinator.AutoSlot,
+                    SaveErrorCode.SessionUnavailable);
+            }
+
+            return await facade.SaveAutoAsync(cancellationToken);
+        }
+
+        public UniTask<LifecycleResult> StopSessionAsync()
+        {
+            return StopCurrentSessionAsync();
+        }
+
+        public void RequestQuit()
+        {
+            Application.Quit();
+        }
 
         public static bool TryGetCurrent(out ApplicationHost host)
         {
@@ -512,6 +674,8 @@ namespace DarkFlare
 
             s_current = this;
             _ownsSingleton = true;
+            _gameTimeService = GameTimeService.Shared;
+            _gameTimeService.RestoreAll();
             Application.wantsToQuit += OnWantsToQuit;
             DontDestroyOnLoad(gameObject);
             Boot();
@@ -623,13 +787,6 @@ namespace DarkFlare
                 _saveSerializer = new NewtonsoftSaveSerializer();
                 _saveStorage = new LocalSaveStorage(_savePathProvider, _saveSerializer);
                 EnsureSaveCoordinator();
-                LifecycleResult sessionResult = CreatePendingSession();
-
-                if (!sessionResult.IsSuccess)
-                {
-                    throw new InvalidOperationException(sessionResult.Message);
-                }
-
                 State = ApplicationLifecycleState.Ready;
                 LifecycleResult coordinatorResult = StartSceneInitializationCoordinator();
 
@@ -1112,6 +1269,11 @@ namespace DarkFlare
         async UniTask<LifecycleResult> ShutdownCoreAsync()
         {
             Exception shutdownException = null;
+            _applicationShellController = null;
+            _sceneFlowService?.Dispose();
+            _sceneFlowService = null;
+            _sceneFlowConfiguration = null;
+            _gameTimeService?.RestoreAll();
 
             if (_saveCoordinator != null)
             {
@@ -1193,6 +1355,7 @@ namespace DarkFlare
             _saveStorage = null;
             _saveSerializer = null;
             _savePathProvider = null;
+            _gameTimeService = null;
             ProfileId = null;
             State = ApplicationLifecycleState.Shutdown;
 
@@ -1270,6 +1433,11 @@ namespace DarkFlare
 
         void EmergencyShutdown()
         {
+            _applicationShellController = null;
+            _sceneFlowService?.Dispose();
+            _sceneFlowService = null;
+            _sceneFlowConfiguration = null;
+            _gameTimeService?.RestoreAll();
             _saveCoordinator?.EmergencyClose();
             _localizationService?.Close();
             _settingsService?.Close();
@@ -1297,6 +1465,7 @@ namespace DarkFlare
             _saveStorage = null;
             _saveSerializer = null;
             _savePathProvider = null;
+            _gameTimeService = null;
             ProfileId = null;
             State = ApplicationLifecycleState.Shutdown;
             LifecycleResult result = sessionResult.IsSuccess
@@ -1355,8 +1524,7 @@ namespace DarkFlare
                     this,
                     session,
                     _saveCoordinator,
-                    session.BoundScene,
-                    bootstrap.CreateSceneConfiguration());
+                    session.BoundScene);
             }
             catch (Exception exception)
             {

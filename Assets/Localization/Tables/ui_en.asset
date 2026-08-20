@@ -980,6 +980,166 @@ MonoBehaviour:
     m_Metadata:
       m_Items:
       - rid: 6738608143192817845
+  - m_Id: 300000000000001
+    m_Localized: DarkFlare
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000002
+    m_Localized: Enter the dark before the last ember fades.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000003
+    m_Localized: Continue
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000004
+    m_Localized: New Game
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000005
+    m_Localized: Quit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000006
+    m_Localized: Operation Incomplete
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000007
+    m_Localized: Retry
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000008
+    m_Localized: Cancel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000009
+    m_Localized: Unable to Recover Safely
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000010
+    m_Localized: Returned to Front End
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000011
+    m_Localized: Preparing
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000012
+    m_Localized: Reading Save
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000013
+    m_Localized: Loading Scene
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000014
+    m_Localized: Activating Scene
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000015
+    m_Localized: Starting Game
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000016
+    m_Localized: Saving Progress
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000017
+    m_Localized: Stopping Session
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000018
+    m_Localized: Unloading Scene
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000019
+    m_Localized: Recovering a Safe State
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000020
+    m_Localized: This operation is not available in the current state.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000021
+    m_Localized: The operation was cancelled.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000022
+    m_Localized: A newer request replaced this operation.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000023
+    m_Localized: The scene flow configuration is invalid.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000024
+    m_Localized: The target scene is missing from Build Settings.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000025
+    m_Localized: The scene could not be loaded.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000026
+    m_Localized: The scene could not be activated.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000027
+    m_Localized: The gameplay entry is missing.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000028
+    m_Localized: More than one gameplay entry was found.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000029
+    m_Localized: The save cannot be continued.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000030
+    m_Localized: Saving failed. The current game remains active.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000031
+    m_Localized: The game session could not start.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000032
+    m_Localized: The game session could not stop.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000033
+    m_Localized: The scene could not be unloaded.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000034
+    m_Localized: The operation timed out.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000035
+    m_Localized: Application services are unavailable.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000036
+    m_Localized: Cleanup failed and the current state is unsafe.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000037
+    m_Localized: Return to Front End
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000038
+    m_Localized: Return to Front End?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000039
+    m_Localized: Your progress will be saved before this session ends.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300000000000040
+    m_Localized: Save and Return
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:

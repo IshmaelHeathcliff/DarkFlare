@@ -316,7 +316,10 @@ namespace DarkFlare
                     return CommitFailure(
                         LocalSaveStorageCode.VerificationFailed,
                         verification.Code,
-                        verification.Exception);
+                        verification.Exception
+                        ?? new InvalidDataException(
+                            $"存档写入校验失败: {verification.Code}"),
+                        verification.ValidationIssues);
                 }
 
                 cancellationToken.ThrowIfCancellationRequested();
@@ -697,13 +700,14 @@ namespace DarkFlare
         static LocalSaveCommitResult CommitFailure(
             LocalSaveStorageCode code,
             SaveSerializationCode serializationCode = SaveSerializationCode.Success,
-            Exception exception = null)
+            Exception exception = null,
+            IReadOnlyList<SaveDataIssue> validationIssues = null)
         {
             return new LocalSaveCommitResult(
                 code,
                 null,
                 serializationCode,
-                Array.Empty<SaveDataIssue>(),
+                validationIssues ?? Array.Empty<SaveDataIssue>(),
                 exception);
         }
 

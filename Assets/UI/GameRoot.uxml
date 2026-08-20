@@ -80,26 +80,13 @@
                 <l:LocalizedString property="text" table="ui" entry="menu.save.action" />
               </Bindings>
             </ui:Button>
-            <ui:Button name="game-menu-continue" text="" class="game-menu-save-action">
+            <ui:Button name="game-menu-return-front-end" text="" class="game-menu-save-action">
               <Bindings>
-                <l:LocalizedString property="text" table="ui" entry="menu.continue.action" />
-              </Bindings>
-            </ui:Button>
-            <ui:Button name="game-menu-new-game" text="" class="game-menu-save-action">
-              <Bindings>
-                <l:LocalizedString property="text" table="ui" entry="menu.new_game.action" />
+                <l:LocalizedString property="text" table="ui" entry="menu.return_front_end" />
               </Bindings>
             </ui:Button>
           </ui:VisualElement>
           <ui:Label name="game-menu-save-status" text="" class="game-menu-save-status" />
-          <ui:VisualElement name="game-menu-language" class="game-menu-language">
-            <ui:Label name="game-menu-language-label" text="" class="game-menu-language-label">
-              <Bindings>
-                <l:LocalizedString property="text" table="ui" entry="settings.language.label" />
-              </Bindings>
-            </ui:Label>
-            <ui:DropdownField name="game-menu-language-dropdown" class="game-menu-language-dropdown" />
-          </ui:VisualElement>
         </ui:VisualElement>
       </ui:VisualElement>
       <ui:VisualElement name="item-tooltip-layer" class="item-tooltip-layer" picking-mode="Ignore">

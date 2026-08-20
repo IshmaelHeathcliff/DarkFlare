@@ -29,7 +29,7 @@ namespace DarkFlare.Tests
         [UnityTest]
         public IEnumerator MainScene_OfficialEquipmentCompletesTradeCraftAndFourSlotFlow()
         {
-            yield return SceneManager.LoadSceneAsync("Main", LoadSceneMode.Single);
+            yield return _fixture.EnterMain();
 
             IArchitecture architecture = GameArchitectureProvider.RequireCurrent();
             EconomyModel economy = architecture.GetModel<EconomyModel>();

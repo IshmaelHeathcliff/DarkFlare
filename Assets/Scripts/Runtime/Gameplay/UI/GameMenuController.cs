@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -14,20 +13,6 @@ namespace DarkFlare
     public class GameMenuController : MonoBehaviour, IController
     {
         const string ActiveTabClass = "game-menu-tab--active";
-
-        static readonly UserLanguagePreference[] LanguagePreferences =
-        {
-            UserLanguagePreference.Auto,
-            UserLanguagePreference.SimplifiedChinese,
-            UserLanguagePreference.English,
-        };
-
-        static readonly string[] LanguageOptionKeys =
-        {
-            "settings.language.auto",
-            "settings.language.zh_hans",
-            "settings.language.en",
-        };
 
         [SerializeField]
         UIDocument _document;
@@ -54,18 +39,11 @@ namespace DarkFlare
         Button _craftingTab;
         Button _closeButton;
         Button _saveButton;
-        Button _continueButton;
-        Button _newGameButton;
+        Button _returnFrontEndButton;
         Label _saveStatus;
-        DropdownField _languageDropdown;
-        readonly List<string> _languageChoices = new List<string>();
         SessionSaveFacade _saveFacade;
         LocalizationService _localizationService;
-        int _languageRefreshGeneration;
         bool _saveOperationBusy;
-        bool _hasAutoSave;
-        bool _languageOperationBusy;
-        bool _updatingLanguageChoice;
         LocalizedMessage _saveStatusMessage;
 
         public GameMenuAccess AvailablePages { get; private set; } = GameMenuAccess.Inventory;
@@ -77,8 +55,6 @@ namespace DarkFlare
         public int SessionBindCount => _sessionBinding?.BindCount ?? 0;
 
         public bool IsSaveOperationBusy => _saveOperationBusy;
-
-        public bool CanContinueAutoSave => _hasAutoSave && !_saveOperationBusy;
 
         public string SaveStatusText => _saveStatus?.text ?? string.Empty;
 
@@ -174,11 +150,10 @@ namespace DarkFlare
             _saveFacade = ResolveSaveFacade();
             _localizationService = ResolveLocalizationService();
             _saveOperationBusy = false;
-            _hasAutoSave = false;
-            _languageOperationBusy = false;
+            SetSaveStatus(_saveFacade != null
+                ? "save.status.ready"
+                : "save.status.service_unavailable");
             RefreshSaveControls();
-            ScheduleLanguageRefresh();
-            ScheduleAutoSaveProbe();
 
             _openRequestRegistration = this.RegisterEvent<GameMenuOpenRequestedEvent>(OnMenuOpenRequested);
             _gameInput.ModeChanged += OnInputModeChanged;
@@ -222,19 +197,9 @@ namespace DarkFlare
                 _saveButton.clicked -= OnSaveClicked;
             }
 
-            if (_continueButton != null)
+            if (_returnFrontEndButton != null)
             {
-                _continueButton.clicked -= OnContinueClicked;
-            }
-
-            if (_newGameButton != null)
-            {
-                _newGameButton.clicked -= OnNewGameClicked;
-            }
-
-            if (_languageDropdown != null)
-            {
-                _languageDropdown.UnregisterValueChangedCallback(OnLanguageChanged);
+                _returnFrontEndButton.clicked -= OnReturnFrontEndClicked;
             }
 
             if (_localizationService != null)
@@ -258,18 +223,11 @@ namespace DarkFlare
             _craftingTab = null;
             _closeButton = null;
             _saveButton = null;
-            _continueButton = null;
-            _newGameButton = null;
+            _returnFrontEndButton = null;
             _saveStatus = null;
-            _languageDropdown = null;
-            _languageChoices.Clear();
             _saveFacade = null;
             _localizationService = null;
-            _languageRefreshGeneration++;
             _saveOperationBusy = false;
-            _hasAutoSave = false;
-            _languageOperationBusy = false;
-            _updatingLanguageChoice = false;
         }
 
         void OnValidate()
@@ -324,10 +282,8 @@ namespace DarkFlare
             _craftingTab = root.Q<Button>("game-menu-crafting-tab");
             _closeButton = root.Q<Button>("game-menu-close");
             _saveButton = root.Q<Button>("game-menu-save");
-            _continueButton = root.Q<Button>("game-menu-continue");
-            _newGameButton = root.Q<Button>("game-menu-new-game");
+            _returnFrontEndButton = root.Q<Button>("game-menu-return-front-end");
             _saveStatus = root.Q<Label>("game-menu-save-status");
-            _languageDropdown = root.Q<DropdownField>("game-menu-language-dropdown");
 
             if (_overlay == null
                 || _panel == null
@@ -339,10 +295,8 @@ namespace DarkFlare
                 || _craftingTab == null
                 || _closeButton == null
                 || _saveButton == null
-                || _continueButton == null
-                || _newGameButton == null
-                || _saveStatus == null
-                || _languageDropdown == null)
+                || _returnFrontEndButton == null
+                || _saveStatus == null)
             {
                 Debug.LogError("[GameMenuController] 菜单 UXML 缺少必要的命名元素", this);
                 return false;
@@ -353,9 +307,7 @@ namespace DarkFlare
             _craftingTab.clicked += OnCraftingTabClicked;
             _closeButton.clicked += OnCloseClicked;
             _saveButton.clicked += OnSaveClicked;
-            _continueButton.clicked += OnContinueClicked;
-            _newGameButton.clicked += OnNewGameClicked;
-            _languageDropdown.RegisterValueChangedCallback(OnLanguageChanged);
+            _returnFrontEndButton.clicked += OnReturnFrontEndClicked;
             _panel.RegisterCallback<GeometryChangedEvent>(OnPanelGeometryChanged);
             return true;
         }
@@ -465,174 +417,19 @@ namespace DarkFlare
                 _saveButton);
         }
 
-        void OnContinueClicked()
+        void OnReturnFrontEndClicked()
         {
-            if (!_hasAutoSave)
+            if (!ApplicationHost.TryGetCurrent(out ApplicationHost host))
             {
                 return;
             }
 
-            RunSaveOperation(
-                "continue-auto",
-                facade => facade.ContinueAutoAsync(),
-                _continueButton);
-        }
-
-        void OnNewGameClicked()
-        {
-            RunSaveOperation(
-                "new-game",
-                facade => facade.StartNewGameAsync(),
-                _newGameButton);
-        }
-
-        void OnLanguageChanged(ChangeEvent<string> evt)
-        {
-            if (_updatingLanguageChoice
-                || _languageOperationBusy
-                || _localizationService == null)
-            {
-                return;
-            }
-
-            int index = _languageChoices.IndexOf(evt.newValue);
-
-            if (index < 0 || index >= LanguagePreferences.Length)
-            {
-                ScheduleLanguageRefresh();
-                return;
-            }
-
-            if (!ApplicationHost.TryGetCurrent(out ApplicationHost host)
-                || host.ApplicationScope == null
-                || !host.ApplicationScope.CanAcceptWork)
-            {
-                ScheduleLanguageRefresh();
-                return;
-            }
-
-            UserLanguagePreference preference = LanguagePreferences[index];
-            LocalizationService service = _localizationService;
-            _languageOperationBusy = true;
-            _languageDropdown.SetEnabled(false);
-
-            try
-            {
-                host.ApplicationScope.Tasks.Run(
-                    "game-menu-language-change",
-                    async token =>
-                    {
-                        LocalizationOperationResult result =
-                            await service.ChangeLanguageAsync(preference, token);
-
-                        if (!ReferenceEquals(_localizationService, service)
-                            || _languageDropdown == null)
-                        {
-                            return;
-                        }
-
-                        _languageOperationBusy = false;
-                        ScheduleLanguageRefresh();
-
-                        if (result.Succeeded && IsOpen)
-                        {
-                            _languageDropdown?.Focus();
-                        }
-                        else if (!result.Succeeded
-                            && result.Code != LocalizationOperationCode.Cancelled)
-                        {
-                            Debug.LogError(
-                                $"[GameMenuController] 语言切换失败：{result.Code}\n"
-                                + result.Exception,
-                                this);
-                        }
-                    },
-                    failurePolicy: LifecycleTaskFailurePolicy.Report);
-            }
-            catch (Exception exception)
-            {
-                _languageOperationBusy = false;
-                _languageDropdown.SetEnabled(true);
-                Debug.LogException(exception, this);
-                ScheduleLanguageRefresh();
-            }
+            host.ApplicationShell?.RequestReturnToFrontEnd();
         }
 
         void OnLocaleChanged(string localeCode)
         {
-            ScheduleLanguageRefresh();
             RefreshSaveStatusText();
-        }
-
-        void ScheduleLanguageRefresh()
-        {
-            LocalizationService service = _localizationService;
-
-            if (_languageDropdown == null || service == null)
-            {
-                return;
-            }
-
-            if (!ApplicationHost.TryGetCurrent(out ApplicationHost host)
-                || host.ApplicationScope == null
-                || !host.ApplicationScope.CanAcceptWork)
-            {
-                _languageDropdown.SetEnabled(false);
-                return;
-            }
-
-            int generation = ++_languageRefreshGeneration;
-
-            try
-            {
-                host.ApplicationScope.Tasks.Run(
-                    "game-menu-language-refresh",
-                    async token =>
-                    {
-                        List<string> choices = new List<string>(LanguageOptionKeys.Length);
-
-                        for (int i = 0; i < LanguageOptionKeys.Length; i++)
-                        {
-                            choices.Add(await service.GetStringAsync(
-                                "ui",
-                                LanguageOptionKeys[i],
-                                cancellationToken: token));
-                        }
-
-                        if (generation != _languageRefreshGeneration
-                            || !ReferenceEquals(_localizationService, service)
-                            || _languageDropdown == null)
-                        {
-                            return;
-                        }
-
-                        _languageChoices.Clear();
-                        _languageChoices.AddRange(choices);
-                        _updatingLanguageChoice = true;
-
-                        try
-                        {
-                            _languageDropdown.choices = new List<string>(_languageChoices);
-                            int selectedIndex = Array.IndexOf(
-                                LanguagePreferences,
-                                host.Settings.Current.Language);
-                            selectedIndex = Mathf.Clamp(selectedIndex, 0, _languageChoices.Count - 1);
-                            _languageDropdown.SetValueWithoutNotify(
-                                _languageChoices[selectedIndex]);
-                            _languageDropdown.SetEnabled(!_languageOperationBusy);
-                        }
-                        finally
-                        {
-                            _updatingLanguageChoice = false;
-                        }
-                    },
-                    failurePolicy: LifecycleTaskFailurePolicy.Report);
-            }
-            catch (Exception exception)
-            {
-                Debug.LogException(exception, this);
-                _languageDropdown.SetEnabled(false);
-            }
         }
 
         SessionSaveFacade ResolveSaveFacade()
@@ -664,53 +461,6 @@ namespace DarkFlare
             }
 
             return service;
-        }
-
-        void ScheduleAutoSaveProbe()
-        {
-            SessionSaveFacade facade = _saveFacade;
-
-            if (facade == null
-                || !ApplicationHost.TryGetCurrent(out ApplicationHost host)
-                || host.ApplicationScope == null
-                || !host.ApplicationScope.CanAcceptWork)
-            {
-                SetSaveStatus("save.status.service_unavailable");
-                RefreshSaveControls();
-                return;
-            }
-
-            SetSaveOperationBusy(true, "save.status.checking");
-
-            try
-            {
-                host.ApplicationScope.Tasks.Run(
-                    "game-menu-probe-auto-save",
-                    async token =>
-                    {
-                        SaveOperationResult result = await facade.ProbeAutoSaveAsync(token);
-
-                        if (!ReferenceEquals(_saveFacade, facade))
-                        {
-                            return;
-                        }
-
-                        _hasAutoSave = result.Succeeded;
-                        SetSaveOperationBusy(
-                            false,
-                            result.Succeeded
-                                ? result.RecoverySource == SaveRecoverySource.Backup
-                                    ? LocalizedMessage.Ui("save.status.available_backup")
-                                    : LocalizedMessage.Ui("save.status.available")
-                                : DescribeSaveResult(result));
-                    },
-                    failurePolicy: LifecycleTaskFailurePolicy.Report);
-            }
-            catch (Exception exception)
-            {
-                Debug.LogException(exception, this);
-                SetSaveOperationBusy(false, "save.status.probe_failed");
-            }
         }
 
         void RunSaveOperation(
@@ -748,11 +498,6 @@ namespace DarkFlare
                             return;
                         }
 
-                        if (result.Succeeded && result.Operation == SaveOperation.Save)
-                        {
-                            _hasAutoSave = true;
-                        }
-
                         SetSaveOperationBusy(false, DescribeSaveResult(result));
 
                         if (focusTarget != null && focusTarget.enabledSelf)
@@ -787,8 +532,12 @@ namespace DarkFlare
         {
             bool available = _saveFacade != null && !_saveOperationBusy;
             _saveButton?.SetEnabled(available);
-            _continueButton?.SetEnabled(available && _hasAutoSave);
-            _newGameButton?.SetEnabled(available);
+            bool canReturn = ApplicationHost.TryGetCurrent(out ApplicationHost host)
+                && host.ApplicationShell != null
+                && host.SceneFlow != null
+                && (host.SceneFlow.State == GameFlowState.InGame
+                    || host.SceneFlow.State == GameFlowState.Paused);
+            _returnFrontEndButton?.SetEnabled(!_saveOperationBusy && canReturn);
         }
 
         void SetSaveStatus(string statusKey, params object[] arguments)

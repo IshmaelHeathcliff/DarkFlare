@@ -86,20 +86,17 @@ namespace DarkFlare.Tests
         }
 
         [Test]
-        public void GameRoot_ContainsFocusableLanguageSelectorAndLocalizedLabelBinding()
+        public void ApplicationShell_ContainsFocusableFrontEndLanguageSelector()
         {
             VisualTreeAsset tree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(
-                "Assets/UI/GameRoot.uxml");
+                "Assets/UI/ApplicationShell.uxml");
             Assert.NotNull(tree);
             TemplateContainer root = tree.CloneTree();
-            DropdownField dropdown = root.Q<DropdownField>("game-menu-language-dropdown");
-            Label label = root.Q<Label>("game-menu-language-label");
+            DropdownField dropdown = root.Q<DropdownField>("front-end-language");
 
             Assert.NotNull(dropdown);
             Assert.IsTrue(dropdown.focusable);
-            Assert.NotNull(label);
-            Assert.IsEmpty(label.text);
-            Assert.NotNull(label.GetBinding("text"));
+            Assert.IsNull(root.Q<DropdownField>("game-menu-language-dropdown"));
         }
 
         [UnityTest]

@@ -27,7 +27,7 @@ namespace DarkFlare.Tests
         [UnityTest]
         public IEnumerator MainScene_ActorEventsSwitchAttackHitDeathAndRevive()
         {
-            yield return SceneManager.LoadSceneAsync("Main", LoadSceneMode.Single);
+            yield return _fixture.EnterMain();
 
             PlayerController player = null;
             float timeout = Time.realtimeSinceStartup + 15f;

@@ -11,21 +11,18 @@ namespace DarkFlare
         readonly GameSessionHost _session;
         readonly SaveCoordinator _coordinator;
         readonly Scene _scene;
-        readonly GameplaySceneConfiguration _configuration;
         bool _operationInProgress;
 
         public SessionSaveFacade(
             ApplicationHost host,
             GameSessionHost session,
             SaveCoordinator coordinator,
-            Scene scene,
-            GameplaySceneConfiguration configuration)
+            Scene scene)
         {
             _host = host ?? throw new ArgumentNullException(nameof(host));
             _session = session ?? throw new ArgumentNullException(nameof(session));
             _coordinator = coordinator ?? throw new ArgumentNullException(nameof(coordinator));
             _scene = scene;
-            _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
 
         public int ArchitectureGeneration => _session.ArchitectureGeneration;
@@ -52,99 +49,6 @@ namespace DarkFlare
                 return await _coordinator.SaveAsync(
                     SaveCoordinator.AutoSlot,
                     cancellationToken);
-            }
-            finally
-            {
-                _operationInProgress = false;
-            }
-        }
-
-        public async UniTask<SaveOperationResult> ProbeAutoSaveAsync(
-            CancellationToken cancellationToken = default)
-        {
-            if (!TryBeginOperation(cancellationToken, out SaveOperationResult failure))
-            {
-                return ChangeOperation(failure, SaveOperation.PrepareContinue);
-            }
-
-            try
-            {
-                PrepareContinueResult prepared = await _coordinator.PrepareContinueAsync(
-                    SaveCoordinator.AutoSlot,
-                    cancellationToken);
-                return prepared.OperationResult;
-            }
-            finally
-            {
-                _operationInProgress = false;
-            }
-        }
-
-        public async UniTask<SaveOperationResult> ContinueAutoAsync(
-            CancellationToken cancellationToken = default)
-        {
-            if (!TryBeginOperation(cancellationToken, out SaveOperationResult failure))
-            {
-                return ChangeOperation(failure, SaveOperation.Continue);
-            }
-
-            try
-            {
-                PrepareContinueResult prepared = await _coordinator.PrepareContinueAsync(
-                    SaveCoordinator.AutoSlot,
-                    cancellationToken);
-
-                if (!prepared.Succeeded)
-                {
-                    return ChangeOperation(
-                        prepared.OperationResult,
-                        SaveOperation.Continue);
-                }
-
-                if (!IsCurrentSession())
-                {
-                    return SaveOperationResult.Failure(
-                        SaveOperation.Continue,
-                        SaveCoordinator.AutoSlot,
-                        SaveErrorCode.SessionUnavailable);
-                }
-
-                SaveOperationResult transition = await BeginTransitionAsync(
-                    new RestoreGameSessionInitializer(
-                        _configuration,
-                        prepared.PreparedRestore),
-                    SaveOperation.Continue);
-
-                if (!transition.Succeeded)
-                {
-                    return transition;
-                }
-
-                return SaveOperationResult.Success(
-                    SaveOperation.Continue,
-                    SaveCoordinator.AutoSlot,
-                    prepared.OperationResult.CommitSequence,
-                    prepared.OperationResult.RecoverySource);
-            }
-            finally
-            {
-                _operationInProgress = false;
-            }
-        }
-
-        public async UniTask<SaveOperationResult> StartNewGameAsync(
-            CancellationToken cancellationToken = default)
-        {
-            if (!TryBeginOperation(cancellationToken, out SaveOperationResult failure))
-            {
-                return ChangeOperation(failure, SaveOperation.NewGame);
-            }
-
-            try
-            {
-                return await BeginTransitionAsync(
-                    new NewGameSessionInitializer(_configuration),
-                    SaveOperation.NewGame);
             }
             finally
             {
@@ -199,54 +103,5 @@ namespace DarkFlare
                 && _scene.isLoaded;
         }
 
-        async UniTask<SaveOperationResult> BeginTransitionAsync(
-            IGameSessionInitializer initializer,
-            SaveOperation operation)
-        {
-            UniTaskCompletionSource<LifecycleResult> completion =
-                new UniTaskCompletionSource<LifecycleResult>();
-            LifecycleResult submitted = _host.BeginSceneSessionInitialization(
-                _scene,
-                initializer,
-                onCompleted: result => completion.TrySetResult(result));
-
-            if (!submitted.IsSuccess)
-            {
-                return SaveOperationResult.Failure(
-                    operation,
-                    SaveCoordinator.AutoSlot,
-                    submitted.Code == LifecycleResultCode.OperationInProgress
-                        ? SaveErrorCode.OperationInProgress
-                        : SaveErrorCode.RestoreCommitFailed,
-                    submitted.Code == LifecycleResultCode.OperationInProgress,
-                    submitted.Exception);
-            }
-
-            LifecycleResult completed = await completion.Task;
-            return completed.IsSuccess
-                ? SaveOperationResult.Success(operation, SaveCoordinator.AutoSlot)
-                : SaveOperationResult.Failure(
-                    operation,
-                    SaveCoordinator.AutoSlot,
-                    completed.Code == LifecycleResultCode.Cancelled
-                        ? SaveErrorCode.Cancelled
-                        : SaveErrorCode.RestoreCommitFailed,
-                    false,
-                    completed.Exception);
-        }
-
-        static SaveOperationResult ChangeOperation(
-            SaveOperationResult result,
-            SaveOperation operation)
-        {
-            return new SaveOperationResult(
-                operation,
-                result.SlotId,
-                result.ErrorCode,
-                result.RecoverySource,
-                result.CanRetry,
-                result.Exception,
-                result.CommitSequence);
-        }
     }
 }
