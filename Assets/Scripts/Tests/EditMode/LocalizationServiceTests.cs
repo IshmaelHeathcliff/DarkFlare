@@ -80,7 +80,9 @@ namespace DarkFlare.Tests
             Assert.IsTrue(result.Succeeded, result.Exception?.ToString());
             Assert.AreEqual(LocalizationService.EnglishLocaleCode, service.CurrentLocaleCode);
             Assert.AreEqual(LocalizationService.EnglishLocaleCode, runtime.SelectedLocaleCode);
-            CollectionAssert.AreEquivalent(new[] { "ui", "system" }, runtime.LastPreloadTables);
+            CollectionAssert.AreEquivalent(
+                new[] { "ui", "system", "items", "stats", "affixes", "monsters" },
+                runtime.LastPreloadTables);
         }
 
         async UniTask VerifyLatestWinsAsync()
@@ -153,6 +155,14 @@ namespace DarkFlare.Tests
 
             Assert.AreEqual("已知", service.GetString("ui", "known"));
             Assert.AreEqual("[ui.missing]", service.GetString("ui", "missing"));
+            runtime.SetString(
+                "ui",
+                "formatted",
+                LocalizationService.EnglishLocaleCode,
+                "Value {0}");
+            Assert.AreEqual(
+                "Value 42",
+                service.GetString(LocalizedMessage.Ui("formatted", 42)));
         }
 
         SettingsService CreateSettingsService()
@@ -247,7 +257,7 @@ namespace DarkFlare.Tests
                 IList<object> arguments)
             {
                 _strings.TryGetValue(Key(tableName, entryKey, localeCode), out string value);
-                return value ?? string.Empty;
+                return Format(value, arguments);
             }
 
             public void BlockLocale(string localeCode)
@@ -267,6 +277,25 @@ namespace DarkFlare.Tests
             static string Key(string tableName, string entryKey, string localeCode)
             {
                 return tableName + "|" + entryKey + "|" + localeCode;
+            }
+
+            static string Format(string value, IList<object> arguments)
+            {
+                if (string.IsNullOrEmpty(value)
+                    || arguments == null
+                    || arguments.Count == 0)
+                {
+                    return value ?? string.Empty;
+                }
+
+                object[] values = new object[arguments.Count];
+
+                for (int i = 0; i < arguments.Count; i++)
+                {
+                    values[i] = arguments[i];
+                }
+
+                return string.Format(value, values);
             }
         }
     }

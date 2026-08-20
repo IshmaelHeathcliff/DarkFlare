@@ -14,7 +14,147 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.SharedTableData
   m_TableCollectionName: affixes
   m_TableCollectionNameGuidString: f8f0c87e721861740a8eb1f0a7cc5471
-  m_Entries: []
+  m_Entries:
+  - m_Id: 158451694034944
+    m_Key: item_affix.sharp.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451727589376
+    m_Key: item_affix.tempered.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451727589377
+    m_Key: item_affix.flame_touched.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451727589378
+    m_Key: item_affix.frost_touched.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451727589379
+    m_Key: item_affix.healthy.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451727589380
+    m_Key: item_affix.reinforced.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451727589381
+    m_Key: item_affix.of_power.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451727589382
+    m_Key: item_affix.of_endurance.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451727589383
+    m_Key: item_affix.of_fire_guard.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451727589384
+    m_Key: item_affix.of_cold_guard.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451727589385
+    m_Key: item_affix.of_lightning_guard.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451727589386
+    m_Key: item_affix.of_chaos_guard.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451727589387
+    m_Key: item_affix.arcane_reserve.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451727589388
+    m_Key: item_affix.regenerating.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451727589389
+    m_Key: item_affix.meditative.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451727589390
+    m_Key: item_affix.mighty.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451727589391
+    m_Key: item_affix.deft.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451727589392
+    m_Key: item_affix.learned.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451727589393
+    m_Key: item_affix.storm_touched.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451727589394
+    m_Key: item_affix.chaos_touched.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451727589395
+    m_Key: item_affix.deadly.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451727589396
+    m_Key: item_affix.of_ruin.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451727589397
+    m_Key: item_affix.accurate.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451727589398
+    m_Key: item_affix.elusive.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451727589399
+    m_Key: item_affix.of_swiftness.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451727589400
+    m_Key: monster_affix.monster_flame_touched.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451727589401
+    m_Key: monster_affix.monster_frost_touched.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451727589402
+    m_Key: monster_affix.monster_storm_touched.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451727589403
+    m_Key: monster_affix.monster_fire_guarded.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451727589404
+    m_Key: monster_affix.monster_cold_guarded.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451727589405
+    m_Key: monster_affix.monster_lightning_guarded.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451727589406
+    m_Key: monster_affix.monster_robust.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451727589407
+    m_Key: monster_affix.monster_armored.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451727589408
+    m_Key: monster_affix.monster_elusive.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451727589409
+    m_Key: monster_affix.monster_swift.name
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

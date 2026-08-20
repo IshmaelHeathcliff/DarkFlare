@@ -2,17 +2,17 @@
 
 > 状态：规划期强制契约
 > 建立日期：2026-08-17
-> 最近更新：2026-08-19
+> 最近更新：2026-08-20
 > 适用范围：`alpha 0.2` 全部实现、迁移、测试和后续新增运行时代码
 > 上位计划：[alpha 0.2 基础设施开发计划](./alpha-0.2-plan.md)
-> 已落地模块：[应用生命周期与会话作用域](../infrastructure/application-lifecycle.md)（`alpha 0.2.0`）、[稳定身份、内容目录与迁移框架](../infrastructure/content-identity-migration.md)（`alpha 0.2.1`）、[本地存档与 Session 恢复](../infrastructure/local-save.md)（`alpha 0.2.2`）
-> 当前阶段：[`alpha 0.2.3` 用户设置与本地化](./alpha-0.2.3-settings-localization-plan.md)，实施中
+> 已落地模块：[应用生命周期与会话作用域](../infrastructure/application-lifecycle.md)（`alpha 0.2.0`）、[稳定身份、内容目录与迁移框架](../infrastructure/content-identity-migration.md)（`alpha 0.2.1`）、[本地存档与 Session 恢复](../infrastructure/local-save.md)（`alpha 0.2.2`）、[用户设置与本地化](../infrastructure/user-settings-localization.md)（`alpha 0.2.3`）
+> 下一阶段：`alpha 0.2.4` 游戏状态、场景流与 UI 外壳
 
 ## 使用方式
 
 本文使用“必须”“禁止”“允许”表达强制级别。阶段实现可以在独立执行计划中补充细节，但不能静默绕过本文。确需例外时，必须提交机器可读白名单，记录规则、文件、原因和移除阶段，并在版本封板前复核。
 
-本文是规划期契约，不代表当前代码已经全部符合。`alpha 0.2.0` 已落地唯一宿主、作用域、Session 事务、统一取消、架构 lease / generation 隔离、场景组件安全绑定、latest-wins 单场景协调和首批策略扫描；`alpha 0.2.1` 已落地稳定内容 / 实例身份、Application 内容目录、纯 DTO 和内存迁移链；`alpha 0.2.2` 已落地确定性文件存档、代际提交与损坏回退、完整快照、Restore Session、菜单消费者和退出 Flush。本地化、用户设置、完整 SceneFlow 等其余契约仍由后续阶段实现。现有技术债在对应阶段迁移；新增代码不得扩大债务面。
+本文是规划期契约，不代表当前代码已经全部符合。`alpha 0.2.0` 已落地唯一宿主、作用域、Session 事务、统一取消、架构 lease / generation 隔离、场景组件安全绑定、latest-wins 单场景协调和首批策略扫描；`alpha 0.2.1` 已落地稳定内容 / 实例身份、Application 内容目录、纯 DTO 和内存迁移链；`alpha 0.2.2` 已落地确定性文件存档、代际提交与损坏回退、完整快照、Restore Session、菜单消费者和退出 Flush；`alpha 0.2.3` 已落地 Settings V1、运行时本地化、正式内容引用、字体 fallback 和玩家文本策略扫描。完整 SceneFlow 等其余契约仍由后续阶段实现。现有技术债在对应阶段迁移；新增代码不得扩大债务面。
 
 ## 基础设施总清单
 

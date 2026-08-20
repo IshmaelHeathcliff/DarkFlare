@@ -14,6 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DarkFlare.StatDefinition
   _id: accuracy
   _displayName: "\u547D\u4E2D\u503C"
+  _localizedName:
+    _tableName: stats
+    _entryKey: accuracy
   _category: 1
   _defaultValue: 0
   _minValue: 0

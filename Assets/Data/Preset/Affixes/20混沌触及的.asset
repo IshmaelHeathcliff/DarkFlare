@@ -14,6 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.AffixDefinition
   _id: chaos_touched
   _displayName: "\u6DF7\u6C8C\u89E6\u53CA\u7684"
+  _localizedName:
+    _tableName: affixes
+    _entryKey: item_affix.chaos_touched.name
   _affixType: 0
   _groupId: elemental_extra
   _minItemLevel: 1

@@ -14,6 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.AffixDefinition
   _id: elusive
   _displayName: "\u98D8\u5FFD\u7684"
+  _localizedName:
+    _tableName: affixes
+    _entryKey: item_affix.elusive.name
   _affixType: 0
   _groupId: evasion_flat
   _minItemLevel: 1

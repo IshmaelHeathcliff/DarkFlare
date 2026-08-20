@@ -29,19 +29,6 @@ namespace DarkFlare
             "settings.language.en",
         };
 
-        readonly struct LocalizedMessage
-        {
-            public string Key { get; }
-
-            public IList<object> Arguments { get; }
-
-            public LocalizedMessage(string key, params object[] arguments)
-            {
-                Key = key;
-                Arguments = arguments;
-            }
-        }
-
         [SerializeField]
         UIDocument _document;
 
@@ -79,8 +66,7 @@ namespace DarkFlare
         bool _hasAutoSave;
         bool _languageOperationBusy;
         bool _updatingLanguageChoice;
-        string _saveStatusKey = string.Empty;
-        IList<object> _saveStatusArguments;
+        LocalizedMessage _saveStatusMessage;
 
         public GameMenuAccess AvailablePages { get; private set; } = GameMenuAccess.Inventory;
 
@@ -714,8 +700,8 @@ namespace DarkFlare
                             false,
                             result.Succeeded
                                 ? result.RecoverySource == SaveRecoverySource.Backup
-                                    ? new LocalizedMessage("save.status.available_backup")
-                                    : new LocalizedMessage("save.status.available")
+                                    ? LocalizedMessage.Ui("save.status.available_backup")
+                                    : LocalizedMessage.Ui("save.status.available")
                                 : DescribeSaveResult(result));
                     },
                     failurePolicy: LifecycleTaskFailurePolicy.Report);
@@ -807,65 +793,62 @@ namespace DarkFlare
 
         void SetSaveStatus(string statusKey, params object[] arguments)
         {
-            SetSaveStatus(new LocalizedMessage(statusKey, arguments));
+            SetSaveStatus(LocalizedMessage.Ui(statusKey, arguments));
         }
 
         void SetSaveStatus(LocalizedMessage status)
         {
-            _saveStatusKey = status.Key ?? string.Empty;
-            _saveStatusArguments = status.Arguments;
+            _saveStatusMessage = status;
             RefreshSaveStatusText();
         }
 
         void RefreshSaveStatusText()
         {
-            if (_saveStatus == null || string.IsNullOrEmpty(_saveStatusKey))
+            if (_saveStatus == null || _saveStatusMessage.IsEmpty)
             {
                 return;
             }
 
-            _saveStatus.text = _localizationService?.GetString(
-                "ui",
-                _saveStatusKey,
-                _saveStatusArguments) ?? $"[ui.{_saveStatusKey}]";
+            _saveStatus.text = _localizationService?.GetString(_saveStatusMessage)
+                ?? $"[{_saveStatusMessage.TableName}.{_saveStatusMessage.EntryKey}]";
         }
 
         static LocalizedMessage DescribeSaveResult(SaveOperationResult result)
         {
             if (result == null)
             {
-                return new LocalizedMessage("save.status.no_result");
+                return LocalizedMessage.Ui("save.status.no_result");
             }
 
             if (result.Succeeded)
             {
                 return result.Operation switch
                 {
-                    SaveOperation.Save => new LocalizedMessage("save.status.save_succeeded"),
+                    SaveOperation.Save => LocalizedMessage.Ui("save.status.save_succeeded"),
                     SaveOperation.Continue => result.RecoverySource == SaveRecoverySource.Backup
-                        ? new LocalizedMessage("save.status.continue_backup")
-                        : new LocalizedMessage("save.status.continue_succeeded"),
-                    SaveOperation.NewGame => new LocalizedMessage("save.status.new_game_succeeded"),
-                    _ => new LocalizedMessage("save.status.ready"),
+                        ? LocalizedMessage.Ui("save.status.continue_backup")
+                        : LocalizedMessage.Ui("save.status.continue_succeeded"),
+                    SaveOperation.NewGame => LocalizedMessage.Ui("save.status.new_game_succeeded"),
+                    _ => LocalizedMessage.Ui("save.status.ready"),
                 };
             }
 
             return result.ErrorCode switch
             {
-                SaveErrorCode.SlotNotFound => new LocalizedMessage("save.error.slot_not_found"),
-                SaveErrorCode.NoValidGeneration => new LocalizedMessage("save.error.no_valid_generation"),
-                SaveErrorCode.OperationInProgress => new LocalizedMessage("save.error.operation_in_progress"),
-                SaveErrorCode.SessionUnavailable => new LocalizedMessage("save.error.session_unavailable"),
-                SaveErrorCode.SnapshotUnavailable => new LocalizedMessage("save.error.snapshot_unavailable"),
-                SaveErrorCode.Cancelled => new LocalizedMessage("save.error.cancelled"),
-                SaveErrorCode.ContentVersionMismatch => new LocalizedMessage("save.error.content_version_mismatch"),
-                SaveErrorCode.ContentMissing => new LocalizedMessage("save.error.content_missing"),
-                SaveErrorCode.FutureSchemaUnsupported => new LocalizedMessage("save.error.future_schema_unsupported"),
-                SaveErrorCode.ChecksumMismatch => new LocalizedMessage("save.error.checksum_mismatch"),
-                SaveErrorCode.PermissionDenied => new LocalizedMessage("save.error.permission_denied"),
-                SaveErrorCode.StorageFull => new LocalizedMessage("save.error.storage_full"),
-                SaveErrorCode.FlushTimedOut => new LocalizedMessage("save.error.flush_timed_out"),
-                _ => new LocalizedMessage("save.error.unknown", result.ErrorCode),
+                SaveErrorCode.SlotNotFound => LocalizedMessage.Ui("save.error.slot_not_found"),
+                SaveErrorCode.NoValidGeneration => LocalizedMessage.Ui("save.error.no_valid_generation"),
+                SaveErrorCode.OperationInProgress => LocalizedMessage.Ui("save.error.operation_in_progress"),
+                SaveErrorCode.SessionUnavailable => LocalizedMessage.Ui("save.error.session_unavailable"),
+                SaveErrorCode.SnapshotUnavailable => LocalizedMessage.Ui("save.error.snapshot_unavailable"),
+                SaveErrorCode.Cancelled => LocalizedMessage.Ui("save.error.cancelled"),
+                SaveErrorCode.ContentVersionMismatch => LocalizedMessage.Ui("save.error.content_version_mismatch"),
+                SaveErrorCode.ContentMissing => LocalizedMessage.Ui("save.error.content_missing"),
+                SaveErrorCode.FutureSchemaUnsupported => LocalizedMessage.Ui("save.error.future_schema_unsupported"),
+                SaveErrorCode.ChecksumMismatch => LocalizedMessage.Ui("save.error.checksum_mismatch"),
+                SaveErrorCode.PermissionDenied => LocalizedMessage.Ui("save.error.permission_denied"),
+                SaveErrorCode.StorageFull => LocalizedMessage.Ui("save.error.storage_full"),
+                SaveErrorCode.FlushTimedOut => LocalizedMessage.Ui("save.error.flush_timed_out"),
+                _ => LocalizedMessage.Ui("save.error.unknown", result.ErrorCode),
             };
         }
 

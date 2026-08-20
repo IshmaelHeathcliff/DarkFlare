@@ -34,6 +34,7 @@ namespace DarkFlare.Tests
         static readonly string[] ExpectedNestedTypes =
         {
             "DarkFlare.DamageRollDefinition",
+            "DarkFlare.LocalizedContentReference",
             "DarkFlare.LootTableEntry",
             "DarkFlare.MonsterSpawnRule",
             "DarkFlare.StatModifierDefinition",
@@ -69,7 +70,7 @@ namespace DarkFlare.Tests
         }
 
         [Test]
-        public void ConfigurationDiscovery_FreezesTwelveTopLevelAndSixNestedStructures()
+        public void ConfigurationDiscovery_FreezesTwelveTopLevelAndSevenNestedStructures()
         {
             IReadOnlyList<Type> topLevelTypes = ConfigurationTypeDiscovery.FindTopLevelTypes();
             IReadOnlyList<Type> nestedTypes = ConfigurationTypeDiscovery.FindNestedSerializedTypes(topLevelTypes);
@@ -80,10 +81,10 @@ namespace DarkFlare.Tests
             CollectionAssert.AreEqual(
                 ExpectedNestedTypes,
                 nestedTypes.Select(type => type.FullName).ToArray());
-            Assert.AreEqual(126, ConfigurationTypeDiscovery.CountSerializedFields(topLevelTypes));
-            Assert.AreEqual(27, ConfigurationTypeDiscovery.CountSerializedFields(nestedTypes));
+            Assert.AreEqual(134, ConfigurationTypeDiscovery.CountSerializedFields(topLevelTypes));
+            Assert.AreEqual(29, ConfigurationTypeDiscovery.CountSerializedFields(nestedTypes));
             Assert.AreEqual(
-                153,
+                163,
                 ConfigurationTypeDiscovery.CountSerializedFields(topLevelTypes)
                 + ConfigurationTypeDiscovery.CountSerializedFields(nestedTypes));
 

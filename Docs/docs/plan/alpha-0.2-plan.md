@@ -1,8 +1,8 @@
 # alpha 0.2 基础设施开发计划
 
-> 状态：`alpha 0.2.0–0.2.2` 已完成；`alpha 0.2.3` 实施中
+> 状态：`alpha 0.2.0–0.2.3` 已完成；下一阶段为 `alpha 0.2.4`
 > 建立日期：2026-08-17
-> 最近更新：2026-08-19
+> 最近更新：2026-08-20
 > 基线提交：`21360c7`
 > 计划建立时前置基线：`alpha 0.1` 已完成并归档；EditMode `212/212` 通过，PlayMode `24` 项中 `22` 项通过、`2` 项因 Input System 上游问题忽略、零失败
 > 约束契约：[alpha 0.2 基础设施约束契约](./alpha-0.2-infrastructure-contract.md)
@@ -27,10 +27,10 @@
 - `alpha 0.2.1` 建立的纯 DTO、分离对象图 Mapper、版本合同和迁移管线已在 `alpha 0.2.2` 接入确定性 JSON、`Application.persistentDataPath` 代际存储、损坏回退和退出 Flush；`Assets/Data/Saves` 继续不存放正式玩家数据。
 - 背包、装备、经济和物品实例仍可在玩法内使用对象引用，持久化边界统一转换为 ContentId 与强类型实例 ID；`auto` 保存和 Restore Session 已有真实菜单消费者。
 - Application 级唯一内容目录 `core` v1 已收录 90 个正式配置，并由配置验证器冻结零空值、零重复、零遗漏。
-- Unity Localization `1.5.12` 已安装，但没有 Locale、String Table、运行时语言服务或玩家可见文本迁移。
-- 用户设置、输入重绑定、按键图标、音频服务、全局异常处理和结构化日志尚未建立。
+- `alpha 0.2.3` 已建立 Settings V1、Application 级 Localization Service、`zh-Hans` / `en` / Pseudo Locale、六张职责表、86 个正式内容名称引用和中英字体 fallback；静态 UXML 与当前动态 UI 均已迁移，三语言 × 三分辨率矩阵和全量回归通过。
+- 输入重绑定、完整按键图标、音频服务、全局异常处理和结构化日志尚未建立；交互提示现阶段仅使用 Input System 的绑定显示文本。
 - Addressables 已用于 Prefab 和 Sprite 加载，Prefab GUID 单飞与精确句柄释放已有自动验证；当前内容主要位于本地默认组，仍缺少完整分组、标签和跨加载器治理。
-- 运行时代码仍存在直接 `Debug.Log*` 调用，可见字符串规则尚未启用；直接业务文件 IO、`PlayerPrefs` 和散落场景加载已由 `alpha 0.2.0` 策略测试冻结。
+- 运行时代码仍存在直接 `Debug.Log*` 调用；玩家可见硬编码文本规则已启用，日志治理留到 `alpha 0.2.6`。直接业务文件 IO、`PlayerPrefs` 和散落场景加载已由策略测试冻结。
 
 ## 交付层级
 
@@ -68,8 +68,8 @@
 | `alpha 0.2.0` | 已完成 | 建立应用宿主、作用域、生命周期和首批规范验证 | [模块文档](../infrastructure/application-lifecycle.md) · [归档计划](./archive/alpha-0.2.0-application-lifecycle-plan.md) |
 | `alpha 0.2.1` | 已完成 | 建立稳定身份、内容目录和版本迁移底座 | [模块文档](../infrastructure/content-identity-migration.md) · [归档计划](./archive/alpha-0.2.1-content-identity-migration-plan.md) |
 | `alpha 0.2.2` | 已完成 | 完成本地存档、读档和损坏恢复闭环 | [模块文档](../infrastructure/local-save.md) · [归档计划](./archive/alpha-0.2.2-local-save-plan.md) |
-| `alpha 0.2.3` | 实施中 | 完成用户设置和运行时本地化 | [执行计划](./alpha-0.2.3-settings-localization-plan.md) · Settings / Localization 启动门禁与静态 UXML 已完成；动态反馈、内容、字体和布局待完成 |
-| `alpha 0.2.4` | 待开始 | 建立游戏状态、场景加载和通用 UI 外壳 | Boot / Loading / InGame 状态、SceneFlow、Loading UI、Page / Modal / Toast |
+| `alpha 0.2.3` | 已完成 | 完成用户设置和运行时本地化 | [模块文档](../infrastructure/user-settings-localization.md) · [归档计划](./archive/alpha-0.2.3-settings-localization-plan.md) |
+| `alpha 0.2.4` | 下一阶段 | 建立游戏状态、场景加载和通用 UI 外壳 | Boot / Loading / InGame 状态、SceneFlow、Loading UI、Page / Modal / Toast |
 | `alpha 0.2.5` | 待开始 | 接入输入、音频、可访问性和平台生命周期 | 重绑定、输入图标、AudioMixer 服务、可访问性设置、挂起 / 退出策略 |
 | `alpha 0.2.6` | 待开始 | 建立日志、错误处理和资源生命周期治理 | Logger、异常捕获、玩家错误反馈、Addressables 规则与句柄验证 |
 | `alpha 0.2.7` | 待开始 | 完成跨模块回归、故障演练和文档封板 | 综合验收记录、迁移样本、模块文档、计划归档 |
@@ -194,7 +194,7 @@
 
 ## alpha 0.2.3：用户设置与本地化
 
-冻结的数据合同、启动顺序、文本迁移范围、实施切片和验收矩阵见[独立执行计划](./alpha-0.2.3-settings-localization-plan.md)。
+当前实现与维护边界见[用户设置与本地化](../infrastructure/user-settings-localization.md)；冻结的数据合同、启动顺序、文本迁移范围、实施切片和验收矩阵见[归档执行计划](./archive/alpha-0.2.3-settings-localization-plan.md)。
 
 ### 目标
 
@@ -221,6 +221,15 @@
 - Pseudo Locale 与长文本检查在目标分辨率下无关键按钮截断、遮挡或不可操作。
 - 正式表中零缺失、零空翻译、零重复 Key；新增玩家可见硬编码文本会触发自动检查失败。
 - 字体回退不会产生缺字方框，格式化结果符合当前 Locale。
+
+### 完成记录
+
+- Settings V1 已实现独立 Schema、确定性 JSON、SHA-256、`0 → 1` 迁移、原子提交、备份与损坏恢复；Application Host 在 Profile / Session 和首份玩家 UI 之前加载设置并预热本地化表。
+- `LocalizationService` 已覆盖系统语言自动选择、显式偏好、`zh-Hans` 回退、latest-wins 切换、失败回滚和结构化结果；Game Menu 只开放有真实消费者的语言入口。
+- 七份 UXML、当前动态 UI、86 个正式内容名称和六张职责表已迁移；快照只保存 `LocalizedMessage`、稳定 ID、数值与领域结果，Locale 切换不重建玩法状态。
+- UI Toolkit 与 TextMesh Pro 均建立中英字体 fallback；六张正式表及实际 `qps-ploc` 字符集零缺字，秋水书体的 OFL 与来源说明随资产保存。
+- `LocalizationPolicyTests` 冻结配置引用、双语条目、孤儿键、UXML / C# 玩家文本和字体覆盖；三语言 × 1280×720、1920×1080、2560×1440 布局矩阵通过。
+- 最终验证为 Unity 编译 0 error、EditMode `334/334`、项目自有 PlayMode `48/48`；完整 PlayMode 52 项中 50 项通过、0 失败，2 项 Input System 包集成测试因上游 issue 1252825 跳过。
 
 ## alpha 0.2.4：游戏状态、场景流与 UI 外壳
 

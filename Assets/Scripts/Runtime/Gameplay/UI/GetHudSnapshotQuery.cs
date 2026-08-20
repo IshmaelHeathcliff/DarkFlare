@@ -8,16 +8,13 @@ namespace DarkFlare
     {
         public string StatId { get; }
 
-        public string DisplayName { get; }
-
         public float Value { get; }
 
         public bool IsPercentage { get; }
 
-        public HudAttributeValue(string statId, string displayName, float value, bool isPercentage)
+        public HudAttributeValue(string statId, float value, bool isPercentage)
         {
             StatId = statId;
-            DisplayName = displayName;
             Value = value;
             IsPercentage = isPercentage;
         }
@@ -31,29 +28,29 @@ namespace DarkFlare
 
         static readonly AttributeDefinition[] Definitions =
         {
-            new AttributeDefinition(StatIds.MaxHealth, "最大生命"),
-            new AttributeDefinition(StatIds.Mana, "最大法力"),
-            new AttributeDefinition(StatIds.HealthRegeneration, "生命恢复"),
-            new AttributeDefinition(StatIds.ManaRegeneration, "法力恢复"),
-            new AttributeDefinition(StatIds.Strength, "力量"),
-            new AttributeDefinition(StatIds.Dexterity, "敏捷"),
-            new AttributeDefinition(StatIds.Intelligence, "智力"),
-            new AttributeDefinition(StatIds.Damage, "伤害"),
-            new AttributeDefinition(StatIds.CriticalChance, "暴击率", true),
-            new AttributeDefinition(StatIds.CriticalDamage, "暴击伤害", true),
-            new AttributeDefinition(StatIds.Accuracy, "命中值"),
-            new AttributeDefinition(StatIds.Armor, "护甲"),
-            new AttributeDefinition(StatIds.Evasion, "闪避值"),
-            new AttributeDefinition(StatIds.FireResistance, "火焰抗性", true),
-            new AttributeDefinition(StatIds.ColdResistance, "冰霜抗性", true),
-            new AttributeDefinition(StatIds.LightningResistance, "闪电抗性", true),
-            new AttributeDefinition(StatIds.ChaosResistance, "混沌抗性", true),
-            new AttributeDefinition(StatIds.MoveSpeed, "移动速度"),
-            new AttributeDefinition(StatIds.PhysicalDamage, "物理伤害"),
-            new AttributeDefinition(StatIds.FireDamage, "火焰伤害"),
-            new AttributeDefinition(StatIds.ColdDamage, "冰霜伤害"),
-            new AttributeDefinition(StatIds.LightningDamage, "闪电伤害"),
-            new AttributeDefinition(StatIds.ChaosDamage, "混沌伤害"),
+            new AttributeDefinition(StatIds.MaxHealth),
+            new AttributeDefinition(StatIds.Mana),
+            new AttributeDefinition(StatIds.HealthRegeneration),
+            new AttributeDefinition(StatIds.ManaRegeneration),
+            new AttributeDefinition(StatIds.Strength),
+            new AttributeDefinition(StatIds.Dexterity),
+            new AttributeDefinition(StatIds.Intelligence),
+            new AttributeDefinition(StatIds.Damage),
+            new AttributeDefinition(StatIds.CriticalChance, true),
+            new AttributeDefinition(StatIds.CriticalDamage, true),
+            new AttributeDefinition(StatIds.Accuracy),
+            new AttributeDefinition(StatIds.Armor),
+            new AttributeDefinition(StatIds.Evasion),
+            new AttributeDefinition(StatIds.FireResistance, true),
+            new AttributeDefinition(StatIds.ColdResistance, true),
+            new AttributeDefinition(StatIds.LightningResistance, true),
+            new AttributeDefinition(StatIds.ChaosResistance, true),
+            new AttributeDefinition(StatIds.MoveSpeed),
+            new AttributeDefinition(StatIds.PhysicalDamage),
+            new AttributeDefinition(StatIds.FireDamage),
+            new AttributeDefinition(StatIds.ColdDamage),
+            new AttributeDefinition(StatIds.LightningDamage),
+            new AttributeDefinition(StatIds.ChaosDamage),
         };
 
         public IReadOnlyList<HudAttributeValue> Values => _values ?? EmptyValues;
@@ -98,7 +95,6 @@ namespace DarkFlare
                         : GetNonNegative(stats, definition.StatId);
                 _values[i] = new HudAttributeValue(
                     definition.StatId,
-                    definition.DisplayName,
                     value,
                     definition.IsPercentage);
             }
@@ -126,14 +122,11 @@ namespace DarkFlare
         {
             public string StatId { get; }
 
-            public string DisplayName { get; }
-
             public bool IsPercentage { get; }
 
-            public AttributeDefinition(string statId, string displayName, bool isPercentage = false)
+            public AttributeDefinition(string statId, bool isPercentage = false)
             {
                 StatId = statId;
-                DisplayName = displayName;
                 IsPercentage = isPercentage;
             }
         }

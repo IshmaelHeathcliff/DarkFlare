@@ -150,7 +150,7 @@ flowchart LR
 - 当前仍只有 `local-default` Profile；已支持 `auto` 槽位、序列化、两代备份、迁移和 Restore，但没有正式档案切换、手动槽位管理或云同步。
 - 新游戏与读档分别使用 `NewGameSessionInitializer` 和 `RestoreGameSessionInitializer`，禁止复用新游戏发放流程伪装恢复。
 - 尚未实现 Boot / FrontEnd / Loading / Recovering / FatalError 状态机。
-- Unity Localization、应用级结构化日志、统一玩家错误反馈和完整 Addressables 治理不属于本模块。
+- Settings / Unity Localization 已由独立模块落地；SceneFlow / UI 错误外壳、应用级结构化日志和完整 Addressables 治理仍不属于本模块。
 - 一旦进入 `Abandoned`，本次运行不得继续创建 Session；应终止运行或执行测试静态重置。
 
-本模块的边界是提供可靠的生命周期、所有权和注入时机；稳定身份、内容目录和迁移合同见[稳定身份、内容目录与迁移框架](./content-identity-migration.md)，已落地的文件格式、保存与 Restore 顺序见[本地存档与 Session 恢复](./local-save.md)，场景流、本地化与资源治理继续建立在这些基础之上。历史验收范围和测试记录见顶部归档计划。
+本模块的边界是提供可靠的生命周期、所有权和注入时机；稳定身份、内容目录和迁移合同见[稳定身份、内容目录与迁移框架](./content-identity-migration.md)，已落地的文件格式、保存与 Restore 顺序见[本地存档与 Session 恢复](./local-save.md)，本地化见[用户设置与本地化](./user-settings-localization.md)，场景流与资源治理继续建立在这些基础之上。历史验收范围和测试记录见顶部归档计划。

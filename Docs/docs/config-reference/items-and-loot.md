@@ -10,6 +10,7 @@
 | --- | --- | --- | --- |
 | `_id` | `string` / 空 | 正式资产必填；唯一小写 `snake_case`，发布后稳定 | 实例 ID、价格、Addressable 映射、随机与存档消费；改名须迁移 |
 | `_displayName` | `string` / 空 | 正式资产必填；中文名称 | 物品信息浮窗、交易与调试消费 |
+| `_localizedName` | `LocalizedContentReference` / 空引用 | 正式资产必填；固定使用 `items/item.<id>.name` | 玩家可见名称由 `LocalizationService` 按当前语言解析；`_displayName` 仅保留作者识别与日志兼容 |
 | `_itemType` | `ItemType` / `Weapon` | 必填；必须与槽位、伤害和标签派生一致 | 背包/装备、词缀 SpawnQuery 和 UI 消费；改变类型属于实例迁移 |
 | `_icon` | `AssetReferenceSprite` / `null` | 正式资产必填；Addressable GUID 有效且各正式物品独立 | `SpriteAssetLoader` 预热/缓存/释放；禁止 Resources 与直接路径加载 |
 | `_allowedEquipmentSlots` | `EquipmentSlotMask` / `None` | 可装备物品必须非空；Weapon 只能 Weapon，护甲/饰品遵循对应槽位 | 拖拽装备与装备模型校验消费 |

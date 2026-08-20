@@ -10,6 +10,7 @@
 | --- | --- | --- | --- |
 | `_id` | `string` / 空 | 正式资产必填；全局唯一的小写 ASCII `snake_case`；发布后视为稳定 ID | 由标签资产拥有，运行时比较与跨资产引用使用；重命名必须迁移所有引用，不能只改显示名 |
 | `_displayName` | `string` / 空 | 正式资产必填；中文短名称 | Inspector、调试与配置中心显示；不参与匹配 |
+| `_localizedName` | `LocalizedContentReference` / 空引用 | 正式资产必填；固定使用 `items/tag.<id>.name` | 物品详情按当前语言显示标签；匹配仍只使用稳定标签资产与 `_id` |
 | `_domain` | `CombatTagDomain` / `ItemSpawn` | 必填；必须与生产者和引用位置一致 | `ContentConfigurationValidator` 校验；旧资产未显式保存时按 `ItemSpawn` 解释，迁移后必须明确复核 |
 | `_usage` | `CombatTagUsage` / `Active` | `Active` 必须有正式查询消费者；预留但无消费者使用 `Reserved` | 配置中心拒绝预留标签被当作正式规则消费；改变状态不改变匹配算法 |
 | `_description` | `string` / 空 | 正式资产必填；说明语义、生产者及允许消费者 | 仅供作者与审查；不进入运行时结果 |
@@ -35,4 +36,3 @@
 - “Domain 与引用位置不一致”：移动或移除引用；不要复制同义标签到另一个 Domain。
 - 新字段或新嵌套查询类型必须先进入 `coverage-manifest.json`，并在对应 H2 下增加独立字段行。
 - `alpha 0.1.1` 以前的平面标签列表仅为兼容读取；正式配置必须使用结构化查询并清空旧字段。
-

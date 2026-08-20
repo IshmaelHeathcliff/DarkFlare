@@ -130,10 +130,12 @@
 
 .shop-actions {
   flex-direction: row;
+  flex-wrap: wrap;
 }
 
 .shop-actions .item-context-action {
   flex-grow: 1;
+  width: 48%;
 }
 
 .shop-actions .shop-buy {

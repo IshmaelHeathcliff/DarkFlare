@@ -34,7 +34,7 @@
 }
 
 .game-menu-header {
-  height: 58px;
+  min-height: 58px;
   flex-direction: row;
   align-items: center;
   margin-bottom: 12px;
@@ -43,19 +43,23 @@
 }
 
 .game-menu-heading {
-  width: 286px;
+  width: 320px;
   flex-direction: row;
   align-items: center;
 }
 
 .game-menu-title {
+  min-width: 0;
+  flex-grow: 1;
   margin-right: 10px;
+  white-space: normal;
   font-size: 25px;
   -unity-font-style: bold;
   color: rgb(241, 232, 210);
 }
 
 .game-menu-kicker {
+  display: none;
   font-size: 9px;
   letter-spacing: 2px;
   color: rgb(166, 132, 77);
@@ -213,8 +217,9 @@
 }
 
 .item-context-header {
-  height: 36px;
+  min-height: 36px;
   flex-direction: row;
+  flex-wrap: wrap;
   align-items: center;
   margin-bottom: 10px;
   border-bottom-width: 1px;
@@ -222,13 +227,19 @@
 }
 
 .item-context-title {
+  width: 100%;
+  min-width: 0;
   flex-grow: 1;
+  white-space: normal;
   font-size: 17px;
   -unity-font-style: bold;
   color: rgb(214, 190, 145);
 }
 
 .item-context-kicker {
+  width: 100%;
+  white-space: normal;
+  -unity-text-align: middle-right;
   font-size: 10px;
   letter-spacing: 2px;
   color: rgb(132, 107, 67);
@@ -242,8 +253,10 @@
 }
 
 .item-context-action {
+  min-width: 0;
   min-height: 38px;
   margin-top: 5px;
+  white-space: normal;
   color: rgb(215, 218, 223);
   background-color: rgb(42, 46, 54);
   border-left-color: rgb(74, 79, 89);
@@ -327,12 +340,12 @@
 }
 
 .game-menu-panel--compact .game-menu-header {
-  height: 50px;
+  min-height: 50px;
   margin-bottom: 8px;
 }
 
 .game-menu-panel--compact .game-menu-heading {
-  width: 214px;
+  width: 300px;
 }
 
 .game-menu-panel--compact .game-menu-title {
@@ -366,6 +379,10 @@
   padding: 10px;
 }
 
+.game-menu-panel--compact .item-context-kicker {
+  display: none;
+}
+
 .game-menu-panel--wide .game-menu-context-stack {
   width: 380px;
 }
@@ -374,7 +391,7 @@
 .game-menu-language {
   width: 250px;
   min-width: 250px;
-  height: 36px;
+  min-height: 42px;
   margin-left: 12px;
   flex-direction: row;
   align-items: center;
@@ -382,7 +399,9 @@
 
 .game-menu-language-label {
   min-width: 70px;
+  min-height: 40px;
   margin-right: 8px;
+  white-space: normal;
   color: rgb(190, 163, 115);
 }
 

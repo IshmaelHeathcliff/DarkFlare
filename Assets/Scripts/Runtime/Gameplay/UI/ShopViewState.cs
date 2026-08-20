@@ -35,23 +35,23 @@ namespace DarkFlare
 
         public ShopFocusTarget FocusTarget { get; set; } = ShopFocusTarget.Item;
 
-        public string Feedback { get; private set; } = string.Empty;
+        public LocalizedMessage Feedback { get; private set; }
 
-        public bool HasFeedback => !string.IsNullOrWhiteSpace(Feedback);
+        public bool HasFeedback => !Feedback.IsEmpty;
 
         public ItemListViewState GetList(ShopItemSource source)
         {
             return source == ShopItemSource.Merchant ? Merchant : Player;
         }
 
-        public void SetFeedback(string feedback)
+        public void SetFeedback(LocalizedMessage feedback)
         {
-            Feedback = feedback ?? string.Empty;
+            Feedback = feedback;
         }
 
         public void ClearFeedback()
         {
-            Feedback = string.Empty;
+            Feedback = default;
         }
 
         public void Reset()

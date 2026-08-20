@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -34,6 +35,13 @@ namespace DarkFlare
         public bool IsGameplayEnabled => !_disposed && _actions.Player.enabled;
 
         public bool IsUiEnabled => !_disposed && _actions.UI.enabled;
+
+        public string GetInteractBindingDisplayString()
+        {
+            return _disposed
+                ? string.Empty
+                : GetBindingDisplayString(_actions.Player.Interact);
+        }
 
         public GameInput()
         {
@@ -165,6 +173,36 @@ namespace DarkFlare
             }
 
             return handled;
+        }
+
+        static string GetBindingDisplayString(InputAction action)
+        {
+            if (action == null)
+            {
+                return string.Empty;
+            }
+
+            List<string> displayNames = new List<string>();
+
+            for (int i = 0; i < action.bindings.Count; i++)
+            {
+                InputBinding binding = action.bindings[i];
+
+                if (binding.isComposite || binding.isPartOfComposite)
+                {
+                    continue;
+                }
+
+                string displayName = action.GetBindingDisplayString(i);
+
+                if (!string.IsNullOrWhiteSpace(displayName)
+                    && !displayNames.Contains(displayName))
+                {
+                    displayNames.Add(displayName);
+                }
+            }
+
+            return string.Join(" / ", displayNames);
         }
     }
 }

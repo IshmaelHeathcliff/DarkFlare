@@ -14,6 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.StatDefinition
   _id: cold_damage
   _displayName: "\u51B0\u971C\u4F24\u5BB3"
+  _localizedName:
+    _tableName: stats
+    _entryKey: cold_damage
   _category: 1
   _defaultValue: 0
   _minValue: 0

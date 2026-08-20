@@ -17,6 +17,10 @@ namespace DarkFlare
         string _displayName = string.Empty;
 
         [SerializeField]
+        [LabelText("本地化名称")]
+        LocalizedContentReference _localizedName = new LocalizedContentReference("monsters", string.Empty);
+
+        [SerializeField]
         [LabelText("角色 Prefab")]
         AssetReferenceGameObject _prefab;
 
@@ -89,6 +93,8 @@ namespace DarkFlare
         public string Id => _id;
 
         public string DisplayName => _displayName;
+
+        public LocalizedContentReference LocalizedName => _localizedName;
 
         public AssetReferenceGameObject Prefab => _prefab;
 

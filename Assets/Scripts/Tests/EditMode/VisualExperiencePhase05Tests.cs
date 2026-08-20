@@ -126,6 +126,10 @@ namespace DarkFlare.Tests
             ItemBaseDefinition definition = ScriptableObject.CreateInstance<ItemBaseDefinition>();
             _objects.Add(definition);
             SetField(definition, "_displayName", "测试大剑");
+            SetField(
+                definition,
+                "_localizedName",
+                new LocalizedContentReference("items", "item.great_sword.name"));
             ItemInstance item = definition.CreateInstance("phase05", 1, 1, ItemRarity.Rare);
             pickup.Init(item);
             TextMeshPro label = instance.GetComponentInChildren<TextMeshPro>(true);
@@ -133,7 +137,7 @@ namespace DarkFlare.Tests
 
             Assert.AreSame(item, pickup.Item);
             Assert.AreSame(item, visual.Item);
-            Assert.AreEqual("测试大剑 · 稀有", label.text);
+            Assert.AreEqual("[ui.loot.label]", label.text, "无 ApplicationHost 时应暴露本地化占位符");
             Assert.AreEqual(0.82f, halo.color.a, 0.001f);
             Assert.AreNotEqual(Color.white, halo.color);
             Assert.AreEqual(Vector3.one, halo.transform.localScale);

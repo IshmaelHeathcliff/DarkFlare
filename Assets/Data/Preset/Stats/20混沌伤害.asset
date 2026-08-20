@@ -14,6 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.StatDefinition
   _id: chaos_damage
   _displayName: "\u6DF7\u6C8C\u4F24\u5BB3"
+  _localizedName:
+    _tableName: stats
+    _entryKey: chaos_damage
   _category: 1
   _defaultValue: 0
   _minValue: 0

@@ -17,7 +17,147 @@ MonoBehaviour:
   m_SharedData: {fileID: 11400000, guid: f8f0c87e721861740a8eb1f0a7cc5471, type: 2}
   m_Metadata:
     m_Items: []
-  m_TableData: []
+  m_TableData:
+  - m_Id: 158451694034944
+    m_Localized: Sharp
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451727589376
+    m_Localized: Tempered
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451727589377
+    m_Localized: Flame-Forged
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451727589378
+    m_Localized: Frostbound
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451727589379
+    m_Localized: Healthy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451727589380
+    m_Localized: Reinforced
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451727589381
+    m_Localized: of Power
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451727589382
+    m_Localized: of Endurance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451727589383
+    m_Localized: of Fire Guard
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451727589384
+    m_Localized: of Cold Guard
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451727589385
+    m_Localized: of Lightning Guard
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451727589386
+    m_Localized: of Chaos Guard
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451727589387
+    m_Localized: Arcane Reserve
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451727589388
+    m_Localized: Regenerating
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451727589389
+    m_Localized: Meditative
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451727589390
+    m_Localized: Mighty
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451727589391
+    m_Localized: Deft
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451727589392
+    m_Localized: Learned
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451727589393
+    m_Localized: Storm-Touched
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451727589394
+    m_Localized: Chaos-Touched
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451727589395
+    m_Localized: Deadly
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451727589396
+    m_Localized: of Ruin
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451727589397
+    m_Localized: Accurate
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451727589398
+    m_Localized: Elusive
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451727589399
+    m_Localized: of Swiftness
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451727589400
+    m_Localized: Burning
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451727589401
+    m_Localized: Chilling
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451727589402
+    m_Localized: Stormcharged
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451727589403
+    m_Localized: Fire Resistant
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451727589404
+    m_Localized: Cold Resistant
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451727589405
+    m_Localized: Lightning Resistant
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451727589406
+    m_Localized: Robust
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451727589407
+    m_Localized: Armored
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451727589408
+    m_Localized: Elusive
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451727589409
+    m_Localized: Swift
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

@@ -1,12 +1,12 @@
 # alpha 0.2.3 用户设置与本地化执行计划
 
-> 状态：实施中（切片 0–2 已完成；切片 3 已完成静态 UXML、Game Menu 与 HUD 动态文本迁移）
+> 状态：已完成并归档
 > 建立日期：2026-08-19
-> 最近更新：2026-08-19
+> 最近更新：2026-08-20
 > 实施基线：`ebce6b9`（`alpha 0.2.2` 已完成）
-> 上位计划：[alpha 0.2 基础设施开发计划](./alpha-0.2-plan.md)
-> 强制契约：[alpha 0.2 基础设施约束契约](./alpha-0.2-infrastructure-contract.md)
-> 前置模块：[应用生命周期与会话作用域](../infrastructure/application-lifecycle.md)、[稳定身份、内容目录与迁移框架](../infrastructure/content-identity-migration.md)、[本地存档与 Session 恢复](../infrastructure/local-save.md)
+> 上位计划：[alpha 0.2 基础设施开发计划](../alpha-0.2-plan.md)
+> 强制契约：[alpha 0.2 基础设施约束契约](../alpha-0.2-infrastructure-contract.md)
+> 前置模块：[应用生命周期与会话作用域](../../infrastructure/application-lifecycle.md)、[稳定身份、内容目录与迁移框架](../../infrastructure/content-identity-migration.md)、[本地存档与 Session 恢复](../../infrastructure/local-save.md)
 
 ## 阶段结论
 
@@ -29,8 +29,13 @@ Settings Schema 在本阶段覆盖语言、音频、输入、显示和可访问�
 - Settings V1 已实现语言、音频、输入、显示和可访问性域的 DTO、范围校验、确定性 JSON、SHA-256、`0 → 1` 迁移、独立路径、原子提交、单份备份、损坏副本与并发互斥；Application Host 已在 Profile / Session 前初始化 Settings。
 - Localization 已建立 `zh-Hans`、`en`、`qps-ploc`，以及 `ui`、`system`、`items`、`stats`、`affixes`、`monsters` 六张职责表。Application 只有在首屏表预热完成后才进入 Ready，启动期场景 Session 请求会排队等待。
 - Localization Service 已实现显式语言优先、系统语言自动选择、`zh-Hans` 故障回退、latest-wins 切换、失败回滚和结构化结果；现有 Game Menu 已增加可聚焦的语言下拉框，只有语言设置对玩家开放。
-- 7 份 UXML 的 74 个初扫候选已完成迁移：45 个静态文本使用 Localization 1.5.12 原生 UI Toolkit Binding，29 个动态文本入口清空字面量并进入显式策略白名单。Game Menu 存档状态和 HUD 动态文本已迁移，切换 Locale 时可按当前状态重绘；`ui` 表当前有 108 个中英双语 Key，缺失、空翻译和孤儿条目检查为零。
-- 当前新增专项验证共 20 项通过；主场景真实冷启动、菜单存档入口与 HUD 法力反馈专项通过。背包、商店、打造、物品详情和交互提示等动态 Controller 文本、配置内容、字体 fallback、Pseudo / 三分辨率布局与全量回归仍未完成，不能据此宣布 `alpha 0.2.3` 完成。
+- 7 份 UXML 的 74 个初扫候选已完成迁移：45 个静态文本使用 Localization 1.5.12 原生 UI Toolkit Binding，29 个动态文本入口清空字面量并进入显式策略白名单。Game Menu 存档状态、HUD、背包 / 四槽装备、商店、打造、共享物品详情和场景交互提示的动态文本已迁移；Locale 变化会从业务状态重新解析显示文本，不重建背包、装备、拖拽、交易、打造或交互领域状态。
+- 动态格式化消息已抽成共享 `LocalizedMessage`；交互提示从当前 Input System 配置生成键盘 / 手柄绑定显示文本，不再硬编码 `E / Y`。HUD 与背包快照不再携带属性、槽位或装备摘要的最终中文字符串，`stats` 表已与 `StatIds.All` 的 23 个稳定属性 ID 精确对齐并纳入双语完整性检查。
+- 商店反馈以 `LocalizedMessage` 保存，打造结果保留领域 `CraftingResult`，共享物品详情快照只保存伤害、属性 ID、操作和值等语义；因此买卖结果、打造结果和详情内容可在 Locale 变化后重算，不缓存旧语言最终字符串。
+- 六张正式表最终包含 `ui` 230、`system` 2、`items` 21、`stats` 23、`affixes` 35、`monsters` 7 个中英双语 Key；首屏进入 Ready 前预热全部六表。
+- 86 个正式内容名称已迁移为 `LocalizedContentReference`；配置引用与表条目精确对应，快照和 Controller 不再把旧 `_displayName` 当作玩家文本真值。
+- UI Toolkit 与 TextMesh Pro 已建立 QiushuiShotai / Liberation Sans fallback，并用六张表和实际 Pseudo 输出执行零缺字检查；秋水书体授权和来源说明随资产保存。
+- 切片 4–5 已完成；三语言 × 三分辨率布局矩阵、全量 EditMode、项目自有 PlayMode 和完整 PlayMode 回归全部达到完成定义。
 
 ## 目标
 
@@ -211,3 +216,12 @@ ApplicationBootstrap
 - 正式表零缺失、零空翻译、零重复 Key、零孤儿 Key；玩家可见硬编码扫描零未登记违规。
 - 三档分辨率与中英 / Pseudo 布局可操作；键鼠 / 手柄路径与 `alpha 0.2.2` 存档闭环回归通过。
 - 新增 `Docs/docs/infrastructure/user-settings-localization.md`，同步项目概览、目录结构与索引；本计划归档并将下一阶段切换为 `alpha 0.2.4`。
+
+## 完成记录
+
+- Settings V1、迁移、原子存储、损坏回退、Application 启动门禁与有界关闭均已实现并有自动测试。
+- `zh-Hans`、`en`、测试用 `qps-ploc`、六张职责表、最小语言入口和运行时往返切换全部可运行；快速重复切换由 latest-wins 仲裁。
+- 静态 UXML、动态反馈、正式内容名称与字体链均已迁移；玩家可见硬编码、缺键、空翻译、孤儿键、错表与缺字检查零未登记违规。
+- `Phase1UxPlayModeTests` 已覆盖 `zh-Hans` / `en` / `qps-ploc` × 1280×720 / 1920×1080 / 2560×1440，关键控件边界、重叠、文本测量和操作路径通过。
+- 最终验证为 Unity 编译 0 error、EditMode `334/334`、项目自有 PlayMode `48/48`；完整 PlayMode 52 项中 50 项通过、0 失败，2 项 Input System 包集成测试因上游 issue 1252825 跳过。
+- 当前维护合同已总结到[用户设置与本地化](../../infrastructure/user-settings-localization.md)，上位计划已推进到 `alpha 0.2.4`。

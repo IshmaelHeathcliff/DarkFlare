@@ -26,6 +26,7 @@ namespace DarkFlare
         readonly ShopViewState _viewState = new ShopViewState();
 
         SceneSessionBinding _sessionBinding;
+        LocalizationService _localizationService;
         VisualElement _page;
         VisualElement _merchantFrame;
         VisualElement _merchantList;
@@ -72,7 +73,7 @@ namespace DarkFlare
             CaptureViewState();
             int generation = ++_refreshGeneration;
             LastSnapshot = this.SendQuery(new GetShopSnapshotQuery());
-            _goldLabel.text = $"持有金币  {LastSnapshot.Gold}";
+            _goldLabel.text = Localize("shop.gold", LastSnapshot.Gold);
             _merchantList.Clear();
             _merchantButtons.Clear();
 
@@ -165,6 +166,7 @@ namespace DarkFlare
             }
 
             RegisterEvents();
+            BindLocalization();
             _inventoryPanel.SelectionChanged += OnInventorySelectionChanged;
             _inventoryPanel.ContextActionRequested += OnInventoryContextActionRequested;
             _inventoryPanel.NavigationBoundaryRequested += OnInventoryNavigationBoundaryRequested;
@@ -202,6 +204,13 @@ namespace DarkFlare
             }
 
             _eventRegistrations.Clear();
+
+            if (_localizationService != null)
+            {
+                _localizationService.LocaleChanged -= OnLocaleChanged;
+                _localizationService = null;
+            }
+
             _merchantButtons.Clear();
             _playerButtons.Clear();
             _viewState.Reset();
@@ -480,7 +489,7 @@ namespace DarkFlare
 
             if (!TryFindSnapshot(item, ShopItemSource.Player, out ShopItemSnapshot selected))
             {
-                SetFeedback("出售失败：物品已不在背包中");
+                SetFeedback("shop.feedback.sell_failed");
                 return;
             }
 
@@ -523,9 +532,11 @@ namespace DarkFlare
 
             if (!TryGetSelectedSnapshot(out ShopItemSnapshot selected))
             {
-                _selectedSourceLabel.text = "来源：-";
-                _selectedPriceLabel.text = "价格：-";
-                _feedbackLabel.text = _viewState.HasFeedback ? _viewState.Feedback : "商店和背包均为空";
+                _selectedSourceLabel.text = Localize("shop.source.empty");
+                _selectedPriceLabel.text = Localize("shop.price.empty");
+                _feedbackLabel.text = _viewState.HasFeedback
+                    ? Resolve(_viewState.Feedback)
+                    : Localize("shop.feedback.empty");
                 _buyButton.SetEnabled(false);
                 _sellButton.SetEnabled(false);
                 _viewState.FocusTarget = ShopFocusTarget.CloseFallback;
@@ -535,22 +546,26 @@ namespace DarkFlare
 
             bool isMerchantItem = selected.Source == ShopItemSource.Merchant;
             RefreshDetail();
-            _selectedSourceLabel.text = $"来源：{(isMerchantItem ? "商人库存" : "玩家背包")}";
-            _selectedPriceLabel.text = $"{(isMerchantItem ? "买入" : "卖出")}价格：{selected.Price} 金币";
+            _selectedSourceLabel.text = Localize(isMerchantItem
+                ? "shop.source.merchant"
+                : "shop.source.player");
+            _selectedPriceLabel.text = Localize(
+                isMerchantItem ? "shop.price.buy" : "shop.price.sell",
+                selected.Price);
             bool canAfford = LastSnapshot.Gold >= selected.Price;
             _buyButton.SetEnabled(isMerchantItem && canAfford);
             _sellButton.SetEnabled(!isMerchantItem);
             if (_viewState.HasFeedback)
             {
-                _feedbackLabel.text = _viewState.Feedback;
+                _feedbackLabel.text = Resolve(_viewState.Feedback);
                 return;
             }
 
             _feedbackLabel.text = isMerchantItem
                 ? canAfford
-                    ? "确认购买后，物品将尝试放入背包"
-                    : $"金币不足，还需要 {selected.Price - LastSnapshot.Gold}"
-                : "出售后物品会离开背包，首版不提供回购";
+                    ? Localize("shop.feedback.buy_ready")
+                    : Localize("shop.feedback.insufficient_gold", selected.Price - LastSnapshot.Gold)
+                : Localize("shop.feedback.sell_warning");
         }
 
         void RefreshSelectionClasses()
@@ -587,13 +602,13 @@ namespace DarkFlare
                 {
                     _inventoryPanel.ShowMerchantTooltip(
                         item,
-                        $"商人库存 · 买入 {snapshot.Price} 金币");
+                        Localize("shop.tooltip.merchant", snapshot.Price));
                 }
                 else
                 {
                     _inventoryPanel.ShowPlayerTooltip(
                         item,
-                        $"玩家背包 · 卖出 {snapshot.Price} 金币");
+                        Localize("shop.tooltip.player", snapshot.Price));
                 }
 
                 return;
@@ -639,7 +654,7 @@ namespace DarkFlare
             if (!TryGetSelectedSnapshot(out ShopItemSnapshot selected)
                 || selected.Source != ShopItemSource.Merchant)
             {
-                SetFeedback("请选择商人库存中的物品");
+                SetFeedback("shop.feedback.select_merchant");
                 return;
             }
 
@@ -656,9 +671,9 @@ namespace DarkFlare
                 _isTransactionInProgress = false;
             }
 
-            SetFeedback(bought
-                ? $"已购买 {selected.DisplayName}"
-                : "购买失败：请检查金币、背包空间或库存");
+            SetFeedback(
+                bought ? "shop.feedback.buy_succeeded" : "shop.feedback.buy_failed",
+                bought ? new object[] { Resolve(selected.Detail.Name) } : null);
         }
 
         void OnSellClicked()
@@ -668,7 +683,7 @@ namespace DarkFlare
             if (!TryGetSelectedSnapshot(out ShopItemSnapshot selected)
                 || selected.Source != ShopItemSource.Player)
             {
-                SetFeedback("请选择背包中的物品");
+                SetFeedback("shop.feedback.select_player");
                 return;
             }
 
@@ -679,7 +694,7 @@ namespace DarkFlare
         {
             if (selected.Source != ShopItemSource.Player)
             {
-                SetFeedback("请选择背包中的物品");
+                SetFeedback("shop.feedback.select_player");
                 return;
             }
 
@@ -696,15 +711,59 @@ namespace DarkFlare
                 _isTransactionInProgress = false;
             }
 
-            SetFeedback(sold
-                ? $"已出售 {selected.DisplayName}"
-                : "出售失败：物品已不在背包中");
+            SetFeedback(
+                sold ? "shop.feedback.sell_succeeded" : "shop.feedback.sell_failed",
+                sold ? new object[] { Resolve(selected.Detail.Name) } : null);
         }
 
-        void SetFeedback(string feedback)
+        void SetFeedback(string entryKey, params object[] arguments)
         {
+            LocalizedMessage feedback = LocalizedMessage.Ui(entryKey, arguments);
             _viewState.SetFeedback(feedback);
-            _feedbackLabel.text = feedback;
+            _feedbackLabel.text = Resolve(feedback);
+        }
+
+        void BindLocalization()
+        {
+            if (!ApplicationHost.TryGetCurrent(out ApplicationHost host)
+                || ReferenceEquals(_localizationService, host.Localization))
+            {
+                return;
+            }
+
+            if (_localizationService != null)
+            {
+                _localizationService.LocaleChanged -= OnLocaleChanged;
+            }
+
+            _localizationService = host.Localization;
+
+            if (_localizationService != null)
+            {
+                _localizationService.LocaleChanged += OnLocaleChanged;
+            }
+        }
+
+        void OnLocaleChanged(string localeCode)
+        {
+            if (_merchantList == null)
+            {
+                return;
+            }
+
+            _goldLabel.text = Localize("shop.gold", LastSnapshot.Gold);
+            RefreshSelection();
+        }
+
+        string Localize(string entryKey, params object[] arguments)
+        {
+            return Resolve(LocalizedMessage.Ui(entryKey, arguments));
+        }
+
+        string Resolve(LocalizedMessage message)
+        {
+            return _localizationService?.GetString(message)
+                ?? $"[{message.TableName}.{message.EntryKey}]";
         }
 
         void CaptureViewState()

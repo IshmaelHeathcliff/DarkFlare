@@ -14,9 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DarkFlare.StatDefinition
   _id: strength
   _displayName: "\u529B\u91CF"
+  _localizedName:
+    _tableName: stats
+    _entryKey: strength
   _category: 1
   _defaultValue: 0
   _minValue: 0
   _maxValue: 999999
   _isPercent: 0
-  _description: "\u9884\u7559\u7684\u57FA\u7840\u5C5E\u6027\uFF0C\u5F53\u524D\u4EC5\u652F\u6301\u901A\u7528\u5C5E\u6027\u805A\u5408\u548C UI \u5C55\u793A\u3002"
+  _description: "\u9884\u7559\u7684\u57FA\u7840\u5C5E\u6027\uFF0C\u5F53\u524D\u4EC5\u652F\u6301\u901A\u7528\u5C5E\u6027\u805A\u5408\u548C
+    UI \u5C55\u793A\u3002"

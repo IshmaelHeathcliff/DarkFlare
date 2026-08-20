@@ -14,6 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DarkFlare.CharacterDefinition
   _id: player
   _displayName: "\u73A9\u5BB6"
+  _localizedName:
+    _tableName: monsters
+    _entryKey: actor.player.name
   _prefab:
     m_AssetGUID: 942c099ccdd7eed428f0ac0b1694f6ff
     m_SubObjectName:

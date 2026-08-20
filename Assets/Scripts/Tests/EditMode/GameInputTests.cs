@@ -94,6 +94,17 @@ namespace DarkFlare.Tests
         }
 
         [Test]
+        public void InteractBindingDisplayString_ComesFromConfiguredBindings()
+        {
+            string displayName = _input.GetInteractBindingDisplayString();
+
+            Assert.IsFalse(string.IsNullOrWhiteSpace(displayName));
+            StringAssert.Contains(" / ", displayName);
+            StringAssert.DoesNotContain("<Keyboard>", displayName);
+            StringAssert.DoesNotContain("<Gamepad>", displayName);
+        }
+
+        [Test]
         public void SwitchMethods_IgnoreRepeatedMode()
         {
             int changeCount = 0;

@@ -57,7 +57,7 @@ MonoBehaviour:
           m_ExpansionAmount: 0.3
         m_Location: 1
         m_MinimumStringLength: 1
-        m_PaddingCharacters: 2100220023002400250026002700280029002a002b002c002d002e002f0030003100320033003400350036003700380039003a003b003c003d003e003f0040004100420043004400450046004700480049004a004b004c004d004e004f0050005100520053005400550056005700580059005a005b005c005d005e005f0060006100620063006400650066006700680069006a006b006c006d006e006f0070007100720073007400750076007700780079007a007b007c007d00
+        m_PaddingCharacters: 4100420043004400450046004700480049004a004b004c004d004e004f0050005100520053005400550056005700580059005a006100620063006400650066006700680069006a006b006c006d006e006f0070007100720073007400750076007700780079007a003000310032003300340035003600370038003900
     - rid: 6738608143192817781
       type: {class: Accenter, ns: UnityEngine.Localization.Pseudo, asm: Unity.Localization}
       data:
@@ -81,11 +81,11 @@ MonoBehaviour:
         - original: 39
           replacement: 180
         - original: 42
-          replacement: 8270
+          replacement: 42
         - original: 43
           replacement: 8314
         - original: 93
-          replacement: 8262
+          replacement: 93
         - original: 45
           replacement: 8208
         - original: 46
@@ -115,7 +115,7 @@ MonoBehaviour:
         - original: 58
           replacement: 8758
         - original: 59
-          replacement: 8271
+          replacement: 59
         - original: 60
           replacement: 8804
         - original: 61
@@ -125,7 +125,7 @@ MonoBehaviour:
         - original: 63
           replacement: 191
         - original: 64
-          replacement: 1374
+          replacement: 64
         - original: 65
           replacement: 197
         - original: 66
@@ -179,7 +179,7 @@ MonoBehaviour:
         - original: 90
           replacement: 381
         - original: 91
-          replacement: 8261
+          replacement: 91
         - original: 92
           replacement: 8726
         - original: 94
@@ -243,7 +243,7 @@ MonoBehaviour:
         - original: 124
           replacement: 166
         - original: 126
-          replacement: 734
+          replacement: 126
         m_ReplacementList: 5f00
     - rid: 6738608143192817782
       type: {class: Encapsulator, ns: UnityEngine.Localization.Pseudo, asm: Unity.Localization}

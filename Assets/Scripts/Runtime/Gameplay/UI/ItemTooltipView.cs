@@ -45,6 +45,11 @@ namespace DarkFlare
             && _contextLabel != null
             && _detailView.IsValid;
 
+        public void SetLocalizationService(LocalizationService localizationService)
+        {
+            _detailView.SetLocalizationService(localizationService);
+        }
+
         public void Show(ItemInstance item, string context, ItemTooltipSide side)
         {
             if (!IsValid || item == null)

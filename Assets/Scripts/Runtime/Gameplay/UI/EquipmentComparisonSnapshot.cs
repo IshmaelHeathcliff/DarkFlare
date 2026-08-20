@@ -127,7 +127,7 @@ namespace DarkFlare
                 string key = $"{modifier.Scope}:{modifier.Operation}:{modifier.StatId}";
                 values.TryGetValue(key, out ModifierValue current);
                 values[key] = new ModifierValue(
-                    detail.StatDisplayName,
+                    detail.StatId,
                     modifier.Operation,
                     current.Value + modifier.Value);
             }

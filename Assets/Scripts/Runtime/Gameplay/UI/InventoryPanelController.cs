@@ -65,6 +65,9 @@ namespace DarkFlare
         Button _unequipButton;
         ItemTooltipView _tooltip;
         GameInput _gameInput;
+        LocalizationService _localizationService;
+        ItemDetailFormatter _itemDetailFormatter;
+        LocalizedMessage _feedbackMessage;
         ItemInstance _selectedItem;
         ItemInstance _previewItem;
         ItemInstance _externalSlotItem;
@@ -381,6 +384,9 @@ namespace DarkFlare
                 return SceneSessionBindResult.Failed;
             }
 
+            BindLocalization();
+            _itemDetailFormatter = new ItemDetailFormatter(Localize);
+            _tooltip.SetLocalizationService(_localizationService);
             _gameInput = architecture.GetUtility<GameInput>();
 
             if (_gameInput != null)
@@ -410,6 +416,12 @@ namespace DarkFlare
                 _gameInput.CancelRequested -= OnCancelRequested;
             }
 
+            if (_localizationService != null)
+            {
+                _localizationService.LocaleChanged -= OnLocaleChanged;
+                _localizationService = null;
+            }
+
             for (int i = 0; i < _eventRegistrations.Count; i++)
             {
                 _eventRegistrations[i].UnRegister();
@@ -433,7 +445,9 @@ namespace DarkFlare
             _equipButton = null;
             _unequipButton = null;
             _tooltip = null;
+            _itemDetailFormatter = null;
             _gameInput = null;
+            _feedbackMessage = default;
             _selectedItem = null;
             _previewItem = null;
             _externalSlotItem = null;
@@ -811,27 +825,31 @@ namespace DarkFlare
 
             if (!LastSnapshot.HasPlayer)
             {
-                _feedbackLabel.text = "等待玩家生成";
+                SetFeedback("inventory.feedback.waiting_player");
             }
             else if (hasCandidate && !hasTarget && selected.CompatibleSlots == EquipmentSlotMask.Rings)
             {
-                _feedbackLabel.text = "请选择左戒指或右戒指槽";
+                SetFeedback("inventory.feedback.select_ring");
             }
             else if (canEquip)
             {
-                _feedbackLabel.text = canUnequip ? "可替换目标槽装备" : "可装备到目标槽";
+                SetFeedback(canUnequip
+                    ? "inventory.feedback.can_replace"
+                    : "inventory.feedback.can_equip");
             }
             else if (canUnequip)
             {
-                _feedbackLabel.text = "可卸下当前槽位装备";
+                SetFeedback("inventory.feedback.can_unequip");
             }
             else if (!hasCandidate)
             {
-                _feedbackLabel.text = "选择背包物品或装备槽";
+                SetFeedback("inventory.feedback.select_item_or_slot");
             }
             else
             {
-                _feedbackLabel.text = selected.CanEquip ? "请选择兼容的装备槽" : "该物品不能装备";
+                SetFeedback(selected.CanEquip
+                    ? "inventory.feedback.select_compatible_slot"
+                    : "inventory.feedback.cannot_equip");
             }
         }
 
@@ -875,12 +893,15 @@ namespace DarkFlare
 
                 ItemVisualPresenter.ApplyIcon(icon, snapshot.Detail.IconGuid);
                 icon.EnableInClassList("inventory-equipment-slot-icon--empty", snapshot.Item == null);
-                slotLabel.text = snapshot.Item != null
-                    ? snapshot.SlotName
-                    : $"{snapshot.SlotName} · 空";
+                string slotName = GetSlotName(snapshot.Slot);
+                slotLabel.text = slotName;
                 button.tooltip = snapshot.Item != null
-                    ? $"{snapshot.Detail.DisplayName} · {ItemDetailFormatter.GetRarityText(snapshot.Detail.Rarity)}"
-                    : $"{snapshot.SlotName}为空";
+                    ? Localize(
+                        "ui",
+                        "inventory.slot.tooltip.filled",
+                        Resolve(snapshot.Detail.Name),
+                        _itemDetailFormatter.GetRarityText(snapshot.Detail.Rarity))
+                    : Localize("ui", "inventory.slot.tooltip.empty", slotName);
                 button.EnableInClassList("inventory-equipment-slot--filled", snapshot.Item != null);
             }
         }
@@ -980,11 +1001,14 @@ namespace DarkFlare
         {
             if (!_targetSlot.HasValue)
             {
-                _targetSlotLabel.text = "操作槽位：未选择";
+                _targetSlotLabel.text = Localize("ui", "inventory.target.none");
                 return;
             }
 
-            _targetSlotLabel.text = $"操作槽位：{EquipmentSlots.GetDisplayName(_targetSlot.Value)}";
+            _targetSlotLabel.text = Localize(
+                "ui",
+                "inventory.target.selected",
+                GetSlotName(_targetSlot.Value));
         }
 
         void RefreshAttributes()
@@ -1002,7 +1026,7 @@ namespace DarkFlare
                 snapshot.HasPlayer));
         }
 
-        static VisualElement CreateAttributeColumn(
+        VisualElement CreateAttributeColumn(
             IReadOnlyList<HudAttributeValue> attributes,
             int startIndex,
             int endIndex,
@@ -1022,7 +1046,7 @@ namespace DarkFlare
                 HudAttributeValue attribute = attributes[i];
                 VisualElement row = new VisualElement();
                 row.AddToClassList("inventory-attribute-row");
-                Label name = new Label(attribute.DisplayName);
+                Label name = new Label(Localize("stats", attribute.StatId));
                 name.AddToClassList("inventory-attribute-name");
                 Label value = new Label
                 {
@@ -1105,25 +1129,28 @@ namespace DarkFlare
         {
             if (_selectedItem == null || !LastSnapshot.HasPlayer || !_targetSlot.HasValue)
             {
-                _feedbackLabel.text = "请选择可装备物品和目标槽位";
+                SetFeedback("inventory.feedback.equip_select");
                 return;
             }
 
             EquipmentSlot slot = _targetSlot.Value;
-            string selectedName = _selectedItem.BaseDefinition.DisplayName;
+            string selectedName = Resolve(ItemDetailSnapshotFactory.Create(_selectedItem).Name);
             _selectionHighlightSource = SelectionHighlightSource.Equipment;
             bool equipped = this.SendCommand(new EquipItemCommand(LastSnapshot.Player, _selectedItem, slot));
 
             if (!equipped)
             {
-                _feedbackLabel.text = "装备失败，请检查背包空间、目标槽位和物品类型";
+                SetFeedback("inventory.feedback.equip_failed");
                 return;
             }
 
             RefreshInventory();
             _targetSlot = slot;
             RefreshSelection();
-            _feedbackLabel.text = $"已将 {selectedName} 装备到{EquipmentSlots.GetDisplayName(slot)}";
+            SetFeedback(
+                "inventory.feedback.equip_succeeded",
+                selectedName,
+                GetSlotName(slot));
             FocusSlot(slot);
         }
 
@@ -1134,19 +1161,19 @@ namespace DarkFlare
                 || !TryGetSlotSnapshot(_targetSlot.Value, out EquipmentSlotSnapshot snapshot)
                 || snapshot.Item == null)
             {
-                _feedbackLabel.text = "当前槽位没有可卸下的装备";
+                SetFeedback("inventory.feedback.unequip_no_item");
                 return;
             }
 
             EquipmentSlot slot = _targetSlot.Value;
             ItemInstance item = snapshot.Item;
-            string displayName = snapshot.Detail.DisplayName;
+            string displayName = Resolve(snapshot.Detail.Name);
             _selectionHighlightSource = SelectionHighlightSource.Equipment;
             bool unequipped = this.SendCommand(new UnequipItemCommand(LastSnapshot.Player, slot));
 
             if (!unequipped)
             {
-                _feedbackLabel.text = "卸下失败，请检查背包空间";
+                SetFeedback("inventory.feedback.unequip_failed");
                 return;
             }
 
@@ -1154,7 +1181,7 @@ namespace DarkFlare
             RefreshInventory();
             _targetSlot = slot;
             RefreshSelection();
-            _feedbackLabel.text = $"已卸下 {displayName}";
+            SetFeedback("inventory.feedback.unequip_succeeded", displayName);
             FocusSlot(slot);
         }
 
@@ -1523,7 +1550,7 @@ namespace DarkFlare
 
             if (!valid || item == null)
             {
-                _feedbackLabel.text = "无法放置到目标位置";
+                SetFeedback("inventory.feedback.drop_invalid");
                 RestoreTooltip();
                 return;
             }
@@ -1570,14 +1597,14 @@ namespace DarkFlare
 
             if (!completed)
             {
-                _feedbackLabel.text = "整理失败，背包或装备状态已变化";
+                SetFeedback("inventory.feedback.drop_stale");
                 RefreshInventory();
                 return;
             }
 
-            _feedbackLabel.text = targetKind == DropTargetKind.External
-                ? "已放入打造槽"
-                : "物品位置已更新";
+            SetFeedback(targetKind == DropTargetKind.External
+                ? "inventory.feedback.drop_external_succeeded"
+                : "inventory.feedback.drop_moved");
 
             if (targetKind != DropTargetKind.External)
             {
@@ -1669,7 +1696,7 @@ namespace DarkFlare
             _isKeyboardDrag = true;
             sourceButton.EnableInClassList("inventory-item--drag-source", true);
             _tooltip.Hide();
-            _feedbackLabel.text = "已拿起物品：方向键选择位置，再按整理键放下";
+            SetFeedback("inventory.feedback.drag_started");
         }
 
         void OnNavigatePerformed(Vector2 direction)
@@ -1849,7 +1876,7 @@ namespace DarkFlare
 
             if (showFeedback && _feedbackLabel != null)
             {
-                _feedbackLabel.text = "已取消物品整理";
+                SetFeedback("inventory.feedback.drag_cancelled");
             }
 
             RestoreTooltip();
@@ -2003,10 +2030,87 @@ namespace DarkFlare
         {
             if (_targetSlot.HasValue && IsCompatible(item, _targetSlot.Value))
             {
-                return $"候选装备 · {EquipmentSlots.GetDisplayName(_targetSlot.Value)}";
+                return Localize(
+                    "ui",
+                    "inventory.tooltip.candidate",
+                    GetSlotName(_targetSlot.Value));
             }
 
-            return "玩家背包";
+            return Localize("ui", "inventory.tooltip.player");
+        }
+
+        void BindLocalization()
+        {
+            if (!ApplicationHost.TryGetCurrent(out ApplicationHost host)
+                || ReferenceEquals(_localizationService, host.Localization))
+            {
+                return;
+            }
+
+            if (_localizationService != null)
+            {
+                _localizationService.LocaleChanged -= OnLocaleChanged;
+            }
+
+            _localizationService = host.Localization;
+            _tooltip?.SetLocalizationService(_localizationService);
+
+            if (_localizationService != null)
+            {
+                _localizationService.LocaleChanged += OnLocaleChanged;
+            }
+        }
+
+        void OnLocaleChanged(string localeCode)
+        {
+            if (_grid == null)
+            {
+                return;
+            }
+
+            RefreshAttributes();
+            RefreshEquipmentSlots();
+            RefreshTargetSlotLabel();
+            RefreshFeedbackText();
+            RefreshDetail();
+        }
+
+        void SetFeedback(string entryKey, params object[] arguments)
+        {
+            _feedbackMessage = LocalizedMessage.Ui(entryKey, arguments);
+            RefreshFeedbackText();
+        }
+
+        void RefreshFeedbackText()
+        {
+            if (_feedbackLabel != null && !_feedbackMessage.IsEmpty)
+            {
+                _feedbackLabel.text = Resolve(_feedbackMessage);
+            }
+        }
+
+        string GetSlotName(EquipmentSlot slot)
+        {
+            string entryKey = slot switch
+            {
+                EquipmentSlot.Weapon => "equipment.slot.weapon",
+                EquipmentSlot.Armor => "equipment.slot.armor",
+                EquipmentSlot.RingLeft => "equipment.slot.ring_left",
+                EquipmentSlot.RingRight => "equipment.slot.ring_right",
+                _ => "equipment.slot.unknown",
+            };
+            return Localize("ui", entryKey);
+        }
+
+        string Localize(string tableName, string entryKey, params object[] arguments)
+        {
+            return Resolve(new LocalizedMessage(tableName, entryKey, arguments));
+        }
+
+        string Resolve(LocalizedMessage message)
+        {
+            return _localizationService?.GetString(message)
+                ?? $"[{message.TableName}.{message.EntryKey}]";
         }
 
         static bool IsCompatible(ItemInstance item, EquipmentSlot slot)

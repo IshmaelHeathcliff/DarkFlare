@@ -46,6 +46,10 @@ namespace DarkFlare
         string _displayName = string.Empty;
 
         [SerializeField]
+        [LabelText("本地化名称")]
+        LocalizedContentReference _localizedName = new LocalizedContentReference("items", string.Empty);
+
+        [SerializeField]
         [LabelText("标签域")]
         CombatTagDomain _domain;
 
@@ -61,6 +65,8 @@ namespace DarkFlare
         public string Id => _id;
 
         public string DisplayName => _displayName;
+
+        public LocalizedContentReference LocalizedName => _localizedName;
 
         public CombatTagDomain Domain => _domain;
 

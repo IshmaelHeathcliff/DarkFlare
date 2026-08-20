@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Globalization;
 using System.Reflection;
 using DarkFlare;
 using DarkFlare.Tests;
@@ -35,7 +36,7 @@ public class ItemDetailSnapshotTests
     }
 
     [Test]
-    public void Factory_BuildsChineseDamageImplicitPrefixAndSuffixDetails()
+    public void Factory_BuildsSemanticDamageImplicitPrefixAndSuffixDetails()
     {
         StatDefinition damageStat = CreateStat("damage", "伤害");
         StatModifierDefinition implicitModifier = CreateModifier(
@@ -53,10 +54,12 @@ public class ItemDetailSnapshotTests
             new List<StatModifierDefinition> { implicitModifier });
         ItemInstance item = definition.CreateInstance("detail_weapon_01", 12, 7, ItemRarity.Rare);
         AffixDefinition prefix = CreateAffix(
+            "fierce",
             "猛烈",
             AffixType.Prefix,
             CreateModifier(damageStat, ModifierOperation.Increase, 20f, 20f));
         AffixDefinition suffix = CreateAffix(
+            "embers",
             "余烬",
             AffixType.Suffix,
             CreateModifier(null, ModifierOperation.GainAsExtra, 10f, 10f, DamageType.Physical, DamageType.Fire));
@@ -66,18 +69,24 @@ public class ItemDetailSnapshotTests
         ItemDetailSnapshot detail = ItemDetailSnapshotFactory.Create(item);
 
         Assert.AreEqual("detail_weapon_01", detail.InstanceId);
-        Assert.AreEqual("详情大剑", detail.DisplayName);
+        Assert.AreEqual("items", detail.Name.TableName);
+        Assert.AreEqual("item.detail_weapon.name", detail.Name.EntryKey);
         Assert.AreEqual(ItemType.Weapon, detail.Type);
         Assert.AreEqual(ItemRarity.Rare, detail.Rarity);
         Assert.AreEqual(12, detail.ItemLevel);
         Assert.AreEqual(1, detail.Damages.Count);
-        Assert.AreEqual("物理伤害 20–40", detail.Damages[0].DisplayText);
-        Assert.AreEqual("伤害 +5", detail.ImplicitModifiers[0].DisplayText);
-        Assert.AreEqual("猛烈", detail.Prefixes[0].DisplayName);
-        Assert.AreEqual("伤害提高 20%", detail.Prefixes[0].ModifierSummary);
-        Assert.AreEqual("余烬", detail.Suffixes[0].DisplayName);
-        Assert.AreEqual("获得等同于物理伤害 10% 的额外火焰伤害", detail.Suffixes[0].ModifierSummary);
-        StringAssert.DoesNotContain("damage", detail.Prefixes[0].ModifierSummary);
+        Assert.AreEqual(DamageType.Physical, detail.Damages[0].DamageType);
+        Assert.AreEqual(20f, detail.Damages[0].Minimum);
+        Assert.AreEqual(40f, detail.Damages[0].Maximum);
+        Assert.AreEqual("damage", detail.ImplicitModifiers[0].StatId);
+        Assert.AreEqual(5f, detail.ImplicitModifiers[0].Value);
+        Assert.AreEqual("item_affix.fierce.name", detail.Prefixes[0].Name.EntryKey);
+        Assert.AreEqual(ModifierOperation.Increase, detail.Prefixes[0].Modifiers[0].Operation);
+        Assert.AreEqual(20f, detail.Prefixes[0].Modifiers[0].Value);
+        Assert.AreEqual("item_affix.embers.name", detail.Suffixes[0].Name.EntryKey);
+        Assert.AreEqual(ModifierOperation.GainAsExtra, detail.Suffixes[0].Modifiers[0].Operation);
+        Assert.AreEqual(DamageType.Physical, detail.Suffixes[0].Modifiers[0].Modifier.FromDamageType);
+        Assert.AreEqual(DamageType.Fire, detail.Suffixes[0].Modifiers[0].Modifier.ToDamageType);
     }
 
     [Test]
@@ -91,6 +100,7 @@ public class ItemDetailSnapshotTests
             new List<StatModifierDefinition>());
         ItemInstance item = definition.CreateInstance("shared_detail_01", 3, 11, ItemRarity.Magic);
         AffixDefinition prefix = CreateAffix(
+            "keen",
             "锐利",
             AffixType.Prefix,
             CreateModifier(damageStat, ModifierOperation.More, 15f, 15f));
@@ -107,9 +117,13 @@ public class ItemDetailSnapshotTests
         ItemDetailSnapshot craftingDetail = craftingSnapshot.Items[0].Detail;
         Assert.AreEqual(inventoryDetail.InstanceId, shopDetail.InstanceId);
         Assert.AreEqual(inventoryDetail.InstanceId, craftingDetail.InstanceId);
-        Assert.AreEqual(inventoryDetail.DisplayName, shopDetail.DisplayName);
-        Assert.AreEqual(inventoryDetail.Prefixes[0].ModifierSummary, shopDetail.Prefixes[0].ModifierSummary);
-        Assert.AreEqual(inventoryDetail.Prefixes[0].ModifierSummary, craftingDetail.Prefixes[0].ModifierSummary);
+        Assert.AreEqual(inventoryDetail.Name.EntryKey, shopDetail.Name.EntryKey);
+        Assert.AreEqual(
+            inventoryDetail.Prefixes[0].Modifiers[0].Operation,
+            shopDetail.Prefixes[0].Modifiers[0].Operation);
+        Assert.AreEqual(
+            inventoryDetail.Prefixes[0].Modifiers[0].Value,
+            craftingDetail.Prefixes[0].Modifiers[0].Value);
     }
 
     [Test]
@@ -138,7 +152,24 @@ public class ItemDetailSnapshotTests
             DamageType.Fire,
             TagSet.Empty,
             TagSet.Empty);
-        return ItemDetailFormatter.FormatModifier(modifier, "伤害", false);
+        ItemDetailFormatter formatter = new ItemDetailFormatter(LocalizeForTest);
+        return formatter.FormatModifier(modifier, "伤害", false);
+    }
+
+    static string LocalizeForTest(string tableName, string entryKey, object[] arguments)
+    {
+        Dictionary<string, string> formats = new Dictionary<string, string>
+        {
+            ["item.damage_type.physical"] = "物理",
+            ["item.damage_type.fire"] = "火焰",
+            ["item.modifier.flat"] = "{0} +{1}{2}",
+            ["item.modifier.increase"] = "{0}提高 {1}%",
+            ["item.modifier.more"] = "{0}总增 {1}%",
+            ["item.modifier.override"] = "{0}设为 {1}{2}",
+            ["item.modifier.conversion"] = "{0}伤害的 {1}% 转化为{2}伤害",
+            ["item.modifier.gain_as_extra"] = "获得等同于{0}伤害 {1}% 的额外{2}伤害",
+        };
+        return string.Format(CultureInfo.InvariantCulture, formats[entryKey], arguments);
     }
 
     ItemBaseDefinition CreateItemDefinition(
@@ -150,6 +181,10 @@ public class ItemDetailSnapshotTests
         ItemBaseDefinition definition = CreateScriptableObject<ItemBaseDefinition>();
         SetField(definition, "_id", id);
         SetField(definition, "_displayName", displayName);
+        SetField(
+            definition,
+            "_localizedName",
+            new LocalizedContentReference("items", $"item.{id}.name"));
         SetField(definition, "_itemType", ItemType.Weapon);
         SetField(definition, "_gridSize", new Vector2Int(2, 3));
         SetField(definition, "_baseValue", 10);
@@ -163,16 +198,23 @@ public class ItemDetailSnapshotTests
         StatDefinition stat = CreateScriptableObject<StatDefinition>();
         SetField(stat, "_id", id);
         SetField(stat, "_displayName", displayName);
+        SetField(stat, "_localizedName", new LocalizedContentReference("stats", id));
         return stat;
     }
 
     AffixDefinition CreateAffix(
+        string id,
         string displayName,
         AffixType type,
         StatModifierDefinition modifier)
     {
         AffixDefinition affix = CreateScriptableObject<AffixDefinition>();
+        SetField(affix, "_id", id);
         SetField(affix, "_displayName", displayName);
+        SetField(
+            affix,
+            "_localizedName",
+            new LocalizedContentReference("affixes", $"item_affix.{id}.name"));
         SetField(affix, "_affixType", type);
         SetField(affix, "_weight", 100);
         SetField(affix, "_modifiers", new List<StatModifierDefinition> { modifier });

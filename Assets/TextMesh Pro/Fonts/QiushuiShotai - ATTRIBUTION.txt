@@ -1,0 +1,6 @@
+QiushuiShotai / 秋水書体
+
+Upstream: https://github.com/NoHeartPen/QiushuiShotai
+License: SIL Open Font License 1.1
+Reserved Font Names: 秋水書体, QiushuiShotai
+Full license: QiushuiShotai - OFL.txt

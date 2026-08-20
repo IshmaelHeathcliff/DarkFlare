@@ -5,11 +5,10 @@ namespace DarkFlare
 {
     public static class ItemDetailSnapshotFactory
     {
-        const string MissingPropertyName = "未配置属性";
-
         static readonly IReadOnlyList<DamageDetailSnapshot> EmptyDamages = new List<DamageDetailSnapshot>();
         static readonly IReadOnlyList<ModifierDetailSnapshot> EmptyModifiers = new List<ModifierDetailSnapshot>();
         static readonly IReadOnlyList<AffixDetailSnapshot> EmptyAffixes = new List<AffixDetailSnapshot>();
+        static readonly IReadOnlyList<LocalizedMessage> EmptyNames = new List<LocalizedMessage>();
 
         public static ItemDetailSnapshot Create(ItemInstance item)
         {
@@ -18,7 +17,7 @@ namespace DarkFlare
                 return new ItemDetailSnapshot(
                     null,
                     string.Empty,
-                    "未选择物品",
+                    default,
                     string.Empty,
                     default,
                     default,
@@ -34,13 +33,11 @@ namespace DarkFlare
             }
 
             ItemBaseDefinition definition = item.BaseDefinition;
-            string displayName = definition != null && !string.IsNullOrWhiteSpace(definition.DisplayName)
-                ? definition.DisplayName
-                : item.InstanceId;
+            LocalizedMessage name = definition?.LocalizedName?.Message ?? default;
             return new ItemDetailSnapshot(
                 item,
                 item.InstanceId,
-                displayName,
+                name,
                 definition != null && definition.Icon != null ? definition.Icon.AssetGUID : string.Empty,
                 definition != null ? definition.ItemType : default,
                 item.Rarity,
@@ -53,10 +50,10 @@ namespace DarkFlare
                 CreateModifiers(
                     item.ImplicitModifiers,
                     definition != null ? definition.ImplicitModifiers : null,
-                    displayName,
-                    "固有属性"),
-                CreateAffixes(item.Prefixes, displayName),
-                CreateAffixes(item.Suffixes, displayName));
+                    definition != null ? definition.Id : item.InstanceId,
+                    "implicit"),
+                CreateAffixes(item.Prefixes, definition != null ? definition.Id : item.InstanceId),
+                CreateAffixes(item.Suffixes, definition != null ? definition.Id : item.InstanceId));
         }
 
         static IReadOnlyList<DamageDetailSnapshot> CreateDamages(ItemBaseDefinition definition)
@@ -71,16 +68,11 @@ namespace DarkFlare
             for (int i = 0; i < definition.BaseDamages.Count; i++)
             {
                 DamageRollDefinition damage = definition.BaseDamages[i];
-                string tagSummary = FormatTags(damage.Tags);
                 damages.Add(new DamageDetailSnapshot(
                     damage.DamageType,
                     damage.AmountRange.x,
                     damage.AmountRange.y,
-                    tagSummary,
-                    ItemDetailFormatter.FormatDamage(
-                        damage.DamageType,
-                        damage.AmountRange.x,
-                        damage.AmountRange.y)));
+                    CreateTagNames(damage.Tags)));
             }
 
             return damages;
@@ -101,20 +93,17 @@ namespace DarkFlare
             {
                 AffixInstance affix = affixes[i];
                 AffixDefinition definition = affix != null ? affix.Definition : null;
-                string displayName = definition != null && !string.IsNullOrWhiteSpace(definition.DisplayName)
-                    ? definition.DisplayName
-                    : "未命名词缀";
+                LocalizedMessage name = definition?.LocalizedName?.Message ?? default;
                 IReadOnlyList<ModifierDetailSnapshot> modifiers = CreateModifiers(
                     affix != null ? affix.Modifiers : null,
                     definition != null ? definition.Modifiers : null,
                     itemName,
-                    displayName);
+                    definition != null ? definition.Id : string.Empty);
                 snapshots.Add(new AffixDetailSnapshot(
                     affix,
                     definition != null ? definition.AffixType : default,
-                    displayName,
+                    name,
                     modifiers,
-                    JoinModifierText(modifiers),
                     SumModifierValues(modifiers)));
             }
 
@@ -136,7 +125,8 @@ namespace DarkFlare
             {
                 int definitionCount = definitions != null ? definitions.Count : 0;
                 Debug.LogWarning(
-                    $"[ItemDetailSnapshotFactory] {itemName} / {groupName} 的修改器定义数量({definitionCount})与实例数量({modifiers.Count})不一致");
+                    $"[ItemDetailSnapshotFactory] {itemName} / {groupName} modifier definition count "
+                    + $"({definitionCount}) does not match instance count ({modifiers.Count})");
             }
 
             List<ModifierDetailSnapshot> snapshots = new List<ModifierDetailSnapshot>(modifiers.Count);
@@ -147,33 +137,13 @@ namespace DarkFlare
                 StatDefinition stat = definitions != null && i < definitions.Count && definitions[i] != null
                     ? definitions[i].Stat
                     : null;
-                string statName = stat != null && !string.IsNullOrWhiteSpace(stat.DisplayName)
-                    ? stat.DisplayName
-                    : MissingPropertyName;
                 snapshots.Add(new ModifierDetailSnapshot(
                     modifier,
-                    statName,
-                    ItemDetailFormatter.FormatModifier(modifier, statName, stat != null && stat.IsPercent)));
+                    stat != null ? stat.Id : modifier?.StatId ?? string.Empty,
+                    stat != null && stat.IsPercent));
             }
 
             return snapshots;
-        }
-
-        static string JoinModifierText(IReadOnlyList<ModifierDetailSnapshot> modifiers)
-        {
-            if (modifiers.Count == 0)
-            {
-                return "无数值修改";
-            }
-
-            List<string> texts = new List<string>(modifiers.Count);
-
-            for (int i = 0; i < modifiers.Count; i++)
-            {
-                texts.Add(modifiers[i].DisplayText);
-            }
-
-            return string.Join(" · ", texts);
         }
 
         static float SumModifierValues(IReadOnlyList<ModifierDetailSnapshot> modifiers)
@@ -188,14 +158,14 @@ namespace DarkFlare
             return total;
         }
 
-        static string FormatTags(IReadOnlyList<TagDefinition> tags)
+        static IReadOnlyList<LocalizedMessage> CreateTagNames(IReadOnlyList<TagDefinition> tags)
         {
             if (tags == null || tags.Count == 0)
             {
-                return string.Empty;
+                return EmptyNames;
             }
 
-            List<string> names = new List<string>(tags.Count);
+            List<LocalizedMessage> names = new List<LocalizedMessage>(tags.Count);
 
             for (int i = 0; i < tags.Count; i++)
             {
@@ -206,10 +176,13 @@ namespace DarkFlare
                     continue;
                 }
 
-                names.Add(!string.IsNullOrWhiteSpace(tag.DisplayName) ? tag.DisplayName : tag.Id);
+                if (tag.LocalizedName != null && tag.LocalizedName.IsValid)
+                {
+                    names.Add(tag.LocalizedName.Message);
+                }
             }
 
-            return string.Join("、", names);
+            return names;
         }
     }
 }

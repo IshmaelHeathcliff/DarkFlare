@@ -14,6 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.MonsterDefinition
   _id: razor_hound
   _displayName: "\u88C2\u722A\u730E\u72AC"
+  _localizedName:
+    _tableName: monsters
+    _entryKey: monster.razor_hound.name
   _character: {fileID: 0}
   _prefab:
     m_AssetGUID: f4600000000000000000000000000002

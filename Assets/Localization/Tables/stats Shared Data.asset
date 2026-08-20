@@ -14,7 +14,99 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.SharedTableData
   m_TableCollectionName: stats
   m_TableCollectionNameGuidString: a5fbd62b841a42f46b9c274e2802bbe7
-  m_Entries: []
+  m_Entries:
+  - m_Id: 15696883867648
+    m_Key: max_health
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15696917422080
+    m_Key: mana
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15696917422081
+    m_Key: health_regeneration
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15696917422082
+    m_Key: mana_regeneration
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15696917422083
+    m_Key: strength
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15696917422084
+    m_Key: dexterity
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15696917422085
+    m_Key: intelligence
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15696917422086
+    m_Key: damage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15696917422087
+    m_Key: critical_chance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15696917422088
+    m_Key: critical_damage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15696917422089
+    m_Key: accuracy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15696917422090
+    m_Key: armor
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15696917422091
+    m_Key: evasion
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15696917422092
+    m_Key: fire_resistance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15696917422093
+    m_Key: cold_resistance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15696917422094
+    m_Key: lightning_resistance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15696917422095
+    m_Key: chaos_resistance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15696917422096
+    m_Key: move_speed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15696917422097
+    m_Key: physical_damage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15696917422098
+    m_Key: fire_damage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15696917422099
+    m_Key: cold_damage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15696917422100
+    m_Key: lightning_damage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15696917422101
+    m_Key: chaos_damage
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

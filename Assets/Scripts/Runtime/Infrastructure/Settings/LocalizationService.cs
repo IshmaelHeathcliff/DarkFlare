@@ -240,6 +240,10 @@ namespace DarkFlare
         {
             "ui",
             "system",
+            "items",
+            "stats",
+            "affixes",
+            "monsters",
         };
 
         readonly SettingsService _settings;
@@ -523,6 +527,19 @@ namespace DarkFlare
             return string.IsNullOrWhiteSpace(value)
                 ? $"[{tableName}.{entryKey}]"
                 : value;
+        }
+
+        public string GetString(LocalizedMessage message)
+        {
+            if (message.IsEmpty)
+            {
+                return string.Empty;
+            }
+
+            return GetString(
+                message.TableName,
+                message.EntryKey,
+                message.Arguments);
         }
 
         public void Close()

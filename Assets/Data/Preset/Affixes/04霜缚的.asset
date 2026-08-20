@@ -14,6 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.AffixDefinition
   _id: frost_touched
   _displayName: "\u971C\u7F1A\u7684"
+  _localizedName:
+    _tableName: affixes
+    _entryKey: item_affix.frost_touched.name
   _affixType: 0
   _groupId: elemental_extra
   _minItemLevel: 1

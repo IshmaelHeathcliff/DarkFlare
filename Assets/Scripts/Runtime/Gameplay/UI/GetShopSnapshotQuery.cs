@@ -16,8 +16,6 @@ namespace DarkFlare
 
         public ItemDetailSnapshot Detail { get; }
 
-        public string DisplayName => Detail.DisplayName;
-
         public ItemType Type => Detail.Type;
 
         public ItemRarity Rarity => Detail.Rarity;

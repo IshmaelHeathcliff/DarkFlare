@@ -10,6 +10,7 @@
 | --- | --- | --- | --- |
 | `_id` | `string` / 空 | 正式资产必填；唯一小写 `snake_case`，发布后稳定 | `CombatActor.ActorId`、调试与潜在存档消费；改名需迁移引用 |
 | `_displayName` | `string` / 空 | 正式资产必填 | Inspector/UI 显示，不参与计算 |
+| `_localizedName` | `LocalizedContentReference` / 空引用 | 正式资产必填；固定使用 `monsters/actor.<id>.name` | 玩家可见角色名按当前语言解析；旧显示名仅供作者与日志识别 |
 | `_prefab` | `AssetReferenceGameObject` / `null` | 可实例化的正式角色必填且 GUID 有效 | `SpawnSystem` 异步加载并释放；禁止改用 Resources |
 | `_maxHealth` | `float` / `100` | 至少 `1` | `CreateStats` 写入最大生命，`CombatActor` 初始化资源 |
 | `_mana` | `float` / `0` | 不得小于 `0` | 写入最大法力；旧资产默认零，正式资产应显式保存 |
@@ -34,6 +35,7 @@
 | --- | --- | --- | --- |
 | `_id` | `string` / 空 | 正式资产必填；唯一小写 `snake_case`，发布后稳定 | 生成、随机子种子、调试与实例标识消费 |
 | `_displayName` | `string` / 空 | 正式资产必填 | 世界 UI、调试与配置中心消费 |
+| `_localizedName` | `LocalizedContentReference` / 空引用 | 正式资产必填；固定使用 `monsters/monster.<id>.name` | 世界 UI 在显示边界解析；实例与随机仍使用稳定 `_id` |
 | `_character` | `CharacterDefinition` / `null` | 可空；非空时下面的基础角色数值均由引用资产提供 | `CreateStats` 优先消费引用；切换所有权必须迁移旧内联值，不能混合生效 |
 | `_prefab` | `AssetReferenceGameObject` / `null` | 正式怪物必填且 GUID 有效、彼此独立 | `SpawnSystem` 加载；Prefab 必须满足角色层级与碰撞合同 |
 | `_maxHealth` | `float` / `24` | 无 `_character` 时至少 `1` | 内联基础生命；有引用时隐藏且不生效 |
@@ -71,6 +73,7 @@
 | --- | --- | --- | --- |
 | `_id` | `string` / 空 | 必填；唯一小写 `snake_case`，发布后稳定 | 词条实例、随机子种子、世界标签与调试消费 |
 | `_displayName` | `string` / 空 | 必填；简短且可在世界标签显示 | `MonsterAffixVisual` 与调试消费 |
+| `_localizedName` | `LocalizedContentReference` / 空引用 | 正式资产必填；固定使用 `affixes/monster_affix.<id>.name` | `MonsterAffixVisual` 监听语言切换并重新解析 |
 | `_groupId` | `string` / 空 | 必填；小写 `snake_case` | 单个怪物实例同组最多一项，生成器互斥过滤消费 |
 | `_weight` | `int` / `100` | 必须大于 `0` | 合法候选内加权随机；为相对权重 |
 | `_displayColor` | `Color` / 白色 | Alpha 必须大于 `0`，保证可辨认 | 世界词条标签消费；不影响战斗数值 |

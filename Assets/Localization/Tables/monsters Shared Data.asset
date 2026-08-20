@@ -14,7 +14,35 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.SharedTableData
   m_TableCollectionName: monsters
   m_TableCollectionNameGuidString: 92424fac0190c6e46b774adc2db7b23e
-  m_Entries: []
+  m_Entries:
+  - m_Id: 158451282993152
+    m_Key: monster.wasteland_wraith.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451324936192
+    m_Key: monster.razor_hound.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451324936193
+    m_Key: monster.iron_husk.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451324936194
+    m_Key: actor.player.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451324936195
+    m_Key: trader.basic_trader.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451324936196
+    m_Key: interaction.merchant.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451324936197
+    m_Key: interaction.crafting_station.name
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

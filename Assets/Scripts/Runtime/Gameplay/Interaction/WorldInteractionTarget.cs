@@ -10,6 +10,9 @@ namespace DarkFlare
         string _displayName = "交互目标";
 
         [SerializeField]
+        LocalizedContentReference _localizedName = new LocalizedContentReference("monsters", string.Empty);
+
+        [SerializeField]
         GameMenuPage _menuPage = GameMenuPage.Shop;
 
         [SerializeField]
@@ -20,6 +23,8 @@ namespace DarkFlare
         CircleCollider2D _collider;
 
         public string DisplayName => string.IsNullOrWhiteSpace(_displayName) ? GetDefaultDisplayName() : _displayName;
+
+        public LocalizedContentReference LocalizedName => _localizedName;
 
         public GameMenuPage MenuPage => _menuPage;
 

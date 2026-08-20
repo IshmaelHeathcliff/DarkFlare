@@ -12,6 +12,18 @@
       "path": "Assets/Scripts/Runtime/Core/QFramework.cs",
       "reason": "QFramework 外部框架的场景事件注销辅助对象需要跨场景存活，不属于项目 ApplicationHost。",
       "removeByStage": "external-framework-replacement"
+    },
+    {
+      "ruleId": "naked-forget",
+      "path": "Assets/Scripts/Runtime/Infrastructure/Settings/LocalizationService.cs",
+      "reason": "设置变更事件是同步入口；服务在应用生命周期令牌下启动 latest-wins 语言协调，并在内部捕获取消与异常。",
+      "removeByStage": "settings-events-become-async"
+    },
+    {
+      "ruleId": "cancellation-token-source-owner",
+      "path": "Assets/Scripts/Runtime/Infrastructure/Settings/LocalizationService.cs",
+      "reason": "语言切换需要原子替换并取消上一请求，所有权封装在 LocalizationService，Close 时统一取消。",
+      "removeByStage": "localization-switch-coordinator-extraction"
     }
   ]
 }

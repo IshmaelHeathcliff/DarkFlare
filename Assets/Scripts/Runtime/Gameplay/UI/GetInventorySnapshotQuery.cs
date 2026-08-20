@@ -11,8 +11,6 @@ namespace DarkFlare
 
         public ItemDetailSnapshot Detail { get; }
 
-        public string DisplayName => Detail.DisplayName;
-
         public ItemType Type => Detail.Type;
 
         public ItemRarity Rarity => Detail.Rarity;
@@ -41,12 +39,6 @@ namespace DarkFlare
 
         public ItemDetailSnapshot Detail { get; }
 
-        public string SlotName => EquipmentSlots.GetDisplayName(Slot);
-
-        public string Summary => Item != null
-            ? $"{SlotName} · {Detail.DisplayName}"
-            : $"{SlotName} · 空";
-
         public EquipmentSlotSnapshot(EquipmentSlot slot, ItemInstance item)
         {
             Slot = slot;
@@ -67,8 +59,6 @@ namespace DarkFlare
 
         public ItemInstance CurrentWeapon { get; }
 
-        public string CurrentWeaponSummary { get; }
-
         public IReadOnlyList<EquipmentSlotSnapshot> EquipmentSlots { get; }
 
         public bool HasPlayer => Player != null;
@@ -79,7 +69,6 @@ namespace DarkFlare
             int height,
             IReadOnlyList<InventoryItemSnapshot> items,
             ItemInstance currentWeapon,
-            string currentWeaponSummary,
             IReadOnlyList<EquipmentSlotSnapshot> equipmentSlots)
         {
             Player = player;
@@ -87,7 +76,6 @@ namespace DarkFlare
             Height = height;
             Items = items;
             CurrentWeapon = currentWeapon;
-            CurrentWeaponSummary = currentWeaponSummary;
             EquipmentSlots = equipmentSlots;
         }
     }
@@ -116,7 +104,6 @@ namespace DarkFlare
                 grid.Height,
                 items,
                 currentWeapon,
-                DescribeWeapon(currentWeapon),
                 equipmentSlots);
         }
 
@@ -159,15 +146,5 @@ namespace DarkFlare
                 : left.Placement.x.CompareTo(right.Placement.x);
         }
 
-        static string DescribeWeapon(ItemInstance weapon)
-        {
-            if (weapon == null)
-            {
-                return "未装备";
-            }
-
-            ItemDetailSnapshot detail = ItemDetailSnapshotFactory.Create(weapon);
-            return $"{detail.DisplayName} · {ItemDetailFormatter.GetRarityText(detail.Rarity)} · {detail.AffixCount} 条词缀";
-        }
     }
 }

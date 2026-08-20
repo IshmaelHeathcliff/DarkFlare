@@ -14,6 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.ItemBaseDefinition
   _id: jade_ring
   _displayName: "\u7FE1\u7FE0\u6212\u6307"
+  _localizedName:
+    _tableName: items
+    _entryKey: item.jade_ring.name
   _itemType: 2
   _icon:
     m_AssetGUID: d8c5c86107920ab4d9e117e19d6ed11e

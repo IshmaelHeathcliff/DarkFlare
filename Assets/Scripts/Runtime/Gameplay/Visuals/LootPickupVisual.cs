@@ -42,6 +42,7 @@ namespace DarkFlare
         Quaternion _haloBaseRotation;
         Tween _floatTween;
         Tween _rotationTween;
+        LocalizationService _localizationService;
         bool _hasBaseState;
 
         public ItemInstance Item => _item;
@@ -77,15 +78,8 @@ namespace DarkFlare
                 _iconRenderer.color = Color.white;
             }
 
-            if (_label != null)
-            {
-                string displayName = item?.BaseDefinition != null
-                    && !string.IsNullOrWhiteSpace(item.BaseDefinition.DisplayName)
-                        ? item.BaseDefinition.DisplayName
-                        : "未知物品";
-                _label.text = $"{displayName} · {GetRarityText(rarity)}";
-                _label.color = Color.Lerp(Color.white, GetRarityColor(rarity), 0.35f);
-            }
+            BindLocalization();
+            RefreshLabel();
 
             if (isActiveAndEnabled)
             {
@@ -113,24 +107,24 @@ namespace DarkFlare
             return new Color32(153, 158, 168, 255);
         }
 
-        public static string GetRarityText(ItemRarity rarity)
+        static string GetRarityKey(ItemRarity rarity)
         {
             if (rarity == ItemRarity.Magic)
             {
-                return "魔法";
+                return "item.rarity.magic";
             }
 
             if (rarity == ItemRarity.Rare)
             {
-                return "稀有";
+                return "item.rarity.rare";
             }
 
             if (rarity == ItemRarity.Unique)
             {
-                return "独特";
+                return "item.rarity.unique";
             }
 
-            return "普通";
+            return "item.rarity.normal";
         }
 
         void Awake()
@@ -141,6 +135,9 @@ namespace DarkFlare
 
         void OnEnable()
         {
+            BindLocalization();
+            RefreshLabel();
+
             if (_item != null)
             {
                 StartAnimations();
@@ -149,6 +146,12 @@ namespace DarkFlare
 
         void OnDisable()
         {
+            if (_localizationService != null)
+            {
+                _localizationService.LocaleChanged -= OnLocaleChanged;
+                _localizationService = null;
+            }
+
             StopAnimations();
             ResetTransforms();
         }
@@ -268,6 +271,58 @@ namespace DarkFlare
             }
 
             _haloRenderer.transform.localRotation = _haloBaseRotation * Quaternion.Euler(0f, 0f, angle);
+        }
+
+        void BindLocalization()
+        {
+            if (!ApplicationHost.TryGetCurrent(out ApplicationHost host)
+                || ReferenceEquals(_localizationService, host.Localization))
+            {
+                return;
+            }
+
+            if (_localizationService != null)
+            {
+                _localizationService.LocaleChanged -= OnLocaleChanged;
+            }
+
+            _localizationService = host.Localization;
+
+            if (_localizationService != null)
+            {
+                _localizationService.LocaleChanged += OnLocaleChanged;
+            }
+        }
+
+        void RefreshLabel()
+        {
+            if (_label == null || _item == null)
+            {
+                return;
+            }
+
+            LocalizedMessage name = _item.BaseDefinition?.LocalizedName?.Message ?? default;
+            string displayName = Resolve(name);
+            ItemRarity rarity = _item.Rarity;
+            _label.text = Localize("loot.label", displayName, Localize(GetRarityKey(rarity)));
+            _label.color = Color.Lerp(Color.white, GetRarityColor(rarity), 0.35f);
+        }
+
+        void OnLocaleChanged(string localeCode)
+        {
+            RefreshLabel();
+        }
+
+        string Localize(string entryKey, params object[] arguments)
+        {
+            LocalizedMessage message = LocalizedMessage.Ui(entryKey, arguments);
+            return Resolve(message);
+        }
+
+        string Resolve(LocalizedMessage message)
+        {
+            return _localizationService?.GetString(message)
+                ?? $"[{message.TableName}.{message.EntryKey}]";
         }
     }
 }

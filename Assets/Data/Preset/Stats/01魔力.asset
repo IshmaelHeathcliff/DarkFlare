@@ -14,6 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DarkFlare.StatDefinition
   _id: mana
   _displayName: "\u6700\u5927\u6CD5\u529B"
+  _localizedName:
+    _tableName: stats
+    _entryKey: mana
   _category: 0
   _defaultValue: 0
   _minValue: 0

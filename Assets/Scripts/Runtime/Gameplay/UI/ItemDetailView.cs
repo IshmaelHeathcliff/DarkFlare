@@ -20,10 +20,14 @@ namespace DarkFlare
         readonly VisualElement _implicitList;
         readonly VisualElement _prefixList;
         readonly VisualElement _suffixList;
+        readonly ItemDetailFormatter _formatter;
+        LocalizationService _localizationService;
 
-        public ItemDetailView(VisualElement root)
+        public ItemDetailView(VisualElement root, LocalizationService localizationService = null)
         {
             _root = root;
+            _localizationService = localizationService;
+            _formatter = new ItemDetailFormatter(Localize);
 
             if (_root == null)
             {
@@ -48,6 +52,11 @@ namespace DarkFlare
             && _prefixList != null
             && _suffixList != null;
 
+        public void SetLocalizationService(LocalizationService localizationService)
+        {
+            _localizationService = localizationService;
+        }
+
         public void Show(ItemDetailSnapshot detail)
         {
             Show(detail, ItemVisualPresenter.GetSprite(detail.IconGuid));
@@ -66,14 +75,32 @@ namespace DarkFlare
             _icon.style.backgroundImage = icon != null
                 ? new StyleBackground(icon)
                 : new StyleBackground(StyleKeyword.None);
-            _nameLabel.text = detail.Item != null ? detail.DisplayName : "未选择物品";
+            _nameLabel.text = detail.Item != null
+                ? Resolve(detail.Name, detail.InstanceId)
+                : Localize("ui", "item.detail.none_name");
             _metaLabel.text = detail.Item != null
-                ? $"{ItemDetailFormatter.GetItemTypeText(detail.Type)} · {ItemDetailFormatter.GetRarityText(detail.Rarity)} · 等级 {detail.ItemLevel}"
-                : "类型与稀有度：-";
-            _baseLabel.text = detail.Item != null ? BuildBaseSummary(detail) : "基础属性：-";
-            BindModifiers(_implicitList, detail.ImplicitModifiers, "无固有属性");
-            BindAffixes(_prefixList, detail.Prefixes, "无前缀");
-            BindAffixes(_suffixList, detail.Suffixes, "无后缀");
+                ? Localize(
+                    "ui",
+                    "item.detail.meta",
+                    _formatter.GetItemTypeText(detail.Type),
+                    _formatter.GetRarityText(detail.Rarity),
+                    detail.ItemLevel)
+                : Localize("ui", "item.detail.meta_empty");
+            _baseLabel.text = detail.Item != null
+                ? BuildBaseSummary(detail)
+                : Localize("ui", "item.detail.base_empty");
+            BindModifiers(
+                _implicitList,
+                detail.ImplicitModifiers,
+                Localize("ui", "item.detail.no_implicit"));
+            BindAffixes(
+                _prefixList,
+                detail.Prefixes,
+                Localize("ui", "item.detail.no_prefix"));
+            BindAffixes(
+                _suffixList,
+                detail.Suffixes,
+                Localize("ui", "item.detail.no_suffix"));
         }
 
         public void Clear()
@@ -81,18 +108,23 @@ namespace DarkFlare
             Show(ItemDetailSnapshotFactory.Create(null));
         }
 
-        static string BuildBaseSummary(ItemDetailSnapshot detail)
+        string BuildBaseSummary(ItemDetailSnapshot detail)
         {
             List<string> lines = new List<string>();
 
             for (int i = 0; i < detail.Damages.Count; i++)
             {
                 DamageDetailSnapshot damage = detail.Damages[i];
-                string line = damage.DisplayText;
+                string line = _formatter.FormatDamage(
+                    damage.DamageType,
+                    damage.Minimum,
+                    damage.Maximum);
 
-                if (!string.IsNullOrWhiteSpace(damage.TagSummary))
+                string tagSummary = FormatTags(damage.Tags);
+
+                if (!string.IsNullOrWhiteSpace(tagSummary))
                 {
-                    line += $" · {damage.TagSummary}";
+                    line += $" · {tagSummary}";
                 }
 
                 lines.Add(line);
@@ -100,15 +132,24 @@ namespace DarkFlare
 
             if (lines.Count == 0)
             {
-                lines.Add("无基础伤害");
+                lines.Add(Localize("ui", "item.detail.no_base_damage"));
             }
 
-            lines.Add($"占用 {detail.GridSize.x}×{detail.GridSize.y} · 重量 {ItemDetailFormatter.FormatNumber(detail.Weight)}");
-            lines.Add($"基础价值 {detail.BaseValue} · 当前价值 {detail.CalculatedValue}");
+            lines.Add(Localize(
+                "ui",
+                "item.detail.size_weight",
+                detail.GridSize.x,
+                detail.GridSize.y,
+                ItemDetailFormatter.FormatNumber(detail.Weight)));
+            lines.Add(Localize(
+                "ui",
+                "item.detail.values",
+                detail.BaseValue,
+                detail.CalculatedValue));
             return string.Join("\n", lines);
         }
 
-        static void BindModifiers(
+        void BindModifiers(
             VisualElement container,
             IReadOnlyList<ModifierDetailSnapshot> modifiers,
             string emptyText)
@@ -123,11 +164,14 @@ namespace DarkFlare
 
             for (int i = 0; i < modifiers.Count; i++)
             {
-                AddLine(container, modifiers[i].DisplayText, "item-detail-modifier");
+                AddLine(
+                    container,
+                    FormatModifier(modifiers[i]),
+                    "item-detail-modifier");
             }
         }
 
-        static void BindAffixes(
+        void BindAffixes(
             VisualElement container,
             IReadOnlyList<AffixDetailSnapshot> affixes,
             string emptyText)
@@ -152,14 +196,21 @@ namespace DarkFlare
 
                 for (int j = 0; j < affix.Modifiers.Count; j++)
                 {
-                    AddLine(entry, affix.Modifiers[j].DisplayText, "item-detail-affix-content");
+                    AddLine(
+                        entry,
+                        FormatModifier(affix.Modifiers[j]),
+                        "item-detail-affix-content");
                 }
 
                 Label name = AddLine(
                     entry,
-                    $"{ItemDetailFormatter.GetAffixTypeText(affix.Type)} · {affix.DisplayName}",
+                    Localize(
+                        "ui",
+                        "item.detail.affix_name",
+                        _formatter.GetAffixTypeText(affix.Type),
+                        Resolve(affix.Name, string.Empty)),
                     "item-detail-affix-name");
-                name.tooltip = affix.DisplayName;
+                name.tooltip = Resolve(affix.Name, string.Empty);
             }
         }
 
@@ -169,6 +220,49 @@ namespace DarkFlare
             label.AddToClassList(className);
             container.Add(label);
             return label;
+        }
+
+        string FormatModifier(ModifierDetailSnapshot detail)
+        {
+            string statDisplayName = !string.IsNullOrWhiteSpace(detail.StatId)
+                && StatIds.IsSupported(detail.StatId)
+                    ? Localize("stats", detail.StatId)
+                    : detail.Modifier?.StatId;
+            return _formatter.FormatModifier(
+                detail.Modifier,
+                statDisplayName,
+                detail.StatIsPercent);
+        }
+
+        string FormatTags(IReadOnlyList<LocalizedMessage> tags)
+        {
+            if (tags == null || tags.Count == 0)
+            {
+                return string.Empty;
+            }
+
+            List<string> names = new List<string>(tags.Count);
+
+            for (int i = 0; i < tags.Count; i++)
+            {
+                names.Add(Resolve(tags[i], string.Empty));
+            }
+
+            return string.Join(", ", names);
+        }
+
+        string Resolve(LocalizedMessage message, string fallback)
+        {
+            return message.IsEmpty
+                ? fallback
+                : _localizationService?.GetString(message)
+                    ?? $"[{message.TableName}.{message.EntryKey}]";
+        }
+
+        string Localize(string tableName, string entryKey, params object[] arguments)
+        {
+            return _localizationService?.GetString(tableName, entryKey, arguments)
+                ?? $"[{tableName}.{entryKey}]";
         }
 
         void ApplyRarityClass(ItemRarity rarity)

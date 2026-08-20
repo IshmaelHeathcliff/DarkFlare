@@ -14,4 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.TagDefinition
   _id: weapon
   _displayName: "\u6B66\u5668"
+  _localizedName:
+    _tableName: items
+    _entryKey: tag.weapon.name
+  _domain: 0
+  _usage: 0
   _description: "\u6240\u6709\u6B66\u5668\u88C5\u5907\u7684\u7C7B\u522B\u6807\u7B7E\u3002"

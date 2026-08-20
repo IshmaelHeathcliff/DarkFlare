@@ -212,6 +212,7 @@
 
 .equipment-future-title {
   min-height: 18px;
+  white-space: normal;
   font-size: 9px;
   letter-spacing: 1px;
   -unity-text-align: middle-center;
@@ -255,14 +256,17 @@
 }
 
 .inventory-equipment-slot-label {
+  display: none;
   position: absolute;
   left: 3px;
   right: 3px;
   bottom: 3px;
-  height: 18px;
+  min-height: 18px;
+  max-height: 32px;
   padding-left: 2px;
   padding-right: 2px;
   -unity-text-align: middle-center;
+  white-space: normal;
   font-size: 10px;
   color: rgb(225, 216, 195);
   background-color: rgba(10, 12, 16, 0.78);

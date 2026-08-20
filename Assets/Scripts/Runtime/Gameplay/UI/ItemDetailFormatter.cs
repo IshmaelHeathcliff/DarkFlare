@@ -1,126 +1,127 @@
+using System;
 using System.Globalization;
 
 namespace DarkFlare
 {
-    public static class ItemDetailFormatter
+    public sealed class ItemDetailFormatter
     {
-        public static string GetItemTypeText(ItemType type)
+        readonly Func<string, string, object[], string> _localize;
+
+        public ItemDetailFormatter(Func<string, string, object[], string> localize = null)
         {
-            switch (type)
-            {
-                case ItemType.Weapon:
-                    return "武器";
-                case ItemType.Armor:
-                    return "护甲";
-                case ItemType.Accessory:
-                    return "饰品";
-                case ItemType.Material:
-                    return "材料";
-                case ItemType.Currency:
-                    return "货币";
-                default:
-                    return "未知类型";
-            }
+            _localize = localize ?? ((tableName, entryKey, arguments) =>
+                $"[{tableName}.{entryKey}]");
         }
 
-        public static string GetRarityText(ItemRarity rarity)
+        public string GetItemTypeText(ItemType type)
         {
-            switch (rarity)
+            string entryKey = type switch
             {
-                case ItemRarity.Normal:
-                    return "普通";
-                case ItemRarity.Magic:
-                    return "魔法";
-                case ItemRarity.Rare:
-                    return "稀有";
-                case ItemRarity.Unique:
-                    return "传奇";
-                default:
-                    return "未知稀有度";
-            }
+                ItemType.Weapon => "item.type.weapon",
+                ItemType.Armor => "item.type.armor",
+                ItemType.Accessory => "item.type.accessory",
+                ItemType.Material => "item.type.material",
+                ItemType.Currency => "item.type.currency",
+                _ => "item.type.unknown",
+            };
+            return Localize(entryKey);
         }
 
-        public static string GetAffixTypeText(AffixType type)
+        public string GetRarityText(ItemRarity rarity)
         {
-            switch (type)
+            string entryKey = rarity switch
             {
-                case AffixType.Prefix:
-                    return "前缀";
-                case AffixType.Suffix:
-                    return "后缀";
-                case AffixType.Implicit:
-                    return "固有";
-                default:
-                    return "词缀";
-            }
+                ItemRarity.Normal => "item.rarity.normal",
+                ItemRarity.Magic => "item.rarity.magic",
+                ItemRarity.Rare => "item.rarity.rare",
+                ItemRarity.Unique => "item.rarity.unique",
+                _ => "item.rarity.unknown",
+            };
+            return Localize(entryKey);
         }
 
-        public static string GetDamageTypeText(DamageType damageType)
+        public string GetAffixTypeText(AffixType type)
         {
-            switch (damageType)
+            string entryKey = type switch
             {
-                case DamageType.Physical:
-                    return "物理";
-                case DamageType.Fire:
-                    return "火焰";
-                case DamageType.Cold:
-                    return "冰霜";
-                case DamageType.Lightning:
-                    return "闪电";
-                case DamageType.Chaos:
-                    return "混沌";
-                default:
-                    return "未知";
-            }
+                AffixType.Prefix => "item.affix_type.prefix",
+                AffixType.Suffix => "item.affix_type.suffix",
+                AffixType.Implicit => "item.affix_type.implicit",
+                _ => "item.affix_type.unknown",
+            };
+            return Localize(entryKey);
         }
 
-        public static string FormatDamage(DamageType damageType, float minimum, float maximum)
+        public string GetDamageTypeText(DamageType damageType)
+        {
+            string entryKey = damageType switch
+            {
+                DamageType.Physical => "item.damage_type.physical",
+                DamageType.Fire => "item.damage_type.fire",
+                DamageType.Cold => "item.damage_type.cold",
+                DamageType.Lightning => "item.damage_type.lightning",
+                DamageType.Chaos => "item.damage_type.chaos",
+                _ => "item.damage_type.unknown",
+            };
+            return Localize(entryKey);
+        }
+
+        public string FormatDamage(DamageType damageType, float minimum, float maximum)
         {
             string damageName = GetDamageTypeText(damageType);
             string minimumText = FormatNumber(minimum);
             string maximumText = FormatNumber(maximum);
             return NearlyEqual(minimum, maximum)
-                ? $"{damageName}伤害 {minimumText}"
-                : $"{damageName}伤害 {minimumText}–{maximumText}";
+                ? Localize("item.damage.single", damageName, minimumText)
+                : Localize("item.damage.range", damageName, minimumText, maximumText);
         }
 
-        public static string FormatModifier(
+        public string FormatModifier(
             ModifierInstance modifier,
             string statDisplayName,
             bool statIsPercent)
         {
             if (modifier == null)
             {
-                return "未配置修改器";
+                return Localize("item.modifier.missing");
             }
 
             string statName = string.IsNullOrWhiteSpace(statDisplayName)
-                ? "未配置属性"
+                ? Localize("item.stat.missing")
                 : statDisplayName;
             string value = FormatNumber(modifier.Value);
+            string percentSuffix = statIsPercent ? "%" : string.Empty;
 
             switch (modifier.Operation)
             {
                 case ModifierOperation.Flat:
-                    return $"{statName} +{value}{(statIsPercent ? "%" : string.Empty)}";
+                    return Localize("item.modifier.flat", statName, value, percentSuffix);
                 case ModifierOperation.Increase:
-                    return $"{statName}提高 {value}%";
+                    return Localize("item.modifier.increase", statName, value);
                 case ModifierOperation.More:
-                    return $"{statName}总增 {value}%";
+                    return Localize("item.modifier.more", statName, value);
                 case ModifierOperation.Override:
-                    return $"{statName}设为 {value}{(statIsPercent ? "%" : string.Empty)}";
+                    return Localize("item.modifier.override", statName, value, percentSuffix);
                 case ModifierOperation.Conversion:
-                    return $"{GetDamageTypeText(modifier.FromDamageType)}伤害的 {value}% 转化为{GetDamageTypeText(modifier.ToDamageType)}伤害";
+                    return Localize(
+                        "item.modifier.conversion",
+                        GetDamageTypeText(modifier.FromDamageType),
+                        value,
+                        GetDamageTypeText(modifier.ToDamageType));
                 case ModifierOperation.GainAsExtra:
-                    return $"获得等同于{GetDamageTypeText(modifier.FromDamageType)}伤害 {value}% 的额外{GetDamageTypeText(modifier.ToDamageType)}伤害";
+                    return Localize(
+                        "item.modifier.gain_as_extra",
+                        GetDamageTypeText(modifier.FromDamageType),
+                        value,
+                        GetDamageTypeText(modifier.ToDamageType));
                 case ModifierOperation.Chance:
-                    return $"{statName}触发概率 {value}%（暂未生效）";
+                    return Localize("item.modifier.chance", statName, value);
                 case ModifierOperation.Trigger:
-                    return $"{statName}触发 {value}（暂未生效）";
+                    return Localize("item.modifier.trigger", statName, value);
                 case ModifierOperation.Limit:
-                    return $"{statName}上限 {value}（暂未生效）";
+                    return Localize("item.modifier.limit", statName, value);
                 default:
-                    return $"{statName} {value}";
+                    return Localize("item.modifier.default", statName, value);
             }
         }
 
@@ -129,9 +130,14 @@ namespace DarkFlare
             return value.ToString("0.##", CultureInfo.InvariantCulture);
         }
 
+        string Localize(string entryKey, params object[] arguments)
+        {
+            return _localize("ui", entryKey, arguments);
+        }
+
         static bool NearlyEqual(float left, float right)
         {
-            return System.Math.Abs(left - right) <= 0.0001f;
+            return Math.Abs(left - right) <= 0.0001f;
         }
     }
 }

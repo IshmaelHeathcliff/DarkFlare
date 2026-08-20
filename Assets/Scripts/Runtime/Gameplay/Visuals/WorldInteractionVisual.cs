@@ -26,6 +26,7 @@ namespace DarkFlare
         readonly List<IUnRegister> _registrations = new List<IUnRegister>();
 
         SceneSessionBinding _sessionBinding;
+        LocalizationService _localizationService;
         bool _focused;
         bool _paused;
 
@@ -60,6 +61,7 @@ namespace DarkFlare
 
         SceneSessionBindResult BindSession(IArchitecture architecture)
         {
+            BindLocalization();
             RegisterEvents();
             ApplyState();
             return SceneSessionBindResult.Success;
@@ -68,6 +70,13 @@ namespace DarkFlare
         void UnbindSession()
         {
             UnregisterEvents();
+
+            if (_localizationService != null)
+            {
+                _localizationService.LocaleChanged -= OnLocaleChanged;
+                _localizationService = null;
+            }
+
             _focused = false;
             _paused = false;
             ApplyState();
@@ -148,13 +157,56 @@ namespace DarkFlare
             if (_focusPrompt != null)
             {
                 _focusPrompt.gameObject.SetActive(highlighted);
-                _focusPrompt.text = highlighted ? $"交互 · {_target.DisplayName}" : string.Empty;
+                _focusPrompt.text = highlighted && _target != null
+                    ? Localize(
+                        "interaction.world_prompt",
+                        Resolve(_target.LocalizedName?.Message ?? default))
+                    : string.Empty;
             }
 
             if (_nameplate != null && _target != null)
             {
-                _nameplate.text = _target.DisplayName;
+                _nameplate.text = Resolve(_target.LocalizedName?.Message ?? default);
             }
+        }
+
+        void BindLocalization()
+        {
+            if (!ApplicationHost.TryGetCurrent(out ApplicationHost host)
+                || ReferenceEquals(_localizationService, host.Localization))
+            {
+                return;
+            }
+
+            if (_localizationService != null)
+            {
+                _localizationService.LocaleChanged -= OnLocaleChanged;
+            }
+
+            _localizationService = host.Localization;
+
+            if (_localizationService != null)
+            {
+                _localizationService.LocaleChanged += OnLocaleChanged;
+            }
+        }
+
+        void OnLocaleChanged(string localeCode)
+        {
+            ApplyState();
+        }
+
+        string Localize(string entryKey, params object[] arguments)
+        {
+            LocalizedMessage message = LocalizedMessage.Ui(entryKey, arguments);
+            return _localizationService?.GetString(message)
+                ?? $"[{message.TableName}.{message.EntryKey}]";
+        }
+
+        string Resolve(LocalizedMessage message)
+        {
+            return _localizationService?.GetString(message)
+                ?? $"[{message.TableName}.{message.EntryKey}]";
         }
     }
 }

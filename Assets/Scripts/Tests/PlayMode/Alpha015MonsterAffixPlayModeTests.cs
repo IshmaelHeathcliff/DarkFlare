@@ -42,7 +42,11 @@ namespace DarkFlare.Tests
         [UnityTest]
         public IEnumerator Controller_AppliesModifiersAndVisualTracksLifecycle()
         {
-            MonsterAffixDefinition definition = CreateAffix("armored", "装甲", Color.yellow);
+            MonsterAffixDefinition definition = CreateAffix(
+                "armored",
+                "装甲",
+                "monster_affix.monster_armored.name",
+                Color.yellow);
             ModifierInstance modifier = CreateModifier(StatIds.Armor, ModifierOperation.Flat, 35f);
             MonsterAffixInstance affix = new MonsterAffixInstance(definition, 17, new[] { modifier });
             MonsterInstanceData instance = CreateInstance(new[] { affix }, new[] { modifier });
@@ -56,7 +60,7 @@ namespace DarkFlare.Tests
             Assert.AreEqual(1, controller.Actor.Modifiers.Count);
             Assert.AreEqual(40f, controller.Actor.Stats.GetValue(StatIds.Armor), 0.001f);
             Assert.IsTrue(visual.IsVisible);
-            StringAssert.Contains("装甲", visual.DisplayText);
+            StringAssert.Contains(ResolveName(definition), visual.DisplayText);
             Assert.AreEqual(1f, visual.LabelWorldScale.x, 0.001f);
             Assert.AreEqual(1f, visual.LabelWorldScale.y, 0.001f);
 
@@ -83,16 +87,31 @@ namespace DarkFlare.Tests
             yield return null;
             Assert.IsFalse(visual.IsVisible);
 
+            MonsterAffixDefinition firstDefinition = CreateAffix(
+                "first",
+                "第一",
+                "monster_affix.monster_flame_touched.name",
+                Color.red);
+            MonsterAffixDefinition secondDefinition = CreateAffix(
+                "second",
+                "第二",
+                "monster_affix.monster_frost_touched.name",
+                Color.cyan);
+            MonsterAffixDefinition thirdDefinition = CreateAffix(
+                "third",
+                "第三",
+                "monster_affix.monster_storm_touched.name",
+                Color.green);
             MonsterAffixInstance first = new MonsterAffixInstance(
-                CreateAffix("first", "第一", Color.red),
+                firstDefinition,
                 1,
                 new List<ModifierInstance>());
             MonsterAffixInstance second = new MonsterAffixInstance(
-                CreateAffix("second", "第二", Color.cyan),
+                secondDefinition,
                 2,
                 new List<ModifierInstance>());
             MonsterAffixInstance third = new MonsterAffixInstance(
-                CreateAffix("third", "第三", Color.green),
+                thirdDefinition,
                 3,
                 new List<ModifierInstance>());
             controller.Configure(
@@ -101,9 +120,9 @@ namespace DarkFlare.Tests
             yield return null;
 
             Assert.IsTrue(visual.IsVisible);
-            StringAssert.Contains("第一", visual.DisplayText);
-            StringAssert.Contains("第二", visual.DisplayText);
-            StringAssert.DoesNotContain("第三", visual.DisplayText);
+            StringAssert.Contains(ResolveName(firstDefinition), visual.DisplayText);
+            StringAssert.Contains(ResolveName(secondDefinition), visual.DisplayText);
+            StringAssert.DoesNotContain(ResolveName(thirdDefinition), visual.DisplayText);
             Assert.AreEqual(2, visual.DisplayText.Split('\n').Length);
         }
 
@@ -125,19 +144,34 @@ namespace DarkFlare.Tests
             _objects.Add(definition);
             SetField(definition, "_id", "alpha015_monster");
             SetField(definition, "_displayName", "测试怪物");
+            SetField(
+                definition,
+                "_localizedName",
+                new LocalizedContentReference("monsters", "monster.wasteland_wraith.name"));
             return definition;
         }
 
-        MonsterAffixDefinition CreateAffix(string id, string displayName, Color color)
+        MonsterAffixDefinition CreateAffix(
+            string id,
+            string displayName,
+            string localizedKey,
+            Color color)
         {
             MonsterAffixDefinition definition = ScriptableObject.CreateInstance<MonsterAffixDefinition>();
             _objects.Add(definition);
             SetField(definition, "_id", id);
             SetField(definition, "_displayName", displayName);
+            SetField(definition, "_localizedName", new LocalizedContentReference("affixes", localizedKey));
             SetField(definition, "_groupId", id);
             SetField(definition, "_weight", 100);
             SetField(definition, "_displayColor", color);
             return definition;
+        }
+
+        static string ResolveName(MonsterAffixDefinition definition)
+        {
+            Assert.IsTrue(ApplicationHost.TryGetCurrent(out ApplicationHost host));
+            return host.Localization.GetString(definition.LocalizedName.Message);
         }
 
         static MonsterInstanceData CreateInstance(

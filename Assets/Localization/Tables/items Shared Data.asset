@@ -15,8 +15,88 @@ MonoBehaviour:
   m_TableCollectionName: items
   m_TableCollectionNameGuidString: f9b4b93f365256343a14b94ccf0697dc
   m_Entries:
-  - m_Id: 519036928
-    m_Key: placeholder.none
+  - m_Id: 158645839978496
+    m_Key: item.great_sword.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158645894504448
+    m_Key: item.war_axe.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158645894504449
+    m_Key: item.leather_armor.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158645898698752
+    m_Key: item.plate_armor.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158645898698753
+    m_Key: item.iron_ring.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158645898698754
+    m_Key: item.jade_ring.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158645898698755
+    m_Key: item.obsidian_ring.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158645898698756
+    m_Key: tag.damage.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158645898698757
+    m_Key: tag.weapon.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158645898698758
+    m_Key: tag.armor.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158645898698759
+    m_Key: tag.ring.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158645898698760
+    m_Key: tag.sword.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158645898698761
+    m_Key: tag.axe.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158645898698762
+    m_Key: tag.physical.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158645898698763
+    m_Key: tag.fire.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158645898698764
+    m_Key: tag.cold.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158645898698765
+    m_Key: tag.lightning.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158645898698766
+    m_Key: tag.chaos.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158645898698767
+    m_Key: tag.projectile.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158645898698768
+    m_Key: tag.melee.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158645898698769
+    m_Key: tag.monster.name
     m_Metadata:
       m_Items: []
   m_Metadata:

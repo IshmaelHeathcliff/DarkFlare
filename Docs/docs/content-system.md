@@ -6,6 +6,8 @@
 
 稳定本地 ID 均使用小写 `snake_case`，持久化时由类型命名空间组成 `<namespace>:<local_id>` 的 `ContentId`；唯一正式目录 `core` v1 收录当前 90 个配置。目录、缺失策略和扩展规则见[稳定身份、内容目录与迁移框架](./infrastructure/content-identity-migration.md)。运行时随机规则继续沿用独立通道：怪物生命倍率 `0.85–1.15`、初始大剑伤害 `20–40`，掉落概率由各怪物掉落表独立配置。空手武器技能没有伤害回退。
 
+正式内容身份与显示文本彼此独立。七件装备、23 项属性、25 个物品词条、10 个怪物词条、三种怪物、玩家、商人、14 个标签和两个世界交互目标均持有 `LocalizedContentReference`；运行时 UI 从 `items`、`stats`、`affixes`、`monsters` 表解析名称，旧 `_displayName` 只保留给 Inspector 作者识别和日志兼容。具体 Key、回退和迁移合同见[用户设置与本地化](./infrastructure/user-settings-localization.md)。
+
 ## 标签
 
 当前标签目录仍包含 14 个稳定 ID，但按 Domain 和使用状态管理：
@@ -110,6 +112,7 @@
 - 标签 Domain、使用状态、引用位置、查询作用域与新旧字段混用。
 - 物品类别、角色阵营、技能类型和伤害类型的重复手填标签。
 - 中文名、词条组、权重、范围、Operation 与 Scope。
+- 正式内容本地化引用的非空、正确职责表、条目存在性，以及中英翻译与资产引用精确对应。
 - 标签兼容、每件装备候选数量和池覆盖。
 - 刷怪、掉落、商店和打造池的空项、权重与内容覆盖。
 - 怪物 Prefab 的独立 GUID、Addressables 注册和运行组件。
@@ -130,5 +133,6 @@
 - 阶段 6 全量 EditMode 98/98 通过；PlayMode 12 项中 10 项通过、2 项 Input System 上游既有用例跳过、0 失败。正式七件装备的交易 / 打造 / 四槽流程、三种怪物与十二词条池继续通过整合回归。
 - alpha 0.1.3 全量 EditMode 148/148 通过；PlayMode 17 项中 15 项通过、2 项 Input System 上游既有用例跳过、0 失败。三种怪物的 Layer、独立接触间隔、停止与软分离配置均由永久校验和专项测试覆盖。
 - alpha 0.1.5 正式内容专项 13/13、全量 EditMode 176/176 通过；PlayMode 20 项中 18 项通过、2 项 Input System 上游既有用例跳过、0 失败。25 个物品词条、10 个怪物词条、三份完整怪物池、三个世界标记 Prefab 与固定种子重放均通过整合回归。
+- alpha 0.2.3 将 86 个正式内容名称引用迁移到六张职责表；配置引用、双语条目、孤儿键、硬编码文本和字体字符集由 `LocalizationPolicyTests` 持续验证。
 
 随机种子与掉落判定见 [随机化与掉落规则](./randomization-system.md)，装备事务见 [装备系统](./equipment-system.md)，词条计算语义见 [伤害系统与词条系统设计](./damage-affix-system.md)。

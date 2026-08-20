@@ -14,6 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.MonsterAffixDefinition
   _id: monster_elusive
   _displayName: "\u654F\u6377"
+  _localizedName:
+    _tableName: affixes
+    _entryKey: monster_affix.monster_elusive.name
   _groupId: monster_evasion
   _weight: 90
   _displayColor: {r: 0.42, g: 0.95, b: 0.52, a: 1}

@@ -14,4 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.TagDefinition
   _id: armor
   _displayName: "\u62A4\u7532"
+  _localizedName:
+    _tableName: items
+    _entryKey: tag.armor.name
+  _domain: 0
+  _usage: 0
   _description: "\u6240\u6709\u62A4\u7532\u88C5\u5907\u7684\u7C7B\u522B\u6807\u7B7E\u3002"

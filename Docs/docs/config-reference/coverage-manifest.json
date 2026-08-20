@@ -62,6 +62,11 @@
       "anchor": "damagerolldefinition"
     },
     {
+      "type": "DarkFlare.LocalizedContentReference",
+      "document": "Docs/docs/infrastructure/user-settings-localization.md",
+      "anchor": "localizedcontentreference"
+    },
+    {
       "type": "DarkFlare.LootTableDefinition",
       "document": "Docs/docs/config-reference/items-and-loot.md",
       "anchor": "loottabledefinition"

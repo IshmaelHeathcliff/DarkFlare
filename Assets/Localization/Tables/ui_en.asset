@@ -16,7 +16,8 @@ MonoBehaviour:
     m_Code: en
   m_SharedData: {fileID: 11400000, guid: d78e71da38651da4487c070d86279ba7, type: 2}
   m_Metadata:
-    m_Items: []
+    m_Items:
+    - rid: 6738608143192817845
   m_TableData:
   - m_Id: 2066735104
     m_Localized: Auto
@@ -197,7 +198,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 4111712903207
-    m_Localized: 'Target Slot: None'
+    m_Localized: 'Target slot: None'
     m_Metadata:
       m_Items: []
   - m_Id: 4111712903208
@@ -223,22 +224,6 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 4111712903213
     m_Localized: EQUIPMENT
-    m_Metadata:
-      m_Items: []
-  - m_Id: 4111712903214
-    m_Localized: "Weapon \xB7 Empty"
-    m_Metadata:
-      m_Items: []
-  - m_Id: 4111712903215
-    m_Localized: "Armor \xB7 Empty"
-    m_Metadata:
-      m_Items: []
-  - m_Id: 4111712903216
-    m_Localized: "Left Ring \xB7 Empty"
-    m_Metadata:
-      m_Items: []
-  - m_Id: 4111712903217
-    m_Localized: "Right Ring \xB7 Empty"
     m_Metadata:
       m_Items: []
   - m_Id: 4111712903218
@@ -453,6 +438,588 @@ MonoBehaviour:
     m_Localized: Not enough mana (requires {0:0.#})
     m_Metadata:
       m_Items: []
+  - m_Id: 15892258742272
+    m_Localized: Weapon
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15892321656832
+    m_Localized: Armor
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15892321656833
+    m_Localized: Left Ring
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15892321656834
+    m_Localized: Right Ring
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15892321656835
+    m_Localized: Unknown Slot
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15892321656836
+    m_Localized: Waiting for player
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15892321656837
+    m_Localized: Select the left or right ring slot
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15892321656838
+    m_Localized: Ready to replace the target slot item
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15892321656839
+    m_Localized: Ready to equip to the target slot
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15892321656840
+    m_Localized: Ready to unequip the current slot
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15892321656841
+    m_Localized: Select an inventory item or equipment slot
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15892321656842
+    m_Localized: Select a compatible equipment slot
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15892321656843
+    m_Localized: This item cannot be equipped
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15892321656844
+    m_Localized: Select an equippable item and target slot
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15892321656845
+    m_Localized: Equip failed. Check inventory space, target slot, and item type
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15892321656846
+    m_Localized: Equipped {0} to {1}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15892321656847
+    m_Localized: The current slot has no item to unequip
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15892321656848
+    m_Localized: Unequip failed. Check inventory space
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15892321656849
+    m_Localized: Unequipped {0}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15892321656850
+    m_Localized: Cannot place the item at the target position
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15892321656851
+    m_Localized: Rearrange failed because inventory or equipment changed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15892321656852
+    m_Localized: Placed in the crafting slot
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15892321656853
+    m_Localized: Item position updated
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15892321656854
+    m_Localized: 'Item picked up: choose a position, then press Rearrange to place
+      it'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15892321656855
+    m_Localized: Item rearrange cancelled
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15892321656857
+    m_Localized: "{0} \xB7 {1}"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15892321656858
+    m_Localized: '{0} is empty'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15892321656859
+    m_Localized: 'Target slot: {0}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15892321656860
+    m_Localized: "Equipment candidate \xB7 {0}"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15892321656861
+    m_Localized: Player Inventory
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15892321656862
+    m_Localized: "{0} \xB7 {1}"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15892321656863
+    m_Localized: "Interact \xB7 {0}"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975395143680
+    m_Localized: Gold  {0}
+    m_Metadata:
+      m_Items:
+      - rid: 6738608143192817845
+  - m_Id: 18975449669632
+    m_Localized: Both the shop and inventory are empty
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975453863936
+    m_Localized: 'Source: Merchant Stock'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975453863937
+    m_Localized: 'Source: Player Inventory'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975453863938
+    m_Localized: 'Buy Price: {0} gold'
+    m_Metadata:
+      m_Items:
+      - rid: 6738608143192817845
+  - m_Id: 18975453863939
+    m_Localized: 'Sell Price: {0} gold'
+    m_Metadata:
+      m_Items:
+      - rid: 6738608143192817845
+  - m_Id: 18975453863940
+    m_Localized: Confirm purchase to place the item in your inventory
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975453863941
+    m_Localized: Not enough gold; {0} more required
+    m_Metadata:
+      m_Items:
+      - rid: 6738608143192817845
+  - m_Id: 18975453863942
+    m_Localized: Sold items leave your inventory; buyback is not available
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975453863943
+    m_Localized: "Merchant Stock \xB7 Buy for {0} gold"
+    m_Metadata:
+      m_Items:
+      - rid: 6738608143192817845
+  - m_Id: 18975453863944
+    m_Localized: "Player Inventory \xB7 Sell for {0} gold"
+    m_Metadata:
+      m_Items:
+      - rid: 6738608143192817845
+  - m_Id: 18975453863945
+    m_Localized: Select an item from the merchant stock
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975453863946
+    m_Localized: Purchased {0}
+    m_Metadata:
+      m_Items:
+      - rid: 6738608143192817845
+  - m_Id: 18975453863947
+    m_Localized: 'Purchase failed: check your gold, inventory space, or stock'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975453863948
+    m_Localized: Select an item from your inventory
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975453863949
+    m_Localized: Sold {0}
+    m_Metadata:
+      m_Items:
+      - rid: 6738608143192817845
+  - m_Id: 18975453863950
+    m_Localized: 'Sale failed: the item is no longer in your inventory'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975453863951
+    m_Localized: Gold  {0}
+    m_Metadata:
+      m_Items:
+      - rid: 6738608143192817845
+  - m_Id: 18975453863952
+    m_Localized: "{0} \xB7 {1}"
+    m_Metadata:
+      m_Items:
+      - rid: 6738608143192817845
+  - m_Id: 18975453863953
+    m_Localized: "Affixes: Prefixes {0}/{1} \xB7 Suffixes {2}/{3} \xB7 Total {4}/{5}-{6}"
+    m_Metadata:
+      m_Items:
+      - rid: 6738608143192817845
+  - m_Id: 18975453863954
+    m_Localized: "Item Value: {0} \xB7 Sell Price: {1}"
+    m_Metadata:
+      m_Items:
+      - rid: 6738608143192817845
+  - m_Id: 18975453863955
+    m_Localized: Crafting configuration is not loaded
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975453863956
+    m_Localized: 'Any scope: randomize from all available prefixes and suffixes at
+      base cost'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975453863957
+    m_Localized: "Precise {0}: affects only {0} and costs 3\xD7 the Any scope"
+    m_Metadata:
+      m_Items:
+      - rid: 6738608143192817845
+  - m_Id: 18975453863958
+    m_Localized: Crafting target locked; hover for details or use Return to clear
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975453863959
+    m_Localized: Drag an inventory item here, or select one and use Place
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975453863960
+    m_Localized: Already in Crafting Slot
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975453863961
+    m_Localized: Place in Crafting Slot
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975453863962
+    m_Localized: There are no craftable items in your inventory
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975453863963
+    m_Localized: Selected {0}; place it in the crafting slot to craft
+    m_Metadata:
+      m_Items:
+      - rid: 6738608143192817845
+  - m_Id: 18975453863964
+    m_Localized: "{0} \xB7 {1} gold"
+    m_Metadata:
+      m_Items:
+      - rid: 6738608143192817845
+  - m_Id: 18975453863965
+    m_Localized: '{0}, costs {1} gold'
+    m_Metadata:
+      m_Items:
+      - rid: 6738608143192817845
+  - m_Id: 18975453863966
+    m_Localized: Item in Crafting Slot
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975453863967
+    m_Localized: Place an item in the crafting slot first
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975453863968
+    m_Localized: 'No effect: {0}'
+    m_Metadata:
+      m_Items:
+      - rid: 6738608143192817845
+  - m_Id: 18975453863969
+    m_Localized: "Completed: {0} \xB7 {1} \xB7 Cost {2} gold\n{3} ({4}) \u2192 {5}
+      ({6})"
+    m_Metadata:
+      m_Items:
+      - rid: 6738608143192817845
+  - m_Id: 18975453863975
+    m_Localized: The item is not in the player's inventory
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975453863976
+    m_Localized: Not enough gold
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975453863977
+    m_Localized: Maximum rarity reached
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975453863978
+    m_Localized: This operation would not change the current state
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975453863979
+    m_Localized: The selected scope has reached its affix capacity
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975453863980
+    m_Localized: The selected scope has no applicable affix
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975453863981
+    m_Localized: The selected scope has no affix with a rerollable value
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975453863982
+    m_Localized: The affix pool has no valid candidate
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975453863983
+    m_Localized: The affix pool cannot produce a complete result for this rarity
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975453863984
+    m_Localized: State commit failed; no gold was spent
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975453863985
+    m_Localized: This operation is unavailable
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581931016192
+    m_Localized: Weapon
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581993930752
+    m_Localized: Armor
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581993930753
+    m_Localized: Accessory
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581993930754
+    m_Localized: Material
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581993930755
+    m_Localized: Currency
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581993930756
+    m_Localized: Unknown Type
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581993930757
+    m_Localized: Normal
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581993930758
+    m_Localized: Magic
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581993930759
+    m_Localized: Rare
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581993930760
+    m_Localized: Legendary
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581993930761
+    m_Localized: Unknown Rarity
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581993930762
+    m_Localized: Prefix
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581993930763
+    m_Localized: Suffix
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581993930764
+    m_Localized: Implicit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581993930765
+    m_Localized: Affix
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581993930766
+    m_Localized: Physical
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581993930767
+    m_Localized: Fire
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581993930768
+    m_Localized: Cold
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581993930769
+    m_Localized: Lightning
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581993930770
+    m_Localized: Chaos
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581993930771
+    m_Localized: Unknown
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581993930772
+    m_Localized: '{0} Damage {1}'
+    m_Metadata:
+      m_Items:
+      - rid: 6738608143192817845
+  - m_Id: 20581998125056
+    m_Localized: "{0} Damage {1}\u2013{2}"
+    m_Metadata:
+      m_Items:
+      - rid: 6738608143192817845
+  - m_Id: 20581998125057
+    m_Localized: Modifier not configured
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581998125058
+    m_Localized: Stat not configured
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581998125059
+    m_Localized: '{0} +{1}{2}'
+    m_Metadata:
+      m_Items:
+      - rid: 6738608143192817845
+  - m_Id: 20581998125060
+    m_Localized: '{0} increased by {1}%'
+    m_Metadata:
+      m_Items:
+      - rid: 6738608143192817845
+  - m_Id: 20581998125061
+    m_Localized: '{1}% more {0}'
+    m_Metadata:
+      m_Items:
+      - rid: 6738608143192817845
+  - m_Id: 20581998125062
+    m_Localized: Set {0} to {1}{2}
+    m_Metadata:
+      m_Items:
+      - rid: 6738608143192817845
+  - m_Id: 20581998125063
+    m_Localized: '{1}% of {0} Damage converted to {2} Damage'
+    m_Metadata:
+      m_Items:
+      - rid: 6738608143192817845
+  - m_Id: 20581998125064
+    m_Localized: Gain {1}% of {0} Damage as extra {2} Damage
+    m_Metadata:
+      m_Items:
+      - rid: 6738608143192817845
+  - m_Id: 20581998125065
+    m_Localized: '{0} chance {1}% (not active yet)'
+    m_Metadata:
+      m_Items:
+      - rid: 6738608143192817845
+  - m_Id: 20581998125066
+    m_Localized: '{0} trigger {1} (not active yet)'
+    m_Metadata:
+      m_Items:
+      - rid: 6738608143192817845
+  - m_Id: 20581998125067
+    m_Localized: '{0} limit {1} (not active yet)'
+    m_Metadata:
+      m_Items:
+      - rid: 6738608143192817845
+  - m_Id: 20581998125068
+    m_Localized: '{0} {1}'
+    m_Metadata:
+      m_Items:
+      - rid: 6738608143192817845
+  - m_Id: 20581998125069
+    m_Localized: No Item Selected
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581998125070
+    m_Localized: "{0} \xB7 {1} \xB7 Level {2}"
+    m_Metadata:
+      m_Items:
+      - rid: 6738608143192817845
+  - m_Id: 20581998125071
+    m_Localized: 'Type and Rarity: -'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581998125072
+    m_Localized: 'Base Properties: -'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581998125073
+    m_Localized: No Implicit Modifiers
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581998125074
+    m_Localized: No Prefixes
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581998125075
+    m_Localized: No Suffixes
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581998125076
+    m_Localized: No Base Damage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581998125077
+    m_Localized: "Size {0}\xD7{1} \xB7 Weight {2}"
+    m_Metadata:
+      m_Items:
+      - rid: 6738608143192817845
+  - m_Id: 20581998125078
+    m_Localized: "Base Value {0} \xB7 Current Value {1}"
+    m_Metadata:
+      m_Items:
+      - rid: 6738608143192817845
+  - m_Id: 20581998125079
+    m_Localized: "{0} \xB7 {1}"
+    m_Metadata:
+      m_Items:
+      - rid: 6738608143192817845
+  - m_Id: 158647622557696
+    m_Localized: "{0} \xB7 {1}"
+    m_Metadata:
+      m_Items:
+      - rid: 6738608143192817845
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 6738608143192817845
+      type: {class: SmartFormatTag, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_Entries:
+        m_SharedEntries:
+        - id: 18975395143680
+        - id: 18975453863938
+        - id: 18975453863939
+        - id: 18975453863941
+        - id: 18975453863943
+        - id: 18975453863944
+        - id: 18975453863946
+        - id: 18975453863949
+        - id: 18975453863951
+        - id: 18975453863952
+        - id: 18975453863953
+        - id: 18975453863954
+        - id: 18975453863957
+        - id: 18975453863963
+        - id: 18975453863964
+        - id: 18975453863965
+        - id: 18975453863968
+        - id: 18975453863969
+        - id: 20581993930772
+        - id: 20581998125056
+        - id: 20581998125059
+        - id: 20581998125060
+        - id: 20581998125061
+        - id: 20581998125062
+        - id: 20581998125063
+        - id: 20581998125064
+        - id: 20581998125065
+        - id: 20581998125066
+        - id: 20581998125067
+        - id: 20581998125068
+        - id: 20581998125070
+        - id: 20581998125077
+        - id: 20581998125078
+        - id: 20581998125079
+        - id: 158647622557696

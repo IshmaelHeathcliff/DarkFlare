@@ -5,25 +5,26 @@
 `alpha 0.1.7` 阶段 E 已建立配置发现、文档映射与字段覆盖闭环：
 
 - 发现入口：所有 `CreateAssetMenu.menuName` 以 `DarkFlare/Data/` 开头的顶层配置，以及它们可达的 Unity 嵌套序列化类型；
-- 当前基线：12 个顶层类型、6 个嵌套类型，共 18 类、153 个序列化字段；
+- 当前基线：12 个顶层类型、7 个嵌套类型，共 19 类、163 个序列化字段；
 - 映射真值：[coverage-manifest.json](./coverage-manifest.json) 只登记完整类型名、职责文档和 H2 锚点；
 - 字段真值：Editor 反射实时读取 Unity 序列化字段，manifest 不复制字段列表；
 - 文档要求：每个字段必须在对应类型 H2 章节中拥有独立表格行。
 
 配置中心“内容校验”会同时运行覆盖扫描。新增配置类型、可达嵌套类型或序列化字段而未登记时，提交前会得到明确错误；删除或重命名字段后，旧文档行也会以 stale 错误阻止通过。
 
-## 六份职责文档
+## 七份职责文档
 
 | 职责 | 类型 | 字段数 | 字段参考 | 模块说明 |
 | --- | --- | ---: | --- | --- |
-| 标签与查询 | `TagDefinition`、`TagQueryDefinition` | 9 | [完整](./tags-and-queries.md) | [战斗标签系统](../combat-tag-system.md) |
-| 属性与词缀 | `StatDefinition`、`AffixDefinition`、`StatModifierDefinition` | 28 | [完整](./stats-and-affixes.md) | [属性系统](../stat-system.md)、[伤害与词缀](../damage-affix-system.md) |
-| 角色与怪物 | `CharacterDefinition`、`MonsterDefinition`、`MonsterAffixDefinition`、`MonsterSpawnDefinition`、`MonsterSpawnRule` | 59 | [完整](./actors-and-monsters.md) | [玩法循环](../gameplay-loop.md)、[首批内容池](../content-system.md) |
-| 物品与掉落 | `ItemBaseDefinition`、`DamageRollDefinition`、`LootTableDefinition`、`LootTableEntry` | 23 | [完整](./items-and-loot.md) | [装备系统](../equipment-system.md)、[随机化与掉落](../randomization-system.md) |
+| 标签与查询 | `TagDefinition`、`TagQueryDefinition` | 10 | [完整](./tags-and-queries.md) | [战斗标签系统](../combat-tag-system.md) |
+| 属性与词缀 | `StatDefinition`、`AffixDefinition`、`StatModifierDefinition` | 30 | [完整](./stats-and-affixes.md) | [属性系统](../stat-system.md)、[伤害与词缀](../damage-affix-system.md) |
+| 角色与怪物 | `CharacterDefinition`、`MonsterDefinition`、`MonsterAffixDefinition`、`MonsterSpawnDefinition`、`MonsterSpawnRule` | 63 | [完整](./actors-and-monsters.md) | [玩法循环](../gameplay-loop.md)、[首批内容池](../content-system.md) |
+| 物品与掉落 | `ItemBaseDefinition`、`DamageRollDefinition`、`LootTableDefinition`、`LootTableEntry` | 25 | [完整](./items-and-loot.md) | [装备系统](../equipment-system.md)、[随机化与掉落](../randomization-system.md) |
 | 技能 | `ProjectileSkillDefinition` | 12 | [完整](./skills.md) | [伤害与词缀](../damage-affix-system.md) |
-| 交易与打造 | `TraderDefinition`、`TraderStockEntry`、`CraftingDefinition` | 19 | [完整](./trade-and-crafting.md) | [打造系统](../crafting-system.md)、[首批内容池](../content-system.md) |
+| 交易与打造 | `TraderDefinition`、`TraderStockEntry`、`CraftingDefinition` | 21 | [完整](./trade-and-crafting.md) | [打造系统](../crafting-system.md)、[首批内容池](../content-system.md) |
+| 本地化内容引用 | `LocalizedContentReference` | 2 | [完整](../infrastructure/user-settings-localization.md#localizedcontentreference) | [用户设置与本地化](../infrastructure/user-settings-localization.md) |
 
-旧 [标签配置参考](./combat-tags.md) 与 [角色、物品与攻击配置参考](./combat-content.md) 保留为阶段迁移摘要；新增或修改字段只维护上表六份封板合同。
+旧 [标签配置参考](./combat-tags.md) 与 [角色、物品与攻击配置参考](./combat-content.md) 保留为阶段迁移摘要；新增或修改字段只维护上表七份封板合同。
 
 ## 每类配置的交付要求
 

@@ -565,12 +565,12 @@ namespace DarkFlare.Tests
                     TagSet.Empty));
             ModifierDetailSnapshot modifierDetail = new ModifierDetailSnapshot(
                 conditional,
-                "伤害",
-                "伤害提高 10%");
+                StatIds.Damage,
+                false);
             ItemDetailSnapshot detail = new ItemDetailSnapshot(
                 null,
                 string.Empty,
-                string.Empty,
+                default,
                 string.Empty,
                 ItemType.Weapon,
                 ItemRarity.Normal,

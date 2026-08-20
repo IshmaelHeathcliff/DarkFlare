@@ -30,8 +30,6 @@ namespace DarkFlare
     {
         public ItemInstance Item { get; }
 
-        public string DisplayName { get; }
-
         public ItemType Type { get; }
 
         public ItemRarity Rarity { get; }
@@ -63,7 +61,6 @@ namespace DarkFlare
         {
             Item = item;
             Detail = ItemDetailSnapshotFactory.Create(item);
-            DisplayName = Detail.DisplayName;
             Type = Detail.Type;
             Rarity = Detail.Rarity;
             Value = Detail.CalculatedValue;

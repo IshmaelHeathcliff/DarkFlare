@@ -53,10 +53,10 @@ public class ShopViewStateTests
     {
         ShopViewState state = new ShopViewState();
 
-        state.SetFeedback("已购买测试物品");
+        state.SetFeedback(LocalizedMessage.Ui("shop.feedback.buy_succeeded", "测试物品"));
 
         Assert.IsTrue(state.HasFeedback);
-        Assert.AreEqual("已购买测试物品", state.Feedback);
+        Assert.AreEqual("shop.feedback.buy_succeeded", state.Feedback.EntryKey);
 
         state.ClearFeedback();
 

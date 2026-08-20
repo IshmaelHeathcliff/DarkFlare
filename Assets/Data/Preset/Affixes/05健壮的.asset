@@ -14,6 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.AffixDefinition
   _id: healthy
   _displayName: "\u5065\u58EE\u7684"
+  _localizedName:
+    _tableName: affixes
+    _entryKey: item_affix.healthy.name
   _affixType: 0
   _groupId: maximum_health_flat
   _minItemLevel: 1

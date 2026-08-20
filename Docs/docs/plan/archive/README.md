@@ -14,6 +14,7 @@
 - [应用生命周期与会话作用域](../../infrastructure/application-lifecycle.md)
 - [稳定身份、内容目录与迁移框架](../../infrastructure/content-identity-migration.md)
 - [本地存档与 Session 恢复](../../infrastructure/local-save.md)
+- [用户设置与本地化](../../infrastructure/user-settings-localization.md)
 
 ## 归档清单
 
@@ -47,5 +48,6 @@
 | [alpha 0.2.0 应用宿主、作用域与规范验证执行计划](./alpha-0.2.0-application-lifecycle-plan.md) | alpha 0.2.0 | [应用生命周期与会话作用域](../../infrastructure/application-lifecycle.md) |
 | [alpha 0.2.1 稳定身份、内容目录与迁移框架执行计划](./alpha-0.2.1-content-identity-migration-plan.md) | alpha 0.2.1 | [稳定身份、内容目录与迁移框架](../../infrastructure/content-identity-migration.md) |
 | [alpha 0.2.2 本地存档闭环执行计划](./alpha-0.2.2-local-save-plan.md) | alpha 0.2.2 | [本地存档与 Session 恢复](../../infrastructure/local-save.md) |
+| [alpha 0.2.3 用户设置与本地化执行计划](./alpha-0.2.3-settings-localization-plan.md) | alpha 0.2.3 | [用户设置与本地化](../../infrastructure/user-settings-localization.md) |
 
-最近归档日期：2026-08-19。
+最近归档日期：2026-08-20。

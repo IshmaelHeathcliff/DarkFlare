@@ -14,6 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.AffixDefinition
   _id: arcane_reserve
   _displayName: "\u5965\u672F\u50A8\u5907\u7684"
+  _localizedName:
+    _tableName: affixes
+    _entryKey: item_affix.arcane_reserve.name
   _affixType: 0
   _groupId: maximum_mana_flat
   _minItemLevel: 1

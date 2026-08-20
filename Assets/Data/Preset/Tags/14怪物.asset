@@ -14,6 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.TagDefinition
   _id: monster
   _displayName: "\u602A\u7269"
+  _localizedName:
+    _tableName: items
+    _entryKey: tag.monster.name
   _domain: 2
   _usage: 1
   _description: "\u602A\u7269\u89D2\u8272\u6807\u7B7E\u3002"

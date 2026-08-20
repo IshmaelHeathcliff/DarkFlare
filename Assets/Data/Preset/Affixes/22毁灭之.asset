@@ -14,6 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.AffixDefinition
   _id: of_ruin
   _displayName: "\u6BC1\u706D\u4E4B"
+  _localizedName:
+    _tableName: affixes
+    _entryKey: item_affix.of_ruin.name
   _affixType: 1
   _groupId: critical_damage_flat
   _minItemLevel: 1

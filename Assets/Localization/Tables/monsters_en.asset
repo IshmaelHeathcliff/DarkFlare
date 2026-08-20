@@ -17,7 +17,35 @@ MonoBehaviour:
   m_SharedData: {fileID: 11400000, guid: 92424fac0190c6e46b774adc2db7b23e, type: 2}
   m_Metadata:
     m_Items: []
-  m_TableData: []
+  m_TableData:
+  - m_Id: 158451282993152
+    m_Localized: Wasteland Wraith
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451324936192
+    m_Localized: Razor Hound
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451324936193
+    m_Localized: Iron Husk
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451324936194
+    m_Localized: Player
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451324936195
+    m_Localized: Basic Trader
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451324936196
+    m_Localized: Wandering Merchant
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158451324936197
+    m_Localized: Camp Forge
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

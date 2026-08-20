@@ -126,7 +126,7 @@ Application.persistentDataPath/
 - 新游戏：重建当前 Main Session，不删除旧档。
 - Busy 期间三个按钮统一禁用，并显示稳定中文反馈。
 
-这些按钮同时支持鼠标、键盘和手柄焦点。当前中文文本将在 `alpha 0.2.3` 迁入 Unity Localization String Table。
+这些按钮同时支持鼠标、键盘和手柄焦点。相关文本已在 `alpha 0.2.3` 迁入 Unity Localization String Table。
 
 ## 验证证据
 
@@ -141,6 +141,6 @@ Application.persistentDataPath/
 
 - UI 只有一个 `auto` 槽位，没有手动槽位列表、删除、重命名、Profile 选择或云同步。
 - 仍只有 `Main` 单场景，没有 Boot / FrontEnd / Loading 和正式 SceneFlow。
-- 没有 Settings 文件、Locale 服务、统一 Logger、Toast / 错误页和移动平台挂起恢复。
+- Settings 文件与 Locale 服务已在 `alpha 0.2.3` 落地；统一 Logger、Toast / 错误页和移动平台挂起恢复仍未实现，其中 UI 错误外壳由 `alpha 0.2.4` 负责。
 - 退出门禁只完成当前桌面流程；平台差异由 `alpha 0.2.5` 处理。
-- 当前 Storage 原语可被后续设置模块参考，但 Settings 必须使用独立路径域、Schema 和服务，不能写入游戏存档。
+- Settings 已使用独立路径域、Schema 和服务，未写入游戏存档；存档 Storage 原语继续只服务 Save Domain。

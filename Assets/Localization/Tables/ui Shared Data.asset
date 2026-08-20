@@ -219,22 +219,6 @@ MonoBehaviour:
     m_Key: workbench.equipment.kicker
     m_Metadata:
       m_Items: []
-  - m_Id: 4111712903214
-    m_Key: equipment.slot.weapon.empty
-    m_Metadata:
-      m_Items: []
-  - m_Id: 4111712903215
-    m_Key: equipment.slot.armor.empty
-    m_Metadata:
-      m_Items: []
-  - m_Id: 4111712903216
-    m_Key: equipment.slot.ring_left.empty
-    m_Metadata:
-      m_Items: []
-  - m_Id: 4111712903217
-    m_Key: equipment.slot.ring_right.empty
-    m_Metadata:
-      m_Items: []
   - m_Id: 4111712903218
     m_Key: equipment.future.title
     m_Metadata:
@@ -445,6 +429,510 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 7274079707137
     m_Key: hud.skill.insufficient_mana
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15892258742272
+    m_Key: equipment.slot.weapon
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15892321656832
+    m_Key: equipment.slot.armor
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15892321656833
+    m_Key: equipment.slot.ring_left
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15892321656834
+    m_Key: equipment.slot.ring_right
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15892321656835
+    m_Key: equipment.slot.unknown
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15892321656836
+    m_Key: inventory.feedback.waiting_player
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15892321656837
+    m_Key: inventory.feedback.select_ring
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15892321656838
+    m_Key: inventory.feedback.can_replace
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15892321656839
+    m_Key: inventory.feedback.can_equip
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15892321656840
+    m_Key: inventory.feedback.can_unequip
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15892321656841
+    m_Key: inventory.feedback.select_item_or_slot
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15892321656842
+    m_Key: inventory.feedback.select_compatible_slot
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15892321656843
+    m_Key: inventory.feedback.cannot_equip
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15892321656844
+    m_Key: inventory.feedback.equip_select
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15892321656845
+    m_Key: inventory.feedback.equip_failed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15892321656846
+    m_Key: inventory.feedback.equip_succeeded
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15892321656847
+    m_Key: inventory.feedback.unequip_no_item
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15892321656848
+    m_Key: inventory.feedback.unequip_failed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15892321656849
+    m_Key: inventory.feedback.unequip_succeeded
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15892321656850
+    m_Key: inventory.feedback.drop_invalid
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15892321656851
+    m_Key: inventory.feedback.drop_stale
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15892321656852
+    m_Key: inventory.feedback.drop_external_succeeded
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15892321656853
+    m_Key: inventory.feedback.drop_moved
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15892321656854
+    m_Key: inventory.feedback.drag_started
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15892321656855
+    m_Key: inventory.feedback.drag_cancelled
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15892321656857
+    m_Key: inventory.slot.tooltip.filled
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15892321656858
+    m_Key: inventory.slot.tooltip.empty
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15892321656859
+    m_Key: inventory.target.selected
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15892321656860
+    m_Key: inventory.tooltip.candidate
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15892321656861
+    m_Key: inventory.tooltip.player
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15892321656862
+    m_Key: interaction.prompt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15892321656863
+    m_Key: interaction.world_prompt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975395143680
+    m_Key: shop.gold
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975449669632
+    m_Key: shop.feedback.empty
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975453863936
+    m_Key: shop.source.merchant
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975453863937
+    m_Key: shop.source.player
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975453863938
+    m_Key: shop.price.buy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975453863939
+    m_Key: shop.price.sell
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975453863940
+    m_Key: shop.feedback.buy_ready
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975453863941
+    m_Key: shop.feedback.insufficient_gold
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975453863942
+    m_Key: shop.feedback.sell_warning
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975453863943
+    m_Key: shop.tooltip.merchant
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975453863944
+    m_Key: shop.tooltip.player
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975453863945
+    m_Key: shop.feedback.select_merchant
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975453863946
+    m_Key: shop.feedback.buy_succeeded
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975453863947
+    m_Key: shop.feedback.buy_failed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975453863948
+    m_Key: shop.feedback.select_player
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975453863949
+    m_Key: shop.feedback.sell_succeeded
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975453863950
+    m_Key: shop.feedback.sell_failed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975453863951
+    m_Key: crafting.gold
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975453863952
+    m_Key: crafting.selection.summary
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975453863953
+    m_Key: crafting.capacity.summary
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975453863954
+    m_Key: crafting.value.summary
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975453863955
+    m_Key: crafting.failure.not_configured
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975453863956
+    m_Key: crafting.feedback.scope_any
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975453863957
+    m_Key: crafting.feedback.scope_precise
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975453863958
+    m_Key: crafting.slot.tooltip.filled
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975453863959
+    m_Key: crafting.slot.tooltip.empty
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975453863960
+    m_Key: crafting.action.in_slot
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975453863961
+    m_Key: crafting.action.place
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975453863962
+    m_Key: crafting.feedback.empty_inventory
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975453863963
+    m_Key: crafting.feedback.candidate
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975453863964
+    m_Key: crafting.action.cost
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975453863965
+    m_Key: crafting.action.tooltip
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975453863966
+    m_Key: crafting.tooltip.slotted
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975453863967
+    m_Key: crafting.feedback.slot_required
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975453863968
+    m_Key: crafting.result.failed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975453863969
+    m_Key: crafting.result.succeeded
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975453863975
+    m_Key: crafting.failure.item_not_in_inventory
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975453863976
+    m_Key: crafting.failure.insufficient_gold
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975453863977
+    m_Key: crafting.failure.maximum_rarity
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975453863978
+    m_Key: crafting.failure.no_change
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975453863979
+    m_Key: crafting.failure.no_capacity
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975453863980
+    m_Key: crafting.failure.scope_has_no_affix
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975453863981
+    m_Key: crafting.failure.no_variable_affix
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975453863982
+    m_Key: crafting.failure.no_legal_affix
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975453863983
+    m_Key: crafting.failure.incomplete_result
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975453863984
+    m_Key: crafting.failure.commit_failed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18975453863985
+    m_Key: crafting.failure.unavailable
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581931016192
+    m_Key: item.type.weapon
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581993930752
+    m_Key: item.type.armor
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581993930753
+    m_Key: item.type.accessory
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581993930754
+    m_Key: item.type.material
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581993930755
+    m_Key: item.type.currency
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581993930756
+    m_Key: item.type.unknown
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581993930757
+    m_Key: item.rarity.normal
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581993930758
+    m_Key: item.rarity.magic
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581993930759
+    m_Key: item.rarity.rare
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581993930760
+    m_Key: item.rarity.unique
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581993930761
+    m_Key: item.rarity.unknown
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581993930762
+    m_Key: item.affix_type.prefix
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581993930763
+    m_Key: item.affix_type.suffix
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581993930764
+    m_Key: item.affix_type.implicit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581993930765
+    m_Key: item.affix_type.unknown
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581993930766
+    m_Key: item.damage_type.physical
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581993930767
+    m_Key: item.damage_type.fire
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581993930768
+    m_Key: item.damage_type.cold
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581993930769
+    m_Key: item.damage_type.lightning
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581993930770
+    m_Key: item.damage_type.chaos
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581993930771
+    m_Key: item.damage_type.unknown
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581993930772
+    m_Key: item.damage.single
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581998125056
+    m_Key: item.damage.range
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581998125057
+    m_Key: item.modifier.missing
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581998125058
+    m_Key: item.stat.missing
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581998125059
+    m_Key: item.modifier.flat
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581998125060
+    m_Key: item.modifier.increase
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581998125061
+    m_Key: item.modifier.more
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581998125062
+    m_Key: item.modifier.override
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581998125063
+    m_Key: item.modifier.conversion
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581998125064
+    m_Key: item.modifier.gain_as_extra
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581998125065
+    m_Key: item.modifier.chance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581998125066
+    m_Key: item.modifier.trigger
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581998125067
+    m_Key: item.modifier.limit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581998125068
+    m_Key: item.modifier.default
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581998125069
+    m_Key: item.detail.none_name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581998125070
+    m_Key: item.detail.meta
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581998125071
+    m_Key: item.detail.meta_empty
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581998125072
+    m_Key: item.detail.base_empty
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581998125073
+    m_Key: item.detail.no_implicit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581998125074
+    m_Key: item.detail.no_prefix
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581998125075
+    m_Key: item.detail.no_suffix
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581998125076
+    m_Key: item.detail.no_base_damage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581998125077
+    m_Key: item.detail.size_weight
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581998125078
+    m_Key: item.detail.values
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20581998125079
+    m_Key: item.detail.affix_name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158647622557696
+    m_Key: loot.label
     m_Metadata:
       m_Items: []
   m_Metadata:

@@ -17,7 +17,99 @@ MonoBehaviour:
   m_SharedData: {fileID: 11400000, guid: a5fbd62b841a42f46b9c274e2802bbe7, type: 2}
   m_Metadata:
     m_Items: []
-  m_TableData: []
+  m_TableData:
+  - m_Id: 15696883867648
+    m_Localized: Maximum Health
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15696917422080
+    m_Localized: Maximum Mana
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15696917422081
+    m_Localized: Health Regeneration
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15696917422082
+    m_Localized: Mana Regeneration
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15696917422083
+    m_Localized: Strength
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15696917422084
+    m_Localized: Dexterity
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15696917422085
+    m_Localized: Intelligence
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15696917422086
+    m_Localized: Damage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15696917422087
+    m_Localized: Critical Chance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15696917422088
+    m_Localized: Critical Damage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15696917422089
+    m_Localized: Accuracy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15696917422090
+    m_Localized: Armor
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15696917422091
+    m_Localized: Evasion
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15696917422092
+    m_Localized: Fire Resistance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15696917422093
+    m_Localized: Cold Resistance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15696917422094
+    m_Localized: Lightning Resistance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15696917422095
+    m_Localized: Chaos Resistance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15696917422096
+    m_Localized: Movement Speed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15696917422097
+    m_Localized: Physical Damage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15696917422098
+    m_Localized: Fire Damage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15696917422099
+    m_Localized: Cold Damage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15696917422100
+    m_Localized: Lightning Damage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15696917422101
+    m_Localized: Chaos Damage
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

@@ -625,6 +625,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.WorldInteractionTarget
   _displayName: "\u6D41\u6D6A\u5546\u4EBA"
+  _localizedName:
+    _tableName: monsters
+    _entryKey: interaction.merchant.name
   _menuPage: 1
   _interactionRadius: 1.5
   _collider: {fileID: 8658540533506281815}

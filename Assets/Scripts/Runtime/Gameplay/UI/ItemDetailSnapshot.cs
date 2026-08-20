@@ -11,22 +11,18 @@ namespace DarkFlare
 
         public float Maximum { get; }
 
-        public string TagSummary { get; }
-
-        public string DisplayText { get; }
+        public IReadOnlyList<LocalizedMessage> Tags { get; }
 
         public DamageDetailSnapshot(
             DamageType damageType,
             float minimum,
             float maximum,
-            string tagSummary,
-            string displayText)
+            IReadOnlyList<LocalizedMessage> tags)
         {
             DamageType = damageType;
             Minimum = minimum;
             Maximum = maximum;
-            TagSummary = tagSummary;
-            DisplayText = displayText;
+            Tags = tags;
         }
     }
 
@@ -34,7 +30,9 @@ namespace DarkFlare
     {
         public ModifierInstance Modifier { get; }
 
-        public string StatDisplayName { get; }
+        public string StatId { get; }
+
+        public bool StatIsPercent { get; }
 
         public ModifierOperation Operation { get; }
 
@@ -42,19 +40,17 @@ namespace DarkFlare
 
         public float Value { get; }
 
-        public string DisplayText { get; }
-
         public ModifierDetailSnapshot(
             ModifierInstance modifier,
-            string statDisplayName,
-            string displayText)
+            string statId,
+            bool statIsPercent)
         {
             Modifier = modifier;
-            StatDisplayName = statDisplayName;
+            StatId = statId ?? string.Empty;
+            StatIsPercent = statIsPercent;
             Operation = modifier != null ? modifier.Operation : default;
             Scope = modifier != null ? modifier.Scope : default;
             Value = modifier != null ? modifier.Value : 0f;
-            DisplayText = displayText;
         }
     }
 
@@ -64,27 +60,23 @@ namespace DarkFlare
 
         public AffixType Type { get; }
 
-        public string DisplayName { get; }
+        public LocalizedMessage Name { get; }
 
         public IReadOnlyList<ModifierDetailSnapshot> Modifiers { get; }
-
-        public string ModifierSummary { get; }
 
         public float TotalValue { get; }
 
         public AffixDetailSnapshot(
             AffixInstance affix,
             AffixType type,
-            string displayName,
+            LocalizedMessage name,
             IReadOnlyList<ModifierDetailSnapshot> modifiers,
-            string modifierSummary,
             float totalValue)
         {
             Affix = affix;
             Type = type;
-            DisplayName = displayName;
+            Name = name;
             Modifiers = modifiers;
-            ModifierSummary = modifierSummary;
             TotalValue = totalValue;
         }
     }
@@ -95,7 +87,7 @@ namespace DarkFlare
 
         public string InstanceId { get; }
 
-        public string DisplayName { get; }
+        public LocalizedMessage Name { get; }
 
         public string IconGuid { get; }
 
@@ -126,7 +118,7 @@ namespace DarkFlare
         public ItemDetailSnapshot(
             ItemInstance item,
             string instanceId,
-            string displayName,
+            LocalizedMessage name,
             string iconGuid,
             ItemType type,
             ItemRarity rarity,
@@ -142,7 +134,7 @@ namespace DarkFlare
         {
             Item = item;
             InstanceId = instanceId;
-            DisplayName = displayName;
+            Name = name;
             IconGuid = iconGuid;
             Type = type;
             Rarity = rarity;

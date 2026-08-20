@@ -48,6 +48,10 @@ namespace DarkFlare
         string _displayName = string.Empty;
 
         [SerializeField]
+        [LabelText("本地化名称")]
+        LocalizedContentReference _localizedName = new LocalizedContentReference("monsters", string.Empty);
+
+        [SerializeField]
         [MinValue(0)]
         [LabelText("买入倍率")]
         float _buyMultiplier = 1.5f;
@@ -64,6 +68,8 @@ namespace DarkFlare
         public string Id => _id;
 
         public string DisplayName => _displayName;
+
+        public LocalizedContentReference LocalizedName => _localizedName;
 
         public float BuyMultiplier => _buyMultiplier;
 

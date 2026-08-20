@@ -224,7 +224,7 @@ public class GameplayUiFoundationTests
     }
 
     [Test]
-    public void InventorySnapshot_ContainsOrderedPlacementsAndDisplayData()
+    public void InventorySnapshot_ContainsOrderedPlacementsAndSemanticData()
     {
         InventoryModel inventory = _architecture.GetModel<InventoryModel>();
         CombatActor player = CreatePlayer();
@@ -241,13 +241,13 @@ public class GameplayUiFoundationTests
         Assert.AreEqual(2, snapshot.Items.Count);
         Assert.AreSame(weapon, snapshot.Items[0].Item);
         Assert.AreEqual(new RectInt(0, 0, 2, 3), snapshot.Items[0].Placement);
-        Assert.AreEqual("快照武器", snapshot.Items[0].DisplayName);
+        Assert.AreEqual("item.snapshot_weapon.name", snapshot.Items[0].Detail.Name.EntryKey);
         Assert.IsTrue(snapshot.Items[0].CanEquip);
         Assert.AreSame(armor, snapshot.Items[1].Item);
         Assert.AreEqual(new RectInt(2, 0, 1, 1), snapshot.Items[1].Placement);
         Assert.IsTrue(snapshot.Items[1].CanEquip);
         Assert.AreEqual(4, snapshot.EquipmentSlots.Count);
-        Assert.AreEqual("未装备", snapshot.CurrentWeaponSummary);
+        Assert.IsNull(snapshot.CurrentWeapon);
     }
 
     [Test]
@@ -419,7 +419,7 @@ public class GameplayUiFoundationTests
         Assert.AreEqual(100, snapshot.Gold);
         Assert.AreEqual(1, snapshot.Items.Count);
         Assert.AreSame(item, snapshot.Items[0].Item);
-        Assert.AreEqual("快照大剑", snapshot.Items[0].DisplayName);
+        Assert.AreEqual("item.craft_snapshot_item.name", snapshot.Items[0].Detail.Name.EntryKey);
         Assert.AreEqual(25, snapshot.Items[0].Value);
         Assert.AreEqual(10, snapshot.Items[0].SellPrice);
         Assert.AreEqual(14, snapshot.Items[0].Actions.Count);
@@ -565,6 +565,10 @@ public class GameplayUiFoundationTests
         ItemBaseDefinition definition = CreateScriptableObject<ItemBaseDefinition>();
         SetField(definition, "_id", instanceId);
         SetField(definition, "_displayName", displayName);
+        SetField(
+            definition,
+            "_localizedName",
+            new LocalizedContentReference("items", $"item.{instanceId}.name"));
         SetField(definition, "_itemType", itemType);
         SetField(definition, "_allowedEquipmentSlots", GetAllowedSlots(itemType));
         SetField(definition, "_gridSize", gridSize ?? Vector2Int.one);

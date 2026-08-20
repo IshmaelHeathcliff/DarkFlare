@@ -14,6 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.AffixDefinition
   _id: of_lightning_guard
   _displayName: "\u96F7\u536B\u4E4B"
+  _localizedName:
+    _tableName: affixes
+    _entryKey: item_affix.of_lightning_guard.name
   _affixType: 1
   _groupId: lightning_resistance_flat
   _minItemLevel: 1

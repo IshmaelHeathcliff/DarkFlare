@@ -16,6 +16,7 @@ namespace DarkFlare
         VisualElement _prompt;
         Label _promptLabel;
         WorldInteractionTarget _target;
+        LocalizationService _localizationService;
 
         public WorldInteractionTarget CurrentTarget => _target;
 
@@ -78,6 +79,7 @@ namespace DarkFlare
 
             _focusRegistration = this.RegisterEvent<InteractionFocusChangedEvent>(OnFocusChanged);
             _gameInput.ModeChanged += OnInputModeChanged;
+            BindLocalization();
             RefreshPrompt();
             return SceneSessionBindResult.Success;
         }
@@ -91,6 +93,13 @@ namespace DarkFlare
 
             _focusRegistration?.UnRegister();
             _focusRegistration = null;
+
+            if (_localizationService != null)
+            {
+                _localizationService.LocaleChanged -= OnLocaleChanged;
+                _localizationService = null;
+            }
+
             _gameInput = null;
             _target = null;
             IsVisible = false;
@@ -163,8 +172,50 @@ namespace DarkFlare
 
             if (IsVisible)
             {
-                _promptLabel.text = $"E / Y · {_target.DisplayName}";
+                _promptLabel.text = Localize(
+                    "interaction.prompt",
+                    _gameInput.GetInteractBindingDisplayString(),
+                    Resolve(_target.LocalizedName?.Message ?? default));
             }
+        }
+
+        void BindLocalization()
+        {
+            if (!ApplicationHost.TryGetCurrent(out ApplicationHost host)
+                || ReferenceEquals(_localizationService, host.Localization))
+            {
+                return;
+            }
+
+            if (_localizationService != null)
+            {
+                _localizationService.LocaleChanged -= OnLocaleChanged;
+            }
+
+            _localizationService = host.Localization;
+
+            if (_localizationService != null)
+            {
+                _localizationService.LocaleChanged += OnLocaleChanged;
+            }
+        }
+
+        void OnLocaleChanged(string localeCode)
+        {
+            RefreshPrompt();
+        }
+
+        string Localize(string entryKey, params object[] arguments)
+        {
+            LocalizedMessage message = LocalizedMessage.Ui(entryKey, arguments);
+            return _localizationService?.GetString(message)
+                ?? $"[{message.TableName}.{message.EntryKey}]";
+        }
+
+        string Resolve(LocalizedMessage message)
+        {
+            return _localizationService?.GetString(message)
+                ?? $"[{message.TableName}.{message.EntryKey}]";
         }
     }
 }

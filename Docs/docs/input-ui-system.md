@@ -65,6 +65,10 @@
 
 alpha 0.1.0 将三套物品页面合并为共享工作台：扩容后的四槽装备区位于共享玩家列上方，10×6 背包位于下方；该列在商店和打造中最大占内容区 49%，右侧上下文获得主要空间。商店使用更大的固定 10×6 商人背包且不显示滚动条，玩家与商人格内只保留图标。装备区保留两个非交互扩展位置，但不提前增加领域槽位。48 px 背包格与 4 px 间隔同时作为装备槽尺寸基准：武器/护甲和打造槽为 100×152，左右戒指为 60×60 方形；背包面板压缩为 408 px，装备区取得共享列的剩余高度。三个右侧模板仅当前页参与布局，因此背包、商店、打造与共享玩家列始终等高。运行时只有一个顶层 `ItemTooltipView`，以 360×680 固定展开且不使用滚动条，顶部与主面板对齐；玩家/打造内容停靠左侧，商人内容停靠右侧。拖放后等待指针离开并再次主动预览再显示，整个浮窗子树输入穿透；显示时先隐藏完成几何定位，再切换为可见。菜单每次重新打开都会清空玩家物品选择，默认焦点落在当前页签，没有物品预览时隐藏浮窗。`alpha 0.2.2` 在原 940 px 内容区下增加 64 px 存档栏，因此主面板总高为 1160×1004；面板与槽位继续使用统一 1 px USS 细边框。
 
+`alpha 0.2.3` 已将 Game Menu、HUD、背包 / 四槽装备、商店、打造、共享物品详情和场景交互提示的动态界面文本接入 Application 级 Localization Service。快照只传递属性 ID、数值、装备槽、伤害与修改器等语义数据，Controller / View 在当前 Locale 下解析显示文本；Locale 变化只重绘现有状态，不重新查询或改动背包、装备、拖拽、交易、打造和焦点。商店反馈保存 `LocalizedMessage`，打造结果保存领域 `CraftingResult`，避免缓存旧语言字符串。交互提示通过 `GameInput` 从 Input System 配置生成键盘 / 手柄绑定显示文本，完整设备图标留到 `alpha 0.2.5`。
+
+同阶段已补齐正式内容名称和字体链：UI Toolkit 使用动态 `GameCjkFont` 并回退 `GameLatinFont`，TextMesh Pro 使用 `QiushuiShotai SDF` 并回退 `LiberationSans SDF`。`Phase1UxPlayModeTests` 对 `zh-Hans`、`en`、`qps-ploc` 分别在 1280×720、1920×1080、2560×1440 验证关键区域边界、重叠、文本测量与可操作性。设置存储、Key 和字体维护规则见[用户设置与本地化](./infrastructure/user-settings-localization.md)。
+
 鼠标物品操作采用点击与拖拽分离：左键按下不会立即拿起，只有持续按住并移动超过 10 px 才进入拖拽；直接松开只固定选择。背包物品与装备槽共用唯一选择描边，键盘焦点或鼠标悬浮预览会临时接管该描边，离开后再恢复固定选择，任意时刻不会出现两个同级高亮。商店上下文中，玩家背包物品支持右键直接出售，商人库存仍需左键选择并使用购买按钮；玩家背包最右侧继续向右会转入商人背包。打造目标放入 2×3 槽位后从背包视图移除，取回后恢复。物品详情在 4–6 条显式词缀时自动切换紧凑排版，优先显示词条效果，词条名降为小号辅助信息，并继续保持无滚动完整展开。
 
 alpha 0.1.0 的 HUD 移除武器卡片和属性详情，只保留生命、金币与交互提示。“当前属性”移动到背包页右侧，与装备操作共用上下文区域。alpha 0.1.4 在生命条下增加当前 / 最大法力条与短暂的技能拒绝提示；法力不足时显示所需数值，下次成功释放时清除，不把属性详情重新放回 HUD。
@@ -98,7 +102,7 @@ alpha 0.1.0 的 HUD 移除武器卡片和属性详情，只保留生命、金币
 ## 世界交互与暂停
 
 1. `PlayerInteractionController` 维护进入触发范围的 `WorldInteractionTarget`，按距离选择最近有效目标。
-2. 焦点变化通过 `SetInteractionFocusCommand` 发布消息，`InteractionPromptController` 显示 `E / Y · {目标名称}`。
+2. 焦点变化通过 `SetInteractionFocusCommand` 发布消息，`InteractionPromptController` 使用本地化模板显示 `{当前绑定显示文本} · {目标名称}`。
 3. 玩家触发交互后，`OpenGameMenuCommand` 请求打开目标对应的菜单上下文。
 4. `GameMenuController` 切换到 UI 模式，并通过 `SetGameplayPausedCommand` 请求 `GameplayPauseSystem` 暂停玩法时间。
 5. 取消、关闭、对象禁用或销毁时恢复原时间倍率和 Gameplay 输入；目标仍有效时重新显示提示。
@@ -120,6 +124,7 @@ alpha 0.1.0 的 HUD 移除武器卡片和属性详情，只保留生命、金币
 - 阶段 6 将常规布局回归收敛为 1920×1080；键盘 Tab / Esc、手柄 Start / B、默认焦点、暂停恢复、商店状态、四槽装备与打造路径继续通过。正式世界、背包、商店和打造截图均无关键遮挡或越界。
 - alpha 0.1.0 修正后的领域、输入和 UI 结构 EditMode 为 9/9，相关 PlayMode 4/4。真实 Mouse 已覆盖背包换位、拖拽装备和装备拖回；1280×720、1920×1080、2560×1440 均通过纵向布局、共享列占比和边界验收。
 - alpha 0.1.4 的法力 HUD 与资源事件专项 EditMode 6/6、Main PlayMode 1/1 通过；全量 PlayMode 继续通过三档布局回归，1280×720 真实 Main 中生命 / 法力条无越界，停止运行后 Console 为零错误。
+- alpha 0.2.3 完成三语言 × 三分辨率布局矩阵；项目自有 PlayMode `48/48`、完整 PlayMode 52 项中 50 项通过、0 失败，2 项 Input System 上游用例按原标记跳过。
 
 以上数据是首版收尾时的验证记录；修改输入资产、菜单路由、UXML 或场景组件后，应重新验证键鼠与手柄两条路径。
 
@@ -131,4 +136,4 @@ alpha 0.1.0 的 HUD 移除武器卡片和属性详情，只保留生命、金币
 - `Attack`、`Look` 尚未接入手动战斗操作。
 - PlayMode 已包含角色动画状态与阶段 0 背包体验两项项目测试；包内测试另有上游不稳定用例按原标记跳过。
 
-完整工作台结构见[物品 UI 工作台](./item-ui-workbench.md)，存档入口与错误语义见[本地存档与 Session 恢复](./infrastructure/local-save.md)，玩法链见[首版玩法循环](./gameplay-loop.md)，装备规则见[装备系统](./equipment-system.md)，打造页的数据和事务规则见[打造系统](./crafting-system.md)。
+完整工作台结构见[物品 UI 工作台](./item-ui-workbench.md)，存档入口与错误语义见[本地存档与 Session 恢复](./infrastructure/local-save.md)，设置与语言见[用户设置与本地化](./infrastructure/user-settings-localization.md)，玩法链见[首版玩法循环](./gameplay-loop.md)，装备规则见[装备系统](./equipment-system.md)，打造页的数据和事务规则见[打造系统](./crafting-system.md)。

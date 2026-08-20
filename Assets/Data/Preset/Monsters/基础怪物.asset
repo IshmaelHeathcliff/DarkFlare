@@ -14,6 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DarkFlare.MonsterDefinition
   _id: wasteland_wraith
   _displayName: "\u8352\u539F\u6E38\u9B42"
+  _localizedName:
+    _tableName: monsters
+    _entryKey: monster.wasteland_wraith.name
   _character: {fileID: 0}
   _prefab:
     m_AssetGUID: 67b8ae84734f42f4792a4190aad88049

@@ -159,7 +159,10 @@ namespace DarkFlare.Tests
             yield return Submit(root.Q<Button>("inventory-unequip"), gamepad.buttonSouth);
             Assert.IsNull(equipment.GetItem(player, EquipmentSlot.RingLeft));
             Assert.IsTrue(inventory.Grid.Placements.ContainsKey(leftRing));
-            StringAssert.Contains("已卸下", root.Q<Label>("inventory-feedback").text);
+            Assert.IsTrue(ApplicationHost.TryGetCurrent(out ApplicationHost host));
+            StringAssert.Contains(
+                host.Localization.GetString(leftRing.BaseDefinition.LocalizedName.Message),
+                root.Q<Label>("inventory-feedback").text);
 
             Vector2Int[] resolutions =
             {
@@ -254,6 +257,10 @@ namespace DarkFlare.Tests
             _objects.Add(definition);
             SetField(definition, "_id", id);
             SetField(definition, "_displayName", displayName);
+            SetField(
+                definition,
+                "_localizedName",
+                new LocalizedContentReference("items", GetItemLocalizationKey(id, type)));
             SetField(definition, "_itemType", type);
             SetField(definition, "_allowedEquipmentSlots", slots);
             SetField(definition, "_gridSize", Vector2Int.one);
@@ -272,6 +279,10 @@ namespace DarkFlare.Tests
                 _objects.Add(stat);
                 SetField(stat, "_id", StatIds.MaxHealth);
                 SetField(stat, "_displayName", "最大生命");
+                SetField(
+                    stat,
+                    "_localizedName",
+                    new LocalizedContentReference("stats", StatIds.MaxHealth));
                 StatModifierDefinition modifier = new StatModifierDefinition();
                 SetField(modifier, "_stat", stat);
                 SetField(modifier, "_operation", ModifierOperation.Flat);
@@ -281,6 +292,23 @@ namespace DarkFlare.Tests
             }
 
             return definition.CreateInstance(id, 1, 1);
+        }
+
+        static string GetItemLocalizationKey(string id, ItemType type)
+        {
+            if (id.Contains("left_ring"))
+            {
+                return "item.jade_ring.name";
+            }
+
+            if (id.Contains("right_ring"))
+            {
+                return "item.obsidian_ring.name";
+            }
+
+            return type == ItemType.Armor
+                ? "item.leather_armor.name"
+                : "item.great_sword.name";
         }
 
         ProjectileSkillDefinition CreateSkill()

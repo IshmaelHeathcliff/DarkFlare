@@ -18,8 +18,88 @@ MonoBehaviour:
   m_Metadata:
     m_Items: []
   m_TableData:
-  - m_Id: 519036928
-    m_Localized: None
+  - m_Id: 158645839978496
+    m_Localized: Greatsword
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158645894504448
+    m_Localized: War Axe
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158645894504449
+    m_Localized: Leather Armor
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158645898698752
+    m_Localized: Plate Armor
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158645898698753
+    m_Localized: Iron Ring
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158645898698754
+    m_Localized: Jade Ring
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158645898698755
+    m_Localized: Obsidian Ring
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158645898698756
+    m_Localized: Damage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158645898698757
+    m_Localized: Weapon
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158645898698758
+    m_Localized: Armor
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158645898698759
+    m_Localized: Ring
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158645898698760
+    m_Localized: Sword
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158645898698761
+    m_Localized: Axe
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158645898698762
+    m_Localized: Physical
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158645898698763
+    m_Localized: Fire
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158645898698764
+    m_Localized: Cold
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158645898698765
+    m_Localized: Lightning
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158645898698766
+    m_Localized: Chaos
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158645898698767
+    m_Localized: Projectile
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158645898698768
+    m_Localized: Melee
+    m_Metadata:
+      m_Items: []
+  - m_Id: 158645898698769
+    m_Localized: Monster
     m_Metadata:
       m_Items: []
   references:

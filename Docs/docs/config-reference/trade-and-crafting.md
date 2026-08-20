@@ -10,6 +10,7 @@
 | --- | --- | --- | --- |
 | `_id` | `string` / 空 | 正式资产必填；唯一小写 `snake_case`，发布后稳定 | 库存实例 ID 前缀、调试与潜在存档消费；改名会改变新实例标识 |
 | `_displayName` | `string` / 空 | 正式资产必填；中文名称 | 商店 UI、Inspector 与调试消费 |
+| `_localizedName` | `LocalizedContentReference` / 空引用 | 正式资产必填；固定使用 `monsters/trader.<id>.name` | 商店与交互 UI 按当前语言解析；库存实例 ID 仍由 `_id` 派生 |
 | `_buyMultiplier` | `float` / `1.5` | 不得小于 `0` | `EconomyModel` 与 `ItemValueCalculator.GetBuyPrice` 消费；表示玩家购买溢价 |
 | `_sellMultiplier` | `float` / `0.4` | 不得小于 `0` | `EconomyModel` 与 `ItemValueCalculator.GetSellPrice` 消费；表示玩家出售回收比例 |
 | `_stock` | `List<TraderStockEntry>` / 空 | 正式商人必须有可售条目；无空引用、非法数量或无意义重复项 | `CreateStock(random)` 逐条创建实例并填入商人网格背包 |

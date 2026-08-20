@@ -26,6 +26,7 @@ namespace DarkFlare
         readonly List<IUnRegister> _registrations = new List<IUnRegister>();
 
         MonsterInstanceData _instance;
+        LocalizationService _localizationService;
 
         public TextMeshPro Label => _label;
 
@@ -66,12 +67,19 @@ namespace DarkFlare
 
         void OnEnable()
         {
+            BindLocalization();
             RegisterEvents();
             Refresh();
         }
 
         void OnDisable()
         {
+            if (_localizationService != null)
+            {
+                _localizationService.LocaleChanged -= OnLocaleChanged;
+                _localizationService = null;
+            }
+
             UnregisterEvents();
             Hide();
         }
@@ -197,9 +205,7 @@ namespace DarkFlare
                     continue;
                 }
 
-                string displayName = !string.IsNullOrWhiteSpace(definition.DisplayName)
-                    ? definition.DisplayName
-                    : definition.Id;
+                string displayName = Resolve(definition.LocalizedName?.Message ?? default);
                 string color = ColorUtility.ToHtmlStringRGBA(definition.DisplayColor);
                 lines.Add($"<color=#{color}>{displayName}</color>");
             }
@@ -228,6 +234,38 @@ namespace DarkFlare
             {
                 Refresh();
             }
+        }
+
+        void BindLocalization()
+        {
+            if (!ApplicationHost.TryGetCurrent(out ApplicationHost host)
+                || ReferenceEquals(_localizationService, host.Localization))
+            {
+                return;
+            }
+
+            if (_localizationService != null)
+            {
+                _localizationService.LocaleChanged -= OnLocaleChanged;
+            }
+
+            _localizationService = host.Localization;
+
+            if (_localizationService != null)
+            {
+                _localizationService.LocaleChanged += OnLocaleChanged;
+            }
+        }
+
+        void OnLocaleChanged(string localeCode)
+        {
+            Refresh();
+        }
+
+        string Resolve(LocalizedMessage message)
+        {
+            return _localizationService?.GetString(message)
+                ?? $"[{message.TableName}.{message.EntryKey}]";
         }
     }
 }

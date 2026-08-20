@@ -362,6 +362,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.WorldInteractionTarget
   _displayName: "\u8425\u5730\u6253\u9020\u53F0"
+  _localizedName:
+    _tableName: monsters
+    _entryKey: interaction.crafting_station.name
   _menuPage: 2
   _interactionRadius: 1.5
   _collider: {fileID: 7757464088414671887}

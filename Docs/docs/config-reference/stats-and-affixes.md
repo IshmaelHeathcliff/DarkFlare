@@ -10,6 +10,7 @@
 | --- | --- | --- | --- |
 | `_id` | `string` / 空 | 正式资产必填；小写 `snake_case`；必须与 `StatIds.All` 一一对应，发布后稳定 | `StatBlock`、修改器、UI 与存档共同消费；重命名必须全链路迁移 |
 | `_displayName` | `string` / 空 | 正式资产必填；中文名称 | 属性面板、物品说明和 Inspector 消费；不参与数值计算 |
+| `_localizedName` | `LocalizedContentReference` / 空引用 | 正式资产必填；固定使用 `stats/<id>` | 属性面板和物品详情按当前语言解析；稳定属性 ID 仍是数值与存档真值 |
 | `_category` | `StatCategory` / `Survival` | 必填枚举；仅决定作者与 UI 分组 | 配置中心和属性展示消费；改变分类不改变公式 |
 | `_defaultValue` | `float` / `0` | 必须位于作者声明范围内 | 作为元数据和未显式初始化场景的约定；角色与怪物仍应显式写入基础值 |
 | `_minValue` | `float` / `0` | 不得大于 `_maxValue` | Inspector/验证器消费；不会自动 Clamp `StatBlock` |
@@ -25,6 +26,7 @@
 | --- | --- | --- | --- |
 | `_id` | `string` / 空 | 正式资产必填；唯一小写 `snake_case`；发布后稳定 | 词缀实例、随机子种子与 UI 消费；重命名会改变确定性派生结果，必须迁移 |
 | `_displayName` | `string` / 空 | 正式资产必填；可直接展示的中文短名称 | 物品信息浮窗与调试消费 |
+| `_localizedName` | `LocalizedContentReference` / 空引用 | 正式资产必填；固定使用 `affixes/item_affix.<id>.name` | 物品详情在最终显示边界解析；快照只携带表名和键 |
 | `_affixType` | `AffixType` / `Prefix` | 必填；只能为 Prefix 或 Suffix | 容量、精准打造范围与 UI 分组消费；改变类型属于实例数据迁移 |
 | `_groupId` | `string` / 空 | 正式资产必填；小写 `snake_case` | 同一物品同组最多一项；随机生成与打造候选过滤消费 |
 | `_minItemLevel` | `int` / `1` | 至少 `1` | 候选生成按物品等级过滤；不会自动提高传入等级 |
@@ -60,4 +62,3 @@
 - “没有任何兼容装备”通常表示 SpawnQuery Domain/Scope 错误或候选物品缺少派生类别。
 - “修改器没有当前运行时消费者”必须修改建模或实现消费者，不能仅关闭验证。
 - 兼容字段正式资产必须为空；移除兼容层前先通过内容扫描确认零使用。
-

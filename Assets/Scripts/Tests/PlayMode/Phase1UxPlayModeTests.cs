@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using DarkFlare;
 using NUnit.Framework;
@@ -68,6 +69,8 @@ namespace DarkFlare.Tests
             Assert.IsNotNull(menu, "Main 场景未初始化 GameMenuController");
             Assert.IsNotNull(document, "UIRoot 缺少 UIDocument");
             IArchitecture architecture = menu.GetArchitecture();
+            Assert.IsTrue(ApplicationHost.TryGetCurrent(out ApplicationHost host));
+            Assert.IsNotNull(host.Localization);
             ShopSnapshot setupShop = default;
             InventorySnapshot setupInventory = default;
             timeout = Time.realtimeSinceStartup + 15f;
@@ -110,6 +113,8 @@ namespace DarkFlare.Tests
             Assert.IsNotNull(selectedButton, "未生成可用于滚动验收的商店按钮");
             ItemInstance purchasedItem = selectedButton.userData as ItemInstance;
             Assert.IsNotNull(purchasedItem, "商店按钮缺少物品实例");
+            string purchasedDisplayName = host.Localization.GetString(
+                ItemDetailSnapshotFactory.Create(purchasedItem).Name);
             yield return FocusAfterScheduledRestore(root, selectedButton);
             InvokeButton(selectedButton);
             yield return null;
@@ -130,10 +135,15 @@ namespace DarkFlare.Tests
             Assert.AreEqual(ShopItemSource.Merchant, shop.SelectedSource, "购买后离开了原来源列");
             Assert.AreEqual(expectedNeighborId, shop.SelectedItem.InstanceId, "购买后未选择原索引邻近项");
             Label feedback = root.Q<Label>("shop-feedback");
-            StringAssert.Contains("已购买", feedback.text, "交易反馈在刷新帧内被覆盖");
+            StringAssert.Contains(
+                purchasedDisplayName,
+                feedback.text,
+                "交易反馈在刷新帧内被覆盖");
             VisualElement detailRoot = root.Q<VisualElement>("item-tooltip");
             Label detailName = detailRoot.Q<Label>("item-detail-name");
-            Assert.AreEqual(shop.SelectedItem.BaseDefinition.DisplayName, detailName.text, "详情未跟随邻近选择");
+            string selectedDisplayName = host.Localization.GetString(
+                ItemDetailSnapshotFactory.Create(shop.SelectedItem).Name);
+            Assert.AreEqual(selectedDisplayName, detailName.text, "详情未跟随邻近选择");
             AssertFocusedSelectedItem(root, shop.SelectedItem.BaseDefinition.DisplayName);
 
             List<Button> playerButtons = root.Query<Button>(className: "inventory-item").ToList();
@@ -189,87 +199,125 @@ namespace DarkFlare.Tests
 
             try
             {
-                for (int i = 0; i < resolutions.Length; i++)
+                string[] localeModes =
                 {
-                    Vector2Int resolution = resolutions[i];
-                    SetGameViewResolution(resolution);
-                    yield return WaitForResolution(resolution, 5f);
-                    Assert.IsTrue(architecture.SendCommand(new OpenGameMenuCommand(merchant)), "无法打开商店布局验收");
-                    yield return null;
-                    yield return null;
-                    List<Button> merchantPreviewButtons = root.Query<Button>(className: "shop-item").ToList();
-                    Assert.IsNotEmpty(merchantPreviewButtons, "商人背包缺少可悬停物品");
-                    merchantPreviewButtons[0].Focus();
-                    yield return null;
-                    yield return null;
-                    AssertLayoutInsideRoot(root, new[]
-                    {
-                        "game-menu-panel",
-                        "shop-page",
-                        "shop-merchant-frame",
-                        "shop-merchant-list",
-                        "inventory-grid",
-                        "item-tooltip",
-                        "shop-buy",
-                        "shop-sell",
-                        "game-menu-close",
-                    });
-                    AssertElementsInsideContainer(root, "shop-page", new[]
-                    {
-                        "shop-actions",
-                        "shop-buy",
-                        "shop-sell",
-                    });
-                    AssertWorkbenchShare(root);
-                    AssertMerchantBackpack(root);
+                    "zh-Hans",
+                    "en",
+                    "qps-ploc",
+                };
 
-                    if (resolution.x >= 1920)
-                    {
-                        AssertElementsDoNotOverlap(root, "item-tooltip", "game-menu-panel");
-                        AssertTooltipSide(root, true);
-                    }
+                for (int localeIndex = 0; localeIndex < localeModes.Length; localeIndex++)
+                {
+                    string localeMode = localeModes[localeIndex];
+                    UserLanguagePreference preference = localeIndex == 0
+                        ? UserLanguagePreference.SimplifiedChinese
+                        : UserLanguagePreference.English;
+                    yield return ChangeLanguage(host.Localization, preference);
 
-                    Assert.IsTrue(architecture.SendCommand(new OpenGameMenuCommand(crafting)), "无法打开打造页布局验收");
-                    yield return null;
-                    yield return null;
-                    List<Button> playerPreviewButtons = root.Query<Button>(className: "inventory-item").ToList();
-                    Assert.IsNotEmpty(playerPreviewButtons, "玩家背包缺少可悬停物品");
-                    playerPreviewButtons[0].Focus();
-                    yield return null;
-                    yield return null;
-                    AssertLayoutInsideRoot(root, new[]
+                    for (int i = 0; i < resolutions.Length; i++)
                     {
-                        "game-menu-panel",
-                        "crafting-page",
-                        "crafting-input-slot",
-                        "crafting-slot-place",
-                        "crafting-slot-remove",
-                        "crafting-selected-rarity",
-                        "inventory-grid",
-                        "item-tooltip",
-                        "crafting-add-affix",
-                        "crafting-remove-affix",
-                        "game-menu-close",
-                    });
-                    AssertElementsInsideContainer(root, "crafting-page", new[]
-                    {
-                        "crafting-actions",
-                        "crafting-input-slot",
-                        "crafting-slot-place",
-                        "crafting-slot-remove",
-                        "crafting-add-affix",
-                        "crafting-reroll-affixes",
-                        "crafting-remove-affix",
-                        "crafting-upgrade-rarity",
-                        "crafting-reroll-values",
-                    });
-                    AssertWorkbenchShare(root);
+                        Vector2Int resolution = resolutions[i];
+                        SetGameViewResolution(resolution);
+                        yield return WaitForResolution(resolution, 5f);
+                        Assert.IsTrue(architecture.SendCommand(new OpenGameMenuCommand(merchant)), "无法打开商店布局验收");
+                        yield return null;
+                        yield return null;
+                        List<Button> merchantPreviewButtons = root.Query<Button>(className: "shop-item").ToList();
+                        Assert.IsNotEmpty(merchantPreviewButtons, "商人背包缺少可悬停物品");
+                        merchantPreviewButtons[0].Focus();
+                        yield return null;
+                        yield return null;
 
-                    if (resolution.x >= 1920)
-                    {
-                        AssertTooltipSide(root, false);
+                        if (localeMode == "qps-ploc")
+                        {
+                            Assert.Greater(ApplyPseudoLocalization(root), 0, "没有可用于伪本地化的 UI 文本");
+                            yield return null;
+                            yield return null;
+                        }
+
+                        AssertLayoutInsideRoot(root, new[]
+                        {
+                            "game-menu-panel",
+                            "shop-page",
+                            "shop-merchant-frame",
+                            "shop-merchant-list",
+                            "inventory-grid",
+                            "item-tooltip",
+                            "shop-buy",
+                            "shop-sell",
+                            "game-menu-close",
+                        });
+                        AssertElementsInsideContainer(root, "shop-page", new[]
+                        {
+                            "shop-actions",
+                            "shop-buy",
+                            "shop-sell",
+                        });
+                        AssertWorkbenchShare(root);
+                        AssertMerchantBackpack(root);
+                        AssertVisibleTextFits(root, localeMode, resolution);
+
+                        if (resolution.x >= 1920)
+                        {
+                            AssertElementsDoNotOverlap(root, "item-tooltip", "game-menu-panel");
+                            AssertTooltipSide(root, true);
+                        }
+
+                        Assert.IsTrue(architecture.SendCommand(new OpenGameMenuCommand(crafting)), "无法打开打造页布局验收");
+                        yield return null;
+                        yield return null;
+                        List<Button> playerPreviewButtons = root.Query<Button>(className: "inventory-item").ToList();
+                        Assert.IsNotEmpty(playerPreviewButtons, "玩家背包缺少可悬停物品");
+                        playerPreviewButtons[0].Focus();
+                        yield return null;
+                        yield return null;
+
+                        if (localeMode == "qps-ploc")
+                        {
+                            ApplyPseudoLocalization(root);
+                            yield return null;
+                            yield return null;
+                        }
+
+                        AssertLayoutInsideRoot(root, new[]
+                        {
+                            "game-menu-panel",
+                            "crafting-page",
+                            "crafting-input-slot",
+                            "crafting-slot-place",
+                            "crafting-slot-remove",
+                            "crafting-selected-rarity",
+                            "inventory-grid",
+                            "item-tooltip",
+                            "crafting-add-affix",
+                            "crafting-remove-affix",
+                            "game-menu-close",
+                        });
+                        AssertElementsInsideContainer(root, "crafting-page", new[]
+                        {
+                            "crafting-actions",
+                            "crafting-input-slot",
+                            "crafting-slot-place",
+                            "crafting-slot-remove",
+                            "crafting-add-affix",
+                            "crafting-reroll-affixes",
+                            "crafting-remove-affix",
+                            "crafting-upgrade-rarity",
+                            "crafting-reroll-values",
+                        });
+                        AssertWorkbenchShare(root);
+                        AssertVisibleTextFits(root, localeMode, resolution);
+
+                        if (resolution.x >= 1920)
+                        {
+                            AssertTooltipSide(root, false);
+                        }
                     }
                 }
+
+                yield return ChangeLanguage(
+                    host.Localization,
+                    UserLanguagePreference.SimplifiedChinese);
 
                 Assert.IsTrue(architecture.SendCommand(new OpenGameMenuCommand(merchant)), "无法打开商店右键出售验收");
                 yield return null;
@@ -300,7 +348,11 @@ namespace DarkFlare.Tests
                     architecture.SendQuery(new GetShopSnapshotQuery()).Gold,
                     goldBeforeSale,
                     "右键出售后金币没有增加");
-                StringAssert.Contains("已出售", feedback.text, "右键出售没有显示交易反馈");
+                StringAssert.Contains(
+                    host.Localization.GetString(
+                        ItemDetailSnapshotFactory.Create(purchasedItem).Name),
+                    feedback.text,
+                    "右键出售没有显示交易反馈");
                 Assert.AreEqual(ShopItemSource.Merchant, shop.SelectedSource, "右键出售后没有恢复到商人库存选择");
                 Assert.AreEqual(expectedNeighborId, shop.SelectedItem.InstanceId, "右键出售后商人库存邻近选择丢失");
             }
@@ -439,6 +491,10 @@ namespace DarkFlare.Tests
             _objects.Add(definition);
             SetField(definition, "_id", id);
             SetField(definition, "_displayName", displayName);
+            SetField(
+                definition,
+                "_localizedName",
+                new LocalizedContentReference("items", "item.great_sword.name"));
             SetField(definition, "_itemType", ItemType.Weapon);
             SetField(definition, "_allowedEquipmentSlots", EquipmentSlotMask.Weapon);
             SetField(definition, "_gridSize", Vector2Int.one);
@@ -565,32 +621,52 @@ namespace DarkFlare.Tests
             {
                 List<ModifierDetailSnapshot> prefixModifiers = new List<ModifierDetailSnapshot>
                 {
-                    new ModifierDetailSnapshot(null, "护甲", $"护甲提高 {20 + i}%"),
+                    new ModifierDetailSnapshot(
+                        new ModifierInstance(
+                            StatIds.Armor,
+                            ModifierOperation.Increase,
+                            ModifierScope.GlobalActor,
+                            20 + i,
+                            DamageType.Physical,
+                            DamageType.Physical,
+                            TagSet.Empty,
+                            TagSet.Empty),
+                        StatIds.Armor,
+                        false),
                 };
                 List<ModifierDetailSnapshot> suffixModifiers = new List<ModifierDetailSnapshot>
                 {
-                    new ModifierDetailSnapshot(null, "额外火焰伤害", $"获得等同于物理伤害 {10 + i}% 的额外火焰伤害"),
+                    new ModifierDetailSnapshot(
+                        new ModifierInstance(
+                            string.Empty,
+                            ModifierOperation.GainAsExtra,
+                            ModifierScope.GlobalActor,
+                            10 + i,
+                            DamageType.Physical,
+                            DamageType.Fire,
+                            TagSet.Empty,
+                            TagSet.Empty),
+                        string.Empty,
+                        false),
                 };
                 prefixes.Add(new AffixDetailSnapshot(
                     null,
                     AffixType.Prefix,
-                    $"测试前缀 {i + 1}",
+                    new LocalizedMessage("affixes", $"test.prefix.{i + 1}"),
                     prefixModifiers,
-                    prefixModifiers[0].DisplayText,
                     0f));
                 suffixes.Add(new AffixDetailSnapshot(
                     null,
                     AffixType.Suffix,
-                    $"测试后缀 {i + 1}",
+                    new LocalizedMessage("affixes", $"test.suffix.{i + 1}"),
                     suffixModifiers,
-                    suffixModifiers[0].DisplayText,
                     0f));
             }
 
             return new ItemDetailSnapshot(
                 item,
                 item.InstanceId,
-                item.BaseDefinition.DisplayName,
+                item.BaseDefinition.LocalizedName.Message,
                 string.Empty,
                 item.BaseDefinition.ItemType,
                 ItemRarity.Unique,
@@ -676,6 +752,111 @@ namespace DarkFlare.Tests
             MethodInfo method = utilityType.GetMethod("SetResolution", BindingFlags.Static | BindingFlags.Public)
                 ?? throw new System.MissingMethodException(UtilityTypeName, "SetResolution");
             method.Invoke(null, new object[] { resolution.x, resolution.y });
+        }
+
+        static IEnumerator ChangeLanguage(
+            LocalizationService service,
+            UserLanguagePreference preference)
+        {
+            Cysharp.Threading.Tasks.UniTask<LocalizationOperationResult> operation =
+                service.ChangeLanguageAsync(preference);
+
+            while (operation.Status == Cysharp.Threading.Tasks.UniTaskStatus.Pending)
+            {
+                yield return null;
+            }
+
+            LocalizationOperationResult result = operation.GetAwaiter().GetResult();
+            Assert.IsTrue(
+                result.Succeeded,
+                $"切换语言 {preference} 失败：{result.Code} {result.Exception}");
+            yield return null;
+            yield return null;
+        }
+
+        static int ApplyPseudoLocalization(VisualElement root)
+        {
+            const string UtilityTypeName = "DarkFlare.Editor.PseudoLocalizationUtility, DarkFlare.Editor";
+            System.Type utilityType = System.Type.GetType(UtilityTypeName, true);
+            MethodInfo method = utilityType.GetMethod("Localize", BindingFlags.Static | BindingFlags.Public)
+                ?? throw new System.MissingMethodException(UtilityTypeName, "Localize");
+            List<TextElement> elements = root.Query<TextElement>().ToList();
+            int transformed = 0;
+
+            for (int i = 0; i < elements.Count; i++)
+            {
+                TextElement element = elements[i];
+
+                if (string.IsNullOrWhiteSpace(element.text)
+                    || !element.text.Any(char.IsLetter)
+                    || (element.text[0] == '[' && element.text[^1] == ']')
+                    || element.worldBound.width <= 0f
+                    || element.worldBound.height <= 0f)
+                {
+                    continue;
+                }
+
+                string pseudo = (string)method.Invoke(null, new object[] { element.text });
+
+                if (!string.Equals(pseudo, element.text, System.StringComparison.Ordinal))
+                {
+                    element.text = pseudo;
+                    transformed++;
+                }
+            }
+
+            return transformed;
+        }
+
+        static void AssertVisibleTextFits(
+            VisualElement root,
+            string localeMode,
+            Vector2Int resolution)
+        {
+            List<TextElement> elements = root.Query<TextElement>().ToList();
+
+            for (int i = 0; i < elements.Count; i++)
+            {
+                TextElement element = elements[i];
+                Rect content = element.contentRect;
+
+                if (string.IsNullOrWhiteSpace(element.text)
+                    || element.resolvedStyle.display == DisplayStyle.None
+                    || element.worldBound.width <= 1f
+                    || element.worldBound.height <= 1f
+                    || content.width <= 1f
+                    || content.height <= 1f)
+                {
+                    continue;
+                }
+
+                bool wraps = element.resolvedStyle.whiteSpace == WhiteSpace.Normal;
+                Vector2 measured = element.MeasureTextSize(
+                    element.text,
+                    wraps ? content.width : 0f,
+                    wraps ? VisualElement.MeasureMode.AtMost : VisualElement.MeasureMode.Undefined,
+                    0f,
+                    VisualElement.MeasureMode.Undefined);
+                string identity = string.IsNullOrWhiteSpace(element.name)
+                    ? $"{element.GetType().Name} '{element.text}'"
+                    : element.name;
+                string context = $"{localeMode} {resolution.x}×{resolution.y} {identity}";
+
+                if (wraps)
+                {
+                    Assert.LessOrEqual(
+                        measured.y,
+                        content.height + 2f,
+                        $"{context}: 换行文本被纵向裁切");
+                }
+                else
+                {
+                    Assert.LessOrEqual(
+                        measured.x,
+                        content.width + 2f,
+                        $"{context}: 单行文本被横向裁切");
+                }
+            }
         }
 
         static void AssertLayoutInsideRoot(VisualElement root, IReadOnlyList<string> names)

@@ -15,6 +15,7 @@ namespace DarkFlare
         readonly List<IUnRegister> _eventRegistrations = new List<IUnRegister>();
 
         SceneSessionBinding _sessionBinding;
+        LocalizationService _localizationService;
 
         [SerializeField]
         UIDocument _document;
@@ -46,7 +47,7 @@ namespace DarkFlare
         ItemInstance _candidateItem;
         ItemInstance _slottedItem;
         CraftingAffixScope _scope = CraftingAffixScope.Any;
-        string _resultText = string.Empty;
+        CraftingResult _lastResult;
 
         public CraftingSnapshot LastSnapshot { get; private set; }
 
@@ -92,7 +93,7 @@ namespace DarkFlare
 
             if (visible)
             {
-                _resultText = string.Empty;
+                _lastResult = null;
                 RefreshCrafting();
             }
         }
@@ -149,6 +150,7 @@ namespace DarkFlare
             }
 
             RegisterEvents();
+            BindLocalization();
             _inventoryPanel.SelectionChanged += OnInventorySelectionChanged;
             _inventoryPanel.ConfigureExternalDropTarget(
                 _inputSlotButton,
@@ -177,9 +179,17 @@ namespace DarkFlare
             }
 
             _eventRegistrations.Clear();
+
+            if (_localizationService != null)
+            {
+                _localizationService.LocaleChanged -= OnLocaleChanged;
+                _localizationService = null;
+            }
+
             _page = null;
             _candidateItem = null;
             _slottedItem = null;
+            _lastResult = null;
             IsVisible = false;
         }
 
@@ -344,7 +354,7 @@ namespace DarkFlare
             }
 
             _candidateItem = item;
-            _resultText = string.Empty;
+            _lastResult = null;
             RefreshCrafting();
         }
 
@@ -370,12 +380,13 @@ namespace DarkFlare
 
         void RefreshSelection()
         {
-            _goldLabel.text = $"持有金币  {LastSnapshot.Gold}";
+            _goldLabel.text = Localize("crafting.gold", LastSnapshot.Gold);
             _scopeAnyButton.EnableInClassList(SelectedScopeClass, _scope == CraftingAffixScope.Any);
             _scopePrefixButton.EnableInClassList(SelectedScopeClass, _scope == CraftingAffixScope.Prefix);
             _scopeSuffixButton.EnableInClassList(SelectedScopeClass, _scope == CraftingAffixScope.Suffix);
-            _resultLabel.text = _resultText;
-            _resultLabel.style.display = string.IsNullOrEmpty(_resultText)
+            string resultText = BuildResultText();
+            _resultLabel.text = resultText;
+            _resultLabel.style.display = string.IsNullOrEmpty(resultText)
                 ? DisplayStyle.None
                 : DisplayStyle.Flex;
             RefreshInputSlot();
@@ -387,21 +398,35 @@ namespace DarkFlare
             }
 
             int totalCount = item.PrefixCount + item.SuffixCount;
-            _selectedRarityLabel.text = $"{item.DisplayName} · {ItemDetailFormatter.GetRarityText(item.Rarity)}";
-            _selectedCapacityLabel.text = $"词缀：前缀 {item.PrefixCount}/{item.MaxPrefixCount} · 后缀 {item.SuffixCount}/{item.MaxSuffixCount} · 总数 {totalCount}/{item.MinimumTotalCount}-{item.MaximumTotalCount}";
-            _selectedValueLabel.text = $"物品价值：{item.Value} · 出售价：{item.SellPrice}";
-            RefreshButton(_upgradeRarityButton, item, CraftOperation.UpgradeRarity, CraftingAffixScope.Any, "提升稀有度");
-            RefreshButton(_resetNormalButton, item, CraftOperation.ResetToNormal, CraftingAffixScope.Any, "还原为普通");
-            RefreshButton(_rerollAffixesButton, item, CraftOperation.RerollAffixes, _scope, "随机全部词缀");
-            RefreshButton(_addAffixButton, item, CraftOperation.AddAffix, _scope, "随机增加一条");
-            RefreshButton(_removeAffixButton, item, CraftOperation.RemoveAffix, _scope, "随机移除一条");
-            RefreshButton(_rerollValuesButton, item, CraftOperation.RerollAffixValues, _scope, "重随一条数值");
+            _selectedRarityLabel.text = Localize(
+                "crafting.selection.summary",
+                Resolve(item.Detail.Name),
+                GetRarityText(item.Rarity));
+            _selectedCapacityLabel.text = Localize(
+                "crafting.capacity.summary",
+                item.PrefixCount,
+                item.MaxPrefixCount,
+                item.SuffixCount,
+                item.MaxSuffixCount,
+                totalCount,
+                item.MinimumTotalCount,
+                item.MaximumTotalCount);
+            _selectedValueLabel.text = Localize(
+                "crafting.value.summary",
+                item.Value,
+                item.SellPrice);
+            RefreshButton(_upgradeRarityButton, item, CraftOperation.UpgradeRarity, CraftingAffixScope.Any);
+            RefreshButton(_resetNormalButton, item, CraftOperation.ResetToNormal, CraftingAffixScope.Any);
+            RefreshButton(_rerollAffixesButton, item, CraftOperation.RerollAffixes, _scope);
+            RefreshButton(_addAffixButton, item, CraftOperation.AddAffix, _scope);
+            RefreshButton(_removeAffixButton, item, CraftOperation.RemoveAffix, _scope);
+            RefreshButton(_rerollValuesButton, item, CraftOperation.RerollAffixValues, _scope);
 
             _feedbackLabel.text = !LastSnapshot.IsConfigured
-                ? "打造配置尚未加载"
+                ? Localize("crafting.failure.not_configured")
                 : _scope == CraftingAffixScope.Any
-                    ? "任意范围：从全部可用前后缀中随机，按基础价格结算"
-                    : $"精准{GetScopeText(_scope)}：只影响{GetScopeText(_scope)}，价格为任意范围的 3 倍";
+                    ? Localize("crafting.feedback.scope_any")
+                    : Localize("crafting.feedback.scope_precise", GetScopeText(_scope));
         }
 
         void RefreshInputSlot()
@@ -409,35 +434,37 @@ namespace DarkFlare
             bool hasSlottedItem = _slottedItem != null;
             _inputSlotButton.EnableInClassList(FilledSlotClass, hasSlottedItem);
             _inputSlotNameLabel.text = hasSlottedItem
-                ? _slottedItem.BaseDefinition.DisplayName
-                : "空打造槽";
+                ? Resolve(ItemDetailSnapshotFactory.Create(_slottedItem).Name)
+                : Localize("crafting.slot.empty_name");
             _inputSlotButton.tooltip = hasSlottedItem
-                ? "打造目标已锁定；悬停查看详情，使用取回按钮清空"
-                : "将背包物品拖入这里，或选中物品后使用放入按钮";
+                ? Localize("crafting.slot.tooltip.filled")
+                : Localize("crafting.slot.tooltip.empty");
             ItemVisualPresenter.ApplyIcon(
                 _inputSlotIcon,
                 hasSlottedItem ? ItemDetailSnapshotFactory.Create(_slottedItem).IconGuid : string.Empty);
             _placeInSlotButton.SetEnabled(_candidateItem != null && _candidateItem != _slottedItem);
             _placeInSlotButton.text = _candidateItem == null
-                ? "先选择背包物品"
+                ? Localize("crafting.action.select_inventory")
                 : _candidateItem == _slottedItem
-                    ? "已放入打造槽"
-                    : "放入打造槽";
+                    ? Localize("crafting.action.in_slot")
+                    : Localize("crafting.action.place");
             _removeFromSlotButton.SetEnabled(hasSlottedItem);
         }
 
         void ShowEmptySlot()
         {
-            _selectedRarityLabel.text = "打造槽为空";
-            _selectedCapacityLabel.text = "词缀容量：-";
-            _selectedValueLabel.text = "物品价值：-";
+            _selectedRarityLabel.text = Localize("crafting.slot.empty_state");
+            _selectedCapacityLabel.text = Localize("crafting.capacity.empty");
+            _selectedValueLabel.text = Localize("crafting.value.empty");
             _feedbackLabel.text = !LastSnapshot.IsConfigured
-                ? "打造配置尚未加载"
+                ? Localize("crafting.failure.not_configured")
                 : LastSnapshot.Items.Count == 0
-                    ? "背包中没有可打造物品"
+                    ? Localize("crafting.feedback.empty_inventory")
                     : _candidateItem == null
-                        ? "将背包物品拖入打造槽；也可以先选中，再按放入"
-                        : $"已选择 {_candidateItem.BaseDefinition.DisplayName}；放入打造槽后才能打造";
+                        ? Localize("crafting.feedback.place_item")
+                        : Localize(
+                            "crafting.feedback.candidate",
+                            Resolve(ItemDetailSnapshotFactory.Create(_candidateItem).Name));
             SetAllActionsEnabled(false);
             SetButtonTextWithoutCost();
         }
@@ -446,9 +473,10 @@ namespace DarkFlare
             Button button,
             CraftingItemSnapshot item,
             CraftOperation operation,
-            CraftingAffixScope scope,
-            string label)
+            CraftingAffixScope scope)
         {
+            string label = GetOperationText(operation);
+
             if (!item.TryGetAction(operation, scope, out CraftingActionSnapshot action))
             {
                 button.text = label;
@@ -456,9 +484,9 @@ namespace DarkFlare
                 return;
             }
 
-            button.text = $"{label} · {action.Cost} 金币";
+            button.text = Localize("crafting.action.cost", label, action.Cost);
             button.tooltip = action.IsAvailable
-                ? $"{label}，消耗 {action.Cost} 金币"
+                ? Localize("crafting.action.tooltip", label, action.Cost)
                 : GetFailureText(action.FailureReason);
             button.SetEnabled(action.IsAvailable);
         }
@@ -475,12 +503,12 @@ namespace DarkFlare
 
         void SetButtonTextWithoutCost()
         {
-            _upgradeRarityButton.text = "提升稀有度";
-            _resetNormalButton.text = "还原为普通";
-            _rerollAffixesButton.text = "随机全部词缀";
-            _addAffixButton.text = "随机增加一条";
-            _removeAffixButton.text = "随机移除一条";
-            _rerollValuesButton.text = "重随一条数值";
+            _upgradeRarityButton.text = GetOperationText(CraftOperation.UpgradeRarity);
+            _resetNormalButton.text = GetOperationText(CraftOperation.ResetToNormal);
+            _rerollAffixesButton.text = GetOperationText(CraftOperation.RerollAffixes);
+            _addAffixButton.text = GetOperationText(CraftOperation.AddAffix);
+            _removeAffixButton.text = GetOperationText(CraftOperation.RemoveAffix);
+            _rerollValuesButton.text = GetOperationText(CraftOperation.RerollAffixValues);
         }
 
         bool TryGetSlottedItem(out CraftingItemSnapshot selected)
@@ -514,7 +542,7 @@ namespace DarkFlare
 
             _candidateItem = snapshotItem;
             _slottedItem = snapshotItem;
-            _resultText = string.Empty;
+            _lastResult = null;
             _inventoryPanel.SetExternalSlotItem(_slottedItem);
             RefreshSelection();
         }
@@ -527,7 +555,7 @@ namespace DarkFlare
             }
 
             _slottedItem = null;
-            _resultText = string.Empty;
+            _lastResult = null;
             _inventoryPanel.SetExternalSlotItem(null);
             _inventoryPanel.ShowPlayerTooltip(null, string.Empty);
             RefreshSelection();
@@ -575,7 +603,9 @@ namespace DarkFlare
         {
             if (_slottedItem != null)
             {
-                _inventoryPanel.ShowPlayerTooltip(_slottedItem, "打造槽中的物品");
+                _inventoryPanel.ShowPlayerTooltip(
+                    _slottedItem,
+                    Localize("crafting.tooltip.slotted"));
             }
         }
 
@@ -632,7 +662,7 @@ namespace DarkFlare
         void SetScope(CraftingAffixScope scope)
         {
             _scope = scope;
-            _resultText = string.Empty;
+            _lastResult = null;
             RefreshSelection();
         }
 
@@ -640,91 +670,144 @@ namespace DarkFlare
         {
             if (_slottedItem == null)
             {
-                _feedbackLabel.text = "请先将物品放入打造槽";
+                _feedbackLabel.text = Localize("crafting.feedback.slot_required");
                 return;
             }
 
             CraftingResult result = this.SendCommand(new CraftItemCommand(operation, scope, _slottedItem));
-            _resultText = result.Succeeded
-                ? BuildSuccessText(result)
-                : $"未生效：{GetFailureText(result.FailureReason)}";
+            _lastResult = result;
             RefreshCrafting();
             FocusDefault();
         }
 
-        static string BuildSuccessText(CraftingResult result)
+        string BuildResultText()
         {
-            int previousCount = result.PreviousPrefixes.Count + result.PreviousSuffixes.Count;
-            int currentCount = result.CurrentPrefixes.Count + result.CurrentSuffixes.Count;
-            return $"完成：{GetOperationText(result.Operation)} · {GetScopeText(result.Scope)} · 花费 {result.Cost} 金币\n"
-                + $"{ItemDetailFormatter.GetRarityText(result.PreviousRarity)} {previousCount} 条 → "
-                + $"{ItemDetailFormatter.GetRarityText(result.CurrentRarity)} {currentCount} 条";
+            if (_lastResult == null)
+            {
+                return string.Empty;
+            }
+
+            if (!_lastResult.Succeeded)
+            {
+                return Localize(
+                    "crafting.result.failed",
+                    GetFailureText(_lastResult.FailureReason));
+            }
+
+            int previousCount = _lastResult.PreviousPrefixes.Count
+                + _lastResult.PreviousSuffixes.Count;
+            int currentCount = _lastResult.CurrentPrefixes.Count
+                + _lastResult.CurrentSuffixes.Count;
+            return Localize(
+                "crafting.result.succeeded",
+                GetOperationText(_lastResult.Operation),
+                GetScopeText(_lastResult.Scope),
+                _lastResult.Cost,
+                GetRarityText(_lastResult.PreviousRarity),
+                previousCount,
+                GetRarityText(_lastResult.CurrentRarity),
+                currentCount);
         }
 
-        static string GetOperationText(CraftOperation operation)
+        string GetOperationText(CraftOperation operation)
         {
-            switch (operation)
+            string entryKey = operation switch
             {
-                case CraftOperation.UpgradeRarity:
-                    return "提升稀有度";
-                case CraftOperation.ResetToNormal:
-                    return "还原普通";
-                case CraftOperation.RerollAffixes:
-                    return "随机全部词缀";
-                case CraftOperation.AddAffix:
-                    return "增加词缀";
-                case CraftOperation.RemoveAffix:
-                    return "移除词缀";
-                case CraftOperation.RerollAffixValues:
-                    return "重随数值";
-                default:
-                    return operation.ToString();
+                CraftOperation.UpgradeRarity => "crafting.action.upgrade_rarity",
+                CraftOperation.ResetToNormal => "crafting.action.reset_normal",
+                CraftOperation.RerollAffixes => "crafting.action.reroll_affixes",
+                CraftOperation.AddAffix => "crafting.action.add_affix",
+                CraftOperation.RemoveAffix => "crafting.action.remove_affix",
+                CraftOperation.RerollAffixValues => "crafting.action.reroll_values",
+                _ => string.Empty,
+            };
+            return string.IsNullOrEmpty(entryKey) ? operation.ToString() : Localize(entryKey);
+        }
+
+        string GetScopeText(CraftingAffixScope scope)
+        {
+            string entryKey = scope switch
+            {
+                CraftingAffixScope.Prefix => "crafting.scope.prefix",
+                CraftingAffixScope.Suffix => "crafting.scope.suffix",
+                _ => "crafting.scope.any",
+            };
+            return Localize(entryKey);
+        }
+
+        string GetFailureText(CraftingFailureReason reason)
+        {
+            string entryKey = reason switch
+            {
+                CraftingFailureReason.NotConfigured => "crafting.failure.not_configured",
+                CraftingFailureReason.ItemMissing => "crafting.failure.item_not_in_inventory",
+                CraftingFailureReason.ItemNotInInventory => "crafting.failure.item_not_in_inventory",
+                CraftingFailureReason.InsufficientGold => "crafting.failure.insufficient_gold",
+                CraftingFailureReason.MaximumRarity => "crafting.failure.maximum_rarity",
+                CraftingFailureReason.NoChange => "crafting.failure.no_change",
+                CraftingFailureReason.NoCapacity => "crafting.failure.no_capacity",
+                CraftingFailureReason.ScopeHasNoAffix => "crafting.failure.scope_has_no_affix",
+                CraftingFailureReason.NoVariableAffix => "crafting.failure.no_variable_affix",
+                CraftingFailureReason.NoLegalAffix => "crafting.failure.no_legal_affix",
+                CraftingFailureReason.CannotBuildCompleteResult => "crafting.failure.incomplete_result",
+                CraftingFailureReason.CommitFailed => "crafting.failure.commit_failed",
+                _ => "crafting.failure.unavailable",
+            };
+            return Localize(entryKey);
+        }
+
+        string GetRarityText(ItemRarity rarity)
+        {
+            string entryKey = rarity switch
+            {
+                ItemRarity.Normal => "item.rarity.normal",
+                ItemRarity.Magic => "item.rarity.magic",
+                ItemRarity.Rare => "item.rarity.rare",
+                ItemRarity.Unique => "item.rarity.unique",
+                _ => "item.rarity.unknown",
+            };
+            return Localize(entryKey);
+        }
+
+        void BindLocalization()
+        {
+            if (!ApplicationHost.TryGetCurrent(out ApplicationHost host)
+                || ReferenceEquals(_localizationService, host.Localization))
+            {
+                return;
+            }
+
+            if (_localizationService != null)
+            {
+                _localizationService.LocaleChanged -= OnLocaleChanged;
+            }
+
+            _localizationService = host.Localization;
+
+            if (_localizationService != null)
+            {
+                _localizationService.LocaleChanged += OnLocaleChanged;
             }
         }
 
-        static string GetScopeText(CraftingAffixScope scope)
+        void OnLocaleChanged(string localeCode)
         {
-            switch (scope)
+            if (_page != null)
             {
-                case CraftingAffixScope.Prefix:
-                    return "前缀";
-                case CraftingAffixScope.Suffix:
-                    return "后缀";
-                default:
-                    return "任意";
+                RefreshSelection();
             }
         }
 
-        static string GetFailureText(CraftingFailureReason reason)
+        string Localize(string entryKey, params object[] arguments)
         {
-            switch (reason)
-            {
-                case CraftingFailureReason.NotConfigured:
-                    return "打造配置尚未加载";
-                case CraftingFailureReason.ItemMissing:
-                case CraftingFailureReason.ItemNotInInventory:
-                    return "物品不在玩家背包中";
-                case CraftingFailureReason.InsufficientGold:
-                    return "金币不足";
-                case CraftingFailureReason.MaximumRarity:
-                    return "已达到最高稀有度";
-                case CraftingFailureReason.NoChange:
-                    return "当前状态无需执行该操作";
-                case CraftingFailureReason.NoCapacity:
-                    return "当前范围已达到词缀容量";
-                case CraftingFailureReason.ScopeHasNoAffix:
-                    return "当前范围没有可操作词缀";
-                case CraftingFailureReason.NoVariableAffix:
-                    return "当前范围没有可重随数值的词缀";
-                case CraftingFailureReason.NoLegalAffix:
-                    return "词缀池没有合法候选";
-                case CraftingFailureReason.CannotBuildCompleteResult:
-                    return "词缀池无法生成满足稀有度规则的完整结果";
-                case CraftingFailureReason.CommitFailed:
-                    return "状态提交失败，未扣除金币";
-                default:
-                    return "当前操作不可用";
-            }
+            LocalizedMessage message = LocalizedMessage.Ui(entryKey, arguments);
+            return Resolve(message);
+        }
+
+        string Resolve(LocalizedMessage message)
+        {
+            return _localizationService?.GetString(message)
+                ?? $"[{message.TableName}.{message.EntryKey}]";
         }
     }
 }

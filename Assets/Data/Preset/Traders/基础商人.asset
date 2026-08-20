@@ -14,6 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DarkFlare.TraderDefinition
   _id: basic_trader
   _displayName: "\u57FA\u7840\u5546\u4EBA"
+  _localizedName:
+    _tableName: monsters
+    _entryKey: trader.basic_trader.name
   _buyMultiplier: 1.5
   _sellMultiplier: 0.4
   _stock:

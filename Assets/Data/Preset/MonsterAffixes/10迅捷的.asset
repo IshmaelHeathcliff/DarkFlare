@@ -14,6 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.MonsterAffixDefinition
   _id: monster_swift
   _displayName: "\u8FC5\u6377"
+  _localizedName:
+    _tableName: affixes
+    _entryKey: monster_affix.monster_swift.name
   _groupId: monster_speed
   _weight: 80
   _displayColor: {r: 0.78, g: 0.48, b: 1, a: 1}
