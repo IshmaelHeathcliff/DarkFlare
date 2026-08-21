@@ -32,8 +32,9 @@
 
 - [alpha 0.2 基础设施开发计划](./plan/alpha-0.2-plan.md)
 - [alpha 0.2 基础设施约束契约](./plan/alpha-0.2-infrastructure-contract.md)
+- [alpha 0.2.5 输入、音频、可访问性与平台生命周期执行计划](./plan/alpha-0.2.5-input-audio-accessibility-platform-lifecycle-plan.md)
 
-`alpha 0.2.0–0.2.4` 已完成，当前实现见上述五份基础设施模块文档，阶段执行计划已移入[已完成计划归档](./plan/archive/README.md)。当前上位计划已推进到 `alpha 0.2.5` 输入、音频、可访问性与平台生命周期。
+`alpha 0.2.0–0.2.4` 已完成，当前实现见上述五份基础设施模块文档，阶段执行计划已移入[已完成计划归档](./plan/archive/README.md)。`alpha 0.2.5` 输入、音频、可访问性与平台生命周期正在执行，切片 0 合同与特征测试已完成。
 
 ## 说明
 

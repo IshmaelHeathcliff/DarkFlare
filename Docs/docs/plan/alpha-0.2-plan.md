@@ -1,6 +1,6 @@
 # alpha 0.2 基础设施开发计划
 
-> 状态：`alpha 0.2.0–0.2.4` 已完成；`alpha 0.2.5` 待开始
+> 状态：`alpha 0.2.0–0.2.4` 已完成；`alpha 0.2.5` 进行中，切片 0 已完成
 > 建立日期：2026-08-17
 > 最近更新：2026-08-21
 > 基线提交：`21360c7`
@@ -70,7 +70,7 @@
 | `alpha 0.2.2` | 已完成 | 完成本地存档、读档和损坏恢复闭环 | [模块文档](../infrastructure/local-save.md) · [归档计划](./archive/alpha-0.2.2-local-save-plan.md) |
 | `alpha 0.2.3` | 已完成 | 完成用户设置和运行时本地化 | [模块文档](../infrastructure/user-settings-localization.md) · [归档计划](./archive/alpha-0.2.3-settings-localization-plan.md) |
 | `alpha 0.2.4` | 已完成 | 建立游戏状态、场景加载和通用 UI 外壳 | [模块文档](../infrastructure/game-state-scene-flow-ui-shell.md) · [归档计划](./archive/alpha-0.2.4-game-state-scene-flow-ui-shell-plan.md) |
-| `alpha 0.2.5` | 待开始 | 接入输入、音频、可访问性和平台生命周期 | 重绑定、输入图标、AudioMixer 服务、可访问性设置、挂起 / 退出策略 |
+| `alpha 0.2.5` | 进行中，切片 0 已完成 | 接入输入、音频、可访问性和平台生命周期 | [执行计划](./alpha-0.2.5-input-audio-accessibility-platform-lifecycle-plan.md) |
 | `alpha 0.2.6` | 待开始 | 建立日志、错误处理和资源生命周期治理 | Logger、异常捕获、玩家错误反馈、Addressables 规则与句柄验证 |
 | `alpha 0.2.7` | 待开始 | 完成跨模块回归、故障演练和文档封板 | 综合验收记录、迁移样本、模块文档、计划归档 |
 
