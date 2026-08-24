@@ -40,6 +40,7 @@ namespace DarkFlare
         Button _closeButton;
         Button _saveButton;
         Button _returnFrontEndButton;
+        Button _settingsButton;
         Label _saveStatus;
         SessionSaveFacade _saveFacade;
         LocalizationService _localizationService;
@@ -202,6 +203,11 @@ namespace DarkFlare
                 _returnFrontEndButton.clicked -= OnReturnFrontEndClicked;
             }
 
+            if (_settingsButton != null)
+            {
+                _settingsButton.clicked -= OnSettingsClicked;
+            }
+
             if (_localizationService != null)
             {
                 _localizationService.LocaleChanged -= OnLocaleChanged;
@@ -224,6 +230,7 @@ namespace DarkFlare
             _closeButton = null;
             _saveButton = null;
             _returnFrontEndButton = null;
+            _settingsButton = null;
             _saveStatus = null;
             _saveFacade = null;
             _localizationService = null;
@@ -283,6 +290,7 @@ namespace DarkFlare
             _closeButton = root.Q<Button>("game-menu-close");
             _saveButton = root.Q<Button>("game-menu-save");
             _returnFrontEndButton = root.Q<Button>("game-menu-return-front-end");
+            _settingsButton = root.Q<Button>("game-menu-settings");
             _saveStatus = root.Q<Label>("game-menu-save-status");
 
             if (_overlay == null
@@ -296,6 +304,7 @@ namespace DarkFlare
                 || _closeButton == null
                 || _saveButton == null
                 || _returnFrontEndButton == null
+                || _settingsButton == null
                 || _saveStatus == null)
             {
                 Debug.LogError("[GameMenuController] 菜单 UXML 缺少必要的命名元素", this);
@@ -308,6 +317,7 @@ namespace DarkFlare
             _closeButton.clicked += OnCloseClicked;
             _saveButton.clicked += OnSaveClicked;
             _returnFrontEndButton.clicked += OnReturnFrontEndClicked;
+            _settingsButton.clicked += OnSettingsClicked;
             _panel.RegisterCallback<GeometryChangedEvent>(OnPanelGeometryChanged);
             return true;
         }
@@ -425,6 +435,14 @@ namespace DarkFlare
             }
 
             host.ApplicationShell?.RequestReturnToFrontEnd();
+        }
+
+        void OnSettingsClicked()
+        {
+            if (ApplicationHost.TryGetCurrent(out ApplicationHost host))
+            {
+                host.ApplicationShell?.OpenSettings(() => _settingsButton?.Focus());
+            }
         }
 
         void OnLocaleChanged(string localeCode)

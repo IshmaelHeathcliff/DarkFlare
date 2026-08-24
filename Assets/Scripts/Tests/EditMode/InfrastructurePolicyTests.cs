@@ -74,12 +74,20 @@ namespace DarkFlare.Tests
                 "unitask-void",
                 @"\bUniTaskVoid\b",
                 new[] { RuntimeRoot },
-                Array.Empty<string>()),
+                new[]
+                {
+                    "Assets/Scripts/Runtime/Infrastructure/Audio/AudioService.cs",
+                    "Assets/Scripts/Runtime/Infrastructure/Input/ApplicationInputService.cs",
+                }),
             new PolicyRule(
                 "naked-forget",
                 @"\.\s*Forget\s*\(",
                 new[] { RuntimeRoot },
-                Array.Empty<string>()),
+                new[]
+                {
+                    "Assets/Scripts/Runtime/Infrastructure/Audio/AudioService.cs",
+                    "Assets/Scripts/Runtime/Infrastructure/Input/ApplicationInputService.cs",
+                }),
             new PolicyRule(
                 "cancellation-token-source-owner",
                 @"\bCancellationTokenSource\b",
@@ -89,7 +97,42 @@ namespace DarkFlare.Tests
                     "Assets/Scripts/Runtime/Infrastructure/Lifecycle/LifecycleScope.cs",
                     "Assets/Scripts/Runtime/Infrastructure/Lifecycle/LifecycleTaskGroup.cs",
                     "Assets/Scripts/Runtime/Infrastructure/Flow/SceneFlowService.cs",
+                    "Assets/Scripts/Runtime/Infrastructure/Audio/AudioService.cs",
                     "Assets/Scripts/Runtime/Infrastructure/UI/ApplicationFrontEndController.cs",
+                    "Assets/Scripts/Runtime/Infrastructure/UI/ApplicationSettingsController.cs",
+                }),
+            new PolicyRule(
+                "input-device-singleton-owner",
+                @"\b(?:Keyboard|Mouse|Gamepad)\s*\.\s*current\b",
+                new[] { RuntimeRoot },
+                new[]
+                {
+                    "Assets/Scripts/Runtime/Infrastructure/Input/ApplicationInputService.cs",
+                }),
+            new PolicyRule(
+                "input-binding-override-owner",
+                @"\.\s*(?:ApplyBindingOverride|RemoveBindingOverride|RemoveAllBindingOverrides)\s*\(",
+                new[] { RuntimeRoot },
+                new[]
+                {
+                    "Assets/Scripts/Runtime/Infrastructure/Input/ApplicationInputService.cs",
+                }),
+            new PolicyRule(
+                "runtime-audio-owner",
+                @"\b(?:AudioSource|AudioListener|AudioMixer(?:Group)?)\b",
+                new[] { RuntimeRoot },
+                new[]
+                {
+                    "Assets/Scripts/Runtime/Infrastructure/Audio/AudioService.cs",
+                    "Assets/Scripts/Runtime/Infrastructure/Audio/AudioServiceConfiguration.cs",
+                }),
+            new PolicyRule(
+                "platform-callback-owner",
+                @"\bOnApplication(?:Focus|Pause)\s*\(",
+                new[] { RuntimeRoot },
+                new[]
+                {
+                    "Assets/Scripts/Runtime/Infrastructure/Lifecycle/ApplicationHost.cs",
                 }),
             new PolicyRule(
                 "runtime-guid-generation-owner",
@@ -113,6 +156,10 @@ namespace DarkFlare.Tests
         [TestCase("unitask-void")]
         [TestCase("naked-forget")]
         [TestCase("cancellation-token-source-owner")]
+        [TestCase("input-device-singleton-owner")]
+        [TestCase("input-binding-override-owner")]
+        [TestCase("runtime-audio-owner")]
+        [TestCase("platform-callback-owner")]
         [TestCase("runtime-guid-generation-owner")]
         public void SourcePolicy_HasNoUnregisteredViolations(string ruleId)
         {
@@ -216,6 +263,22 @@ namespace DarkFlare.Tests
             "cancellation-token-source-owner",
             "var cancellation = new CancellationTokenSource();",
             "CancellationTokenSource")]
+        [TestCase(
+            "input-device-singleton-owner",
+            "return Gamepad.current;",
+            "Gamepad.current")]
+        [TestCase(
+            "input-binding-override-owner",
+            "action.ApplyBindingOverride(0, path);",
+            "ApplyBindingOverride")]
+        [TestCase(
+            "runtime-audio-owner",
+            "return gameObject.GetComponent<AudioListener>();",
+            "AudioListener")]
+        [TestCase(
+            "platform-callback-owner",
+            "void OnApplicationPause(bool paused) { }",
+            "OnApplicationPause")]
         [TestCase(
             "runtime-guid-generation-owner",
             "var id = Guid.NewGuid();",

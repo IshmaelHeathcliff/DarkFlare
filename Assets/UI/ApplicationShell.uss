@@ -203,3 +203,174 @@
 .application-dialog--fatal {
   border-left-color: rgb(181, 62, 70);
 }
+
+.application-settings {
+  background-color: rgba(5, 6, 8, 0.9);
+}
+
+.application-settings-panel {
+  width: 900px;
+  max-width: 92%;
+  height: 820px;
+  max-height: 92%;
+  padding: 24px;
+  background-color: rgb(24, 27, 33);
+  border-left-width: 2px;
+  border-right-width: 1px;
+  border-top-width: 1px;
+  border-bottom-width: 1px;
+  border-left-color: rgb(201, 151, 76);
+  border-right-color: rgb(70, 74, 83);
+  border-top-color: rgb(70, 74, 83);
+  border-bottom-color: rgb(70, 74, 83);
+}
+
+.application-settings-header {
+  min-height: 54px;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 12px;
+  border-bottom-width: 1px;
+  border-bottom-color: rgb(70, 74, 83);
+}
+
+.application-settings-title {
+  flex-grow: 1;
+  color: rgb(239, 225, 195);
+  font-size: 30px;
+  -unity-font-style: bold;
+}
+
+.application-settings-back,
+.application-settings-restore {
+  min-width: 150px;
+  height: 40px;
+  color: rgb(226, 222, 212);
+  background-color: rgb(45, 49, 58);
+}
+
+.application-settings-scroll {
+  flex-grow: 1;
+  min-height: 0;
+}
+
+.application-settings-section {
+  margin-bottom: 16px;
+  padding: 16px;
+  background-color: rgb(31, 35, 42);
+  border-left-width: 1px;
+  border-right-width: 1px;
+  border-top-width: 1px;
+  border-bottom-width: 1px;
+  border-left-color: rgb(66, 70, 80);
+  border-right-color: rgb(66, 70, 80);
+  border-top-color: rgb(66, 70, 80);
+  border-bottom-color: rgb(66, 70, 80);
+}
+
+.application-settings-section-title {
+  margin-bottom: 12px;
+  color: rgb(218, 172, 98);
+  font-size: 21px;
+  -unity-font-style: bold;
+}
+
+.application-settings-slider,
+.application-settings-toggle,
+.application-settings-dropdown {
+  min-height: 38px;
+  margin-bottom: 8px;
+  color: rgb(218, 220, 226);
+}
+
+.application-settings-binding-list {
+  margin-top: 10px;
+  margin-bottom: 12px;
+}
+
+.application-settings-binding-row {
+  min-height: 44px;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 5px;
+  padding-left: 8px;
+  background-color: rgb(38, 42, 50);
+}
+
+.application-settings-binding-name {
+  flex-grow: 1;
+  min-width: 240px;
+  white-space: normal;
+  color: rgb(207, 210, 217);
+}
+
+.application-settings-binding-glyph {
+  width: 36px;
+  height: 36px;
+  margin-right: 8px;
+  align-items: center;
+  justify-content: center;
+  -unity-background-scale-mode: scale-to-fit;
+}
+
+.application-settings-binding-glyph-text {
+  font-size: 10px;
+  -unity-font-style: bold;
+  color: rgb(239, 231, 212);
+  -unity-text-align: middle-center;
+}
+
+.application-settings-binding-action {
+  width: 210px;
+  height: 36px;
+  color: rgb(226, 222, 212);
+  background-color: rgb(49, 54, 64);
+}
+
+.application-settings-binding-action:focus,
+.application-settings-back:focus,
+.application-settings-restore:focus {
+  border-left-color: rgb(218, 172, 98);
+  border-right-color: rgb(218, 172, 98);
+  border-top-color: rgb(218, 172, 98);
+  border-bottom-color: rgb(218, 172, 98);
+}
+
+.application-settings-status {
+  min-height: 28px;
+  margin-top: 8px;
+  white-space: normal;
+  color: rgb(169, 174, 184);
+}
+
+.input-glyph--keyboard-keycap {
+  background-image: url("project://database/Assets/Art/UI/InputGlyphs/keyboard_keycap.png");
+}
+
+.input-glyph--gamepad-button_south {
+  background-image: url("project://database/Assets/Art/UI/InputGlyphs/gamepad_button_south.png");
+}
+
+.input-glyph--gamepad-button_east {
+  background-image: url("project://database/Assets/Art/UI/InputGlyphs/gamepad_button_east.png");
+}
+
+.input-glyph--gamepad-button_west {
+  background-image: url("project://database/Assets/Art/UI/InputGlyphs/gamepad_button_west.png");
+}
+
+.input-glyph--gamepad-button_north {
+  background-image: url("project://database/Assets/Art/UI/InputGlyphs/gamepad_button_north.png");
+}
+
+.input-glyph--gamepad-start {
+  background-image: url("project://database/Assets/Art/UI/InputGlyphs/gamepad_start.png");
+}
+
+.input-glyph--gamepad-dpad {
+  background-image: url("project://database/Assets/Art/UI/InputGlyphs/gamepad_dpad.png");
+}
+
+.input-glyph--gamepad-left_stick {
+  background-image: url("project://database/Assets/Art/UI/InputGlyphs/gamepad_left_stick.png");
+}

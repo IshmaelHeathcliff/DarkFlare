@@ -1095,6 +1095,158 @@ MonoBehaviour:
     m_Key: menu.return_confirm.confirm
     m_Metadata:
       m_Items: []
+  - m_Id: 1756845248077824
+    m_Key: settings.open
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409472
+    m_Key: settings.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409473
+    m_Key: settings.back
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409474
+    m_Key: settings.audio.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409475
+    m_Key: settings.audio.master
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409476
+    m_Key: settings.audio.music
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409477
+    m_Key: settings.audio.sfx
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409478
+    m_Key: settings.audio.ui
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409479
+    m_Key: settings.audio.muted
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409480
+    m_Key: settings.input.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409481
+    m_Key: settings.input.glyph_preference
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409482
+    m_Key: settings.input.glyph.auto
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409483
+    m_Key: settings.input.device.keyboard_mouse
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409484
+    m_Key: settings.input.device.gamepad
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409485
+    m_Key: settings.input.restore_defaults
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409486
+    m_Key: settings.input.restore_title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409487
+    m_Key: settings.input.restore_message
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409488
+    m_Key: settings.accessibility.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409489
+    m_Key: settings.accessibility.reduce_motion
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409490
+    m_Key: settings.status.saved
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409491
+    m_Key: settings.status.save_failed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409492
+    m_Key: settings.input.rebind_listening
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409493
+    m_Key: settings.input.rebind_conflict
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409494
+    m_Key: settings.input.rebind_timeout
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409495
+    m_Key: settings.input.rebind_cancelled
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409496
+    m_Key: settings.toast.saved
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409497
+    m_Key: settings.input.action.player_move
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409498
+    m_Key: settings.input.action.player_interact
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409499
+    m_Key: settings.input.action.player_toggle_menu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409500
+    m_Key: settings.input.action.ui_navigate
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409501
+    m_Key: settings.input.action.ui_submit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409502
+    m_Key: settings.input.action.ui_cancel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409503
+    m_Key: settings.input.action.ui_rearrange
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409504
+    m_Key: settings.input.part.up
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409505
+    m_Key: settings.input.part.down
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409506
+    m_Key: settings.input.part.left
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409507
+    m_Key: settings.input.part.right
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409508
+    m_Key: flow.modal.confirm
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

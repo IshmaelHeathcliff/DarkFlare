@@ -6,12 +6,13 @@ namespace DarkFlare
     public sealed class ApplicationShellController : IDisposable
     {
         const string BrandName = "DARKFLARE";
-        const string AlphaVersion = "alpha 0.2.4";
+        const string AlphaVersion = "alpha 0.2.5";
 
         readonly UIDocument _document;
         readonly ApplicationHost _host;
 
         ApplicationFrontEndController _frontEndController;
+        ApplicationSettingsController _settingsController;
         VisualElement _root;
         VisualElement _frontEndPage;
         Label _frontEndBrand;
@@ -70,10 +71,17 @@ namespace DarkFlare
             _frontEndController = new ApplicationFrontEndController(
                 _root,
                 _host,
-                RunRequest);
+                RunRequest,
+                () => OpenSettings(_frontEndController.FocusDefault));
+            _settingsController = new ApplicationSettingsController(
+                _root,
+                _host,
+                ShowToast,
+                ShowConfirmation);
             _frontEndBrand.text = BrandName;
             _frontEndVersion.text = AlphaVersion;
             _frontEndController.Bind();
+            _settingsController.Bind();
             _busyCancel.clicked += OnBusyCancel;
             _modalRetry.clicked += OnModalPrimary;
             _modalCancel.clicked += HideModal;
@@ -164,6 +172,44 @@ namespace DarkFlare
             _modalRetry.Focus();
         }
 
+        public void OpenSettings(Action restoreFocus = null)
+        {
+            if (!_bound || _settingsController == null)
+            {
+                return;
+            }
+
+            _settingsController.Open(restoreFocus ?? _frontEndController.FocusDefault);
+        }
+
+        public bool IsSettingsOpen => _settingsController?.IsOpen ?? false;
+
+        public void ShowConfirmation(
+            LocalizedMessage title,
+            LocalizedMessage message,
+            Action confirm)
+        {
+            if (!_bound || confirm == null)
+            {
+                return;
+            }
+
+            _retryRequest = null;
+            _modalPrimaryAction = confirm;
+            _focusBeforeModal = _root?.panel?.focusController?.focusedElement as VisualElement;
+            _modalTitle.text = Resolve(title, title.EntryKey);
+            _modalMessage.text = Resolve(message, message.EntryKey);
+            _modalRetry.text = Resolve(
+                LocalizedMessage.Ui("flow.modal.confirm"),
+                "Confirm");
+            _modalCancel.text = Resolve(
+                LocalizedMessage.Ui("flow.modal.cancel"),
+                "Cancel");
+            _modalRetry.style.display = DisplayStyle.Flex;
+            SetVisible(_modalLayer, true);
+            _modalRetry.Focus();
+        }
+
         public void Dispose()
         {
             if (!_bound)
@@ -185,6 +231,9 @@ namespace DarkFlare
             _fatalQuit.clicked -= _host.RequestQuit;
             _frontEndController?.Dispose();
             _frontEndController = null;
+            _settingsController?.Dispose();
+            _settingsController = null;
+            _host.Audio?.StopOwner(this);
             _bound = false;
         }
 
@@ -312,6 +361,22 @@ namespace DarkFlare
 
         void OnModalPrimary()
         {
+            if (_host.Audio != null
+                && _host.ApplicationScope != null
+                && _host.ApplicationScope.CanAcceptWork)
+            {
+                _host.ApplicationScope.Tasks.Run(
+                    "application-shell-ui-confirm",
+                    async token =>
+                    {
+                        await _host.Audio.PlayAsync(
+                            AudioCueIds.UiConfirm,
+                            this,
+                            token);
+                    },
+                    failurePolicy: LifecycleTaskFailurePolicy.Report);
+            }
+
             SceneFlowRequest? request = _retryRequest;
             Action action = _modalPrimaryAction;
             HideModal();

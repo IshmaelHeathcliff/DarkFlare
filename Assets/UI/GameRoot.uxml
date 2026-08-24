@@ -85,6 +85,11 @@
                 <l:LocalizedString property="text" table="ui" entry="menu.return_front_end" />
               </Bindings>
             </ui:Button>
+            <ui:Button name="game-menu-settings" text="" class="game-menu-save-action">
+              <Bindings>
+                <l:LocalizedString property="text" table="ui" entry="settings.open" />
+              </Bindings>
+            </ui:Button>
           </ui:VisualElement>
           <ui:Label name="game-menu-save-status" text="" class="game-menu-save-status" />
         </ui:VisualElement>

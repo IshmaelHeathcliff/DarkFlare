@@ -8,6 +8,7 @@ namespace DarkFlare.Tests
     {
         readonly SceneFlowPlayModeFixture _sceneFlowFixture = new SceneFlowPlayModeFixture();
         LifecycleScope _standaloneScope;
+        ApplicationInputService _standaloneInputService;
 
         public IArchitecture Architecture { get; private set; }
 
@@ -50,7 +51,10 @@ namespace DarkFlare.Tests
             else
             {
                 _standaloneScope = LifecycleScope.CreateRoot("PlayModeTestSession");
-                GameArchitectureProvider.StartSession(_standaloneScope);
+                _standaloneInputService = new ApplicationInputService();
+                GameArchitectureProvider.StartSession(
+                    _standaloneScope,
+                    _standaloneInputService);
             }
 
             Architecture = GameArchitectureProvider.RequireCurrent();
@@ -89,6 +93,8 @@ namespace DarkFlare.Tests
             yield return _standaloneScope.StopAsync().ToCoroutine();
             GameArchitectureProvider.StopSession(_standaloneScope);
             _standaloneScope = null;
+            _standaloneInputService?.Dispose();
+            _standaloneInputService = null;
         }
     }
 }

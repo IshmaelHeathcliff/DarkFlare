@@ -202,6 +202,76 @@ namespace DarkFlare
                 HighContrast);
         }
 
+        public UserSettingsSnapshot WithAudio(
+            float masterVolume,
+            float musicVolume,
+            float soundEffectsVolume,
+            float uiVolume,
+            bool muted)
+        {
+            return new UserSettingsSnapshot(
+                Language,
+                masterVolume,
+                musicVolume,
+                soundEffectsVolume,
+                uiVolume,
+                muted,
+                BindingOverridesJson,
+                GlyphPreference,
+                DisplayWidth,
+                DisplayHeight,
+                DisplayMode,
+                UiScale,
+                TextScale,
+                ReduceMotion,
+                ScreenShakeIntensity,
+                HighContrast);
+        }
+
+        public UserSettingsSnapshot WithInput(
+            string bindingOverridesJson,
+            InputGlyphPreference glyphPreference)
+        {
+            return new UserSettingsSnapshot(
+                Language,
+                MasterVolume,
+                MusicVolume,
+                SoundEffectsVolume,
+                UiVolume,
+                Muted,
+                bindingOverridesJson,
+                glyphPreference,
+                DisplayWidth,
+                DisplayHeight,
+                DisplayMode,
+                UiScale,
+                TextScale,
+                ReduceMotion,
+                ScreenShakeIntensity,
+                HighContrast);
+        }
+
+        public UserSettingsSnapshot WithReduceMotion(bool reduceMotion)
+        {
+            return new UserSettingsSnapshot(
+                Language,
+                MasterVolume,
+                MusicVolume,
+                SoundEffectsVolume,
+                UiVolume,
+                Muted,
+                BindingOverridesJson,
+                GlyphPreference,
+                DisplayWidth,
+                DisplayHeight,
+                DisplayMode,
+                UiScale,
+                TextScale,
+                reduceMotion,
+                ScreenShakeIntensity,
+                HighContrast);
+        }
+
         public UserSettingsDataDto ToDto()
         {
             return new UserSettingsDataDto

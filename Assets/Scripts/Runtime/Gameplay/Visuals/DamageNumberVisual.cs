@@ -17,10 +17,13 @@ namespace DarkFlare
     [DisallowMultipleComponent]
     public sealed class DamageNumberVisual : MonoBehaviour
     {
+        const float BaseDuration = 0.65f;
+
         Tween _moveTween;
         Tween _fadeTween;
         TextMeshPro _label;
         SessionObjectRegistry _sessionObjects;
+        AccessibilityService _accessibilityService;
 
         public static DamageNumberVisual Spawn(
             Vector3 worldPosition,
@@ -49,7 +52,8 @@ namespace DarkFlare
                 visual._sessionObjects.Register(instance);
             }
 
-            visual.Play();
+            visual.BindAccessibility();
+            visual.Play(visual.ResolveMotionProfile());
             return visual;
         }
 
@@ -102,6 +106,16 @@ namespace DarkFlare
                 : new Color(1f, 0.79f, 0.39f, 1f);
         }
 
+        internal static float ResolveDuration(MotionProfile profile)
+        {
+            return BaseDuration * profile.DurationScale;
+        }
+
+        internal static float ResolveTravelDistance(MotionProfile profile)
+        {
+            return profile.AllowContinuousMotion ? 0.65f : 0f;
+        }
+
         static string GetObjectName(CombatTextKind kind)
         {
             return kind switch
@@ -127,6 +141,12 @@ namespace DarkFlare
 
         void OnDisable()
         {
+            if (_accessibilityService != null)
+            {
+                _accessibilityService.ProfileChanged -= OnMotionProfileChanged;
+                _accessibilityService = null;
+            }
+
             StopTweens();
         }
 
@@ -135,10 +155,23 @@ namespace DarkFlare
             _sessionObjects?.Unregister(gameObject);
         }
 
-        void Play()
+        void Play(MotionProfile profile)
         {
+            StopTweens();
             Vector3 start = transform.position;
-            _moveTween = Tween.PositionY(transform, start.y, start.y + 0.65f, 0.65f, Ease.OutCubic);
+            float duration = ResolveDuration(profile);
+            float travelDistance = ResolveTravelDistance(profile);
+
+            if (travelDistance > 0f)
+            {
+                _moveTween = Tween.PositionY(
+                    transform,
+                    start.y,
+                    start.y + travelDistance,
+                    duration,
+                    Ease.OutCubic);
+            }
+
             Color startColor = _label.color;
             Color endColor = startColor;
             endColor.a = 0f;
@@ -146,7 +179,7 @@ namespace DarkFlare
                     _label,
                     startColor,
                     endColor,
-                    0.65f,
+                    duration,
                     (label, color) => label.color = color,
                     Ease.InQuad)
                 .OnComplete(this, visual =>
@@ -156,6 +189,34 @@ namespace DarkFlare
                         Destroy(visual.gameObject);
                     }
                 });
+        }
+
+        void BindAccessibility()
+        {
+            if (!ApplicationHost.TryGetCurrent(out ApplicationHost host))
+            {
+                return;
+            }
+
+            _accessibilityService = host.Accessibility;
+
+            if (_accessibilityService != null)
+            {
+                _accessibilityService.ProfileChanged += OnMotionProfileChanged;
+            }
+        }
+
+        MotionProfile ResolveMotionProfile()
+        {
+            return _accessibilityService?.Profile ?? MotionProfile.Default;
+        }
+
+        void OnMotionProfileChanged(MotionProfile profile)
+        {
+            if (isActiveAndEnabled)
+            {
+                Play(profile);
+            }
         }
 
         void StopTweens()

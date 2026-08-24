@@ -8,15 +8,26 @@ Main 玩法 UI 复用一个 `UIDocument` 和一个 `PanelSettings`；常驻 Boot
 
 ## 输入层
 
-`Assets/Settings/InputSystem_Actions.inputactions` 是唯一输入源，并生成 `InputSystem_Actions.cs`。`GameInput` 作为 `IUtility` 注册到 `GameArchitecture`，统一管理：
+`Assets/Settings/InputSystem_Actions.inputactions` 是唯一输入源，并生成 `InputSystem_Actions.cs`。运行时只由 Application 级 `ApplicationInputService` 创建并持有一个 `InputSystem_Actions` 实例；Session 级 `GameInput` 作为 `IUtility` Adapter 注册到 `GameArchitecture`，只转发既有玩法 API，不创建或销毁 Action Asset。
 
 - `Player` Action Map：移动、瞄准、攻击预留、世界交互和菜单开关。
 - `UI` Action Map：导航、提交、取消、物品拿起 / 放置和指针操作。
-- Gameplay 模式下只启用 `Player`，UI 模式下只启用 `UI`。
+- 无 Session 的 FrontEnd 默认使用 UI Context；Session 创建进入 Gameplay，菜单打开切到 UI，Session 结束恢复 UI。
+- `ApplicationInputService` 统一计算 Gameplay / UI Map 状态；任一 suspension lease 有效时两个 Map 都禁用，最后一个租约释放后恢复当前 Context。
 - `PlayerController` 从 `GameInput.Move` 读取移动，不直接轮询设备。
 - `InteractPerformed` 只在 Gameplay Action Map 有效，用于世界目标交互。
 - `ModeChanged` 驱动菜单显示、默认焦点和玩法暂停状态。
-- `Dispose` 解除输入订阅并释放生成的 Actions。
+- `GameInput.Dispose()` 只解除 Session 订阅并恢复 UI Context；只有 Application Shutdown 才释放生成的 Actions。
+
+`Bootstrap.unity/EventSystem` 上的 `ApplicationInputModuleBinder` 将 `InputSystemUIInputModule` 绑定到同一运行时 Asset，并显式建立 Point、Navigate、Submit、Cancel、Click、Scroll 和追踪设备 ActionReference。绑定和解绑都会先停用 UI Module，避免旧 Action 仍处于启用状态；服务关闭前先发出 `Closing`，Binder 清空引用后才允许销毁 Asset。同场景重建 `ApplicationHost` 时，`InputReady` 事件会把模块重新绑定到新的 Application owner。
+
+共享 Asset 下，未消费的 UI Cancel 不在 Action 回调分发中途直接禁用 UI Map，而是在当前 `InputSystem.onAfterUpdate` 阶段切回 Gameplay。这样 UI Module 能先完成同一 CallbackContext 的处理，同时玩家观感仍保持在同一帧内关闭菜单。
+
+### 重绑定、设备族与 Glyph
+
+`ApplicationInputService` 维护正式可重绑定 Action / Composite Part 清单，并把 Binding Overrides JSON 与 `GlyphPreference` 保存到 Settings V1。一次变更按“临时覆盖 → 合同 / 冲突校验 → Settings 提交 → 失败回滚”执行；交互捕获期间持有 Rebinding suspension lease，Escape、超时或设备拔出都恢复旧覆盖。恢复默认只移除 runtime override，不修改 `InputSystem_Actions.inputactions`。
+
+设备显示分为 `KeyboardMouse` 与 `Gamepad`。活动设备输入会更新设备族；玩家偏好可覆盖自动选择。交互提示与设置页只显示当前显示族，不再拼接两套绑定。`InputGlyphResolver` 把规范 control path 映射到 `Assets/Art/UI/InputGlyphs` 的 8 张独立 64×64 单 Sprite；未知控件回退为可读 Keycap 文本，不暴露原始 control path。
 
 首版关键绑定：
 
@@ -51,7 +62,7 @@ Main 玩法 UI 复用一个 `UIDocument` 和一个 `PanelSettings`；常驻 Boot
 - `GameMenu.uss`
 - `Theme.uss`
 
-`Main.unity/UIRoot` 挂载 `UIDocument`、`GameMenuController`、四个数据显示 Controller 和 `InteractionPromptController`。`InputSystemUIInputModule` 引用同一份 Input Actions 的 `UI` Action Map。
+`Main.unity/UIRoot` 挂载 `UIDocument`、`GameMenuController`、四个数据显示 Controller 和 `InteractionPromptController`。常驻 Bootstrap 的 `InputSystemUIInputModule` 与 Application / Session 共享同一个运行时 Input Actions 实例。
 
 `Bootstrap.unity` 挂载 `ApplicationShell.uxml/.uss` 和唯一 EventSystem。Shell 负责 FrontEnd Page、Busy、Modal、Toast、Fatal 与跨场景焦点；Main 不再序列化 EventSystem，隐藏的 Application 层不得抢占玩法 UI 焦点。
 
@@ -67,7 +78,7 @@ Main 玩法 UI 复用一个 `UIDocument` 和一个 `PanelSettings`；常驻 Boot
 
 alpha 0.1.0 将三套物品页面合并为共享工作台：扩容后的四槽装备区位于共享玩家列上方，10×6 背包位于下方；该列在商店和打造中最大占内容区 49%，右侧上下文获得主要空间。商店使用更大的固定 10×6 商人背包且不显示滚动条，玩家与商人格内只保留图标。装备区保留两个非交互扩展位置，但不提前增加领域槽位。48 px 背包格与 4 px 间隔同时作为装备槽尺寸基准：武器/护甲和打造槽为 100×152，左右戒指为 60×60 方形；背包面板压缩为 408 px，装备区取得共享列的剩余高度。三个右侧模板仅当前页参与布局，因此背包、商店、打造与共享玩家列始终等高。运行时只有一个顶层 `ItemTooltipView`，以 360×680 固定展开且不使用滚动条，顶部与主面板对齐；玩家/打造内容停靠左侧，商人内容停靠右侧。拖放后等待指针离开并再次主动预览再显示，整个浮窗子树输入穿透；显示时先隐藏完成几何定位，再切换为可见。菜单每次重新打开都会清空玩家物品选择，默认焦点落在当前页签，没有物品预览时隐藏浮窗。`alpha 0.2.2` 在原 940 px 内容区下增加 64 px 存档栏，因此主面板总高为 1160×1004；面板与槽位继续使用统一 1 px USS 细边框。
 
-`alpha 0.2.3` 已将 Game Menu、HUD、背包 / 四槽装备、商店、打造、共享物品详情和场景交互提示的动态界面文本接入 Application 级 Localization Service。快照只传递属性 ID、数值、装备槽、伤害与修改器等语义数据，Controller / View 在当前 Locale 下解析显示文本；Locale 变化只重绘现有状态，不重新查询或改动背包、装备、拖拽、交易、打造和焦点。商店反馈保存 `LocalizedMessage`，打造结果保存领域 `CraftingResult`，避免缓存旧语言字符串。交互提示通过 `GameInput` 从 Input System 配置生成键盘 / 手柄绑定显示文本，完整设备图标留到 `alpha 0.2.5`。
+`alpha 0.2.3` 已将 Game Menu、HUD、背包 / 四槽装备、商店、打造、共享物品详情和场景交互提示的动态界面文本接入 Application 级 Localization Service。快照只传递属性 ID、数值、装备槽、伤害与修改器等语义数据，Controller / View 在当前 Locale 下解析显示文本；Locale 变化只重绘现有状态，不重新查询或改动背包、装备、拖拽、交易、打造和焦点。商店反馈保存 `LocalizedMessage`，打造结果保存领域 `CraftingResult`，避免缓存旧语言字符串。`alpha 0.2.5` 以后交互提示从 Application 输入服务取得当前显示设备族的绑定与 Glyph。
 
 `alpha 0.2.4` 把 Continue、NewGame 和语言入口迁到无 Session 的 FrontEnd；游戏菜单保留 Save、Return FrontEnd 和 Close。Scene Flow 事务由 Application Busy 阻断底层输入，确认返回与可恢复错误使用 Modal，非阻塞结果使用 Toast；键鼠和手柄共享同一焦点恢复合同。
 
@@ -88,6 +99,7 @@ alpha 0.1.0 的 HUD 移除武器卡片和属性详情，只保留生命、金币
 | `CraftingPanelController` | `GetCraftingSnapshotQuery` | 槽内目标的 `CraftItemCommand` | 打造、金币、背包事件 |
 | `GameMenuController` | 当前 Session 的 `SessionSaveFacade` | 保存 `auto`、请求返回 FrontEnd | Session 绑定、存档操作完成和 Busy 状态 |
 | `InteractionPromptController` | 交互焦点消息 | 无 | 焦点、输入模式和 Actor 状态变化 |
+| `ApplicationSettingsController` | Settings、Input、Audio、Accessibility 服务 | 音量、绑定、Glyph 偏好、Reduce Motion | 页面打开、设置 / 绑定 / 设备族变化 |
 
 所有格子和详情都来自只读快照。打造页不再维护词缀列表，而是取得槽内物品 14 个操作变体的成本、可用性和失败原因；背包选择仅作为详情与“放入”候选，不能直接执行打造。鼠标拖入或键盘 / 手柄确认“放入打造槽”后才锁定目标，取回或目标离开背包时立即禁用全部操作。操作成功后由对应 System / Model 发送领域 Event，再触发 HUD 和面板重新查询，失败分支不伪造成功事件。
 
@@ -130,12 +142,13 @@ alpha 0.1.0 的 HUD 移除武器卡片和属性详情，只保留生命、金币
 - alpha 0.1.4 的法力 HUD 与资源事件专项 EditMode 6/6、Main PlayMode 1/1 通过；全量 PlayMode 继续通过三档布局回归，1280×720 真实 Main 中生命 / 法力条无越界，停止运行后 Console 为零错误。
 - alpha 0.2.3 完成三语言 × 三分辨率布局矩阵；项目自有 PlayMode `48/48`、完整 PlayMode 52 项中 50 项通过、0 失败，2 项 Input System 上游用例按原标记跳过。
 - alpha 0.2.4 完成 Application Shell、FrontEnd、Busy / Modal / Toast / Fatal、返回确认和焦点隔离；EditMode `360/360`、项目 PlayMode `52/52`，完整 PlayMode 54 项中 52 项通过、0 失败，仍只跳过相同 2 项上游用例。
+- alpha 0.2.5 完成 Application 输入唯一 owner、Session Adapter、Context / suspension lease、重绑定、设备族、Glyph 与共享 Settings Page；三轮 FrontEnd → Main → FrontEnd 的 Asset Instance ID 保持不变。全量 EditMode `409/409`、项目 PlayMode `53/53`；完整 PlayMode 57 项中 55 项通过、0 失败，2 项仍为 Input System 上游既有 Ignore。
 
 以上数据是首版收尾时的验证记录；修改输入资产、菜单路由、UXML 或场景组件后，应重新验证键鼠与手柄两条路径。
 
 ## 当前限制
 
-- HUD、背包、商店、打造和详情已完成首版统一视觉；菜单切换仍以即时显隐为主，暂未加入完整过场动画与音效。
+- HUD、背包、商店、打造、详情和设置页已完成首版统一视觉；菜单切换仍以即时显隐为主，音频只接入首个 UI Confirm Cue。
 - 背包已支持鼠标拖拽与键盘 / 手柄拿起—放置的精确移动、单目标交换和装备换位；仍不支持旋转、堆叠、重量和自动整理。
 - 商店和打造共用首版单实例运行时数据；商人运行时库存已随 `auto` 存档恢复，但仍不支持多商人独立状态。
 - `Attack`、`Look` 尚未接入手动战斗操作。

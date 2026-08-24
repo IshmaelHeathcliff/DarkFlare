@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "family": "darkflare-input-glyphs",
+  "alpha_threshold": 8,
+  "canvas": {
+    "width": 64,
+    "height": 64
+  },
+  "alpha_required": true,
+  "assets": [
+    {
+      "name": "keyboard_keycap",
+      "image": "keyboard_keycap.png",
+      "visible_width": [50, 54],
+      "visible_height": [50, 54],
+      "alpha_coverage": [0.55, 0.75],
+      "visual_center_x": [30.5, 33.5],
+      "visual_center_y": [30.5, 33.5],
+      "bottom_margin": [5, 8],
+      "edge_clearance": 5
+    },
+    {
+      "name": "gamepad_button_south",
+      "image": "gamepad_button_south.png",
+      "visible_width": [46, 50],
+      "visible_height": [46, 50],
+      "alpha_coverage": [0.38, 0.55],
+      "visual_center_x": [30.5, 33.5],
+      "visual_center_y": [30.5, 33.5],
+      "bottom_margin": [7, 10],
+      "edge_clearance": 7
+    },
+    {
+      "name": "gamepad_button_east",
+      "image": "gamepad_button_east.png",
+      "visible_width": [46, 50],
+      "visible_height": [46, 50],
+      "alpha_coverage": [0.38, 0.55],
+      "visual_center_x": [30.5, 33.5],
+      "visual_center_y": [30.5, 33.5],
+      "bottom_margin": [7, 10],
+      "edge_clearance": 7
+    },
+    {
+      "name": "gamepad_button_west",
+      "image": "gamepad_button_west.png",
+      "visible_width": [46, 50],
+      "visible_height": [46, 50],
+      "alpha_coverage": [0.38, 0.55],
+      "visual_center_x": [30.5, 33.5],
+      "visual_center_y": [30.5, 33.5],
+      "bottom_margin": [7, 10],
+      "edge_clearance": 7
+    },
+    {
+      "name": "gamepad_button_north",
+      "image": "gamepad_button_north.png",
+      "visible_width": [46, 50],
+      "visible_height": [46, 50],
+      "alpha_coverage": [0.38, 0.55],
+      "visual_center_x": [30.5, 33.5],
+      "visual_center_y": [30.5, 33.5],
+      "bottom_margin": [7, 10],
+      "edge_clearance": 7
+    },
+    {
+      "name": "gamepad_start",
+      "image": "gamepad_start.png",
+      "visible_width": [48, 52],
+      "visible_height": [26, 30],
+      "alpha_coverage": [0.22, 0.38],
+      "visual_center_x": [30.5, 33.5],
+      "visual_center_y": [30.5, 33.5],
+      "bottom_margin": [16, 20],
+      "edge_clearance": 6
+    },
+    {
+      "name": "gamepad_dpad",
+      "image": "gamepad_dpad.png",
+      "visible_width": [48, 52],
+      "visible_height": [48, 52],
+      "alpha_coverage": [0.28, 0.48],
+      "visual_center_x": [30.5, 33.5],
+      "visual_center_y": [30.5, 33.5],
+      "bottom_margin": [6, 9],
+      "edge_clearance": 6
+    },
+    {
+      "name": "gamepad_left_stick",
+      "image": "gamepad_left_stick.png",
+      "visible_width": [46, 50],
+      "visible_height": [46, 50],
+      "alpha_coverage": [0.38, 0.55],
+      "visual_center_x": [30.5, 33.5],
+      "visual_center_y": [30.5, 33.5],
+      "bottom_margin": [7, 10],
+      "edge_clearance": 7
+    }
+  ],
+  "groups": []
+}

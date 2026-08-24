@@ -316,6 +316,7 @@ namespace DarkFlare.Tests
             LifecycleScope firstOwner = null;
             LifecycleScope duplicateOwner = null;
             LifecycleScope recreatedOwner = null;
+            ApplicationInputService inputService = new ApplicationInputService();
 
             try
             {
@@ -325,7 +326,9 @@ namespace DarkFlare.Tests
 
                 int generationBeforeStart = GameArchitectureProvider.Generation;
                 firstOwner = LifecycleScope.CreateRoot("Provider-Test-FirstOwner");
-                IArchitecture firstArchitecture = GameArchitectureProvider.StartSession(firstOwner);
+                IArchitecture firstArchitecture = GameArchitectureProvider.StartSession(
+                    firstOwner,
+                    inputService);
 
                 Assert.IsTrue(GameArchitectureProvider.HasCurrent);
                 Assert.AreSame(firstArchitecture, GameArchitectureProvider.RequireCurrent());
@@ -333,7 +336,7 @@ namespace DarkFlare.Tests
 
                 duplicateOwner = LifecycleScope.CreateRoot("Provider-Test-DuplicateOwner");
                 Assert.Throws<InvalidOperationException>(
-                    () => GameArchitectureProvider.StartSession(duplicateOwner));
+                    () => GameArchitectureProvider.StartSession(duplicateOwner, inputService));
                 Assert.Throws<InvalidOperationException>(
                     () => GameArchitectureProvider.StopSession(duplicateOwner));
 
@@ -346,7 +349,7 @@ namespace DarkFlare.Tests
 
                 recreatedOwner = LifecycleScope.CreateRoot("Provider-Test-RecreatedOwner");
                 IArchitecture recreatedArchitecture =
-                    GameArchitectureProvider.StartSession(recreatedOwner);
+                    GameArchitectureProvider.StartSession(recreatedOwner, inputService);
 
                 Assert.AreNotSame(firstArchitecture, recreatedArchitecture);
                 Assert.AreEqual(generationBeforeStart + 2, GameArchitectureProvider.Generation);
@@ -363,6 +366,7 @@ namespace DarkFlare.Tests
                 await StopScopeIfNeeded(firstOwner);
                 await StopScopeIfNeeded(duplicateOwner);
                 await StopScopeIfNeeded(recreatedOwner);
+                inputService.Dispose();
             }
         }
 
@@ -432,10 +436,11 @@ namespace DarkFlare.Tests
             LifecycleScope duplicateOwner = null;
             HangingRollbackInitializer initializer = new HangingRollbackInitializer();
             GameSessionHost session = null;
+            ApplicationInputService inputService = new ApplicationInputService();
 
             try
             {
-                session = new GameSessionHost(profileScope, 1, null);
+                session = new GameSessionHost(profileScope, 1, null, inputService);
                 LifecycleResult initializationResult = await session.InitializeAsync(initializer);
 
                 Assert.IsTrue(initializationResult.IsSuccess, initializationResult.Message);
@@ -460,7 +465,7 @@ namespace DarkFlare.Tests
                 duplicateOwner = LifecycleScope.CreateRoot(
                     "Lifecycle-Test-HangingRollback-Duplicate");
                 Assert.Throws<InvalidOperationException>(
-                    () => GameArchitectureProvider.StartSession(duplicateOwner));
+                    () => GameArchitectureProvider.StartSession(duplicateOwner, inputService));
 
                 initializer.Release();
                 await UniTask.WaitUntil(() => session.SessionScope.Tasks.TaskCount == 0)
@@ -486,6 +491,7 @@ namespace DarkFlare.Tests
                 GameArchitectureProvider.ResetStaticState();
                 await StopScopeIfNeeded(duplicateOwner);
                 await StopScopeIfNeeded(applicationScope);
+                inputService.Dispose();
             }
         }
 
@@ -501,10 +507,11 @@ namespace DarkFlare.Tests
             LifecycleScope duplicateOwner = null;
             GameSessionHost session = null;
             UniTaskCompletionSource release = new UniTaskCompletionSource();
+            ApplicationInputService inputService = new ApplicationInputService();
 
             try
             {
-                session = new GameSessionHost(profileScope, 1, null);
+                session = new GameSessionHost(profileScope, 1, null, inputService);
                 LifecycleResult initializationResult = await session.InitializeAsync(
                     new NoOpSessionInitializer());
 
@@ -561,9 +568,9 @@ namespace DarkFlare.Tests
                 duplicateOwner = LifecycleScope.CreateRoot(
                     "Lifecycle-Test-ComponentTaint-DuplicateOwner");
                 Assert.Throws<InvalidOperationException>(
-                    () => GameArchitectureProvider.StartSession(duplicateOwner));
+                    () => GameArchitectureProvider.StartSession(duplicateOwner, inputService));
                 Assert.Throws<InvalidOperationException>(
-                    () => new GameSessionHost(profileScope, 2, null));
+                    () => new GameSessionHost(profileScope, 2, null, inputService));
                 Assert.AreEqual(generation, GameArchitectureProvider.Generation);
 
                 await AwaitWithTimeout(profileScope.StopAsync());
@@ -586,6 +593,7 @@ namespace DarkFlare.Tests
                 await StopScopeIfNeeded(applicationScope);
                 GameArchitectureProvider.ResetStaticState();
                 await StopScopeIfNeeded(duplicateOwner);
+                inputService.Dispose();
             }
         }
 

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.SceneManagement;
 
 namespace DarkFlare
@@ -16,6 +18,11 @@ namespace DarkFlare
 
         static ApplicationHost s_current;
 
+        [SerializeField]
+        AudioServiceConfiguration _audioConfiguration;
+        AsyncOperationHandle<AudioServiceConfiguration> _audioConfigurationHandle;
+        bool _hasAudioConfigurationHandle;
+
         LifecycleScope _applicationScope;
         LifecycleScope _profileScope;
         GameSessionHost _session;
@@ -27,6 +34,10 @@ namespace DarkFlare
         ISettingsSerializer _settingsSerializer;
         ILocalSettingsStorage _settingsStorage;
         SettingsService _settingsService;
+        ApplicationInputService _inputService;
+        AudioService _audioService;
+        AccessibilityService _accessibilityService;
+        PlatformLifecycleService _platformLifecycleService;
         LocalizationService _localizationService;
         ISavePathProvider _savePathProvider;
         ISaveSerializer _saveSerializer;
@@ -46,6 +57,7 @@ namespace DarkFlare
         bool _sceneTransitionInProgress;
         bool _quitGateArmed;
         bool _allowQuit;
+        IDisposable _shutdownInputSuspension;
         UniTaskCompletionSource<LifecycleResult> _shutdownCompletion;
         UniTask _shutdownRunner;
         int _sessionSequence;
@@ -53,6 +65,8 @@ namespace DarkFlare
         int _lastNotifiedSessionGeneration;
 
         public static bool HasCurrent => s_current != null;
+
+        public static event Action<ApplicationInputService> InputReady;
 
         public static ApplicationHost Current
         {
@@ -84,6 +98,14 @@ namespace DarkFlare
         public ContentCatalogDefinition ContentCatalogDefinition => _contentCatalogDefinition;
 
         public SettingsService Settings => _settingsService;
+
+        public ApplicationInputService Input => _inputService;
+
+        public AudioService Audio => _audioService;
+
+        public AccessibilityService Accessibility => _accessibilityService;
+
+        public PlatformLifecycleService PlatformLifecycle => _platformLifecycleService;
 
         public LocalizationService Localization => _localizationService;
 
@@ -367,6 +389,7 @@ namespace DarkFlare
                     _profileScope,
                     _sessionSequence,
                     OnControlledSessionStopRequested,
+                    _inputService,
                     _itemInstanceIds);
                 _controlledStopSession = null;
                 return LifecycleResult.Success("待初始化 Session 已创建");
@@ -648,6 +671,10 @@ namespace DarkFlare
             }
 
             _shutdownStarted = true;
+            _platformLifecycleService?.BeginShutdown();
+            _shutdownInputSuspension = _inputService != null && !_inputService.IsClosed
+                ? _inputService.AcquireSuspension(InputSuspensionReason.Shutdown)
+                : null;
             _shutdownCompletion = new UniTaskCompletionSource<LifecycleResult>();
             State = ApplicationLifecycleState.ShuttingDown;
             _shutdownRunner = CompleteShutdownAsync().Preserve();
@@ -662,6 +689,7 @@ namespace DarkFlare
         internal static void ResetStaticState()
         {
             s_current = null;
+            InputReady = null;
         }
 
         void Awake()
@@ -676,6 +704,7 @@ namespace DarkFlare
             _ownsSingleton = true;
             _gameTimeService = GameTimeService.Shared;
             _gameTimeService.RestoreAll();
+            _gameTimeService.SetBaseTimeScale(1f);
             Application.wantsToQuit += OnWantsToQuit;
             DontDestroyOnLoad(gameObject);
             Boot();
@@ -684,6 +713,38 @@ namespace DarkFlare
         void OnApplicationQuit()
         {
             BeginShutdown();
+        }
+
+        void OnApplicationFocus(bool hasFocus)
+        {
+            PlatformLifecycleService service = _platformLifecycleService;
+
+            if (service == null)
+            {
+                return;
+            }
+
+            ForwardPlatformLifecycle(
+                hasFocus ? "platform-focus-restored" : "platform-focus-lost",
+                token => service.HandleFocusChangedAsync(
+                    hasFocus,
+                    token));
+        }
+
+        void OnApplicationPause(bool paused)
+        {
+            PlatformLifecycleService service = _platformLifecycleService;
+
+            if (service == null)
+            {
+                return;
+            }
+
+            ForwardPlatformLifecycle(
+                paused ? "platform-suspended" : "platform-resumed",
+                token => service.HandlePauseChangedAsync(
+                    paused,
+                    token));
         }
 
         void OnDestroy()
@@ -753,6 +814,15 @@ namespace DarkFlare
                         settingsResult.Exception);
                 }
 
+                _inputService = new ApplicationInputService(_settingsService);
+                InputReady?.Invoke(_inputService);
+                _audioService = new AudioService(transform, _settingsService);
+                _accessibilityService = new AccessibilityService(_settingsService);
+                _platformLifecycleService = new PlatformLifecycleService(
+                    _inputService,
+                    _audioService,
+                    GameTime,
+                    SavePlatformCheckpointAsync);
                 _localizationService = new LocalizationService(_settingsService);
                 _applicationScope.Tasks.Run(
                     "application-bootstrap",
@@ -769,6 +839,7 @@ namespace DarkFlare
         {
             try
             {
+                await InitializeAudioAsync(cancellationToken);
                 LocalizationOperationResult localizationResult =
                     await _localizationService.InitializeAsync(cancellationToken);
 
@@ -815,9 +886,100 @@ namespace DarkFlare
             _session?.BeginStop();
             _profileScope?.BeginStop();
             _localizationService?.Close();
+            _accessibilityService?.Dispose();
+            _platformLifecycleService?.Close();
+            _gameTimeService?.RestoreAll();
+            _audioService?.Dispose();
+            ReleaseAudioConfiguration();
+            _inputService?.Dispose();
+            _shutdownInputSuspension?.Dispose();
+            _shutdownInputSuspension = null;
             _settingsService?.Close();
             _applicationScope?.BeginStop();
             CompletePendingSceneRequest(false);
+        }
+
+        UniTask<SaveOperationResult> SavePlatformCheckpointAsync(
+            PlatformCheckpointUrgency urgency,
+            CancellationToken cancellationToken)
+        {
+            return SaveBeforeExitAsync(cancellationToken);
+        }
+
+        void ForwardPlatformLifecycle(
+            string operationName,
+            Func<CancellationToken, UniTask<PlatformLifecycleResult>> operation)
+        {
+            if (_platformLifecycleService == null
+                || _applicationScope == null
+                || !_applicationScope.CanAcceptWork
+                || _shutdownStarted)
+            {
+                return;
+            }
+
+            try
+            {
+                _applicationScope.Tasks.Run(
+                    operationName,
+                    async token =>
+                    {
+                        PlatformLifecycleResult result = await operation(token);
+
+                        if (!result.Succeeded
+                            && result.Code != PlatformLifecycleResultCode.Deferred
+                            && result.Code != PlatformLifecycleResultCode.Cancelled
+                            && result.Code != PlatformLifecycleResultCode.Closed)
+                        {
+                            Debug.LogWarning(
+                                $"[ApplicationHost] 平台生命周期 {operationName} 结果：{result.Code}",
+                                this);
+                        }
+                    },
+                    failurePolicy: LifecycleTaskFailurePolicy.Report);
+            }
+            catch (InvalidOperationException) when (
+                _shutdownStarted
+                || _applicationScope == null
+                || !_applicationScope.CanAcceptWork)
+            {
+            }
+        }
+
+        async UniTask InitializeAudioAsync(CancellationToken cancellationToken)
+        {
+            if (_audioConfiguration == null)
+            {
+                _audioConfigurationHandle =
+                    Addressables.LoadAssetAsync<AudioServiceConfiguration>(
+                        AudioServiceConfiguration.Address);
+                _hasAudioConfigurationHandle = true;
+                await _audioConfigurationHandle.ToUniTask(
+                    cancellationToken: cancellationToken);
+                _audioConfiguration = _audioConfigurationHandle.Result;
+            }
+
+            AudioOperationResult audioResult = _audioService.Configure(
+                _audioConfiguration);
+
+            if (!audioResult.Succeeded)
+            {
+                throw new InvalidOperationException(
+                    $"音频服务初始化失败：{audioResult.Code}",
+                    audioResult.Exception);
+            }
+        }
+
+        void ReleaseAudioConfiguration()
+        {
+            if (_hasAudioConfigurationHandle
+                && _audioConfigurationHandle.IsValid())
+            {
+                Addressables.Release(_audioConfigurationHandle);
+            }
+
+            _hasAudioConfigurationHandle = false;
+            _audioConfiguration = null;
         }
 
         void OnLifecycleTaskFailure(LifecycleTaskFailure failure)
@@ -1273,7 +1435,6 @@ namespace DarkFlare
             _sceneFlowService?.Dispose();
             _sceneFlowService = null;
             _sceneFlowConfiguration = null;
-            _gameTimeService?.RestoreAll();
 
             if (_saveCoordinator != null)
             {
@@ -1321,6 +1482,14 @@ namespace DarkFlare
             }
 
             _localizationService?.Close();
+            _accessibilityService?.Dispose();
+            _platformLifecycleService?.Close();
+            _gameTimeService?.RestoreAll();
+            _audioService?.Dispose();
+            ReleaseAudioConfiguration();
+            _inputService?.Dispose();
+            _shutdownInputSuspension?.Dispose();
+            _shutdownInputSuspension = null;
             _settingsService?.Close();
 
             if (_applicationScope != null)
@@ -1346,6 +1515,10 @@ namespace DarkFlare
             _contentCatalogDefinition = null;
             _itemInstanceIds = null;
             _localizationService = null;
+            _accessibilityService = null;
+            _platformLifecycleService = null;
+            _audioService = null;
+            _inputService = null;
             _settingsService = null;
             _settingsStorage = null;
             _settingsSerializer = null;
@@ -1437,14 +1610,21 @@ namespace DarkFlare
             _sceneFlowService?.Dispose();
             _sceneFlowService = null;
             _sceneFlowConfiguration = null;
-            _gameTimeService?.RestoreAll();
             _saveCoordinator?.EmergencyClose();
-            _localizationService?.Close();
-            _settingsService?.Close();
             LifecycleResult sessionResult = _session != null
                 ? _session.EmergencyStop()
                 : LifecycleResult.AlreadyCompleted();
             _session = null;
+            _localizationService?.Close();
+            _accessibilityService?.Dispose();
+            _platformLifecycleService?.Close();
+            _gameTimeService?.RestoreAll();
+            _audioService?.Dispose();
+            ReleaseAudioConfiguration();
+            _inputService?.Dispose();
+            _shutdownInputSuspension?.Dispose();
+            _shutdownInputSuspension = null;
+            _settingsService?.Close();
             _profileScope?.BeginStop();
             _applicationScope?.BeginStop();
             _profileScope = null;
@@ -1456,6 +1636,10 @@ namespace DarkFlare
             _contentCatalogDefinition = null;
             _itemInstanceIds = null;
             _localizationService = null;
+            _accessibilityService = null;
+            _platformLifecycleService = null;
+            _audioService = null;
+            _inputService = null;
             _settingsService = null;
             _settingsStorage = null;
             _settingsSerializer = null;

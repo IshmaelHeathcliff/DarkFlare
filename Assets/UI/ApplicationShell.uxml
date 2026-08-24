@@ -27,6 +27,11 @@
               <l:LocalizedString property="text" table="ui" entry="flow.front.new_game" />
             </Bindings>
           </ui:Button>
+          <ui:Button name="front-end-settings" class="front-end-action" text="">
+            <Bindings>
+              <l:LocalizedString property="text" table="ui" entry="settings.open" />
+            </Bindings>
+          </ui:Button>
           <ui:DropdownField name="front-end-language" class="front-end-language" />
           <ui:Button name="front-end-quit" class="front-end-action front-end-action--quiet" text="">
             <Bindings>
@@ -36,6 +41,60 @@
         </ui:VisualElement>
       </ui:VisualElement>
       <ui:Label name="front-end-version" class="front-end-version" />
+    </ui:VisualElement>
+
+    <ui:VisualElement name="application-settings" class="application-layer application-blocker application-settings" picking-mode="Position">
+      <ui:VisualElement class="application-settings-panel">
+        <ui:VisualElement class="application-settings-header">
+          <ui:Label class="application-settings-title" text="">
+            <Bindings>
+              <l:LocalizedString property="text" table="ui" entry="settings.title" />
+            </Bindings>
+          </ui:Label>
+          <ui:Button name="settings-back" class="application-settings-back" text="">
+            <Bindings>
+              <l:LocalizedString property="text" table="ui" entry="settings.back" />
+            </Bindings>
+          </ui:Button>
+        </ui:VisualElement>
+        <ui:ScrollView name="settings-scroll" class="application-settings-scroll">
+          <ui:VisualElement class="application-settings-section">
+            <ui:Label class="application-settings-section-title" text="">
+              <Bindings>
+                <l:LocalizedString property="text" table="ui" entry="settings.audio.title" />
+              </Bindings>
+            </ui:Label>
+            <ui:Slider name="settings-master-volume" class="application-settings-slider" low-value="0" high-value="1" show-input-field="True" />
+            <ui:Slider name="settings-music-volume" class="application-settings-slider" low-value="0" high-value="1" show-input-field="True" />
+            <ui:Slider name="settings-sfx-volume" class="application-settings-slider" low-value="0" high-value="1" show-input-field="True" />
+            <ui:Slider name="settings-ui-volume" class="application-settings-slider" low-value="0" high-value="1" show-input-field="True" />
+            <ui:Toggle name="settings-muted" class="application-settings-toggle" />
+          </ui:VisualElement>
+          <ui:VisualElement class="application-settings-section">
+            <ui:Label class="application-settings-section-title" text="">
+              <Bindings>
+                <l:LocalizedString property="text" table="ui" entry="settings.input.title" />
+              </Bindings>
+            </ui:Label>
+            <ui:DropdownField name="settings-glyph-preference" class="application-settings-dropdown" />
+            <ui:VisualElement name="settings-binding-list" class="application-settings-binding-list" />
+            <ui:Button name="settings-restore-defaults" class="application-settings-restore" text="">
+              <Bindings>
+                <l:LocalizedString property="text" table="ui" entry="settings.input.restore_defaults" />
+              </Bindings>
+            </ui:Button>
+          </ui:VisualElement>
+          <ui:VisualElement class="application-settings-section">
+            <ui:Label class="application-settings-section-title" text="">
+              <Bindings>
+                <l:LocalizedString property="text" table="ui" entry="settings.accessibility.title" />
+              </Bindings>
+            </ui:Label>
+            <ui:Toggle name="settings-reduce-motion" class="application-settings-toggle" />
+          </ui:VisualElement>
+        </ui:ScrollView>
+        <ui:Label name="settings-status" class="application-settings-status" />
+      </ui:VisualElement>
     </ui:VisualElement>
 
     <ui:VisualElement name="application-toast" class="application-layer application-toast" picking-mode="Ignore">

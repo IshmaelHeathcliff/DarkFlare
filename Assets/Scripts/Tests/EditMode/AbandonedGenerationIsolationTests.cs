@@ -34,10 +34,12 @@ namespace DarkFlare.Tests
             LifecycleScope replacementOwner = null;
             IgnoringCancellationInitializer initializer = new IgnoringCancellationInitializer();
             GameSessionHost session = null;
+            ApplicationInputService abandonedInputService = new ApplicationInputService();
+            ApplicationInputService replacementInputService = new ApplicationInputService();
 
             try
             {
-                session = CreateSession(profileScope);
+                session = CreateSession(profileScope, abandonedInputService);
                 int abandonedGeneration = GameArchitectureProvider.Generation;
                 UniTask<LifecycleResult> initialization = session.InitializeAsync(initializer);
                 UniTask<LifecycleResult> normalStop = session.StopAsync();
@@ -55,7 +57,9 @@ namespace DarkFlare.Tests
 
                 replacementOwner = LifecycleScope.CreateRoot("Replacement-Generation-Owner");
                 IArchitecture replacementArchitecture =
-                    GameArchitectureProvider.StartSession(replacementOwner);
+                    GameArchitectureProvider.StartSession(
+                        replacementOwner,
+                        replacementInputService);
                 int replacementGeneration = GameArchitectureProvider.Generation;
 
                 Assert.Greater(replacementGeneration, abandonedGeneration);
@@ -89,6 +93,8 @@ namespace DarkFlare.Tests
 
                 await profileScope.StopAsync().Timeout(Timeout, DelayType.Realtime);
                 ResetProvider();
+                abandonedInputService.Dispose();
+                replacementInputService.Dispose();
             }
         }
 
@@ -126,7 +132,9 @@ namespace DarkFlare.Tests
             Assert.AreEqual(LifecycleScopeState.Abandoned, scope.State);
         }
 
-        static GameSessionHost CreateSession(LifecycleScope profileScope)
+        static GameSessionHost CreateSession(
+            LifecycleScope profileScope,
+            ApplicationInputService inputService)
         {
             ConstructorInfo constructor = typeof(GameSessionHost).GetConstructor(
                 BindingFlags.Instance | BindingFlags.NonPublic,
@@ -136,6 +144,7 @@ namespace DarkFlare.Tests
                     typeof(LifecycleScope),
                     typeof(int),
                     typeof(Action<GameSessionHost, string>),
+                    typeof(ApplicationInputService),
                     typeof(IItemInstanceIdGenerator)
                 },
                 null);
@@ -146,6 +155,7 @@ namespace DarkFlare.Tests
                 profileScope,
                 1,
                 null,
+                inputService,
                 null
             });
         }

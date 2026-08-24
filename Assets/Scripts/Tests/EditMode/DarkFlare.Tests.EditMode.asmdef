@@ -13,6 +13,7 @@
         "Unity.TextMeshPro",
         "Unity.InputSystem",
         "Unity.InputSystem.TestFramework",
+        "Unity.Addressables.Editor",
         "Unity.Newtonsoft.Json",
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner"

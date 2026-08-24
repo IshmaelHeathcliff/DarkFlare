@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -10,11 +11,21 @@ namespace DarkFlare.Tests
     {
         static InputTestFixture s_activeFixture;
 
-        public static void Setup(InputTestFixture fixture)
+        public static IEnumerator Setup(InputTestFixture fixture)
         {
+            bool replacesRuntime = s_activeFixture == null;
+            bool restartApplication = false;
+
+            if (replacesRuntime
+                && ApplicationHost.TryGetCurrent(out ApplicationHost host))
+            {
+                UnityEngine.Object.DestroyImmediate(host.gameObject);
+                restartApplication = true;
+            }
+
             RunWithUiInputDisabled(() =>
             {
-                if (s_activeFixture == null)
+                if (replacesRuntime)
                 {
                     fixture.Setup();
                     s_activeFixture = fixture;
@@ -23,6 +34,16 @@ namespace DarkFlare.Tests
 
                 RemoveTestDevices();
             });
+
+            if (restartApplication)
+            {
+                GameObject hostObject = new GameObject("[ApplicationHost]");
+                hostObject.AddComponent<ApplicationHost>();
+                yield return null;
+                SceneFlowPlayModeFixture sceneFlowFixture =
+                    new SceneFlowPlayModeFixture();
+                yield return sceneFlowFixture.EnterFrontEnd();
+            }
         }
 
         public static void TearDown(InputTestFixture fixture)
@@ -52,7 +73,6 @@ namespace DarkFlare.Tests
                 if (modules[i] != null && modules[i].enabled)
                 {
                     modules[i].enabled = false;
-                    modules[i].UnassignActions();
                     enabledModules.Add(modules[i]);
                 }
             }
@@ -62,15 +82,6 @@ namespace DarkFlare.Tests
             try
             {
                 action();
-
-                for (int i = 0; i < enabledModules.Count; i++)
-                {
-                    InputSystemUIInputModule module = enabledModules[i];
-                    if (module != null)
-                    {
-                        module.AssignDefaultActions();
-                    }
-                }
             }
             finally
             {

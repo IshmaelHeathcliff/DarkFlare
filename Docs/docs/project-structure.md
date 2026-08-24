@@ -10,7 +10,9 @@ DarkFlare/
     design/
     docs/
       infrastructure/
+        accessibility-platform-lifecycle.md
         application-lifecycle.md
+        application-audio.md
         content-identity-migration.md
         local-save.md
         user-settings-localization.md
@@ -30,7 +32,7 @@ DarkFlare/
 ## Assets 目录
 
 ```text
-Assets/
+  Assets/
   AddressableAssetsData/
   Art/
     Animations/
@@ -50,6 +52,13 @@ Assets/
       Environment/Ground/
     Textures/
       Prototype/
+    UI/
+      InputGlyphs/
+  Audio/
+    AudioServiceConfiguration.asset
+    DarkFlareAudioMixer.mixer
+    UI/
+      ui_confirm.wav
   Data/
     Preset/
     Saves/
@@ -73,6 +82,14 @@ Assets/
         DarkFlare.Core.asmdef
         QFramework.cs
       Infrastructure/
+        Accessibility/
+          AccessibilityContracts.cs
+          AccessibilityService.cs
+        Audio/
+          AudioClipLoader.cs
+          AudioService.cs
+          AudioServiceConfiguration.cs
+          AudioServiceContracts.cs
         Content/
         Flow/
           GameFlowContracts.cs
@@ -81,6 +98,11 @@ Assets/
           SceneLoader.cs
           UnitySceneLoader.cs
         Identity/
+        Input/
+          ApplicationInputContracts.cs
+          ApplicationInputModuleBinder.cs
+          ApplicationInputService.cs
+          InputGlyphResolver.cs
         Lifecycle/
           ApplicationBootstrap.cs
           ApplicationHost.cs
@@ -118,8 +140,12 @@ Assets/
           SettingsService.cs
         Time/
           GameTimeService.cs
+        Platform/
+          PlatformLifecycleContracts.cs
+          PlatformLifecycleService.cs
         UI/
           ApplicationFrontEndController.cs
+          ApplicationSettingsController.cs
           ApplicationShellBootstrap.cs
           ApplicationShellController.cs
       Data/
@@ -165,8 +191,12 @@ Assets/
       EditMode/                       # 程序集 DarkFlare.Tests.EditMode
         DarkFlare.Tests.EditMode.asmdef
         AbandonedGenerationIsolationTests.cs
+        AccessibilityAndPlatformLifecycleTests.cs
+        Alpha025ProductionAssetTests.cs
+        ApplicationInputServiceTests.cs
         ApplicationLifecycleTests.cs
         ArchitectureExceptionSafetyTests.cs
+        AudioServiceTests.cs
         GroundTilemapTests.cs
         InfrastructurePolicyExceptions.json
         InfrastructurePolicyTests.cs
@@ -181,6 +211,7 @@ Assets/
         DarkFlare.Tests.PlayMode.asmdef
         ApplicationHostSceneTransitionPlayModeTests.cs
         ApplicationLifecyclePlayModeTests.cs
+        Alpha025InputOwnershipPlayModeTests.cs
         SceneSessionComponentBindingPlayModeTests.cs
         SaveCaptureRestorePlayModeTests.cs
         SessionObjectRegistryOwnershipPlayModeTests.cs
@@ -274,7 +305,7 @@ Addressables 的配置目录，包含资源组、模板和构建器配置。后�
 | `DarkFlare.Core` | `Runtime/Core/` | 全部 | 无（仅 `QFramework.cs`，稳定框架层，隔离后迭代玩法不再重编框架） |
 | `DarkFlare.Runtime` | `Runtime/` | 全部 | `DarkFlare.Core`、`UniTask`、`Unity.InputSystem`、`Unity.Addressables`、`Unity.ResourceManager`、`Unity.Newtonsoft.Json`、`Unity.Localization` |
 | `DarkFlare.Editor` | `Editor/` | 仅 Editor | `DarkFlare.Runtime`、`DarkFlare.Core` |
-| `DarkFlare.Tests.EditMode` | `Tests/EditMode/` | 仅 Editor | `DarkFlare.Runtime`、`DarkFlare.Core`、`Unity.InputSystem`、`Unity.InputSystem.TestFramework`、`Unity.Newtonsoft.Json`、`UnityEngine.TestRunner`、`UnityEditor.TestRunner`、`nunit.framework.dll`、`Newtonsoft.Json.dll` |
+| `DarkFlare.Tests.EditMode` | `Tests/EditMode/` | 仅 Editor | `DarkFlare.Runtime`、`DarkFlare.Core`、`Unity.InputSystem`、`Unity.InputSystem.TestFramework`、`Unity.Addressables.Editor`、`Unity.Newtonsoft.Json`、`UnityEngine.TestRunner`、`UnityEditor.TestRunner`、`nunit.framework.dll`、`Newtonsoft.Json.dll` |
 | `DarkFlare.Tests.PlayMode` | `Tests/PlayMode/` | 全部 | `DarkFlare.Runtime`、`DarkFlare.Core`、`UniTask` 及 Unity 测试依赖；覆盖场景循环、生命周期、输入、装备、随机化与运行时资源加载 |
 
 依赖方向单向向上、无环：`Core ← Runtime ← {Editor, Tests}`。`GameArchitecture.cs` 作为组合根依赖全部玩法模块，因此位于 `Runtime/` 根而非 `Core/`。测试程序集带 `defineConstraints: ["UNITY_INCLUDE_TESTS"]`，仅在测试运行时参与编译，不进入 Player 包。Odin 等预编译 DLL 默认对所有程序集可见，无需在 asmdef 中显式引用。
@@ -282,7 +313,7 @@ Addressables 的配置目录，包含资源组、模板和构建器配置。后�
 `Runtime/` 下的子目录职责：
 
 - `Core`：基础架构与全局入口（独立成 `DarkFlare.Core` 程序集）
-- `Infrastructure`：应用宿主、作用域、Session、统一任务取消、架构所有权、内容目录、稳定实例身份、DTO / 迁移、本地存储、Restore、用户设置、本地化、场景流、应用时间和 UI 外壳
+- `Infrastructure`：应用宿主、作用域、Session、统一任务取消、架构所有权、内容目录、稳定实例身份、DTO / 迁移、本地存储、Restore、用户设置、本地化、场景流、应用时间、输入、音频、可访问性、平台生命周期和 UI 外壳
 - `Data`：数据定义与配置类型
 - `Gameplay`：玩法逻辑
 - `UI`：界面逻辑（占位）
@@ -300,7 +331,11 @@ Addressables 的配置目录，包含资源组、模板和构建器配置。后�
 - `Infrastructure/Settings`：`SettingsModels.cs`、`SettingsSerializer.cs`、`SettingsPathProvider.cs`、`LocalSettingsStorage.cs`、`SettingsService.cs`、`LocalizationService.cs`、`LocalizedContentReference.cs`、`LocalizedMessage.cs`；实现 Settings V1、原子持久化、迁移、Application 启动门禁、Locale latest-wins、表预热、缺失回退和语义文本引用
 - `Infrastructure/Flow`：`GameFlowContracts.cs`、`SceneFlowConfiguration.cs`、`SceneLoader.cs`、`UnitySceneLoader.cs`、`SceneFlowService.cs`；实现稳定状态 / SceneId、集中场景注册、唯一 Runtime Scene API、latest-wins 事务、阶段进度和失败补偿
 - `Infrastructure/Time/GameTimeService.cs`：实现有主 pause lease、基础倍率恢复与唯一 `Time.timeScale` 写入
-- `Infrastructure/UI`：`ApplicationShellBootstrap.cs`、`ApplicationShellController.cs`、`ApplicationFrontEndController.cs`；实现 Bootstrap FrontEnd、Busy / Modal / Toast / Fatal 和焦点恢复
+- `Infrastructure/Input`：`ApplicationInputService.cs`、`ApplicationInputModuleBinder.cs`、`ApplicationInputContracts.cs`、`InputGlyphResolver.cs`；实现唯一 Action Asset owner、Context / suspension lease、重绑定、设备族、Glyph 和 Bootstrap UI Module 绑定
+- `Infrastructure/Audio`：`AudioService.cs`、`AudioServiceConfiguration.cs`、`AudioServiceContracts.cs`、`AudioClipLoader.cs`；实现四类 Mixer 路由、Addressables Cue、Source 池、有主句柄和精确释放
+- `Infrastructure/Accessibility`：`AccessibilityContracts.cs`、`AccessibilityService.cs`；实现 Settings 驱动的 MotionProfile
+- `Infrastructure/Platform`：`PlatformLifecycleContracts.cs`、`PlatformLifecycleService.cs`；实现 Focus / Suspend / Resume、检查点和输入 / 时间 / 音频编排
+- `Infrastructure/UI`：`ApplicationShellBootstrap.cs`、`ApplicationShellController.cs`、`ApplicationFrontEndController.cs`、`ApplicationSettingsController.cs`；实现 Bootstrap FrontEnd、共享 Settings Page、Busy / Modal / Toast / Fatal 和焦点恢复
 - `GameArchitecture.cs`（位于 `Runtime/` 根，Session 组合根；由 `GameArchitectureProvider` 独占创建与销毁，已注册 `GameInput`、`CombatModel`/`EquipmentModel`/`InventoryModel`/`EconomyModel`、`CombatSystem`/`SpawnSystem`/`LootSystem`/`TradingSystem`/`CraftingSystem`/`GameplayPauseSystem`、`PrefabAssetLoader` 与 `SessionObjectRegistry`）
 - `Data/Tags/TagDefinition.cs`、`Data/Tags/TagQueryDefinition.cs`（标签目录元数据与结构化查询）
 - `Data/Stats/StatDefinition.cs`
@@ -324,7 +359,7 @@ Addressables 的配置目录，包含资源组、模板和构建器配置。后�
 - `Gameplay/Spawning`：`MonsterSpawner.cs`
 - `Gameplay/Loot`：`LootPickupController.cs`
 - `Gameplay/Bootstrap`：`CombatPrototypeBootstrap.cs`、`GameplaySceneConfiguration.cs`、`NewGameSessionInitializer.cs`、`CameraFollowTarget.cs`；Main Bootstrap 只组装场景配置，由 Scene Flow 选择 initializer，NewGame initializer 负责可回滚的新游戏事务，Restore initializer 位于 `Infrastructure/Persistence`
-- `Gameplay/Input`：`GameInput.cs`（输入封装、Gameplay/UI Action Map 切换与交互事件）、`InputSystem_Actions.cs`（由输入资产自动生成的 C# 包装类）
+- `Gameplay/Input`：`GameInput.cs`（Session 非所有权输入 Adapter 与玩法事件）、`InputSystem_Actions.cs`（由输入资产自动生成的 C# 包装类）
 - `Gameplay/Interaction`：`WorldInteractionTarget.cs`、`PlayerInteractionController.cs`、`GameplayPauseSystem.cs` 与 `Commands/`，负责最近世界目标、情境菜单请求和集中暂停
 - `Gameplay/Events/GameplayEvents.cs`：金币、背包、装备、打造、交易、交互焦点、菜单请求、暂停和 Actor 注册 / 注销领域事件
 - `Gameplay/UI/GetHudSnapshotQuery.cs`、`HudController.cs`：生命、金币和最终有效属性的只读 HUD 快照与事件驱动控制器
@@ -340,6 +375,7 @@ Addressables 的配置目录，包含资源组、模板和构建器配置。后�
 - `Tests/EditMode/SaveDataContractTests.cs`、`SaveSerializerTests.cs`、`LocalSaveStorageTests.cs`、`SaveRestorePreparerTests.cs`、`SaveCoordinatorTests.cs`：覆盖完整存档 DTO、校验、SHA-256 / 迁移、临时写和两代文件、损坏回退、内容预检、请求合并、Flush 超时与异常结算
 - `Tests/EditMode/Settings*Tests.cs`、`LocalizationServiceTests.cs`、`LocalizationPolicyTests.cs`：覆盖 Settings 合同与存储、Locale 并发切换、六张职责表、正式内容引用、硬编码文本策略和字体字符集
 - `Tests/EditMode/Alpha024*Tests.cs` 与 `Tests/PlayMode/Alpha024SceneFlowPlayModeTests.cs`：覆盖 Scene Flow 合同 / 配置、场景与时间策略、Bootstrap 冷启动、NewGame / Continue、取消 / 替代、恢复、暂停、返回和三次循环
+- `Tests/EditMode/ApplicationInputServiceTests.cs`、`AudioServiceTests.cs`、`AccessibilityAndPlatformLifecycleTests.cs`、`Alpha025ProductionAssetTests.cs` 与 `Tests/PlayMode/Alpha025InputOwnershipPlayModeTests.cs`：覆盖 Application 输入、重绑定 / Glyph、Audio、Reduce Motion、Platform 生命周期、生产资产和设置页双入口
 - `Tests/EditMode/Alpha01TagMigrationCharacterizationTests.cs` 与既有 EditMode 测试：覆盖标签查询、域隔离、物品—词条候选矩阵、伤害血统、旧接口兼容、纯逻辑、原子换装、交易和打造事务语义、键鼠 / 手柄输入、Action Map 切换、交互消息、暂停及 HUD/背包/商店/打造快照。归属 `DarkFlare.Tests.EditMode` 程序集
 - `Tests/PlayMode/ApplicationLifecyclePlayModeTests.cs`：覆盖冷启动唯一性、取消回滚、并发请求、连续 Session、场景卸载和直接 `Main` 重载
 - `Tests/PlayMode/ApplicationHostSceneTransitionPlayModeTests.cs`：覆盖每 generation 一次 `SessionRunning` 通知、回滚中的重载、三次快速请求 latest-wins、挂起回滚 / 作用域超时有界收敛，以及受控停止 / Shutdown / Emergency 终态隔离
@@ -349,7 +385,7 @@ Addressables 的配置目录，包含资源组、模板和构建器配置。后�
 
 `UI`、`Utilities` 目前主要是占位，为后续模块扩展预留。
 
-**首版玩法循环和 `alpha 0.2.0–0.2.4` 基础设施已完成**：当前已覆盖输入、UIToolkit HUD / 背包装备 / 商店 / 打造 / 场景交互，以及唯一应用宿主、Session 重建、稳定身份、内容目录、DTO / 迁移、`auto` 本地存档 / Restore、Settings V1、中英运行时本地化、Bootstrap / Main Scene Flow、Game Time 和 Application Shell。运行流程见 [`gameplay-loop.md`](gameplay-loop.md)，生命周期见[应用生命周期与会话作用域](infrastructure/application-lifecycle.md)，身份与迁移见[稳定身份、内容目录与迁移框架](infrastructure/content-identity-migration.md)，持久化见[本地存档与 Session 恢复](infrastructure/local-save.md)，设置与语言见[用户设置与本地化](infrastructure/user-settings-localization.md)，场景状态与 Shell 见[游戏状态、场景流与应用 UI 外壳](infrastructure/game-state-scene-flow-ui-shell.md)，输入与玩法 UI 见 [`input-ui-system.md`](input-ui-system.md)；完成过程保存在 [`plan/archive/`](plan/archive/README.md)。
+**首版玩法循环和 `alpha 0.2.0–0.2.5` 基础设施已完成**：当前已覆盖 UIToolkit HUD / 背包装备 / 商店 / 打造 / 场景交互，以及唯一应用宿主、Session 重建、稳定身份、内容目录、DTO / 迁移、`auto` 本地存档 / Restore、Settings V1、中英运行时本地化、Bootstrap / Main Scene Flow、Game Time、Application Shell、应用级输入 / 重绑定 / Glyph、Audio、Reduce Motion 和 Platform Lifecycle。运行流程见 [`gameplay-loop.md`](gameplay-loop.md)，生命周期见[应用生命周期与会话作用域](infrastructure/application-lifecycle.md)，身份与迁移见[稳定身份、内容目录与迁移框架](infrastructure/content-identity-migration.md)，持久化见[本地存档与 Session 恢复](infrastructure/local-save.md)，设置与语言见[用户设置与本地化](infrastructure/user-settings-localization.md)，场景状态与 Shell 见[游戏状态、场景流与应用 UI 外壳](infrastructure/game-state-scene-flow-ui-shell.md)，输入与玩法 UI 见 [`input-ui-system.md`](input-ui-system.md)，音频见 [Application Audio](infrastructure/application-audio.md)，降低动态与平台挂起见[可访问性与平台生命周期](infrastructure/accessibility-platform-lifecycle.md)；完成过程保存在 [`plan/archive/`](plan/archive/README.md)。
 
 ### `Assets/Settings`
 
@@ -358,6 +394,7 @@ Addressables 的配置目录，包含资源组、模板和构建器配置。后�
 - 输入系统配置（`InputSystem_Actions.inputactions`，含 `Keyboard&Mouse` 与 `Gamepad` 两套控制方案；现已作为唯一输入源并自动生成 C# 包装类）
 - UIToolkit 面板与文本配置（`UI/GamePanelSettings.asset`、`UI/GamePanelTextSettings.asset`，参考分辨率 1920×1080）
 - UI 字体链（动态 `UI/Fonts/GameCjkFont.asset` → `GameLatinFont.asset`）
+- Application Audio 配置（`Audio/AudioServiceConfiguration.asset`、`Audio/DarkFlareAudioMixer.mixer` 与 `Audio/UI/ui_confirm.wav`）
 - URP 配置
 - 场景相关设置资源
 

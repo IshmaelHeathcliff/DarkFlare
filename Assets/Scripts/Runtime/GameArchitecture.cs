@@ -4,7 +4,6 @@ namespace DarkFlare
     {
         protected override void Init()
         {
-            this.RegisterUtility(new GameInput());
             this.RegisterUtility(new SessionObjectRegistry());
             this.RegisterUtility<IItemInstanceIdGenerator>(new UuidItemInstanceIdGenerator());
             this.RegisterUtility<IRunInstanceIdGenerator>(RunInstanceIdGenerator.Create());
@@ -34,7 +33,7 @@ namespace DarkFlare
             this.GetUtility<VisualEffectPool>().ReleaseAll();
             this.GetUtility<SpriteAssetLoader>().ReleaseAll();
             this.GetUtility<PrefabAssetLoader>().ReleaseAll();
-            this.GetUtility<GameInput>().Dispose();
+            this.GetUtility<GameInput>()?.Dispose();
         }
     }
 }

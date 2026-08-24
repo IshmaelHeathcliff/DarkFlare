@@ -2,17 +2,17 @@
 
 > 状态：规划期强制契约
 > 建立日期：2026-08-17
-> 最近更新：2026-08-21
+> 最近更新：2026-08-24
 > 适用范围：`alpha 0.2` 全部实现、迁移、测试和后续新增运行时代码
 > 上位计划：[alpha 0.2 基础设施开发计划](./alpha-0.2-plan.md)
-> 已落地模块：[应用生命周期与会话作用域](../infrastructure/application-lifecycle.md)（`alpha 0.2.0`）、[稳定身份、内容目录与迁移框架](../infrastructure/content-identity-migration.md)（`alpha 0.2.1`）、[本地存档与 Session 恢复](../infrastructure/local-save.md)（`alpha 0.2.2`）、[用户设置与本地化](../infrastructure/user-settings-localization.md)（`alpha 0.2.3`）、[游戏状态、场景流与应用 UI 外壳](../infrastructure/game-state-scene-flow-ui-shell.md)（`alpha 0.2.4`）
-> 当前阶段：`alpha 0.2.5` 输入、音频、可访问性与平台生命周期，待开始
+> 已落地模块：[应用生命周期与会话作用域](../infrastructure/application-lifecycle.md)（`alpha 0.2.0`）、[稳定身份、内容目录与迁移框架](../infrastructure/content-identity-migration.md)（`alpha 0.2.1`）、[本地存档与 Session 恢复](../infrastructure/local-save.md)（`alpha 0.2.2`）、[用户设置与本地化](../infrastructure/user-settings-localization.md)（`alpha 0.2.3`）、[游戏状态、场景流与应用 UI 外壳](../infrastructure/game-state-scene-flow-ui-shell.md)（`alpha 0.2.4`）、[输入与运行时 UI](../input-ui-system.md)、[Application Audio](../infrastructure/application-audio.md)、[可访问性与平台生命周期](../infrastructure/accessibility-platform-lifecycle.md)（`alpha 0.2.5`）
+> 当前阶段：`alpha 0.2.5` 已完成；`alpha 0.2.6` 日志、错误处理与 Addressables 资源治理待开始
 
 ## 使用方式
 
 本文使用“必须”“禁止”“允许”表达强制级别。阶段实现可以在独立执行计划中补充细节，但不能静默绕过本文。确需例外时，必须提交机器可读白名单，记录规则、文件、原因和移除阶段，并在版本封板前复核。
 
-本文是规划期契约，不代表当前代码已经全部符合。`alpha 0.2.0` 已落地唯一宿主、作用域、Session 事务、统一取消、架构 lease / generation 隔离和场景组件安全绑定；`alpha 0.2.1` 已落地稳定内容 / 实例身份、Application 内容目录、纯 DTO 和迁移链；`alpha 0.2.2` 已落地确定性文件存档、代际提交与损坏回退、完整快照、Restore Session 和退出 Flush；`alpha 0.2.3` 已落地 Settings V1、运行时本地化、正式内容引用、字体 fallback 和玩家文本策略；`alpha 0.2.4` 已落地 Bootstrap / Main 双场景、完整 Scene Flow、Game Time Service、Application UI Shell、FrontEnd 与保存后返回前台。输入、音频、可访问性、平台生命周期、日志和资源治理仍由后续阶段完成。现有技术债在对应阶段迁移；新增代码不得扩大债务面。
+本文是规划期契约，不代表当前代码已经全部符合。`alpha 0.2.0–0.2.4` 已落地应用生命周期、身份 / 迁移、存档、设置 / 本地化和场景流 / UI Shell；`alpha 0.2.5` 已落地 Application 级唯一输入 owner、重绑定、设备 Glyph、共享 Settings Page、Audio Service、Reduce Motion 与 Platform Lifecycle。结构化日志、进程级异常处理和通用 Addressables 资源治理仍由 `alpha 0.2.6` 完成。现有技术债在对应阶段迁移；新增代码不得扩大债务面。
 
 ## 基础设施总清单
 
@@ -169,6 +169,13 @@
 - 可访问性项必须记录实际消费者、目标范围和测试方式；禁止只保存但不应用。
 - 降低动态效果等设置必须能够覆盖 PrimeTween、特效或镜头表现的统一入口，而不是在各 Controller 写分支。
 
+## 平台生命周期规范
+
+- `ApplicationHost` 是 Focus、Pause 和 Quit 回调的唯一 Unity 入口；业务组件不得直接编排平台恢复。
+- Focus Lost 与 Suspend 使用可叠加原因，恢复只能释放 Platform 自己持有的输入和时间 lease。
+- 每次连续挂起 episode 最多提交一个检查点；无 Session、Busy、失败、超时和取消必须返回结构化结果。
+- 恢复顺序先刷新设备，再恢复音频，最后恢复输入；关闭先阻止新平台事务，再进入既有 Quit Flush。
+
 ## 日志、异常与玩家错误规范
 
 - 生产 Runtime 只通过 Logger 记录；除 Logger Adapter 外禁止直接 `Debug.Log*`。
@@ -196,6 +203,9 @@
 | `Debug.Log*` | Logger | Logger Adapter、第三方包 |
 | `Addressables.*` | Asset Service / Loader | Loader 实现与 Editor 验证工具 |
 | `Keyboard.current` / `Gamepad.current` 等 | GameInput / Input Service | 输入实现与输入测试 |
+| `AudioSource` / `AudioListener` / `AudioMixer` | Audio Service | 音频配置与音频测试 |
+| `OnApplicationFocus` / `OnApplicationPause` | ApplicationHost → Platform Lifecycle Service | 生命周期测试 |
+| binding override API | Application Input Service | 输入实现与输入测试 |
 | `Time.timeScale =` | Time / Pause Service | Time Service 实现 |
 | `UnityEngine.Random` / 临时 `System.Random` | GameplayRandomSystem | 纯视觉随机须登记独立非玩法入口 |
 | 保存 `UnityEngine.Object` / GUID / 路径 | ContentId + InstanceId DTO | 无 |
@@ -211,7 +221,8 @@
 | 可见文本必须本地化 | C# / UXML / 配置扫描 + String Table 完整性测试 |
 | Runtime 只经 Logger | 调用点扫描 + Logger Sink 测试 |
 | Addressables 只经 Loader | 调用点扫描 + 句柄生命周期测试 |
-| 输入只经 GameInput | 调用点扫描 + 键鼠 / 手柄 PlayMode 测试 |
+| 输入只经 Application Input Service / GameInput Adapter | 调用点扫描 + 键鼠 / 手柄 PlayMode 测试 |
+| 音频与平台回调只有唯一 owner | 调用点扫描 + 故障注入 + Application 生命周期 PlayMode |
 | 时间与随机使用唯一入口 | 调用点扫描 + 固定时间 / 固定种子测试 |
 | DTO 不含 Unity 引用 | 反射结构测试 + Round-trip 测试 |
 | Schema 变更必须有迁移 | 版本登记测试 + 历史夹具迁移测试 |

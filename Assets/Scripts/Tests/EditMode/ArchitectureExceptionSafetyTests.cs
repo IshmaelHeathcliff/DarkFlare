@@ -78,10 +78,11 @@ namespace DarkFlare.Tests
         {
             LifecycleScope normalOwner = LifecycleScope.CreateRoot("Provider-NormalStop-Test");
             LifecycleScope emergencyOwner = null;
+            ApplicationInputService inputService = new ApplicationInputService();
 
             try
             {
-                GameArchitectureProvider.StartSession(normalOwner);
+                GameArchitectureProvider.StartSession(normalOwner, inputService);
 
                 Assert.Throws<InvalidOperationException>(
                     () => GameArchitectureProvider.StopSession(normalOwner));
@@ -92,7 +93,7 @@ namespace DarkFlare.Tests
                 Assert.IsFalse(GameArchitectureProvider.HasCurrent);
 
                 emergencyOwner = LifecycleScope.CreateRoot("Provider-EmergencyStop-Test");
-                GameArchitectureProvider.StartSession(emergencyOwner);
+                GameArchitectureProvider.StartSession(emergencyOwner, inputService);
                 MethodInfo emergencyStop = typeof(GameArchitectureProvider).GetMethod(
                     "EmergencyStopSession",
                     BindingFlags.NonPublic | BindingFlags.Static);
@@ -108,6 +109,7 @@ namespace DarkFlare.Tests
                 StopProviderOwnerIfNeeded();
                 StopScopeIfNeeded(normalOwner);
                 StopScopeIfNeeded(emergencyOwner);
+                inputService.Dispose();
             }
         }
 

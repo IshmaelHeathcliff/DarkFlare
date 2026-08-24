@@ -9,6 +9,7 @@ namespace DarkFlare.Tests
 
         LifecycleScope _ownerScope;
         IArchitecture _architecture;
+        ApplicationInputService _inputService;
 
         public IArchitecture Architecture => _architecture
             ?? throw new InvalidOperationException("测试 Session 尚未启动");
@@ -22,16 +23,21 @@ namespace DarkFlare.Tests
 
             int sequence = Interlocked.Increment(ref s_sequence);
             LifecycleScope ownerScope = LifecycleScope.CreateRoot($"EditMode-TestSession-{sequence}");
+            ApplicationInputService inputService = new ApplicationInputService();
 
             try
             {
-                IArchitecture architecture = GameArchitectureProvider.StartSession(ownerScope);
+                IArchitecture architecture = GameArchitectureProvider.StartSession(
+                    ownerScope,
+                    inputService);
                 _ownerScope = ownerScope;
                 _architecture = architecture;
+                _inputService = inputService;
                 return architecture;
             }
             catch
             {
+                inputService.Dispose();
                 ownerScope.BeginStop();
                 ownerScope.StopAsync().GetAwaiter().GetResult();
                 throw;
@@ -61,8 +67,10 @@ namespace DarkFlare.Tests
             }
             finally
             {
+                _inputService?.Dispose();
                 _ownerScope = null;
                 _architecture = null;
+                _inputService = null;
             }
         }
     }

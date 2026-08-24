@@ -37,17 +37,30 @@ namespace DarkFlare
 
         public static int Generation => s_generation;
 
-        public static IArchitecture StartSession(LifecycleScope ownerScope)
+        public static IArchitecture StartSession(
+            LifecycleScope ownerScope,
+            ApplicationInputService inputService)
         {
-            return StartOwnedSession(ownerScope).Architecture;
+            return StartOwnedSession(ownerScope, inputService).Architecture;
         }
 
         public static GameArchitectureSessionLease StartOwnedSession(
-            LifecycleScope ownerScope)
+            LifecycleScope ownerScope,
+            ApplicationInputService inputService)
         {
             if (ownerScope == null)
             {
                 throw new ArgumentNullException(nameof(ownerScope));
+            }
+
+            if (inputService == null)
+            {
+                throw new ArgumentNullException(nameof(inputService));
+            }
+
+            if (inputService.IsClosed)
+            {
+                throw new ObjectDisposedException(nameof(inputService));
             }
 
             if (ownerScope.State != LifecycleScopeState.Active)
@@ -64,10 +77,14 @@ namespace DarkFlare
             int generation = AdvanceGeneration();
             s_ownerScope = ownerScope;
             s_currentGeneration = generation;
+            GameInput gameInput = null;
 
             try
             {
-                s_current = GameArchitecture.Interface;
+                IArchitecture architecture = GameArchitecture.Interface;
+                gameInput = new GameInput(inputService);
+                architecture.RegisterUtility(gameInput);
+                s_current = architecture;
                 return new GameArchitectureSessionLease(
                     s_current,
                     ownerScope,
@@ -75,6 +92,7 @@ namespace DarkFlare
             }
             catch
             {
+                gameInput?.Dispose();
                 s_ownerScope = null;
                 s_current = null;
                 s_currentGeneration = 0;

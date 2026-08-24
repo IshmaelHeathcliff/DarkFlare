@@ -141,7 +141,11 @@ namespace DarkFlare.Tests
                 "SaveCoordinatorTests",
                 taskStopTimeout: TimeSpan.FromSeconds(1d));
             LifecycleScope profileScope = applicationScope.CreateChild("Profile");
-            GameSessionHost session = CreateGameSessionHost(profileScope, 1);
+            ApplicationInputService inputService = new ApplicationInputService();
+            GameSessionHost session = CreateGameSessionHost(
+                profileScope,
+                1,
+                inputService);
             ContentCatalogDefinition definition = AssetDatabase.LoadAssetAtPath<ContentCatalogDefinition>(
                 "Assets/Data/Preset/Content/正式内容目录.asset");
             ContentCatalogBuildResult catalogBuild = ContentCatalog.Build(definition);
@@ -167,6 +171,7 @@ namespace DarkFlare.Tests
             return new CoordinatorFixture(
                 applicationScope,
                 session,
+                inputService,
                 coordinator,
                 source,
                 storage,
@@ -198,7 +203,8 @@ namespace DarkFlare.Tests
 
         static GameSessionHost CreateGameSessionHost(
             LifecycleScope profileScope,
-            int sequence)
+            int sequence,
+            ApplicationInputService inputService)
         {
             ConstructorInfo constructor = typeof(GameSessionHost).GetConstructor(
                 BindingFlags.Instance | BindingFlags.NonPublic,
@@ -208,12 +214,13 @@ namespace DarkFlare.Tests
                     typeof(LifecycleScope),
                     typeof(int),
                     typeof(Action<GameSessionHost, string>),
+                    typeof(ApplicationInputService),
                     typeof(IItemInstanceIdGenerator)
                 },
                 null);
             Assert.IsNotNull(constructor);
             return (GameSessionHost)constructor.Invoke(
-                new object[] { profileScope, sequence, null, null });
+                new object[] { profileScope, sequence, null, inputService, null });
         }
 
         static void ResetArchitectureProvider()
@@ -229,10 +236,12 @@ namespace DarkFlare.Tests
         {
             readonly LifecycleScope _applicationScope;
             readonly GameSessionHost _session;
+            readonly ApplicationInputService _inputService;
 
             public CoordinatorFixture(
                 LifecycleScope applicationScope,
                 GameSessionHost session,
+                ApplicationInputService inputService,
                 SaveCoordinator coordinator,
                 FakeSnapshotSource source,
                 LocalSaveStorage storage,
@@ -240,6 +249,7 @@ namespace DarkFlare.Tests
             {
                 _applicationScope = applicationScope;
                 _session = session;
+                _inputService = inputService;
                 Coordinator = coordinator;
                 Source = source;
                 Storage = storage;
@@ -261,6 +271,7 @@ namespace DarkFlare.Tests
                 _applicationScope.BeginStop();
                 await _applicationScope.StopAsync();
                 ResetArchitectureProvider();
+                _inputService.Dispose();
             }
         }
 

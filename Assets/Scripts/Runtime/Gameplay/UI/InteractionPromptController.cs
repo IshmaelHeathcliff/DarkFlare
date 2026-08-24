@@ -79,6 +79,7 @@ namespace DarkFlare
 
             _focusRegistration = this.RegisterEvent<InteractionFocusChangedEvent>(OnFocusChanged);
             _gameInput.ModeChanged += OnInputModeChanged;
+            _gameInput.BindingDisplayChanged += RefreshPrompt;
             BindLocalization();
             RefreshPrompt();
             return SceneSessionBindResult.Success;
@@ -89,6 +90,7 @@ namespace DarkFlare
             if (_gameInput != null)
             {
                 _gameInput.ModeChanged -= OnInputModeChanged;
+                _gameInput.BindingDisplayChanged -= RefreshPrompt;
             }
 
             _focusRegistration?.UnRegister();

@@ -7,18 +7,22 @@ namespace DarkFlare.Tests
 {
     public class GameInputTests : InputTestFixture
     {
+        ApplicationInputService _service;
         GameInput _input;
 
         public override void Setup()
         {
             base.Setup();
-            _input = new GameInput();
+            _service = new ApplicationInputService();
+            _input = new GameInput(_service);
         }
 
         public override void TearDown()
         {
             _input?.Dispose();
             _input = null;
+            _service?.Dispose();
+            _service = null;
             base.TearDown();
         }
 
@@ -94,12 +98,12 @@ namespace DarkFlare.Tests
         }
 
         [Test]
-        public void InteractBindingDisplayString_ComesFromConfiguredBindings()
+        public void InteractBindingDisplayString_UsesOnlyCurrentDisplayFamily()
         {
             string displayName = _input.GetInteractBindingDisplayString();
 
             Assert.IsFalse(string.IsNullOrWhiteSpace(displayName));
-            StringAssert.Contains(" / ", displayName);
+            StringAssert.DoesNotContain(" / ", displayName);
             StringAssert.DoesNotContain("<Keyboard>", displayName);
             StringAssert.DoesNotContain("<Gamepad>", displayName);
         }
@@ -142,6 +146,18 @@ namespace DarkFlare.Tests
             Assert.GreaterOrEqual(navigateCount, 1);
             Assert.AreEqual(1, cancelCount);
             Assert.AreEqual(GameInputMode.UI, _input.CurrentMode);
+        }
+
+        [Test]
+        public void Dispose_DoesNotCloseOwnerAndRestoresUiContext()
+        {
+            _input.Dispose();
+
+            Assert.IsFalse(_service.IsClosed);
+            Assert.AreEqual(InputContext.UI, _service.CurrentContext);
+            Assert.IsFalse(_service.IsGameplayEnabled);
+            Assert.IsTrue(_service.IsUiEnabled);
+            Assert.IsNotNull(_service.ActionAsset);
         }
     }
 }

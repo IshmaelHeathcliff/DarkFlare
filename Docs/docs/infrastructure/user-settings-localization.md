@@ -1,5 +1,7 @@
 # 用户设置与本地化
 
+> 状态：`alpha 0.2.3` 已完成；`alpha 0.2.5` 已接入 Audio、Input 与 Reduce Motion 真实消费者；最近更新：2026-08-24
+
 本模块负责本地用户设置的持久化、语言切换、字符串表预载、内容名称引用，以及 UI Toolkit / TextMesh Pro 的字体回退。运行时入口由 `ApplicationHost` 持有，业务 UI 只消费 `SettingsService` 与 `LocalizationService`，不直接访问文件系统或 `LocalizationSettings`。
 
 ## 运行时边界
@@ -8,6 +10,21 @@
 - `LocalizationService` 支持 `Auto`、`SimplifiedChinese`、`English` 三种用户偏好，最终解析为 `zh-Hans` 或 `en`。语言切换采用 latest-wins：新请求取消旧请求，完成字符串表预载后再提交设置并广播 `LocaleChanged`。
 - 启动预载表固定为 `ui`、`system`、`items`、`stats`、`affixes`、`monsters`。当前语言缺失条目时回退 `zh-Hans`，仍缺失则显示 `[table.key]`，不静默返回旧语言文本。
 - `qps-ploc` 只用于 Editor 回归，不写入用户设置。其字符替换与扩展配置必须保持在字体链覆盖范围内。
+
+Settings Schema 仍为 1。`UserSettingsSnapshot` 使用 `WithLanguage`、`WithAudio`、`WithInput` 和 `WithReduceMotion` 生成不可变候选值；输入、音频和可访问性服务先尝试原子提交，失败时恢复旧运行时状态，不允许磁盘与内存设置分叉。
+
+## Application Settings Page
+
+`ApplicationSettingsController` 绑定常驻 Shell 中的共享设置页，可从 FrontEnd 或暂停菜单打开。页面关闭后恢复来源页面与焦点；从 Main 打开时继续保留菜单的 UI Context 和 pause lease。
+
+当前玩家可操作项：
+
+- Master、Music、SFX、UI 音量与全局静音；
+- Keyboard & Mouse / Gamepad 的正式 Action 重绑定、冲突反馈、取消、超时和恢复默认；
+- 自动 / 键鼠 / 手柄 Glyph 偏好；
+- 降低动态效果。
+
+Text Scale、High Contrast、Screen Shake 与 Display Mode 尚无完整运行时消费者，因此不显示在页面中。输入重绑定与 Glyph 合同见[输入与运行时 UI](../input-ui-system.md)，Mixer 应用与失败回滚见 [Application Audio](./application-audio.md)，Reduce Motion 见[可访问性与平台生命周期](./accessibility-platform-lifecycle.md)。
 
 ## LocalizedContentReference
 
@@ -46,4 +63,5 @@
 - 正式内容表必须与正式资产引用精确一致，不允许缺键、空翻译、孤儿条目或错误表名。
 - UXML 玩家文本必须通过 `LocalizedString` 绑定，或登记为由 Controller 负责的动态文本；迁移过的运行时路径禁止重新加入玩家可见中文字符串字面量。
 - `Phase1UxPlayModeTests` 在 `1280×720`、`1920×1080`、`2560×1440` 下验证 `zh-Hans`、`en` 与 `qps-ploc`，检查关键区域边界、重叠和可见文本裁切。
+- `Alpha025ProductionAssetTests` 验证 Settings Page 控件、38 个新增中英条目、Glyph 资产与 Audio 配置；输入、音频和可访问性测试覆盖提交失败回滚。
 - 新增正式内容类型或字段时，先更新对应配置参考与 `coverage-manifest.json`，再添加字符串表键和正式资产引用。

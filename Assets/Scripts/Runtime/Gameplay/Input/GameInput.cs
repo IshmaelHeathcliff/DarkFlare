@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -13,10 +12,31 @@ namespace DarkFlare
 
     public sealed class GameInput : IUtility, IDisposable
     {
-        readonly InputSystem_Actions _actions;
+        readonly ApplicationInputService _inputService;
 
-        bool _hasMode;
+        bool _cancelSwitchPending;
         bool _disposed;
+
+        public GameInput(ApplicationInputService inputService)
+        {
+            _inputService = inputService
+                ?? throw new ArgumentNullException(nameof(inputService));
+
+            if (_inputService.IsClosed)
+            {
+                throw new ObjectDisposedException(nameof(inputService));
+            }
+
+            _inputService.InteractPerformed += OnInteract;
+            _inputService.ToggleMenuPerformed += OnToggleMenu;
+            _inputService.NavigatePerformed += OnNavigate;
+            _inputService.RearrangePerformed += OnRearrange;
+            _inputService.CancelPerformed += OnCancel;
+            _inputService.ContextChanged += OnContextChanged;
+            _inputService.BindingsChanged += OnBindingDisplayChanged;
+            _inputService.GlyphChanged += OnBindingDisplayChanged;
+            SwitchToGameplay();
+        }
 
         public event Action InteractPerformed;
 
@@ -28,30 +48,21 @@ namespace DarkFlare
 
         public event Action<GameInputMode> ModeChanged;
 
-        public GameInputMode CurrentMode { get; private set; }
+        public event Action BindingDisplayChanged;
 
-        public Vector2 Move => _disposed ? Vector2.zero : _actions.Player.Move.ReadValue<Vector2>();
+        public GameInputMode CurrentMode => ToGameInputMode(_inputService.CurrentContext);
 
-        public bool IsGameplayEnabled => !_disposed && _actions.Player.enabled;
+        public Vector2 Move => _disposed ? Vector2.zero : _inputService.Move;
 
-        public bool IsUiEnabled => !_disposed && _actions.UI.enabled;
+        public bool IsGameplayEnabled => !_disposed && _inputService.IsGameplayEnabled;
+
+        public bool IsUiEnabled => !_disposed && _inputService.IsUiEnabled;
 
         public string GetInteractBindingDisplayString()
         {
             return _disposed
                 ? string.Empty
-                : GetBindingDisplayString(_actions.Player.Interact);
-        }
-
-        public GameInput()
-        {
-            _actions = new InputSystem_Actions();
-            _actions.Player.Interact.performed += OnInteract;
-            _actions.Player.ToggleMenu.performed += OnToggleMenu;
-            _actions.UI.Navigate.performed += OnNavigate;
-            _actions.UI.Rearrange.performed += OnRearrange;
-            _actions.UI.Cancel.performed += OnCancel;
-            SwitchToGameplay();
+                : _inputService.GetInteractBindingDisplayString();
         }
 
         public void SwitchToGameplay()
@@ -71,20 +82,19 @@ namespace DarkFlare
                 return;
             }
 
-            _actions.Player.Interact.performed -= OnInteract;
-            _actions.Player.ToggleMenu.performed -= OnToggleMenu;
-            _actions.UI.Navigate.performed -= OnNavigate;
-            _actions.UI.Rearrange.performed -= OnRearrange;
-            _actions.UI.Cancel.performed -= OnCancel;
-            _actions.Disable();
+            _inputService.InteractPerformed -= OnInteract;
+            _inputService.ToggleMenuPerformed -= OnToggleMenu;
+            _inputService.NavigatePerformed -= OnNavigate;
+            _inputService.RearrangePerformed -= OnRearrange;
+            _inputService.CancelPerformed -= OnCancel;
+            _inputService.ContextChanged -= OnContextChanged;
+            _inputService.BindingsChanged -= OnBindingDisplayChanged;
+            _inputService.GlyphChanged -= OnBindingDisplayChanged;
+            CancelPendingContextSwitch();
 
-            if (Application.isPlaying)
+            if (!_inputService.IsClosed)
             {
-                _actions.Dispose();
-            }
-            else
-            {
-                UnityEngine.Object.DestroyImmediate(_actions.asset);
+                _inputService.SwitchContext(InputContext.UI);
             }
 
             InteractPerformed = null;
@@ -92,6 +102,7 @@ namespace DarkFlare
             NavigatePerformed = null;
             CancelRequested = null;
             ModeChanged = null;
+            BindingDisplayChanged = null;
             _disposed = true;
         }
 
@@ -102,56 +113,78 @@ namespace DarkFlare
                 throw new ObjectDisposedException(nameof(GameInput));
             }
 
-            if (_hasMode && CurrentMode == mode)
-            {
-                return;
-            }
-
-            if (mode == GameInputMode.Gameplay)
-            {
-                _actions.UI.Disable();
-                _actions.Player.Enable();
-            }
-            else
-            {
-                _actions.Player.Disable();
-                _actions.UI.Enable();
-            }
-
-            CurrentMode = mode;
-            _hasMode = true;
-            Debug.Log($"[GameInput] 输入模式切换为 {mode}");
-            ModeChanged?.Invoke(mode);
+            _inputService.SwitchContext(ToInputContext(mode));
         }
 
-        void OnToggleMenu(InputAction.CallbackContext context)
+        void OnToggleMenu()
         {
             SwitchToUi();
         }
 
-        void OnInteract(InputAction.CallbackContext context)
+        void OnInteract()
         {
             InteractPerformed?.Invoke();
         }
 
-        void OnNavigate(InputAction.CallbackContext context)
+        void OnNavigate(Vector2 value)
         {
-            NavigatePerformed?.Invoke(context.ReadValue<Vector2>());
+            NavigatePerformed?.Invoke(value);
         }
 
-        void OnRearrange(InputAction.CallbackContext context)
+        void OnRearrange()
         {
             RearrangePerformed?.Invoke();
         }
 
-        void OnCancel(InputAction.CallbackContext context)
+        void OnCancel()
         {
             if (TryHandleCancelRequest())
             {
                 return;
             }
 
+            if (_cancelSwitchPending)
+            {
+                return;
+            }
+
+            _cancelSwitchPending = true;
+            InputSystem.onAfterUpdate += OnAfterInputUpdate;
+        }
+
+        void OnAfterInputUpdate()
+        {
+            CancelPendingContextSwitch();
+
+            if (_disposed
+                || _inputService.IsClosed
+                || CurrentMode != GameInputMode.UI)
+            {
+                return;
+            }
+
             SwitchToGameplay();
+        }
+
+        void CancelPendingContextSwitch()
+        {
+            if (!_cancelSwitchPending)
+            {
+                return;
+            }
+
+            InputSystem.onAfterUpdate -= OnAfterInputUpdate;
+            _cancelSwitchPending = false;
+        }
+
+        void OnContextChanged(InputContext context)
+        {
+            ModeChanged?.Invoke(ToGameInputMode(context));
+        }
+
+        void OnBindingDisplayChanged()
+        {
+            BindingDisplayChanged?.Invoke();
         }
 
         bool TryHandleCancelRequest()
@@ -175,34 +208,30 @@ namespace DarkFlare
             return handled;
         }
 
-        static string GetBindingDisplayString(InputAction action)
+        static InputContext ToInputContext(GameInputMode mode)
         {
-            if (action == null)
+            switch (mode)
             {
-                return string.Empty;
+                case GameInputMode.Gameplay:
+                    return InputContext.Gameplay;
+                case GameInputMode.UI:
+                    return InputContext.UI;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(mode), mode, null);
             }
+        }
 
-            List<string> displayNames = new List<string>();
-
-            for (int i = 0; i < action.bindings.Count; i++)
+        static GameInputMode ToGameInputMode(InputContext context)
+        {
+            switch (context)
             {
-                InputBinding binding = action.bindings[i];
-
-                if (binding.isComposite || binding.isPartOfComposite)
-                {
-                    continue;
-                }
-
-                string displayName = action.GetBindingDisplayString(i);
-
-                if (!string.IsNullOrWhiteSpace(displayName)
-                    && !displayNames.Contains(displayName))
-                {
-                    displayNames.Add(displayName);
-                }
+                case InputContext.Gameplay:
+                    return GameInputMode.Gameplay;
+                case InputContext.UI:
+                    return GameInputMode.UI;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(context), context, null);
             }
-
-            return string.Join(" / ", displayNames);
         }
     }
 }

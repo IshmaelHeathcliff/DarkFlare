@@ -1,12 +1,12 @@
 # alpha 0.2.5 输入、音频、可访问性与平台生命周期执行计划
 
-> 状态：进行中；切片 0 已完成，切片 1 待执行
+> 状态：已完成（2026-08-24）；切片 0–6 全部验收
 > 建立日期：2026-08-21
 > 规划基线：`04f6d31`（`alpha 0.2.4` 完成提交）
 > 实施前置：`alpha 0.2.4` 已独立提交，工作区干净；后续实现不得回写或混入上一阶段
-> 上位计划：[alpha 0.2 基础设施开发计划](./alpha-0.2-plan.md)
-> 强制契约：[alpha 0.2 基础设施约束契约](./alpha-0.2-infrastructure-contract.md)
-> 前置模块：[应用生命周期与会话作用域](../infrastructure/application-lifecycle.md)、[用户设置与本地化](../infrastructure/user-settings-localization.md)、[游戏状态、场景流与应用 UI 外壳](../infrastructure/game-state-scene-flow-ui-shell.md)、[输入与运行时 UI](../input-ui-system.md)
+> 上位计划：[alpha 0.2 基础设施开发计划](../alpha-0.2-plan.md)
+> 强制契约：[alpha 0.2 基础设施约束契约](../alpha-0.2-infrastructure-contract.md)
+> 前置模块：[应用生命周期与会话作用域](../../infrastructure/application-lifecycle.md)、[用户设置与本地化](../../infrastructure/user-settings-localization.md)、[游戏状态、场景流与应用 UI 外壳](../../infrastructure/game-state-scene-flow-ui-shell.md)、[输入与运行时 UI](../../input-ui-system.md)
 
 ## 阶段结论
 
@@ -19,12 +19,12 @@
 ## 实施进度
 
 - [x] 切片 0：特征测试、合同与资产清单冻结
-- [ ] 切片 1：Application Input Service 与 Session 适配
-- [ ] 切片 2：重绑定、设备族、Glyph 与设置页面
-- [ ] 切片 3：AudioMixer、Audio Service 与首个真实 Cue
-- [ ] 切片 4：降低动态效果与平台生命周期
-- [ ] 切片 5：跨模块故障演练、策略与回归
-- [ ] 切片 6：模块文档、综合验收与计划归档
+- [x] 切片 1：Application Input Service 与 Session 适配（[执行计划](./alpha-0.2.5-slice-1-application-input-plan.md)）
+- [x] 切片 2：重绑定、设备族、Glyph 与设置页面
+- [x] 切片 3：AudioMixer、Audio Service 与首个真实 Cue
+- [x] 切片 4：降低动态效果与平台生命周期
+- [x] 切片 5：跨模块故障演练、策略与回归
+- [x] 切片 6：模块文档、综合验收与计划归档
 
 ### 切片 0 完成记录（2026-08-21）
 
@@ -36,6 +36,25 @@
 - Settings 继续使用 Schema 1；测试确认 Audio、Input 和 Accessibility 三个预留域均已存在且有效，不新增迁移。
 - 五份新增脚本通过 Unity 标准校验，均为 0 warning / 0 error；0.2.5 合同专项 `10/10`、项目 EditMode `369/369`、完整 EditMode `370/370` 通过。
 - 本切片未创建运行时服务、AudioMixer、Glyph、设置页面或平台回调，也未修改 ApplicationHost、GameArchitecture、场景和现有运行行为。
+
+### 切片 1 完成记录（2026-08-24）
+
+- Application 级 `ApplicationInputService` 已持有唯一运行时 Action Asset、Gameplay / UI Context 和引用计数 suspension lease；Application Shutdown 获取 Shutdown suspension 后，最终按反向创建顺序释放输入服务。
+- Session 级 `GameInput` 已收缩为 QFramework Adapter；`GameSessionHost` / `GameArchitectureProvider` 要求显式输入依赖，Session Deinit 不再释放 Application Action Asset。
+- Bootstrap `InputSystemUIInputModule` 已由 Binder 绑定同一运行时 Asset 及显式 UI ActionReference，服务关闭前会先停用并解绑模块；Host 重建能够恢复绑定。
+- 三轮 FrontEnd → Main → FrontEnd 保持同一 Asset Instance ID，Context 分别恢复为 Gameplay / UI；原有 Tab / Start、Escape / 东键、导航、拖拽和四槽装备输入路径保持通过。
+- 本切片最终全量 EditMode `378/378`、项目 PlayMode `51/51`；完整 PlayMode 55 项中 53 项通过、0 失败，2 项仍为 Input System 上游既有 Ignore。
+- 输入重绑定、设备族 / Glyph、设置页面和真实 Focus / Platform suspension 消费仍属于切片 2 及后续范围。
+
+### 切片 2–6 完成记录（2026-08-24）
+
+- 输入重绑定已覆盖正式 Action 与 Composite Part、冲突、取消、超时、设备拔出、恢复默认、Settings 持久化 / 回滚；设备族与偏好驱动交互提示和设置页只显示一套 Glyph。
+- FrontEnd 与 Paused Game Menu 已共用 Application Settings Page；新增 PlayMode 直接验证两入口，关闭页面不会释放菜单 pause lease 或切回 Gameplay Context。
+- `DarkFlareAudioMixer`、`AudioServiceConfiguration`、专用 Addressables Clip Loader、Source 池和有主播放句柄已落地；首个 `ui.confirm` Cue 具有来源记录并由真实 Application UI 消费。
+- Reduce Motion 已由 `LootPickupVisual` 和 `DamageNumberVisual` 消费；Platform Lifecycle 已统一 Focus / Suspend / Resume、设备刷新、输入 / 时间 lease、Audio 和每个挂起 episode 的唯一检查点。
+- 策略与故障测试冻结 Runtime 设备、binding override、AudioSource / AudioListener / Mixer 和平台回调的唯一 owner，并覆盖 Settings 失败、待加载 owner 取消、并发、保存 Busy / 失败 / 超时 / 取消与 Shutdown。
+- 最终全量 EditMode `409/409`、项目 PlayMode `53/53`；完整 PlayMode 57 项中 55 项通过、0 失败，2 项仍为 Input System 上游 issue 1252825 的既有 Ignore。
+- 输入、Audio、可访问性 / 平台模块文档已同步；`InputSystem_Actions.inputactions`、Settings Schema、Save / Content Schema 与 `Docs/design/` 均未修改。
 
 ## 已确认基线
 
@@ -227,13 +246,15 @@ Active
 
 ### 切片 1：Application Input Service 与 Session 适配
 
-- 建立 Application Input Service，持有唯一 runtime Action Asset、InputContext、suspension lease 和设备状态。
+详细执行顺序、文件边界与验证矩阵见[切片 1 执行计划](./alpha-0.2.5-slice-1-application-input-plan.md)。
+
+- 建立 Application Input Service，持有唯一 runtime Action Asset、InputContext 和 suspension lease；设备族识别在切片 2 完成。
 - 调整 ApplicationHost 启动 / 关闭顺序并暴露只读服务入口。
 - 将 QFramework `GameInput` 改为非所有权 Adapter；standalone 测试使用显式 owner fixture。
 - 让 Bootstrap `InputSystemUIInputModule` 绑定同一 runtime Action Asset，验证 FrontEnd 与 Main 共用覆盖。
 - 保持现有 Gameplay / UI 模式、菜单 Cancel、键盘 / 手柄移动和交互行为不变。
 
-验收：连续三次 Session 只有一个 Action Asset owner 和一组全局设备订阅；Session Dispose 不破坏 FrontEnd UI 导航。
+验收：连续三次 Session 只有一个 Action Asset owner，且不存在 Session 级设备订阅；Session Dispose 不破坏 FrontEnd UI 导航。
 
 ### 切片 2：重绑定、设备族、Glyph 与设置页面
 

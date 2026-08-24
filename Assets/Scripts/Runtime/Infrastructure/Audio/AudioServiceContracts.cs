@@ -128,4 +128,59 @@ namespace DarkFlare
             return new AudioOperationResult(code, cueId, exception);
         }
     }
+
+    public sealed class AudioPlaybackResult
+    {
+        public AudioOperationResult Operation { get; }
+
+        public AudioPlaybackHandle Handle { get; }
+
+        public bool Succeeded => Operation != null && Operation.Succeeded && Handle != null;
+
+        internal AudioPlaybackResult(
+            AudioOperationResult operation,
+            AudioPlaybackHandle handle)
+        {
+            Operation = operation ?? throw new ArgumentNullException(nameof(operation));
+            Handle = handle;
+        }
+    }
+
+    public sealed class AudioPlaybackHandle : IDisposable
+    {
+        AudioService _service;
+        readonly int _playbackId;
+        readonly AudioCueId _cueId;
+
+        internal AudioPlaybackHandle(
+            AudioService service,
+            int playbackId,
+            AudioCueId cueId)
+        {
+            _service = service ?? throw new ArgumentNullException(nameof(service));
+            _playbackId = playbackId;
+            _cueId = cueId;
+        }
+
+        public bool IsReleased => _service == null;
+
+        public AudioOperationResult Stop()
+        {
+            AudioService service = _service;
+            _service = null;
+            return service == null
+                ? AudioOperationResult.AlreadyCompleted(_cueId)
+                : service.StopPlayback(_playbackId, _cueId);
+        }
+
+        public void Dispose()
+        {
+            Stop();
+        }
+
+        internal void MarkReleased()
+        {
+            _service = null;
+        }
+    }
 }

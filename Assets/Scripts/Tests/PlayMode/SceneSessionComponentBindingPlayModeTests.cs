@@ -19,6 +19,7 @@ namespace DarkFlare.Tests
         Scene _temporaryScene;
         LifecycleScope _isolatedApplicationScope;
         GameSessionHost _isolatedSession;
+        ApplicationInputService _isolatedInputService;
         UniTaskCompletionSource _isolatedTaskRelease;
         SceneSessionBinding _isolatedBinding;
 
@@ -52,6 +53,8 @@ namespace DarkFlare.Tests
             }
 
             _isolatedSession = null;
+            _isolatedInputService?.Dispose();
+            _isolatedInputService = null;
             _isolatedApplicationScope = null;
             _isolatedTaskRelease = null;
 
@@ -234,7 +237,11 @@ namespace DarkFlare.Tests
                 taskStopTimeout: System.TimeSpan.FromMilliseconds(50d));
             LifecycleScope profileScope = _isolatedApplicationScope.CreateChild(
                 "SceneSessionBinding-TaintedScene-Profile");
-            _isolatedSession = CreateGameSessionHost(profileScope, 1);
+            _isolatedInputService = new ApplicationInputService();
+            _isolatedSession = CreateGameSessionHost(
+                profileScope,
+                1,
+                _isolatedInputService);
             LifecycleResult sceneBindResult = _isolatedSession.BindScene(
                 owner.gameObject.scene);
             Assert.IsTrue(sceneBindResult.IsSuccess, sceneBindResult.Message);
@@ -305,7 +312,8 @@ namespace DarkFlare.Tests
 
         static GameSessionHost CreateGameSessionHost(
             LifecycleScope profileScope,
-            int sequence)
+            int sequence,
+            ApplicationInputService inputService)
         {
             ConstructorInfo constructor = typeof(GameSessionHost).GetConstructor(
                 BindingFlags.Instance | BindingFlags.NonPublic,
@@ -315,12 +323,13 @@ namespace DarkFlare.Tests
                     typeof(LifecycleScope),
                     typeof(int),
                     typeof(System.Action<GameSessionHost, string>),
+                    typeof(ApplicationInputService),
                     typeof(IItemInstanceIdGenerator)
                 },
                 null);
             Assert.IsNotNull(constructor, "未找到 GameSessionHost 内部构造函数");
             return (GameSessionHost)constructor.Invoke(
-                new object[] { profileScope, sequence, null, null });
+                new object[] { profileScope, sequence, null, inputService, null });
         }
 
         static void ResetArchitectureProvider()

@@ -72,15 +72,23 @@ namespace DarkFlare
             LifecycleScope profileScope,
             int sequence,
             Action<GameSessionHost, string> controlledStopRequested,
+            ApplicationInputService inputService,
             IItemInstanceIdGenerator itemInstanceIds = null)
         {
+            if (inputService == null)
+            {
+                throw new ArgumentNullException(nameof(inputService));
+            }
+
             _controlledStopRequested = controlledStopRequested;
             SessionScope = profileScope.CreateChild($"Session-{sequence}");
             SceneScope = SessionScope.CreateChild($"Scene-{sequence}");
 
             try
             {
-                _architectureLease = GameArchitectureProvider.StartOwnedSession(SessionScope);
+                _architectureLease = GameArchitectureProvider.StartOwnedSession(
+                    SessionScope,
+                    inputService);
                 _architecture = _architectureLease.Architecture;
 
                 if (itemInstanceIds != null)

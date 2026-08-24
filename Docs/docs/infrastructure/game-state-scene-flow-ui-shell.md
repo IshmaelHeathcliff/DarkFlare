@@ -1,6 +1,6 @@
 # 游戏状态、场景流与应用 UI 外壳
 
-> 状态：`alpha 0.2.4` 已完成；最近更新：2026-08-21
+> 状态：`alpha 0.2.4` 已完成；`alpha 0.2.5` 已扩展共享 Settings Page；最近更新：2026-08-24
 >
 > 参考：[归档计划](../plan/archive/alpha-0.2.4-game-state-scene-flow-ui-shell-plan.md) · [基础设施约束契约](../plan/alpha-0.2-infrastructure-contract.md) · [应用生命周期与会话作用域](./application-lifecycle.md)
 
@@ -40,8 +40,9 @@
 | `ApplicationHost` | 安装内容目录、创建 Scene Flow / Time Service、Continue 预检、Session 启停和退出门禁 |
 | `CombatPrototypeBootstrap` | 只组装 `GameplaySceneConfiguration`，不再在 `Start` 自动创建新游戏 |
 | `ApplicationShellBootstrap` | 等待 Application Ready，安装正式目录、配置 Scene Flow、绑定 Shell 并进入 FrontEnd |
-| `ApplicationShellController` | FrontEnd、Busy、Modal、Toast、Fatal 表现和焦点恢复 |
-| `ApplicationFrontEndController` | 新游戏、继续、语言和退出入口；不依赖 `GameArchitecture` |
+| `ApplicationShellController` | FrontEnd、Settings、Busy、Modal、Toast、Fatal 表现、UI Confirm Cue 和焦点恢复 |
+| `ApplicationFrontEndController` | 新游戏、继续、语言、设置和退出入口；不依赖 `GameArchitecture` |
+| `ApplicationSettingsController` | FrontEnd / Paused 共用音频、输入、Glyph 与 Reduce Motion 设置事务 |
 
 业务 Controller 不得调用 `SceneManager`、存档 Storage 或 Session initializer。游戏内菜单只保留保存、返回前台和关闭；跨 Session 的 NewGame / Continue 由 FrontEnd 通过 Scene Flow 发起。
 
@@ -50,7 +51,7 @@
 ### 冷启动
 
 1. Bootstrap 加载，`ApplicationBootstrap` 创建宿主。
-2. Application 完成 Settings、Localization、Profile 和持久化服务启动。
+2. Application 完成 Settings、Input、Audio、Accessibility、Platform、Localization、Profile 和持久化服务启动。
 3. `ApplicationShellBootstrap` 安装正式 Content Catalog，配置 Scene Flow 并绑定 UIDocument。
 4. Scene Flow 提交 `Boot → FrontEnd`。此时 Main 未加载，也不会隐式创建 Session。
 
@@ -78,9 +79,10 @@
 
 ## UI 外壳与焦点
 
-`ApplicationShell.uxml/.uss` 使用现有 Theme、Localization 和字体链，固定包含 FrontEnd Page、Toast、Modal、Busy 与 Fatal 层。Bootstrap 的 Panel sorting order 高于 Main UI：
+`ApplicationShell.uxml/.uss` 使用现有 Theme、Localization 和字体链，固定包含 FrontEnd Page、共享 Settings Page、Toast、Modal、Busy 与 Fatal 层。Bootstrap 的 Panel sorting order 高于 Main UI：
 
 - FrontEnd 只在 `FrontEnd` 可交互，Continue 由 Profile 级存档预检决定是否启用。
+- Settings 可从 FrontEnd 与暂停菜单打开；关闭后恢复来源焦点，从 Main 打开时不释放菜单 pause lease 或切回 Gameplay Context。
 - Modal 保存打开前焦点，关闭后优先恢复原元素；确认返回和可恢复错误均使用此层。
 - Busy 只在阶段可取消时暴露取消按钮；隐藏层不能在后续帧抢占 Main UI 焦点。
 - Toast 不聚焦、不阻止底层输入；Fatal 只保留安全退出入口。
@@ -108,9 +110,14 @@
 - 从 Bootstrap 真实 Play 后为 Application `Ready`、Flow `FrontEnd`、Shell 唯一，Main 未加载且无 Session；停止后控制台无错误。
 - 策略扫描保证 Runtime 场景 API 只在 `UnitySceneLoader`，`Time.timeScale` 写入只在 `GameTimeService`；底层场景故障测试保留精确白名单。
 
+## alpha 0.2.5 扩展验证
+
+- Settings Page 的资产、控件、本地化与两入口由 EditMode / PlayMode 契约覆盖；音频确认通过真实 Addressables Cue 播放。
+- 全量 EditMode `409/409`、项目 PlayMode `53/53`；完整 PlayMode 57 项中 55 项通过、0 失败，2 项为 Input System 上游既有 Ignore。
+
 ## 当前边界
 
 - 当前只有 Bootstrap 与 Main，不包含多地图、关卡选择、快速旅行或 Addressables Scene。
-- FrontEnd 只有新游戏、继续、语言和退出；没有 Profile 选择、手动槽位、删除、重命名或云同步。
-- Shell 是当前真实消费者所需的最小闭环，不是通用多 Page 导航框架；完整输入重绑定、设备 Glyph、AudioMixer、可访问性和平台挂起恢复属于 `alpha 0.2.5`。
+- FrontEnd 提供新游戏、继续、语言、设置和退出；仍没有 Profile 选择、手动槽位、删除、重命名或云同步。
+- Shell 是当前真实消费者所需的最小闭环，不是通用多 Page 导航框架；设置页只开放已有真实消费者的 Audio、Input、Glyph 与 Reduce Motion。
 - 全局结构化日志、进程级异常捕获和完整 Addressables 句柄治理属于 `alpha 0.2.6`。

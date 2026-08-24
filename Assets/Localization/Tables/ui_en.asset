@@ -1140,6 +1140,158 @@ MonoBehaviour:
     m_Localized: Save and Return
     m_Metadata:
       m_Items: []
+  - m_Id: 1756845248077824
+    m_Localized: Settings
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409472
+    m_Localized: Settings
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409473
+    m_Localized: Back
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409474
+    m_Localized: Audio
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409475
+    m_Localized: Master Volume
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409476
+    m_Localized: Music
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409477
+    m_Localized: Sound Effects
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409478
+    m_Localized: UI Audio
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409479
+    m_Localized: Mute
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409480
+    m_Localized: Input
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409481
+    m_Localized: Glyph Preference
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409482
+    m_Localized: Auto
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409483
+    m_Localized: Keyboard & Mouse
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409484
+    m_Localized: Gamepad
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409485
+    m_Localized: Restore Default Bindings
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409486
+    m_Localized: Restore Default Bindings
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409487
+    m_Localized: Restore all keyboard, mouse, and gamepad bindings?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409488
+    m_Localized: Accessibility
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409489
+    m_Localized: Reduce Motion
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409490
+    m_Localized: Saved
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409491
+    m_Localized: Save failed; previous settings restored
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409492
+    m_Localized: Press a new control; Esc or gamepad East cancels
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409493
+    m_Localized: That control is already used in this input mode
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409494
+    m_Localized: Rebinding timed out
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409495
+    m_Localized: Rebinding cancelled
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409496
+    m_Localized: Settings saved
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409497
+    m_Localized: Move
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409498
+    m_Localized: Interact
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409499
+    m_Localized: Open Menu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409500
+    m_Localized: UI Navigate
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409501
+    m_Localized: UI Submit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409502
+    m_Localized: UI Cancel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409503
+    m_Localized: Pick Up / Place
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409504
+    m_Localized: Up
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409505
+    m_Localized: Down
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409506
+    m_Localized: Left
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409507
+    m_Localized: Right
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1756845298409508
+    m_Localized: Confirm
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:

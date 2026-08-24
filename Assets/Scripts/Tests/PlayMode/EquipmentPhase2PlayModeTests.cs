@@ -25,7 +25,7 @@ namespace DarkFlare.Tests
         {
             yield return _fixture.StopCurrent();
             yield return null;
-            InputTestFixtureGuard.Setup(_inputFixture);
+            yield return InputTestFixtureGuard.Setup(_inputFixture);
             yield return _fixture.Restart();
             _architecture = _fixture.Architecture;
         }

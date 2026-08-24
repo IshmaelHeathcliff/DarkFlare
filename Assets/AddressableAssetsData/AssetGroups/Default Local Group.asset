@@ -25,10 +25,22 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 39f88bd4147a82945b01aaac74795ba3
+    m_Address: audio/ui.confirm
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Audio
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3b6e21dfbc7f54e4f9e0312efd6c6af5
     m_Address: Combat/Projectile/Default
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4fe1306a12212b747b1e41fb8c4aa53f
+    m_Address: infrastructure/audio
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Audio
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 67b8ae84734f42f4792a4190aad88049
     m_Address: Combat/Monster/Basic

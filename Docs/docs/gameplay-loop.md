@@ -11,7 +11,7 @@
 
 玩家可在场景内持续战斗和获取物品，通过 Tab / 手柄 Start 打开随身背包，也可接近商人或打造台后使用 E / 手柄北键进入对应功能。菜单打开时暂停玩法模拟，关闭后恢复战斗与 Gameplay 输入。
 
-当前成果用于验证战斗、物品、经济与构筑之间的闭环，仍是单玩法地图的功能原型。`alpha 0.2.0–0.2.4` 已为该循环补上唯一应用宿主、Session 作用域、新游戏 / Restore 事务、`auto` 本地存档、统一退出、用户设置、中英运行时本地化、完整 Scene Flow 和 Application Shell。装备已扩展为武器、护甲、左戒指和右戒指四槽，正式内容池包含七件装备、25 个物品词条、10 个怪物词条和三种怪物；地图、商人、打造台、三种怪物、七件装备与运行时 UI 已完成首版视觉接入。
+当前成果用于验证战斗、物品、经济与构筑之间的闭环，仍是单玩法地图的功能原型。`alpha 0.2.0–0.2.5` 已为该循环补上唯一应用宿主、Session 作用域、新游戏 / Restore 事务、`auto` 本地存档、统一退出、用户设置、中英运行时本地化、完整 Scene Flow、Application Shell，以及应用级输入、音频、降低动态和平台挂起恢复。装备已扩展为武器、护甲、左戒指和右戒指四槽，正式内容池包含七件装备、25 个物品词条、10 个怪物词条和三种怪物；地图、商人、打造台、三种怪物、七件装备与运行时 UI 已完成首版视觉接入。
 
 ## 阶段 0 视觉切片
 
@@ -181,6 +181,7 @@ Prefab 通过 Addressables 预热和实例化，首版不使用 `Resources` 或�
 - alpha 0.2.0 全量 EditMode `255/255`、项目自有 PlayMode `45/45` 通过，Unity 脚本编译 0 error。PlayMode 完整运行共 `49` 项，`47` 项通过、`0` 失败，另有 `2` 项 Input System 包集成测试因上游 issue 1252825 按既有标记跳过。latest-wins 场景请求、挂起回滚有界收敛、后代 Abandoned 污点隔离、同场景 Running Session 组件绑定、架构 lease / generation 隔离和旧 Registry 精确注销专项均通过。最终修复后两次真实 Play 均达到 Application `Ready`、Session `Running` 且 lease 有效，宿主、玩家和已提交刷怪器每次各 `1` 个；每次退出后的 Console Error 均为 0。
 - alpha 0.2.2 全量 EditMode `310/310`、项目自有 PlayMode `48/48` 通过，Unity 脚本编译 0 error。PlayMode 完整运行共 `52` 项，`50` 项通过、`0` 失败，另有 `2` 项 Input System 包集成测试因上游 issue 1252825 跳过。存档 DTO / 校验、确定性序列化、代际 Storage、损坏回退、Coordinator 合并与超时、Main 保存 / Continue / NewGame / Continue、菜单焦点和退出 Flush 均通过；两次真实 Play 的 Application / Session / 玩家 / Facade / 菜单绑定回到基线，最终 Console Error 为 0。
 - alpha 0.2.4 全量 EditMode `360/360`、项目自有 PlayMode `52/52` 通过，完整 PlayMode 54 项中 52 项通过、0 失败，仍只跳过相同 2 项 Input System 上游用例。Bootstrap 冷启动、NewGame / Continue、暂停、保存后返回、三次循环、取消 / 替代、故障恢复、唯一 Main / Session / 玩家 / EventSystem 与焦点隔离均通过；真实 Bootstrap Play 停在无 Session 的 FrontEnd，Console Error 为 0。
+- alpha 0.2.5 全量 EditMode `409/409`、项目自有 PlayMode `53/53` 通过；完整 PlayMode 57 项中 55 项通过、0 失败，仍只跳过相同 2 项 Input System 上游用例。Application 输入 / 重绑定 / Glyph、Settings 双入口、真实 UI Cue、Reduce Motion、Focus / Suspend 重叠与 Shutdown 回收均通过。
 
 以上数据是首版收尾时的验证记录；后续改动仍应重新运行相关测试和 Play 流程。
 
@@ -191,6 +192,6 @@ Prefab 通过 Addressables 预热和实例化，首版不使用 `Resources` 或�
 - 装备已实现武器、护甲和双戒指槽，以及替换和卸下；首批七件装备和 25 个物品词条已接入，但尚无耐久、套装、纸娃娃和词条等级段。
 - 交易只维护单个共享商人库存；卖出物品不进入商人库存，也没有回购。
 - 打造只消耗金币，尚无配方、材料、锁定词缀或批量操作。
-- 首版视觉已覆盖地图、玩家、三种怪物、投射物、掉落、七件装备、商人、打造台、HUD 与三个菜单；`PrototypeSquare` 仅保留为调试回退，不再表达主要可玩对象。当前仍不包含音效、音乐、纸娃娃或镜头震动。
+- 首版视觉已覆盖地图、玩家、三种怪物、投射物、掉落、七件装备、商人、打造台、HUD 与三个菜单；`PrototypeSquare` 仅保留为调试回退，不再表达主要可玩对象。当前仅有首个 UI Confirm Cue，仍不包含战斗音效、音乐、纸娃娃或镜头震动。
 
 输入和 UI 结构见 [输入与运行时 UI](./input-ui-system.md)，存档与 Restore 见[本地存档与 Session 恢复](./infrastructure/local-save.md)，装备事务见 [装备系统](./equipment-system.md)，打造事务规则见 [打造系统](./crafting-system.md)，伤害与词条规则见 [伤害系统与词条系统设计](./damage-affix-system.md)。

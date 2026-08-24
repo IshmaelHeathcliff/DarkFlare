@@ -25,11 +25,13 @@ namespace DarkFlare
         readonly VisualElement _root;
         readonly ApplicationHost _host;
         readonly Action<SceneFlowRequest> _runRequest;
+        readonly Action _openSettings;
         readonly List<string> _languageChoices = new List<string>();
 
         Button _newGame;
         Button _continue;
         Button _quit;
+        Button _settings;
         DropdownField _language;
         CancellationTokenSource _continueProbeCancellation;
         int _continueRefreshGeneration;
@@ -41,11 +43,13 @@ namespace DarkFlare
         public ApplicationFrontEndController(
             VisualElement root,
             ApplicationHost host,
-            Action<SceneFlowRequest> runRequest)
+            Action<SceneFlowRequest> runRequest,
+            Action openSettings)
         {
             _root = root ?? throw new ArgumentNullException(nameof(root));
             _host = host ?? throw new ArgumentNullException(nameof(host));
             _runRequest = runRequest ?? throw new ArgumentNullException(nameof(runRequest));
+            _openSettings = openSettings ?? throw new ArgumentNullException(nameof(openSettings));
         }
 
         public void Bind()
@@ -58,10 +62,12 @@ namespace DarkFlare
             _newGame = Require<Button>("front-end-new-game");
             _continue = Require<Button>("front-end-continue");
             _quit = Require<Button>("front-end-quit");
+            _settings = Require<Button>("front-end-settings");
             _language = Require<DropdownField>("front-end-language");
             _newGame.clicked += OnNewGame;
             _continue.clicked += OnContinue;
             _quit.clicked += _host.RequestQuit;
+            _settings.clicked += _openSettings;
             _language.RegisterValueChangedCallback(OnLanguageChanged);
             _host.Localization.LocaleChanged += OnLocaleChanged;
             _bound = true;
@@ -141,6 +147,7 @@ namespace DarkFlare
             _newGame.clicked -= OnNewGame;
             _continue.clicked -= OnContinue;
             _quit.clicked -= _host.RequestQuit;
+            _settings.clicked -= _openSettings;
             _language.UnregisterValueChangedCallback(OnLanguageChanged);
             if (_host.Localization != null)
             {

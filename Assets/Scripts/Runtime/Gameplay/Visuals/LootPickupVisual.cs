@@ -43,6 +43,7 @@ namespace DarkFlare
         Tween _floatTween;
         Tween _rotationTween;
         LocalizationService _localizationService;
+        AccessibilityService _accessibilityService;
         bool _hasBaseState;
 
         public ItemInstance Item => _item;
@@ -52,6 +53,11 @@ namespace DarkFlare
         public IArchitecture GetArchitecture()
         {
             return GameArchitectureProvider.RequireCurrent();
+        }
+
+        internal static bool ShouldRunContinuousMotion(MotionProfile profile)
+        {
+            return profile.AllowContinuousMotion;
         }
 
         public void Bind(ItemInstance item)
@@ -136,6 +142,7 @@ namespace DarkFlare
         void OnEnable()
         {
             BindLocalization();
+            BindAccessibility();
             RefreshLabel();
 
             if (_item != null)
@@ -150,6 +157,12 @@ namespace DarkFlare
             {
                 _localizationService.LocaleChanged -= OnLocaleChanged;
                 _localizationService = null;
+            }
+
+            if (_accessibilityService != null)
+            {
+                _accessibilityService.ProfileChanged -= OnMotionProfileChanged;
+                _accessibilityService = null;
             }
 
             StopAnimations();
@@ -214,6 +227,14 @@ namespace DarkFlare
 
             StopAnimations();
             ResetTransforms();
+
+            MotionProfile profile = _accessibilityService?.Profile ?? MotionProfile.Default;
+
+            if (!ShouldRunContinuousMotion(profile))
+            {
+                return;
+            }
+
             _floatTween = Tween.LocalPositionY(
                 _visualRoot,
                 _visualBasePosition.y,
@@ -292,6 +313,37 @@ namespace DarkFlare
             {
                 _localizationService.LocaleChanged += OnLocaleChanged;
             }
+        }
+
+        void BindAccessibility()
+        {
+            if (!ApplicationHost.TryGetCurrent(out ApplicationHost host)
+                || ReferenceEquals(_accessibilityService, host.Accessibility))
+            {
+                return;
+            }
+
+            if (_accessibilityService != null)
+            {
+                _accessibilityService.ProfileChanged -= OnMotionProfileChanged;
+            }
+
+            _accessibilityService = host.Accessibility;
+
+            if (_accessibilityService != null)
+            {
+                _accessibilityService.ProfileChanged += OnMotionProfileChanged;
+            }
+        }
+
+        void OnMotionProfileChanged(MotionProfile profile)
+        {
+            if (!isActiveAndEnabled || _item == null)
+            {
+                return;
+            }
+
+            StartAnimations();
         }
 
         void RefreshLabel()
