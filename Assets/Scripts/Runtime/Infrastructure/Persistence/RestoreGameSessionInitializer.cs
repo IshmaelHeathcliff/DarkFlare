@@ -50,8 +50,10 @@ namespace DarkFlare
 
             ValidateCatalogCompatibility(context.ContentCatalog);
             IArchitecture architecture = context.Architecture;
-            IReadOnlyList<MonsterDefinition> monsterDefinitions = _prepared.Monsters
-                .Select(monster => monster.Definition)
+            IReadOnlyList<MonsterDefinition> monsterDefinitions = _prepared.SpawnDefinition
+                .AllMonsters
+                .Concat(_prepared.Monsters.Select(monster => monster.Definition))
+                .Where(monster => monster != null)
                 .Distinct()
                 .ToArray();
             List<AssetReferenceSprite> itemIcons = CollectItemIcons();

@@ -119,6 +119,15 @@ namespace DarkFlare.Tests
             Assert.IsTrue(callbackResult.IsSuccess, callbackResult.Exception?.ToString());
             Assert.Greater(host.CurrentSession.ArchitectureGeneration, oldGeneration);
             IArchitecture restoredArchitecture = host.CurrentSession.Architecture;
+            PrefabAssetLoader prefabLoader = restoredArchitecture.GetUtility<PrefabAssetLoader>();
+
+            foreach (MonsterDefinition monster in prepared.Value.SpawnDefinition.AllMonsters)
+            {
+                Assert.IsNotNull(
+                    prefabLoader.GetPrefab(monster.Prefab),
+                    $"Restore 必须预热后续刷怪所需 Prefab: {monster.Id}");
+            }
+
             PlayerController restoredPlayer = UnityEngine.Object.FindAnyObjectByType<PlayerController>();
             Assert.IsNotNull(restoredPlayer);
             Assert.AreEqual(expectedHealth, restoredPlayer.Actor.CurrentHealth, 0.001f);
