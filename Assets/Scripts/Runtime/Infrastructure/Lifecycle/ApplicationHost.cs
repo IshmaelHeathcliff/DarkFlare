@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.SceneManagement;
 
 namespace DarkFlare
@@ -20,8 +18,7 @@ namespace DarkFlare
 
         [SerializeField]
         AudioServiceConfiguration _audioConfiguration;
-        AsyncOperationHandle<AudioServiceConfiguration> _audioConfigurationHandle;
-        bool _hasAudioConfigurationHandle;
+        AssetLease<AudioServiceConfiguration> _audioConfigurationLease;
 
         LifecycleScope _applicationScope;
         LifecycleScope _profileScope;
@@ -48,6 +45,14 @@ namespace DarkFlare
         SceneFlowService _sceneFlowService;
         ApplicationShellController _applicationShellController;
         GameTimeService _gameTimeService;
+        ApplicationLogger _logger;
+        RingBufferLogSink _logBuffer;
+        ApplicationFailureCoordinator _failureCoordinator;
+        ApplicationExceptionMonitor _exceptionMonitor;
+        IDisposable _logInstallation;
+        AddressableAssetService _resourceService;
+        AssetOwnerScope _applicationConfigurationOwner;
+        AssetOwnerScope _applicationAudioOwner;
         GameSessionHost _lastNotifiedSession;
         SceneSessionInitializationRequest _activeSceneRequest;
         SceneSessionInitializationRequest _pendingSceneRequest;
@@ -118,6 +123,18 @@ namespace DarkFlare
         public ApplicationShellController ApplicationShell => _applicationShellController;
 
         public GameTimeService GameTime => _gameTimeService ?? GameTimeService.Shared;
+
+        public ApplicationLogger Logger => _logger;
+
+        public IReadOnlyList<ApplicationLogEntry> RecentLogs =>
+            _logBuffer?.Snapshot() ?? Array.Empty<ApplicationLogEntry>();
+
+        public ApplicationFailureCoordinator FailureCoordinator => _failureCoordinator;
+
+        public AddressableAssetService Resources => _resourceService;
+
+        public ResourceDiagnosticsSnapshot ResourceDiagnostics =>
+            _resourceService?.GetDiagnostics() ?? default;
 
         bool ISceneFlowApplication.IsReady => State == ApplicationLifecycleState.Ready;
 
@@ -690,6 +707,7 @@ namespace DarkFlare
         {
             s_current = null;
             InputReady = null;
+            ApplicationLog.Reset();
         }
 
         void Awake()
@@ -700,6 +718,7 @@ namespace DarkFlare
                 return;
             }
 
+            InitializeDiagnostics();
             s_current = this;
             _ownsSingleton = true;
             _gameTimeService = GameTimeService.Shared;
@@ -767,6 +786,8 @@ namespace DarkFlare
             {
                 s_current = null;
             }
+
+            ReleaseDiagnostics();
         }
 
         bool OnWantsToQuit()
@@ -816,7 +837,16 @@ namespace DarkFlare
 
                 _inputService = new ApplicationInputService(_settingsService);
                 InputReady?.Invoke(_inputService);
-                _audioService = new AudioService(transform, _settingsService);
+                _resourceService = new AddressableAssetService();
+                _applicationConfigurationOwner = _resourceService.CreateOwner(
+                    "application-configuration");
+                _applicationAudioOwner = _resourceService.CreateOwner("application-audio");
+                _audioService = new AudioService(
+                    transform,
+                    _settingsService,
+                    new AddressableAudioClipLoader(
+                        _resourceService,
+                        _applicationAudioOwner));
                 _accessibilityService = new AccessibilityService(_settingsService);
                 _platformLifecycleService = new PlatformLifecycleService(
                     _inputService,
@@ -833,6 +863,58 @@ namespace DarkFlare
             {
                 FailBoot(exception);
             }
+        }
+
+        void InitializeDiagnostics()
+        {
+            _logBuffer = new RingBufferLogSink();
+            ApplicationLogLevel minimumLevel = UnityEngine.Debug.isDebugBuild
+                ? ApplicationLogLevel.Debug
+                : ApplicationLogLevel.Warning;
+            _logger = new ApplicationLogger(
+                new IApplicationLogSink[]
+                {
+                    new MinimumLevelLogSink(
+                        new UnityConsoleLogSink(),
+                        minimumLevel),
+                    _logBuffer,
+                });
+            _logInstallation = ApplicationLog.Install(_logger);
+            _failureCoordinator = new ApplicationFailureCoordinator();
+            _failureCoordinator.FatalReported += OnFatalReported;
+            _exceptionMonitor = new ApplicationExceptionMonitor(_failureCoordinator);
+        }
+
+        void OnFatalReported(ApplicationFatalFailure failure)
+        {
+            if (failure == null
+                || State == ApplicationLifecycleState.ShuttingDown
+                || State == ApplicationLifecycleState.Shutdown)
+            {
+                return;
+            }
+
+            State = ApplicationLifecycleState.Failed;
+            PlayerErrorPresentation presentation = PlayerErrorCatalog.Unhandled();
+            _applicationShellController?.ShowFatal(
+                presentation.Message,
+                "Unexpected fatal error");
+        }
+
+        void ReleaseDiagnostics()
+        {
+            _exceptionMonitor?.Dispose();
+            _exceptionMonitor = null;
+
+            if (_failureCoordinator != null)
+            {
+                _failureCoordinator.FatalReported -= OnFatalReported;
+            }
+
+            _failureCoordinator = null;
+            _logInstallation?.Dispose();
+            _logInstallation = null;
+            _logger = null;
         }
 
         async UniTask CompleteBootAsync(CancellationToken cancellationToken)
@@ -865,7 +947,7 @@ namespace DarkFlare
                     && coordinatorResult.Code != LifecycleResultCode.AlreadyCompleted)
                 {
                     CompletePendingSceneRequest(false);
-                    Debug.LogError(
+                    ApplicationLog.Error(LogEventIds.InfrastructureLifecycle,
                         $"[ApplicationHost] 场景 Session 协调器启动失败：{coordinatorResult.Message}",
                         this);
                 }
@@ -882,7 +964,7 @@ namespace DarkFlare
         void FailBoot(Exception exception)
         {
             State = ApplicationLifecycleState.Failed;
-            Debug.LogException(exception, this);
+            ApplicationLog.Exception(LogEventIds.InfrastructureLifecycle, exception, this);
             _session?.BeginStop();
             _profileScope?.BeginStop();
             _localizationService?.Close();
@@ -891,6 +973,7 @@ namespace DarkFlare
             _gameTimeService?.RestoreAll();
             _audioService?.Dispose();
             ReleaseAudioConfiguration();
+            ReleaseResources();
             _inputService?.Dispose();
             _shutdownInputSuspension?.Dispose();
             _shutdownInputSuspension = null;
@@ -931,7 +1014,7 @@ namespace DarkFlare
                             && result.Code != PlatformLifecycleResultCode.Cancelled
                             && result.Code != PlatformLifecycleResultCode.Closed)
                         {
-                            Debug.LogWarning(
+                            ApplicationLog.Warning(LogEventIds.InfrastructureLifecycle,
                                 $"[ApplicationHost] 平台生命周期 {operationName} 结果：{result.Code}",
                                 this);
                         }
@@ -950,13 +1033,22 @@ namespace DarkFlare
         {
             if (_audioConfiguration == null)
             {
-                _audioConfigurationHandle =
-                    Addressables.LoadAssetAsync<AudioServiceConfiguration>(
-                        AudioServiceConfiguration.Address);
-                _hasAudioConfigurationHandle = true;
-                await _audioConfigurationHandle.ToUniTask(
-                    cancellationToken: cancellationToken);
-                _audioConfiguration = _audioConfigurationHandle.Result;
+                ResourceLoadResult<AudioServiceConfiguration> result =
+                    await _resourceService.AcquireAsync<AudioServiceConfiguration>(
+                        _applicationConfigurationOwner,
+                        AudioServiceConfiguration.Address,
+                        AudioServiceConfiguration.Address,
+                        cancellationToken);
+
+                if (!result.Succeeded)
+                {
+                    throw new InvalidOperationException(
+                        $"音频配置资源加载失败：{result.Code}",
+                        result.Exception);
+                }
+
+                _audioConfigurationLease = result.Lease;
+                _audioConfiguration = result.Lease.Asset;
             }
 
             AudioOperationResult audioResult = _audioService.Configure(
@@ -972,19 +1064,24 @@ namespace DarkFlare
 
         void ReleaseAudioConfiguration()
         {
-            if (_hasAudioConfigurationHandle
-                && _audioConfigurationHandle.IsValid())
-            {
-                Addressables.Release(_audioConfigurationHandle);
-            }
-
-            _hasAudioConfigurationHandle = false;
+            _audioConfigurationLease?.Dispose();
+            _audioConfigurationLease = null;
             _audioConfiguration = null;
+        }
+
+        void ReleaseResources()
+        {
+            _applicationAudioOwner?.Close();
+            _applicationAudioOwner = null;
+            _applicationConfigurationOwner?.Close();
+            _applicationConfigurationOwner = null;
+            _resourceService?.Dispose();
+            _resourceService = null;
         }
 
         void OnLifecycleTaskFailure(LifecycleTaskFailure failure)
         {
-            Debug.LogError(
+            ApplicationLog.Error(LogEventIds.InfrastructureLifecycle,
                 $"[ApplicationHost] 生命周期任务失败: {failure.ScopeName}/{failure.OperationName}\n"
                 + failure.Exception,
                 this);
@@ -1036,7 +1133,7 @@ namespace DarkFlare
             }
             catch (Exception exception)
             {
-                Debug.LogException(exception, this);
+                ApplicationLog.Exception(LogEventIds.InfrastructureLifecycle, exception, this);
                 session.BeginStop();
                 State = ApplicationLifecycleState.Failed;
             }
@@ -1381,7 +1478,7 @@ namespace DarkFlare
             }
             catch (Exception exception)
             {
-                Debug.LogException(exception, this);
+                ApplicationLog.Exception(LogEventIds.InfrastructureLifecycle, exception, this);
             }
         }
 
@@ -1423,7 +1520,7 @@ namespace DarkFlare
                 }
                 catch (Exception exception)
                 {
-                    Debug.LogException(exception, this);
+                    ApplicationLog.Exception(LogEventIds.InfrastructureLifecycle, exception, this);
                 }
             }
         }
@@ -1487,6 +1584,7 @@ namespace DarkFlare
             _gameTimeService?.RestoreAll();
             _audioService?.Dispose();
             ReleaseAudioConfiguration();
+            ReleaseResources();
             _inputService?.Dispose();
             _shutdownInputSuspension?.Dispose();
             _shutdownInputSuspension = null;
@@ -1596,6 +1694,7 @@ namespace DarkFlare
             }
 
             _shutdownCompletion.TrySetResult(result);
+            ReleaseDiagnostics();
 
             if (_quitGateArmed && !_allowQuit)
             {
@@ -1621,6 +1720,7 @@ namespace DarkFlare
             _gameTimeService?.RestoreAll();
             _audioService?.Dispose();
             ReleaseAudioConfiguration();
+            ReleaseResources();
             _inputService?.Dispose();
             _shutdownInputSuspension?.Dispose();
             _shutdownInputSuspension = null;
@@ -1659,6 +1759,7 @@ namespace DarkFlare
                     "Application 应急关闭发生错误",
                     sessionResult.Exception);
             _shutdownCompletion?.TrySetResult(result);
+            ReleaseDiagnostics();
         }
 
         void EnsureSaveCoordinator()
@@ -1693,7 +1794,7 @@ namespace DarkFlare
 
             if (spawner == null || bootstrap == null)
             {
-                Debug.LogWarning(
+                ApplicationLog.Warning(LogEventIds.InfrastructureLifecycle,
                     "[ApplicationHost] 当前 Session 场景缺少 Bootstrap 或 MonsterSpawner，存档入口不可用",
                     this);
                 return;
@@ -1712,7 +1813,7 @@ namespace DarkFlare
             }
             catch (Exception exception)
             {
-                Debug.LogException(exception, this);
+                ApplicationLog.Exception(LogEventIds.InfrastructureLifecycle, exception, this);
             }
         }
 

@@ -100,6 +100,7 @@ namespace DarkFlare.Tests
                     "Assets/Scripts/Runtime/Infrastructure/Audio/AudioService.cs",
                     "Assets/Scripts/Runtime/Infrastructure/UI/ApplicationFrontEndController.cs",
                     "Assets/Scripts/Runtime/Infrastructure/UI/ApplicationSettingsController.cs",
+                    "Assets/Scripts/Runtime/Gameplay/Combat/PrefabAssetLoader.cs",
                 }),
             new PolicyRule(
                 "input-device-singleton-owner",
@@ -142,6 +143,25 @@ namespace DarkFlare.Tests
                 {
                     "Assets/Scripts/Runtime/Infrastructure/Identity/StableInstanceIds.cs",
                     "Assets/Scripts/Runtime/Gameplay/Combat/GameplayRandomSystem.cs",
+                }),
+            new PolicyRule(
+                "runtime-direct-debug-log",
+                @"\b(?:(?:UnityEngine\s*\.\s*)?Debug)\s*\.\s*"
+                    + @"(?:Log|LogWarning|LogError|LogException)\s*\(",
+                new[] { RuntimeRoot },
+                new[]
+                {
+                    "Assets/Scripts/Runtime/Infrastructure/Diagnostics/ApplicationLogging.cs",
+                }),
+            new PolicyRule(
+                "runtime-addressables-static-api",
+                @"\bAddressables\s*\.\s*"
+                    + @"(?:LoadAssetAsync|InstantiateAsync|Release|ReleaseInstance)"
+                    + @"(?:\s*<[^>]+>)?\s*\(",
+                new[] { RuntimeRoot },
+                new[]
+                {
+                    "Assets/Scripts/Runtime/Infrastructure/Resources/ApplicationResources.cs",
                 })
         };
 
@@ -161,6 +181,8 @@ namespace DarkFlare.Tests
         [TestCase("runtime-audio-owner")]
         [TestCase("platform-callback-owner")]
         [TestCase("runtime-guid-generation-owner")]
+        [TestCase("runtime-direct-debug-log")]
+        [TestCase("runtime-addressables-static-api")]
         public void SourcePolicy_HasNoUnregisteredViolations(string ruleId)
         {
             PolicyContext context = CreateContext();
@@ -283,6 +305,14 @@ namespace DarkFlare.Tests
             "runtime-guid-generation-owner",
             "var id = Guid.NewGuid();",
             "Guid.NewGuid")]
+        [TestCase(
+            "runtime-direct-debug-log",
+            "Debug.LogError(\"failure\");",
+            "Debug.LogError")]
+        [TestCase(
+            "runtime-addressables-static-api",
+            "Addressables.LoadAssetAsync<GameObject>(key);",
+            "Addressables.LoadAssetAsync")]
         public void PolicyRule_DetectsExecutableProbeAndIgnoresText(
             string ruleId,
             string executableProbe,

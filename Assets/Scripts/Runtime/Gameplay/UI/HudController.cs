@@ -75,7 +75,7 @@ namespace DarkFlare
         {
             if (_document == null || _document.panelSettings == null)
             {
-                Debug.LogError("[HudController] 缺少 UIDocument 或 PanelSettings，无法初始化 HUD", this);
+                ApplicationLog.Error(LogEventIds.GameplayUi, "[HudController] 缺少 UIDocument 或 PanelSettings，无法初始化 HUD", this);
                 return SceneSessionBindResult.Failed;
             }
 
@@ -156,7 +156,7 @@ namespace DarkFlare
         {
             if (_document == null)
             {
-                Debug.LogError("[HudController] 缺少 UIDocument，无法初始化 HUD", this);
+                ApplicationLog.Error(LogEventIds.GameplayUi, "[HudController] 缺少 UIDocument，无法初始化 HUD", this);
                 return false;
             }
 
@@ -168,7 +168,7 @@ namespace DarkFlare
 
             if (_healthBar == null || _manaBar == null || _goldLabel == null || _skillStatusLabel == null)
             {
-                Debug.LogError("[HudController] HUD UXML 缺少生命、法力、技能状态或金币元素", this);
+                ApplicationLog.Error(LogEventIds.GameplayUi, "[HudController] HUD UXML 缺少生命、法力、技能状态或金币元素", this);
                 return false;
             }
 
@@ -178,7 +178,7 @@ namespace DarkFlare
             _manaBar.highValue = 1f;
             _skillStatusLabel.style.display = DisplayStyle.None;
             RefreshHud();
-            Debug.Log("[HudController] HUD 初始化完成", this);
+            ApplicationLog.Info(LogEventIds.GameplayUi, "[HudController] HUD 初始化完成", this);
             return true;
         }
 

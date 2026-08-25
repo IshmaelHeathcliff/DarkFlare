@@ -313,7 +313,7 @@ Addressables 的配置目录，包含资源组、模板和构建器配置。后�
 `Runtime/` 下的子目录职责：
 
 - `Core`：基础架构与全局入口（独立成 `DarkFlare.Core` 程序集）
-- `Infrastructure`：应用宿主、作用域、Session、统一任务取消、架构所有权、内容目录、稳定实例身份、DTO / 迁移、本地存储、Restore、用户设置、本地化、场景流、应用时间、输入、音频、可访问性、平台生命周期和 UI 外壳
+- `Infrastructure`：应用宿主、作用域、Session、统一任务取消、架构所有权、内容目录、稳定实例身份、DTO / 迁移、本地存储、Restore、用户设置、本地化、场景流、应用时间、输入、音频、可访问性、平台生命周期、结构化日志、资源服务和 UI 外壳
 - `Data`：数据定义与配置类型
 - `Gameplay`：玩法逻辑
 - `UI`：界面逻辑（占位）
@@ -333,6 +333,8 @@ Addressables 的配置目录，包含资源组、模板和构建器配置。后�
 - `Infrastructure/Time/GameTimeService.cs`：实现有主 pause lease、基础倍率恢复与唯一 `Time.timeScale` 写入
 - `Infrastructure/Input`：`ApplicationInputService.cs`、`ApplicationInputModuleBinder.cs`、`ApplicationInputContracts.cs`、`InputGlyphResolver.cs`；实现唯一 Action Asset owner、Context / suspension lease、重绑定、设备族、Glyph 和 Bootstrap UI Module 绑定
 - `Infrastructure/Audio`：`AudioService.cs`、`AudioServiceConfiguration.cs`、`AudioServiceContracts.cs`、`AudioClipLoader.cs`；实现四类 Mixer 路由、Addressables Cue、Source 池、有主句柄和精确释放
+- `Infrastructure/Diagnostics`：`ApplicationLogging.cs`、`PlayerErrorCatalog.cs`；实现日志门面、事件 ID、Console / Ring Buffer Sink、全局异常监控、致命失败协调和玩家错误映射
+- `Infrastructure/Resources`：`ApplicationResources.cs`；实现 Addressables 唯一静态后端、Application 级单航班、owner / lease、结构化结果与诊断快照
 - `Infrastructure/Accessibility`：`AccessibilityContracts.cs`、`AccessibilityService.cs`；实现 Settings 驱动的 MotionProfile
 - `Infrastructure/Platform`：`PlatformLifecycleContracts.cs`、`PlatformLifecycleService.cs`；实现 Focus / Suspend / Resume、检查点和输入 / 时间 / 音频编排
 - `Infrastructure/UI`：`ApplicationShellBootstrap.cs`、`ApplicationShellController.cs`、`ApplicationFrontEndController.cs`、`ApplicationSettingsController.cs`；实现 Bootstrap FrontEnd、共享 Settings Page、Busy / Modal / Toast / Fatal 和焦点恢复
@@ -376,6 +378,7 @@ Addressables 的配置目录，包含资源组、模板和构建器配置。后�
 - `Tests/EditMode/Settings*Tests.cs`、`LocalizationServiceTests.cs`、`LocalizationPolicyTests.cs`：覆盖 Settings 合同与存储、Locale 并发切换、六张职责表、正式内容引用、硬编码文本策略和字体字符集
 - `Tests/EditMode/Alpha024*Tests.cs` 与 `Tests/PlayMode/Alpha024SceneFlowPlayModeTests.cs`：覆盖 Scene Flow 合同 / 配置、场景与时间策略、Bootstrap 冷启动、NewGame / Continue、取消 / 替代、恢复、暂停、返回和三次循环
 - `Tests/EditMode/ApplicationInputServiceTests.cs`、`AudioServiceTests.cs`、`AccessibilityAndPlatformLifecycleTests.cs`、`Alpha025ProductionAssetTests.cs` 与 `Tests/PlayMode/Alpha025InputOwnershipPlayModeTests.cs`：覆盖 Application 输入、重绑定 / Glyph、Audio、Reduce Motion、Platform 生命周期、生产资产和设置页双入口
+- `Tests/EditMode/Alpha026DiagnosticsTests.cs`、`Alpha026AddressablesGovernanceTests.cs` 与 `Tests/PlayMode/Alpha024SceneFlowPlayModeTests.cs`：覆盖日志 / 失败 / 玩家错误合同、资源单航班和 owner 释放、15 个 Addressables 条目，以及三轮 Session 资源基线回收
 - `Tests/EditMode/Alpha01TagMigrationCharacterizationTests.cs` 与既有 EditMode 测试：覆盖标签查询、域隔离、物品—词条候选矩阵、伤害血统、旧接口兼容、纯逻辑、原子换装、交易和打造事务语义、键鼠 / 手柄输入、Action Map 切换、交互消息、暂停及 HUD/背包/商店/打造快照。归属 `DarkFlare.Tests.EditMode` 程序集
 - `Tests/PlayMode/ApplicationLifecyclePlayModeTests.cs`：覆盖冷启动唯一性、取消回滚、并发请求、连续 Session、场景卸载和直接 `Main` 重载
 - `Tests/PlayMode/ApplicationHostSceneTransitionPlayModeTests.cs`：覆盖每 generation 一次 `SessionRunning` 通知、回滚中的重载、三次快速请求 latest-wins、挂起回滚 / 作用域超时有界收敛，以及受控停止 / Shutdown / Emergency 终态隔离
@@ -385,7 +388,7 @@ Addressables 的配置目录，包含资源组、模板和构建器配置。后�
 
 `UI`、`Utilities` 目前主要是占位，为后续模块扩展预留。
 
-**首版玩法循环和 `alpha 0.2.0–0.2.5` 基础设施已完成**：当前已覆盖 UIToolkit HUD / 背包装备 / 商店 / 打造 / 场景交互，以及唯一应用宿主、Session 重建、稳定身份、内容目录、DTO / 迁移、`auto` 本地存档 / Restore、Settings V1、中英运行时本地化、Bootstrap / Main Scene Flow、Game Time、Application Shell、应用级输入 / 重绑定 / Glyph、Audio、Reduce Motion 和 Platform Lifecycle。运行流程见 [`gameplay-loop.md`](gameplay-loop.md)，生命周期见[应用生命周期与会话作用域](infrastructure/application-lifecycle.md)，身份与迁移见[稳定身份、内容目录与迁移框架](infrastructure/content-identity-migration.md)，持久化见[本地存档与 Session 恢复](infrastructure/local-save.md)，设置与语言见[用户设置与本地化](infrastructure/user-settings-localization.md)，场景状态与 Shell 见[游戏状态、场景流与应用 UI 外壳](infrastructure/game-state-scene-flow-ui-shell.md)，输入与玩法 UI 见 [`input-ui-system.md`](input-ui-system.md)，音频见 [Application Audio](infrastructure/application-audio.md)，降低动态与平台挂起见[可访问性与平台生命周期](infrastructure/accessibility-platform-lifecycle.md)；完成过程保存在 [`plan/archive/`](plan/archive/README.md)。
+**首版玩法循环和 `alpha 0.2.0–0.2.6` 基础设施已完成**：当前已覆盖 UIToolkit HUD / 背包装备 / 商店 / 打造 / 场景交互，以及唯一应用宿主、Session 重建、稳定身份、内容目录、DTO / 迁移、`auto` 本地存档 / Restore、Settings V1、中英运行时本地化、Bootstrap / Main Scene Flow、Game Time、Application Shell、应用级输入 / 重绑定 / Glyph、Audio、Reduce Motion、Platform Lifecycle、结构化日志、玩家错误和 Addressables Resource Service。运行流程见 [`gameplay-loop.md`](gameplay-loop.md)，生命周期见[应用生命周期与会话作用域](infrastructure/application-lifecycle.md)，身份与迁移见[稳定身份、内容目录与迁移框架](infrastructure/content-identity-migration.md)，持久化见[本地存档与 Session 恢复](infrastructure/local-save.md)，设置与语言见[用户设置与本地化](infrastructure/user-settings-localization.md)，场景状态与 Shell 见[游戏状态、场景流与应用 UI 外壳](infrastructure/game-state-scene-flow-ui-shell.md)，输入与玩法 UI 见 [`input-ui-system.md`](input-ui-system.md)，音频见 [Application Audio](infrastructure/application-audio.md)，日志与资源见[日志、错误处理与 Addressables 资源治理](infrastructure/logging-error-addressables-governance.md)，降低动态与平台挂起见[可访问性与平台生命周期](infrastructure/accessibility-platform-lifecycle.md)；完成过程保存在 [`plan/archive/`](plan/archive/README.md)。
 
 ### `Assets/Settings`
 

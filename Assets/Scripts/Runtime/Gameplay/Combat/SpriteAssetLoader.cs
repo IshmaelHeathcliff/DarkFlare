@@ -4,17 +4,38 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace DarkFlare
 {
     public class SpriteAssetLoader : IUtility
     {
         readonly Dictionary<string, Sprite> _spriteCache = new Dictionary<string, Sprite>();
-        readonly Dictionary<string, AsyncOperationHandle<Sprite>> _handles = new Dictionary<string, AsyncOperationHandle<Sprite>>();
-        readonly HashSet<string> _loadingGuids = new HashSet<string>();
+        readonly Dictionary<string, AssetLease<Sprite>> _leases =
+            new Dictionary<string, AssetLease<Sprite>>();
+        readonly Dictionary<string, LoadOperation> _inFlight =
+            new Dictionary<string, LoadOperation>();
+        readonly AddressableAssetService _service;
+        readonly AddressableAssetService _ownedService;
+        readonly AssetOwnerScope _owner;
 
-        public async UniTask PreloadAsync(IEnumerable<AssetReferenceSprite> references, CancellationToken token)
+        int _generation;
+
+        public SpriteAssetLoader()
+        {
+            _ownedService = new AddressableAssetService();
+            _service = _ownedService;
+            _owner = _service.CreateOwner("standalone-sprite-loader");
+        }
+
+        internal SpriteAssetLoader(AddressableAssetService service, AssetOwnerScope owner)
+        {
+            _service = service ?? throw new ArgumentNullException(nameof(service));
+            _owner = owner ?? throw new ArgumentNullException(nameof(owner));
+        }
+
+        public async UniTask PreloadAsync(
+            IEnumerable<AssetReferenceSprite> references,
+            CancellationToken token)
         {
             token.ThrowIfCancellationRequested();
 
@@ -28,18 +49,24 @@ namespace DarkFlare
 
             foreach (AssetReferenceSprite reference in references)
             {
+                token.ThrowIfCancellationRequested();
                 string guid = reference != null ? reference.AssetGUID : string.Empty;
 
                 if (string.IsNullOrWhiteSpace(guid)
                     || !requestedGuids.Add(guid)
-                    || _spriteCache.ContainsKey(guid)
-                    || _loadingGuids.Contains(guid))
+                    || _spriteCache.ContainsKey(guid))
                 {
                     continue;
                 }
 
-                _loadingGuids.Add(guid);
-                loadTasks.Add(LoadOneAsync(reference, token));
+                if (!_inFlight.TryGetValue(guid, out LoadOperation operation))
+                {
+                    operation = new LoadOperation(guid, _generation);
+                    _inFlight.Add(guid, operation);
+                    operation.Runner = LoadOneAsync(reference, operation);
+                }
+
+                loadTasks.Add(operation.Completion.Task.AttachExternalCancellation(token));
             }
 
             await UniTask.WhenAll(loadTasks);
@@ -57,68 +84,101 @@ namespace DarkFlare
                 return sprite;
             }
 
-            Debug.LogWarning($"[SpriteAssetLoader] 图标未预热或加载失败: {iconGuid}");
+            ApplicationLog.Warning(
+                LogEventIds.ResourceSprite,
+                $"[SpriteAssetLoader] 图标未预热或加载失败: {iconGuid}");
             return null;
         }
 
         public void ReleaseAll()
         {
-            foreach (AsyncOperationHandle<Sprite> handle in _handles.Values)
+            _generation++;
+            LoadOperation[] operations = new LoadOperation[_inFlight.Count];
+            _inFlight.Values.CopyTo(operations, 0);
+            _inFlight.Clear();
+
+            for (int i = 0; i < operations.Length; i++)
             {
-                if (handle.IsValid())
-                {
-                    Addressables.Release(handle);
-                }
+                operations[i].Invalidated = true;
+                operations[i].Completion.TrySetCanceled();
             }
 
-            _handles.Clear();
+            foreach (AssetLease<Sprite> lease in _leases.Values)
+            {
+                lease.Dispose();
+            }
+
+            _leases.Clear();
             _spriteCache.Clear();
-            _loadingGuids.Clear();
         }
 
-        async UniTask LoadOneAsync(AssetReferenceSprite reference, CancellationToken token)
+        public void Dispose()
         {
-            string guid = reference.AssetGUID;
-            AsyncOperationHandle<Sprite> handle = default;
+            ReleaseAll();
+            _owner.Close();
+            _ownedService?.Dispose();
+        }
 
-            try
-            {
-                handle = Addressables.LoadAssetAsync<Sprite>(reference.RuntimeKey);
-                await handle.ToUniTask(cancellationToken: token);
+        async UniTask LoadOneAsync(AssetReferenceSprite reference, LoadOperation operation)
+        {
+            ResourceLoadResult<Sprite> result = await _service.AcquireAsync<Sprite>(
+                _owner,
+                reference.RuntimeKey,
+                operation.Guid);
 
-                if (handle.Status != AsyncOperationStatus.Succeeded || handle.Result == null)
-                {
-                    Debug.LogError($"[SpriteAssetLoader] 图标加载失败: {guid}");
-                    ReleaseHandle(handle);
-                    return;
-                }
+            if (operation.Invalidated || operation.Generation != _generation)
+            {
+                result.Lease?.Dispose();
+                operation.Completion.TrySetCanceled();
+                return;
+            }
 
-                _handles[guid] = handle;
-                _spriteCache[guid] = handle.Result;
-                Debug.Log($"[SpriteAssetLoader] 图标加载完成: {guid} -> {handle.Result.name}");
-            }
-            catch (OperationCanceledException)
+            if (!result.Succeeded)
             {
-                ReleaseHandle(handle);
-                throw;
+                ApplicationLog.Error(
+                    LogEventIds.ResourceSprite,
+                    $"[SpriteAssetLoader] 图标加载失败: {operation.Guid} ({result.Code})");
+                RemoveIfCurrent(operation);
+                operation.Completion.TrySetResult();
+                return;
             }
-            catch (Exception exception)
+
+            _leases.Add(operation.Guid, result.Lease);
+            _spriteCache.Add(operation.Guid, result.Lease.Asset);
+            RemoveIfCurrent(operation);
+            ApplicationLog.Info(
+                LogEventIds.ResourceSprite,
+                $"[SpriteAssetLoader] 图标加载完成: {operation.Guid} -> {result.Lease.Asset.name}");
+            operation.Completion.TrySetResult();
+        }
+
+        void RemoveIfCurrent(LoadOperation operation)
+        {
+            if (_inFlight.TryGetValue(operation.Guid, out LoadOperation current)
+                && ReferenceEquals(current, operation))
             {
-                Debug.LogError($"[SpriteAssetLoader] 图标加载异常: {guid}\n{exception.Message}");
-                ReleaseHandle(handle);
-            }
-            finally
-            {
-                _loadingGuids.Remove(guid);
+                _inFlight.Remove(operation.Guid);
             }
         }
 
-        static void ReleaseHandle(AsyncOperationHandle<Sprite> handle)
+        sealed class LoadOperation
         {
-            if (handle.IsValid())
+            public LoadOperation(string guid, int generation)
             {
-                Addressables.Release(handle);
+                Guid = guid;
+                Generation = generation;
+                Completion = new UniTaskCompletionSource();
             }
+
+            public string Guid { get; }
+
+            public int Generation { get; }
+
+            public UniTaskCompletionSource Completion { get; }
+
+            public UniTask Runner { get; set; }
+
+            public bool Invalidated { get; set; }
         }
     }
 }

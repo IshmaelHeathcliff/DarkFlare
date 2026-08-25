@@ -82,7 +82,7 @@ namespace DarkFlare.Tests
                 AudioServiceConfiguration.Address,
                 settings.FindAssetEntry(configGuid, true)?.address);
             Assert.AreEqual(
-                "audio/ui.confirm",
+                "audio/ui/confirm",
                 settings.FindAssetEntry(clipGuid, true)?.address);
             Assert.AreEqual(clipGuid, cue.Clip.AssetGUID);
             AudioClip clip = AssetDatabase.LoadAssetAtPath<AudioClip>(clipPath);

@@ -101,7 +101,7 @@ namespace DarkFlare
                     entry.PrefixCount,
                     entry.SuffixCount))
             {
-                Debug.LogError(
+                ApplicationLog.Error(LogEventIds.DataValidation,
                     $"[LootTableDefinition] {name} 的掉落条目配置非法："
                     + $"{entry.Item.Id} / {entry.Rarity} / 前缀 {entry.PrefixCount} / 后缀 {entry.SuffixCount}",
                     this);
@@ -117,7 +117,7 @@ namespace DarkFlare
             }
             catch (InvalidOperationException exception)
             {
-                Debug.LogError(
+                ApplicationLog.Error(LogEventIds.DataValidation,
                     $"[LootTableDefinition] {name} 无法生成完整掉落：{exception.Message}",
                     this);
                 return null;
@@ -179,7 +179,7 @@ namespace DarkFlare
 
             for (int i = 0; i < issues.Count; i++)
             {
-                Debug.LogWarning($"[LootTableDefinition] {name}: {issues[i]}", this);
+                ApplicationLog.Warning(LogEventIds.DataValidation, $"[LootTableDefinition] {name}: {issues[i]}", this);
             }
         }
     }

@@ -6,7 +6,7 @@ namespace DarkFlare
     public sealed class ApplicationShellController : IDisposable
     {
         const string BrandName = "DARKFLARE";
-        const string AlphaVersion = "alpha 0.2.5";
+        const string AlphaVersion = "alpha 0.2.6";
 
         readonly UIDocument _document;
         readonly ApplicationHost _host;
@@ -104,35 +104,41 @@ namespace DarkFlare
                 return;
             }
 
-            if (_host.SceneFlow.State == GameFlowState.FatalError)
+            PlayerErrorPresentation presentation = PlayerErrorCatalog.From(result);
+
+            if (_host.SceneFlow.State == GameFlowState.FatalError
+                || presentation.Severity == PlayerErrorSeverity.Fatal)
             {
-                _fatalMessage.text = Resolve(result.PlayerMessage, result.ErrorCode.ToString());
+                _fatalMessage.text = Resolve(presentation.Message, result.ErrorCode.ToString());
                 SetVisible(_fatalLayer, true);
                 _fatalQuit.Focus();
                 return;
             }
 
-            _modalPrimaryAction = null;
-            _retryRequest = result.CanRetry
+            _modalPrimaryAction = !presentation.HasAction(PlayerErrorAction.Retry)
+                && presentation.HasAction(PlayerErrorAction.ReturnFrontEnd)
+                ? () => RunRequest(SceneFlowRequest.ReturnToFrontEnd())
+                : null;
+            _retryRequest = presentation.HasAction(PlayerErrorAction.Retry)
                 ? CreateRetryRequest(result)
                 : null;
             _focusBeforeModal = _root?.panel?.focusController?.focusedElement as VisualElement;
             _modalTitle.text = Resolve(
                 LocalizedMessage.Ui("flow.modal.title"),
                 "Operation Failed");
-            _modalMessage.text = Resolve(result.PlayerMessage, result.ErrorCode.ToString());
-            _modalRetry.text = Resolve(
-                LocalizedMessage.Ui("flow.modal.retry"),
-                "Retry");
+            _modalMessage.text = Resolve(presentation.Message, result.ErrorCode.ToString());
+            _modalRetry.text = _retryRequest.HasValue
+                ? Resolve(LocalizedMessage.Ui("flow.modal.retry"), "Retry")
+                : Resolve(LocalizedMessage.Ui("menu.return_confirm.confirm"), "Return");
             _modalCancel.text = Resolve(
                 LocalizedMessage.Ui("flow.modal.cancel"),
                 "Cancel");
-            _modalRetry.style.display = _retryRequest.HasValue
+            _modalRetry.style.display = _retryRequest.HasValue || _modalPrimaryAction != null
                 ? DisplayStyle.Flex
                 : DisplayStyle.None;
             SetVisible(_modalLayer, true);
 
-            if (_retryRequest.HasValue)
+            if (_retryRequest.HasValue || _modalPrimaryAction != null)
             {
                 _modalRetry.Focus();
             }
@@ -140,6 +146,13 @@ namespace DarkFlare
             {
                 _modalCancel.Focus();
             }
+        }
+
+        public void ShowFatal(LocalizedMessage message, string fallback)
+        {
+            _fatalMessage.text = Resolve(message, fallback);
+            SetVisible(_fatalLayer, true);
+            _fatalQuit.Focus();
         }
 
         public void RequestReturnToFrontEnd()

@@ -75,7 +75,7 @@ namespace DarkFlare
 
             if (!evaluation.IsAvailable)
             {
-                Debug.Log(
+                ApplicationLog.Info(LogEventIds.GameplayCrafting,
                     $"[CraftingSystem] 打造不可用：{evaluation.FailureReason}，{DescribeItem(item)}");
                 return CraftingResult.Failure(
                     operation,
@@ -96,7 +96,7 @@ namespace DarkFlare
 
             if (!result.Succeeded)
             {
-                Debug.Log(
+                ApplicationLog.Info(LogEventIds.GameplayCrafting,
                     $"[CraftingSystem] 打造失败：{result.FailureReason}，根种子 {rootSeed}，{DescribeItem(item)}");
                 return result.WithEconomy(evaluation.Cost, inventory.Gold);
             }
@@ -120,7 +120,7 @@ namespace DarkFlare
 
             CraftingResult committed = result.WithEconomy(evaluation.Cost, inventory.Gold);
             this.SendEvent(new ItemCraftedEvent(committed));
-            Debug.Log(
+            ApplicationLog.Info(LogEventIds.GameplayCrafting,
                 $"[CraftingSystem] {operation}/{scope} 成功，根种子 {rootSeed}，花费 {evaluation.Cost}，"
                 + $"{DescribeItem(item)} 当前词条 {item.Prefixes.Count + item.Suffixes.Count} 条，剩余金币 {inventory.Gold}");
             return committed;

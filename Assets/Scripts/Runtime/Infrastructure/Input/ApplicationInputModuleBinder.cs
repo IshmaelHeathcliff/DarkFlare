@@ -64,7 +64,7 @@ namespace DarkFlare
 
             if (!IsBound)
             {
-                Debug.LogError(
+                ApplicationLog.Error(LogEventIds.InfrastructureInput,
                     "[ApplicationInputModuleBinder] UI Input Module 绑定运行时 Action Asset 失败",
                     this);
                 Unbind();

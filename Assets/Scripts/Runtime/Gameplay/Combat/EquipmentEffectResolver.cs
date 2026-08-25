@@ -38,7 +38,7 @@ namespace DarkFlare
                     {
                         if (pair.Key != EquipmentSlot.Weapon)
                         {
-                            Debug.LogWarning(
+                            ApplicationLog.Warning(LogEventIds.GameplayCombat,
                                 $"[EquipmentEffectResolver] {item.InstanceId} 的 LocalItem 修改器位于非武器槽 {pair.Key}，已忽略");
                         }
 

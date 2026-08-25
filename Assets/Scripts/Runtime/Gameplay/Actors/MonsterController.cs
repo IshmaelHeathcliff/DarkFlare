@@ -216,7 +216,7 @@ namespace DarkFlare
 
             if (_definition.ContactDamages.Count == 0)
             {
-                Debug.LogError($"[MonsterController] {_definition.Id} 没有可用的碰撞伤害配置", _definition);
+                ApplicationLog.Error(LogEventIds.GameplayActor, $"[MonsterController] {_definition.Id} 没有可用的碰撞伤害配置", _definition);
                 return;
             }
 

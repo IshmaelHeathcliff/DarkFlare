@@ -106,7 +106,7 @@ namespace DarkFlare
             _rootSeed = useFixedSeed ? fixedSeed : CreateRootSeed();
             _sequences.Clear();
             _configured = true;
-            Debug.Log($"[GameplayRandomSystem] 根种子: {_rootSeed}（{(useFixedSeed ? "固定" : "随机")}）");
+            ApplicationLog.Info(LogEventIds.GameplayCombat, $"[GameplayRandomSystem] 根种子: {_rootSeed}（{(useFixedSeed ? "固定" : "随机")}）");
         }
 
         public int NextSeed(GameplayRandomChannel channel)

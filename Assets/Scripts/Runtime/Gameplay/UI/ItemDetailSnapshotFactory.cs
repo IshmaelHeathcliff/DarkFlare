@@ -124,7 +124,7 @@ namespace DarkFlare
             if (definitions == null || definitions.Count != modifiers.Count)
             {
                 int definitionCount = definitions != null ? definitions.Count : 0;
-                Debug.LogWarning(
+                ApplicationLog.Warning(LogEventIds.GameplayUi,
                     $"[ItemDetailSnapshotFactory] {itemName} / {groupName} modifier definition count "
                     + $"({definitionCount}) does not match instance count ({modifiers.Count})");
             }

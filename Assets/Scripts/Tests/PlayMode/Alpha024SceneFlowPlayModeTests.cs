@@ -48,6 +48,11 @@ namespace DarkFlare.Tests
         public IEnumerator ThreeCycles_NewGamePauseAndReturnKeepTopologyUnique()
         {
             ApplicationHost host = ApplicationHost.Current;
+            ResourceDiagnosticsSnapshot applicationBaseline = host.ResourceDiagnostics;
+            Assert.AreEqual(2, applicationBaseline.ActiveOwners);
+            Assert.AreEqual(1, applicationBaseline.ActiveEntries);
+            Assert.AreEqual(1, applicationBaseline.ActiveLeases);
+            Assert.AreEqual(0, applicationBaseline.InFlightLoads);
 
             for (int cycle = 0; cycle < 3; cycle++)
             {
@@ -57,6 +62,16 @@ namespace DarkFlare.Tests
                     .ToCoroutine(result => startResult = result);
                 Assert.IsTrue(startResult.Succeeded, startResult.Exception?.ToString());
                 AssertInGameTopology(host, cycle);
+                ResourceDiagnosticsSnapshot sessionSnapshot = host.ResourceDiagnostics;
+                Assert.GreaterOrEqual(
+                    sessionSnapshot.ActiveOwners,
+                    applicationBaseline.ActiveOwners + 2,
+                    $"cycle={cycle}: Session 资源 owner 未建立");
+                Assert.Greater(
+                    sessionSnapshot.ActiveLeases,
+                    applicationBaseline.ActiveLeases,
+                    $"cycle={cycle}: Session 资源未持有租约");
+                Assert.AreEqual(0, sessionSnapshot.InFlightLoads);
 
                 GameSessionHost session = host.CurrentSession;
                 using (host.GameTime.AcquirePause($"alpha-0.2.4-cycle-{cycle}"))
@@ -77,6 +92,20 @@ namespace DarkFlare.Tests
 
                 yield return null;
                 AssertFrontEndTopology(host, cycle);
+                ResourceDiagnosticsSnapshot released = host.ResourceDiagnostics;
+                Assert.AreEqual(
+                    applicationBaseline.ActiveOwners,
+                    released.ActiveOwners,
+                    $"cycle={cycle}: Session owner 未回到基线");
+                Assert.AreEqual(
+                    applicationBaseline.ActiveEntries,
+                    released.ActiveEntries,
+                    $"cycle={cycle}: Session entry 未回到基线");
+                Assert.AreEqual(
+                    applicationBaseline.ActiveLeases,
+                    released.ActiveLeases,
+                    $"cycle={cycle}: Session lease 未回到基线");
+                Assert.AreEqual(0, released.InFlightLoads);
             }
         }
 

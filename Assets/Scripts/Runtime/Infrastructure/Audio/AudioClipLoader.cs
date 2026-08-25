@@ -3,7 +3,6 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace DarkFlare
 {
@@ -19,8 +18,27 @@ namespace DarkFlare
         IAudioClipLoadHandle StartLoad(AssetReferenceT<AudioClip> reference);
     }
 
-    internal sealed class AddressableAudioClipLoader : IAudioClipLoader
+    internal sealed class AddressableAudioClipLoader : IAudioClipLoader, IDisposable
     {
+        readonly AddressableAssetService _service;
+        readonly AddressableAssetService _ownedService;
+        readonly AssetOwnerScope _owner;
+
+        public AddressableAudioClipLoader()
+        {
+            _ownedService = new AddressableAssetService();
+            _service = _ownedService;
+            _owner = _service.CreateOwner("standalone-audio-loader");
+        }
+
+        public AddressableAudioClipLoader(
+            AddressableAssetService service,
+            AssetOwnerScope owner)
+        {
+            _service = service ?? throw new ArgumentNullException(nameof(service));
+            _owner = owner ?? throw new ArgumentNullException(nameof(owner));
+        }
+
         public IAudioClipLoadHandle StartLoad(AssetReferenceT<AudioClip> reference)
         {
             if (reference == null || string.IsNullOrWhiteSpace(reference.AssetGUID))
@@ -28,40 +46,58 @@ namespace DarkFlare
                 throw new ArgumentException("AudioClip Addressable 引用无效", nameof(reference));
             }
 
-            AsyncOperationHandle<AudioClip> handle =
-                Addressables.LoadAssetAsync<AudioClip>(reference.RuntimeKey);
-            return new AddressableAudioClipLoadHandle(handle);
+            return new AddressableAudioClipLoadHandle(_service, _owner, reference);
+        }
+
+        public void Dispose()
+        {
+            _owner.Close();
+            _ownedService?.Dispose();
         }
     }
 
     internal sealed class AddressableAudioClipLoadHandle : IAudioClipLoadHandle
     {
-        readonly AsyncOperationHandle<AudioClip> _handle;
+        readonly AddressableAssetService _service;
+        readonly AssetOwnerScope _owner;
+        readonly AssetReferenceT<AudioClip> _reference;
 
+        AssetLease<AudioClip> _lease;
         bool _released;
 
-        public AddressableAudioClipLoadHandle(AsyncOperationHandle<AudioClip> handle)
+        public AddressableAudioClipLoadHandle(
+            AddressableAssetService service,
+            AssetOwnerScope owner,
+            AssetReferenceT<AudioClip> reference)
         {
-            _handle = handle;
+            _service = service;
+            _owner = owner;
+            _reference = reference;
         }
 
         public async UniTask<AudioClip> LoadAsync(CancellationToken cancellationToken)
         {
-            await _handle.ToUniTask(cancellationToken: cancellationToken);
+            ResourceLoadResult<AudioClip> result = await _service.AcquireAsync<AudioClip>(
+                _owner,
+                _reference.RuntimeKey,
+                _reference.AssetGUID,
+                cancellationToken);
 
-            if (_released || !_handle.IsValid())
+            if (_released || result.Code == ResourceErrorCode.Cancelled)
             {
-                throw new OperationCanceledException("AudioClip 加载句柄已释放");
+                result.Lease?.Dispose();
+                throw new OperationCanceledException(cancellationToken);
             }
 
-            if (_handle.Status != AsyncOperationStatus.Succeeded || _handle.Result == null)
+            if (!result.Succeeded)
             {
                 throw new InvalidOperationException(
-                    "AudioClip Addressable 加载失败",
-                    _handle.OperationException);
+                    $"AudioClip 资源加载失败：{result.Code}",
+                    result.Exception);
             }
 
-            return _handle.Result;
+            _lease = result.Lease;
+            return _lease.Asset;
         }
 
         public void Release()
@@ -72,11 +108,8 @@ namespace DarkFlare
             }
 
             _released = true;
-
-            if (_handle.IsValid())
-            {
-                Addressables.Release(_handle);
-            }
+            _lease?.Dispose();
+            _lease = null;
         }
     }
 }

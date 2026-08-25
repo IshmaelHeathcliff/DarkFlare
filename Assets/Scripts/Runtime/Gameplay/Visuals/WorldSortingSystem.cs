@@ -79,13 +79,13 @@ namespace DarkFlare
 
             if (string.IsNullOrWhiteSpace(stableSortId))
             {
-                Debug.LogWarning("[WorldSortingSystem] StableSortId 不能为空", participant);
+                ApplicationLog.Warning(LogEventIds.GameplayVisual, "[WorldSortingSystem] StableSortId 不能为空", participant);
                 return false;
             }
 
             if (!_stableIds.Add(stableSortId))
             {
-                Debug.LogWarning($"[WorldSortingSystem] StableSortId 重复：{stableSortId}", participant);
+                ApplicationLog.Warning(LogEventIds.GameplayVisual, $"[WorldSortingSystem] StableSortId 重复：{stableSortId}", participant);
                 return false;
             }
 

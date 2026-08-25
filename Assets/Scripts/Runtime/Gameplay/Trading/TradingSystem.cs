@@ -42,14 +42,14 @@ namespace DarkFlare
 
             if (!inventory.RemoveItem(item))
             {
-                Debug.Log($"[TradingSystem] 出售失败：{DescribeItem(item)} 不在背包中");
+                ApplicationLog.Info(LogEventIds.GameplayTrading, $"[TradingSystem] 出售失败：{DescribeItem(item)} 不在背包中");
                 return false;
             }
 
             int price = GetSellPrice(item);
             inventory.AddGold(price);
             this.SendEvent(new TradeCompletedEvent(TradeOperation.Sell, item, price));
-            Debug.Log($"[TradingSystem] 出售 {DescribeItem(item)} 获得 {price} 金币，当前金币 {inventory.Gold}");
+            ApplicationLog.Info(LogEventIds.GameplayTrading, $"[TradingSystem] 出售 {DescribeItem(item)} 获得 {price} 金币，当前金币 {inventory.Gold}");
             return true;
         }
 
@@ -65,7 +65,7 @@ namespace DarkFlare
 
             if (!economy.HasStock(item))
             {
-                Debug.Log($"[TradingSystem] 购买失败：商人没有 {DescribeItem(item)}");
+                ApplicationLog.Info(LogEventIds.GameplayTrading, $"[TradingSystem] 购买失败：商人没有 {DescribeItem(item)}");
                 return false;
             }
 
@@ -73,20 +73,20 @@ namespace DarkFlare
 
             if (inventory.Gold < price)
             {
-                Debug.Log($"[TradingSystem] 购买失败：金币不足（需要 {price}，持有 {inventory.Gold}）");
+                ApplicationLog.Info(LogEventIds.GameplayTrading, $"[TradingSystem] 购买失败：金币不足（需要 {price}，持有 {inventory.Gold}）");
                 return false;
             }
 
             if (!inventory.TryAddItem(item))
             {
-                Debug.Log($"[TradingSystem] 购买失败：背包放不下 {DescribeItem(item)}");
+                ApplicationLog.Info(LogEventIds.GameplayTrading, $"[TradingSystem] 购买失败：背包放不下 {DescribeItem(item)}");
                 return false;
             }
 
             inventory.TrySpendGold(price);
             economy.RemoveStock(item);
             this.SendEvent(new TradeCompletedEvent(TradeOperation.Buy, item, price));
-            Debug.Log($"[TradingSystem] 购买 {DescribeItem(item)} 花费 {price} 金币，当前金币 {inventory.Gold}");
+            ApplicationLog.Info(LogEventIds.GameplayTrading, $"[TradingSystem] 购买 {DescribeItem(item)} 花费 {price} 金币，当前金币 {inventory.Gold}");
             return true;
         }
 
@@ -113,13 +113,13 @@ namespace DarkFlare
                 economy.AddStock(item);
             }
 
-            Debug.Log($"[TradingSystem] 商人库存初始化完成，共 {economy.MerchantStock.Count} 件");
+            ApplicationLog.Info(LogEventIds.GameplayTrading, $"[TradingSystem] 商人库存初始化完成，共 {economy.MerchantStock.Count} 件");
         }
 
         public void GrantGold(int amount)
         {
             this.GetModel<InventoryModel>().AddGold(amount);
-            Debug.Log($"[TradingSystem] 发放初始金币 {amount}，当前金币 {this.GetModel<InventoryModel>().Gold}");
+            ApplicationLog.Info(LogEventIds.GameplayTrading, $"[TradingSystem] 发放初始金币 {amount}，当前金币 {this.GetModel<InventoryModel>().Gold}");
         }
 
         static string DescribeItem(ItemInstance item)

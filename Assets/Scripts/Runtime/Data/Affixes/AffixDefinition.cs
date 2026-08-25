@@ -292,7 +292,7 @@ namespace DarkFlare
 
             for (int i = 0; i < issues.Count; i++)
             {
-                Debug.LogWarning($"[AffixDefinition] {name}: {issues[i]}", this);
+                ApplicationLog.Warning(LogEventIds.DataValidation, $"[AffixDefinition] {name}: {issues[i]}", this);
             }
         }
     }

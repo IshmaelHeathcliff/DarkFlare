@@ -148,7 +148,7 @@ flowchart LR
 
 - 父作用域停止会自动取消子作用域，但每个任务仍必须响应 Token 并尽快退出。
 - `LifecycleResult` 用于表达成功、幂等完成、进行中、非法状态、关闭中、验证失败、取消和失败；重复停止必须保持幂等。
-- Addressables 句柄由实际加载它的加载器精确释放；`SessionObjectRegistry` 只负责 Session 运行时对象。
+- Addressables 资产由 Application Resource Service 通过 owner / lease 精确释放；`SessionObjectRegistry` 只负责 Session 运行时对象。
 - 只有不存在 `ApplicationHost` 的独立测试环境，`SceneSessionBinding` 和 `ComponentLifecycle` 才允许回退到 Provider / 独立根作用域。
 - `InfrastructurePolicyTests` 会阻止直接访问 `GameArchitecture.Interface`、未登记异步、直接业务文件 IO、`PlayerPrefs` 和散落场景加载；例外必须登记在 `InfrastructurePolicyExceptions.json`，写明原因与移除阶段。
 
@@ -157,7 +157,7 @@ flowchart LR
 - 当前 Scene Flow 已覆盖 Bootstrap / Main 的启动、NewGame、Continue、取消、恢复和返回前台；生命周期模块仍不自行加载或卸载场景。
 - 当前仍只有 `local-default` Profile；已支持 `auto` 槽位、序列化、两代备份、迁移和 Restore，但没有正式档案切换、手动槽位管理或云同步。
 - 新游戏与读档分别使用 `NewGameSessionInitializer` 和 `RestoreGameSessionInitializer`，禁止复用新游戏发放流程伪装恢复。
-- Game Flow 状态、场景事务、UI 错误外壳、输入、音频和平台挂起已由独立模块落地；应用级结构化日志和完整 Addressables 治理仍不属于本模块。
+- Game Flow 状态、场景事务、UI 错误外壳、输入、音频、平台挂起、结构化日志和 Addressables 治理已由独立模块落地；本模块只提供其所有权和注入时机。
 - 一旦进入 `Abandoned`，本次运行不得继续创建 Session；应终止运行或执行测试静态重置。
 
-本模块的边界是提供可靠的生命周期、所有权和注入时机；稳定身份、内容目录和迁移合同见[稳定身份、内容目录与迁移框架](./content-identity-migration.md)，文件格式、保存与 Restore 顺序见[本地存档与 Session 恢复](./local-save.md)，本地化见[用户设置与本地化](./user-settings-localization.md)，场景状态与 UI 外壳见[游戏状态、场景流与应用 UI 外壳](./game-state-scene-flow-ui-shell.md)，音频见 [Application Audio](./application-audio.md)，降低动态与平台挂起见[可访问性与平台生命周期](./accessibility-platform-lifecycle.md)。历史验收范围和测试记录见顶部归档计划。
+本模块的边界是提供可靠的生命周期、所有权和注入时机；稳定身份、内容目录和迁移合同见[稳定身份、内容目录与迁移框架](./content-identity-migration.md)，文件格式、保存与 Restore 顺序见[本地存档与 Session 恢复](./local-save.md)，本地化见[用户设置与本地化](./user-settings-localization.md)，场景状态与 UI 外壳见[游戏状态、场景流与应用 UI 外壳](./game-state-scene-flow-ui-shell.md)，音频见 [Application Audio](./application-audio.md)，日志与资源见[日志、错误处理与 Addressables 资源治理](./logging-error-addressables-governance.md)，降低动态与平台挂起见[可访问性与平台生命周期](./accessibility-platform-lifecycle.md)。历史验收范围和测试记录见顶部归档计划。

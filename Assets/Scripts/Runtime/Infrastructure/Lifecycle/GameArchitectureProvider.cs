@@ -283,7 +283,7 @@ namespace DarkFlare
             }
             catch (Exception exception)
             {
-                Debug.LogException(exception);
+                ApplicationLog.Exception(LogEventIds.InfrastructureLifecycle, exception);
             }
             finally
             {

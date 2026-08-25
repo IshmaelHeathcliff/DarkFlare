@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: DarkFlare-Audio
+  m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
+  m_GroupName: DarkFlare-Audio
+  m_GUID: 31b0bbb980274fb4ab54f8b3a7e27c75
+  m_SerializeEntries:
+  - m_GUID: 39f88bd4147a82945b01aaac74795ba3
+    m_Address: audio/ui/confirm
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - df.application
+    - df.audio
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 2a89337400d536944bcf12b9576d1482, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: db2a3e28b3ea9c845822580c9b52937e, type: 2}
+    - {fileID: 11400000, guid: a260cc07c482c064d906b8fba8cc51de, type: 2}

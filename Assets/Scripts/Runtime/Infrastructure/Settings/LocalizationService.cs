@@ -599,7 +599,7 @@ namespace DarkFlare
             }
             catch (Exception exception)
             {
-                UnityEngine.Debug.LogException(exception);
+                ApplicationLog.Exception(LogEventIds.InfrastructureSettings, exception);
                 await RollbackLatestAsync(generation);
             }
             finally
@@ -627,7 +627,7 @@ namespace DarkFlare
             }
             catch (Exception exception)
             {
-                UnityEngine.Debug.LogException(exception);
+                ApplicationLog.Exception(LogEventIds.InfrastructureSettings, exception);
             }
         }
 
@@ -665,7 +665,7 @@ namespace DarkFlare
                 }
                 catch (Exception exception)
                 {
-                    UnityEngine.Debug.LogException(exception);
+                    ApplicationLog.Exception(LogEventIds.InfrastructureSettings, exception);
                 }
             }
         }

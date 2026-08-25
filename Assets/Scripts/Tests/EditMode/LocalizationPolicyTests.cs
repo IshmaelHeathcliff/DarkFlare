@@ -425,7 +425,10 @@ namespace DarkFlare.Tests
                 {
                     string line = lines[lineIndex];
 
-                    if (!line.Contains("Debug.", StringComparison.Ordinal)
+                    bool isTechnicalLog = line.Contains("Debug.", StringComparison.Ordinal)
+                        || line.Contains("ApplicationLog.", StringComparison.Ordinal);
+
+                    if (!isTechnicalLog
                         && ChineseStringLiteralPattern.IsMatch(line))
                     {
                         violations.Add($"{path}:{lineIndex + 1}: {line.Trim()}");

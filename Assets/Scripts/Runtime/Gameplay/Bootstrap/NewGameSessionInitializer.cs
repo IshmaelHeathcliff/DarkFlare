@@ -49,7 +49,7 @@ namespace DarkFlare
             architecture.GetSystem<GameplayRandomSystem>().Configure(
                 _configuration.UseFixedRandomSeed,
                 _configuration.FixedRandomSeed);
-            Debug.Log("[NewGameSessionInitializer] 开始预热资源");
+            ApplicationLog.Info(LogEventIds.GameplayBootstrap, "[NewGameSessionInitializer] 开始预热资源");
             List<AssetReferenceSprite> itemIcons = _configuration.CollectItemIcons();
             await UniTask.WhenAll(
                 architecture.GetSystem<SpawnSystem>().PreloadAsync(
@@ -92,7 +92,7 @@ namespace DarkFlare
             _cameraBound = true;
             _configuration.MonsterSpawner.gameObject.SetActive(true);
             _configuration.MonsterSpawner.BeginSpawning();
-            Debug.Log("[NewGameSessionInitializer] 新游戏 Session 初始化完成");
+            ApplicationLog.Info(LogEventIds.GameplayBootstrap, "[NewGameSessionInitializer] 新游戏 Session 初始化完成");
         }
 
         public async UniTask RollbackAsync(

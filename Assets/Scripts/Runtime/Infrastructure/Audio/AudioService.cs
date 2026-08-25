@@ -441,6 +441,7 @@ namespace DarkFlare
 
             _sources.Clear();
             _availableSources.Clear();
+            (_loader as IDisposable)?.Dispose();
             DestroyObject(_root);
             _configuration = null;
         }

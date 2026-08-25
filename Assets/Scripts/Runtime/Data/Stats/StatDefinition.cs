@@ -79,7 +79,7 @@ namespace DarkFlare
 
             for (int i = 0; i < issues.Count; i++)
             {
-                Debug.LogWarning($"[StatDefinition] {name}: {issues[i]}", this);
+                ApplicationLog.Warning(LogEventIds.DataValidation, $"[StatDefinition] {name}: {issues[i]}", this);
             }
         }
     }

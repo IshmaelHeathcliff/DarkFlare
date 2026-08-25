@@ -2,17 +2,17 @@
 
 > 状态：规划期强制契约
 > 建立日期：2026-08-17
-> 最近更新：2026-08-24
+> 最近更新：2026-08-25
 > 适用范围：`alpha 0.2` 全部实现、迁移、测试和后续新增运行时代码
 > 上位计划：[alpha 0.2 基础设施开发计划](./alpha-0.2-plan.md)
-> 已落地模块：[应用生命周期与会话作用域](../infrastructure/application-lifecycle.md)（`alpha 0.2.0`）、[稳定身份、内容目录与迁移框架](../infrastructure/content-identity-migration.md)（`alpha 0.2.1`）、[本地存档与 Session 恢复](../infrastructure/local-save.md)（`alpha 0.2.2`）、[用户设置与本地化](../infrastructure/user-settings-localization.md)（`alpha 0.2.3`）、[游戏状态、场景流与应用 UI 外壳](../infrastructure/game-state-scene-flow-ui-shell.md)（`alpha 0.2.4`）、[输入与运行时 UI](../input-ui-system.md)、[Application Audio](../infrastructure/application-audio.md)、[可访问性与平台生命周期](../infrastructure/accessibility-platform-lifecycle.md)（`alpha 0.2.5`）
-> 当前阶段：`alpha 0.2.5` 已完成；`alpha 0.2.6` 日志、错误处理与 Addressables 资源治理待开始
+> 已落地模块：[应用生命周期与会话作用域](../infrastructure/application-lifecycle.md)（`alpha 0.2.0`）、[稳定身份、内容目录与迁移框架](../infrastructure/content-identity-migration.md)（`alpha 0.2.1`）、[本地存档与 Session 恢复](../infrastructure/local-save.md)（`alpha 0.2.2`）、[用户设置与本地化](../infrastructure/user-settings-localization.md)（`alpha 0.2.3`）、[游戏状态、场景流与应用 UI 外壳](../infrastructure/game-state-scene-flow-ui-shell.md)（`alpha 0.2.4`）、[输入与运行时 UI](../input-ui-system.md)、[Application Audio](../infrastructure/application-audio.md)、[可访问性与平台生命周期](../infrastructure/accessibility-platform-lifecycle.md)（`alpha 0.2.5`）、[日志、错误处理与 Addressables 资源治理](../infrastructure/logging-error-addressables-governance.md)（`alpha 0.2.6`）
+> 当前阶段：`alpha 0.2.6` 已完成；`alpha 0.2.7` 待规划
 
 ## 使用方式
 
 本文使用“必须”“禁止”“允许”表达强制级别。阶段实现可以在独立执行计划中补充细节，但不能静默绕过本文。确需例外时，必须提交机器可读白名单，记录规则、文件、原因和移除阶段，并在版本封板前复核。
 
-本文是规划期契约，不代表当前代码已经全部符合。`alpha 0.2.0–0.2.4` 已落地应用生命周期、身份 / 迁移、存档、设置 / 本地化和场景流 / UI Shell；`alpha 0.2.5` 已落地 Application 级唯一输入 owner、重绑定、设备 Glyph、共享 Settings Page、Audio Service、Reduce Motion 与 Platform Lifecycle。结构化日志、进程级异常处理和通用 Addressables 资源治理仍由 `alpha 0.2.6` 完成。现有技术债在对应阶段迁移；新增代码不得扩大债务面。
+本文是规划期契约，不代表尚未执行的 `alpha 0.2.7` 已经完成。`alpha 0.2.0–0.2.6` 已落地应用生命周期、身份 / 迁移、存档、设置 / 本地化、场景流 / UI Shell、输入、音频、可访问性、平台生命周期、结构化日志、进程级异常处理和通用 Addressables 资源治理；新增代码不得绕过这些正式入口。
 
 ## 基础设施总清单
 

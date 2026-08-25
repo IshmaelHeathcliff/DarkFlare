@@ -320,7 +320,7 @@ namespace DarkFlare
 
             for (int i = 0; i < issues.Count; i++)
             {
-                Debug.LogWarning($"[MonsterDefinition] {name}: {issues[i]}", this);
+                ApplicationLog.Warning(LogEventIds.DataValidation, $"[MonsterDefinition] {name}: {issues[i]}", this);
             }
         }
     }

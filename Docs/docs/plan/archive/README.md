@@ -17,6 +17,7 @@
 - [用户设置与本地化](../../infrastructure/user-settings-localization.md)
 - [游戏状态、场景流与应用 UI 外壳](../../infrastructure/game-state-scene-flow-ui-shell.md)
 - [Application Audio](../../infrastructure/application-audio.md)
+- [日志、错误处理与 Addressables 资源治理](../../infrastructure/logging-error-addressables-governance.md)
 - [可访问性与平台生命周期](../../infrastructure/accessibility-platform-lifecycle.md)
 
 ## 归档清单
@@ -56,5 +57,6 @@
 | [alpha 0.2.5 输入、音频、可访问性与平台生命周期执行计划](./alpha-0.2.5-input-audio-accessibility-platform-lifecycle-plan.md) | alpha 0.2.5 | [输入与运行时 UI](../../input-ui-system.md)、[Application Audio](../../infrastructure/application-audio.md)、[可访问性与平台生命周期](../../infrastructure/accessibility-platform-lifecycle.md) |
 | [alpha 0.2.5 切片 1 Application Input Service 执行计划](./alpha-0.2.5-slice-1-application-input-plan.md) | alpha 0.2.5 切片 1 | [输入与运行时 UI](../../input-ui-system.md)、[应用生命周期与会话作用域](../../infrastructure/application-lifecycle.md) |
 | [alpha 0.2.5 切片 2–6 收尾执行计划](./alpha-0.2.5-slices-2-6-completion-plan.md) | alpha 0.2.5 切片 2–6 | [输入与运行时 UI](../../input-ui-system.md)、[Application Audio](../../infrastructure/application-audio.md)、[可访问性与平台生命周期](../../infrastructure/accessibility-platform-lifecycle.md) |
+| [alpha 0.2.6 日志、错误处理与 Addressables 资源治理执行计划](./alpha-0.2.6-logging-error-addressables-plan.md) | alpha 0.2.6 | [日志、错误处理与 Addressables 资源治理](../../infrastructure/logging-error-addressables-governance.md) |
 
-最近归档日期：2026-08-24。
+最近归档日期：2026-08-25。

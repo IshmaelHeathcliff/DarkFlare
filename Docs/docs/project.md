@@ -2,7 +2,7 @@
 
 ## 项目状态
 
-`DarkFlare` 已完成首版最小循环、初步体验优化、`alpha 0.1` 封板，以及 `alpha 0.2.0–0.2.5` 应用生命周期、稳定身份、迁移、本地存档、用户设置、本地化、场景流、输入、音频、可访问性和平台生命周期。当前可从常驻 `Bootstrap.unity` 的 FrontEnd 新建或继续游戏，additive 进入 `Main.unity` 完成战斗、掉落、四槽装备、交易和打造，暂停后保存并安全返回前台；FrontEnd 与暂停菜单共用设置页，中英语言、音量、按键、设备 Glyph 和降低动态效果可即时生效。
+`DarkFlare` 已完成首版最小循环、初步体验优化、`alpha 0.1` 封板，以及 `alpha 0.2.0–0.2.6` 应用生命周期、稳定身份、迁移、本地存档、用户设置、本地化、场景流、输入、音频、可访问性、平台生命周期、结构化日志、错误处理和 Addressables 资源治理。当前可从常驻 `Bootstrap.unity` 的 FrontEnd 新建或继续游戏，additive 进入 `Main.unity` 完成战斗、掉落、四槽装备、交易和打造，暂停后保存并安全返回前台；FrontEnd 与暂停菜单共用设置页，中英语言、音量、按键、设备 Glyph 和降低动态效果可即时生效。
 
 alpha 版本内的阶段使用三段式名称：`alpha 0.1` 的首个阶段为 `alpha 0.1.0`，后续依次为 `alpha 0.1.1`、`alpha 0.1.2`；`alpha 0.2` 同样从 `alpha 0.2.0` 开始。已完成版本记录见[计划归档](./plan/archive/README.md)，当前版本见[alpha 0.2 基础设施开发计划](./plan/alpha-0.2-plan.md)。
 
@@ -31,7 +31,7 @@ alpha 版本内的阶段使用三段式名称：`alpha 0.1` 的首个阶段为 `
 
 - `Assets/Scripts/Runtime/Core/QFramework.cs`：独立 `DarkFlare.Core` 程序集。
 - `Assets/Scripts/Runtime/Infrastructure/Lifecycle/ApplicationBootstrap.cs`：在场景加载前创建唯一应用宿主，并在 Subsystem Registration 重置静态状态。
-- `Assets/Scripts/Runtime/Infrastructure/Lifecycle/ApplicationHost.cs`：拥有 Application / Profile / Session / Scene 生命周期、内容目录、存档协调、Scene Flow、Time、Input、Audio、Accessibility 与 Platform 服务，向场景流提供 Session 底层事务。
+- `Assets/Scripts/Runtime/Infrastructure/Lifecycle/ApplicationHost.cs`：拥有 Application / Profile / Session / Scene 生命周期、内容目录、存档协调、Scene Flow、Time、Input、Audio、Accessibility、Platform、Logger 与 Resource Service，向场景流提供 Session 底层事务。
 - `Assets/Scripts/Runtime/Infrastructure/Lifecycle/GameArchitectureProvider.cs`：`GameArchitecture` 的唯一正式创建、访问与销毁入口，以所有者 lease 和单调 generation 隔离连续 Session。
 - `Assets/Scripts/Runtime/Infrastructure/Lifecycle/SceneSessionBinding.cs`：让场景预置组件只绑定同场景且已 Running、lease 有效的 Session。
 - `Assets/Scripts/Runtime/Infrastructure/Content/`：`ContentId`、内容类型登记、目录资产与不可变运行时目录。
@@ -40,16 +40,18 @@ alpha 版本内的阶段使用三段式名称：`alpha 0.1` 的首个阶段为 `
 - `Assets/Scripts/Runtime/Infrastructure/Time/GameTimeService.cs`：应用级 pause lease 与 Runtime 唯一 `Time.timeScale` 写入入口。
 - `Assets/Scripts/Runtime/Infrastructure/Input/`：Application 级唯一 Action Asset owner、Context / suspension lease、重绑定、设备族、Glyph 与 Bootstrap UI Module 绑定。
 - `Assets/Scripts/Runtime/Infrastructure/Audio/`：AudioMixer 配置、Addressables Cue、Source 池、有主播放句柄与平台暂停。
+- `Assets/Scripts/Runtime/Infrastructure/Diagnostics/`：结构化日志、稳定事件目录、环形缓冲、异常监控、first-failure-wins 与玩家错误目录。
+- `Assets/Scripts/Runtime/Infrastructure/Resources/`：Addressables 唯一后端、Application Resource Service、owner / lease、单航班与资源诊断。
 - `Assets/Scripts/Runtime/Infrastructure/Accessibility/`、`Platform/`：Reduce Motion Profile，以及 Focus / Suspend / Resume / Quit 编排。
 - `Assets/Scripts/Runtime/Infrastructure/UI/`：Application Shell、FrontEnd、共享 Settings Page、Busy / Modal / Toast / Fatal 表现和焦点恢复。
 - `Assets/Scripts/Runtime/Infrastructure/Persistence/`：纯 DTO、运行时映射、版本迁移、确定性 JSON、代际 Storage、快照 / 恢复准备、Restore initializer、Profile 级 SaveCoordinator 和 Session Facade。
 - `Assets/Scripts/Runtime/Infrastructure/Settings/`：Settings V1、原子存储、迁移、Application 级 Localization Service、语义消息与正式内容本地化引用。
 - `Assets/Scripts/Runtime/GameArchitecture.cs`：Session 组合根，注册输入 Utility、战斗 / 装备 / 背包 / 经济 Model，战斗、生成、掉落、交易、打造 System，以及 `SessionObjectRegistry`。
 - `Assets/Scripts/Runtime/`：`DarkFlare.Runtime` 程序集。
-- `Assets/Scripts/Tests/EditMode/`：`DarkFlare.Tests.EditMode`，全量 `409/409` 通过。
+- `Assets/Scripts/Tests/EditMode/`：`DarkFlare.Tests.EditMode`，全量 `423/423` 通过。
 - `Assets/Scripts/Tests/PlayMode/`：`DarkFlare.Tests.PlayMode`，项目自有测试 `53/53` 通过；完整运行 57 项中 55 项通过、0 失败，另有 2 项 Input System 包集成测试因既有 issue 1252825 跳过。
 
-生命周期的职责、状态、事务和禁止事项见[应用生命周期与会话作用域](./infrastructure/application-lifecycle.md)；内容、实例身份、DTO 与迁移规则见[稳定身份、内容目录与迁移框架](./infrastructure/content-identity-migration.md)；文件格式、代际存储、保存和 Restore 流程见[本地存档与 Session 恢复](./infrastructure/local-save.md)；设置存储、语言切换、内容名称和字体合同见[用户设置与本地化](./infrastructure/user-settings-localization.md)；Bootstrap / Main 拓扑、状态、场景事务、Time Service 和 Shell 见[游戏状态、场景流与应用 UI 外壳](./infrastructure/game-state-scene-flow-ui-shell.md)；音频见 [Application Audio](./infrastructure/application-audio.md)；降低动态效果与平台挂起见[可访问性与平台生命周期](./infrastructure/accessibility-platform-lifecycle.md)。
+生命周期的职责、状态、事务和禁止事项见[应用生命周期与会话作用域](./infrastructure/application-lifecycle.md)；内容、实例身份、DTO 与迁移规则见[稳定身份、内容目录与迁移框架](./infrastructure/content-identity-migration.md)；文件格式、代际存储、保存和 Restore 流程见[本地存档与 Session 恢复](./infrastructure/local-save.md)；设置存储、语言切换、内容名称和字体合同见[用户设置与本地化](./infrastructure/user-settings-localization.md)；Bootstrap / Main 拓扑、状态、场景事务、Time Service 和 Shell 见[游戏状态、场景流与应用 UI 外壳](./infrastructure/game-state-scene-flow-ui-shell.md)；音频见 [Application Audio](./infrastructure/application-audio.md)；日志、玩家错误和资源所有权见[日志、错误处理与 Addressables 资源治理](./infrastructure/logging-error-addressables-governance.md)；降低动态效果与平台挂起见[可访问性与平台生命周期](./infrastructure/accessibility-platform-lifecycle.md)。
 
 ### 玩法模块
 
@@ -77,13 +79,14 @@ alpha 版本内的阶段使用三段式名称：`alpha 0.1` 的首个阶段为 `
 
 - `Assets/Data/Preset` 已有玩家、技能、怪物、刷怪、掉落、物品、词条、商人和打造配置；唯一正式内容目录 `core` v1 收录 90 个配置。
 - 玩家、怪物、投射物和掉落物 Prefab 位于 `Assets/Prefabs`，通过 Addressables 加载。
-- Prefab Addressables 加载按 GUID 建立跨调用单飞任务；Sprite 在单次预热请求内按 GUID 去重，加载器保存并精确释放实际句柄。
+- Prefab、Sprite、Audio 与 Application 配置统一通过 Resource Service 按稳定键单航班加载；Application / Session owner 持有 Asset Lease，并在关闭后回到资源基线。
 - `Assets/UI` 已有 `GameRoot`、`Hud`、`Inventory`、`Shop`、`Crafting` 的 UXML / USS。
 - `Assets/UI` 另有 Application Shell UXML / USS；`Assets/Settings/Scenes/SceneFlowConfiguration.asset` 集中注册 Bootstrap 与 Main。
 - 正式本地存档写入 `Application.persistentDataPath/DarkFlare/Saves/<slot>`；项目 Assets 中不保存玩家运行时数据。
 - 用户设置写入独立的 `Application.persistentDataPath/DarkFlare/Settings`；当前开放语言、四类音量与静音、输入重绑定、Glyph 偏好和降低动态效果。
 - `Assets/Localization` 已有 `ui`、`system`、`items`、`stats`、`affixes`、`monsters` 六张中英表；86 个正式内容名称引用与字体 fallback 均由策略测试校验。
 - `Assets/Art/UI/InputGlyphs` 保存 8 张独立 64×64 单 Sprite Glyph；`Assets/Audio` 保存四组 Mixer、Addressables 配置和首个 `ui.confirm` Cue。
+- 15 个 DarkFlare 自有 Addressables 条目位于四个 `DarkFlare-*` 组，使用规范小写地址和 `df.*` 生命周期 / 类型 Label；默认组为空。
 - 地图、玩家、三种怪物、七件装备、商人、打造台和运行时 UI 已完成首批视觉接入；`PrototypeSquare.png` 仅保留为调试回退。
 
 ## 当前边界

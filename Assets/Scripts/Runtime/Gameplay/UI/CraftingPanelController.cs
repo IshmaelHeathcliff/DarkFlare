@@ -133,7 +133,7 @@ namespace DarkFlare
         {
             if (_document == null || _document.panelSettings == null)
             {
-                Debug.LogError("[CraftingPanelController] 缺少 UIDocument 或 PanelSettings，无法初始化打造", this);
+                ApplicationLog.Error(LogEventIds.GameplayUi, "[CraftingPanelController] 缺少 UIDocument 或 PanelSettings，无法初始化打造", this);
                 return SceneSessionBindResult.Failed;
             }
 
@@ -158,7 +158,7 @@ namespace DarkFlare
                 PlaceInCraftingSlot);
             RefreshCrafting();
             SetVisible(IsVisible);
-            Debug.Log("[CraftingPanelController] 随机打造工作台初始化完成", this);
+            ApplicationLog.Info(LogEventIds.GameplayUi, "[CraftingPanelController] 随机打造工作台初始化完成", this);
             return SceneSessionBindResult.Success;
         }
 
@@ -220,7 +220,7 @@ namespace DarkFlare
         {
             if (_document == null || _inventoryPanel == null)
             {
-                Debug.LogError("[CraftingPanelController] 缺少 UIDocument 或共享背包控制器", this);
+                ApplicationLog.Error(LogEventIds.GameplayUi, "[CraftingPanelController] 缺少 UIDocument 或共享背包控制器", this);
                 return false;
             }
 
@@ -269,7 +269,7 @@ namespace DarkFlare
                 || _removeAffixButton == null
                 || _rerollValuesButton == null)
             {
-                Debug.LogError("[CraftingPanelController] 打造 UXML 缺少随机打造工作台所需元素", this);
+                ApplicationLog.Error(LogEventIds.GameplayUi, "[CraftingPanelController] 打造 UXML 缺少随机打造工作台所需元素", this);
                 return false;
             }
 

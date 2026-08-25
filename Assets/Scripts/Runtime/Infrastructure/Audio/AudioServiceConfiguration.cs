@@ -110,7 +110,7 @@ namespace DarkFlare
         menuName = "DarkFlare/基础设施/音频服务配置")]
     public sealed class AudioServiceConfiguration : ScriptableObject
     {
-        public const string Address = "infrastructure/audio";
+        public const string Address = "infrastructure/audio/configuration";
         public const string MasterVolumeParameter = "MasterVolumeDb";
         public const string MusicVolumeParameter = "MusicVolumeDb";
         public const string SoundEffectsVolumeParameter = "SfxVolumeDb";

@@ -186,7 +186,7 @@ namespace DarkFlare
 
             for (int i = 0; i < issues.Count; i++)
             {
-                Debug.LogWarning($"[ItemBaseDefinition] {name}: {issues[i]}", this);
+                ApplicationLog.Warning(LogEventIds.DataValidation, $"[ItemBaseDefinition] {name}: {issues[i]}", this);
             }
         }
     }

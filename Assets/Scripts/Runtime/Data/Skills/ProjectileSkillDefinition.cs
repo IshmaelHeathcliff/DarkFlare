@@ -115,7 +115,7 @@ namespace DarkFlare
 
             for (int i = 0; i < issues.Count; i++)
             {
-                Debug.LogWarning($"[ProjectileSkillDefinition] {name}: {issues[i]}", this);
+                ApplicationLog.Warning(LogEventIds.DataValidation, $"[ProjectileSkillDefinition] {name}: {issues[i]}", this);
             }
         }
     }

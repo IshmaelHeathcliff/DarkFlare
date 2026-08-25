@@ -62,10 +62,14 @@ MonoBehaviour:
   m_overridePlayerVersion: '[UnityEditor.PlayerSettings.bundleVersion]'
   m_GroupAssets:
   - {fileID: 11400000, guid: 8eecd1a55e8680641817d330a56d87d4, type: 2}
+  - {fileID: 11400000, guid: 85797d5bbfc427249aa48e9a8845bae7, type: 2}
+  - {fileID: 11400000, guid: 85b75b445191f7c41a7f8bf9251d691b, type: 2}
   - {fileID: 11400000, guid: b760349d3b52bac4ba3508da0ed9fba8, type: 2}
   - {fileID: 11400000, guid: c61d07e531684234590d535df16611d8, type: 2}
+  - {fileID: 11400000, guid: 86e8266a4d8c8b743bc6decde314e6cd, type: 2}
   - {fileID: 11400000, guid: 40dd20966053f6d4d969ac98d2073c9c, type: 2}
   - {fileID: 11400000, guid: 649e4d36fda33b74690321a42afa1d7d, type: 2}
+  - {fileID: 11400000, guid: c071a6d35d3b5c84f819d3f5db936066, type: 2}
   - {fileID: 11400000, guid: 915532b5a78dac44bb95338cad805016, type: 2}
   m_BuildSettings:
     m_LogResourceManagerExceptions: 1
@@ -110,6 +114,12 @@ MonoBehaviour:
     - Locale-zh-Hans
     - Locale-en
     - Audio
+    - df.application
+    - df.configuration
+    - df.session
+    - df.prefab
+    - df.sprite
+    - df.audio
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: 7965e0bb3ee464c42a000fe610981361, type: 2}

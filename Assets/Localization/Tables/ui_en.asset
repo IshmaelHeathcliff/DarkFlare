@@ -1292,6 +1292,34 @@ MonoBehaviour:
     m_Localized: Confirm
     m_Metadata:
       m_Items: []
+  - m_Id: 2040340162113536
+    m_Localized: An unexpected fatal error occurred. Please quit the application.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2040340250193920
+    m_Localized: A required resource reference is invalid.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2040340250193921
+    m_Localized: The resource request is no longer active.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2040340250193922
+    m_Localized: Resource loading was cancelled.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2040340250193923
+    m_Localized: A resource has an unexpected type.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2040340250193924
+    m_Localized: A required resource could not be loaded.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2040340250193925
+    m_Localized: The resource service is unavailable.
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:

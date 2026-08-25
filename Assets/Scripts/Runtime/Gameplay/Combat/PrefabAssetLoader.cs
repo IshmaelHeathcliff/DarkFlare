@@ -5,7 +5,6 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
 
 [assembly: InternalsVisibleTo("DarkFlare.Tests.EditMode")]
 
@@ -25,42 +24,66 @@ namespace DarkFlare
 
     internal sealed class AddressablePrefabAssetLoadBackend : IPrefabAssetLoadBackend
     {
+        readonly AddressableAssetService _service;
+        readonly AssetOwnerScope _owner;
+
+        public AddressablePrefabAssetLoadBackend(
+            AddressableAssetService service,
+            AssetOwnerScope owner)
+        {
+            _service = service ?? throw new ArgumentNullException(nameof(service));
+            _owner = owner ?? throw new ArgumentNullException(nameof(owner));
+        }
+
         public IPrefabAssetLoadHandle StartLoad(AssetReferenceGameObject reference)
         {
-            AsyncOperationHandle<GameObject> handle =
-                Addressables.LoadAssetAsync<GameObject>(reference.RuntimeKey);
-            return new AddressablePrefabAssetLoadHandle(handle);
+            return new AddressablePrefabAssetLoadHandle(_service, _owner, reference);
         }
     }
 
     internal sealed class AddressablePrefabAssetLoadHandle : IPrefabAssetLoadHandle
     {
-        readonly AsyncOperationHandle<GameObject> _handle;
+        readonly AddressableAssetService _service;
+        readonly AssetOwnerScope _owner;
+        readonly AssetReferenceGameObject _reference;
+        readonly CancellationTokenSource _cancellation = new CancellationTokenSource();
 
+        AssetLease<GameObject> _lease;
         bool _released;
 
-        public AddressablePrefabAssetLoadHandle(AsyncOperationHandle<GameObject> handle)
+        public AddressablePrefabAssetLoadHandle(
+            AddressableAssetService service,
+            AssetOwnerScope owner,
+            AssetReferenceGameObject reference)
         {
-            _handle = handle;
+            _service = service;
+            _owner = owner;
+            _reference = reference;
         }
 
         public async UniTask<GameObject> LoadAsync()
         {
-            await _handle.ToUniTask();
+            ResourceLoadResult<GameObject> result = await _service.AcquireAsync<GameObject>(
+                _owner,
+                _reference.RuntimeKey,
+                _reference.AssetGUID,
+                _cancellation.Token);
 
-            if (!_handle.IsValid())
+            if (_released || result.Code == ResourceErrorCode.Cancelled)
             {
-                throw new OperationCanceledException("Prefab Addressable 加载句柄已释放");
+                result.Lease?.Dispose();
+                throw new OperationCanceledException("Prefab Asset Lease 已释放");
             }
 
-            if (_handle.Status != AsyncOperationStatus.Succeeded || _handle.Result == null)
+            if (!result.Succeeded)
             {
                 throw new InvalidOperationException(
-                    "Prefab Addressable 加载未成功",
-                    _handle.OperationException);
+                    $"Prefab 资源加载未成功：{result.Code}",
+                    result.Exception);
             }
 
-            return _handle.Result;
+            _lease = result.Lease;
+            return _lease.Asset;
         }
 
         public void Release()
@@ -71,11 +94,10 @@ namespace DarkFlare
             }
 
             _released = true;
-
-            if (_handle.IsValid())
-            {
-                Addressables.Release(_handle);
-            }
+            _cancellation.Cancel();
+            _cancellation.Dispose();
+            _lease?.Dispose();
+            _lease = null;
         }
     }
 
@@ -87,17 +109,38 @@ namespace DarkFlare
         readonly Dictionary<string, LoadOperation> _inFlight =
             new Dictionary<string, LoadOperation>();
         readonly IPrefabAssetLoadBackend _backend;
+        readonly AddressableAssetService _ownedService;
+        readonly AssetOwnerScope _owner;
 
         int _generation;
 
         public PrefabAssetLoader()
-            : this(new AddressablePrefabAssetLoadBackend())
         {
+            _ownedService = new AddressableAssetService();
+            _owner = _ownedService.CreateOwner("standalone-prefab-loader");
+            _backend = new AddressablePrefabAssetLoadBackend(_ownedService, _owner);
+        }
+
+        internal PrefabAssetLoader(
+            AddressableAssetService service,
+            AssetOwnerScope owner)
+        {
+            _owner = owner ?? throw new ArgumentNullException(nameof(owner));
+            _backend = new AddressablePrefabAssetLoadBackend(
+                service ?? throw new ArgumentNullException(nameof(service)),
+                owner);
         }
 
         internal PrefabAssetLoader(IPrefabAssetLoadBackend backend)
         {
             _backend = backend ?? throw new ArgumentNullException(nameof(backend));
+        }
+
+        public void Dispose()
+        {
+            ReleaseAll();
+            _owner?.Close();
+            _ownedService?.Dispose();
         }
 
         public async UniTask PreloadAsync(
@@ -149,7 +192,7 @@ namespace DarkFlare
                 return prefab;
             }
 
-            Debug.LogError($"[PrefabAssetLoader] 未预热的 Addressable 引用: {reference.AssetGUID}");
+            ApplicationLog.Error(LogEventIds.ResourcePrefab, $"[PrefabAssetLoader] 未预热的 Addressable 引用: {reference.AssetGUID}");
             return null;
         }
 
@@ -265,7 +308,7 @@ namespace DarkFlare
                 return;
             }
 
-            Debug.Log($"[PrefabAssetLoader] 加载完成: {operation.Guid} -> {_prefabCache[operation.Guid].name}");
+            ApplicationLog.Info(LogEventIds.ResourcePrefab, $"[PrefabAssetLoader] 加载完成: {operation.Guid} -> {_prefabCache[operation.Guid].name}");
             operation.Completion.TrySetResult();
         }
 

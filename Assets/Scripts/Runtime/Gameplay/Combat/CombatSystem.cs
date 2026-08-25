@@ -80,13 +80,13 @@ namespace DarkFlare
 
             if (result.DidDealDamage)
             {
-                Debug.Log($"[CombatSystem] {context.AttackerId} 对 {defender.ActorId} 造成 {result.TotalDamage:0.#} 点伤害");
+                ApplicationLog.Info(LogEventIds.GameplayCombat, $"[CombatSystem] {context.AttackerId} 对 {defender.ActorId} 造成 {result.TotalDamage:0.#} 点伤害");
                 this.SendEvent(new ActorDamagedEvent { Actor = defender, Result = result });
             }
 
             if (justDied)
             {
-                Debug.Log($"[CombatSystem] {defender.ActorId} 死亡");
+                ApplicationLog.Info(LogEventIds.GameplayCombat, $"[CombatSystem] {defender.ActorId} 死亡");
                 this.SendEvent(new ActorDiedEvent { Actor = defender });
             }
 
@@ -194,7 +194,7 @@ namespace DarkFlare
 
             if (sendHealingFeedback)
             {
-                Debug.Log($"[CombatSystem] {actor.ActorId} 恢复 {healedAmount:0.#} 点生命");
+                ApplicationLog.Info(LogEventIds.GameplayCombat, $"[CombatSystem] {actor.ActorId} 恢复 {healedAmount:0.#} 点生命");
                 this.SendEvent(new ActorHealedEvent { Actor = actor, Amount = healedAmount });
             }
 
@@ -206,7 +206,7 @@ namespace DarkFlare
             CombatResourceSnapshot previousResources = actor.Resources;
             actor.Revive(position);
             PublishResourceChanges(actor, previousResources, ActorResourceChangeReason.Revive);
-            Debug.Log($"[CombatSystem] {actor.ActorId} 复活");
+            ApplicationLog.Info(LogEventIds.GameplayCombat, $"[CombatSystem] {actor.ActorId} 复活");
             this.SendEvent(new ActorRevivedEvent { Actor = actor });
         }
 

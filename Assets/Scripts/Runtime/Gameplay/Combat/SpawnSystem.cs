@@ -106,7 +106,7 @@ namespace DarkFlare
 
             if (prefab == null)
             {
-                Debug.LogError($"[SpawnSystem] 怪物 Prefab 未加载: {definition.Id}");
+                ApplicationLog.Error(LogEventIds.GameplayCombat, $"[SpawnSystem] 怪物 Prefab 未加载: {definition.Id}");
                 return null;
             }
 
@@ -116,7 +116,7 @@ namespace DarkFlare
 
             if (controller == null)
             {
-                Debug.LogError($"[SpawnSystem] 怪物 Prefab 缺少 MonsterController: {definition.Id}");
+                ApplicationLog.Error(LogEventIds.GameplayCombat, $"[SpawnSystem] 怪物 Prefab 缺少 MonsterController: {definition.Id}");
                 this.GetUtility<SessionObjectRegistry>().Release(instance);
                 return null;
             }
@@ -131,7 +131,7 @@ namespace DarkFlare
                 controller.Actor,
                 previousResources,
                 ActorResourceChangeReason.Configure);
-            Debug.Log(
+            ApplicationLog.Info(LogEventIds.GameplayCombat,
                 $"[SpawnSystem] 生成怪物 {definition.Id}，生成种子 {seed}，实例根种子 {instanceSeed}，"
                 + $"词条 {DescribeAffixes(instanceData)}，最终属性 {DescribeMonsterStats(instanceData.EffectiveStats)}");
             return controller;
@@ -174,7 +174,7 @@ namespace DarkFlare
 
             if (prefab == null)
             {
-                Debug.LogError("[SpawnSystem] 玩家 Prefab 未加载");
+                ApplicationLog.Error(LogEventIds.GameplayCombat, "[SpawnSystem] 玩家 Prefab 未加载");
                 return null;
             }
 
@@ -184,7 +184,7 @@ namespace DarkFlare
 
             if (controller == null)
             {
-                Debug.LogError("[SpawnSystem] 玩家 Prefab 缺少 PlayerController");
+                ApplicationLog.Error(LogEventIds.GameplayCombat, "[SpawnSystem] 玩家 Prefab 缺少 PlayerController");
                 this.GetUtility<SessionObjectRegistry>().Release(instance);
                 return null;
             }
@@ -198,7 +198,7 @@ namespace DarkFlare
 
             if (prefab == null)
             {
-                Debug.LogError($"[SpawnSystem] 怪物 Prefab 未加载: {definition.Id}");
+                ApplicationLog.Error(LogEventIds.GameplayCombat, $"[SpawnSystem] 怪物 Prefab 未加载: {definition.Id}");
                 return null;
             }
 
@@ -208,7 +208,7 @@ namespace DarkFlare
 
             if (controller == null)
             {
-                Debug.LogError($"[SpawnSystem] 怪物 Prefab 缺少 MonsterController: {definition.Id}");
+                ApplicationLog.Error(LogEventIds.GameplayCombat, $"[SpawnSystem] 怪物 Prefab 缺少 MonsterController: {definition.Id}");
                 this.GetUtility<SessionObjectRegistry>().Release(instance);
                 return null;
             }
@@ -273,7 +273,7 @@ namespace DarkFlare
 
             if (prefab == null)
             {
-                Debug.LogError($"[SpawnSystem] 投射物 Prefab 未加载: {skill.Id}");
+                ApplicationLog.Error(LogEventIds.GameplayCombat, $"[SpawnSystem] 投射物 Prefab 未加载: {skill.Id}");
                 return null;
             }
 
@@ -283,7 +283,7 @@ namespace DarkFlare
 
             if (controller == null)
             {
-                Debug.LogError($"[SpawnSystem] 投射物 Prefab 缺少 ProjectileController: {skill.Id}");
+                ApplicationLog.Error(LogEventIds.GameplayCombat, $"[SpawnSystem] 投射物 Prefab 缺少 ProjectileController: {skill.Id}");
                 this.GetUtility<SessionObjectRegistry>().Release(instance);
                 return null;
             }

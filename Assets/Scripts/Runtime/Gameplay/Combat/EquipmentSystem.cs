@@ -66,7 +66,7 @@ namespace DarkFlare
             }
 
             this.SendEvent(new EquipmentChangedEvent(actor, slot, previousItem, item));
-            Debug.Log($"[EquipmentSystem] {actor.ActorId} 的{EquipmentSlots.GetDisplayName(slot)}已装备 {item.BaseDefinition.DisplayName}");
+            ApplicationLog.Info(LogEventIds.GameplayCombat, $"[EquipmentSystem] {actor.ActorId} 的{EquipmentSlots.GetDisplayName(slot)}已装备 {item.BaseDefinition.DisplayName}");
             return true;
         }
 
@@ -163,7 +163,7 @@ namespace DarkFlare
             RebuildActorEffects(actor, loadout);
             inventory.NotifyItemChanged(previousItem, InventoryChangeType.Added);
             this.SendEvent(new EquipmentChangedEvent(actor, slot, previousItem, null));
-            Debug.Log($"[EquipmentSystem] {actor.ActorId} 卸下了{EquipmentSlots.GetDisplayName(slot)} {previousItem.BaseDefinition.DisplayName}");
+            ApplicationLog.Info(LogEventIds.GameplayCombat, $"[EquipmentSystem] {actor.ActorId} 卸下了{EquipmentSlots.GetDisplayName(slot)} {previousItem.BaseDefinition.DisplayName}");
             return true;
         }
 
@@ -221,7 +221,7 @@ namespace DarkFlare
             }
 
             this.SendEvent(new EquipmentChangedEvent(actor, slot, previousItem, item));
-            Debug.Log($"[EquipmentSystem] {actor.ActorId} 的{EquipmentSlots.GetDisplayName(slot)}已从指定背包格装备 {item.BaseDefinition.DisplayName}");
+            ApplicationLog.Info(LogEventIds.GameplayCombat, $"[EquipmentSystem] {actor.ActorId} 的{EquipmentSlots.GetDisplayName(slot)}已从指定背包格装备 {item.BaseDefinition.DisplayName}");
             return true;
         }
 
@@ -258,7 +258,7 @@ namespace DarkFlare
             RebuildActorEffects(actor, loadout);
             inventory.NotifyItemChanged(previousItem, InventoryChangeType.Added);
             this.SendEvent(new EquipmentChangedEvent(actor, slot, previousItem, null));
-            Debug.Log($"[EquipmentSystem] {actor.ActorId} 从{EquipmentSlots.GetDisplayName(slot)}精确卸下了 {previousItem.BaseDefinition.DisplayName}");
+            ApplicationLog.Info(LogEventIds.GameplayCombat, $"[EquipmentSystem] {actor.ActorId} 从{EquipmentSlots.GetDisplayName(slot)}精确卸下了 {previousItem.BaseDefinition.DisplayName}");
             return true;
         }
 
@@ -281,7 +281,7 @@ namespace DarkFlare
             RebuildActorEffects(actor, loadout);
             this.SendEvent(new EquipmentChangedEvent(actor, sourceSlot, sourceItem, targetItem));
             this.SendEvent(new EquipmentChangedEvent(actor, targetSlot, targetItem, sourceItem));
-            Debug.Log($"[EquipmentSystem] {actor.ActorId} 将装备从{EquipmentSlots.GetDisplayName(sourceSlot)}移动到{EquipmentSlots.GetDisplayName(targetSlot)}");
+            ApplicationLog.Info(LogEventIds.GameplayCombat, $"[EquipmentSystem] {actor.ActorId} 将装备从{EquipmentSlots.GetDisplayName(sourceSlot)}移动到{EquipmentSlots.GetDisplayName(targetSlot)}");
             return true;
         }
 

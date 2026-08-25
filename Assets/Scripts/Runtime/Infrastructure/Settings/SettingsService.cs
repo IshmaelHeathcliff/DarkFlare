@@ -188,7 +188,7 @@ namespace DarkFlare
                 }
                 catch (Exception exception)
                 {
-                    UnityEngine.Debug.LogException(exception);
+                    ApplicationLog.Exception(LogEventIds.InfrastructureSettings, exception);
                 }
             }
         }

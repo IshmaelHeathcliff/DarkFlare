@@ -368,7 +368,7 @@ namespace DarkFlare
         {
             if (_document == null || _document.panelSettings == null)
             {
-                Debug.LogError("[InventoryPanelController] 缺少 UIDocument 或 PanelSettings，无法初始化背包", this);
+                ApplicationLog.Error(LogEventIds.GameplayUi, "[InventoryPanelController] 缺少 UIDocument 或 PanelSettings，无法初始化背包", this);
                 return SceneSessionBindResult.Failed;
             }
 
@@ -399,7 +399,7 @@ namespace DarkFlare
             RegisterEvents();
             RefreshInventory();
             SetVisible(IsVisible);
-            Debug.Log("[InventoryPanelController] 背包与四槽装备面板初始化完成", this);
+            ApplicationLog.Info(LogEventIds.GameplayUi, "[InventoryPanelController] 背包与四槽装备面板初始化完成", this);
             return SceneSessionBindResult.Success;
         }
 
@@ -484,7 +484,7 @@ namespace DarkFlare
         {
             if (_document == null)
             {
-                Debug.LogError("[InventoryPanelController] 缺少 UIDocument，无法初始化背包面板", this);
+                ApplicationLog.Error(LogEventIds.GameplayUi, "[InventoryPanelController] 缺少 UIDocument，无法初始化背包面板", this);
                 return false;
             }
 
@@ -527,7 +527,7 @@ namespace DarkFlare
                 || _slotButtons.Count != EquipmentSlots.All.Count
                 || !_tooltip.IsValid)
             {
-                Debug.LogError("[InventoryPanelController] 背包 UXML 缺少四槽装备面板所需的命名元素", this);
+                ApplicationLog.Error(LogEventIds.GameplayUi, "[InventoryPanelController] 背包 UXML 缺少四槽装备面板所需的命名元素", this);
                 return false;
             }
 

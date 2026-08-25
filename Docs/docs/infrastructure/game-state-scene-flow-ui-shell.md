@@ -110,14 +110,15 @@
 - 从 Bootstrap 真实 Play 后为 Application `Ready`、Flow `FrontEnd`、Shell 唯一，Main 未加载且无 Session；停止后控制台无错误。
 - 策略扫描保证 Runtime 场景 API 只在 `UnitySceneLoader`，`Time.timeScale` 写入只在 `GameTimeService`；底层场景故障测试保留精确白名单。
 
-## alpha 0.2.5 扩展验证
+## alpha 0.2.6 扩展验证
 
 - Settings Page 的资产、控件、本地化与两入口由 EditMode / PlayMode 契约覆盖；音频确认通过真实 Addressables Cue 播放。
-- 全量 EditMode `409/409`、项目 PlayMode `53/53`；完整 PlayMode 57 项中 55 项通过、0 失败，2 项为 Input System 上游既有 Ignore。
+- Scene Flow 失败通过 `PlayerErrorCatalog` 映射严重度和 Retry / ReturnFrontEnd / Quit，未处理异常进入现有 Fatal 覆盖层。
+- 全量 EditMode `423/423`、项目 PlayMode `53/53`；完整 PlayMode 57 项中 55 项通过、0 失败，2 项为 Input System 上游既有 Ignore。
 
 ## 当前边界
 
 - 当前只有 Bootstrap 与 Main，不包含多地图、关卡选择、快速旅行或 Addressables Scene。
 - FrontEnd 提供新游戏、继续、语言、设置和退出；仍没有 Profile 选择、手动槽位、删除、重命名或云同步。
 - Shell 是当前真实消费者所需的最小闭环，不是通用多 Page 导航框架；设置页只开放已有真实消费者的 Audio、Input、Glyph 与 Reduce Motion。
-- 全局结构化日志、进程级异常捕获和完整 Addressables 句柄治理属于 `alpha 0.2.6`。
+- Shell 不拥有领域恢复事务；日志、异常和资源错误的映射与所有权见[日志、错误处理与 Addressables 资源治理](./logging-error-addressables-governance.md)。

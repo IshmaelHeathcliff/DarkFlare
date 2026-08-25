@@ -32,7 +32,7 @@ namespace DarkFlare
                 || host.ApplicationScope == null
                 || !host.ApplicationScope.CanAcceptWork)
             {
-                Debug.LogError("[ApplicationShellBootstrap] ApplicationHost 尚未就绪", this);
+                ApplicationLog.Error(LogEventIds.InfrastructureUi, "[ApplicationShellBootstrap] ApplicationHost 尚未就绪", this);
                 return;
             }
 
@@ -46,7 +46,7 @@ namespace DarkFlare
             }
             catch (Exception exception)
             {
-                Debug.LogException(exception, this);
+                ApplicationLog.Exception(LogEventIds.InfrastructureUi, exception, this);
             }
         }
 

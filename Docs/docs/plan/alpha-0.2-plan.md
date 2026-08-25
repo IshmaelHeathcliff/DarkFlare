@@ -1,8 +1,8 @@
 # alpha 0.2 基础设施开发计划
 
-> 状态：`alpha 0.2.0–0.2.5` 已完成；下一阶段 `alpha 0.2.6` 待开始
+> 状态：`alpha 0.2.0–0.2.6` 已完成；`alpha 0.2.7` 待规划
 > 建立日期：2026-08-17
-> 最近更新：2026-08-24
+> 最近更新：2026-08-25
 > 基线提交：`21360c7`
 > 计划建立时前置基线：`alpha 0.1` 已完成并归档；EditMode `212/212` 通过，PlayMode `24` 项中 `22` 项通过、`2` 项因 Input System 上游问题忽略、零失败
 > 约束契约：[alpha 0.2 基础设施约束契约](./alpha-0.2-infrastructure-contract.md)
@@ -28,9 +28,9 @@
 - 背包、装备、经济和物品实例仍可在玩法内使用对象引用，持久化边界统一转换为 ContentId 与强类型实例 ID；`auto` 保存和 Restore Session 已有真实菜单消费者。
 - Application 级唯一内容目录 `core` v1 已收录 90 个正式配置，并由配置验证器冻结零空值、零重复、零遗漏。
 - `alpha 0.2.3` 已建立 Settings V1、Application 级 Localization Service、`zh-Hans` / `en` / Pseudo Locale、六张职责表、86 个正式内容名称引用和中英字体 fallback；静态 UXML 与当前动态 UI 均已迁移，三语言 × 三分辨率矩阵和全量回归通过。
-- `alpha 0.2.5` 已建立 Application 级输入 owner、重绑定、设备族 / Glyph、共享 Settings Page、Audio、Reduce Motion 和 Platform Lifecycle；剩余主要缺口是全局异常处理、结构化日志和通用资源治理。
-- Addressables 已用于 Prefab 和 Sprite 加载，Prefab GUID 单飞与精确句柄释放已有自动验证；当前内容主要位于本地默认组，仍缺少完整分组、标签和跨加载器治理。
-- 运行时代码仍存在直接 `Debug.Log*` 调用；玩家可见硬编码文本规则已启用，日志治理留到 `alpha 0.2.6`。直接业务文件 IO、`PlayerPrefs` 和散落场景加载已由策略测试冻结。
+- `alpha 0.2.6` 已建立 Application 级 Logger、环形缓冲、全局异常监控、first-failure-wins、玩家错误目录与统一 Addressables Resource Service。
+- 15 个 DarkFlare Addressables 条目已迁入四个生命周期分组，默认组为空；Prefab、Sprite、Audio 与 Application 配置均通过 owner / lease 管理。
+- Runtime 直接 `Debug.Log*` 与 Addressables 静态 API 已由策略测试收口到唯一 Adapter；`alpha 0.2.7` 只负责跨模块综合验收、封板和总计划归档。
 
 ## 交付层级
 
@@ -71,8 +71,8 @@
 | `alpha 0.2.3` | 已完成 | 完成用户设置和运行时本地化 | [模块文档](../infrastructure/user-settings-localization.md) · [归档计划](./archive/alpha-0.2.3-settings-localization-plan.md) |
 | `alpha 0.2.4` | 已完成 | 建立游戏状态、场景加载和通用 UI 外壳 | [模块文档](../infrastructure/game-state-scene-flow-ui-shell.md) · [归档计划](./archive/alpha-0.2.4-game-state-scene-flow-ui-shell-plan.md) |
 | `alpha 0.2.5` | 已完成 | 接入输入、音频、可访问性和平台生命周期 | [输入 / UI 文档](../input-ui-system.md) · [Audio 文档](../infrastructure/application-audio.md) · [可访问性 / 平台文档](../infrastructure/accessibility-platform-lifecycle.md) · [归档计划](./archive/alpha-0.2.5-input-audio-accessibility-platform-lifecycle-plan.md) |
-| `alpha 0.2.6` | 待开始 | 建立日志、错误处理和资源生命周期治理 | Logger、异常捕获、玩家错误反馈、Addressables 规则与句柄验证 |
-| `alpha 0.2.7` | 待开始 | 完成跨模块回归、故障演练和文档封板 | 综合验收记录、迁移样本、模块文档、计划归档 |
+| `alpha 0.2.6` | 已完成 | 建立日志、错误处理和资源生命周期治理 | [模块文档](../infrastructure/logging-error-addressables-governance.md) · [归档计划](./archive/alpha-0.2.6-logging-error-addressables-plan.md) |
+| `alpha 0.2.7` | 待规划 | 完成跨模块回归、故障演练和文档封板 | 综合验收记录、迁移样本、模块文档、计划归档 |
 
 ## alpha 0.2.0：应用宿主、作用域与规范验证
 
@@ -301,6 +301,8 @@
 
 ## alpha 0.2.6：日志、错误处理与 Addressables 资源治理
 
+当前实现与维护边界见[日志、错误处理与 Addressables 资源治理](../infrastructure/logging-error-addressables-governance.md)；详细基线、冻结架构、实施切片和验收矩阵见[归档执行计划](./archive/alpha-0.2.6-logging-error-addressables-plan.md)。
+
 ### 目标
 
 让游戏运行故障可以定位并向玩家提供可恢复反馈，同时保证资源加载和释放具有明确所有权。
@@ -323,6 +325,15 @@
 - 场景往返和重复创建 Session 后，Addressables 句柄、实例和常驻对象回到稳定生命周期基线。
 - Addressables 配置验证可在 EditMode 重复执行，资源缺失和所有权错误在运行前被发现。
 - 资源加载失败、取消或对象提前销毁时，不留下悬挂句柄或不可恢复的半初始化状态。
+
+### 完成结果
+
+- `ApplicationLog`、集中事件目录、Console Sink 与 256 条 Ring Buffer 已落地；Unity、AppDomain、UniTask 异常经主线程协调后 first-failure-wins。
+- `PlayerErrorCatalog` 已接入 Shell，资源和未处理异常消息具备 `zh-Hans`、`en` 与 Pseudo Locale 契约，Retry / ReturnFrontEnd / Quit 只按领域能力开放。
+- `AddressableAssetService` 已统一 Prefab、Sprite、Audio Clip 和 Application Audio 配置；owner、lease、单航班、类型冲突、取消与迟到释放均有自动测试。
+- 15 个自有条目位于四个 `DarkFlare-*` 组及目标地址 / `df.*` Label，`Default Local Group` 为空，Editor 验证器零问题。
+- 三轮 NewGame 场景往返后资源诊断回到 Application 基线；真实 Bootstrap 为 Application `Ready`、owner `2`、entry `1`、lease `1`、in-flight `0`，Console Error / Warning 为 0。
+- 最终全量 EditMode `423/423`、项目 PlayMode `53/53`；完整 PlayMode 57 项中 55 项通过、0 失败，2 项为 Input System 上游 issue 1252825 的既有 Ignore。
 
 ## alpha 0.2.7：综合验收与封板
 

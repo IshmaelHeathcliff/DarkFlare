@@ -36,11 +36,11 @@ namespace DarkFlare
 
             if (!this.GetModel<InventoryModel>().TryAddItem(pickup.Item))
             {
-                Debug.Log($"[LootSystem] 背包已满，无法拾取 {DescribeItem(pickup.Item)}");
+                ApplicationLog.Info(LogEventIds.GameplayCombat, $"[LootSystem] 背包已满，无法拾取 {DescribeItem(pickup.Item)}");
                 return false;
             }
 
-            Debug.Log($"[LootSystem] {collector.ActorId} 拾取了 {DescribeItem(pickup.Item)}，放入背包");
+            ApplicationLog.Info(LogEventIds.GameplayCombat, $"[LootSystem] {collector.ActorId} 拾取了 {DescribeItem(pickup.Item)}，放入背包");
             return true;
         }
 
@@ -68,11 +68,11 @@ namespace DarkFlare
 
             if (item == null)
             {
-                Debug.Log($"[LootSystem] {e.Actor.ActorId} 未掉落物品，掉落种子 {lootSeed}");
+                ApplicationLog.Info(LogEventIds.GameplayCombat, $"[LootSystem] {e.Actor.ActorId} 未掉落物品，掉落种子 {lootSeed}");
                 return;
             }
 
-            Debug.Log($"[LootSystem] {e.Actor.ActorId} 生成 {DescribeItem(item)}，掉落种子 {lootSeed}，物品种子 {item.Seed}");
+            ApplicationLog.Info(LogEventIds.GameplayCombat, $"[LootSystem] {e.Actor.ActorId} 生成 {DescribeItem(item)}，掉落种子 {lootSeed}，物品种子 {item.Seed}");
             SpawnPickup(
                 this.GetUtility<IRunInstanceIdGenerator>().NextWorldDropId(),
                 item,
@@ -88,7 +88,7 @@ namespace DarkFlare
 
             if (prefab == null)
             {
-                Debug.LogError("[LootSystem] 拾取物 Prefab 未加载");
+                ApplicationLog.Error(LogEventIds.GameplayCombat, "[LootSystem] 拾取物 Prefab 未加载");
                 return null;
             }
 
@@ -98,7 +98,7 @@ namespace DarkFlare
 
             if (controller == null)
             {
-                Debug.LogError("[LootSystem] 拾取物 Prefab 缺少 LootPickupController");
+                ApplicationLog.Error(LogEventIds.GameplayCombat, "[LootSystem] 拾取物 Prefab 缺少 LootPickupController");
                 this.GetUtility<SessionObjectRegistry>().Release(instance);
                 return null;
             }

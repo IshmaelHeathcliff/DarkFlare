@@ -1,0 +1,65 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: DarkFlare-Session-Prefabs
+  m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
+  m_GroupName: DarkFlare-Session-Prefabs
+  m_GUID: c4bf0112da350a84ba86013983e6418f
+  m_SerializeEntries:
+  - m_GUID: 07152fe41aa52d740b4d1df2049f9f3d
+    m_Address: gameplay/prefabs/loot/pickup
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - df.prefab
+    - df.session
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3b6e21dfbc7f54e4f9e0312efd6c6af5
+    m_Address: gameplay/prefabs/projectiles/default
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - df.prefab
+    - df.session
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 67b8ae84734f42f4792a4190aad88049
+    m_Address: gameplay/prefabs/monsters/basic
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - df.prefab
+    - df.session
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 942c099ccdd7eed428f0ac0b1694f6ff
+    m_Address: gameplay/prefabs/player
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - df.prefab
+    - df.session
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f4600000000000000000000000000002
+    m_Address: gameplay/prefabs/monsters/swift
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - df.prefab
+    - df.session
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f4600000000000000000000000000003
+    m_Address: gameplay/prefabs/monsters/heavy
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - df.prefab
+    - df.session
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 2a89337400d536944bcf12b9576d1482, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: a244a79020ef56449bd3a58473fba705, type: 2}
+    - {fileID: 11400000, guid: e0696ae3d60848f44b5ca0d03029c4d4, type: 2}

@@ -208,7 +208,7 @@ namespace DarkFlare.Tests
                 _ => throw new System.InvalidOperationException("scene-binding-probe"),
                 () => unbinds++);
 
-            LogAssert.Expect(LogType.Exception, new Regex("scene-binding-probe"));
+            LogAssert.Expect(LogType.Error, new Regex("scene-binding-probe"));
             binding.Enable();
 
             Assert.IsFalse(binding.IsBound);

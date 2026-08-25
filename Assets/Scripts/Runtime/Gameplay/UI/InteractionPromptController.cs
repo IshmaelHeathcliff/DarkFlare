@@ -53,7 +53,7 @@ namespace DarkFlare
         {
             if (_document == null || _document.panelSettings == null)
             {
-                Debug.LogError("[InteractionPromptController] 缺少 UIDocument 或 PanelSettings，无法初始化交互提示", this);
+                ApplicationLog.Error(LogEventIds.GameplayUi, "[InteractionPromptController] 缺少 UIDocument 或 PanelSettings，无法初始化交互提示", this);
                 return SceneSessionBindResult.Failed;
             }
 
@@ -73,7 +73,7 @@ namespace DarkFlare
 
             if (_gameInput == null)
             {
-                Debug.LogError("[InteractionPromptController] 缺少 GameInput，无法显示交互提示", this);
+                ApplicationLog.Error(LogEventIds.GameplayUi, "[InteractionPromptController] 缺少 GameInput，无法显示交互提示", this);
                 return SceneSessionBindResult.Failed;
             }
 
@@ -131,7 +131,7 @@ namespace DarkFlare
         {
             if (_document == null)
             {
-                Debug.LogError("[InteractionPromptController] 缺少 UIDocument，无法初始化交互提示", this);
+                ApplicationLog.Error(LogEventIds.GameplayUi, "[InteractionPromptController] 缺少 UIDocument，无法初始化交互提示", this);
                 return false;
             }
 
@@ -141,7 +141,7 @@ namespace DarkFlare
 
             if (_prompt == null || _promptLabel == null)
             {
-                Debug.LogError("[InteractionPromptController] HUD UXML 缺少交互提示元素", this);
+                ApplicationLog.Error(LogEventIds.GameplayUi, "[InteractionPromptController] HUD UXML 缺少交互提示元素", this);
                 return false;
             }
 

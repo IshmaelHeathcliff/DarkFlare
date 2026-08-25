@@ -149,7 +149,7 @@ namespace DarkFlare
         {
             if (_document == null || _document.panelSettings == null)
             {
-                Debug.LogError("[ShopPanelController] 缺少 UIDocument 或 PanelSettings，无法初始化商店", this);
+                ApplicationLog.Error(LogEventIds.GameplayUi, "[ShopPanelController] 缺少 UIDocument 或 PanelSettings，无法初始化商店", this);
                 return SceneSessionBindResult.Failed;
             }
 
@@ -173,7 +173,7 @@ namespace DarkFlare
             _inventoryPanel.PreviewChanged += OnInventoryPreviewChanged;
             RefreshShop();
             SetVisible(IsVisible);
-            Debug.Log("[ShopPanelController] 商店面板初始化完成", this);
+            ApplicationLog.Info(LogEventIds.GameplayUi, "[ShopPanelController] 商店面板初始化完成", this);
             return SceneSessionBindResult.Success;
         }
 
@@ -262,7 +262,7 @@ namespace DarkFlare
         {
             if (_document == null || _inventoryPanel == null)
             {
-                Debug.LogError("[ShopPanelController] 缺少 UIDocument 或共享背包控制器", this);
+                ApplicationLog.Error(LogEventIds.GameplayUi, "[ShopPanelController] 缺少 UIDocument 或共享背包控制器", this);
                 return false;
             }
 
@@ -289,7 +289,7 @@ namespace DarkFlare
                 || _buyButton == null
                 || _sellButton == null)
             {
-                Debug.LogError("[ShopPanelController] 商店 UXML 缺少格子背包所需的命名元素", this);
+                ApplicationLog.Error(LogEventIds.GameplayUi, "[ShopPanelController] 商店 UXML 缺少格子背包所需的命名元素", this);
                 return false;
             }
 

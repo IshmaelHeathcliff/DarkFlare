@@ -34,7 +34,7 @@ namespace DarkFlare
 
             if (_gameInput == null)
             {
-                Debug.LogError("[PlayerInteractionController] 缺少 GameInput，无法处理交互", this);
+                ApplicationLog.Error(LogEventIds.GameplayInteraction, "[PlayerInteractionController] 缺少 GameInput，无法处理交互", this);
                 return;
             }
 
@@ -156,7 +156,7 @@ namespace DarkFlare
 
             if (opened)
             {
-                Debug.Log($"[PlayerInteractionController] 与 {_focusedTarget.DisplayName} 交互", this);
+                ApplicationLog.Info(LogEventIds.GameplayInteraction, $"[PlayerInteractionController] 与 {_focusedTarget.DisplayName} 交互", this);
             }
         }
 

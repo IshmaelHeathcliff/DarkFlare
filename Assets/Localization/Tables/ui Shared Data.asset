@@ -1247,6 +1247,34 @@ MonoBehaviour:
     m_Key: flow.modal.confirm
     m_Metadata:
       m_Items: []
+  - m_Id: 2040340162113536
+    m_Key: flow.error.unhandled_exception
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2040340250193920
+    m_Key: resource.error.invalid_reference
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2040340250193921
+    m_Key: resource.error.owner_closed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2040340250193922
+    m_Key: resource.error.cancelled
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2040340250193923
+    m_Key: resource.error.type_mismatch
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2040340250193924
+    m_Key: resource.error.load_failed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2040340250193925
+    m_Key: resource.error.service_closed
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

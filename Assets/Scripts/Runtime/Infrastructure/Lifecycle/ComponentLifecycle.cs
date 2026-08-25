@@ -39,7 +39,7 @@ namespace DarkFlare
 
             return LifecycleScope.CreateRoot(
                 $"StandaloneComponent:{scopeName}",
-                failure => Debug.LogException(failure.Exception, owner),
+                failure => ApplicationLog.Exception(LogEventIds.InfrastructureLifecycle, failure.Exception, owner),
                 externalToken);
         }
     }

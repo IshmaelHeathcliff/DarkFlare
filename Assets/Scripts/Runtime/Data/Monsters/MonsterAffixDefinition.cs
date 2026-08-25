@@ -73,7 +73,7 @@ namespace DarkFlare
 
             for (int i = 0; i < issues.Count; i++)
             {
-                Debug.LogWarning($"[MonsterAffixDefinition] {name}: {issues[i]}", this);
+                ApplicationLog.Warning(LogEventIds.DataValidation, $"[MonsterAffixDefinition] {name}: {issues[i]}", this);
             }
         }
     }

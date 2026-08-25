@@ -124,7 +124,7 @@ namespace DarkFlare
         {
             if (_document == null || _document.panelSettings == null)
             {
-                Debug.LogError("[GameMenuController] 缺少 UIDocument 或 PanelSettings，无法初始化菜单", this);
+                ApplicationLog.Error(LogEventIds.GameplayUi, "[GameMenuController] 缺少 UIDocument 或 PanelSettings，无法初始化菜单", this);
                 return SceneSessionBindResult.Failed;
             }
 
@@ -144,7 +144,7 @@ namespace DarkFlare
 
             if (_gameInput == null)
             {
-                Debug.LogError("[GameMenuController] 缺少 GameInput，无法控制菜单", this);
+                ApplicationLog.Error(LogEventIds.GameplayUi, "[GameMenuController] 缺少 GameInput，无法控制菜单", this);
                 return SceneSessionBindResult.Failed;
             }
 
@@ -159,7 +159,7 @@ namespace DarkFlare
             _openRequestRegistration = this.RegisterEvent<GameMenuOpenRequestedEvent>(OnMenuOpenRequested);
             _gameInput.ModeChanged += OnInputModeChanged;
             ApplyInputMode(_gameInput.CurrentMode);
-            Debug.Log("[GameMenuController] 游戏菜单初始化完成", this);
+            ApplicationLog.Info(LogEventIds.GameplayUi, "[GameMenuController] 游戏菜单初始化完成", this);
             return SceneSessionBindResult.Success;
         }
 
@@ -274,7 +274,7 @@ namespace DarkFlare
         {
             if (_document == null)
             {
-                Debug.LogError("[GameMenuController] 缺少 UIDocument，无法初始化菜单", this);
+                ApplicationLog.Error(LogEventIds.GameplayUi, "[GameMenuController] 缺少 UIDocument，无法初始化菜单", this);
                 return false;
             }
 
@@ -307,7 +307,7 @@ namespace DarkFlare
                 || _settingsButton == null
                 || _saveStatus == null)
             {
-                Debug.LogError("[GameMenuController] 菜单 UXML 缺少必要的命名元素", this);
+                ApplicationLog.Error(LogEventIds.GameplayUi, "[GameMenuController] 菜单 UXML 缺少必要的命名元素", this);
                 return false;
             }
 
@@ -527,7 +527,7 @@ namespace DarkFlare
             }
             catch (Exception exception)
             {
-                Debug.LogException(exception, this);
+                ApplicationLog.Exception(LogEventIds.GameplayUi, exception, this);
                 SetSaveOperationBusy(false, "save.status.submit_failed");
             }
         }

@@ -213,7 +213,7 @@ namespace DarkFlare
             catch (Exception exception)
             {
                 RollbackBindingAttempt();
-                Debug.LogException(exception, _owner);
+                ApplicationLog.Exception(LogEventIds.InfrastructureLifecycle, exception, _owner);
                 return SceneSessionBindResult.Failed;
             }
         }
@@ -264,7 +264,7 @@ namespace DarkFlare
                     _retryScheduled = false;
                 }
 
-                Debug.LogException(exception, _owner);
+                ApplicationLog.Exception(LogEventIds.InfrastructureLifecycle, exception, _owner);
             }
         }
 
@@ -376,7 +376,7 @@ namespace DarkFlare
             }
             catch (Exception exception)
             {
-                Debug.LogException(exception, _owner);
+                ApplicationLog.Exception(LogEventIds.InfrastructureLifecycle, exception, _owner);
             }
         }
 
@@ -388,7 +388,7 @@ namespace DarkFlare
             }
             catch (Exception exception)
             {
-                Debug.LogException(exception, _owner);
+                ApplicationLog.Exception(LogEventIds.InfrastructureLifecycle, exception, _owner);
             }
             finally
             {

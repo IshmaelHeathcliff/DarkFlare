@@ -20,8 +20,22 @@ namespace DarkFlare
             this.RegisterSystem(new TradingSystem());
             this.RegisterSystem(new CraftingSystem());
             this.RegisterSystem(new GameplayPauseSystem());
-            this.RegisterUtility(new PrefabAssetLoader());
-            this.RegisterUtility(new SpriteAssetLoader());
+            if (ApplicationHost.TryGetCurrent(out ApplicationHost host)
+                && host.Resources != null)
+            {
+                int generation = GameArchitectureProvider.Generation;
+                this.RegisterUtility(new PrefabAssetLoader(
+                    host.Resources,
+                    host.Resources.CreateOwner($"session-{generation}-prefabs")));
+                this.RegisterUtility(new SpriteAssetLoader(
+                    host.Resources,
+                    host.Resources.CreateOwner($"session-{generation}-sprites")));
+            }
+            else
+            {
+                this.RegisterUtility(new PrefabAssetLoader());
+                this.RegisterUtility(new SpriteAssetLoader());
+            }
             this.RegisterUtility(new VisualEffectPool());
             this.RegisterUtility(new WorldSortingSystem());
         }
@@ -31,8 +45,8 @@ namespace DarkFlare
             this.GetUtility<SessionObjectRegistry>().ReleaseAllImmediate();
             this.GetUtility<WorldSortingSystem>().ReleaseAll();
             this.GetUtility<VisualEffectPool>().ReleaseAll();
-            this.GetUtility<SpriteAssetLoader>().ReleaseAll();
-            this.GetUtility<PrefabAssetLoader>().ReleaseAll();
+            this.GetUtility<SpriteAssetLoader>().Dispose();
+            this.GetUtility<PrefabAssetLoader>().Dispose();
             this.GetUtility<GameInput>()?.Dispose();
         }
     }
