@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "version": "0.2.7-alpha",
+  "target": "StandaloneWindows64",
+  "addressables": {
+    "succeeded": true,
+    "cleanBuild": true,
+    "validationIssues": 0
+  },
+  "developmentPlayer": {
+    "succeeded": true,
+    "outputOutsideRepository": true,
+    "errors": 0,
+    "warnings": 12,
+    "durationSeconds": 56.420,
+    "sizeMegabytes": 238.8,
+    "runtimeAssemblies": [
+      "DarkFlare.Core.dll",
+      "DarkFlare.Runtime.dll"
+    ]
+  },
+  "runtimeSmoke": {
+    "coldStartSucceeded": true,
+    "fullPathAutomatedInPlayMode": true,
+    "interactivePlayerStatus": "blocked_by_windows_security_prompt"
+  }
+}

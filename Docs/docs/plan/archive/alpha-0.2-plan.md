@@ -1,11 +1,12 @@
 # alpha 0.2 基础设施开发计划
 
-> 状态：`alpha 0.2.0–0.2.6` 已完成；`alpha 0.2.7` 待规划
+> 状态：`alpha 0.2.0–0.2.7` 已完成并归档
 > 建立日期：2026-08-17
-> 最近更新：2026-08-25
+> 最近更新：2026-08-26
 > 基线提交：`21360c7`
 > 计划建立时前置基线：`alpha 0.1` 已完成并归档；EditMode `212/212` 通过，PlayMode `24` 项中 `22` 项通过、`2` 项因 Input System 上游问题忽略、零失败
-> 约束契约：[alpha 0.2 基础设施约束契约](./alpha-0.2-infrastructure-contract.md)
+> 长期契约：[alpha 0.2 长期运行时契约](../../infrastructure/alpha-0.2-runtime-contract.md)
+> 综合验收：[alpha 0.2 综合验收记录](../../infrastructure/alpha-0.2-acceptance.md)
 
 ## 版本定位
 
@@ -65,18 +66,18 @@
 
 | 阶段 | 状态 | 核心目标 | 主要交付 |
 | --- | --- | --- | --- |
-| `alpha 0.2.0` | 已完成 | 建立应用宿主、作用域、生命周期和首批规范验证 | [模块文档](../infrastructure/application-lifecycle.md) · [归档计划](./archive/alpha-0.2.0-application-lifecycle-plan.md) |
-| `alpha 0.2.1` | 已完成 | 建立稳定身份、内容目录和版本迁移底座 | [模块文档](../infrastructure/content-identity-migration.md) · [归档计划](./archive/alpha-0.2.1-content-identity-migration-plan.md) |
-| `alpha 0.2.2` | 已完成 | 完成本地存档、读档和损坏恢复闭环 | [模块文档](../infrastructure/local-save.md) · [归档计划](./archive/alpha-0.2.2-local-save-plan.md) |
-| `alpha 0.2.3` | 已完成 | 完成用户设置和运行时本地化 | [模块文档](../infrastructure/user-settings-localization.md) · [归档计划](./archive/alpha-0.2.3-settings-localization-plan.md) |
-| `alpha 0.2.4` | 已完成 | 建立游戏状态、场景加载和通用 UI 外壳 | [模块文档](../infrastructure/game-state-scene-flow-ui-shell.md) · [归档计划](./archive/alpha-0.2.4-game-state-scene-flow-ui-shell-plan.md) |
-| `alpha 0.2.5` | 已完成 | 接入输入、音频、可访问性和平台生命周期 | [输入 / UI 文档](../input-ui-system.md) · [Audio 文档](../infrastructure/application-audio.md) · [可访问性 / 平台文档](../infrastructure/accessibility-platform-lifecycle.md) · [归档计划](./archive/alpha-0.2.5-input-audio-accessibility-platform-lifecycle-plan.md) |
-| `alpha 0.2.6` | 已完成 | 建立日志、错误处理和资源生命周期治理 | [模块文档](../infrastructure/logging-error-addressables-governance.md) · [归档计划](./archive/alpha-0.2.6-logging-error-addressables-plan.md) |
-| `alpha 0.2.7` | 待规划 | 完成跨模块回归、故障演练和文档封板 | 综合验收记录、迁移样本、模块文档、计划归档 |
+| `alpha 0.2.0` | 已完成 | 建立应用宿主、作用域、生命周期和首批规范验证 | [模块文档](../../infrastructure/application-lifecycle.md) · [归档计划](./alpha-0.2.0-application-lifecycle-plan.md) |
+| `alpha 0.2.1` | 已完成 | 建立稳定身份、内容目录和版本迁移底座 | [模块文档](../../infrastructure/content-identity-migration.md) · [归档计划](./alpha-0.2.1-content-identity-migration-plan.md) |
+| `alpha 0.2.2` | 已完成 | 完成本地存档、读档和损坏恢复闭环 | [模块文档](../../infrastructure/local-save.md) · [归档计划](./alpha-0.2.2-local-save-plan.md) |
+| `alpha 0.2.3` | 已完成 | 完成用户设置和运行时本地化 | [模块文档](../../infrastructure/user-settings-localization.md) · [归档计划](./alpha-0.2.3-settings-localization-plan.md) |
+| `alpha 0.2.4` | 已完成 | 建立游戏状态、场景加载和通用 UI 外壳 | [模块文档](../../infrastructure/game-state-scene-flow-ui-shell.md) · [归档计划](./alpha-0.2.4-game-state-scene-flow-ui-shell-plan.md) |
+| `alpha 0.2.5` | 已完成 | 接入输入、音频、可访问性和平台生命周期 | [输入 / UI 文档](../../input-ui-system.md) · [Audio 文档](../../infrastructure/application-audio.md) · [可访问性 / 平台文档](../../infrastructure/accessibility-platform-lifecycle.md) · [归档计划](./alpha-0.2.5-input-audio-accessibility-platform-lifecycle-plan.md) |
+| `alpha 0.2.6` | 已完成 | 建立日志、错误处理和资源生命周期治理 | [模块文档](../../infrastructure/logging-error-addressables-governance.md) · [归档计划](./alpha-0.2.6-logging-error-addressables-plan.md) |
+| `alpha 0.2.7` | 已完成 | 完成跨模块回归、故障演练和文档封板 | [归档计划](./alpha-0.2.7-integrated-acceptance-release-sealing-plan.md) · [综合验收记录](../../infrastructure/alpha-0.2-acceptance.md) · 迁移样本 |
 
 ## alpha 0.2.0：应用宿主、作用域与规范验证
 
-当前实现与使用边界见[应用生命周期与会话作用域](../infrastructure/application-lifecycle.md)；现状审计、冻结决策、执行切片、实际偏差和验收证据见[归档执行计划](./archive/alpha-0.2.0-application-lifecycle-plan.md)。
+当前实现与使用边界见[应用生命周期与会话作用域](../../infrastructure/application-lifecycle.md)；现状审计、冻结决策、执行切片、实际偏差和验收证据见[归档执行计划](./alpha-0.2.0-application-lifecycle-plan.md)。
 
 ### 目标
 
@@ -112,7 +113,7 @@
 
 ## alpha 0.2.1：稳定身份、内容目录与迁移框架
 
-当前实现与使用边界见[稳定身份、内容目录与迁移框架](../infrastructure/content-identity-migration.md)；审计基线、冻结决策、执行切片和验收证据见[归档执行计划](./archive/alpha-0.2.1-content-identity-migration-plan.md)。
+当前实现与使用边界见[稳定身份、内容目录与迁移框架](../../infrastructure/content-identity-migration.md)；审计基线、冻结决策、执行切片和验收证据见[归档执行计划](./alpha-0.2.1-content-identity-migration-plan.md)。
 
 ### 目标
 
@@ -148,7 +149,7 @@
 
 ## alpha 0.2.2：本地存档闭环
 
-当前实现与使用边界见[本地存档与 Session 恢复](../infrastructure/local-save.md)；冻结的数据合同、代际存储方案、生命周期顺序、实际偏差和验收证据见[归档执行计划](./archive/alpha-0.2.2-local-save-plan.md)。
+当前实现与使用边界见[本地存档与 Session 恢复](../../infrastructure/local-save.md)；冻结的数据合同、代际存储方案、生命周期顺序、实际偏差和验收证据见[归档执行计划](./alpha-0.2.2-local-save-plan.md)。
 
 ### 目标
 
@@ -194,7 +195,7 @@
 
 ## alpha 0.2.3：用户设置与本地化
 
-当前实现与维护边界见[用户设置与本地化](../infrastructure/user-settings-localization.md)；冻结的数据合同、启动顺序、文本迁移范围、实施切片和验收矩阵见[归档执行计划](./archive/alpha-0.2.3-settings-localization-plan.md)。
+当前实现与维护边界见[用户设置与本地化](../../infrastructure/user-settings-localization.md)；冻结的数据合同、启动顺序、文本迁移范围、实施切片和验收矩阵见[归档执行计划](./alpha-0.2.3-settings-localization-plan.md)。
 
 ### 目标
 
@@ -233,7 +234,7 @@
 
 ## alpha 0.2.4：游戏状态、场景流与 UI 外壳
 
-当前实现与使用边界见[游戏状态、场景流与应用 UI 外壳](../infrastructure/game-state-scene-flow-ui-shell.md)；冻结架构、迁移顺序、实施切片和验收矩阵见[归档执行计划](./archive/alpha-0.2.4-game-state-scene-flow-ui-shell-plan.md)。
+当前实现与使用边界见[游戏状态、场景流与应用 UI 外壳](../../infrastructure/game-state-scene-flow-ui-shell.md)；冻结架构、迁移顺序、实施切片和验收矩阵见[归档执行计划](./alpha-0.2.4-game-state-scene-flow-ui-shell-plan.md)。
 
 ### 目标
 
@@ -297,11 +298,11 @@
 - Application Audio 已落地四组 Mixer、Addressables 配置、Source 池、有主播放句柄、并发 / 淡入淡出 / 挂起与首个真实 `ui.confirm` Cue。
 - Accessibility 已由 Loot Pickup 与 Damage Number 消费；Platform Lifecycle 已统一 Focus / Suspend / Resume、输入、时间、Audio 和每次挂起 episode 唯一检查点。
 - 策略测试冻结输入设备、binding override、AudioSource / AudioListener / Mixer 和平台回调的唯一 owner；故障测试覆盖设置回滚、设备拔出、Owner 取消、保存 Busy / 失败 / 超时 / 取消与 Shutdown。
-- 最终全量 EditMode `409/409`、项目 PlayMode `53/53`；完整 PlayMode 57 项中 55 项通过、0 失败，2 项为 Input System 上游 issue 1252825 的既有 Ignore。完成记录见[归档阶段计划](./archive/alpha-0.2.5-input-audio-accessibility-platform-lifecycle-plan.md)。
+- 最终全量 EditMode `409/409`、项目 PlayMode `53/53`；完整 PlayMode 57 项中 55 项通过、0 失败，2 项为 Input System 上游 issue 1252825 的既有 Ignore。完成记录见[归档阶段计划](./alpha-0.2.5-input-audio-accessibility-platform-lifecycle-plan.md)。
 
 ## alpha 0.2.6：日志、错误处理与 Addressables 资源治理
 
-当前实现与维护边界见[日志、错误处理与 Addressables 资源治理](../infrastructure/logging-error-addressables-governance.md)；详细基线、冻结架构、实施切片和验收矩阵见[归档执行计划](./archive/alpha-0.2.6-logging-error-addressables-plan.md)。
+当前实现与维护边界见[日志、错误处理与 Addressables 资源治理](../../infrastructure/logging-error-addressables-governance.md)；详细基线、冻结架构、实施切片和验收矩阵见[归档执行计划](./alpha-0.2.6-logging-error-addressables-plan.md)。
 
 ### 目标
 
@@ -333,9 +334,11 @@
 - `AddressableAssetService` 已统一 Prefab、Sprite、Audio Clip 和 Application Audio 配置；owner、lease、单航班、类型冲突、取消与迟到释放均有自动测试。
 - 15 个自有条目位于四个 `DarkFlare-*` 组及目标地址 / `df.*` Label，`Default Local Group` 为空，Editor 验证器零问题。
 - 三轮 NewGame 场景往返后资源诊断回到 Application 基线；真实 Bootstrap 为 Application `Ready`、owner `2`、entry `1`、lease `1`、in-flight `0`，Console Error / Warning 为 0。
-- 最终全量 EditMode `423/423`、项目 PlayMode `53/53`；完整 PlayMode 57 项中 55 项通过、0 失败，2 项为 Input System 上游 issue 1252825 的既有 Ignore。
+- 最终全量 EditMode `424/424`、项目 PlayMode `53/53`；完整 PlayMode 57 项中 55 项通过、0 失败，2 项为 Input System 上游 issue 1252825 的既有 Ignore。
 
 ## alpha 0.2.7：综合验收与封板
+
+完成过程见 [alpha 0.2.7 综合验收与封板执行计划](./alpha-0.2.7-integrated-acceptance-release-sealing-plan.md)，最终证据见[综合验收记录](../../infrastructure/alpha-0.2-acceptance.md)。
 
 ### 目标
 
@@ -361,7 +364,7 @@
 
 ## 跨阶段工程约束
 
-- [基础设施约束契约](./alpha-0.2-infrastructure-contract.md) 对全部阶段生效；阶段计划只能收紧，不能静默放宽。
+- [长期运行时契约](../../infrastructure/alpha-0.2-runtime-contract.md) 对后续实现持续生效；阶段计划只能收紧，不能静默放宽。
 - 遵守 QFramework 分层。基础设施通过 System / Utility / Command / Query 或明确的应用服务接入，Controller 不直接持久化、切场景或修改全局状态。
 - 所有异步入口必须声明所有者、取消令牌、超时和失败路径；退出作用域后不得继续回调 Unity 对象。
 - 配置或存档 Schema 变化必须同时提交迁移、旧版本夹具、验证器和文档。

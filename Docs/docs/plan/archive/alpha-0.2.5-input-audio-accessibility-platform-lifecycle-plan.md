@@ -4,8 +4,8 @@
 > 建立日期：2026-08-21
 > 规划基线：`04f6d31`（`alpha 0.2.4` 完成提交）
 > 实施前置：`alpha 0.2.4` 已独立提交，工作区干净；后续实现不得回写或混入上一阶段
-> 上位计划：[alpha 0.2 基础设施开发计划](../alpha-0.2-plan.md)
-> 强制契约：[alpha 0.2 基础设施约束契约](../alpha-0.2-infrastructure-contract.md)
+> 上位计划：[alpha 0.2 基础设施开发计划](./alpha-0.2-plan.md)
+> 强制契约：[alpha 0.2 长期运行时契约](../../infrastructure/alpha-0.2-runtime-contract.md)
 > 前置模块：[应用生命周期与会话作用域](../../infrastructure/application-lifecycle.md)、[用户设置与本地化](../../infrastructure/user-settings-localization.md)、[游戏状态、场景流与应用 UI 外壳](../../infrastructure/game-state-scene-flow-ui-shell.md)、[输入与运行时 UI](../../input-ui-system.md)
 
 ## 阶段结论

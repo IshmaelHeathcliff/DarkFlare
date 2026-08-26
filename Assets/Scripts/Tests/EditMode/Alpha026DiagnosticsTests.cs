@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using NUnit.Framework;
 using UnityEngine;
@@ -181,6 +182,12 @@ namespace DarkFlare.Tests
             return VerifyResourceServiceGuardsAsync().ToCoroutine();
         }
 
+        [UnityTest]
+        public IEnumerator ResourceService_FailureCancellationAndEarlyOwnerCloseReleaseEverything()
+        {
+            return VerifyResourceServiceFaultMatrixAsync().ToCoroutine();
+        }
+
         static async UniTask VerifyResourceServiceSingleFlightAsync()
         {
             GameObject asset = new GameObject("ResourceService-Test");
@@ -252,6 +259,57 @@ namespace DarkFlare.Tests
                     "other-key");
                 Assert.IsNotNull(closed, "关闭 owner 后必须返回失败结果");
                 Assert.AreEqual(ResourceErrorCode.OwnerClosed, closed.Code);
+            }
+            finally
+            {
+                TryCleanup(owner.Close);
+                TryCleanup(service.Dispose);
+                TryCleanup(() => UnityEngine.Object.DestroyImmediate(asset));
+            }
+        }
+
+        static async UniTask VerifyResourceServiceFaultMatrixAsync()
+        {
+            GameObject asset = new GameObject("ResourceService-Fault-Test");
+            ControlledAssetBackend backend = new ControlledAssetBackend(asset);
+            AddressableAssetService service = new AddressableAssetService(backend);
+            AssetOwnerScope owner = service.CreateOwner("fault-owner");
+
+            try
+            {
+                backend.FailNext = true;
+                ResourceLoadResult<GameObject> failed = await service.AcquireAsync<GameObject>(
+                    owner,
+                    "failed-runtime-key",
+                    "failed-key");
+                Assert.AreEqual(ResourceErrorCode.LoadFailed, failed.Code);
+                Assert.AreEqual(1, backend.ReleaseCount);
+
+                CancellationTokenSource cancellation = new CancellationTokenSource();
+                UniTask<ResourceLoadResult<GameObject>> cancelledTask = service.AcquireAsync<GameObject>(
+                    owner,
+                    "cancelled-runtime-key",
+                    "cancelled-key",
+                    cancellation.Token);
+                cancellation.Cancel();
+                ResourceLoadResult<GameObject> cancelled = await cancelledTask;
+                cancellation.Dispose();
+                Assert.AreEqual(ResourceErrorCode.Cancelled, cancelled.Code);
+                Assert.AreEqual(2, backend.ReleaseCount);
+
+                UniTask<ResourceLoadResult<GameObject>> closedTask = service.AcquireAsync<GameObject>(
+                    owner,
+                    "closed-runtime-key",
+                    "closed-key");
+                owner.Close();
+                backend.LastHandle.Succeed();
+                ResourceLoadResult<GameObject> closed = await closedTask;
+                Assert.AreEqual(ResourceErrorCode.OwnerClosed, closed.Code);
+                Assert.AreEqual(3, backend.ReleaseCount);
+                ResourceDiagnosticsSnapshot diagnostics = service.GetDiagnostics();
+                Assert.AreEqual(0, diagnostics.ActiveEntries);
+                Assert.AreEqual(0, diagnostics.ActiveLeases);
+                Assert.AreEqual(0, diagnostics.InFlightLoads);
             }
             finally
             {
@@ -333,6 +391,82 @@ namespace DarkFlare.Tests
 
                 _isReleased = true;
                 _released.Invoke();
+            }
+        }
+
+        sealed class ControlledAssetBackend : IAddressableAssetBackend
+        {
+            readonly UnityEngine.Object _asset;
+
+            public ControlledAssetBackend(UnityEngine.Object asset)
+            {
+                _asset = asset;
+            }
+
+            public bool FailNext { get; set; }
+
+            public int ReleaseCount { get; private set; }
+
+            public ControlledAssetHandle LastHandle { get; private set; }
+
+            public IAddressableAssetLoadHandle<T> StartLoad<T>(object runtimeKey)
+                where T : UnityEngine.Object
+            {
+                ControlledAssetHandle handle = new ControlledAssetHandle(
+                    (GameObject)_asset,
+                    () => ReleaseCount++);
+                LastHandle = handle;
+
+                if (FailNext)
+                {
+                    FailNext = false;
+                    handle.Fail(new InvalidOperationException("injected resource failure"));
+                }
+
+                return (IAddressableAssetLoadHandle<T>)(object)handle;
+            }
+        }
+
+        sealed class ControlledAssetHandle : IAddressableAssetLoadHandle<GameObject>
+        {
+            readonly GameObject _asset;
+            readonly Action _released;
+            readonly UniTaskCompletionSource<GameObject> _completion =
+                new UniTaskCompletionSource<GameObject>();
+
+            bool _isReleased;
+
+            public ControlledAssetHandle(GameObject asset, Action released)
+            {
+                _asset = asset;
+                _released = released;
+            }
+
+            public UniTask<GameObject> LoadAsync()
+            {
+                return _completion.Task;
+            }
+
+            public void Succeed()
+            {
+                _completion.TrySetResult(_asset);
+            }
+
+            public void Fail(Exception exception)
+            {
+                _completion.TrySetException(exception);
+            }
+
+            public void Release()
+            {
+                if (_isReleased)
+                {
+                    return;
+                }
+
+                _isReleased = true;
+                _released.Invoke();
+                _completion.TrySetCanceled();
             }
         }
     }

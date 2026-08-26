@@ -10,6 +10,11 @@ namespace DarkFlare.Tests
     {
         const float ReadyTimeoutSeconds = 30f;
 
+        public IEnumerator ReloadBootstrap()
+        {
+            yield return SceneManager.LoadSceneAsync("Bootstrap", LoadSceneMode.Single);
+        }
+
         public IEnumerator EnterFrontEnd()
         {
             if (ApplicationHost.TryGetCurrent(out ApplicationHost divergentHost)

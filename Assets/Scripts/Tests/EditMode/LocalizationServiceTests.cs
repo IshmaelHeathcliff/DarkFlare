@@ -5,6 +5,7 @@ using System.IO;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using NUnit.Framework;
+using UnityEngine;
 using UnityEngine.TestTools;
 
 namespace DarkFlare.Tests
@@ -20,6 +21,20 @@ namespace DarkFlare.Tests
                 Path.GetTempPath(),
                 "DarkFlareLocalizationServiceTests",
                 Guid.NewGuid().ToString("N"));
+        }
+
+        [TestCase(SystemLanguage.Chinese, LocalizationService.SimplifiedChineseLocaleCode)]
+        [TestCase(SystemLanguage.ChineseSimplified, LocalizationService.SimplifiedChineseLocaleCode)]
+        [TestCase(SystemLanguage.ChineseTraditional, LocalizationService.SimplifiedChineseLocaleCode)]
+        [TestCase(SystemLanguage.English, LocalizationService.EnglishLocaleCode)]
+        [TestCase(SystemLanguage.Japanese, LocalizationService.EnglishLocaleCode)]
+        public void AutomaticLocale_UsesSystemLanguageInsteadOfCurrentSelection(
+            SystemLanguage language,
+            string expected)
+        {
+            Assert.AreEqual(
+                expected,
+                UnityLocalizationRuntime.ResolveAutomaticLocaleCode(language));
         }
 
         [TearDown]

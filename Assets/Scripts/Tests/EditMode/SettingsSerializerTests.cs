@@ -68,15 +68,7 @@ namespace DarkFlare.Tests
         [Test]
         public void Deserialize_MigratesLegacyLanguageDocumentAndFillsFutureDomains()
         {
-            string json = "{"
-                + "\"formatId\":\"darkflare-settings\","
-                + "\"formatVersion\":1,"
-                + "\"settingsSchemaVersion\":0,"
-                + "\"updatedUtc\":\"2026-08-19T00:00:00.0000000+00:00\","
-                + "\"payloadSha256\":\"\","
-                + "\"language\":\"english\","
-                + "\"payload\":{}"
-                + "}";
+            string json = MigrationFixtureUtility.ReadUtf8("settings-v0-language.json");
 
             SettingsSerializationResult result = _serializer.Deserialize(Encoding.UTF8.GetBytes(json));
 

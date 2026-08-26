@@ -2,7 +2,7 @@
 
 > 状态：`alpha 0.2.6` 资源治理已接入；最近更新：2026-08-25
 >
-> 参考：[应用生命周期与会话作用域](./application-lifecycle.md) · [用户设置与本地化](./user-settings-localization.md) · [基础设施约束契约](../plan/alpha-0.2-infrastructure-contract.md)
+> 参考：[应用生命周期与会话作用域](./application-lifecycle.md) · [用户设置与本地化](./user-settings-localization.md) · [长期运行时契约](./alpha-0.2-runtime-contract.md)
 
 ## 职责与所有权
 
@@ -40,6 +40,6 @@ Settings Schema 仍为 1；本阶段只开始消费既有字段，没有改变�
 - EditMode 覆盖线性到 dB、并发、句柄幂等、待加载 owner 取消、Mixer 参数应用与 Settings 失败回滚。
 - 资产测试冻结四个 Exposed Parameter、配置地址、Cue 地址、来源记录和 Addressables 登记。
 - PlayMode 使用真实配置和真实 Clip 验证播放、Application 唯一实例、挂起 / 恢复和 Shutdown 回收。
-- `alpha 0.2.6` 全量 EditMode `423/423`、项目 PlayMode `53/53`；完整 PlayMode 57 项中 55 项通过、0 失败，2 项为 Input System 上游既有 Ignore。
+- `alpha 0.2.6` 全量 EditMode `424/424`、项目 PlayMode `53/53`；完整 PlayMode 57 项中 55 项通过、0 失败，2 项为 Input System 上游既有 Ignore。
 
 当前只接入一个 UI Cue，不代表完整音乐或战斗音频内容已经制作。分组、标签、跨加载器所有权与资源诊断见[日志、错误处理与 Addressables 资源治理](./logging-error-addressables-governance.md)。

@@ -1,12 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
-
-[assembly: InternalsVisibleTo("DarkFlare.Tests.EditMode")]
 
 namespace DarkFlare
 {

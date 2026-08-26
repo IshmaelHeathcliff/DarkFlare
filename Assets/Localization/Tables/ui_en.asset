@@ -1320,6 +1320,58 @@ MonoBehaviour:
     m_Localized: The resource service is unavailable.
     m_Metadata:
       m_Items: []
+  - m_Id: 2333851465904128
+    m_Localized: Delete Auto Save
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2333851512041472
+    m_Localized: Delete Auto Save
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2333851512041473
+    m_Localized: Delete the auto save? This cannot be undone.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2333851512041474
+    m_Localized: "Deleting auto save\u2026"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2333851512041475
+    m_Localized: Auto save deleted
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2333851512041476
+    m_Localized: Could not delete auto save. Please try again.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2333851512041477
+    m_Localized: Restore All Defaults
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2333851512041478
+    m_Localized: Restore Default Settings
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2333851512041479
+    m_Localized: Restore all language, audio, input, and accessibility defaults?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2333851512041480
+    m_Localized: "Restoring default settings\u2026"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2333851512041481
+    m_Localized: All settings restored to defaults
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2333851512041482
+    m_Localized: Could not restore defaults. Previous settings were kept.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2333851512041483
+    m_Localized: Settings are being saved. Please wait.
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:

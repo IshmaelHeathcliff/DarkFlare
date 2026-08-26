@@ -26,10 +26,15 @@ namespace DarkFlare
         readonly ApplicationHost _host;
         readonly Action<SceneFlowRequest> _runRequest;
         readonly Action _openSettings;
+        readonly Action<LocalizedMessage> _showToast;
+        readonly Action<LocalizedMessage, LocalizedMessage, Action> _showConfirmation;
+        readonly Action<LocalizedMessage> _showBusy;
+        readonly Action _hideBusy;
         readonly List<string> _languageChoices = new List<string>();
 
         Button _newGame;
         Button _continue;
+        Button _deleteSave;
         Button _quit;
         Button _settings;
         DropdownField _language;
@@ -44,12 +49,21 @@ namespace DarkFlare
             VisualElement root,
             ApplicationHost host,
             Action<SceneFlowRequest> runRequest,
-            Action openSettings)
+            Action openSettings,
+            Action<LocalizedMessage> showToast,
+            Action<LocalizedMessage, LocalizedMessage, Action> showConfirmation,
+            Action<LocalizedMessage> showBusy,
+            Action hideBusy)
         {
             _root = root ?? throw new ArgumentNullException(nameof(root));
             _host = host ?? throw new ArgumentNullException(nameof(host));
             _runRequest = runRequest ?? throw new ArgumentNullException(nameof(runRequest));
             _openSettings = openSettings ?? throw new ArgumentNullException(nameof(openSettings));
+            _showToast = showToast ?? throw new ArgumentNullException(nameof(showToast));
+            _showConfirmation = showConfirmation
+                ?? throw new ArgumentNullException(nameof(showConfirmation));
+            _showBusy = showBusy ?? throw new ArgumentNullException(nameof(showBusy));
+            _hideBusy = hideBusy ?? throw new ArgumentNullException(nameof(hideBusy));
         }
 
         public void Bind()
@@ -61,11 +75,13 @@ namespace DarkFlare
 
             _newGame = Require<Button>("front-end-new-game");
             _continue = Require<Button>("front-end-continue");
+            _deleteSave = Require<Button>("front-end-delete-save");
             _quit = Require<Button>("front-end-quit");
             _settings = Require<Button>("front-end-settings");
             _language = Require<DropdownField>("front-end-language");
             _newGame.clicked += OnNewGame;
             _continue.clicked += OnContinue;
+            _deleteSave.clicked += RequestDeleteSave;
             _quit.clicked += _host.RequestQuit;
             _settings.clicked += _openSettings;
             _language.RegisterValueChangedCallback(OnLanguageChanged);
@@ -87,6 +103,7 @@ namespace DarkFlare
             CancellationTokenSource cancellation = new CancellationTokenSource();
             _continueProbeCancellation = cancellation;
             _continue.SetEnabled(false);
+            _deleteSave.SetEnabled(false);
 
             try
             {
@@ -100,6 +117,7 @@ namespace DarkFlare
                         if (generation == _continueRefreshGeneration && _continue != null)
                         {
                             _continue.SetEnabled(preparation.Succeeded);
+                            _deleteSave?.SetEnabled(true);
                         }
                     },
                     cancellation.Token,
@@ -109,6 +127,7 @@ namespace DarkFlare
             {
                 CancelContinueProbe();
                 _continue.SetEnabled(false);
+                _deleteSave.SetEnabled(true);
             }
         }
 
@@ -122,6 +141,7 @@ namespace DarkFlare
 
             CancelContinueProbe();
             _continue?.SetEnabled(false);
+            _deleteSave?.SetEnabled(false);
         }
 
         public void FocusDefault()
@@ -146,6 +166,7 @@ namespace DarkFlare
             CancelContinueProbe();
             _newGame.clicked -= OnNewGame;
             _continue.clicked -= OnContinue;
+            _deleteSave.clicked -= RequestDeleteSave;
             _quit.clicked -= _host.RequestQuit;
             _settings.clicked -= _openSettings;
             _language.UnregisterValueChangedCallback(OnLanguageChanged);
@@ -164,6 +185,60 @@ namespace DarkFlare
         void OnContinue()
         {
             _runRequest(SceneFlowRequest.StartGame(GameStartIntent.Continue));
+        }
+
+        void RequestDeleteSave()
+        {
+            _showConfirmation(
+                LocalizedMessage.Ui("save.delete.title"),
+                LocalizedMessage.Ui("save.delete.message"),
+                DeleteSave);
+        }
+
+        void DeleteSave()
+        {
+            if (!_bound
+                || _host.ApplicationScope == null
+                || !_host.ApplicationScope.CanAcceptWork)
+            {
+                return;
+            }
+
+            _deleteSave.SetEnabled(false);
+            _continue.SetEnabled(false);
+            _showBusy(LocalizedMessage.Ui("save.delete.busy"));
+
+            try
+            {
+                _host.ApplicationScope.Tasks.Run(
+                    "front-end-delete-auto-save",
+                    async token =>
+                    {
+                        SaveOperationResult result = await _host.DeleteAutoSaveAsync(token);
+
+                        if (!_bound)
+                        {
+                            return;
+                        }
+
+                        _hideBusy();
+                        _deleteSave.SetEnabled(true);
+                        RefreshContinueAvailability();
+                        _showToast(LocalizedMessage.Ui(
+                            result.Succeeded
+                                ? "save.delete.success"
+                                : "save.delete.failed"));
+                        _deleteSave.Focus();
+                    },
+                    failurePolicy: LifecycleTaskFailurePolicy.Report);
+            }
+            catch
+            {
+                _hideBusy();
+                _deleteSave.SetEnabled(true);
+                RefreshContinueAvailability();
+                _showToast(LocalizedMessage.Ui("save.delete.failed"));
+            }
         }
 
         void OnLanguageChanged(ChangeEvent<string> evt)

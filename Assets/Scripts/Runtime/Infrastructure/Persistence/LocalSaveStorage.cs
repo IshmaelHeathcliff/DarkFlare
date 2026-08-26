@@ -139,6 +139,27 @@ namespace DarkFlare
         }
     }
 
+    public sealed class LocalSaveDeleteResult
+    {
+        public LocalSaveStorageCode Code { get; }
+
+        public int DeletedFileCount { get; }
+
+        public Exception Exception { get; }
+
+        public bool Succeeded => Code == LocalSaveStorageCode.Success;
+
+        internal LocalSaveDeleteResult(
+            LocalSaveStorageCode code,
+            int deletedFileCount,
+            Exception exception)
+        {
+            Code = code;
+            DeletedFileCount = deletedFileCount;
+            Exception = exception;
+        }
+    }
+
     public interface ILocalSaveStorage
     {
         LocalSaveCommitResult Commit(
@@ -147,6 +168,10 @@ namespace DarkFlare
             CancellationToken cancellationToken = default);
 
         LocalSaveLoadResult LoadLatest(
+            SaveSlotId slotId,
+            CancellationToken cancellationToken = default);
+
+        LocalSaveDeleteResult DeleteSlot(
             SaveSlotId slotId,
             CancellationToken cancellationToken = default);
     }
@@ -429,6 +454,69 @@ namespace DarkFlare
             }
         }
 
+        public LocalSaveDeleteResult DeleteSlot(
+            SaveSlotId slotId,
+            CancellationToken cancellationToken = default)
+        {
+            if (!TryBeginOperation())
+            {
+                return DeleteFailure(LocalSaveStorageCode.Busy);
+            }
+
+            int deletedFileCount = 0;
+
+            try
+            {
+                if (cancellationToken.IsCancellationRequested)
+                {
+                    return DeleteFailure(LocalSaveStorageCode.Cancelled);
+                }
+
+                string slotPath = GetSlotPath(slotId);
+
+                if (!_files.DirectoryExists(slotPath))
+                {
+                    return DeleteSuccess(0);
+                }
+
+                IReadOnlyList<string> paths = _files.EnumerateFiles(slotPath);
+
+                for (int i = 0; i < paths.Count; i++)
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+                    string fileName = Path.GetFileName(paths[i]);
+
+                    if (!IsOwnedSlotFile(fileName))
+                    {
+                        continue;
+                    }
+
+                    _files.DeleteFile(paths[i]);
+                    deletedFileCount++;
+                }
+
+                return DeleteSuccess(deletedFileCount);
+            }
+            catch (OperationCanceledException exception)
+            {
+                return DeleteFailure(
+                    LocalSaveStorageCode.Cancelled,
+                    deletedFileCount,
+                    exception);
+            }
+            catch (Exception exception) when (IsStorageException(exception))
+            {
+                return DeleteFailure(
+                    LocalSaveStorageCode.IoFailure,
+                    deletedFileCount,
+                    exception);
+            }
+            finally
+            {
+                EndOperation();
+            }
+        }
+
         GenerationScan ScanGenerations(
             string slotPath,
             SaveSlotId slotId,
@@ -689,6 +777,15 @@ namespace DarkFlare
                 && commitSequence > 0;
         }
 
+        static bool IsOwnedSlotFile(string fileName)
+        {
+            return TryParseGenerationFileName(fileName, out _)
+                || (!string.IsNullOrWhiteSpace(fileName)
+                    && fileName.EndsWith(
+                        TemporaryExtension,
+                        StringComparison.OrdinalIgnoreCase));
+        }
+
         static bool IsStorageException(Exception exception)
         {
             return exception is IOException
@@ -716,6 +813,22 @@ namespace DarkFlare
             Exception exception = null)
         {
             return new LocalSaveLoadResult(code, null, null, false, exception);
+        }
+
+        static LocalSaveDeleteResult DeleteSuccess(int deletedFileCount)
+        {
+            return new LocalSaveDeleteResult(
+                LocalSaveStorageCode.Success,
+                deletedFileCount,
+                null);
+        }
+
+        static LocalSaveDeleteResult DeleteFailure(
+            LocalSaveStorageCode code,
+            int deletedFileCount = 0,
+            Exception exception = null)
+        {
+            return new LocalSaveDeleteResult(code, deletedFileCount, exception);
         }
 
         sealed class GenerationPath

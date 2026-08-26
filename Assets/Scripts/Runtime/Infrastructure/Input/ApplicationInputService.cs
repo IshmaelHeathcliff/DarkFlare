@@ -881,6 +881,27 @@ namespace DarkFlare
 
         void OnSettingsChanged(UserSettingsSnapshot settings)
         {
+            string currentOverrides = SaveOverrides();
+
+            if (!string.Equals(
+                    currentOverrides,
+                    settings.BindingOverridesJson,
+                    StringComparison.Ordinal))
+            {
+                try
+                {
+                    RestoreOverrides(settings.BindingOverridesJson);
+                    BindingsChanged?.Invoke();
+                }
+                catch (Exception exception)
+                {
+                    RestoreOverrides(currentOverrides);
+                    ApplicationLog.Exception(
+                        LogEventIds.InfrastructureInput,
+                        exception);
+                }
+            }
+
             SetGlyphPreference(settings.GlyphPreference);
         }
 

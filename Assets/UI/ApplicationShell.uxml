@@ -33,11 +33,18 @@
             </Bindings>
           </ui:Button>
           <ui:DropdownField name="front-end-language" class="front-end-language" />
-          <ui:Button name="front-end-quit" class="front-end-action front-end-action--quiet" text="">
-            <Bindings>
-              <l:LocalizedString property="text" table="ui" entry="flow.front.quit" />
-            </Bindings>
-          </ui:Button>
+          <ui:VisualElement class="front-end-secondary-actions">
+            <ui:Button name="front-end-delete-save" class="front-end-action front-end-action--quiet front-end-secondary-action--left" text="">
+              <Bindings>
+                <l:LocalizedString property="text" table="ui" entry="save.delete.action" />
+              </Bindings>
+            </ui:Button>
+            <ui:Button name="front-end-quit" class="front-end-action front-end-action--quiet front-end-secondary-action--right" text="">
+              <Bindings>
+                <l:LocalizedString property="text" table="ui" entry="flow.front.quit" />
+              </Bindings>
+            </ui:Button>
+          </ui:VisualElement>
         </ui:VisualElement>
       </ui:VisualElement>
       <ui:Label name="front-end-version" class="front-end-version" />
@@ -80,7 +87,7 @@
             <ui:VisualElement name="settings-binding-list" class="application-settings-binding-list" />
             <ui:Button name="settings-restore-defaults" class="application-settings-restore" text="">
               <Bindings>
-                <l:LocalizedString property="text" table="ui" entry="settings.input.restore_defaults" />
+                <l:LocalizedString property="text" table="ui" entry="settings.restore.action" />
               </Bindings>
             </ui:Button>
           </ui:VisualElement>

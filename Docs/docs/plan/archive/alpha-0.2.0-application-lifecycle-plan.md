@@ -5,8 +5,8 @@
 > 最近更新：2026-08-18
 > 完成日期：2026-08-18
 > 基线提交：`926e32e`
-> 上位计划：[alpha 0.2 基础设施开发计划](../alpha-0.2-plan.md)
-> 强制约束：[alpha 0.2 基础设施约束契约](../alpha-0.2-infrastructure-contract.md)
+> 上位计划：[alpha 0.2 基础设施开发计划](./alpha-0.2-plan.md)
+> 强制约束：[alpha 0.2 长期运行时契约](../../infrastructure/alpha-0.2-runtime-contract.md)
 > 当前模块：[应用生命周期与会话作用域](../../infrastructure/application-lifecycle.md)
 
 ## 阶段目标

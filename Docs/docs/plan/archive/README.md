@@ -19,6 +19,8 @@
 - [Application Audio](../../infrastructure/application-audio.md)
 - [日志、错误处理与 Addressables 资源治理](../../infrastructure/logging-error-addressables-governance.md)
 - [可访问性与平台生命周期](../../infrastructure/accessibility-platform-lifecycle.md)
+- [alpha 0.2 长期运行时契约](../../infrastructure/alpha-0.2-runtime-contract.md)
+- [alpha 0.2 综合验收记录](../../infrastructure/alpha-0.2-acceptance.md)
 
 ## 归档清单
 
@@ -58,5 +60,7 @@
 | [alpha 0.2.5 切片 1 Application Input Service 执行计划](./alpha-0.2.5-slice-1-application-input-plan.md) | alpha 0.2.5 切片 1 | [输入与运行时 UI](../../input-ui-system.md)、[应用生命周期与会话作用域](../../infrastructure/application-lifecycle.md) |
 | [alpha 0.2.5 切片 2–6 收尾执行计划](./alpha-0.2.5-slices-2-6-completion-plan.md) | alpha 0.2.5 切片 2–6 | [输入与运行时 UI](../../input-ui-system.md)、[Application Audio](../../infrastructure/application-audio.md)、[可访问性与平台生命周期](../../infrastructure/accessibility-platform-lifecycle.md) |
 | [alpha 0.2.6 日志、错误处理与 Addressables 资源治理执行计划](./alpha-0.2.6-logging-error-addressables-plan.md) | alpha 0.2.6 | [日志、错误处理与 Addressables 资源治理](../../infrastructure/logging-error-addressables-governance.md) |
+| [alpha 0.2.7 综合验收与封板执行计划](./alpha-0.2.7-integrated-acceptance-release-sealing-plan.md) | alpha 0.2.7 | [alpha 0.2 综合验收记录](../../infrastructure/alpha-0.2-acceptance.md) |
+| [alpha 0.2 基础设施开发计划](./alpha-0.2-plan.md) | alpha 0.2.0–0.2.7 | [alpha 0.2 长期运行时契约](../../infrastructure/alpha-0.2-runtime-contract.md)、[综合验收记录](../../infrastructure/alpha-0.2-acceptance.md) |
 
-最近归档日期：2026-08-25。
+最近归档日期：2026-08-26。

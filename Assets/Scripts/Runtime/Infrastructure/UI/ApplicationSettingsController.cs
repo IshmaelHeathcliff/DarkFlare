@@ -49,6 +49,8 @@ namespace DarkFlare
         readonly ApplicationHost _host;
         readonly Action<LocalizedMessage> _showToast;
         readonly Action<LocalizedMessage, LocalizedMessage, Action> _showConfirmation;
+        readonly Action<LocalizedMessage> _showBusy;
+        readonly Action _hideBusy;
         readonly List<BindingRow> _bindingRows = new List<BindingRow>();
         readonly List<string> _glyphChoices = new List<string>();
 
@@ -76,13 +78,17 @@ namespace DarkFlare
             VisualElement root,
             ApplicationHost host,
             Action<LocalizedMessage> showToast,
-            Action<LocalizedMessage, LocalizedMessage, Action> showConfirmation)
+            Action<LocalizedMessage, LocalizedMessage, Action> showConfirmation,
+            Action<LocalizedMessage> showBusy,
+            Action hideBusy)
         {
             _root = root ?? throw new ArgumentNullException(nameof(root));
             _host = host ?? throw new ArgumentNullException(nameof(host));
             _showToast = showToast ?? throw new ArgumentNullException(nameof(showToast));
             _showConfirmation = showConfirmation
                 ?? throw new ArgumentNullException(nameof(showConfirmation));
+            _showBusy = showBusy ?? throw new ArgumentNullException(nameof(showBusy));
+            _hideBusy = hideBusy ?? throw new ArgumentNullException(nameof(hideBusy));
         }
 
         public bool IsOpen { get; private set; }
@@ -565,36 +571,54 @@ namespace DarkFlare
         void RequestRestoreDefaults()
         {
             _showConfirmation(
-                LocalizedMessage.Ui("settings.input.restore_title"),
-                LocalizedMessage.Ui("settings.input.restore_message"),
+                LocalizedMessage.Ui("settings.restore.title"),
+                LocalizedMessage.Ui("settings.restore.message"),
                 RestoreDefaults);
         }
 
         void RestoreDefaults()
         {
-            SetBindingsEnabled(false);
+            if (_settingsCommitRunning || _host.Settings.IsBusy)
+            {
+                SetStatus("settings.status.busy", "Settings are busy");
+                return;
+            }
+
+            CancelRebind();
+            _page.SetEnabled(false);
+            _showBusy(LocalizedMessage.Ui("settings.restore.busy"));
 
             try
             {
                 _host.ApplicationScope.Tasks.Run(
-                    "settings-input-restore-defaults",
+                    "settings-restore-all-defaults",
                     async token =>
                     {
-                        InputRebindResult result = await _host.Input.ResetBindingOverridesAsync(
-                            cancellationToken: token);
-                        SetBindingsEnabled(true);
+                        SettingsOperationResult result =
+                            await _host.Settings.ResetToDefaultsAsync(token);
+                        _hideBusy();
+                        _page.SetEnabled(true);
                         RefreshBindingRows();
+                        RefreshFromSettings();
                         SetStatus(
                             result.Succeeded
                                 ? "settings.status.saved"
                                 : "settings.status.save_failed",
                             result.Code.ToString());
+                        _showToast(LocalizedMessage.Ui(
+                            result.Succeeded
+                                ? "settings.restore.success"
+                                : "settings.restore.failed"));
+                        _restoreDefaults.Focus();
                     },
                     failurePolicy: LifecycleTaskFailurePolicy.Report);
             }
             catch
             {
-                SetBindingsEnabled(true);
+                _hideBusy();
+                _page.SetEnabled(true);
+                RefreshFromSettings();
+                _showToast(LocalizedMessage.Ui("settings.restore.failed"));
             }
         }
 

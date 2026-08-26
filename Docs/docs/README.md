@@ -12,6 +12,8 @@
 - [Application Audio](./infrastructure/application-audio.md)
 - [日志、错误处理与 Addressables 资源治理](./infrastructure/logging-error-addressables-governance.md)
 - [可访问性与平台生命周期](./infrastructure/accessibility-platform-lifecycle.md)
+- [alpha 0.2 长期运行时契约](./infrastructure/alpha-0.2-runtime-contract.md)
+- [alpha 0.2 综合验收记录](./infrastructure/alpha-0.2-acceptance.md)
 - [首版玩法循环](./gameplay-loop.md)
 - [输入与运行时 UI](./input-ui-system.md)
 - [物品 UI 工作台](./item-ui-workbench.md)
@@ -31,14 +33,11 @@
 - [世界渲染与稳定层级](./world-rendering.md)
 - [已完成计划归档](./plan/archive/README.md)
 
-## 进行中的计划
+## 计划状态
 
-- [alpha 0.2 基础设施开发计划](./plan/alpha-0.2-plan.md)
-- [alpha 0.2 基础设施约束契约](./plan/alpha-0.2-infrastructure-contract.md)
-
-`alpha 0.2.0–0.2.6` 已完成，当前实现见上述基础设施模块文档，阶段执行计划已移入[已完成计划归档](./plan/archive/README.md)。下一阶段 `alpha 0.2.7` 尚待独立规划。
+`alpha 0.2.0–0.2.7` 已完成。规划期总计划、阶段计划与验收过程已移入[已完成计划归档](./plan/archive/README.md)；后续实现以长期运行时契约和各基础设施模块文档为准。
 
 ## 说明
 
-当前项目已完成首版最小循环、初步体验优化、`alpha 0.1` 封板，以及 `alpha 0.2.0–0.2.6` 生命周期、稳定身份、内容目录、迁移、本地存档、用户设置、本地化、场景流、应用 UI 外壳、输入、音频、可访问性、平台生命周期、结构化日志、错误处理和 Addressables 资源治理，正在继续推进 `alpha 0.2` 基础设施。文档以现有目录、包依赖和脚本入口为准整理；已完成的执行计划统一保存在 `Docs/docs/plan/archive/`。
+当前项目已完成首版最小循环、初步体验优化、`alpha 0.1` 封板和 `alpha 0.2` 基础设施封板。文档以现有目录、包依赖和脚本入口为准整理；已完成的执行计划统一保存在 `Docs/docs/plan/archive/`。
 后续新增系统、配置或流程时，应优先更新对应文档，避免 `Docs/docs/` 与实现脱节。游戏设计文档位于 `Docs/design/`，不属于 Agent 的常规维护范围。

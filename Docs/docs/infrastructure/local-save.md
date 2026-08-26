@@ -1,7 +1,7 @@
 # 本地存档与 Session 恢复
 
-> 状态：`alpha 0.2.2` 已实现
-> 最近更新：2026-08-21
+> 状态：`alpha 0.2.2` 已实现；`alpha 0.2.7` 已补齐自动档删除闭环
+> 最近更新：2026-08-26
 
 ## 模块目标
 
@@ -21,7 +21,7 @@
 | 恢复预检 | `SaveRestorePreparer` | 使用当前 `ContentCatalog` 解析稳定 ID，构造不接触旧 Session 的 `PreparedRestore` |
 | 恢复提交 | `RestoreGameSessionInitializer` | 预热资源、重建状态、提交新 Session；失败时按初始化事务回滚 |
 | 协调 | `SaveCoordinator` | Profile 级单写者、Dirty revision、请求合并、PrepareContinue 和退出 Flush |
-| 玩家入口 | `SessionSaveFacade`、`GameMenuController` | 对当前 generation 暴露保存与稳定错误反馈；跨 Session 操作由 Scene Flow 负责 |
+| 玩家入口 | `SessionSaveFacade`、`GameMenuController`、`ApplicationFrontEndController` | 对当前 generation 暴露保存；在 FrontEnd 二次确认删除 `auto`；跨 Session 操作由 Scene Flow 负责 |
 
 `ApplicationHost` 拥有 PathProvider、Serializer、Storage 和 Profile 级 Coordinator；每个 Running Session 只绑定一个 generation-bound Snapshot Source 与 Facade。Session 停止时先解绑这些入口，再释放场景与架构。
 
@@ -102,6 +102,10 @@ FrontEnd 通过 Scene Flow 使用 Main 场景配置创建 NewGame Session。新�
 
 `OnDestroy` / 应急关闭不等待，只关闭入口并保留已经原子提交的代际有效性；不承诺尚未提交的临时文件成为正式存档。
 
+### 删除自动档
+
+FrontEnd 只在无活动 Session、Coordinator 空闲且 Flow 为 `FrontEnd` 时开放删除。玩家二次确认后，`SaveCoordinator.DeleteSlotAsync` 只删除 `auto` 槽位内的 `.save` 与 `.tmp` 所有文件；槽位不存在按幂等成功处理。IO 部分失败返回结构化结果，Shell 重新 Probe 真实磁盘状态后再决定 Continue 是否可用，不显示虚假成功。删除存档不会修改 Settings。
+
 ## 错误与调用约束
 
 玩家入口统一返回 `SaveOperationResult`，包含 operation、slot、`SaveErrorCode`、恢复来源、是否可重试、内部异常和提交序号。UI 只显示稳定错误语义，不展示完整存档内容或用户绝对路径。
@@ -123,6 +127,7 @@ FrontEnd 通过 Scene Flow 使用 Main 场景配置创建 NewGame Session。新�
 
 - Main 游戏菜单保存按钮通过 `SessionSaveFacade` 写入 `auto`。
 - FrontEnd 的 Continue 只有 Profile 级预检确认 `auto` 有效时可用；NewGame 不删除旧档。
+- FrontEnd 的删除自动档按钮必须经过共用 Modal 二次确认；删除后立即按 Probe 结果刷新 Continue。
 - 返回 FrontEnd 必须先完成 `SaveBeforeExitAsync`；失败时保留当前 Session，并由 Application Shell 提供重试 / 取消。
 
 这些按钮同时支持鼠标、键盘和手柄焦点，文本来自 Unity Localization String Table。
@@ -130,16 +135,16 @@ FrontEnd 通过 Scene Flow 使用 Main 场景配置创建 NewGame Session。新�
 ## 验证证据
 
 - Unity `6000.4.3f1` 重编译：0 error。
-- EditMode 全量：`360/360` 通过。
-- 项目自有 PlayMode：`52/52` 通过。
-- 完整 PlayMode：54 项中 52 项通过、0 失败；2 项 Input System 包集成测试因既有 issue 1252825 跳过。
+- 封板 EditMode：`443/443` 通过。
+- 项目自有 PlayMode：`56/56` 通过。
+- 完整 PlayMode：60 项中 58 项通过、0 失败；2 项 Input System 包集成测试因既有 issue 1252825 跳过。
 - 存档专项覆盖 DTO / 校验、确定性序列化 / SHA-256 / 迁移、Storage 中断 / 损坏 / 备份、恢复准备、Coordinator 合并 / 超时 / 异常结算，以及 Main Session 捕获与恢复。
 - 两次真实 Play 均达到 Application `Ready`、Session `Running`、存档 Facade 有效、玩家 1 个、菜单绑定 1 次；第二次退出后 Console Error 为 0。
 
 ## 当前边界
 
-- UI 只有一个 `auto` 槽位，没有手动槽位列表、删除、重命名、Profile 选择或云同步。
+- UI 只有一个 `auto` 槽位及其删除入口，没有手动槽位列表、重命名、Profile 选择或云同步。
 - Bootstrap / Main Scene Flow 与 Application Shell 已落地；仍没有 Profile 选择、手动槽位或云同步。
-- Settings、Locale、Toast / Modal / Fatal 错误外壳已落地；统一 Logger 和移动平台挂起恢复仍未实现。
-- 退出门禁只完成当前桌面流程；平台差异由 `alpha 0.2.5` 处理。
+- Settings、Locale、Toast / Modal / Fatal 错误外壳、统一 Logger 和平台挂起恢复均已落地。
+- 退出门禁覆盖当前桌面流程；平台差异由 Platform Lifecycle 统一编排。
 - Settings 已使用独立路径域、Schema 和服务，未写入游戏存档；存档 Storage 原语继续只服务 Save Domain。

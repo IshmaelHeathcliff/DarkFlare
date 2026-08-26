@@ -2,7 +2,7 @@
 
 > 状态：`alpha 0.2.6` 已完成；最近更新：2026-08-25
 >
-> 参考：[应用生命周期与会话作用域](./application-lifecycle.md) · [游戏状态、场景流与应用 UI 外壳](./game-state-scene-flow-ui-shell.md) · [Application Audio](./application-audio.md) · [基础设施约束契约](../plan/alpha-0.2-infrastructure-contract.md)
+> 参考：[应用生命周期与会话作用域](./application-lifecycle.md) · [游戏状态、场景流与应用 UI 外壳](./game-state-scene-flow-ui-shell.md) · [Application Audio](./application-audio.md) · [长期运行时契约](./alpha-0.2-runtime-contract.md)
 
 ## 职责与所有权
 
@@ -65,6 +65,6 @@ Editor 治理器 `Alpha026AddressablesGovernance` 通过 Addressables Editor API
 - EditMode 覆盖事件目录、环形顺序、Sink 隔离、失败去重、玩家动作、资源单飞 / 双 owner / 类型冲突及资产治理。
 - 三轮 FrontEnd → NewGame → Main → FrontEnd 验证 Session owner、entry、lease 和 in-flight 全部回到 Application 基线。
 - 真实 Bootstrap Play 达到 Application `Ready`；资源基线为 owner `2`、entry `1`、lease `1`、in-flight `0`，停止后 Console Error / Warning 为 `0`。
-- 最终 EditMode `423/423`、项目 PlayMode `53/53`；完整 PlayMode 57 项中 55 项通过、0 失败，2 项为 Input System 上游 issue 1252825 的既有 Ignore。
+- 最终 EditMode `424/424`、项目 PlayMode `53/53`；完整 PlayMode 57 项中 55 项通过、0 失败，2 项为 Input System 上游 issue 1252825 的既有 Ignore。
 
 禁止业务代码直接调用 `Debug.Log*`、`Addressables.*`、持有原始异步句柄，或用资源地址 / GUID 作为存档身份。当前不包含远端 Catalog、CDN、热更新、日志文件、遥测、玩家日志导出或通用 Addressables 实例池。

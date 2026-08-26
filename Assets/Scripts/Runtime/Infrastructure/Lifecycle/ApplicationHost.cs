@@ -129,6 +129,10 @@ namespace DarkFlare
         public IReadOnlyList<ApplicationLogEntry> RecentLogs =>
             _logBuffer?.Snapshot() ?? Array.Empty<ApplicationLogEntry>();
 
+        internal string SettingsRootPath => _settingsPathProvider?.RootPath;
+
+        internal string SaveRootPath => _savePathProvider?.RootPath;
+
         public ApplicationFailureCoordinator FailureCoordinator => _failureCoordinator;
 
         public AddressableAssetService Resources => _resourceService;
@@ -221,6 +225,32 @@ namespace DarkFlare
             return result.Succeeded
                 ? SceneFlowContinuePreparation.Success(result.PreparedRestore)
                 : SceneFlowContinuePreparation.Failure(result.OperationResult.Exception);
+        }
+
+        public UniTask<SaveOperationResult> DeleteAutoSaveAsync(
+            CancellationToken cancellationToken = default)
+        {
+            if (State != ApplicationLifecycleState.Ready
+                || _sceneFlowService == null
+                || _sceneFlowService.State != GameFlowState.FrontEnd)
+            {
+                return UniTask.FromResult(SaveOperationResult.Failure(
+                    SaveOperation.Delete,
+                    SaveCoordinator.AutoSlot,
+                    SaveErrorCode.InvalidRequest));
+            }
+
+            if (_session != null || _saveCoordinator == null)
+            {
+                return UniTask.FromResult(SaveOperationResult.Failure(
+                    SaveOperation.Delete,
+                    SaveCoordinator.AutoSlot,
+                    SaveErrorCode.SessionUnavailable));
+            }
+
+            return _saveCoordinator.DeleteSlotAsync(
+                SaveCoordinator.AutoSlot,
+                cancellationToken);
         }
 
         public IGameSessionInitializer CreateSessionInitializer(
@@ -820,7 +850,8 @@ namespace DarkFlare
                 _applicationScope = LifecycleScope.CreateRoot(
                     "Application",
                     OnLifecycleTaskFailure);
-                _settingsPathProvider = new PersistentSettingsPathProvider();
+                _settingsPathProvider =
+                    ApplicationDataPathProviderFactory.CreateSettingsPathProvider();
                 _settingsSerializer = new NewtonsoftSettingsSerializer();
                 _settingsStorage = new LocalSettingsStorage(
                     _settingsPathProvider,
@@ -936,7 +967,8 @@ namespace DarkFlare
                 ProfileId = DefaultProfileId;
                 _profileScope = _applicationScope.CreateChild($"Profile-{ProfileId}");
                 _itemInstanceIds = new UuidItemInstanceIdGenerator();
-                _savePathProvider = new PersistentSavePathProvider();
+                _savePathProvider =
+                    ApplicationDataPathProviderFactory.CreateSavePathProvider();
                 _saveSerializer = new NewtonsoftSaveSerializer();
                 _saveStorage = new LocalSaveStorage(_savePathProvider, _saveSerializer);
                 EnsureSaveCoordinator();

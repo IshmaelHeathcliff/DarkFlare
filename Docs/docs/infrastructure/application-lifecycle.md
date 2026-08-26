@@ -2,7 +2,7 @@
 
 > 状态：`alpha 0.2.0` 已完成；`alpha 0.2.5` 已补充 Application 输入、音频、可访问性与平台生命周期；最近更新：2026-08-24
 >
-> 参考：[归档计划](../plan/archive/alpha-0.2.0-application-lifecycle-plan.md) · [基础设施约束契约](../plan/alpha-0.2-infrastructure-contract.md)
+> 参考：[归档计划](../plan/archive/alpha-0.2.0-application-lifecycle-plan.md) · [长期运行时契约](./alpha-0.2-runtime-contract.md)
 
 ## 核心模型
 

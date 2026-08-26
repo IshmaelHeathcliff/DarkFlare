@@ -11,6 +11,8 @@ DarkFlare/
     docs/
       infrastructure/
         accessibility-platform-lifecycle.md
+        alpha-0.2-acceptance.md
+        alpha-0.2-runtime-contract.md
         application-lifecycle.md
         application-audio.md
         content-identity-migration.md
@@ -105,6 +107,7 @@ DarkFlare/
           InputGlyphResolver.cs
         Lifecycle/
           ApplicationBootstrap.cs
+          ApplicationDataPathProviderFactory.cs
           ApplicationHost.cs
           ComponentLifecycle.cs
           GameArchitectureProvider.cs
@@ -379,6 +382,8 @@ Addressables 的配置目录，包含资源组、模板和构建器配置。后�
 - `Tests/EditMode/Alpha024*Tests.cs` 与 `Tests/PlayMode/Alpha024SceneFlowPlayModeTests.cs`：覆盖 Scene Flow 合同 / 配置、场景与时间策略、Bootstrap 冷启动、NewGame / Continue、取消 / 替代、恢复、暂停、返回和三次循环
 - `Tests/EditMode/ApplicationInputServiceTests.cs`、`AudioServiceTests.cs`、`AccessibilityAndPlatformLifecycleTests.cs`、`Alpha025ProductionAssetTests.cs` 与 `Tests/PlayMode/Alpha025InputOwnershipPlayModeTests.cs`：覆盖 Application 输入、重绑定 / Glyph、Audio、Reduce Motion、Platform 生命周期、生产资产和设置页双入口
 - `Tests/EditMode/Alpha026DiagnosticsTests.cs`、`Alpha026AddressablesGovernanceTests.cs` 与 `Tests/PlayMode/Alpha024SceneFlowPlayModeTests.cs`：覆盖日志 / 失败 / 玩家错误合同、资源单航班和 owner 释放、15 个 Addressables 条目，以及三轮 Session 资源基线回收
+- `Tests/EditMode/Alpha027Acceptance*`、`MigrationFixture*` 与 `Tests/Fixtures/Migration/`：冻结 0.2.7 版本、覆盖清单、构建记录和 Save / Settings V0 迁移样本
+- `Tests/PlayMode/Alpha027*`：覆盖每次 Test Runner 隔离数据根、完整删除 / 重置 / 重启路径，以及三语言 × 三分辨率 Shell 矩阵
 - `Tests/EditMode/Alpha01TagMigrationCharacterizationTests.cs` 与既有 EditMode 测试：覆盖标签查询、域隔离、物品—词条候选矩阵、伤害血统、旧接口兼容、纯逻辑、原子换装、交易和打造事务语义、键鼠 / 手柄输入、Action Map 切换、交互消息、暂停及 HUD/背包/商店/打造快照。归属 `DarkFlare.Tests.EditMode` 程序集
 - `Tests/PlayMode/ApplicationLifecyclePlayModeTests.cs`：覆盖冷启动唯一性、取消回滚、并发请求、连续 Session、场景卸载和直接 `Main` 重载
 - `Tests/PlayMode/ApplicationHostSceneTransitionPlayModeTests.cs`：覆盖每 generation 一次 `SessionRunning` 通知、回滚中的重载、三次快速请求 latest-wins、挂起回滚 / 作用域超时有界收敛，以及受控停止 / Shutdown / Emergency 终态隔离
@@ -388,7 +393,7 @@ Addressables 的配置目录，包含资源组、模板和构建器配置。后�
 
 `UI`、`Utilities` 目前主要是占位，为后续模块扩展预留。
 
-**首版玩法循环和 `alpha 0.2.0–0.2.6` 基础设施已完成**：当前已覆盖 UIToolkit HUD / 背包装备 / 商店 / 打造 / 场景交互，以及唯一应用宿主、Session 重建、稳定身份、内容目录、DTO / 迁移、`auto` 本地存档 / Restore、Settings V1、中英运行时本地化、Bootstrap / Main Scene Flow、Game Time、Application Shell、应用级输入 / 重绑定 / Glyph、Audio、Reduce Motion、Platform Lifecycle、结构化日志、玩家错误和 Addressables Resource Service。运行流程见 [`gameplay-loop.md`](gameplay-loop.md)，生命周期见[应用生命周期与会话作用域](infrastructure/application-lifecycle.md)，身份与迁移见[稳定身份、内容目录与迁移框架](infrastructure/content-identity-migration.md)，持久化见[本地存档与 Session 恢复](infrastructure/local-save.md)，设置与语言见[用户设置与本地化](infrastructure/user-settings-localization.md)，场景状态与 Shell 见[游戏状态、场景流与应用 UI 外壳](infrastructure/game-state-scene-flow-ui-shell.md)，输入与玩法 UI 见 [`input-ui-system.md`](input-ui-system.md)，音频见 [Application Audio](infrastructure/application-audio.md)，日志与资源见[日志、错误处理与 Addressables 资源治理](infrastructure/logging-error-addressables-governance.md)，降低动态与平台挂起见[可访问性与平台生命周期](infrastructure/accessibility-platform-lifecycle.md)；完成过程保存在 [`plan/archive/`](plan/archive/README.md)。
+**首版玩法循环和 `alpha 0.2.0–0.2.7` 基础设施已完成**：当前已覆盖 UIToolkit HUD / 背包装备 / 商店 / 打造 / 场景交互，以及唯一应用宿主、Session 重建、稳定身份、内容目录、DTO / 迁移、`auto` 本地存档 / Restore / 删除、Settings V1 / 完整默认恢复、中英运行时本地化、Bootstrap / Main Scene Flow、Game Time、Application Shell、应用级输入 / 重绑定 / Glyph、Audio、Reduce Motion、Platform Lifecycle、结构化日志、玩家错误和 Addressables Resource Service。运行流程见 [`gameplay-loop.md`](gameplay-loop.md)，长期规则见[alpha 0.2 长期运行时契约](infrastructure/alpha-0.2-runtime-contract.md)，最终证据见[alpha 0.2 综合验收记录](infrastructure/alpha-0.2-acceptance.md)，完成过程保存在 [`plan/archive/`](plan/archive/README.md)。
 
 ### `Assets/Settings`
 
@@ -448,6 +453,6 @@ Unity 工程级设置目录，包括版本、构建场景、图形设置等。
 - 插件和核心依赖已经接入
 - 代码架构入口和唯一生命周期所有者已经就位
 - 战斗、掉落、背包、交易、打造、输入、HUD、情境菜单与世界交互入口已有首版可运行内容
-- `auto` 本地存档与 Restore、Settings V1、运行时本地化、完整 SceneFlow、Game Time 和应用 UI 外壳已实现；手动槽位、云同步、重绑定、音频、可访问性和平台生命周期仍是后续 `alpha 0.2` 阶段重点
+- `auto` 本地存档与 Restore、Settings V1、运行时本地化、完整 SceneFlow、Game Time、应用 UI 外壳、重绑定、音频、可访问性、平台生命周期、结构化日志和资源治理均已实现；`alpha 0.2.7` 只处理封板缺口、综合验收与计划归档，手动槽位和云同步不属于本版本
 
 因此，后续工作重点不在“再拆目录”，而在把每一层真正填上首批可运行内容。

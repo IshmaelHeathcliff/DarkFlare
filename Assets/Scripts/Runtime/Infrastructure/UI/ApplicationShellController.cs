@@ -6,7 +6,7 @@ namespace DarkFlare
     public sealed class ApplicationShellController : IDisposable
     {
         const string BrandName = "DARKFLARE";
-        const string AlphaVersion = "alpha 0.2.6";
+        const string AlphaVersion = "alpha 0.2.7";
 
         readonly UIDocument _document;
         readonly ApplicationHost _host;
@@ -72,12 +72,18 @@ namespace DarkFlare
                 _root,
                 _host,
                 RunRequest,
-                () => OpenSettings(_frontEndController.FocusDefault));
+                () => OpenSettings(_frontEndController.FocusDefault),
+                ShowToast,
+                ShowConfirmation,
+                ShowOperationBusy,
+                HideBusy);
             _settingsController = new ApplicationSettingsController(
                 _root,
                 _host,
                 ShowToast,
-                ShowConfirmation);
+                ShowConfirmation,
+                ShowOperationBusy,
+                HideBusy);
             _frontEndBrand.text = BrandName;
             _frontEndVersion.text = AlphaVersion;
             _frontEndController.Bind();
@@ -221,6 +227,15 @@ namespace DarkFlare
             _modalRetry.style.display = DisplayStyle.Flex;
             SetVisible(_modalLayer, true);
             _modalRetry.Focus();
+        }
+
+        public void ShowOperationBusy(LocalizedMessage message)
+        {
+            _busyLabel.text = Resolve(message, message.EntryKey);
+            _busyProgress.style.display = DisplayStyle.None;
+            _busyCancel.style.display = DisplayStyle.None;
+            _busyCancel.SetEnabled(false);
+            SetVisible(_busyLayer, true);
         }
 
         public void Dispose()

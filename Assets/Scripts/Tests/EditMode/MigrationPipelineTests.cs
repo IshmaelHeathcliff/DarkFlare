@@ -97,7 +97,7 @@ namespace DarkFlare.Tests
                 BuildRegistry(1, new LegacySaveV0ToV1Migration()),
                 "header.saveSchemaVersion");
             JObject input = JObject.Parse(
-                "{\"header\":{\"saveSchemaVersion\":0},\"payload\":{\"items\":[{\"baseItemId\":\"great_sword\"}]}}");
+                MigrationFixtureUtility.ReadUtf8("save-v0-content-id.json"));
 
             JsonMigrationResult result = pipeline.Migrate(input, 0);
 

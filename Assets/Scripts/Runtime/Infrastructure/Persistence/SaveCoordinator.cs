@@ -12,6 +12,7 @@ namespace DarkFlare
     public enum SaveOperation
     {
         Save,
+        Delete,
         PrepareContinue,
         Continue,
         NewGame,
@@ -300,6 +301,94 @@ namespace DarkFlare
             catch (OperationCanceledException)
             {
                 return ContinueFailure(slotId, SaveErrorCode.Cancelled);
+            }
+            finally
+            {
+                _loadInProgress = false;
+                _loadCompletion.TrySetResult(true);
+            }
+        }
+
+        public async UniTask<SaveOperationResult> DeleteSlotAsync(
+            SaveSlotId slotId,
+            CancellationToken cancellationToken = default)
+        {
+            if (!_accepting)
+            {
+                return SaveOperationResult.Failure(
+                    SaveOperation.Delete,
+                    slotId,
+                    SaveErrorCode.InvalidRequest);
+            }
+
+            if (_boundSession != null)
+            {
+                return SaveOperationResult.Failure(
+                    SaveOperation.Delete,
+                    slotId,
+                    SaveErrorCode.SessionUnavailable);
+            }
+
+            if (IsBusy)
+            {
+                return SaveOperationResult.Failure(
+                    SaveOperation.Delete,
+                    slotId,
+                    SaveErrorCode.OperationInProgress,
+                    true);
+            }
+
+            if (cancellationToken.IsCancellationRequested)
+            {
+                return SaveOperationResult.Failure(
+                    SaveOperation.Delete,
+                    slotId,
+                    SaveErrorCode.Cancelled);
+            }
+
+            _loadInProgress = true;
+            _loadCompletion = new UniTaskCompletionSource<bool>();
+
+            try
+            {
+                LocalSaveDeleteResult result;
+                await UniTask.SwitchToThreadPool();
+
+                try
+                {
+                    result = _storage.DeleteSlot(slotId, cancellationToken);
+                }
+                finally
+                {
+                    await UniTask.SwitchToMainThread();
+                }
+
+                if (result.Succeeded)
+                {
+                    return SaveOperationResult.Success(SaveOperation.Delete, slotId);
+                }
+
+                SaveErrorCode errorCode = result.Code switch
+                {
+                    LocalSaveStorageCode.Busy => SaveErrorCode.OperationInProgress,
+                    LocalSaveStorageCode.Cancelled => SaveErrorCode.Cancelled,
+                    LocalSaveStorageCode.IoFailure => MapIoException(result.Exception),
+                    _ => SaveErrorCode.IoFailure,
+                };
+                return SaveOperationResult.Failure(
+                    SaveOperation.Delete,
+                    slotId,
+                    errorCode,
+                    IsRetryable(errorCode),
+                    result.Exception);
+            }
+            catch (OperationCanceledException exception)
+            {
+                return SaveOperationResult.Failure(
+                    SaveOperation.Delete,
+                    slotId,
+                    SaveErrorCode.Cancelled,
+                    exception: exception);
             }
             finally
             {

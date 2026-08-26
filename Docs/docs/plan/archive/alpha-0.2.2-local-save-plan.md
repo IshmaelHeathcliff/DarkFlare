@@ -5,8 +5,8 @@
 > 最近更新：2026-08-19
 > 完成日期：2026-08-19
 > 基线提交：`21360c7`
-> 上位计划：[alpha 0.2 基础设施开发计划](../alpha-0.2-plan.md)
-> 强制约束：[alpha 0.2 基础设施约束契约](../alpha-0.2-infrastructure-contract.md)
+> 上位计划：[alpha 0.2 基础设施开发计划](./alpha-0.2-plan.md)
+> 强制约束：[alpha 0.2 长期运行时契约](../../infrastructure/alpha-0.2-runtime-contract.md)
 > 前置模块：[应用生命周期与会话作用域](../../infrastructure/application-lifecycle.md) · [稳定身份、内容目录与迁移框架](../../infrastructure/content-identity-migration.md)
 > 实现总结：[本地存档与 Session 恢复](../../infrastructure/local-save.md)
 

@@ -1,0 +1,271 @@
+{
+  "schemaVersion": 1,
+  "phaseStatus": "complete",
+  "baselineCommit": "be85dd4",
+  "unityVersion": "6000.4.3f1",
+  "requirements": [
+    {
+      "id": "application.lifecycle",
+      "status": "covered",
+      "plannedSlice": "",
+      "evidence": [
+        {
+          "path": "Assets/Scripts/Tests/EditMode/ApplicationLifecycleTests.cs",
+          "testName": "LifecycleScope_StoppingParentCancelsAndWaitsForChildren"
+        }
+      ]
+    },
+    {
+      "id": "game.flow",
+      "status": "covered",
+      "plannedSlice": "",
+      "evidence": [
+        {
+          "path": "Assets/Scripts/Tests/PlayMode/Alpha024SceneFlowPlayModeTests.cs",
+          "testName": "ThreeCycles_NewGamePauseAndReturnKeepTopologyUnique"
+        }
+      ]
+    },
+    {
+      "id": "content.identity",
+      "status": "covered",
+      "plannedSlice": "",
+      "evidence": [
+        {
+          "path": "Assets/Scripts/Tests/EditMode/ContentIdentityTests.cs",
+          "testName": "OfficialContentCatalog_ContainsEveryRegisteredPresetDefinition"
+        }
+      ]
+    },
+    {
+      "id": "data.migration",
+      "status": "covered",
+      "plannedSlice": "",
+      "evidence": [
+        {
+          "path": "Assets/Scripts/Tests/EditMode/MigrationPipelineTests.cs",
+          "testName": "HistoricalMigration_DeepCopiesNormalizesContentIdAndIsDeterministic"
+        }
+      ]
+    },
+    {
+      "id": "persistence.save",
+      "status": "covered",
+      "plannedSlice": "",
+      "evidence": [
+        {
+          "path": "Assets/Scripts/Tests/EditMode/LocalSaveStorageTests.cs",
+          "testName": "Commit_MoveFailureOrCancellationPreservesPreviousGenerationAndCleansTemporaryFile"
+        }
+      ]
+    },
+    {
+      "id": "settings.runtime",
+      "status": "covered",
+      "plannedSlice": "",
+      "evidence": [
+        {
+          "path": "Assets/Scripts/Tests/EditMode/SettingsServiceTests.cs",
+          "testName": "Update_PersistsThenReloadsAndPublishesCommittedSnapshot"
+        }
+      ]
+    },
+    {
+      "id": "localization.runtime",
+      "status": "covered",
+      "plannedSlice": "",
+      "evidence": [
+        {
+          "path": "Assets/Scripts/Tests/EditMode/LocalizationAssetContractTests.cs",
+          "testName": "Runtime_LoadsRealTablesAndPersistsExplicitLanguageInTemporarySettings"
+        }
+      ]
+    },
+    {
+      "id": "input.ownership",
+      "status": "covered",
+      "plannedSlice": "",
+      "evidence": [
+        {
+          "path": "Assets/Scripts/Tests/PlayMode/Alpha025InputOwnershipPlayModeTests.cs",
+          "testName": "BootstrapAndThreeSessionsShareOneRuntimeActionAsset"
+        }
+      ]
+    },
+    {
+      "id": "input.rebinding",
+      "status": "covered",
+      "plannedSlice": "",
+      "evidence": [
+        {
+          "path": "Assets/Scripts/Tests/EditMode/ApplicationInputServiceTests.cs",
+          "testName": "ApplyBindingOverride_PersistsAndConflictLeavesStableState"
+        }
+      ]
+    },
+    {
+      "id": "audio.lifecycle",
+      "status": "covered",
+      "plannedSlice": "",
+      "evidence": [
+        {
+          "path": "Assets/Scripts/Tests/EditMode/AudioServiceTests.cs",
+          "testName": "StopOwner_CancelsPendingAddressableLoadAndReleasesHandle"
+        }
+      ]
+    },
+    {
+      "id": "accessibility.runtime",
+      "status": "covered",
+      "plannedSlice": "",
+      "evidence": [
+        {
+          "path": "Assets/Scripts/Tests/EditMode/AccessibilityAndPlatformLifecycleTests.cs",
+          "testName": "AccessibilityService_UpdatesAfterCommitAndPublishesOnce"
+        }
+      ]
+    },
+    {
+      "id": "platform.lifecycle",
+      "status": "covered",
+      "plannedSlice": "",
+      "evidence": [
+        {
+          "path": "Assets/Scripts/Tests/EditMode/AccessibilityAndPlatformLifecycleTests.cs",
+          "testName": "PlatformLifecycle_CoalescesOverlapAndRestoresOnlyAfterAllReasons"
+        }
+      ]
+    },
+    {
+      "id": "diagnostics.failure",
+      "status": "covered",
+      "plannedSlice": "",
+      "evidence": [
+        {
+          "path": "Assets/Scripts/Tests/EditMode/Alpha026DiagnosticsTests.cs",
+          "testName": "FailureCoordinator_PreservesFirstFailureAndCountsDuplicates"
+        }
+      ]
+    },
+    {
+      "id": "resources.addressables",
+      "status": "covered",
+      "plannedSlice": "",
+      "evidence": [
+        {
+          "path": "Assets/Scripts/Tests/EditMode/Alpha026AddressablesGovernanceTests.cs",
+          "testName": "ManagedContract_HasExpectedShapeAndNoValidationIssues"
+        }
+      ]
+    },
+    {
+      "id": "policies.infrastructure",
+      "status": "covered",
+      "plannedSlice": "",
+      "evidence": [
+        {
+          "path": "Assets/Scripts/Tests/EditMode/InfrastructurePolicyTests.cs",
+          "testName": "ExceptionManifest_HasFourRequiredFieldsExactPathsAndNoStaleEntries"
+        }
+      ]
+    },
+    {
+      "id": "tests.data-isolation",
+      "status": "covered",
+      "plannedSlice": "",
+      "evidence": [
+        {
+          "path": "Assets/Scripts/Tests/PlayMode/Alpha027ApplicationDataIsolationPlayModeTests.cs",
+          "testName": "ApplicationHost_UsesTemporaryIsolatedDataRoots"
+        },
+        {
+          "path": "Assets/Scripts/Tests/EditMode/ApplicationDataPathProviderFactoryTests.cs",
+          "testName": "StaleInstallation_CannotReleaseReplacementOwner"
+        }
+      ]
+    },
+    {
+      "id": "user-data.reset-delete",
+      "status": "covered",
+      "plannedSlice": "",
+      "evidence": [
+        {
+          "path": "Assets/Scripts/Tests/EditMode/LocalSaveStorageTests.cs",
+          "testName": "DeleteSlot_RemovesOnlyOwnedFilesAndIsIdempotent"
+        },
+        {
+          "path": "Assets/Scripts/Tests/EditMode/SettingsServiceTests.cs",
+          "testName": "ResetToDefaults_PersistsCompleteDefaultSnapshot"
+        }
+      ]
+    },
+    {
+      "id": "acceptance.integrated-path",
+      "status": "covered",
+      "plannedSlice": "",
+      "evidence": [
+        {
+          "path": "Assets/Scripts/Tests/PlayMode/Alpha027IntegratedAcceptancePlayModeTests.cs",
+          "testName": "FullPlayerPath_DeleteAndResetPersistAcrossHostRestart"
+        }
+      ]
+    },
+    {
+      "id": "acceptance.fault-matrix",
+      "status": "covered",
+      "plannedSlice": "",
+      "evidence": [
+        {
+          "path": "Assets/Scripts/Tests/EditMode/Alpha026DiagnosticsTests.cs",
+          "testName": "ResourceService_FailureCancellationAndEarlyOwnerCloseReleaseEverything"
+        },
+        {
+          "path": "Assets/Scripts/Tests/EditMode/AbandonedGenerationIsolationTests.cs",
+          "testName": "EmergencyStop_LateContinuationsCannotLeaveAbandonedOrTouchNewGeneration"
+        },
+        {
+          "path": "Assets/Scripts/Tests/EditMode/Alpha024SceneFlowFoundationTests.cs",
+          "testName": "SceneFlow_CancelledLoadCompensatesWithoutStartingSession"
+        }
+      ]
+    },
+    {
+      "id": "acceptance.ui-matrix",
+      "status": "covered",
+      "plannedSlice": "",
+      "evidence": [
+        {
+          "path": "Assets/Scripts/Tests/PlayMode/Alpha027ShellUiMatrixPlayModeTests.cs",
+          "testName": "FrontEndSettingsAndErrorModal_FitThreeLocalesAndResolutions"
+        },
+        {
+          "path": "Assets/Scripts/Tests/PlayMode/EquipmentPhase2PlayModeTests.cs",
+          "testName": "InventoryFourSlots_SupportKeyboardGamepadLayoutAndProjectileSnapshot"
+        }
+      ]
+    },
+    {
+      "id": "release.player-build",
+      "status": "covered",
+      "plannedSlice": "",
+      "evidence": [
+        {
+          "path": "Assets/Scripts/Tests/EditMode/Alpha027ReleaseAcceptanceTests.cs",
+          "testName": "ReleaseRecord_RequiresCleanAddressablesAndWindowsPlayerBuild"
+        }
+      ]
+    }
+  ],
+  "allowedIgnoredTests": [
+    {
+      "path": "Library/PackageCache/com.unity.inputsystem@21a28c3a6c83/Tests/IntegrationTests/IntegrationTests.cs",
+      "testName": "WindowsInput_RemoteDesktopMouseMovements_AreDetected",
+      "reason": "Unity Input System 上游 issue 1252825"
+    },
+    {
+      "path": "Library/PackageCache/com.unity.inputsystem@21a28c3a6c83/Tests/IntegrationTests/IntegrationTests.cs",
+      "testName": "WindowsInput_MouseMovements_AreDetected",
+      "reason": "Unity Input System 上游 issue 1252825"
+    }
+  ]
+}

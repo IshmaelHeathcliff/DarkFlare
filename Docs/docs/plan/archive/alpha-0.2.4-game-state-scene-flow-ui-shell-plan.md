@@ -4,8 +4,8 @@
 > 建立日期：2026-08-20
 > 规划基线：`16d67c6`（`alpha 0.2.3` 完成提交）
 > 实施前置：`alpha 0.2.3` 已独立提交；后续实现不得回写或混入上一阶段
-> 上位计划：[alpha 0.2 基础设施开发计划](../alpha-0.2-plan.md)
-> 强制契约：[alpha 0.2 基础设施约束契约](../alpha-0.2-infrastructure-contract.md)
+> 上位计划：[alpha 0.2 基础设施开发计划](./alpha-0.2-plan.md)
+> 强制契约：[alpha 0.2 长期运行时契约](../../infrastructure/alpha-0.2-runtime-contract.md)
 > 前置模块：[应用生命周期与会话作用域](../../infrastructure/application-lifecycle.md)、[本地存档与 Session 恢复](../../infrastructure/local-save.md)、[用户设置与本地化](../../infrastructure/user-settings-localization.md)、[输入与运行时 UI](../../input-ui-system.md)
 
 ## 阶段结论

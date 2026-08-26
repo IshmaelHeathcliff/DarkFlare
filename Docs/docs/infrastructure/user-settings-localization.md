@@ -1,6 +1,6 @@
 # 用户设置与本地化
 
-> 状态：`alpha 0.2.3` 已完成；`alpha 0.2.5` 已接入 Audio、Input 与 Reduce Motion 真实消费者；最近更新：2026-08-24
+> 状态：`alpha 0.2.3` 已完成；`alpha 0.2.7` 已补齐完整默认恢复；最近更新：2026-08-26
 
 本模块负责本地用户设置的持久化、语言切换、字符串表预载、内容名称引用，以及 UI Toolkit / TextMesh Pro 的字体回退。运行时入口由 `ApplicationHost` 持有，业务 UI 只消费 `SettingsService` 与 `LocalizationService`，不直接访问文件系统或 `LocalizationSettings`。
 
@@ -23,6 +23,9 @@ Settings Schema 仍为 1。`UserSettingsSnapshot` 使用 `WithLanguage`、`WithA
 - Keyboard & Mouse / Gamepad 的正式 Action 重绑定、冲突反馈、取消、超时和恢复默认；
 - 自动 / 键鼠 / 手柄 Glyph 偏好；
 - 降低动态效果。
+- 恢复全部默认设置；二次确认后通过 `SettingsService.ResetToDefaultsAsync` 原子提交 `UserSettingsSnapshot.Default`。
+
+恢复成功后，Locale、Binding Override / Glyph、Audio 与 Reduce Motion 消费者在当前 Application 内使用同一已提交快照收敛；存储失败时保留旧快照和页面表示。恢复设置不会删除存档。
 
 Text Scale、High Contrast、Screen Shake 与 Display Mode 尚无完整运行时消费者，因此不显示在页面中。输入重绑定与 Glyph 合同见[输入与运行时 UI](../input-ui-system.md)，Mixer 应用与失败回滚见 [Application Audio](./application-audio.md)，Reduce Motion 见[可访问性与平台生命周期](./accessibility-platform-lifecycle.md)。
 
@@ -64,4 +67,5 @@ Text Scale、High Contrast、Screen Shake 与 Display Mode 尚无完整运行时
 - UXML 玩家文本必须通过 `LocalizedString` 绑定，或登记为由 Controller 负责的动态文本；迁移过的运行时路径禁止重新加入玩家可见中文字符串字面量。
 - `Phase1UxPlayModeTests` 在 `1280×720`、`1920×1080`、`2560×1440` 下验证 `zh-Hans`、`en` 与 `qps-ploc`，检查关键区域边界、重叠和可见文本裁切。
 - `Alpha025ProductionAssetTests` 验证 Settings Page 控件、38 个新增中英条目、Glyph 资产与 Audio 配置；输入、音频和可访问性测试覆盖提交失败回滚。
+- `SettingsServiceTests` 覆盖完整默认快照持久化与存储失败回滚；`Alpha027IntegratedAcceptancePlayModeTests` 覆盖重置后消费者收敛及 Host 重启保持。
 - 新增正式内容类型或字段时，先更新对应配置参考与 `coverage-manifest.json`，再添加字符串表键和正式资产引用。

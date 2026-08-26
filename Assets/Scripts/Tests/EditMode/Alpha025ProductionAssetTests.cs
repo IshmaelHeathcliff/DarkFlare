@@ -34,12 +34,19 @@ namespace DarkFlare.Tests
             "settings.title",
             "settings.audio.title",
             "settings.input.title",
-            "settings.input.restore_defaults",
+            "settings.restore.action",
+            "settings.restore.title",
+            "settings.restore.message",
+            "settings.restore.success",
             "settings.accessibility.title",
             "settings.accessibility.reduce_motion",
             "settings.status.saved",
             "settings.input.rebind_listening",
             "flow.modal.confirm",
+            "save.delete.action",
+            "save.delete.title",
+            "save.delete.message",
+            "save.delete.success",
         };
 
         [Test]
@@ -102,11 +109,13 @@ namespace DarkFlare.Tests
             Assert.IsNotNull(tree);
             TemplateContainer root = tree.CloneTree();
             Assert.IsNotNull(root.Q<Button>("front-end-settings"));
+            Assert.IsNotNull(root.Q<Button>("front-end-delete-save"));
             Assert.IsNotNull(root.Q<VisualElement>("application-settings"));
             Assert.IsNotNull(root.Q<Slider>("settings-master-volume"));
             Assert.IsNotNull(root.Q<DropdownField>("settings-glyph-preference"));
             Assert.IsNotNull(root.Q<VisualElement>("settings-binding-list"));
             Assert.IsNotNull(root.Q<Toggle>("settings-reduce-motion"));
+            Assert.IsNotNull(root.Q<Button>("settings-restore-defaults"));
         }
 
         [Test]

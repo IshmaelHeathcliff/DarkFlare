@@ -4,8 +4,8 @@
 > 建立日期：2026-08-25
 > 规划基线：`601f0fd`（读档后怪物资源预热修复提交）
 > 实施前置：`alpha 0.2.5` 已完成并归档，工作区干净
-> 上位计划：[alpha 0.2 基础设施开发计划](../alpha-0.2-plan.md)
-> 强制契约：[alpha 0.2 基础设施约束契约](../alpha-0.2-infrastructure-contract.md)
+> 上位计划：[alpha 0.2 基础设施开发计划](./alpha-0.2-plan.md)
+> 强制契约：[alpha 0.2 长期运行时契约](../../infrastructure/alpha-0.2-runtime-contract.md)
 > 前置模块：[应用生命周期与会话作用域](../../infrastructure/application-lifecycle.md) · [本地存档与 Session 恢复](../../infrastructure/local-save.md) · [游戏状态、场景流与应用 UI 外壳](../../infrastructure/game-state-scene-flow-ui-shell.md) · [Application Audio](../../infrastructure/application-audio.md)
 
 ## 阶段结论

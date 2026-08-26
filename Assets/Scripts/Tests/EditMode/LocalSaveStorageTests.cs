@@ -182,6 +182,58 @@ namespace DarkFlare.Tests
             Assert.AreEqual(2, loaded.Document.Header.CommitSequence);
         }
 
+        [Test]
+        public void DeleteSlot_RemovesOnlyOwnedFilesAndIsIdempotent()
+        {
+            LocalSaveStorage storage = CreateStorage();
+            SaveSlotId auto = SaveSlotId.Parse("auto");
+            SaveSlotId manual = SaveSlotId.Parse("manual");
+            Assert.IsTrue(storage.Commit(auto, CreateDocument(1)).Succeeded);
+            Assert.IsTrue(storage.Commit(auto, CreateDocument(2)).Succeeded);
+            SaveDocumentDto manualDocument = CreateDocument(1);
+            manualDocument.Header.SlotId = manual.Value;
+            Assert.IsTrue(storage.Commit(manual, manualDocument).Succeeded);
+            string autoPath = Path.Combine(_rootPath, auto.Value);
+            string temporaryPath = Path.Combine(autoPath, "interrupted.tmp");
+            string unrelatedPath = Path.Combine(autoPath, "do-not-delete.txt");
+            File.WriteAllText(temporaryPath, "temporary");
+            File.WriteAllText(unrelatedPath, "unrelated");
+
+            LocalSaveDeleteResult deleted = storage.DeleteSlot(auto);
+            LocalSaveDeleteResult repeated = storage.DeleteSlot(auto);
+
+            Assert.IsTrue(deleted.Succeeded, deleted.Exception?.ToString());
+            Assert.AreEqual(3, deleted.DeletedFileCount);
+            Assert.IsTrue(repeated.Succeeded, repeated.Exception?.ToString());
+            Assert.AreEqual(0, repeated.DeletedFileCount);
+            Assert.AreEqual(LocalSaveStorageCode.SlotNotFound, storage.LoadLatest(auto).Code);
+            Assert.IsTrue(storage.LoadLatest(manual).Succeeded);
+            Assert.IsTrue(File.Exists(unrelatedPath));
+        }
+
+        [Test]
+        public void DeleteSlot_IoFailureReportsPartialStateWithoutTouchingOtherSlots()
+        {
+            FaultInjectingFileOperations files = new FaultInjectingFileOperations();
+            LocalSaveStorage storage = CreateStorage(files);
+            SaveSlotId auto = SaveSlotId.Parse("auto");
+            SaveSlotId manual = SaveSlotId.Parse("manual");
+            Assert.IsTrue(storage.Commit(auto, CreateDocument(1)).Succeeded);
+            SaveDocumentDto manualDocument = CreateDocument(1);
+            manualDocument.Header.SlotId = manual.Value;
+            Assert.IsTrue(storage.Commit(manual, manualDocument).Succeeded);
+            files.BeforeDelete = () => throw new IOException("injected delete failure");
+
+            LocalSaveDeleteResult result = storage.DeleteSlot(auto);
+
+            Assert.AreEqual(LocalSaveStorageCode.IoFailure, result.Code);
+            Assert.AreEqual(0, result.DeletedFileCount);
+            Assert.IsInstanceOf<IOException>(result.Exception);
+            files.BeforeDelete = null;
+            Assert.IsTrue(storage.LoadLatest(auto).Succeeded);
+            Assert.IsTrue(storage.LoadLatest(manual).Succeeded);
+        }
+
         LocalSaveStorage CreateStorage(ILocalSaveFileOperations files = null)
         {
             return new LocalSaveStorage(
@@ -252,6 +304,8 @@ namespace DarkFlare.Tests
 
             public Action BeforeMove { get; set; }
 
+            public Action BeforeDelete { get; set; }
+
             public bool DirectoryExists(string path)
             {
                 return _inner.DirectoryExists(path);
@@ -297,6 +351,7 @@ namespace DarkFlare.Tests
 
             public void DeleteFile(string path)
             {
+                BeforeDelete?.Invoke();
                 _inner.DeleteFile(path);
             }
         }

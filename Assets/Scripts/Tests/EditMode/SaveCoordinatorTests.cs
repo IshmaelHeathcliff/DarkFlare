@@ -32,6 +32,12 @@ namespace DarkFlare.Tests
             return VerifyUnexpectedStorageFailureAsync().ToCoroutine();
         }
 
+        [UnityTest]
+        public IEnumerator DeleteSlot_RejectsBoundSessionThenDeletesIdempotently()
+        {
+            return VerifyDeleteSlotAsync().ToCoroutine();
+        }
+
         static async UniTask VerifyDenseRequestMergingAsync()
         {
             CoordinatorFixture fixture = CreateFixture(true);
@@ -128,6 +134,39 @@ namespace DarkFlare.Tests
             finally
             {
                 fixture.Files.ReleaseWrites.Set();
+                await fixture.DisposeAsync();
+            }
+        }
+
+        static async UniTask VerifyDeleteSlotAsync()
+        {
+            CoordinatorFixture fixture = CreateFixture(false);
+
+            try
+            {
+                SaveOperationResult saved = await fixture.Coordinator.SaveAsync(
+                    SaveCoordinator.AutoSlot);
+                Assert.IsTrue(saved.Succeeded, saved.Exception?.ToString());
+
+                SaveOperationResult rejected = await fixture.Coordinator.DeleteSlotAsync(
+                    SaveCoordinator.AutoSlot);
+                Assert.AreEqual(SaveErrorCode.SessionUnavailable, rejected.ErrorCode);
+                Assert.IsTrue(fixture.Storage.LoadLatest(SaveCoordinator.AutoSlot).Succeeded);
+
+                fixture.Coordinator.UnbindSession(fixture.Session);
+                SaveOperationResult deleted = await fixture.Coordinator.DeleteSlotAsync(
+                    SaveCoordinator.AutoSlot);
+                SaveOperationResult repeated = await fixture.Coordinator.DeleteSlotAsync(
+                    SaveCoordinator.AutoSlot);
+
+                Assert.IsTrue(deleted.Succeeded, deleted.Exception?.ToString());
+                Assert.IsTrue(repeated.Succeeded, repeated.Exception?.ToString());
+                Assert.AreEqual(
+                    LocalSaveStorageCode.SlotNotFound,
+                    fixture.Storage.LoadLatest(SaveCoordinator.AutoSlot).Code);
+            }
+            finally
+            {
                 await fixture.DisposeAsync();
             }
         }
@@ -257,6 +296,8 @@ namespace DarkFlare.Tests
             }
 
             public SaveCoordinator Coordinator { get; }
+
+            public GameSessionHost Session => _session;
 
             public FakeSnapshotSource Source { get; }
 

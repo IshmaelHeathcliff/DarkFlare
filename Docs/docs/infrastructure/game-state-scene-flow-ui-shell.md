@@ -1,8 +1,8 @@
 # 游戏状态、场景流与应用 UI 外壳
 
-> 状态：`alpha 0.2.4` 已完成；`alpha 0.2.5` 已扩展共享 Settings Page；最近更新：2026-08-24
+> 状态：`alpha 0.2.4` 已完成；`alpha 0.2.7` 已补齐删除 / 重置与封板矩阵；最近更新：2026-08-26
 >
-> 参考：[归档计划](../plan/archive/alpha-0.2.4-game-state-scene-flow-ui-shell-plan.md) · [基础设施约束契约](../plan/alpha-0.2-infrastructure-contract.md) · [应用生命周期与会话作用域](./application-lifecycle.md)
+> 参考：[归档计划](../plan/archive/alpha-0.2.4-game-state-scene-flow-ui-shell-plan.md) · [长期运行时契约](./alpha-0.2-runtime-contract.md) · [应用生命周期与会话作用域](./application-lifecycle.md)
 
 ## 模块目标
 
@@ -41,8 +41,8 @@
 | `CombatPrototypeBootstrap` | 只组装 `GameplaySceneConfiguration`，不再在 `Start` 自动创建新游戏 |
 | `ApplicationShellBootstrap` | 等待 Application Ready，安装正式目录、配置 Scene Flow、绑定 Shell 并进入 FrontEnd |
 | `ApplicationShellController` | FrontEnd、Settings、Busy、Modal、Toast、Fatal 表现、UI Confirm Cue 和焦点恢复 |
-| `ApplicationFrontEndController` | 新游戏、继续、语言、设置和退出入口；不依赖 `GameArchitecture` |
-| `ApplicationSettingsController` | FrontEnd / Paused 共用音频、输入、Glyph 与 Reduce Motion 设置事务 |
+| `ApplicationFrontEndController` | 新游戏、继续、删除自动档、语言、设置和退出入口；不依赖 `GameArchitecture` |
+| `ApplicationSettingsController` | FrontEnd / Paused 共用音频、输入、Glyph、Reduce Motion 与恢复完整默认设置事务 |
 
 业务 Controller 不得调用 `SceneManager`、存档 Storage 或 Session initializer。游戏内菜单只保留保存、返回前台和关闭；跨 Session 的 NewGame / Continue 由 FrontEnd 通过 Scene Flow 发起。
 
@@ -82,6 +82,7 @@
 `ApplicationShell.uxml/.uss` 使用现有 Theme、Localization 和字体链，固定包含 FrontEnd Page、共享 Settings Page、Toast、Modal、Busy 与 Fatal 层。Bootstrap 的 Panel sorting order 高于 Main UI：
 
 - FrontEnd 只在 `FrontEnd` 可交互，Continue 由 Profile 级存档预检决定是否启用。
+- 删除自动档和恢复全部默认设置复用 Modal 二次确认、Busy、Toast 与焦点恢复；失败后以真实服务状态刷新页面。
 - Settings 可从 FrontEnd 与暂停菜单打开；关闭后恢复来源焦点，从 Main 打开时不释放菜单 pause lease 或切回 Gameplay Context。
 - Modal 保存打开前焦点，关闭后优先恢复原元素；确认返回和可恢复错误均使用此层。
 - Busy 只在阶段可取消时暴露取消按钮；隐藏层不能在后续帧抢占 Main UI 焦点。
@@ -114,11 +115,17 @@
 
 - Settings Page 的资产、控件、本地化与两入口由 EditMode / PlayMode 契约覆盖；音频确认通过真实 Addressables Cue 播放。
 - Scene Flow 失败通过 `PlayerErrorCatalog` 映射严重度和 Retry / ReturnFrontEnd / Quit，未处理异常进入现有 Fatal 覆盖层。
-- 全量 EditMode `423/423`、项目 PlayMode `53/53`；完整 PlayMode 57 项中 55 项通过、0 失败，2 项为 Input System 上游既有 Ignore。
+- 全量 EditMode `424/424`、项目 PlayMode `53/53`；完整 PlayMode 57 项中 55 项通过、0 失败，2 项为 Input System 上游既有 Ignore。
+
+## alpha 0.2.7 封板验证
+
+- FrontEnd 删除自动档、Settings 恢复完整默认值及失败回滚均有 EditMode / PlayMode 自动证据。
+- `zh-Hans`、`en`、`qps-ploc` × 1280×720、1920×1080、2560×1440 覆盖 FrontEnd、Settings 与错误 Modal；既有玩法矩阵覆盖 HUD、面板及键鼠 / 手柄焦点。
+- 封板全量 EditMode `443/443`、项目 PlayMode `56/56`；完整 PlayMode 60 项中 58 项通过、0 失败，2 项为 Input System 上游既有 Ignore。
 
 ## 当前边界
 
 - 当前只有 Bootstrap 与 Main，不包含多地图、关卡选择、快速旅行或 Addressables Scene。
-- FrontEnd 提供新游戏、继续、语言、设置和退出；仍没有 Profile 选择、手动槽位、删除、重命名或云同步。
+- FrontEnd 提供新游戏、继续、删除自动档、语言、设置和退出；仍没有 Profile 选择、手动槽位、重命名或云同步。
 - Shell 是当前真实消费者所需的最小闭环，不是通用多 Page 导航框架；设置页只开放已有真实消费者的 Audio、Input、Glyph 与 Reduce Motion。
 - Shell 不拥有领域恢复事务；日志、异常和资源错误的映射与所有权见[日志、错误处理与 Addressables 资源治理](./logging-error-addressables-governance.md)。

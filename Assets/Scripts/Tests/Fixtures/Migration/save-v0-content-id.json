@@ -1,0 +1,12 @@
+{
+  "header": {
+    "saveSchemaVersion": 0
+  },
+  "payload": {
+    "items": [
+      {
+        "baseItemId": "great_sword"
+      }
+    ]
+  }
+}

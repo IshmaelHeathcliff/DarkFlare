@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using UnityEngine;
 using UnityEngine.Localization;
 using UnityEngine.Localization.Settings;
 using UnityEngine.Localization.Tables;
@@ -83,15 +84,26 @@ namespace DarkFlare
         {
             get
             {
-                Locale selected = LocalizationSettings.SelectedLocale;
+                string preferred = ResolveAutomaticLocaleCode(Application.systemLanguage);
 
-                if (selected != null && IsLocaleAvailable(selected.Identifier.Code))
+                if (IsLocaleAvailable(preferred))
                 {
-                    return selected.Identifier.Code;
+                    return preferred;
                 }
 
-                return SimplifiedChineseLocaleCode;
+                return IsLocaleAvailable(SimplifiedChineseLocaleCode)
+                    ? SimplifiedChineseLocaleCode
+                    : LocalizationService.EnglishLocaleCode;
             }
+        }
+
+        internal static string ResolveAutomaticLocaleCode(SystemLanguage language)
+        {
+            return language == SystemLanguage.Chinese
+                || language == SystemLanguage.ChineseSimplified
+                || language == SystemLanguage.ChineseTraditional
+                    ? SimplifiedChineseLocaleCode
+                    : LocalizationService.EnglishLocaleCode;
         }
 
         public bool IsLocaleAvailable(string localeCode)

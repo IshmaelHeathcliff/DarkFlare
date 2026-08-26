@@ -1275,6 +1275,58 @@ MonoBehaviour:
     m_Key: resource.error.service_closed
     m_Metadata:
       m_Items: []
+  - m_Id: 2333851465904128
+    m_Key: save.delete.action
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2333851512041472
+    m_Key: save.delete.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2333851512041473
+    m_Key: save.delete.message
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2333851512041474
+    m_Key: save.delete.busy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2333851512041475
+    m_Key: save.delete.success
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2333851512041476
+    m_Key: save.delete.failed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2333851512041477
+    m_Key: settings.restore.action
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2333851512041478
+    m_Key: settings.restore.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2333851512041479
+    m_Key: settings.restore.message
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2333851512041480
+    m_Key: settings.restore.busy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2333851512041481
+    m_Key: settings.restore.success
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2333851512041482
+    m_Key: settings.restore.failed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2333851512041483
+    m_Key: settings.status.busy
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

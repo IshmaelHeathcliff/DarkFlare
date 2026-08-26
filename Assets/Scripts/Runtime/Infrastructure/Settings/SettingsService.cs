@@ -163,6 +163,12 @@ namespace DarkFlare
             }
         }
 
+        public UniTask<SettingsOperationResult> ResetToDefaultsAsync(
+            CancellationToken cancellationToken = default)
+        {
+            return UpdateAsync(UserSettingsSnapshot.Default, cancellationToken);
+        }
+
         public void Close()
         {
             _closed = true;

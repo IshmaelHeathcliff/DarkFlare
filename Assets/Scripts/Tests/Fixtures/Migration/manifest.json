@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "fixtures": [
+    {
+      "path": "save-v0-content-id.json",
+      "domain": "save",
+      "sourceSchemaVersion": 0,
+      "expectedMigration": "save_0_to_1_content_ids converts payload.items[].baseItemId to item-scoped baseContentId"
+    },
+    {
+      "path": "settings-v0-language.json",
+      "domain": "settings",
+      "sourceSchemaVersion": 0,
+      "expectedMigration": "settings_0_to_1_domains moves language into payload and fills audio, input, display and accessibility defaults"
+    }
+  ]
+}

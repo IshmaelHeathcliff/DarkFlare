@@ -7,6 +7,7 @@ namespace DarkFlare
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         static void ResetStaticState()
         {
+            ApplicationDataPathProviderFactory.ResetForSubsystemRegistration();
             ApplicationHost.ResetStaticState();
             GameArchitectureProvider.ResetStaticState();
         }

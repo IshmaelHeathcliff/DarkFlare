@@ -101,8 +101,26 @@
 }
 
 .front-end-action--quiet {
-  margin-top: 24px;
+  margin-top: 10px;
   background-color: rgba(31, 34, 41, 0.8);
+}
+
+.front-end-secondary-actions {
+  flex-direction: row;
+}
+
+.front-end-secondary-actions > .front-end-action {
+  flex-grow: 1;
+  font-size: 15px;
+  white-space: normal;
+}
+
+.front-end-secondary-action--left {
+  margin-right: 5px;
+}
+
+.front-end-secondary-action--right {
+  margin-left: 5px;
 }
 
 .front-end-version {
@@ -139,6 +157,7 @@
   color: rgb(239, 225, 195);
   font-size: 27px;
   -unity-font-style: bold;
+  white-space: normal;
   margin-bottom: 14px;
 }
 
