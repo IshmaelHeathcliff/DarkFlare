@@ -142,7 +142,8 @@
 
 ## 场景与配置
 
-- `Assets/Scenes/Main.unity`：唯一构建场景，包含战斗启动器、刷怪器、`WorldObstacle` 层的 `WorldBounds`、`GroundGrid` 下的 5×5 基础 Tilemap 与稀疏细节 Tilemap、营地与边界装饰、`UIRoot`、唯一 `EventSystem`、商人与打造台 Prefab。
+- `Assets/Scenes/Bootstrap.unity`：构建入口（index 0），常驻 Application Shell 与唯一 `EventSystem`，负责 FrontEnd 和应用级 UI。
+- `Assets/Scenes/Main.unity`：玩法场景（index 1），由 Scene Flow additive 加载，包含战斗启动器、刷怪器、`WorldObstacle` 层的 `WorldBounds`、`GroundGrid` 下的 5×5 基础 Tilemap 与稀疏细节 Tilemap、营地与边界装饰、`UIRoot`、商人与打造台 Prefab；Main 不持有 `EventSystem`。
 - `Assets/Data/Preset/Actors/玩家.asset`：玩家属性与 Prefab 引用。
 - `Assets/Data/Preset/Skills/基础投射物技能.asset`：首版投射物技能。
 - `Assets/Data/Preset/Stats/`：与 `StatIds.All` 一一对应的 23 份属性定义。
