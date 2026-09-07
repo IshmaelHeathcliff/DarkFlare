@@ -3,6 +3,8 @@
 ## 当前文档
 
 - [项目概览](./project.md)
+- [测试维护规范](./testing/test-maintenance.md)
+- [Alpha 0.3 前置测试审计](./testing/test-suite-audit.md)
 - [目录结构](./project-structure.md)
 - [应用生命周期与会话作用域](./infrastructure/application-lifecycle.md)
 - [稳定身份、内容目录与迁移框架](./infrastructure/content-identity-migration.md)
@@ -34,6 +36,8 @@
 - [已完成计划归档](./plan/archive/README.md)
 
 ## 计划状态
+
+Alpha 0.3 前置[测试审计与精简](./testing/test-suite-audit.md)已完成：EditMode 424/424、PlayMode 56/56 通过，一次性 / 过时测试已清理，后续维护规则已建立。[执行计划已归档](./plan/archive/test-suite-maintenance-plan.md)。
 
 `alpha 0.2.0–0.2.7` 已完成。规划期总计划、阶段计划与验收过程已移入[已完成计划归档](./plan/archive/README.md)；后续实现以长期运行时契约和各基础设施模块文档为准。
 

@@ -62,5 +62,6 @@
 | [alpha 0.2.6 日志、错误处理与 Addressables 资源治理执行计划](./alpha-0.2.6-logging-error-addressables-plan.md) | alpha 0.2.6 | [日志、错误处理与 Addressables 资源治理](../../infrastructure/logging-error-addressables-governance.md) |
 | [alpha 0.2.7 综合验收与封板执行计划](./alpha-0.2.7-integrated-acceptance-release-sealing-plan.md) | alpha 0.2.7 | [alpha 0.2 综合验收记录](../../infrastructure/alpha-0.2-acceptance.md) |
 | [alpha 0.2 基础设施开发计划](./alpha-0.2-plan.md) | alpha 0.2.0–0.2.7 | [alpha 0.2 长期运行时契约](../../infrastructure/alpha-0.2-runtime-contract.md)、[综合验收记录](../../infrastructure/alpha-0.2-acceptance.md) |
+| [测试审计与精简](./test-suite-maintenance-plan.md) | alpha 0.3 测试维护前置 | [测试维护规范](../../testing/test-maintenance.md)、[审计报告](../../testing/test-suite-audit.md) |
 
-最近归档日期：2026-08-26。
+最近归档日期：2026-09-07。

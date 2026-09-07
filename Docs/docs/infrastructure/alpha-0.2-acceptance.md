@@ -13,9 +13,11 @@
 
 机器可读证据位于：
 
-- `Assets/Scripts/Tests/EditMode/Alpha027AcceptanceCoverage.json`
-- `Assets/Scripts/Tests/EditMode/Alpha027ReleaseAcceptance.json`
+- [历史覆盖清单](../testing/archive/alpha-0.2.7/Alpha027AcceptanceCoverage.json)
+- [历史构建记录](../testing/archive/alpha-0.2.7/Alpha027ReleaseAcceptance.json)
 - `Assets/Scripts/Tests/Fixtures/Migration/manifest.json`
+
+2026-09-07 测试审计将前两项原样移出运行测试目录；其中版本、计数、源码路径和方法名均描述当时证据，不作为后续版本的测试约束。当前套件维护结论见[测试审计](../testing/test-suite-audit.md)。
 
 ## 功能闭环
 

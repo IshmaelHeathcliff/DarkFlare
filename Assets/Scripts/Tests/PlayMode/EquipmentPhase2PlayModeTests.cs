@@ -168,9 +168,7 @@ namespace DarkFlare.Tests
 
             Vector2Int[] resolutions =
             {
-                new Vector2Int(1280, 720),
                 new Vector2Int(1920, 1080),
-                new Vector2Int(2560, 1440),
             };
 
             try

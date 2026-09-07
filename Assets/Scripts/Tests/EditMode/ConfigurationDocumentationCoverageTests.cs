@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using DarkFlare.Editor;
 using NUnit.Framework;
 using UnityEngine;
@@ -9,14 +8,6 @@ namespace DarkFlare.Tests
 {
     public sealed class ConfigurationDocumentationCoverageTests
     {
-        const string ManifestPath = "Docs/docs/config-reference/coverage-manifest.json";
-
-        [Test]
-        public void ConfigurationDocumentationManifest_Exists()
-        {
-            Assert.IsTrue(File.Exists(ManifestPath), ManifestPath);
-        }
-
         [Test]
         public void OfficialConfigurationDocumentation_CoversDiscoveredTypesAndFields()
         {

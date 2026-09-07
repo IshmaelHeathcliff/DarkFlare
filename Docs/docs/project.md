@@ -48,8 +48,10 @@ alpha 版本内的阶段使用三段式名称：`alpha 0.1` 的首个阶段为 `
 - `Assets/Scripts/Runtime/Infrastructure/Settings/`：Settings V1、原子存储、迁移、Application 级 Localization Service、语义消息与正式内容本地化引用。
 - `Assets/Scripts/Runtime/GameArchitecture.cs`：Session 组合根，注册输入 Utility、战斗 / 装备 / 背包 / 经济 Model，战斗、生成、掉落、交易、打造 System，以及 `SessionObjectRegistry`。
 - `Assets/Scripts/Runtime/`：`DarkFlare.Runtime` 程序集。
-- `Assets/Scripts/Tests/EditMode/`：`DarkFlare.Tests.EditMode`，封板全量 `443/443` 通过。
-- `Assets/Scripts/Tests/PlayMode/`：`DarkFlare.Tests.PlayMode`，项目自有测试 `56/56` 通过；完整运行 60 项中 58 项通过、0 失败，另有 2 项 Input System 包集成测试因既有 issue 1252825 跳过。
+- `Assets/Scripts/Tests/EditMode/`：`DarkFlare.Tests.EditMode`，2026-09-07 测试审计后 `424/424` 通过；原封板 `443/443` 为历史记录。
+- `Assets/Scripts/Tests/PlayMode/`：`DarkFlare.Tests.PlayMode`，2026-09-07 测试审计后 `56/56` 通过、0 失败 / 跳过。此前含包测试的 60 项运行结果保留在 alpha 0.2 综合验收记录，本轮限定项目自有程序集。
+
+Alpha 0.3 前置[测试审计](./testing/test-suite-audit.md)已完成；新增与受影响测试须遵循[测试维护规范](./testing/test-maintenance.md)，临时验证完成后清理。
 
 生命周期的职责、状态、事务和禁止事项见[应用生命周期与会话作用域](./infrastructure/application-lifecycle.md)；内容、实例身份、DTO 与迁移规则见[稳定身份、内容目录与迁移框架](./infrastructure/content-identity-migration.md)；文件格式、代际存储、保存和 Restore 流程见[本地存档与 Session 恢复](./infrastructure/local-save.md)；设置存储、语言切换、内容名称和字体合同见[用户设置与本地化](./infrastructure/user-settings-localization.md)；Bootstrap / Main 拓扑、状态、场景事务、Time Service 和 Shell 见[游戏状态、场景流与应用 UI 外壳](./infrastructure/game-state-scene-flow-ui-shell.md)；音频见 [Application Audio](./infrastructure/application-audio.md)；日志、玩家错误和资源所有权见[日志、错误处理与 Addressables 资源治理](./infrastructure/logging-error-addressables-governance.md)；降低动态效果与平台挂起见[可访问性与平台生命周期](./infrastructure/accessibility-platform-lifecycle.md)。
 

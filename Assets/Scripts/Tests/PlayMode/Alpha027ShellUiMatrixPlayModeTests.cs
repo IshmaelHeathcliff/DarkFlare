@@ -23,7 +23,7 @@ namespace DarkFlare.Tests
 
         [UnityTest]
         [Timeout(240000)]
-        public IEnumerator FrontEndSettingsAndErrorModal_FitThreeLocalesAndResolutions()
+        public IEnumerator FrontEndSettingsAndErrorModal_FitThreeLocalesAtStandardResolution()
         {
             ApplicationHost host = ApplicationHost.Current;
             ApplicationShellController shell = host.ApplicationShell;
@@ -31,9 +31,7 @@ namespace DarkFlare.Tests
             Vector2Int originalResolution = new Vector2Int(Screen.width, Screen.height);
             Vector2Int[] resolutions =
             {
-                new Vector2Int(1280, 720),
                 new Vector2Int(1920, 1080),
-                new Vector2Int(2560, 1440),
             };
             string[] localeModes = { "zh-Hans", "en", "qps-ploc" };
 

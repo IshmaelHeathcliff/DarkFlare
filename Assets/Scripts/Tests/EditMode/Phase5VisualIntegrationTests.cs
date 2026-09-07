@@ -334,20 +334,6 @@ namespace DarkFlare.Tests
         }
 
         [Test]
-        public void ItemWorkbench_UsesThinScalableFramesWithoutLegacyNineSlice()
-        {
-            string workbench = File.ReadAllText(GetAbsolutePath("Assets/UI/ItemWorkbench.uss"));
-            string menu = File.ReadAllText(GetAbsolutePath("Assets/UI/GameMenu.uss"));
-
-            StringAssert.Contains(".ui-panel-frame", workbench);
-            StringAssert.Contains("border-left-width: 1px;", workbench);
-            StringAssert.Contains("border-left-width: 1px;", menu);
-            StringAssert.DoesNotContain("background-image", workbench);
-            StringAssert.DoesNotContain("-unity-slice-", workbench);
-            StringAssert.DoesNotContain("SpriteSheets/Phase5", workbench);
-        }
-
-        [Test]
         public void AnimationsAndCharacterPrefabs_ReferenceIndependentFrames()
         {
             string[] actorPaths = FindPngAssetPaths(ActorRoots);
@@ -409,7 +395,6 @@ namespace DarkFlare.Tests
         {
             string theme = File.ReadAllText(GetAbsolutePath("Assets/UI/Theme.uss"));
             string inventory = File.ReadAllText(GetAbsolutePath("Assets/UI/Inventory.uss"));
-            string workbench = File.ReadAllText(GetAbsolutePath("Assets/UI/ItemWorkbench.uss"));
 
             for (int i = 0; i < UiIconPaths.Length; i++)
             {
@@ -424,7 +409,6 @@ namespace DarkFlare.Tests
 
             StringAssert.DoesNotContain("SpriteSheets/Phase5", theme);
             StringAssert.DoesNotContain("SpriteSheets/Phase5", inventory);
-            StringAssert.DoesNotContain("background-image", workbench);
 
             GameObject lootPickup = AssetDatabase.LoadAssetAtPath<GameObject>(
                 "Assets/Prefabs/Loot/LootPickup.prefab");

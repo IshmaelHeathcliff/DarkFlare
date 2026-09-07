@@ -1,0 +1,1704 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="56" result="Passed" total="56" passed="56" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-07 15:12:47Z" end-time="2026-09-07 15:13:52Z" duration="64.3523529">
+  <test-suite type="TestSuite" id="1094" name="DarkFlare" fullname="DarkFlare" runstate="Runnable" testcasecount="60" result="Passed" start-time="2026-09-07 15:12:47Z" end-time="2026-09-07 15:13:52Z" duration="64.352353" total="56" passed="56" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <test-suite type="Assembly" id="1082" name="DarkFlare.Tests.PlayMode.dll" fullname="E:/PARA/Projects/Unity/DarkfFlare/UnityProject/Library/ScriptAssemblies/DarkFlare.Tests.PlayMode.dll" runstate="Runnable" testcasecount="56" result="Passed" start-time="2026-09-07 15:12:47Z" end-time="2026-09-07 15:13:52Z" duration="64.344607" total="56" passed="56" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="36308" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestSuite" id="1083" name="DarkFlare" fullname="DarkFlare" runstate="Runnable" testcasecount="56" result="Passed" start-time="2026-09-07 15:12:47Z" end-time="2026-09-07 15:13:52Z" duration="64.342790" total="56" passed="56" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="SetUpFixture" id="1030" name="Tests" fullname="DarkFlare.Tests.Alpha027PlayModeDataEnvironmentFixture" classname="DarkFlare.Tests.Alpha027PlayModeDataEnvironmentFixture" runstate="Runnable" testcasecount="56" result="Passed" start-time="2026-09-07 15:12:47Z" end-time="2026-09-07 15:13:52Z" duration="64.340701" total="56" passed="56" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestFixture" id="1001" name="ActorAnimationPlayModeTests" fullname="DarkFlare.Tests.ActorAnimationPlayModeTests" classname="DarkFlare.Tests.ActorAnimationPlayModeTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-09-07 15:12:47Z" end-time="2026-09-07 15:12:49Z" duration="1.668608" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1002" name="MainScene_ActorEventsSwitchAttackHitDeathAndRevive" fullname="DarkFlare.Tests.ActorAnimationPlayModeTests.MainScene_ActorEventsSwitchAttackHitDeathAndRevive" methodname="MainScene_ActorEventsSwitchAttackHitDeathAndRevive" classname="DarkFlare.Tests.ActorAnimationPlayModeTests" runstate="Runnable" seed="991195373" result="Passed" start-time="2026-09-07 15:12:47Z" end-time="2026-09-07 15:12:49Z" duration="1.660378" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[[gameplay.combat.message] [GameplayRandomSystem] 根种子: 1406318780（随机）
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 开始预热资源
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 942c099ccdd7eed428f0ac0b1694f6ff -> Player
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 3b6e21dfbc7f54e4f9e0312efd6c6af5 -> Projectile_Default
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 67b8ae84734f42f4792a4190aad88049 -> Monster_Basic
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000002 -> Monster_Swift
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000003 -> Monster_Heavy
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 07152fe41aa52d740b4d1df2049f9f3d -> LootPickup
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 1a1e12f2b0381f54c829d3ef4165a2de -> weapon_greatsword
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 9b427dc6b96c7bc4ba30998360436d86 -> weapon_war_axe
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 7ea0a2ad891e6cd4891051d02b338cf0 -> armor_leather
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: b25638dc709c3184cabc93ae9de79ee2 -> armor_plate
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: f597b10c126e825418717edee921bd16 -> ring_iron
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: d8c5c86107920ab4d9e117e19d6ed11e -> ring_jade
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: bf07871323670d148819cd1d7e079297 -> ring_obsidian
+[gameplay.combat.message] [EquipmentSystem] player 的武器已装备 大剑
+[gameplay.trading.message] [TradingSystem] 商人库存初始化完成，共 7 件
+[gameplay.trading.message] [TradingSystem] 发放初始金币 100，当前金币 100
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 新游戏 Session 初始化完成
+[gameplay.ui.message] [HudController] HUD 初始化完成
+[gameplay.ui.message] [InventoryPanelController] 背包与四槽装备面板初始化完成
+[gameplay.ui.message] [GameMenuController] 游戏菜单初始化完成
+[gameplay.ui.message] [ShopPanelController] 商店面板初始化完成
+[gameplay.ui.message] [CraftingPanelController] 随机打造工作台初始化完成
+[gameplay.combat.message] [SpawnSystem] 生成怪物 iron_husk，生成种子 -336433625，实例根种子 2095166535，词条 monster_armored[armor:Flat=51.99]，最终属性 生命=91.14,护甲=91.99,闪避=5,移速=1.7,火抗=0,冰抗=0,电抗=0
+[Phase0AnimationPlayMode] Attack、Hit、Death、Revive 状态切换通过
+]]></output>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1003" name="Alpha012DamageResolutionPlayModeTests" fullname="DarkFlare.Tests.Alpha012DamageResolutionPlayModeTests" classname="DarkFlare.Tests.Alpha012DamageResolutionPlayModeTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-09-07 15:12:49Z" end-time="2026-09-07 15:12:49Z" duration="0.116308" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1004" name="MainScene_EquipsStartingWeaponBeforeSpawnerAndSupportsUnequipRecovery" fullname="DarkFlare.Tests.Alpha012DamageResolutionPlayModeTests.MainScene_EquipsStartingWeaponBeforeSpawnerAndSupportsUnequipRecovery" methodname="MainScene_EquipsStartingWeaponBeforeSpawnerAndSupportsUnequipRecovery" classname="DarkFlare.Tests.Alpha012DamageResolutionPlayModeTests" runstate="Runnable" seed="1823584474" result="Passed" start-time="2026-09-07 15:12:49Z" end-time="2026-09-07 15:12:49Z" duration="0.113301" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[[gameplay.combat.message] [GameplayRandomSystem] 根种子: 789360886（随机）
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 开始预热资源
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 942c099ccdd7eed428f0ac0b1694f6ff -> Player
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 3b6e21dfbc7f54e4f9e0312efd6c6af5 -> Projectile_Default
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 67b8ae84734f42f4792a4190aad88049 -> Monster_Basic
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000002 -> Monster_Swift
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000003 -> Monster_Heavy
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 07152fe41aa52d740b4d1df2049f9f3d -> LootPickup
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 1a1e12f2b0381f54c829d3ef4165a2de -> weapon_greatsword
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 9b427dc6b96c7bc4ba30998360436d86 -> weapon_war_axe
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 7ea0a2ad891e6cd4891051d02b338cf0 -> armor_leather
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: b25638dc709c3184cabc93ae9de79ee2 -> armor_plate
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: f597b10c126e825418717edee921bd16 -> ring_iron
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: d8c5c86107920ab4d9e117e19d6ed11e -> ring_jade
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: bf07871323670d148819cd1d7e079297 -> ring_obsidian
+[gameplay.combat.message] [EquipmentSystem] player 的武器已装备 大剑
+[gameplay.trading.message] [TradingSystem] 商人库存初始化完成，共 7 件
+[gameplay.trading.message] [TradingSystem] 发放初始金币 100，当前金币 100
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 新游戏 Session 初始化完成
+[gameplay.ui.message] [HudController] HUD 初始化完成
+[gameplay.ui.message] [InventoryPanelController] 背包与四槽装备面板初始化完成
+[gameplay.ui.message] [GameMenuController] 游戏菜单初始化完成
+[gameplay.ui.message] [ShopPanelController] 商店面板初始化完成
+[gameplay.ui.message] [CraftingPanelController] 随机打造工作台初始化完成
+[gameplay.combat.message] [SpawnSystem] 生成怪物 wasteland_wraith，生成种子 -1995989488，实例根种子 237461528，词条 无，最终属性 生命=47.91,护甲=0,闪避=15,移速=2.6,火抗=0,冰抗=0,电抗=0
+[gameplay.combat.message] [EquipmentSystem] player 卸下了武器 大剑
+[gameplay.combat.message] [EquipmentSystem] player 的武器已装备 大剑
+]]></output>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1005" name="Alpha013CollisionSafetyPlayModeTests" fullname="DarkFlare.Tests.Alpha013CollisionSafetyPlayModeTests" classname="DarkFlare.Tests.Alpha013CollisionSafetyPlayModeTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-09-07 15:12:49Z" end-time="2026-09-07 15:12:54Z" duration="4.895651" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1007" name="DefaultLayerTrigger_StillReceivesPlayerAndMonsterActors" fullname="DarkFlare.Tests.Alpha013CollisionSafetyPlayModeTests.DefaultLayerTrigger_StillReceivesPlayerAndMonsterActors" methodname="DefaultLayerTrigger_StillReceivesPlayerAndMonsterActors" classname="DarkFlare.Tests.Alpha013CollisionSafetyPlayModeTests" runstate="Runnable" seed="294992615" result="Passed" start-time="2026-09-07 15:12:49Z" end-time="2026-09-07 15:12:49Z" duration="0.191915" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1006" name="PlayerPassesThroughMonsterCrowd_ButWorldObstacleStillBlocksMovement" fullname="DarkFlare.Tests.Alpha013CollisionSafetyPlayModeTests.PlayerPassesThroughMonsterCrowd_ButWorldObstacleStillBlocksMovement" methodname="PlayerPassesThroughMonsterCrowd_ButWorldObstacleStillBlocksMovement" classname="DarkFlare.Tests.Alpha013CollisionSafetyPlayModeTests" runstate="Runnable" seed="1322307671" result="Passed" start-time="2026-09-07 15:12:49Z" end-time="2026-09-07 15:12:54Z" duration="4.698977" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1008" name="Alpha014ResourceSystemPlayModeTests" fullname="DarkFlare.Tests.Alpha014ResourceSystemPlayModeTests" classname="DarkFlare.Tests.Alpha014ResourceSystemPlayModeTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-09-07 15:12:54Z" end-time="2026-09-07 15:12:54Z" duration="0.108190" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1009" name="MainScene_CastsAtomicallyRegeneratesAndUpdatesManaHud" fullname="DarkFlare.Tests.Alpha014ResourceSystemPlayModeTests.MainScene_CastsAtomicallyRegeneratesAndUpdatesManaHud" methodname="MainScene_CastsAtomicallyRegeneratesAndUpdatesManaHud" classname="DarkFlare.Tests.Alpha014ResourceSystemPlayModeTests" runstate="Runnable" seed="343688541" result="Passed" start-time="2026-09-07 15:12:54Z" end-time="2026-09-07 15:12:54Z" duration="0.106237" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[[gameplay.combat.message] [GameplayRandomSystem] 根种子: -446782936（随机）
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 开始预热资源
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 942c099ccdd7eed428f0ac0b1694f6ff -> Player
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 3b6e21dfbc7f54e4f9e0312efd6c6af5 -> Projectile_Default
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 67b8ae84734f42f4792a4190aad88049 -> Monster_Basic
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000002 -> Monster_Swift
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000003 -> Monster_Heavy
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 07152fe41aa52d740b4d1df2049f9f3d -> LootPickup
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 1a1e12f2b0381f54c829d3ef4165a2de -> weapon_greatsword
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 9b427dc6b96c7bc4ba30998360436d86 -> weapon_war_axe
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 7ea0a2ad891e6cd4891051d02b338cf0 -> armor_leather
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: b25638dc709c3184cabc93ae9de79ee2 -> armor_plate
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: f597b10c126e825418717edee921bd16 -> ring_iron
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: d8c5c86107920ab4d9e117e19d6ed11e -> ring_jade
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: bf07871323670d148819cd1d7e079297 -> ring_obsidian
+[gameplay.combat.message] [EquipmentSystem] player 的武器已装备 大剑
+[gameplay.trading.message] [TradingSystem] 商人库存初始化完成，共 7 件
+[gameplay.trading.message] [TradingSystem] 发放初始金币 100，当前金币 100
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 新游戏 Session 初始化完成
+[gameplay.ui.message] [HudController] HUD 初始化完成
+[gameplay.ui.message] [InventoryPanelController] 背包与四槽装备面板初始化完成
+[gameplay.ui.message] [GameMenuController] 游戏菜单初始化完成
+[gameplay.ui.message] [ShopPanelController] 商店面板初始化完成
+[gameplay.ui.message] [CraftingPanelController] 随机打造工作台初始化完成
+[gameplay.combat.message] [SpawnSystem] 生成怪物 wasteland_wraith，生成种子 2095580821，实例根种子 -780369673，词条 monster_armored[armor:Flat=41.7];monster_lightning_guarded[lightning_resistance:Flat=24.23]，最终属性 生命=58.77,护甲=41.7,闪避=15,移速=2.6,火抗=0,冰抗=0,电抗=24.23
+[gameplay.combat.message] [CombatSystem] player 复活
+]]></output>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1010" name="Alpha015MonsterAffixPlayModeTests" fullname="DarkFlare.Tests.Alpha015MonsterAffixPlayModeTests" classname="DarkFlare.Tests.Alpha015MonsterAffixPlayModeTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-09-07 15:12:54Z" end-time="2026-09-07 15:12:54Z" duration="0.032673" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1011" name="Controller_AppliesModifiersAndVisualTracksLifecycle" fullname="DarkFlare.Tests.Alpha015MonsterAffixPlayModeTests.Controller_AppliesModifiersAndVisualTracksLifecycle" methodname="Controller_AppliesModifiersAndVisualTracksLifecycle" classname="DarkFlare.Tests.Alpha015MonsterAffixPlayModeTests" runstate="Runnable" seed="681946891" result="Passed" start-time="2026-09-07 15:12:54Z" end-time="2026-09-07 15:12:54Z" duration="0.017337" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1012" name="Visual_HidesEmptyInstancesAndCapsPresentationAtTwoLines" fullname="DarkFlare.Tests.Alpha015MonsterAffixPlayModeTests.Visual_HidesEmptyInstancesAndCapsPresentationAtTwoLines" methodname="Visual_HidesEmptyInstancesAndCapsPresentationAtTwoLines" classname="DarkFlare.Tests.Alpha015MonsterAffixPlayModeTests" runstate="Runnable" seed="789451859" result="Passed" start-time="2026-09-07 15:12:54Z" end-time="2026-09-07 15:12:54Z" duration="0.011150" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1013" name="Alpha017BaselinePlayModeTests" fullname="DarkFlare.Tests.Alpha017BaselinePlayModeTests" classname="DarkFlare.Tests.Alpha017BaselinePlayModeTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-09-07 15:12:54Z" end-time="2026-09-07 15:12:54Z" duration="0.015715" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1014" name="ProjectileTryHit_ConsumesSnapshotAndResolvesExactlyOnce" fullname="DarkFlare.Tests.Alpha017BaselinePlayModeTests.ProjectileTryHit_ConsumesSnapshotAndResolvesExactlyOnce" methodname="ProjectileTryHit_ConsumesSnapshotAndResolvesExactlyOnce" classname="DarkFlare.Tests.Alpha017BaselinePlayModeTests" runstate="Runnable" seed="653765070" result="Passed" start-time="2026-09-07 15:12:54Z" end-time="2026-09-07 15:12:54Z" duration="0.013952" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[[gameplay.combat.message] [CombatSystem] alpha017_projectile_attacker 对 alpha017_projectile_defender 造成 10 点伤害
+]]></output>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1015" name="Alpha017EffectRuntimePlayModeTests" fullname="DarkFlare.Tests.Alpha017EffectRuntimePlayModeTests" classname="DarkFlare.Tests.Alpha017EffectRuntimePlayModeTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-09-07 15:12:54Z" end-time="2026-09-07 15:12:55Z" duration="0.314091" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1016" name="Pool_IsPrewarmedBoundedReusableAndReleasedWithArchitecture" fullname="DarkFlare.Tests.Alpha017EffectRuntimePlayModeTests.Pool_IsPrewarmedBoundedReusableAndReleasedWithArchitecture" methodname="Pool_IsPrewarmedBoundedReusableAndReleasedWithArchitecture" classname="DarkFlare.Tests.Alpha017EffectRuntimePlayModeTests" runstate="Runnable" seed="2081543774" result="Passed" start-time="2026-09-07 15:12:54Z" end-time="2026-09-07 15:12:55Z" duration="0.312230" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1017" name="Alpha017WorldSortingPlayModeTests" fullname="DarkFlare.Tests.Alpha017WorldSortingPlayModeTests" classname="DarkFlare.Tests.Alpha017WorldSortingPlayModeTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-09-07 15:12:55Z" end-time="2026-09-07 15:12:55Z" duration="0.014721" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1018" name="Participants_RemainStableAcrossCrossingFlipDisableAndIdentityReuse" fullname="DarkFlare.Tests.Alpha017WorldSortingPlayModeTests.Participants_RemainStableAcrossCrossingFlipDisableAndIdentityReuse" methodname="Participants_RemainStableAcrossCrossingFlipDisableAndIdentityReuse" classname="DarkFlare.Tests.Alpha017WorldSortingPlayModeTests" runstate="Runnable" seed="1155670479" result="Passed" start-time="2026-09-07 15:12:55Z" end-time="2026-09-07 15:12:55Z" duration="0.012111" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1019" name="Alpha024SceneFlowPlayModeTests" fullname="DarkFlare.Tests.Alpha024SceneFlowPlayModeTests" classname="DarkFlare.Tests.Alpha024SceneFlowPlayModeTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-09-07 15:12:55Z" end-time="2026-09-07 15:12:55Z" duration="0.480517" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1021" name="Continue_RestoresCommittedRunWithoutNewGameGrant" fullname="DarkFlare.Tests.Alpha024SceneFlowPlayModeTests.Continue_RestoresCommittedRunWithoutNewGameGrant" methodname="Continue_RestoresCommittedRunWithoutNewGameGrant" classname="DarkFlare.Tests.Alpha024SceneFlowPlayModeTests" runstate="Runnable" seed="1167979836" result="Passed" start-time="2026-09-07 15:12:55Z" end-time="2026-09-07 15:12:55Z" duration="0.229100" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="Timeout" value="120000" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[[gameplay.combat.message] [GameplayRandomSystem] 根种子: -1386754106（随机）
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 开始预热资源
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 942c099ccdd7eed428f0ac0b1694f6ff -> Player
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 3b6e21dfbc7f54e4f9e0312efd6c6af5 -> Projectile_Default
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 67b8ae84734f42f4792a4190aad88049 -> Monster_Basic
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000002 -> Monster_Swift
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000003 -> Monster_Heavy
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 07152fe41aa52d740b4d1df2049f9f3d -> LootPickup
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 1a1e12f2b0381f54c829d3ef4165a2de -> weapon_greatsword
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 9b427dc6b96c7bc4ba30998360436d86 -> weapon_war_axe
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 7ea0a2ad891e6cd4891051d02b338cf0 -> armor_leather
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: b25638dc709c3184cabc93ae9de79ee2 -> armor_plate
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: f597b10c126e825418717edee921bd16 -> ring_iron
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: d8c5c86107920ab4d9e117e19d6ed11e -> ring_jade
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: bf07871323670d148819cd1d7e079297 -> ring_obsidian
+[gameplay.combat.message] [EquipmentSystem] player 的武器已装备 大剑
+[gameplay.trading.message] [TradingSystem] 商人库存初始化完成，共 7 件
+[gameplay.trading.message] [TradingSystem] 发放初始金币 100，当前金币 100
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 新游戏 Session 初始化完成
+[gameplay.ui.message] [HudController] HUD 初始化完成
+[gameplay.ui.message] [InventoryPanelController] 背包与四槽装备面板初始化完成
+[gameplay.ui.message] [GameMenuController] 游戏菜单初始化完成
+[gameplay.ui.message] [ShopPanelController] 商店面板初始化完成
+[gameplay.ui.message] [CraftingPanelController] 随机打造工作台初始化完成
+[gameplay.combat.message] [SpawnSystem] 生成怪物 razor_hound，生成种子 1457397621，实例根种子 -107776377，词条 无，最终属性 生命=31.03,护甲=0,闪避=30,移速=3.6,火抗=0,冰抗=0,电抗=0
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 942c099ccdd7eed428f0ac0b1694f6ff -> Player
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 3b6e21dfbc7f54e4f9e0312efd6c6af5 -> Projectile_Default
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 67b8ae84734f42f4792a4190aad88049 -> Monster_Basic
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000002 -> Monster_Swift
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000003 -> Monster_Heavy
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 07152fe41aa52d740b4d1df2049f9f3d -> LootPickup
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: b25638dc709c3184cabc93ae9de79ee2 -> armor_plate
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 1a1e12f2b0381f54c829d3ef4165a2de -> weapon_greatsword
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 7ea0a2ad891e6cd4891051d02b338cf0 -> armor_leather
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: f597b10c126e825418717edee921bd16 -> ring_iron
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: d8c5c86107920ab4d9e117e19d6ed11e -> ring_jade
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 9b427dc6b96c7bc4ba30998360436d86 -> weapon_war_axe
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: bf07871323670d148819cd1d7e079297 -> ring_obsidian
+[gameplay.ui.message] [HudController] HUD 初始化完成
+[gameplay.ui.message] [InventoryPanelController] 背包与四槽装备面板初始化完成
+[gameplay.ui.message] [GameMenuController] 游戏菜单初始化完成
+[gameplay.ui.message] [ShopPanelController] 商店面板初始化完成
+[gameplay.ui.message] [CraftingPanelController] 随机打造工作台初始化完成
+]]></output>
+            </test-case>
+            <test-case id="1020" name="ThreeCycles_NewGamePauseAndReturnKeepTopologyUnique" fullname="DarkFlare.Tests.Alpha024SceneFlowPlayModeTests.ThreeCycles_NewGamePauseAndReturnKeepTopologyUnique" methodname="ThreeCycles_NewGamePauseAndReturnKeepTopologyUnique" classname="DarkFlare.Tests.Alpha024SceneFlowPlayModeTests" runstate="Runnable" seed="259734705" result="Passed" start-time="2026-09-07 15:12:55Z" end-time="2026-09-07 15:12:55Z" duration="0.249129" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="Timeout" value="180000" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[[gameplay.combat.message] [GameplayRandomSystem] 根种子: -2131598120（随机）
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 开始预热资源
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 942c099ccdd7eed428f0ac0b1694f6ff -> Player
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 3b6e21dfbc7f54e4f9e0312efd6c6af5 -> Projectile_Default
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 67b8ae84734f42f4792a4190aad88049 -> Monster_Basic
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000002 -> Monster_Swift
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000003 -> Monster_Heavy
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 07152fe41aa52d740b4d1df2049f9f3d -> LootPickup
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 1a1e12f2b0381f54c829d3ef4165a2de -> weapon_greatsword
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 9b427dc6b96c7bc4ba30998360436d86 -> weapon_war_axe
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 7ea0a2ad891e6cd4891051d02b338cf0 -> armor_leather
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: b25638dc709c3184cabc93ae9de79ee2 -> armor_plate
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: f597b10c126e825418717edee921bd16 -> ring_iron
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: d8c5c86107920ab4d9e117e19d6ed11e -> ring_jade
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: bf07871323670d148819cd1d7e079297 -> ring_obsidian
+[gameplay.combat.message] [EquipmentSystem] player 的武器已装备 大剑
+[gameplay.trading.message] [TradingSystem] 商人库存初始化完成，共 7 件
+[gameplay.trading.message] [TradingSystem] 发放初始金币 100，当前金币 100
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 新游戏 Session 初始化完成
+[gameplay.ui.message] [HudController] HUD 初始化完成
+[gameplay.ui.message] [InventoryPanelController] 背包与四槽装备面板初始化完成
+[gameplay.ui.message] [GameMenuController] 游戏菜单初始化完成
+[gameplay.ui.message] [ShopPanelController] 商店面板初始化完成
+[gameplay.ui.message] [CraftingPanelController] 随机打造工作台初始化完成
+[gameplay.combat.message] [SpawnSystem] 生成怪物 wasteland_wraith，生成种子 -2080501498，实例根种子 -546607502，词条 monster_armored[armor:Flat=48.42]，最终属性 生命=51.32,护甲=48.42,闪避=15,移速=2.6,火抗=0,冰抗=0,电抗=0
+[gameplay.combat.message] [GameplayRandomSystem] 根种子: 1091173157（随机）
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 开始预热资源
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 942c099ccdd7eed428f0ac0b1694f6ff -> Player
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 3b6e21dfbc7f54e4f9e0312efd6c6af5 -> Projectile_Default
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 67b8ae84734f42f4792a4190aad88049 -> Monster_Basic
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000002 -> Monster_Swift
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000003 -> Monster_Heavy
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 07152fe41aa52d740b4d1df2049f9f3d -> LootPickup
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 1a1e12f2b0381f54c829d3ef4165a2de -> weapon_greatsword
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 9b427dc6b96c7bc4ba30998360436d86 -> weapon_war_axe
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 7ea0a2ad891e6cd4891051d02b338cf0 -> armor_leather
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: b25638dc709c3184cabc93ae9de79ee2 -> armor_plate
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: f597b10c126e825418717edee921bd16 -> ring_iron
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: d8c5c86107920ab4d9e117e19d6ed11e -> ring_jade
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: bf07871323670d148819cd1d7e079297 -> ring_obsidian
+[gameplay.combat.message] [EquipmentSystem] player 的武器已装备 大剑
+[gameplay.trading.message] [TradingSystem] 商人库存初始化完成，共 7 件
+[gameplay.trading.message] [TradingSystem] 发放初始金币 100，当前金币 100
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 新游戏 Session 初始化完成
+[gameplay.ui.message] [HudController] HUD 初始化完成
+[gameplay.ui.message] [InventoryPanelController] 背包与四槽装备面板初始化完成
+[gameplay.ui.message] [GameMenuController] 游戏菜单初始化完成
+[gameplay.ui.message] [ShopPanelController] 商店面板初始化完成
+[gameplay.ui.message] [CraftingPanelController] 随机打造工作台初始化完成
+[gameplay.combat.message] [SpawnSystem] 生成怪物 wasteland_wraith，生成种子 -593062373，实例根种子 -961354931，词条 monster_elusive[evasion:Flat=22.88]，最终属性 生命=56.18,护甲=0,闪避=37.88,移速=2.6,火抗=0,冰抗=0,电抗=0
+[gameplay.combat.message] [GameplayRandomSystem] 根种子: -959049761（随机）
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 开始预热资源
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 942c099ccdd7eed428f0ac0b1694f6ff -> Player
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 3b6e21dfbc7f54e4f9e0312efd6c6af5 -> Projectile_Default
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 67b8ae84734f42f4792a4190aad88049 -> Monster_Basic
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000002 -> Monster_Swift
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000003 -> Monster_Heavy
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 07152fe41aa52d740b4d1df2049f9f3d -> LootPickup
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 1a1e12f2b0381f54c829d3ef4165a2de -> weapon_greatsword
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 9b427dc6b96c7bc4ba30998360436d86 -> weapon_war_axe
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 7ea0a2ad891e6cd4891051d02b338cf0 -> armor_leather
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: b25638dc709c3184cabc93ae9de79ee2 -> armor_plate
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: f597b10c126e825418717edee921bd16 -> ring_iron
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: d8c5c86107920ab4d9e117e19d6ed11e -> ring_jade
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: bf07871323670d148819cd1d7e079297 -> ring_obsidian
+[gameplay.combat.message] [EquipmentSystem] player 的武器已装备 大剑
+[gameplay.trading.message] [TradingSystem] 商人库存初始化完成，共 7 件
+[gameplay.trading.message] [TradingSystem] 发放初始金币 100，当前金币 100
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 新游戏 Session 初始化完成
+[gameplay.ui.message] [HudController] HUD 初始化完成
+[gameplay.ui.message] [InventoryPanelController] 背包与四槽装备面板初始化完成
+[gameplay.ui.message] [GameMenuController] 游戏菜单初始化完成
+[gameplay.ui.message] [ShopPanelController] 商店面板初始化完成
+[gameplay.ui.message] [CraftingPanelController] 随机打造工作台初始化完成
+[gameplay.combat.message] [SpawnSystem] 生成怪物 razor_hound，生成种子 47015968，实例根种子 327585420，词条 monster_fire_guarded[fire_resistance:Flat=20.49];monster_robust[max_health:More=27.86]，最终属性 生命=51.99,护甲=0,闪避=30,移速=3.6,火抗=20.49,冰抗=0,电抗=0
+]]></output>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1022" name="Alpha025InputOwnershipPlayModeTests" fullname="DarkFlare.Tests.Alpha025InputOwnershipPlayModeTests" classname="DarkFlare.Tests.Alpha025InputOwnershipPlayModeTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-09-07 15:12:55Z" end-time="2026-09-07 15:12:55Z" duration="0.425926" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1024" name="AudioAccessibilityAndPlatformServicesUseApplicationLifetime" fullname="DarkFlare.Tests.Alpha025InputOwnershipPlayModeTests.AudioAccessibilityAndPlatformServicesUseApplicationLifetime" methodname="AudioAccessibilityAndPlatformServicesUseApplicationLifetime" classname="DarkFlare.Tests.Alpha025InputOwnershipPlayModeTests" runstate="Runnable" seed="641587969" result="Passed" start-time="2026-09-07 15:12:55Z" end-time="2026-09-07 15:12:55Z" duration="0.029452" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="Timeout" value="180000" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1023" name="BootstrapAndThreeSessionsShareOneRuntimeActionAsset" fullname="DarkFlare.Tests.Alpha025InputOwnershipPlayModeTests.BootstrapAndThreeSessionsShareOneRuntimeActionAsset" methodname="BootstrapAndThreeSessionsShareOneRuntimeActionAsset" classname="DarkFlare.Tests.Alpha025InputOwnershipPlayModeTests" runstate="Runnable" seed="165758127" result="Passed" start-time="2026-09-07 15:12:55Z" end-time="2026-09-07 15:12:55Z" duration="0.237221" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="Timeout" value="180000" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[[gameplay.combat.message] [GameplayRandomSystem] 根种子: -1515009289（随机）
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 开始预热资源
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 942c099ccdd7eed428f0ac0b1694f6ff -> Player
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 3b6e21dfbc7f54e4f9e0312efd6c6af5 -> Projectile_Default
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 67b8ae84734f42f4792a4190aad88049 -> Monster_Basic
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000002 -> Monster_Swift
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000003 -> Monster_Heavy
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 07152fe41aa52d740b4d1df2049f9f3d -> LootPickup
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 1a1e12f2b0381f54c829d3ef4165a2de -> weapon_greatsword
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 9b427dc6b96c7bc4ba30998360436d86 -> weapon_war_axe
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 7ea0a2ad891e6cd4891051d02b338cf0 -> armor_leather
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: b25638dc709c3184cabc93ae9de79ee2 -> armor_plate
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: f597b10c126e825418717edee921bd16 -> ring_iron
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: d8c5c86107920ab4d9e117e19d6ed11e -> ring_jade
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: bf07871323670d148819cd1d7e079297 -> ring_obsidian
+[gameplay.combat.message] [EquipmentSystem] player 的武器已装备 大剑
+[gameplay.trading.message] [TradingSystem] 商人库存初始化完成，共 7 件
+[gameplay.trading.message] [TradingSystem] 发放初始金币 100，当前金币 100
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 新游戏 Session 初始化完成
+[gameplay.ui.message] [HudController] HUD 初始化完成
+[gameplay.ui.message] [InventoryPanelController] 背包与四槽装备面板初始化完成
+[gameplay.ui.message] [GameMenuController] 游戏菜单初始化完成
+[gameplay.ui.message] [ShopPanelController] 商店面板初始化完成
+[gameplay.ui.message] [CraftingPanelController] 随机打造工作台初始化完成
+[gameplay.combat.message] [SpawnSystem] 生成怪物 razor_hound，生成种子 -334536467，实例根种子 -1069292291，词条 monster_lightning_guarded[lightning_resistance:Flat=23.83];monster_swift[move_speed:Increase=12.63]，最终属性 生命=36.98,护甲=0,闪避=30,移速=4.05,火抗=0,冰抗=0,电抗=23.83
+[gameplay.combat.message] [GameplayRandomSystem] 根种子: -1876977840（随机）
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 开始预热资源
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 942c099ccdd7eed428f0ac0b1694f6ff -> Player
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 3b6e21dfbc7f54e4f9e0312efd6c6af5 -> Projectile_Default
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 67b8ae84734f42f4792a4190aad88049 -> Monster_Basic
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000002 -> Monster_Swift
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000003 -> Monster_Heavy
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 07152fe41aa52d740b4d1df2049f9f3d -> LootPickup
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 1a1e12f2b0381f54c829d3ef4165a2de -> weapon_greatsword
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 9b427dc6b96c7bc4ba30998360436d86 -> weapon_war_axe
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 7ea0a2ad891e6cd4891051d02b338cf0 -> armor_leather
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: b25638dc709c3184cabc93ae9de79ee2 -> armor_plate
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: f597b10c126e825418717edee921bd16 -> ring_iron
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: d8c5c86107920ab4d9e117e19d6ed11e -> ring_jade
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: bf07871323670d148819cd1d7e079297 -> ring_obsidian
+[gameplay.combat.message] [EquipmentSystem] player 的武器已装备 大剑
+[gameplay.trading.message] [TradingSystem] 商人库存初始化完成，共 7 件
+[gameplay.trading.message] [TradingSystem] 发放初始金币 100，当前金币 100
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 新游戏 Session 初始化完成
+[gameplay.ui.message] [HudController] HUD 初始化完成
+[gameplay.ui.message] [InventoryPanelController] 背包与四槽装备面板初始化完成
+[gameplay.ui.message] [GameMenuController] 游戏菜单初始化完成
+[gameplay.ui.message] [ShopPanelController] 商店面板初始化完成
+[gameplay.ui.message] [CraftingPanelController] 随机打造工作台初始化完成
+[gameplay.combat.message] [SpawnSystem] 生成怪物 wasteland_wraith，生成种子 1815142840，实例根种子 -1414376725，词条 无，最终属性 生命=47.79,护甲=0,闪避=15,移速=2.6,火抗=0,冰抗=0,电抗=0
+[gameplay.combat.message] [GameplayRandomSystem] 根种子: -1416717244（随机）
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 开始预热资源
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 942c099ccdd7eed428f0ac0b1694f6ff -> Player
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 3b6e21dfbc7f54e4f9e0312efd6c6af5 -> Projectile_Default
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 67b8ae84734f42f4792a4190aad88049 -> Monster_Basic
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000002 -> Monster_Swift
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000003 -> Monster_Heavy
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 07152fe41aa52d740b4d1df2049f9f3d -> LootPickup
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 1a1e12f2b0381f54c829d3ef4165a2de -> weapon_greatsword
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 9b427dc6b96c7bc4ba30998360436d86 -> weapon_war_axe
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 7ea0a2ad891e6cd4891051d02b338cf0 -> armor_leather
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: b25638dc709c3184cabc93ae9de79ee2 -> armor_plate
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: f597b10c126e825418717edee921bd16 -> ring_iron
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: d8c5c86107920ab4d9e117e19d6ed11e -> ring_jade
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: bf07871323670d148819cd1d7e079297 -> ring_obsidian
+[gameplay.combat.message] [EquipmentSystem] player 的武器已装备 大剑
+[gameplay.trading.message] [TradingSystem] 商人库存初始化完成，共 7 件
+[gameplay.trading.message] [TradingSystem] 发放初始金币 100，当前金币 100
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 新游戏 Session 初始化完成
+[gameplay.ui.message] [HudController] HUD 初始化完成
+[gameplay.ui.message] [InventoryPanelController] 背包与四槽装备面板初始化完成
+[gameplay.ui.message] [GameMenuController] 游戏菜单初始化完成
+[gameplay.ui.message] [ShopPanelController] 商店面板初始化完成
+[gameplay.ui.message] [CraftingPanelController] 随机打造工作台初始化完成
+[gameplay.combat.message] [SpawnSystem] 生成怪物 wasteland_wraith，生成种子 -341161398，实例根种子 -1274698098，词条 monster_swift[move_speed:Increase=19.17];monster_fire_guarded[fire_resistance:Flat=34.06]，最终属性 生命=47.28,护甲=0,闪避=15,移速=3.1,火抗=34.06,冰抗=0,电抗=0
+]]></output>
+            </test-case>
+            <test-case id="1025" name="SettingsPageOpensFromFrontEndAndPausedMenuWithoutReleasingPause" fullname="DarkFlare.Tests.Alpha025InputOwnershipPlayModeTests.SettingsPageOpensFromFrontEndAndPausedMenuWithoutReleasingPause" methodname="SettingsPageOpensFromFrontEndAndPausedMenuWithoutReleasingPause" classname="DarkFlare.Tests.Alpha025InputOwnershipPlayModeTests" runstate="Runnable" seed="1709689315" result="Passed" start-time="2026-09-07 15:12:55Z" end-time="2026-09-07 15:12:55Z" duration="0.156600" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="Timeout" value="180000" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[[gameplay.combat.message] [GameplayRandomSystem] 根种子: -1114099288（随机）
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 开始预热资源
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 942c099ccdd7eed428f0ac0b1694f6ff -> Player
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 3b6e21dfbc7f54e4f9e0312efd6c6af5 -> Projectile_Default
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 67b8ae84734f42f4792a4190aad88049 -> Monster_Basic
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000002 -> Monster_Swift
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000003 -> Monster_Heavy
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 07152fe41aa52d740b4d1df2049f9f3d -> LootPickup
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 1a1e12f2b0381f54c829d3ef4165a2de -> weapon_greatsword
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 9b427dc6b96c7bc4ba30998360436d86 -> weapon_war_axe
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 7ea0a2ad891e6cd4891051d02b338cf0 -> armor_leather
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: b25638dc709c3184cabc93ae9de79ee2 -> armor_plate
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: f597b10c126e825418717edee921bd16 -> ring_iron
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: d8c5c86107920ab4d9e117e19d6ed11e -> ring_jade
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: bf07871323670d148819cd1d7e079297 -> ring_obsidian
+[gameplay.combat.message] [EquipmentSystem] player 的武器已装备 大剑
+[gameplay.trading.message] [TradingSystem] 商人库存初始化完成，共 7 件
+[gameplay.trading.message] [TradingSystem] 发放初始金币 100，当前金币 100
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 新游戏 Session 初始化完成
+[gameplay.ui.message] [HudController] HUD 初始化完成
+[gameplay.ui.message] [InventoryPanelController] 背包与四槽装备面板初始化完成
+[gameplay.ui.message] [GameMenuController] 游戏菜单初始化完成
+[gameplay.ui.message] [ShopPanelController] 商店面板初始化完成
+[gameplay.ui.message] [CraftingPanelController] 随机打造工作台初始化完成
+[gameplay.combat.message] [SpawnSystem] 生成怪物 wasteland_wraith，生成种子 -9080685，实例根种子 1839955724，词条 monster_cold_guarded[cold_resistance:Flat=26.78]，最终属性 生命=55,护甲=0,闪避=15,移速=2.6,火抗=0,冰抗=26.78,电抗=0
+]]></output>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1026" name="Alpha027ApplicationDataIsolationPlayModeTests" fullname="DarkFlare.Tests.Alpha027ApplicationDataIsolationPlayModeTests" classname="DarkFlare.Tests.Alpha027ApplicationDataIsolationPlayModeTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-09-07 15:12:55Z" end-time="2026-09-07 15:12:56Z" duration="0.008078" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1027" name="ApplicationHost_UsesTemporaryIsolatedDataRoots" fullname="DarkFlare.Tests.Alpha027ApplicationDataIsolationPlayModeTests.ApplicationHost_UsesTemporaryIsolatedDataRoots" methodname="ApplicationHost_UsesTemporaryIsolatedDataRoots" classname="DarkFlare.Tests.Alpha027ApplicationDataIsolationPlayModeTests" runstate="Runnable" seed="1506176348" result="Passed" start-time="2026-09-07 15:12:55Z" end-time="2026-09-07 15:12:56Z" duration="0.006192" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1028" name="Alpha027IntegratedAcceptancePlayModeTests" fullname="DarkFlare.Tests.Alpha027IntegratedAcceptancePlayModeTests" classname="DarkFlare.Tests.Alpha027IntegratedAcceptancePlayModeTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-09-07 15:12:56Z" end-time="2026-09-07 15:12:57Z" duration="1.484328" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1029" name="FullPlayerPath_DeleteAndResetPersistAcrossHostRestart" fullname="DarkFlare.Tests.Alpha027IntegratedAcceptancePlayModeTests.FullPlayerPath_DeleteAndResetPersistAcrossHostRestart" methodname="FullPlayerPath_DeleteAndResetPersistAcrossHostRestart" classname="DarkFlare.Tests.Alpha027IntegratedAcceptancePlayModeTests" runstate="Runnable" seed="1229658800" result="Passed" start-time="2026-09-07 15:12:56Z" end-time="2026-09-07 15:12:57Z" duration="1.482071" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="Timeout" value="240000" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[[gameplay.combat.message] [GameplayRandomSystem] 根种子: 1126759135（随机）
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 开始预热资源
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 942c099ccdd7eed428f0ac0b1694f6ff -> Player
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 3b6e21dfbc7f54e4f9e0312efd6c6af5 -> Projectile_Default
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 67b8ae84734f42f4792a4190aad88049 -> Monster_Basic
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000002 -> Monster_Swift
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000003 -> Monster_Heavy
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 07152fe41aa52d740b4d1df2049f9f3d -> LootPickup
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 1a1e12f2b0381f54c829d3ef4165a2de -> weapon_greatsword
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 9b427dc6b96c7bc4ba30998360436d86 -> weapon_war_axe
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 7ea0a2ad891e6cd4891051d02b338cf0 -> armor_leather
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: b25638dc709c3184cabc93ae9de79ee2 -> armor_plate
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: f597b10c126e825418717edee921bd16 -> ring_iron
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: d8c5c86107920ab4d9e117e19d6ed11e -> ring_jade
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: bf07871323670d148819cd1d7e079297 -> ring_obsidian
+[gameplay.combat.message] [EquipmentSystem] player 的武器已装备 大剑
+[gameplay.trading.message] [TradingSystem] 商人库存初始化完成，共 7 件
+[gameplay.trading.message] [TradingSystem] 发放初始金币 100，当前金币 100
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 新游戏 Session 初始化完成
+[gameplay.ui.message] [HudController] HUD 初始化完成
+[gameplay.ui.message] [InventoryPanelController] 背包与四槽装备面板初始化完成
+[gameplay.ui.message] [GameMenuController] 游戏菜单初始化完成
+[gameplay.ui.message] [ShopPanelController] 商店面板初始化完成
+[gameplay.ui.message] [CraftingPanelController] 随机打造工作台初始化完成
+[gameplay.combat.message] [SpawnSystem] 生成怪物 razor_hound，生成种子 -1531497110，实例根种子 -1453196021，词条 monster_elusive[evasion:Flat=33.1]，最终属性 生命=36.4,护甲=0,闪避=63.1,移速=3.6,火抗=0,冰抗=0,电抗=0
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 942c099ccdd7eed428f0ac0b1694f6ff -> Player
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 3b6e21dfbc7f54e4f9e0312efd6c6af5 -> Projectile_Default
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 67b8ae84734f42f4792a4190aad88049 -> Monster_Basic
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000002 -> Monster_Swift
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000003 -> Monster_Heavy
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 07152fe41aa52d740b4d1df2049f9f3d -> LootPickup
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: bf07871323670d148819cd1d7e079297 -> ring_obsidian
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: d8c5c86107920ab4d9e117e19d6ed11e -> ring_jade
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: b25638dc709c3184cabc93ae9de79ee2 -> armor_plate
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 1a1e12f2b0381f54c829d3ef4165a2de -> weapon_greatsword
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: f597b10c126e825418717edee921bd16 -> ring_iron
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 9b427dc6b96c7bc4ba30998360436d86 -> weapon_war_axe
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 7ea0a2ad891e6cd4891051d02b338cf0 -> armor_leather
+[gameplay.ui.message] [HudController] HUD 初始化完成
+[gameplay.ui.message] [InventoryPanelController] 背包与四槽装备面板初始化完成
+[gameplay.ui.message] [GameMenuController] 游戏菜单初始化完成
+[gameplay.ui.message] [ShopPanelController] 商店面板初始化完成
+[gameplay.ui.message] [CraftingPanelController] 随机打造工作台初始化完成
+]]></output>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1031" name="Alpha027ShellUiMatrixPlayModeTests" fullname="DarkFlare.Tests.Alpha027ShellUiMatrixPlayModeTests" classname="DarkFlare.Tests.Alpha027ShellUiMatrixPlayModeTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-09-07 15:12:57Z" end-time="2026-09-07 15:12:57Z" duration="0.291706" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1032" name="FrontEndSettingsAndErrorModal_FitThreeLocalesAtStandardResolution" fullname="DarkFlare.Tests.Alpha027ShellUiMatrixPlayModeTests.FrontEndSettingsAndErrorModal_FitThreeLocalesAtStandardResolution" methodname="FrontEndSettingsAndErrorModal_FitThreeLocalesAtStandardResolution" classname="DarkFlare.Tests.Alpha027ShellUiMatrixPlayModeTests" runstate="Runnable" seed="1842369504" result="Passed" start-time="2026-09-07 15:12:57Z" end-time="2026-09-07 15:12:57Z" duration="0.284198" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="Timeout" value="240000" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1033" name="ApplicationHostSceneTransitionPlayModeTests" fullname="DarkFlare.Tests.ApplicationHostSceneTransitionPlayModeTests" classname="DarkFlare.Tests.ApplicationHostSceneTransitionPlayModeTests" runstate="Runnable" testcasecount="9" result="Passed" start-time="2026-09-07 15:12:57Z" end-time="2026-09-07 15:13:08Z" duration="11.125729" total="9" passed="9" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1042" name="ApplicationScopeTimeout_ShutdownReturnsFailureAndKeepsDiagnostics" fullname="DarkFlare.Tests.ApplicationHostSceneTransitionPlayModeTests.ApplicationScopeTimeout_ShutdownReturnsFailureAndKeepsDiagnostics" methodname="ApplicationScopeTimeout_ShutdownReturnsFailureAndKeepsDiagnostics" classname="DarkFlare.Tests.ApplicationHostSceneTransitionPlayModeTests" runstate="Runnable" seed="1978283760" result="Passed" start-time="2026-09-07 15:12:57Z" end-time="2026-09-07 15:12:57Z" duration="0.127980" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1040" name="ControlledStop_CleanupFailureAfterSessionClearsMarksApplicationFailed" fullname="DarkFlare.Tests.ApplicationHostSceneTransitionPlayModeTests.ControlledStop_CleanupFailureAfterSessionClearsMarksApplicationFailed" methodname="ControlledStop_CleanupFailureAfterSessionClearsMarksApplicationFailed" classname="DarkFlare.Tests.ApplicationHostSceneTransitionPlayModeTests" runstate="Runnable" seed="335942035" result="Passed" start-time="2026-09-07 15:12:57Z" end-time="2026-09-07 15:12:57Z" duration="0.023596" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[
+IgnoreFailingMessages:true
+[infrastructure.lifecycle.message] [ApplicationHost] 生命周期任务失败: Application/controlled-session-stop:cleanup-failure-test
+System.InvalidOperationException: controlled stop rollback failure
+  at DarkFlare.ApplicationHost.StopControlledSessionAsync (DarkFlare.GameSessionHost session) [0x00113] in E:\PARA\Projects\Unity\DarkfFlare\UnityProject\Assets\Scripts\Runtime\Infrastructure\Lifecycle\ApplicationHost.cs:1201 
+  at Cysharp.Threading.Tasks.UniTaskCompletionSourceCore`1[TResult].GetResult (System.Int16 token) [0x00067] in .\Library\PackageCache\com.cysharp.unitask@dc216dc4183d\Runtime\UniTaskCompletionSource.cs:244 
+  at Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask`1[TStateMachine].GetResult (System.Int16 token) [0x00002] in .\Library\PackageCache\com.cysharp.unitask@dc216dc4183d\Runtime\CompilerServices\StateMachineRunner.cs:218 
+  at Cysharp.Threading.Tasks.UniTask+Awaiter.GetResult () [0x00015] in .\Library\PackageCache\com.cysharp.unitask@dc216dc4183d\Runtime\UniTask.cs:316 
+  at DarkFlare.LifecycleTaskGroup.ExecuteAsync (System.String operationName, System.Func`2[T,TResult] operation, System.Threading.CancellationToken externalToken, DarkFlare.LifecycleTaskFailurePolicy failurePolicy, DarkFlare.LifecycleTaskGroup+ActiveTask activeTask) [0x00092] in E:\PARA\Projects\Unity\DarkfFlare\UnityProject\Assets\Scripts\Runtime\Infrastructure\Lifecycle\LifecycleTaskGroup.cs:206 
+]]></output>
+            </test-case>
+            <test-case id="1036" name="DirectCreateBindInitialize_NotifiesExactlyOncePerGeneration" fullname="DarkFlare.Tests.ApplicationHostSceneTransitionPlayModeTests.DirectCreateBindInitialize_NotifiesExactlyOncePerGeneration" methodname="DirectCreateBindInitialize_NotifiesExactlyOncePerGeneration" classname="DarkFlare.Tests.ApplicationHostSceneTransitionPlayModeTests" runstate="Runnable" seed="1600096743" result="Passed" start-time="2026-09-07 15:12:57Z" end-time="2026-09-07 15:12:57Z" duration="0.017368" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1039" name="EmergencyShutdown_LateControlledStopCannotOverwriteShutdown" fullname="DarkFlare.Tests.ApplicationHostSceneTransitionPlayModeTests.EmergencyShutdown_LateControlledStopCannotOverwriteShutdown" methodname="EmergencyShutdown_LateControlledStopCannotOverwriteShutdown" classname="DarkFlare.Tests.ApplicationHostSceneTransitionPlayModeTests" runstate="Runnable" seed="1736291990" result="Passed" start-time="2026-09-07 15:12:57Z" end-time="2026-09-07 15:12:57Z" duration="0.021823" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[
+IgnoreFailingMessages:true
+[infrastructure.lifecycle.message] [ApplicationHost] 生命周期任务失败: Application/controlled-session-stop:late-emergency-test
+System.InvalidOperationException: Session 未等待异步任务收敛，禁止启动下一代 Session
+  at DarkFlare.ApplicationHost.StopControlledSessionAsync (DarkFlare.GameSessionHost session) [0x00113] in E:\PARA\Projects\Unity\DarkfFlare\UnityProject\Assets\Scripts\Runtime\Infrastructure\Lifecycle\ApplicationHost.cs:1201 
+  at Cysharp.Threading.Tasks.UniTaskCompletionSourceCore`1[TResult].GetResult (System.Int16 token) [0x00067] in .\Library\PackageCache\com.cysharp.unitask@dc216dc4183d\Runtime\UniTaskCompletionSource.cs:244 
+  at Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask`1[TStateMachine].GetResult (System.Int16 token) [0x00002] in .\Library\PackageCache\com.cysharp.unitask@dc216dc4183d\Runtime\CompilerServices\StateMachineRunner.cs:218 
+  at Cysharp.Threading.Tasks.UniTask+Awaiter.GetResult () [0x00015] in .\Library\PackageCache\com.cysharp.unitask@dc216dc4183d\Runtime\UniTask.cs:316 
+  at DarkFlare.LifecycleTaskGroup.ExecuteAsync (System.String operationName, System.Func`2[T,TResult] operation, System.Threading.CancellationToken externalToken, DarkFlare.LifecycleTaskFailurePolicy failurePolicy, DarkFlare.LifecycleTaskGroup+ActiveTask activeTask) [0x00092] in E:\PARA\Projects\Unity\DarkfFlare\UnityProject\Assets\Scripts\Runtime\Infrastructure\Lifecycle\LifecycleTaskGroup.cs:206 
+]]></output>
+            </test-case>
+            <test-case id="1037" name="HangingRollback_SettlesRequestsAndShutdownWithoutStartingLatestGeneration" fullname="DarkFlare.Tests.ApplicationHostSceneTransitionPlayModeTests.HangingRollback_SettlesRequestsAndShutdownWithoutStartingLatestGeneration" methodname="HangingRollback_SettlesRequestsAndShutdownWithoutStartingLatestGeneration" classname="DarkFlare.Tests.ApplicationHostSceneTransitionPlayModeTests" runstate="Runnable" seed="342722187" result="Passed" start-time="2026-09-07 15:12:57Z" end-time="2026-09-07 15:13:07Z" duration="10.021036" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[
+IgnoreFailingMessages:true
+[infrastructure.lifecycle.message] [ApplicationHost] 生命周期任务失败: Application/scene-session-initialization:HangingRollbackBlocked-8effb4ee8ab14c3ca6fa4efe6bc4747f:reload-rollback-gate
+System.TimeoutException: 生命周期作用域 SceneTransition-1 在 10 秒内未能停止全部任务；超时时仍活动: scene-session-initialization:HangingRollbackBlocked-8effb4ee8ab14c3ca6fa4efe6bc4747f:reload-rollback-gate
+  at Cysharp.Threading.Tasks.UniTaskCompletionSource.GetResult (System.Int16 token) [0x0002d] in .\Library\PackageCache\com.cysharp.unitask@dc216dc4183d\Runtime\UniTaskCompletionSource.cs:649 
+  at Cysharp.Threading.Tasks.UniTask+Awaiter.GetResult () [0x00015] in .\Library\PackageCache\com.cysharp.unitask@dc216dc4183d\Runtime\UniTask.cs:316 
+  at DarkFlare.ApplicationHost.ExecuteSceneInitializationRequestAsync (DarkFlare.ApplicationHost+SceneSessionInitializationRequest request, DarkFlare.LifecycleScope transitionScope) [0x000d3] in E:\PARA\Projects\Unity\DarkfFlare\UnityProject\Assets\Scripts\Runtime\Infrastructure\Lifecycle\ApplicationHost.cs:1384 
+[infrastructure.lifecycle.message] [ApplicationHost] 生命周期任务失败: SceneTransition-1/stop-timeout
+System.TimeoutException: 生命周期作用域 SceneTransition-1 在 10 秒内未能停止全部任务；超时时仍活动: scene-session-initialization:HangingRollbackBlocked-8effb4ee8ab14c3ca6fa4efe6bc4747f:reload-rollback-gate
+  at Cysharp.Threading.Tasks.UniTaskCompletionSource.GetResult (System.Int16 token) [0x0002d] in .\Library\PackageCache\com.cysharp.unitask@dc216dc4183d\Runtime\UniTaskCompletionSource.cs:649 
+  at Cysharp.Threading.Tasks.UniTask+Awaiter.GetResult () [0x00015] in .\Library\PackageCache\com.cysharp.unitask@dc216dc4183d\Runtime\UniTask.cs:316 
+  at DarkFlare.ApplicationHost.ExecuteSceneInitializationRequestAsync (DarkFlare.ApplicationHost+SceneSessionInitializationRequest request, DarkFlare.LifecycleScope transitionScope) [0x000d3] in E:\PARA\Projects\Unity\DarkfFlare\UnityProject\Assets\Scripts\Runtime\Infrastructure\Lifecycle\ApplicationHost.cs:1384 
+[infrastructure.lifecycle.message] [ApplicationHost] 生命周期任务失败: Session-2/stop-timeout
+System.TimeoutException: 生命周期作用域 Session-2 在 10 秒内未能停止全部任务；超时时仍活动: session-rollback-coordinator
+]]></output>
+            </test-case>
+            <test-case id="1035" name="MainReloadDuringPreviousRollback_LatestInitializationEventuallyRuns" fullname="DarkFlare.Tests.ApplicationHostSceneTransitionPlayModeTests.MainReloadDuringPreviousRollback_LatestInitializationEventuallyRuns" methodname="MainReloadDuringPreviousRollback_LatestInitializationEventuallyRuns" classname="DarkFlare.Tests.ApplicationHostSceneTransitionPlayModeTests" runstate="Runnable" seed="2090196657" result="Passed" start-time="2026-09-07 15:13:07Z" end-time="2026-09-07 15:13:08Z" duration="0.632234" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[[gameplay.combat.message] [GameplayRandomSystem] 根种子: 422261284（随机）
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 开始预热资源
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 942c099ccdd7eed428f0ac0b1694f6ff -> Player
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 3b6e21dfbc7f54e4f9e0312efd6c6af5 -> Projectile_Default
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 67b8ae84734f42f4792a4190aad88049 -> Monster_Basic
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000002 -> Monster_Swift
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000003 -> Monster_Heavy
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 07152fe41aa52d740b4d1df2049f9f3d -> LootPickup
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 1a1e12f2b0381f54c829d3ef4165a2de -> weapon_greatsword
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 9b427dc6b96c7bc4ba30998360436d86 -> weapon_war_axe
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 7ea0a2ad891e6cd4891051d02b338cf0 -> armor_leather
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: b25638dc709c3184cabc93ae9de79ee2 -> armor_plate
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: f597b10c126e825418717edee921bd16 -> ring_iron
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: d8c5c86107920ab4d9e117e19d6ed11e -> ring_jade
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: bf07871323670d148819cd1d7e079297 -> ring_obsidian
+[gameplay.combat.message] [EquipmentSystem] player 的武器已装备 大剑
+[gameplay.trading.message] [TradingSystem] 商人库存初始化完成，共 7 件
+[gameplay.trading.message] [TradingSystem] 发放初始金币 100，当前金币 100
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 新游戏 Session 初始化完成
+[gameplay.ui.message] [HudController] HUD 初始化完成
+[gameplay.ui.message] [InventoryPanelController] 背包与四槽装备面板初始化完成
+[gameplay.ui.message] [GameMenuController] 游戏菜单初始化完成
+[gameplay.ui.message] [ShopPanelController] 商店面板初始化完成
+[gameplay.ui.message] [CraftingPanelController] 随机打造工作台初始化完成
+[gameplay.combat.message] [SpawnSystem] 生成怪物 wasteland_wraith，生成种子 -1705278022，实例根种子 -1372836832，词条 无，最终属性 生命=44.21,护甲=0,闪避=15,移速=2.6,火抗=0,冰抗=0,电抗=0
+]]></output>
+            </test-case>
+            <test-case id="1038" name="MultipleComponentTimeouts_StopSessionOnceAndPreserveAbandonedLease" fullname="DarkFlare.Tests.ApplicationHostSceneTransitionPlayModeTests.MultipleComponentTimeouts_StopSessionOnceAndPreserveAbandonedLease" methodname="MultipleComponentTimeouts_StopSessionOnceAndPreserveAbandonedLease" classname="DarkFlare.Tests.ApplicationHostSceneTransitionPlayModeTests" runstate="Runnable" seed="1064889003" result="Passed" start-time="2026-09-07 15:13:08Z" end-time="2026-09-07 15:13:08Z" duration="0.137730" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[
+IgnoreFailingMessages:true
+[infrastructure.lifecycle.message] [ApplicationHost] 当前 Session 场景缺少 Bootstrap 或 MonsterSpawner，存档入口不可用
+[infrastructure.lifecycle.message] [ApplicationHost] 生命周期任务失败: Timeout-Controlled-Stop-Component-First/stop-timeout
+System.TimeoutException: 生命周期作用域 Timeout-Controlled-Stop-Component-First 在 0.1 秒内未能停止全部任务；超时时仍活动: ignores-first-component-stop
+[infrastructure.lifecycle.message] [ApplicationHost] 生命周期任务失败: Timeout-Controlled-Stop-Component-Second/stop-timeout
+System.TimeoutException: 生命周期作用域 Timeout-Controlled-Stop-Component-Second 在 0.1 秒内未能停止全部任务；超时时仍活动: ignores-second-component-stop
+[infrastructure.lifecycle.message] [ApplicationHost] 生命周期任务失败: Timeout-Controlled-Stop-Application/controlled-session-stop:scope-timeout:Timeout-Controlled-Stop-Component-First
+System.TimeoutException: Session 中存在未在时限内停止的任务；架构保持隔离且不会启动下一代 Session
+  at DarkFlare.ApplicationHost.StopControlledSessionAsync (DarkFlare.GameSessionHost session) [0x00113] in E:\PARA\Projects\Unity\DarkfFlare\UnityProject\Assets\Scripts\Runtime\Infrastructure\Lifecycle\ApplicationHost.cs:1201 
+  at Cysharp.Threading.Tasks.UniTaskCompletionSourceCore`1[TResult].GetResult (System.Int16 token) [0x00067] in .\Library\PackageCache\com.cysharp.unitask@dc216dc4183d\Runtime\UniTaskCompletionSource.cs:244 
+  at Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask`1[TStateMachine].GetResult (System.Int16 token) [0x00002] in .\Library\PackageCache\com.cysharp.unitask@dc216dc4183d\Runtime\CompilerServices\StateMachineRunner.cs:218 
+  at Cysharp.Threading.Tasks.UniTask+Awaiter.GetResult () [0x00015] in .\Library\PackageCache\com.cysharp.unitask@dc216dc4183d\Runtime\UniTask.cs:316 
+  at DarkFlare.LifecycleTaskGroup.ExecuteAsync (System.String operationName, System.Func`2[T,TResult] operation, System.Threading.CancellationToken externalToken, DarkFlare.LifecycleTaskFailurePolicy failurePolicy, DarkFlare.LifecycleTaskGroup+ActiveTask activeTask) [0x00092] in E:\PARA\Projects\Unity\DarkfFlare\UnityProject\Assets\Scripts\Runtime\Infrastructure\Lifecycle\LifecycleTaskGroup.cs:206 
+]]></output>
+            </test-case>
+            <test-case id="1041" name="ProfileScopeTimeout_ShutdownReturnsFailureAndKeepsDiagnostics" fullname="DarkFlare.Tests.ApplicationHostSceneTransitionPlayModeTests.ProfileScopeTimeout_ShutdownReturnsFailureAndKeepsDiagnostics" methodname="ProfileScopeTimeout_ShutdownReturnsFailureAndKeepsDiagnostics" classname="DarkFlare.Tests.ApplicationHostSceneTransitionPlayModeTests" runstate="Runnable" seed="260652729" result="Passed" start-time="2026-09-07 15:13:08Z" end-time="2026-09-07 15:13:08Z" duration="0.122772" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1034" name="ThreeRapidSceneRequests_OnlyLatestRequestReachesRunning" fullname="DarkFlare.Tests.ApplicationHostSceneTransitionPlayModeTests.ThreeRapidSceneRequests_OnlyLatestRequestReachesRunning" methodname="ThreeRapidSceneRequests_OnlyLatestRequestReachesRunning" classname="DarkFlare.Tests.ApplicationHostSceneTransitionPlayModeTests" runstate="Runnable" seed="650464716" result="Passed" start-time="2026-09-07 15:13:08Z" end-time="2026-09-07 15:13:08Z" duration="0.017112" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1043" name="ApplicationLifecyclePlayModeTests" fullname="DarkFlare.Tests.ApplicationLifecyclePlayModeTests" classname="DarkFlare.Tests.ApplicationLifecyclePlayModeTests" runstate="Runnable" testcasecount="10" result="Passed" start-time="2026-09-07 15:13:08Z" end-time="2026-09-07 15:13:10Z" duration="1.803324" total="10" passed="10" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1046" name="ConcurrentInitializationRequest_IsRejectedSynchronously" fullname="DarkFlare.Tests.ApplicationLifecyclePlayModeTests.ConcurrentInitializationRequest_IsRejectedSynchronously" methodname="ConcurrentInitializationRequest_IsRejectedSynchronously" classname="DarkFlare.Tests.ApplicationLifecyclePlayModeTests" runstate="Runnable" seed="1078797748" result="Passed" start-time="2026-09-07 15:13:08Z" end-time="2026-09-07 15:13:08Z" duration="0.013944" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1049" name="ConcurrentStop_IsIdempotentAndClearsOnlyTheCapturedSession" fullname="DarkFlare.Tests.ApplicationLifecyclePlayModeTests.ConcurrentStop_IsIdempotentAndClearsOnlyTheCapturedSession" methodname="ConcurrentStop_IsIdempotentAndClearsOnlyTheCapturedSession" classname="DarkFlare.Tests.ApplicationLifecyclePlayModeTests" runstate="Runnable" seed="1195115379" result="Passed" start-time="2026-09-07 15:13:08Z" end-time="2026-09-07 15:13:08Z" duration="0.013065" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1053" name="DestroyedSessionObject_UnregistersFromRegistry" fullname="DarkFlare.Tests.ApplicationLifecyclePlayModeTests.DestroyedSessionObject_UnregistersFromRegistry" methodname="DestroyedSessionObject_UnregistersFromRegistry" classname="DarkFlare.Tests.ApplicationLifecyclePlayModeTests" runstate="Runnable" seed="1103090320" result="Passed" start-time="2026-09-07 15:13:08Z" end-time="2026-09-07 15:13:08Z" duration="0.011928" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1051" name="DirectMainReload_CoordinatesStopCreateBindAndInitialize" fullname="DarkFlare.Tests.ApplicationLifecyclePlayModeTests.DirectMainReload_CoordinatesStopCreateBindAndInitialize" methodname="DirectMainReload_CoordinatesStopCreateBindAndInitialize" classname="DarkFlare.Tests.ApplicationLifecyclePlayModeTests" runstate="Runnable" seed="991473518" result="Passed" start-time="2026-09-07 15:13:08Z" end-time="2026-09-07 15:13:09Z" duration="0.753356" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[[gameplay.combat.message] [GameplayRandomSystem] 根种子: -153223309（随机）
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 开始预热资源
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 942c099ccdd7eed428f0ac0b1694f6ff -> Player
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 3b6e21dfbc7f54e4f9e0312efd6c6af5 -> Projectile_Default
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 67b8ae84734f42f4792a4190aad88049 -> Monster_Basic
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000002 -> Monster_Swift
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000003 -> Monster_Heavy
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 07152fe41aa52d740b4d1df2049f9f3d -> LootPickup
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 1a1e12f2b0381f54c829d3ef4165a2de -> weapon_greatsword
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 9b427dc6b96c7bc4ba30998360436d86 -> weapon_war_axe
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 7ea0a2ad891e6cd4891051d02b338cf0 -> armor_leather
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: b25638dc709c3184cabc93ae9de79ee2 -> armor_plate
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: f597b10c126e825418717edee921bd16 -> ring_iron
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: d8c5c86107920ab4d9e117e19d6ed11e -> ring_jade
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: bf07871323670d148819cd1d7e079297 -> ring_obsidian
+[gameplay.combat.message] [EquipmentSystem] player 的武器已装备 大剑
+[gameplay.trading.message] [TradingSystem] 商人库存初始化完成，共 7 件
+[gameplay.trading.message] [TradingSystem] 发放初始金币 100，当前金币 100
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 新游戏 Session 初始化完成
+[gameplay.ui.message] [HudController] HUD 初始化完成
+[gameplay.ui.message] [InventoryPanelController] 背包与四槽装备面板初始化完成
+[gameplay.ui.message] [GameMenuController] 游戏菜单初始化完成
+[gameplay.ui.message] [ShopPanelController] 商店面板初始化完成
+[gameplay.ui.message] [CraftingPanelController] 随机打造工作台初始化完成
+[gameplay.combat.message] [SpawnSystem] 生成怪物 wasteland_wraith，生成种子 1080775997，实例根种子 -1678438844，词条 monster_frost_touched[Physical->Cold:GainAsExtra=15.51];monster_fire_guarded[fire_resistance:Flat=25.42]，最终属性 生命=57.96,护甲=0,闪避=15,移速=2.6,火抗=25.42,冰抗=0,电抗=0
+[gameplay.combat.message] [GameplayRandomSystem] 根种子: -100197927（随机）
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 开始预热资源
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 942c099ccdd7eed428f0ac0b1694f6ff -> Player
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 3b6e21dfbc7f54e4f9e0312efd6c6af5 -> Projectile_Default
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 67b8ae84734f42f4792a4190aad88049 -> Monster_Basic
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000002 -> Monster_Swift
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000003 -> Monster_Heavy
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 07152fe41aa52d740b4d1df2049f9f3d -> LootPickup
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 1a1e12f2b0381f54c829d3ef4165a2de -> weapon_greatsword
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 9b427dc6b96c7bc4ba30998360436d86 -> weapon_war_axe
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 7ea0a2ad891e6cd4891051d02b338cf0 -> armor_leather
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: b25638dc709c3184cabc93ae9de79ee2 -> armor_plate
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: f597b10c126e825418717edee921bd16 -> ring_iron
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: d8c5c86107920ab4d9e117e19d6ed11e -> ring_jade
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: bf07871323670d148819cd1d7e079297 -> ring_obsidian
+[gameplay.combat.message] [EquipmentSystem] player 的武器已装备 大剑
+[gameplay.trading.message] [TradingSystem] 商人库存初始化完成，共 7 件
+[gameplay.trading.message] [TradingSystem] 发放初始金币 100，当前金币 100
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 新游戏 Session 初始化完成
+[gameplay.ui.message] [HudController] HUD 初始化完成
+[gameplay.ui.message] [InventoryPanelController] 背包与四槽装备面板初始化完成
+[gameplay.ui.message] [GameMenuController] 游戏菜单初始化完成
+[gameplay.ui.message] [ShopPanelController] 商店面板初始化完成
+[gameplay.ui.message] [CraftingPanelController] 随机打造工作台初始化完成
+[gameplay.combat.message] [SpawnSystem] 生成怪物 iron_husk，生成种子 -1000429179，实例根种子 1108668191，词条 无，最终属性 生命=94.6,护甲=40,闪避=5,移速=1.7,火抗=0,冰抗=0,电抗=0
+]]></output>
+            </test-case>
+            <test-case id="1045" name="ExternalInitializationCancellation_RollsBackAndNeverCommits" fullname="DarkFlare.Tests.ApplicationLifecyclePlayModeTests.ExternalInitializationCancellation_RollsBackAndNeverCommits" methodname="ExternalInitializationCancellation_RollsBackAndNeverCommits" classname="DarkFlare.Tests.ApplicationLifecyclePlayModeTests" runstate="Runnable" seed="1005528585" result="Passed" start-time="2026-09-07 15:13:09Z" end-time="2026-09-07 15:13:09Z" duration="0.014975" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1048" name="InvalidNewGameConfiguration_RollsBackWithoutRuntimeObjects" fullname="DarkFlare.Tests.ApplicationLifecyclePlayModeTests.InvalidNewGameConfiguration_RollsBackWithoutRuntimeObjects" methodname="InvalidNewGameConfiguration_RollsBackWithoutRuntimeObjects" classname="DarkFlare.Tests.ApplicationLifecyclePlayModeTests" runstate="Runnable" seed="2006500800" result="Passed" start-time="2026-09-07 15:13:09Z" end-time="2026-09-07 15:13:09Z" duration="0.011488" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[[infrastructure.lifecycle.message] [ApplicationHost] 生命周期任务失败: Scene-17/initialize:new-game
+DarkFlare.GameplaySceneConfigurationException: 场景配置无效: 玩家定义 未配置；玩家 Prefab 未配置有效 Addressable 引用；玩家默认技能 未配置；投射物 Prefab 未配置有效 Addressable 引用；初始武器 未配置；怪物生成定义 未配置；掉落物 Prefab 未配置有效 Addressable 引用；商人定义 未配置；打造定义 未配置；场景缺少 MonsterSpawner；场景缺少 CameraFollowTarget
+  at DarkFlare.NewGameSessionInitializer.InitializeAsync (DarkFlare.SessionInitializationContext context, System.Threading.CancellationToken token) [0x00072] in E:\PARA\Projects\Unity\DarkfFlare\UnityProject\Assets\Scripts\Runtime\Gameplay\Bootstrap\NewGameSessionInitializer.cs:45 
+  at Cysharp.Threading.Tasks.UniTask+ExceptionResultSource.GetResult (System.Int16 token) [0x0001e] in .\Library\PackageCache\com.cysharp.unitask@dc216dc4183d\Runtime\UniTask.Factory.cs:326 
+  at Cysharp.Threading.Tasks.UniTask+Awaiter.GetResult () [0x00015] in .\Library\PackageCache\com.cysharp.unitask@dc216dc4183d\Runtime\UniTask.cs:316 
+  at DarkFlare.LifecycleTaskGroup.ExecuteAsync (System.String operationName, System.Func`2[T,TResult] operation, System.Threading.CancellationToken externalToken, DarkFlare.LifecycleTaskFailurePolicy failurePolicy, DarkFlare.LifecycleTaskGroup+ActiveTask activeTask) [0x00092] in E:\PARA\Projects\Unity\DarkfFlare\UnityProject\Assets\Scripts\Runtime\Infrastructure\Lifecycle\LifecycleTaskGroup.cs:206 
+]]></output>
+            </test-case>
+            <test-case id="1044" name="MainColdStart_HasUniqueHostArchitecturePlayerAndCommittedSpawner" fullname="DarkFlare.Tests.ApplicationLifecyclePlayModeTests.MainColdStart_HasUniqueHostArchitecturePlayerAndCommittedSpawner" methodname="MainColdStart_HasUniqueHostArchitecturePlayerAndCommittedSpawner" classname="DarkFlare.Tests.ApplicationLifecyclePlayModeTests" runstate="Runnable" seed="1489493904" result="Passed" start-time="2026-09-07 15:13:09Z" end-time="2026-09-07 15:13:09Z" duration="0.098882" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[[gameplay.combat.message] [GameplayRandomSystem] 根种子: -1206483989（随机）
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 开始预热资源
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 942c099ccdd7eed428f0ac0b1694f6ff -> Player
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 3b6e21dfbc7f54e4f9e0312efd6c6af5 -> Projectile_Default
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 67b8ae84734f42f4792a4190aad88049 -> Monster_Basic
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000002 -> Monster_Swift
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000003 -> Monster_Heavy
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 07152fe41aa52d740b4d1df2049f9f3d -> LootPickup
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 1a1e12f2b0381f54c829d3ef4165a2de -> weapon_greatsword
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 9b427dc6b96c7bc4ba30998360436d86 -> weapon_war_axe
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 7ea0a2ad891e6cd4891051d02b338cf0 -> armor_leather
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: b25638dc709c3184cabc93ae9de79ee2 -> armor_plate
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: f597b10c126e825418717edee921bd16 -> ring_iron
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: d8c5c86107920ab4d9e117e19d6ed11e -> ring_jade
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: bf07871323670d148819cd1d7e079297 -> ring_obsidian
+[gameplay.combat.message] [EquipmentSystem] player 的武器已装备 大剑
+[gameplay.trading.message] [TradingSystem] 商人库存初始化完成，共 7 件
+[gameplay.trading.message] [TradingSystem] 发放初始金币 100，当前金币 100
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 新游戏 Session 初始化完成
+[gameplay.ui.message] [HudController] HUD 初始化完成
+[gameplay.ui.message] [InventoryPanelController] 背包与四槽装备面板初始化完成
+[gameplay.ui.message] [GameMenuController] 游戏菜单初始化完成
+[gameplay.ui.message] [ShopPanelController] 商店面板初始化完成
+[gameplay.ui.message] [CraftingPanelController] 随机打造工作台初始化完成
+[gameplay.combat.message] [SpawnSystem] 生成怪物 wasteland_wraith，生成种子 -7881876，实例根种子 2098653368，词条 monster_robust[max_health:More=38.56]，最终属性 生命=70.52,护甲=0,闪避=15,移速=2.6,火抗=0,冰抗=0,电抗=0
+]]></output>
+            </test-case>
+            <test-case id="1047" name="PreCancelledInitializationRequest_ReturnsCallbackExactlyOnce" fullname="DarkFlare.Tests.ApplicationLifecyclePlayModeTests.PreCancelledInitializationRequest_ReturnsCallbackExactlyOnce" methodname="PreCancelledInitializationRequest_ReturnsCallbackExactlyOnce" classname="DarkFlare.Tests.ApplicationLifecyclePlayModeTests" runstate="Runnable" seed="1041269416" result="Passed" start-time="2026-09-07 15:13:09Z" end-time="2026-09-07 15:13:09Z" duration="0.013852" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1050" name="ThreeSessionRestarts_DoNotDuplicateHostPlayerOrArchitecture" fullname="DarkFlare.Tests.ApplicationLifecyclePlayModeTests.ThreeSessionRestarts_DoNotDuplicateHostPlayerOrArchitecture" methodname="ThreeSessionRestarts_DoNotDuplicateHostPlayerOrArchitecture" classname="DarkFlare.Tests.ApplicationLifecyclePlayModeTests" runstate="Runnable" seed="936366121" result="Passed" start-time="2026-09-07 15:13:09Z" end-time="2026-09-07 15:13:10Z" duration="0.285155" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[[gameplay.combat.message] [GameplayRandomSystem] 根种子: -340836262（随机）
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 开始预热资源
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 942c099ccdd7eed428f0ac0b1694f6ff -> Player
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 3b6e21dfbc7f54e4f9e0312efd6c6af5 -> Projectile_Default
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 67b8ae84734f42f4792a4190aad88049 -> Monster_Basic
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000002 -> Monster_Swift
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000003 -> Monster_Heavy
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 07152fe41aa52d740b4d1df2049f9f3d -> LootPickup
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 1a1e12f2b0381f54c829d3ef4165a2de -> weapon_greatsword
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 9b427dc6b96c7bc4ba30998360436d86 -> weapon_war_axe
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 7ea0a2ad891e6cd4891051d02b338cf0 -> armor_leather
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: b25638dc709c3184cabc93ae9de79ee2 -> armor_plate
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: f597b10c126e825418717edee921bd16 -> ring_iron
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: d8c5c86107920ab4d9e117e19d6ed11e -> ring_jade
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: bf07871323670d148819cd1d7e079297 -> ring_obsidian
+[gameplay.combat.message] [EquipmentSystem] player 的武器已装备 大剑
+[gameplay.trading.message] [TradingSystem] 商人库存初始化完成，共 7 件
+[gameplay.trading.message] [TradingSystem] 发放初始金币 100，当前金币 100
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 新游戏 Session 初始化完成
+[gameplay.ui.message] [HudController] HUD 初始化完成
+[gameplay.ui.message] [InventoryPanelController] 背包与四槽装备面板初始化完成
+[gameplay.ui.message] [GameMenuController] 游戏菜单初始化完成
+[gameplay.ui.message] [ShopPanelController] 商店面板初始化完成
+[gameplay.ui.message] [CraftingPanelController] 随机打造工作台初始化完成
+[gameplay.combat.message] [SpawnSystem] 生成怪物 razor_hound，生成种子 623839602，实例根种子 -932219374，词条 monster_elusive[evasion:Flat=35.63];monster_frost_touched[Physical->Cold:GainAsExtra=21.66]，最终属性 生命=38.23,护甲=0,闪避=65.63,移速=3.6,火抗=0,冰抗=0,电抗=0
+[gameplay.combat.message] [GameplayRandomSystem] 根种子: -2071332697（随机）
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 开始预热资源
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 942c099ccdd7eed428f0ac0b1694f6ff -> Player
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 3b6e21dfbc7f54e4f9e0312efd6c6af5 -> Projectile_Default
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 67b8ae84734f42f4792a4190aad88049 -> Monster_Basic
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000002 -> Monster_Swift
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000003 -> Monster_Heavy
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 07152fe41aa52d740b4d1df2049f9f3d -> LootPickup
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 1a1e12f2b0381f54c829d3ef4165a2de -> weapon_greatsword
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 9b427dc6b96c7bc4ba30998360436d86 -> weapon_war_axe
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 7ea0a2ad891e6cd4891051d02b338cf0 -> armor_leather
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: b25638dc709c3184cabc93ae9de79ee2 -> armor_plate
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: f597b10c126e825418717edee921bd16 -> ring_iron
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: d8c5c86107920ab4d9e117e19d6ed11e -> ring_jade
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: bf07871323670d148819cd1d7e079297 -> ring_obsidian
+[gameplay.combat.message] [EquipmentSystem] player 的武器已装备 大剑
+[gameplay.trading.message] [TradingSystem] 商人库存初始化完成，共 7 件
+[gameplay.trading.message] [TradingSystem] 发放初始金币 100，当前金币 100
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 新游戏 Session 初始化完成
+[gameplay.ui.message] [HudController] HUD 初始化完成
+[gameplay.ui.message] [InventoryPanelController] 背包与四槽装备面板初始化完成
+[gameplay.ui.message] [GameMenuController] 游戏菜单初始化完成
+[gameplay.ui.message] [ShopPanelController] 商店面板初始化完成
+[gameplay.ui.message] [CraftingPanelController] 随机打造工作台初始化完成
+[gameplay.combat.message] [SpawnSystem] 生成怪物 iron_husk，生成种子 1153626273，实例根种子 -121458036，词条 无，最终属性 生命=102.06,护甲=40,闪避=5,移速=1.7,火抗=0,冰抗=0,电抗=0
+[gameplay.combat.message] [GameplayRandomSystem] 根种子: 1549766797（随机）
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 开始预热资源
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 942c099ccdd7eed428f0ac0b1694f6ff -> Player
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 3b6e21dfbc7f54e4f9e0312efd6c6af5 -> Projectile_Default
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 67b8ae84734f42f4792a4190aad88049 -> Monster_Basic
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000002 -> Monster_Swift
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000003 -> Monster_Heavy
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 07152fe41aa52d740b4d1df2049f9f3d -> LootPickup
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 1a1e12f2b0381f54c829d3ef4165a2de -> weapon_greatsword
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 9b427dc6b96c7bc4ba30998360436d86 -> weapon_war_axe
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 7ea0a2ad891e6cd4891051d02b338cf0 -> armor_leather
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: b25638dc709c3184cabc93ae9de79ee2 -> armor_plate
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: f597b10c126e825418717edee921bd16 -> ring_iron
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: d8c5c86107920ab4d9e117e19d6ed11e -> ring_jade
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: bf07871323670d148819cd1d7e079297 -> ring_obsidian
+[gameplay.combat.message] [EquipmentSystem] player 的武器已装备 大剑
+[gameplay.trading.message] [TradingSystem] 商人库存初始化完成，共 7 件
+[gameplay.trading.message] [TradingSystem] 发放初始金币 100，当前金币 100
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 新游戏 Session 初始化完成
+[gameplay.ui.message] [HudController] HUD 初始化完成
+[gameplay.ui.message] [InventoryPanelController] 背包与四槽装备面板初始化完成
+[gameplay.ui.message] [GameMenuController] 游戏菜单初始化完成
+[gameplay.ui.message] [ShopPanelController] 商店面板初始化完成
+[gameplay.ui.message] [CraftingPanelController] 随机打造工作台初始化完成
+[gameplay.combat.message] [SpawnSystem] 生成怪物 wasteland_wraith，生成种子 -1744057942，实例根种子 -334857295，词条 monster_swift[move_speed:Increase=12.47]，最终属性 生命=56.3,护甲=0,闪避=15,移速=2.92,火抗=0,冰抗=0,电抗=0
+]]></output>
+            </test-case>
+            <test-case id="1052" name="UnloadingBoundMainScene_StopsSessionAndReleasesArchitecture" fullname="DarkFlare.Tests.ApplicationLifecyclePlayModeTests.UnloadingBoundMainScene_StopsSessionAndReleasesArchitecture" methodname="UnloadingBoundMainScene_StopsSessionAndReleasesArchitecture" classname="DarkFlare.Tests.ApplicationLifecyclePlayModeTests" runstate="Runnable" seed="986989998" result="Passed" start-time="2026-09-07 15:13:10Z" end-time="2026-09-07 15:13:10Z" duration="0.582248" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[[gameplay.combat.message] [GameplayRandomSystem] 根种子: 1268379922（随机）
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 开始预热资源
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 942c099ccdd7eed428f0ac0b1694f6ff -> Player
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 3b6e21dfbc7f54e4f9e0312efd6c6af5 -> Projectile_Default
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 67b8ae84734f42f4792a4190aad88049 -> Monster_Basic
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000002 -> Monster_Swift
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000003 -> Monster_Heavy
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 07152fe41aa52d740b4d1df2049f9f3d -> LootPickup
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 1a1e12f2b0381f54c829d3ef4165a2de -> weapon_greatsword
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 9b427dc6b96c7bc4ba30998360436d86 -> weapon_war_axe
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 7ea0a2ad891e6cd4891051d02b338cf0 -> armor_leather
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: b25638dc709c3184cabc93ae9de79ee2 -> armor_plate
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: f597b10c126e825418717edee921bd16 -> ring_iron
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: d8c5c86107920ab4d9e117e19d6ed11e -> ring_jade
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: bf07871323670d148819cd1d7e079297 -> ring_obsidian
+[gameplay.combat.message] [EquipmentSystem] player 的武器已装备 大剑
+[gameplay.trading.message] [TradingSystem] 商人库存初始化完成，共 7 件
+[gameplay.trading.message] [TradingSystem] 发放初始金币 100，当前金币 100
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 新游戏 Session 初始化完成
+[gameplay.ui.message] [HudController] HUD 初始化完成
+[gameplay.ui.message] [InventoryPanelController] 背包与四槽装备面板初始化完成
+[gameplay.ui.message] [GameMenuController] 游戏菜单初始化完成
+[gameplay.ui.message] [ShopPanelController] 商店面板初始化完成
+[gameplay.ui.message] [CraftingPanelController] 随机打造工作台初始化完成
+[gameplay.combat.message] [SpawnSystem] 生成怪物 razor_hound，生成种子 165383829，实例根种子 -631910388，词条 monster_storm_touched[Physical->Lightning:GainAsExtra=22.89]，最终属性 生命=39.7,护甲=0,闪避=30,移速=3.6,火抗=0,冰抗=0,电抗=0
+]]></output>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1054" name="EquipmentPhase2PlayModeTests" fullname="DarkFlare.Tests.EquipmentPhase2PlayModeTests" classname="DarkFlare.Tests.EquipmentPhase2PlayModeTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-09-07 15:13:10Z" end-time="2026-09-07 15:13:12Z" duration="1.598521" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1055" name="InventoryFourSlots_SupportKeyboardGamepadLayoutAndProjectileSnapshot" fullname="DarkFlare.Tests.EquipmentPhase2PlayModeTests.InventoryFourSlots_SupportKeyboardGamepadLayoutAndProjectileSnapshot" methodname="InventoryFourSlots_SupportKeyboardGamepadLayoutAndProjectileSnapshot" classname="DarkFlare.Tests.EquipmentPhase2PlayModeTests" runstate="Runnable" seed="2022686812" result="Passed" start-time="2026-09-07 15:13:10Z" end-time="2026-09-07 15:13:12Z" duration="1.591369" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[[gameplay.combat.message] [GameplayRandomSystem] 根种子: 409166846（随机）
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 开始预热资源
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 942c099ccdd7eed428f0ac0b1694f6ff -> Player
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 3b6e21dfbc7f54e4f9e0312efd6c6af5 -> Projectile_Default
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 67b8ae84734f42f4792a4190aad88049 -> Monster_Basic
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000002 -> Monster_Swift
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000003 -> Monster_Heavy
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 07152fe41aa52d740b4d1df2049f9f3d -> LootPickup
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 1a1e12f2b0381f54c829d3ef4165a2de -> weapon_greatsword
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 9b427dc6b96c7bc4ba30998360436d86 -> weapon_war_axe
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 7ea0a2ad891e6cd4891051d02b338cf0 -> armor_leather
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: b25638dc709c3184cabc93ae9de79ee2 -> armor_plate
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: f597b10c126e825418717edee921bd16 -> ring_iron
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: d8c5c86107920ab4d9e117e19d6ed11e -> ring_jade
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: bf07871323670d148819cd1d7e079297 -> ring_obsidian
+[gameplay.combat.message] [EquipmentSystem] player 的武器已装备 大剑
+[gameplay.trading.message] [TradingSystem] 商人库存初始化完成，共 7 件
+[gameplay.trading.message] [TradingSystem] 发放初始金币 100，当前金币 100
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 新游戏 Session 初始化完成
+[gameplay.ui.message] [HudController] HUD 初始化完成
+[gameplay.ui.message] [InventoryPanelController] 背包与四槽装备面板初始化完成
+[gameplay.ui.message] [GameMenuController] 游戏菜单初始化完成
+[gameplay.ui.message] [ShopPanelController] 商店面板初始化完成
+[gameplay.ui.message] [CraftingPanelController] 随机打造工作台初始化完成
+[gameplay.combat.message] [SpawnSystem] 生成怪物 wasteland_wraith，生成种子 -545454058，实例根种子 -1019139188，词条 monster_elusive[evasion:Flat=26.9];monster_swift[move_speed:Increase=14.02]，最终属性 生命=57.32,护甲=0,闪避=41.9,移速=2.96,火抗=0,冰抗=0,电抗=0
+[gameplay.combat.message] [EquipmentSystem] player 的武器已装备 阶段二武器
+[gameplay.combat.message] [EquipmentSystem] player 的护甲已装备 阶段二护甲
+[gameplay.combat.message] [EquipmentSystem] player 的左戒指已装备 左槽测试戒指
+[gameplay.combat.message] [EquipmentSystem] player 的右戒指已装备 右槽测试戒指
+[gameplay.combat.message] [EquipmentSystem] player 卸下了左戒指 左槽测试戒指
+[gameplay.combat.message] [EquipmentSystem] player 的武器已装备 换装后武器
+[gameplay.combat.message] [CombatSystem] player 对 phase2_snapshot_defender 造成 20 点伤害
+]]></output>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1056" name="Phase0ExperiencePlayModeTests" fullname="DarkFlare.Tests.Phase0ExperiencePlayModeTests" classname="DarkFlare.Tests.Phase0ExperiencePlayModeTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-09-07 15:13:12Z" end-time="2026-09-07 15:13:13Z" duration="1.597047" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1057" name="MainScene_InventorySupportsKeyboardGamepadAndStandardResolution" fullname="DarkFlare.Tests.Phase0ExperiencePlayModeTests.MainScene_InventorySupportsKeyboardGamepadAndStandardResolution" methodname="MainScene_InventorySupportsKeyboardGamepadAndStandardResolution" classname="DarkFlare.Tests.Phase0ExperiencePlayModeTests" runstate="Runnable" seed="361790384" result="Passed" start-time="2026-09-07 15:13:12Z" end-time="2026-09-07 15:13:13Z" duration="0.755566" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[[gameplay.combat.message] [GameplayRandomSystem] 根种子: 1029407799（随机）
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 开始预热资源
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 942c099ccdd7eed428f0ac0b1694f6ff -> Player
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 3b6e21dfbc7f54e4f9e0312efd6c6af5 -> Projectile_Default
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 67b8ae84734f42f4792a4190aad88049 -> Monster_Basic
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000002 -> Monster_Swift
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000003 -> Monster_Heavy
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 07152fe41aa52d740b4d1df2049f9f3d -> LootPickup
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 1a1e12f2b0381f54c829d3ef4165a2de -> weapon_greatsword
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 9b427dc6b96c7bc4ba30998360436d86 -> weapon_war_axe
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 7ea0a2ad891e6cd4891051d02b338cf0 -> armor_leather
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: b25638dc709c3184cabc93ae9de79ee2 -> armor_plate
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: f597b10c126e825418717edee921bd16 -> ring_iron
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: d8c5c86107920ab4d9e117e19d6ed11e -> ring_jade
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: bf07871323670d148819cd1d7e079297 -> ring_obsidian
+[gameplay.combat.message] [EquipmentSystem] player 的武器已装备 大剑
+[gameplay.trading.message] [TradingSystem] 商人库存初始化完成，共 7 件
+[gameplay.trading.message] [TradingSystem] 发放初始金币 100，当前金币 100
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 新游戏 Session 初始化完成
+[gameplay.ui.message] [HudController] HUD 初始化完成
+[gameplay.ui.message] [InventoryPanelController] 背包与四槽装备面板初始化完成
+[gameplay.ui.message] [GameMenuController] 游戏菜单初始化完成
+[gameplay.ui.message] [ShopPanelController] 商店面板初始化完成
+[gameplay.ui.message] [CraftingPanelController] 随机打造工作台初始化完成
+[gameplay.combat.message] [SpawnSystem] 生成怪物 razor_hound，生成种子 1041684511，实例根种子 -2147317896，词条 monster_elusive[evasion:Flat=29.51]，最终属性 生命=32.92,护甲=0,闪避=59.51,移速=3.6,火抗=0,冰抗=0,电抗=0
+[gameplay.trading.message] [TradingSystem] 购买 大剑[Normal] 花费 45 金币，当前金币 55
+[gameplay.combat.message] [EquipmentSystem] player 的武器已装备 大剑
+[Phase0ExperiencePlayMode] 键鼠、手柄、背包焦点与 1920×1080 验收通过
+]]></output>
+            </test-case>
+            <test-case id="1058" name="MainScene_PointerDragMovesInventoryItemAndEquipsIt" fullname="DarkFlare.Tests.Phase0ExperiencePlayModeTests.MainScene_PointerDragMovesInventoryItemAndEquipsIt" methodname="MainScene_PointerDragMovesInventoryItemAndEquipsIt" classname="DarkFlare.Tests.Phase0ExperiencePlayModeTests" runstate="Runnable" seed="848699614" result="Passed" start-time="2026-09-07 15:13:13Z" end-time="2026-09-07 15:13:13Z" duration="0.833597" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[[gameplay.combat.message] [GameplayRandomSystem] 根种子: -855349041（随机）
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 开始预热资源
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 942c099ccdd7eed428f0ac0b1694f6ff -> Player
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 3b6e21dfbc7f54e4f9e0312efd6c6af5 -> Projectile_Default
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 67b8ae84734f42f4792a4190aad88049 -> Monster_Basic
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000002 -> Monster_Swift
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000003 -> Monster_Heavy
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 07152fe41aa52d740b4d1df2049f9f3d -> LootPickup
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 1a1e12f2b0381f54c829d3ef4165a2de -> weapon_greatsword
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 9b427dc6b96c7bc4ba30998360436d86 -> weapon_war_axe
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 7ea0a2ad891e6cd4891051d02b338cf0 -> armor_leather
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: b25638dc709c3184cabc93ae9de79ee2 -> armor_plate
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: f597b10c126e825418717edee921bd16 -> ring_iron
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: d8c5c86107920ab4d9e117e19d6ed11e -> ring_jade
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: bf07871323670d148819cd1d7e079297 -> ring_obsidian
+[gameplay.combat.message] [EquipmentSystem] player 的武器已装备 大剑
+[gameplay.trading.message] [TradingSystem] 商人库存初始化完成，共 7 件
+[gameplay.trading.message] [TradingSystem] 发放初始金币 100，当前金币 100
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 新游戏 Session 初始化完成
+[gameplay.ui.message] [HudController] HUD 初始化完成
+[gameplay.ui.message] [InventoryPanelController] 背包与四槽装备面板初始化完成
+[gameplay.ui.message] [GameMenuController] 游戏菜单初始化完成
+[gameplay.ui.message] [ShopPanelController] 商店面板初始化完成
+[gameplay.ui.message] [CraftingPanelController] 随机打造工作台初始化完成
+[gameplay.combat.message] [SpawnSystem] 生成怪物 wasteland_wraith，生成种子 -680792647，实例根种子 -355500761，词条 monster_robust[max_health:More=37.12];monster_storm_touched[Physical->Lightning:GainAsExtra=15.8]，最终属性 生命=62.84,护甲=0,闪避=15,移速=2.6,火抗=0,冰抗=0,电抗=0
+[gameplay.trading.message] [TradingSystem] 购买 大剑[Normal] 花费 45 金币，当前金币 55
+[gameplay.combat.message] [EquipmentSystem] player 的武器已从指定背包格装备 大剑
+[gameplay.combat.message] [EquipmentSystem] player 从武器精确卸下了 大剑
+]]></output>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1059" name="Phase1UxPlayModeTests" fullname="DarkFlare.Tests.Phase1UxPlayModeTests" classname="DarkFlare.Tests.Phase1UxPlayModeTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-09-07 15:13:13Z" end-time="2026-09-07 15:13:15Z" duration="2.060467" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1061" name="Crafting_OnlyUsesItemsPlacedInTheInputSlot" fullname="DarkFlare.Tests.Phase1UxPlayModeTests.Crafting_OnlyUsesItemsPlacedInTheInputSlot" methodname="Crafting_OnlyUsesItemsPlacedInTheInputSlot" classname="DarkFlare.Tests.Phase1UxPlayModeTests" runstate="Runnable" seed="1804851412" result="Passed" start-time="2026-09-07 15:13:13Z" end-time="2026-09-07 15:13:14Z" duration="0.753267" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[[gameplay.combat.message] [GameplayRandomSystem] 根种子: -1842638099（随机）
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 开始预热资源
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 942c099ccdd7eed428f0ac0b1694f6ff -> Player
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 3b6e21dfbc7f54e4f9e0312efd6c6af5 -> Projectile_Default
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 67b8ae84734f42f4792a4190aad88049 -> Monster_Basic
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000002 -> Monster_Swift
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000003 -> Monster_Heavy
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 07152fe41aa52d740b4d1df2049f9f3d -> LootPickup
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 1a1e12f2b0381f54c829d3ef4165a2de -> weapon_greatsword
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 9b427dc6b96c7bc4ba30998360436d86 -> weapon_war_axe
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 7ea0a2ad891e6cd4891051d02b338cf0 -> armor_leather
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: b25638dc709c3184cabc93ae9de79ee2 -> armor_plate
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: f597b10c126e825418717edee921bd16 -> ring_iron
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: d8c5c86107920ab4d9e117e19d6ed11e -> ring_jade
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: bf07871323670d148819cd1d7e079297 -> ring_obsidian
+[gameplay.combat.message] [EquipmentSystem] player 的武器已装备 大剑
+[gameplay.trading.message] [TradingSystem] 商人库存初始化完成，共 7 件
+[gameplay.trading.message] [TradingSystem] 发放初始金币 100，当前金币 100
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 新游戏 Session 初始化完成
+[gameplay.ui.message] [HudController] HUD 初始化完成
+[gameplay.ui.message] [InventoryPanelController] 背包与四槽装备面板初始化完成
+[gameplay.ui.message] [GameMenuController] 游戏菜单初始化完成
+[gameplay.ui.message] [ShopPanelController] 商店面板初始化完成
+[gameplay.ui.message] [CraftingPanelController] 随机打造工作台初始化完成
+[gameplay.combat.message] [SpawnSystem] 生成怪物 razor_hound，生成种子 1508176410，实例根种子 -260843290，词条 无，最终属性 生命=34.77,护甲=0,闪避=30,移速=3.6,火抗=0,冰抗=0,电抗=0
+]]></output>
+            </test-case>
+            <test-case id="1060" name="ShopPurchase_UsesGridAndRestoresNeighborFocusFeedbackAndTooltip" fullname="DarkFlare.Tests.Phase1UxPlayModeTests.ShopPurchase_UsesGridAndRestoresNeighborFocusFeedbackAndTooltip" methodname="ShopPurchase_UsesGridAndRestoresNeighborFocusFeedbackAndTooltip" classname="DarkFlare.Tests.Phase1UxPlayModeTests" runstate="Runnable" seed="1769649326" result="Passed" start-time="2026-09-07 15:13:14Z" end-time="2026-09-07 15:13:15Z" duration="1.299780" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[[gameplay.combat.message] [GameplayRandomSystem] 根种子: 25832843（随机）
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 开始预热资源
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 942c099ccdd7eed428f0ac0b1694f6ff -> Player
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 3b6e21dfbc7f54e4f9e0312efd6c6af5 -> Projectile_Default
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 67b8ae84734f42f4792a4190aad88049 -> Monster_Basic
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000002 -> Monster_Swift
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000003 -> Monster_Heavy
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 07152fe41aa52d740b4d1df2049f9f3d -> LootPickup
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 1a1e12f2b0381f54c829d3ef4165a2de -> weapon_greatsword
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 9b427dc6b96c7bc4ba30998360436d86 -> weapon_war_axe
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 7ea0a2ad891e6cd4891051d02b338cf0 -> armor_leather
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: b25638dc709c3184cabc93ae9de79ee2 -> armor_plate
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: f597b10c126e825418717edee921bd16 -> ring_iron
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: d8c5c86107920ab4d9e117e19d6ed11e -> ring_jade
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: bf07871323670d148819cd1d7e079297 -> ring_obsidian
+[gameplay.combat.message] [EquipmentSystem] player 的武器已装备 大剑
+[gameplay.trading.message] [TradingSystem] 商人库存初始化完成，共 7 件
+[gameplay.trading.message] [TradingSystem] 发放初始金币 100，当前金币 100
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 新游戏 Session 初始化完成
+[gameplay.ui.message] [HudController] HUD 初始化完成
+[gameplay.ui.message] [InventoryPanelController] 背包与四槽装备面板初始化完成
+[gameplay.ui.message] [GameMenuController] 游戏菜单初始化完成
+[gameplay.ui.message] [ShopPanelController] 商店面板初始化完成
+[gameplay.ui.message] [CraftingPanelController] 随机打造工作台初始化完成
+[gameplay.combat.message] [SpawnSystem] 生成怪物 wasteland_wraith，生成种子 -302906883，实例根种子 1472528139，词条 monster_lightning_guarded[lightning_resistance:Flat=22.05];monster_flame_touched[Physical->Fire:GainAsExtra=18.58]，最终属性 生命=57.47,护甲=0,闪避=15,移速=2.6,火抗=0,冰抗=0,电抗=22.05
+[gameplay.trading.message] [TradingSystem] 购买 状态测试装备 3[Normal] 花费 150 金币，当前金币 9950
+[gameplay.trading.message] [TradingSystem] 出售 状态测试装备 3[Normal] 获得 40 金币，当前金币 9990
+]]></output>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1062" name="Phase4ContentPlayModeTests" fullname="DarkFlare.Tests.Phase4ContentPlayModeTests" classname="DarkFlare.Tests.Phase4ContentPlayModeTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-09-07 15:13:15Z" end-time="2026-09-07 15:13:16Z" duration="0.295569" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1063" name="MainScene_OfficialEquipmentCompletesTradeCraftAndFourSlotFlow" fullname="DarkFlare.Tests.Phase4ContentPlayModeTests.MainScene_OfficialEquipmentCompletesTradeCraftAndFourSlotFlow" methodname="MainScene_OfficialEquipmentCompletesTradeCraftAndFourSlotFlow" classname="DarkFlare.Tests.Phase4ContentPlayModeTests" runstate="Runnable" seed="822393673" result="Passed" start-time="2026-09-07 15:13:15Z" end-time="2026-09-07 15:13:16Z" duration="0.289017" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[[gameplay.combat.message] [GameplayRandomSystem] 根种子: 1283063010（随机）
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 开始预热资源
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 942c099ccdd7eed428f0ac0b1694f6ff -> Player
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 3b6e21dfbc7f54e4f9e0312efd6c6af5 -> Projectile_Default
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 67b8ae84734f42f4792a4190aad88049 -> Monster_Basic
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000002 -> Monster_Swift
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000003 -> Monster_Heavy
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 07152fe41aa52d740b4d1df2049f9f3d -> LootPickup
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 1a1e12f2b0381f54c829d3ef4165a2de -> weapon_greatsword
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 9b427dc6b96c7bc4ba30998360436d86 -> weapon_war_axe
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 7ea0a2ad891e6cd4891051d02b338cf0 -> armor_leather
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: b25638dc709c3184cabc93ae9de79ee2 -> armor_plate
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: f597b10c126e825418717edee921bd16 -> ring_iron
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: d8c5c86107920ab4d9e117e19d6ed11e -> ring_jade
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: bf07871323670d148819cd1d7e079297 -> ring_obsidian
+[gameplay.combat.message] [EquipmentSystem] player 的武器已装备 大剑
+[gameplay.trading.message] [TradingSystem] 商人库存初始化完成，共 7 件
+[gameplay.trading.message] [TradingSystem] 发放初始金币 100，当前金币 100
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 新游戏 Session 初始化完成
+[gameplay.ui.message] [HudController] HUD 初始化完成
+[gameplay.ui.message] [InventoryPanelController] 背包与四槽装备面板初始化完成
+[gameplay.ui.message] [GameMenuController] 游戏菜单初始化完成
+[gameplay.ui.message] [ShopPanelController] 商店面板初始化完成
+[gameplay.ui.message] [CraftingPanelController] 随机打造工作台初始化完成
+[gameplay.combat.message] [SpawnSystem] 生成怪物 wasteland_wraith，生成种子 792639469，实例根种子 125895004，词条 无，最终属性 生命=59.7,护甲=0,闪避=15,移速=2.6,火抗=0,冰抗=0,电抗=0
+[gameplay.trading.message] [TradingSystem] 发放初始金币 1000，当前金币 1100
+[gameplay.trading.message] [TradingSystem] 购买 大剑[Normal] 花费 45 金币，当前金币 1055
+[gameplay.trading.message] [TradingSystem] 购买 皮甲[Normal] 花费 36 金币，当前金币 1019
+[gameplay.trading.message] [TradingSystem] 购买 铁指环[Normal] 花费 30 金币，当前金币 989
+[gameplay.trading.message] [TradingSystem] 购买 翡翠戒指[Normal] 花费 33 金币，当前金币 956
+[gameplay.crafting.message] [CraftingSystem] UpgradeRarity/Any 成功，根种子 734274563，花费 15，大剑[Magic] 当前词条 2 条，剩余金币 941
+[gameplay.combat.message] [EquipmentSystem] player 的武器已装备 大剑
+[gameplay.combat.message] [EquipmentSystem] player 的护甲已装备 皮甲
+[gameplay.combat.message] [EquipmentSystem] player 的左戒指已装备 铁指环
+[gameplay.combat.message] [EquipmentSystem] player 的右戒指已装备 翡翠戒指
+[gameplay.combat.message] [EquipmentSystem] player 卸下了武器 大剑
+[gameplay.combat.message] [EquipmentSystem] player 卸下了护甲 皮甲
+[gameplay.combat.message] [EquipmentSystem] player 卸下了左戒指 铁指环
+[gameplay.combat.message] [EquipmentSystem] player 卸下了右戒指 翡翠戒指
+[gameplay.trading.message] [TradingSystem] 出售 大剑[Magic] 获得 36 金币，当前金币 977
+[gameplay.trading.message] [TradingSystem] 出售 皮甲[Normal] 获得 9 金币，当前金币 986
+[gameplay.trading.message] [TradingSystem] 出售 铁指环[Normal] 获得 8 金币，当前金币 994
+[gameplay.trading.message] [TradingSystem] 出售 翡翠戒指[Normal] 获得 8 金币，当前金币 1002
+]]></output>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1064" name="RandomizationPhase3PlayModeTests" fullname="DarkFlare.Tests.RandomizationPhase3PlayModeTests" classname="DarkFlare.Tests.RandomizationPhase3PlayModeTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-09-07 15:13:16Z" end-time="2026-09-07 15:13:50Z" duration="33.748241" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1066" name="MainScene_DefaultRandomSeedChangesBetweenRuns" fullname="DarkFlare.Tests.RandomizationPhase3PlayModeTests.MainScene_DefaultRandomSeedChangesBetweenRuns" methodname="MainScene_DefaultRandomSeedChangesBetweenRuns" classname="DarkFlare.Tests.RandomizationPhase3PlayModeTests" runstate="Runnable" seed="1298380574" result="Passed" start-time="2026-09-07 15:13:16Z" end-time="2026-09-07 15:13:16Z" duration="0.194738" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[[gameplay.combat.message] [GameplayRandomSystem] 根种子: 565295945（随机）
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 开始预热资源
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 942c099ccdd7eed428f0ac0b1694f6ff -> Player
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 3b6e21dfbc7f54e4f9e0312efd6c6af5 -> Projectile_Default
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 67b8ae84734f42f4792a4190aad88049 -> Monster_Basic
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000002 -> Monster_Swift
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000003 -> Monster_Heavy
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 07152fe41aa52d740b4d1df2049f9f3d -> LootPickup
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 1a1e12f2b0381f54c829d3ef4165a2de -> weapon_greatsword
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 9b427dc6b96c7bc4ba30998360436d86 -> weapon_war_axe
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 7ea0a2ad891e6cd4891051d02b338cf0 -> armor_leather
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: b25638dc709c3184cabc93ae9de79ee2 -> armor_plate
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: f597b10c126e825418717edee921bd16 -> ring_iron
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: d8c5c86107920ab4d9e117e19d6ed11e -> ring_jade
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: bf07871323670d148819cd1d7e079297 -> ring_obsidian
+[gameplay.combat.message] [EquipmentSystem] player 的武器已装备 大剑
+[gameplay.trading.message] [TradingSystem] 商人库存初始化完成，共 7 件
+[gameplay.trading.message] [TradingSystem] 发放初始金币 100，当前金币 100
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 新游戏 Session 初始化完成
+[gameplay.ui.message] [HudController] HUD 初始化完成
+[gameplay.ui.message] [InventoryPanelController] 背包与四槽装备面板初始化完成
+[gameplay.ui.message] [GameMenuController] 游戏菜单初始化完成
+[gameplay.ui.message] [ShopPanelController] 商店面板初始化完成
+[gameplay.ui.message] [CraftingPanelController] 随机打造工作台初始化完成
+[gameplay.combat.message] [SpawnSystem] 生成怪物 razor_hound，生成种子 169450665，实例根种子 1484644978，词条 monster_frost_touched[Physical->Cold:GainAsExtra=21.53]，最终属性 生命=33.43,护甲=0,闪避=30,移速=3.6,火抗=0,冰抗=0,电抗=0
+[gameplay.combat.message] [GameplayRandomSystem] 根种子: 584131771（随机）
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 开始预热资源
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 942c099ccdd7eed428f0ac0b1694f6ff -> Player
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 3b6e21dfbc7f54e4f9e0312efd6c6af5 -> Projectile_Default
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 67b8ae84734f42f4792a4190aad88049 -> Monster_Basic
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000002 -> Monster_Swift
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000003 -> Monster_Heavy
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 07152fe41aa52d740b4d1df2049f9f3d -> LootPickup
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 1a1e12f2b0381f54c829d3ef4165a2de -> weapon_greatsword
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 9b427dc6b96c7bc4ba30998360436d86 -> weapon_war_axe
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 7ea0a2ad891e6cd4891051d02b338cf0 -> armor_leather
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: b25638dc709c3184cabc93ae9de79ee2 -> armor_plate
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: f597b10c126e825418717edee921bd16 -> ring_iron
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: d8c5c86107920ab4d9e117e19d6ed11e -> ring_jade
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: bf07871323670d148819cd1d7e079297 -> ring_obsidian
+[gameplay.combat.message] [EquipmentSystem] player 的武器已装备 大剑
+[gameplay.trading.message] [TradingSystem] 商人库存初始化完成，共 7 件
+[gameplay.trading.message] [TradingSystem] 发放初始金币 100，当前金币 100
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 新游戏 Session 初始化完成
+[gameplay.ui.message] [HudController] HUD 初始化完成
+[gameplay.ui.message] [InventoryPanelController] 背包与四槽装备面板初始化完成
+[gameplay.ui.message] [GameMenuController] 游戏菜单初始化完成
+[gameplay.ui.message] [ShopPanelController] 商店面板初始化完成
+[gameplay.ui.message] [CraftingPanelController] 随机打造工作台初始化完成
+[gameplay.combat.message] [SpawnSystem] 生成怪物 razor_hound，生成种子 -405438041，实例根种子 700009556，词条 monster_armored[armor:Flat=49.48];monster_fire_guarded[fire_resistance:Flat=26.95]，最终属性 生命=39.02,护甲=49.48,闪避=30,移速=3.6,火抗=26.95,冰抗=0,电抗=0
+[Phase3RandomizationPlayMode] 随机启动根种子已变化: 565295945 -> 584131771
+]]></output>
+            </test-case>
+            <test-case id="1065" name="MainScene_SameFixedSeedReplaysMonsterHealthDamageAndLoot" fullname="DarkFlare.Tests.RandomizationPhase3PlayModeTests.MainScene_SameFixedSeedReplaysMonsterHealthDamageAndLoot" methodname="MainScene_SameFixedSeedReplaysMonsterHealthDamageAndLoot" classname="DarkFlare.Tests.RandomizationPhase3PlayModeTests" runstate="Runnable" seed="1659962477" result="Passed" start-time="2026-09-07 15:13:16Z" end-time="2026-09-07 15:13:50Z" duration="33.548830" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[[gameplay.combat.message] [GameplayRandomSystem] 根种子: 24681357（固定）
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 开始预热资源
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 942c099ccdd7eed428f0ac0b1694f6ff -> Player
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 3b6e21dfbc7f54e4f9e0312efd6c6af5 -> Projectile_Default
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 67b8ae84734f42f4792a4190aad88049 -> Monster_Basic
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000002 -> Monster_Swift
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000003 -> Monster_Heavy
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 07152fe41aa52d740b4d1df2049f9f3d -> LootPickup
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 1a1e12f2b0381f54c829d3ef4165a2de -> weapon_greatsword
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 9b427dc6b96c7bc4ba30998360436d86 -> weapon_war_axe
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 7ea0a2ad891e6cd4891051d02b338cf0 -> armor_leather
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: b25638dc709c3184cabc93ae9de79ee2 -> armor_plate
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: f597b10c126e825418717edee921bd16 -> ring_iron
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: d8c5c86107920ab4d9e117e19d6ed11e -> ring_jade
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: bf07871323670d148819cd1d7e079297 -> ring_obsidian
+[gameplay.combat.message] [EquipmentSystem] player 的武器已装备 大剑
+[gameplay.trading.message] [TradingSystem] 商人库存初始化完成，共 7 件
+[gameplay.trading.message] [TradingSystem] 发放初始金币 100，当前金币 100
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 新游戏 Session 初始化完成
+[gameplay.ui.message] [HudController] HUD 初始化完成
+[gameplay.ui.message] [InventoryPanelController] 背包与四槽装备面板初始化完成
+[gameplay.ui.message] [GameMenuController] 游戏菜单初始化完成
+[gameplay.ui.message] [ShopPanelController] 商店面板初始化完成
+[gameplay.ui.message] [CraftingPanelController] 随机打造工作台初始化完成
+[gameplay.combat.message] [SpawnSystem] 生成怪物 wasteland_wraith，生成种子 -1020084942，实例根种子 -694499874，词条 无，最终属性 生命=47.97,护甲=0,闪避=15,移速=2.6,火抗=0,冰抗=0,电抗=0
+[gameplay.combat.message] [SpawnSystem] 生成怪物 razor_hound，生成种子 -691183029，实例根种子 -1477931710，词条 无，最终属性 生命=35.35,护甲=0,闪避=30,移速=3.6,火抗=0,冰抗=0,电抗=0
+[gameplay.combat.message] [SpawnSystem] 生成怪物 wasteland_wraith，生成种子 917120422，实例根种子 438468140，词条 monster_lightning_guarded[lightning_resistance:Flat=26.42]，最终属性 生命=53.85,护甲=0,闪避=15,移速=2.6,火抗=0,冰抗=0,电抗=26.42
+[gameplay.combat.message] [SpawnSystem] 生成怪物 wasteland_wraith，生成种子 1721927020，实例根种子 -1324345944，词条 monster_frost_touched[Physical->Cold:GainAsExtra=18.31]，最终属性 生命=49.14,护甲=0,闪避=15,移速=2.6,火抗=0,冰抗=0,电抗=0
+[gameplay.combat.message] [SpawnSystem] 生成怪物 razor_hound，生成种子 -1991174158，实例根种子 -1371676617，词条 无，最终属性 生命=38.55,护甲=0,闪避=30,移速=3.6,火抗=0,冰抗=0,电抗=0
+[gameplay.combat.message] [SpawnSystem] 生成怪物 wasteland_wraith，生成种子 -1048570909，实例根种子 -818744824，词条 monster_armored[armor:Flat=53.97]，最终属性 生命=46.1,护甲=53.97,闪避=15,移速=2.6,火抗=0,冰抗=0,电抗=0
+[gameplay.combat.message] [SpawnSystem] 生成怪物 wasteland_wraith，生成种子 -1495538948，实例根种子 -1055655093，词条 monster_flame_touched[Physical->Fire:GainAsExtra=18.42]，最终属性 生命=45.72,护甲=0,闪避=15,移速=2.6,火抗=0,冰抗=0,电抗=0
+[gameplay.combat.message] [SpawnSystem] 生成怪物 iron_husk，生成种子 1901168581，实例根种子 1417341387，词条 monster_armored[armor:Flat=56.82];monster_robust[max_health:More=34.12]，最终属性 生命=120.45,护甲=96.82,闪避=5,移速=1.7,火抗=0,冰抗=0,电抗=0
+[gameplay.combat.message] [SpawnSystem] 生成怪物 wasteland_wraith，生成种子 -47255960，实例根种子 587157510，词条 monster_swift[move_speed:Increase=18.47]，最终属性 生命=50.06,护甲=0,闪避=15,移速=3.08,火抗=0,冰抗=0,电抗=0
+[gameplay.combat.message] [SpawnSystem] 生成怪物 razor_hound，生成种子 -1159127767，实例根种子 -1762479158，词条 monster_armored[armor:Flat=31.49];monster_robust[max_health:More=28.24]，最终属性 生命=41.14,护甲=31.49,闪避=30,移速=3.6,火抗=0,冰抗=0,电抗=0
+[gameplay.combat.message] [SpawnSystem] 生成怪物 razor_hound，生成种子 -24747049，实例根种子 1555505795，词条 monster_flame_touched[Physical->Fire:GainAsExtra=23.84]，最终属性 生命=34.35,护甲=0,闪避=30,移速=3.6,火抗=0,冰抗=0,电抗=0
+[gameplay.combat.message] [SpawnSystem] 生成怪物 razor_hound，生成种子 1958107571，实例根种子 843478437，词条 monster_armored[armor:Flat=40.15];monster_frost_touched[Physical->Cold:GainAsExtra=17.14]，最终属性 生命=36.58,护甲=40.15,闪避=30,移速=3.6,火抗=0,冰抗=0,电抗=0
+[gameplay.combat.message] [GameplayRandomSystem] 根种子: 24681357（固定）
+[gameplay.combat.message] [GameplayRandomSystem] 根种子: 24681357（固定）
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 开始预热资源
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 942c099ccdd7eed428f0ac0b1694f6ff -> Player
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 3b6e21dfbc7f54e4f9e0312efd6c6af5 -> Projectile_Default
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 67b8ae84734f42f4792a4190aad88049 -> Monster_Basic
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000002 -> Monster_Swift
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000003 -> Monster_Heavy
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 07152fe41aa52d740b4d1df2049f9f3d -> LootPickup
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 1a1e12f2b0381f54c829d3ef4165a2de -> weapon_greatsword
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 9b427dc6b96c7bc4ba30998360436d86 -> weapon_war_axe
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 7ea0a2ad891e6cd4891051d02b338cf0 -> armor_leather
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: b25638dc709c3184cabc93ae9de79ee2 -> armor_plate
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: f597b10c126e825418717edee921bd16 -> ring_iron
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: d8c5c86107920ab4d9e117e19d6ed11e -> ring_jade
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: bf07871323670d148819cd1d7e079297 -> ring_obsidian
+[gameplay.combat.message] [EquipmentSystem] player 的武器已装备 大剑
+[gameplay.trading.message] [TradingSystem] 商人库存初始化完成，共 7 件
+[gameplay.trading.message] [TradingSystem] 发放初始金币 100，当前金币 100
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 新游戏 Session 初始化完成
+[gameplay.ui.message] [HudController] HUD 初始化完成
+[gameplay.ui.message] [InventoryPanelController] 背包与四槽装备面板初始化完成
+[gameplay.ui.message] [GameMenuController] 游戏菜单初始化完成
+[gameplay.ui.message] [ShopPanelController] 商店面板初始化完成
+[gameplay.ui.message] [CraftingPanelController] 随机打造工作台初始化完成
+[gameplay.combat.message] [SpawnSystem] 生成怪物 wasteland_wraith，生成种子 -1020084942，实例根种子 -694499874，词条 无，最终属性 生命=47.97,护甲=0,闪避=15,移速=2.6,火抗=0,冰抗=0,电抗=0
+[gameplay.combat.message] [SpawnSystem] 生成怪物 razor_hound，生成种子 -691183029，实例根种子 -1477931710，词条 无，最终属性 生命=35.35,护甲=0,闪避=30,移速=3.6,火抗=0,冰抗=0,电抗=0
+[gameplay.combat.message] [SpawnSystem] 生成怪物 wasteland_wraith，生成种子 917120422，实例根种子 438468140，词条 monster_lightning_guarded[lightning_resistance:Flat=26.42]，最终属性 生命=53.85,护甲=0,闪避=15,移速=2.6,火抗=0,冰抗=0,电抗=26.42
+[gameplay.combat.message] [SpawnSystem] 生成怪物 wasteland_wraith，生成种子 1721927020，实例根种子 -1324345944，词条 monster_frost_touched[Physical->Cold:GainAsExtra=18.31]，最终属性 生命=49.14,护甲=0,闪避=15,移速=2.6,火抗=0,冰抗=0,电抗=0
+[gameplay.combat.message] [SpawnSystem] 生成怪物 razor_hound，生成种子 -1991174158，实例根种子 -1371676617，词条 无，最终属性 生命=38.55,护甲=0,闪避=30,移速=3.6,火抗=0,冰抗=0,电抗=0
+[gameplay.combat.message] [SpawnSystem] 生成怪物 wasteland_wraith，生成种子 -1048570909，实例根种子 -818744824，词条 monster_armored[armor:Flat=53.97]，最终属性 生命=46.1,护甲=53.97,闪避=15,移速=2.6,火抗=0,冰抗=0,电抗=0
+[gameplay.combat.message] [SpawnSystem] 生成怪物 wasteland_wraith，生成种子 -1495538948，实例根种子 -1055655093，词条 monster_flame_touched[Physical->Fire:GainAsExtra=18.42]，最终属性 生命=45.72,护甲=0,闪避=15,移速=2.6,火抗=0,冰抗=0,电抗=0
+[gameplay.combat.message] [SpawnSystem] 生成怪物 iron_husk，生成种子 1901168581，实例根种子 1417341387，词条 monster_armored[armor:Flat=56.82];monster_robust[max_health:More=34.12]，最终属性 生命=120.45,护甲=96.82,闪避=5,移速=1.7,火抗=0,冰抗=0,电抗=0
+[gameplay.combat.message] [SpawnSystem] 生成怪物 wasteland_wraith，生成种子 -47255960，实例根种子 587157510，词条 monster_swift[move_speed:Increase=18.47]，最终属性 生命=50.06,护甲=0,闪避=15,移速=3.08,火抗=0,冰抗=0,电抗=0
+[gameplay.combat.message] [SpawnSystem] 生成怪物 razor_hound，生成种子 -1159127767，实例根种子 -1762479158，词条 monster_armored[armor:Flat=31.49];monster_robust[max_health:More=28.24]，最终属性 生命=41.14,护甲=31.49,闪避=30,移速=3.6,火抗=0,冰抗=0,电抗=0
+[gameplay.combat.message] [SpawnSystem] 生成怪物 razor_hound，生成种子 -24747049，实例根种子 1555505795，词条 monster_flame_touched[Physical->Fire:GainAsExtra=23.84]，最终属性 生命=34.35,护甲=0,闪避=30,移速=3.6,火抗=0,冰抗=0,电抗=0
+[gameplay.combat.message] [SpawnSystem] 生成怪物 razor_hound，生成种子 1958107571，实例根种子 843478437，词条 monster_armored[armor:Flat=40.15];monster_frost_touched[Physical->Cold:GainAsExtra=17.14]，最终属性 生命=36.58,护甲=40.15,闪避=30,移速=3.6,火抗=0,冰抗=0,电抗=0
+[gameplay.combat.message] [GameplayRandomSystem] 根种子: 24681357（固定）
+[Phase3RandomizationPlayMode] 固定种子 24681357 的两次 Main 运行结果一致: monsters=[wasteland_wraith:-694499874:47.96716,razor_hound:-1477931710:35.3529358,wasteland_wraith:438468140:53.8454628,wasteland_wraith:-1324345944:49.1429825,razor_hound:-1371676617:38.5466576,wasteland_wraith:-818744824:46.09748,wasteland_wraith:-1055655093:45.72022,iron_husk:1417341387:120.445786,wasteland_wraith:587157510:50.05792,razor_hound:-1762479158:41.14321,razor_hound:1555505795:34.35189,razor_hound:843478437:36.5768852], player=[Physical:21.7109451,Physical:30.82411,Physical:37.64471,Physical:23.171236,Physical:37.3194733,Physical:31.2521248,Physical:27.5913258,Physical:22.9783249,Physical:23.1519165,Physical:23.8613338,Physical:34.0663643,Physical:37.7406235], monster=[Physical:6.7562933,Physical:6.55527,Physical:9.590547,Physical:7.64996624,Physical:7.24056435,Physical:8.641225,Physical:7.07999372,Physical:9.081547,Physical:6.640446,Physical:7.888761,Physical:8.512861,Physical:9.381263], loot=[leather_armor:1809384209,none,none,great_sword:41582527,none,none,plate_armor:1584506279,none,none,none,none,none]
+]]></output>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1067" name="SaveCaptureRestorePlayModeTests" fullname="DarkFlare.Tests.SaveCaptureRestorePlayModeTests" classname="DarkFlare.Tests.SaveCaptureRestorePlayModeTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-09-07 15:13:50Z" end-time="2026-09-07 15:13:50Z" duration="0.491368" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1070" name="GameMenu_SaveActionsArePresentFocusableAndReflectSlotProbe" fullname="DarkFlare.Tests.SaveCaptureRestorePlayModeTests.GameMenu_SaveActionsArePresentFocusableAndReflectSlotProbe" methodname="GameMenu_SaveActionsArePresentFocusableAndReflectSlotProbe" classname="DarkFlare.Tests.SaveCaptureRestorePlayModeTests" runstate="Runnable" seed="562782552" result="Passed" start-time="2026-09-07 15:13:50Z" end-time="2026-09-07 15:13:50Z" duration="0.141921" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[[gameplay.combat.message] [GameplayRandomSystem] 根种子: -369404917（随机）
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 开始预热资源
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 942c099ccdd7eed428f0ac0b1694f6ff -> Player
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 3b6e21dfbc7f54e4f9e0312efd6c6af5 -> Projectile_Default
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 67b8ae84734f42f4792a4190aad88049 -> Monster_Basic
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000002 -> Monster_Swift
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000003 -> Monster_Heavy
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 07152fe41aa52d740b4d1df2049f9f3d -> LootPickup
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 1a1e12f2b0381f54c829d3ef4165a2de -> weapon_greatsword
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 9b427dc6b96c7bc4ba30998360436d86 -> weapon_war_axe
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 7ea0a2ad891e6cd4891051d02b338cf0 -> armor_leather
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: b25638dc709c3184cabc93ae9de79ee2 -> armor_plate
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: f597b10c126e825418717edee921bd16 -> ring_iron
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: d8c5c86107920ab4d9e117e19d6ed11e -> ring_jade
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: bf07871323670d148819cd1d7e079297 -> ring_obsidian
+[gameplay.combat.message] [EquipmentSystem] player 的武器已装备 大剑
+[gameplay.trading.message] [TradingSystem] 商人库存初始化完成，共 7 件
+[gameplay.trading.message] [TradingSystem] 发放初始金币 100，当前金币 100
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 新游戏 Session 初始化完成
+[gameplay.ui.message] [HudController] HUD 初始化完成
+[gameplay.ui.message] [InventoryPanelController] 背包与四槽装备面板初始化完成
+[gameplay.ui.message] [GameMenuController] 游戏菜单初始化完成
+[gameplay.ui.message] [ShopPanelController] 商店面板初始化完成
+[gameplay.ui.message] [CraftingPanelController] 随机打造工作台初始化完成
+[gameplay.combat.message] [SpawnSystem] 生成怪物 wasteland_wraith，生成种子 1794831043，实例根种子 562878144，词条 monster_cold_guarded[cold_resistance:Flat=32.37]，最终属性 生命=53.38,护甲=0,闪避=15,移速=2.6,火抗=0,冰抗=32.37,电抗=0
+]]></output>
+            </test-case>
+            <test-case id="1068" name="MainSession_CapturePrepareRestorePreservesStateWithoutNewGameGrant" fullname="DarkFlare.Tests.SaveCaptureRestorePlayModeTests.MainSession_CapturePrepareRestorePreservesStateWithoutNewGameGrant" methodname="MainSession_CapturePrepareRestorePreservesStateWithoutNewGameGrant" classname="DarkFlare.Tests.SaveCaptureRestorePlayModeTests" runstate="Runnable" seed="155581170" result="Passed" start-time="2026-09-07 15:13:50Z" end-time="2026-09-07 15:13:50Z" duration="0.214888" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[[gameplay.combat.message] [GameplayRandomSystem] 根种子: 1164960441（随机）
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 开始预热资源
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 942c099ccdd7eed428f0ac0b1694f6ff -> Player
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 3b6e21dfbc7f54e4f9e0312efd6c6af5 -> Projectile_Default
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 67b8ae84734f42f4792a4190aad88049 -> Monster_Basic
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000002 -> Monster_Swift
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000003 -> Monster_Heavy
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 07152fe41aa52d740b4d1df2049f9f3d -> LootPickup
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 1a1e12f2b0381f54c829d3ef4165a2de -> weapon_greatsword
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 9b427dc6b96c7bc4ba30998360436d86 -> weapon_war_axe
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 7ea0a2ad891e6cd4891051d02b338cf0 -> armor_leather
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: b25638dc709c3184cabc93ae9de79ee2 -> armor_plate
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: f597b10c126e825418717edee921bd16 -> ring_iron
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: d8c5c86107920ab4d9e117e19d6ed11e -> ring_jade
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: bf07871323670d148819cd1d7e079297 -> ring_obsidian
+[gameplay.combat.message] [EquipmentSystem] player 的武器已装备 大剑
+[gameplay.trading.message] [TradingSystem] 商人库存初始化完成，共 7 件
+[gameplay.trading.message] [TradingSystem] 发放初始金币 100，当前金币 100
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 新游戏 Session 初始化完成
+[gameplay.ui.message] [HudController] HUD 初始化完成
+[gameplay.ui.message] [InventoryPanelController] 背包与四槽装备面板初始化完成
+[gameplay.ui.message] [GameMenuController] 游戏菜单初始化完成
+[gameplay.ui.message] [ShopPanelController] 商店面板初始化完成
+[gameplay.ui.message] [CraftingPanelController] 随机打造工作台初始化完成
+[gameplay.combat.message] [SpawnSystem] 生成怪物 wasteland_wraith，生成种子 -1578578009，实例根种子 -2096318474，词条 monster_robust[max_health:More=35.34]，最终属性 生命=65.82,护甲=0,闪避=15,移速=2.6,火抗=0,冰抗=0,电抗=0
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 942c099ccdd7eed428f0ac0b1694f6ff -> Player
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 3b6e21dfbc7f54e4f9e0312efd6c6af5 -> Projectile_Default
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 67b8ae84734f42f4792a4190aad88049 -> Monster_Basic
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000002 -> Monster_Swift
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000003 -> Monster_Heavy
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 07152fe41aa52d740b4d1df2049f9f3d -> LootPickup
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 1a1e12f2b0381f54c829d3ef4165a2de -> weapon_greatsword
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 7ea0a2ad891e6cd4891051d02b338cf0 -> armor_leather
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: d8c5c86107920ab4d9e117e19d6ed11e -> ring_jade
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 9b427dc6b96c7bc4ba30998360436d86 -> weapon_war_axe
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: bf07871323670d148819cd1d7e079297 -> ring_obsidian
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: b25638dc709c3184cabc93ae9de79ee2 -> armor_plate
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: f597b10c126e825418717edee921bd16 -> ring_iron
+[gameplay.ui.message] [HudController] HUD 初始化完成
+[gameplay.ui.message] [InventoryPanelController] 背包与四槽装备面板初始化完成
+[gameplay.ui.message] [GameMenuController] 游戏菜单初始化完成
+[gameplay.ui.message] [ShopPanelController] 商店面板初始化完成
+[gameplay.ui.message] [CraftingPanelController] 随机打造工作台初始化完成
+]]></output>
+            </test-case>
+            <test-case id="1069" name="SessionFacade_SaveIsSessionScopedAndCrossSessionMethodsAreRemoved" fullname="DarkFlare.Tests.SaveCaptureRestorePlayModeTests.SessionFacade_SaveIsSessionScopedAndCrossSessionMethodsAreRemoved" methodname="SessionFacade_SaveIsSessionScopedAndCrossSessionMethodsAreRemoved" classname="DarkFlare.Tests.SaveCaptureRestorePlayModeTests" runstate="Runnable" seed="1999904089" result="Passed" start-time="2026-09-07 15:13:50Z" end-time="2026-09-07 15:13:50Z" duration="0.130067" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[[gameplay.combat.message] [GameplayRandomSystem] 根种子: 1573319519（随机）
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 开始预热资源
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 942c099ccdd7eed428f0ac0b1694f6ff -> Player
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 3b6e21dfbc7f54e4f9e0312efd6c6af5 -> Projectile_Default
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 67b8ae84734f42f4792a4190aad88049 -> Monster_Basic
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000002 -> Monster_Swift
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000003 -> Monster_Heavy
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 07152fe41aa52d740b4d1df2049f9f3d -> LootPickup
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 1a1e12f2b0381f54c829d3ef4165a2de -> weapon_greatsword
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 9b427dc6b96c7bc4ba30998360436d86 -> weapon_war_axe
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 7ea0a2ad891e6cd4891051d02b338cf0 -> armor_leather
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: b25638dc709c3184cabc93ae9de79ee2 -> armor_plate
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: f597b10c126e825418717edee921bd16 -> ring_iron
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: d8c5c86107920ab4d9e117e19d6ed11e -> ring_jade
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: bf07871323670d148819cd1d7e079297 -> ring_obsidian
+[gameplay.combat.message] [EquipmentSystem] player 的武器已装备 大剑
+[gameplay.trading.message] [TradingSystem] 商人库存初始化完成，共 7 件
+[gameplay.trading.message] [TradingSystem] 发放初始金币 100，当前金币 100
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 新游戏 Session 初始化完成
+[gameplay.ui.message] [HudController] HUD 初始化完成
+[gameplay.ui.message] [InventoryPanelController] 背包与四槽装备面板初始化完成
+[gameplay.ui.message] [GameMenuController] 游戏菜单初始化完成
+[gameplay.ui.message] [ShopPanelController] 商店面板初始化完成
+[gameplay.ui.message] [CraftingPanelController] 随机打造工作台初始化完成
+[gameplay.combat.message] [SpawnSystem] 生成怪物 wasteland_wraith，生成种子 554262599，实例根种子 -854223961，词条 monster_robust[max_health:More=26.34]，最终属性 生命=58.62,护甲=0,闪避=15,移速=2.6,火抗=0,冰抗=0,电抗=0
+]]></output>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1071" name="SceneSessionComponentBindingPlayModeTests" fullname="DarkFlare.Tests.SceneSessionComponentBindingPlayModeTests" classname="DarkFlare.Tests.SceneSessionComponentBindingPlayModeTests" runstate="Runnable" testcasecount="5" result="Passed" start-time="2026-09-07 15:13:50Z" end-time="2026-09-07 15:13:51Z" duration="1.332603" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1075" name="BindingException_RollsBackWithoutReportingSuccess" fullname="DarkFlare.Tests.SceneSessionComponentBindingPlayModeTests.BindingException_RollsBackWithoutReportingSuccess" methodname="BindingException_RollsBackWithoutReportingSuccess" classname="DarkFlare.Tests.SceneSessionComponentBindingPlayModeTests" runstate="Runnable" seed="1894593879" result="Passed" start-time="2026-09-07 15:13:50Z" end-time="2026-09-07 15:13:50Z" duration="0.113258" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[[gameplay.combat.message] [GameplayRandomSystem] 根种子: -1785648966（随机）
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 开始预热资源
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 942c099ccdd7eed428f0ac0b1694f6ff -> Player
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 3b6e21dfbc7f54e4f9e0312efd6c6af5 -> Projectile_Default
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 67b8ae84734f42f4792a4190aad88049 -> Monster_Basic
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000002 -> Monster_Swift
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000003 -> Monster_Heavy
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 07152fe41aa52d740b4d1df2049f9f3d -> LootPickup
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 1a1e12f2b0381f54c829d3ef4165a2de -> weapon_greatsword
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 9b427dc6b96c7bc4ba30998360436d86 -> weapon_war_axe
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 7ea0a2ad891e6cd4891051d02b338cf0 -> armor_leather
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: b25638dc709c3184cabc93ae9de79ee2 -> armor_plate
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: f597b10c126e825418717edee921bd16 -> ring_iron
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: d8c5c86107920ab4d9e117e19d6ed11e -> ring_jade
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: bf07871323670d148819cd1d7e079297 -> ring_obsidian
+[gameplay.combat.message] [EquipmentSystem] player 的武器已装备 大剑
+[gameplay.trading.message] [TradingSystem] 商人库存初始化完成，共 7 件
+[gameplay.trading.message] [TradingSystem] 发放初始金币 100，当前金币 100
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 新游戏 Session 初始化完成
+[gameplay.ui.message] [HudController] HUD 初始化完成
+[gameplay.ui.message] [InventoryPanelController] 背包与四槽装备面板初始化完成
+[gameplay.ui.message] [GameMenuController] 游戏菜单初始化完成
+[gameplay.ui.message] [ShopPanelController] 商店面板初始化完成
+[gameplay.ui.message] [CraftingPanelController] 随机打造工作台初始化完成
+[gameplay.combat.message] [SpawnSystem] 生成怪物 razor_hound，生成种子 476434798，实例根种子 -1327756400，词条 monster_armored[armor:Flat=54.41];monster_fire_guarded[fire_resistance:Flat=23.71]，最终属性 生命=33.95,护甲=54.41,闪避=30,移速=3.6,火抗=23.71,冰抗=0,电抗=0
+[infrastructure.lifecycle.message] scene-binding-probe
+System.InvalidOperationException: scene-binding-probe
+  at DarkFlare.Tests.SceneSessionComponentBindingPlayModeTests+<>c.<BindingException_RollsBackWithoutReportingSuccess>b__13_0 (IArchitecture _) [0x00000] in E:\PARA\Projects\Unity\DarkfFlare\UnityProject\Assets\Scripts\Tests\PlayMode\SceneSessionComponentBindingPlayModeTests.cs:208 
+  at DarkFlare.SceneSessionBinding.TryBindCurrent () [0x0003c] in E:\PARA\Projects\Unity\DarkfFlare\UnityProject\Assets\Scripts\Runtime\Infrastructure\Lifecycle\SceneSessionBinding.cs:192 
+]]></output>
+            </test-case>
+            <test-case id="1072" name="MainToMain_PreplacedConsumersBindNewSessionExactlyOnce" fullname="DarkFlare.Tests.SceneSessionComponentBindingPlayModeTests.MainToMain_PreplacedConsumersBindNewSessionExactlyOnce" methodname="MainToMain_PreplacedConsumersBindNewSessionExactlyOnce" classname="DarkFlare.Tests.SceneSessionComponentBindingPlayModeTests" runstate="Runnable" seed="551000085" result="Passed" start-time="2026-09-07 15:13:50Z" end-time="2026-09-07 15:13:50Z" duration="0.287254" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[[gameplay.combat.message] [GameplayRandomSystem] 根种子: -321095796（随机）
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 开始预热资源
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 942c099ccdd7eed428f0ac0b1694f6ff -> Player
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 3b6e21dfbc7f54e4f9e0312efd6c6af5 -> Projectile_Default
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 67b8ae84734f42f4792a4190aad88049 -> Monster_Basic
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000002 -> Monster_Swift
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000003 -> Monster_Heavy
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 07152fe41aa52d740b4d1df2049f9f3d -> LootPickup
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 1a1e12f2b0381f54c829d3ef4165a2de -> weapon_greatsword
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 9b427dc6b96c7bc4ba30998360436d86 -> weapon_war_axe
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 7ea0a2ad891e6cd4891051d02b338cf0 -> armor_leather
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: b25638dc709c3184cabc93ae9de79ee2 -> armor_plate
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: f597b10c126e825418717edee921bd16 -> ring_iron
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: d8c5c86107920ab4d9e117e19d6ed11e -> ring_jade
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: bf07871323670d148819cd1d7e079297 -> ring_obsidian
+[gameplay.combat.message] [EquipmentSystem] player 的武器已装备 大剑
+[gameplay.trading.message] [TradingSystem] 商人库存初始化完成，共 7 件
+[gameplay.trading.message] [TradingSystem] 发放初始金币 100，当前金币 100
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 新游戏 Session 初始化完成
+[gameplay.ui.message] [HudController] HUD 初始化完成
+[gameplay.ui.message] [InventoryPanelController] 背包与四槽装备面板初始化完成
+[gameplay.ui.message] [GameMenuController] 游戏菜单初始化完成
+[gameplay.ui.message] [ShopPanelController] 商店面板初始化完成
+[gameplay.ui.message] [CraftingPanelController] 随机打造工作台初始化完成
+[gameplay.combat.message] [SpawnSystem] 生成怪物 wasteland_wraith，生成种子 -1365023576，实例根种子 998763094，词条 monster_flame_touched[Physical->Fire:GainAsExtra=22.35]，最终属性 生命=50.2,护甲=0,闪避=15,移速=2.6,火抗=0,冰抗=0,电抗=0
+[gameplay.combat.message] [GameplayRandomSystem] 根种子: -675514879（随机）
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 开始预热资源
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 942c099ccdd7eed428f0ac0b1694f6ff -> Player
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 3b6e21dfbc7f54e4f9e0312efd6c6af5 -> Projectile_Default
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 67b8ae84734f42f4792a4190aad88049 -> Monster_Basic
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000002 -> Monster_Swift
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000003 -> Monster_Heavy
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 07152fe41aa52d740b4d1df2049f9f3d -> LootPickup
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 1a1e12f2b0381f54c829d3ef4165a2de -> weapon_greatsword
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 9b427dc6b96c7bc4ba30998360436d86 -> weapon_war_axe
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 7ea0a2ad891e6cd4891051d02b338cf0 -> armor_leather
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: b25638dc709c3184cabc93ae9de79ee2 -> armor_plate
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: f597b10c126e825418717edee921bd16 -> ring_iron
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: d8c5c86107920ab4d9e117e19d6ed11e -> ring_jade
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: bf07871323670d148819cd1d7e079297 -> ring_obsidian
+[gameplay.combat.message] [EquipmentSystem] player 的武器已装备 大剑
+[gameplay.trading.message] [TradingSystem] 商人库存初始化完成，共 7 件
+[gameplay.trading.message] [TradingSystem] 发放初始金币 100，当前金币 100
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 新游戏 Session 初始化完成
+[gameplay.ui.message] [HudController] HUD 初始化完成
+[gameplay.ui.message] [InventoryPanelController] 背包与四槽装备面板初始化完成
+[gameplay.ui.message] [GameMenuController] 游戏菜单初始化完成
+[gameplay.ui.message] [ShopPanelController] 商店面板初始化完成
+[gameplay.ui.message] [CraftingPanelController] 随机打造工作台初始化完成
+[gameplay.combat.message] [SpawnSystem] 生成怪物 wasteland_wraith，生成种子 912919599，实例根种子 1131245231，词条 无，最终属性 生命=50.03,护甲=0,闪避=15,移速=2.6,火抗=0,冰抗=0,电抗=0
+]]></output>
+            </test-case>
+            <test-case id="1073" name="NoProviderEmptySceneToMain_ConsumersWaitForRunningSessionAndBindExactlyOnce" fullname="DarkFlare.Tests.SceneSessionComponentBindingPlayModeTests.NoProviderEmptySceneToMain_ConsumersWaitForRunningSessionAndBindExactlyOnce" methodname="NoProviderEmptySceneToMain_ConsumersWaitForRunningSessionAndBindExactlyOnce" classname="DarkFlare.Tests.SceneSessionComponentBindingPlayModeTests" runstate="Runnable" seed="520095381" result="Passed" start-time="2026-09-07 15:13:50Z" end-time="2026-09-07 15:13:51Z" duration="0.127709" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[[gameplay.combat.message] [GameplayRandomSystem] 根种子: 1968976362（随机）
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 开始预热资源
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 942c099ccdd7eed428f0ac0b1694f6ff -> Player
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 3b6e21dfbc7f54e4f9e0312efd6c6af5 -> Projectile_Default
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 67b8ae84734f42f4792a4190aad88049 -> Monster_Basic
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000002 -> Monster_Swift
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000003 -> Monster_Heavy
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 07152fe41aa52d740b4d1df2049f9f3d -> LootPickup
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 1a1e12f2b0381f54c829d3ef4165a2de -> weapon_greatsword
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 9b427dc6b96c7bc4ba30998360436d86 -> weapon_war_axe
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 7ea0a2ad891e6cd4891051d02b338cf0 -> armor_leather
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: b25638dc709c3184cabc93ae9de79ee2 -> armor_plate
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: f597b10c126e825418717edee921bd16 -> ring_iron
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: d8c5c86107920ab4d9e117e19d6ed11e -> ring_jade
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: bf07871323670d148819cd1d7e079297 -> ring_obsidian
+[gameplay.combat.message] [EquipmentSystem] player 的武器已装备 大剑
+[gameplay.trading.message] [TradingSystem] 商人库存初始化完成，共 7 件
+[gameplay.trading.message] [TradingSystem] 发放初始金币 100，当前金币 100
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 新游戏 Session 初始化完成
+[gameplay.ui.message] [HudController] HUD 初始化完成
+[gameplay.ui.message] [InventoryPanelController] 背包与四槽装备面板初始化完成
+[gameplay.ui.message] [GameMenuController] 游戏菜单初始化完成
+[gameplay.ui.message] [ShopPanelController] 商店面板初始化完成
+[gameplay.ui.message] [CraftingPanelController] 随机打造工作台初始化完成
+[gameplay.combat.message] [SpawnSystem] 生成怪物 razor_hound，生成种子 -1077198906，实例根种子 1471821183，词条 monster_swift[move_speed:Increase=11.21];monster_elusive[evasion:Flat=34.15]，最终属性 生命=36.1,护甲=0,闪避=64.15,移速=4,火抗=0,冰抗=0,电抗=0
+]]></output>
+            </test-case>
+            <test-case id="1074" name="RetryResult_DoesNotExposeFalseBindingAndBindsExactlyOnceAfterLaterFrame" fullname="DarkFlare.Tests.SceneSessionComponentBindingPlayModeTests.RetryResult_DoesNotExposeFalseBindingAndBindsExactlyOnceAfterLaterFrame" methodname="RetryResult_DoesNotExposeFalseBindingAndBindsExactlyOnceAfterLaterFrame" classname="DarkFlare.Tests.SceneSessionComponentBindingPlayModeTests" runstate="Runnable" seed="1543355882" result="Passed" start-time="2026-09-07 15:13:51Z" end-time="2026-09-07 15:13:51Z" duration="0.100346" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[[gameplay.combat.message] [GameplayRandomSystem] 根种子: -1861523324（随机）
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 开始预热资源
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 942c099ccdd7eed428f0ac0b1694f6ff -> Player
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 3b6e21dfbc7f54e4f9e0312efd6c6af5 -> Projectile_Default
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 67b8ae84734f42f4792a4190aad88049 -> Monster_Basic
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000002 -> Monster_Swift
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000003 -> Monster_Heavy
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 07152fe41aa52d740b4d1df2049f9f3d -> LootPickup
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 1a1e12f2b0381f54c829d3ef4165a2de -> weapon_greatsword
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 9b427dc6b96c7bc4ba30998360436d86 -> weapon_war_axe
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 7ea0a2ad891e6cd4891051d02b338cf0 -> armor_leather
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: b25638dc709c3184cabc93ae9de79ee2 -> armor_plate
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: f597b10c126e825418717edee921bd16 -> ring_iron
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: d8c5c86107920ab4d9e117e19d6ed11e -> ring_jade
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: bf07871323670d148819cd1d7e079297 -> ring_obsidian
+[gameplay.combat.message] [EquipmentSystem] player 的武器已装备 大剑
+[gameplay.trading.message] [TradingSystem] 商人库存初始化完成，共 7 件
+[gameplay.trading.message] [TradingSystem] 发放初始金币 100，当前金币 100
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 新游戏 Session 初始化完成
+[gameplay.ui.message] [HudController] HUD 初始化完成
+[gameplay.ui.message] [InventoryPanelController] 背包与四槽装备面板初始化完成
+[gameplay.ui.message] [GameMenuController] 游戏菜单初始化完成
+[gameplay.ui.message] [ShopPanelController] 商店面板初始化完成
+[gameplay.ui.message] [CraftingPanelController] 随机打造工作台初始化完成
+[gameplay.combat.message] [SpawnSystem] 生成怪物 wasteland_wraith，生成种子 -397318799，实例根种子 -1207848312，词条 monster_storm_touched[Physical->Lightning:GainAsExtra=22.76];monster_robust[max_health:More=31.12]，最终属性 生命=60.4,护甲=0,闪避=15,移速=2.6,火抗=0,冰抗=0,电抗=0
+]]></output>
+            </test-case>
+            <test-case id="1076" name="TaintedScene_DisableEnableDoesNotRebindOrScheduleRetry" fullname="DarkFlare.Tests.SceneSessionComponentBindingPlayModeTests.TaintedScene_DisableEnableDoesNotRebindOrScheduleRetry" methodname="TaintedScene_DisableEnableDoesNotRebindOrScheduleRetry" classname="DarkFlare.Tests.SceneSessionComponentBindingPlayModeTests" runstate="Runnable" seed="1693304327" result="Passed" start-time="2026-09-07 15:13:51Z" end-time="2026-09-07 15:13:51Z" duration="0.700013" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[[gameplay.combat.message] [GameplayRandomSystem] 根种子: 1930635627（随机）
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 开始预热资源
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 942c099ccdd7eed428f0ac0b1694f6ff -> Player
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 3b6e21dfbc7f54e4f9e0312efd6c6af5 -> Projectile_Default
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 67b8ae84734f42f4792a4190aad88049 -> Monster_Basic
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000002 -> Monster_Swift
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000003 -> Monster_Heavy
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 07152fe41aa52d740b4d1df2049f9f3d -> LootPickup
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 1a1e12f2b0381f54c829d3ef4165a2de -> weapon_greatsword
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 9b427dc6b96c7bc4ba30998360436d86 -> weapon_war_axe
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 7ea0a2ad891e6cd4891051d02b338cf0 -> armor_leather
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: b25638dc709c3184cabc93ae9de79ee2 -> armor_plate
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: f597b10c126e825418717edee921bd16 -> ring_iron
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: d8c5c86107920ab4d9e117e19d6ed11e -> ring_jade
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: bf07871323670d148819cd1d7e079297 -> ring_obsidian
+[gameplay.combat.message] [EquipmentSystem] player 的武器已装备 大剑
+[gameplay.trading.message] [TradingSystem] 商人库存初始化完成，共 7 件
+[gameplay.trading.message] [TradingSystem] 发放初始金币 100，当前金币 100
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 新游戏 Session 初始化完成
+[gameplay.ui.message] [HudController] HUD 初始化完成
+[gameplay.ui.message] [InventoryPanelController] 背包与四槽装备面板初始化完成
+[gameplay.ui.message] [GameMenuController] 游戏菜单初始化完成
+[gameplay.ui.message] [ShopPanelController] 商店面板初始化完成
+[gameplay.ui.message] [CraftingPanelController] 随机打造工作台初始化完成
+[gameplay.combat.message] [SpawnSystem] 生成怪物 iron_husk，生成种子 -386242090，实例根种子 1976159173，词条 monster_lightning_guarded[lightning_resistance:Flat=29.38]，最终属性 生命=97.37,护甲=40,闪避=5,移速=1.7,火抗=0,冰抗=0,电抗=29.38
+]]></output>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1077" name="SessionObjectRegistryOwnershipPlayModeTests" fullname="DarkFlare.Tests.SessionObjectRegistryOwnershipPlayModeTests" classname="DarkFlare.Tests.SessionObjectRegistryOwnershipPlayModeTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-09-07 15:13:51Z" end-time="2026-09-07 15:13:51Z" duration="0.016363" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1078" name="DelayedDestroy_UnregistersCapturedRegistryOnly" fullname="DarkFlare.Tests.SessionObjectRegistryOwnershipPlayModeTests.DelayedDestroy_UnregistersCapturedRegistryOnly" methodname="DelayedDestroy_UnregistersCapturedRegistryOnly" classname="DarkFlare.Tests.SessionObjectRegistryOwnershipPlayModeTests" runstate="Runnable" seed="396537640" result="Passed" start-time="2026-09-07 15:13:51Z" end-time="2026-09-07 15:13:51Z" duration="0.008846" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1079" name="VisualExperiencePhase05PlayModeTests" fullname="DarkFlare.Tests.VisualExperiencePhase05PlayModeTests" classname="DarkFlare.Tests.VisualExperiencePhase05PlayModeTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-09-07 15:13:51Z" end-time="2026-09-07 15:13:52Z" duration="0.394281" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1081" name="LootRarityRing_RotatesAndUsesRuntimeRarityColor" fullname="DarkFlare.Tests.VisualExperiencePhase05PlayModeTests.LootRarityRing_RotatesAndUsesRuntimeRarityColor" methodname="LootRarityRing_RotatesAndUsesRuntimeRarityColor" classname="DarkFlare.Tests.VisualExperiencePhase05PlayModeTests" runstate="Runnable" seed="153923607" result="Passed" start-time="2026-09-07 15:13:51Z" end-time="2026-09-07 15:13:52Z" duration="0.261067" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1080" name="MainScene_UsesSharedBoundsAndKeepsCameraOnGround" fullname="DarkFlare.Tests.VisualExperiencePhase05PlayModeTests.MainScene_UsesSharedBoundsAndKeepsCameraOnGround" methodname="MainScene_UsesSharedBoundsAndKeepsCameraOnGround" classname="DarkFlare.Tests.VisualExperiencePhase05PlayModeTests" runstate="Runnable" seed="1201437013" result="Passed" start-time="2026-09-07 15:13:52Z" end-time="2026-09-07 15:13:52Z" duration="0.130603" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[[gameplay.combat.message] [GameplayRandomSystem] 根种子: 1677698585（随机）
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 开始预热资源
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 942c099ccdd7eed428f0ac0b1694f6ff -> Player
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 3b6e21dfbc7f54e4f9e0312efd6c6af5 -> Projectile_Default
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 67b8ae84734f42f4792a4190aad88049 -> Monster_Basic
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000002 -> Monster_Swift
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000003 -> Monster_Heavy
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 07152fe41aa52d740b4d1df2049f9f3d -> LootPickup
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 1a1e12f2b0381f54c829d3ef4165a2de -> weapon_greatsword
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 9b427dc6b96c7bc4ba30998360436d86 -> weapon_war_axe
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 7ea0a2ad891e6cd4891051d02b338cf0 -> armor_leather
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: b25638dc709c3184cabc93ae9de79ee2 -> armor_plate
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: f597b10c126e825418717edee921bd16 -> ring_iron
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: d8c5c86107920ab4d9e117e19d6ed11e -> ring_jade
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: bf07871323670d148819cd1d7e079297 -> ring_obsidian
+[gameplay.combat.message] [EquipmentSystem] player 的武器已装备 大剑
+[gameplay.trading.message] [TradingSystem] 商人库存初始化完成，共 7 件
+[gameplay.trading.message] [TradingSystem] 发放初始金币 100，当前金币 100
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 新游戏 Session 初始化完成
+[gameplay.ui.message] [HudController] HUD 初始化完成
+[gameplay.ui.message] [InventoryPanelController] 背包与四槽装备面板初始化完成
+[gameplay.ui.message] [GameMenuController] 游戏菜单初始化完成
+[gameplay.ui.message] [ShopPanelController] 商店面板初始化完成
+[gameplay.ui.message] [CraftingPanelController] 随机打造工作台初始化完成
+[gameplay.combat.message] [SpawnSystem] 生成怪物 iron_husk，生成种子 961140503，实例根种子 -1111108249，词条 monster_armored[armor:Flat=52.23];monster_storm_touched[Physical->Lightning:GainAsExtra=21.48]，最终属性 生命=100.8,护甲=92.23,闪避=5,移速=1.7,火抗=0,冰抗=0,电抗=0
+Saving results to: E:\PARA\Projects\Unity\DarkfFlare\UnityProject\Temp\TestAuditPlayMode.xml
+]]></output>
+            </test-case>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

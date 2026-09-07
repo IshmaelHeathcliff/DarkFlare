@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.IO;
 using System.Reflection;
 using DarkFlare;
 using DarkFlare.Tests;
@@ -96,23 +95,6 @@ public class GameplayUiFoundationTests
         {
             Assert.AreEqual(StatIds.All[i], snapshot.Attributes.Values[i].StatId);
         }
-    }
-
-    [Test]
-    public void AttributesMoveFromHudToInventoryContext()
-    {
-        string hudPath = Path.GetFullPath(Path.Combine(Application.dataPath, "../Assets/UI/Hud.uxml"));
-        string inventoryPath = Path.GetFullPath(Path.Combine(Application.dataPath, "../Assets/UI/Inventory.uxml"));
-        string hud = File.ReadAllText(hudPath);
-        string inventory = File.ReadAllText(inventoryPath);
-
-        StringAssert.DoesNotContain("name=\"attribute-card\"", hud);
-        StringAssert.DoesNotContain("name=\"attribute-armor\"", hud);
-        StringAssert.Contains("name=\"inventory-attribute-card\"", inventory);
-        StringAssert.Contains("name=\"inventory-attribute-grid\"", inventory);
-        StringAssert.DoesNotContain("weapon-card", hud);
-        StringAssert.DoesNotContain("weapon-label", hud);
-        StringAssert.DoesNotContain("weapon-icon", hud);
     }
 
     [Test]

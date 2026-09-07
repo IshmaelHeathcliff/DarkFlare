@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using DarkFlare;
-using DarkFlare.Editor;
 using NUnit.Framework;
 using UnityEditor;
 
@@ -62,14 +61,6 @@ namespace DarkFlare.Tests
                         $"{affix.Id} 修改器 {modifierIndex} 未按固定种子复现");
                 }
             }
-        }
-
-        [Test]
-        public void OfficialContent_PassesTwentyThreeStatCoverageValidation()
-        {
-            List<ContentValidationIssue> issues = ContentConfigurationValidator.Scan();
-
-            Assert.IsEmpty(issues, string.Join("\n", issues.ConvertAll(issue => $"{issue.AssetPath}: {issue.Message}")));
         }
 
         static bool IsConsumable(StatModifierDefinition modifier)

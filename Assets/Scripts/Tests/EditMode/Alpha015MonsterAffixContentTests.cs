@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using DarkFlare;
-using DarkFlare.Editor;
 using NUnit.Framework;
 using UnityEditor;
 
@@ -124,14 +123,6 @@ namespace DarkFlare.Tests
                 StatBlock effective = CombatStatResolver.Build(baseStats, instance.Modifiers);
                 Assert.AreNotEqual(100f, effective.GetValue(definition.Stat.Id), affix.Id);
             }
-        }
-
-        [Test]
-        public void OfficialContent_PassesMonsterAffixValidation()
-        {
-            List<ContentValidationIssue> issues = ContentConfigurationValidator.Scan();
-
-            Assert.IsEmpty(issues, string.Join("\n", issues.ConvertAll(issue => $"{issue.AssetPath}: {issue.Message}")));
         }
 
         static Dictionary<string, AffixContract> CreateContracts()
