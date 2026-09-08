@@ -1,5 +1,5 @@
 .game-menu-overlay { justify-content: flex-start; padding-top: 24px; padding-bottom: 160px; background-color: rgba(5, 7, 10, 0.64); }
-.game-menu-panel { width: auto; max-width: 97%; height: 872px; max-height: 100%; padding: 0; background-color: rgba(0,0,0,0); border-width: 0; }
+.game-menu-panel { width: auto; max-width: 97%; height: 896px; max-height: 100%; padding: 0; background-color: rgba(0,0,0,0); border-width: 0; }
 .game-menu-header { height: 44px; min-height: 44px; margin-bottom: 12px; justify-content: center; border-width: 0; }
 .game-menu-content { flex-direction: row; align-items: stretch; flex-grow: 1; min-height: 0; }
 .item-window { width: 760px; min-width: 0; flex-shrink: 0; margin-left: 8px; margin-right: 8px; padding: 12px; background-color: rgb(14,17,22); border-width: 2px; border-color: rgb(91,76,53); }
@@ -11,9 +11,9 @@
 .item-window .item-context-header, .item-window .item-context-help, .item-window .item-workbench-help, .item-window .item-workbench-section-kicker, .item-window .equipment-silhouette { display: none; }
 .item-workbench-template { width: auto; max-width: 100%; min-width: 0; flex-grow: 0; }
 .item-workbench-shared { flex-grow: 0; }
-.item-workbench-equipment { min-height: 192px; height: 192px; padding: 0; margin-bottom: 6px; flex-grow: 0; }
+.item-workbench-equipment { min-height: 168px; height: 168px; padding: 0; margin-bottom: 6px; flex-grow: 0; }
 .item-workbench-equipment .item-workbench-section-header { display: none; }
-.equipment-canvas { min-height: 186px; height: 186px; margin-top: 0; }
+.equipment-canvas { min-height: 162px; height: 162px; margin-top: 0; }
 .equipment-slot-layout { left: 4px; right: 4px; top: 4px; bottom: 4px; }
 .item-workbench-inventory { height: 346px; min-height: 346px; padding: 0; }
 .item-workbench-inventory .item-workbench-section-header { height: 28px; }
@@ -23,12 +23,16 @@
 .inventory-window .inventory-page { flex-grow: 1; }
 .inventory-window .inventory-target-slot, .inventory-window .inventory-feedback { min-height: 22px; padding: 2px; margin: 0; font-size: 13px; }
 .inventory-window .item-context-subtitle { display: none; }
-.inventory-window .inventory-actions { margin-top: 4px; }
-.inventory-window .item-context-action { min-height: 30px; height: 30px; font-size: 14px; }
+.inventory-window .inventory-actions { margin-top: 4px; flex-shrink: 0; }
+.inventory-window .item-context-action { min-height: 30px; height: auto; min-width: 0; flex-basis: 0; flex-shrink: 1; white-space: normal; font-size: 14px; }
+.inventory-window .unity-foldout__toggle { flex-shrink: 0; }
 .inventory-attributes-scroll { max-height: 120px; }
 .inventory-attribute-card { min-height: 0; padding: 4px; }
 .inventory-attribute-row { height: auto; min-height: 25px; flex-shrink: 0; }
-.inventory-attribute-name { white-space: normal; min-width: 0; flex-shrink: 1; }
+.inventory-attribute-grid { flex-direction: column; flex-grow: 0; }
+.inventory-attribute-column { flex-grow: 0; flex-shrink: 0; }
+.inventory-attribute-column--separated { margin-left: 0; padding-left: 0; border-left-width: 0; }
+.inventory-attribute-name { white-space: normal; width: 75%; min-width: 0; min-height: 20px; padding-top: 0; padding-bottom: 0; flex-grow: 1; flex-shrink: 0; }
 .item-source-section { flex-shrink: 0; margin-top: 4px; margin-bottom: 8px; }
 .item-source-scroll { height: 128px; min-height: 80px; border-width: 1px; border-color: rgb(54,57,65); background-color: rgb(10,13,18); }
 .item-source-row { flex-shrink: 0; height: auto; min-height: 44px; margin: 2px; padding: 3px; flex-direction: row; align-items: center; background-color: rgb(25,29,36); border-width: 1px; border-color: rgb(60,64,72); }
@@ -66,7 +70,8 @@
 .item-window-close, .game-hud-pause { padding-top: 2px; padding-bottom: 2px; }
 .item-source-name { -unity-text-align: middle-left; }
 
-.item-window-close { width: auto; min-width: 76px; padding-left: 10px; padding-right: 10px; }
+.item-window-close { width: 36px; min-width: 36px; height: 32px; padding: 2px; align-items: center; justify-content: center; }
+.item-window-close-icon { width: 22px; height: 22px; }
 .game-hud-pause { width: auto; min-width: 90px; padding-left: 10px; padding-right: 10px; }
 .item-window-title { font-size: 20px; }
 

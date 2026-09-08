@@ -1,8 +1,8 @@
 # alpha 0.3.0：统一物品操作与事务
 
 > 状态：已完成；2026-09-08
-> 上位计划：[独立窗口与交互拆分](../alpha-0.3.0-independent-ui-windows-plan.md)
-> 验收依据：[交互合同](../alpha-0.3-item-interaction-contract.md)
+> 上位计划：[独立窗口与交互拆分](alpha-0.3.0-independent-ui-windows-plan.md)
+> 验收依据：[交互合同](alpha-0.3-item-interaction-contract.md)
 
 ## 交付与边界
 

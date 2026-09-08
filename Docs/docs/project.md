@@ -4,9 +4,9 @@
 
 `DarkFlare` 已完成首版最小循环、初步体验优化、`alpha 0.1` 封板和 `alpha 0.2.0–0.2.7` 基础设施封板。当前可从常驻 `Bootstrap.unity` 的 FrontEnd 新建或继续游戏，additive 进入 `Main.unity` 完成战斗、掉落、四槽装备、交易和打造，暂停后保存并安全返回前台；FrontEnd 可二次确认删除自动档，共享设置页可恢复完整默认设置，中英语言、音量、按键、设备 Glyph 和降低动态效果即时收敛。
 
-alpha 版本内的阶段使用三段式名称：`alpha 0.1` 的首个阶段为 `alpha 0.1.0`，后续依次为 `alpha 0.1.1`、`alpha 0.1.2`；`alpha 0.2` 同样从 `alpha 0.2.0` 开始。当前版本为 `0.2.7-alpha`；完成记录见[alpha 0.2 综合验收记录](./infrastructure/alpha-0.2-acceptance.md)与[计划归档](./plan/archive/README.md)。
+alpha 版本内的阶段使用三段式名称：`alpha 0.1` 的首个阶段为 `alpha 0.1.0`，后续依次为 `alpha 0.1.1`、`alpha 0.1.2`；`alpha 0.2` 同样从 `alpha 0.2.0` 开始。当前版本为 `0.3.0-alpha`；完成记录见[alpha 0.2 综合验收记录](./infrastructure/alpha-0.2-acceptance.md)与[计划归档](./plan/archive/README.md)。
 
-下一轮 [alpha 0.3 UI 迭代](./plan/alpha-0.3-plan.md)已确定方向：独立且可同时显示的背包 / 商店 / 打造窗口、实时属性详情、暗黑像素 HUD 与统一边框 / 背景组件；首阶段完善统一物品操作及按视觉位置的手柄四向跨窗口导航，收尾扩充十槽装备并为每个部位提供至少两件配置。当前处于计划阶段，运行时仍使用已有四槽工作台。
+当前 [alpha 0.3 UI 迭代](./plan/alpha-0.3-plan.md)已确定方向：独立且可同时显示的背包 / 商店 / 打造窗口、实时属性详情、暗黑像素 HUD 与统一边框 / 背景组件；首阶段完善统一物品操作及按视觉位置的手柄四向跨窗口导航，收尾扩充十槽装备并为每个部位提供至少两件配置。0.3.0 已完成独立窗口、统一操作与代表视觉组件；当前仍为四槽装备，下一阶段实施实时属性详情。见[0.3.0 验收](./assets/acceptance/alpha-0.3.0-visual-pilot/README.md)。
 
 ## 游戏定位
 

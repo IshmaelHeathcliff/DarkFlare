@@ -1,14 +1,14 @@
 # alpha 0.3：统一物品操作与菜单交接合同
 
-> 状态：菜单交接、独立窗口与统一物品操作已实现；十槽导航与最终视觉随后续阶段复验
+> 状态：0.3.0 合同已验收并归档；十槽导航与最终视觉继续约束后续阶段复验
 > 更新日期：2026-09-08
-> 上位计划：[alpha 0.3](./alpha-0.3-plan.md)、[首阶段](./alpha-0.3.0-independent-ui-windows-plan.md)
+> 上位计划：[alpha 0.3](../alpha-0.3-plan.md)、[首阶段](alpha-0.3.0-independent-ui-windows-plan.md)
 
 ## 首先修复菜单交接
 
 用户反馈：打开设置或返回主菜单确认时背包没有关闭；手动关闭背包后，上层界面无法交互。
 
-初始问题已在真实 Pointer 回归中复现并由 `c82323e` 修复：应用上层取得独立 UI / 暂停所有权后隐藏底层；Bootstrap 文档排序提高到 Main 之上；Cancel 分发结束后才执行必要的 Map 切换，避免失效 control 索引。验证记录见[菜单交接切片](./alpha-0.3.0-independent-ui-windows-plan.md#2026-09-08菜单交接切片)。[独立窗口改造](./archive/alpha-0.3.0-window-workspace-plan.md)已通过单窗、双窗、暂停与 Shell 交接回归。统一物品操作已接通指定格交易、世界丢弃和快捷菜单；以下合同继续约束后续视觉与十槽扩展，不能把当前四槽验证视为十槽导航验收。
+初始问题已在真实 Pointer 回归中复现并由 `c82323e` 修复：应用上层取得独立 UI / 暂停所有权后隐藏底层；Bootstrap 文档排序提高到 Main 之上；Cancel 分发结束后才执行必要的 Map 切换，避免失效 control 索引。验证记录见[菜单交接切片](alpha-0.3.0-independent-ui-windows-plan.md#2026-09-08菜单交接切片)。[独立窗口改造](alpha-0.3.0-window-workspace-plan.md)已通过单窗、双窗、暂停与 Shell 交接回归。统一物品操作已接通指定格交易、世界丢弃和快捷菜单；以下合同继续约束后续视觉与十槽扩展，不能把当前四槽验证视为十槽导航验收。
 
 修复合同：
 

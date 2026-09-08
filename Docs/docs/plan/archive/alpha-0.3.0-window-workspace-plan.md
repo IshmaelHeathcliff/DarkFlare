@@ -1,8 +1,8 @@
 # alpha 0.3.0 下一切片：独立窗口可用闭环
 
 > 状态：已完成；2026-09-08 实施并验收
-> 上位计划：[独立窗口与交互拆分](../alpha-0.3.0-independent-ui-windows-plan.md)
-> 行为合同：[统一物品操作与菜单交接](../alpha-0.3-item-interaction-contract.md)
+> 上位计划：[独立窗口与交互拆分](alpha-0.3.0-independent-ui-windows-plan.md)
+> 行为合同：[统一物品操作与菜单交接](alpha-0.3-item-interaction-contract.md)
 > 前置提交：`c82323e`，菜单交接修复；EditMode 426/426、PlayMode 57/57 通过
 
 ## 交付边界

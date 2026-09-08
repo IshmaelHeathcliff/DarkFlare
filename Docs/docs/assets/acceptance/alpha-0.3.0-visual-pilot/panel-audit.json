@@ -1,0 +1,46 @@
+{
+  "manifest": "E:\\PARA\\Projects\\Unity\\DarkfFlare\\UnityProject\\Docs\\docs\\assets\\acceptance\\alpha-0.3.0-visual-pilot\\panel-manifest.json",
+  "family": "ui-item-window-base",
+  "canvas": [
+    1254,
+    1254
+  ],
+  "errors": [],
+  "assets": [
+    {
+      "name": "item_window_base",
+      "image": "E:\\PARA\\Projects\\Unity\\DarkfFlare\\UnityProject\\Assets\\Art\\Sprites\\UI\\Frames\\ui_item_window_base.png",
+      "canvas": [
+        1254,
+        1254
+      ],
+      "visible_bbox": [
+        0,
+        0,
+        1254,
+        1254
+      ],
+      "visible_width": 1254,
+      "visible_height": 1254,
+      "margins": {
+        "left": 0,
+        "top": 0,
+        "right": 0,
+        "bottom": 0
+      },
+      "alpha_coverage": 1.0,
+      "visual_center": [
+        627.0,
+        627.0
+      ],
+      "errors": [],
+      "warnings": []
+    }
+  ],
+  "summary": {
+    "assets": 1,
+    "errors": 0,
+    "warnings": 0,
+    "passed": true
+  }
+}

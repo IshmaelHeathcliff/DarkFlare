@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "family": "ui-item-window-base",
+  "alpha_threshold": 8,
+  "canvas": { "width": 1254, "height": 1254 },
+  "alpha_required": false,
+  "unity_import": { "pixels_per_unit": 100, "pivot": [0.5, 0.5], "slice_border": [96, 96, 96, 96], "slice_scale": 0.125, "filter": "Point", "mesh": "FullRect" },
+  "assets": [
+    {
+      "name": "item_window_base",
+      "image": "../../../../../Assets/Art/Sprites/UI/Frames/ui_item_window_base.png",
+      "visible_width": [1254, 1254],
+      "visible_height": [1254, 1254],
+      "alpha_coverage": [0.95, 1],
+      "visual_center_x": [621, 633],
+      "visual_center_y": [621, 633],
+      "bottom_margin": [0, 0],
+      "edge_clearance": 0
+    }
+  ],
+  "groups": []
+}

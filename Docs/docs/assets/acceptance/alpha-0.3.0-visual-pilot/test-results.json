@@ -1,0 +1,70 @@
+{
+  "editMode": {
+    "job_id": "9fcefb9012524cc2b3828605d4882e7e",
+    "status": "succeeded",
+    "mode": "EditMode",
+    "started_unix_ms": 1788859371464,
+    "finished_unix_ms": 1788859384933,
+    "last_update_unix_ms": 1788859384933,
+    "progress": {
+      "completed": 430,
+      "total": 430,
+      "current_test_full_name": null,
+      "current_test_started_unix_ms": 1788859384798,
+      "last_finished_test_full_name": "ShopViewStateTests.ViewState_FeedbackPersistsUntilExplicitlyCleared",
+      "last_finished_unix_ms": 1788859384798,
+      "stuck_suspected": false,
+      "editor_is_focused": true,
+      "blocked_reason": null,
+      "failures_so_far": [],
+      "failures_capped": false
+    },
+    "error": null,
+    "result": {
+      "mode": "EditMode",
+      "summary": {
+        "total": 430,
+        "passed": 430,
+        "failed": 0,
+        "skipped": 0,
+        "durationSeconds": 12.2001924,
+        "resultState": "Passed"
+      },
+      "results": []
+    }
+  },
+  "playMode": {
+    "job_id": "8d6a9fc99c4d42ab8f0aa89895be5702",
+    "status": "succeeded",
+    "mode": "PlayMode",
+    "started_unix_ms": 1788859420517,
+    "finished_unix_ms": 1788859493273,
+    "last_update_unix_ms": 1788859493273,
+    "progress": {
+      "completed": 61,
+      "total": 61,
+      "current_test_full_name": null,
+      "current_test_started_unix_ms": 1788859493039,
+      "last_finished_test_full_name": "DarkFlare.Tests.VisualExperiencePhase05PlayModeTests.MainScene_UsesSharedBoundsAndKeepsCameraOnGround",
+      "last_finished_unix_ms": 1788859493177,
+      "stuck_suspected": false,
+      "editor_is_focused": true,
+      "blocked_reason": null,
+      "failures_so_far": [],
+      "failures_capped": false
+    },
+    "error": null,
+    "result": {
+      "mode": "PlayMode",
+      "summary": {
+        "total": 61,
+        "passed": 61,
+        "failed": 0,
+        "skipped": 0,
+        "durationSeconds": 70.7516345,
+        "resultState": "Passed"
+      },
+      "results": []
+    }
+  }
+}

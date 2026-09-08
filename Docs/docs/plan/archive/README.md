@@ -26,6 +26,9 @@
 
 | 计划 | 完成阶段 | 当前总结 |
 | --- | --- | --- |
+| [独立窗口与交互拆分](./alpha-0.3.0-independent-ui-windows-plan.md) | alpha 0.3.0 | [物品工作台](../../item-ui-workbench.md)、[阶段验收](../../assets/acceptance/alpha-0.3.0-visual-pilot/README.md) |
+| [代表视觉组件与布局收尾](./alpha-0.3.0-visual-pilot-plan.md) | alpha 0.3.0 | [组件规范](../../ui-component-style.md) |
+| [统一物品交互合同](./alpha-0.3-item-interaction-contract.md) | alpha 0.3.0；后续持续复验 | [物品工作台](../../item-ui-workbench.md) |
 | [独立窗口可用闭环](./alpha-0.3.0-window-workspace-plan.md) | alpha 0.3.0 窗口切片 | [物品工作台](../../item-ui-workbench.md)、[验收证据](../../assets/acceptance/alpha-0.3.0-windows/README.md) |
 | [最小循环设计](./minimum-loop-design.md) | 首版循环 1–8 | [首版玩法循环](../../gameplay-loop.md) |
 | [输入系统与 UI 设计](./input-ui-design.md) | 8a–8f | [输入与运行时 UI](../../input-ui-system.md) |

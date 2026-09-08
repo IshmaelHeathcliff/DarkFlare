@@ -1,5 +1,11 @@
 # 视觉资产清单
 
+## Alpha 0.3.0 窗口底板增量
+
+新增 `Assets/Art/Sprites/UI/Frames/ui_item_window_base.png`，供背包、商店和打造共用：1254×1254 原生画布，Sprite Single、Full Rect、PPU 100、中心 Pivot、Point、None、Mipmap Off；四边 Border 96，USS Slice Scale 0.125。由 `Theme.uss` 引用，经 `GameRoot.uxml` 的依赖链加载，无独立 Addressables 句柄或新命中节点。
+
+[组件规范](./ui-component-style.md)、[生成提示](./assets/acceptance/alpha-0.3.0-visual-pilot/generation-prompt.md)、[合同与验收](./assets/acceptance/alpha-0.3.0-visual-pilot/README.md)。旧四个 UI Frame 保留为历史独立资产；当前 GameRoot 的依赖扫描不再引用旧面板 / 槽位 Frame，下文关于旧绑定的记录仅代表 alpha 0.1 迁移时状态，不据此删除可能被其他工具使用的资源。
+
 ## 当前状态
 
 - 状态：alpha 单图迁移、双层地表 Tile、掉落稀有度环与 alpha 0.1.7 多帧战斗特效已完成；当前共 121 个独立 PNG，旧 SpriteSheet 与旧静态投射物已清理。

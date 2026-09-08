@@ -55,8 +55,9 @@
               </ui:Label>
               <ui:Button name="inventory-window-close" class="item-window-close">
                 <Bindings>
-                  <l:LocalizedString property="text" table="ui" entry="window.close" />
+                  <l:LocalizedString property="tooltip" table="ui" entry="window.close" />
                 </Bindings>
+                <ui:VisualElement class="ui-icon ui-icon--close item-window-close-icon" picking-mode="Ignore" />
               </ui:Button>
             </ui:VisualElement>
             <ui:Instance template="ItemWorkbench" class="item-workbench-template" />
@@ -71,8 +72,9 @@
               </ui:Label>
               <ui:Button name="shop-window-close" class="item-window-close">
                 <Bindings>
-                  <l:LocalizedString property="text" table="ui" entry="window.close" />
+                  <l:LocalizedString property="tooltip" table="ui" entry="window.close" />
                 </Bindings>
+                <ui:VisualElement class="ui-icon ui-icon--close item-window-close-icon" picking-mode="Ignore" />
               </ui:Button>
             </ui:VisualElement>
             <ui:Instance template="Shop" class="shop-template" />
@@ -86,8 +88,9 @@
               </ui:Label>
               <ui:Button name="crafting-window-close" class="item-window-close">
                 <Bindings>
-                  <l:LocalizedString property="text" table="ui" entry="window.close" />
+                  <l:LocalizedString property="tooltip" table="ui" entry="window.close" />
                 </Bindings>
+                <ui:VisualElement class="ui-icon ui-icon--close item-window-close-icon" picking-mode="Ignore" />
               </ui:Button>
             </ui:VisualElement>
             <ui:Instance template="Crafting" class="crafting-template" />

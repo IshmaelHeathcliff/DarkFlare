@@ -3,7 +3,7 @@
 > 状态：范围已确定，待实施
 > 建立日期：2026-09-07
 > 上位计划：[alpha 0.3 UI 与装备迭代](./alpha-0.3-plan.md)
-> 前置：独立窗口、实时属性、HUD、统一视觉与[物品交互合同](./alpha-0.3-item-interaction-contract.md)
+> 前置：独立窗口、实时属性、HUD、统一视觉与[物品交互合同](archive/alpha-0.3-item-interaction-contract.md)
 
 ## 收尾目标
 

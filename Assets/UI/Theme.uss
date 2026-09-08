@@ -1,3 +1,12 @@
+.item-window {
+  background-image: url("project://database/Assets/Art/Sprites/UI/Frames/ui_item_window_base.png?fileID=21300000&guid=fa17b4d2b1447a2479b6730851bc615f&type=3");
+  -unity-slice-left: 96;
+  -unity-slice-right: 96;
+  -unity-slice-top: 96;
+  -unity-slice-bottom: 96;
+  -unity-slice-scale: 0.125;
+}
+
 Button:hover {
   background-color: rgb(61, 66, 76);
 }

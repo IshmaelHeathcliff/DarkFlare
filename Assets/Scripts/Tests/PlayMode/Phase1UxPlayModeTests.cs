@@ -685,6 +685,35 @@ namespace DarkFlare.Tests
                         yield return null;
                         AssertLayoutInsideRoot(root, new[] { "inventory-window", "item-operation-bar" });
                         AssertVisibleTextFits(root, localeMode, resolution);
+                        Foldout attributes = root.Q<Foldout>("inventory-attributes-toggle");
+                        attributes.value = true;
+                        root.Q<ScrollView>("inventory-attributes-scroll").scrollOffset = Vector2.zero;
+                        yield return null;
+                        yield return null;
+                        if (localeMode == "qps-ploc") { ApplyPseudoLocalization(root); }
+                        yield return null;
+                        yield return null;
+                        AssertElementsInsideContainer(root, "inventory-window", new[]
+                        {
+                            "inventory-equip", "inventory-unequip", "inventory-attributes-toggle",
+                        });
+                        Assert.LessOrEqual(root.Q("inventory-actions").worldBound.yMax,
+                            attributes.worldBound.yMin + 1f, "展开属性后穿脱操作区与属性标题重叠");
+                        Assert.LessOrEqual(root.Q("inventory-equip").worldBound.yMax,
+                            attributes.worldBound.yMin + 1f, "穿戴按钮溢出操作区并遮挡属性标题");
+                        AssertVisibleTextFits(root, localeMode, resolution);
+                        ScrollView attributeScroll = root.Q<ScrollView>("inventory-attributes-scroll");
+                        Assert.GreaterOrEqual(attributeScroll.contentViewport.worldBound.height,
+                            root.Q(className: "inventory-attribute-row").worldBound.height,
+                            "展开属性后应至少显示一整行，不能将内容区压缩为空");
+                        attributeScroll.scrollOffset = new Vector2(0f, attributeScroll.verticalScroller.highValue);
+                        yield return null;
+                        yield return null;
+                        if (localeMode == "qps-ploc") { ApplyPseudoLocalization(root); }
+                        yield return null;
+                        yield return null;
+                        AssertVisibleTextFits(root, localeMode, resolution);
+                        attributes.value = false;
                     }
                 }
 
@@ -1166,6 +1195,7 @@ namespace DarkFlare.Tests
 
                 if (string.IsNullOrWhiteSpace(element.text)
                     || !element.text.Any(char.IsLetter)
+                    || !HasVisibleHierarchy(element)
                     || (element.text[0] == '[' && element.text[^1] == ']')
                     || element.worldBound.width <= 0f
                     || element.worldBound.height <= 0f)
@@ -1198,6 +1228,7 @@ namespace DarkFlare.Tests
                 Rect content = element.contentRect;
 
                 if (string.IsNullOrWhiteSpace(element.text)
+                    || !HasVisibleHierarchy(element)
                     || element.resolvedStyle.display == DisplayStyle.None
                     || element.worldBound.width <= 1f
                     || element.worldBound.height <= 1f
@@ -1224,7 +1255,7 @@ namespace DarkFlare.Tests
                     Assert.LessOrEqual(
                         measured.y,
                         content.height + 2f,
-                        $"{context}: 换行文本被纵向裁切");
+                        $"{context}: 换行文本被纵向裁切；元素 {element.worldBound}，容器 {element.parent.worldBound}");
                 }
                 else
                 {
@@ -1234,6 +1265,24 @@ namespace DarkFlare.Tests
                         $"{context}: 单行文本被横向裁切");
                 }
             }
+        }
+
+        static bool HasVisibleHierarchy(VisualElement element)
+        {
+            for (VisualElement ancestor = element; ancestor != null; ancestor = ancestor.parent)
+            {
+                if (ancestor.resolvedStyle.display == DisplayStyle.None
+                    || ancestor.resolvedStyle.visibility == Visibility.Hidden)
+                {
+                    return false;
+                }
+                if (ancestor.ClassListContains("unity-scroll-view__content-viewport")
+                    && !ancestor.worldBound.Overlaps(element.worldBound))
+                {
+                    return false;
+                }
+            }
+            return true;
         }
 
         static void AssertLayoutInsideRoot(VisualElement root, IReadOnlyList<string> names)
