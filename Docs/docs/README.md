@@ -21,6 +21,7 @@
 - [物品 UI 工作台](./item-ui-workbench.md)
 - [装备系统](./equipment-system.md)
 - [属性定义与调用关系](./stat-system.md)
+- [独立属性详情](./attribute-details.md)
 - [随机化与掉落规则](./randomization-system.md)
 - [首批内容池](./content-system.md)
 - [打造系统](./crafting-system.md)
@@ -38,6 +39,8 @@
 
 ## 计划状态
 
+[alpha 0.3.1：独立属性详情与实时解释](./plan/archive/alpha-0.3.1-realtime-attributes-plan.md)已完成，运行版本为 `0.3.1-alpha`。模块行为见[独立属性详情](./attribute-details.md)，全量回归与视觉证据见[验收记录](./assets/acceptance/alpha-0.3.1-attributes/README.md)。下一阶段为 0.3.2 暗黑像素 HUD。
+
 Alpha 0.3 前置[测试审计与精简](./testing/test-suite-audit.md)已完成：EditMode 424/424、PlayMode 56/56 通过，一次性 / 过时测试已清理，后续维护规则已建立。[执行计划已归档](./plan/archive/test-suite-maintenance-plan.md)。
 
 `alpha 0.2.0–0.2.7` 已完成。规划期总计划、阶段计划与验收过程已移入[已完成计划归档](./plan/archive/README.md)；后续实现以长期运行时契约和各基础设施模块文档为准。
@@ -46,7 +49,7 @@ Alpha 0.3 前置[测试审计与精简](./testing/test-suite-audit.md)已完成�
 
 首阶段优先修复设置 / 返回主菜单与背包的交互阻塞，并按[统一物品交互合同](plan/archive/alpha-0.3-item-interaction-contract.md)验收拖动、右键、手柄、单一高亮与详情排版。
 
-[独立窗口可用闭环已归档](./plan/archive/alpha-0.3.0-window-workspace-plan.md)：EditMode 429/429、PlayMode 59/59 通过，[18 种组合截图与十槽空间线框](./assets/acceptance/alpha-0.3.0-windows/README.md)已留档。[统一物品操作与事务](./plan/archive/alpha-0.3.0-unified-item-actions-plan.md)已接通指定格购买、出售 / 丢弃、打造取回落点和统一快捷动作；[当前验收记录](./assets/acceptance/alpha-0.3.0-actions/README.md)。0.3.0 已完成，下一步进入 0.3.1 实时属性详情。
+[独立窗口可用闭环已归档](./plan/archive/alpha-0.3.0-window-workspace-plan.md)：EditMode 429/429、PlayMode 59/59 通过，[18 种组合截图与十槽空间线框](./assets/acceptance/alpha-0.3.0-windows/README.md)已留档。[统一物品操作与事务](./plan/archive/alpha-0.3.0-unified-item-actions-plan.md)已接通指定格购买、出售 / 丢弃、打造取回落点和统一快捷动作；[当前验收记录](./assets/acceptance/alpha-0.3.0-actions/README.md)。0.3.0 与 0.3.1 已完成，下一步进入 0.3.2 HUD。
 
 [代表视觉组件与布局收尾](plan/archive/alpha-0.3.0-visual-pilot-plan.md)已完成：正式窗口底板、独立属性 / HUD 空间线框、展开属性排版与关闭图标通过验证。完整 EditMode 430/430、PlayMode 61/61，见[阶段验收](./assets/acceptance/alpha-0.3.0-visual-pilot/README.md)。
 

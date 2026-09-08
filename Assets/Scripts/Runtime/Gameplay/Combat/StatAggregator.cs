@@ -4,7 +4,8 @@ namespace DarkFlare
 {
     public static class StatAggregator
     {
-        public static StatBlock Build(StatBlock baseStats, IEnumerable<ModifierInstance> modifiers, TagSet contextTags)
+        public static StatBlock Build(StatBlock baseStats, IEnumerable<ModifierInstance> modifiers, TagSet contextTags,
+            List<StatCalculationStep> steps = null)
         {
             StatBlock result = baseStats != null ? baseStats.Clone() : new StatBlock();
             Dictionary<string, float> increases = new Dictionary<string, float>();
@@ -20,10 +21,12 @@ namespace DarkFlare
                 if (modifier.Operation == ModifierOperation.Flat)
                 {
                     result.AddValue(modifier.StatId, modifier.Value);
+                    steps?.Add(new StatCalculationStep(modifier.StatId, modifier.Operation, modifier.Value, result.GetValue(modifier.StatId), modifier.Origin));
                 }
                 else if (modifier.Operation == ModifierOperation.Override)
                 {
                     result.SetValue(modifier.StatId, modifier.Value);
+                    steps?.Add(new StatCalculationStep(modifier.StatId, modifier.Operation, modifier.Value, result.GetValue(modifier.StatId), modifier.Origin));
                 }
                 else if (modifier.Operation == ModifierOperation.Increase)
                 {
@@ -39,6 +42,7 @@ namespace DarkFlare
             {
                 float current = result.GetValue(pair.Key);
                 result.SetValue(pair.Key, current * (1f + pair.Value / 100f));
+                steps?.Add(new StatCalculationStep(pair.Key, ModifierOperation.Increase, pair.Value, result.GetValue(pair.Key)));
             }
 
             foreach (KeyValuePair<string, List<float>> pair in moreValues)
@@ -48,6 +52,7 @@ namespace DarkFlare
                 for (int i = 0; i < pair.Value.Count; i++)
                 {
                     current *= 1f + pair.Value[i] / 100f;
+                    steps?.Add(new StatCalculationStep(pair.Key, ModifierOperation.More, pair.Value[i], current));
                 }
 
                 result.SetValue(pair.Key, current);
@@ -87,4 +92,3 @@ namespace DarkFlare
         }
     }
 }
-

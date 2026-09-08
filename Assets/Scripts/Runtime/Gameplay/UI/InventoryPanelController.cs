@@ -789,85 +789,30 @@ namespace DarkFlare
         void RefreshAttributes()
         {
             HudSnapshot snapshot = this.SendQuery(new GetHudSnapshotQuery());
-            IReadOnlyList<HudAttributeValue> attributes = snapshot.Attributes.Values;
-            int firstColumnCount = (attributes.Count + 1) / 2;
-            _attributeGrid.Clear();
-            _attributeGrid.Add(CreateAttributeColumn(attributes, 0, firstColumnCount, false, snapshot.HasPlayer));
-            _attributeGrid.Add(CreateAttributeColumn(
-                attributes,
-                firstColumnCount,
-                attributes.Count,
-                true,
-                snapshot.HasPlayer));
-        }
-
-        VisualElement CreateAttributeColumn(
-            IReadOnlyList<HudAttributeValue> attributes,
-            int startIndex,
-            int endIndex,
-            bool separated,
-            bool hasPlayer)
-        {
-            VisualElement column = new VisualElement();
-            column.AddToClassList("inventory-attribute-column");
-
-            if (separated)
+            var attributes = new List<HudAttributeValue>();
+            foreach (HudAttributeValue value in snapshot.Attributes.Values)
             {
-                column.AddToClassList("inventory-attribute-column--separated");
-            }
-
-            for (int i = startIndex; i < endIndex; i++)
-            {
-                HudAttributeValue attribute = attributes[i];
-                VisualElement row = new VisualElement();
-                row.AddToClassList("inventory-attribute-row");
-                Label name = new Label(Localize("stats", attribute.StatId));
-                name.AddToClassList("inventory-attribute-name");
-                Label value = new Label
+                if (value.StatId == StatIds.Strength || value.StatId == StatIds.Dexterity || value.StatId == StatIds.Intelligence)
                 {
-                    name = $"inventory-attribute-{attribute.StatId.Replace('_', '-')}",
-                    text = attribute.IsPercentage
-                        ? FormatPercentage(attribute.Value, hasPlayer)
-                        : FormatAttribute(attribute.Value, hasPlayer),
+                    attributes.Add(value);
+                }
+            }
+            _attributeGrid.Clear();
+            foreach (HudAttributeValue attribute in attributes)
+            {
+                var label = new Label(Localize("stats", attribute.StatId) + "  " + FormatAttribute(attribute.Value, snapshot.HasPlayer))
+                {
+                    name = "inventory-attribute-" + attribute.StatId,
+                    pickingMode = PickingMode.Ignore,
                 };
-                value.AddToClassList("inventory-attribute-value");
-                AddAttributeColorClass(value, attribute.StatId);
-                row.Add(name);
-                row.Add(value);
-                column.Add(row);
-            }
-
-            return column;
-        }
-
-        static void AddAttributeColorClass(VisualElement value, string statId)
-        {
-            if (statId == StatIds.FireDamage || statId == StatIds.FireResistance)
-            {
-                value.AddToClassList("inventory-attribute-value--fire");
-            }
-            else if (statId == StatIds.ColdDamage || statId == StatIds.ColdResistance)
-            {
-                value.AddToClassList("inventory-attribute-value--cold");
-            }
-            else if (statId == StatIds.LightningDamage || statId == StatIds.LightningResistance)
-            {
-                value.AddToClassList("inventory-attribute-value--lightning");
-            }
-            else if (statId == StatIds.ChaosDamage || statId == StatIds.ChaosResistance)
-            {
-                value.AddToClassList("inventory-attribute-value--chaos");
+                label.AddToClassList("inventory-primary-summary");
+                _attributeGrid.Add(label);
             }
         }
 
         static string FormatAttribute(float value, bool hasPlayer)
         {
             return hasPlayer ? value.ToString("0.##") : "--";
-        }
-
-        static string FormatPercentage(float value, bool hasPlayer)
-        {
-            return hasPlayer ? $"{value:0.#}%" : "--";
         }
 
         bool TryGetSelectedSnapshot(out InventoryItemSnapshot selected)

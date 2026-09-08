@@ -23,7 +23,7 @@ namespace DarkFlare
                     continue;
                 }
 
-                List<ModifierInstance> modifiers = item.CollectModifiers();
+                List<ModifierInstance> modifiers = CollectItemModifiers(item, pair.Key);
 
                 for (int i = 0; i < modifiers.Count; i++)
                 {
@@ -66,7 +66,7 @@ namespace DarkFlare
                 return result;
             }
 
-            List<ModifierInstance> modifiers = weapon.CollectModifiers();
+            List<ModifierInstance> modifiers = CollectItemModifiers(weapon, EquipmentSlot.Weapon);
 
             for (int i = 0; i < modifiers.Count; i++)
             {
@@ -80,11 +80,31 @@ namespace DarkFlare
 
             return result;
         }
+
+        public static List<ModifierInstance> CollectItemModifiers(ItemInstance item, EquipmentSlot slot)
+        {
+            var result = new List<ModifierInstance>();
+            if (item == null) { return result; }
+            LocalizedMessage name = item.BaseDefinition?.LocalizedName?.Message ?? default;
+            Add(item.ImplicitModifiers, LocalizedMessage.Ui("item.affix_type.implicit"));
+            foreach (AffixInstance affix in item.Prefixes) { Add(affix.Modifiers, affix.Definition.LocalizedName.Message); }
+            foreach (AffixInstance affix in item.Suffixes) { Add(affix.Modifiers, affix.Definition.LocalizedName.Message); }
+            return result;
+
+            void Add(IReadOnlyList<ModifierInstance> modifiers, LocalizedMessage affix)
+            {
+                foreach (ModifierInstance modifier in modifiers)
+                {
+                    if (modifier != null) { result.Add(modifier.WithOrigin(new ModifierOrigin(item.InstanceId, slot, name, affix))); }
+                }
+            }
+        }
     }
 
     public static class CombatStatResolver
     {
-        public static StatBlock Build(StatBlock baseStats, IEnumerable<ModifierInstance> modifiers)
+        public static StatBlock Build(StatBlock baseStats, IEnumerable<ModifierInstance> modifiers,
+            List<StatCalculationStep> steps = null)
         {
             List<ModifierInstance> statModifiers = new List<ModifierInstance>();
 
@@ -92,10 +112,7 @@ namespace DarkFlare
             {
                 foreach (ModifierInstance modifier in modifiers)
                 {
-                    if (modifier == null
-                        || modifier.Scope != ModifierScope.GlobalActor
-                        || IsDamageStat(modifier.StatId)
-                        || !IsStatOperation(modifier.Operation))
+                    if (!CanAggregate(modifier))
                     {
                         continue;
                     }
@@ -104,8 +121,8 @@ namespace DarkFlare
                 }
             }
 
-            StatBlock directStats = StatAggregator.Build(baseStats, statModifiers, TagSet.Empty);
-            return PrimaryAttributeResolver.Apply(directStats);
+            StatBlock directStats = StatAggregator.Build(baseStats, statModifiers, TagSet.Empty, steps);
+            return PrimaryAttributeResolver.Apply(directStats, steps);
         }
 
         public static bool IsDamageStat(string statId)
@@ -116,6 +133,12 @@ namespace DarkFlare
                 || statId == StatIds.ColdDamage
                 || statId == StatIds.LightningDamage
                 || statId == StatIds.ChaosDamage;
+        }
+
+        public static bool CanAggregate(ModifierInstance modifier)
+        {
+            return modifier != null && modifier.Scope == ModifierScope.GlobalActor
+                && !IsDamageStat(modifier.StatId) && IsStatOperation(modifier.Operation);
         }
 
         static bool IsStatOperation(ModifierOperation operation)

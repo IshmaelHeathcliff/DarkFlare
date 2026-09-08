@@ -112,7 +112,8 @@ namespace DarkFlare
         public void Refresh()
         {
             if (_disposed) { return; }
-            _bar.style.display = _menu.IsOpen && !_menu.IsPauseOpen ? DisplayStyle.Flex : DisplayStyle.None;
+            bool hasItems = (_menu.OpenWindows & (GameMenuAccess.Inventory | GameMenuAccess.Shop | GameMenuAccess.Crafting)) != 0;
+            _bar.style.display = _menu.IsOpen && !_menu.IsPauseOpen && hasItems ? DisplayStyle.Flex : DisplayStyle.None;
             SyncBarWidth();
             if ((IsDragging || IsPointerPending) && !_router.IsCurrent(_source)) { Cancel(); }
             if (!_router.IsCurrent(_selected))

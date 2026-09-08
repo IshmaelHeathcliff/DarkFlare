@@ -38,6 +38,72 @@ public class GameplayUiFoundationTests
     }
 
     [Test]
+    public void AttributeQueries_PreserveGameplayStateAndExposeEffectiveValuesAndSources()
+    {
+        CombatActor actor = CreatePlayer();
+        ItemInstance template = CreateItem("attribute_ring", "属性戒指", ItemType.Accessory);
+        var ring = new ItemInstance("attribute_ring_source", template.BaseDefinition, ItemRarity.Normal, 1, 1,
+            new[] { new ModifierInstance(StatIds.CriticalChance, ModifierOperation.Flat, ModifierScope.GlobalActor,
+                150f, default, default, TagSet.Empty, TagSet.Empty) });
+        InventoryModel inventory = _architecture.GetModel<InventoryModel>();
+        Assert.IsTrue(inventory.TryAddItem(ring));
+        Assert.IsTrue(_architecture.GetSystem<EquipmentSystem>().Equip(actor, ring, EquipmentSlot.RingRight));
+        GameplayRandomSystem random = _architecture.GetSystem<GameplayRandomSystem>();
+        random.Configure(true, 42);
+        GameplayRandomState before = random.CaptureState();
+        CombatResourceSnapshot resources = actor.Resources;
+        AttributeDetailsSnapshot details = null;
+        for (int i = 0; i < 10; i++)
+        {
+            details = _architecture.SendQuery(new GetAttributeDetailsQuery());
+            _architecture.SendQuery(new GetAttributeRuntimeQuery());
+        }
+        foreach (var pair in before.NextSequences) { Assert.AreEqual(pair.Value, random.CaptureState().NextSequences[pair.Key]); }
+        Assert.AreEqual(resources.CurrentHealth, actor.CurrentHealth);
+        Assert.AreEqual(resources.CurrentMana, actor.CurrentMana);
+        Assert.AreSame(ring, _architecture.GetModel<EquipmentModel>().GetItem(actor, EquipmentSlot.RingRight));
+        Assert.AreEqual(ring.InstanceId, details.Modifiers[0].Origin.ItemId);
+        Assert.AreEqual(EquipmentSlot.RingRight, details.Modifiers[0].Origin.Slot);
+        foreach (AttributeDetail value in details.Attributes)
+        {
+            if (value.Id == StatIds.CriticalChance) { Assert.AreEqual(157.5f, value.RawValue); Assert.AreEqual(100f, value.EffectiveValue); }
+            if (value.Id == StatIds.FireResistance) { Assert.AreEqual(90f, value.RawValue); Assert.AreEqual(75f, value.EffectiveValue); }
+            if (value.Id == StatIds.ChaosResistance) { Assert.AreEqual(-120f, value.RawValue); Assert.AreEqual(-100f, value.EffectiveValue); }
+        }
+        _architecture.SendCommand(new SetGameplayPausedCommand(true));
+        AttributeRuntimeSnapshot paused = _architecture.SendQuery(new GetAttributeRuntimeQuery());
+        Assert.AreEqual("paused", paused.ResourceState);
+        Assert.AreEqual(10f, paused.ManaRegeneration);
+        Assert.AreEqual("no_source", paused.SkillState);
+        ProjectileSkillDefinition skill = CreateScriptableObject<ProjectileSkillDefinition>();
+        SetField(skill, "_id", "query_skill");
+        SetField(skill, "_manaCost", 8f);
+        var damageRange = new DamageRollDefinition();
+        SetField(damageRange, "_amountRange", new Vector2(5f, 12f));
+        SetField(skill, "_baseDamages", new List<DamageRollDefinition> { damageRange });
+        PlayerSkillStateRegistry registry = _architecture.GetSystem<PlayerSkillStateRegistry>();
+        registry.Register(actor, () => new PlayerSkillState(skill, 0.4f));
+        Assert.AreEqual("query_skill", _architecture.SendQuery(new GetAttributeDetailsQuery()).SkillId);
+        _architecture.SendCommand(new SetGameplayPausedCommand(false));
+        Assert.AreEqual("cooldown", _architecture.SendQuery(new GetAttributeRuntimeQuery()).SkillState);
+        Assert.IsTrue(actor.TrySpendMana(actor.CurrentMana));
+        Assert.AreEqual("no_mana", _architecture.SendQuery(new GetAttributeRuntimeQuery()).SkillState);
+        var lethal = new Dictionary<DamageType, float> { { DamageType.Physical, 999f } };
+        actor.ReceiveDamage(new DamageResult(true, false, lethal, lethal));
+        Assert.AreEqual("dead", _architecture.SendQuery(new GetAttributeRuntimeQuery()).ResourceState);
+        _architecture.SendCommand(new ReviveActorCommand(actor, Vector3.zero));
+        Assert.AreEqual("full", _architecture.SendQuery(new GetAttributeRuntimeQuery()).ResourceState);
+        actor.gameObject.SetActive(false);
+        Assert.AreEqual("inactive", _architecture.SendQuery(new GetAttributeRuntimeQuery()).ResourceState);
+        registry.Unregister(actor);
+        actor.gameObject.SetActive(true);
+        Assert.IsNull(_architecture.SendQuery(new GetAttributeDetailsQuery()).SkillId);
+        StatBlock copy = actor.CaptureBaseStats();
+        copy.SetValue(StatIds.Armor, 999f);
+        Assert.AreEqual(42f, actor.CaptureBaseStats().GetValue(StatIds.Armor));
+    }
+
+    [Test]
     public void InventoryModel_SendsEventsOnlyAfterSuccessfulChanges()
     {
         InventoryModel inventory = _architecture.GetModel<InventoryModel>();

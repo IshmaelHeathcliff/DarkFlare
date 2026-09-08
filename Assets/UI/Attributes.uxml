@@ -1,0 +1,9 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:l="UnityEngine.Localization" editor-extension-mode="False">
+  <ui:VisualElement name="attributes-window" class="item-window attributes-window">
+    <ui:VisualElement class="item-window-header">
+      <ui:Label class="item-window-title" picking-mode="Ignore"><Bindings><l:LocalizedString property="text" table="ui" entry="attributes.title" /></Bindings></ui:Label>
+      <ui:Button name="attributes-window-close" class="item-window-close"><Bindings><l:LocalizedString property="tooltip" table="ui" entry="window.close" /></Bindings><ui:VisualElement class="ui-icon ui-icon--close item-window-close-icon" picking-mode="Ignore" /></ui:Button>
+    </ui:VisualElement>
+    <ui:ScrollView name="attributes-scroll" class="attributes-scroll" mode="Vertical" />
+  </ui:VisualElement>
+</ui:UXML>

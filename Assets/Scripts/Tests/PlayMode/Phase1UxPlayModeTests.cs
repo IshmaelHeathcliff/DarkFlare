@@ -51,6 +51,147 @@ namespace DarkFlare.Tests
         }
 
         [UnityTest]
+        public IEnumerator Attributes_IndependentWindowsRefreshAndNavigateWithoutTakingItemOwnership()
+        {
+            int originalWidth = Screen.width;
+            int originalHeight = Screen.height;
+            yield return _fixture.EnterMain();
+            GameMenuController menu = Object.FindAnyObjectByType<GameMenuController>();
+            IArchitecture architecture = menu.GetArchitecture();
+            VisualElement root = menu.GetComponent<UIDocument>().rootVisualElement;
+            ApplicationHost host = ApplicationHost.Current;
+            Gamepad pad = InputSystem.AddDevice<Gamepad>();
+            try
+            {
+                SetGameViewResolution(new Vector2Int(1920, 1080));
+                yield return WaitForResolution(new Vector2Int(1920, 1080), 5f);
+                menu.OpenPage(GameMenuPage.Inventory);
+                yield return null;
+                root.Q<Button>("inventory-attributes-open").Focus();
+                _inputFixture.PressAndRelease(pad.buttonSouth);
+                yield return null;
+                yield return null;
+                Assert.IsTrue(menu.IsWindowVisible(GameMenuPage.Attributes));
+                Assert.IsTrue(menu.IsWindowVisible(GameMenuPage.Inventory));
+                Assert.AreEqual("paused", menu.Attributes.RuntimeSnapshot.ResourceState);
+                float remaining = menu.Attributes.RuntimeSnapshot.RemainingSeconds;
+                yield return new WaitForSecondsRealtime(0.25f);
+                Assert.AreEqual(remaining, menu.Attributes.RuntimeSnapshot.RemainingSeconds, 0.01f);
+                ScrollView scroll = root.Q<ScrollView>("attributes-scroll");
+                Toggle resources = root.Q<Foldout>("attributes-group-resources").Q<Toggle>();
+                resources.Focus();
+                _inputFixture.PressAndRelease(pad.buttonSouth);
+                yield return null;
+                Assert.IsFalse(root.Q<Foldout>("attributes-group-resources").value);
+                _inputFixture.Press(pad.dpad.down);
+                yield return null;
+                _inputFixture.Release(pad.dpad.down);
+                yield return null;
+                Assert.AreNotSame(resources, root.focusController.focusedElement);
+                Assert.IsTrue(root.Q("attributes-window").Contains((VisualElement)root.focusController.focusedElement));
+                menu.ClosePage(GameMenuPage.Inventory);
+                yield return null;
+                Assert.IsTrue(menu.IsOpen);
+                Assert.IsTrue(menu.IsWindowVisible(GameMenuPage.Attributes));
+                Assert.AreEqual(DisplayStyle.None, root.Q("item-operation-bar").resolvedStyle.display);
+                menu.TogglePause();
+                yield return null;
+                host.ApplicationShell.OpenSettings();
+                yield return null;
+                Assert.IsFalse(menu.IsWindowVisible(GameMenuPage.Attributes));
+                _inputFixture.PressAndRelease(pad.buttonEast);
+                yield return null;
+                yield return null;
+                Assert.IsFalse(host.ApplicationShell.BlocksGameplay);
+                menu.TogglePause();
+                yield return null;
+                Assert.IsTrue(menu.IsWindowVisible(GameMenuPage.Attributes));
+                InventoryModel inventory = architecture.GetModel<InventoryModel>();
+                inventory.AddGold(10000);
+                ItemInstance armor = architecture.GetModel<EconomyModel>().MerchantStock.First(item => item.BaseDefinition.CanEquipTo(EquipmentSlot.Armor));
+                Assert.IsTrue(architecture.SendCommand(new BuyItemCommand(armor)));
+                CombatActor player = architecture.SendQuery(new GetInventorySnapshotQuery()).Player;
+                Assert.IsTrue(architecture.GetSystem<EquipmentSystem>().Equip(player, armor, EquipmentSlot.Armor));
+                yield return null;
+                Assert.IsTrue(menu.Attributes.LastSnapshot.Modifiers.Any(modifier => modifier.Origin.ItemId == armor.InstanceId));
+                Assert.AreEqual(player.MaxHealth, menu.Attributes.LastSnapshot.Attributes.First(value => value.Id == StatIds.MaxHealth).EffectiveValue);
+                foreach (string locale in new[] { "zh-Hans", "en", "qps-ploc" })
+                {
+                    yield return ChangeLanguage(host.Localization, locale == "zh-Hans" ? UserLanguagePreference.SimplifiedChinese : UserLanguagePreference.English);
+                    foreach (GameMenuPage? service in new GameMenuPage?[] { null, GameMenuPage.Shop, GameMenuPage.Crafting })
+                    {
+                        if (service.HasValue) { Assert.IsTrue(architecture.SendCommand(new OpenGameMenuCommand(FindTarget(service.Value)))); }
+                        menu.OpenPage(GameMenuPage.Inventory);
+                        menu.OpenPage(GameMenuPage.Attributes);
+                        yield return null;
+                        yield return null;
+                        foreach (Foldout group in scroll.Query<Foldout>().ToList()) { group.value = false; }
+                        foreach (Foldout group in scroll.Query<Foldout>().ToList().Where(fold => fold.name.StartsWith("attributes-group-"))) { group.value = true; }
+                        scroll.scrollOffset = Vector2.zero;
+                        if (locale == "qps-ploc") { ApplyPseudoLocalization(root); }
+                        yield return null;
+                        yield return null;
+                        AssertLayoutInsideRoot(root, new[] { "inventory-window", "attributes-window", "attributes-scroll" });
+                        Assert.LessOrEqual(root.Q("inventory-window").worldBound.xMax, root.Q("attributes-window").worldBound.xMin);
+                        if (service.HasValue)
+                        {
+                            VisualElement serviceWindow = root.Q(service == GameMenuPage.Shop ? "shop-window" : "crafting-window");
+                            Assert.LessOrEqual(serviceWindow.worldBound.xMax, root.Q("attributes-window").worldBound.xMin);
+                        }
+                        AssertVisibleTextFits(root, locale, new Vector2Int(1920, 1080));
+                        root.Q<Foldout>("attribute-max_health").value = true;
+                        yield return null;
+                        scroll.ScrollTo(root.Q("attribute-max_health"));
+                        yield return null;
+                        AssertVisibleTextFits(root, locale, new Vector2Int(1920, 1080));
+                        scroll.scrollOffset = new Vector2(0f, scroll.verticalScroller.highValue);
+                        yield return null;
+                        AssertVisibleTextFits(root, locale, new Vector2Int(1920, 1080));
+                        Assert.LessOrEqual(CountItemSelectionHighlights(root), 1);
+                        root.Q<Button>("attributes-window-close").Focus();
+                        _inputFixture.Press(pad.dpad.left);
+                        yield return null;
+                        _inputFixture.Release(pad.dpad.left);
+                        yield return null;
+                        Assert.AreNotEqual(GameMenuPage.Attributes, menu.CurrentPage, "左移必须进入视觉相邻窗口");
+                        _inputFixture.Press(pad.dpad.right);
+                        yield return null;
+                        _inputFixture.Release(pad.dpad.right);
+                        yield return null;
+                        Assert.AreEqual(GameMenuPage.Attributes, menu.CurrentPage, "右移必须能回到属性窗口");
+                        if (service == GameMenuPage.Shop)
+                        {
+                            Button stock = root.Q("shop-merchant-list").Query<Button>().First();
+                            stock.Focus();
+                            yield return null;
+                            yield return null;
+                            yield return null;
+                            VisualElement tooltip = root.Q("item-tooltip");
+                            Assert.AreEqual(Visibility.Visible, tooltip.resolvedStyle.visibility);
+                            Assert.GreaterOrEqual(tooltip.worldBound.yMin, root.Q("attributes-window-close").worldBound.yMax);
+                            Assert.LessOrEqual(tooltip.worldBound.xMax, root.Q("attributes-window").worldBound.xMax);
+                            root.Q<Button>("attributes-window-close").Focus();
+                            yield return null;
+                            Assert.AreEqual(DisplayStyle.None, tooltip.resolvedStyle.display);
+                            Assert.AreEqual(Visibility.Visible, scroll.contentContainer.resolvedStyle.visibility);
+                        }
+                        if (service.HasValue) { menu.ClosePage(service.Value); }
+                    }
+                }
+                menu.ClosePage(GameMenuPage.Inventory);
+                menu.OpenPage(GameMenuPage.Attributes);
+                _inputFixture.PressAndRelease(pad.buttonEast);
+                yield return null;
+                Assert.IsFalse(menu.IsOpen);
+            }
+            finally
+            {
+                SetGameViewResolution(new Vector2Int(originalWidth, originalHeight));
+                InputSystem.RemoveDevice(pad);
+            }
+        }
+
+        [UnityTest]
         public IEnumerator ItemActions_EquipmentMenuDiscardAndDeviceLossKeepOwnership()
         {
             yield return _fixture.EnterMain();
@@ -685,35 +826,14 @@ namespace DarkFlare.Tests
                         yield return null;
                         AssertLayoutInsideRoot(root, new[] { "inventory-window", "item-operation-bar" });
                         AssertVisibleTextFits(root, localeMode, resolution);
-                        Foldout attributes = root.Q<Foldout>("inventory-attributes-toggle");
-                        attributes.value = true;
-                        root.Q<ScrollView>("inventory-attributes-scroll").scrollOffset = Vector2.zero;
-                        yield return null;
-                        yield return null;
-                        if (localeMode == "qps-ploc") { ApplyPseudoLocalization(root); }
-                        yield return null;
-                        yield return null;
                         AssertElementsInsideContainer(root, "inventory-window", new[]
                         {
-                            "inventory-equip", "inventory-unequip", "inventory-attributes-toggle",
+                            "inventory-equip", "inventory-unequip", "inventory-attributes-open", "inventory-attribute-grid",
                         });
                         Assert.LessOrEqual(root.Q("inventory-actions").worldBound.yMax,
-                            attributes.worldBound.yMin + 1f, "展开属性后穿脱操作区与属性标题重叠");
-                        Assert.LessOrEqual(root.Q("inventory-equip").worldBound.yMax,
-                            attributes.worldBound.yMin + 1f, "穿戴按钮溢出操作区并遮挡属性标题");
+                            root.Q("inventory-attribute-grid").worldBound.yMin + 1f,
+                            "穿脱操作区不能遮挡属性摘要");
                         AssertVisibleTextFits(root, localeMode, resolution);
-                        ScrollView attributeScroll = root.Q<ScrollView>("inventory-attributes-scroll");
-                        Assert.GreaterOrEqual(attributeScroll.contentViewport.worldBound.height,
-                            root.Q(className: "inventory-attribute-row").worldBound.height,
-                            "展开属性后应至少显示一整行，不能将内容区压缩为空");
-                        attributeScroll.scrollOffset = new Vector2(0f, attributeScroll.verticalScroller.highValue);
-                        yield return null;
-                        yield return null;
-                        if (localeMode == "qps-ploc") { ApplyPseudoLocalization(root); }
-                        yield return null;
-                        yield return null;
-                        AssertVisibleTextFits(root, localeMode, resolution);
-                        attributes.value = false;
                     }
                 }
 

@@ -260,7 +260,7 @@ namespace DarkFlare
         {
             List<DamagePacket> result = new List<DamagePacket>(packets.Count);
             float criticalDamage = attackerStats.GetValue(StatIds.CriticalDamage);
-            float multiplier = 1f + criticalDamage / 100f;
+            float multiplier = CombatStatValues.CriticalMultiplier(criticalDamage);
 
             for (int i = 0; i < packets.Count; i++)
             {
@@ -399,7 +399,7 @@ namespace DarkFlare
                 return 0f;
             }
 
-            return Clamp(defenderStats.GetValue(resistanceStatId), -100f, 75f);
+            return CombatStatValues.Resistance(defenderStats.GetValue(resistanceStatId));
         }
 
         static float GetArmorReduction(float amount, float armor)

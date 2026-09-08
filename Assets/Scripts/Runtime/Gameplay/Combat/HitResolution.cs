@@ -90,10 +90,8 @@ namespace DarkFlare
                 outcome = HitOutcome.Missed;
             }
 
-            float criticalChance = Clamp(
-                (attackerStats != null ? attackerStats.GetValue(StatIds.CriticalChance) : 0f) / 100f,
-                0f,
-                1f);
+            float criticalChance = CombatStatValues.CriticalChance(
+                attackerStats != null ? attackerStats.GetValue(StatIds.CriticalChance) : 0f) / 100f;
             bool isCritical = outcome == HitOutcome.Hit && criticalRoll < criticalChance;
             return new HitResolution(
                 outcome,

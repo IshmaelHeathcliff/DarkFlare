@@ -22,6 +22,34 @@ public class Alpha015PrimaryAttributeTests
     }
 
     [Test]
+    public void StatExplanation_PreservesOverrideOrderMultipliersAndPrimaryDerivation()
+    {
+        var stats = new StatBlock();
+        stats.SetValue(StatIds.Strength, 10f);
+        stats.SetValue(StatIds.MaxHealth, 100f);
+        var modifiers = new[]
+        {
+            CreateModifier(StatIds.Strength, ModifierOperation.Flat, 5f),
+            CreateModifier(StatIds.Strength, ModifierOperation.Override, 20f),
+            CreateModifier(StatIds.Strength, ModifierOperation.Flat, 2f),
+            CreateModifier(StatIds.Strength, ModifierOperation.Increase, 50f),
+            CreateModifier(StatIds.Strength, ModifierOperation.More, 10f),
+            CreateModifier(StatIds.Strength, ModifierOperation.More, 20f),
+        };
+        var steps = new List<StatCalculationStep>();
+        StatBlock explained = CombatStatResolver.Build(stats, modifiers, steps);
+        Assert.AreEqual(43.56f, explained.GetValue(StatIds.Strength), 0.001f);
+        Assert.AreEqual(187.12f, explained.GetValue(StatIds.MaxHealth), 0.001f);
+        CollectionAssert.AreEqual(new[] { 15f, 20f, 22f, 33f, 36.3f, 43.56f },
+            steps.FindAll(step => step.StatId == StatIds.Strength).ConvertAll(step => Mathf.Round(step.Result * 100f) / 100f));
+        StatCalculationStep derived = steps.Find(step => step.StatId == StatIds.MaxHealth);
+        Assert.AreEqual(StatIds.Strength, derived.DerivedFrom);
+        Assert.AreEqual(87.12f, derived.Operand, 0.001f);
+        Assert.AreEqual(CombatStatResolver.Build(stats, modifiers).GetValue(StatIds.MaxHealth), derived.Result);
+        Assert.AreEqual(10f, stats.GetValue(StatIds.Strength));
+    }
+
+    [Test]
     public void PrimaryAttributeResolver_AppliesFrozenFormulasWithoutMutatingInput()
     {
         StatBlock input = new StatBlock();

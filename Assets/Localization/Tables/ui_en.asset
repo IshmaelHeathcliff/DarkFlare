@@ -1496,6 +1496,235 @@ MonoBehaviour:
     m_Localized: Action completed
     m_Metadata:
       m_Items: []
+  - m_Id: 7191908173471744
+    m_Localized: Attributes
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414784
+    m_Localized: Resources
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414785
+    m_Localized: Core & movement
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414786
+    m_Localized: Attack
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414787
+    m_Localized: Defense
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414788
+    m_Localized: Modifiers & sources
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414789
+    m_Localized: "Health {0} / {1} ({2}%)\nMana {3} / {4} ({5}%)\nRecovery: health
+      {6}/s \xB7 mana {7}/s\nState: {8}"
+    m_Metadata:
+      m_Items:
+      - rid: 6738608143192817845
+  - m_Id: 7191908215414790
+    m_Localized: "Mana recovery = maximum mana \xD7 5%/s + nonnegative flat bonus.
+      Full resources stop increasing. Pause, death or inactivity stops recovery without
+      changing its capacity."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414791
+    m_Localized: "Mana cost {0} \xB7 cast interval {1}s\nRemaining {2}s \xB7 {3}"
+    m_Metadata:
+      m_Items:
+      - rid: 6738608143192817845
+  - m_Id: 7191908215414792
+    m_Localized: Basic projectile
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414793
+    m_Localized: "Configured base damage \xB7 {0}"
+    m_Metadata:
+      m_Items:
+      - rid: 6738608143192817845
+  - m_Id: 7191908215414794
+    m_Localized: Base ranges exclude damage modifiers, critical hits and target defenses.
+      Hit chance depends on target evasion. See modifiers for damage bonuses.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414795
+    m_Localized: Armor reduction depends on incoming physical damage; evasion chance
+      depends on attacker accuracy. Effective resistances range from -100% to 75%.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414796
+    m_Localized: 'Base: {0}'
+    m_Metadata:
+      m_Items:
+      - rid: 6738608143192817845
+  - m_Id: 7191908215414797
+    m_Localized: "{0} {1} \u2192 {2}"
+    m_Metadata:
+      m_Items:
+      - rid: 6738608143192817845
+  - m_Id: 7191908215414798
+    m_Localized: "Derived from {0}: +{1} \u2192 {2}"
+    m_Metadata:
+      m_Items:
+      - rid: 6738608143192817845
+  - m_Id: 7191908215414799
+    m_Localized: "Aggregated {0} \xB7 effective {1}"
+    m_Metadata:
+      m_Items:
+      - rid: 6738608143192817845
+  - m_Id: 7191908215414800
+    m_Localized: "Final critical multiplier: \xD7{0}"
+    m_Metadata:
+      m_Items:
+      - rid: 6738608143192817845
+  - m_Id: 7191908215414801
+    m_Localized: No current modifiers
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414802
+    m_Localized: Applied directly
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414803
+    m_Localized: Conditions not matched
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414804
+    m_Localized: Evaluated per attack / target
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414805
+    m_Localized: Not consumed by the current resolver
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414806
+    m_Localized: Actor source
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414807
+    m_Localized: None
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414808
+    m_Localized: 'Condition scope: {0}
+
+      Require all: {1}
+
+      Require any:
+      {2}
+
+      Exclude: {3}'
+    m_Metadata:
+      m_Items:
+      - rid: 6738608143192817845
+  - m_Id: 7191908215414809
+    m_Localized: Waiting for player
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414810
+    m_Localized: Actor inactive
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414811
+    m_Localized: Actor dead
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414812
+    m_Localized: Gameplay paused
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414813
+    m_Localized: Resources full
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414814
+    m_Localized: Recovering
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414815
+    m_Localized: No valid skill / damage source
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414816
+    m_Localized: Insufficient mana
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414817
+    m_Localized: Waiting for next cast
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414818
+    m_Localized: Ready
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414819
+    m_Localized: Local item
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414820
+    m_Localized: Global actor
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414821
+    m_Localized: Skill
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414822
+    m_Localized: Target taken
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414823
+    m_Localized: Area
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414824
+    m_Localized: Temporary
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414825
+    m_Localized: Flat
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414826
+    m_Localized: Total increase (%)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414827
+    m_Localized: More (%)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414828
+    m_Localized: Override
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414829
+    m_Localized: Source actor
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414830
+    m_Localized: Target actor
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414831
+    m_Localized: Skill
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414832
+    m_Localized: Source item
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414833
+    m_Localized: Attack
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414834
+    m_Localized: Damage packet
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:
@@ -1539,3 +1768,12 @@ MonoBehaviour:
         - id: 20581998125078
         - id: 20581998125079
         - id: 158647622557696
+        - id: 7191908215414789
+        - id: 7191908215414791
+        - id: 7191908215414793
+        - id: 7191908215414796
+        - id: 7191908215414797
+        - id: 7191908215414798
+        - id: 7191908215414799
+        - id: 7191908215414800
+        - id: 7191908215414808

@@ -110,10 +110,7 @@ namespace DarkFlare.Tests
             VisualElement root = document.rootVisualElement;
             Assert.IsNull(root.Q<VisualElement>("attribute-card"), "HUD 不应继续显示当前属性窗口");
             Assert.IsNotNull(root.Q<VisualElement>("inventory-attribute-card"), "背包右侧缺少当前属性窗口");
-            Assert.AreEqual(
-                StatIds.All.Count,
-                root.Query<Label>(className: "inventory-attribute-value").ToList().Count,
-                "当前属性窗口必须显示全部已登记属性");
+            Assert.IsNotNull(root.Q<Button>("inventory-attributes-open"), "背包必须提供独立属性详情入口");
             Assert.IsNull(root.Q<VisualElement>("weapon-card"), "HUD 不应继续显示当前装备");
             Keyboard keyboard = InputSystem.AddDevice<Keyboard>();
             Gamepad gamepad = InputSystem.AddDevice<Gamepad>();
@@ -181,12 +178,12 @@ namespace DarkFlare.Tests
                     SetGameViewResolution(resolutions[i]);
                     yield return WaitForResolution(resolutions[i], 5f);
                     yield return null;
-                    root.Q<Foldout>("inventory-attributes-toggle").value = true;
+                    menu.OpenPage(GameMenuPage.Attributes);
                     yield return null;
                     AssertLayoutInsideRoot(root, new[]
                     {
                         "game-menu-panel",
-                        "inventory-attributes-scroll",
+                        "attributes-scroll",
                         "inventory-page",
                         "inventory-grid",
                         "inventory-equipment",
@@ -199,8 +196,8 @@ namespace DarkFlare.Tests
                         "inventory-unequip",
                         "game-menu-close",
                     });
-                    ScrollView attributes = root.Q<ScrollView>("inventory-attributes-scroll");
-                    foreach (string name in new[] { "inventory-attribute-armor", "inventory-attribute-chaos-resistance" })
+                    ScrollView attributes = root.Q<ScrollView>("attributes-scroll");
+                    foreach (string name in new[] { "attribute-armor", "attribute-chaos_resistance" })
                     {
                         VisualElement attribute = root.Q(name);
                         Assert.IsNotNull(attribute);

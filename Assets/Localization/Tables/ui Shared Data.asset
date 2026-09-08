@@ -1451,6 +1451,214 @@ MonoBehaviour:
     m_Key: item.action.completed
     m_Metadata:
       m_Items: []
+  - m_Id: 7191908173471744
+    m_Key: attributes.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414784
+    m_Key: attributes.group.resources
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414785
+    m_Key: attributes.group.basic
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414786
+    m_Key: attributes.group.attack
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414787
+    m_Key: attributes.group.defense
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414788
+    m_Key: attributes.group.modifiers
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414789
+    m_Key: attributes.resources.summary
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414790
+    m_Key: attributes.resources.explanation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414791
+    m_Key: attributes.skill.summary
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414792
+    m_Key: attributes.skill.basic_projectile
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414793
+    m_Key: attributes.base_damage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414794
+    m_Key: attributes.attack.conditions
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414795
+    m_Key: attributes.defense.conditions
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414796
+    m_Key: attributes.calculation.base
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414797
+    m_Key: attributes.calculation.step
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414798
+    m_Key: attributes.calculation.derived
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414799
+    m_Key: attributes.calculation.result
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414800
+    m_Key: attributes.critical_multiplier
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414801
+    m_Key: attributes.modifiers.empty
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414802
+    m_Key: attributes.modifier.active
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414803
+    m_Key: attributes.modifier.unmatched
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414804
+    m_Key: attributes.modifier.conditional
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414805
+    m_Key: attributes.modifier.unsupported
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414806
+    m_Key: attributes.source.actor
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414807
+    m_Key: attributes.none
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414808
+    m_Key: attributes.conditions
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414809
+    m_Key: attributes.state.waiting
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414810
+    m_Key: attributes.state.inactive
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414811
+    m_Key: attributes.state.dead
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414812
+    m_Key: attributes.state.paused
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414813
+    m_Key: attributes.state.full
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414814
+    m_Key: attributes.state.recovering
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414815
+    m_Key: attributes.state.no_source
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414816
+    m_Key: attributes.state.no_mana
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414817
+    m_Key: attributes.state.cooldown
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414818
+    m_Key: attributes.state.ready
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414819
+    m_Key: attributes.scope.LocalItem
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414820
+    m_Key: attributes.scope.GlobalActor
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414821
+    m_Key: attributes.scope.Skill
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414822
+    m_Key: attributes.scope.TargetTaken
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414823
+    m_Key: attributes.scope.Area
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414824
+    m_Key: attributes.scope.Temporary
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414825
+    m_Key: attributes.operation.Flat
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414826
+    m_Key: attributes.operation.Increase
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414827
+    m_Key: attributes.operation.More
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414828
+    m_Key: attributes.operation.Override
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414829
+    m_Key: attributes.tag_scope.SourceActor
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414830
+    m_Key: attributes.tag_scope.TargetActor
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414831
+    m_Key: attributes.tag_scope.Skill
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414832
+    m_Key: attributes.tag_scope.SourceItem
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414833
+    m_Key: attributes.tag_scope.Attack
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7191908215414834
+    m_Key: attributes.tag_scope.Damage
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

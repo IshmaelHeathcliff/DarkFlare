@@ -120,6 +120,8 @@ namespace DarkFlare
 
         void OnEnable()
         {
+            this.GetSystem<PlayerSkillStateRegistry>()?.Register(_actor,
+                () => new PlayerSkillState(_defaultSkill, AutoCastCooldownRemainingSeconds));
             _enableVersion++;
             _componentScope = ComponentLifecycle.CreateScope(
                 this,
@@ -131,6 +133,7 @@ namespace DarkFlare
 
         void OnDisable()
         {
+            _architecture?.GetSystem<PlayerSkillStateRegistry>()?.Unregister(_actor);
             _enableVersion++;
             _componentScope?.BeginStop();
             _componentScope = null;

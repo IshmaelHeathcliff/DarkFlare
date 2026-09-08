@@ -367,12 +367,14 @@ Addressables 的配置目录，包含资源组、模板和构建器配置。后�
 - `Gameplay/Input`：`GameInput.cs`（Session 非所有权输入 Adapter 与玩法事件）、`InputSystem_Actions.cs`（由输入资产自动生成的 C# 包装类）
 - `Gameplay/Interaction`：`WorldInteractionTarget.cs`、`PlayerInteractionController.cs`、`GameplayPauseSystem.cs` 与 `Commands/`，负责最近世界目标、情境菜单请求和集中暂停
 - `Gameplay/Events/GameplayEvents.cs`：金币、背包、装备、打造、交易、交互焦点、菜单请求、暂停和 Actor 注册 / 注销领域事件
+- `Gameplay/UI/GetAttributeDetailsQuery.cs`、`AttributePanelController.cs`：独立属性只读解释 / 动态状态、分组来源、本地化与有作用域的刷新；详见[属性详情](./attribute-details.md)
+- `Gameplay/Combat/StatExplanation.cs`、`PlayerSkillState.cs`：共享消费者边界、正式解析 trace 与 Session 技能状态 Adapter
 - `Gameplay/UI/GetHudSnapshotQuery.cs`、`HudController.cs`：生命、金币和最终有效属性的只读 HUD 快照与事件驱动控制器
 - `Gameplay/UI/GetInventorySnapshotQuery.cs`、`InventoryPanelController.cs`：只读背包快照、共享 10×6 格子、四槽装备、拖拽与拿起 / 放置控制器
 - `Gameplay/UI/ItemTooltipView.cs`、`ItemDragQueries.cs`、`MerchantGridLayout.cs`：唯一物品浮窗、拖拽目标只读查询和商人确定性虚拟格子排布
 - `Gameplay/UI/GetShopSnapshotQuery.cs`、`ShopPanelController.cs`：只读商店快照、商人格子与共享玩家背包的买卖交互控制器
 - `Gameplay/UI/GetCraftingSnapshotQuery.cs`、`CraftingPanelController.cs`：复用共享玩家背包选择，提供稀有度、任意 / 前缀 / 后缀范围和 14 个随机打造变体，不保留具体词条选择
-- `Gameplay/UI/GameMenuAccess.cs`、`GameMenuController.cs`：背包 / 商店 / 打造情境访问范围、共享菜单遮罩、`auto` 保存、返回前台、关闭和 Gameplay/UI 输入路由
+- `Gameplay/UI/GameMenuAccess.cs`、`GameMenuController.cs`：背包 / 商店 / 打造 / 属性情境访问范围、共享菜单遮罩、`auto` 保存、返回前台、关闭和 Gameplay/UI 输入路由
 - `Gameplay/UI/InteractionPromptController.cs`：显示当前世界交互目标，并在 UI 模式或目标失效时隐藏
 - `Tests/EditMode/ApplicationLifecycleTests.cs`、`ArchitectureExceptionSafetyTests.cs`、`AbandonedGenerationIsolationTests.cs`、`PrefabAssetLoaderTests.cs`：覆盖作用域停止 / 超时、活动任务跟踪、后代 `Abandoned` 污点传播、旧 generation 隔离、架构初始化与反初始化异常安全、Prefab Addressables GUID 单飞和精确句柄
 - `Tests/EditMode/InfrastructurePolicyTests.cs` 与 `InfrastructurePolicyExceptions.json`：扫描架构直连、未登记异步、直接文件 IO / PlayerPrefs / 场景加载，并用正反向夹具验证规则

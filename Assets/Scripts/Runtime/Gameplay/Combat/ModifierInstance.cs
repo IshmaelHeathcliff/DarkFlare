@@ -2,6 +2,14 @@ namespace DarkFlare
 {
     public sealed class ModifierInstance
     {
+        public ModifierOrigin Origin { get; private set; }
+
+        public ModifierInstance WithOrigin(ModifierOrigin origin)
+        {
+            return new ModifierInstance(StatId, Operation, Scope, Value, FromDamageType,
+                ToDamageType, Query, UsesLegacyTagMatching) { Origin = origin };
+        }
+
         public string StatId { get; }
 
         public ModifierOperation Operation { get; }

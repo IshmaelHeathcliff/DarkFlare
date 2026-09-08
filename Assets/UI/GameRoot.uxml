@@ -10,6 +10,8 @@
   <ui:Template name="Hud" src="project://database/Assets/UI/Hud.uxml" />
   <ui:Template name="ItemWorkbench" src="project://database/Assets/UI/ItemWorkbench.uxml" />
   <ui:Style src="project://database/Assets/UI/Windows.uss" />
+  <ui:Style src="project://database/Assets/UI/Attributes.uss" />
+  <ui:Template name="Attributes" src="project://database/Assets/UI/Attributes.uxml" />
   <ui:Template name="Inventory" src="project://database/Assets/UI/Inventory.uxml" />
   <ui:Template name="Shop" src="project://database/Assets/UI/Shop.uxml" />
   <ui:Template name="Crafting" src="project://database/Assets/UI/Crafting.uxml" />
@@ -34,6 +36,7 @@
               <l:LocalizedString property="text" table="ui" entry="menu.tab.crafting" />
             </Bindings>
           </ui:Button>
+          <ui:Button name="game-menu-attributes-tab" class="game-menu-tab"><Bindings><l:LocalizedString property="text" table="ui" entry="attributes.title" /></Bindings></ui:Button>
           <ui:Button name="game-menu-pause" class="game-menu-tab">
             <Bindings>
               <l:LocalizedString property="text" table="ui" entry="window.pause" />
@@ -53,6 +56,7 @@
                   <l:LocalizedString property="text" table="ui" entry="menu.tab.inventory" />
                 </Bindings>
               </ui:Label>
+              <ui:Button name="inventory-attributes-open" class="item-window-close inventory-attributes-open"><Bindings><l:LocalizedString property="tooltip" table="ui" entry="attributes.title" /></Bindings><ui:VisualElement class="ui-icon ui-icon--armor item-window-close-icon" picking-mode="Ignore" /></ui:Button>
               <ui:Button name="inventory-window-close" class="item-window-close">
                 <Bindings>
                   <l:LocalizedString property="tooltip" table="ui" entry="window.close" />
@@ -95,6 +99,7 @@
             </ui:VisualElement>
             <ui:Instance template="Crafting" class="crafting-template" />
           </ui:VisualElement>
+          <ui:Instance template="Attributes" class="attributes-template" />
         </ui:VisualElement>
         <ui:VisualElement name="item-operation-bar" class="item-operation-bar">
           <ui:Label name="item-operation-status" class="item-operation-status" picking-mode="Ignore" />
@@ -143,6 +148,7 @@
       <ui:VisualElement name="item-action-menu" class="item-action-menu ui-panel-frame" />
       <ui:VisualElement name="item-drag-layer" class="item-drag-layer" picking-mode="Ignore" />
     </ui:VisualElement>
+    <ui:Button name="game-hud-attributes" class="game-hud-attributes"><Bindings><l:LocalizedString property="text" table="ui" entry="attributes.title" /></Bindings></ui:Button>
     <ui:Button name="game-hud-pause" class="game-hud-pause">
       <Bindings>
         <l:LocalizedString property="text" table="ui" entry="window.pause" />

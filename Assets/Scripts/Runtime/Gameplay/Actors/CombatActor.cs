@@ -75,6 +75,12 @@ namespace DarkFlare
         public bool IsAlive => _isAlive;
 
         public StatBlock Stats => _stats;
+        public int StatsRevision { get; private set; }
+
+        public StatBlock CaptureBaseStats()
+        {
+            return _baseStats.Clone();
+        }
 
         public IReadOnlyList<ModifierInstance> Modifiers => _modifiers;
 
@@ -278,6 +284,7 @@ namespace DarkFlare
         void RebuildStats()
         {
             _stats = CombatStatResolver.Build(_baseStats, _modifiers);
+            StatsRevision++;
         }
 
         float GetEffectiveMaxHealth()

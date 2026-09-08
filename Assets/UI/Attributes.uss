@@ -1,0 +1,26 @@
+.game-menu-panel--attributes { margin-right: 0; }
+.attributes-template { flex-shrink: 0; min-height: 0; flex-grow: 0; }
+.attributes-window { width: 440px; height: 100%; }
+.attributes-scroll { flex-grow: 1; min-height: 0; }
+.attributes-scroll .unity-scroll-view__content-container { padding-right: 8px; }
+.attribute-foldout { flex-shrink: 0; min-height: 30px; margin-top: 4px; margin-bottom: 4px; }
+.attribute-foldout > .unity-foldout__toggle { min-height: 32px; height: auto; flex-shrink: 0; padding: 4px 2px; background-color: rgb(25,28,33); }
+.attribute-foldout .unity-toggle__text { white-space: normal; min-width: 0; flex-shrink: 1; color: rgb(230,214,184); font-size: 15px; }
+.attribute-foldout .unity-foldout__content { margin-left: 8px; padding-left: 4px; }
+.attribute-explanation { white-space: normal; min-height: 22px; flex-shrink: 0; font-size: 14px; color: rgb(192,190,179); padding: 4px 0; }
+.attribute-foldout .unity-toggle:focus { border-width: 1px; border-color: rgb(208,164,88); }
+.game-hud-attributes { position: absolute; right: 24px; top: 68px; min-width: 90px; height: auto; min-height: 36px; padding: 4px 10px; white-space: normal; background-color: rgb(28,32,39); color: rgb(225,211,184); border-color: rgb(91,76,53); border-width: 1px; }
+.inventory-attributes-open { min-height: 32px; flex-shrink: 0; white-space: normal; font-size: 14px; margin-top: 4px; color: rgb(225,211,184); background-color: rgb(28,32,39); border-width: 1px; border-color: rgb(91,76,53); }
+
+.inventory-primary-card { flex-shrink: 0; margin-top: 4px; }
+.inventory-primary-grid { flex-direction: row; }
+.inventory-primary-summary { width: 33.33%; min-width: 0; min-height: 32px; flex-shrink: 0; white-space: normal; font-size: 13px; color: rgb(192,190,179); -unity-text-align: middle-left; margin: 0; padding: 0 4px 0 0; }
+
+.inventory-window .inventory-attributes-open { margin: 0 6px 0 0; width: 36px; min-width: 36px; height: 32px; padding: 2px; }
+.attributes-template { align-items: center; }
+.attributes-scroll .unity-scroller { background-color: rgb(16,19,24); }
+.attributes-scroll .unity-base-slider__tracker { background-color: rgb(29,32,38); }
+.attributes-scroll .unity-base-slider__dragger { background-color: rgb(116,99,71); border-color: rgb(154,127,82); border-width: 1px; }
+.attributes-scroll .unity-scroller__low-button, .attributes-scroll .unity-scroller__high-button { background-color: rgb(32,34,40); -unity-background-image-tint-color: rgb(191,163,116); }
+
+.game-menu-panel--attributes .game-menu-content { justify-content: center; }

@@ -28,7 +28,8 @@ namespace DarkFlare
 
         public IReadOnlyList<CombatActor> GetActorsByTeam(ActorTeam team)
         {
-            return GetOrCreateTeamList(team);
+            return _actorsByTeam.TryGetValue(team, out List<CombatActor> actors)
+                ? actors : System.Array.Empty<CombatActor>();
         }
 
         List<CombatActor> GetOrCreateTeamList(ActorTeam team)

@@ -75,8 +75,8 @@ namespace DarkFlare
         {
             Armor = GetNonNegative(stats, StatIds.Armor);
             Evasion = GetNonNegative(stats, StatIds.Evasion);
-            MoveSpeed = GetNonNegative(stats, StatIds.MoveSpeed);
-            CriticalChance = GetNonNegative(stats, StatIds.CriticalChance);
+            MoveSpeed = stats != null ? stats.GetValue(StatIds.MoveSpeed) : 0f;
+            CriticalChance = CombatStatValues.CriticalChance(stats != null ? stats.GetValue(StatIds.CriticalChance) : 0f);
             FireResistance = GetResistance(stats, StatIds.FireResistance);
             ColdResistance = GetResistance(stats, StatIds.ColdResistance);
             LightningResistance = GetResistance(stats, StatIds.LightningResistance);
@@ -86,13 +86,7 @@ namespace DarkFlare
             for (int i = 0; i < Definitions.Length; i++)
             {
                 AttributeDefinition definition = Definitions[i];
-                float value = definition.StatId == StatIds.ManaRegeneration
-                    ? ResourceRegenerationSystem.CalculateManaRegenerationPerSecond(
-                        GetNonNegative(stats, StatIds.Mana),
-                        GetNonNegative(stats, StatIds.ManaRegeneration))
-                    : IsResistance(definition.StatId)
-                        ? GetResistance(stats, definition.StatId)
-                        : GetNonNegative(stats, definition.StatId);
+                float value = stats != null ? CombatStatValues.Effective(stats, definition.StatId) : 0f;
                 _values[i] = new HudAttributeValue(
                     definition.StatId,
                     value,
@@ -107,15 +101,7 @@ namespace DarkFlare
 
         static float GetResistance(StatBlock stats, string statId)
         {
-            return stats != null ? Mathf.Clamp(stats.GetValue(statId), -100f, 75f) : 0f;
-        }
-
-        static bool IsResistance(string statId)
-        {
-            return statId == StatIds.FireResistance
-                || statId == StatIds.ColdResistance
-                || statId == StatIds.LightningResistance
-                || statId == StatIds.ChaosResistance;
+            return stats != null ? CombatStatValues.Resistance(stats.GetValue(statId)) : 0f;
         }
 
         readonly struct AttributeDefinition

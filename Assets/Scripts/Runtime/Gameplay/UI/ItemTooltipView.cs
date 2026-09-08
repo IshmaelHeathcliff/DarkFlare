@@ -18,6 +18,7 @@ namespace DarkFlare
         readonly VisualElement _root;
         readonly VisualElement _layer;
         VisualElement _panel;
+        VisualElement _coveredAttributeContent;
         readonly Label _contextLabel;
         readonly ItemDetailView _detailView;
 
@@ -79,6 +80,7 @@ namespace DarkFlare
         public void Hide()
         {
             _positionGeneration++;
+            RestoreAttributeContent();
 
             if (_root != null)
             {
@@ -127,6 +129,23 @@ namespace DarkFlare
             float oppositeX = side == ItemTooltipSide.Left
                 ? panelBounds.xMax + PanelGap
                 : panelBounds.xMin - tooltipWidth - PanelGap;
+            ScrollView attributes = _layer.parent?.Q<ScrollView>("attributes-scroll");
+            bool dockInAttributes = !FitsHorizontally(preferredX, tooltipWidth, screenBounds)
+                && !FitsHorizontally(oppositeX, tooltipWidth, screenBounds)
+                && attributes != null && attributes.worldBound.width >= tooltipWidth
+                && GameMenuController.IsNavigable(attributes);
+            if (dockInAttributes)
+            {
+                // Reading area yields to the single item preview; its title and close button stay accessible.
+                _coveredAttributeContent = attributes.contentContainer;
+                _coveredAttributeContent.style.visibility = Visibility.Hidden;
+                Vector2 docked = _layer.WorldToLocal(attributes.worldBound.position);
+                _root.style.left = docked.x;
+                _root.style.top = docked.y;
+                _root.style.visibility = Visibility.Visible;
+                return;
+            }
+            RestoreAttributeContent();
             float x = preferredX;
 
             if (!FitsHorizontally(x, tooltipWidth, screenBounds))
@@ -155,6 +174,13 @@ namespace DarkFlare
         {
             return x >= screenBounds.xMin + EdgePadding
                 && x + width <= screenBounds.xMax - EdgePadding;
+        }
+
+        void RestoreAttributeContent()
+        {
+            if (_coveredAttributeContent == null) { return; }
+            _coveredAttributeContent.style.visibility = Visibility.Visible;
+            _coveredAttributeContent = null;
         }
 
         static void DisablePicking(VisualElement element)

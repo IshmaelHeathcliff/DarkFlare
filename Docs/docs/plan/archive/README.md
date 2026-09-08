@@ -26,6 +26,7 @@
 
 | 计划 | 完成阶段 | 当前总结 |
 | --- | --- | --- |
+| [独立属性详情与实时解释](./alpha-0.3.1-realtime-attributes-plan.md) | alpha 0.3.1 | [属性详情](../../attribute-details.md)、[阶段验收](../../assets/acceptance/alpha-0.3.1-attributes/README.md) |
 | [独立窗口与交互拆分](./alpha-0.3.0-independent-ui-windows-plan.md) | alpha 0.3.0 | [物品工作台](../../item-ui-workbench.md)、[阶段验收](../../assets/acceptance/alpha-0.3.0-visual-pilot/README.md) |
 | [代表视觉组件与布局收尾](./alpha-0.3.0-visual-pilot-plan.md) | alpha 0.3.0 | [组件规范](../../ui-component-style.md) |
 | [统一物品交互合同](./alpha-0.3-item-interaction-contract.md) | alpha 0.3.0；后续持续复验 | [物品工作台](../../item-ui-workbench.md) |

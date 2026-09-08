@@ -34,7 +34,7 @@ flowchart LR
 6. 攻击发起时，`AttackSnapshotFactory` 冻结攻击者属性、修改器和具名随机子流；命中时 `HitResolutionCalculator` 读取目标闪避，再由 `DamageCalculator` 计算类型伤害、暴击、护甲和抗性。
 7. `ItemDetailSnapshotFactory` 从原始 `StatDefinition` 读取中文名和百分比标记，再交给 `ItemDetailFormatter` 生成背包、商店和打造 UI 文本。
 
-背包右侧的当前属性卡不再维护局部白名单。`HudAttributeSnapshot.Values` 按 `StatIds.All` 生成完整、有序的显示快照，当前 23 项全部可见；抗性沿用伤害结算边界，其他百分比语义与 `StatDefinition` 保持一致。
+背包只保留力量、敏捷、智力摘要，标题栏与 HUD 可打开[独立属性详情](./attribute-details.md)。`GetAttributeDetailsQuery` 提供基础值、正式解析步骤、有效值、装备来源和条件；伤害类修改器在攻击 / 修改器分组解释，不伪装成直接聚合属性。`HudAttributeSnapshot.Values` 仍按 `StatIds.All` 提供有序快照，显示有效值与详情共用 `CombatStatValues`，抗性与暴击边界沿用正式消费者。
 
 ## 当前属性清单
 

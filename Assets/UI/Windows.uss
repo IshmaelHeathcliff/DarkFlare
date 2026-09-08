@@ -26,13 +26,6 @@
 .inventory-window .inventory-actions { margin-top: 4px; flex-shrink: 0; }
 .inventory-window .item-context-action { min-height: 30px; height: auto; min-width: 0; flex-basis: 0; flex-shrink: 1; white-space: normal; font-size: 14px; }
 .inventory-window .unity-foldout__toggle { flex-shrink: 0; }
-.inventory-attributes-scroll { max-height: 120px; }
-.inventory-attribute-card { min-height: 0; padding: 4px; }
-.inventory-attribute-row { height: auto; min-height: 25px; flex-shrink: 0; }
-.inventory-attribute-grid { flex-direction: column; flex-grow: 0; }
-.inventory-attribute-column { flex-grow: 0; flex-shrink: 0; }
-.inventory-attribute-column--separated { margin-left: 0; padding-left: 0; border-left-width: 0; }
-.inventory-attribute-name { white-space: normal; width: 75%; min-width: 0; min-height: 20px; padding-top: 0; padding-bottom: 0; flex-grow: 1; flex-shrink: 0; }
 .item-source-section { flex-shrink: 0; margin-top: 4px; margin-bottom: 8px; }
 .item-source-scroll { height: 128px; min-height: 80px; border-width: 1px; border-color: rgb(54,57,65); background-color: rgb(10,13,18); }
 .item-source-row { flex-shrink: 0; height: auto; min-height: 44px; margin: 2px; padding: 3px; flex-direction: row; align-items: center; background-color: rgb(25,29,36); border-width: 1px; border-color: rgb(60,64,72); }

@@ -27,6 +27,13 @@ namespace DarkFlare
         [SerializeField]
         CraftingPanelController _craftingPanel;
 
+        AttributePanelController _attributes;
+        VisualElement _attributesTemplate;
+        Button _attributesTab;
+        Button _attributesClose;
+        Button _attributesEntry;
+        Button _hudAttributes;
+        public AttributePanelController Attributes => _attributes;
         ItemWorkspace _workspace;
         VisualElement _pausePanel;
         VisualElement _windows;
@@ -115,7 +122,8 @@ namespace DarkFlare
             if (CurrentPage == page)
             {
                 CurrentPage = OpenWindows.Contains(GameMenuPage.Inventory) ? GameMenuPage.Inventory
-                    : OpenWindows.Contains(GameMenuPage.Shop) ? GameMenuPage.Shop : GameMenuPage.Crafting;
+                    : OpenWindows.Contains(GameMenuPage.Shop) ? GameMenuPage.Shop
+                    : OpenWindows.Contains(GameMenuPage.Crafting) ? GameMenuPage.Crafting : GameMenuPage.Attributes;
             }
             ApplyPage();
             FocusWindow(CurrentPage);
@@ -140,6 +148,7 @@ namespace DarkFlare
             _inventoryTemplate?.EnableInClassList("item-window--active", page == GameMenuPage.Inventory);
             _shopTemplate?.EnableInClassList("item-window--active", page == GameMenuPage.Shop);
             _craftingTemplate?.EnableInClassList("item-window--active", page == GameMenuPage.Crafting);
+            _attributesTemplate?.EnableInClassList("item-window--active", page == GameMenuPage.Attributes);
         }
 
         void FocusWindow(GameMenuPage page)
@@ -152,10 +161,11 @@ namespace DarkFlare
                 return;
             }
             bool focused = page == GameMenuPage.Inventory ? _inventoryPanel.FocusDefault()
-                : page == GameMenuPage.Shop ? _shopPanel.FocusDefault() : _craftingPanel.FocusDefault();
+                : page == GameMenuPage.Shop ? _shopPanel.FocusDefault()
+                : page == GameMenuPage.Crafting ? _craftingPanel.FocusDefault() : _attributes.FocusDefault();
             if (!focused)
             {
-                (page == GameMenuPage.Inventory ? _inventoryClose : page == GameMenuPage.Shop ? _shopClose : _craftingClose)?.Focus();
+                (page == GameMenuPage.Inventory ? _inventoryClose : page == GameMenuPage.Shop ? _shopClose : page == GameMenuPage.Crafting ? _craftingClose : _attributesClose)?.Focus();
             }
         }
 
@@ -187,16 +197,16 @@ namespace DarkFlare
         void OnCycleWindow(int step)
         {
             if (!IsOpen || _pauseOpen || Workspace.IsDragging || Workspace.Interactions?.IsMenuOpen == true) { return; }
-            for (int i = 1; i <= 3; i++)
+            for (int i = 1; i <= 4; i++)
             {
-                GameMenuPage page = (GameMenuPage)(((int)CurrentPage + step * i + 6) % 3);
+                GameMenuPage page = (GameMenuPage)(((int)CurrentPage + step * i + 8) % 4);
                 if (IsWindowVisible(page)) { FocusWindow(page); return; }
             }
         }
 
         public bool IsPageAvailable(GameMenuPage page)
         {
-            return page == GameMenuPage.Inventory || AvailablePages.Contains(page)
+            return page == GameMenuPage.Inventory || page == GameMenuPage.Attributes || AvailablePages.Contains(page)
                 && _interactionTarget != null && _interactionTarget.CanInteract
                 && _interactionPlayer != null && _interactionPlayer.isActiveAndEnabled && _interactionPlayer.IsAlive
                 && ApplicationHost.TryGetCurrent(out ApplicationHost host)
@@ -263,6 +273,8 @@ namespace DarkFlare
             _saveFacade = ResolveSaveFacade();
             Workspace.Interactions = new ItemInteractionSession(this, _gameInput);
             _localizationService = ResolveLocalizationService();
+            _attributes = new AttributePanelController(architecture, _attributesTemplate, _localizationService,
+                ApplicationHost.Current.CurrentSession.SceneScope);
             _saveOperationBusy = false;
             SetSaveStatus(_saveFacade != null
                 ? "save.status.ready"
@@ -301,6 +313,13 @@ namespace DarkFlare
 
         void UnbindSession()
         {
+            _attributes?.Dispose();
+            _attributes = null;
+            if (_attributesTab != null) { _attributesTab.clicked -= OnAttributesOpen; }
+            if (_attributesEntry != null) { _attributesEntry.clicked -= OnAttributesOpen; }
+            if (_hudAttributes != null) { _hudAttributes.clicked -= OnAttributesOpen; }
+            if (_attributesClose != null) { _attributesClose.clicked -= OnAttributesClose; }
+            _attributesTemplate?.UnregisterCallback<PointerDownEvent>(OnAttributesActivated, TrickleDown.TrickleDown);
             if (_applicationShell != null)
             {
                 _applicationShell.BlockingChanged -= OnShellBlockingChanged;
@@ -448,6 +467,11 @@ namespace DarkFlare
             _inventoryTemplate = root.Q("inventory-window");
             _shopTemplate = root.Q("shop-window");
             _craftingTemplate = root.Q("crafting-window");
+            _attributesTemplate = root.Q("attributes-window");
+            _attributesTab = root.Q<Button>("game-menu-attributes-tab");
+            _attributesClose = root.Q<Button>("attributes-window-close");
+            _attributesEntry = root.Q<Button>("inventory-attributes-open");
+            _hudAttributes = root.Q<Button>("game-hud-attributes");
             _inventoryTab = root.Q<Button>("game-menu-inventory-tab");
             _shopTab = root.Q<Button>("game-menu-shop-tab");
             _craftingTab = root.Q<Button>("game-menu-crafting-tab");
@@ -466,7 +490,9 @@ namespace DarkFlare
             _craftingClose = root.Q<Button>("crafting-window-close");
 
             if (_overlay == null
-                || _panel == null
+                || _panel == null || _attributesTemplate == null || _attributesTab == null
+                || _attributesClose == null || _attributesEntry == null || _hudAttributes == null
+                || root.Q<ScrollView>("attributes-scroll") == null
                 || _inventoryTemplate == null
                 || _shopTemplate == null
                 || _craftingTemplate == null
@@ -489,6 +515,11 @@ namespace DarkFlare
                 return false;
             }
 
+            _attributesTab.clicked += OnAttributesOpen;
+            _attributesEntry.clicked += OnAttributesOpen;
+            _hudAttributes.clicked += OnAttributesOpen;
+            _attributesClose.clicked += OnAttributesClose;
+            _attributesTemplate.RegisterCallback<PointerDownEvent>(OnAttributesActivated, TrickleDown.TrickleDown);
             _pauseButton.clicked += TogglePause;
             _hudPauseButton.clicked += TogglePause;
             _resumeButton.clicked += TogglePause;
@@ -529,7 +560,7 @@ namespace DarkFlare
             _interactionGeneration = ApplicationHost.Current.CurrentSession.ArchitectureGeneration;
             _interactionTarget.Unavailable += OnTargetUnavailable;
             AvailablePages = e.AvailablePages | GameMenuAccess.Inventory;
-            OpenWindows &= AvailablePages;
+            OpenWindows &= AvailablePages | GameMenuAccess.Attributes;
             OpenPage(e.Page);
         }
 
@@ -584,11 +615,20 @@ namespace DarkFlare
         {
             if (_overlay == null) { return; }
             _overlay.style.display = IsOpen ? DisplayStyle.Flex : DisplayStyle.None;
+            bool hudEntries = !IsOpen && !(_applicationShell?.BlocksGameplay ?? false);
+            SetTemplateVisible(_hudAttributes, hudEntries);
+            SetTemplateVisible(_hudPauseButton, hudEntries);
             _windows.style.display = IsOpen && !_pauseOpen ? DisplayStyle.Flex : DisplayStyle.None;
             _pausePanel.style.display = IsOpen && _pauseOpen ? DisplayStyle.Flex : DisplayStyle.None;
             bool inventory = IsWindowVisible(GameMenuPage.Inventory);
             bool shop = IsWindowVisible(GameMenuPage.Shop);
             bool crafting = IsWindowVisible(GameMenuPage.Crafting);
+            bool attributes = IsWindowVisible(GameMenuPage.Attributes);
+            SetTemplateVisible(_attributesTemplate, attributes);
+            _attributes?.SetVisible(attributes);
+            _panel.EnableInClassList("game-menu-panel--attributes", attributes);
+            _attributesTab.SetEnabled(!_pauseOpen);
+            SetTabActive(_attributesTab, attributes);
             SetTemplateVisible(_inventoryTemplate, inventory);
             SetTemplateVisible(_shopTemplate, shop);
             SetTemplateVisible(_craftingTemplate, crafting);
@@ -606,6 +646,9 @@ namespace DarkFlare
             Workspace.Interactions?.Refresh();
         }
 
+        void OnAttributesOpen() { OpenPage(GameMenuPage.Attributes); }
+        void OnAttributesClose() { ClosePage(GameMenuPage.Attributes); }
+        void OnAttributesActivated(PointerDownEvent evt) { if (!Workspace.IsDragging) { Workspace.Activate(GameMenuPage.Attributes); } }
         void OnInventoryClose() { ClosePage(GameMenuPage.Inventory); }
         void OnShopClose() { ClosePage(GameMenuPage.Shop); }
         void OnCraftingClose() { ClosePage(GameMenuPage.Crafting); }
@@ -656,7 +699,8 @@ namespace DarkFlare
             {
                 GameMenuPage? page = ancestor == _inventoryTemplate ? GameMenuPage.Inventory
                     : ancestor == _shopTemplate ? GameMenuPage.Shop
-                    : ancestor == _craftingTemplate ? GameMenuPage.Crafting : null;
+                    : ancestor == _craftingTemplate ? GameMenuPage.Crafting
+                    : ancestor == _attributesTemplate ? GameMenuPage.Attributes : null;
                 if (!page.HasValue) { continue; }
                 _windowFocus[page.Value] = element;
                 Workspace.Activate(page.Value);
