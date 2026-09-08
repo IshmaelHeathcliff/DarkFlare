@@ -265,7 +265,7 @@ namespace DarkFlare.Tests
             Assert.AreEqual(DisplayStyle.Flex, tooltip.resolvedStyle.display, "拖回背包后首次悬停未显示物品信息");
             Assert.AreEqual(Visibility.Visible, tooltip.resolvedStyle.visibility, "物品信息完成定位后仍不可见");
             Assert.AreEqual(
-                root.Q<VisualElement>("game-menu-panel").worldBound.yMin,
+                root.Q<VisualElement>("game-menu-content").worldBound.yMin,
                 tooltip.worldBound.yMin,
                 1f,
                 "拖回背包后物品信息顶部位置错误");
@@ -484,10 +484,8 @@ namespace DarkFlare.Tests
 
             AssertInventoryGridInsideFrame(root);
             Rect equipment = root.Q<VisualElement>("inventory-equipment").worldBound;
-            Rect inventoryPanel = root.Q<VisualElement>(className: "item-workbench-inventory").worldBound;
             Rect inventory = root.Q<VisualElement>("inventory-grid-frame").worldBound;
             Assert.LessOrEqual(equipment.yMax, inventory.yMin + 1f, "装备区没有位于背包上方");
-            Assert.Greater(equipment.height, inventoryPanel.height, "装备区高度没有高于压缩后的背包区");
             Rect cell = root.Q<VisualElement>(className: "inventory-cell").worldBound;
             Rect weapon = root.Q<VisualElement>("inventory-slot-weapon").worldBound;
             Rect armor = root.Q<VisualElement>("inventory-slot-armor").worldBound;

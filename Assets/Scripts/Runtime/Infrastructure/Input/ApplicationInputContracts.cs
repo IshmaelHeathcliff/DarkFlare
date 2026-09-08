@@ -37,6 +37,10 @@ namespace DarkFlare
         UiSubmit,
         UiCancel,
         UiRearrange,
+        PlayerPause,
+        UiPause,
+        UiPreviousWindow,
+        UiNextWindow,
     }
 
     public enum InputBindingPart
@@ -289,6 +293,10 @@ namespace DarkFlare
                 RebindableInputAction.UiSubmit,
                 RebindableInputAction.UiCancel,
                 RebindableInputAction.UiRearrange,
+                RebindableInputAction.PlayerPause,
+                RebindableInputAction.UiPause,
+                RebindableInputAction.UiPreviousWindow,
+                RebindableInputAction.UiNextWindow,
             });
 
         public static IReadOnlyList<RebindableInputAction> Actions => ActionsValue;
@@ -300,11 +308,15 @@ namespace DarkFlare
                 case RebindableInputAction.PlayerMove:
                 case RebindableInputAction.PlayerInteract:
                 case RebindableInputAction.PlayerToggleMenu:
+                case RebindableInputAction.PlayerPause:
                     return "Player";
                 case RebindableInputAction.UiNavigate:
                 case RebindableInputAction.UiSubmit:
                 case RebindableInputAction.UiCancel:
                 case RebindableInputAction.UiRearrange:
+                case RebindableInputAction.UiPause:
+                case RebindableInputAction.UiPreviousWindow:
+                case RebindableInputAction.UiNextWindow:
                     return "UI";
                 default:
                     throw new ArgumentOutOfRangeException(nameof(action), action, null);
@@ -329,6 +341,13 @@ namespace DarkFlare
                     return "Cancel";
                 case RebindableInputAction.UiRearrange:
                     return "Rearrange";
+                case RebindableInputAction.PlayerPause:
+                case RebindableInputAction.UiPause:
+                    return "Pause";
+                case RebindableInputAction.UiPreviousWindow:
+                    return "PreviousWindow";
+                case RebindableInputAction.UiNextWindow:
+                    return "NextWindow";
                 default:
                     throw new ArgumentOutOfRangeException(nameof(action), action, null);
             }

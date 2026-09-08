@@ -6,7 +6,6 @@ namespace DarkFlare
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(UIDocument))]
-    [RequireComponent(typeof(InventoryPanelController))]
     public class CraftingPanelController : MonoBehaviour, IController
     {
         const string SelectedScopeClass = "crafting-scope--selected";
@@ -20,8 +19,9 @@ namespace DarkFlare
         [SerializeField]
         UIDocument _document;
 
-        [SerializeField]
-        InventoryPanelController _inventoryPanel;
+        ItemWorkspace _workspace;
+        GameMenuController _menu;
+        ItemSourceListView _sourceList;
 
         VisualElement _page;
         Label _goldLabel;
@@ -44,7 +44,9 @@ namespace DarkFlare
         Button _addAffixButton;
         Button _removeAffixButton;
         Button _rerollValuesButton;
+        readonly Dictionary<ItemInstance, Button> _candidateButtons = new Dictionary<ItemInstance, Button>();
         ItemInstance _candidateItem;
+        ItemInstance _previewItem;
         ItemInstance _slottedItem;
         CraftingAffixScope _scope = CraftingAffixScope.Any;
         CraftingResult _lastResult;
@@ -68,13 +70,20 @@ namespace DarkFlare
             }
 
             LastSnapshot = this.SendQuery(new GetCraftingSnapshotQuery());
-            _candidateItem = FindSnapshotItem(_inventoryPanel.SelectedItem);
+            var candidates = new List<ItemInstance>();
+            foreach (CraftingItemSnapshot snapshot in LastSnapshot.Items)
+            {
+                if (snapshot.Item != _workspace.CraftingItem) { candidates.Add(snapshot.Item); }
+            }
+            _sourceList.Refresh(candidates, item => Resolve(ItemDetailSnapshotFactory.Create(item).Name),
+                SelectCandidate, PreviewCandidate, EndCandidatePreview);
+            _candidateItem = FindSnapshotItem(_candidateItem);
             ItemInstance previousSlottedItem = _slottedItem;
             _slottedItem = FindSnapshotItem(_slottedItem);
 
             if (previousSlottedItem != null && _slottedItem == null)
             {
-                _inventoryPanel.SetExternalSlotItem(null);
+                _workspace.SetCraftingItem(null);
             }
 
             RefreshSelection();
@@ -106,7 +115,14 @@ namespace DarkFlare
                 return true;
             }
 
-            return _inventoryPanel != null && _inventoryPanel.FocusDefault();
+            if (_candidateItem != null && _candidateButtons.TryGetValue(_candidateItem, out Button candidate))
+            {
+                candidate.Focus();
+                return true;
+            }
+            foreach (Button button in _candidateButtons.Values) { button.Focus(); return true; }
+            _inputSlotButton?.Focus();
+            return _inputSlotButton != null;
         }
 
         void Awake()
@@ -144,6 +160,7 @@ namespace DarkFlare
                 return SceneSessionBindResult.Retry;
             }
 
+            _workspace = _menu.Workspace;
             if (!BindVisualTree())
             {
                 return SceneSessionBindResult.Failed;
@@ -151,11 +168,7 @@ namespace DarkFlare
 
             RegisterEvents();
             BindLocalization();
-            _inventoryPanel.SelectionChanged += OnInventorySelectionChanged;
-            _inventoryPanel.ConfigureExternalDropTarget(
-                _inputSlotButton,
-                CanAcceptCraftingItem,
-                PlaceInCraftingSlot);
+            _workspace.InventorySelectionChanged += OnInventorySelectionChanged;
             RefreshCrafting();
             SetVisible(IsVisible);
             ApplicationLog.Info(LogEventIds.GameplayUi, "[CraftingPanelController] 随机打造工作台初始化完成", this);
@@ -166,11 +179,10 @@ namespace DarkFlare
         {
             UnbindButtons();
 
-            if (_inventoryPanel != null)
+            if (_workspace != null)
             {
-                _inventoryPanel.SelectionChanged -= OnInventorySelectionChanged;
-                _inventoryPanel.ClearExternalDropTarget(_inputSlotButton);
-                _inventoryPanel.SetExternalSlotItem(null);
+                _workspace.InventorySelectionChanged -= OnInventorySelectionChanged;
+                _workspace.SetCraftingItem(null);
             }
 
             for (int i = 0; i < _eventRegistrations.Count; i++)
@@ -188,6 +200,7 @@ namespace DarkFlare
 
             _page = null;
             _candidateItem = null;
+            _previewItem = null;
             _slottedItem = null;
             _lastResult = null;
             IsVisible = false;
@@ -210,22 +223,20 @@ namespace DarkFlare
                 _document = gameObject.AddComponent<UIDocument>();
             }
 
-            if (_inventoryPanel == null)
-            {
-                _inventoryPanel = GetComponent<InventoryPanelController>();
-            }
+            _menu = GetComponent<GameMenuController>();
         }
 
         bool BindVisualTree()
         {
-            if (_document == null || _inventoryPanel == null)
+            if (_document == null || _workspace == null)
             {
-                ApplicationLog.Error(LogEventIds.GameplayUi, "[CraftingPanelController] 缺少 UIDocument 或共享背包控制器", this);
+                ApplicationLog.Error(LogEventIds.GameplayUi, "[CraftingPanelController] 缺少 UIDocument 或物品窗口宿主", this);
                 return false;
             }
 
             VisualElement root = _document.rootVisualElement;
             _page = root.Q<VisualElement>("crafting-page");
+            _sourceList = new ItemSourceListView(root.Q("crafting-candidates"), _candidateButtons);
             _goldLabel = root.Q<Label>("crafting-gold");
             _selectedRarityLabel = root.Q<Label>("crafting-selected-rarity");
             _selectedCapacityLabel = root.Q<Label>("crafting-selected-capacity");
@@ -248,6 +259,7 @@ namespace DarkFlare
             _rerollValuesButton = root.Q<Button>("crafting-reroll-values");
 
             if (_page == null
+                || root.Q("crafting-candidates") == null
                 || _goldLabel == null
                 || _selectedRarityLabel == null
                 || _selectedCapacityLabel == null
@@ -344,6 +356,40 @@ namespace DarkFlare
             _eventRegistrations.Add(this.RegisterEvent<InventoryChangedEvent>(_ => RefreshCrafting()));
             _eventRegistrations.Add(this.RegisterEvent<GoldChangedEvent>(_ => RefreshCrafting()));
             _eventRegistrations.Add(this.RegisterEvent<ItemCraftedEvent>(_ => RefreshCrafting()));
+        }
+
+        public void CloseWindow()
+        {
+            _slottedItem = null;
+            _workspace?.SetCraftingItem(null);
+            _workspace?.HidePreview(GameMenuPage.Crafting);
+        }
+
+        void SelectCandidate(ItemInstance item)
+        {
+            _workspace.Activate(GameMenuPage.Crafting);
+            _candidateItem = item;
+            RefreshSelection();
+            PreviewCandidate(item);
+        }
+
+        void PreviewCandidate(ItemInstance item)
+        {
+            if (!IsVisible || _workspace.IsDragging) { return; }
+            _workspace.Activate(GameMenuPage.Crafting);
+            _previewItem = item;
+            foreach (var entry in _candidateButtons)
+            {
+                _workspace.Highlight(GameMenuPage.Crafting, entry.Value, "item-source-row--selected", entry.Key == item);
+            }
+            _workspace.Preview(GameMenuPage.Crafting, _document.rootVisualElement.Q("crafting-window"), item, string.Empty);
+        }
+
+        void EndCandidatePreview(ItemInstance item)
+        {
+            if (_previewItem != item) { return; }
+            _previewItem = null;
+            _workspace.HidePreview(GameMenuPage.Crafting);
         }
 
         void OnInventorySelectionChanged(ItemInstance item)
@@ -526,16 +572,35 @@ namespace DarkFlare
             return false;
         }
 
-        bool CanAcceptCraftingItem(ItemInstance item)
+        public bool CanAcceptItem(ItemInstance item)
         {
-            return IsVisible && FindSnapshotItem(item) != null;
+            if (!IsVisible || !_menu.IsPageAvailable(GameMenuPage.Crafting)) { return false; }
+            foreach (CraftingItemSnapshot candidate in this.SendQuery(new GetCraftingSnapshotQuery()).Items)
+            {
+                if (candidate.Item == item) { return true; }
+            }
+            return false;
+        }
+
+        public bool PlaceItem(ItemInstance item)
+        {
+            if (!CanAcceptItem(item) || item == _slottedItem) { return false; }
+            PlaceInCraftingSlot(item);
+            return _slottedItem == item;
+        }
+
+        public bool ReturnItem()
+        {
+            if (!IsVisible || !_menu.IsPageAvailable(GameMenuPage.Crafting) || _slottedItem == null) { return false; }
+            RemoveFromCraftingSlot();
+            return true;
         }
 
         void PlaceInCraftingSlot(ItemInstance item)
         {
             ItemInstance snapshotItem = FindSnapshotItem(item);
 
-            if (!IsVisible || snapshotItem == null)
+            if (!IsVisible || !_menu.IsPageAvailable(GameMenuPage.Crafting) || snapshotItem == null)
             {
                 return;
             }
@@ -543,8 +608,8 @@ namespace DarkFlare
             _candidateItem = snapshotItem;
             _slottedItem = snapshotItem;
             _lastResult = null;
-            _inventoryPanel.SetExternalSlotItem(_slottedItem);
-            RefreshSelection();
+            _workspace.SetCraftingItem(_slottedItem);
+            RefreshCrafting();
         }
 
         void RemoveFromCraftingSlot()
@@ -556,9 +621,9 @@ namespace DarkFlare
 
             _slottedItem = null;
             _lastResult = null;
-            _inventoryPanel.SetExternalSlotItem(null);
-            _inventoryPanel.ShowPlayerTooltip(null, string.Empty);
-            RefreshSelection();
+            _workspace.SetCraftingItem(null);
+            _workspace.HidePreview(GameMenuPage.Crafting);
+            RefreshCrafting();
         }
 
         void OnInputSlotClicked()
@@ -603,7 +668,10 @@ namespace DarkFlare
         {
             if (_slottedItem != null)
             {
-                _inventoryPanel.ShowPlayerTooltip(
+                _previewItem = _slottedItem;
+                _workspace.Activate(GameMenuPage.Crafting);
+                _workspace.Highlight(GameMenuPage.Crafting, _inputSlotButton, "item-source-row--selected", true);
+                _workspace.Preview(GameMenuPage.Crafting, _document.rootVisualElement.Q("crafting-window"),
                     _slottedItem,
                     Localize("crafting.tooltip.slotted"));
             }
@@ -611,7 +679,8 @@ namespace DarkFlare
 
         void EndSlottedItemPreview()
         {
-            _inventoryPanel.ShowPlayerTooltip(null, string.Empty);
+            _previewItem = null;
+            _workspace.HidePreview(GameMenuPage.Crafting);
         }
 
         void OnUpgradeRarityClicked()
@@ -668,6 +737,7 @@ namespace DarkFlare
 
         void Craft(CraftOperation operation, CraftingAffixScope scope)
         {
+            if (!IsVisible || !_menu.IsPageAvailable(GameMenuPage.Crafting)) { return; }
             if (_slottedItem == null)
             {
                 _feedbackLabel.text = Localize("crafting.feedback.slot_required");
@@ -794,7 +864,13 @@ namespace DarkFlare
         {
             if (_page != null)
             {
+                _sourceList.RefreshTitles(item => Resolve(ItemDetailSnapshotFactory.Create(item).Name));
                 RefreshSelection();
+                if (_previewItem != null && _workspace.ActiveWindow == GameMenuPage.Crafting)
+                {
+                    if (_previewItem == _slottedItem) { PreviewSlottedItem(); }
+                    else { PreviewCandidate(_previewItem); }
+                }
             }
         }
 

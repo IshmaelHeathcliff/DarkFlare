@@ -1,4 +1,4 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:l="UnityEngine.Localization" editor-extension-mode="False">
+<ui:UXML xmlns:l="UnityEngine.Localization" xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
   <ui:VisualElement name="item-workbench-shared" class="item-workbench-shared" picking-mode="Position">
     <ui:VisualElement name="inventory-equipment" class="item-workbench-equipment ui-panel-frame">
       <ui:VisualElement class="item-workbench-section-header">
@@ -23,17 +23,6 @@
           <ui:Button name="inventory-slot-armor" text="" class="inventory-equipment-slot equipment-slot--armor" />
           <ui:Button name="inventory-slot-ring-left" text="" class="inventory-equipment-slot equipment-slot--ring-left" />
           <ui:Button name="inventory-slot-ring-right" text="" class="inventory-equipment-slot equipment-slot--ring-right" />
-          <ui:VisualElement name="equipment-future-slots" class="equipment-future-slots" picking-mode="Ignore">
-            <ui:Label text="" class="equipment-future-title">
-              <Bindings>
-                <l:LocalizedString property="text" table="ui" entry="equipment.future.title" />
-              </Bindings>
-            </ui:Label>
-            <ui:VisualElement class="equipment-future-slot-row">
-              <ui:VisualElement class="equipment-future-slot" />
-              <ui:VisualElement class="equipment-future-slot" />
-            </ui:VisualElement>
-          </ui:VisualElement>
         </ui:VisualElement>
       </ui:VisualElement>
       <ui:Label text="" class="item-workbench-help">

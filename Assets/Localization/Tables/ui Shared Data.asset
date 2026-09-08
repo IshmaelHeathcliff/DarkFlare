@@ -1327,6 +1327,130 @@ MonoBehaviour:
     m_Key: settings.status.busy
     m_Metadata:
       m_Items: []
+  - m_Id: 7074927826952192
+    m_Key: window.pause
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7074927877283840
+    m_Key: window.resume
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7074927877283841
+    m_Key: window.sell_source
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7074927877283842
+    m_Key: window.craft_source
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7074927877283843
+    m_Key: window.empty_source
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7075041031217152
+    m_Key: settings.input.action.player_pause
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7075041031217153
+    m_Key: settings.input.action.ui_pause
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7075041031217154
+    m_Key: settings.input.action.ui_previous_window
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7075041031217155
+    m_Key: settings.input.action.ui_next_window
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7079955325247488
+    m_Key: window.close
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7114873027682304
+    m_Key: item.action.none
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7114873073819648
+    m_Key: item.action.move
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7114873073819649
+    m_Key: item.action.equip
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7114873073819650
+    m_Key: item.action.unequip
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7114873073819651
+    m_Key: item.action.buy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7114873073819652
+    m_Key: item.action.sell
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7114873073819653
+    m_Key: item.action.place
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7114873073819654
+    m_Key: item.action.return
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7114873073819655
+    m_Key: item.action.discard
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7114873073819656
+    m_Key: item.action.menu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7114873073819657
+    m_Key: item.action.discard_zone
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7114873073819658
+    m_Key: item.action.buy_zone
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7114873073819659
+    m_Key: item.action.sell_zone
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7114873073819660
+    m_Key: item.action.select
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7114873073819661
+    m_Key: item.action.stale
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7114873073819662
+    m_Key: item.action.invalid
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7114873073819663
+    m_Key: item.action.no_gold
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7114873073819664
+    m_Key: item.action.no_space
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7114873073819665
+    m_Key: item.action.no_drop_position
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7114873073819666
+    m_Key: item.action.cancelled
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7114873073819667
+    m_Key: item.action.completed
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

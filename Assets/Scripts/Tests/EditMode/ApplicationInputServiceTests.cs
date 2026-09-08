@@ -29,6 +29,41 @@ namespace DarkFlare.Tests
         }
 
         [Test]
+        public void SessionWindowActions_WorkInUiAndYieldToUpperOwners()
+        {
+            Keyboard keyboard = InputSystem.AddDevice<Keyboard>();
+            int inventory = 0;
+            int pause = 0;
+            int cycle = 0;
+            _service.ToggleMenuPerformed += () => inventory++;
+            _service.PausePerformed += () => pause++;
+            _service.CycleWindowPerformed += step => cycle += step;
+            _service.SetSessionMenuActive(true);
+            PressAndRelease(keyboard.tabKey);
+            PressAndRelease(keyboard.pKey);
+            PressAndRelease(keyboard.rightBracketKey);
+            Assert.AreEqual(1, inventory);
+            Assert.AreEqual(1, pause);
+            Assert.AreEqual(1, cycle);
+            Assert.IsFalse(_service.IsGameplayEnabled);
+            Assert.IsFalse(_service.ActionAsset.FindAction("Player/Interact").enabled);
+            using (_service.AcquireUiContext("settings"))
+            {
+                PressAndRelease(keyboard.tabKey);
+                PressAndRelease(keyboard.pKey);
+                PressAndRelease(keyboard.rightBracketKey);
+            }
+            Assert.AreEqual(1, inventory);
+            Assert.AreEqual(1, pause);
+            Assert.AreEqual(1, cycle);
+            PressAndRelease(keyboard.tabKey);
+            Assert.AreEqual(2, inventory);
+            _service.SetSessionMenuActive(false);
+            PressAndRelease(keyboard.tabKey);
+            Assert.AreEqual(2, inventory);
+        }
+
+        [Test]
         public void Constructor_EnablesUiContextOnly()
         {
             Assert.AreEqual(InputContext.UI, _service.CurrentContext);
@@ -334,6 +369,10 @@ namespace DarkFlare.Tests
             Assert.AreEqual(InputRebindResultCode.Conflict, conflict.Code);
             Assert.AreEqual(RebindableInputAction.PlayerToggleMenu, conflict.Conflict.ConflictingTarget.Action);
             Assert.IsTrue(crossMap.Succeeded);
+            Assert.AreEqual("<Keyboard>/f", _service.GetBindingControlPath(submit));
+            InputRebindResult windowConflict = await _service.ApplyBindingOverrideAsync(submit, "<Keyboard>/tab");
+            Assert.AreEqual(InputRebindResultCode.Conflict, windowConflict.Code,
+                "背包开关与 UI 同时启用后必须检测跨 Map 冲突");
             Assert.AreEqual("<Keyboard>/f", _service.GetBindingControlPath(submit));
         }
 

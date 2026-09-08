@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace DarkFlare
@@ -35,6 +36,13 @@ namespace DarkFlare
         public IArchitecture GetArchitecture()
         {
             return GameArchitectureProvider.RequireCurrent();
+        }
+
+        public event Action<WorldInteractionTarget> Unavailable;
+
+        void OnDisable()
+        {
+            Unavailable?.Invoke(this);
         }
 
         void Awake()

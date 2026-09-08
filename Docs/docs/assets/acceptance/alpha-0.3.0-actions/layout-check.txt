@@ -1,0 +1,19 @@
+1920x1080; formal six-affix item; isolated data root
+inventory-details-zh-Hans: PASS
+ring-actions-zh-Hans: PASS
+purchase-valid-zh-Hans: PASS
+purchase-invalid-zh-Hans: PASS
+shop-actions-zh-Hans: PASS
+crafting-details-zh-Hans: PASS
+inventory-details-en: PASS
+ring-actions-en: PASS
+purchase-valid-en: PASS
+purchase-invalid-en: PASS
+shop-actions-en: PASS
+crafting-details-en: PASS
+inventory-details-qps-ploc: PASS
+ring-actions-qps-ploc: PASS
+purchase-valid-qps-ploc: PASS
+purchase-invalid-qps-ploc: PASS
+shop-actions-qps-ploc: PASS
+crafting-details-qps-ploc: PASS

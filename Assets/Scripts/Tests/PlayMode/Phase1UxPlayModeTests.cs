@@ -51,6 +51,362 @@ namespace DarkFlare.Tests
         }
 
         [UnityTest]
+        public IEnumerator ItemActions_EquipmentMenuDiscardAndDeviceLossKeepOwnership()
+        {
+            yield return _fixture.EnterMain();
+            GameMenuController menu = Object.FindAnyObjectByType<GameMenuController>();
+            IArchitecture architecture = menu.GetArchitecture();
+            InventoryModel inventory = architecture.GetModel<InventoryModel>();
+            inventory.AddGold(10000);
+            EconomyModel economy = architecture.GetModel<EconomyModel>();
+            ItemInstance weapon = economy.MerchantStock.First(item => item.BaseDefinition.CanEquipTo(EquipmentSlot.Weapon));
+            ItemInstance ring = economy.MerchantStock.First(item => item.BaseDefinition.CanEquipTo(EquipmentSlot.RingLeft));
+            Assert.IsTrue(architecture.SendCommand(new BuyItemCommand(weapon)));
+            Assert.IsTrue(architecture.SendCommand(new BuyItemCommand(ring)));
+            menu.OpenPage(GameMenuPage.Inventory);
+            yield return null;
+            yield return null;
+            VisualElement root = menu.GetComponent<UIDocument>().rootVisualElement;
+            CombatActor player = architecture.SendQuery(new GetInventorySnapshotQuery()).Player;
+            EquipmentModel equipment = architecture.GetModel<EquipmentModel>();
+            Mouse mouse = InputSystem.AddDevice<Mouse>();
+            Gamepad pad = InputSystem.AddDevice<Gamepad>();
+            yield return RightClickPointer(mouse, root, FindItemButton(root, weapon, "inventory-item").worldBound.center);
+            Assert.AreSame(weapon, equipment.GetItem(player, EquipmentSlot.Weapon), "普通背包右键没有装备");
+            yield return RightClickPointer(mouse, root, root.Q("inventory-slot-weapon").worldBound.center);
+            Assert.IsTrue(inventory.Grid.Placements.ContainsKey(weapon), "装备右键没有卸下");
+            ItemInstance previousLeft = equipment.GetItem(player, EquipmentSlot.RingLeft);
+            yield return RightClickPointer(mouse, root, FindItemButton(root, ring, "inventory-item").worldBound.center);
+            Assert.IsTrue(menu.Workspace.Interactions.IsMenuOpen, "戒指需要明确选择左右槽");
+            Assert.AreEqual("item-action-equip-RingLeft", ((VisualElement)root.focusController.focusedElement).name);
+            _inputFixture.Press(pad.dpad.down);
+            yield return null;
+            _inputFixture.Release(pad.dpad.down);
+            yield return null;
+            Assert.AreEqual("item-action-equip-RingRight", ((VisualElement)root.focusController.focusedElement).name);
+            _inputFixture.PressAndRelease(pad.buttonSouth);
+            yield return null;
+            yield return null;
+            Assert.AreSame(ring, equipment.GetItem(player, EquipmentSlot.RingRight));
+            Assert.AreSame(previousLeft, equipment.GetItem(player, EquipmentSlot.RingLeft));
+
+            Button button = FindItemButton(root, weapon, "inventory-item");
+            button.Focus();
+            yield return null;
+            _inputFixture.PressAndRelease(pad.buttonWest);
+            yield return null;
+            Assert.IsTrue(menu.Workspace.IsDragging);
+            InputSystem.RemoveDevice(pad);
+            yield return null;
+            Assert.IsFalse(menu.Workspace.IsDragging, "手柄断开没有取消拿起");
+            Assert.IsTrue(inventory.Grid.Placements.ContainsKey(weapon));
+            yield return DragPointer(mouse, root, button.worldBound.position + new Vector2(24f, 24f),
+                root.Q("item-discard-zone").worldBound.center, menu.GetComponent<InventoryPanelController>());
+            Assert.IsFalse(inventory.Grid.Placements.ContainsKey(weapon), "明确丢弃区未转移物品");
+            LootPickupController drop = Object.FindObjectsByType<LootPickupController>(FindObjectsSortMode.None)
+                .Single(pickup => pickup.Item == weapon);
+            Assert.IsNotNull(drop);
+            Assert.IsFalse(architecture.SendCommand(new DiscardItemCommand(weapon, player)), "重复丢弃必须失败");
+            Assert.LessOrEqual(CountItemSelectionHighlights(root), 1);
+            InputSystem.RemoveDevice(mouse);
+        }
+
+        [UnityTest]
+        public IEnumerator ItemActions_TradeByPointerAndGamepadAndReturnCraftingToExactCell()
+        {
+            yield return _fixture.EnterMain();
+            GameMenuController menu = Object.FindAnyObjectByType<GameMenuController>();
+            IArchitecture architecture = menu.GetArchitecture();
+            InventoryModel inventory = architecture.GetModel<InventoryModel>();
+            inventory.AddGold(10000);
+            VisualElement root = menu.GetComponent<UIDocument>().rootVisualElement;
+            InventoryPanelController panel = menu.GetComponent<InventoryPanelController>();
+            CraftingPanelController crafting = menu.GetComponent<CraftingPanelController>();
+            Assert.IsTrue(architecture.SendCommand(new OpenGameMenuCommand(FindTarget(GameMenuPage.Shop))));
+            menu.OpenPage(GameMenuPage.Inventory);
+            yield return null;
+            yield return null;
+            Mouse mouse = InputSystem.AddDevice<Mouse>();
+            Gamepad pad = InputSystem.AddDevice<Gamepad>();
+            Button stock = root.Q("shop-merchant-list").Query<Button>().First();
+            ItemInstance first = (ItemInstance)stock.userData;
+            int before = inventory.Gold;
+            VisualElement grid = root.Q("inventory-grid");
+            Vector2Int exact = new Vector2Int(3, 1);
+            yield return DragPointer(mouse, root, stock.worldBound.position + new Vector2(24f, 24f),
+                grid.worldBound.position + new Vector2(exact.x * 52f + 24f, exact.y * 52f + 24f), panel);
+            Assert.AreEqual(exact, inventory.Grid.Placements[first].position, "购买没有保留鼠标指定格");
+            Assert.Less(inventory.Gold, before);
+            Assert.IsFalse(architecture.GetModel<EconomyModel>().HasStock(first));
+            yield return DragPointer(mouse, root, FindItemButton(root, first, "inventory-item").worldBound.center,
+                root.Q("shop-sell-zone").worldBound.center, panel);
+            Assert.IsFalse(inventory.Grid.Placements.ContainsKey(first), "明确出售落点没有成交");
+
+            menu.ClosePage(GameMenuPage.Inventory);
+            yield return null;
+            stock = root.Q("shop-merchant-list").Query<Button>().First();
+            ItemInstance second = (ItemInstance)stock.userData;
+            yield return RightClickPointer(mouse, root, stock.worldBound.center);
+            Assert.IsTrue(inventory.Grid.Placements.ContainsKey(second), "单窗商人物品右键不能买入");
+            Button playerSource = root.Q("shop-player-list").Query<Button>().ToList().First(button => button.userData == second);
+            yield return RightClickPointer(mouse, root, playerSource.worldBound.center);
+            Assert.IsFalse(inventory.Grid.Placements.ContainsKey(second), "单窗玩家来源右键不能卖出");
+
+            stock = root.Q("shop-merchant-list").Query<Button>().First();
+            ItemInstance third = (ItemInstance)stock.userData;
+            stock.Focus();
+            yield return null;
+            _inputFixture.PressAndRelease(pad.buttonSouth);
+            yield return null;
+            yield return null;
+            Assert.IsTrue(menu.Workspace.Interactions.IsMenuOpen, "手柄提交没有打开物品动作菜单");
+            Assert.AreEqual("item-action-buy", ((VisualElement)root.focusController.focusedElement).name);
+            yield return RightClickPointer(mouse, root, stock.worldBound.position + new Vector2(16f, 16f));
+            Assert.IsFalse(menu.Workspace.Interactions.IsMenuOpen);
+            Assert.IsFalse(inventory.Grid.Placements.ContainsKey(third), "菜单外右键只能关闭菜单，不能穿透购买");
+            stock.Focus();
+            _inputFixture.PressAndRelease(pad.buttonSouth);
+            yield return null;
+            yield return null;
+            Assert.IsTrue(menu.Workspace.Interactions.IsMenuOpen);
+            _inputFixture.PressAndRelease(pad.buttonSouth);
+            yield return null;
+            yield return null;
+            Assert.IsTrue(inventory.Grid.Placements.ContainsKey(third), "手柄动作菜单没有买入");
+            Assert.IsFalse(menu.Workspace.Interactions.IsMenuOpen);
+
+            menu.OpenPage(GameMenuPage.Inventory);
+            yield return null;
+            yield return null;
+            stock = root.Q("shop-merchant-list").Query<Button>().First();
+            ItemInstance fourth = (ItemInstance)stock.userData;
+            stock.Focus();
+            _inputFixture.PressAndRelease(pad.buttonWest);
+            yield return null;
+            Assert.IsTrue(menu.Workspace.IsDragging);
+            _inputFixture.Press(pad.dpad.left);
+            yield return null;
+            _inputFixture.Release(pad.dpad.left);
+            yield return null;
+            Assert.IsNotEmpty(grid.Query<VisualElement>(className: "inventory-cell--drop-valid").ToList(),
+                "商人拿起后向左应进入实际左侧背包格");
+            _inputFixture.PressAndRelease(pad.buttonWest);
+            yield return null;
+            Assert.IsTrue(inventory.Grid.Placements.ContainsKey(fourth), "手柄跨窗指定格购买未提交");
+            Assert.AreEqual(inventory.Grid.Width - fourth.BaseDefinition.GridSize.x,
+                inventory.Grid.Placements[fourth].x, "从右侧商店进入背包应保留最近列");
+            menu.ClosePage(GameMenuPage.Inventory);
+
+            Assert.IsTrue(architecture.SendCommand(new OpenGameMenuCommand(FindTarget(GameMenuPage.Crafting))));
+            yield return null;
+            yield return null;
+            Button candidate = root.Q("crafting-candidates").Query<Button>().ToList().First(button => button.userData == third);
+            RectInt original = inventory.Grid.Placements[third];
+            yield return RightClickPointer(mouse, root, candidate.worldBound.center);
+            Assert.AreSame(third, crafting.SlottedItem, "单窗候选右键没有放入打造槽");
+            yield return RightClickPointer(mouse, root, root.Q("crafting-input-slot").worldBound.center);
+            Assert.IsNull(crafting.SlottedItem);
+            Assert.AreEqual(original, inventory.Grid.Placements[third]);
+            candidate = root.Q("crafting-candidates").Query<Button>().ToList().First(button => button.userData == third);
+            yield return DragPointer(mouse, root, candidate.worldBound.center, root.Q("crafting-input-slot").worldBound.center, panel);
+            Assert.AreSame(third, crafting.SlottedItem, "单窗候选不能拖入打造槽");
+            menu.OpenPage(GameMenuPage.Inventory);
+            yield return null;
+            yield return null;
+            yield return DragPointer(mouse, root, root.Q("crafting-input-slot").worldBound.center,
+                grid.worldBound.position + new Vector2(9f * 52f + 24f, 5f * 52f + 24f), panel);
+            Assert.AreSame(third, crafting.SlottedItem, "非法取回落点不应释放打造目标");
+            Assert.AreEqual(original, inventory.Grid.Placements[third]);
+            exact = new Vector2Int(5, 0);
+            yield return DragPointer(mouse, root, root.Q("crafting-input-slot").worldBound.center,
+                grid.worldBound.position + new Vector2(exact.x * 52f + 24f, exact.y * 52f + 24f), panel);
+            Assert.IsNull(crafting.SlottedItem);
+            Assert.AreEqual(exact, inventory.Grid.Placements[third].position, "打造取回没有使用指定格");
+            Assert.LessOrEqual(CountItemSelectionHighlights(root), 1);
+            InputSystem.RemoveDevice(mouse);
+            InputSystem.RemoveDevice(pad);
+        }
+
+        [UnityTest]
+        public IEnumerator GamepadNavigation_MovesHeldGridItemsAndCrossesCraftingBoundary()
+        {
+            yield return _fixture.EnterMain();
+            yield return null;
+            GameMenuController menu = Object.FindAnyObjectByType<GameMenuController>();
+            IArchitecture architecture = menu.GetArchitecture();
+            InventoryModel inventory = architecture.GetModel<InventoryModel>();
+            ItemInstance item = CreateItemDefinition("navigation_item", "导航物品")
+                .CreateInstance("navigation_instance", 1, 42);
+            Assert.IsTrue(inventory.TryAddItem(item));
+            Assert.IsTrue(architecture.SendCommand(new OpenGameMenuCommand(FindTarget(GameMenuPage.Crafting))));
+            menu.OpenPage(GameMenuPage.Inventory);
+            yield return null;
+            yield return null;
+            VisualElement root = menu.GetComponent<UIDocument>().rootVisualElement;
+            Button itemButton = FindItemButton(root, item, "inventory-item");
+            itemButton.Focus();
+            Gamepad pad = InputSystem.AddDevice<Gamepad>();
+            Vector2Int initial = inventory.Grid.Placements[item].position;
+            _inputFixture.PressAndRelease(pad.buttonWest);
+            yield return null;
+            Assert.IsTrue(menu.Workspace.IsDragging);
+            _inputFixture.Press(pad.dpad.right);
+            yield return null;
+            _inputFixture.Release(pad.dpad.right);
+            yield return null;
+            Assert.AreEqual(initial, inventory.Grid.Placements[item].position, "拿起时不能提前提交移动");
+            _inputFixture.PressAndRelease(pad.buttonWest);
+            yield return null;
+            Assert.AreEqual(initial + Vector2Int.right, inventory.Grid.Placements[item].position,
+                "一次方向输入必须只移动一格");
+            Assert.IsFalse(menu.Workspace.IsDragging);
+
+            Assert.IsTrue(architecture.SendCommand(new MoveInventoryItemCommand(item, new Vector2Int(9, 0))));
+            yield return null;
+            itemButton = FindItemButton(root, item, "inventory-item");
+            itemButton.Focus();
+            _inputFixture.PressAndRelease(pad.buttonWest);
+            yield return null;
+            _inputFixture.Press(pad.dpad.right);
+            yield return null;
+            _inputFixture.Release(pad.dpad.right);
+            yield return null;
+            Button slot = root.Q<Button>("crafting-input-slot");
+            Assert.IsTrue(slot.ClassListContains("inventory-external-drop--valid"), "背包右边缘未进入实际右侧打造落点");
+            _inputFixture.Press(pad.dpad.left);
+            yield return null;
+            _inputFixture.Release(pad.dpad.left);
+            yield return null;
+            Assert.IsFalse(slot.ClassListContains("inventory-external-drop--valid"), "打造落点不能返回背包");
+            _inputFixture.Set(pad.leftStick, Vector2.right);
+            yield return null;
+            _inputFixture.Set(pad.leftStick, Vector2.zero);
+            yield return null;
+            Assert.IsTrue(slot.ClassListContains("inventory-external-drop--valid"), "摇杆与 D-pad 导航规则不一致");
+            _inputFixture.PressAndRelease(pad.buttonWest);
+            yield return null;
+            Assert.AreSame(item, menu.GetComponent<CraftingPanelController>().SlottedItem);
+            Assert.AreEqual(new Vector2Int(9, 0), inventory.Grid.Placements[item].position);
+            slot.Focus();
+            _inputFixture.Press(pad.dpad.left);
+            yield return null;
+            _inputFixture.Release(pad.dpad.left);
+            yield return null;
+            Assert.AreEqual(GameMenuPage.Inventory, menu.CurrentPage, "普通浏览不能从打造跨回背包");
+            Assert.Less(((VisualElement)root.focusController.focusedElement).worldBound.center.x, slot.worldBound.center.x);
+            slot.Focus();
+            _inputFixture.PressAndRelease(pad.buttonWest);
+            yield return null;
+            _inputFixture.Press(pad.dpad.left);
+            yield return null;
+            _inputFixture.Release(pad.dpad.left);
+            yield return null;
+            Assert.IsNotEmpty(root.Query<VisualElement>(className: "inventory-cell--drop-valid").ToList(),
+                "打造槽拿起后向左应允许取回背包");
+            _inputFixture.PressAndRelease(pad.buttonWest);
+            yield return null;
+            Assert.IsNull(menu.GetComponent<CraftingPanelController>().SlottedItem);
+            Assert.IsTrue(inventory.Grid.Placements.ContainsKey(item));
+            Assert.LessOrEqual(CountItemSelectionHighlights(root), 1);
+            InputSystem.RemoveDevice(pad);
+        }
+
+        [UnityTest]
+        public IEnumerator IndependentWindows_TradeAndCraftWithoutInventoryAndRevokeInvalidTargets()
+        {
+            yield return _fixture.EnterMain();
+            yield return null;
+            GameMenuController menu = Object.FindAnyObjectByType<GameMenuController>();
+            IArchitecture architecture = menu.GetArchitecture();
+            VisualElement root = menu.GetComponent<UIDocument>().rootVisualElement;
+            InventoryModel inventory = architecture.GetModel<InventoryModel>();
+            inventory.AddGold(10000);
+            WorldInteractionTarget merchant = FindTarget(GameMenuPage.Shop);
+            WorldInteractionTarget craftingTarget = FindTarget(GameMenuPage.Crafting);
+            Assert.IsTrue(architecture.SendCommand(new OpenGameMenuCommand(merchant)));
+            yield return null;
+            yield return null;
+            Assert.IsFalse(menu.IsWindowVisible(GameMenuPage.Inventory));
+            ShopPanelController shop = menu.GetComponent<ShopPanelController>();
+            Button stock = root.Q("shop-merchant-list").Query<Button>().First();
+            ItemInstance purchased = (ItemInstance)stock.userData;
+            InvokeButton(stock);
+            InvokeButton(root.Q<Button>("shop-buy"));
+            yield return null;
+            yield return null;
+            Assert.IsTrue(inventory.Grid.Placements.ContainsKey(purchased));
+            Button playerSource = root.Q("shop-player-list").Query<Button>().ToList()
+                .First(button => button.userData == purchased);
+            InvokeButton(playerSource);
+            Assert.AreEqual(ShopItemSource.Player, shop.SelectedSource);
+            InvokeButton(root.Q<Button>("shop-sell"));
+            yield return null;
+            Assert.IsFalse(inventory.Grid.Placements.ContainsKey(purchased));
+            Assert.IsFalse(menu.IsWindowVisible(GameMenuPage.Inventory));
+
+            Keyboard keyboard = InputSystem.AddDevice<Keyboard>();
+            Gamepad pad = InputSystem.AddDevice<Gamepad>();
+            _inputFixture.Press(keyboard.tabKey);
+            yield return null;
+            _inputFixture.Release(keyboard.tabKey);
+            yield return null;
+            Assert.IsTrue(menu.IsWindowVisible(GameMenuPage.Inventory));
+            Assert.IsTrue(menu.IsWindowVisible(GameMenuPage.Shop));
+            menu.ClosePage(GameMenuPage.Inventory);
+            Assert.IsTrue(menu.IsWindowVisible(GameMenuPage.Shop));
+
+            ItemBaseDefinition definition = CreateItemDefinition("window_craft", "窗口打造物品");
+            ItemInstance item = definition.CreateInstance("window_craft_item", 1, 42, ItemRarity.Normal);
+            Assert.IsTrue(inventory.TryAddItem(item));
+            Assert.IsTrue(architecture.SendCommand(new OpenGameMenuCommand(craftingTarget)));
+            yield return null;
+            yield return null;
+            Assert.IsFalse(menu.IsWindowVisible(GameMenuPage.Shop));
+            Assert.IsFalse(menu.IsWindowVisible(GameMenuPage.Inventory));
+            CraftingPanelController crafting = menu.GetComponent<CraftingPanelController>();
+            Button candidate = root.Q("crafting-candidates").Query<Button>().ToList()
+                .First(button => button.userData == item);
+            InvokeButton(candidate);
+            InvokeButton(root.Q<Button>("crafting-slot-place"));
+            yield return null;
+            Assert.AreSame(item, crafting.SlottedItem);
+            InvokeButton(root.Q<Button>("crafting-upgrade-rarity"));
+            yield return null;
+            Assert.AreNotEqual(ItemRarity.Normal, item.Rarity);
+            RectInt original = inventory.Grid.Placements[item];
+            menu.OpenPage(GameMenuPage.Inventory);
+            yield return null;
+            menu.ClosePage(GameMenuPage.Inventory);
+            Assert.AreSame(item, crafting.SlottedItem);
+
+            _inputFixture.Press(pad.selectButton);
+            yield return null;
+            _inputFixture.Release(pad.selectButton);
+            yield return null;
+            Assert.IsTrue(menu.IsPauseOpen);
+            Assert.IsFalse(menu.IsWindowVisible(GameMenuPage.Crafting));
+            Assert.AreSame(item, crafting.SlottedItem);
+            _inputFixture.Press(pad.buttonEast);
+            yield return null;
+            _inputFixture.Release(pad.buttonEast);
+            yield return null;
+            Assert.IsFalse(menu.IsPauseOpen);
+            Assert.IsTrue(menu.IsWindowVisible(GameMenuPage.Crafting));
+            Assert.AreSame(item, crafting.SlottedItem);
+            menu.OpenPage(GameMenuPage.Inventory);
+            craftingTarget.enabled = false;
+            yield return null;
+            Assert.IsFalse(menu.IsWindowVisible(GameMenuPage.Crafting));
+            Assert.IsTrue(menu.IsWindowVisible(GameMenuPage.Inventory));
+            Assert.IsNull(crafting.SlottedItem);
+            Assert.AreEqual(original, inventory.Grid.Placements[item]);
+            menu.OpenPage(GameMenuPage.Crafting);
+            Assert.IsFalse(menu.IsWindowVisible(GameMenuPage.Crafting), "失效目标不能沿用旧授权重开");
+            InputSystem.RemoveDevice(keyboard);
+            InputSystem.RemoveDevice(pad);
+        }
+
+        [UnityTest]
         public IEnumerator ShopPurchase_UsesGridAndRestoresNeighborFocusFeedbackAndTooltip()
         {
             int originalWidth = Screen.width;
@@ -148,6 +504,9 @@ namespace DarkFlare.Tests
             Assert.AreEqual(selectedDisplayName, detailName.text, "详情未跟随邻近选择");
             AssertFocusedSelectedItem(root, shop.SelectedItem.BaseDefinition.DisplayName);
 
+            menu.OpenPage(GameMenuPage.Inventory);
+            yield return null;
+            yield return null;
             List<Button> playerButtons = root.Query<Button>(className: "inventory-item").ToList();
             Assert.IsNotEmpty(playerButtons, "购买后玩家背包没有可用于跨栏导航的物品");
             Button rightmostPlayerButton = playerButtons[0];
@@ -220,6 +579,7 @@ namespace DarkFlare.Tests
                         SetGameViewResolution(resolution);
                         yield return WaitForResolution(resolution, 5f);
                         Assert.IsTrue(architecture.SendCommand(new OpenGameMenuCommand(merchant)), "无法打开商店布局验收");
+                        menu.OpenPage(GameMenuPage.Inventory);
                         yield return null;
                         yield return null;
                         List<Button> merchantPreviewButtons = root.Query<Button>(className: "shop-item").ToList();
@@ -252,7 +612,12 @@ namespace DarkFlare.Tests
                             "shop-actions",
                             "shop-buy",
                             "shop-sell",
+                            "shop-buy-zone",
+                            "shop-sell-zone",
                         });
+                        Assert.LessOrEqual(root.Q("shop-actions").worldBound.yMax,
+                            root.Q("shop-buy-zone").parent.worldBound.yMin + 1f,
+                            "买卖按钮与拖放操作区重叠");
                         AssertWorkbenchShare(root);
                         AssertMerchantBackpack(root);
                         AssertVisibleTextFits(root, localeMode, resolution);
@@ -260,7 +625,7 @@ namespace DarkFlare.Tests
                         if (resolution.x >= 1920)
                         {
                             AssertElementsDoNotOverlap(root, "item-tooltip", "game-menu-panel");
-                            AssertTooltipSide(root, true);
+                            AssertTooltipClearOfWindows(root);
                         }
 
                         Assert.IsTrue(architecture.SendCommand(new OpenGameMenuCommand(crafting)), "无法打开打造页布局验收");
@@ -310,8 +675,16 @@ namespace DarkFlare.Tests
 
                         if (resolution.x >= 1920)
                         {
-                            AssertTooltipSide(root, false);
+                            AssertTooltipClearOfWindows(root);
                         }
+                        menu.ClosePage(GameMenuPage.Crafting);
+                        yield return null;
+                        yield return null;
+                        if (localeMode == "qps-ploc") { ApplyPseudoLocalization(root); }
+                        yield return null;
+                        yield return null;
+                        AssertLayoutInsideRoot(root, new[] { "inventory-window", "item-operation-bar" });
+                        AssertVisibleTextFits(root, localeMode, resolution);
                     }
                 }
 
@@ -414,6 +787,9 @@ namespace DarkFlare.Tests
             yield return null;
 
             VisualElement root = document.rootVisualElement;
+            menu.OpenPage(GameMenuPage.Inventory);
+            yield return null;
+            yield return null;
             InventoryPanelController inventoryPanel = menu.GetComponent<InventoryPanelController>();
             CraftingPanelController craftingPanel = menu.GetComponent<CraftingPanelController>();
             Button itemButton = FindItemButton(root, item, "inventory-item");
@@ -609,6 +985,7 @@ namespace DarkFlare.Tests
         {
             return root.Query<VisualElement>(className: "inventory-item--selected").ToList().Count
                 + root.Query<VisualElement>(className: "inventory-equipment-slot--selected").ToList().Count
+                + root.Query<VisualElement>(className: "item-source-row--selected").ToList().Count
                 + root.Query<VisualElement>(className: "shop-item--selected").ToList().Count;
         }
 
@@ -862,6 +1239,27 @@ namespace DarkFlare.Tests
         static void AssertLayoutInsideRoot(VisualElement root, IReadOnlyList<string> names)
         {
             Rect rootBounds = root.worldBound;
+            if (GameMenuController.IsNavigable(root.Q("item-operation-bar")))
+            {
+                AssertElementsInsideContainer(root, "game-menu-panel", new[] { "item-operation-bar" });
+                AssertElementsInsideContainer(root, "item-operation-bar", new[]
+                {
+                    "item-operation-status", "item-operation-actions", "item-discard-zone",
+                });
+            }
+
+            foreach (VisualElement header in root.Query<VisualElement>(className: "item-window-header").ToList())
+            {
+                if (!GameMenuController.IsNavigable(header))
+                {
+                    continue;
+                }
+
+                VisualElement title = header.Q<VisualElement>(className: "item-window-title");
+                VisualElement close = header.Q<VisualElement>(className: "item-window-close");
+                Assert.LessOrEqual(title.worldBound.xMax, close.worldBound.xMin + 1f, "长标题遮挡关闭按钮");
+                Assert.LessOrEqual(close.worldBound.xMax, header.worldBound.xMax + 1f, "关闭按钮超出窗口标题区");
+            }
 
             for (int i = 0; i < names.Count; i++)
             {
@@ -894,53 +1292,30 @@ namespace DarkFlare.Tests
             Assert.IsFalse(first.worldBound.Overlaps(second.worldBound), $"{firstName} 遮挡了 {secondName}");
         }
 
-        static void AssertTooltipSide(VisualElement root, bool right)
+        static void AssertTooltipClearOfWindows(VisualElement root)
         {
-            Rect tooltip = root.Q<VisualElement>("item-tooltip").worldBound;
-            Rect panel = root.Q<VisualElement>("game-menu-panel").worldBound;
-            Assert.AreEqual(panel.yMin, tooltip.yMin, 1f, "物品信息栏顶部未与主 UI 对齐");
-
-            if (right)
+            Rect tooltip = root.Q("item-tooltip").worldBound;
+            foreach (VisualElement window in root.Query<VisualElement>(className: "item-window").ToList())
             {
-                Assert.GreaterOrEqual(tooltip.xMin, panel.xMax, "商人物品信息栏未固定在主 UI 右侧");
-                return;
+                if (!GameMenuController.IsNavigable(window)) { continue; }
+                Assert.IsFalse(tooltip.Overlaps(window.worldBound), $"详情遮挡 {window.name}");
+                Assert.AreEqual(window.worldBound.yMin, tooltip.yMin, 1f, "详情与窗口顶部没有对齐");
             }
-
-            Assert.LessOrEqual(tooltip.xMax, panel.xMin, "玩家物品信息栏未固定在主 UI 左侧");
         }
 
         static void AssertWorkbenchShare(VisualElement root)
         {
-            Rect content = root.Q<VisualElement>("game-menu-content").worldBound;
-            Rect workbench = root.Q<VisualElement>("item-workbench-shared").worldBound;
-            Rect equipment = root.Q<VisualElement>("inventory-equipment").worldBound;
-            Rect inventory = root.Q<VisualElement>("inventory-grid-frame").worldBound;
-            Assert.LessOrEqual(
-                workbench.width,
-                content.width * 0.5f + 1f,
-                "商店或打造界面的装备/背包列超过内容区一半");
-            Assert.LessOrEqual(equipment.yMax, inventory.yMin + 1f, "装备区没有位于背包上方");
-
-            VisualElement[] pages =
+            VisualElement inventory = root.Q("inventory-window");
+            Rect equipment = root.Q("inventory-equipment").worldBound;
+            Rect grid = root.Q("inventory-grid-frame").worldBound;
+            Assert.LessOrEqual(equipment.yMax, grid.yMin + 1f, "装备区没有位于背包上方");
+            foreach (VisualElement window in root.Query<VisualElement>(className: "item-window").ToList())
             {
-                root.Q<VisualElement>("inventory-page"),
-                root.Q<VisualElement>("shop-page"),
-                root.Q<VisualElement>("crafting-page"),
-            };
-            VisualElement activePage = null;
-
-            for (int i = 0; i < pages.Length; i++)
-            {
-                if (pages[i].resolvedStyle.display == DisplayStyle.Flex)
-                {
-                    activePage = pages[i];
-                    break;
-                }
+                if (window == inventory || !GameMenuController.IsNavigable(window)) { continue; }
+                Assert.IsFalse(inventory.worldBound.Overlaps(window.worldBound), "独立窗口互相遮挡");
+                Assert.AreEqual(inventory.worldBound.yMin, window.worldBound.yMin, 1f, "窗口顶部没有对齐");
+                Assert.AreEqual(inventory.worldBound.yMax, window.worldBound.yMax, 1f, "窗口底部没有对齐");
             }
-
-            Assert.IsNotNull(activePage, "没有找到当前显示的物品上下文页");
-            Assert.AreEqual(workbench.yMin, activePage.worldBound.yMin, 1f, "背包与上下文顶部未对齐");
-            Assert.AreEqual(workbench.yMax, activePage.worldBound.yMax, 1f, "背包与上下文底部未对齐");
         }
 
         static void AssertMerchantBackpack(VisualElement root)

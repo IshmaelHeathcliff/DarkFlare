@@ -1,4 +1,4 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:l="UnityEngine.Localization" editor-extension-mode="False">
+<ui:UXML xmlns:l="UnityEngine.Localization" xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
   <ui:VisualElement name="crafting-page" class="crafting-page item-context-panel ui-panel-frame" picking-mode="Position">
     <ui:VisualElement class="item-context-header">
       <ui:Label text="" class="item-context-title">
@@ -32,6 +32,14 @@
         </ui:VisualElement>
       </ui:VisualElement>
     </ui:VisualElement>
+    <ui:Foldout class="item-source-section" name="crafting-source-toggle" value="true">
+      <Bindings>
+        <l:LocalizedString property="text" table="ui" entry="window.craft_source" />
+      </Bindings>
+      <ui:ScrollView name="crafting-candidates-scroll" mode="Vertical" class="item-source-scroll">
+        <ui:VisualElement name="crafting-candidates" />
+      </ui:ScrollView>
+    </ui:Foldout>
     <ui:Label text="" class="item-context-subtitle">
       <Bindings>
         <l:LocalizedString property="text" table="ui" entry="crafting.rarity.title" />

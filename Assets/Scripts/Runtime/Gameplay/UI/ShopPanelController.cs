@@ -6,7 +6,6 @@ namespace DarkFlare
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(UIDocument))]
-    [RequireComponent(typeof(InventoryPanelController))]
     public class ShopPanelController : MonoBehaviour, IController
     {
         const int MerchantGridWidth = 10;
@@ -17,8 +16,9 @@ namespace DarkFlare
         [SerializeField]
         UIDocument _document;
 
-        [SerializeField]
-        InventoryPanelController _inventoryPanel;
+        ItemWorkspace _workspace;
+        GameMenuController _menu;
+        ItemSourceListView _sourceList;
 
         readonly List<IUnRegister> _eventRegistrations = new List<IUnRegister>();
         readonly Dictionary<ItemInstance, Button> _merchantButtons = new Dictionary<ItemInstance, Button>();
@@ -39,14 +39,12 @@ namespace DarkFlare
         Label _feedbackLabel;
         Button _buyButton;
         Button _sellButton;
-        ItemDetailView _detailView;
         ItemInstance _selectedItem;
         ItemInstance _previewItem;
         ShopItemSource _selectedSource;
         ShopItemSource _previewSource;
         int _refreshGeneration;
         bool _isTransactionInProgress;
-        bool _isPlayerPreviewActive;
 
         public ShopSnapshot LastSnapshot { get; private set; }
 
@@ -78,6 +76,14 @@ namespace DarkFlare
             _merchantButtons.Clear();
 
             BuildList(LastSnapshot.MerchantItems, _merchantList, _merchantButtons);
+            var playerItems = new List<ItemInstance>();
+            foreach (ShopItemSnapshot snapshot in LastSnapshot.PlayerItems)
+            {
+                if (snapshot.Item != _workspace.CraftingItem) { playerItems.Add(snapshot.Item); }
+            }
+            _sourceList.Refresh(playerItems, item => Resolve(ItemDetailSnapshotFactory.Create(item).Name),
+                item => SelectItem(item, ShopItemSource.Player), item => PreviewItem(item, ShopItemSource.Player), EndPreview);
+            _playerEmptyLabel.style.display = playerItems.Count == 0 ? DisplayStyle.Flex : DisplayStyle.None;
             _merchantEmptyLabel.style.display = LastSnapshot.MerchantItems.Count == 0
                 ? DisplayStyle.Flex
                 : DisplayStyle.None;
@@ -93,8 +99,7 @@ namespace DarkFlare
             {
                 CaptureViewState();
                 _refreshGeneration++;
-                _isPlayerPreviewActive = false;
-                _inventoryPanel.SetSelectionHighlightSuppressed(false);
+
             }
 
             IsVisible = visible;
@@ -122,7 +127,7 @@ namespace DarkFlare
                 return true;
             }
 
-            return _inventoryPanel != null && _inventoryPanel.FocusDefault();
+            return FocusPlayerSource();
         }
 
         void Awake()
@@ -160,6 +165,7 @@ namespace DarkFlare
                 return SceneSessionBindResult.Retry;
             }
 
+            _workspace = _menu.Workspace;
             if (!BindVisualTree())
             {
                 return SceneSessionBindResult.Failed;
@@ -167,10 +173,8 @@ namespace DarkFlare
 
             RegisterEvents();
             BindLocalization();
-            _inventoryPanel.SelectionChanged += OnInventorySelectionChanged;
-            _inventoryPanel.ContextActionRequested += OnInventoryContextActionRequested;
-            _inventoryPanel.NavigationBoundaryRequested += OnInventoryNavigationBoundaryRequested;
-            _inventoryPanel.PreviewChanged += OnInventoryPreviewChanged;
+            _workspace.InventorySelectionChanged += OnInventorySelectionChanged;
+
             RefreshShop();
             SetVisible(IsVisible);
             ApplicationLog.Info(LogEventIds.GameplayUi, "[ShopPanelController] 商店面板初始化完成", this);
@@ -189,13 +193,10 @@ namespace DarkFlare
                 _sellButton.clicked -= OnSellClicked;
             }
 
-            if (_inventoryPanel != null)
+            if (_workspace != null)
             {
-                _inventoryPanel.SelectionChanged -= OnInventorySelectionChanged;
-                _inventoryPanel.ContextActionRequested -= OnInventoryContextActionRequested;
-                _inventoryPanel.NavigationBoundaryRequested -= OnInventoryNavigationBoundaryRequested;
-                _inventoryPanel.PreviewChanged -= OnInventoryPreviewChanged;
-                _inventoryPanel.SetSelectionHighlightSuppressed(false);
+                _workspace.InventorySelectionChanged -= OnInventorySelectionChanged;
+
             }
 
             for (int i = 0; i < _eventRegistrations.Count; i++)
@@ -227,11 +228,9 @@ namespace DarkFlare
             _feedbackLabel = null;
             _buyButton = null;
             _sellButton = null;
-            _detailView = null;
             _selectedItem = null;
             _previewItem = null;
             _isTransactionInProgress = false;
-            _isPlayerPreviewActive = false;
             IsVisible = false;
         }
 
@@ -252,17 +251,14 @@ namespace DarkFlare
                 _document = gameObject.AddComponent<UIDocument>();
             }
 
-            if (_inventoryPanel == null)
-            {
-                _inventoryPanel = GetComponent<InventoryPanelController>();
-            }
+            _menu = GetComponent<GameMenuController>();
         }
 
         bool BindVisualTree()
         {
-            if (_document == null || _inventoryPanel == null)
+            if (_document == null || _workspace == null)
             {
-                ApplicationLog.Error(LogEventIds.GameplayUi, "[ShopPanelController] 缺少 UIDocument 或共享背包控制器", this);
+                ApplicationLog.Error(LogEventIds.GameplayUi, "[ShopPanelController] 缺少 UIDocument 或物品窗口宿主", this);
                 return false;
             }
 
@@ -274,6 +270,9 @@ namespace DarkFlare
             _merchantEmptyLabel = root.Q<Label>("shop-merchant-empty");
             _selectedSourceLabel = root.Q<Label>("shop-selected-source");
             _selectedPriceLabel = root.Q<Label>("shop-selected-price");
+            _playerList = root.Q("shop-player-list");
+            _playerEmptyLabel = root.Q<Label>("shop-player-empty");
+            _sourceList = new ItemSourceListView(_playerList, _playerButtons);
             _feedbackLabel = root.Q<Label>("shop-feedback");
             _buyButton = root.Q<Button>("shop-buy");
             _sellButton = root.Q<Button>("shop-sell");
@@ -281,6 +280,7 @@ namespace DarkFlare
             if (_page == null
                 || _merchantFrame == null
                 || _merchantList == null
+                || _playerList == null || _playerEmptyLabel == null
                 || _goldLabel == null
                 || _merchantEmptyLabel == null
                 || _selectedSourceLabel == null
@@ -305,7 +305,7 @@ namespace DarkFlare
                 return;
             }
 
-            _eventRegistrations.Add(this.RegisterEvent<TradeCompletedEvent>(_ => RefreshShop()));
+            _eventRegistrations.Add(this.RegisterEvent<TradeCompletedEvent>(OnTradeCompleted));
             _eventRegistrations.Add(this.RegisterEvent<ItemCraftedEvent>(_ => RefreshShop()));
         }
 
@@ -383,10 +383,7 @@ namespace DarkFlare
 
         void SelectItem(ItemInstance item, ShopItemSource source)
         {
-            if (source == ShopItemSource.Merchant)
-            {
-                _inventoryPanel.ClearSelection();
-            }
+            _workspace.Activate(GameMenuPage.Shop);
 
             _selectedItem = item;
             _selectedSource = source;
@@ -397,64 +394,9 @@ namespace DarkFlare
             RefreshSelection();
         }
 
-        void OnInventoryNavigationBoundaryRequested(Vector2 direction)
-        {
-            if (!IsVisible
-                || direction.x <= 0f
-                || Mathf.Abs(direction.x) < Mathf.Abs(direction.y)
-                || _merchantButtons.Count == 0
-                || _page == null)
-            {
-                return;
-            }
-
-            float sourceY = 0f;
-
-            if (_page.panel?.focusController.focusedElement is VisualElement focusedElement)
-            {
-                sourceY = focusedElement.worldBound.center.y;
-            }
-
-            _page.schedule.Execute(() => FocusMerchantFromInventory(sourceY));
-        }
-
-        void FocusMerchantFromInventory(float sourceY)
-        {
-            if (!IsVisible || _merchantButtons.Count == 0)
-            {
-                return;
-            }
-
-            Button target = null;
-            float left = float.MaxValue;
-            float verticalDistance = float.MaxValue;
-
-            foreach (Button button in _merchantButtons.Values)
-            {
-                float buttonLeft = button.worldBound.xMin;
-                float buttonVerticalDistance = Mathf.Abs(button.worldBound.center.y - sourceY);
-
-                if (buttonLeft < left - 1f
-                    || Mathf.Abs(buttonLeft - left) <= 1f && buttonVerticalDistance < verticalDistance)
-                {
-                    target = button;
-                    left = buttonLeft;
-                    verticalDistance = buttonVerticalDistance;
-                }
-            }
-
-            if (target?.userData is not ItemInstance item)
-            {
-                return;
-            }
-
-            SelectItem(item, ShopItemSource.Merchant);
-            target.Focus();
-        }
-
         void OnInventorySelectionChanged(ItemInstance item)
         {
-            if (!IsVisible || _isTransactionInProgress || item == null)
+            if (!IsVisible || !_menu.IsPageAvailable(GameMenuPage.Shop) || _isTransactionInProgress || item == null)
             {
                 return;
             }
@@ -469,46 +411,20 @@ namespace DarkFlare
             RefreshSelection();
         }
 
-        void OnInventoryPreviewChanged(ItemInstance item)
+        void OnTradeCompleted(TradeCompletedEvent trade)
         {
-            if (!IsVisible)
-            {
-                return;
-            }
-
-            _isPlayerPreviewActive = item != null;
-            RefreshSelectionClasses();
-        }
-
-        void OnInventoryContextActionRequested(ItemInstance item)
-        {
-            if (!IsVisible || _isTransactionInProgress || item == null)
-            {
-                return;
-            }
-
-            if (!TryFindSnapshot(item, ShopItemSource.Player, out ShopItemSnapshot selected))
-            {
-                SetFeedback("shop.feedback.sell_failed");
-                return;
-            }
-
-            _selectedItem = item;
-            _selectedSource = ShopItemSource.Player;
-            _previewItem = null;
-            _viewState.ActiveSource = ShopItemSource.Player;
-            _viewState.FocusTarget = ShopFocusTarget.Item;
-            _viewState.ClearFeedback();
-            UpdateSelectedListState(ShopItemSource.Player, item);
-            RefreshSelection();
-            SellItem(selected);
+            RefreshShop();
+            SetFeedback(trade.Operation == TradeOperation.Buy ? "shop.feedback.buy_succeeded" : "shop.feedback.sell_succeeded",
+                Resolve(ItemDetailSnapshotFactory.Create(trade.Item).Name));
         }
 
         void PreviewItem(ItemInstance item, ShopItemSource source)
         {
+            if (_workspace.IsDragging || !IsVisible) { return; }
+            _workspace.Activate(GameMenuPage.Shop);
             _previewItem = item;
             _previewSource = source;
-            _inventoryPanel.SetSelectionHighlightSuppressed(source == ShopItemSource.Merchant);
+
             RefreshSelectionClasses();
             RefreshDetail();
         }
@@ -521,7 +437,7 @@ namespace DarkFlare
             }
 
             _previewItem = null;
-            _inventoryPanel.SetSelectionHighlightSuppressed(false);
+
             RefreshSelectionClasses();
             RefreshDetail();
         }
@@ -540,7 +456,7 @@ namespace DarkFlare
                 _buyButton.SetEnabled(false);
                 _sellButton.SetEnabled(false);
                 _viewState.FocusTarget = ShopFocusTarget.CloseFallback;
-                _inventoryPanel.RestoreTooltip();
+                _workspace.HidePreview(GameMenuPage.Shop);
                 return;
             }
 
@@ -570,25 +486,11 @@ namespace DarkFlare
 
         void RefreshSelectionClasses()
         {
-            ItemInstance merchantItem = null;
-
-            if (!_isPlayerPreviewActive)
-            {
-                merchantItem = _previewItem != null && _previewSource == ShopItemSource.Merchant
-                    ? _previewItem
-                    : _selectedSource == ShopItemSource.Merchant
-                        ? _selectedItem
-                        : null;
-            }
-
+            ItemInstance active = _previewItem ?? _selectedItem;
+            ShopItemSource source = _previewItem != null ? _previewSource : _selectedSource;
+            ItemInstance merchantItem = source == ShopItemSource.Merchant ? active : null;
             SetSelectedClass(_merchantButtons, merchantItem);
-            SetSelectedClass(
-                _playerButtons,
-                _previewItem != null && _previewSource == ShopItemSource.Player
-                    ? _previewItem
-                    : _selectedSource == ShopItemSource.Player
-                        ? _selectedItem
-                        : null);
+            SetSelectedClass(_playerButtons, source == ShopItemSource.Player ? active : null);
         }
 
         void RefreshDetail()
@@ -600,13 +502,13 @@ namespace DarkFlare
             {
                 if (source == ShopItemSource.Merchant)
                 {
-                    _inventoryPanel.ShowMerchantTooltip(
+                    _workspace.Preview(GameMenuPage.Shop, _document.rootVisualElement.Q("shop-window"),
                         item,
                         Localize("shop.tooltip.merchant", snapshot.Price));
                 }
                 else
                 {
-                    _inventoryPanel.ShowPlayerTooltip(
+                    _workspace.Preview(GameMenuPage.Shop, _document.rootVisualElement.Q("shop-window"),
                         item,
                         Localize("shop.tooltip.player", snapshot.Price));
                 }
@@ -614,7 +516,7 @@ namespace DarkFlare
                 return;
             }
 
-            _inventoryPanel.RestoreTooltip();
+            _workspace.HidePreview(GameMenuPage.Shop);
         }
 
         bool TryGetSelectedSnapshot(out ShopItemSnapshot selected)
@@ -649,6 +551,7 @@ namespace DarkFlare
 
         void OnBuyClicked()
         {
+            if (!IsVisible || !_menu.IsPageAvailable(GameMenuPage.Shop)) { return; }
             _viewState.ClearFeedback();
 
             if (!TryGetSelectedSnapshot(out ShopItemSnapshot selected)
@@ -678,6 +581,7 @@ namespace DarkFlare
 
         void OnSellClicked()
         {
+            if (!IsVisible || !_menu.IsPageAvailable(GameMenuPage.Shop)) { return; }
             _viewState.ClearFeedback();
 
             if (!TryGetSelectedSnapshot(out ShopItemSnapshot selected)
@@ -752,6 +656,7 @@ namespace DarkFlare
             }
 
             _goldLabel.text = Localize("shop.gold", LastSnapshot.Gold);
+            _sourceList.RefreshTitles(item => Resolve(ItemDetailSnapshotFactory.Create(item).Name));
             RefreshSelection();
         }
 
@@ -900,7 +805,7 @@ namespace DarkFlare
             if (generation != _refreshGeneration
                 || _page == null
                 || _page.panel == null
-                || !IsVisible)
+                || !IsVisible || _workspace.ActiveWindow != GameMenuPage.Shop)
             {
                 return;
             }
@@ -919,7 +824,7 @@ namespace DarkFlare
 
             if (_selectedSource == ShopItemSource.Player)
             {
-                _inventoryPanel.FocusDefault();
+                FocusPlayerSource();
                 return;
             }
 
@@ -929,6 +834,17 @@ namespace DarkFlare
             }
 
             button.Focus();
+        }
+
+        bool FocusPlayerSource()
+        {
+            if (_selectedItem != null && _playerButtons.TryGetValue(_selectedItem, out Button button))
+            {
+                button.GetFirstAncestorOfType<ScrollView>()?.ScrollTo(button);
+                button.Focus();
+                return true;
+            }
+            return false;
         }
 
         static bool ContainsButton(Dictionary<ItemInstance, Button> buttons, Focusable focused)
@@ -944,11 +860,11 @@ namespace DarkFlare
             return false;
         }
 
-        static void SetSelectedClass(Dictionary<ItemInstance, Button> buttons, ItemInstance selectedItem)
+        void SetSelectedClass(Dictionary<ItemInstance, Button> buttons, ItemInstance selectedItem)
         {
             foreach (KeyValuePair<ItemInstance, Button> entry in buttons)
             {
-                entry.Value.EnableInClassList("shop-item--selected", entry.Key == selectedItem);
+                _workspace.Highlight(GameMenuPage.Shop, entry.Value, buttons == _playerButtons ? "item-source-row--selected" : "shop-item--selected", entry.Key == selectedItem);
             }
         }
 

@@ -18,7 +18,8 @@ namespace DarkFlare
 
             this.SendEvent(new GameMenuOpenRequestedEvent(
                 _target.MenuPage,
-                _target.AvailablePages));
+                _target.AvailablePages,
+                _target));
             return true;
         }
     }

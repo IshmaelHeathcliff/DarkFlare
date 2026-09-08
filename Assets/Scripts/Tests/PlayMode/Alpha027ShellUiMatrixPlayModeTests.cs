@@ -30,7 +30,7 @@ namespace DarkFlare.Tests
 
             try
             {
-                gameInput.SwitchToUi();
+                UnityEngine.Object.FindAnyObjectByType<GameMenuController>().TogglePause();
                 yield return null;
                 yield return ClickPointer(input, mouse, FindButton("game-menu-settings"));
                 Assert.IsTrue(host.ApplicationShell.IsSettingsOpen);
@@ -47,7 +47,7 @@ namespace DarkFlare.Tests
                 Assert.IsTrue(host.Input.IsGameplayEnabled);
                 Assert.IsFalse(host.GameTime.IsPaused);
 
-                gameInput.SwitchToUi();
+                UnityEngine.Object.FindAnyObjectByType<GameMenuController>().TogglePause();
                 yield return null;
                 yield return ClickPointer(input, mouse, FindButton("game-menu-settings"));
                 gameInput.SwitchToGameplay();
@@ -60,7 +60,7 @@ namespace DarkFlare.Tests
                     "底层先关闭后，键盘返回设置也必须安全恢复 Gameplay");
                 Assert.IsFalse(host.GameTime.IsPaused);
 
-                gameInput.SwitchToUi();
+                UnityEngine.Object.FindAnyObjectByType<GameMenuController>().TogglePause();
                 yield return null;
                 yield return ClickPointer(input, mouse, FindButton("game-menu-settings"));
                 ((ScrollView)FindElement("settings-scroll")).ScrollTo(FindButton("settings-restore-defaults"));
@@ -103,7 +103,7 @@ namespace DarkFlare.Tests
                 Assert.IsTrue(host.Input.IsGameplayEnabled);
                 Assert.IsFalse(host.GameTime.IsPaused);
 
-                gameInput.SwitchToUi();
+                UnityEngine.Object.FindAnyObjectByType<GameMenuController>().TogglePause();
                 yield return null;
                 yield return ClickPointer(input, mouse, FindButton("game-menu-return-front-end"));
                 yield return ClickPointer(input, mouse, FindButton("application-modal-retry"));

@@ -320,6 +320,36 @@ public class GameplayUiFoundationTests
     }
 
     [Test]
+    public void ExactPurchase_CommitsAllStateBeforeEventsAndNeverFallsBackToAnotherCell()
+    {
+        InventoryModel inventory = _architecture.GetModel<InventoryModel>();
+        EconomyModel economy = _architecture.GetModel<EconomyModel>();
+        ItemInstance item = CreateItem("precise_purchase", "精确购买", baseValue: 10);
+        ItemInstance blocker = CreateItem("precise_blocker", "已占用格");
+        Vector2Int origin = new Vector2Int(3, 2);
+        inventory.AddGold(100);
+        economy.AddStock(item);
+        Assert.IsTrue(inventory.TryAddItemAt(blocker, origin));
+        Assert.IsFalse(_architecture.SendCommand(new BuyItemCommand(item, origin)));
+        Assert.AreEqual(100, inventory.Gold);
+        Assert.IsTrue(economy.HasStock(item));
+        Assert.IsFalse(inventory.Grid.Placements.ContainsKey(item));
+        inventory.RemoveItem(blocker);
+        int observed = 0;
+        _architecture.RegisterEvent<InventoryChangedEvent>(change =>
+        {
+            if (change.Item != item) { return; }
+            observed++;
+            Assert.IsFalse(economy.HasStock(item), "通知时物品不能同时属于商人和背包");
+            Assert.AreEqual(85, inventory.Gold, "通知时必须已经完成扣款");
+            Assert.AreEqual(origin, inventory.Grid.Placements[item].position);
+            Assert.IsFalse(_architecture.SendCommand(new BuyItemCommand(item, origin)), "重入购买不能重复提交");
+        });
+        Assert.IsTrue(_architecture.SendCommand(new BuyItemCommand(item, origin)));
+        Assert.AreEqual(1, observed);
+    }
+
+    [Test]
     public void CraftingSystem_SendsItemCraftedEventAfterSuccess()
     {
         CraftingDefinition craftingDefinition = CreateScriptableObject<CraftingDefinition>();

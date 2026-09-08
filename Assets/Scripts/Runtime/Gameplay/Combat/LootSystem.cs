@@ -29,19 +29,127 @@ namespace DarkFlare
 
         public bool CollectLoot(LootPickupController pickup, CombatActor collector)
         {
-            if (pickup == null || pickup.Item == null || collector == null)
+            if (pickup == null || pickup.Item == null || collector == null || !collector.IsAlive
+                || collector.Team != ActorTeam.Player || !pickup.isActiveAndEnabled)
             {
                 return false;
             }
 
-            if (!this.GetModel<InventoryModel>().TryAddItem(pickup.Item))
+            InventoryModel inventory = this.GetModel<InventoryModel>();
+            ItemInstance item = pickup.Item;
+            if (!inventory.TryAddItemWithoutEvents(item))
             {
                 ApplicationLog.Info(LogEventIds.GameplayCombat, $"[LootSystem] 背包已满，无法拾取 {DescribeItem(pickup.Item)}");
                 return false;
             }
 
-            ApplicationLog.Info(LogEventIds.GameplayCombat, $"[LootSystem] {collector.ActorId} 拾取了 {DescribeItem(pickup.Item)}，放入背包");
+            pickup.ClearItem();
+            this.GetUtility<SessionObjectRegistry>().Release(pickup.gameObject);
+            inventory.NotifyItemChanged(item, InventoryChangeType.Added);
+            ApplicationLog.Info(LogEventIds.GameplayCombat, $"[LootSystem] {collector.ActorId} 拾取了 {DescribeItem(item)}，放入背包");
             return true;
+        }
+
+        public bool CanDiscardItem(ItemInstance item, CombatActor player)
+        {
+            return TryGetDiscardPosition(item, player, out _);
+        }
+
+        public bool DiscardItem(ItemInstance item, CombatActor player)
+        {
+            if (!TryGetDiscardPosition(item, player, out Vector3 position))
+            {
+                return false;
+            }
+
+            InventoryModel inventory = this.GetModel<InventoryModel>();
+            RectInt placement = inventory.Grid.Placements[item];
+            LootPickupController pickup = null;
+            bool removed = false;
+            try
+            {
+                pickup = PreparePickup(position);
+                if (pickup == null)
+                {
+                    return false;
+                }
+
+                removed = inventory.RemoveItemWithoutEvents(item);
+                if (!removed)
+                {
+                    this.GetUtility<SessionObjectRegistry>().Release(pickup.gameObject);
+                    return false;
+                }
+
+                pickup.Init(this.GetUtility<IRunInstanceIdGenerator>().NextWorldDropId(), item);
+            }
+            catch (System.Exception exception)
+            {
+                if (pickup != null) { this.GetUtility<SessionObjectRegistry>().Release(pickup.gameObject); }
+                if (removed) { inventory.TryAddItemAtWithoutEvents(item, placement.position); }
+                ApplicationLog.Error(LogEventIds.GameplayCombat, $"[LootSystem] 丢弃准备失败，已保留原物品：{exception}");
+                return false;
+            }
+
+            inventory.NotifyItemChanged(item, InventoryChangeType.Removed);
+            ApplicationLog.Info(LogEventIds.GameplayCombat, $"[LootSystem] 丢弃 {DescribeItem(item)}，世界身份 {pickup.Id.Value}");
+            return true;
+        }
+
+        bool TryGetDiscardPosition(ItemInstance item, CombatActor player, out Vector3 position)
+        {
+            position = default;
+            if (item == null || player == null || !player.IsAlive || !player.isActiveAndEnabled
+                || player.Team != ActorTeam.Player
+                || !GameArchitectureProvider.TryGetCurrent(out IArchitecture current) || current.GetSystem<LootSystem>() != this
+                || !GameArchitectureProvider.TryGetOwnerScope(out LifecycleScope scope) || !scope.CanAcceptWork
+                || !this.GetModel<InventoryModel>().Grid.Placements.ContainsKey(item))
+            {
+                return false;
+            }
+
+            GameObject prefab = this.GetUtility<PrefabAssetLoader>().GetPrefab(_pickupPrefabReference);
+            CircleCollider2D pickupCollider = prefab != null ? prefab.GetComponent<CircleCollider2D>() : null;
+            CameraFollowTarget camera = Object.FindAnyObjectByType<CameraFollowTarget>();
+            Collider2D world = camera != null ? camera.WorldBounds : null;
+            if (pickupCollider == null || prefab.GetComponent<LootPickupController>() == null || world == null)
+            {
+                return false;
+            }
+
+            float pickupRadius = pickupCollider.radius * Mathf.Max(Mathf.Abs(prefab.transform.lossyScale.x), Mathf.Abs(prefab.transform.lossyScale.y));
+            float playerRadius = 0.5f;
+            foreach (Collider2D collider in player.GetComponentsInChildren<Collider2D>())
+            {
+                if (!collider.enabled || !collider.gameObject.activeInHierarchy) { continue; }
+                playerRadius = Mathf.Max(playerRadius, Vector2.Distance(player.transform.position, collider.bounds.center)
+                    + ((Vector2)collider.bounds.extents).magnitude);
+            }
+
+            Vector2 center = player.transform.position;
+            float distance = playerRadius + pickupRadius + 0.5f;
+            for (int i = 0; i < 16; i++)
+            {
+                float angle = i % 8 * Mathf.PI / 4f;
+                Vector2 direction = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
+                Vector2 candidate = center + direction * (distance + i / 8);
+                Bounds bounds = world.bounds;
+                if (candidate.x - pickupRadius < bounds.min.x || candidate.x + pickupRadius > bounds.max.x
+                    || candidate.y - pickupRadius < bounds.min.y || candidate.y + pickupRadius > bounds.max.y) { continue; }
+                bool blocked = false;
+                foreach (RaycastHit2D hit in Physics2D.CircleCastAll(center, pickupRadius, direction, Vector2.Distance(center, candidate)))
+                {
+                    if (hit.collider != null && !hit.collider.isTrigger && !hit.collider.transform.IsChildOf(player.transform))
+                    {
+                        blocked = true;
+                        break;
+                    }
+                }
+                if (blocked) { continue; }
+                position = new Vector3(candidate.x, candidate.y, player.transform.position.z);
+                return true;
+            }
+            return false;
         }
 
         void OnActorDied(ActorDiedEvent e)
@@ -84,6 +192,13 @@ namespace DarkFlare
             ItemInstance item,
             Vector3 position)
         {
+            LootPickupController controller = PreparePickup(position);
+            if (controller != null) { controller.Init(worldDropId, item); }
+            return controller;
+        }
+
+        LootPickupController PreparePickup(Vector3 position)
+        {
             GameObject prefab = this.GetUtility<PrefabAssetLoader>().GetPrefab(_pickupPrefabReference);
 
             if (prefab == null)
@@ -103,7 +218,6 @@ namespace DarkFlare
                 return null;
             }
 
-            controller.Init(worldDropId, item);
             return controller;
         }
 

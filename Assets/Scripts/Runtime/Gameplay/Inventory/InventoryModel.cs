@@ -198,6 +198,26 @@ namespace DarkFlare
             }
         }
 
+        internal bool TryChangeGoldWithoutEvents(int change)
+        {
+            long next = (long)Gold + change;
+            if (next < 0 || next > int.MaxValue)
+            {
+                return false;
+            }
+
+            Gold = (int)next;
+            return true;
+        }
+
+        internal void NotifyGoldChanged(int previousGold)
+        {
+            if (previousGold != Gold)
+            {
+                this.SendEvent(new GoldChangedEvent(previousGold, Gold));
+            }
+        }
+
         public bool TrySpendGold(int amount)
         {
             if (amount < 0 || Gold < amount)

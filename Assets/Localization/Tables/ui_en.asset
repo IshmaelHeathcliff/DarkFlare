@@ -1372,6 +1372,130 @@ MonoBehaviour:
     m_Localized: Settings are being saved. Please wait.
     m_Metadata:
       m_Items: []
+  - m_Id: 7074927826952192
+    m_Localized: Pause
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7074927877283840
+    m_Localized: Resume
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7074927877283841
+    m_Localized: Sell from inventory
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7074927877283842
+    m_Localized: Crafting candidates
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7074927877283843
+    m_Localized: No available items
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7075041031217152
+    m_Localized: Pause game
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7075041031217153
+    m_Localized: Pause page
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7075041031217154
+    m_Localized: Previous window
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7075041031217155
+    m_Localized: Next window
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7079955325247488
+    m_Localized: Close
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7114873027682304
+    m_Localized: Choose an action or destination
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7114873073819648
+    m_Localized: Move / Swap
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7114873073819649
+    m_Localized: Equip
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7114873073819650
+    m_Localized: Unequip
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7114873073819651
+    m_Localized: Buy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7114873073819652
+    m_Localized: Sell
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7114873073819653
+    m_Localized: Place in crafting slot
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7114873073819654
+    m_Localized: Return to original cell
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7114873073819655
+    m_Localized: Drop into world
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7114873073819656
+    m_Localized: Actions
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7114873073819657
+    m_Localized: Discard
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7114873073819658
+    m_Localized: Drop here to buy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7114873073819659
+    m_Localized: Drop here to sell
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7114873073819660
+    m_Localized: Select an item to see actions
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7114873073819661
+    m_Localized: Item or source is no longer available
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7114873073819662
+    m_Localized: Cannot place here
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7114873073819663
+    m_Localized: Not enough gold
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7114873073819664
+    m_Localized: Inventory space unavailable
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7114873073819665
+    m_Localized: No safe drop position nearby
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7114873073819666
+    m_Localized: Action cancelled
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7114873073819667
+    m_Localized: Action completed
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:

@@ -26,6 +26,7 @@
 
 | 计划 | 完成阶段 | 当前总结 |
 | --- | --- | --- |
+| [独立窗口可用闭环](./alpha-0.3.0-window-workspace-plan.md) | alpha 0.3.0 窗口切片 | [物品工作台](../../item-ui-workbench.md)、[验收证据](../../assets/acceptance/alpha-0.3.0-windows/README.md) |
 | [最小循环设计](./minimum-loop-design.md) | 首版循环 1–8 | [首版玩法循环](../../gameplay-loop.md) |
 | [输入系统与 UI 设计](./input-ui-design.md) | 8a–8f | [输入与运行时 UI](../../input-ui-system.md) |
 | [打造交互执行计划](./crafting-ui-plan.md) | 8e | [打造系统](../../crafting-system.md) |
@@ -64,5 +65,6 @@
 | [alpha 0.2 基础设施开发计划](./alpha-0.2-plan.md) | alpha 0.2.0–0.2.7 | [alpha 0.2 长期运行时契约](../../infrastructure/alpha-0.2-runtime-contract.md)、[综合验收记录](../../infrastructure/alpha-0.2-acceptance.md) |
 | [alpha 0.3 启动准备](./alpha-0.3-startup.md) | alpha 0.3 规划前置准备 | [alpha 0.3 UI 迭代计划](../alpha-0.3-plan.md)；归档仅表示资料梳理完成，不表示版本功能已实现 |
 | [测试审计与精简](./test-suite-maintenance-plan.md) | alpha 0.3 测试维护前置 | [测试维护规范](../../testing/test-maintenance.md)、[审计报告](../../testing/test-suite-audit.md) |
+| [alpha 0.3.0 统一物品操作与事务](./alpha-0.3.0-unified-item-actions-plan.md) | alpha 0.3.0 操作切片 | [物品 UI 工作台](../../item-ui-workbench.md)、[验收记录](../../assets/acceptance/alpha-0.3.0-actions/README.md) |
 
-最近归档日期：2026-09-07。
+最近归档日期：2026-09-08。

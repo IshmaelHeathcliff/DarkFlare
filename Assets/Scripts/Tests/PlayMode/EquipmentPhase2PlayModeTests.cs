@@ -115,7 +115,6 @@ namespace DarkFlare.Tests
                 root.Query<Label>(className: "inventory-attribute-value").ToList().Count,
                 "当前属性窗口必须显示全部已登记属性");
             Assert.IsNull(root.Q<VisualElement>("weapon-card"), "HUD 不应继续显示当前装备");
-            InventoryPanelController panel = menu.GetComponent<InventoryPanelController>();
             Keyboard keyboard = InputSystem.AddDevice<Keyboard>();
             Gamepad gamepad = InputSystem.AddDevice<Gamepad>();
             VisualElement backpackWeaponIcon = root.Q<Button>("inventory-item-phase2_weapon")
@@ -123,8 +122,15 @@ namespace DarkFlare.Tests
             Vector2 backpackWeaponIconSize = backpackWeaponIcon.worldBound.size;
 
             yield return SelectAndSubmit(root, "阶段二武器", keyboard.enterKey);
-            Assert.AreEqual(EquipmentSlot.Weapon, panel.TargetSlot);
-            yield return Submit(root.Q<Button>("inventory-equip"), keyboard.enterKey);
+            Assert.IsTrue(menu.Workspace.Interactions.IsMenuOpen);
+            Assert.IsFalse(root.Q<Button>("item-action-equip-Weapon").enabledInHierarchy,
+                "旧武器无法回到来源格时不能偷偷改放到别处");
+            Assert.IsTrue(inventory.Grid.Placements.ContainsKey(weapon));
+            menu.Workspace.Interactions.CloseMenu(true);
+            Assert.IsTrue(_architecture.SendCommand(new MoveInventoryItemCommand(weapon, new Vector2Int(5, 0))));
+            yield return null;
+            yield return SelectAndSubmit(root, "阶段二武器", keyboard.enterKey);
+            yield return Submit(root.Q<Button>("item-action-equip-Weapon"), keyboard.enterKey);
             Assert.AreSame(weapon, equipment.GetItem(player, EquipmentSlot.Weapon));
             Assert.AreSame(root.Q<Button>("inventory-slot-weapon"), root.focusController.focusedElement);
             VisualElement equippedWeaponIcon = root.Q<Button>("inventory-slot-weapon")
@@ -133,8 +139,7 @@ namespace DarkFlare.Tests
             Assert.GreaterOrEqual(equippedWeaponIcon.worldBound.height, backpackWeaponIconSize.y - 0.5f);
 
             yield return SelectAndSubmit(root, "阶段二护甲", keyboard.enterKey);
-            Assert.AreEqual(EquipmentSlot.Armor, panel.TargetSlot);
-            yield return Submit(root.Q<Button>("inventory-equip"), keyboard.enterKey);
+            yield return Submit(root.Q<Button>("item-action-equip-Armor"), keyboard.enterKey);
             Assert.AreSame(armor, equipment.GetItem(player, EquipmentSlot.Armor));
             Assert.AreEqual(baseMaxHealth + 200f, player.MaxHealth, 0.001f);
             Assert.AreEqual(player.MaxHealth, player.CurrentHealth, 0.001f);
@@ -143,28 +148,26 @@ namespace DarkFlare.Tests
                 root.Q<ProgressBar>("health-bar").title);
 
             yield return SelectAndSubmit(root, "左槽测试戒指", gamepad.buttonSouth);
-            Assert.IsNull(panel.TargetSlot, "饰品不应自动猜测左右戒指槽");
-            yield return Submit(root.Q<Button>("inventory-slot-ring-left"), gamepad.buttonSouth);
-            Assert.AreEqual(EquipmentSlot.RingLeft, panel.TargetSlot);
-            yield return Submit(root.Q<Button>("inventory-equip"), gamepad.buttonSouth);
+            Assert.IsTrue(menu.Workspace.Interactions.IsMenuOpen, "戒指必须明确选择槽位");
+            Assert.IsNotNull(root.Q<Button>("item-action-equip-RingRight"));
+            yield return Submit(root.Q<Button>("item-action-equip-RingLeft"), gamepad.buttonSouth);
             Assert.AreSame(leftRing, equipment.GetItem(player, EquipmentSlot.RingLeft));
             Assert.AreSame(root.Q<Button>("inventory-slot-ring-left"), root.focusController.focusedElement);
 
             yield return SelectAndSubmit(root, "右槽测试戒指", gamepad.buttonSouth);
-            Assert.IsNull(panel.TargetSlot, "第二个饰品仍应显式选择目标槽");
-            yield return Submit(root.Q<Button>("inventory-slot-ring-right"), gamepad.buttonSouth);
-            yield return Submit(root.Q<Button>("inventory-equip"), gamepad.buttonSouth);
+            Assert.IsTrue(menu.Workspace.Interactions.IsMenuOpen, "第二个饰品仍应显式选择目标槽");
+            yield return Submit(root.Q<Button>("item-action-equip-RingRight"), gamepad.buttonSouth);
             Assert.AreSame(rightRing, equipment.GetItem(player, EquipmentSlot.RingRight));
             Assert.AreSame(leftRing, equipment.GetItem(player, EquipmentSlot.RingLeft));
 
             yield return Submit(root.Q<Button>("inventory-slot-ring-left"), gamepad.buttonSouth);
-            yield return Submit(root.Q<Button>("inventory-unequip"), gamepad.buttonSouth);
+            yield return Submit(root.Q<Button>("item-action-unequip"), gamepad.buttonSouth);
             Assert.IsNull(equipment.GetItem(player, EquipmentSlot.RingLeft));
             Assert.IsTrue(inventory.Grid.Placements.ContainsKey(leftRing));
             Assert.IsTrue(ApplicationHost.TryGetCurrent(out ApplicationHost host));
             StringAssert.Contains(
                 host.Localization.GetString(leftRing.BaseDefinition.LocalizedName.Message),
-                root.Q<Label>("inventory-feedback").text);
+                root.Q<Label>("item-operation-status").text);
 
             Vector2Int[] resolutions =
             {
@@ -178,12 +181,12 @@ namespace DarkFlare.Tests
                     SetGameViewResolution(resolutions[i]);
                     yield return WaitForResolution(resolutions[i], 5f);
                     yield return null;
+                    root.Q<Foldout>("inventory-attributes-toggle").value = true;
+                    yield return null;
                     AssertLayoutInsideRoot(root, new[]
                     {
                         "game-menu-panel",
-                        "inventory-attribute-card",
-                        "inventory-attribute-armor",
-                        "inventory-attribute-chaos-resistance",
+                        "inventory-attributes-scroll",
                         "inventory-page",
                         "inventory-grid",
                         "inventory-equipment",
@@ -196,6 +199,17 @@ namespace DarkFlare.Tests
                         "inventory-unequip",
                         "game-menu-close",
                     });
+                    ScrollView attributes = root.Q<ScrollView>("inventory-attributes-scroll");
+                    foreach (string name in new[] { "inventory-attribute-armor", "inventory-attribute-chaos-resistance" })
+                    {
+                        VisualElement attribute = root.Q(name);
+                        Assert.IsNotNull(attribute);
+                        attributes.ScrollTo(attribute);
+                        yield return null;
+                        Assert.GreaterOrEqual(attribute.worldBound.yMin, attributes.worldBound.yMin - 1f);
+                        Assert.LessOrEqual(attribute.worldBound.yMax, attributes.worldBound.yMax + 1f,
+                            $"滚动后属性 {name} 仍不可见");
+                    }
                 }
             }
             finally

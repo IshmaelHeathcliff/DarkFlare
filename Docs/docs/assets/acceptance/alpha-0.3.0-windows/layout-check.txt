@@ -1,0 +1,1 @@
+18 combinations passed visible text and six-affix bounds checks.

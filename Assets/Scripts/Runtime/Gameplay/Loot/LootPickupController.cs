@@ -52,6 +52,12 @@ namespace DarkFlare
             _sessionObjects = this.GetUtility<SessionObjectRegistry>();
         }
 
+        internal void ClearItem()
+        {
+            _item = null;
+            if (_collider != null) { _collider.enabled = false; }
+        }
+
         void OnValidate()
         {
             EnsureComponents();
@@ -84,7 +90,6 @@ namespace DarkFlare
                 return;
             }
 
-            Destroy(gameObject);
         }
 
         void EnsureComponents()

@@ -1,4 +1,4 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:l="UnityEngine.Localization" editor-extension-mode="False">
+<ui:UXML xmlns:l="UnityEngine.Localization" xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
   <ui:VisualElement name="shop-page" class="shop-page item-context-panel ui-panel-frame" picking-mode="Position">
     <ui:VisualElement class="item-context-header">
       <ui:Label text="" class="item-context-title">
@@ -21,6 +21,19 @@
         </Bindings>
       </ui:Label>
     </ui:VisualElement>
+    <ui:Foldout name="shop-source-toggle" class="item-source-section" value="true">
+      <Bindings>
+        <l:LocalizedString property="text" table="ui" entry="window.sell_source" />
+      </Bindings>
+      <ui:ScrollView name="shop-player-scroll" mode="Vertical" class="item-source-scroll">
+        <ui:VisualElement name="shop-player-list" />
+      </ui:ScrollView>
+      <ui:Label name="shop-player-empty" class="item-source-empty" picking-mode="Ignore">
+        <Bindings>
+          <l:LocalizedString property="text" table="ui" entry="window.empty_source" />
+        </Bindings>
+      </ui:Label>
+    </ui:Foldout>
     <ui:VisualElement class="shop-selection-summary">
       <ui:Label name="shop-selected-source" text="" class="shop-detail-line" />
       <ui:Label name="shop-selected-price" text="" class="shop-price" />
@@ -37,6 +50,10 @@
           <l:LocalizedString property="text" table="ui" entry="shop.sell.action" />
         </Bindings>
       </ui:Button>
+    </ui:VisualElement>
+    <ui:VisualElement class="item-trade-drop-zones">
+      <ui:Button name="shop-buy-zone" class="item-drop-zone"><Bindings><l:LocalizedString property="text" table="ui" entry="item.action.buy_zone" /></Bindings></ui:Button>
+      <ui:Button name="shop-sell-zone" class="item-drop-zone"><Bindings><l:LocalizedString property="text" table="ui" entry="item.action.sell_zone" /></Bindings></ui:Button>
     </ui:VisualElement>
     <ui:Label text="" class="item-context-help">
       <Bindings>

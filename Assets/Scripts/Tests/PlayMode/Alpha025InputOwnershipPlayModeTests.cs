@@ -176,6 +176,8 @@ namespace DarkFlare.Tests
             yield return null;
             Assert.IsTrue(menu.IsOpen);
             Assert.IsTrue(host.GameTime.IsPaused);
+            menu.TogglePause();
+            yield return null;
             Button menuSettings = FindButton("game-menu-settings");
 
             InvokeButton(menuSettings);

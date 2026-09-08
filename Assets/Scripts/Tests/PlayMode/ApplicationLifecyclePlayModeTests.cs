@@ -51,7 +51,7 @@ namespace DarkFlare.Tests
                 ? gameMenu.GetComponent<UIDocument>()
                 : null;
             Label localizedMenuTitle = uiDocument?.rootVisualElement.Q<Label>(
-                className: "game-menu-title");
+                className: "item-window-title");
 
             Assert.AreEqual(1, hosts.Length, "冷启动后必须只有一个 ApplicationHost");
             Assert.AreEqual(1, players.Length, "冷启动后必须只有一个有效玩家");

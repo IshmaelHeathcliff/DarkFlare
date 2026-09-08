@@ -141,6 +141,8 @@ FrontEnd 只在无活动 Session、Coordinator 空闲且 Flow 为 `FrontEnd` 时
 - 存档专项覆盖 DTO / 校验、确定性序列化 / SHA-256 / 迁移、Storage 中断 / 损坏 / 备份、恢复准备、Coordinator 合并 / 超时 / 异常结算，以及 Main Session 捕获与恢复。
 - 两次真实 Play 均达到 Application `Ready`、Session `Running`、存档 Facade 有效、玩家 1 个、菜单绑定 1 次；第二次退出后 Console Error 为 0。
 
+玩家丢弃复用现有世界拾取物快照，不新增存档结构。丢弃后只有世界归属，重新拾取后只有背包归属；完整 Main 捕获 / 恢复回归覆盖世界 ID、物品 ID、种子、真实词缀掷值及拾取事件重入。
+
 ## 当前边界
 
 - UI 只有一个 `auto` 槽位及其删除入口，没有手动槽位列表、重命名、Profile 选择或云同步。

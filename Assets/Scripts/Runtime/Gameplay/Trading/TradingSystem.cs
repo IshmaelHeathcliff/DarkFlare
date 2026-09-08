@@ -40,20 +40,31 @@ namespace DarkFlare
 
             InventoryModel inventory = this.GetModel<InventoryModel>();
 
-            if (!inventory.RemoveItem(item))
+            int price = GetSellPrice(item);
+            if ((long)inventory.Gold + price > int.MaxValue || !inventory.RemoveItemWithoutEvents(item))
             {
                 ApplicationLog.Info(LogEventIds.GameplayTrading, $"[TradingSystem] 出售失败：{DescribeItem(item)} 不在背包中");
                 return false;
             }
 
-            int price = GetSellPrice(item);
-            inventory.AddGold(price);
+            int previousGold = inventory.Gold;
+            inventory.TryChangeGoldWithoutEvents(price);
+            inventory.NotifyItemChanged(item, InventoryChangeType.Removed);
+            inventory.NotifyGoldChanged(previousGold);
             this.SendEvent(new TradeCompletedEvent(TradeOperation.Sell, item, price));
             ApplicationLog.Info(LogEventIds.GameplayTrading, $"[TradingSystem] 出售 {DescribeItem(item)} 获得 {price} 金币，当前金币 {inventory.Gold}");
             return true;
         }
 
-        public bool BuyItem(ItemInstance item)
+        public bool CanBuyItem(ItemInstance item, Vector2Int? origin = null)
+        {
+            InventoryModel inventory = this.GetModel<InventoryModel>();
+            return item != null && this.GetModel<EconomyModel>().HasStock(item)
+                && inventory.Gold >= GetBuyPrice(item)
+                && (origin.HasValue ? inventory.CanAddItemAt(item, origin.Value) : inventory.CanAddItem(item));
+        }
+
+        public bool BuyItem(ItemInstance item, Vector2Int? origin = null)
         {
             if (item == null)
             {
@@ -77,14 +88,20 @@ namespace DarkFlare
                 return false;
             }
 
-            if (!inventory.TryAddItem(item))
+            bool added = origin.HasValue
+                ? inventory.TryAddItemAtWithoutEvents(item, origin.Value)
+                : inventory.TryAddItemWithoutEvents(item);
+            if (!added)
             {
                 ApplicationLog.Info(LogEventIds.GameplayTrading, $"[TradingSystem] 购买失败：背包放不下 {DescribeItem(item)}");
                 return false;
             }
 
-            inventory.TrySpendGold(price);
+            int previousGold = inventory.Gold;
+            inventory.TryChangeGoldWithoutEvents(-price);
             economy.RemoveStock(item);
+            inventory.NotifyItemChanged(item, InventoryChangeType.Added);
+            inventory.NotifyGoldChanged(previousGold);
             this.SendEvent(new TradeCompletedEvent(TradeOperation.Buy, item, price));
             ApplicationLog.Info(LogEventIds.GameplayTrading, $"[TradingSystem] 购买 {DescribeItem(item)} 花费 {price} 金币，当前金币 {inventory.Gold}");
             return true;

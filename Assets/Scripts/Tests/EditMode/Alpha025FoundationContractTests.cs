@@ -14,19 +14,9 @@ namespace DarkFlare.Tests
         const string InputAssetPath = "Assets/Settings/InputSystem_Actions.inputactions";
 
         [Test]
-        public void RebindableCatalog_FreezesSevenConsumedActionsAndMatchesInputAsset()
+        public void RebindableCatalog_RegistersAllConfigurableActionsAndMatchesInputAsset()
         {
-            RebindableInputAction[] expected =
-            {
-                RebindableInputAction.PlayerMove,
-                RebindableInputAction.PlayerInteract,
-                RebindableInputAction.PlayerToggleMenu,
-                RebindableInputAction.UiNavigate,
-                RebindableInputAction.UiSubmit,
-                RebindableInputAction.UiCancel,
-                RebindableInputAction.UiRearrange,
-            };
-            CollectionAssert.AreEqual(expected, RebindableInputCatalog.Actions);
+            CollectionAssert.AreEquivalent(Enum.GetValues(typeof(RebindableInputAction)), RebindableInputCatalog.Actions);
             Assert.AreEqual(
                 RebindableInputCatalog.Actions.Count,
                 RebindableInputCatalog.Actions.Distinct().Count());

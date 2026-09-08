@@ -154,9 +154,12 @@ namespace DarkFlare
 
         public GameMenuAccess AvailablePages { get; }
 
-        public GameMenuOpenRequestedEvent(GameMenuPage page, GameMenuAccess availablePages)
+        public WorldInteractionTarget Target { get; }
+
+        public GameMenuOpenRequestedEvent(GameMenuPage page, GameMenuAccess availablePages, WorldInteractionTarget target = null)
         {
             Page = page;
+            Target = target;
             AvailablePages = availablePages | GameMenuAccess.Inventory;
         }
     }

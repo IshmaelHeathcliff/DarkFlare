@@ -1,4 +1,4 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:l="UnityEngine.Localization" editor-extension-mode="False">
+<ui:UXML xmlns:l="UnityEngine.Localization" xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
   <ui:Style src="project://database/Assets/UI/Theme.uss" />
   <ui:Style src="project://database/Assets/UI/Hud.uss" />
   <ui:Style src="project://database/Assets/UI/GameMenu.uss" />
@@ -9,6 +9,7 @@
   <ui:Style src="project://database/Assets/UI/ItemDetail.uss" />
   <ui:Template name="Hud" src="project://database/Assets/UI/Hud.uxml" />
   <ui:Template name="ItemWorkbench" src="project://database/Assets/UI/ItemWorkbench.uxml" />
+  <ui:Style src="project://database/Assets/UI/Windows.uss" />
   <ui:Template name="Inventory" src="project://database/Assets/UI/Inventory.uxml" />
   <ui:Template name="Shop" src="project://database/Assets/UI/Shop.uxml" />
   <ui:Template name="Crafting" src="project://database/Assets/UI/Crafting.uxml" />
@@ -16,82 +17,118 @@
   <ui:VisualElement name="game-ui-root" class="game-ui-root" picking-mode="Ignore">
     <ui:Instance template="Hud" />
     <ui:VisualElement name="game-menu-overlay" class="game-menu-overlay" picking-mode="Position">
-      <ui:VisualElement name="game-menu-panel" class="game-menu-panel" picking-mode="Position">
+      <ui:VisualElement name="game-menu-panel" class="game-menu-panel" picking-mode="Ignore">
         <ui:VisualElement class="game-menu-header">
-          <ui:VisualElement class="game-menu-heading">
-            <ui:Label text="" class="game-menu-title">
-              <Bindings>
-                <l:LocalizedString property="text" table="ui" entry="menu.title" />
-              </Bindings>
-            </ui:Label>
-            <ui:Label text="" class="game-menu-kicker">
-              <Bindings>
-                <l:LocalizedString property="text" table="ui" entry="menu.kicker" />
-              </Bindings>
-            </ui:Label>
-          </ui:VisualElement>
-          <ui:VisualElement class="game-menu-tabs">
-            <ui:Button name="game-menu-inventory-tab" class="game-menu-tab">
-              <ui:VisualElement class="ui-icon ui-icon--inventory game-menu-tab-icon" picking-mode="Ignore" />
-              <ui:Label text="" class="game-menu-tab-label" picking-mode="Ignore">
+          <ui:Button name="game-menu-inventory-tab" class="game-menu-tab">
+            <Bindings>
+              <l:LocalizedString property="text" table="ui" entry="menu.tab.inventory" />
+            </Bindings>
+          </ui:Button>
+          <ui:Button name="game-menu-shop-tab" class="game-menu-tab">
+            <Bindings>
+              <l:LocalizedString property="text" table="ui" entry="menu.tab.shop" />
+            </Bindings>
+          </ui:Button>
+          <ui:Button name="game-menu-crafting-tab" class="game-menu-tab">
+            <Bindings>
+              <l:LocalizedString property="text" table="ui" entry="menu.tab.crafting" />
+            </Bindings>
+          </ui:Button>
+          <ui:Button name="game-menu-pause" class="game-menu-tab">
+            <Bindings>
+              <l:LocalizedString property="text" table="ui" entry="window.pause" />
+            </Bindings>
+          </ui:Button>
+          <ui:Button name="game-menu-close" class="game-menu-close">
+            <Bindings>
+              <l:LocalizedString property="text" table="ui" entry="window.close" />
+            </Bindings>
+          </ui:Button>
+        </ui:VisualElement>
+        <ui:VisualElement name="game-menu-content" class="game-menu-content" picking-mode="Ignore">
+          <ui:VisualElement name="inventory-window" class="item-window inventory-window">
+            <ui:VisualElement class="item-window-header">
+              <ui:Label name="" class="item-window-title" picking-mode="Ignore">
                 <Bindings>
                   <l:LocalizedString property="text" table="ui" entry="menu.tab.inventory" />
                 </Bindings>
               </ui:Label>
-            </ui:Button>
-            <ui:Button name="game-menu-shop-tab" class="game-menu-tab">
-              <ui:VisualElement class="ui-icon ui-icon--shop game-menu-tab-icon" picking-mode="Ignore" />
-              <ui:Label text="" class="game-menu-tab-label" picking-mode="Ignore">
+              <ui:Button name="inventory-window-close" class="item-window-close">
+                <Bindings>
+                  <l:LocalizedString property="text" table="ui" entry="window.close" />
+                </Bindings>
+              </ui:Button>
+            </ui:VisualElement>
+            <ui:Instance template="ItemWorkbench" class="item-workbench-template" />
+            <ui:Instance template="Inventory" class="inventory-template" />
+          </ui:VisualElement>
+          <ui:VisualElement name="shop-window" class="item-window shop-window">
+            <ui:VisualElement class="item-window-header">
+              <ui:Label name="" class="item-window-title" picking-mode="Ignore">
                 <Bindings>
                   <l:LocalizedString property="text" table="ui" entry="menu.tab.shop" />
                 </Bindings>
               </ui:Label>
-            </ui:Button>
-            <ui:Button name="game-menu-crafting-tab" class="game-menu-tab">
-              <ui:VisualElement class="ui-icon ui-icon--crafting game-menu-tab-icon" picking-mode="Ignore" />
-              <ui:Label text="" class="game-menu-tab-label" picking-mode="Ignore">
+              <ui:Button name="shop-window-close" class="item-window-close">
+                <Bindings>
+                  <l:LocalizedString property="text" table="ui" entry="window.close" />
+                </Bindings>
+              </ui:Button>
+            </ui:VisualElement>
+            <ui:Instance template="Shop" class="shop-template" />
+          </ui:VisualElement>
+          <ui:VisualElement name="crafting-window" class="item-window crafting-window">
+            <ui:VisualElement class="item-window-header">
+              <ui:Label name="" class="item-window-title" picking-mode="Ignore">
                 <Bindings>
                   <l:LocalizedString property="text" table="ui" entry="menu.tab.crafting" />
                 </Bindings>
               </ui:Label>
-            </ui:Button>
-          </ui:VisualElement>
-          <ui:Button name="game-menu-close" class="game-menu-close">
-            <ui:VisualElement class="ui-icon ui-icon--close game-menu-close-icon" picking-mode="Ignore" />
-            <ui:Label text="" picking-mode="Ignore">
-              <Bindings>
-                <l:LocalizedString property="text" table="ui" entry="menu.close" />
-              </Bindings>
-            </ui:Label>
-          </ui:Button>
-        </ui:VisualElement>
-        <ui:VisualElement name="game-menu-content" class="game-menu-content">
-          <ui:Instance template="ItemWorkbench" class="item-workbench-template" />
-          <ui:VisualElement name="game-menu-context-stack" class="game-menu-context-stack">
-            <ui:Instance template="Inventory" class="inventory-template" />
-            <ui:Instance template="Shop" class="shop-template" />
+              <ui:Button name="crafting-window-close" class="item-window-close">
+                <Bindings>
+                  <l:LocalizedString property="text" table="ui" entry="window.close" />
+                </Bindings>
+              </ui:Button>
+            </ui:VisualElement>
             <ui:Instance template="Crafting" class="crafting-template" />
           </ui:VisualElement>
         </ui:VisualElement>
-        <ui:VisualElement name="game-menu-save-bar" class="game-menu-save-bar">
-          <ui:VisualElement class="game-menu-save-actions">
-            <ui:Button name="game-menu-save" text="" class="game-menu-save-action game-menu-save-action--primary">
-              <Bindings>
-                <l:LocalizedString property="text" table="ui" entry="menu.save.action" />
-              </Bindings>
-            </ui:Button>
-            <ui:Button name="game-menu-return-front-end" text="" class="game-menu-save-action">
-              <Bindings>
-                <l:LocalizedString property="text" table="ui" entry="menu.return_front_end" />
-              </Bindings>
-            </ui:Button>
-            <ui:Button name="game-menu-settings" text="" class="game-menu-save-action">
-              <Bindings>
-                <l:LocalizedString property="text" table="ui" entry="settings.open" />
-              </Bindings>
-            </ui:Button>
+        <ui:VisualElement name="item-operation-bar" class="item-operation-bar">
+          <ui:Label name="item-operation-status" class="item-operation-status" picking-mode="Ignore" />
+          <ui:Button name="item-operation-actions" class="item-operation-button"><Bindings><l:LocalizedString property="text" table="ui" entry="item.action.menu" /></Bindings></ui:Button>
+          <ui:Button name="item-discard-zone" class="item-operation-button item-drop-zone"><Bindings><l:LocalizedString property="text" table="ui" entry="item.action.discard_zone" /></Bindings></ui:Button>
+        </ui:VisualElement>
+        <ui:VisualElement name="game-pause-panel" class="game-pause-panel ui-panel-frame">
+          <ui:Label name="" class="item-window-title" picking-mode="Ignore">
+            <Bindings>
+              <l:LocalizedString property="text" table="ui" entry="window.pause" />
+            </Bindings>
+          </ui:Label>
+          <ui:VisualElement name="game-menu-save-bar" class="game-menu-save-bar">
+            <ui:VisualElement class="game-menu-save-actions">
+              <ui:Button name="game-menu-save" text="" class="game-menu-save-action game-menu-save-action--primary">
+                <Bindings>
+                  <l:LocalizedString property="text" table="ui" entry="menu.save.action" />
+                </Bindings>
+              </ui:Button>
+              <ui:Button name="game-menu-return-front-end" text="" class="game-menu-save-action">
+                <Bindings>
+                  <l:LocalizedString property="text" table="ui" entry="menu.return_front_end" />
+                </Bindings>
+              </ui:Button>
+              <ui:Button name="game-menu-settings" text="" class="game-menu-save-action">
+                <Bindings>
+                  <l:LocalizedString property="text" table="ui" entry="settings.open" />
+                </Bindings>
+              </ui:Button>
+            </ui:VisualElement>
+            <ui:Label name="game-menu-save-status" text="" class="game-menu-save-status" />
           </ui:VisualElement>
-          <ui:Label name="game-menu-save-status" text="" class="game-menu-save-status" />
+          <ui:Button name="game-menu-resume" class="game-menu-save-action">
+            <Bindings>
+              <l:LocalizedString property="text" table="ui" entry="window.resume" />
+            </Bindings>
+          </ui:Button>
         </ui:VisualElement>
       </ui:VisualElement>
       <ui:VisualElement name="item-tooltip-layer" class="item-tooltip-layer" picking-mode="Ignore">
@@ -100,7 +137,13 @@
           <ui:Label name="item-tooltip-context" text="" class="item-tooltip-context" />
         </ui:VisualElement>
       </ui:VisualElement>
+      <ui:VisualElement name="item-action-menu" class="item-action-menu ui-panel-frame" />
       <ui:VisualElement name="item-drag-layer" class="item-drag-layer" picking-mode="Ignore" />
     </ui:VisualElement>
+    <ui:Button name="game-hud-pause" class="game-hud-pause">
+      <Bindings>
+        <l:LocalizedString property="text" table="ui" entry="window.pause" />
+      </Bindings>
+    </ui:Button>
   </ui:VisualElement>
 </ui:UXML>

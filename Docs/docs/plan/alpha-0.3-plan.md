@@ -1,10 +1,11 @@
 # alpha 0.3：UI 迭代计划
 
-> 状态：实施中；首阶段已完成菜单交接修复，独立窗口及后续切片待实施
+> 状态：实施中；首阶段已完成菜单交接、独立窗口和统一操作事务；代表视觉组件及后续切片继续实施
 > 建立日期：2026-09-07
 > 当前运行版本：`0.2.7-alpha`
 > 执行前置：[测试审计与精简](../testing/test-suite-audit.md)已完成；2026-09-08 开始功能实施
 > 首阶段：[alpha 0.3.0 独立窗口与交互拆分](./alpha-0.3.0-independent-ui-windows-plan.md)
+> 已完成切片：[独立窗口可用闭环](./archive/alpha-0.3.0-window-workspace-plan.md)、[统一物品操作与事务](./archive/alpha-0.3.0-unified-item-actions-plan.md)；下一步制作代表视觉组件
 > 交互验收：[统一物品操作与菜单交接合同](./alpha-0.3-item-interaction-contract.md)
 > 收尾阶段：[alpha 0.3.4 十槽装备与内容补齐](./alpha-0.3.4-equipment-completion-plan.md)
 > 基线：[启动准备归档](./archive/alpha-0.3-startup.md)、[alpha 0.2 综合验收](../infrastructure/alpha-0.2-acceptance.md)
@@ -23,7 +24,9 @@
 
 本轮同时修复现有设置 / 返回主菜单与背包的交互阻塞，并统一拖动装备、丢弃、买卖、打造放入 / 取出及对应右键、手柄操作。全窗口最多一个物品高亮，详情不超框、面板对齐是功能验收条件，不能留到皮肤阶段才处理。具体规则见[交互合同](./alpha-0.3-item-interaction-contract.md)。
 
-## 当前实现与迁移重点
+## 启动基线与迁移重点
+
+下表保留启动时的迁移边界。当前独立窗口、共享表现和空间导航已落地，模块现状见[物品工作台](../item-ui-workbench.md)。
 
 | 现状 | 本版改动 |
 | --- | --- |

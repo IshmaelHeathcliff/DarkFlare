@@ -17,7 +17,7 @@ namespace DarkFlare
 
         readonly VisualElement _root;
         readonly VisualElement _layer;
-        readonly VisualElement _panel;
+        VisualElement _panel;
         readonly Label _contextLabel;
         readonly ItemDetailView _detailView;
 
@@ -48,6 +48,11 @@ namespace DarkFlare
         public void SetLocalizationService(LocalizationService localizationService)
         {
             _detailView.SetLocalizationService(localizationService);
+        }
+
+        public void SetAnchor(VisualElement panel)
+        {
+            if (panel != null) { _panel = panel; }
         }
 
         public void Show(ItemInstance item, string context, ItemTooltipSide side)
@@ -86,6 +91,7 @@ namespace DarkFlare
         {
             if (generation != _positionGeneration
                 || !IsValid
+                || _layer.panel == null
                 || _root.resolvedStyle.display == DisplayStyle.None)
             {
                 return;

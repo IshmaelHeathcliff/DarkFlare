@@ -48,7 +48,33 @@ namespace DarkFlare.Tests
             Assert.IsNotNull(oldPlayer);
             Assert.IsNotNull(spawner);
             Assert.IsNotNull(bootstrap);
-            oldArchitecture.GetModel<InventoryModel>().AddGold(37);
+            InventoryModel oldInventory = oldArchitecture.GetModel<InventoryModel>();
+            oldInventory.AddGold(1037);
+            ItemInstance discarded = oldArchitecture.GetModel<EconomyModel>().MerchantStock[0];
+            Assert.IsTrue(oldArchitecture.SendCommand(new BuyItemCommand(discarded)));
+            Assert.IsTrue(oldArchitecture.SendCommand(new CraftItemCommand(
+                CraftOperation.UpgradeRarity, CraftingAffixScope.Any, discarded)).Succeeded);
+            int expectedItemSeed = discarded.Seed;
+            string[] expectedAffixes = discarded.Prefixes.Concat(discarded.Suffixes)
+                .Select(affix => affix.Definition.Id).ToArray();
+            float[] expectedRolls = discarded.CollectModifiers().Select(modifier => modifier.Value).ToArray();
+            Assert.IsNotEmpty(expectedAffixes, "丢弃存档回归必须包含真实词缀");
+            LootSystem loot = oldArchitecture.GetSystem<LootSystem>();
+            var prefabField = typeof(LootSystem).GetField("_pickupPrefabReference",
+                System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+            object pickupReference = prefabField.GetValue(loot);
+            RectInt originalPlacement = oldInventory.Grid.Placements[discarded];
+            prefabField.SetValue(loot, null);
+            Assert.IsFalse(oldArchitecture.SendCommand(new DiscardItemCommand(discarded, oldPlayer.Actor)));
+            Assert.AreEqual(originalPlacement, oldInventory.Grid.Placements[discarded], "生成资源缺失时物品必须保留原格");
+            prefabField.SetValue(loot, pickupReference);
+            Assert.IsTrue(oldArchitecture.SendCommand(new DiscardItemCommand(discarded, oldPlayer.Actor)));
+            LootPickupController originalDrop = UnityEngine.Object.FindObjectsByType<LootPickupController>(FindObjectsSortMode.None)
+                .Single(drop => drop.Item == discarded);
+            string dropId = originalDrop.Id.Value;
+            yield return new WaitForFixedUpdate();
+            yield return null;
+            Assert.IsFalse(oldInventory.Grid.Placements.ContainsKey(discarded), "丢弃后不能原地立即自动拾回");
             CombatResourceSnapshot oldResources = oldPlayer.Actor.Resources;
             float expectedHealth = oldResources.MaxHealth - 13f;
             oldPlayer.Actor.RestoreResources(
@@ -154,6 +180,32 @@ namespace DarkFlare.Tests
             Assert.AreEqual(
                 captured.Payload.Run.Spawner.IsRunning,
                 UnityEngine.Object.FindAnyObjectByType<MonsterSpawner>().IsSpawning);
+            LootPickupController restoredDrop = UnityEngine.Object.FindObjectsByType<LootPickupController>(FindObjectsSortMode.None)
+                .Single(drop => drop.Id.Value == dropId);
+            ItemInstance restoredItem = restoredDrop.Item;
+            Assert.AreEqual(discarded.InstanceId, restoredItem.InstanceId);
+            Assert.AreEqual(expectedItemSeed, restoredItem.Seed);
+            CollectionAssert.AreEqual(expectedAffixes, restoredItem.Prefixes.Concat(restoredItem.Suffixes)
+                .Select(affix => affix.Definition.Id).ToArray());
+            CollectionAssert.AreEqual(expectedRolls, restoredItem.CollectModifiers().Select(modifier => modifier.Value).ToArray());
+            yield return new WaitForFixedUpdate();
+            yield return null;
+            Assert.IsNotNull(restoredDrop, "继续游戏后不应在原位自动拾回丢弃物");
+            InventoryModel restoredInventory = restoredArchitecture.GetModel<InventoryModel>();
+            Assert.IsFalse(restoredInventory.Grid.Placements.ContainsKey(restoredItem));
+            int notifications = 0;
+            IUnRegister registration = restoredArchitecture.RegisterEvent<InventoryChangedEvent>(change =>
+            {
+                if (change.Item != restoredItem) { return; }
+                notifications++;
+                Assert.IsNull(restoredDrop.Item, "拾取通知发出时必须已清除世界归属");
+                Assert.IsFalse(restoredArchitecture.SendCommand(new PickupLootCommand(restoredDrop, restoredPlayer.Actor)),
+                    "同帧重入不能重复拾取");
+            });
+            Assert.IsTrue(restoredArchitecture.SendCommand(new PickupLootCommand(restoredDrop, restoredPlayer.Actor)));
+            Assert.IsTrue(restoredInventory.Grid.Placements.ContainsKey(restoredItem));
+            Assert.AreEqual(1, notifications);
+            registration.UnRegister();
         }
 
         [UnityTest]
@@ -211,6 +263,8 @@ namespace DarkFlare.Tests
 
             Assert.IsFalse(menu.IsSaveOperationBusy, "自动存档探测超时");
             VisualElement root = document.rootVisualElement;
+            menu.TogglePause();
+            yield return null;
             Button save = root.Q<Button>("game-menu-save");
             Button returnFrontEnd = root.Q<Button>("game-menu-return-front-end");
             Label status = root.Q<Label>("game-menu-save-status");

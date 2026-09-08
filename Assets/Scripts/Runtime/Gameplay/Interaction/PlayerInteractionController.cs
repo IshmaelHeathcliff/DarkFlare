@@ -56,7 +56,9 @@ namespace DarkFlare
             _actorRevivedRegistration = null;
             _gameInput = null;
             _targets.Clear();
-            SetFocusedTarget(null, false);
+            bool canNotify = GameArchitectureProvider.TryGetCurrent(out _)
+                && GameArchitectureProvider.TryGetOwnerScope(out LifecycleScope scope) && scope.CanAcceptWork;
+            SetFocusedTarget(null, canNotify);
         }
 
         void OnTriggerEnter2D(Collider2D other)

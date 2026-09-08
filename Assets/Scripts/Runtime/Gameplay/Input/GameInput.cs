@@ -29,6 +29,9 @@ namespace DarkFlare
 
             _inputService.InteractPerformed += OnInteract;
             _inputService.ToggleMenuPerformed += OnToggleMenu;
+            _inputService.PausePerformed += OnPause;
+            _inputService.CycleWindowPerformed += OnCycleWindow;
+            _inputService.SetSessionMenuActive(true);
             _inputService.NavigatePerformed += OnNavigate;
             _inputService.RearrangePerformed += OnRearrange;
             _inputService.CancelPerformed += OnCancel;
@@ -38,6 +41,9 @@ namespace DarkFlare
             SwitchToGameplay();
         }
 
+        public event Action ToggleInventoryRequested;
+        public event Action PauseRequested;
+        public event Action<int> CycleWindowRequested;
         public event Action InteractPerformed;
 
         public event Action RearrangePerformed;
@@ -84,6 +90,9 @@ namespace DarkFlare
 
             _inputService.InteractPerformed -= OnInteract;
             _inputService.ToggleMenuPerformed -= OnToggleMenu;
+            _inputService.PausePerformed -= OnPause;
+            _inputService.CycleWindowPerformed -= OnCycleWindow;
+            if (!_inputService.IsClosed) { _inputService.SetSessionMenuActive(false); }
             _inputService.NavigatePerformed -= OnNavigate;
             _inputService.RearrangePerformed -= OnRearrange;
             _inputService.CancelPerformed -= OnCancel;
@@ -97,6 +106,9 @@ namespace DarkFlare
                 _inputService.SwitchContext(InputContext.UI);
             }
 
+            ToggleInventoryRequested = null;
+            PauseRequested = null;
+            CycleWindowRequested = null;
             InteractPerformed = null;
             RearrangePerformed = null;
             NavigatePerformed = null;
@@ -118,8 +130,12 @@ namespace DarkFlare
 
         void OnToggleMenu()
         {
-            SwitchToUi();
+            if (ToggleInventoryRequested != null) { ToggleInventoryRequested.Invoke(); }
+            else { SwitchToUi(); }
         }
+
+        void OnPause() { PauseRequested?.Invoke(); }
+        void OnCycleWindow(int step) { CycleWindowRequested?.Invoke(step); }
 
         void OnInteract()
         {

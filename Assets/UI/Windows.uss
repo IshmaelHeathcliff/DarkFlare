@@ -1,0 +1,104 @@
+.game-menu-overlay { justify-content: flex-start; padding-top: 24px; padding-bottom: 160px; background-color: rgba(5, 7, 10, 0.64); }
+.game-menu-panel { width: auto; max-width: 97%; height: 872px; max-height: 100%; padding: 0; background-color: rgba(0,0,0,0); border-width: 0; }
+.game-menu-header { height: 44px; min-height: 44px; margin-bottom: 12px; justify-content: center; border-width: 0; }
+.game-menu-content { flex-direction: row; align-items: stretch; flex-grow: 1; min-height: 0; }
+.item-window { width: 760px; min-width: 0; flex-shrink: 0; margin-left: 8px; margin-right: 8px; padding: 12px; background-color: rgb(14,17,22); border-width: 2px; border-color: rgb(91,76,53); }
+.inventory-window { width: 560px; }
+.item-window--active { border-color: rgb(173,134,74); }
+.item-window-header { flex-direction: row; align-items: center; min-height: 38px; height: 38px; margin-bottom: 8px; border-bottom-width: 1px; border-bottom-color: rgb(91,76,53); }
+.item-window-title { flex-grow: 1; font-size: 22px; color: rgb(236,216,177); }
+.item-window-close { width: 98px; height: 30px; font-size: 15px; }
+.item-window .item-context-header, .item-window .item-context-help, .item-window .item-workbench-help, .item-window .item-workbench-section-kicker, .item-window .equipment-silhouette { display: none; }
+.item-workbench-template { width: auto; max-width: 100%; min-width: 0; flex-grow: 0; }
+.item-workbench-shared { flex-grow: 0; }
+.item-workbench-equipment { min-height: 192px; height: 192px; padding: 0; margin-bottom: 6px; flex-grow: 0; }
+.item-workbench-equipment .item-workbench-section-header { display: none; }
+.equipment-canvas { min-height: 186px; height: 186px; margin-top: 0; }
+.equipment-slot-layout { left: 4px; right: 4px; top: 4px; bottom: 4px; }
+.item-workbench-inventory { height: 346px; min-height: 346px; padding: 0; }
+.item-workbench-inventory .item-workbench-section-header { height: 28px; }
+.inventory-grid-frame { padding: 0; margin-top: 4px; }
+.inventory-template, .shop-template, .crafting-template { min-height: 0; flex-grow: 1; }
+.item-window .item-context-panel { padding: 0; border-width: 0; background-color: rgba(0,0,0,0); }
+.inventory-window .inventory-page { flex-grow: 1; }
+.inventory-window .inventory-target-slot, .inventory-window .inventory-feedback { min-height: 22px; padding: 2px; margin: 0; font-size: 13px; }
+.inventory-window .item-context-subtitle { display: none; }
+.inventory-window .inventory-actions { margin-top: 4px; }
+.inventory-window .item-context-action { min-height: 30px; height: 30px; font-size: 14px; }
+.inventory-attributes-scroll { max-height: 120px; }
+.inventory-attribute-card { min-height: 0; padding: 4px; }
+.inventory-attribute-row { height: auto; min-height: 25px; flex-shrink: 0; }
+.inventory-attribute-name { white-space: normal; min-width: 0; flex-shrink: 1; }
+.item-source-section { flex-shrink: 0; margin-top: 4px; margin-bottom: 8px; }
+.item-source-scroll { height: 128px; min-height: 80px; border-width: 1px; border-color: rgb(54,57,65); background-color: rgb(10,13,18); }
+.item-source-row { flex-shrink: 0; height: auto; min-height: 44px; margin: 2px; padding: 3px; flex-direction: row; align-items: center; background-color: rgb(25,29,36); border-width: 1px; border-color: rgb(60,64,72); }
+.item-source-icon { width: 36px; height: 36px; flex-shrink: 0; margin-right: 10px; -unity-background-scale-mode: scale-to-fit; }
+.item-source-name { flex-grow: 1; white-space: normal; font-size: 16px; }
+.item-source-row--selected { border-color: rgb(208,164,88); background-color: rgb(55,45,32); }
+.item-source-empty { font-size: 14px; color: rgb(174,169,160); }
+.shop-merchant-frame { flex-grow: 0; height: 324px; min-height: 324px; padding: 6px; }
+.shop-window .shop-feedback { min-height: 36px; padding: 6px; }
+.crafting-window .item-context-subtitle { margin-top: 4px; margin-bottom: 4px; min-height: 20px; }
+.crafting-window .crafting-selection-card { min-height: 160px; padding: 4px; }
+.crafting-window .crafting-feedback { min-height: 26px; padding: 4px; }
+.crafting-window .item-context-action { min-height: 34px; height: 34px; margin-top: 3px; margin-bottom: 3px; }
+.crafting-window .crafting-result { min-height: 0; padding: 3px; }
+.game-pause-panel { display: none; width: 620px; padding: 24px; align-self: center; }
+.game-menu-save-bar { flex-direction: column; border-width: 0; }
+.game-menu-save-actions { flex-direction: column; align-self: stretch; }
+.game-menu-save-action { height: 44px; margin: 6px; white-space: normal; }
+.game-menu-save-status { min-height: 30px; white-space: normal; }
+.game-hud-pause { position: absolute; right: 24px; top: 24px; width: 90px; height: 36px; }
+.item-tooltip { width: 400px; height: auto; min-height: 0; max-height: 824px; }
+
+.game-menu-panel { margin-right: 416px; }
+
+.inventory-grid-frame { height: 310px; min-height: 310px; margin-bottom: 0; }
+.item-workbench-inventory .item-workbench-section-header { flex-shrink: 0; }
+.item-window-close, .game-hud-pause { background-color: rgb(28,32,39); color: rgb(225,211,184); border-color: rgb(91,76,53); border-width: 1px; }
+.item-window-close { width: 130px; flex-shrink: 0; }
+.item-source-name { min-width: 0; flex-shrink: 1; }
+.item-source-section .item-context-subtitle { min-height: 24px; margin-top: 2px; margin-bottom: 2px; font-size: 16px; }
+.inventory-item:focus, .shop-item:focus, .inventory-equipment-slot:focus, .item-source-row:focus { border-width: 1px; border-color: rgb(78,72,61); }
+.inventory-item.inventory-item--selected, .shop-item.shop-item--selected, .inventory-equipment-slot.inventory-equipment-slot--selected, .item-source-row--selected.item-source-row, .item-source-row--selected.crafting-input-slot { border-width: 2px; border-color: rgb(208,164,88); }
+
+.item-window .item-context-action { padding-top: 3px; padding-bottom: 3px; }
+.item-window-close, .game-hud-pause { padding-top: 2px; padding-bottom: 2px; }
+.item-source-name { -unity-text-align: middle-left; }
+
+.item-window-close { width: auto; min-width: 76px; padding-left: 10px; padding-right: 10px; }
+.game-hud-pause { width: auto; min-width: 90px; padding-left: 10px; padding-right: 10px; }
+.item-window-title { font-size: 20px; }
+
+.crafting-window .item-context-action { height: auto; min-height: 44px; }
+.crafting-input-slot--filled { border-color: rgb(78,72,61); }
+.crafting-input-slot:focus { border-width: 1px; border-color: rgb(78,72,61); }
+
+.crafting-input-slot--filled { background-color: rgb(23,28,36); }
+.crafting-input-slot.item-source-row--selected { border-width: 2px; border-color: rgb(208,164,88); }
+.item-window-title { min-width: 0; flex-shrink: 1; white-space: normal; }
+.item-window-header { height: auto; min-height: 38px; flex-shrink: 0; }
+
+.item-operation-bar { flex-direction: row; flex-shrink: 0; min-height: 38px; margin-top: 4px; margin-left: 8px; margin-right: 8px; align-items: center; background-color: rgb(14,17,22); }
+.item-operation-status { min-width: 0; flex-grow: 1; flex-shrink: 1; white-space: normal; font-size: 14px; color: rgb(225,211,184); }
+.item-operation-button, .item-drop-zone { min-height: 32px; padding: 4px 10px; white-space: normal; font-size: 14px; color: rgb(225,211,184); background-color: rgb(28,32,39); border-width: 1px; border-color: rgb(91,76,53); }
+.item-operation-button { flex-shrink: 0; margin-left: 8px; }
+.item-trade-drop-zones { flex-direction: row; flex-shrink: 0; margin-top: 8px; }
+.item-trade-drop-zones .item-drop-zone { flex-grow: 1; flex-basis: 0; min-width: 0; margin-left: 4px; margin-right: 4px; }
+.item-action-menu { display: none; position: absolute; left: 36%; right: 36%; top: 24%; padding: 16px; background-color: rgb(14,17,22); border-width: 2px; border-color: rgb(173,134,74); }
+.item-action-option { min-height: 42px; height: auto; padding: 6px 10px; margin: 4px; white-space: normal; font-size: 16px; color: rgb(225,211,184); background-color: rgb(28,32,39); border-width: 1px; border-color: rgb(91,76,53); }
+.item-drop-zone.inventory-external-drop--valid { border-width: 2px; border-color: rgb(115,186,137); background-color: rgb(32,54,40); }
+.item-drop-zone.inventory-external-drop--invalid { border-width: 2px; border-color: rgb(205,75,64); }
+
+.shop-selection-summary { flex-shrink: 0; }
+.shop-detail-line, .shop-price { flex-shrink: 0; min-height: 34px; }
+
+.shop-window .item-context-action { height: auto; min-height: 44px; flex-shrink: 0; white-space: normal; }
+
+.shop-window .shop-actions, .crafting-window .crafting-scope-actions { flex-shrink: 0; }
+.shop-window .item-source-scroll { height: 64px; min-height: 64px; }
+.crafting-window .crafting-scope { height: auto; min-height: 52px; flex-shrink: 0; padding-top: 4px; padding-bottom: 4px; }
+.crafting-window .item-source-scroll { height: 96px; }
+.item-operation-bar { min-width: 0; align-self: flex-start; margin-left: 0; margin-right: 0; padding-left: 8px; padding-right: 8px; }
+.item-operation-status { flex-basis: 0; }
+.item-operation-button { width: 144px; min-width: 144px; max-width: 144px; flex-shrink: 0; }

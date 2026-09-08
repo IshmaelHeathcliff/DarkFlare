@@ -75,6 +75,7 @@ namespace DarkFlare
         float _rebindStartedAt;
         float _rebindTimeoutSeconds;
         bool _dispatchingCancel;
+        bool _sessionMenuActive;
         bool _contextRefreshPending;
         bool _closed;
 
@@ -85,6 +86,10 @@ namespace DarkFlare
             _actions = new InputSystem_Actions();
             _actions.Player.Interact.performed += OnInteract;
             _actions.Player.ToggleMenu.performed += OnToggleMenu;
+            _actions.asset.FindAction("Player/Pause", true).performed += OnPause;
+            _actions.asset.FindAction("UI/Pause", true).performed += OnPause;
+            _actions.asset.FindAction("UI/PreviousWindow", true).performed += OnPreviousWindow;
+            _actions.asset.FindAction("UI/NextWindow", true).performed += OnNextWindow;
             _actions.UI.Navigate.performed += OnNavigate;
             _actions.UI.Rearrange.performed += OnRearrange;
             _actions.UI.Cancel.performed += OnCancel;
@@ -108,6 +113,8 @@ namespace DarkFlare
         public event Action InteractPerformed;
 
         public event Action ToggleMenuPerformed;
+        public event Action PausePerformed;
+        public event Action<int> CycleWindowPerformed;
 
         public event Action<Vector2> NavigatePerformed;
 
@@ -145,11 +152,13 @@ namespace DarkFlare
 
         public bool IsClosed => _closed;
 
-        public bool IsGameplayEnabled => !_closed && _actions.Player.enabled;
+        public bool IsGameplayEnabled => !_closed && _actions.Player.Move.enabled;
 
         public bool IsUiEnabled => !_closed && _actions.UI.enabled;
 
         public InputDeviceFamily ActiveDeviceFamily { get; private set; }
+
+        public InputDevice ItemMoveDevice { get; private set; }
 
         public InputDeviceFamily DisplayDeviceFamily
         {
@@ -238,6 +247,7 @@ namespace DarkFlare
 
             if (CurrentContext == effective)
             {
+                ApplyState();
                 return;
             }
 
@@ -831,16 +841,16 @@ namespace DarkFlare
             {
                 RebindableInputAction candidateAction = RebindableInputCatalog.Actions[actionIndex];
 
-                if (!string.Equals(
-                    RebindableInputCatalog.GetMapName(candidateAction),
-                    targetMap,
-                    StringComparison.Ordinal))
+                string candidateMap = RebindableInputCatalog.GetMapName(candidateAction);
+                if (!string.Equals(candidateMap, targetMap, StringComparison.Ordinal)
+                    && candidateAction != RebindableInputAction.PlayerToggleMenu
+                    && target.Action != RebindableInputAction.PlayerToggleMenu)
                 {
                     continue;
                 }
 
                 InputAction action = _actions.asset.FindAction(
-                    $"{targetMap}/{RebindableInputCatalog.GetActionName(candidateAction)}",
+                    $"{candidateMap}/{RebindableInputCatalog.GetActionName(candidateAction)}",
                     false);
 
                 if (action == null)
@@ -1163,6 +1173,10 @@ namespace DarkFlare
             CancelPendingContextRefresh();
             _actions.Player.Interact.performed -= OnInteract;
             _actions.Player.ToggleMenu.performed -= OnToggleMenu;
+            _actions.asset.FindAction("Player/Pause", true).performed -= OnPause;
+            _actions.asset.FindAction("UI/Pause", true).performed -= OnPause;
+            _actions.asset.FindAction("UI/PreviousWindow", true).performed -= OnPreviousWindow;
+            _actions.asset.FindAction("UI/NextWindow", true).performed -= OnNextWindow;
             _actions.UI.Navigate.performed -= OnNavigate;
             _actions.UI.Rearrange.performed -= OnRearrange;
             _actions.UI.Cancel.performed -= OnCancel;
@@ -1192,6 +1206,8 @@ namespace DarkFlare
 
             InteractPerformed = null;
             ToggleMenuPerformed = null;
+            PausePerformed = null;
+            CycleWindowPerformed = null;
             NavigatePerformed = null;
             RearrangePerformed = null;
             CancelPerformed = null;
@@ -1224,6 +1240,13 @@ namespace DarkFlare
             SuspensionChanged?.Invoke(SuspensionReasons);
         }
 
+        public void SetSessionMenuActive(bool active)
+        {
+            ThrowIfClosed();
+            _sessionMenuActive = active;
+            ApplyState();
+        }
+
         void ApplyState()
         {
             _actions.Disable();
@@ -1240,6 +1263,16 @@ namespace DarkFlare
             }
 
             _actions.UI.Enable();
+            if (_sessionMenuActive && !HasUiContextOverride)
+            {
+                _actions.Player.ToggleMenu.Enable();
+            }
+            else
+            {
+                _actions.asset.FindAction("UI/Pause", true).Disable();
+                _actions.asset.FindAction("UI/PreviousWindow", true).Disable();
+                _actions.asset.FindAction("UI/NextWindow", true).Disable();
+            }
         }
 
         void OnInteract(InputAction.CallbackContext context)
@@ -1249,7 +1282,29 @@ namespace DarkFlare
 
         void OnToggleMenu(InputAction.CallbackContext context)
         {
-            ToggleMenuPerformed?.Invoke();
+            DispatchWindowAction(() => ToggleMenuPerformed?.Invoke());
+        }
+
+        void OnPause(InputAction.CallbackContext context)
+        {
+            DispatchWindowAction(() => PausePerformed?.Invoke());
+        }
+
+        void OnPreviousWindow(InputAction.CallbackContext context)
+        {
+            CycleWindowPerformed?.Invoke(-1);
+        }
+
+        void OnNextWindow(InputAction.CallbackContext context)
+        {
+            CycleWindowPerformed?.Invoke(1);
+        }
+
+        void DispatchWindowAction(Action action)
+        {
+            _dispatchingCancel = true;
+            try { action(); }
+            finally { _dispatchingCancel = false; }
         }
 
         void OnNavigate(InputAction.CallbackContext context)
@@ -1259,6 +1314,7 @@ namespace DarkFlare
 
         void OnRearrange(InputAction.CallbackContext context)
         {
+            ItemMoveDevice = context.control.device;
             RearrangePerformed?.Invoke();
         }
 

@@ -1,4 +1,4 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:l="UnityEngine.Localization" editor-extension-mode="False">
+<ui:UXML xmlns:l="UnityEngine.Localization" xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
   <ui:VisualElement name="inventory-page" class="inventory-page item-context-panel ui-panel-frame" picking-mode="Position">
     <ui:VisualElement class="item-context-header">
       <ui:Label text="" class="item-context-title">
@@ -11,9 +11,6 @@
           <l:LocalizedString property="text" table="ui" entry="inventory.stats.kicker" />
         </Bindings>
       </ui:Label>
-    </ui:VisualElement>
-    <ui:VisualElement name="inventory-attribute-card" class="inventory-attribute-card">
-      <ui:VisualElement name="inventory-attribute-grid" class="inventory-attribute-grid" />
     </ui:VisualElement>
     <ui:Label text="" class="item-context-subtitle">
       <Bindings>
@@ -39,5 +36,15 @@
         <l:LocalizedString property="text" table="ui" entry="inventory.help.drag" />
       </Bindings>
     </ui:Label>
+    <ui:Foldout name="inventory-attributes-toggle" value="false">
+      <Bindings>
+        <l:LocalizedString property="text" table="ui" entry="inventory.stats.title" />
+      </Bindings>
+      <ui:ScrollView name="inventory-attributes-scroll" class="inventory-attributes-scroll" mode="Vertical">
+        <ui:VisualElement name="inventory-attribute-card" class="inventory-attribute-card">
+          <ui:VisualElement name="inventory-attribute-grid" class="inventory-attribute-grid" />
+        </ui:VisualElement>
+      </ui:ScrollView>
+    </ui:Foldout>
   </ui:VisualElement>
 </ui:UXML>
