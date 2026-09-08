@@ -13,15 +13,17 @@ Main 玩法 UI 复用一个 `UIDocument` 和一个 `PanelSettings`；常驻 Boot
 - `Player` Action Map：移动、瞄准、攻击预留、世界交互和菜单开关。
 - `UI` Action Map：导航、提交、取消、物品拿起 / 放置和指针操作。
 - 无 Session 的 FrontEnd 默认使用 UI Context；Session 创建进入 Gameplay，菜单打开切到 UI，Session 结束恢复 UI。
-- `ApplicationInputService` 统一计算 Gameplay / UI Map 状态；任一 suspension lease 有效时两个 Map 都禁用，最后一个租约释放后恢复当前 Context。
+- `ApplicationInputService` 区分 `RequestedContext` 与实际 `CurrentContext`。普通模式切换更新请求；Settings / Modal 等应用层通过 `AcquireUiContext` 持有独立 UI 所有权，最后一个所有者释放后采用最新请求。任一 suspension lease 有效时两个 Map 都禁用，UI 所有权不能绕过 suspension。
 - `PlayerController` 从 `GameInput.Move` 读取移动，不直接轮询设备。
 - `InteractPerformed` 只在 Gameplay Action Map 有效，用于世界目标交互。
-- `ModeChanged` 驱动菜单显示、默认焦点和玩法暂停状态。
+- `GameInput.CurrentMode` / `ModeChanged` 反映 Session 请求，驱动玩法菜单与本组暂停；Shell 的 `BlocksGameplay` 单独控制底层可见性，不用有效 UI Map 推断背包是否打开。
 - `GameInput.Dispose()` 只解除 Session 订阅并恢复 UI Context；只有 Application Shutdown 才释放生成的 Actions。
 
 `Bootstrap.unity/EventSystem` 上的 `ApplicationInputModuleBinder` 将 `InputSystemUIInputModule` 绑定到同一运行时 Asset，并显式建立 Point、Navigate、Submit、Cancel、Click、Scroll 和追踪设备 ActionReference。绑定和解绑都会先停用 UI Module，避免旧 Action 仍处于启用状态；服务关闭前先发出 `Closing`，Binder 清空引用后才允许销毁 Asset。同场景重建 `ApplicationHost` 时，`InputReady` 事件会把模块重新绑定到新的 Application owner。
 
-共享 Asset 下，未消费的 UI Cancel 不在 Action 回调分发中途直接禁用 UI Map，而是在当前 `InputSystem.onAfterUpdate` 阶段切回 Gameplay。这样 UI Module 能先完成同一 CallbackContext 的处理，同时玩家观感仍保持在同一帧内关闭菜单。
+共享 Asset 下，未消费的 UI Cancel 不在 Action 回调分发中途直接禁用 UI Map，而是在当前 `InputSystem.onAfterUpdate` 阶段切回 Gameplay。Application 层在 Cancel 回调中释放最后一个 UI 所有者时，也把实际 Context 刷新延后到该阶段，并采用届时的最新请求；服务销毁会取消尚未执行的刷新。这样 UI Module 能先完成同一 CallbackContext 的处理，避免读取失效 control 索引，同时玩家观感仍保持在同一帧内关闭菜单。
+
+Cancel 先由 Application Shell 处理 Fatal、Busy、Modal、Settings，再交给 Session 的拖放与菜单处理；每级在首个所有者消费后停止分发，一次输入只处理一层。Shell 阻挡期间不向玩法物品界面转发导航和拿起动作，也不执行排队中的 Gameplay 切换。关闭底层菜单只更新请求，不能释放上层 UI / pause lease。
 
 ### 重绑定、设备族与 Glyph
 
@@ -64,7 +66,7 @@ Main 玩法 UI 复用一个 `UIDocument` 和一个 `PanelSettings`；常驻 Boot
 
 `Main.unity/UIRoot` 挂载 `UIDocument`、`GameMenuController`、四个数据显示 Controller 和 `InteractionPromptController`。常驻 Bootstrap 的 `InputSystemUIInputModule` 与 Application / Session 共享同一个运行时 Input Actions 实例。
 
-`Bootstrap.unity` 挂载 `ApplicationShell.uxml/.uss` 和唯一 EventSystem。Shell 负责 FrontEnd Page、Busy、Modal、Toast、Fatal 与跨场景焦点；Main 不再序列化 EventSystem，隐藏的 Application 层不得抢占玩法 UI 焦点。
+`Bootstrap.unity` 挂载 `ApplicationShell.uxml/.uss` 和唯一 EventSystem。Shell 负责 FrontEnd Page、Busy、Modal、Toast、Fatal 与跨场景焦点；Main 不再序列化 EventSystem，隐藏的 Application 层不得抢占玩法 UI 焦点。两个文档共用 PanelSettings，Bootstrap 的 `UIDocument.sortingOrder` 为 200，Main 为 100，保证应用层位于 HUD 和物品界面之上并正确接收指针。
 
 阶段 0 为背包页接入深石板面板、普通 / 焦点 / 禁用格子纹理和大剑武器图标。纹理通过 USS 静态引用，动态按钮只增加表现子元素；选择、装备、事件刷新和默认焦点逻辑不变。视觉状态同时使用边框形状、亮度和局部色彩，手柄焦点不依赖鼠标悬停。
 

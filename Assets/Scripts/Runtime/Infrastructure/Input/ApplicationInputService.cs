@@ -10,6 +10,25 @@ namespace DarkFlare
 {
     public sealed class ApplicationInputService : IDisposable
     {
+        sealed class UiContextLease : IDisposable
+        {
+            ApplicationInputService _owner;
+            readonly int _id;
+
+            public UiContextLease(ApplicationInputService owner, int id)
+            {
+                _owner = owner;
+                _id = id;
+            }
+
+            public void Dispose()
+            {
+                ApplicationInputService owner = _owner;
+                _owner = null;
+                owner?.ReleaseUiContext(_id);
+            }
+        }
+
         sealed class SuspensionLease : IDisposable
         {
             ApplicationInputService _owner;
@@ -38,6 +57,8 @@ namespace DarkFlare
         }
 
         readonly InputSystem_Actions _actions;
+        readonly Dictionary<int, string> _uiContextOwners = new Dictionary<int, string>();
+        int _nextUiContextId;
         readonly Dictionary<InputSuspensionReason, int> _suspensionCounts =
             new Dictionary<InputSuspensionReason, int>();
         readonly SettingsService _settings;
@@ -53,6 +74,8 @@ namespace DarkFlare
         bool _rebindDeviceRemoved;
         float _rebindStartedAt;
         float _rebindTimeoutSeconds;
+        bool _dispatchingCancel;
+        bool _contextRefreshPending;
         bool _closed;
 
         public ApplicationInputService(SettingsService settings = null)
@@ -92,6 +115,10 @@ namespace DarkFlare
 
         public event Action CancelPerformed;
 
+        public event Func<bool> CancelRequested;
+
+        public event Action<InputContext> RequestedContextChanged;
+
         public event Action<InputContext> ContextChanged;
 
         public event Action<InputSuspensionReason> SuspensionChanged;
@@ -107,6 +134,10 @@ namespace DarkFlare
         public InputActionAsset ActionAsset => _closed ? null : _actions.asset;
 
         public InputContext CurrentContext { get; private set; }
+
+        public InputContext RequestedContext { get; private set; } = InputContext.UI;
+
+        public bool HasUiContextOverride => _uiContextOwners.Count > 0;
 
         public InputSuspensionReason SuspensionReasons { get; private set; }
 
@@ -157,14 +188,81 @@ namespace DarkFlare
                 throw new ArgumentOutOfRangeException(nameof(context), context, null);
             }
 
-            if (CurrentContext == context)
+            if (RequestedContext == context)
             {
                 return;
             }
 
-            CurrentContext = context;
+            RequestedContext = context;
+            RefreshContext();
+            RequestedContextChanged?.Invoke(context);
+        }
+
+        public IDisposable AcquireUiContext(string owner)
+        {
+            ThrowIfClosed();
+
+            if (string.IsNullOrWhiteSpace(owner))
+            {
+                throw new ArgumentException("UI 输入所有者不能为空", nameof(owner));
+            }
+
+            int id = ++_nextUiContextId;
+            _uiContextOwners.Add(id, owner);
+            RefreshContext();
+            return new UiContextLease(this, id);
+        }
+
+        void ReleaseUiContext(int id)
+        {
+            if (!_closed && _uiContextOwners.Remove(id))
+            {
+                RefreshContext();
+            }
+        }
+
+        void RefreshContext()
+        {
+            if (_dispatchingCancel)
+            {
+                if (!_contextRefreshPending)
+                {
+                    _contextRefreshPending = true;
+                    InputSystem.onAfterUpdate += OnAfterInputUpdate;
+                }
+
+                return;
+            }
+
+            InputContext effective = HasUiContextOverride ? InputContext.UI : RequestedContext;
+
+            if (CurrentContext == effective)
+            {
+                return;
+            }
+
+            CurrentContext = effective;
             ApplyState();
-            ContextChanged?.Invoke(context);
+            ContextChanged?.Invoke(effective);
+        }
+
+        void OnAfterInputUpdate()
+        {
+            CancelPendingContextRefresh();
+
+            if (!_closed)
+            {
+                RefreshContext();
+            }
+        }
+
+        void CancelPendingContextRefresh()
+        {
+            if (_contextRefreshPending)
+            {
+                InputSystem.onAfterUpdate -= OnAfterInputUpdate;
+                _contextRefreshPending = false;
+            }
         }
 
         public IDisposable AcquireSuspension(InputSuspensionReason reason)
@@ -1062,6 +1160,7 @@ namespace DarkFlare
             ReleaseInteractiveRebind();
             Closing?.Invoke();
             _closed = true;
+            CancelPendingContextRefresh();
             _actions.Player.Interact.performed -= OnInteract;
             _actions.Player.ToggleMenu.performed -= OnToggleMenu;
             _actions.UI.Navigate.performed -= OnNavigate;
@@ -1079,6 +1178,7 @@ namespace DarkFlare
 
             _actions.Disable();
             _suspensionCounts.Clear();
+            _uiContextOwners.Clear();
             SuspensionReasons = InputSuspensionReason.None;
 
             if (Application.isPlaying)
@@ -1095,6 +1195,8 @@ namespace DarkFlare
             NavigatePerformed = null;
             RearrangePerformed = null;
             CancelPerformed = null;
+            CancelRequested = null;
+            RequestedContextChanged = null;
             ContextChanged = null;
             SuspensionChanged = null;
             DeviceFamilyChanged = null;
@@ -1162,7 +1264,29 @@ namespace DarkFlare
 
         void OnCancel(InputAction.CallbackContext context)
         {
-            CancelPerformed?.Invoke();
+            _dispatchingCancel = true;
+
+            try
+            {
+                Delegate[] callbacks = CancelRequested?.GetInvocationList();
+
+                if (callbacks != null)
+                {
+                    for (int i = 0; i < callbacks.Length; i++)
+                    {
+                        if (callbacks[i] is Func<bool> callback && callback())
+                        {
+                            return;
+                        }
+                    }
+                }
+
+                CancelPerformed?.Invoke();
+            }
+            finally
+            {
+                _dispatchingCancel = false;
+            }
         }
 
         void ThrowIfClosed()

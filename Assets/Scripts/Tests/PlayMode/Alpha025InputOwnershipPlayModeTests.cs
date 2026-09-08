@@ -182,7 +182,9 @@ namespace DarkFlare.Tests
             yield return null;
 
             Assert.IsTrue(shell.IsSettingsOpen);
-            Assert.IsTrue(menu.IsOpen);
+            Assert.IsFalse(menu.IsOpen, "设置接管时必须隐藏底层玩法菜单");
+            Assert.AreEqual(InputContext.UI, host.Input.RequestedContext,
+                "隐藏底层不能清除原来的菜单请求");
             Assert.AreEqual(InputContext.UI, host.Input.CurrentContext);
             Assert.IsTrue(host.GameTime.IsPaused);
             InvokeButton(FindButton("settings-back"));

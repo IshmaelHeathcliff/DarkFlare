@@ -28,6 +28,7 @@ namespace DarkFlare
 
         SceneSessionBinding _sessionBinding;
         GameInput _gameInput;
+        ApplicationShellController _applicationShell;
         IUnRegister _openRequestRegistration;
         VisualElement _overlay;
         VisualElement _panel;
@@ -51,7 +52,8 @@ namespace DarkFlare
 
         public GameMenuPage CurrentPage { get; private set; } = GameMenuPage.Inventory;
 
-        public bool IsOpen => _gameInput != null && _gameInput.CurrentMode == GameInputMode.UI;
+        public bool IsOpen => _gameInput != null && _gameInput.CurrentMode == GameInputMode.UI
+            && !(_applicationShell?.BlocksGameplay ?? false);
 
         public int SessionBindCount => _sessionBinding?.BindCount ?? 0;
 
@@ -157,6 +159,13 @@ namespace DarkFlare
             RefreshSaveControls();
 
             _openRequestRegistration = this.RegisterEvent<GameMenuOpenRequestedEvent>(OnMenuOpenRequested);
+            _applicationShell = ApplicationHost.Current.ApplicationShell;
+
+            if (_applicationShell != null)
+            {
+                _applicationShell.BlockingChanged += OnShellBlockingChanged;
+            }
+
             _gameInput.ModeChanged += OnInputModeChanged;
             ApplyInputMode(_gameInput.CurrentMode);
             ApplicationLog.Info(LogEventIds.GameplayUi, "[GameMenuController] 游戏菜单初始化完成", this);
@@ -165,6 +174,12 @@ namespace DarkFlare
 
         void UnbindSession()
         {
+            if (_applicationShell != null)
+            {
+                _applicationShell.BlockingChanged -= OnShellBlockingChanged;
+                _applicationShell = null;
+            }
+
             if (_gameInput != null)
             {
                 _gameInput.ModeChanged -= OnInputModeChanged;
@@ -343,22 +358,52 @@ namespace DarkFlare
                 return;
             }
 
-            _overlay.style.display = isOpen ? DisplayStyle.Flex : DisplayStyle.None;
+            _overlay.style.display = IsOpen ? DisplayStyle.Flex : DisplayStyle.None;
 
             if (isOpen)
             {
+                if (!IsOpen)
+                {
+                    HidePanels();
+                    return;
+                }
+
                 _inventoryPanel?.ClearSelection();
                 RefreshSaveControls();
                 ApplyPage();
                 return;
             }
 
-            _inventoryPanel?.SetVisible(false);
-            _inventoryPanel?.CancelActiveDrag();
-            _shopPanel?.SetVisible(false);
-            _craftingPanel?.SetVisible(false);
+            HidePanels();
             AvailablePages = GameMenuAccess.Inventory;
             CurrentPage = GameMenuPage.Inventory;
+        }
+
+        void OnShellBlockingChanged(bool blocked)
+        {
+            if (_overlay == null)
+            {
+                return;
+            }
+
+            _overlay.style.display = IsOpen ? DisplayStyle.Flex : DisplayStyle.None;
+
+            if (blocked || !IsOpen)
+            {
+                HidePanels();
+                return;
+            }
+
+            RefreshSaveControls();
+            ApplyPage();
+        }
+
+        void HidePanels()
+        {
+            _inventoryPanel?.CancelActiveDrag();
+            _inventoryPanel?.SetVisible(false);
+            _shopPanel?.SetVisible(false);
+            _craftingPanel?.SetVisible(false);
         }
 
         void ApplyPage()

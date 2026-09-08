@@ -35,7 +35,16 @@ namespace DarkFlare
         SceneFlowRequest? _retryRequest;
         SceneFlowRequest? _lastRequest;
         Action _modalPrimaryAction;
+        IDisposable _uiContextLease;
+        ApplicationInputService _inputService;
+        GamePauseLease _pauseLease;
+        bool _refreshingOwnership;
+        bool _submittingModal;
         bool _bound;
+
+        public bool BlocksGameplay { get; private set; }
+
+        public event Action<bool> BlockingChanged;
 
         public ApplicationShellController(UIDocument document, ApplicationHost host)
         {
@@ -95,12 +104,15 @@ namespace DarkFlare
             _host.SceneFlow.StateChanged += OnStateChanged;
             _host.SceneFlow.ProgressChanged += OnProgressChanged;
             _host.SceneFlow.RequestCompleted += OnRequestCompleted;
-            _bound = true;
             ApplyState(_host.SceneFlow.State);
             HideBusy();
             HideModal();
             HideToast();
             HideFatal();
+            _inputService = _host.Input;
+            _inputService.CancelRequested += HandleCancel;
+            _bound = true;
+            RefreshInputOwnership();
         }
 
         public void ShowFailure(SceneFlowResult result)
@@ -198,7 +210,12 @@ namespace DarkFlare
                 return;
             }
 
-            _settingsController.Open(restoreFocus ?? _frontEndController.FocusDefault);
+            _settingsController.Open(() =>
+            {
+                RefreshInputOwnership();
+                (restoreFocus ?? _frontEndController.FocusDefault).Invoke();
+            });
+            RefreshInputOwnership();
         }
 
         public bool IsSettingsOpen => _settingsController?.IsOpen ?? false;
@@ -263,6 +280,17 @@ namespace DarkFlare
             _settingsController = null;
             _host.Audio?.StopOwner(this);
             _bound = false;
+            if (_inputService != null)
+            {
+                _inputService.CancelRequested -= HandleCancel;
+                _inputService = null;
+            }
+            _uiContextLease?.Dispose();
+            _uiContextLease = null;
+            _pauseLease?.Dispose();
+            _pauseLease = null;
+            BlockingChanged = null;
+            BlocksGameplay = false;
         }
 
         void RunRequest(SceneFlowRequest request)
@@ -407,15 +435,25 @@ namespace DarkFlare
 
             SceneFlowRequest? request = _retryRequest;
             Action action = _modalPrimaryAction;
-            HideModal();
+            _submittingModal = true;
 
-            if (action != null)
+            try
             {
-                action.Invoke();
+                HideModal();
+
+                if (action != null)
+                {
+                    action.Invoke();
+                }
+                else if (request.HasValue)
+                {
+                    RunRequest(request.Value);
+                }
             }
-            else if (request.HasValue)
+            finally
             {
-                RunRequest(request.Value);
+                _submittingModal = false;
+                RefreshInputOwnership();
             }
         }
 
@@ -431,6 +469,11 @@ namespace DarkFlare
             _modalPrimaryAction = null;
             VisualElement focus = _focusBeforeModal;
             _focusBeforeModal = null;
+
+            if (_submittingModal)
+            {
+                return;
+            }
 
             if (focus != null && focus.panel != null && focus.enabledInHierarchy)
             {
@@ -501,11 +544,92 @@ namespace DarkFlare
             }
         }
 
-        static void SetVisible(VisualElement element, bool visible)
+        bool HandleCancel()
+        {
+            if (!BlocksGameplay)
+            {
+                return false;
+            }
+
+            if (IsVisible(_fatalLayer))
+            {
+                return true;
+            }
+
+            if (IsVisible(_busyLayer))
+            {
+                if (_busyCancel.enabledSelf && IsVisible(_busyCancel))
+                {
+                    OnBusyCancel();
+                }
+
+                return true;
+            }
+
+            if (IsVisible(_modalLayer))
+            {
+                HideModal();
+                return true;
+            }
+
+            _settingsController?.HandleCancel();
+            return true;
+        }
+
+        void RefreshInputOwnership()
+        {
+            if (!_bound || _refreshingOwnership || _inputService == null || _inputService.IsClosed)
+            {
+                return;
+            }
+
+            _refreshingOwnership = true;
+            bool blocked = IsSettingsOpen || IsVisible(_modalLayer)
+                || IsVisible(_busyLayer) || IsVisible(_fatalLayer) || _submittingModal;
+            bool changed = BlocksGameplay != blocked;
+            BlocksGameplay = blocked;
+
+            try
+            {
+                if (blocked)
+                {
+                    _uiContextLease ??= _inputService.AcquireUiContext("ApplicationShell");
+
+                    if (_host.CurrentSession != null)
+                    {
+                        _pauseLease ??= _host.GameTime.AcquirePause("ApplicationShell");
+                    }
+                }
+                else
+                {
+                    _uiContextLease?.Dispose();
+                    _uiContextLease = null;
+                    _pauseLease?.Dispose();
+                    _pauseLease = null;
+                }
+            }
+            finally
+            {
+                _refreshingOwnership = false;
+            }
+
+            if (changed)
+            {
+                BlockingChanged?.Invoke(blocked);
+            }
+        }
+
+        static bool IsVisible(VisualElement element)
+        {
+            return element != null && element.style.display.value == DisplayStyle.Flex;
+        }
+
+        void SetVisible(VisualElement element, bool visible)
         {
             if (element != null)
             {
                 element.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
+                RefreshInputOwnership();
             }
         }
 

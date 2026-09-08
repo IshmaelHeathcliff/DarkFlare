@@ -84,6 +84,57 @@ namespace DarkFlare.Tests
         }
 
         [Test]
+        public void UiContextOwners_PreserveLatestRequestAndRespectSuspension()
+        {
+            _service.SwitchContext(InputContext.Gameplay);
+            IDisposable settings = _service.AcquireUiContext("settings");
+            IDisposable modal = _service.AcquireUiContext("modal");
+            _service.SwitchContext(InputContext.UI);
+            _service.SwitchContext(InputContext.Gameplay);
+            settings.Dispose();
+            settings.Dispose();
+            Assert.AreEqual(InputContext.Gameplay, _service.RequestedContext);
+            Assert.AreEqual(InputContext.UI, _service.CurrentContext);
+            Assert.IsTrue(_service.IsUiEnabled);
+            Assert.IsFalse(_service.IsGameplayEnabled);
+
+            using (IDisposable suspension = _service.AcquireSuspension(InputSuspensionReason.FocusLost))
+            {
+                modal.Dispose();
+                Assert.IsFalse(_service.IsUiEnabled);
+                Assert.IsFalse(_service.IsGameplayEnabled);
+            }
+
+            Assert.IsTrue(_service.IsGameplayEnabled);
+            Assert.IsFalse(_service.HasUiContextOverride);
+            IDisposable stale = _service.AcquireUiContext("ending-session");
+            _service.Dispose();
+            Assert.DoesNotThrow(() => stale.Dispose());
+        }
+
+        [Test]
+        public void Cancel_StopsAfterFirstOwnerConsumesInput()
+        {
+            Keyboard keyboard = InputSystem.AddDevice<Keyboard>();
+            int shellCount = 0;
+            int lowerCount = 0;
+            _service.CancelRequested += () =>
+            {
+                shellCount++;
+                return true;
+            };
+            _service.CancelRequested += () =>
+            {
+                lowerCount++;
+                return true;
+            };
+            _service.CancelPerformed += () => lowerCount++;
+            PressAndRelease(keyboard.escapeKey);
+            Assert.AreEqual(1, shellCount);
+            Assert.AreEqual(0, lowerCount);
+        }
+
+        [Test]
         public void SuspensionLease_ReleaseIsIdempotent()
         {
             IDisposable lease = _service.AcquireSuspension(

@@ -32,7 +32,7 @@ namespace DarkFlare
             _inputService.NavigatePerformed += OnNavigate;
             _inputService.RearrangePerformed += OnRearrange;
             _inputService.CancelPerformed += OnCancel;
-            _inputService.ContextChanged += OnContextChanged;
+            _inputService.RequestedContextChanged += OnContextChanged;
             _inputService.BindingsChanged += OnBindingDisplayChanged;
             _inputService.GlyphChanged += OnBindingDisplayChanged;
             SwitchToGameplay();
@@ -50,7 +50,7 @@ namespace DarkFlare
 
         public event Action BindingDisplayChanged;
 
-        public GameInputMode CurrentMode => ToGameInputMode(_inputService.CurrentContext);
+        public GameInputMode CurrentMode => ToGameInputMode(_inputService.RequestedContext);
 
         public Vector2 Move => _disposed ? Vector2.zero : _inputService.Move;
 
@@ -87,7 +87,7 @@ namespace DarkFlare
             _inputService.NavigatePerformed -= OnNavigate;
             _inputService.RearrangePerformed -= OnRearrange;
             _inputService.CancelPerformed -= OnCancel;
-            _inputService.ContextChanged -= OnContextChanged;
+            _inputService.RequestedContextChanged -= OnContextChanged;
             _inputService.BindingsChanged -= OnBindingDisplayChanged;
             _inputService.GlyphChanged -= OnBindingDisplayChanged;
             CancelPendingContextSwitch();
@@ -128,12 +128,18 @@ namespace DarkFlare
 
         void OnNavigate(Vector2 value)
         {
-            NavigatePerformed?.Invoke(value);
+            if (!_inputService.HasUiContextOverride)
+            {
+                NavigatePerformed?.Invoke(value);
+            }
         }
 
         void OnRearrange()
         {
-            RearrangePerformed?.Invoke();
+            if (!_inputService.HasUiContextOverride)
+            {
+                RearrangePerformed?.Invoke();
+            }
         }
 
         void OnCancel()
@@ -158,6 +164,7 @@ namespace DarkFlare
 
             if (_disposed
                 || _inputService.IsClosed
+                || _inputService.HasUiContextOverride
                 || CurrentMode != GameInputMode.UI)
             {
                 return;
@@ -194,18 +201,17 @@ namespace DarkFlare
                 return false;
             }
 
-            bool handled = false;
             Delegate[] callbacks = CancelRequested.GetInvocationList();
 
             for (int i = 0; i < callbacks.Length; i++)
             {
                 if (callbacks[i] is Func<bool> callback && callback())
                 {
-                    handled = true;
+                    return true;
                 }
             }
 
-            return handled;
+            return false;
         }
 
         static InputContext ToInputContext(GameInputMode mode)

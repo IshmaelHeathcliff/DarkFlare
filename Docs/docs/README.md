@@ -41,7 +41,7 @@ Alpha 0.3 前置[测试审计与精简](./testing/test-suite-audit.md)已完成�
 
 `alpha 0.2.0–0.2.7` 已完成。规划期总计划、阶段计划与验收过程已移入[已完成计划归档](./plan/archive/README.md)；后续实现以长期运行时契约和各基础设施模块文档为准。
 
-`alpha 0.3` 已明确为 [UI 迭代](./plan/alpha-0.3-plan.md)：独立背包 / 商店 / 打造窗口、实时属性详情、暗黑像素 HUD 和统一视觉组件。独立窗口可按需同时打开；[alpha 0.3.0 首阶段计划](./plan/alpha-0.3.0-independent-ui-windows-plan.md)已建立，尚未开始功能实现。[启动资料梳理](./plan/archive/alpha-0.3-startup.md)已归档。
+`alpha 0.3` 已开始 [UI 迭代](./plan/alpha-0.3-plan.md)：独立背包 / 商店 / 打造窗口、实时属性详情、暗黑像素 HUD 和统一视觉组件。[alpha 0.3.0 首阶段](./plan/alpha-0.3.0-independent-ui-windows-plan.md)已完成设置 / 返回确认与背包的交接修复；独立窗口、共享物品操作和视觉切片仍待实施。[启动资料梳理](./plan/archive/alpha-0.3-startup.md)已归档。
 
 首阶段优先修复设置 / 返回主菜单与背包的交互阻塞，并按[统一物品交互合同](./plan/alpha-0.3-item-interaction-contract.md)验收拖动、右键、手柄、单一高亮与详情排版。
 

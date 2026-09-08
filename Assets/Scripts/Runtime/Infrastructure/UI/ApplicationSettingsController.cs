@@ -125,7 +125,6 @@ namespace DarkFlare
             _host.Localization.LocaleChanged += OnLocaleChanged;
             _host.Input.BindingsChanged += RefreshBindingRows;
             _host.Input.GlyphChanged += RefreshBindingRows;
-            _host.Input.CancelPerformed += OnCancelPerformed;
             _bound = true;
             BuildBindingRows();
             RefreshLocalizedText();
@@ -199,7 +198,6 @@ namespace DarkFlare
             {
                 input.BindingsChanged -= RefreshBindingRows;
                 input.GlyphChanged -= RefreshBindingRows;
-                input.CancelPerformed -= OnCancelPerformed;
             }
 
             audio?.StopOwner(this);
@@ -655,7 +653,7 @@ namespace DarkFlare
             RefreshFromSettings();
         }
 
-        void OnCancelPerformed()
+        public void HandleCancel()
         {
             if (!IsOpen || _rebindCancellation != null)
             {

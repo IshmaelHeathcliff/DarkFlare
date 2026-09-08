@@ -79,12 +79,14 @@
 
 ## UI 外壳与焦点
 
-`ApplicationShell.uxml/.uss` 使用现有 Theme、Localization 和字体链，固定包含 FrontEnd Page、共享 Settings Page、Toast、Modal、Busy 与 Fatal 层。Bootstrap 的 Panel sorting order 高于 Main UI：
+`ApplicationShell.uxml/.uss` 使用现有 Theme、Localization 和字体链，固定包含 FrontEnd Page、共享 Settings Page、Toast、Modal、Busy 与 Fatal 层。Bootstrap 与 Main 共用 PanelSettings，使用 `UIDocument.sortingOrder` 确定文档顺序：Bootstrap 为 200，Main 为 100。不能让两个文档同序，否则后加载的 HUD 模板会挡住设置页指针命中。
 
 - FrontEnd 只在 `FrontEnd` 可交互，Continue 由 Profile 级存档预检决定是否启用。
 - 删除自动档和恢复全部默认设置复用 Modal 二次确认、Busy、Toast 与焦点恢复；失败后以真实服务状态刷新页面。
-- Settings 可从 FrontEnd 与暂停菜单打开；关闭后恢复来源焦点，从 Main 打开时不释放菜单 pause lease 或切回 Gameplay Context。
+- Settings 可从 FrontEnd 与玩法菜单打开；Shell 为 Settings / Modal / Busy / Fatal 持有独立 UI Context，存在 Session 时另持 pause lease。接管后隐藏玩法菜单及其浮窗并取消拖动，保存当前页面和有效选择；关闭后恢复仍打开的玩法菜单和来源焦点。
+- 底层菜单在上层显示期间关闭，只更新 Session 请求并释放本组暂停；上层仍可点击、导航和返回。上层全部关闭后释放自己的 lease，按最新请求恢复 Gameplay 或 UI；Toast 不取得这些所有权。
 - Modal 保存打开前焦点，关闭后优先恢复原元素；确认返回和可恢复错误均使用此层。
+- 提交 Modal 时保持阻挡，直到交给 Busy 或完成动作，避免确认返回时短暂恢复底层。Cancel 按 Fatal → Busy → Modal → Settings 消费，一次输入不同时关闭设置及其确认框，也不穿透至玩法菜单。
 - Busy 只在阶段可取消时暴露取消按钮；隐藏层不能在后续帧抢占 Main UI 焦点。
 - Toast 不聚焦、不阻止底层输入；Fatal 只保留安全退出入口。
 - 唯一 `EventSystem` 位于 Bootstrap，Main 不再拥有 EventSystem。

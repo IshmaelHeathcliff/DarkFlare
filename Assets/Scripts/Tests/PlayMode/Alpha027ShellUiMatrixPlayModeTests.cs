@@ -6,6 +6,7 @@ using System.Reflection;
 using Cysharp.Threading.Tasks;
 using NUnit.Framework;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.TestTools;
 using UnityEngine.UIElements;
 
@@ -14,6 +15,144 @@ namespace DarkFlare.Tests
     public sealed class Alpha027ShellUiMatrixPlayModeTests
     {
         readonly SceneFlowPlayModeFixture _fixture = new SceneFlowPlayModeFixture();
+
+        [UnityTest]
+        public IEnumerator GameplayMenu_SettingsAndConfirmationOwnInputUntilDismissed()
+        {
+            var input = new InputTestFixture();
+            yield return InputTestFixtureGuard.Setup(input);
+            yield return _fixture.EnterMain();
+            ApplicationHost host = ApplicationHost.Current;
+            GameInput gameInput = host.CurrentSession.Architecture.GetUtility<GameInput>();
+            var mouse = InputSystem.AddDevice<Mouse>();
+            var keyboard = InputSystem.AddDevice<Keyboard>();
+            var gamepad = InputSystem.AddDevice<Gamepad>();
+
+            try
+            {
+                gameInput.SwitchToUi();
+                yield return null;
+                yield return ClickPointer(input, mouse, FindButton("game-menu-settings"));
+                Assert.IsTrue(host.ApplicationShell.IsSettingsOpen);
+                Assert.AreEqual(DisplayStyle.None, FindElement("game-menu-overlay").resolvedStyle.display,
+                    "设置接管后背包必须隐藏");
+
+                gameInput.SwitchToGameplay();
+                yield return null;
+                Assert.IsTrue(host.Input.IsUiEnabled, "底层关闭不能禁用设置输入");
+                Assert.IsFalse(host.Input.IsGameplayEnabled);
+                Assert.IsTrue(host.GameTime.IsPaused, "上层设置必须持有自己的暂停");
+                yield return ClickPointer(input, mouse, FindButton("settings-back"));
+                Assert.IsFalse(host.ApplicationShell.IsSettingsOpen);
+                Assert.IsTrue(host.Input.IsGameplayEnabled);
+                Assert.IsFalse(host.GameTime.IsPaused);
+
+                gameInput.SwitchToUi();
+                yield return null;
+                yield return ClickPointer(input, mouse, FindButton("game-menu-settings"));
+                gameInput.SwitchToGameplay();
+                input.Press(keyboard.escapeKey);
+                yield return null;
+                input.Release(keyboard.escapeKey);
+                yield return null;
+                Assert.IsFalse(host.ApplicationShell.IsSettingsOpen);
+                Assert.IsTrue(host.Input.IsGameplayEnabled,
+                    "底层先关闭后，键盘返回设置也必须安全恢复 Gameplay");
+                Assert.IsFalse(host.GameTime.IsPaused);
+
+                gameInput.SwitchToUi();
+                yield return null;
+                yield return ClickPointer(input, mouse, FindButton("game-menu-settings"));
+                ((ScrollView)FindElement("settings-scroll")).ScrollTo(FindButton("settings-restore-defaults"));
+                yield return null;
+                yield return null;
+                yield return ClickPointer(input, mouse, FindButton("settings-restore-defaults"));
+                input.Press(gamepad.buttonEast);
+                yield return null;
+                input.Release(gamepad.buttonEast);
+                yield return null;
+                Assert.AreEqual(DisplayStyle.None, FindElement("application-modal").resolvedStyle.display);
+                Assert.IsTrue(host.ApplicationShell.IsSettingsOpen,
+                    "一次返回关闭确认框后必须保留下面的设置页");
+                Assert.AreEqual(DisplayStyle.None, FindElement("game-menu-overlay").resolvedStyle.display);
+                input.Press(keyboard.escapeKey);
+                yield return null;
+                input.Release(keyboard.escapeKey);
+                yield return null;
+                Assert.IsFalse(host.ApplicationShell.IsSettingsOpen);
+                Assert.AreEqual(DisplayStyle.Flex, FindElement("game-menu-overlay").resolvedStyle.display,
+                    "一次返回只关闭设置并恢复背包");
+                Assert.AreEqual(GameInputMode.UI, gameInput.CurrentMode);
+
+                yield return ClickPointer(input, mouse, FindButton("game-menu-return-front-end"));
+                Assert.AreEqual(DisplayStyle.None, FindElement("game-menu-overlay").resolvedStyle.display);
+                input.Press(gamepad.buttonEast);
+                yield return null;
+                input.Release(gamepad.buttonEast);
+                yield return null;
+                Assert.AreEqual(DisplayStyle.None, FindElement("application-modal").resolvedStyle.display);
+                Assert.AreEqual(DisplayStyle.Flex, FindElement("game-menu-overlay").resolvedStyle.display);
+                Assert.AreEqual(GameInputMode.UI, gameInput.CurrentMode);
+
+                yield return ClickPointer(input, mouse, FindButton("game-menu-return-front-end"));
+                gameInput.SwitchToGameplay();
+                yield return null;
+                Assert.IsTrue(host.Input.IsUiEnabled);
+                yield return ClickPointer(input, mouse, FindButton("application-modal-cancel"));
+                Assert.AreEqual(DisplayStyle.None, FindElement("application-modal").resolvedStyle.display);
+                Assert.IsTrue(host.Input.IsGameplayEnabled);
+                Assert.IsFalse(host.GameTime.IsPaused);
+
+                gameInput.SwitchToUi();
+                yield return null;
+                yield return ClickPointer(input, mouse, FindButton("game-menu-return-front-end"));
+                yield return ClickPointer(input, mouse, FindButton("application-modal-retry"));
+                float timeout = Time.realtimeSinceStartup + 20f;
+
+                while ((host.SceneFlow.IsBusy || host.SceneFlow.State != GameFlowState.FrontEnd)
+                       && Time.realtimeSinceStartup < timeout)
+                {
+                    yield return null;
+                }
+
+                Assert.AreEqual(GameFlowState.FrontEnd, host.SceneFlow.State);
+                Assert.IsNull(host.CurrentSession);
+                Assert.IsFalse(host.GameTime.IsPaused);
+                Assert.IsFalse(host.Input.HasUiContextOverride);
+            }
+            finally
+            {
+                InputSystem.RemoveDevice(mouse);
+                InputSystem.RemoveDevice(keyboard);
+                InputSystem.RemoveDevice(gamepad);
+                InputTestFixtureGuard.TearDown(input);
+            }
+        }
+
+        static IEnumerator ClickPointer(InputTestFixture input, Mouse mouse, Button button)
+        {
+            bool clicked = false;
+            Action observeClick = () => clicked = true;
+            button.clicked += observeClick;
+            VisualElement root = button.panel.visualTree;
+            Rect bounds = root.worldBound;
+            Vector2 point = button.worldBound.center;
+            input.Set(mouse.position, new Vector2(
+                (point.x - bounds.xMin) / bounds.width * Screen.width,
+                (1f - (point.y - bounds.yMin) / bounds.height) * Screen.height));
+            yield return null;
+            input.Press(mouse.leftButton);
+            yield return null;
+            input.Release(mouse.leftButton);
+            yield return null;
+            yield return null;
+            button.clicked -= observeClick;
+            Assert.IsTrue(clicked,
+                $"鼠标未点击到 {button.name}：bounds={button.worldBound}, root={bounds}, "
+                + $"point={point}, picked={button.panel?.Pick(point)}, "
+                + $"context={ApplicationHost.Current.Input.CurrentContext}, "
+                + $"suspension={ApplicationHost.Current.Input.SuspensionReasons}");
+        }
 
         [UnitySetUp]
         public IEnumerator SetUp()

@@ -1,9 +1,9 @@
 # alpha 0.3：UI 迭代计划
 
-> 状态：版本方向与独立窗口交互已明确，尚未开始功能实现
+> 状态：实施中；首阶段已完成菜单交接修复，独立窗口及后续切片待实施
 > 建立日期：2026-09-07
 > 当前运行版本：`0.2.7-alpha`
-> 执行前置：[测试审计与精简](../testing/test-suite-audit.md)已完成；功能阶段尚未开始
+> 执行前置：[测试审计与精简](../testing/test-suite-audit.md)已完成；2026-09-08 开始功能实施
 > 首阶段：[alpha 0.3.0 独立窗口与交互拆分](./alpha-0.3.0-independent-ui-windows-plan.md)
 > 交互验收：[统一物品操作与菜单交接合同](./alpha-0.3-item-interaction-contract.md)
 > 收尾阶段：[alpha 0.3.4 十槽装备与内容补齐](./alpha-0.3.4-equipment-completion-plan.md)
