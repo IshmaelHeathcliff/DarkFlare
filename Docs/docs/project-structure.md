@@ -18,6 +18,7 @@ DarkFlare/
         content-identity-migration.md
         local-save.md
         user-settings-localization.md
+      hud-system.md
   Packages/
   ProjectSettings/
   tools/

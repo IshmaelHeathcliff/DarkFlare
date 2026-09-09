@@ -1,4 +1,8 @@
+using System;
 using System.Collections.Generic;
+using System.Threading;
+using Cysharp.Threading.Tasks;
+using PrimeTween;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -8,23 +12,31 @@ namespace DarkFlare
     [RequireComponent(typeof(UIDocument))]
     public class HudController : MonoBehaviour, IController
     {
-        [SerializeField]
-        UIDocument _document;
-
+        const float LowHealthThreshold = 0.25f;
+        [SerializeField] UIDocument _document;
         readonly List<IUnRegister> _eventRegistrations = new List<IUnRegister>();
-
         SceneSessionBinding _sessionBinding;
+        LifecycleScope _scope;
         ProgressBar _healthBar;
         ProgressBar _manaBar;
+        ProgressBar _cooldownBar;
         Label _goldLabel;
         Label _skillStatusLabel;
-        LocalizationService _localizationService;
-        float _lastRequiredMana;
-        bool _showsInsufficientMana;
+        Label _skillName;
+        Label _skillDetails;
+        Label _healthState;
+        Label _manaState;
+        VisualElement _healthCard;
+        VisualElement _lowWarning;
+        LocalizationService _localization;
+        AccessibilityService _accessibility;
+        GameInput _input;
+        Tween _warningTween;
 
         public HudSnapshot LastSnapshot { get; private set; }
-
+        public AttributeRuntimeSnapshot RuntimeSnapshot { get; private set; }
         public int SessionBindCount => _sessionBinding?.BindCount ?? 0;
+        public bool IsWarningAnimating => _warningTween.isAlive;
 
         public IArchitecture GetArchitecture()
         {
@@ -33,221 +45,173 @@ namespace DarkFlare
 
         public void RefreshHud()
         {
-            if (_healthBar == null || _manaBar == null || _goldLabel == null || _skillStatusLabel == null)
-            {
-                return;
-            }
-
-            HudSnapshot snapshot = this.SendQuery(new GetHudSnapshotQuery());
-            LastSnapshot = snapshot;
-            _healthBar.value = snapshot.HealthNormalized;
-            _healthBar.title = snapshot.HasPlayer
-                ? $"{snapshot.CurrentHealth:0.#} / {snapshot.MaxHealth:0.#}"
-                : Localize("hud.waiting_player");
-            _manaBar.value = snapshot.ManaNormalized;
-            _manaBar.title = snapshot.HasPlayer
-                ? $"{snapshot.CurrentMana:0.#} / {snapshot.MaxMana:0.#}"
-                : Localize("hud.waiting_player");
-            _goldLabel.text = Localize("hud.gold", snapshot.Gold);
+            if (_healthBar == null) { return; }
+            LastSnapshot = this.SendQuery(new GetHudSnapshotQuery());
+            _goldLabel.text = L("hud.gold", LastSnapshot.Gold);
+            RefreshDynamic();
         }
 
-        void Awake()
+        void RefreshDynamic()
         {
-            EnsureComponents();
+            if (_healthBar == null) { return; }
+            RuntimeSnapshot = this.SendQuery(new GetAttributeRuntimeQuery());
+            AttributeRuntimeSnapshot state = RuntimeSnapshot;
+            float health = state.MaxHealth > 0f ? Mathf.Clamp01(state.Health / state.MaxHealth) : 0f;
+            _healthBar.value = health;
+            _manaBar.value = state.MaxMana > 0f ? Mathf.Clamp01(state.Mana / state.MaxMana) : 0f;
+            _healthBar.title = state.HasPlayer ? $"{state.Health:0.#} / {state.MaxHealth:0.#}" : L("hud.waiting_player");
+            _manaBar.title = state.HasPlayer ? $"{state.Mana:0.#} / {state.MaxMana:0.#}" : L("hud.waiting_player");
+            _cooldownBar.value = state.CooldownNormalized;
+            _skillName.text = string.IsNullOrEmpty(state.SkillId) ? L("attributes.state.no_source") : L("attributes.skill." + state.SkillId);
+            _skillDetails.text = L("hud.combat.details", N(state.ManaCost), N(state.Interval), N(state.RemainingSeconds));
+            _skillStatusLabel.text = L("attributes.state." + state.SkillState);
+            _skillStatusLabel.style.display = DisplayStyle.Flex;
+            bool low = state.HasPlayer && state.Health > 0f && health <= LowHealthThreshold;
+            _healthCard.EnableInClassList("hud-resource--low", low);
+            _healthState.text = !state.HasPlayer ? L("hud.waiting_player") : state.Health <= 0f ? L("attributes.state.dead")
+                : low ? L("hud.health.low") : string.Empty;
+            _manaState.text = state.ResourceState == "recovering" ? L("hud.mana.recovery")
+                : L("attributes.state." + state.ResourceState);
+            bool animate = low && state.ResourceState != "paused" && state.ResourceState != "inactive"
+                && _input.IsGameplayEnabled && _accessibility.Profile.AllowContinuousMotion;
+            if (animate && !_warningTween.isAlive)
+            {
+                _warningTween = Tween.Custom(0.25f, 0.7f, 0.8f, ApplyWarning, Ease.InOutSine, -1, CycleMode.Yoyo);
+            }
+            else if (!animate) { StopWarning(); }
         }
 
+        async UniTask RefreshLoopAsync(CancellationToken token)
+        {
+            while (!token.IsCancellationRequested)
+            {
+                bool cancelled = await UniTask.Delay(TimeSpan.FromSeconds(0.1), ignoreTimeScale: true,
+                    cancellationToken: token).SuppressCancellationThrow();
+                if (cancelled) { return; }
+                RefreshDynamic();
+            }
+        }
+
+        void ApplyWarning(float opacity) { if (_lowWarning != null) { _lowWarning.style.opacity = opacity; } }
+        void StopWarning()
+        {
+            if (_warningTween.isAlive) { _warningTween.Stop(); }
+            ApplyWarning(0f);
+        }
+        void OnMotionChanged(MotionProfile profile) { RefreshDynamic(); }
+        void OnInputModeChanged(GameInputMode mode) { RefreshDynamic(); }
+        void OnLocaleChanged(string locale) { RefreshHud(); RefreshBindings(); }
+
+        void RefreshBindings()
+        {
+            VisualElement root = _document.rootVisualElement;
+            ApplicationInputService input = ApplicationHost.Current.Input;
+            Set("hud-inventory-binding", RebindableInputAction.PlayerToggleMenu);
+            Set("hud-pause-binding", RebindableInputAction.PlayerPause);
+            void Set(string name, RebindableInputAction action)
+            {
+                Label label = root.Q<Label>(name);
+                if (label == null) { return; }
+                foreach (string className in new List<string>(label.GetClasses()))
+                {
+                    if (className.StartsWith("input-glyph--", StringComparison.Ordinal)) { label.RemoveFromClassList(className); }
+                }
+                InputGlyphToken glyph = input.GetGlyphToken(action);
+                bool text = glyph.UsesTextFallback || glyph.GlyphId == "keyboard.keycap";
+                if (!text) { label.AddToClassList("input-glyph--" + glyph.GlyphId.Replace('.', '-')); }
+                label.EnableInClassList("hud-binding--text", text);
+                label.text = text ? glyph.FallbackText : string.Empty;
+                label.style.width = text ? new StyleLength(StyleKeyword.Auto) : new StyleLength(28f);
+            }
+        }
+
+        void Awake() { EnsureComponents(); }
         void OnEnable()
         {
             EnsureComponents();
-            _sessionBinding ??= new SceneSessionBinding(
-                this,
-                BindSession,
-                UnbindSession);
+            _sessionBinding ??= new SceneSessionBinding(this, BindSession, UnbindSession);
             _sessionBinding.Enable();
         }
-
-        void OnDisable()
+        void OnDisable() { _sessionBinding?.Disable(); }
+        void OnValidate() { EnsureComponents(); }
+        void EnsureComponents()
         {
-            _sessionBinding?.Disable();
+            if (_document == null) { _document = GetComponent<UIDocument>(); }
+            if (_document == null && gameObject.scene.IsValid()) { _document = gameObject.AddComponent<UIDocument>(); }
         }
 
         SceneSessionBindResult BindSession(IArchitecture architecture)
         {
-            if (_document == null || _document.panelSettings == null)
-            {
-                ApplicationLog.Error(LogEventIds.GameplayUi, "[HudController] 缺少 UIDocument 或 PanelSettings，无法初始化 HUD", this);
-                return SceneSessionBindResult.Failed;
-            }
-
+            if (_document == null || _document.panelSettings == null) { return SceneSessionBindResult.Failed; }
             VisualElement root = _document.rootVisualElement;
-
-            if (root == null || root.panel == null)
+            if (root?.panel == null) { return SceneSessionBindResult.Retry; }
+            _healthBar = root.Q<ProgressBar>("health-bar");
+            _manaBar = root.Q<ProgressBar>("mana-bar");
+            _cooldownBar = root.Q<ProgressBar>("skill-cooldown");
+            _goldLabel = root.Q<Label>("gold-label");
+            _skillStatusLabel = root.Q<Label>("skill-status-label");
+            _skillName = root.Q<Label>("hud-skill-name");
+            _skillDetails = root.Q<Label>("hud-skill-details");
+            _healthState = root.Q<Label>("hud-health-state");
+            _manaState = root.Q<Label>("hud-mana-state");
+            _healthCard = root.Q("health-card");
+            _lowWarning = root.Q("hud-low-warning");
+            if (_healthBar == null || _manaBar == null || _cooldownBar == null || _goldLabel == null
+                || _skillStatusLabel == null || _skillName == null || _skillDetails == null
+                || _healthState == null || _manaState == null || _healthCard == null || _lowWarning == null)
             {
-                return SceneSessionBindResult.Retry;
-            }
-
-            if (!BindVisualTree())
-            {
+                ApplicationLog.Error(LogEventIds.GameplayUi, "[HudController] HUD 缺少必要元素", this);
                 return SceneSessionBindResult.Failed;
             }
-
-            BindLocalization();
+            ApplicationHost host = ApplicationHost.Current;
+            _localization = host.Localization;
+            _accessibility = host.Accessibility;
+            _input = architecture.GetUtility<GameInput>();
+            _localization.LocaleChanged += OnLocaleChanged;
+            _accessibility.ProfileChanged += OnMotionChanged;
+            _input.BindingDisplayChanged += RefreshBindings;
+            _input.ModeChanged += OnInputModeChanged;
+            _eventRegistrations.Add(this.RegisterEvent<ActorRegisteredEvent>(_ => RefreshHud()));
+            _eventRegistrations.Add(this.RegisterEvent<ActorUnregisteredEvent>(_ => RefreshHud()));
+            _eventRegistrations.Add(this.RegisterEvent<ActorResourceChangedEvent>(_ => RefreshHud()));
+            _eventRegistrations.Add(this.RegisterEvent<ActorDiedEvent>(_ => RefreshHud()));
+            _eventRegistrations.Add(this.RegisterEvent<ActorRevivedEvent>(_ => RefreshHud()));
+            _eventRegistrations.Add(this.RegisterEvent<GoldChangedEvent>(_ => RefreshHud()));
+            _eventRegistrations.Add(this.RegisterEvent<EquipmentChangedEvent>(_ => RefreshHud()));
+            _eventRegistrations.Add(this.RegisterEvent<SkillCastRejectedEvent>(_ => RefreshDynamic()));
+            _eventRegistrations.Add(this.RegisterEvent<ActorAttackedEvent>(_ => RefreshDynamic()));
+            _scope = host.CurrentSession.SceneScope.CreateChild("combat-hud");
             RefreshHud();
-            RegisterEvents();
+            RefreshBindings();
+            _scope.Tasks.Run("refresh-combat-state", RefreshLoopAsync, failurePolicy: LifecycleTaskFailurePolicy.Report);
             return SceneSessionBindResult.Success;
         }
 
         void UnbindSession()
         {
-            for (int i = 0; i < _eventRegistrations.Count; i++)
-            {
-                _eventRegistrations[i].UnRegister();
-            }
-
+            _scope?.BeginStop();
+            _scope = null;
+            StopWarning();
+            foreach (IUnRegister registration in _eventRegistrations) { registration.UnRegister(); }
             _eventRegistrations.Clear();
-
-            if (_localizationService != null)
+            if (_localization != null) { _localization.LocaleChanged -= OnLocaleChanged; }
+            if (_accessibility != null) { _accessibility.ProfileChanged -= OnMotionChanged; }
+            if (_input != null)
             {
-                _localizationService.LocaleChanged -= OnLocaleChanged;
-                _localizationService = null;
+                _input.BindingDisplayChanged -= RefreshBindings;
+                _input.ModeChanged -= OnInputModeChanged;
             }
-
+            _localization = null;
+            _accessibility = null;
+            _input = null;
             _healthBar = null;
             _manaBar = null;
-            _goldLabel = null;
-            _skillStatusLabel = null;
+            _cooldownBar = null;
+            _lowWarning = null;
+            LastSnapshot = default;
+            RuntimeSnapshot = default;
         }
-
-        void OnValidate()
-        {
-            EnsureComponents();
-        }
-
-        void EnsureComponents()
-        {
-            if (_document == null)
-            {
-                _document = GetComponent<UIDocument>();
-            }
-
-            if (_document == null && gameObject.scene.IsValid())
-            {
-                _document = gameObject.AddComponent<UIDocument>();
-            }
-        }
-
-        void RegisterEvents()
-        {
-            if (_eventRegistrations.Count > 0)
-            {
-                return;
-            }
-
-            _eventRegistrations.Add(this.RegisterEvent<ActorRegisteredEvent>(_ => RefreshHud()));
-            _eventRegistrations.Add(this.RegisterEvent<ActorUnregisteredEvent>(_ => RefreshHud()));
-            _eventRegistrations.Add(this.RegisterEvent<ActorResourceChangedEvent>(_ => RefreshHud()));
-            _eventRegistrations.Add(this.RegisterEvent<SkillCastRejectedEvent>(OnSkillCastRejected));
-            _eventRegistrations.Add(this.RegisterEvent<ActorAttackedEvent>(OnActorAttacked));
-            _eventRegistrations.Add(this.RegisterEvent<GoldChangedEvent>(_ => RefreshHud()));
-            _eventRegistrations.Add(this.RegisterEvent<EquipmentChangedEvent>(_ => RefreshHud()));
-        }
-
-        bool BindVisualTree()
-        {
-            if (_document == null)
-            {
-                ApplicationLog.Error(LogEventIds.GameplayUi, "[HudController] 缺少 UIDocument，无法初始化 HUD", this);
-                return false;
-            }
-
-            VisualElement root = _document.rootVisualElement;
-            _healthBar = root.Q<ProgressBar>("health-bar");
-            _manaBar = root.Q<ProgressBar>("mana-bar");
-            _goldLabel = root.Q<Label>("gold-label");
-            _skillStatusLabel = root.Q<Label>("skill-status-label");
-
-            if (_healthBar == null || _manaBar == null || _goldLabel == null || _skillStatusLabel == null)
-            {
-                ApplicationLog.Error(LogEventIds.GameplayUi, "[HudController] HUD UXML 缺少生命、法力、技能状态或金币元素", this);
-                return false;
-            }
-
-            _healthBar.lowValue = 0f;
-            _healthBar.highValue = 1f;
-            _manaBar.lowValue = 0f;
-            _manaBar.highValue = 1f;
-            _skillStatusLabel.style.display = DisplayStyle.None;
-            RefreshHud();
-            ApplicationLog.Info(LogEventIds.GameplayUi, "[HudController] HUD 初始化完成", this);
-            return true;
-        }
-
-        void OnSkillCastRejected(SkillCastRejectedEvent e)
-        {
-            if (_skillStatusLabel == null
-                || e.Actor == null
-                || e.Actor.Team != ActorTeam.Player
-                || e.Reason != SkillCastRejectionReason.InsufficientMana)
-            {
-                return;
-            }
-
-            _lastRequiredMana = e.RequiredMana;
-            _showsInsufficientMana = true;
-            _skillStatusLabel.text = Localize(
-                "hud.skill.insufficient_mana",
-                _lastRequiredMana);
-            _skillStatusLabel.style.display = DisplayStyle.Flex;
-        }
-
-        void OnActorAttacked(ActorAttackedEvent e)
-        {
-            if (_skillStatusLabel == null || e.Actor == null || e.Actor.Team != ActorTeam.Player)
-            {
-                return;
-            }
-
-            _showsInsufficientMana = false;
-            _skillStatusLabel.style.display = DisplayStyle.None;
-        }
-
-        void BindLocalization()
-        {
-            if (!ApplicationHost.TryGetCurrent(out ApplicationHost host)
-                || ReferenceEquals(_localizationService, host.Localization))
-            {
-                return;
-            }
-
-            if (_localizationService != null)
-            {
-                _localizationService.LocaleChanged -= OnLocaleChanged;
-            }
-
-            _localizationService = host.Localization;
-
-            if (_localizationService != null)
-            {
-                _localizationService.LocaleChanged += OnLocaleChanged;
-            }
-        }
-
-        void OnLocaleChanged(string localeCode)
-        {
-            RefreshHud();
-
-            if (_showsInsufficientMana && _skillStatusLabel != null)
-            {
-                _skillStatusLabel.text = Localize(
-                    "hud.skill.insufficient_mana",
-                    _lastRequiredMana);
-            }
-        }
-
-        string Localize(string entryKey, params object[] arguments)
-        {
-            return _localizationService?.GetString("ui", entryKey, arguments)
-                ?? $"[ui.{entryKey}]";
-        }
+        string L(string key, params object[] args) { return _localization.GetString("ui", key, args); }
+        static string N(float value) { return ItemDetailFormatter.FormatNumber(value); }
     }
 }

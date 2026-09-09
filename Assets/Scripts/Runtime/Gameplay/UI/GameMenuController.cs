@@ -33,6 +33,7 @@ namespace DarkFlare
         Button _attributesClose;
         Button _attributesEntry;
         Button _hudAttributes;
+        Button _hudInventory;
         public AttributePanelController Attributes => _attributes;
         ItemWorkspace _workspace;
         VisualElement _pausePanel;
@@ -318,6 +319,7 @@ namespace DarkFlare
             if (_attributesTab != null) { _attributesTab.clicked -= OnAttributesOpen; }
             if (_attributesEntry != null) { _attributesEntry.clicked -= OnAttributesOpen; }
             if (_hudAttributes != null) { _hudAttributes.clicked -= OnAttributesOpen; }
+            if (_hudInventory != null) { _hudInventory.clicked -= OnInventoryTabClicked; }
             if (_attributesClose != null) { _attributesClose.clicked -= OnAttributesClose; }
             _attributesTemplate?.UnregisterCallback<PointerDownEvent>(OnAttributesActivated, TrickleDown.TrickleDown);
             if (_applicationShell != null)
@@ -472,6 +474,7 @@ namespace DarkFlare
             _attributesClose = root.Q<Button>("attributes-window-close");
             _attributesEntry = root.Q<Button>("inventory-attributes-open");
             _hudAttributes = root.Q<Button>("game-hud-attributes");
+            _hudInventory = root.Q<Button>("game-hud-inventory");
             _inventoryTab = root.Q<Button>("game-menu-inventory-tab");
             _shopTab = root.Q<Button>("game-menu-shop-tab");
             _craftingTab = root.Q<Button>("game-menu-crafting-tab");
@@ -491,7 +494,7 @@ namespace DarkFlare
 
             if (_overlay == null
                 || _panel == null || _attributesTemplate == null || _attributesTab == null
-                || _attributesClose == null || _attributesEntry == null || _hudAttributes == null
+                || _attributesClose == null || _attributesEntry == null || _hudAttributes == null || _hudInventory == null
                 || root.Q<ScrollView>("attributes-scroll") == null
                 || _inventoryTemplate == null
                 || _shopTemplate == null
@@ -518,6 +521,7 @@ namespace DarkFlare
             _attributesTab.clicked += OnAttributesOpen;
             _attributesEntry.clicked += OnAttributesOpen;
             _hudAttributes.clicked += OnAttributesOpen;
+            _hudInventory.clicked += OnInventoryTabClicked;
             _attributesClose.clicked += OnAttributesClose;
             _attributesTemplate.RegisterCallback<PointerDownEvent>(OnAttributesActivated, TrickleDown.TrickleDown);
             _pauseButton.clicked += TogglePause;
@@ -617,6 +621,7 @@ namespace DarkFlare
             _overlay.style.display = IsOpen ? DisplayStyle.Flex : DisplayStyle.None;
             bool hudEntries = !IsOpen && !(_applicationShell?.BlocksGameplay ?? false);
             SetTemplateVisible(_hudAttributes, hudEntries);
+            SetTemplateVisible(_hudInventory, hudEntries);
             SetTemplateVisible(_hudPauseButton, hudEntries);
             _windows.style.display = IsOpen && !_pauseOpen ? DisplayStyle.Flex : DisplayStyle.None;
             _pausePanel.style.display = IsOpen && _pauseOpen ? DisplayStyle.Flex : DisplayStyle.None;

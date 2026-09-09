@@ -22,6 +22,7 @@
 - [装备系统](./equipment-system.md)
 - [属性定义与调用关系](./stat-system.md)
 - [独立属性详情](./attribute-details.md)
+- [战斗 HUD](./hud-system.md)
 - [随机化与掉落规则](./randomization-system.md)
 - [首批内容池](./content-system.md)
 - [打造系统](./crafting-system.md)
@@ -39,7 +40,9 @@
 
 ## 计划状态
 
-[alpha 0.3.1：独立属性详情与实时解释](./plan/archive/alpha-0.3.1-realtime-attributes-plan.md)已完成，运行版本为 `0.3.1-alpha`。模块行为见[独立属性详情](./attribute-details.md)，全量回归与视觉证据见[验收记录](./assets/acceptance/alpha-0.3.1-attributes/README.md)。下一阶段为 0.3.2 暗黑像素 HUD。
+[alpha 0.3.2：暗黑像素 HUD 与战斗状态](./plan/archive/alpha-0.3.2-dark-pixel-hud-plan.md)已完成，当前版本 `0.3.2-alpha`；EditMode 432/432、PlayMode 63/63。见[HUD 模块](./hud-system.md)与[验收证据](./assets/acceptance/alpha-0.3.2-hud/README.md)。下一阶段为 0.3.3 统一 UI 视觉组件。
+
+[alpha 0.3.1：独立属性详情与实时解释](./plan/archive/alpha-0.3.1-realtime-attributes-plan.md)已完成，当时运行版本为 `0.3.1-alpha`。模块行为见[独立属性详情](./attribute-details.md)，全量回归与视觉证据见[验收记录](./assets/acceptance/alpha-0.3.1-attributes/README.md)。0.3.2 HUD 也已完成。
 
 Alpha 0.3 前置[测试审计与精简](./testing/test-suite-audit.md)已完成：EditMode 424/424、PlayMode 56/56 通过，一次性 / 过时测试已清理，后续维护规则已建立。[执行计划已归档](./plan/archive/test-suite-maintenance-plan.md)。
 
@@ -49,7 +52,7 @@ Alpha 0.3 前置[测试审计与精简](./testing/test-suite-audit.md)已完成�
 
 首阶段优先修复设置 / 返回主菜单与背包的交互阻塞，并按[统一物品交互合同](plan/archive/alpha-0.3-item-interaction-contract.md)验收拖动、右键、手柄、单一高亮与详情排版。
 
-[独立窗口可用闭环已归档](./plan/archive/alpha-0.3.0-window-workspace-plan.md)：EditMode 429/429、PlayMode 59/59 通过，[18 种组合截图与十槽空间线框](./assets/acceptance/alpha-0.3.0-windows/README.md)已留档。[统一物品操作与事务](./plan/archive/alpha-0.3.0-unified-item-actions-plan.md)已接通指定格购买、出售 / 丢弃、打造取回落点和统一快捷动作；[当前验收记录](./assets/acceptance/alpha-0.3.0-actions/README.md)。0.3.0 与 0.3.1 已完成，下一步进入 0.3.2 HUD。
+[独立窗口可用闭环已归档](./plan/archive/alpha-0.3.0-window-workspace-plan.md)：EditMode 429/429、PlayMode 59/59 通过，[18 种组合截图与十槽空间线框](./assets/acceptance/alpha-0.3.0-windows/README.md)已留档。[统一物品操作与事务](./plan/archive/alpha-0.3.0-unified-item-actions-plan.md)已接通指定格购买、出售 / 丢弃、打造取回落点和统一快捷动作；[当前验收记录](./assets/acceptance/alpha-0.3.0-actions/README.md)。0.3.0–0.3.2 已完成，下一步进入 0.3.3 统一视觉组件。
 
 [代表视觉组件与布局收尾](plan/archive/alpha-0.3.0-visual-pilot-plan.md)已完成：正式窗口底板、独立属性 / HUD 空间线框、展开属性排版与关闭图标通过验证。完整 EditMode 430/430、PlayMode 61/61，见[阶段验收](./assets/acceptance/alpha-0.3.0-visual-pilot/README.md)。
 

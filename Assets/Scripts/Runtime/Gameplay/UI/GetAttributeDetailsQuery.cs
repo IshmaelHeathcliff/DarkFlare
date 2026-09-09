@@ -93,6 +93,10 @@ namespace DarkFlare
         public float HealthRegeneration { get; }
         public float ManaRegeneration { get; }
         public float RemainingSeconds { get; }
+        public string SkillId { get; }
+        public float Interval { get; }
+        public float ManaCost { get; }
+        public float CooldownNormalized => Interval > 0f ? Math.Clamp(RemainingSeconds / Interval, 0f, 1f) : 0f;
         public string ResourceState { get; }
         public string SkillState { get; }
 
@@ -107,6 +111,9 @@ namespace DarkFlare
             HealthRegeneration = actor != null ? Math.Max(0f, actor.Stats.GetValue(StatIds.HealthRegeneration)) : 0f;
             ManaRegeneration = actor != null ? ResourceRegenerationSystem.CalculateManaRegenerationPerSecond(MaxMana, actor.Stats.GetValue(StatIds.ManaRegeneration)) : 0f;
             RemainingSeconds = skill.RemainingSeconds;
+            SkillId = skill.Skill?.Id;
+            Interval = skill.Skill != null ? skill.Skill.Cooldown : 0f;
+            ManaCost = skill.Skill != null ? skill.Skill.ManaCost : 0f;
             ResourceState = actor == null ? "waiting" : !actor.isActiveAndEnabled ? "inactive" : !actor.IsAlive ? "dead"
                 : paused ? "paused" : Health >= MaxHealth && Mana >= MaxMana ? "full" : "recovering";
             SkillState = actor == null ? "waiting" : !actor.isActiveAndEnabled ? "inactive" : !actor.IsAlive ? "dead"

@@ -1,5 +1,11 @@
 # 视觉资产清单
 
+## Alpha 0.3.2 HUD 增量
+
+新增 `Assets/Art/Sprites/UI/Frames/ui_hud_resource_base.png`，供生命 / 法力仪表共用。原生 1254×1254、Sprite Single、Full Rect、PPU 100、中心 Pivot、Point、无压缩 / Mipmap，Border 96、Slice Scale 0.125。由 `Hud.uss` 引用并通过原 GameRoot 依赖加载，不新增资源句柄；输入 Glyph 复用已有 8 张图片，样式抽到 `InputGlyphs.uss` 供 HUD 与 Shell 共用。
+
+正式资源底板见[资产合同](./assets/acceptance/alpha-0.3.2-hud/asset-contract.md)及[审计与运行验收](./assets/acceptance/alpha-0.3.2-hud/README.md)。下方数量是 alpha 0.1.7 历史批次，两个 alpha 0.3 底板增量单独记录。
+
 ## Alpha 0.3.0 窗口底板增量
 
 新增 `Assets/Art/Sprites/UI/Frames/ui_item_window_base.png`，供背包、商店和打造共用：1254×1254 原生画布，Sprite Single、Full Rect、PPU 100、中心 Pivot、Point、None、Mipmap Off；四边 Border 96，USS Slice Scale 0.125。由 `Theme.uss` 引用，经 `GameRoot.uxml` 的依赖链加载，无独立 Addressables 句柄或新命中节点。
@@ -8,7 +14,7 @@
 
 ## 当前状态
 
-- 状态：alpha 单图迁移、双层地表 Tile、掉落稀有度环与 alpha 0.1.7 多帧战斗特效已完成；当前共 121 个独立 PNG，旧 SpriteSheet 与旧静态投射物已清理。
+- 状态：alpha 单图迁移、双层地表 Tile、掉落稀有度环与 alpha 0.1.7 多帧战斗特效已完成；该批次共 121 个独立 PNG，旧 SpriteSheet 与旧静态投射物已清理。
 - 生产规范：[美术资产生成规范](./visual-asset-generation.md)
 - 视觉规范：[视觉规范](./visual-style.md)
 - 已归档计划：[alpha 0.1 美术资产单图迁移计划](./plan/archive/alpha-0.1-art-asset-migration-plan.md)

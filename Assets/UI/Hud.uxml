@@ -1,39 +1,61 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:l="UnityEngine.Localization" editor-extension-mode="False">
   <ui:VisualElement name="hud-root" class="hud-root" picking-mode="Ignore">
-    <ui:VisualElement name="hud-top-row" class="hud-top-row" picking-mode="Ignore">
-      <ui:VisualElement name="health-card" class="hud-card health-card hud-card--row" picking-mode="Ignore">
-        <ui:VisualElement class="ui-icon ui-icon--health hud-leading-icon" picking-mode="Ignore" />
-        <ui:VisualElement class="hud-card-content" picking-mode="Ignore">
-          <ui:Label text="" class="hud-caption" picking-mode="Ignore">
-            <Bindings>
-              <l:LocalizedString property="text" table="ui" entry="hud.health" />
-            </Bindings>
-          </ui:Label>
-          <ui:ProgressBar name="health-bar" title="等待玩家..." low-value="0" high-value="1" value="0" picking-mode="Ignore" />
-          <ui:Label text="" class="hud-caption hud-caption--resource" picking-mode="Ignore">
-            <Bindings>
-              <l:LocalizedString property="text" table="ui" entry="hud.mana" />
-            </Bindings>
-          </ui:Label>
-          <ui:ProgressBar name="mana-bar" title="等待玩家..." low-value="0" high-value="1" value="0" picking-mode="Ignore" />
-          <ui:Label name="skill-status-label" text="" class="skill-status-label" picking-mode="Ignore" />
-        </ui:VisualElement>
-      </ui:VisualElement>
-      <ui:VisualElement name="gold-card" class="hud-card gold-card hud-card--row" picking-mode="Ignore">
-        <ui:VisualElement class="ui-icon ui-icon--gold hud-leading-icon" picking-mode="Ignore" />
-        <ui:VisualElement class="hud-card-content hud-card-content--compact" picking-mode="Ignore">
-          <ui:Label text="" class="hud-caption" picking-mode="Ignore">
-            <Bindings>
-              <l:LocalizedString property="text" table="ui" entry="hud.resources" />
-            </Bindings>
-          </ui:Label>
-          <ui:Label name="gold-label" text="" class="hud-value" picking-mode="Ignore" />
-        </ui:VisualElement>
-      </ui:VisualElement>
+    <ui:VisualElement name="interaction-prompt" class="interaction-prompt" picking-mode="Ignore">
+      <ui:Label name="interaction-prompt-label" class="interaction-prompt__label" picking-mode="Ignore" />
     </ui:VisualElement>
-    <ui:VisualElement name="hud-bottom-row" class="hud-bottom-row" picking-mode="Ignore">
-      <ui:VisualElement name="interaction-prompt" class="interaction-prompt" picking-mode="Ignore">
-        <ui:Label name="interaction-prompt-label" text="" class="interaction-prompt__label" picking-mode="Ignore" />
+    <ui:VisualElement name="hud-combat-row" class="hud-combat-row" picking-mode="Ignore">
+      <ui:VisualElement name="health-card" class="hud-resource hud-health" picking-mode="Ignore">
+        <ui:VisualElement name="hud-low-warning" class="hud-low-warning" picking-mode="Ignore" />
+        <ui:Label class="hud-caption" picking-mode="Ignore">
+          <Bindings>
+            <l:LocalizedString property="text" table="ui" entry="hud.health" />
+          </Bindings>
+        </ui:Label>
+        <ui:ProgressBar name="health-bar" low-value="0" high-value="1" value="0" picking-mode="Ignore" />
+        <ui:Label name="hud-health-state" class="hud-resource-state" picking-mode="Ignore" />
+      </ui:VisualElement>
+      <ui:VisualElement name="hud-center" class="hud-center" picking-mode="Ignore">
+        <ui:VisualElement class="hud-skill-heading" picking-mode="Ignore">
+          <ui:Label name="hud-skill-name" picking-mode="Ignore" />
+          <ui:Label name="gold-label" picking-mode="Ignore" />
+        </ui:VisualElement>
+        <ui:VisualElement class="hud-skill-readout" picking-mode="Ignore">
+          <ui:Label name="hud-skill-details" picking-mode="Ignore" />
+          <ui:Label name="skill-status-label" picking-mode="Ignore" />
+        </ui:VisualElement>
+        <ui:ProgressBar name="skill-cooldown" title="" low-value="0" high-value="1" value="0" picking-mode="Ignore" />
+        <ui:VisualElement name="hud-entries" class="hud-entries" picking-mode="Ignore">
+          <ui:Button name="game-hud-inventory" class="hud-entry">
+            <ui:Label picking-mode="Ignore">
+              <Bindings>
+                <l:LocalizedString property="text" table="ui" entry="menu.tab.inventory" />
+              </Bindings>
+            </ui:Label>
+            <ui:Label name="hud-inventory-binding" class="hud-binding input-binding-token" picking-mode="Ignore" />
+          </ui:Button>
+          <ui:Button name="game-hud-attributes" class="hud-entry">
+            <Bindings>
+              <l:LocalizedString property="text" table="ui" entry="attributes.title" />
+            </Bindings>
+          </ui:Button>
+          <ui:Button name="game-hud-pause" class="hud-entry">
+            <ui:Label picking-mode="Ignore">
+              <Bindings>
+                <l:LocalizedString property="text" table="ui" entry="window.pause" />
+              </Bindings>
+            </ui:Label>
+            <ui:Label name="hud-pause-binding" class="hud-binding input-binding-token" picking-mode="Ignore" />
+          </ui:Button>
+        </ui:VisualElement>
+      </ui:VisualElement>
+      <ui:VisualElement name="mana-card" class="hud-resource hud-mana" picking-mode="Ignore">
+        <ui:Label class="hud-caption" picking-mode="Ignore">
+          <Bindings>
+            <l:LocalizedString property="text" table="ui" entry="hud.mana" />
+          </Bindings>
+        </ui:Label>
+        <ui:ProgressBar name="mana-bar" low-value="0" high-value="1" value="0" picking-mode="Ignore" />
+        <ui:Label class="hud-resource-state" picking-mode="Ignore" name="hud-mana-state" />
       </ui:VisualElement>
     </ui:VisualElement>
   </ui:VisualElement>

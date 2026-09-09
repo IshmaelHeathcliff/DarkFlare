@@ -24,6 +24,8 @@
 
 ## 归档清单
 
+- [alpha 0.3.2 暗黑像素 HUD 与战斗状态](./alpha-0.3.2-dark-pixel-hud-plan.md)：已完成，见[HUD 验收](../../assets/acceptance/alpha-0.3.2-hud/README.md)。
+
 | 计划 | 完成阶段 | 当前总结 |
 | --- | --- | --- |
 | [独立属性详情与实时解释](./alpha-0.3.1-realtime-attributes-plan.md) | alpha 0.3.1 | [属性详情](../../attribute-details.md)、[阶段验收](../../assets/acceptance/alpha-0.3.1-attributes/README.md) |

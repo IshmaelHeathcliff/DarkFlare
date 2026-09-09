@@ -1,4 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:l="UnityEngine.Localization" editor-extension-mode="False">
+  <ui:Style src="project://database/Assets/UI/InputGlyphs.uss" />
   <ui:Style src="project://database/Assets/UI/Theme.uss" />
   <ui:Style src="project://database/Assets/UI/ApplicationShell.uss" />
   <ui:VisualElement name="application-shell" class="application-shell" picking-mode="Ignore">
@@ -49,7 +51,6 @@
       </ui:VisualElement>
       <ui:Label name="front-end-version" class="front-end-version" />
     </ui:VisualElement>
-
     <ui:VisualElement name="application-settings" class="application-layer application-blocker application-settings" picking-mode="Position">
       <ui:VisualElement class="application-settings-panel">
         <ui:VisualElement class="application-settings-header">
@@ -103,11 +104,9 @@
         <ui:Label name="settings-status" class="application-settings-status" />
       </ui:VisualElement>
     </ui:VisualElement>
-
     <ui:VisualElement name="application-toast" class="application-layer application-toast" picking-mode="Ignore">
       <ui:Label name="application-toast-message" class="application-toast-message" />
     </ui:VisualElement>
-
     <ui:VisualElement name="application-modal" class="application-layer application-blocker application-modal" picking-mode="Position">
       <ui:VisualElement class="application-dialog">
         <ui:Label name="application-modal-title" class="application-dialog-title" />
@@ -118,7 +117,6 @@
         </ui:VisualElement>
       </ui:VisualElement>
     </ui:VisualElement>
-
     <ui:VisualElement name="application-busy" class="application-layer application-blocker application-busy" picking-mode="Position">
       <ui:VisualElement class="application-busy-card">
         <ui:Label name="application-busy-label" class="application-busy-label" />
@@ -130,7 +128,6 @@
         </ui:Button>
       </ui:VisualElement>
     </ui:VisualElement>
-
     <ui:VisualElement name="application-fatal" class="application-layer application-blocker application-fatal" picking-mode="Position">
       <ui:VisualElement class="application-dialog application-dialog--fatal">
         <ui:Label class="application-dialog-title" text="">

@@ -1659,6 +1659,18 @@ MonoBehaviour:
     m_Key: attributes.tag_scope.Damage
     m_Metadata:
       m_Items: []
+  - m_Id: 7409032787648512
+    m_Key: hud.combat.details
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7409032846368768
+    m_Key: hud.health.low
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7409032846368769
+    m_Key: hud.mana.recovery
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

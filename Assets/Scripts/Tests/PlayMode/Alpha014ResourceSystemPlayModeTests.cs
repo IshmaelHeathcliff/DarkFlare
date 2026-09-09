@@ -79,6 +79,7 @@ namespace DarkFlare.Tests
             ResourceRegenerationSystem regeneration = architecture.GetSystem<ResourceRegenerationSystem>();
             GameplayPauseSystem pause = architecture.GetSystem<GameplayPauseSystem>();
             player.enabled = false;
+            architecture.GetSystem<PlayerSkillStateRegistry>().Register(actor, () => new PlayerSkillState(skill, 0f));
             spawner.enabled = false;
             pause.SetPaused(true);
             Assert.AreEqual(200f, actor.CurrentMana, 0.001f);
@@ -114,8 +115,7 @@ namespace DarkFlare.Tests
             Assert.AreEqual(
                 host.Localization.GetString(
                     "ui",
-                    "hud.skill.insufficient_mana",
-                    new object[] { skill.ManaCost }),
+                    "attributes.state.no_mana"),
                 skillStatus.text);
 
             regeneration.AdvanceRegeneration(2f);
@@ -123,6 +123,7 @@ namespace DarkFlare.Tests
             pause.SetPaused(false);
             regeneration.AdvanceRegeneration(0.7f);
             Assert.AreEqual(8f, actor.CurrentMana, 0.001f);
+            Assert.AreEqual("ready", hud.RuntimeSnapshot.SkillState, "恢复至可施放时应立即清除不足状态，无需先攻击");
 
             SkillCastResult recoveredCast = architecture.SendCommand(new FireProjectileCommand(
                 actor,
@@ -131,7 +132,7 @@ namespace DarkFlare.Tests
                 Vector2.right));
             Assert.IsTrue(recoveredCast.IsSuccess);
             Assert.AreEqual(0f, actor.CurrentMana, 0.001f);
-            Assert.AreEqual(DisplayStyle.None, skillStatus.style.display.value);
+            Assert.AreEqual("no_mana", hud.RuntimeSnapshot.SkillState, "成功施放后按当前资源显示状态");
             Object.Destroy(recoveredCast.Projectile.gameObject);
 
             actor.ReceiveDamage(CreateDamageResult(10f));

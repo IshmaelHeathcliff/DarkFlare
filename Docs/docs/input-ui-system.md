@@ -12,6 +12,7 @@ Main 玩法 UI 复用一个 `UIDocument` 和一个 `PanelSettings`；常驻 Boot
 
 - `Player` Action Map：移动、瞄准、攻击预留、世界交互、背包开关与暂停。
 - `UI` Action Map：导航、提交、取消、物品拿起 / 放置、暂停、窗口循环和指针操作。
+- Gameplay 额外启用 UI Point / Click，支持 HUD 鼠标入口；Navigate / Submit 保持关闭，不占用移动方向。`IsUiEnabled` 以 Navigate 是否启用判断，表示完整 UI 导航可用性。挂起时包括 Point / Click 在内的动作全部禁用。
 - 玩法物品窗口打开时，单独启用原 `Player.ToggleMenu`，不启用移动、战斗或交互；保留原 Action / Binding ID 和有效 overrides。Shell 所有权、挂起或 Session 结束后禁用窗口专用动作。Gameplay 可用性以移动 Action 是否启用判断，不能再以整个 Player Map 是否存在一个启用动作判断。
 - 无 Session 的 FrontEnd 默认使用 UI Context；Session 创建进入 Gameplay，菜单打开切到 UI，Session 结束恢复 UI。
 - `ApplicationInputService` 区分 `RequestedContext` 与实际 `CurrentContext`。普通模式切换更新请求；Settings / Modal 等应用层通过 `AcquireUiContext` 持有独立 UI 所有权，最后一个所有者释放后采用最新请求。任一 suspension lease 有效时两个 Map 都禁用，UI 所有权不能绕过 suspension。
@@ -31,6 +32,8 @@ Cancel 先由 Application Shell 处理 Fatal、Busy、Modal、Settings，再交�
 `ApplicationInputService` 维护正式可重绑定 Action / Composite Part 清单，并把 Binding Overrides JSON 与 `GlyphPreference` 保存到 Settings V1。一次变更按“临时覆盖 → 合同 / 冲突校验 → Settings 提交 → 失败回滚”执行；交互捕获期间持有 Rebinding suspension lease，Escape、超时或设备拔出都恢复旧覆盖。恢复默认只移除 runtime override，不修改 `InputSystem_Actions.inputactions`。
 
 设备显示分为 `KeyboardMouse` 与 `Gamepad`。活动设备输入会更新设备族；玩家偏好可覆盖自动选择。交互提示与设置页只显示当前显示族，不再拼接两套绑定。`InputGlyphResolver` 把规范 control path 映射到 `Assets/Art/UI/InputGlyphs` 的 8 张独立 64×64 单 Sprite；未知控件回退为可读 Keycap 文本，不暴露原始 control path。
+
+Point / Look 在 Context 切换后会回放当前指针位置；相同控件的未变化位置不视为新设备活动，避免手柄返回时 Glyph 误切键盘。真实位置变化与按钮输入仍更新活动设备族。
 
 当前默认绑定（新增暂停与窗口循环均可重绑定）：
 
@@ -72,7 +75,7 @@ Cancel 先由 Application Shell 处理 Fatal、Busy、Modal、Settings，再交�
 
 `Bootstrap.unity` 挂载 `ApplicationShell.uxml/.uss` 和唯一 EventSystem。Shell 负责 FrontEnd Page、Busy、Modal、Toast、Fatal 与跨场景焦点；Main 不再序列化 EventSystem，隐藏的 Application 层不得抢占玩法 UI 焦点。两个文档共用 PanelSettings，Bootstrap 的 `UIDocument.sortingOrder` 为 200，Main 为 100，保证应用层位于 HUD 和物品界面之上并正确接收指针。
 
-当前窗口结构、详情、安全区与导航以[物品 UI 工作台](./item-ui-workbench.md)为准：背包、商店、打造与属性四种窗口独立显示，背包可与商店或打造并排，并打开属性；暂停有独立入口。商店 / 打造有自己的物品来源选择器。背包标题栏与 HUD 打开[独立属性详情](./attribute-details.md)，组标题与展开项参与跨窗导航。物品详情优先位于组合窗口外侧，三窗拥挤时临时替换属性阅读区，切回属性恢复。`Windows.uss` 与 `Attributes.uss` 定义组合布局，当前版本为 `0.3.1-alpha`。
+当前窗口结构、详情、安全区与导航以[物品 UI 工作台](./item-ui-workbench.md)为准：背包、商店、打造与属性四种窗口独立显示，背包可与商店或打造并排，并打开属性；暂停有独立入口。商店 / 打造有自己的物品来源选择器。背包标题栏与 HUD 打开[独立属性详情](./attribute-details.md)，组标题与展开项参与跨窗导航。物品详情优先位于组合窗口外侧，三窗拥挤时临时替换属性阅读区，切回属性恢复。`Windows.uss` 与 `Attributes.uss` 定义组合布局，当前版本为 `0.3.2-alpha`。
 
 `alpha 0.2.3` 已将 Game Menu、HUD、背包 / 四槽装备、商店、打造、共享物品详情和场景交互提示的动态界面文本接入 Application 级 Localization Service。快照只传递属性 ID、数值、装备槽、伤害与修改器等语义数据，Controller / View 在当前 Locale 下解析显示文本；Locale 变化只重绘现有状态，不重新查询或改动背包、装备、拖拽、交易、打造和焦点。商店反馈保存 `LocalizedMessage`，打造结果保存领域 `CraftingResult`，避免缓存旧语言字符串。`alpha 0.2.5` 以后交互提示从 Application 输入服务取得当前显示设备族的绑定与 Glyph。
 
@@ -82,14 +85,14 @@ Cancel 先由 Application Shell 处理 Fatal、Busy、Modal、Settings，再交�
 
 鼠标物品操作采用点击与拖拽分离：左键按下不会立即拿起，只有持续按住并移动超过 10 px 才进入拖拽；直接松开只固定选择。背包物品与装备槽共用唯一选择描边，键盘焦点或鼠标悬浮预览会临时接管该描边，离开后再恢复固定选择，任意时刻不会出现两个同级高亮。商店上下文中，玩家背包物品支持右键直接出售，商人库存仍需左键选择并使用购买按钮；四向浏览按实际屏幕矩形选择邻居，可自然跨入相邻可见窗口。打造目标放入 2×3 槽位后从背包视图移除，取回后恢复。物品详情在 4–6 条显式词缀时自动切换紧凑排版，优先显示词条效果，词条名降为小号辅助信息，并继续保持无滚动完整展开。
 
-alpha 0.1.0 的 HUD 移除武器卡片和属性详情，只保留生命、金币与交互提示。“当前属性”移动到背包页右侧，与装备操作共用上下文区域。alpha 0.1.4 在生命条下增加当前 / 最大法力条与短暂的技能拒绝提示；法力不足时显示所需数值，下次成功释放时清除，不把属性详情重新放回 HUD。
+alpha 0.3.2 将 HUD 改为底部双资源仪表与技能状态区，背包 / 属性 / 暂停入口沿用菜单路由。法力不足、暂停和冷却由共享当前状态驱动，恢复后立即解除旧提示。HUD 与 Shell 共用 `InputGlyphs.uss`，设备和绑定变化更新真实提示。布局、动效与生命周期见[战斗 HUD](./hud-system.md)。
 `GetHudSnapshotQuery` 读取有效属性和资源快照，背包只显示三主属性摘要。独立属性使用静态解释与动态状态两类 Query，展示来源、条件及空态；抗性限制在 `-100%` 至 `75%`，暴击率限制在 `0%` 至 `100%`，倍率与百分比明确区分。装备 / Actor 变化重建解释，资源事件与可见时的低频刷新只更新动态区；Locale 切换只重排文本。
 
 装备槽图标使用与背包占格相同的 `scale-to-fit` 规则，并占满槽位扣除统一 4 px 内边距后的区域；当前窗口装备区隐藏常驻槽位标签，图标不受文字挤压；物品详情提供名称。武器、护甲装备后的图标可见范围不得小于其 2×3 背包占格中的图标，戒指槽同样不得小于 1×1 背包占格。
 
 | Controller | 只读数据入口 | 写入入口 | 主要刷新来源 |
 | --- | --- | --- | --- |
-| `HudController` | `GetHudSnapshotQuery` | 无 | Actor、生命 / 法力资源、技能释放、金币、装备事件 |
+| `HudController` | `GetHudSnapshotQuery`、轻量 `GetAttributeRuntimeQuery` | 无 | Actor、生命 / 法力资源、技能释放、金币、装备事件；Locale / Glyph / Motion |
 | `InventoryPanelController` | `GetInventorySnapshotQuery`、`GetHudSnapshotQuery` | 背包移动、精确装备 / 卸下与戒指交换 Commands | 背包、装备、Actor 事件 |
 | `ShopPanelController` | `GetShopSnapshotQuery` | `BuyItemCommand`、`SellItemCommand` | 交易、金币、背包事件 |
 | `CraftingPanelController` | `GetCraftingSnapshotQuery` | 槽内目标的 `CraftItemCommand` | 打造、金币、背包事件 |

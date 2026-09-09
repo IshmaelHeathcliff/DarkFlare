@@ -86,6 +86,13 @@ public class GameplayUiFoundationTests
         Assert.AreEqual("query_skill", _architecture.SendQuery(new GetAttributeDetailsQuery()).SkillId);
         _architecture.SendCommand(new SetGameplayPausedCommand(false));
         Assert.AreEqual("cooldown", _architecture.SendQuery(new GetAttributeRuntimeQuery()).SkillState);
+        SetField(skill, "_cooldown", 0.8f);
+        AttributeRuntimeSnapshot combatState = _architecture.SendQuery(new GetAttributeRuntimeQuery());
+        Assert.AreEqual(0.5f, combatState.CooldownNormalized, 0.001f);
+        Assert.AreEqual(8f, combatState.ManaCost);
+        Assert.AreEqual("query_skill", combatState.SkillId);
+        SetField(skill, "_cooldown", 0f);
+        Assert.AreEqual(0f, _architecture.SendQuery(new GetAttributeRuntimeQuery()).CooldownNormalized);
         Assert.IsTrue(actor.TrySpendMana(actor.CurrentMana));
         Assert.AreEqual("no_mana", _architecture.SendQuery(new GetAttributeRuntimeQuery()).SkillState);
         var lethal = new Dictionary<DamageType, float> { { DamageType.Physical, 999f } };

@@ -85,6 +85,10 @@ namespace DarkFlare.Tests
             Assert.AreEqual(InputContext.Gameplay, _service.CurrentContext);
             Assert.IsTrue(_service.IsGameplayEnabled);
             Assert.IsFalse(_service.IsUiEnabled);
+            Assert.IsTrue(_service.ActionAsset.FindAction("UI/Point").enabled);
+            Assert.IsTrue(_service.ActionAsset.FindAction("UI/Click").enabled);
+            Assert.IsFalse(_service.ActionAsset.FindAction("UI/Navigate").enabled);
+            Assert.IsFalse(_service.ActionAsset.FindAction("UI/Submit").enabled);
             Assert.AreEqual(1, changeCount);
         }
 
@@ -104,6 +108,9 @@ namespace DarkFlare.Tests
                 _service.SuspensionReasons);
             Assert.IsFalse(_service.IsGameplayEnabled);
             Assert.IsFalse(_service.IsUiEnabled);
+
+            Assert.IsFalse(_service.ActionAsset.FindAction("UI/Point").enabled);
+            Assert.IsFalse(_service.ActionAsset.FindAction("UI/Click").enabled);
 
             firstFocus.Dispose();
             platform.Dispose();
@@ -283,6 +290,20 @@ namespace DarkFlare.Tests
             Assert.AreEqual(InputDeviceFamily.Gamepad, _service.ActiveDeviceFamily);
             Assert.AreEqual(InputDeviceFamily.KeyboardMouse, _service.DisplayDeviceFamily);
             Assert.AreEqual(2, changeCount);
+            Release(keyboard.enterKey);
+            Release(gamepad.buttonSouth);
+            _service.SetGlyphPreferenceForTests(InputGlyphPreference.Auto);
+            Mouse mouse = InputSystem.AddDevice<Mouse>();
+            Set(mouse.position, new Vector2(300f, 200f));
+            Assert.AreEqual(InputDeviceFamily.KeyboardMouse, _service.DisplayDeviceFamily);
+            PressAndRelease(gamepad.buttonEast);
+            _service.SwitchContext(InputContext.Gameplay);
+            InputSystem.Update();
+            Assert.AreEqual(InputDeviceFamily.Gamepad, _service.DisplayDeviceFamily,
+                "Context 切换回放未移动的鼠标位置不能覆盖手柄提示");
+            Set(mouse.position, new Vector2(320f, 200f));
+            Assert.AreEqual(InputDeviceFamily.KeyboardMouse, _service.DisplayDeviceFamily,
+                "真实鼠标移动仍应更新提示设备");
         }
 
         [UnityTest]

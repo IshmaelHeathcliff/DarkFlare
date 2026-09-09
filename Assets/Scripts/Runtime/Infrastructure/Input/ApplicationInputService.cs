@@ -70,6 +70,8 @@ namespace DarkFlare
         IDisposable _rebindSuspension;
         InputDeviceFamily _activeRebindFamily;
         InputGlyphPreference _glyphPreference;
+        InputControl _lastPointerPositionControl;
+        Vector2 _lastPointerPosition;
         bool _rebindCancelledByToken;
         bool _rebindDeviceRemoved;
         float _rebindStartedAt;
@@ -154,7 +156,7 @@ namespace DarkFlare
 
         public bool IsGameplayEnabled => !_closed && _actions.Player.Move.enabled;
 
-        public bool IsUiEnabled => !_closed && _actions.UI.enabled;
+        public bool IsUiEnabled => !_closed && _actions.UI.Navigate.enabled;
 
         public InputDeviceFamily ActiveDeviceFamily { get; private set; }
 
@@ -954,6 +956,19 @@ namespace DarkFlare
                 return;
             }
 
+            if (context.control.device is Pointer pointer && context.control == pointer.position)
+            {
+                Vector2 position = pointer.position.ReadValue();
+                if (_lastPointerPositionControl == context.control && position == _lastPointerPosition)
+                {
+                    return;
+                }
+
+                // Re-enabling Point / Look replays the current cursor position without user activity.
+                _lastPointerPositionControl = context.control;
+                _lastPointerPosition = position;
+            }
+
             SetActiveDeviceFamily(GetDeviceFamily(context.control.device));
         }
 
@@ -1259,6 +1274,8 @@ namespace DarkFlare
             if (CurrentContext == InputContext.Gameplay)
             {
                 _actions.Player.Enable();
+                _actions.UI.Point.Enable();
+                _actions.UI.Click.Enable();
                 return;
             }
 

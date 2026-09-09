@@ -1725,6 +1725,19 @@ MonoBehaviour:
     m_Localized: Damage packet
     m_Metadata:
       m_Items: []
+  - m_Id: 7409032787648512
+    m_Localized: "Mana {0} \xB7 interval {1}s \xB7 remaining {2}s"
+    m_Metadata:
+      m_Items:
+      - rid: 6738608143192817845
+  - m_Id: 7409032846368768
+    m_Localized: "Danger \xB7 low health"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7409032846368769
+    m_Localized: Mana regenerates over time
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:
@@ -1777,3 +1790,4 @@ MonoBehaviour:
         - id: 7191908215414799
         - id: 7191908215414800
         - id: 7191908215414808
+        - id: 7409032787648512

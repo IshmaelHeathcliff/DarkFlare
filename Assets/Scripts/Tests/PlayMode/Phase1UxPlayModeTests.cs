@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Cysharp.Threading.Tasks;
 using DarkFlare;
 using NUnit.Framework;
 using UnityEngine;
@@ -48,6 +49,66 @@ namespace DarkFlare.Tests
             yield return null;
             InputTestFixtureGuard.TearDown(_inputFixture);
             yield return _fixture.Restart();
+        }
+
+        [UnityTest]
+        public IEnumerator Hud_CurrentResourcesMotionAndEntriesRespectInputOwnership()
+        {
+            yield return _fixture.EnterMain();
+            ApplicationHost host = ApplicationHost.Current;
+            yield return host.PlatformLifecycle.HandleFocusChangedAsync(true).ToCoroutine();
+            yield return host.Accessibility.SetReduceMotionAsync(false).ToCoroutine();
+            yield return host.Input.SetGlyphPreferenceAsync(InputGlyphPreference.Auto).ToCoroutine();
+            GameMenuController menu = Object.FindAnyObjectByType<GameMenuController>();
+            HudController hud = Object.FindAnyObjectByType<HudController>();
+            VisualElement root = hud.GetComponent<UIDocument>().rootVisualElement;
+            IArchitecture architecture = menu.GetArchitecture();
+            architecture.GetUtility<GameInput>().SwitchToGameplay();
+            PlayerController player = Object.FindAnyObjectByType<PlayerController>();
+            CombatActor actor = player.Actor;
+            player.enabled = false;
+            Object.FindAnyObjectByType<MonsterSpawner>().enabled = false;
+            var damage = new Dictionary<DamageType, float> { { DamageType.Physical, actor.CurrentHealth - actor.MaxHealth * 0.2f } };
+            CombatResourceSnapshot previousResources = actor.Resources;
+            actor.ReceiveDamage(new DamageResult(true, false, damage, damage));
+            architecture.GetSystem<CombatSystem>().PublishResourceChanges(actor, previousResources, ActorResourceChangeReason.Damage);
+            Assert.AreEqual(0.2f, root.Q<ProgressBar>("health-bar").value, 0.001f);
+            Assert.IsTrue(root.Q("health-card").ClassListContains("hud-resource--low"));
+            Assert.IsTrue(hud.IsWarningAnimating);
+            yield return host.Accessibility.SetReduceMotionAsync(true).ToCoroutine();
+            Assert.IsFalse(hud.IsWarningAnimating);
+            Assert.AreEqual(0f, root.Q("hud-low-warning").style.opacity.value);
+            yield return host.Accessibility.SetReduceMotionAsync(false).ToCoroutine();
+            Assert.IsTrue(hud.IsWarningAnimating);
+            Mouse mouse = InputSystem.AddDevice<Mouse>();
+            _inputFixture.Set(mouse.position, PanelToScreen(root, root.Q("game-hud-inventory").worldBound.center));
+            yield return null;
+            _inputFixture.Press(mouse.leftButton);
+            yield return null;
+            _inputFixture.Release(mouse.leftButton);
+            yield return null;
+            yield return null;
+            Assert.IsTrue(menu.IsWindowVisible(GameMenuPage.Inventory));
+            Assert.IsFalse(hud.IsWarningAnimating);
+            Assert.AreEqual(DisplayStyle.None, root.Q("game-hud-inventory").resolvedStyle.display);
+            Gamepad pad = InputSystem.AddDevice<Gamepad>();
+            _inputFixture.PressAndRelease(pad.buttonEast);
+            yield return null;
+            Assert.IsFalse(menu.IsOpen);
+            yield return new WaitForSecondsRealtime(0.15f);
+            Assert.IsTrue(hud.IsWarningAnimating);
+            Assert.IsTrue(root.Q("hud-inventory-binding").ClassListContains("input-glyph--gamepad-start"),
+                $"Family={host.Input.DisplayDeviceFamily}; token={host.Input.GetGlyphToken(RebindableInputAction.PlayerToggleMenu).GlyphId}; classes={string.Join(",", root.Q("hud-inventory-binding").GetClasses())}");
+            Assert.LessOrEqual(root.Q("skill-cooldown").worldBound.yMax, root.Q("hud-entries").worldBound.yMin);
+            architecture.GetSystem<CombatSystem>().Revive(actor, actor.transform.position);
+            Assert.IsFalse(hud.IsWarningAnimating);
+            Assert.IsFalse(root.Q("health-card").ClassListContains("hud-resource--low"));
+            hud.enabled = false;
+            Assert.IsFalse(hud.IsWarningAnimating);
+            Assert.IsFalse(hud.RuntimeSnapshot.HasPlayer);
+            hud.enabled = true;
+            yield return null;
+            Assert.AreEqual(actor.CurrentHealth, hud.RuntimeSnapshot.Health);
         }
 
         [UnityTest]
@@ -846,7 +907,7 @@ namespace DarkFlare.Tests
                 yield return null;
                 VisualElement tooltip = root.Q<VisualElement>("item-tooltip");
                 VisualElement tooltipDetail = root.Q<VisualElement>("item-tooltip-detail");
-                ItemDetailView denseDetailView = new ItemDetailView(tooltipDetail);
+                ItemDetailView denseDetailView = new ItemDetailView(tooltipDetail, host.Localization);
                 denseDetailView.Show(CreateDenseDetail(purchasedItem), null);
                 tooltip.style.display = DisplayStyle.Flex;
                 tooltip.style.visibility = Visibility.Visible;
@@ -1178,13 +1239,13 @@ namespace DarkFlare.Tests
                 prefixes.Add(new AffixDetailSnapshot(
                     null,
                     AffixType.Prefix,
-                    new LocalizedMessage("affixes", $"test.prefix.{i + 1}"),
+                    new LocalizedMessage("affixes", "item_affix.reinforced.name"),
                     prefixModifiers,
                     0f));
                 suffixes.Add(new AffixDetailSnapshot(
                     null,
                     AffixType.Suffix,
-                    new LocalizedMessage("affixes", $"test.suffix.{i + 1}"),
+                    new LocalizedMessage("affixes", "item_affix.of_power.name"),
                     suffixModifiers,
                     0f));
             }
@@ -1314,6 +1375,7 @@ namespace DarkFlare.Tests
                 TextElement element = elements[i];
 
                 if (string.IsNullOrWhiteSpace(element.text)
+                    || element.ClassListContains("input-binding-token")
                     || !element.text.Any(char.IsLetter)
                     || !HasVisibleHierarchy(element)
                     || (element.text[0] == '[' && element.text[^1] == ']')

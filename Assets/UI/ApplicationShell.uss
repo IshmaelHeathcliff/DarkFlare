@@ -361,35 +361,3 @@
   white-space: normal;
   color: rgb(169, 174, 184);
 }
-
-.input-glyph--keyboard-keycap {
-  background-image: url("project://database/Assets/Art/UI/InputGlyphs/keyboard_keycap.png");
-}
-
-.input-glyph--gamepad-button_south {
-  background-image: url("project://database/Assets/Art/UI/InputGlyphs/gamepad_button_south.png");
-}
-
-.input-glyph--gamepad-button_east {
-  background-image: url("project://database/Assets/Art/UI/InputGlyphs/gamepad_button_east.png");
-}
-
-.input-glyph--gamepad-button_west {
-  background-image: url("project://database/Assets/Art/UI/InputGlyphs/gamepad_button_west.png");
-}
-
-.input-glyph--gamepad-button_north {
-  background-image: url("project://database/Assets/Art/UI/InputGlyphs/gamepad_button_north.png");
-}
-
-.input-glyph--gamepad-start {
-  background-image: url("project://database/Assets/Art/UI/InputGlyphs/gamepad_start.png");
-}
-
-.input-glyph--gamepad-dpad {
-  background-image: url("project://database/Assets/Art/UI/InputGlyphs/gamepad_dpad.png");
-}
-
-.input-glyph--gamepad-left_stick {
-  background-image: url("project://database/Assets/Art/UI/InputGlyphs/gamepad_left_stick.png");
-}

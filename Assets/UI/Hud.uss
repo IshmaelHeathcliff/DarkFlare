@@ -1,138 +1,46 @@
-.game-ui-root,
-.hud-root {
-    flex-grow: 1;
-}
+.game-ui-root { flex-grow: 1; }
+.hud-root { position: absolute; left: 0; right: 0; bottom: 12px; align-items: center; color: rgb(230,214,184); }
+.hud-combat-row { flex-direction: row; align-items: stretch; height: 136px; }
+.hud-resource { width: 300px; padding: 16px 24px; background-color: rgb(18,22,27); border-width: 2px; border-color: rgb(112,93,63); }
+.hud-center { width: 840px; padding: 8px 14px; margin: 0 12px; background-color: rgba(12,16,21,0.96); border-width: 1px; border-color: rgb(83,73,57); }
+.hud-caption { font-size: 17px; color: rgb(220,204,175); margin-bottom: 8px; }
+.hud-resource-state { font-size: 14px; white-space: normal; margin-top: 5px; color: rgb(188,184,173); }
+.hud-skill-heading { flex-direction: row; justify-content: space-between; height: 26px; flex-shrink: 0; }
+#hud-skill-name { font-size: 16px; white-space: normal; flex-shrink: 1; }
+#gold-label { font-size: 15px; color: rgb(224,185,104); margin-left: 12px; }
+.hud-skill-readout { flex-direction: row; min-height: 38px; justify-content: space-between; }
+#hud-skill-details { width: 62%; white-space: normal; font-size: 14px; color: rgb(189,188,179); }
+#skill-status-label { width: 36%; white-space: normal; font-size: 14px; color: rgb(220,184,121); }
+#health-bar, #mana-bar { height: 27px; min-height: 27px; }
+#health-bar .unity-progress-bar__background, #mana-bar .unity-progress-bar__background { background-color: rgb(8,11,15); border-radius: 0; }
+#health-bar .unity-progress-bar__progress { background-color: rgb(173,36,48); border-radius: 0; }
+#mana-bar .unity-progress-bar__progress { background-color: rgb(34,86,165); border-radius: 0; }
+#health-bar .unity-progress-bar__title, #mana-bar .unity-progress-bar__title { color: rgb(255,242,220); -unity-font-style: bold; font-size: 16px; }
+#skill-cooldown { height: 4px; min-height: 4px; margin: 3px 0; }
+#skill-cooldown .unity-progress-bar__background { background-color: rgb(25,29,35); }
+#skill-cooldown .unity-progress-bar__progress { background-color: rgb(163,133,81); }
+#skill-cooldown .unity-progress-bar__title { display: none; }
+.hud-entries { flex-direction: row; justify-content: center; height: 44px; flex-shrink: 0; }
+.hud-entry { flex-direction: row; justify-content: center; align-items: center; width: 32%; white-space: normal; font-size: 14px; margin: 0 3px; padding: 3px 6px; color: rgb(226,210,182); background-color: rgb(26,29,34); border-width: 1px; border-color: rgb(89,77,58); }
+.hud-entry Label { white-space: normal; flex-shrink: 1; font-size: 14px; }
+.hud-entry:hover { background-color: rgb(47,43,34); }
+.hud-entry:focus { border-color: rgb(222,177,89); }
+.hud-entry:active { background-color: rgb(64,49,30); }
+.hud-binding { margin-left: 8px; color: rgb(195,172,129); }
+.hud-resource--low #hud-health-state { color: rgb(244,122,104); }
+.hud-low-warning { position: absolute; left: 0; right: 0; top: 0; bottom: 0; border-width: 3px; border-color: rgb(197,48,44); opacity: 0; }
+.interaction-prompt { display: none; max-width: 840px; padding: 8px 18px; margin-bottom: 12px; background-color: rgba(16,19,24,0.96); border-width: 1px; border-color: rgb(123,101,63); }
+.interaction-prompt__label { font-size: 17px; white-space: normal; -unity-text-align: middle-center; color: rgb(237,219,183); }
 
-.hud-root {
-    justify-content: space-between;
-    padding: 28px;
-    color: rgb(236, 241, 245);
-}
+.hud-template { position: absolute; left: 0; right: 0; top: 0; bottom: 0; }
+.hud-root Label { margin: 0; padding: 0; }
 
-.hud-top-row,
-.hud-bottom-row {
-    flex-direction: row;
-    justify-content: space-between;
-}
+#hud-skill-name, #gold-label { min-height: 26px; flex-shrink: 0; }
 
-.hud-top-row {
-    align-items: flex-start;
-}
+#skill-cooldown, #skill-cooldown .unity-progress-bar__container, #skill-cooldown .unity-progress-bar__background, #skill-cooldown .unity-progress-bar__progress { min-height: 0; height: 4px; padding: 0; border-width: 0; flex-shrink: 0; }
 
-.hud-bottom-row {
-    justify-content: center;
-    align-items: flex-end;
-}
+.hud-root .hud-binding { margin-left: 8px; min-width: 28px; min-height: 24px; flex-shrink: 0; -unity-background-scale-mode: scale-to-fit; -unity-text-align: middle-center; }
 
-.hud-card {
-    background-color: rgba(12, 18, 24, 0.92);
-    border-top-width: 2px;
-    border-right-width: 2px;
-    border-bottom-width: 2px;
-    border-left-width: 2px;
-    border-top-color: rgba(89, 119, 136, 0.9);
-    border-right-color: rgba(89, 119, 136, 0.9);
-    border-bottom-color: rgba(89, 119, 136, 0.9);
-    border-left-color: rgba(89, 119, 136, 0.9);
-    border-radius: 8px;
-    padding: 14px 18px;
-}
+.hud-resource { background-image: url("project://database/Assets/Art/Sprites/UI/Frames/ui_hud_resource_base.png?fileID=21300000&guid=883832f8f53d9924a9e3c37a7c47c670&type=3"); -unity-slice-left: 96; -unity-slice-right: 96; -unity-slice-top: 96; -unity-slice-bottom: 96; -unity-slice-scale: 0.125; border-color: transparent; }
 
-.health-card {
-    width: 390px;
-}
-
-.gold-card {
-    min-width: 180px;
-    align-items: flex-end;
-}
-
-.hud-caption {
-    font-size: 13px;
-    color: rgb(145, 169, 181);
-    -unity-font-style: bold;
-    margin-bottom: 5px;
-}
-
-.hud-value {
-    font-size: 20px;
-    color: rgb(245, 238, 210);
-    -unity-font-style: bold;
-}
-
-.interaction-prompt {
-    display: none;
-    min-width: 360px;
-    min-height: 58px;
-    justify-content: center;
-    align-items: center;
-    padding: 12px 24px;
-    background-color: rgba(12, 18, 24, 0.94);
-    border-top-width: 2px;
-    border-right-width: 2px;
-    border-bottom-width: 2px;
-    border-left-width: 2px;
-    border-top-color: rgb(194, 150, 78);
-    border-right-color: rgb(194, 150, 78);
-    border-bottom-color: rgb(194, 150, 78);
-    border-left-color: rgb(194, 150, 78);
-    border-radius: 8px;
-}
-
-.interaction-prompt__label {
-    font-size: 20px;
-    color: rgb(246, 235, 213);
-    -unity-font-style: bold;
-}
-
-#health-bar {
-    height: 30px;
-    margin-top: 3px;
-}
-
-#health-bar .unity-progress-bar__background {
-    background-color: rgb(42, 48, 53);
-    border-radius: 5px;
-}
-
-#health-bar .unity-progress-bar__progress {
-    background-color: rgb(194, 54, 57);
-    border-radius: 5px;
-}
-
-#health-bar .unity-progress-bar__title {
-    color: white;
-    -unity-font-style: bold;
-}
-
-.hud-caption--resource {
-    margin-top: 8px;
-}
-
-#mana-bar {
-    height: 24px;
-    margin-top: 3px;
-}
-
-#mana-bar .unity-progress-bar__background {
-    background-color: rgb(42, 48, 53);
-    border-radius: 5px;
-}
-
-#mana-bar .unity-progress-bar__progress {
-    background-color: rgb(45, 105, 184);
-    border-radius: 5px;
-}
-
-#mana-bar .unity-progress-bar__title {
-    color: white;
-    -unity-font-style: bold;
-}
-
-.skill-status-label {
-    display: none;
-    margin-top: 7px;
-    color: rgb(242, 180, 92);
-    font-size: 13px;
-    -unity-font-style: bold;
-}
+.hud-root .hud-binding--text { padding: 0 5px; border-width: 1px; border-color: rgb(137,113,72); background-color: rgb(17,20,25); }

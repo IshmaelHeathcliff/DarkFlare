@@ -9,7 +9,6 @@
 .attribute-foldout .unity-foldout__content { margin-left: 8px; padding-left: 4px; }
 .attribute-explanation { white-space: normal; min-height: 22px; flex-shrink: 0; font-size: 14px; color: rgb(192,190,179); padding: 4px 0; }
 .attribute-foldout .unity-toggle:focus { border-width: 1px; border-color: rgb(208,164,88); }
-.game-hud-attributes { position: absolute; right: 24px; top: 68px; min-width: 90px; height: auto; min-height: 36px; padding: 4px 10px; white-space: normal; background-color: rgb(28,32,39); color: rgb(225,211,184); border-color: rgb(91,76,53); border-width: 1px; }
 .inventory-attributes-open { min-height: 32px; flex-shrink: 0; white-space: normal; font-size: 14px; margin-top: 4px; color: rgb(225,211,184); background-color: rgb(28,32,39); border-width: 1px; border-color: rgb(91,76,53); }
 
 .inventory-primary-card { flex-shrink: 0; margin-top: 4px; }
