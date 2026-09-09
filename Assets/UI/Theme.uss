@@ -7,36 +7,6 @@
   -unity-slice-scale: 0.125;
 }
 
-Button:hover {
-  background-color: rgb(61, 66, 76);
-}
-
-Button:focus {
-  border-left-width: 2px;
-  border-right-width: 2px;
-  border-top-width: 2px;
-  border-bottom-width: 2px;
-  border-left-color: rgb(246, 203, 126);
-  border-right-color: rgb(246, 203, 126);
-  border-top-color: rgb(246, 203, 126);
-  border-bottom-color: rgb(246, 203, 126);
-}
-
-Button:active {
-  scale: 0.97 0.97;
-  background-color: rgb(91, 70, 43);
-}
-
-Button:disabled {
-  opacity: 0.42;
-  color: rgb(109, 113, 122);
-  background-color: rgb(42, 45, 51);
-  border-left-color: rgb(59, 63, 71);
-  border-right-color: rgb(59, 63, 71);
-  border-top-color: rgb(59, 63, 71);
-  border-bottom-color: rgb(59, 63, 71);
-}
-
 .ui-icon {
   width: 32px;
   height: 32px;
@@ -184,25 +154,6 @@ Button:disabled {
   border-bottom-color: rgb(246, 203, 126);
 }
 
-
-.hud-card--row {
-  flex-direction: row;
-  align-items: center;
-}
-
-.hud-leading-icon {
-  width: 44px;
-  height: 44px;
-  margin-right: 14px;
-}
-
-.hud-card-content {
-  flex-grow: 1;
-}
-
-.hud-card-content--compact {
-  align-items: flex-end;
-}
 
 .game-menu-tab,
 .game-menu-close {

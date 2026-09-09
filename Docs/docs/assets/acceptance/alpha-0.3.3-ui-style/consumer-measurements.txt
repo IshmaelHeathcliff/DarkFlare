@@ -1,0 +1,14 @@
+game-menu-inventory-tab (x:494.00, y:28.00, width:118.00, height:36.00) border=1
+game-menu-attributes-tab (x:620.00, y:28.00, width:118.00, height:36.00) border=1
+game-menu-pause (x:746.00, y:28.00, width:118.00, height:36.00) border=1
+game-menu-close (x:872.00, y:28.00, width:138.00, height:36.00) border=1
+inventory-attributes-open (x:932.00, y:98.00, width:36.00, height:32.00) border=1
+inventory-window-close (x:978.00, y:98.00, width:36.00, height:32.00) border=1
+inventory-slot-weapon (x:573.00, y:150.00, width:100.00, height:152.00) border=1
+inventory-slot-armor (x:685.00, y:150.00, width:100.00, height:152.00) border=1
+inventory-slot-ring-left (x:797.00, y:196.00, width:60.00, height:60.00) border=1
+inventory-slot-ring-right (x:867.00, y:196.00, width:60.00, height:60.00) border=1
+inventory-equip (x:490.00, y:715.00, width:257.00, height:30.00) border=1
+inventory-unequip (x:757.00, y:715.00, width:257.00, height:30.00) border=1
+item-operation-actions (x:728.00, y:885.00, width:144.00, height:32.00) border=1
+item-discard-zone (x:884.00, y:885.00, width:144.00, height:32.00) border=1

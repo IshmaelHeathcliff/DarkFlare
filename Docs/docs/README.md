@@ -40,7 +40,9 @@
 
 ## 计划状态
 
-[alpha 0.3.2：暗黑像素 HUD 与战斗状态](./plan/archive/alpha-0.3.2-dark-pixel-hud-plan.md)已完成，当前版本 `0.3.2-alpha`；EditMode 432/432、PlayMode 63/63。见[HUD 模块](./hud-system.md)与[验收证据](./assets/acceptance/alpha-0.3.2-hud/README.md)。下一阶段为 0.3.3 统一 UI 视觉组件。
+[alpha 0.3.3：统一 UI 视觉组件](./plan/archive/alpha-0.3.3-unified-ui-visual-plan.md)已完成：共享材质、正式按钮 / 槽位、Shell 控件与三语言排版通过验收。当前运行版本 `0.3.3-alpha`，EditMode 432/432、PlayMode 63/63；见[组件规范](./ui-component-style.md)与[验收证据](./assets/acceptance/alpha-0.3.3-ui-style/README.md)。下一阶段为 [0.3.4 十槽装备与内容补齐](./plan/alpha-0.3.4-equipment-completion-plan.md)。
+
+[alpha 0.3.2：暗黑像素 HUD 与战斗状态](./plan/archive/alpha-0.3.2-dark-pixel-hud-plan.md)已完成，当时版本 `0.3.2-alpha`；EditMode 432/432、PlayMode 63/63。见[HUD 模块](./hud-system.md)与[验收证据](./assets/acceptance/alpha-0.3.2-hud/README.md)。0.3.3 统一 UI 视觉组件也已完成。
 
 [alpha 0.3.1：独立属性详情与实时解释](./plan/archive/alpha-0.3.1-realtime-attributes-plan.md)已完成，当时运行版本为 `0.3.1-alpha`。模块行为见[独立属性详情](./attribute-details.md)，全量回归与视觉证据见[验收记录](./assets/acceptance/alpha-0.3.1-attributes/README.md)。0.3.2 HUD 也已完成。
 

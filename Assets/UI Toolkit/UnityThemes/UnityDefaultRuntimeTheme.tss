@@ -1,1 +1,9 @@
 @import url("unity-theme://default");
+
+/* Popup is attached to the panel root, outside the Shell content root. */
+.unity-base-dropdown__container-outer, .unity-base-dropdown__container-inner {
+  background-color: rgb(17,21,25); border-width: 1px; border-color: rgb(100,88,67); border-radius: 0;
+}
+.unity-base-dropdown__item, .unity-base-dropdown__label { color: rgb(230,214,184); }
+.unity-base-dropdown__item:hover, .unity-base-dropdown__item:checked { background-color: rgb(75,60,37); }
+.unity-base-dropdown__checkmark { -unity-background-image-tint-color: rgb(231,186,103); }

@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "family": "slot-base",
+  "canvas": {
+    "width": 1254,
+    "height": 1254
+  },
+  "alpha_required": false,
+  "assets": [
+    {
+      "name": "slot-base",
+      "image": "../../../../../Assets/Art/Sprites/UI/Frames/ui_slot_base.png",
+      "visible_width": [
+        1254,
+        1254
+      ],
+      "visible_height": [
+        1254,
+        1254
+      ],
+      "alpha_coverage": [
+        0.99,
+        1
+      ],
+      "visual_center_x": [
+        626,
+        628
+      ],
+      "visual_center_y": [
+        626,
+        628
+      ]
+    }
+  ]
+}

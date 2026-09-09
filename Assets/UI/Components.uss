@@ -1,0 +1,168 @@
+/* Shared material and interaction states; layout remains in module styles. */
+.game-ui-root, .application-shell {
+  --ui-text: rgb(230,214,184);
+  --ui-muted: rgb(164,158,146);
+  --ui-edge: rgb(100,88,67);
+  --ui-focus: rgb(231,186,103);
+  --ui-danger: rgb(217,116,101);
+  --ui-valid: rgb(116,194,142);
+  --ui-surface: rgb(22,25,29);
+  --ui-control: url("project://database/Assets/Art/Sprites/UI/Frames/ui_control_base.png?fileID=21300000&guid=228abfc658c026947a8a34cdcfdc7ef1&type=3");
+}
+.game-ui-root Button, .application-shell Button {
+  background-image: var(--ui-control);
+  -unity-slice-left: 32; -unity-slice-right: 32; -unity-slice-top: 32; -unity-slice-bottom: 32; -unity-slice-scale: 0.125;
+  -unity-background-image-tint-color: rgb(170,164,151);
+  background-color: var(--ui-surface);
+  color: var(--ui-text);
+  border-width: 1px; border-color: var(--ui-edge);
+  border-radius: 0; scale: 1 1;
+}
+.game-ui-root Button:hover, .application-shell Button:hover {
+  -unity-background-image-tint-color: rgb(225,211,182);
+  border-color: rgb(160,139,99);
+}
+.game-ui-root Button:focus, .application-shell Button:focus {
+  border-color: var(--ui-focus);
+  -unity-background-image-tint-color: rgb(220,194,145);
+}
+.game-ui-root Button:active, .application-shell Button:active {
+  -unity-background-image-tint-color: rgb(115,106,87);
+  border-color: var(--ui-focus);
+  scale: 1 1;
+}
+.game-ui-root Button:disabled, .application-shell Button:disabled {
+  -unity-background-image-tint-color: rgb(106,108,108);
+  color: rgb(143,141,134);
+  border-color: rgb(67,65,60);
+  opacity: 1;
+}
+.game-ui-root .game-menu-tab--active,
+.application-shell .front-end-action--primary,
+.application-shell .application-dialog-action--primary {
+  -unity-background-image-tint-color: rgb(242,191,107);
+  border-color: var(--ui-focus); color: rgb(249,228,191);
+}
+.game-ui-root #item-discard-zone, .game-ui-root #game-menu-return-front-end,
+.application-shell #front-end-delete-save, .application-shell #application-fatal-quit {
+  color: var(--ui-danger);
+}
+/* Item ownership is distinct from generic button focus and hover. */
+.game-ui-root .inventory-item, .game-ui-root .shop-item,
+.game-ui-root .inventory-equipment-slot, .game-ui-root .item-source-row,
+.game-ui-root .crafting-input-slot {
+  border-width: 1px; border-color: rgb(78,72,61);
+  -unity-background-image-tint-color: rgb(132,135,137);
+}
+.game-ui-root .inventory-item:focus, .game-ui-root .shop-item:focus,
+.game-ui-root .inventory-equipment-slot:focus, .game-ui-root .item-source-row:focus,
+.game-ui-root .crafting-input-slot:focus,
+.game-ui-root .inventory-item:hover, .game-ui-root .shop-item:hover,
+.game-ui-root .inventory-equipment-slot:hover, .game-ui-root .item-source-row:hover {
+  border-color: rgb(78,72,61);
+  -unity-background-image-tint-color: rgb(132,135,137);
+}
+.game-ui-root .inventory-item--selected, .game-ui-root .shop-item--selected,
+.game-ui-root .inventory-equipment-slot--selected, .game-ui-root .item-source-row--selected,
+.game-ui-root .inventory-item--selected:focus, .game-ui-root .shop-item--selected:focus,
+.game-ui-root .inventory-equipment-slot--selected:focus, .game-ui-root .item-source-row--selected:focus,
+.game-ui-root .inventory-item--selected:hover, .game-ui-root .shop-item--selected:hover,
+.game-ui-root .inventory-equipment-slot--selected:hover, .game-ui-root .item-source-row--selected:hover {
+  border-color: var(--ui-focus); -unity-background-image-tint-color: rgb(216,177,113);
+}
+
+/* Recessed item surfaces share one Sprite, independent of item content. */
+.game-ui-root .inventory-item, .game-ui-root .shop-item,
+.game-ui-root .inventory-equipment-slot, .game-ui-root .item-source-row,
+.game-ui-root .crafting-input-slot, .game-ui-root .item-detail-icon {
+  background-image: url("project://database/Assets/Art/Sprites/UI/Frames/ui_slot_base.png?fileID=21300000&guid=009d445a5b8dc944685392b6c277dc59&type=3");
+  -unity-slice-left: 32; -unity-slice-right: 32; -unity-slice-top: 32; -unity-slice-bottom: 32; -unity-slice-scale: 0.125;
+  border-radius: 0;
+}
+.game-ui-root .inventory-cell { background-color: rgb(17,21,25); border-color: rgb(53,54,51); }
+.game-ui-root .inventory-item--magic { border-left-color: rgb(92,138,220); }
+.game-ui-root .inventory-item--rare { border-left-color: rgb(220,176,63); }
+.game-ui-root .inventory-item--unique { border-left-color: rgb(211,105,48); }
+.game-ui-root .inventory-item--selected, .game-ui-root .shop-item--selected,
+.game-ui-root .inventory-equipment-slot--selected, .game-ui-root .item-source-row--selected {
+  border-width: 1px; border-color: var(--ui-focus);
+}
+.game-ui-root .inventory-cell--drop-valid,
+.game-ui-root .inventory-equipment-slot--drop-valid,
+.game-ui-root .inventory-equipment-slot--drop-valid:focus,
+.game-ui-root .inventory-equipment-slot--drop-valid:hover,
+.game-ui-root .inventory-external-drop--valid,
+.game-ui-root .inventory-external-drop--valid:focus {
+  border-color: var(--ui-valid); -unity-background-image-tint-color: rgb(105,221,143);
+  background-color: rgb(30,56,38);
+}
+.game-ui-root .inventory-cell--drop-invalid,
+.game-ui-root .inventory-equipment-slot--drop-invalid,
+.game-ui-root .inventory-equipment-slot--drop-invalid:focus,
+.game-ui-root .inventory-equipment-slot--drop-invalid:hover,
+.game-ui-root .inventory-external-drop--invalid,
+.game-ui-root .inventory-external-drop--invalid:focus {
+  border-color: var(--ui-danger); -unity-background-image-tint-color: rgb(231,109,99);
+  background-color: rgb(64,28,26);
+}
+/* Reuse the approved outer panel; no extra hit or focus elements. */
+.application-shell .front-end-panel, .application-shell .application-settings-panel,
+.application-shell .application-dialog, .application-shell .application-busy-card,
+.game-ui-root .game-pause-panel {
+  background-image: url("project://database/Assets/Art/Sprites/UI/Frames/ui_item_window_base.png?fileID=21300000&guid=fa17b4d2b1447a2479b6730851bc615f&type=3");
+  -unity-slice-left: 96; -unity-slice-right: 96; -unity-slice-top: 96; -unity-slice-bottom: 96; -unity-slice-scale: 0.125;
+  border-radius: 0; border-color: rgb(97,80,53);
+}
+.game-ui-root .item-tooltip, .game-ui-root .item-action-menu,
+.game-ui-root .interaction-prompt, .application-shell .application-toast-message {
+  background-image: url("project://database/Assets/Art/Sprites/UI/Frames/ui_hud_resource_base.png?fileID=21300000&guid=883832f8f53d9924a9e3c37a7c47c670&type=3");
+  -unity-slice-left: 96; -unity-slice-right: 96; -unity-slice-top: 96; -unity-slice-bottom: 96; -unity-slice-scale: 0.125;
+  border-radius: 0; border-color: var(--ui-edge); color: var(--ui-text);
+}
+.game-ui-root .item-workbench-section, .game-ui-root .inventory-grid-frame,
+.game-ui-root .item-source-section, .game-ui-root .crafting-selection-card,
+.game-ui-root .item-operation-bar, .game-ui-root .hud-center,
+.application-shell .application-settings-section {
+  border-radius: 0; background-color: rgb(15,19,23); border-color: rgb(78,70,57);
+}
+.game-ui-root .item-workbench-section-header,
+.application-shell .application-settings-header {
+  border-bottom-color: rgb(122,98,61); color: var(--ui-text);
+}
+.game-ui-root .item-detail-group-title,
+.application-shell .application-settings-section-title {
+  color: rgb(217,181,119);
+}
+.application-shell .application-settings-binding-row { background-color: rgb(25,28,31); }
+.application-shell .application-settings-binding-name,
+.application-shell .application-dialog-message, .application-shell .application-busy-label,
+.application-shell .application-settings-slider, .application-shell .application-settings-toggle,
+.application-shell .application-settings-dropdown { color: var(--ui-text); }
+.application-shell .application-dialog--fatal { border-color: var(--ui-danger); }
+.application-shell .application-toast { padding-bottom: 168px; }
+/* Shared form controls: keep Unity's navigation, value and popup behavior. */
+.application-shell .unity-base-popup-field__input,
+.application-shell .unity-text-field__input {
+  background-color: rgb(17,21,25); border-width: 1px; border-color: var(--ui-edge);
+  border-radius: 0; color: var(--ui-text);
+}
+.application-shell .unity-base-popup-field:focus .unity-base-popup-field__input,
+.application-shell .unity-text-field:focus .unity-text-field__input { border-color: var(--ui-focus); }
+.application-shell .unity-toggle__input > .unity-toggle__checkmark {
+  background-color: rgb(17,21,25); border-width: 1px; border-color: var(--ui-edge);
+  border-radius: 0; -unity-background-image-tint-color: var(--ui-focus);
+}
+.application-shell Toggle:focus .unity-toggle__checkmark,
+.game-ui-root .attribute-foldout .unity-toggle:focus { border-color: var(--ui-focus); }
+.application-shell .unity-base-slider__tracker,
+.game-ui-root .unity-base-slider__tracker { background-color: rgb(39,37,32); border-radius: 0; }
+.application-shell .unity-base-slider__dragger,
+.game-ui-root .unity-base-slider__dragger {
+  background-color: rgb(126,102,64); border-width: 1px; border-color: rgb(194,157,91); border-radius: 0;
+}
+.application-shell .unity-base-slider:focus .unity-base-slider__dragger,
+.game-ui-root .unity-base-slider:focus .unity-base-slider__dragger { border-color: var(--ui-focus); }
+.application-shell .application-toast-message { white-space: normal; }
+
+.application-shell .unity-scroller { background-color: rgb(16,19,24); }
+.application-shell .unity-scroller__low-button, .application-shell .unity-scroller__high-button { background-color: rgb(32,34,40); -unity-background-image-tint-color: rgb(191,163,116); }

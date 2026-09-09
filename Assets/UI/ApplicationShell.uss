@@ -111,6 +111,10 @@
 
 .front-end-secondary-actions > .front-end-action {
   flex-grow: 1;
+  flex-basis: 0;
+  min-width: 0;
+  height: auto;
+  min-height: 52px;
   font-size: 15px;
   white-space: normal;
 }

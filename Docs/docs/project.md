@@ -4,9 +4,9 @@
 
 `DarkFlare` 已完成首版最小循环、初步体验优化、`alpha 0.1` 封板和 `alpha 0.2.0–0.2.7` 基础设施封板。当前可从常驻 `Bootstrap.unity` 的 FrontEnd 新建或继续游戏，additive 进入 `Main.unity` 完成战斗、掉落、四槽装备、交易和打造，暂停后保存并安全返回前台；FrontEnd 可二次确认删除自动档，共享设置页可恢复完整默认设置，中英语言、音量、按键、设备 Glyph 和降低动态效果即时收敛。
 
-alpha 版本内的阶段使用三段式名称：`alpha 0.1` 的首个阶段为 `alpha 0.1.0`，后续依次为 `alpha 0.1.1`、`alpha 0.1.2`；`alpha 0.2` 同样从 `alpha 0.2.0` 开始。当前版本为 `0.3.2-alpha`；完成记录见[alpha 0.2 综合验收记录](./infrastructure/alpha-0.2-acceptance.md)与[计划归档](./plan/archive/README.md)。
+alpha 版本内的阶段使用三段式名称：`alpha 0.1` 的首个阶段为 `alpha 0.1.0`，后续依次为 `alpha 0.1.1`、`alpha 0.1.2`；`alpha 0.2` 同样从 `alpha 0.2.0` 开始。当前版本为 `0.3.3-alpha`；完成记录见[alpha 0.2 综合验收记录](./infrastructure/alpha-0.2-acceptance.md)与[计划归档](./plan/archive/README.md)。
 
-当前 [alpha 0.3 UI 迭代](./plan/alpha-0.3-plan.md)已完成 0.3.0 独立窗口 / 统一物品操作、0.3.1 独立属性详情及 0.3.2 暗黑像素 HUD。底部双资源仪表、技能当前状态、鼠标入口 / 手柄 Glyph、降低动态和 Session 回归完成，见[HUD 验收](./assets/acceptance/alpha-0.3.2-hud/README.md)。下一阶段为 0.3.3 统一 UI 视觉组件；当前仍为四槽装备，0.3.4 扩充十槽并为每个部位提供至少两件配置。
+当前 [alpha 0.3 UI 迭代](./plan/alpha-0.3-plan.md)已完成 0.3.0 独立窗口 / 统一物品操作、0.3.1 独立属性详情、0.3.2 暗黑像素 HUD 及 0.3.3 统一 UI 视觉组件。底部双资源仪表、技能当前状态、鼠标入口 / 手柄 Glyph、降低动态和 Session 回归完成，见[HUD 验收](./assets/acceptance/alpha-0.3.2-hud/README.md)。统一按钮、槽位、面板与 Shell 已交付，见[组件验收](./assets/acceptance/alpha-0.3.3-ui-style/README.md)；下一阶段为 0.3.4 十槽装备与内容补齐；当前仍为四槽装备，0.3.4 扩充十槽并为每个部位提供至少两件配置。
 
 ## 游戏定位
 

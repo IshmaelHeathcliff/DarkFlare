@@ -3,6 +3,7 @@
   <ui:Style src="project://database/Assets/UI/InputGlyphs.uss" />
   <ui:Style src="project://database/Assets/UI/Theme.uss" />
   <ui:Style src="project://database/Assets/UI/ApplicationShell.uss" />
+  <ui:Style src="project://database/Assets/UI/Components.uss" />
   <ui:VisualElement name="application-shell" class="application-shell" picking-mode="Ignore">
     <ui:VisualElement name="application-front-end" class="application-layer application-front-end" picking-mode="Position">
       <ui:VisualElement class="front-end-vignette" picking-mode="Ignore" />

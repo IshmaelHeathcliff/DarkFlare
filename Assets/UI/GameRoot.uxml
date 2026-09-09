@@ -18,6 +18,7 @@
   <ui:Template name="Shop" src="project://database/Assets/UI/Shop.uxml" />
   <ui:Template name="Crafting" src="project://database/Assets/UI/Crafting.uxml" />
   <ui:Template name="ItemDetail" src="project://database/Assets/UI/ItemDetail.uxml" />
+  <ui:Style src="project://database/Assets/UI/Components.uss" />
   <ui:VisualElement name="game-ui-root" class="game-ui-root" picking-mode="Ignore">
     <ui:Instance template="Hud" class="hud-template" picking-mode="Ignore" />
     <ui:VisualElement name="game-menu-overlay" class="game-menu-overlay" picking-mode="Position">

@@ -81,10 +81,16 @@ namespace DarkFlare.Tests
             yield return host.Accessibility.SetReduceMotionAsync(false).ToCoroutine();
             Assert.IsTrue(hud.IsWarningAnimating);
             Mouse mouse = InputSystem.AddDevice<Mouse>();
+            VisualElement hudEntry = root.Q("game-hud-inventory");
+            Rect entryBounds = hudEntry.worldBound;
+            float entryBorder = hudEntry.resolvedStyle.borderLeftWidth;
             _inputFixture.Set(mouse.position, PanelToScreen(root, root.Q("game-hud-inventory").worldBound.center));
             yield return null;
             _inputFixture.Press(mouse.leftButton);
             yield return null;
+            Assert.AreEqual(entryBounds, hudEntry.worldBound, "按下不能改变入口视觉位置或尺寸");
+            Assert.AreEqual(entryBorder, hudEntry.resolvedStyle.borderLeftWidth, "焦点 / 按下不应改变内容边界");
+            Assert.AreEqual(Vector3.one, hudEntry.resolvedStyle.scale.value, "按下不得缩放命中区域");
             _inputFixture.Release(mouse.leftButton);
             yield return null;
             yield return null;

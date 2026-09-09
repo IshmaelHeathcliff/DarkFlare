@@ -1,5 +1,7 @@
 # 战斗 HUD
 
+0.3.3 的入口按钮、交互提示和中区分隔接入公共 `Components.uss`，复用已验证的资源底板与 Glyph；按下不缩放，Toast 位于资源仪表上方并支持长文本换行。资源、冷却和输入所有权仍遵循下列合同，见[统一组件验收](./assets/acceptance/alpha-0.3.3-ui-style/README.md)。
+
 ## 布局与内容
 
 Main 的 `GameRoot.uxml` 组合 `Hud.uxml`，共享原有 UIDocument、PanelSettings 与 Application EventSystem。1920×1080 下仪表位于 y=932–1068：左右各 300×136 的生命 / 法力底板，中间 840×136 的技能与窗口入口区，间距 12。既有物品窗口宽度与网格保持原值。

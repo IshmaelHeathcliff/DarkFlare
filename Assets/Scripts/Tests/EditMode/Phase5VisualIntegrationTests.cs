@@ -70,6 +70,8 @@ namespace DarkFlare.Tests
             $"{UiFrameRoot}/ui_inventory_slot_disabled.png",
             $"{UiFrameRoot}/ui_item_window_base.png",
             $"{UiFrameRoot}/ui_hud_resource_base.png",
+            $"{UiFrameRoot}/ui_control_base.png",
+            $"{UiFrameRoot}/ui_slot_base.png",
         };
 
         static readonly string[] WorldPropPaths =
@@ -254,6 +256,11 @@ namespace DarkFlare.Tests
             {
                 AssertSpriteContract(path, 1254, 1254, 100f,
                     new Vector2(0.5f, 0.5f), new Vector4(96f, 96f, 96f, 96f));
+            }
+            foreach (string path in new[] { UiFramePaths[6], UiFramePaths[7] })
+            {
+                AssertSpriteContract(path, 1254, 1254, 100f,
+                    new Vector2(0.5f, 0.5f), new Vector4(32f, 32f, 32f, 32f));
             }
             AssertSpriteContract(
                 UiFramePaths[3],

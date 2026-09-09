@@ -1,10 +1,12 @@
 # 游戏状态、场景流与应用 UI 外壳
 
-> 状态：`alpha 0.2.4` 已完成；`alpha 0.2.7` 已补齐删除 / 重置与封板矩阵；最近更新：2026-08-26
+> 状态：`alpha 0.2.4` 已完成；`alpha 0.2.7` 已补齐删除 / 重置；`alpha 0.3.3` 统一视觉组件；最近更新：2026-09-09
 >
 > 参考：[归档计划](../plan/archive/alpha-0.2.4-game-state-scene-flow-ui-shell-plan.md) · [长期运行时契约](./alpha-0.2-runtime-contract.md) · [应用生命周期与会话作用域](./application-lifecycle.md)
 
 ## 模块目标
+
+FrontEnd、Settings、Modal、Busy、Fatal、Toast 使用 Main 共用材质与按钮状态，表单保留原生输入行为。下拉菜单挂在 Panel 根部，其深色规则置于共享运行主题；Toast 支持长文本换行。前台版本直接读取 `Application.version`，不维护硬编码旧版本。皮肤不改变输入 / 暂停 lease 与模态返回流程。见[组件规范](../ui-component-style.md)。
 
 本模块把应用前台、玩法场景和单次 Session 串成唯一、可取消、可恢复的玩家路径。`SceneFlowService` 只决定场景与 Session 事务，`ApplicationHost` 继续负责生命周期和底层 Session 提交，Application UI Shell 只负责玩家表现；三者不互相越权。
 

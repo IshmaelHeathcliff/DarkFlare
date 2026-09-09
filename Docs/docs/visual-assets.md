@@ -1,10 +1,16 @@
 # 视觉资产清单
 
+## Alpha 0.3.3 组件增量
+
+新增 `ui_control_base.png` 与 `ui_slot_base.png`：1254×1254 完整原图、Sprite Single / Full Rect、PPU 100、中心 Pivot、Point、无压缩 / Mipmap，Border 32、Slice Scale 0.125。`Components.uss` 为 Main / Shell 共用按钮与物品槽皮肤入口；外框、详情和提示复用现有两张大底板。每张新图均有真实消费者，固定形状状态由 tint / border 表达。
+
+详见[资产合同与验收](./assets/acceptance/alpha-0.3.3-ui-style/README.md)及[生成记录](./assets/acceptance/alpha-0.3.3-ui-style/generation-record.md)。本增量不改变下方历史迁移计数。
+
 ## Alpha 0.3.2 HUD 增量
 
 新增 `Assets/Art/Sprites/UI/Frames/ui_hud_resource_base.png`，供生命 / 法力仪表共用。原生 1254×1254、Sprite Single、Full Rect、PPU 100、中心 Pivot、Point、无压缩 / Mipmap，Border 96、Slice Scale 0.125。由 `Hud.uss` 引用并通过原 GameRoot 依赖加载，不新增资源句柄；输入 Glyph 复用已有 8 张图片，样式抽到 `InputGlyphs.uss` 供 HUD 与 Shell 共用。
 
-正式资源底板见[资产合同](./assets/acceptance/alpha-0.3.2-hud/asset-contract.md)及[审计与运行验收](./assets/acceptance/alpha-0.3.2-hud/README.md)。下方数量是 alpha 0.1.7 历史批次，两个 alpha 0.3 底板增量单独记录。
+正式资源底板见[资产合同](./assets/acceptance/alpha-0.3.2-hud/asset-contract.md)及[审计与运行验收](./assets/acceptance/alpha-0.3.2-hud/README.md)。下方数量是 alpha 0.1.7 历史批次，alpha 0.3 底板增量单独记录。
 
 ## Alpha 0.3.0 窗口底板增量
 

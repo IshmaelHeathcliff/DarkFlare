@@ -74,3 +74,5 @@
 | [alpha 0.3.0 统一物品操作与事务](./alpha-0.3.0-unified-item-actions-plan.md) | alpha 0.3.0 操作切片 | [物品 UI 工作台](../../item-ui-workbench.md)、[验收记录](../../assets/acceptance/alpha-0.3.0-actions/README.md) |
 
 最近归档日期：2026-09-08。
+
+- [alpha 0.3.3 统一 UI 视觉组件](./alpha-0.3.3-unified-ui-visual-plan.md)：已完成，见[组件验收](../../assets/acceptance/alpha-0.3.3-ui-style/README.md)。

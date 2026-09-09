@@ -6,6 +6,8 @@
 
 Main 玩法 UI 复用一个 `UIDocument` 和一个 `PanelSettings`；常驻 Bootstrap 持有 Application Shell 与唯一 `EventSystem`。界面 Controller 通过 Query、Command 与领域 Event 接入 QFramework，不直接修改运行时 Model。
 
+Main / Shell 在模块 USS 后加载公共 `Components.uss`，按钮按下只改变材质和轮廓，不缩放或改变边框盒尺寸。物品 Focus / Hover 服从共享选择，投放反馈优先；下拉弹层通过共享 Panel 的运行主题着色。皮肤不新增焦点 / 命中层，见[组件规范](./ui-component-style.md)。
+
 ## 输入层
 
 `Assets/Settings/InputSystem_Actions.inputactions` 是唯一输入源，并生成 `InputSystem_Actions.cs`。运行时只由 Application 级 `ApplicationInputService` 创建并持有一个 `InputSystem_Actions` 实例；Session 级 `GameInput` 作为 `IUtility` Adapter 注册到 `GameArchitecture`，只转发既有玩法 API，不创建或销毁 Action Asset。

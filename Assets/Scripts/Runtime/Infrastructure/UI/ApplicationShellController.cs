@@ -6,7 +6,6 @@ namespace DarkFlare
     public sealed class ApplicationShellController : IDisposable
     {
         const string BrandName = "DARKFLARE";
-        const string AlphaVersion = "alpha 0.2.7";
 
         readonly UIDocument _document;
         readonly ApplicationHost _host;
@@ -94,7 +93,7 @@ namespace DarkFlare
                 ShowOperationBusy,
                 HideBusy);
             _frontEndBrand.text = BrandName;
-            _frontEndVersion.text = AlphaVersion;
+            _frontEndVersion.text = UnityEngine.Application.version;
             _frontEndController.Bind();
             _settingsController.Bind();
             _busyCancel.clicked += OnBusyCancel;

@@ -210,6 +210,13 @@ namespace DarkFlare.Tests
                         }, localeMode, resolution);
                         AssertVisibleTextFits(root, localeMode, resolution);
 
+                        Button quit = FindButton("front-end-quit");
+                        Button delete = FindButton("front-end-delete-save");
+                        Assert.LessOrEqual(quit.worldBound.xMax, quit.parent.worldBound.xMax + 1f,
+                            "前台次要操作不能超出面板内容边界");
+                        Assert.LessOrEqual(delete.worldBound.xMax, quit.worldBound.xMin,
+                            "删除与退出按钮不能重叠");
+
                         shell.OpenSettings();
                         yield return null;
 
@@ -250,6 +257,16 @@ namespace DarkFlare.Tests
                         AssertVisibleTextFits(root, localeMode, resolution);
                         InvokeButton(FindButton("application-modal-cancel"));
                         yield return null;
+                        shell.ShowToast(LocalizedMessage.Ui("menu.return_confirm.message"));
+                        yield return null;
+
+                        if (localeMode == "qps-ploc")
+                        {
+                            ApplyPseudoLocalization(root);
+                            yield return null;
+                        }
+
+                        AssertVisibleTextFits(root, localeMode, resolution);
                     }
                 }
             }

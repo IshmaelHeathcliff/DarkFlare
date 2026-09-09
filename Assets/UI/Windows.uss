@@ -45,14 +45,13 @@
 .game-menu-save-actions { flex-direction: column; align-self: stretch; }
 .game-menu-save-action { height: 44px; margin: 6px; white-space: normal; }
 .game-menu-save-status { min-height: 30px; white-space: normal; }
-.game-hud-pause { position: absolute; right: 24px; top: 24px; width: 90px; height: 36px; }
 .item-tooltip { width: 400px; height: auto; min-height: 0; max-height: 824px; }
 
 .game-menu-panel { margin-right: 416px; }
 
 .inventory-grid-frame { height: 310px; min-height: 310px; margin-bottom: 0; }
 .item-workbench-inventory .item-workbench-section-header { flex-shrink: 0; }
-.item-window-close, .game-hud-pause { background-color: rgb(28,32,39); color: rgb(225,211,184); border-color: rgb(91,76,53); border-width: 1px; }
+.item-window-close { background-color: rgb(28,32,39); color: rgb(225,211,184); border-color: rgb(91,76,53); border-width: 1px; }
 .item-window-close { width: 130px; flex-shrink: 0; }
 .item-source-name { min-width: 0; flex-shrink: 1; }
 .item-source-section .item-context-subtitle { min-height: 24px; margin-top: 2px; margin-bottom: 2px; font-size: 16px; }
@@ -60,12 +59,11 @@
 .inventory-item.inventory-item--selected, .shop-item.shop-item--selected, .inventory-equipment-slot.inventory-equipment-slot--selected, .item-source-row--selected.item-source-row, .item-source-row--selected.crafting-input-slot { border-width: 2px; border-color: rgb(208,164,88); }
 
 .item-window .item-context-action { padding-top: 3px; padding-bottom: 3px; }
-.item-window-close, .game-hud-pause { padding-top: 2px; padding-bottom: 2px; }
+.item-window-close { padding-top: 2px; padding-bottom: 2px; }
 .item-source-name { -unity-text-align: middle-left; }
 
 .item-window-close { width: 36px; min-width: 36px; height: 32px; padding: 2px; align-items: center; justify-content: center; }
 .item-window-close-icon { width: 22px; height: 22px; }
-.game-hud-pause { width: auto; min-width: 90px; padding-left: 10px; padding-right: 10px; }
 .item-window-title { font-size: 20px; }
 
 .crafting-window .item-context-action { height: auto; min-height: 44px; }
