@@ -23,6 +23,12 @@
           <ui:Button name="inventory-slot-armor" text="" class="inventory-equipment-slot equipment-slot--armor" />
           <ui:Button name="inventory-slot-ring-left" text="" class="inventory-equipment-slot equipment-slot--ring-left" />
           <ui:Button name="inventory-slot-ring-right" text="" class="inventory-equipment-slot equipment-slot--ring-right" />
+          <ui:Button name="inventory-slot-head" text="" class="inventory-equipment-slot equipment-slot--head" />
+          <ui:Button name="inventory-slot-hands" text="" class="inventory-equipment-slot equipment-slot--hands" />
+          <ui:Button name="inventory-slot-legs" text="" class="inventory-equipment-slot equipment-slot--legs" />
+          <ui:Button name="inventory-slot-off-hand" text="" class="inventory-equipment-slot equipment-slot--off-hand" />
+          <ui:Button name="inventory-slot-necklace" text="" class="inventory-equipment-slot equipment-slot--necklace" />
+          <ui:Button name="inventory-slot-belt" text="" class="inventory-equipment-slot equipment-slot--belt" />
         </ui:VisualElement>
       </ui:VisualElement>
       <ui:Label text="" class="item-workbench-help">

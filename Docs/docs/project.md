@@ -6,7 +6,7 @@
 
 alpha 版本内的阶段使用三段式名称：`alpha 0.1` 的首个阶段为 `alpha 0.1.0`，后续依次为 `alpha 0.1.1`、`alpha 0.1.2`；`alpha 0.2` 同样从 `alpha 0.2.0` 开始。当前版本为 `0.3.3-alpha`；完成记录见[alpha 0.2 综合验收记录](./infrastructure/alpha-0.2-acceptance.md)与[计划归档](./plan/archive/README.md)。
 
-当前 [alpha 0.3 UI 迭代](./plan/alpha-0.3-plan.md)已完成 0.3.0 独立窗口 / 统一物品操作、0.3.1 独立属性详情、0.3.2 暗黑像素 HUD 及 0.3.3 统一 UI 视觉组件。底部双资源仪表、技能当前状态、鼠标入口 / 手柄 Glyph、降低动态和 Session 回归完成，见[HUD 验收](./assets/acceptance/alpha-0.3.2-hud/README.md)。统一按钮、槽位、面板与 Shell 已交付，见[组件验收](./assets/acceptance/alpha-0.3.3-ui-style/README.md)；下一阶段为 0.3.4 十槽装备与内容补齐；当前仍为四槽装备，0.3.4 扩充十槽并为每个部位提供至少两件配置。
+当前 [alpha 0.3 UI 迭代](./plan/alpha-0.3-plan.md)已完成 0.3.0–0.3.3；0.3.4 十槽装备、每槽至少两件配置及 core v1 → v2 旧档兼容已实现，全量 EditMode 434/434、PlayMode 63/63 通过。Editor 三语言与 Windows Player 行为验收通过；可见 Player 画面及退出释放提示待核对，尚未更新发布版本或归档总计划。见[本轮验收进度](./assets/acceptance/alpha-0.3.4-equipment/README.md)。
 
 ## 游戏定位
 
@@ -81,17 +81,17 @@ Alpha 0.3 前置[测试审计](./testing/test-suite-audit.md)已完成；新增�
 
 ## 当前资源与配置
 
-- `Assets/Data/Preset` 已有玩家、技能、怪物、刷怪、掉落、物品、词条、商人和打造配置；唯一正式内容目录 `core` v1 收录 90 个配置。
+- `Assets/Data/Preset` 已有玩家、技能、怪物、刷怪、掉落、物品、词条、商人和打造配置；唯一正式内容目录 `core` v2 收录 104 个配置，其中二十件独立装备覆盖十槽。
 - 玩家、怪物、投射物和掉落物 Prefab 位于 `Assets/Prefabs`，通过 Addressables 加载。
 - Prefab、Sprite、Audio 与 Application 配置统一通过 Resource Service 按稳定键单航班加载；Application / Session owner 持有 Asset Lease，并在关闭后回到资源基线。
 - `Assets/UI` 已有 `GameRoot`、`Hud`、`Inventory`、`Shop`、`Crafting` 的 UXML / USS。
 - `Assets/UI` 另有 Application Shell UXML / USS；`Assets/Settings/Scenes/SceneFlowConfiguration.asset` 集中注册 Bootstrap 与 Main。
 - 正式本地存档写入 `Application.persistentDataPath/DarkFlare/Saves/<slot>`；项目 Assets 中不保存玩家运行时数据。
 - 用户设置写入独立的 `Application.persistentDataPath/DarkFlare/Settings`；当前开放语言、四类音量与静音、输入重绑定、Glyph 偏好和降低动态效果。
-- `Assets/Localization` 已有 `ui`、`system`、`items`、`stats`、`affixes`、`monsters` 六张中英表；86 个正式内容名称引用与字体 fallback 均由策略测试校验。
+- `Assets/Localization` 已有 `ui`、`system`、`items`、`stats`、`affixes`、`monsters` 六张中英表；正式内容名称引用与字体 fallback 均由策略测试校验。
 - `Assets/Art/UI/InputGlyphs` 保存 8 张独立 64×64 单 Sprite Glyph；`Assets/Audio` 保存四组 Mixer、Addressables 配置和首个 `ui.confirm` Cue。
-- 15 个 DarkFlare 自有 Addressables 条目位于四个 `DarkFlare-*` 组，使用规范小写地址和 `df.*` 生命周期 / 类型 Label；默认组为空。
-- 地图、玩家、三种怪物、七件装备、商人、打造台和运行时 UI 已完成首批视觉接入；`PrototypeSquare.png` 仅保留为调试回退。
+- DarkFlare 自有 Addressables 条目位于 `DarkFlare-*` 组，使用规范小写地址和 `df.*` 生命周期 / 类型 Label；默认组为空。
+- 地图、玩家、三种怪物、二十件装备、商人、打造台和运行时 UI 已完成视觉接入；`PrototypeSquare.png` 仅保留为调试回退。
 
 ## 当前边界
 
@@ -100,7 +100,7 @@ Alpha 0.3 前置[测试审计](./testing/test-suite-audit.md)已完成；新增�
 - 当前场景流只覆盖常驻 Bootstrap 与单一 Main 玩法场景；尚无多地图、关卡选择、Profile 选择或 Addressables Scene。
 - 当前已有 `auto` 槽位、确定性 JSON、Payload SHA-256、两代有效文件保留、损坏回退、单写者协调、Restore Session、二次确认删除和退出前有界 Flush；尚无手动槽位管理、Profile 选择或云同步。
 - Settings V1 已有语言、音频、输入与 Reduce Motion 真实消费者；Text Scale、High Contrast、Screen Shake 和 Display Mode 仍为数据预留，不在玩家 UI 中开放。
-- 背包已支持拖拽换位、单目标原子交换和键鼠 / 手柄拿起放置，尚无旋转、堆叠和重量；装备已实现武器、护甲、左戒指和右戒指四槽及精确拖入 / 拖回，但没有耐久、套装、完整纸娃娃或唯一装备特效。
+- 背包已支持拖拽换位、单目标原子交换和键鼠 / 手柄拿起放置，尚无旋转、堆叠和重量；装备已实现十槽及精确拖入 / 拖回，每槽至少两件正式基底，但没有耐久、套装、完整纸娃娃或唯一装备特效。
 - 交易没有回购或多商人独立库存；打造没有配方、材料和批量操作。
 - 战斗内容密度、场景规模和 UI 功能深度仍属于原型基线；现有首批视觉不视为最终美术质量。
 

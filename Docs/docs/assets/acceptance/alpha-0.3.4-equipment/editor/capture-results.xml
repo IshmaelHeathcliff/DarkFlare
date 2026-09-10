@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="1" result="Passed" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-10 10:33:55Z" end-time="2026-09-10 10:34:03Z" duration="8.2151917">
+  <test-suite type="TestSuite" id="1103" name="DarkFlare" fullname="DarkFlare" runstate="Runnable" testcasecount="68" result="Passed" start-time="2026-09-10 10:33:55Z" end-time="2026-09-10 10:34:03Z" duration="8.215192" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <test-suite type="Assembly" id="1091" name="DarkFlare.Tests.PlayMode.dll" fullname="E:/PARA/Projects/Unity/DarkfFlare/UnityProject/Library/ScriptAssemblies/DarkFlare.Tests.PlayMode.dll" runstate="Runnable" testcasecount="64" result="Passed" start-time="2026-09-10 10:33:55Z" end-time="2026-09-10 10:34:03Z" duration="8.190936" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="22316" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestSuite" id="1092" name="DarkFlare" fullname="DarkFlare" runstate="Runnable" testcasecount="64" result="Passed" start-time="2026-09-10 10:33:55Z" end-time="2026-09-10 10:34:03Z" duration="8.188320" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="SetUpFixture" id="1030" name="Tests" fullname="DarkFlare.Tests.Alpha027PlayModeDataEnvironmentFixture" classname="DarkFlare.Tests.Alpha027PlayModeDataEnvironmentFixture" runstate="Runnable" testcasecount="64" result="Passed" start-time="2026-09-10 10:33:55Z" end-time="2026-09-10 10:34:03Z" duration="8.181908" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestFixture" id="1055" name="EquipmentAcceptanceCaptureTests" fullname="DarkFlare.Tests.EquipmentAcceptanceCaptureTests" classname="DarkFlare.Tests.EquipmentAcceptanceCaptureTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-09-10 10:33:55Z" end-time="2026-09-10 10:34:03Z" duration="8.147369" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1056" name="CaptureNormalEditorFlow" fullname="DarkFlare.Tests.EquipmentAcceptanceCaptureTests.CaptureNormalEditorFlow" methodname="CaptureNormalEditorFlow" classname="DarkFlare.Tests.EquipmentAcceptanceCaptureTests" runstate="Runnable" seed="1837631798" result="Passed" start-time="2026-09-10 10:33:55Z" end-time="2026-09-10 10:34:03Z" duration="8.132558" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="Timeout" value="300000" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[[gameplay.combat.message] [GameplayRandomSystem] 根种子: -1689520500（随机）
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 开始预热资源
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 942c099ccdd7eed428f0ac0b1694f6ff -> Player
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 3b6e21dfbc7f54e4f9e0312efd6c6af5 -> Projectile_Default
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 67b8ae84734f42f4792a4190aad88049 -> Monster_Basic
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000002 -> Monster_Swift
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000003 -> Monster_Heavy
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 07152fe41aa52d740b4d1df2049f9f3d -> LootPickup
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 1a1e12f2b0381f54c829d3ef4165a2de -> weapon_greatsword
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 9b427dc6b96c7bc4ba30998360436d86 -> weapon_war_axe
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 7ea0a2ad891e6cd4891051d02b338cf0 -> armor_leather
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: b25638dc709c3184cabc93ae9de79ee2 -> armor_plate
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: f597b10c126e825418717edee921bd16 -> ring_iron
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: d8c5c86107920ab4d9e117e19d6ed11e -> ring_jade
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: bf07871323670d148819cd1d7e079297 -> ring_obsidian
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: b3806fb8c8738174487f9f3e67c2f3f5 -> amber_amulet
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: c0e3f5b5a15ce4145b503f6d14008c18 -> chain_belt
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 8ad010ef0c777404f88b6750ceff0ce8 -> hunter_gloves
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 9fad0c26610c6044391a45574b771208 -> iron_gauntlets
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: d11b4ff31ee5f1b468f54a1ae53d0ecf -> iron_helm
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: b62b575d086885c4db4a12d760f0ca5e -> iron_shield
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 8f112e6ebb039bf499e46e941051893e -> leather_belt
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 30fc8a5dea98e7442930045f376687c7 -> leather_hood
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 83510c26851949145b53ddaa7fd05749 -> plated_greaves
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: a79ac64f5b2207c4dad1ea9dbd87f9ec -> ruby_ring
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 4a332dccf7ba1c243bf7ec03103acb8f -> scout_boots
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: dada93ae602fc6b4fac4c23ee7b69a84 -> silver_pendant
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: b534d7eb703c15f45931eb3923c04af1 -> warding_buckler
+[gameplay.combat.message] [EquipmentSystem] player 的主武器已装备 大剑
+[gameplay.trading.message] [TradingSystem] 商人库存初始化完成，共 20 件
+[gameplay.trading.message] [TradingSystem] 发放初始金币 100，当前金币 100
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 新游戏 Session 初始化完成
+[gameplay.ui.message] [InventoryPanelController] 背包与四槽装备面板初始化完成
+[gameplay.ui.message] [GameMenuController] 游戏菜单初始化完成
+[gameplay.ui.message] [ShopPanelController] 商店面板初始化完成
+[gameplay.ui.message] [CraftingPanelController] 随机打造工作台初始化完成
+[gameplay.combat.message] [SpawnSystem] 生成怪物 wasteland_wraith，生成种子 -1188980125，实例根种子 -938196686，词条 monster_armored[armor:Flat=30.51];monster_swift[move_speed:Increase=11.56]，最终属性 生命=57.09,护甲=30.51,闪避=15,移速=2.9,火抗=0,冰抗=0,电抗=0
+[gameplay.trading.message] [TradingSystem] 发放初始金币 100000，当前金币 100100
+[gameplay.trading.message] [TradingSystem] 购买 皮甲[Normal] 花费 36 金币，当前金币 100064
+[gameplay.combat.message] [EquipmentSystem] player 的身体已从指定背包格装备 皮甲
+[gameplay.trading.message] [TradingSystem] 购买 铁指环[Normal] 花费 30 金币，当前金币 100034
+[gameplay.combat.message] [EquipmentSystem] player 的左戒指已从指定背包格装备 铁指环
+[gameplay.trading.message] [TradingSystem] 购买 翡翠戒指[Normal] 花费 33 金币，当前金币 100001
+[gameplay.combat.message] [EquipmentSystem] player 的右戒指已从指定背包格装备 翡翠戒指
+[gameplay.trading.message] [TradingSystem] 购买 铁盔[Normal] 花费 42 金币，当前金币 99959
+[gameplay.combat.message] [EquipmentSystem] player 的头部已从指定背包格装备 铁盔
+[gameplay.trading.message] [TradingSystem] 购买 猎手手套[Normal] 花费 36 金币，当前金币 99923
+[gameplay.combat.message] [EquipmentSystem] player 的手部已从指定背包格装备 猎手手套
+[gameplay.trading.message] [TradingSystem] 购买 铁胫甲[Normal] 花费 45 金币，当前金币 99878
+[gameplay.combat.message] [EquipmentSystem] player 的腿部已从指定背包格装备 铁胫甲
+[gameplay.trading.message] [TradingSystem] 购买 铁盾[Normal] 花费 51 金币，当前金币 99827
+[gameplay.combat.message] [EquipmentSystem] player 的副手已从指定背包格装备 铁盾
+[gameplay.trading.message] [TradingSystem] 购买 琥珀护符[Normal] 花费 44 金币，当前金币 99783
+[gameplay.combat.message] [EquipmentSystem] player 的项链已从指定背包格装备 琥珀护符
+[gameplay.trading.message] [TradingSystem] 购买 锁链腰带[Normal] 花费 41 金币，当前金币 99742
+[gameplay.combat.message] [EquipmentSystem] player 的腰带已从指定背包格装备 锁链腰带
+[gameplay.trading.message] [TradingSystem] 购买 战斧[Normal] 花费 48 金币，当前金币 99694
+[gameplay.trading.message] [TradingSystem] 出售 战斧[Normal] 获得 12 金币，当前金币 99706
+[gameplay.trading.message] [TradingSystem] 购买 大剑[Normal] 花费 45 金币，当前金币 99661
+[gameplay.crafting.message] [CraftingSystem] UpgradeRarity/Any 成功，根种子 2060379233，花费 15，大剑[Magic] 当前词条 1 条，剩余金币 99646
+[gameplay.trading.message] [TradingSystem] 购买 板甲[Normal] 花费 54 金币，当前金币 99592
+[gameplay.crafting.message] [CraftingSystem] UpgradeRarity/Any 成功，根种子 -1585673527，花费 15，板甲[Magic] 当前词条 1 条，剩余金币 99577
+[gameplay.trading.message] [TradingSystem] 出售 板甲[Magic] 获得 36 金币，当前金币 99613
+[gameplay.trading.message] [TradingSystem] 购买 黑曜戒指[Normal] 花费 42 金币，当前金币 99571
+[gameplay.crafting.message] [CraftingSystem] UpgradeRarity/Any 成功，根种子 1337216535，花费 15，黑曜戒指[Magic] 当前词条 2 条，剩余金币 99556
+[gameplay.trading.message] [TradingSystem] 出售 黑曜戒指[Magic] 获得 33 金币，当前金币 99589
+[gameplay.trading.message] [TradingSystem] 购买 铁护手[Normal] 花费 39 金币，当前金币 99550
+[gameplay.crafting.message] [CraftingSystem] UpgradeRarity/Any 成功，根种子 -594528867，花费 15，铁护手[Magic] 当前词条 2 条，剩余金币 99535
+[gameplay.trading.message] [TradingSystem] 出售 铁护手[Magic] 获得 31 金币，当前金币 99566
+[gameplay.trading.message] [TradingSystem] 购买 厚皮腰带[Normal] 花费 35 金币，当前金币 99531
+[gameplay.crafting.message] [CraftingSystem] UpgradeRarity/Any 成功，根种子 1544972314，花费 15，厚皮腰带[Magic] 当前词条 2 条，剩余金币 99516
+[gameplay.trading.message] [TradingSystem] 出售 厚皮腰带[Magic] 获得 27 金币，当前金币 99543
+[gameplay.trading.message] [TradingSystem] 购买 猎手兜帽[Normal] 花费 38 金币，当前金币 99505
+[gameplay.crafting.message] [CraftingSystem] UpgradeRarity/Any 成功，根种子 -278115040，花费 15，猎手兜帽[Magic] 当前词条 2 条，剩余金币 99490
+[gameplay.trading.message] [TradingSystem] 出售 猎手兜帽[Magic] 获得 30 金币，当前金币 99520
+[gameplay.trading.message] [TradingSystem] 购买 红玉戒指[Normal] 花费 45 金币，当前金币 99475
+[gameplay.crafting.message] [CraftingSystem] UpgradeRarity/Any 成功，根种子 1024357606，花费 15，红玉戒指[Magic] 当前词条 1 条，剩余金币 99460
+[gameplay.trading.message] [TradingSystem] 出售 红玉戒指[Magic] 获得 30 金币，当前金币 99490
+[gameplay.trading.message] [TradingSystem] 购买 斥候长靴[Normal] 花费 42 金币，当前金币 99448
+[gameplay.crafting.message] [CraftingSystem] UpgradeRarity/Any 成功，根种子 -336102260，花费 15，斥候长靴[Magic] 当前词条 2 条，剩余金币 99433
+[gameplay.trading.message] [TradingSystem] 出售 斥候长靴[Magic] 获得 33 金币，当前金币 99466
+[gameplay.trading.message] [TradingSystem] 购买 银月吊坠[Normal] 花费 47 金币，当前金币 99419
+[gameplay.crafting.message] [CraftingSystem] UpgradeRarity/Any 成功，根种子 -1982096082，花费 15，银月吊坠[Magic] 当前词条 2 条，剩余金币 99404
+[gameplay.trading.message] [TradingSystem] 出售 银月吊坠[Magic] 获得 37 金币，当前金币 99441
+[gameplay.trading.message] [TradingSystem] 购买 守护圆盾[Normal] 花费 48 金币，当前金币 99393
+[gameplay.crafting.message] [CraftingSystem] UpgradeRarity/Any 成功，根种子 -1749936803，花费 15，守护圆盾[Magic] 当前词条 1 条，剩余金币 99378
+[gameplay.trading.message] [TradingSystem] 出售 守护圆盾[Magic] 获得 32 金币，当前金币 99410
+[gameplay.crafting.message] [CraftingSystem] UpgradeRarity/Any 成功，根种子 931174250，花费 60，大剑[Rare] 当前词条 2 条，剩余金币 99350
+[gameplay.crafting.message] [CraftingSystem] AddAffix/Any 成功，根种子 1407300151，花费 60，大剑[Rare] 当前词条 3 条，剩余金币 99290
+[gameplay.crafting.message] [CraftingSystem] AddAffix/Any 成功，根种子 -427630464，花费 60，大剑[Rare] 当前词条 4 条，剩余金币 99230
+[gameplay.crafting.message] [CraftingSystem] AddAffix/Any 成功，根种子 725141046，花费 60，大剑[Rare] 当前词条 5 条，剩余金币 99170
+[gameplay.crafting.message] [CraftingSystem] AddAffix/Any 成功，根种子 984138831，花费 60，大剑[Rare] 当前词条 6 条，剩余金币 99110
+[gameplay.crafting.message] [CraftingSystem] RerollAffixValues/Any 成功，根种子 -1125679466，花费 80，大剑[Rare] 当前词条 6 条，剩余金币 99030
+[gameplay.combat.message] [LootSystem] 丢弃 大剑[Rare] 词条7条，世界身份 ccbbe9d4657e4e1f849e9350d9b34593:drop:1
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 942c099ccdd7eed428f0ac0b1694f6ff -> Player
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 3b6e21dfbc7f54e4f9e0312efd6c6af5 -> Projectile_Default
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 67b8ae84734f42f4792a4190aad88049 -> Monster_Basic
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000002 -> Monster_Swift
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000003 -> Monster_Heavy
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 07152fe41aa52d740b4d1df2049f9f3d -> LootPickup
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 83510c26851949145b53ddaa7fd05749 -> plated_greaves
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: d8c5c86107920ab4d9e117e19d6ed11e -> ring_jade
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 1a1e12f2b0381f54c829d3ef4165a2de -> weapon_greatsword
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: b3806fb8c8738174487f9f3e67c2f3f5 -> amber_amulet
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 8ad010ef0c777404f88b6750ceff0ce8 -> hunter_gloves
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 7ea0a2ad891e6cd4891051d02b338cf0 -> armor_leather
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: b62b575d086885c4db4a12d760f0ca5e -> iron_shield
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: d11b4ff31ee5f1b468f54a1ae53d0ecf -> iron_helm
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: c0e3f5b5a15ce4145b503f6d14008c18 -> chain_belt
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: f597b10c126e825418717edee921bd16 -> ring_iron
+[gameplay.ui.message] [InventoryPanelController] 背包与四槽装备面板初始化完成
+[gameplay.ui.message] [GameMenuController] 游戏菜单初始化完成
+[gameplay.ui.message] [ShopPanelController] 商店面板初始化完成
+[gameplay.ui.message] [CraftingPanelController] 随机打造工作台初始化完成
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 942c099ccdd7eed428f0ac0b1694f6ff -> Player
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 3b6e21dfbc7f54e4f9e0312efd6c6af5 -> Projectile_Default
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 67b8ae84734f42f4792a4190aad88049 -> Monster_Basic
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000002 -> Monster_Swift
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000003 -> Monster_Heavy
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 07152fe41aa52d740b4d1df2049f9f3d -> LootPickup
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 83510c26851949145b53ddaa7fd05749 -> plated_greaves
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: d8c5c86107920ab4d9e117e19d6ed11e -> ring_jade
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 1a1e12f2b0381f54c829d3ef4165a2de -> weapon_greatsword
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: b3806fb8c8738174487f9f3e67c2f3f5 -> amber_amulet
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 8ad010ef0c777404f88b6750ceff0ce8 -> hunter_gloves
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 7ea0a2ad891e6cd4891051d02b338cf0 -> armor_leather
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: b62b575d086885c4db4a12d760f0ca5e -> iron_shield
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: d11b4ff31ee5f1b468f54a1ae53d0ecf -> iron_helm
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: c0e3f5b5a15ce4145b503f6d14008c18 -> chain_belt
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: f597b10c126e825418717edee921bd16 -> ring_iron
+[gameplay.ui.message] [InventoryPanelController] 背包与四槽装备面板初始化完成
+[gameplay.ui.message] [GameMenuController] 游戏菜单初始化完成
+[gameplay.ui.message] [ShopPanelController] 商店面板初始化完成
+[gameplay.ui.message] [CraftingPanelController] 随机打造工作台初始化完成
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 942c099ccdd7eed428f0ac0b1694f6ff -> Player
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 3b6e21dfbc7f54e4f9e0312efd6c6af5 -> Projectile_Default
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 67b8ae84734f42f4792a4190aad88049 -> Monster_Basic
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000002 -> Monster_Swift
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000003 -> Monster_Heavy
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 07152fe41aa52d740b4d1df2049f9f3d -> LootPickup
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 83510c26851949145b53ddaa7fd05749 -> plated_greaves
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: d8c5c86107920ab4d9e117e19d6ed11e -> ring_jade
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 1a1e12f2b0381f54c829d3ef4165a2de -> weapon_greatsword
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: b3806fb8c8738174487f9f3e67c2f3f5 -> amber_amulet
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 8ad010ef0c777404f88b6750ceff0ce8 -> hunter_gloves
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 7ea0a2ad891e6cd4891051d02b338cf0 -> armor_leather
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: b62b575d086885c4db4a12d760f0ca5e -> iron_shield
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: d11b4ff31ee5f1b468f54a1ae53d0ecf -> iron_helm
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: c0e3f5b5a15ce4145b503f6d14008c18 -> chain_belt
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: f597b10c126e825418717edee921bd16 -> ring_iron
+[gameplay.ui.message] [InventoryPanelController] 背包与四槽装备面板初始化完成
+[gameplay.ui.message] [GameMenuController] 游戏菜单初始化完成
+[gameplay.ui.message] [ShopPanelController] 商店面板初始化完成
+[gameplay.ui.message] [CraftingPanelController] 随机打造工作台初始化完成
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 942c099ccdd7eed428f0ac0b1694f6ff -> Player
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 3b6e21dfbc7f54e4f9e0312efd6c6af5 -> Projectile_Default
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 67b8ae84734f42f4792a4190aad88049 -> Monster_Basic
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000002 -> Monster_Swift
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000003 -> Monster_Heavy
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 07152fe41aa52d740b4d1df2049f9f3d -> LootPickup
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 7ea0a2ad891e6cd4891051d02b338cf0 -> armor_leather
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: f597b10c126e825418717edee921bd16 -> ring_iron
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: bf07871323670d148819cd1d7e079297 -> ring_obsidian
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 1a1e12f2b0381f54c829d3ef4165a2de -> weapon_greatsword
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 9b427dc6b96c7bc4ba30998360436d86 -> weapon_war_axe
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: b25638dc709c3184cabc93ae9de79ee2 -> armor_plate
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: d8c5c86107920ab4d9e117e19d6ed11e -> ring_jade
+[gameplay.ui.message] [InventoryPanelController] 背包与四槽装备面板初始化完成
+[gameplay.ui.message] [GameMenuController] 游戏菜单初始化完成
+[gameplay.ui.message] [ShopPanelController] 商店面板初始化完成
+[gameplay.ui.message] [CraftingPanelController] 随机打造工作台初始化完成
+<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: [TestRunnerNoThrottle] Restored Interaction Mode after test run.
+Saving results to: C:/Users/darkf/AppData/LocalLow/DefaultCompany/DarkFlare\TestResults.xml
+]]></output>
+            </test-case>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using UnityEditor;
 
@@ -58,10 +59,62 @@ namespace DarkFlare.Tests
         }
 
         [Test]
+        public void Prepare_UpgradesOnlyKnownContentWithoutMutatingSourceOrRerollingItems()
+        {
+            ContentCatalogDefinition source = AssetDatabase.LoadAssetAtPath<ContentCatalogDefinition>(
+                "Assets/Data/Preset/Content/正式内容目录.asset");
+            ContentCatalogDefinition target = UnityEngine.Object.Instantiate(source);
+            try
+            {
+                SerializedObject serialized = new SerializedObject(target);
+                serialized.FindProperty("_contentVersion").intValue = 2;
+                serialized.ApplyModifiedPropertiesWithoutUndo();
+                ContentCatalogBuildResult build = ContentCatalog.Build(target);
+                Assert.IsTrue(build.Succeeded);
+                byte[] historicalBytes = System.IO.File.ReadAllBytes(
+                    "Assets/Scripts/Tests/Fixtures/Migration/save-v1-core-v1-four-slots.json");
+                SaveDeserializationResult historical = new NewtonsoftSaveSerializer().Deserialize(historicalBytes);
+                Assert.IsTrue(historical.Succeeded);
+                SaveDocumentDto document = historical.Document;
+                document.Header.ContentVersion = 1;
+                JObject original = JObject.FromObject(document);
+
+                PreparedRestoreResult result = SaveRestorePreparer.Prepare(document, build.Catalog);
+
+                Assert.IsTrue(result.Succeeded, Describe(result));
+                Assert.AreEqual(2, result.Value.Document.Header.ContentVersion);
+                Assert.IsTrue(JToken.DeepEquals(original, JObject.FromObject(document)), "预检不能修改调用方的旧档");
+                Assert.IsTrue(JToken.DeepEquals(original["Payload"], JObject.FromObject(result.Value.Document.Payload)),
+                    "迁移必须保留物品、已掷值、位置、金币和商人库存");
+                Assert.IsNull(result.Value.PlayerEquipment.Get(EquipmentSlot.Head));
+                Assert.IsNull(result.Value.PlayerEquipment.Get(EquipmentSlot.OffHand));
+                foreach (EquipmentEntryDto entry in document.Payload.Profile.Equipment[0].Entries)
+                {
+                    Assert.AreEqual(entry.ItemInstanceId, result.Value.PlayerEquipment.Get(entry.Slot).Id.Value);
+                }
+
+                document.Header.ContentVersion = 3;
+                Assert.IsFalse(SaveRestorePreparer.Prepare(document, build.Catalog).Succeeded);
+                document.Header.ContentVersion = 1;
+                document.Header.CatalogId = "other";
+                Assert.IsFalse(SaveRestorePreparer.Prepare(document, build.Catalog).Succeeded);
+                document.Header.CatalogId = "core";
+                document.Payload.Profile.Equipment[0].Entries[0].Slot = EquipmentSlot.OffHand;
+                Assert.IsFalse(SaveRestorePreparer.Prepare(document, build.Catalog).Succeeded,
+                    "声明旧内容版本的文件不能携带新增槽位");
+                Assert.AreEqual(1, document.Header.ContentVersion);
+            }
+            finally
+            {
+                UnityEngine.Object.DestroyImmediate(target);
+            }
+        }
+
+        [Test]
         public void Prepare_RejectsCatalogMismatchAndDerivedMonsterStateMismatchBeforeCommit()
         {
             SaveDocumentDto catalogMismatch = SaveDataContractTests.CreateValidDocument();
-            catalogMismatch.Header.ContentVersion++;
+            catalogMismatch.Header.ContentVersion = _catalog.ContentVersion + 1;
 
             PreparedRestoreResult incompatible = SaveRestorePreparer.Prepare(
                 catalogMismatch,
@@ -81,6 +134,45 @@ namespace DarkFlare.Tests
             Assert.IsTrue(invalid.Issues.Any(issue =>
                 issue.Code == DtoMapIssueCode.InvalidValue
                 && issue.Path.EndsWith("effectiveStats", StringComparison.Ordinal)));
+        }
+
+        [Test]
+        public void Prepare_RoundTripsAllEquipmentSlotsAndRejectsDuplicateOwnership()
+        {
+            SaveDocumentDto document = SaveDataContractTests.CreateValidDocument();
+            document.Header.ContentVersion = _catalog.ContentVersion;
+            document.Payload.Items.RemoveAll(item => item.InstanceId == "22222222222222222222222222222222");
+            document.Payload.Profile.Equipment[0].Entries.Clear();
+            ItemBaseDefinition[] definitions = AssetDatabase.FindAssets("t:ItemBaseDefinition", new[] { "Assets/Data/Preset/Items" })
+                .Select(guid => AssetDatabase.LoadAssetAtPath<ItemBaseDefinition>(AssetDatabase.GUIDToAssetPath(guid))).ToArray();
+            foreach (EquipmentSlot slot in EquipmentSlots.All)
+            {
+                ItemBaseDefinition definition = definitions.First(item => item.CanEquipTo(slot));
+                ItemInstance item = definition.CreateInstance(Guid.NewGuid().ToString("N"), 1, 701 + (int)slot);
+                DtoMapResult<ItemInstanceDto> dto = RuntimeStateMapper.ToDto(item, _catalog);
+                Assert.IsTrue(dto.Succeeded);
+                document.Payload.Items.Add(dto.Value);
+                document.Payload.Profile.Equipment[0].Entries.Add(new EquipmentEntryDto { Slot = slot, ItemInstanceId = item.Id.Value });
+            }
+            document.Header.Summary.ItemCount = document.Payload.Items.Count;
+            var serializer = new NewtonsoftSaveSerializer();
+            SaveSerializationResult saved = serializer.Serialize(document);
+            Assert.IsTrue(saved.Succeeded);
+            SaveDeserializationResult loaded = serializer.Deserialize(saved.Bytes);
+            Assert.IsTrue(loaded.Succeeded);
+            PreparedRestoreResult restored = SaveRestorePreparer.Prepare(loaded.Document, _catalog);
+            Assert.IsTrue(restored.Succeeded, Describe(restored));
+            foreach (EquipmentEntryDto entry in document.Payload.Profile.Equipment[0].Entries)
+            {
+                ItemInstance actual = restored.Value.PlayerEquipment.Get(entry.Slot);
+                Assert.AreEqual(entry.ItemInstanceId, actual.Id.Value);
+                Assert.IsTrue(JToken.DeepEquals(JObject.FromObject(document.Payload.Items.First(item => item.InstanceId == entry.ItemInstanceId)),
+                    JObject.FromObject(RuntimeStateMapper.ToDto(actual, _catalog).Value)), "装备已掷数值必须精确保留");
+            }
+            document.Payload.Profile.Equipment[0].Entries[1].ItemInstanceId = document.Payload.Profile.Equipment[0].Entries[0].ItemInstanceId;
+            JObject invalidSource = JObject.FromObject(document);
+            Assert.IsFalse(SaveRestorePreparer.Prepare(document, _catalog).Succeeded);
+            Assert.IsTrue(JToken.DeepEquals(invalidSource, JObject.FromObject(document)), "失败不能修改来源 DTO");
         }
 
         static string Describe(PreparedRestoreResult result)

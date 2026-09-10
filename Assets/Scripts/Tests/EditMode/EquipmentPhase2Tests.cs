@@ -35,7 +35,7 @@ public class EquipmentPhase2Tests
     }
 
     [Test]
-    public void EquipmentLoadout_UsesFourSlots_AndRejectsDuplicateInstance()
+    public void EquipmentLoadout_UsesRegisteredSlots_AndRejectsDuplicateInstance()
     {
         EquipmentLoadout loadout = new EquipmentLoadout();
         ItemInstance weapon = CreateItem("loadout_weapon", ItemType.Weapon, EquipmentSlotMask.Weapon);
@@ -51,6 +51,19 @@ public class EquipmentPhase2Tests
         Assert.AreSame(armor, loadout.Get(EquipmentSlot.Armor));
         Assert.AreSame(ring, loadout.Get(EquipmentSlot.RingLeft));
         Assert.IsNull(loadout.Get(EquipmentSlot.RingRight));
+        foreach (EquipmentSlot slot in EquipmentSlots.All)
+        {
+            if (loadout.Get(slot) != null) { continue; }
+            EquipmentSlotMask mask = EquipmentSlots.ToMask(slot);
+            ItemType type = (mask & EquipmentSlotMask.Defenses) != 0 ? ItemType.Armor : ItemType.Accessory;
+            ItemInstance item = CreateItem("slot_" + EquipmentSlots.GetKey(slot), type, mask);
+            Assert.IsEmpty(EquipmentConfigurationValidator.Validate(item.BaseDefinition));
+            Assert.IsTrue(loadout.TrySet(slot, item));
+            Assert.AreSame(item, loadout.Get(slot));
+            Assert.AreEqual(slot, EquipmentSlots.GetUniqueTarget(mask));
+        }
+        Assert.IsNull(EquipmentSlots.GetUniqueTarget(EquipmentSlotMask.Rings));
+        Assert.IsNull(EquipmentSlots.GetUniqueTarget((EquipmentSlotMask)(1 << 20)));
     }
 
     [Test]
@@ -397,7 +410,7 @@ public class EquipmentPhase2Tests
     }
 
     [Test]
-    public void InventorySnapshot_ExposesFourSlotsAndSafeComparison()
+    public void InventorySnapshot_ExposesRegisteredSlotsAndSafeComparison()
     {
         CombatActor player = CreateActor("inventory_snapshot_player", ActorTeam.Player, new StatBlock());
         ItemInstance current = CreateWeaponWithDamage("comparison_current", 10f, 20f);
@@ -413,7 +426,7 @@ public class EquipmentPhase2Tests
             current,
             candidate);
 
-        Assert.AreEqual(4, snapshot.EquipmentSlots.Count);
+        Assert.AreEqual(EquipmentSlots.All.Count, snapshot.EquipmentSlots.Count);
         Assert.AreSame(current, snapshot.EquipmentSlots[0].Item);
         Assert.AreEqual(EquipmentSlotMask.Weapon, snapshot.Items[0].CompatibleSlots);
         Assert.IsNotEmpty(comparison.Lines);

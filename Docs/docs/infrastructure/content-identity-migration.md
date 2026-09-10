@@ -39,7 +39,7 @@
 
 ## 内容目录与所有权
 
-`ContentCatalogDefinition` 是可编辑的目录资产；`ContentCatalog.Build` 一次性验证后生成不可变运行时目录，支持强类型正向解析、反向查询和结构化错误。当前正式目录为 `core`、内容版本 `1`，收录 90 个正式配置。
+`ContentCatalogDefinition` 是可编辑的目录资产；`ContentCatalog.Build` 一次性验证后生成不可变运行时目录，支持强类型正向解析、反向查询和结构化错误。当前正式目录为 `core`、内容版本 `2`，收录 104 个正式配置。`SaveRestorePreparer` 仅为已知 `core` v1 → v2 路径复制 DTO 并更新副本 Header，之后仍执行严格目录和所有权校验。旧物品、已掷数值、四槽和商人库存保持不变，新槽为空；v1 文档含新增槽、未知目录及未来版本一律拒绝。SaveSchemaVersion 仍为 1，既有 v0 → v1 结构迁移独立保留。
 
 目录由 `ApplicationHost` 拥有：
 

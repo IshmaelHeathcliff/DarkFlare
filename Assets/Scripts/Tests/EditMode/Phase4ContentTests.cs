@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using DarkFlare.Editor;
 using NUnit.Framework;
 using UnityEditor;
@@ -10,13 +11,14 @@ namespace DarkFlare.Tests
         const string PresetRoot = "Assets/Data/Preset";
 
         [Test]
-        public void OfficialContent_HasExpectedCountsIdsAndNoValidationIssues()
+        public void OfficialContent_CoversEquipmentSlotsAndHasNoValidationIssues()
         {
-            Assert.AreEqual(14, LoadAssets<TagDefinition>($"{PresetRoot}/Tags").Count);
-            Assert.AreEqual(25, LoadAssets<AffixDefinition>($"{PresetRoot}/Affixes").Count);
-            Assert.AreEqual(10, LoadAssets<MonsterAffixDefinition>($"{PresetRoot}/MonsterAffixes").Count);
-            Assert.AreEqual(7, LoadAssets<ItemBaseDefinition>($"{PresetRoot}/Items").Count);
-            Assert.AreEqual(3, LoadAssets<MonsterDefinition>($"{PresetRoot}/Monsters").Count);
+            List<ItemBaseDefinition> items = LoadAssets<ItemBaseDefinition>($"{PresetRoot}/Items");
+            foreach (EquipmentSlot slot in EquipmentSlots.All)
+            {
+                Assert.GreaterOrEqual(items.Where(item => item.CanEquipTo(slot)).Select(item => item.Id).Distinct().Count(), 2,
+                    $"{slot} 缺少两个可选的独立装备基底");
+            }
 
             List<ContentValidationIssue> issues = ContentConfigurationValidator.Scan();
             Assert.IsEmpty(issues, JoinIssues(issues));
@@ -33,6 +35,12 @@ namespace DarkFlare.Tests
             {
                 ItemBaseDefinition item = items[itemIndex];
                 int candidateCount = 0;
+                if (item.ItemType == ItemType.Accessory)
+                {
+                    Assert.IsTrue(item.RuntimeTags.Contains(CombatTagIds.Accessory), item.Id);
+                    Assert.AreEqual((item.AllowedEquipmentSlots & EquipmentSlotMask.Rings) != 0,
+                        item.RuntimeTags.Contains(CombatTagIds.Ring), "项链和腰带不能派生戒指专属标签");
+                }
 
                 for (int affixIndex = 0; affixIndex < affixes.Count; affixIndex++)
                 {
@@ -154,11 +162,12 @@ namespace DarkFlare.Tests
             Assert.AreEqual(15, spawn.Rules[2].Weight);
 
             List<LootTableDefinition> lootTables = LoadAssets<LootTableDefinition>($"{PresetRoot}/Loot");
+            List<ItemBaseDefinition> items = LoadAssets<ItemBaseDefinition>($"{PresetRoot}/Items");
             Assert.AreEqual(3, lootTables.Count);
 
             for (int i = 0; i < lootTables.Count; i++)
             {
-                Assert.AreEqual(7, lootTables[i].Entries.Count);
+                CollectionAssert.AreEquivalent(items, lootTables[i].Entries.Select(entry => entry.Item));
                 Assert.AreEqual(25, lootTables[i].AffixPool.Count);
             }
 
@@ -168,7 +177,7 @@ namespace DarkFlare.Tests
                 $"{PresetRoot}/Crafting/基础打造配置.asset");
             Assert.IsNotNull(trader);
             Assert.IsNotNull(crafting);
-            Assert.AreEqual(7, trader.Stock.Count);
+            CollectionAssert.AreEquivalent(items, trader.Stock.Select(entry => entry.Item));
             Assert.AreEqual(25, crafting.AffixPool.Count);
         }
 

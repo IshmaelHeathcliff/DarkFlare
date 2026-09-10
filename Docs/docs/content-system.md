@@ -2,24 +2,24 @@
 
 ## 当前范围
 
-当前正式内容包含 14 个标签、25 个物品词条、10 个怪物词条、7 件装备和 3 种怪物，并统一接入刷怪、掉落、商店与打造。七件装备和三种怪物均使用独立正式视觉；带怪物词条的实例会在世界中显示最多两行短名称。
+当前正式内容包含 15 个标签、25 个物品词条、10 个怪物词条、20 件装备和 3 种怪物，并统一接入刷怪、掉落、商店与打造。二十件装备和三种怪物均使用独立正式视觉；带怪物词条的实例会在世界中显示最多两行短名称。
 
-稳定本地 ID 均使用小写 `snake_case`，持久化时由类型命名空间组成 `<namespace>:<local_id>` 的 `ContentId`；唯一正式目录 `core` v1 收录当前 90 个配置。目录、缺失策略和扩展规则见[稳定身份、内容目录与迁移框架](./infrastructure/content-identity-migration.md)。运行时随机规则继续沿用独立通道：怪物生命倍率 `0.85–1.15`、初始大剑伤害 `20–40`，掉落概率由各怪物掉落表独立配置。空手武器技能没有伤害回退。
+稳定本地 ID 均使用小写 `snake_case`，持久化时由类型命名空间组成 `<namespace>:<local_id>` 的 `ContentId`；唯一正式目录 `core` v2 收录当前 104 个配置。目录、缺失策略和扩展规则见[稳定身份、内容目录与迁移框架](./infrastructure/content-identity-migration.md)。运行时随机规则继续沿用独立通道：怪物生命倍率 `0.85–1.15`、初始大剑伤害 `20–40`，掉落概率由各怪物掉落表独立配置。空手武器技能没有伤害回退。
 
-正式内容身份与显示文本彼此独立。七件装备、23 项属性、25 个物品词条、10 个怪物词条、三种怪物、玩家、商人、14 个标签和两个世界交互目标均持有 `LocalizedContentReference`；运行时 UI 从 `items`、`stats`、`affixes`、`monsters` 表解析名称，旧 `_displayName` 只保留给 Inspector 作者识别和日志兼容。具体 Key、回退和迁移合同见[用户设置与本地化](./infrastructure/user-settings-localization.md)。
+正式内容身份与显示文本彼此独立。二十件装备、23 项属性、25 个物品词条、10 个怪物词条、三种怪物、玩家、商人、15 个标签和两个世界交互目标均持有 `LocalizedContentReference`；运行时 UI 从 `items`、`stats`、`affixes`、`monsters` 表解析名称，旧 `_displayName` 只保留给 Inspector 作者识别和日志兼容。具体 Key、回退和迁移合同见[用户设置与本地化](./infrastructure/user-settings-localization.md)。
 
 ## 标签
 
-当前标签目录仍包含 14 个稳定 ID，但按 Domain 和使用状态管理：
+当前标签目录包含 15 个稳定 ID，但按 Domain 和使用状态管理：
 
 | Domain | Active | Reserved |
 | --- | --- | --- |
-| `ItemSpawn` | `weapon`、`armor`、`ring` | `sword`、`axe` |
+| `ItemSpawn` | `weapon`、`armor`、`ring`、`accessory` | `sword`、`axe` |
 | `Damage` | `physical` | `damage`、`fire`、`cold`、`lightning`、`chaos` |
 | `Skill` | — | `projectile`、`melee` |
 | `Actor` | — | `monster` |
 
-`weapon`、`armor`、`ring` 由物品类型与装备槽派生；`projectile` 由投射物技能类型派生；`monster` 由角色阵营派生；伤害类型标签由 `DamagePacket` 的最终类型与缩放血统派生。正式资产不再重复手填这些事实。详细字段合同见[标签配置参考](./config-reference/combat-tags.md)。
+`weapon`、`armor`、`ring`、`accessory` 由物品类型与装备槽派生；所有饰品派生 `accessory`，只有兼容双戒指掩码的饰品派生 `ring`；`projectile` 由投射物技能类型派生；`monster` 由角色阵营派生；伤害类型标签由 `DamagePacket` 的最终类型与缩放血统派生。正式资产不再重复手填这些事实。详细字段合同见[标签配置参考](./config-reference/combat-tags.md)。
 
 ## 词条池
 
@@ -29,27 +29,27 @@
 | `tempered` | 前缀 | 武器 | LocalItem 物理伤害 Increase `15–25%` | 80 |
 | `flame_touched` | 前缀 | 武器、戒指 | 物理额外获得火焰 `8–12%`；火焰伤害 Increase `8–15%` | 60 |
 | `frost_touched` | 前缀 | 武器、戒指 | 物理额外获得冰霜 `8–12%`；冰霜伤害 Increase `8–15%` | 60 |
-| `healthy` | 前缀 | 护甲、戒指 | 最大生命 Flat `15–30` | 100 |
+| `healthy` | 前缀 | 护甲、饰品 | 最大生命 Flat `15–30` | 100 |
 | `reinforced` | 前缀 | 护甲 | 护甲 Flat `15–30` | 100 |
 | `of_power` | 后缀 | 武器、戒指 | 全局伤害 Increase `8–15%` | 80 |
-| `of_endurance` | 后缀 | 护甲、戒指 | 最大生命 Increase `8–15%` | 80 |
-| `of_fire_guard` | 后缀 | 护甲、戒指 | 火焰抗性 Flat `10–20` | 100 |
-| `of_cold_guard` | 后缀 | 护甲、戒指 | 冰霜抗性 Flat `10–20` | 100 |
-| `of_lightning_guard` | 后缀 | 护甲、戒指 | 闪电抗性 Flat `10–20` | 100 |
-| `of_chaos_guard` | 后缀 | 护甲、戒指 | 混沌抗性 Flat `10–20` | 100 |
-| `arcane_reserve` | 前缀 | 护甲、戒指 | 最大法力 Flat `15–30` | 100 |
-| `regenerating` | 前缀 | 护甲、戒指 | 生命恢复 Flat `0.5–1.5` / 秒 | 80 |
-| `meditative` | 前缀 | 护甲、戒指 | 法力恢复 Flat `1–3` / 秒 | 80 |
-| `mighty` | 前缀 | 武器、护甲、戒指 | 力量 Flat `5–10` | 90 |
-| `deft` | 前缀 | 武器、护甲、戒指 | 敏捷 Flat `5–10` | 90 |
-| `learned` | 前缀 | 武器、护甲、戒指 | 智力 Flat `5–10` | 90 |
+| `of_endurance` | 后缀 | 护甲、饰品 | 最大生命 Increase `8–15%` | 80 |
+| `of_fire_guard` | 后缀 | 护甲、饰品 | 火焰抗性 Flat `10–20` | 100 |
+| `of_cold_guard` | 后缀 | 护甲、饰品 | 冰霜抗性 Flat `10–20` | 100 |
+| `of_lightning_guard` | 后缀 | 护甲、饰品 | 闪电抗性 Flat `10–20` | 100 |
+| `of_chaos_guard` | 后缀 | 护甲、饰品 | 混沌抗性 Flat `10–20` | 100 |
+| `arcane_reserve` | 前缀 | 护甲、饰品 | 最大法力 Flat `15–30` | 100 |
+| `regenerating` | 前缀 | 护甲、饰品 | 生命恢复 Flat `0.5–1.5` / 秒 | 80 |
+| `meditative` | 前缀 | 护甲、饰品 | 法力恢复 Flat `1–3` / 秒 | 80 |
+| `mighty` | 前缀 | 武器、护甲、饰品 | 力量 Flat `5–10` | 90 |
+| `deft` | 前缀 | 武器、护甲、饰品 | 敏捷 Flat `5–10` | 90 |
+| `learned` | 前缀 | 武器、护甲、饰品 | 智力 Flat `5–10` | 90 |
 | `storm_touched` | 前缀 | 武器、戒指 | 物理额外获得闪电 `8–12%`；闪电伤害 Increase `8–15%` | 60 |
 | `chaos_touched` | 前缀 | 武器、戒指 | 物理额外获得混沌 `8–12%`；混沌伤害 Increase `8–15%` | 45 |
 | `deadly` | 后缀 | 武器、戒指 | 暴击率 Flat `2–5` | 75 |
 | `of_ruin` | 后缀 | 武器、戒指 | 暴击伤害 Flat `10–20` | 75 |
 | `accurate` | 后缀 | 武器、戒指 | 命中 Flat `10–25` | 90 |
-| `elusive` | 前缀 | 护甲、戒指 | 闪避 Flat `8–20` | 90 |
-| `of_swiftness` | 后缀 | 护甲、戒指 | 移动速度 Increase `5–10%` | 70 |
+| `elusive` | 前缀 | 护甲、饰品 | 闪避 Flat `8–20` | 90 |
+| `of_swiftness` | 后缀 | 护甲、饰品 | 移动速度 Increase `5–10%` | 70 |
 
 所有词条都有非空互斥组；四个元素额外伤害词条共用元素互斥组。掉落装备生成 1 前缀和 1 后缀，每件装备最多容纳 3 前缀和 3 后缀。25 个正式词条全部进入三张掉落表和打造池，且每条至少兼容一件正式装备。由 `StatIds.All` 驱动的覆盖校验保证 23 项公开属性都有当前运行时可消费的正式词条。
 
@@ -65,7 +65,23 @@
 | 翡翠戒指 | `jade_ring` | 最大生命 Flat `12–24` | 22 | 1×1 |
 | 黑曜戒指 | `obsidian_ring` | 四种抗性各 Flat `5–10` | 28 | 1×1 |
 
-商人库存包含七件普通装备各一件。打造配置引用全部 25 个物品词条；普通商品不会伪装成没有词条的魔法物品。
+| 铁盔 | `iron_helm` | `armor` Flat `14–22` | 28 | 2×2 |
+| 猎手兜帽 | `leather_hood` | `evasion` Flat `12–20` | 25 | 2×2 |
+| 铁护手 | `iron_gauntlets` | `armor` Flat `10–18` | 26 | 2×2 |
+| 猎手手套 | `hunter_gloves` | `dexterity` Flat `4–8` | 24 | 2×2 |
+| 铁胫甲 | `plated_greaves` | `armor` Flat `16–24` | 30 | 2×3 |
+| 斥候长靴 | `scout_boots` | `evasion` Flat `14–22` | 28 | 2×3 |
+| 铁盾 | `iron_shield` | `armor` Flat `20–30` | 34 | 2×3 |
+| 守护圆盾 | `warding_buckler` | `max_health` Flat `18–28` | 32 | 2×2 |
+| 琥珀护符 | `amber_amulet` | `mana` Flat `14–24` | 29 | 1×2 |
+| 银月吊坠 | `silver_pendant` | `mana_regeneration` Flat `1–2` | 31 | 1×2 |
+| 厚皮腰带 | `leather_belt` | `max_health` Flat `16–26` | 23 | 2×1 |
+| 锁链腰带 | `chain_belt` | `strength` Flat `4–8` | 27 | 2×1 |
+| 红玉戒指 | `ruby_ring` | `fire_resistance` Flat `12–20` | 30 | 1×1 |
+
+非戒指部位各两件，双戒指共享四件基底。新配置和槽位、类型、属性范围的逐件清单见[装备内容清单](./assets/acceptance/alpha-0.3.4-equipment/content-manifest.json)。
+
+新游戏商人库存包含全部二十件普通装备各一件。旧档恢复原库存，不补发新商品；新增装备可从正式掉落继续获取。打造配置引用全部 25 个物品词条；普通商品不会伪装成没有词条的魔法物品。
 
 ## 怪物、刷怪与掉落
 
@@ -83,13 +99,15 @@
 | 裂爪猎犬 | 110 | 30 | 8% | 50% | 0 | 0% |
 | 铁壳尸傀 | 80 | 5 | 3% | 50% | 40 | 0% |
 
-三者使用独立 `MonsterDefinition`、掉落表、Addressable Prefab、Sprite 和 Animator Controller，并保持统一的移动、攻击、受伤与死亡参数契约。移动参数统一为停止距离 `0.6`、软分离半径 `0.8`、软分离权重 `0.65`；接触攻击按表中的独立间隔执行，没有玩家全局受伤冷却。三张掉落表都覆盖七件装备和 25 个物品词条，装备顺序统一为大剑、战斧、皮甲、板甲、铁指环、翡翠戒指、黑曜戒指：
+三者使用独立 `MonsterDefinition`、掉落表、Addressable Prefab、Sprite 和 Animator Controller，并保持统一的移动、攻击、受伤与死亡参数契约。移动参数统一为停止距离 `0.6`、软分离半径 `0.8`、软分离权重 `0.65`；接触攻击按表中的独立间隔执行，没有玩家全局受伤冷却。三张掉落表都覆盖二十件装备和 25 个物品词条。原七件条目顺序及权重保持为大剑、战斧、皮甲、板甲、铁指环、翡翠戒指、黑曜戒指：
 
 | 掉落表 | 条目权重 |
 | --- | --- |
 | 荒原游魂 | `16 / 14 / 16 / 12 / 14 / 14 / 14` |
 | 裂爪猎犬 | `14 / 22 / 18 / 8 / 14 / 14 / 10` |
 | 铁壳尸傀 | `18 / 18 / 8 / 24 / 10 / 10 / 12` |
+
+新增十三件在每张掉落表中的条目权重均为 12，生成魔法装备、1 前缀和 1 后缀；旧七件权重保留上表。
 
 三种怪物都显式引用同一组 10 个 `MonsterAffixDefinition`，每个实例按根种子生成 `0–2` 条：
 
@@ -108,7 +126,7 @@
 
 配置中心新增“内容校验”页，可重新扫描、显示错误资产与原因，并直接打开或定位资产。`ContentConfigurationValidator` 检查：
 
-- 预期数量、稳定 ID 格式与重复 ID。
+- 正式登记覆盖、稳定 ID 格式与重复 ID；装备不再锁定旧数量，每个槽位验证至少两种兼容基底。
 - 标签 Domain、使用状态、引用位置、查询作用域与新旧字段混用。
 - 物品类别、角色阵营、技能类型和伤害类型的重复手填标签。
 - 中文名、词条组、权重、范围、Operation 与 Scope。

@@ -164,5 +164,6 @@
 .game-ui-root .unity-base-slider:focus .unity-base-slider__dragger { border-color: var(--ui-focus); }
 .application-shell .application-toast-message { white-space: normal; }
 
-.application-shell .unity-scroller { background-color: rgb(16,19,24); }
-.application-shell .unity-scroller__low-button, .application-shell .unity-scroller__high-button { background-color: rgb(32,34,40); -unity-background-image-tint-color: rgb(191,163,116); }
+.application-shell .unity-scroller, .game-ui-root .unity-scroller { background-color: rgb(16,19,24); }
+.application-shell .unity-scroller__low-button, .application-shell .unity-scroller__high-button,
+.game-ui-root .unity-scroller__low-button, .game-ui-root .unity-scroller__high-button { background-color: rgb(32,34,40); -unity-background-image-tint-color: rgb(191,163,116); }

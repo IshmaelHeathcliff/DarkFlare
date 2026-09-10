@@ -10,7 +10,7 @@
 > 首阶段：[alpha 0.3.0 独立窗口与交互拆分](archive/alpha-0.3.0-independent-ui-windows-plan.md)
 > 已完成切片：[独立窗口可用闭环](./archive/alpha-0.3.0-window-workspace-plan.md)、[统一物品操作与事务](./archive/alpha-0.3.0-unified-item-actions-plan.md)；[代表视觉组件与布局收尾](archive/alpha-0.3.0-visual-pilot-plan.md)已完成，见[阶段验收](../assets/acceptance/alpha-0.3.0-visual-pilot/README.md)
 > 交互验收：[统一物品操作与菜单交接合同](archive/alpha-0.3-item-interaction-contract.md)
-> 收尾阶段：[alpha 0.3.4 十槽装备与内容补齐](./alpha-0.3.4-equipment-completion-plan.md)
+> 收尾阶段：[alpha 0.3.4 十槽装备与内容补齐](./alpha-0.3.4-equipment-completion-plan.md)，2026-09-10 已细化执行切片、旧档兼容、滚动商品与封板矩阵，待实施
 > 基线：[启动准备归档](./archive/alpha-0.3-startup.md)、[alpha 0.2 综合验收](../infrastructure/alpha-0.2-acceptance.md)
 
 ## 版本目标

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="2" result="Passed" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-10 02:17:50Z" end-time="2026-09-10 02:17:50Z" duration="0.2875178">
+  <test-suite type="TestSuite" id="1000" name="DarkFlare" fullname="DarkFlare" runstate="Runnable" testcasecount="435" result="Passed" start-time="2026-09-10 02:17:50Z" end-time="2026-09-10 02:17:50Z" duration="0.287518" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="EditMode" />
+    </properties>
+    <test-suite type="Assembly" id="1507" name="DarkFlare.Tests.EditMode.dll" fullname="E:/PARA/Projects/Unity/DarkfFlare/UnityProject/Library/ScriptAssemblies/DarkFlare.Tests.EditMode.dll" runstate="Runnable" testcasecount="434" result="Passed" start-time="2026-09-10 02:17:50Z" end-time="2026-09-10 02:17:50Z" duration="0.275304" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="22316" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <test-suite type="TestSuite" id="1508" name="DarkFlare" fullname="DarkFlare" runstate="Runnable" testcasecount="353" result="Passed" start-time="2026-09-10 02:17:50Z" end-time="2026-09-10 02:17:50Z" duration="0.274076" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1509" name="Tests" fullname="DarkFlare.Tests" runstate="Runnable" testcasecount="353" result="Passed" start-time="2026-09-10 02:17:50Z" end-time="2026-09-10 02:17:50Z" duration="0.273535" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestFixture" id="1413" name="MigrationFixtureContractTests" fullname="DarkFlare.Tests.MigrationFixtureContractTests" classname="DarkFlare.Tests.MigrationFixtureContractTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-09-10 02:17:50Z" end-time="2026-09-10 02:17:50Z" duration="0.036664" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1414" name="Manifest_RegistersReadableSaveAndSettingsFixturesWithMigrationSummary" fullname="DarkFlare.Tests.MigrationFixtureContractTests.Manifest_RegistersReadableSaveAndSettingsFixturesWithMigrationSummary" methodname="Manifest_RegistersReadableSaveAndSettingsFixturesWithMigrationSummary" classname="DarkFlare.Tests.MigrationFixtureContractTests" runstate="Runnable" seed="736608135" result="Passed" start-time="2026-09-10 02:17:50Z" end-time="2026-09-10 02:17:50Z" duration="0.023624" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1471" name="SaveRestorePreparerTests" fullname="DarkFlare.Tests.SaveRestorePreparerTests" classname="DarkFlare.Tests.SaveRestorePreparerTests" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-09-10 02:17:50Z" end-time="2026-09-10 02:17:50Z" duration="0.235257" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1473" name="Prepare_UpgradesOnlyKnownContentWithoutMutatingSourceOrRerollingItems" fullname="DarkFlare.Tests.SaveRestorePreparerTests.Prepare_UpgradesOnlyKnownContentWithoutMutatingSourceOrRerollingItems" methodname="Prepare_UpgradesOnlyKnownContentWithoutMutatingSourceOrRerollingItems" classname="DarkFlare.Tests.SaveRestorePreparerTests" runstate="Runnable" seed="1265188382" result="Passed" start-time="2026-09-10 02:17:50Z" end-time="2026-09-10 02:17:50Z" duration="0.233007" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: [TestRunnerNoThrottle] Restored Interaction Mode after test run.
+Saving results to: C:/Users/darkf/AppData/LocalLow/DefaultCompany/DarkFlare\TestResults.xml
+]]></output>
+            </test-case>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

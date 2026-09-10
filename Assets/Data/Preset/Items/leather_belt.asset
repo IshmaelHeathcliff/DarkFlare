@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de56d17a7ac2ea64db43d68bd7da6bc8, type: 3}
+  m_Name: leather_belt
+  m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.ItemBaseDefinition
+  _id: leather_belt
+  _displayName: "\u539A\u76AE\u8170\u5E26"
+  _localizedName:
+    _tableName: items
+    _entryKey: item.leather_belt.name
+  _itemType: 2
+  _icon:
+    m_AssetGUID: 8f112e6ebb039bf499e46e941051893e
+    m_SubObjectName:
+    m_SubObjectType:
+    m_SubObjectGUID:
+    m_EditorAssetChanged: 0
+  _allowedEquipmentSlots: 512
+  _defaultRarity: 0
+  _baseValue: 23
+  _gridSize: {x: 2, y: 1}
+  _weight: 2
+  _tags: []
+  _baseDamages: []
+  _implicitModifiers:
+  - _stat: {fileID: 11400000, guid: f44056e439bbcaa4eb1d3fc790dff43a, type: 2}
+    _operation: 0
+    _scope: 1
+    _valueRange: {x: 16, y: 26}
+    _fromDamageType: 0
+    _toDamageType: 1
+    _condition:
+      _scopeMask: 0
+      _requiredAll: []
+      _requiredAny: []
+      _blockedAny: []
+    _requiredTags: []
+    _blockedTags: []

@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de56d17a7ac2ea64db43d68bd7da6bc8, type: 3}
+  m_Name: iron_shield
+  m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.ItemBaseDefinition
+  _id: iron_shield
+  _displayName: "\u94C1\u76FE"
+  _localizedName:
+    _tableName: items
+    _entryKey: item.iron_shield.name
+  _itemType: 1
+  _icon:
+    m_AssetGUID: b62b575d086885c4db4a12d760f0ca5e
+    m_SubObjectName:
+    m_SubObjectType:
+    m_SubObjectGUID:
+    m_EditorAssetChanged: 0
+  _allowedEquipmentSlots: 128
+  _defaultRarity: 0
+  _baseValue: 34
+  _gridSize: {x: 2, y: 3}
+  _weight: 6
+  _tags: []
+  _baseDamages: []
+  _implicitModifiers:
+  - _stat: {fileID: 11400000, guid: e47d955253dbdbc40929575da1be8771, type: 2}
+    _operation: 0
+    _scope: 1
+    _valueRange: {x: 20, y: 30}
+    _fromDamageType: 0
+    _toDamageType: 1
+    _condition:
+      _scopeMask: 0
+      _requiredAll: []
+      _requiredAny: []
+      _blockedAny: []
+    _requiredTags: []
+    _blockedTags: []

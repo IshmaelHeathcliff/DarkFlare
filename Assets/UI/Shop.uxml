@@ -14,7 +14,9 @@
     </ui:VisualElement>
     <ui:Label name="shop-gold" text="" class="shop-gold" />
     <ui:VisualElement name="shop-merchant-frame" class="shop-merchant-frame">
-      <ui:VisualElement name="shop-merchant-list" class="shop-merchant-grid" picking-mode="Position" />
+      <ui:ScrollView name="shop-merchant-scroll" mode="Vertical" class="shop-merchant-scroll">
+        <ui:VisualElement name="shop-merchant-list" class="shop-merchant-grid" picking-mode="Position" />
+      </ui:ScrollView>
       <ui:Label name="shop-merchant-empty" text="" class="shop-empty" picking-mode="Ignore">
         <Bindings>
           <l:LocalizedString property="text" table="ui" entry="shop.merchant.empty" />
@@ -52,8 +54,16 @@
       </ui:Button>
     </ui:VisualElement>
     <ui:VisualElement class="item-trade-drop-zones">
-      <ui:Button name="shop-buy-zone" class="item-drop-zone"><Bindings><l:LocalizedString property="text" table="ui" entry="item.action.buy_zone" /></Bindings></ui:Button>
-      <ui:Button name="shop-sell-zone" class="item-drop-zone"><Bindings><l:LocalizedString property="text" table="ui" entry="item.action.sell_zone" /></Bindings></ui:Button>
+      <ui:Button name="shop-buy-zone" class="item-drop-zone">
+        <Bindings>
+          <l:LocalizedString property="text" table="ui" entry="item.action.buy_zone" />
+        </Bindings>
+      </ui:Button>
+      <ui:Button name="shop-sell-zone" class="item-drop-zone">
+        <Bindings>
+          <l:LocalizedString property="text" table="ui" entry="item.action.sell_zone" />
+        </Bindings>
+      </ui:Button>
     </ui:VisualElement>
     <ui:Label text="" class="item-context-help">
       <Bindings>

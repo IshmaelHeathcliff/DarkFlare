@@ -229,6 +229,8 @@ namespace DarkFlare.Tests
                         if (service == GameMenuPage.Shop)
                         {
                             Button stock = root.Q("shop-merchant-list").Query<Button>().First();
+                            root.Q<ScrollView>("shop-merchant-scroll").ScrollTo(stock);
+                            yield return null;
                             stock.Focus();
                             yield return null;
                             yield return null;
@@ -657,7 +659,7 @@ namespace DarkFlare.Tests
             InventoryModel inventory = architecture.GetModel<InventoryModel>();
             inventory.AddGold(10000);
 
-            for (int i = 0; i < 30; i++)
+            for (int i = 0; i < 80; i++)
             {
                 ItemBaseDefinition definition = CreateItemDefinition($"phase1_shop_{i}", $"状态测试装备 {i}");
                 economy.AddStock(definition.CreateInstance($"phase1_shop_item_{i}", 1, 100 + i));
@@ -673,10 +675,29 @@ namespace DarkFlare.Tests
             VisualElement root = document.rootVisualElement;
             VisualElement merchantList = root.Q<VisualElement>("shop-merchant-list");
             VisualElement merchantFrame = root.Q<VisualElement>("shop-merchant-frame");
-            Assert.IsNotNull(merchantFrame, "商店缺少无滚动背包框架");
-            Assert.IsNull(root.Q<ScrollView>("shop-merchant-scroll"), "商人背包不应继续使用 ScrollView");
-            Button selectedButton = FindButton(merchantList, "状态测试装备 3");
+            Assert.IsNotNull(merchantFrame, "商店缺少固定视口框架");
+            ScrollView merchantScroll = root.Q<ScrollView>("shop-merchant-scroll");
+            Assert.IsNotNull(merchantScroll, "商品扩展需要滚动视口");
+            Button selectedButton = FindButton(merchantList, "状态测试装备 79");
             Assert.IsNotNull(selectedButton, "未生成可用于滚动验收的商店按钮");
+            Assert.IsFalse(GameMenuController.IsInScrollViewport(selectedButton), "首屏不能覆盖整个压力商品池");
+            Button above = merchantList.Query<Button>(className: "shop-item").ToList()
+                .Where(button => button.worldBound.center.y < selectedButton.worldBound.center.y
+                    && button.worldBound.xMin < selectedButton.worldBound.xMax
+                    && button.worldBound.xMax > selectedButton.worldBound.xMin)
+                .OrderByDescending(button => button.worldBound.center.y).First();
+            merchantScroll.ScrollTo(above);
+            yield return FocusAfterScheduledRestore(root, above);
+            Gamepad navigationPad = InputSystem.AddDevice<Gamepad>();
+            yield return null;
+            yield return null;
+            _inputFixture.Press(navigationPad.dpad.down);
+            yield return null;
+            _inputFixture.Release(navigationPad.dpad.down);
+            yield return null;
+            yield return null;
+            Assert.AreSame(selectedButton, root.focusController.focusedElement, "向下没有到达视觉同列的末行商品");
+            Assert.IsTrue(GameMenuController.IsInScrollViewport(selectedButton), "导航末行商品后没有自动滚动显露");
             ItemInstance purchasedItem = selectedButton.userData as ItemInstance;
             Assert.IsNotNull(purchasedItem, "商店按钮缺少物品实例");
             string purchasedDisplayName = host.Localization.GetString(
@@ -684,7 +705,7 @@ namespace DarkFlare.Tests
             yield return FocusAfterScheduledRestore(root, selectedButton);
             InvokeButton(selectedButton);
             yield return null;
-            Assert.AreEqual("phase1_shop_item_3", shop.SelectedItem.InstanceId, "Submit 未固定当前选择");
+            Assert.AreEqual("phase1_shop_item_79", shop.SelectedItem.InstanceId, "Submit 未固定当前选择");
 
             int selectedIndex = FindSnapshotIndex(shop.LastSnapshot.MerchantItems, shop.SelectedItem.InstanceId);
             Assert.GreaterOrEqual(selectedIndex, 0);
@@ -739,6 +760,7 @@ namespace DarkFlare.Tests
             Assert.IsInstanceOf<Button>(root.focusController.focusedElement, "背包向右导航后焦点丢失");
             Button navigatedButton = (Button)root.focusController.focusedElement;
             Assert.IsTrue(navigatedButton.ClassListContains("shop-item"), "背包最右侧向右未进入商人背包");
+            Assert.IsTrue(GameMenuController.IsInScrollViewport(navigatedButton), "跨窗不能选中屏外商品");
             Assert.AreEqual(ShopItemSource.Merchant, shop.SelectedSource, "跨栏导航后未切换到商人物品选择");
             Assert.AreEqual(1, CountItemSelectionHighlights(root), "跨栏导航后玩家和商人物品同时高亮");
             expectedNeighborId = shop.SelectedItem.InstanceId;
@@ -808,7 +830,7 @@ namespace DarkFlare.Tests
                             "game-menu-panel",
                             "shop-page",
                             "shop-merchant-frame",
-                            "shop-merchant-list",
+                            "shop-merchant-scroll",
                             "inventory-grid",
                             "item-tooltip",
                             "shop-buy",
@@ -1560,13 +1582,14 @@ namespace DarkFlare.Tests
             VisualElement frame = root.Q<VisualElement>("shop-merchant-frame");
             VisualElement merchantGrid = root.Q<VisualElement>("shop-merchant-list");
             VisualElement playerGrid = root.Q<VisualElement>("inventory-grid");
-            Assert.IsNull(root.Q<ScrollView>("shop-merchant-scroll"), "商人背包不应出现滚动容器");
+            ScrollView scroll = root.Q<ScrollView>("shop-merchant-scroll");
+            Assert.IsNotNull(scroll, "商人背包缺少滚动视口");
             Assert.AreEqual(playerGrid.worldBound.width, merchantGrid.worldBound.width, 1f, "商人背包应与玩家背包使用相同列宽");
             Assert.GreaterOrEqual(merchantGrid.worldBound.height, playerGrid.worldBound.height - 1f, "商人背包不应小于玩家背包");
             Assert.GreaterOrEqual(merchantGrid.worldBound.xMin, frame.worldBound.xMin - 1f, "商人网格超出框架左边界");
-            Assert.GreaterOrEqual(merchantGrid.worldBound.yMin, frame.worldBound.yMin - 1f, "商人网格超出框架上边界");
+            Assert.GreaterOrEqual(scroll.contentViewport.worldBound.yMin, frame.worldBound.yMin - 1f, "商品视口超出框架上边界");
             Assert.LessOrEqual(merchantGrid.worldBound.xMax, frame.worldBound.xMax + 1f, "商人网格超出框架右边界");
-            Assert.LessOrEqual(merchantGrid.worldBound.yMax, frame.worldBound.yMax + 1f, "商人网格超出框架下边界");
+            Assert.LessOrEqual(scroll.contentViewport.worldBound.yMax, frame.worldBound.yMax + 1f, "商品视口超出框架下边界");
 
             List<Button> buttons = merchantGrid.Query<Button>(className: "shop-item").ToList();
 

@@ -15,8 +15,43 @@ MonoBehaviour:
   m_GroupName: DarkFlare-Session-Sprites
   m_GUID: 13797427c9aa77b4eab823a4b4b8aabc
   m_SerializeEntries:
+  - m_GUID: 01f0910ffa9fbc34dbd44c566c9f7c23
+    m_Address: ui/icons/equipment-slots/ui-icon-necklace
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - df.session
+    - df.sprite
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 1a1e12f2b0381f54c829d3ef4165a2de
     m_Address: ui/icons/items/great-sword
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - df.session
+    - df.sprite
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2f0fb30459917e64598988bb2e369a8b
+    m_Address: ui/icons/equipment-slots/ui-icon-head
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - df.session
+    - df.sprite
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 30fc8a5dea98e7442930045f376687c7
+    m_Address: ui/icons/items/leather-hood
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - df.session
+    - df.sprite
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 45e71ffbb0e2c6a49ade049895c37eab
+    m_Address: ui/icons/equipment-slots/ui-icon-hands
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - df.session
+    - df.sprite
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4a332dccf7ba1c243bf7ec03103acb8f
+    m_Address: ui/icons/items/scout-boots
     m_ReadOnly: 0
     m_SerializedLabels:
     - df.session
@@ -29,8 +64,43 @@ MonoBehaviour:
     - df.session
     - df.sprite
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 83510c26851949145b53ddaa7fd05749
+    m_Address: ui/icons/items/plated-greaves
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - df.session
+    - df.sprite
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8ad010ef0c777404f88b6750ceff0ce8
+    m_Address: ui/icons/items/hunter-gloves
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - df.session
+    - df.sprite
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8f112e6ebb039bf499e46e941051893e
+    m_Address: ui/icons/items/leather-belt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - df.session
+    - df.sprite
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9b427dc6b96c7bc4ba30998360436d86
     m_Address: ui/icons/items/war-axe
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - df.session
+    - df.sprite
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9fad0c26610c6044391a45574b771208
+    m_Address: ui/icons/items/iron-gauntlets
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - df.session
+    - df.sprite
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a79ac64f5b2207c4dad1ea9dbd87f9ec
+    m_Address: ui/icons/items/ruby-ring
     m_ReadOnly: 0
     m_SerializedLabels:
     - df.session
@@ -43,6 +113,27 @@ MonoBehaviour:
     - df.session
     - df.sprite
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b3806fb8c8738174487f9f3e67c2f3f5
+    m_Address: ui/icons/items/amber-amulet
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - df.session
+    - df.sprite
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b534d7eb703c15f45931eb3923c04af1
+    m_Address: ui/icons/items/warding-buckler
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - df.session
+    - df.sprite
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b62b575d086885c4db4a12d760f0ca5e
+    m_Address: ui/icons/items/iron-shield
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - df.session
+    - df.sprite
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: bf07871323670d148819cd1d7e079297
     m_Address: ui/icons/items/obsidian-ring
     m_ReadOnly: 0
@@ -50,8 +141,50 @@ MonoBehaviour:
     - df.session
     - df.sprite
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c0e3f5b5a15ce4145b503f6d14008c18
+    m_Address: ui/icons/items/chain-belt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - df.session
+    - df.sprite
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c388fd83b7380f34988093e9985eaaf9
+    m_Address: ui/icons/equipment-slots/ui-icon-legs
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - df.session
+    - df.sprite
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c9f93ca3e42410d45b479e3d65265e61
+    m_Address: ui/icons/equipment-slots/ui-icon-belt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - df.session
+    - df.sprite
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d11b4ff31ee5f1b468f54a1ae53d0ecf
+    m_Address: ui/icons/items/iron-helm
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - df.session
+    - df.sprite
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d8c5c86107920ab4d9e117e19d6ed11e
     m_Address: ui/icons/items/jade-ring
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - df.session
+    - df.sprite
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: dada93ae602fc6b4fac4c23ee7b69a84
+    m_Address: ui/icons/items/silver-pendant
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - df.session
+    - df.sprite
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e0e185838db5a74429f634a926aea11c
+    m_Address: ui/icons/equipment-slots/ui-icon-off-hand
     m_ReadOnly: 0
     m_SerializedLabels:
     - df.session

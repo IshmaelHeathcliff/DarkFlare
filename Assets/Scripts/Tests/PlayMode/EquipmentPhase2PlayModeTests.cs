@@ -51,7 +51,7 @@ namespace DarkFlare.Tests
         }
 
         [UnityTest]
-        public IEnumerator InventoryFourSlots_SupportKeyboardGamepadLayoutAndProjectileSnapshot()
+        public IEnumerator InventorySlots_SupportKeyboardGamepadLayoutAndProjectileSnapshot()
         {
             int originalWidth = Screen.width;
             int originalHeight = Screen.height;
@@ -191,6 +191,12 @@ namespace DarkFlare.Tests
                         "inventory-slot-armor",
                         "inventory-slot-ring-left",
                         "inventory-slot-ring-right",
+                        "inventory-slot-head",
+                        "inventory-slot-hands",
+                        "inventory-slot-legs",
+                        "inventory-slot-off-hand",
+                        "inventory-slot-necklace",
+                        "inventory-slot-belt",
                         "inventory-actions",
                         "inventory-equip",
                         "inventory-unequip",
@@ -212,6 +218,54 @@ namespace DarkFlare.Tests
             finally
             {
                 SetGameViewResolution(new Vector2Int(originalWidth, originalHeight));
+            }
+
+            menu.ClosePage(GameMenuPage.Attributes);
+            foreach (EquipmentSlot slot in EquipmentSlots.All)
+            {
+                if ((int)slot < 4) { continue; }
+                EquipmentSlotMask mask = EquipmentSlots.ToMask(slot);
+                ItemType type = (mask & EquipmentSlotMask.Defenses) != 0 ? ItemType.Armor : ItemType.Accessory;
+                ItemInstance item = CreateItem("equipment_" + slot, "槽位测试 " + slot, type, mask);
+                Assert.IsTrue(inventory.TryAddItem(item));
+                yield return SelectAndSubmit(root, "槽位测试 " + slot, gamepad.buttonSouth);
+                yield return Submit(root.Q<Button>("item-action-equip-" + slot), gamepad.buttonSouth);
+                Assert.AreSame(item, equipment.GetItem(player, slot), slot.ToString());
+            }
+            string[] upper = { "head", "hands", "legs", "off-hand" };
+            string[] lower = { "ring-left", "ring-right", "necklace", "belt" };
+            for (int i = 0; i < upper.Length; i++)
+            {
+                root.Q<Button>("inventory-slot-" + upper[i]).Focus();
+                yield return null;
+                _inputFixture.Press(gamepad.dpad.down);
+                yield return null;
+                _inputFixture.Release(gamepad.dpad.down);
+                yield return null;
+                yield return null;
+                Assert.AreSame(root.Q<Button>("inventory-slot-" + lower[i]), root.focusController.focusedElement,
+                    upper[i] + " 向下应选中视觉对应槽位");
+                _inputFixture.Press(gamepad.dpad.up);
+                yield return null;
+                _inputFixture.Release(gamepad.dpad.up);
+                yield return null;
+                yield return null;
+                Assert.AreSame(root.Q<Button>("inventory-slot-" + upper[i]), root.focusController.focusedElement);
+                if (i + 1 < upper.Length)
+                {
+                    _inputFixture.Press(gamepad.dpad.right);
+                    yield return null;
+                    _inputFixture.Release(gamepad.dpad.right);
+                    yield return null;
+                    yield return null;
+                    Assert.AreSame(root.Q<Button>("inventory-slot-" + upper[i + 1]), root.focusController.focusedElement);
+                    _inputFixture.Press(gamepad.dpad.left);
+                    yield return null;
+                    _inputFixture.Release(gamepad.dpad.left);
+                    yield return null;
+                    yield return null;
+                    Assert.AreSame(root.Q<Button>("inventory-slot-" + upper[i]), root.focusController.focusedElement);
+                }
             }
 
             _architecture.GetUtility<GameInput>().SwitchToGameplay();

@@ -99,6 +99,62 @@ MonoBehaviour:
     m_Key: tag.monster.name
     m_Metadata:
       m_Items: []
+  - m_Id: 7793548014379008
+    m_Key: item.iron_helm.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7793548257648640
+    m_Key: item.leather_hood.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7793548450586624
+    m_Key: item.iron_gauntlets.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7793548660301824
+    m_Key: item.hunter_gloves.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7793548861628416
+    m_Key: item.plated_greaves.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7793549058760704
+    m_Key: item.scout_boots.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7793549251698688
+    m_Key: item.iron_shield.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7793549453025280
+    m_Key: item.warding_buckler.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7793549654351872
+    m_Key: item.amber_amulet.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7793549851484160
+    m_Key: item.silver_pendant.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7793550057005056
+    m_Key: item.leather_belt.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7793550266720256
+    m_Key: item.chain_belt.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7793550476435456
+    m_Key: item.ruby_ring.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7793550690344960
+    m_Key: tag.accessory.name
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

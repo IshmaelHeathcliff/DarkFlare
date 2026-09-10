@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json.Linq;
 using UnityEngine;
 
 namespace DarkFlare
@@ -124,6 +125,26 @@ namespace DarkFlare
             {
                 SaveDataIssue issue = validation.Issues[i];
                 Add(issues, DtoMapIssueCode.InvalidValue, issue.Path, issue.Message);
+            }
+
+            if (issues.Count > 0)
+            {
+                return Failure(issues);
+            }
+
+            if (document.Header.CatalogId == "core" && catalog.CatalogId == "core"
+                && document.Header.ContentVersion == 1 && catalog.ContentVersion == 2)
+            {
+                // v1 stores four stable slots. New slots start empty; rolled values and stock stay intact.
+                if (document.Payload.Profile.Equipment.Any(loadout =>
+                    loadout.Entries.Any(entry => (int)entry.Slot > 3)))
+                {
+                    Add(issues, DtoMapIssueCode.InvalidValue, "payload.profile.equipment",
+                        "旧内容版本不能包含新增装备槽");
+                    return Failure(issues);
+                }
+                document = JObject.FromObject(document).ToObject<SaveDocumentDto>();
+                document.Header.ContentVersion = 2;
             }
 
             if (!string.Equals(document.Header.CatalogId, catalog.CatalogId, StringComparison.Ordinal)

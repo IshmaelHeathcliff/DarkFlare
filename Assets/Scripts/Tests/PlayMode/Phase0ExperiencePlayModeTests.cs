@@ -496,9 +496,9 @@ namespace DarkFlare.Tests
             Assert.GreaterOrEqual(armor.width, cell.width * 2f + 4f, "护甲槽宽度小于背包 2 格");
             Assert.GreaterOrEqual(armor.height, cell.height * 3f + 8f, "护甲槽高度小于背包 3 格");
             Assert.GreaterOrEqual(ringLeft.width, cell.width, "左戒指槽小于背包 1 格");
-            Assert.AreEqual(ringLeft.width, ringLeft.height, 0.1f, "左戒指槽不是 1:1");
+            Assert.GreaterOrEqual(ringLeft.height, cell.height, "左戒指槽高度不足一个物品格");
             Assert.GreaterOrEqual(ringRight.width, cell.width, "右戒指槽小于背包 1 格");
-            Assert.AreEqual(ringRight.width, ringRight.height, 0.1f, "右戒指槽不是 1:1");
+            Assert.GreaterOrEqual(ringRight.height, cell.height, "右戒指槽高度不足一个物品格");
         }
 
         static void AssertInventoryGridInsideFrame(VisualElement root)

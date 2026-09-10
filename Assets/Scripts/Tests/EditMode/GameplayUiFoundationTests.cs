@@ -301,7 +301,7 @@ public class GameplayUiFoundationTests
         Assert.AreSame(armor, snapshot.Items[1].Item);
         Assert.AreEqual(new RectInt(2, 0, 1, 1), snapshot.Items[1].Placement);
         Assert.IsTrue(snapshot.Items[1].CanEquip);
-        Assert.AreEqual(4, snapshot.EquipmentSlots.Count);
+        Assert.AreEqual(EquipmentSlots.All.Count, snapshot.EquipmentSlots.Count);
         Assert.IsNull(snapshot.CurrentWeapon);
     }
 

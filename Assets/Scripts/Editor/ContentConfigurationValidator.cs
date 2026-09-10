@@ -52,6 +52,7 @@ namespace DarkFlare.Editor
             "weapon",
             "armor",
             "ring",
+            "accessory",
             "sword",
             "axe",
             "physical",
@@ -71,6 +72,7 @@ namespace DarkFlare.Editor
                 { "weapon", TagMetadata(CombatTagDomain.ItemSpawn, CombatTagUsage.Active) },
                 { "armor", TagMetadata(CombatTagDomain.ItemSpawn, CombatTagUsage.Active) },
                 { "ring", TagMetadata(CombatTagDomain.ItemSpawn, CombatTagUsage.Active) },
+                { "accessory", TagMetadata(CombatTagDomain.ItemSpawn, CombatTagUsage.Active) },
                 { "sword", TagMetadata(CombatTagDomain.ItemSpawn, CombatTagUsage.Reserved) },
                 { "axe", TagMetadata(CombatTagDomain.ItemSpawn, CombatTagUsage.Reserved) },
                 { "physical", TagMetadata(CombatTagDomain.Damage, CombatTagUsage.Active) },
@@ -85,6 +87,7 @@ namespace DarkFlare.Editor
 
         static readonly HashSet<string> ForbiddenItemCustomTagIds = new HashSet<string>(StringComparer.Ordinal)
         {
+            "accessory",
             "weapon",
             "armor",
             "ring",
@@ -195,7 +198,7 @@ namespace DarkFlare.Editor
             ValidateExpectedIds(tags, ExpectedTagIds, tag => tag.Id, "标签", false, issues);
             ValidateExpectedIds(stats, StatIds.All, stat => stat.Id, "属性", true, issues);
             ValidateExpectedIds(affixes, ExpectedAffixIds, affix => affix.Id, "词条", true, issues);
-            ValidateExpectedIds(items, ExpectedItemIds, item => item.Id, "装备", true, issues);
+            ValidateExpectedIds(items, ExpectedItemIds, item => item.Id, "装备", false, issues);
             ValidateExpectedIds(monsters, ExpectedMonsterIds, monster => monster.Id, "怪物", true, issues);
             ValidateExpectedIds(
                 monsterAffixes,

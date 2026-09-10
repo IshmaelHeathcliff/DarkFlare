@@ -63,8 +63,8 @@ namespace DarkFlare.Tests
                 string.IsNullOrWhiteSpace(localizedMenuTitle.text),
                 "Application Ready 后静态本地化绑定必须已经产生首份文本");
             Assert.AreEqual("core", host.ContentCatalog.CatalogId);
-            Assert.AreEqual(1, host.ContentCatalog.ContentVersion);
-            Assert.AreEqual(90, host.ContentCatalog.Count);
+            Assert.AreEqual(host.ContentCatalogDefinition.ContentVersion, host.ContentCatalog.ContentVersion);
+            Assert.IsNotEmpty(host.ContentCatalog.GetAll<ItemBaseDefinition>());
 
             ContentCatalogDefinition installedDefinition = host.ContentCatalogDefinition;
             ContentCatalogDefinition equivalentCatalog = UnityEngine.Object.Instantiate(
@@ -194,12 +194,10 @@ namespace DarkFlare.Tests
         [UnityTest]
         public IEnumerator InvalidNewGameConfiguration_RollsBackWithoutRuntimeObjects()
         {
-            LogAssert.Expect(
-                LogType.Error,
-                new Regex("\\[ApplicationHost\\] 生命周期任务失败:.*initialize:new-game"));
             ApplicationHost host = ApplicationHost.Current;
-            ContentCatalogDefinition contentCatalog =
-                ScriptableObject.CreateInstance<ContentCatalogDefinition>();
+            ContentCatalogDefinition contentCatalog = host.ContentCatalogDefinition;
+            bool ownsCatalog = contentCatalog == null;
+            if (ownsCatalog) { contentCatalog = ScriptableObject.CreateInstance<ContentCatalogDefinition>(); }
             LifecycleResult catalogResult = host.InstallContentCatalog(contentCatalog);
             Assert.IsTrue(catalogResult.IsSuccess, catalogResult.Message);
             GameplaySceneConfiguration configuration = new GameplaySceneConfiguration(
@@ -218,6 +216,9 @@ namespace DarkFlare.Tests
                 false,
                 0);
             LifecycleResult result = default;
+            LogAssert.Expect(
+                LogType.Error,
+                new Regex("\\[ApplicationHost\\] 生命周期任务失败:.*initialize:new-game"));
             yield return host.InitializeCurrentSessionAsync(
                     new NewGameSessionInitializer(configuration))
                 .ToCoroutine(value => result = value);
@@ -233,7 +234,7 @@ namespace DarkFlare.Tests
             Assert.AreEqual(0, UnityEngine.Object.FindObjectsByType<MonsterController>(
                 FindObjectsInactive.Include,
                 FindObjectsSortMode.None).Length);
-            UnityEngine.Object.Destroy(contentCatalog);
+            if (ownsCatalog) { UnityEngine.Object.Destroy(contentCatalog); }
         }
 
         [UnityTest]

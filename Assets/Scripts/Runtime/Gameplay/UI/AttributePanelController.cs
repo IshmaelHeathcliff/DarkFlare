@@ -242,11 +242,7 @@ namespace DarkFlare
         string Origin(ModifierOrigin origin)
         {
             if (string.IsNullOrEmpty(origin.ItemId)) { return L("source.actor"); }
-            string slot = origin.Slot switch
-            {
-                EquipmentSlot.Weapon => "weapon", EquipmentSlot.Armor => "armor",
-                EquipmentSlot.RingLeft => "ring_left", EquipmentSlot.RingRight => "ring_right", _ => "unknown",
-            };
+            string slot = EquipmentSlots.GetKey(origin.Slot);
             return _localization.GetString("ui", "equipment.slot." + slot) + " · " + Message(origin.ItemName) + " · " + Message(origin.AffixName);
         }
 

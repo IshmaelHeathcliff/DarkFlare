@@ -697,8 +697,7 @@ namespace DarkFlare
             }
             if (target.Kind == ItemActionKind.Equip)
             {
-                text += " · " + Text("equipment.slot." + (target.Slot == EquipmentSlot.RingLeft ? "ring_left"
-                    : target.Slot == EquipmentSlot.RingRight ? "ring_right" : target.Slot.ToString().ToLowerInvariant()));
+                text += " · " + Text("equipment.slot." + EquipmentSlots.GetKey(target.Slot));
             }
             return text;
         }

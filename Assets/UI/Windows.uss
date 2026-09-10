@@ -98,3 +98,20 @@
 .item-operation-bar { min-width: 0; align-self: flex-start; margin-left: 0; margin-right: 0; padding-left: 8px; padding-right: 8px; }
 .item-operation-status { flex-basis: 0; }
 .item-operation-button { width: 144px; min-width: 144px; max-width: 144px; flex-shrink: 0; }
+
+/* Ten slots keep persistence identities independent of their visual arrangement. */
+.equipment-slot-layout { left: 20px; right: 4px; }
+.equipment-slot-layout > .inventory-equipment-slot { position: absolute; margin: 0; width: 60px; height: 72px; }
+.equipment-slot-layout > .equipment-slot--weapon { left: 0; top: 0; width: 100px; height: 152px; }
+.equipment-slot-layout > .equipment-slot--armor { left: 108px; top: 0; width: 100px; height: 152px; }
+.equipment-slot-layout > .equipment-slot--head { left: 216px; top: 0; }
+.equipment-slot-layout > .equipment-slot--ring-left { left: 216px; top: 80px; }
+.equipment-slot-layout > .equipment-slot--hands { left: 284px; top: 0; }
+.equipment-slot-layout > .equipment-slot--ring-right { left: 284px; top: 80px; }
+.equipment-slot-layout > .equipment-slot--legs { left: 352px; top: 0; }
+.equipment-slot-layout > .equipment-slot--necklace { left: 352px; top: 80px; }
+.equipment-slot-layout > .equipment-slot--off-hand { left: 420px; top: 0; }
+.equipment-slot-layout > .equipment-slot--belt { left: 420px; top: 80px; }
+
+.shop-merchant-scroll { flex-grow: 1; min-height: 0; width: 100%; }
+.shop-merchant-scroll .unity-scroll-view__content-container { align-self: center; }

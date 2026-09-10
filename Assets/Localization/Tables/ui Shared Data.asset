@@ -1671,6 +1671,30 @@ MonoBehaviour:
     m_Key: hud.mana.recovery
     m_Metadata:
       m_Items: []
+  - m_Id: 7771506632286208
+    m_Key: equipment.slot.head
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7771506691006464
+    m_Key: equipment.slot.hands
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7771506691006465
+    m_Key: equipment.slot.legs
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7771506691006466
+    m_Key: equipment.slot.off_hand
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7771506691006467
+    m_Key: equipment.slot.necklace
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7771506691006468
+    m_Key: equipment.slot.belt
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

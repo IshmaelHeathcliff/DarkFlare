@@ -49,7 +49,16 @@ namespace DarkFlare.Tests
             Assert.IsNotNull(spawner);
             Assert.IsNotNull(bootstrap);
             InventoryModel oldInventory = oldArchitecture.GetModel<InventoryModel>();
-            oldInventory.AddGold(1037);
+            oldInventory.AddGold(10000);
+            EquipmentModel equipped = oldArchitecture.GetModel<EquipmentModel>();
+            EconomyModel economy = oldArchitecture.GetModel<EconomyModel>();
+            foreach (EquipmentSlot slot in EquipmentSlots.All)
+            {
+                if (equipped.GetItem(oldPlayer.Actor, slot) != null) { continue; }
+                ItemInstance candidate = economy.MerchantStock.First(item => item.BaseDefinition.CanEquipTo(slot));
+                Assert.IsTrue(oldArchitecture.SendCommand(new BuyItemCommand(candidate)), slot.ToString());
+                Assert.IsTrue(oldArchitecture.SendCommand(new EquipItemCommand(oldPlayer.Actor, candidate, slot)), slot.ToString());
+            }
             ItemInstance discarded = oldArchitecture.GetModel<EconomyModel>().MerchantStock[0];
             Assert.IsTrue(oldArchitecture.SendCommand(new BuyItemCommand(discarded)));
             Assert.IsTrue(oldArchitecture.SendCommand(new CraftItemCommand(
@@ -170,13 +179,12 @@ namespace DarkFlare.Tests
                 restoredArchitecture.GetUtility<IRunInstanceIdGenerator>()
                     .NextMonsterId()
                     .Value);
-            Assert.AreEqual(
-                captured.Payload.Profile.Equipment[0].Entries.Single(
-                    entry => entry.Slot == EquipmentSlot.Weapon).ItemInstanceId,
-                restoredArchitecture.GetModel<EquipmentModel>()
-                    .GetWeapon(restoredPlayer.Actor)
-                    .Id
-                    .Value);
+            foreach (EquipmentSlot slot in EquipmentSlots.All)
+            {
+                Assert.AreEqual(captured.Payload.Profile.Equipment[0].Entries.Single(entry => entry.Slot == slot).ItemInstanceId,
+                    restoredArchitecture.GetModel<EquipmentModel>().GetItem(restoredPlayer.Actor, slot).Id.Value,
+                    $"{slot} 保存恢复后身份不一致");
+            }
             Assert.AreEqual(
                 captured.Payload.Run.Spawner.IsRunning,
                 UnityEngine.Object.FindAnyObjectByType<MonsterSpawner>().IsSpawning);

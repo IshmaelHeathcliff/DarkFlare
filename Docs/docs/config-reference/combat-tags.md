@@ -24,7 +24,7 @@ DarkFlare/Data/Tags/Tag Definition
 
 | 标签 | Domain | 使用状态 | 生产或消费规则 |
 | --- | --- | --- | --- |
-| `weapon`、`armor`、`ring` | `ItemSpawn` | `Active` | 由物品类型 / 装备槽派生，供词条生成查询消费 |
+| `weapon`、`armor`、`ring`、`accessory` | `ItemSpawn` | `Active` | 由物品类型 / 装备槽派生，供词条生成查询消费；`accessory` 覆盖全部饰品，`ring` 仅覆盖兼容双戒指的配置 |
 | `sword`、`axe` | `ItemSpawn` | `Reserved` | 当前无强类型子类字段和正式消费者 |
 | `physical` | `Damage` | `Active` | 由伤害类型 / 缩放血统派生，当前伤害词条条件消费 |
 | `damage`、`fire`、`cold`、`lightning`、`chaos` | `Damage` | `Reserved` | 运行时可派生；当前尚无对应配置查询消费者 |

@@ -685,6 +685,7 @@ namespace DarkFlare
             {
                 if (button is not Button && button is not Toggle) { continue; }
                 if (button == current || !IsNavigable(button)) { continue; }
+                if (GetWindow(button) != GetWindow(current) && !IsInScrollViewport(button)) { continue; }
                 candidates.Add(button);
                 rectangles.Add(button.worldBound);
             }
@@ -719,6 +720,29 @@ namespace DarkFlare
             for (VisualElement ancestor = element; ancestor != null; ancestor = ancestor.parent)
             {
                 if (ancestor.resolvedStyle.display == DisplayStyle.None || ancestor.resolvedStyle.visibility == Visibility.Hidden) { return false; }
+            }
+            return true;
+        }
+
+        static VisualElement GetWindow(VisualElement element)
+        {
+            for (VisualElement ancestor = element; ancestor != null; ancestor = ancestor.parent)
+            {
+                if (ancestor.ClassListContains("item-window")) { return ancestor; }
+            }
+            return null;
+        }
+
+        public static bool IsInScrollViewport(VisualElement element)
+        {
+            Rect bounds = element.worldBound;
+            for (VisualElement ancestor = element.parent; ancestor != null; ancestor = ancestor.parent)
+            {
+                if (ancestor is not ScrollView scroll) { continue; }
+                Rect viewport = scroll.contentViewport.worldBound;
+                bounds = Rect.MinMaxRect(Mathf.Max(bounds.xMin, viewport.xMin), Mathf.Max(bounds.yMin, viewport.yMin),
+                    Mathf.Min(bounds.xMax, viewport.xMax), Mathf.Min(bounds.yMax, viewport.yMax));
+                if (bounds.width <= 0f || bounds.height <= 0f) { return false; }
             }
             return true;
         }

@@ -452,7 +452,8 @@ namespace DarkFlare
                 _selectedPriceLabel.text = Localize("shop.price.empty");
                 _feedbackLabel.text = _viewState.HasFeedback
                     ? Resolve(_viewState.Feedback)
-                    : Localize("shop.feedback.empty");
+                    : Localize(LastSnapshot.MerchantItems.Count == 0 && LastSnapshot.PlayerItems.Count == 0
+                        ? "shop.feedback.empty" : "shop.feedback.select");
                 _buyButton.SetEnabled(false);
                 _sellButton.SetEnabled(false);
                 _viewState.FocusTarget = ShopFocusTarget.CloseFallback;
@@ -833,6 +834,7 @@ namespace DarkFlare
                 return;
             }
 
+            button.GetFirstAncestorOfType<ScrollView>()?.ScrollTo(button);
             button.Focus();
         }
 

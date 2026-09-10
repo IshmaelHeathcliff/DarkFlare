@@ -1,5 +1,9 @@
 # 视觉资产清单
 
+## Alpha 0.3.4 装备增量
+
+新增十三件装备独立图标与头部、手部、腿部、副手、项链、腰带六个空槽图标，正式装备池共二十件，固定 UI 图标共十八张。新图均为 96×96、Single / Full Rect、PPU 64、中心 Pivot、Point、无压缩 / Mipmap；装备最长可见边保持 72–80 px。十九张图片分别导入 Addressables，装备配置引用各自图标，空槽由 Theme.uss 绑定。完整 GUID、哈希及源图 / 成品审计见[资源审计](./assets/acceptance/alpha-0.3.4-equipment/art-audit.json)。下方旧批次数字仍为历史记录。
+
 ## Alpha 0.3.3 组件增量
 
 新增 `ui_control_base.png` 与 `ui_slot_base.png`：1254×1254 完整原图、Sprite Single / Full Rect、PPU 100、中心 Pivot、Point、无压缩 / Mipmap，Border 32、Slice Scale 0.125。`Components.uss` 为 Main / Shell 共用按钮与物品槽皮肤入口；外框、详情和提示复用现有两张大底板。每张新图均有真实消费者，固定形状状态由 tint / border 表达。

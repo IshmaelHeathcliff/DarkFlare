@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de56d17a7ac2ea64db43d68bd7da6bc8, type: 3}
+  m_Name: silver_pendant
+  m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.ItemBaseDefinition
+  _id: silver_pendant
+  _displayName: "\u94F6\u6708\u540A\u5760"
+  _localizedName:
+    _tableName: items
+    _entryKey: item.silver_pendant.name
+  _itemType: 2
+  _icon:
+    m_AssetGUID: dada93ae602fc6b4fac4c23ee7b69a84
+    m_SubObjectName:
+    m_SubObjectType:
+    m_SubObjectGUID:
+    m_EditorAssetChanged: 0
+  _allowedEquipmentSlots: 256
+  _defaultRarity: 0
+  _baseValue: 31
+  _gridSize: {x: 1, y: 2}
+  _weight: 2
+  _tags: []
+  _baseDamages: []
+  _implicitModifiers:
+  - _stat: {fileID: 11400000, guid: 8721e46badcc50d4bbc7152dfafb611f, type: 2}
+    _operation: 0
+    _scope: 1
+    _valueRange: {x: 1, y: 2}
+    _fromDamageType: 0
+    _toDamageType: 1
+    _condition:
+      _scopeMask: 0
+      _requiredAll: []
+      _requiredAny: []
+      _blockedAny: []
+    _requiredTags: []
+    _blockedTags: []

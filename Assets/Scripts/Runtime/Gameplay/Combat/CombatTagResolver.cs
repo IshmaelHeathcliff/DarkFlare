@@ -5,6 +5,7 @@ namespace DarkFlare
     public static class CombatTagIds
     {
         public const string Armor = "armor";
+        public const string Accessory = "accessory";
         public const string Axe = "axe";
         public const string Chaos = "chaos";
         public const string Cold = "cold";
@@ -37,9 +38,10 @@ namespace DarkFlare
             {
                 ids.Add(CombatTagIds.Armor);
             }
-            else if (itemType == ItemType.Accessory && (equipmentSlots & EquipmentSlotMask.Rings) != 0)
+            else if (itemType == ItemType.Accessory)
             {
-                ids.Add(CombatTagIds.Ring);
+                ids.Add(CombatTagIds.Accessory);
+                if ((equipmentSlots & EquipmentSlotMask.Rings) != 0) { ids.Add(CombatTagIds.Ring); }
             }
 
             return Create(ids);

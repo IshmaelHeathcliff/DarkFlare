@@ -27,6 +27,7 @@ MonoBehaviour:
     _requiredAny:
     - {fileID: 11400000, guid: f4100000000000000000000000000003, type: 2}
     - {fileID: 11400000, guid: f4100000000000000000000000000004, type: 2}
+    - {fileID: 11400000, guid: 492d0089d427ec3479c28defbf93453d, type: 2}
     _blockedAny: []
   _modifierTags: []
   _allowedItemTags: []

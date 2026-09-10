@@ -129,6 +129,7 @@
 - `ItemType.Weapon` 的 `_baseDamages` 必须非空。
 - Armor、Accessory、Material、Currency 的 `_baseDamages` 必须为空。
 - 武器必须且只能允许 Weapon 槽；其他类别继续遵循各自槽位合同。
+- Armor 的非空槽位掩码只能来自身体、头部、手部、腿部、副手；Accessory 只能来自双戒指、项链、腰带。未知位或跨类别掩码拒绝。旧 0–3 槽身份保留，新槽追加 4–9；副手不产生武器基础伤害。
 - `LocalItem` 修改器只能配置于武器，并只参与该武器的本地伤害。
 
 `CreateInstance` 的随机种子只负责隐式修改器；一次攻击的武器伤害由 `AttackRandomRolls.BaseDamageSeed` 单独掷出。
@@ -157,7 +158,7 @@
 | 字段 | 类型 | 默认 / 合同 |
 | --- | --- | --- |
 | `_dropChance` | `float` | 默认 `1`，合法范围 `0–1` |
-| `_entries` | `List<LootTableEntry>` | 必须非空，正式三张表覆盖全部七件装备 |
+| `_entries` | `List<LootTableEntry>` | 必须非空，正式三张表覆盖全部二十件装备 |
 | `_affixPool` | `List<AffixDefinition>` | 正式表引用完整 25 物品词条，不得缺失 |
 
 `LootTableEntry` 字段：

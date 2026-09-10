@@ -1,0 +1,1249 @@
+{
+  "canvas": [
+    96,
+    96
+  ],
+  "source_canvas": [
+    1254,
+    1254
+  ],
+  "export": "whole canvas NEAREST 96/1254, fixed green key",
+  "assets": [
+    {
+      "name": "iron_helm",
+      "asset": "Assets/Art/Sprites/Items/Equipment/iron_helm.png",
+      "guid": "d11b4ff31ee5f1b468f54a1ae53d0ecf",
+      "sha256": "6622a765304473c0d6742cb664e91e856ed258bc2992657abcba4845c8673933",
+      "source_file": "exec-42c380d1-6567-469f-bcb0-39f2f82a9dd1.png",
+      "source_sha256": "fae143faba487e8f7c6d0b4092e2f671285f8acb94400d2d3ff59e5990224ebe",
+      "source_metrics": {
+        "name": "iron_helm",
+        "canvas": [
+          1254,
+          1254
+        ],
+        "visible_bbox": [
+          249,
+          160,
+          1017,
+          1123
+        ],
+        "visible_width": 768,
+        "visible_height": 963,
+        "margins": {
+          "left": 249,
+          "top": 160,
+          "right": 237,
+          "bottom": 131
+        },
+        "alpha_coverage": 0.34563591085877665,
+        "visual_center": [
+          633.0450435864129,
+          670.375365673262
+        ],
+        "errors": [],
+        "warnings": []
+      },
+      "delivery_metrics": {
+        "name": "iron_helm",
+        "image": "Assets/Art/Sprites/Items/Equipment/iron_helm.png",
+        "canvas": [
+          96,
+          96
+        ],
+        "visible_bbox": [
+          19,
+          12,
+          78,
+          86
+        ],
+        "visible_width": 59,
+        "visible_height": 74,
+        "margins": {
+          "left": 19,
+          "top": 12,
+          "right": 18,
+          "bottom": 10
+        },
+        "alpha_coverage": 0.3454861111111111,
+        "visual_center": [
+          48.436557788944725,
+          51.27449748743719
+        ],
+        "errors": [],
+        "warnings": []
+      }
+    },
+    {
+      "name": "leather_hood",
+      "asset": "Assets/Art/Sprites/Items/Equipment/leather_hood.png",
+      "guid": "30fc8a5dea98e7442930045f376687c7",
+      "sha256": "fc7a1ba973624deb73d66f177565f6a490086ed3ccb75dbed58c69c9a736f715",
+      "source_file": "exec-0f23de83-2924-4046-8ab4-769be7414219.png",
+      "source_sha256": "d28b1bccf42468e7d0ad65dfda6635e35ae0097db7a25c6e023f6f98e48bd047",
+      "source_metrics": {
+        "name": "leather_hood",
+        "canvas": [
+          1254,
+          1254
+        ],
+        "visible_bbox": [
+          231,
+          135,
+          1042,
+          1130
+        ],
+        "visible_width": 811,
+        "visible_height": 995,
+        "margins": {
+          "left": 231,
+          "top": 135,
+          "right": 212,
+          "bottom": 124
+        },
+        "alpha_coverage": 0.36827606205596636,
+        "visual_center": [
+          638.7305152645393,
+          653.9286451857992
+        ],
+        "errors": [],
+        "warnings": []
+      },
+      "delivery_metrics": {
+        "name": "leather_hood",
+        "image": "Assets/Art/Sprites/Items/Equipment/leather_hood.png",
+        "canvas": [
+          96,
+          96
+        ],
+        "visible_bbox": [
+          18,
+          10,
+          80,
+          87
+        ],
+        "visible_width": 62,
+        "visible_height": 77,
+        "margins": {
+          "left": 18,
+          "top": 10,
+          "right": 16,
+          "bottom": 9
+        },
+        "alpha_coverage": 0.3693576388888889,
+        "visual_center": [
+          48.922150411280846,
+          50.11985898942421
+        ],
+        "errors": [],
+        "warnings": []
+      }
+    },
+    {
+      "name": "iron_gauntlets",
+      "asset": "Assets/Art/Sprites/Items/Equipment/iron_gauntlets.png",
+      "guid": "9fad0c26610c6044391a45574b771208",
+      "sha256": "6e17abf60429a7a9d6f708e344b6642e9572d5dd877728f3fabf1679967b6ce7",
+      "source_file": "exec-472dad20-2d80-4d20-a1a0-34edf4188e73.png",
+      "source_sha256": "6d9679ba063328a5f59105effdf4a8475d5c9f4e392e2e21523b10c310bbc327",
+      "source_metrics": {
+        "name": "iron_gauntlets",
+        "canvas": [
+          1254,
+          1254
+        ],
+        "visible_bbox": [
+          136,
+          174,
+          1125,
+          1091
+        ],
+        "visible_width": 989,
+        "visible_height": 917,
+        "margins": {
+          "left": 136,
+          "top": 174,
+          "right": 129,
+          "bottom": 163
+        },
+        "alpha_coverage": 0.36189774857616713,
+        "visual_center": [
+          629.3242773550757,
+          647.0205942820995
+        ],
+        "errors": [],
+        "warnings": []
+      },
+      "delivery_metrics": {
+        "name": "iron_gauntlets",
+        "image": "Assets/Art/Sprites/Items/Equipment/iron_gauntlets.png",
+        "canvas": [
+          96,
+          96
+        ],
+        "visible_bbox": [
+          10,
+          13,
+          86,
+          84
+        ],
+        "visible_width": 76,
+        "visible_height": 71,
+        "margins": {
+          "left": 10,
+          "top": 13,
+          "right": 10,
+          "bottom": 12
+        },
+        "alpha_coverage": 0.3629557291666667,
+        "visual_center": [
+          48.13109118086697,
+          49.55560538116592
+        ],
+        "errors": [],
+        "warnings": []
+      }
+    },
+    {
+      "name": "hunter_gloves",
+      "asset": "Assets/Art/Sprites/Items/Equipment/hunter_gloves.png",
+      "guid": "8ad010ef0c777404f88b6750ceff0ce8",
+      "sha256": "a28a3309aa55455c9ed2a6012facb669b14b8ae3ddbd1395fa4b102e2cb77943",
+      "source_file": "exec-bb40ba4d-99a6-48bf-816a-d49f7a6bbe2c.png",
+      "source_sha256": "97a9c8cbcb3da5c30d413c85ca5504417631ab0d984e675dd51197b09d8ceda7",
+      "source_metrics": {
+        "name": "hunter_gloves",
+        "canvas": [
+          1254,
+          1254
+        ],
+        "visible_bbox": [
+          159,
+          154,
+          1097,
+          1106
+        ],
+        "visible_width": 938,
+        "visible_height": 952,
+        "margins": {
+          "left": 159,
+          "top": 154,
+          "right": 157,
+          "bottom": 148
+        },
+        "alpha_coverage": 0.35874420355659337,
+        "visual_center": [
+          623.9550804688981,
+          634.1571877808523
+        ],
+        "errors": [],
+        "warnings": []
+      },
+      "delivery_metrics": {
+        "name": "hunter_gloves",
+        "image": "Assets/Art/Sprites/Items/Equipment/hunter_gloves.png",
+        "canvas": [
+          96,
+          96
+        ],
+        "visible_bbox": [
+          12,
+          12,
+          84,
+          85
+        ],
+        "visible_width": 72,
+        "visible_height": 73,
+        "margins": {
+          "left": 12,
+          "top": 12,
+          "right": 12,
+          "bottom": 11
+        },
+        "alpha_coverage": 0.3595920138888889,
+        "visual_center": [
+          47.79269764634882,
+          48.637598068799036
+        ],
+        "errors": [],
+        "warnings": []
+      }
+    },
+    {
+      "name": "scout_boots",
+      "asset": "Assets/Art/Sprites/Items/Equipment/scout_boots.png",
+      "guid": "4a332dccf7ba1c243bf7ec03103acb8f",
+      "sha256": "a199ae902f907f28b6884afc992850c965bdd0b41f58ce03f1d9b9e4f3f61f3c",
+      "source_file": "exec-32e6465c-cf56-414a-9bfd-f22f775f821b.png",
+      "source_sha256": "21db146c9360bb22d76b9ec9ef0989d1bb46239c3622504cc7f2bd23236fd803",
+      "source_metrics": {
+        "name": "scout_boots",
+        "canvas": [
+          1254,
+          1254
+        ],
+        "visible_bbox": [
+          181,
+          127,
+          1026,
+          1136
+        ],
+        "visible_width": 845,
+        "visible_height": 1009,
+        "margins": {
+          "left": 181,
+          "top": 127,
+          "right": 228,
+          "bottom": 118
+        },
+        "alpha_coverage": 0.3811109076155664,
+        "visual_center": [
+          655.8096830818467,
+          643.0492363629082
+        ],
+        "errors": [],
+        "warnings": []
+      },
+      "delivery_metrics": {
+        "name": "scout_boots",
+        "image": "Assets/Art/Sprites/Items/Equipment/scout_boots.png",
+        "canvas": [
+          96,
+          96
+        ],
+        "visible_bbox": [
+          14,
+          10,
+          79,
+          87
+        ],
+        "visible_width": 65,
+        "visible_height": 77,
+        "margins": {
+          "left": 14,
+          "top": 10,
+          "right": 17,
+          "bottom": 9
+        },
+        "alpha_coverage": 0.3795572916666667,
+        "visual_center": [
+          50.262435677530014,
+          49.49028016009148
+        ],
+        "errors": [],
+        "warnings": []
+      }
+    },
+    {
+      "name": "ui_icon_head",
+      "asset": "Assets/Art/Sprites/UI/Icons/ui_icon_head.png",
+      "guid": "2f0fb30459917e64598988bb2e369a8b",
+      "sha256": "7c00830fec725de5a6e5824f75a3674ab4102e649faddd94f820133de30b4980",
+      "source_file": "exec-ea0fdee6-7191-4c71-b6ee-ff891e2c1cc9.png",
+      "source_sha256": "4907cdef1f41f96e5ebdb40822961d2a809d5cecb572434c465aaeef32356e9b",
+      "source_metrics": {
+        "name": "ui_icon_head",
+        "canvas": [
+          1254,
+          1254
+        ],
+        "visible_bbox": [
+          239,
+          132,
+          1015,
+          1117
+        ],
+        "visible_width": 776,
+        "visible_height": 985,
+        "margins": {
+          "left": 239,
+          "top": 132,
+          "right": 239,
+          "bottom": 137
+        },
+        "alpha_coverage": 0.36397213128515066,
+        "visual_center": [
+          626.6715028513921,
+          647.725537780946
+        ],
+        "errors": [],
+        "warnings": []
+      },
+      "delivery_metrics": {
+        "name": "ui_icon_head",
+        "image": "Assets/Art/Sprites/UI/Icons/ui_icon_head.png",
+        "canvas": [
+          96,
+          96
+        ],
+        "visible_bbox": [
+          18,
+          10,
+          78,
+          86
+        ],
+        "visible_width": 60,
+        "visible_height": 76,
+        "margins": {
+          "left": 18,
+          "top": 10,
+          "right": 18,
+          "bottom": 10
+        },
+        "alpha_coverage": 0.3648003472222222,
+        "visual_center": [
+          47.997620464009515,
+          49.491671624033316
+        ],
+        "errors": [],
+        "warnings": []
+      }
+    },
+    {
+      "name": "ui_icon_hands",
+      "asset": "Assets/Art/Sprites/UI/Icons/ui_icon_hands.png",
+      "guid": "45e71ffbb0e2c6a49ade049895c37eab",
+      "sha256": "113a8fba6048b78eb17671b8f65c618948858822f7779f5d7baa4968fca57f4b",
+      "source_file": "exec-35395e72-8f8f-4668-ad05-1f4792493585.png",
+      "source_sha256": "3d8fbdb043a8d3d754e461b48114bbc63607c95b02e636ece3c3b0e5f11bc515",
+      "source_metrics": {
+        "name": "ui_icon_hands",
+        "canvas": [
+          1254,
+          1254
+        ],
+        "visible_bbox": [
+          331,
+          110,
+          961,
+          1128
+        ],
+        "visible_width": 630,
+        "visible_height": 1018,
+        "margins": {
+          "left": 331,
+          "top": 110,
+          "right": 293,
+          "bottom": 126
+        },
+        "alpha_coverage": 0.32135316906155487,
+        "visual_center": [
+          635.6470099914314,
+          617.3977209087868
+        ],
+        "errors": [],
+        "warnings": []
+      },
+      "delivery_metrics": {
+        "name": "ui_icon_hands",
+        "image": "Assets/Art/Sprites/UI/Icons/ui_icon_hands.png",
+        "canvas": [
+          96,
+          96
+        ],
+        "visible_bbox": [
+          25,
+          8,
+          74,
+          86
+        ],
+        "visible_width": 49,
+        "visible_height": 78,
+        "margins": {
+          "left": 25,
+          "top": 8,
+          "right": 22,
+          "bottom": 10
+        },
+        "alpha_coverage": 0.3213975694444444,
+        "visual_center": [
+          48.59520594193113,
+          47.237677245104656
+        ],
+        "errors": [],
+        "warnings": []
+      }
+    },
+    {
+      "name": "ui_icon_legs",
+      "asset": "Assets/Art/Sprites/UI/Icons/ui_icon_legs.png",
+      "guid": "c388fd83b7380f34988093e9985eaaf9",
+      "sha256": "b6b354ced8bd6e757181c728444fffe322f2d7b4c9d457e6b6ff923f8d9afafc",
+      "source_file": "exec-03077ecf-51d9-4853-9cf0-972e0c2f1322.png",
+      "source_sha256": "4eab32f276103f5370117e8141bf5d80dfb56f2bc6c07245442e3cb7fee6c3cb",
+      "source_metrics": {
+        "name": "ui_icon_legs",
+        "canvas": [
+          1254,
+          1254
+        ],
+        "visible_bbox": [
+          342,
+          106,
+          860,
+          1117
+        ],
+        "visible_width": 518,
+        "visible_height": 1011,
+        "margins": {
+          "left": 342,
+          "top": 106,
+          "right": 394,
+          "bottom": 137
+        },
+        "alpha_coverage": 0.20269491693566233,
+        "visual_center": [
+          653.2462704829313,
+          639.3830712082851
+        ],
+        "errors": [],
+        "warnings": []
+      },
+      "delivery_metrics": {
+        "name": "ui_icon_legs",
+        "image": "Assets/Art/Sprites/UI/Icons/ui_icon_legs.png",
+        "canvas": [
+          96,
+          96
+        ],
+        "visible_bbox": [
+          26,
+          8,
+          66,
+          86
+        ],
+        "visible_width": 40,
+        "visible_height": 78,
+        "margins": {
+          "left": 26,
+          "top": 8,
+          "right": 30,
+          "bottom": 10
+        },
+        "alpha_coverage": 0.2025824652777778,
+        "visual_center": [
+          50.05811462238886,
+          48.840117836100696
+        ],
+        "errors": [],
+        "warnings": []
+      }
+    },
+    {
+      "name": "plated_greaves",
+      "asset": "Assets/Art/Sprites/Items/Equipment/plated_greaves.png",
+      "guid": "83510c26851949145b53ddaa7fd05749",
+      "sha256": "362d595c1a38365d2c8e1b9b25c50eaa553cd76d402a723134cde0ccd2c2fe4f",
+      "source_file": "exec-7355f2a8-59d8-4d53-accd-9dc9571668c8.png",
+      "source_sha256": "cf12cc7e905fd00ae346c80e466d0ceff54f143f684f0a1c5e532e2d7a12a73d",
+      "source_metrics": {
+        "name": "plated_greaves",
+        "canvas": [
+          1254,
+          1254
+        ],
+        "visible_bbox": [
+          274,
+          129,
+          927,
+          1125
+        ],
+        "visible_width": 653,
+        "visible_height": 996,
+        "margins": {
+          "left": 274,
+          "top": 129,
+          "right": 327,
+          "bottom": 129
+        },
+        "alpha_coverage": 0.30267291397988955,
+        "visual_center": [
+          636.9215498006126,
+          611.7644834208061
+        ],
+        "errors": [],
+        "warnings": []
+      },
+      "delivery_metrics": {
+        "name": "plated_greaves",
+        "image": "Assets/Art/Sprites/Items/Equipment/plated_greaves.png",
+        "canvas": [
+          96,
+          96
+        ],
+        "visible_bbox": [
+          21,
+          10,
+          71,
+          86
+        ],
+        "visible_width": 50,
+        "visible_height": 76,
+        "margins": {
+          "left": 21,
+          "top": 10,
+          "right": 25,
+          "bottom": 10
+        },
+        "alpha_coverage": 0.3026258680555556,
+        "visual_center": [
+          48.7362854069559,
+          46.90193617784152
+        ],
+        "errors": [],
+        "warnings": []
+      }
+    },
+    {
+      "name": "iron_shield",
+      "asset": "Assets/Art/Sprites/Items/Equipment/iron_shield.png",
+      "guid": "b62b575d086885c4db4a12d760f0ca5e",
+      "sha256": "85348d1ced1853279a4218a604b9db498b117c45ee36b01e27da994d6249c4b9",
+      "source_file": "exec-215bf8c7-4a24-40b2-8340-27474c3906d4.png",
+      "source_sha256": "4fce1ab7ccb1f135e27556ff72969d062606fb3cd9901a3514975ee2f7e6b95e",
+      "source_metrics": {
+        "name": "iron_shield",
+        "canvas": [
+          1254,
+          1254
+        ],
+        "visible_bbox": [
+          270,
+          125,
+          984,
+          1143
+        ],
+        "visible_width": 714,
+        "visible_height": 1018,
+        "margins": {
+          "left": 270,
+          "top": 125,
+          "right": 270,
+          "bottom": 111
+        },
+        "alpha_coverage": 0.30718161214257916,
+        "visual_center": [
+          626.5775140358722,
+          588.1018346002882
+        ],
+        "errors": [],
+        "warnings": []
+      },
+      "delivery_metrics": {
+        "name": "iron_shield",
+        "image": "Assets/Art/Sprites/Items/Equipment/iron_shield.png",
+        "canvas": [
+          96,
+          96
+        ],
+        "visible_bbox": [
+          21,
+          10,
+          75,
+          88
+        ],
+        "visible_width": 54,
+        "visible_height": 78,
+        "margins": {
+          "left": 21,
+          "top": 10,
+          "right": 21,
+          "bottom": 8
+        },
+        "alpha_coverage": 0.3067491319444444,
+        "visual_center": [
+          47.965864874425186,
+          45.115847187831626
+        ],
+        "errors": [],
+        "warnings": []
+      }
+    },
+    {
+      "name": "amber_amulet",
+      "asset": "Assets/Art/Sprites/Items/Equipment/amber_amulet.png",
+      "guid": "b3806fb8c8738174487f9f3e67c2f3f5",
+      "sha256": "3da50afc4a57185c6b0d1b2952a94d28fcd8e1cccfc9083c2d60ba33ee7cdeab",
+      "source_file": "exec-7b99b7c5-893b-4555-94d4-fe2ff1290077.png",
+      "source_sha256": "69831fa012695ef75e2a0149f80edfe10f7ebbab7ccc92d539af43e9b234223e",
+      "source_metrics": {
+        "name": "amber_amulet",
+        "canvas": [
+          1254,
+          1254
+        ],
+        "visible_bbox": [
+          308,
+          122,
+          945,
+          1108
+        ],
+        "visible_width": 637,
+        "visible_height": 986,
+        "margins": {
+          "left": 308,
+          "top": 122,
+          "right": 309,
+          "bottom": 146
+        },
+        "alpha_coverage": 0.14792917846304904,
+        "visual_center": [
+          626.9009010364498,
+          640.0418212457173
+        ],
+        "errors": [],
+        "warnings": []
+      },
+      "delivery_metrics": {
+        "name": "amber_amulet",
+        "image": "Assets/Art/Sprites/Items/Equipment/amber_amulet.png",
+        "canvas": [
+          96,
+          96
+        ],
+        "visible_bbox": [
+          24,
+          9,
+          72,
+          85
+        ],
+        "visible_width": 48,
+        "visible_height": 76,
+        "margins": {
+          "left": 24,
+          "top": 9,
+          "right": 24,
+          "bottom": 11
+        },
+        "alpha_coverage": 0.1488715277777778,
+        "visual_center": [
+          47.99344023323615,
+          48.83819241982507
+        ],
+        "errors": [],
+        "warnings": []
+      }
+    },
+    {
+      "name": "silver_pendant",
+      "asset": "Assets/Art/Sprites/Items/Equipment/silver_pendant.png",
+      "guid": "dada93ae602fc6b4fac4c23ee7b69a84",
+      "sha256": "d16483bbbe4e875660bee8d68df66f7bdb0bff1ea782784de97a84977d77512c",
+      "source_file": "exec-cacdcc9a-72fe-4a55-ae43-cc88949f4ffc.png",
+      "source_sha256": "773c9afe266f7d15e269c96e8ef14600101c2e7e417e2ea1a73abb56b99ea5f5",
+      "source_metrics": {
+        "name": "silver_pendant",
+        "canvas": [
+          1254,
+          1254
+        ],
+        "visible_bbox": [
+          220,
+          101,
+          1031,
+          1127
+        ],
+        "visible_width": 811,
+        "visible_height": 1026,
+        "margins": {
+          "left": 220,
+          "top": 101,
+          "right": 223,
+          "bottom": 127
+        },
+        "alpha_coverage": 0.16648479252357368,
+        "visual_center": [
+          613.9415393430099,
+          623.9483804430863
+        ],
+        "errors": [],
+        "warnings": []
+      },
+      "delivery_metrics": {
+        "name": "silver_pendant",
+        "image": "Assets/Art/Sprites/Items/Equipment/silver_pendant.png",
+        "canvas": [
+          96,
+          96
+        ],
+        "visible_bbox": [
+          17,
+          8,
+          79,
+          86
+        ],
+        "visible_width": 62,
+        "visible_height": 78,
+        "margins": {
+          "left": 17,
+          "top": 8,
+          "right": 17,
+          "bottom": 10
+        },
+        "alpha_coverage": 0.16710069444444445,
+        "visual_center": [
+          46.99285714285714,
+          47.67597402597403
+        ],
+        "errors": [],
+        "warnings": []
+      }
+    },
+    {
+      "name": "leather_belt",
+      "asset": "Assets/Art/Sprites/Items/Equipment/leather_belt.png",
+      "guid": "8f112e6ebb039bf499e46e941051893e",
+      "sha256": "ddb1f47e71f13d58751a8f330537c030d039fb631027e438316033a74ca62de1",
+      "source_file": "exec-e14ff9ed-2280-44a7-ac0f-3ca49a595d0a.png",
+      "source_sha256": "185afa7f049ff57aaa35848c07a6be6216a11ca7f8467fda7b59a663abfff0c3",
+      "source_metrics": {
+        "name": "leather_belt",
+        "canvas": [
+          1254,
+          1254
+        ],
+        "visible_bbox": [
+          137,
+          271,
+          1132,
+          989
+        ],
+        "visible_width": 995,
+        "visible_height": 718,
+        "margins": {
+          "left": 137,
+          "top": 271,
+          "right": 122,
+          "bottom": 265
+        },
+        "alpha_coverage": 0.34710553024579716,
+        "visual_center": [
+          621.8922455567587,
+          620.3907514990959
+        ],
+        "errors": [],
+        "warnings": []
+      },
+      "delivery_metrics": {
+        "name": "leather_belt",
+        "image": "Assets/Art/Sprites/Items/Equipment/leather_belt.png",
+        "canvas": [
+          96,
+          96
+        ],
+        "visible_bbox": [
+          10,
+          21,
+          87,
+          76
+        ],
+        "visible_width": 77,
+        "visible_height": 55,
+        "margins": {
+          "left": 10,
+          "top": 21,
+          "right": 9,
+          "bottom": 20
+        },
+        "alpha_coverage": 0.3484157986111111,
+        "visual_center": [
+          47.625194643413266,
+          47.55138586110246
+        ],
+        "errors": [],
+        "warnings": []
+      }
+    },
+    {
+      "name": "chain_belt",
+      "asset": "Assets/Art/Sprites/Items/Equipment/chain_belt.png",
+      "guid": "c0e3f5b5a15ce4145b503f6d14008c18",
+      "sha256": "8c64dade408a630b3e70c2c1807a37b114c2b530ea4096492e4b64a194c3b3b5",
+      "source_file": "exec-c2080f7e-c871-4667-9716-35cfc23c644c.png",
+      "source_sha256": "a38e82e9df2da92291c3f562738103cfcaf877b811170f1baf28f109e6583e26",
+      "source_metrics": {
+        "name": "chain_belt",
+        "canvas": [
+          1254,
+          1254
+        ],
+        "visible_bbox": [
+          135,
+          340,
+          1122,
+          906
+        ],
+        "visible_width": 987,
+        "visible_height": 566,
+        "margins": {
+          "left": 135,
+          "top": 340,
+          "right": 132,
+          "bottom": 348
+        },
+        "alpha_coverage": 0.2329273597216181,
+        "visual_center": [
+          628.272751595765,
+          619.512872595432
+        ],
+        "errors": [],
+        "warnings": []
+      },
+      "delivery_metrics": {
+        "name": "chain_belt",
+        "image": "Assets/Art/Sprites/Items/Equipment/chain_belt.png",
+        "canvas": [
+          96,
+          96
+        ],
+        "visible_bbox": [
+          10,
+          26,
+          86,
+          69
+        ],
+        "visible_width": 76,
+        "visible_height": 43,
+        "margins": {
+          "left": 10,
+          "top": 26,
+          "right": 10,
+          "bottom": 27
+        },
+        "alpha_coverage": 0.23274739583333334,
+        "visual_center": [
+          48.05524475524476,
+          47.45104895104895
+        ],
+        "errors": [],
+        "warnings": []
+      }
+    },
+    {
+      "name": "ruby_ring",
+      "asset": "Assets/Art/Sprites/Items/Equipment/ruby_ring.png",
+      "guid": "a79ac64f5b2207c4dad1ea9dbd87f9ec",
+      "sha256": "9b1e6134240b6e85b049d8b1b859590012b35c3b8dc4e887aed355e054b1f9d3",
+      "source_file": "exec-10c400b7-a224-4ef8-a7e3-46a532b66e4f.png",
+      "source_sha256": "175715e9ae69efbad61e09f57d35ad9a9a52a5ce2f3e8faae94dd7a775cab6f0",
+      "source_metrics": {
+        "name": "ruby_ring",
+        "canvas": [
+          1254,
+          1254
+        ],
+        "visible_bbox": [
+          226,
+          137,
+          1028,
+          1105
+        ],
+        "visible_width": 802,
+        "visible_height": 968,
+        "margins": {
+          "left": 226,
+          "top": 137,
+          "right": 226,
+          "bottom": 149
+        },
+        "alpha_coverage": 0.3373224819334112,
+        "visual_center": [
+          613.4717746420458,
+          617.6314481237451
+        ],
+        "errors": [],
+        "warnings": []
+      },
+      "delivery_metrics": {
+        "name": "ruby_ring",
+        "image": "Assets/Art/Sprites/Items/Equipment/ruby_ring.png",
+        "canvas": [
+          96,
+          96
+        ],
+        "visible_bbox": [
+          17,
+          10,
+          79,
+          85
+        ],
+        "visible_width": 62,
+        "visible_height": 75,
+        "margins": {
+          "left": 17,
+          "top": 10,
+          "right": 17,
+          "bottom": 11
+        },
+        "alpha_coverage": 0.3373480902777778,
+        "visual_center": [
+          47.035863621743324,
+          47.463975554840786
+        ],
+        "errors": [],
+        "warnings": []
+      }
+    },
+    {
+      "name": "warding_buckler",
+      "asset": "Assets/Art/Sprites/Items/Equipment/warding_buckler.png",
+      "guid": "b534d7eb703c15f45931eb3923c04af1",
+      "sha256": "75dd23f1477160d8a9c3b66ac1d9fcce7537ba8bea515fffe3c7e6de277fab32",
+      "source_file": "exec-ac77bb13-9bda-491f-8a9b-d8308474878c.png",
+      "source_sha256": "457b99c0b66e4c45096dd3fa9162c73b1a8af2ebc3d4431d4db28119340d52e0",
+      "source_metrics": {
+        "name": "warding_buckler",
+        "canvas": [
+          1254,
+          1254
+        ],
+        "visible_bbox": [
+          131,
+          118,
+          1123,
+          1125
+        ],
+        "visible_width": 992,
+        "visible_height": 1007,
+        "margins": {
+          "left": 131,
+          "top": 118,
+          "right": 131,
+          "bottom": 129
+        },
+        "alpha_coverage": 0.4939256579901254,
+        "visual_center": [
+          626.6758039721593,
+          621.9548439177759
+        ],
+        "errors": [],
+        "warnings": []
+      },
+      "delivery_metrics": {
+        "name": "warding_buckler",
+        "image": "Assets/Art/Sprites/Items/Equipment/warding_buckler.png",
+        "canvas": [
+          96,
+          96
+        ],
+        "visible_bbox": [
+          10,
+          9,
+          86,
+          86
+        ],
+        "visible_width": 76,
+        "visible_height": 77,
+        "margins": {
+          "left": 10,
+          "top": 9,
+          "right": 10,
+          "bottom": 10
+        },
+        "alpha_coverage": 0.4938151041666667,
+        "visual_center": [
+          48.001428257525816,
+          47.538233355306524
+        ],
+        "errors": [],
+        "warnings": []
+      }
+    },
+    {
+      "name": "ui_icon_off_hand",
+      "asset": "Assets/Art/Sprites/UI/Icons/ui_icon_off_hand.png",
+      "guid": "e0e185838db5a74429f634a926aea11c",
+      "sha256": "50107e58161723ff0929c61e4eaa95ffa5b529cc5e1bf773364e486e5271ed3a",
+      "source_file": "exec-24a24e46-2a0e-45eb-b05b-e26ec9685c7d.png",
+      "source_sha256": "dccc74e993af29864606a2cc9d111440498a0d21481a1e94bd665ab0037dd8a7",
+      "source_metrics": {
+        "name": "ui_icon_off_hand",
+        "canvas": [
+          1254,
+          1254
+        ],
+        "visible_bbox": [
+          251,
+          150,
+          1004,
+          1118
+        ],
+        "visible_width": 753,
+        "visible_height": 968,
+        "margins": {
+          "left": 251,
+          "top": 150,
+          "right": 250,
+          "bottom": 136
+        },
+        "alpha_coverage": 0.3410076590635644,
+        "visual_center": [
+          627.8210968969119,
+          593.8771762643593
+        ],
+        "errors": [],
+        "warnings": []
+      },
+      "delivery_metrics": {
+        "name": "ui_icon_off_hand",
+        "image": "Assets/Art/Sprites/UI/Icons/ui_icon_off_hand.png",
+        "canvas": [
+          96,
+          96
+        ],
+        "visible_bbox": [
+          19,
+          11,
+          77,
+          86
+        ],
+        "visible_width": 58,
+        "visible_height": 75,
+        "margins": {
+          "left": 19,
+          "top": 11,
+          "right": 19,
+          "bottom": 10
+        },
+        "alpha_coverage": 0.3409288194444444,
+        "visual_center": [
+          48.02036919159771,
+          45.700509229789944
+        ],
+        "errors": [],
+        "warnings": []
+      }
+    },
+    {
+      "name": "ui_icon_necklace",
+      "asset": "Assets/Art/Sprites/UI/Icons/ui_icon_necklace.png",
+      "guid": "01f0910ffa9fbc34dbd44c566c9f7c23",
+      "sha256": "9c6acdaad724bc07edac73f611394fc6607866a9fd09fd741fdcd48b6729d65f",
+      "source_file": "exec-3a11e3e6-941f-4ead-8062-311c3fef066e.png",
+      "source_sha256": "9c0ed5047850bb499a7da83fd98f720c10036580c7337deb1a3b50194005f8c2",
+      "source_metrics": {
+        "name": "ui_icon_necklace",
+        "canvas": [
+          1254,
+          1254
+        ],
+        "visible_bbox": [
+          263,
+          128,
+          991,
+          1126
+        ],
+        "visible_width": 728,
+        "visible_height": 998,
+        "margins": {
+          "left": 263,
+          "top": 128,
+          "right": 263,
+          "bottom": 128
+        },
+        "alpha_coverage": 0.20941090583498037,
+        "visual_center": [
+          627.3373529465354,
+          590.9936107281462
+        ],
+        "errors": [],
+        "warnings": []
+      },
+      "delivery_metrics": {
+        "name": "ui_icon_necklace",
+        "image": "Assets/Art/Sprites/UI/Icons/ui_icon_necklace.png",
+        "canvas": [
+          96,
+          96
+        ],
+        "visible_bbox": [
+          20,
+          10,
+          76,
+          86
+        ],
+        "visible_width": 56,
+        "visible_height": 76,
+        "margins": {
+          "left": 20,
+          "top": 10,
+          "right": 20,
+          "bottom": 10
+        },
+        "alpha_coverage": 0.20909288194444445,
+        "visual_center": [
+          48.03762324857291,
+          45.02309289050337
+        ],
+        "errors": [],
+        "warnings": []
+      }
+    },
+    {
+      "name": "ui_icon_belt",
+      "asset": "Assets/Art/Sprites/UI/Icons/ui_icon_belt.png",
+      "guid": "c9f93ca3e42410d45b479e3d65265e61",
+      "sha256": "3c6f27da427cea04b3655d4ce2db8c0d373b6d2ce55fb4a2e52beb8688e5207c",
+      "source_file": "exec-8366ff93-becc-44fa-b163-118c415a65d7.png",
+      "source_sha256": "e566cf43d1e0e1f01a058653e1fdf2d19bbe77c29bead2ec764e6bba841bd263",
+      "source_metrics": {
+        "name": "ui_icon_belt",
+        "canvas": [
+          1254,
+          1254
+        ],
+        "visible_bbox": [
+          138,
+          324,
+          1116,
+          953
+        ],
+        "visible_width": 978,
+        "visible_height": 629,
+        "margins": {
+          "left": 138,
+          "top": 324,
+          "right": 138,
+          "bottom": 301
+        },
+        "alpha_coverage": 0.2570453973123326,
+        "visual_center": [
+          626.9278910857777,
+          621.814642461307
+        ],
+        "errors": [],
+        "warnings": []
+      },
+      "delivery_metrics": {
+        "name": "ui_icon_belt",
+        "image": "Assets/Art/Sprites/UI/Icons/ui_icon_belt.png",
+        "canvas": [
+          96,
+          96
+        ],
+        "visible_bbox": [
+          11,
+          25,
+          85,
+          73
+        ],
+        "visible_width": 74,
+        "visible_height": 48,
+        "margins": {
+          "left": 11,
+          "top": 25,
+          "right": 11,
+          "bottom": 23
+        },
+        "alpha_coverage": 0.2568359375,
+        "visual_center": [
+          47.98626953950148,
+          47.71461765948458
+        ],
+        "errors": [],
+        "warnings": []
+      }
+    }
+  ],
+  "passed": true
+}

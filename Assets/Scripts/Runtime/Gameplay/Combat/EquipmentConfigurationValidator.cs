@@ -74,14 +74,15 @@ namespace DarkFlare
             {
                 issues.Add("武器必须且只能允许武器槽");
             }
-            else if (definition.ItemType == ItemType.Armor && slots != EquipmentSlotMask.Armor)
+            else if (definition.ItemType == ItemType.Armor
+                     && (slots == EquipmentSlotMask.None || (slots & ~EquipmentSlotMask.Defenses) != 0))
             {
-                issues.Add("护甲必须且只能允许护甲槽");
+                issues.Add("护甲只能允许身体、头部、手部、腿部或副手槽");
             }
             else if (definition.ItemType == ItemType.Accessory
-                     && (slots == EquipmentSlotMask.None || (slots & ~EquipmentSlotMask.Rings) != 0))
+                     && (slots == EquipmentSlotMask.None || (slots & ~EquipmentSlotMask.Accessories) != 0))
             {
-                issues.Add("饰品只能允许左戒指或右戒指槽");
+                issues.Add("饰品只能允许戒指、项链或腰带槽");
             }
             else if ((definition.ItemType == ItemType.Material || definition.ItemType == ItemType.Currency)
                      && slots != EquipmentSlotMask.None)

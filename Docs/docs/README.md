@@ -40,7 +40,9 @@
 
 ## 计划状态
 
-[alpha 0.3.3：统一 UI 视觉组件](./plan/archive/alpha-0.3.3-unified-ui-visual-plan.md)已完成：共享材质、正式按钮 / 槽位、Shell 控件与三语言排版通过验收。当前运行版本 `0.3.3-alpha`，EditMode 432/432、PlayMode 63/63；见[组件规范](./ui-component-style.md)与[验收证据](./assets/acceptance/alpha-0.3.3-ui-style/README.md)。下一阶段为 [0.3.4 十槽装备与内容补齐](./plan/alpha-0.3.4-equipment-completion-plan.md)。
+[alpha 0.3.4：十槽装备与内容补齐](./plan/alpha-0.3.4-equipment-completion-plan.md)主体已实现：十槽、二十件装备、滚动商店、core v1 → v2 兼容及全量 434/434 EditMode、63/63 PlayMode 通过。Editor 三语言与独立 Player 行为验收通过；待可见 Player 画面及退出释放提示核对，尚未封板。见[本轮证据](./assets/acceptance/alpha-0.3.4-equipment/README.md)，运行版本暂保持 `0.3.3-alpha`。
+
+[alpha 0.3.3：统一 UI 视觉组件](./plan/archive/alpha-0.3.3-unified-ui-visual-plan.md)已完成：共享材质、正式按钮 / 槽位、Shell 控件与三语言排版通过验收。当时运行版本 `0.3.3-alpha`，EditMode 432/432、PlayMode 63/63；见[组件规范](./ui-component-style.md)与[验收证据](./assets/acceptance/alpha-0.3.3-ui-style/README.md)。下一阶段为 [0.3.4 十槽装备与内容补齐](./plan/alpha-0.3.4-equipment-completion-plan.md)。
 
 [alpha 0.3.2：暗黑像素 HUD 与战斗状态](./plan/archive/alpha-0.3.2-dark-pixel-hud-plan.md)已完成，当时版本 `0.3.2-alpha`；EditMode 432/432、PlayMode 63/63。见[HUD 模块](./hud-system.md)与[验收证据](./assets/acceptance/alpha-0.3.2-hud/README.md)。0.3.3 统一 UI 视觉组件也已完成。
 

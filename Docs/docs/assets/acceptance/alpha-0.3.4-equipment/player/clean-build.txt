@@ -1,0 +1,5 @@
+result=Succeeded
+errors=0
+warnings=1
+duration=00:00:32.4855629
+version=0.3.3-alpha

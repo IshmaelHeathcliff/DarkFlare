@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using DarkFlare;
 using NUnit.Framework;
 using UnityEngine;
@@ -27,7 +28,7 @@ namespace DarkFlare.Tests
         }
 
         [UnityTest]
-        public IEnumerator MainScene_OfficialEquipmentCompletesTradeCraftAndFourSlotFlow()
+        public IEnumerator MainScene_OfficialEquipmentCompletesTradeCraftAndRegisteredSlotFlow()
         {
             yield return _fixture.EnterMain();
 
@@ -37,7 +38,7 @@ namespace DarkFlare.Tests
             PlayerController player = null;
             float timeout = Time.realtimeSinceStartup + SetupTimeoutSeconds;
 
-            while ((player == null || economy.MerchantStock.Count != 7 || !crafting.IsConfigured)
+            while ((player == null || economy.MerchantStock.Count == 0 || !crafting.IsConfigured)
                    && Time.realtimeSinceStartup < timeout)
             {
                 player = Object.FindAnyObjectByType<PlayerController>();
@@ -45,8 +46,9 @@ namespace DarkFlare.Tests
             }
 
             Assert.IsNotNull(player, "Main 场景未在时限内生成玩家");
-            Assert.AreEqual(7, economy.MerchantStock.Count, "商人未加载七件正式装备");
-            Assert.IsTrue(crafting.IsConfigured, "打造系统未加载十二词条池");
+            CollectionAssert.AreEquivalent(ApplicationHost.Current.ContentCatalog.GetAll<ItemBaseDefinition>(),
+                economy.MerchantStock.Select(item => item.BaseDefinition), "商人未加载完整正式装备池");
+            Assert.IsTrue(crafting.IsConfigured, "打造系统未加载词条池");
 
             player.enabled = false;
             MonsterSpawner spawner = Object.FindAnyObjectByType<MonsterSpawner>();
@@ -60,8 +62,14 @@ namespace DarkFlare.Tests
             ItemInstance armor = FindStock(economy.MerchantStock, "leather_armor");
             ItemInstance leftRing = FindStock(economy.MerchantStock, "iron_ring");
             ItemInstance rightRing = FindStock(economy.MerchantStock, "jade_ring");
-            ItemInstance[] purchased = { weapon, armor, leftRing, rightRing };
-            architecture.GetSystem<TradingSystem>().GrantGold(1000);
+            var primary = new List<ItemInstance> { weapon, armor, leftRing, rightRing };
+            foreach (EquipmentSlot slot in EquipmentSlots.All)
+            {
+                if ((int)slot >= 4) { primary.Add(economy.MerchantStock.First(item => item.BaseDefinition.CanEquipTo(slot))); }
+            }
+            ItemInstance[] purchased = primary.ToArray();
+            ItemInstance[] alternatives = economy.MerchantStock.Where(item => !primary.Contains(item)).ToArray();
+            architecture.GetSystem<TradingSystem>().GrantGold(10000);
 
             for (int i = 0; i < purchased.Length; i++)
             {
@@ -101,6 +109,11 @@ namespace DarkFlare.Tests
             Assert.AreSame(rightRing, equipment.GetItem(actor, EquipmentSlot.RingRight));
 
             IReadOnlyList<EquipmentSlot> slots = EquipmentSlots.All;
+            foreach (ItemInstance item in purchased.Skip(4))
+            {
+                EquipmentSlot slot = EquipmentSlots.GetUniqueTarget(item.BaseDefinition.AllowedEquipmentSlots).Value;
+                Assert.IsTrue(architecture.SendCommand(new EquipItemCommand(actor, item, slot)), slot.ToString());
+            }
 
             for (int i = 0; i < slots.Count; i++)
             {
@@ -114,6 +127,21 @@ namespace DarkFlare.Tests
                     architecture.SendCommand(new SellItemCommand(purchased[i])),
                     $"出售 {purchased[i].BaseDefinition.Id} 失败");
                 Assert.IsFalse(inventory.Grid.Placements.ContainsKey(purchased[i]));
+            }
+            foreach (ItemInstance item in alternatives)
+            {
+                Assert.IsTrue(architecture.SendCommand(new BuyItemCommand(item)), item.BaseDefinition.Id);
+                CraftingResult result = architecture.SendCommand(new CraftItemCommand(
+                    CraftOperation.UpgradeRarity, CraftingAffixScope.Any, item));
+                Assert.IsTrue(result.Succeeded, $"{item.BaseDefinition.Id}: {result.FailureReason}");
+                Assert.IsNotEmpty(item.Prefixes.Concat(item.Suffixes));
+                foreach (EquipmentSlot slot in slots.Where(item.BaseDefinition.CanEquipTo))
+                {
+                    Assert.IsTrue(architecture.SendCommand(new EquipItemCommand(actor, item, slot)), item.BaseDefinition.Id);
+                    Assert.AreSame(item, equipment.GetItem(actor, slot));
+                    Assert.IsTrue(architecture.SendCommand(new UnequipItemCommand(actor, slot)));
+                }
+                Assert.IsTrue(architecture.SendCommand(new SellItemCommand(item)), item.BaseDefinition.Id);
             }
         }
 

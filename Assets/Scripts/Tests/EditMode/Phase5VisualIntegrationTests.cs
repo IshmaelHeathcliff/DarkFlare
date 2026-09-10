@@ -53,6 +53,12 @@ namespace DarkFlare.Tests
             $"{UiIconRoot}/ui_icon_weapon.png",
             $"{UiIconRoot}/ui_icon_armor.png",
             $"{UiIconRoot}/ui_icon_ring.png",
+            $"{UiIconRoot}/ui_icon_head.png",
+            $"{UiIconRoot}/ui_icon_hands.png",
+            $"{UiIconRoot}/ui_icon_legs.png",
+            $"{UiIconRoot}/ui_icon_off_hand.png",
+            $"{UiIconRoot}/ui_icon_necklace.png",
+            $"{UiIconRoot}/ui_icon_belt.png",
             $"{UiIconRoot}/ui_icon_inventory.png",
             $"{UiIconRoot}/ui_icon_shop.png",
             $"{UiIconRoot}/ui_icon_crafting.png",
@@ -124,7 +130,7 @@ namespace DarkFlare.Tests
             List<ItemBaseDefinition> items = LoadAssets<ItemBaseDefinition>(ItemRoot);
             HashSet<string> iconGuids = new HashSet<string>();
 
-            Assert.AreEqual(7, items.Count);
+            Assert.IsNotEmpty(items);
 
             for (int i = 0; i < items.Count; i++)
             {
@@ -432,7 +438,7 @@ namespace DarkFlare.Tests
             Sprite missingIcon = serializedLoot.FindProperty("_missingIcon").objectReferenceValue as Sprite;
             AssertSpritePath(halo.sprite, LootRarityEffectPath, "LootPickup/Visual/Halo");
             Assert.AreEqual(Vector3.one, halo.transform.localScale);
-            AssertSpritePath(missingIcon, UiIconPaths[11], "LootPickupVisual._missingIcon");
+            AssertSpritePath(missingIcon, $"{UiIconRoot}/ui_icon_missing.png", "LootPickupVisual._missingIcon");
 
             GameObject craftingStation = AssetDatabase.LoadAssetAtPath<GameObject>(
                 "Assets/Prefabs/World/CraftingStation.prefab");

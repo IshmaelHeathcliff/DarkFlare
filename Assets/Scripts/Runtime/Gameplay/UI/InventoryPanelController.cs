@@ -513,13 +513,10 @@ namespace DarkFlare
 
             EquipmentSlotMask slots = _selectedItem.BaseDefinition.AllowedEquipmentSlots;
 
-            if (slots == EquipmentSlotMask.Weapon)
+            EquipmentSlot? uniqueTarget = EquipmentSlots.GetUniqueTarget(slots);
+            if (uniqueTarget.HasValue)
             {
-                _targetSlot = EquipmentSlot.Weapon;
-            }
-            else if (slots == EquipmentSlotMask.Armor)
-            {
-                _targetSlot = EquipmentSlot.Armor;
+                _targetSlot = uniqueTarget;
             }
             else if (slots == EquipmentSlotMask.Rings && clearAmbiguousRingTarget)
             {
@@ -1082,14 +1079,7 @@ namespace DarkFlare
 
         string GetSlotName(EquipmentSlot slot)
         {
-            string entryKey = slot switch
-            {
-                EquipmentSlot.Weapon => "equipment.slot.weapon",
-                EquipmentSlot.Armor => "equipment.slot.armor",
-                EquipmentSlot.RingLeft => "equipment.slot.ring_left",
-                EquipmentSlot.RingRight => "equipment.slot.ring_right",
-                _ => "equipment.slot.unknown",
-            };
+            string entryKey = "equipment.slot." + EquipmentSlots.GetKey(slot);
             return Localize("ui", entryKey);
         }
 
@@ -1126,15 +1116,9 @@ namespace DarkFlare
 
         static string GetSlotIconClass(EquipmentSlot slot)
         {
-            switch (slot)
-            {
-                case EquipmentSlot.Weapon:
-                    return "inventory-equipment-slot-icon--weapon";
-                case EquipmentSlot.Armor:
-                    return "inventory-equipment-slot-icon--armor";
-                default:
-                    return "inventory-equipment-slot-icon--ring";
-            }
+            string key = slot == EquipmentSlot.RingLeft || slot == EquipmentSlot.RingRight
+                ? "ring" : EquipmentSlots.GetKey(slot).Replace('_', '-');
+            return "inventory-equipment-slot-icon--" + key;
         }
     }
 }

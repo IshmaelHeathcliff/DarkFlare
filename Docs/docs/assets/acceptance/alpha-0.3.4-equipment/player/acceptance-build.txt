@@ -1,0 +1,4 @@
+result=Succeeded
+errors=0
+warnings=6
+duration=00:00:41.1252415

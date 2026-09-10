@@ -102,6 +102,62 @@ MonoBehaviour:
     m_Localized: Monster
     m_Metadata:
       m_Items: []
+  - m_Id: 7793548014379008
+    m_Localized: Iron Helm
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7793548257648640
+    m_Localized: Hunter Hood
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7793548450586624
+    m_Localized: Iron Gauntlets
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7793548660301824
+    m_Localized: Hunter Gloves
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7793548861628416
+    m_Localized: Iron Greaves
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7793549058760704
+    m_Localized: Scout Boots
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7793549251698688
+    m_Localized: Iron Shield
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7793549453025280
+    m_Localized: Warding Buckler
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7793549654351872
+    m_Localized: Amber Amulet
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7793549851484160
+    m_Localized: Silver Pendant
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7793550057005056
+    m_Localized: Heavy Leather Belt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7793550266720256
+    m_Localized: Chain Belt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7793550476435456
+    m_Localized: Ruby Ring
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7793550690344960
+    m_Localized: Accessory
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

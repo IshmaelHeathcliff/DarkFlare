@@ -2,6 +2,13 @@
   "schemaVersion": 1,
   "fixtures": [
     {
+      "path": "save-v1-core-v1-four-slots.json",
+      "domain": "save",
+      "sourceSchemaVersion": 1,
+      "sourceContentVersion": 1,
+      "expectedMigration": "core v1 to v2 preserves the four released slot identities, instance IDs, rolled modifiers, inventory positions and merchant stock; six appended slots remain empty"
+    },
+    {
       "path": "save-v0-content-id.json",
       "domain": "save",
       "sourceSchemaVersion": 0,

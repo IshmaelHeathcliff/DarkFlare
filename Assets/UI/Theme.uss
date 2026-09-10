@@ -177,3 +177,21 @@
 .game-menu-tab-label {
   -unity-font-style: bold;
 }
+
+.inventory-equipment-slot-icon--head.inventory-equipment-slot-icon--empty { background-image: url("project://database/Assets/Art/Sprites/UI/Icons/ui_icon_head.png?fileID=21300000&guid=2f0fb30459917e64598988bb2e369a8b&type=3"); }
+
+.inventory-equipment-slot-icon--hands.inventory-equipment-slot-icon--empty { background-image: url("project://database/Assets/Art/Sprites/UI/Icons/ui_icon_hands.png?fileID=21300000&guid=45e71ffbb0e2c6a49ade049895c37eab&type=3"); }
+
+.inventory-equipment-slot-icon--legs.inventory-equipment-slot-icon--empty { background-image: url("project://database/Assets/Art/Sprites/UI/Icons/ui_icon_legs.png?fileID=21300000&guid=c388fd83b7380f34988093e9985eaaf9&type=3"); }
+
+.inventory-equipment-slot-icon--off-hand.inventory-equipment-slot-icon--empty {
+    background-image: url("project://database/Assets/Art/Sprites/UI/Icons/ui_icon_off_hand.png?fileID=21300000&guid=e0e185838db5a74429f634a926aea11c&type=3");
+}
+
+.inventory-equipment-slot-icon--necklace.inventory-equipment-slot-icon--empty {
+    background-image: url("project://database/Assets/Art/Sprites/UI/Icons/ui_icon_necklace.png?fileID=21300000&guid=01f0910ffa9fbc34dbd44c566c9f7c23&type=3");
+}
+
+.inventory-equipment-slot-icon--belt.inventory-equipment-slot-icon--empty {
+    background-image: url("project://database/Assets/Art/Sprites/UI/Icons/ui_icon_belt.png?fileID=21300000&guid=c9f93ca3e42410d45b479e3d65265e61&type=3");
+}

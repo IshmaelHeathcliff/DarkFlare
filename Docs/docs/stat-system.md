@@ -8,6 +8,8 @@
 
 ## 调用关系
 
+装备来源遍历完整十槽 Loadout，以 `EquipmentSlots.GetKey` 解析部位本地化；头部、手部、腿部、副手、项链和腰带与旧槽共同聚合。副手不引入第二份武器基础伤害。详情、HUD 和保存恢复均读取同一最终属性，穿脱时继续保持生命 / 法力比例。
+
 ```mermaid
 flowchart LR
   A["StatDefinition 配置资产"] -->|"Stat.Id"| B["StatModifierDefinition"]

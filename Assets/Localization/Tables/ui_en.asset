@@ -275,7 +275,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 4111712903230
-    m_Localized: Select a merchant item to buy, or an inventory item to sell.
+    m_Localized: Select an item to buy or sell
     m_Metadata:
       m_Items: []
   - m_Id: 4111712903231
@@ -439,11 +439,11 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 15892258742272
-    m_Localized: Weapon
+    m_Localized: Main Hand
     m_Metadata:
       m_Items: []
   - m_Id: 15892321656832
-    m_Localized: Armor
+    m_Localized: Body
     m_Metadata:
       m_Items: []
   - m_Id: 15892321656833
@@ -1736,6 +1736,30 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 7409032846368769
     m_Localized: Mana regenerates over time
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7771506632286208
+    m_Localized: Head
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7771506691006464
+    m_Localized: Hands
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7771506691006465
+    m_Localized: Legs
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7771506691006466
+    m_Localized: Off Hand
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7771506691006467
+    m_Localized: Necklace
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7771506691006468
+    m_Localized: Belt
     m_Metadata:
       m_Items: []
   references:

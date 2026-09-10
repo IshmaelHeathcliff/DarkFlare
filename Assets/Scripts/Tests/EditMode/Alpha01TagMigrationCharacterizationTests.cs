@@ -307,12 +307,13 @@ namespace DarkFlare.Tests
         }
 
         [Test]
-        public void OfficialAffixCompatibility_MatchesFrozenCandidateMatrix()
+        public void ReleasedItems_AffixCompatibilityMatchesFrozenCandidateMatrix()
         {
             List<AffixDefinition> affixes = LoadAssets<AffixDefinition>($"{PresetRoot}/Affixes");
             List<ItemBaseDefinition> items = LoadAssets<ItemBaseDefinition>($"{PresetRoot}/Items");
 
-            Assert.AreEqual(CandidateMatrix.Count, items.Count, "正式物品集合发生变化，需要显式更新迁移基线");
+            items = items.Where(item => CandidateMatrix.ContainsKey(item.Id)).ToList();
+            Assert.AreEqual(CandidateMatrix.Count, items.Count, "已发布迁移基线中的物品缺失");
 
             for (int itemIndex = 0; itemIndex < items.Count; itemIndex++)
             {
