@@ -16,8 +16,7 @@ namespace DarkFlare.Tests
 
             ApplicationShellBootstrap[] shells =
                 Object.FindObjectsByType<ApplicationShellBootstrap>(
-                    FindObjectsInactive.Include,
-                    FindObjectsSortMode.None);
+                    FindObjectsInactive.Include);
 
             for (int i = 0; i < shells.Length; i++)
             {

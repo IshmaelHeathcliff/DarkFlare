@@ -649,8 +649,7 @@ namespace DarkFlare
             }
 
             AudioListener[] listeners = UnityEngine.Object.FindObjectsByType<AudioListener>(
-                FindObjectsInactive.Exclude,
-                FindObjectsSortMode.None);
+                FindObjectsInactive.Exclude);
             bool hasSceneListener = false;
 
             for (int i = 0; i < listeners.Length; i++)

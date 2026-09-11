@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -32,6 +33,48 @@ namespace DarkFlare.Tests
         }
 
         [UnityTest]
+        public IEnumerator RepeatedPlayInitialization_ReplacesIsolatedPathsWithoutRetainingOldInstallation()
+        {
+            if (ApplicationHost.TryGetCurrent(out ApplicationHost host))
+            {
+                yield return host.ShutdownAsync().ToCoroutine();
+                UnityEngine.Object.Destroy(host.gameObject);
+                yield return null;
+            }
+
+            MethodInfo install = typeof(Alpha027PlayModeDataEnvironment).GetMethod(
+                "Install", BindingFlags.Static | BindingFlags.NonPublic);
+            Assert.IsNotNull(install);
+
+            try
+            {
+                for (int cycle = 0; cycle < 2; cycle++)
+                {
+                    string previousRoot = Alpha027PlayModeDataEnvironment.RootPath;
+                    Directory.CreateDirectory(previousRoot);
+                    ApplicationDataPathProviderFactory.ResetForSubsystemRegistration();
+                    install.Invoke(null, null);
+                    Assert.AreNotEqual(previousRoot, Alpha027PlayModeDataEnvironment.RootPath);
+                    Assert.IsFalse(Directory.Exists(previousRoot), "旧测试目录必须安全回收");
+                    Assert.AreEqual(Alpha027PlayModeDataEnvironment.SaveRootPath,
+                        ApplicationDataPathProviderFactory.CreateSavePathProvider().RootPath);
+                    Assert.AreEqual(Alpha027PlayModeDataEnvironment.SettingsRootPath,
+                        ApplicationDataPathProviderFactory.CreateSettingsPathProvider().RootPath);
+                }
+            }
+            finally
+            {
+                Alpha027PlayModeDataEnvironment.ReinstallForTestRun();
+                GameObject hostObject = new GameObject("[ApplicationHost]");
+                hostObject.AddComponent<ApplicationHost>();
+            }
+
+            var sceneFlow = new SceneFlowPlayModeFixture();
+            yield return sceneFlow.ReloadBootstrap();
+            yield return sceneFlow.EnterFrontEnd();
+        }
+
+        [UnityTest]
         public IEnumerator MainColdStart_HasUniqueHostArchitecturePlayerAndCommittedSpawner()
         {
             yield return _fixture.EnterMain();
@@ -39,11 +82,9 @@ namespace DarkFlare.Tests
 
             ApplicationHost host = ApplicationHost.Current;
             ApplicationHost[] hosts = UnityEngine.Object.FindObjectsByType<ApplicationHost>(
-                FindObjectsInactive.Include,
-                FindObjectsSortMode.None);
+                FindObjectsInactive.Include);
             PlayerController[] players = UnityEngine.Object.FindObjectsByType<PlayerController>(
-                FindObjectsInactive.Exclude,
-                FindObjectsSortMode.None);
+                FindObjectsInactive.Exclude);
             MonsterSpawner spawner = UnityEngine.Object.FindAnyObjectByType<MonsterSpawner>();
             GameMenuController gameMenu =
                 UnityEngine.Object.FindAnyObjectByType<GameMenuController>();
@@ -229,11 +270,9 @@ namespace DarkFlare.Tests
             Assert.AreEqual(GameSessionState.None, host.CurrentSession.State);
             Assert.IsFalse(GameArchitectureProvider.HasCurrent);
             Assert.AreEqual(0, UnityEngine.Object.FindObjectsByType<PlayerController>(
-                FindObjectsInactive.Include,
-                FindObjectsSortMode.None).Length);
+                FindObjectsInactive.Include).Length);
             Assert.AreEqual(0, UnityEngine.Object.FindObjectsByType<MonsterController>(
-                FindObjectsInactive.Include,
-                FindObjectsSortMode.None).Length);
+                FindObjectsInactive.Include).Length);
             if (ownsCatalog) { UnityEngine.Object.Destroy(contentCatalog); }
         }
 
@@ -273,11 +312,9 @@ namespace DarkFlare.Tests
                 Assert.Greater(GameArchitectureProvider.Generation, previousGeneration);
                 previousGeneration = GameArchitectureProvider.Generation;
                 Assert.AreEqual(1, UnityEngine.Object.FindObjectsByType<ApplicationHost>(
-                    FindObjectsInactive.Include,
-                    FindObjectsSortMode.None).Length);
+                    FindObjectsInactive.Include).Length);
                 Assert.AreEqual(1, UnityEngine.Object.FindObjectsByType<PlayerController>(
-                    FindObjectsInactive.Exclude,
-                    FindObjectsSortMode.None).Length);
+                    FindObjectsInactive.Exclude).Length);
             }
         }
 
@@ -293,11 +330,9 @@ namespace DarkFlare.Tests
 
             Assert.Greater(GameArchitectureProvider.Generation, firstGeneration);
             Assert.AreEqual(1, UnityEngine.Object.FindObjectsByType<ApplicationHost>(
-                FindObjectsInactive.Include,
-                FindObjectsSortMode.None).Length);
+                FindObjectsInactive.Include).Length);
             Assert.AreEqual(1, UnityEngine.Object.FindObjectsByType<PlayerController>(
-                FindObjectsInactive.Exclude,
-                FindObjectsSortMode.None).Length);
+                FindObjectsInactive.Exclude).Length);
             Assert.AreEqual(GameSessionState.Running, ApplicationHost.Current.CurrentSession.State);
         }
 
@@ -315,8 +350,7 @@ namespace DarkFlare.Tests
 
             Assert.IsFalse(GameArchitectureProvider.HasCurrent);
             Assert.AreEqual(0, UnityEngine.Object.FindObjectsByType<PlayerController>(
-                FindObjectsInactive.Include,
-                FindObjectsSortMode.None).Length);
+                FindObjectsInactive.Include).Length);
         }
 
         [UnityTest]

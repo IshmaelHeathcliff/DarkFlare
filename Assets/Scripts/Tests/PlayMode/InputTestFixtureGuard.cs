@@ -63,8 +63,7 @@ namespace DarkFlare.Tests
         {
             InputSystemUIInputModule[] modules =
                 UnityEngine.Object.FindObjectsByType<InputSystemUIInputModule>(
-                    FindObjectsInactive.Include,
-                    FindObjectsSortMode.None);
+                    FindObjectsInactive.Include);
             List<InputSystemUIInputModule> enabledModules =
                 new List<InputSystemUIInputModule>(modules.Length);
 

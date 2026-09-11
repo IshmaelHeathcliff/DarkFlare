@@ -57,11 +57,11 @@ Point / Look 在 Context 切换后会回放当前指针位置；相同控件的�
 
 ### 编辑器进入 Play Mode 约束
 
-当前输入与 QFramework 生命周期的可提交基线要求 `ProjectSettings/EditorSettings.asset` 中的 `EnterPlayModeOptions` 保持为 `0`，即不启用 `DisableDomainReload` 或 `DisableSceneReload`。关闭 Domain Reload 会保留静态架构和输入对象状态，曾导致进入 Play Mode 后移动输入失效。
+当前输入与 QFramework 生命周期的提交基线为 **Reload Scene Only**：`ProjectSettings/EditorSettings.asset` 中选项启用，`EnterPlayModeOptions = DisableDomainReload`（数值 `1`），保留 Scene Reload。2026-09-12 完成[静态状态、输入与连续启停专项审计](./infrastructure/domain-reload-compatibility.md)后，由用户确认采用该设置。
 
-为加快专项测试，可以在测试期间临时调整 Enter Play Mode Options，但该值只属于本地测试环境，不是可提交的项目配置。测试完成、失败或中止后都必须恢复为 `0`，再回归验证首次运行、停止后再次运行、键盘 / 手柄移动、Gameplay / UI Action Map 切换及菜单关闭后恢复移动。
+专项测试可以临时调整 Enter Play Mode Options。测试完成、失败或中止后都必须恢复上述基线；输入与生命周期修改需要回归验证首次运行、停止后再次运行、键盘 / 手柄移动、Gameplay / UI Action Map 切换及菜单关闭后恢复移动。
 
-提交前必须检查 `ProjectSettings/EditorSettings.asset` 的实际值和 Git diff：`EnterPlayModeOptions` 非 `0` 时禁止提交；只有测试产生的 Editor Settings 变动或 Unity 自动格式化差异也不得直接纳入提交。若未来希望持久启用快速进入 Play Mode，必须先完成 `GameArchitecture` 静态状态、`GameInput` Action 生命周期和场景对象重建的专项审计，并独立评审该配置变更。
+提交前检查 `ProjectSettings/EditorSettings.asset` 的实际值和 Git diff，避免纳入测试遗留配置。新增静态状态必须明确其重置或保留合同，事件订阅与输入资产必须按生命周期释放；游戏内直接停止的 Abandoned 隔离边界见兼容检查报告。历史验收中恢复为 `0` 的记录保持原意，不再作为当前基线。
 
 ## UI 组成
 

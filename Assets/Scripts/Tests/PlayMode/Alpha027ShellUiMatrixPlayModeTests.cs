@@ -190,6 +190,11 @@ namespace DarkFlare.Tests
                         yield return WaitForResolution(resolution);
                         yield return null;
                         VisualElement root = FindElement("application-shell");
+                        Assert.AreSame(
+                            UnityEditor.AssetDatabase.LoadAssetAtPath<UnityEngine.TextCore.Text.FontAsset>(
+                                "Assets/Settings/UI/Fonts/GameCjkFont.asset"),
+                            FindButton("front-end-new-game").resolvedStyle.unityFontDefinition.fontAsset,
+                            "三语言 UI 必须实际继承秋水书体，不能依赖已弃用的默认字体设置");
 
                         if (localeMode == "qps-ploc")
                         {
@@ -470,8 +475,7 @@ namespace DarkFlare.Tests
         static T FindElement<T>(string name) where T : VisualElement
         {
             UIDocument[] documents = UnityEngine.Object.FindObjectsByType<UIDocument>(
-                FindObjectsInactive.Include,
-                FindObjectsSortMode.None);
+                FindObjectsInactive.Include);
 
             for (int i = 0; i < documents.Length; i++)
             {

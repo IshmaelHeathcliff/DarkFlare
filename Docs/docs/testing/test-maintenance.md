@@ -21,7 +21,7 @@
 - UI 验证优先真实输入与可见结果，包括焦点、唯一高亮、命中、边界、文本和暂停；不检查某个 Controller 是否包含指定代码行。当前常规视觉矩阵为 1920×1080 × 中文 / 英文 / Pseudo Locale。
 - 不为减少启动次数把所有独立场景塞进一个巨型测试。只合并同一合同、相同前置且没有新增故障分支的重复检查；失败仍应指出具体对象 / 场景。
 - 断言配置数量时先判断是否本身就是产品合同；能通过非空、完整登记、合法引用、每部位覆盖等表达时，不再重复一份内容清单。
-- 测试须使用隔离的数据根，完整恢复场景、分辨率、输入设备、时间、Locale、临时文件及资源。`EnterPlayModeOptions` 保持项目规定值 `0`。
+- 测试须使用隔离的数据根，完整恢复场景、分辨率、输入设备、时间、Locale、临时文件及资源。结束后恢复项目基线 Reload Scene Only：`EnterPlayModeOptionsEnabled = true`、`EnterPlayModeOptions = DisableDomainReload`（数值 `1`）；专项矩阵可以临时切换，见[兼容检查](../infrastructure/domain-reload-compatibility.md)。
 - 第三方包 / 供应商测试由上游维护，不删除包缓存来降低数量。常规项目回归限定两个 `DarkFlare.Tests.*` 程序集；修改相关包集成时再运行针对性上游测试，既有 Ignore 与项目失败分别报告。
 
 ## 收尾检查

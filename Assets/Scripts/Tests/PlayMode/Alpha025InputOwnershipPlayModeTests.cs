@@ -59,7 +59,7 @@ namespace DarkFlare.Tests
             Assert.AreSame(input.ActionAsset, inputModule.submit.action.actionMap.asset);
             Assert.AreSame(input.ActionAsset, inputModule.move.action.actionMap.asset);
             Assert.AreEqual(InputContext.UI, input.CurrentContext);
-            int actionAssetInstanceId = input.ActionAsset.GetInstanceID();
+            EntityId actionAssetEntityId = input.ActionAsset.GetEntityId();
 
             for (int cycle = 0; cycle < 3; cycle++)
             {
@@ -69,7 +69,7 @@ namespace DarkFlare.Tests
                     .ToCoroutine(result => startResult = result);
 
                 Assert.IsTrue(startResult.Succeeded, startResult.Exception?.ToString());
-                Assert.AreEqual(actionAssetInstanceId, input.ActionAsset.GetInstanceID());
+                Assert.AreEqual(actionAssetEntityId, input.ActionAsset.GetEntityId());
                 Assert.AreSame(input.ActionAsset, inputModule.actionsAsset);
                 Assert.AreEqual(InputContext.Gameplay, input.CurrentContext);
                 Assert.IsTrue(input.IsGameplayEnabled);
@@ -84,7 +84,7 @@ namespace DarkFlare.Tests
                     .ToCoroutine(result => returnResult = result);
 
                 Assert.IsTrue(returnResult.Succeeded, returnResult.Exception?.ToString());
-                Assert.AreEqual(actionAssetInstanceId, input.ActionAsset.GetInstanceID());
+                Assert.AreEqual(actionAssetEntityId, input.ActionAsset.GetEntityId());
                 Assert.AreSame(input.ActionAsset, inputModule.actionsAsset);
                 Assert.AreEqual(InputContext.UI, input.CurrentContext);
                 Assert.IsFalse(input.IsGameplayEnabled);
@@ -200,8 +200,7 @@ namespace DarkFlare.Tests
         static Button FindButton(string name)
         {
             UIDocument[] documents = Object.FindObjectsByType<UIDocument>(
-                FindObjectsInactive.Include,
-                FindObjectsSortMode.None);
+                FindObjectsInactive.Include);
 
             for (int i = 0; i < documents.Length; i++)
             {

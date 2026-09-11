@@ -55,4 +55,4 @@
 - 正式配置放在 `Assets/Data/Preset` 对应分类目录；测试临时资产不得进入正式内容池。
 - 随机结果由调用方提供种子；配置对象不得隐式使用全局随机状态或在运行时写回共享资产。
 - 资源通过 Addressables 或显式资产引用持有；运行时不得使用 `Resources.Load`。
-- 正式提交前运行配置中心“内容校验”、相关 EditMode/PlayMode 测试，并确认 `ProjectSettings/EditorSettings.asset` 无差异且 `EnterPlayModeOptions` 为 `0`。
+- 正式提交前运行配置中心“内容校验”、相关 EditMode/PlayMode 测试，并确认 `ProjectSettings/EditorSettings.asset` 无测试遗留差异，保持 Reload Scene Only 基线（选项启用，`EnterPlayModeOptions = 1`）。

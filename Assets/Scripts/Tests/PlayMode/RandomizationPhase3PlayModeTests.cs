@@ -140,6 +140,13 @@ namespace DarkFlare.Tests
 
             while (monsters.Count < MonsterSampleCount && Time.realtimeSinceStartup < timeout)
             {
+                // 随机序列采样需要持续推进时间；平台失焦暂停由输入生命周期测试独立覆盖。
+                PlatformLifecycleService platform = ApplicationHost.Current.PlatformLifecycle;
+                if ((platform.SuspensionReasons & PlatformSuspensionReason.FocusLost) != 0)
+                {
+                    yield return platform.HandleFocusChangedAsync(true).ToCoroutine();
+                }
+
                 MonsterController[] current = UnityEngine.Object.FindObjectsByType<MonsterController>();
 
                 for (int i = 0; i < current.Length && monsters.Count < MonsterSampleCount; i++)
@@ -195,8 +202,7 @@ namespace DarkFlare.Tests
             player.enabled = true;
             MonsterController[] frozenMonsters =
                 UnityEngine.Object.FindObjectsByType<MonsterController>(
-                    FindObjectsInactive.Exclude,
-                    FindObjectsSortMode.None);
+                    FindObjectsInactive.Exclude);
 
             for (int i = 0; i < frozenMonsters.Length; i++)
             {

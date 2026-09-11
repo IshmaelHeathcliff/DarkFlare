@@ -154,6 +154,8 @@ flowchart LR
 
 ## 当前限制
 
+Unity 6.6 下的默认重载、关闭 Domain Reload、同时关闭 Domain / Scene Reload 已完成连续 Play 验证，详见[Domain Reload 兼容检查](./domain-reload-compatibility.md)。游戏内直接停止仍遵循 Abandoned 隔离合同；下一次 SubsystemRegistration 负责释放旧架构，不能把应急隔离报告成正常清理成功。
+
 - 当前 Scene Flow 已覆盖 Bootstrap / Main 的启动、NewGame、Continue、取消、恢复和返回前台；生命周期模块仍不自行加载或卸载场景。
 - 当前仍只有 `local-default` Profile；已支持 `auto` 槽位、序列化、两代备份、迁移和 Restore，但没有正式档案切换、手动槽位管理或云同步。
 - 新游戏与读档分别使用 `NewGameSessionInitializer` 和 `RestoreGameSessionInitializer`，禁止复用新游戏发放流程伪装恢复。

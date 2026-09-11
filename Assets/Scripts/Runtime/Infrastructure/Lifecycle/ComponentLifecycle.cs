@@ -16,7 +16,7 @@ namespace DarkFlare
                 throw new ArgumentNullException(nameof(owner));
             }
 
-            string scopeName = $"{owner.GetType().Name}:{operationName}:{owner.GetInstanceID()}";
+            string scopeName = $"{owner.GetType().Name}:{operationName}:{owner.GetEntityId()}";
 
             if (ApplicationHost.TryGetCurrent(out ApplicationHost host))
             {

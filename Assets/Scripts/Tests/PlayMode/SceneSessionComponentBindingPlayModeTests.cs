@@ -369,8 +369,7 @@ namespace DarkFlare.Tests
             CraftingPanelController crafting = Object.FindAnyObjectByType<CraftingPanelController>();
             InteractionPromptController prompt = Object.FindAnyObjectByType<InteractionPromptController>();
             WorldInteractionVisual[] interactionVisuals = Object.FindObjectsByType<WorldInteractionVisual>(
-                FindObjectsInactive.Include,
-                FindObjectsSortMode.None);
+                FindObjectsInactive.Include);
 
             Assert.IsNotNull(hud);
             Assert.IsNotNull(menu);

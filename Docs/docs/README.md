@@ -3,6 +3,8 @@
 ## 当前文档
 
 - [项目概览](./project.md)
+- [Unity 6.6 升级兼容](./infrastructure/unity-6.6-upgrade.md)
+- [Domain Reload 兼容检查](./infrastructure/domain-reload-compatibility.md)
 - [测试维护规范](./testing/test-maintenance.md)
 - [Alpha 0.3 前置测试审计](./testing/test-suite-audit.md)
 - [目录结构](./project-structure.md)

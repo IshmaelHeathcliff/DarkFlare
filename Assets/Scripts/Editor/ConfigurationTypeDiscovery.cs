@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using UnityEditor;
 using UnityEngine;
 
 namespace DarkFlare.Editor
@@ -16,25 +17,8 @@ namespace DarkFlare.Editor
 
         public static IReadOnlyList<Type> FindTopLevelTypes()
         {
-            List<Type> result = new List<Type>();
-            Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
-
-            for (int assemblyIndex = 0; assemblyIndex < assemblies.Length; assemblyIndex++)
-            {
-                Type[] types = GetTypesSafely(assemblies[assemblyIndex]);
-
-                for (int typeIndex = 0; typeIndex < types.Length; typeIndex++)
-                {
-                    Type type = types[typeIndex];
-
-                    if (IsCreatableConfigType(type))
-                    {
-                        result.Add(type);
-                    }
-                }
-            }
-
-            return result
+            return TypeCache.GetTypesDerivedFrom<ScriptableObject>()
+                .Where(IsCreatableConfigType)
                 .OrderBy(type => type.FullName, StringComparer.Ordinal)
                 .ToArray();
         }
@@ -184,20 +168,6 @@ namespace DarkFlare.Editor
                 && string.Equals(type.Namespace, "DarkFlare", StringComparison.Ordinal)
                 && !typeof(UnityEngine.Object).IsAssignableFrom(type)
                 && type.IsDefined(typeof(SerializableAttribute), false);
-        }
-
-        static Type[] GetTypesSafely(Assembly assembly)
-        {
-            try
-            {
-                return assembly.GetTypes();
-            }
-            catch (ReflectionTypeLoadException exception)
-            {
-                return exception.Types
-                    .Where(type => type != null)
-                    .ToArray();
-            }
         }
     }
 }

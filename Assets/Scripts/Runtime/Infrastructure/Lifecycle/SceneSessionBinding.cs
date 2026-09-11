@@ -248,7 +248,7 @@ namespace DarkFlare
             try
             {
                 bindingScope.Tasks.Run(
-                    $"scene-component-bind:{_owner.GetType().Name}:{_owner.GetInstanceID()}",
+                    $"scene-component-bind:{_owner.GetType().Name}:{_owner.GetEntityId()}",
                     token => RetryBindingAsync(
                         session,
                         bindingScope,

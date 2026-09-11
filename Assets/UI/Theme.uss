@@ -4,7 +4,7 @@
   -unity-slice-right: 96;
   -unity-slice-top: 96;
   -unity-slice-bottom: 96;
-  -unity-slice-scale: 0.125;
+  -unity-slice-scale: 0.125px;
 }
 
 .ui-icon {

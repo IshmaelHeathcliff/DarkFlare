@@ -955,6 +955,7 @@ namespace DarkFlare
                 await InitializeAudioAsync(cancellationToken);
                 LocalizationOperationResult localizationResult =
                     await _localizationService.InitializeAsync(cancellationToken);
+                cancellationToken.ThrowIfCancellationRequested();
 
                 if (!localizationResult.Succeeded)
                 {
@@ -963,7 +964,6 @@ namespace DarkFlare
                         localizationResult.Exception);
                 }
 
-                cancellationToken.ThrowIfCancellationRequested();
                 ProfileId = DefaultProfileId;
                 _profileScope = _applicationScope.CreateChild($"Profile-{ProfileId}");
                 _itemInstanceIds = new UuidItemInstanceIdGenerator();
@@ -1071,6 +1071,7 @@ namespace DarkFlare
                         AudioServiceConfiguration.Address,
                         AudioServiceConfiguration.Address,
                         cancellationToken);
+                cancellationToken.ThrowIfCancellationRequested();
 
                 if (!result.Succeeded)
                 {

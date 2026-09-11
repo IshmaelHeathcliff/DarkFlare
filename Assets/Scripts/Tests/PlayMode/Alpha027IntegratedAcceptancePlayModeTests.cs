@@ -184,8 +184,7 @@ namespace DarkFlare.Tests
                 .ToCoroutine(result => afterRestart = result);
             Assert.IsFalse(afterRestart.Succeeded, "重启后 Continue 必须保持不可用");
             Assert.AreEqual(1, UnityEngine.Object.FindObjectsByType<ApplicationHost>(
-                FindObjectsInactive.Include,
-                FindObjectsSortMode.None).Length);
+                FindObjectsInactive.Include).Length);
             Assert.AreEqual(0, host.ResourceDiagnostics.InFlightLoads);
         }
 
@@ -257,8 +256,7 @@ namespace DarkFlare.Tests
         static T FindElement<T>(string name) where T : VisualElement
         {
             UIDocument[] documents = UnityEngine.Object.FindObjectsByType<UIDocument>(
-                FindObjectsInactive.Include,
-                FindObjectsSortMode.None);
+                FindObjectsInactive.Include);
 
             for (int i = 0; i < documents.Length; i++)
             {

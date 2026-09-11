@@ -14,12 +14,12 @@ alpha 版本内的阶段使用三段式名称：`alpha 0.1` 的首个阶段为 `
 
 ## 当前技术栈
 
-- Unity `6000.4.3f1`，URP
+- Unity `6000.6.0f1`，URP `17.6.0`；[升级兼容记录](./infrastructure/unity-6.6-upgrade.md)
 - QFramework 分层与项目内 `QFramework.cs`
 - UniTask 异步
 - Addressables 资源加载
 - Input System 键鼠 / 手柄输入
-- Unity Localization `1.5.12`，已接入 `zh-Hans`、`en`、测试用 `qps-ploc`、六张职责表和运行时切换服务
+- Unity Localization `1.5.13`，已接入 `zh-Hans`、`en`、测试用 `qps-ploc`、六张职责表和运行时切换服务
 - UI Toolkit 运行时界面
 - Odin Inspector 配置与 Editor 工具
 - PrimeTween 动画补间

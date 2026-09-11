@@ -221,11 +221,9 @@ namespace DarkFlare.Tests
             Assert.IsTrue(host.CurrentSession.IsBoundToScene(mainScene));
             Assert.Greater(host.CurrentSession.ArchitectureGeneration, generationBeforeReload);
             Assert.AreEqual(1, UnityEngine.Object.FindObjectsByType<ApplicationHost>(
-                FindObjectsInactive.Include,
-                FindObjectsSortMode.None).Length);
+                FindObjectsInactive.Include).Length);
             Assert.AreEqual(1, UnityEngine.Object.FindObjectsByType<PlayerController>(
-                FindObjectsInactive.Exclude,
-                FindObjectsSortMode.None).Length);
+                FindObjectsInactive.Exclude).Length);
         }
 
         [UnityTest]
@@ -610,6 +608,64 @@ namespace DarkFlare.Tests
             Scene scene = SceneManager.CreateScene($"{prefix}-{Guid.NewGuid():N}");
             _createdScenes.Add(scene);
             return scene;
+        }
+
+        [UnityTest]
+        public IEnumerator BootCancellation_DoesNotReclassifyCancelledLocalizationAsFailure()
+        {
+            yield return new SceneFlowPlayModeFixture().EnterFrontEnd();
+            ApplicationHost host = ApplicationHost.Current;
+            LocalizationService original = host.Localization;
+            var runtime = new CancelledBootLocalization();
+            var replacement = new LocalizationService(host.Settings, runtime);
+            using var cancellation = new CancellationTokenSource();
+            cancellation.Cancel();
+            MethodInfo completeBoot = typeof(ApplicationHost).GetMethod(
+                "CompleteBootAsync", BindingFlags.Instance | BindingFlags.NonPublic);
+            Assert.IsNotNull(completeBoot);
+
+            try
+            {
+                SetInstanceField(host, "_localizationService", replacement);
+                UniTask operation = (UniTask)completeBoot.Invoke(host, new object[] { cancellation.Token });
+                yield return operation.ToCoroutine();
+                Assert.IsTrue(runtime.Called, "必须覆盖本地化返回 Cancelled 的路径");
+                Assert.AreEqual(ApplicationLifecycleState.Ready, host.State,
+                    "已取消的启动 continuation 不得覆盖宿主状态");
+                LogAssert.NoUnexpectedReceived();
+            }
+            finally
+            {
+                replacement.Close();
+                SetInstanceField(host, "_localizationService", original);
+            }
+        }
+
+        sealed class CancelledBootLocalization : ILocalizationRuntime
+        {
+            public bool Called { get; private set; }
+            public string AutomaticLocaleCode => "en";
+            public bool IsLocaleAvailable(string localeCode)
+            {
+                return true;
+            }
+            public UniTask InitializeAsync(CancellationToken cancellationToken)
+            {
+                Called = true;
+                return UniTask.FromCanceled(cancellationToken);
+            }
+            public UniTask ApplyLocaleAsync(string localeCode, IReadOnlyList<string> tables, CancellationToken token)
+            {
+                throw new InvalidOperationException("取消后不得切换语言");
+            }
+            public UniTask<string> GetStringAsync(string table, string key, string locale, IList<object> arguments, CancellationToken token)
+            {
+                throw new InvalidOperationException("取消后不得加载文本");
+            }
+            public string GetString(string table, string key, string locale, IList<object> arguments)
+            {
+                throw new InvalidOperationException("取消后不得读取文本");
+            }
         }
 
         static void RecreateApplicationHost()

@@ -161,8 +161,7 @@ namespace DarkFlare.Tests
             Assert.AreEqual(
                 1,
                 Object.FindObjectsByType<PlayerController>(
-                    FindObjectsInactive.Include,
-                    FindObjectsSortMode.None).Length);
+                    FindObjectsInactive.Include).Length);
         }
 
         static void AssertInGameTopology(ApplicationHost host, int cycle)
@@ -176,14 +175,12 @@ namespace DarkFlare.Tests
             Assert.AreEqual(
                 1,
                 Object.FindObjectsByType<PlayerController>(
-                    FindObjectsInactive.Include,
-                    FindObjectsSortMode.None).Length,
+                    FindObjectsInactive.Include).Length,
                 $"cycle={cycle}");
             Assert.AreEqual(
                 1,
                 Object.FindObjectsByType<CombatPrototypeBootstrap>(
-                    FindObjectsInactive.Include,
-                    FindObjectsSortMode.None).Length,
+                    FindObjectsInactive.Include).Length,
                 $"cycle={cycle}");
             AssertUniquePersistentInfrastructure(cycle);
         }
@@ -199,8 +196,7 @@ namespace DarkFlare.Tests
             Assert.AreEqual(
                 0,
                 Object.FindObjectsByType<PlayerController>(
-                    FindObjectsInactive.Include,
-                    FindObjectsSortMode.None).Length,
+                    FindObjectsInactive.Include).Length,
                 $"cycle={cycle}");
             AssertUniquePersistentInfrastructure(cycle);
         }
@@ -210,20 +206,17 @@ namespace DarkFlare.Tests
             Assert.AreEqual(
                 1,
                 Object.FindObjectsByType<ApplicationHost>(
-                    FindObjectsInactive.Include,
-                    FindObjectsSortMode.None).Length,
+                    FindObjectsInactive.Include).Length,
                 $"cycle={cycle}");
             Assert.AreEqual(
                 1,
                 Object.FindObjectsByType<ApplicationShellBootstrap>(
-                    FindObjectsInactive.Include,
-                    FindObjectsSortMode.None).Length,
+                    FindObjectsInactive.Include).Length,
                 $"cycle={cycle}");
             Assert.AreEqual(
                 1,
                 Object.FindObjectsByType<EventSystem>(
-                    FindObjectsInactive.Include,
-                    FindObjectsSortMode.None).Length,
+                    FindObjectsInactive.Include).Length,
                 $"cycle={cycle}");
         }
     }

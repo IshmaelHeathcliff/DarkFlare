@@ -11,7 +11,7 @@
 }
 .game-ui-root Button, .application-shell Button {
   background-image: var(--ui-control);
-  -unity-slice-left: 32; -unity-slice-right: 32; -unity-slice-top: 32; -unity-slice-bottom: 32; -unity-slice-scale: 0.125;
+  -unity-slice-left: 32; -unity-slice-right: 32; -unity-slice-top: 32; -unity-slice-bottom: 32; -unity-slice-scale: 0.125px;
   -unity-background-image-tint-color: rgb(170,164,151);
   background-color: var(--ui-surface);
   color: var(--ui-text);
@@ -76,7 +76,7 @@
 .game-ui-root .inventory-equipment-slot, .game-ui-root .item-source-row,
 .game-ui-root .crafting-input-slot, .game-ui-root .item-detail-icon {
   background-image: url("project://database/Assets/Art/Sprites/UI/Frames/ui_slot_base.png?fileID=21300000&guid=009d445a5b8dc944685392b6c277dc59&type=3");
-  -unity-slice-left: 32; -unity-slice-right: 32; -unity-slice-top: 32; -unity-slice-bottom: 32; -unity-slice-scale: 0.125;
+  -unity-slice-left: 32; -unity-slice-right: 32; -unity-slice-top: 32; -unity-slice-bottom: 32; -unity-slice-scale: 0.125px;
   border-radius: 0;
 }
 .game-ui-root .inventory-cell { background-color: rgb(17,21,25); border-color: rgb(53,54,51); }
@@ -110,13 +110,13 @@
 .application-shell .application-dialog, .application-shell .application-busy-card,
 .game-ui-root .game-pause-panel {
   background-image: url("project://database/Assets/Art/Sprites/UI/Frames/ui_item_window_base.png?fileID=21300000&guid=fa17b4d2b1447a2479b6730851bc615f&type=3");
-  -unity-slice-left: 96; -unity-slice-right: 96; -unity-slice-top: 96; -unity-slice-bottom: 96; -unity-slice-scale: 0.125;
+  -unity-slice-left: 96; -unity-slice-right: 96; -unity-slice-top: 96; -unity-slice-bottom: 96; -unity-slice-scale: 0.125px;
   border-radius: 0; border-color: rgb(97,80,53);
 }
 .game-ui-root .item-tooltip, .game-ui-root .item-action-menu,
 .game-ui-root .interaction-prompt, .application-shell .application-toast-message {
   background-image: url("project://database/Assets/Art/Sprites/UI/Frames/ui_hud_resource_base.png?fileID=21300000&guid=883832f8f53d9924a9e3c37a7c47c670&type=3");
-  -unity-slice-left: 96; -unity-slice-right: 96; -unity-slice-top: 96; -unity-slice-bottom: 96; -unity-slice-scale: 0.125;
+  -unity-slice-left: 96; -unity-slice-right: 96; -unity-slice-top: 96; -unity-slice-bottom: 96; -unity-slice-scale: 0.125px;
   border-radius: 0; border-color: var(--ui-edge); color: var(--ui-text);
 }
 .game-ui-root .item-workbench-section, .game-ui-root .inventory-grid-frame,

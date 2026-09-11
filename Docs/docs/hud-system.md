@@ -6,6 +6,8 @@
 
 Main 的 `GameRoot.uxml` 组合 `Hud.uxml`，共享原有 UIDocument、PanelSettings 与 Application EventSystem。1920×1080 下仪表位于 y=932–1068：左右各 300×136 的生命 / 法力底板，中间 840×136 的技能与窗口入口区，间距 12。既有物品窗口宽度与网格保持原值。
 
+Unity 6.6 下技能详情保留至少 44px 高度以容纳伪本地化的两行文字，中区上下留白为 5px；外层仪表尺寸与窗口安全区保持原值。
+
 生命和法力显示当前 / 上限及即时比例；中区显示当前自动攻击名称、耗蓝、间隔、剩余间隔、冷却条和金币。就绪只代表资源与冷却条件满足，不保证有攻击目标。世界交互提示位于仪表上方。
 
 正式底板为 `ui_hud_resource_base.png`，生命和法力共享中性材质。填充、文字与状态由 UI Toolkit 绘制；不以拉伸图片模拟资源比例。规格与证据见[HUD 资产合同](./assets/acceptance/alpha-0.3.2-hud/asset-contract.md)。

@@ -1,0 +1,290 @@
+[
+  {
+    "stopped": {
+      "playing": false,
+      "host": false,
+      "architecture": false,
+      "inputDestroyed": true,
+      "scope": "Stopped",
+      "tasks": 0,
+      "pause": 0,
+      "pauseSubscribers": 0,
+      "inputSubscribers": 0,
+      "resources": {
+        "ActiveOwners": 0,
+        "ActiveEntries": 0,
+        "ActiveLeases": 0,
+        "InFlightLoads": 0
+      }
+    },
+    "options": 1,
+    "cycle": 1,
+    "console": [],
+    "utc": "2026-09-11T15:57:10.3759708Z"
+  },
+  {
+    "stopped": {
+      "playing": false,
+      "host": false,
+      "architecture": false,
+      "inputDestroyed": true,
+      "scope": "Stopped",
+      "tasks": 0,
+      "pause": 0,
+      "pauseSubscribers": 0,
+      "inputSubscribers": 0,
+      "resources": {
+        "ActiveOwners": 0,
+        "ActiveEntries": 0,
+        "ActiveLeases": 0,
+        "InFlightLoads": 0
+      }
+    },
+    "options": 1,
+    "cycle": 2,
+    "console": [],
+    "utc": "2026-09-11T15:57:11.7297591Z"
+  },
+  {
+    "stopped": {
+      "playing": false,
+      "host": false,
+      "architecture": false,
+      "inputDestroyed": true,
+      "scope": "Stopped",
+      "tasks": 0,
+      "pause": 0,
+      "pauseSubscribers": 0,
+      "inputSubscribers": 0,
+      "resources": {
+        "ActiveOwners": 0,
+        "ActiveEntries": 0,
+        "ActiveLeases": 0,
+        "InFlightLoads": 0
+      }
+    },
+    "options": 1,
+    "cycle": 3,
+    "console": [],
+    "utc": "2026-09-11T15:57:13.0363558Z"
+  },
+  {
+    "stopped": {
+      "playing": false,
+      "host": false,
+      "architecture": false,
+      "inputDestroyed": true,
+      "scope": "Stopped",
+      "tasks": 0,
+      "pause": 0,
+      "pauseSubscribers": 0,
+      "inputSubscribers": 0,
+      "resources": {
+        "ActiveOwners": 0,
+        "ActiveEntries": 0,
+        "ActiveLeases": 0,
+        "InFlightLoads": 0
+      }
+    },
+    "console": [],
+    "options": 3,
+    "cycle": 1,
+    "utc": "2026-09-11T15:57:22.2183665Z"
+  },
+  {
+    "stopped": {
+      "playing": false,
+      "host": false,
+      "architecture": false,
+      "inputDestroyed": true,
+      "scope": "Stopped",
+      "tasks": 0,
+      "pause": 0,
+      "pauseSubscribers": 0,
+      "inputSubscribers": 0,
+      "resources": {
+        "ActiveOwners": 0,
+        "ActiveEntries": 0,
+        "ActiveLeases": 0,
+        "InFlightLoads": 0
+      }
+    },
+    "console": [],
+    "options": 3,
+    "cycle": 2,
+    "utc": "2026-09-11T15:57:23.550626Z"
+  },
+  {
+    "stopped": {
+      "playing": false,
+      "host": false,
+      "architecture": false,
+      "inputDestroyed": true,
+      "scope": "Stopped",
+      "tasks": 0,
+      "pause": 0,
+      "pauseSubscribers": 0,
+      "inputSubscribers": 0,
+      "resources": {
+        "ActiveOwners": 0,
+        "ActiveEntries": 0,
+        "ActiveLeases": 0,
+        "InFlightLoads": 0
+      }
+    },
+    "console": [],
+    "options": 3,
+    "cycle": 3,
+    "utc": "2026-09-11T15:57:24.8828707Z"
+  },
+  {
+    "stopped": {
+      "playing": false,
+      "host": false,
+      "architecture": false,
+      "inputDestroyed": true,
+      "scope": "Stopped",
+      "tasks": 0,
+      "pause": 0,
+      "pauseSubscribers": 0,
+      "inputSubscribers": 0,
+      "resources": {
+        "ActiveOwners": 0,
+        "ActiveEntries": 0,
+        "ActiveLeases": 0,
+        "InFlightLoads": 0
+      }
+    },
+    "utc": "2026-09-11T15:58:52.9740945Z",
+    "cycle": 1,
+    "console": [],
+    "options": 0
+  },
+  {
+    "stopped": {
+      "playing": false,
+      "host": false,
+      "architecture": false,
+      "inputDestroyed": true,
+      "scope": "Stopped",
+      "tasks": 0,
+      "pause": 0,
+      "pauseSubscribers": 0,
+      "inputSubscribers": 0,
+      "resources": {
+        "ActiveOwners": 0,
+        "ActiveEntries": 0,
+        "ActiveLeases": 0,
+        "InFlightLoads": 0
+      }
+    },
+    "utc": "2026-09-11T15:59:06.1762269Z",
+    "cycle": 2,
+    "console": [],
+    "options": 0
+  },
+  {
+    "console": [],
+    "utc": "2026-09-11T16:03:19.1741933Z",
+    "stopped": {
+      "playing": false,
+      "host": false,
+      "architecture": true,
+      "session": "Abandoned",
+      "sessionTasks": 1,
+      "inputDestroyed": true,
+      "scope": "Stopping",
+      "tasks": 0,
+      "pause": 0,
+      "pauseSubscribers": 0,
+      "inputSubscribers": 0,
+      "resources": {
+        "ActiveOwners": 0,
+        "ActiveEntries": 0,
+        "ActiveLeases": 0,
+        "InFlightLoads": 0
+      }
+    },
+    "stopInGame": true,
+    "cycle": 1,
+    "options": 1
+  },
+  {
+    "console": [],
+    "utc": "2026-09-11T16:03:20.4890765Z",
+    "stopped": {
+      "playing": false,
+      "host": false,
+      "architecture": true,
+      "session": "Abandoned",
+      "sessionTasks": 1,
+      "inputDestroyed": true,
+      "scope": "Stopping",
+      "tasks": 0,
+      "pause": 0,
+      "pauseSubscribers": 0,
+      "inputSubscribers": 0,
+      "resources": {
+        "ActiveOwners": 0,
+        "ActiveEntries": 0,
+        "ActiveLeases": 0,
+        "InFlightLoads": 0
+      }
+    },
+    "stopInGame": true,
+    "cycle": 2,
+    "options": 1
+  },
+  {
+    "console": [],
+    "utc": "2026-09-11T16:03:22.8883006Z",
+    "stopped": {
+      "playing": false,
+      "host": false,
+      "architecture": true,
+      "session": "Abandoned",
+      "sessionTasks": 1,
+      "inputDestroyed": true,
+      "scope": "Stopping",
+      "tasks": 0,
+      "pause": 0,
+      "pauseSubscribers": 0,
+      "inputSubscribers": 0,
+      "resources": {
+        "ActiveOwners": 0,
+        "ActiveEntries": 0,
+        "ActiveLeases": 0,
+        "InFlightLoads": 0
+      }
+    },
+    "stopInGame": true,
+    "cycle": 1,
+    "options": 3
+  },
+  {
+    "console": [],
+    "utc": "2026-09-11T16:03:24.1599354Z",
+    "stopped": {
+      "playing": false,
+      "host": false,
+      "architecture": true,
+      "session": "Abandoned",
+      "sessionTasks": 1,
+      "inputDestroyed": true,
+      "scope": "Stopping",
+      "tasks": 0,
+      "pause": 0,
+      "pauseSubscribers": 0,
+      "inputSubscribers": 0,
+      "resources": {
+        "ActiveOwners": 0,
+        "ActiveEntries": 0,
+        "ActiveLeases": 0,
+        "InFlightLoads": 0
+      }
+    },
+    "stopInGame": true,
+    "cycle": 2,
+    "options": 3
+  }
+]

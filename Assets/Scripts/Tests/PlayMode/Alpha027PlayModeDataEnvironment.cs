@@ -17,6 +17,7 @@ namespace DarkFlare.Tests
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
         static void Install()
         {
+            ReleaseAndDelete();
             RootPath = Path.Combine(
                 Application.temporaryCachePath,
                 "DarkFlare",
@@ -31,7 +32,6 @@ namespace DarkFlare.Tests
 
         internal static void ReinstallForTestRun()
         {
-            ReleaseAndDelete();
             Install();
         }
 

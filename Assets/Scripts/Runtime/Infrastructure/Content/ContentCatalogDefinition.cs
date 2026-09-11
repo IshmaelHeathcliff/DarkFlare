@@ -19,7 +19,7 @@ namespace DarkFlare
         int _contentVersion = 1;
 
         [SerializeField]
-        [ListDrawerSettings(Expanded = true)]
+        [ListDrawerSettings(ShowFoldout = true)]
         [LabelText("正式内容")]
         List<ScriptableObject> _entries = new List<ScriptableObject>();
 

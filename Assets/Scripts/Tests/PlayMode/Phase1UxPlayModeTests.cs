@@ -313,7 +313,7 @@ namespace DarkFlare.Tests
             yield return DragPointer(mouse, root, button.worldBound.position + new Vector2(24f, 24f),
                 root.Q("item-discard-zone").worldBound.center, menu.GetComponent<InventoryPanelController>());
             Assert.IsFalse(inventory.Grid.Placements.ContainsKey(weapon), "明确丢弃区未转移物品");
-            LootPickupController drop = Object.FindObjectsByType<LootPickupController>(FindObjectsSortMode.None)
+            LootPickupController drop = Object.FindObjectsByType<LootPickupController>()
                 .Single(pickup => pickup.Item == weapon);
             Assert.IsNotNull(drop);
             Assert.IsFalse(architecture.SendCommand(new DiscardItemCommand(weapon, player)), "重复丢弃必须失败");

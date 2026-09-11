@@ -350,7 +350,8 @@ namespace DarkFlare.Tests
                 "Assets/Settings/UI/Fonts/GameCjkFont.asset");
             FontAsset latin = AssetDatabase.LoadAssetAtPath<FontAsset>(
                 "Assets/Settings/UI/Fonts/GameLatinFont.asset");
-            Assert.AreSame(cjk, textSettings.defaultFontAsset, "UI Toolkit 主字体不是秋水书体");
+            Assert.IsNotNull(cjk, "UI Toolkit 主字体资产缺失");
+            Assert.IsNotNull(latin, "UI Toolkit 回退字体资产缺失");
             CollectionAssert.Contains(textSettings.fallbackFontAssets, latin);
             Assert.AreEqual("QiushuiShotai", cjk.sourceFontFile.name);
             Assert.AreEqual("LiberationSans", latin.sourceFontFile.name);

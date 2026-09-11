@@ -78,7 +78,7 @@ namespace DarkFlare.Tests
             Assert.AreEqual(originalPlacement, oldInventory.Grid.Placements[discarded], "生成资源缺失时物品必须保留原格");
             prefabField.SetValue(loot, pickupReference);
             Assert.IsTrue(oldArchitecture.SendCommand(new DiscardItemCommand(discarded, oldPlayer.Actor)));
-            LootPickupController originalDrop = UnityEngine.Object.FindObjectsByType<LootPickupController>(FindObjectsSortMode.None)
+            LootPickupController originalDrop = UnityEngine.Object.FindObjectsByType<LootPickupController>()
                 .Single(drop => drop.Item == discarded);
             string dropId = originalDrop.Id.Value;
             yield return new WaitForFixedUpdate();
@@ -188,7 +188,7 @@ namespace DarkFlare.Tests
             Assert.AreEqual(
                 captured.Payload.Run.Spawner.IsRunning,
                 UnityEngine.Object.FindAnyObjectByType<MonsterSpawner>().IsSpawning);
-            LootPickupController restoredDrop = UnityEngine.Object.FindObjectsByType<LootPickupController>(FindObjectsSortMode.None)
+            LootPickupController restoredDrop = UnityEngine.Object.FindObjectsByType<LootPickupController>()
                 .Single(drop => drop.Id.Value == dropId);
             ItemInstance restoredItem = restoredDrop.Item;
             Assert.AreEqual(discarded.InstanceId, restoredItem.InstanceId);
