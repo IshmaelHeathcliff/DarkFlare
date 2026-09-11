@@ -2,7 +2,7 @@
 
 > 状态：已完成；2026-09-08 菜单交接、独立窗口、统一操作和代表视觉组件均通过验收
 > 建立日期：2026-09-07
-> 上位计划：[alpha 0.3 UI 迭代](../alpha-0.3-plan.md)
+> 上位计划：[alpha 0.3 UI 迭代](alpha-0.3-plan.md)
 > 已确认交互：独立窗口，可按需同时显示
 > 详细验收：[统一物品操作与菜单交接合同](alpha-0.3-item-interaction-contract.md)
 > 已完成切片：[独立窗口可用闭环](alpha-0.3.0-window-workspace-plan.md)
@@ -30,7 +30,7 @@
 | `ItemTooltipView` | 根据唯一菜单面板选择左右停靠位置 | 根据来源窗口、当前布局和安全区定位 |
 | 现有 UI PlayMode 回归 | 当前工作台布局、真实拖动、焦点和详情 | 随独立窗口调整布局断言，保留行为保障；旧源码结构锁定已在前置测试审计中清理 |
 
-上述脚本位于 `Assets/Scripts/Runtime/Gameplay/UI/`，测试位于 `Assets/Scripts/Tests/`。不创建第二份 InventoryModel 或额外 EventSystem。本阶段沿用四槽、背包容量、商品价格与打造规则；十槽领域和正式内容在[收尾阶段](../alpha-0.3.4-equipment-completion-plan.md)落地，当前布局和导航不得再硬编码四槽拓扑。
+上述脚本位于 `Assets/Scripts/Runtime/Gameplay/UI/`，测试位于 `Assets/Scripts/Tests/`。不创建第二份 InventoryModel 或额外 EventSystem。本阶段沿用四槽、背包容量、商品价格与打造规则；十槽领域和正式内容在[收尾阶段](alpha-0.3.4-equipment-completion-plan.md)落地，当前布局和导航不得再硬编码四槽拓扑。
 
 ## 窗口与上下文合同
 

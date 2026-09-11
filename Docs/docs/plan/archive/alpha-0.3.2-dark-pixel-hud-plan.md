@@ -3,7 +3,7 @@
 > 状态：已完成；归档日期 2026-09-09
 > 建立日期：2026-09-09
 > 实现基线：`b36c90e`，运行版本 `0.3.1-alpha`
-> 上位计划：[alpha 0.3 UI 迭代](../alpha-0.3-plan.md)
+> 上位计划：[alpha 0.3 UI 迭代](alpha-0.3-plan.md)
 > 前置结果：[独立属性详情验收](../../assets/acceptance/alpha-0.3.1-attributes/README.md)
 
 ## 目标与边界

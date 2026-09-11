@@ -1,0 +1,2 @@
+Importer(NativeFormatImporter) generated inconsistent result for asset(guid:3a18e112c5f806146b5754b6d8ec227c) "Assets/Settings/UI/Fonts/GameCjkFont.asset"
+Pipeline: No RuntimePipelineConfig asset found (Project Settings > Pipeline > Runtime). Pipeline will be disabled in Player builds.

@@ -2,11 +2,11 @@
 
 ## 项目状态
 
-`DarkFlare` 已完成首版最小循环、初步体验优化、`alpha 0.1` 封板和 `alpha 0.2.0–0.2.7` 基础设施封板。当前可从常驻 `Bootstrap.unity` 的 FrontEnd 新建或继续游戏，additive 进入 `Main.unity` 完成战斗、掉落、四槽装备、交易和打造，暂停后保存并安全返回前台；FrontEnd 可二次确认删除自动档，共享设置页可恢复完整默认设置，中英语言、音量、按键、设备 Glyph 和降低动态效果即时收敛。
+`DarkFlare` 已完成首版最小循环、初步体验优化、`alpha 0.1` 封板和 `alpha 0.2.0–0.2.7` 基础设施封板。当前可从常驻 `Bootstrap.unity` 的 FrontEnd 新建或继续游戏，additive 进入 `Main.unity` 完成战斗、掉落、十槽装备、交易和打造，暂停后保存并安全返回前台；FrontEnd 可二次确认删除自动档，共享设置页可恢复完整默认设置，中英语言、音量、按键、设备 Glyph 和降低动态效果即时收敛。
 
-alpha 版本内的阶段使用三段式名称：`alpha 0.1` 的首个阶段为 `alpha 0.1.0`，后续依次为 `alpha 0.1.1`、`alpha 0.1.2`；`alpha 0.2` 同样从 `alpha 0.2.0` 开始。当前版本为 `0.3.3-alpha`；完成记录见[alpha 0.2 综合验收记录](./infrastructure/alpha-0.2-acceptance.md)与[计划归档](./plan/archive/README.md)。
+alpha 版本内的阶段使用三段式名称：`alpha 0.1` 的首个阶段为 `alpha 0.1.0`，后续依次为 `alpha 0.1.1`、`alpha 0.1.2`；`alpha 0.2` 同样从 `alpha 0.2.0` 开始。当前版本为 `0.3.4-alpha`；完成记录见[alpha 0.2 综合验收记录](./infrastructure/alpha-0.2-acceptance.md)与[计划归档](./plan/archive/README.md)。
 
-当前 [alpha 0.3 UI 迭代](./plan/alpha-0.3-plan.md)已完成 0.3.0–0.3.3；0.3.4 十槽装备、每槽至少两件配置及 core v1 → v2 旧档兼容已实现，全量 EditMode 434/434、PlayMode 63/63 通过。Editor 三语言与 Windows Player 行为验收通过；可见 Player 画面及退出释放提示待核对，尚未更新发布版本或归档总计划。见[本轮验收进度](./assets/acceptance/alpha-0.3.4-equipment/README.md)。
+当前 [alpha 0.3 UI 迭代](./plan/archive/alpha-0.3-plan.md)已全部完成：独立物品窗口、统一拖放、实时属性、暗黑像素 HUD、共享皮肤及十槽装备。二十件装备覆盖每槽至少两件，core v1 → v2 旧档兼容完成；EditMode 434/434、PlayMode 63/63、可见 Windows Player 验收通过。退出时的 2D Animation 回退缓冲区警告已在空场景中复现并定位，作为既有依赖问题保留记录。见[综合验收](./assets/acceptance/alpha-0.3.4-equipment/README.md)。
 
 ## 游戏定位
 

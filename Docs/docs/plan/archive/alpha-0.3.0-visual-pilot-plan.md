@@ -2,7 +2,7 @@
 
 > 状态：已完成；2026-09-08 代表组件、组合线框和阶段回归通过
 > 建立日期：2026-09-08
-> 上位计划：[独立窗口与交互拆分](alpha-0.3.0-independent-ui-windows-plan.md)、[alpha 0.3 总计划](../alpha-0.3-plan.md)
+> 上位计划：[独立窗口与交互拆分](alpha-0.3.0-independent-ui-windows-plan.md)、[alpha 0.3 总计划](alpha-0.3-plan.md)
 > 实现基线：`bacc208`；运行版本仍为 `0.2.7-alpha`
 
 ## 目标与边界

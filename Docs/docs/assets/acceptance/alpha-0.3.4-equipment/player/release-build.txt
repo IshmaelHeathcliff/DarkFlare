@@ -1,0 +1,9 @@
+result=Succeeded
+errors=0
+warnings=2
+version=0.3.4-alpha
+size=199890208
+duration=00:00:13.9972056
+addressablesError=
+scenes=Bootstrap,Main
+extraScriptingDefines=none

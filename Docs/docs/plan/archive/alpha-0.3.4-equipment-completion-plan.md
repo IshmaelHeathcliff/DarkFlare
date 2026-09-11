@@ -1,12 +1,12 @@
 # alpha 0.3.4：十槽装备与内容补齐
 
-> 状态：A / B / C 完成；全量 434/434 EditMode、63/63 PlayMode 通过，Editor 三语言和独立 Player 行为通过；待可见 Player 画面及退出释放提示核对，暂不封板
-> 最近核对：2026-09-10；基线 `3bd7dfb`，运行版本 `0.3.3-alpha`
-> 前阶段：[统一组件验收](../assets/acceptance/alpha-0.3.3-ui-style/README.md)；432/432 EditMode、63/63 PlayMode 为历史基线，本次规划未重跑测试
+> 状态：已完成并于 2026-09-11 归档；十槽、二十件装备、旧档兼容、双输入和可见 Windows Player 验收完成。包级退出警告已通过空场景对照定位，作为既有依赖问题记录。
+> 最终核对：2026-09-11；实现提交 `58e06cd`，完成版本 `0.3.4-alpha`
+> 前阶段：[统一组件验收](../../assets/acceptance/alpha-0.3.3-ui-style/README.md)；432/432 EditMode、63/63 PlayMode 为历史基线，本次规划未重跑测试
 > 建立日期：2026-09-07
-> 上位计划：[alpha 0.3 UI 与装备迭代](./alpha-0.3-plan.md)
-> 当次结果与剩余项：[验收记录](../assets/acceptance/alpha-0.3.4-equipment/README.md)
-> 前置：独立窗口、实时属性、HUD、统一视觉与[物品交互合同](archive/alpha-0.3-item-interaction-contract.md)
+> 上位计划：[alpha 0.3 UI 与装备迭代](alpha-0.3-plan.md)
+> 最终验收：[验收记录](../../assets/acceptance/alpha-0.3.4-equipment/README.md)
+> 前置：独立窗口、实时属性、HUD、统一视觉与[物品交互合同](alpha-0.3-item-interaction-contract.md)
 
 ## 收尾目标
 
@@ -66,7 +66,7 @@
 
 封板条件：十槽全部可用、每槽至少两件正式配置且达到上述独立内容预算；旧档不丢装备，新档十槽正确恢复；四向导航与视觉位置一致且跨窗口顺畅；全局单一物品高亮、详情无超框、正常路径零新增 Error / Warning。
 
-完成后更新[装备模块](../equipment-system.md)、[内容池](../content-system.md)、[输入与 UI](../input-ui-system.md)、[物品工作台](../item-ui-workbench.md)、[属性](../stat-system.md)、[内容与迁移](../infrastructure/content-identity-migration.md)、[存档](../infrastructure/local-save.md)及视觉资源文档，归档本阶段与 alpha 0.3 总计划。交互合同已在 archive 中，不重复归档；运行版本只在实际交付时更新为 `0.3.4-alpha`。
+完成后更新[装备模块](../../equipment-system.md)、[内容池](../../content-system.md)、[输入与 UI](../../input-ui-system.md)、[物品工作台](../../item-ui-workbench.md)、[属性](../../stat-system.md)、[内容与迁移](../../infrastructure/content-identity-migration.md)、[存档](../../infrastructure/local-save.md)及视觉资源文档，归档本阶段与 alpha 0.3 总计划。交互合同已在 archive 中，不重复归档；运行版本只在实际交付时更新为 `0.3.4-alpha`。
 
 ## 核对后的实施决策
 
@@ -93,7 +93,7 @@
 | C：内容与获取 | 至少新增十三件正式基底、独立图标和双语文本，目录 / 掉落 / 商店 / 打造登记，滚动商品视口 | 每槽至少两件、总基底至少二十；逐件有正式获取和合法词条候选；商品末行可见、可选、可买，交易后焦点合理 |
 | D：综合封板 | 新旧存档、真实输入、全量测试、Addressables / Windows Player 与文档 | 当次构建和 Player 路径通过，临时工具清理，模块与证据归档后更新版本 |
 
-B 复用已有[十槽空间线框](../assets/acceptance/alpha-0.3.0-windows/ten-slot-space-reference.png)，但旧线框不替代真实控件验收。保持背包 560、商店 / 打造 760、属性 440、48 px 网格与 HUD 上方安全区；大小槽按内容安排。空间不满足约束时先修订布局，再生成正式资源。
+B 复用已有[十槽空间线框](../../assets/acceptance/alpha-0.3.0-windows/ten-slot-space-reference.png)，但旧线框不替代真实控件验收。保持背包 560、商店 / 打造 760、属性 440、48 px 网格与 HUD 上方安全区；大小槽按内容安排。空间不满足约束时先修订布局，再生成正式资源。
 
 商品导航须区分同窗和跨窗：同窗方向移动到未显示商品时先滚动显露目标；跨窗只以实际可见区域建立空间邻居。滚动后重新核对拖放坐标、详情定位与唯一高亮，不能让屏外商品抢走相邻窗口焦点。
 
@@ -118,6 +118,10 @@ B 复用已有[十槽空间线框](../assets/acceptance/alpha-0.3.0-windows/ten-
 - [x] A：槽位、事务与明确的内容兼容路径完成。
 - [x] B：十槽真实控件、详情、双输入与空间导航完成。
 - [x] C：至少二十件正式基底及获取 / 打造 / 本地化 / 视觉接入。
-- [ ] D：全量回归、Addressables 与 Windows Player 当次验收通过。
+- [x] D：全量回归、Addressables 与 Windows Player 当次验收通过。
 - [x] 临时工具、过时测试清理；保留独有覆盖和用户原有改动，恢复字体缓存与测试环境。
-- [ ] 模块、总计划和阶段计划收尾归档，版本更新为 `0.3.4-alpha`。
+- [x] 模块、总计划和阶段计划收尾归档，版本更新为 `0.3.4-alpha`。
+
+## 最终验收
+
+2026-09-11 完成可见 Windows Player 验收与退出提示定位。全量回归 EditMode 434/434、PlayMode 63/63；版本 `0.3.4-alpha`。证据和已知依赖警告见[十槽综合验收](../../assets/acceptance/alpha-0.3.4-equipment/README.md)。临时入口已清理，模块文档已同步。

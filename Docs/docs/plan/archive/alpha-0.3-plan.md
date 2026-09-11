@@ -1,17 +1,17 @@
 # alpha 0.3：UI 迭代计划
 
-> 状态：实施中；0.3.0–0.3.3 已完成并归档，下一阶段 0.3.4 十槽装备与内容补齐
-> 最近完成：[alpha 0.3.3 统一 UI 视觉组件](./archive/alpha-0.3.3-unified-ui-visual-plan.md)，见[验收记录](../assets/acceptance/alpha-0.3.3-ui-style/README.md)
-> HUD 已完成：[alpha 0.3.2 暗黑像素 HUD 与战斗状态](./archive/alpha-0.3.2-dark-pixel-hud-plan.md)；统一组件亦已完成
-> 已完成：[alpha 0.3.1 独立属性详情与实时解释](./archive/alpha-0.3.1-realtime-attributes-plan.md)，见[验收记录](../assets/acceptance/alpha-0.3.1-attributes/README.md)
+> 状态：0.3.0–0.3.4 全部完成，2026-09-11 综合验收后归档
+> 最近完成：[alpha 0.3.4 十槽装备与内容补齐](alpha-0.3.4-equipment-completion-plan.md)，见[综合验收记录](../../assets/acceptance/alpha-0.3.4-equipment/README.md)
+> HUD 已完成：[alpha 0.3.2 暗黑像素 HUD 与战斗状态](alpha-0.3.2-dark-pixel-hud-plan.md)；统一组件亦已完成
+> 已完成：[alpha 0.3.1 独立属性详情与实时解释](alpha-0.3.1-realtime-attributes-plan.md)，见[验收记录](../../assets/acceptance/alpha-0.3.1-attributes/README.md)
 > 建立日期：2026-09-07
-> 当前运行版本：`0.3.3-alpha`
-> 执行前置：[测试审计与精简](../testing/test-suite-audit.md)已完成；2026-09-08 开始功能实施
-> 首阶段：[alpha 0.3.0 独立窗口与交互拆分](archive/alpha-0.3.0-independent-ui-windows-plan.md)
-> 已完成切片：[独立窗口可用闭环](./archive/alpha-0.3.0-window-workspace-plan.md)、[统一物品操作与事务](./archive/alpha-0.3.0-unified-item-actions-plan.md)；[代表视觉组件与布局收尾](archive/alpha-0.3.0-visual-pilot-plan.md)已完成，见[阶段验收](../assets/acceptance/alpha-0.3.0-visual-pilot/README.md)
-> 交互验收：[统一物品操作与菜单交接合同](archive/alpha-0.3-item-interaction-contract.md)
-> 收尾阶段：[alpha 0.3.4 十槽装备与内容补齐](./alpha-0.3.4-equipment-completion-plan.md)，2026-09-10 已细化执行切片、旧档兼容、滚动商品与封板矩阵，待实施
-> 基线：[启动准备归档](./archive/alpha-0.3-startup.md)、[alpha 0.2 综合验收](../infrastructure/alpha-0.2-acceptance.md)
+> 完成版本：`0.3.4-alpha`
+> 执行前置：[测试审计与精简](../../testing/test-suite-audit.md)已完成；2026-09-08 开始功能实施
+> 首阶段：[alpha 0.3.0 独立窗口与交互拆分](alpha-0.3.0-independent-ui-windows-plan.md)
+> 已完成切片：[独立窗口可用闭环](alpha-0.3.0-window-workspace-plan.md)、[统一物品操作与事务](alpha-0.3.0-unified-item-actions-plan.md)；[代表视觉组件与布局收尾](alpha-0.3.0-visual-pilot-plan.md)已完成，见[阶段验收](../../assets/acceptance/alpha-0.3.0-visual-pilot/README.md)
+> 交互验收：[统一物品操作与菜单交接合同](alpha-0.3-item-interaction-contract.md)
+> 收尾阶段：[alpha 0.3.4 十槽装备与内容补齐](alpha-0.3.4-equipment-completion-plan.md)，2026-09-11 已完成十槽、内容、旧档兼容及综合验收
+> 基线：[启动准备归档](alpha-0.3-startup.md)、[alpha 0.2 综合验收](../../infrastructure/alpha-0.2-acceptance.md)
 
 ## 版本目标
 
@@ -25,11 +25,11 @@
 
 用户已明确选择“独立窗口，可按需同时打开，例如商店旁打开背包”。窗口独立性必须体现在开关、焦点、内容和功能可用性上。
 
-本轮同时修复现有设置 / 返回主菜单与背包的交互阻塞，并统一拖动装备、丢弃、买卖、打造放入 / 取出及对应右键、手柄操作。全窗口最多一个物品高亮，详情不超框、面板对齐是功能验收条件，不能留到皮肤阶段才处理。具体规则见[交互合同](archive/alpha-0.3-item-interaction-contract.md)。
+本轮同时修复现有设置 / 返回主菜单与背包的交互阻塞，并统一拖动装备、丢弃、买卖、打造放入 / 取出及对应右键、手柄操作。全窗口最多一个物品高亮，详情不超框、面板对齐是功能验收条件，不能留到皮肤阶段才处理。具体规则见[交互合同](alpha-0.3-item-interaction-contract.md)。
 
 ## 启动基线与迁移重点
 
-下表保留启动时的迁移边界。当前独立窗口、共享表现和空间导航已落地，模块现状见[物品工作台](../item-ui-workbench.md)。
+下表保留启动时的迁移边界。当前独立窗口、共享表现和空间导航已落地，模块现状见[物品工作台](../../item-ui-workbench.md)。
 
 | 现状 | 本版改动 |
 | --- | --- |
@@ -60,7 +60,7 @@
 - 打开设置或返回主菜单确认时，先由应用上层接管 UI 输入和暂停，再隐藏背包及其他玩法窗口、取消拖放和物品提示；返回 / 取消后按有效上下文恢复，确认离开则清理。关闭底层窗口不能使上层失去操作能力。
 - Esc / 手柄返回优先处理顶层 Modal / Settings，再取消拖放，再关闭当前窗口；一次输入只消费一层，手柄提供可重绑定的窗口切换操作和持续可见的焦点。
 - 手柄上下左右根据物品 / 槽位的实际视觉位置移动；到达边缘时自然进入该方向相邻的可见背包、商店、打造窗口。窗口循环快捷键仅是补充，不能代替方向键跨面板导航；详细规则见交互合同。
-- 详细的来源选择、上下文和暂停合同见[首阶段计划](archive/alpha-0.3.0-independent-ui-windows-plan.md)。
+- 详细的来源选择、上下文和暂停合同见[首阶段计划](alpha-0.3.0-independent-ui-windows-plan.md)。
 
 ## 实时属性详情
 
@@ -95,9 +95,9 @@ HUD 采用底部双资源仪表的方向：生命偏左、法力偏右，中间�
 
 ## 美术生产与验收边界
 
-- 视觉参考沿用[当前视觉规范](../visual-style.md)与已保留风格板；首阶段产出 UI 线框和代表组件视觉样例后，冻结这一版的材质、像素密度和尺寸规则。
+- 视觉参考沿用[当前视觉规范](../../visual-style.md)与已保留风格板；首阶段产出 UI 线框和代表组件视觉样例后，冻结这一版的材质、像素密度和尺寸规则。
 - 资产家族覆盖窗口底板 / 外框、标题与分隔、按钮、物品 / 装备槽位、HUD 仪表外框与填充、浮窗和提示底板。
-- 严格遵循[美术资产生成规范](../visual-asset-generation.md)：生成前声明画布、主体范围、Pivot / PPU、九宫格保护区、最小 / 常规 / 最大使用尺寸和消费者。
+- 严格遵循[美术资产生成规范](../../visual-asset-generation.md)：生成前声明画布、主体范围、Pivot / PPU、九宫格保护区、最小 / 常规 / 最大使用尺寸和消费者。
 - 一张生产 PNG 只含一个组件、一个状态或一帧；文字、数量、示例装备不烘焙进底图；不可拉伸角件与可拉伸背景分离。
 - ImageGen / 可用美术工具先生成单个 Pilot，通过自动审计与原生像素视觉验证后再逐张派生。组合概念稿只作参考，不导入 Unity 或手工切图。
 - UI 创建、布局、导入和绑定通过 Unity MCP / Editor API 验证。独立窗口仍可共享 Main 的一个 UIDocument，Bootstrap 保持唯一 EventSystem。
@@ -111,13 +111,13 @@ HUD 采用底部双资源仪表的方向：生命偏左、法力偏右，中间�
 | `alpha 0.3.1`（已完成） | 分组属性详情、来源解释与实时 Query | 数据与正式解析器一致，换装 / 恢复 / 本地化刷新正确，查询无玩法副作用 |
 | `alpha 0.3.2`（已完成） | 暗黑像素 HUD 与已有技能状态 | 战斗信息清晰，冷却 / 资源 / 异常状态正确，键鼠 / 手柄和 Reduce Motion 可用 |
 | `alpha 0.3.3`（已完成） | 统一边框、背景、按钮、槽位、浮窗及 Shell 基础皮肤 | 资产逐张通过审计，所有新窗口与 Shell 视觉一致，无纹理拉坏或旧引用 |
-| `alpha 0.3.4` | [十槽装备与每槽至少两件内容](./alpha-0.3.4-equipment-completion-plan.md)，补齐图标 / 内容池 / 旧档兼容，完成综合回归与构建封板 | 五项目标全部有证据；十槽穿脱和属性生效、四向跨窗口导航及旧档继续通过；正常路径零新增错误 |
+| `alpha 0.3.4` | [十槽装备与每槽至少两件内容](alpha-0.3.4-equipment-completion-plan.md)，补齐图标 / 内容池 / 旧档兼容，完成综合回归与构建封板 | 五项目标全部有证据；十槽穿脱和属性生效、四向跨窗口导航及旧档继续通过；正常路径零新增错误 |
 
-各阶段先补充必要的执行细节，再实施与验收；完成后更新对应模块文档并归档阶段计划。0.3.0–0.3.3 已完成；下一阶段展开十槽装备与内容补齐，收尾装备范围保持已制定计划。十槽组合空间已通过首阶段线框验证，正式内容在 0.3.4 落地。
+各阶段先补充必要的执行细节，再实施与验收；完成后更新对应模块文档并归档阶段计划。0.3.0–0.3.4 已全部完成，十槽真实控件与二十件正式装备已落地。
 
 ## 验收与版本约束
 
-- 新增及受影响测试遵循[测试维护规范](../testing/test-maintenance.md)：优先扩展长期行为回归；临时验证完成后清理，不新增锁定当前版本或历史发布记录的测试。
+- 新增及受影响测试遵循[测试维护规范](../../testing/test-maintenance.md)：优先扩展长期行为回归；临时验证完成后清理，不新增锁定当前版本或历史发布记录的测试。
 
 - 领域层保留背包占格、装备原子交换、既有价格、14 个打造操作变体及随机通道隔离；为指定格购买、世界丢弃及十槽装备补充必要事务。新装备显式配置价格及内容池权重，不借此改背包容量或经济公式；内容池扩充后的固定种子序列单独建立新基线，保留旧版历史证据。
 - 用行为测试替换已失效的“固定工作台宽高 / 单页签 / 无背景图”源码断言；保留物品唯一归属、输入可达、无重复提交和无丢失资源的测试。
@@ -131,4 +131,8 @@ HUD 采用底部双资源仪表的方向：生命偏左、法力偏右，中间�
 
 不新增地图、技能栏玩法、药水系统、背包旋转 / 堆叠 / 重量、十槽之外的装备槽、打造配方或云存档。本轮副手先提供当前属性系统可消费的装备效果；双持攻击、格挡新公式、武器组切换不由扩槽默认引入。
 
-后续模块说明分别更新[输入与 UI](../input-ui-system.md)、[物品工作台](../item-ui-workbench.md)、[属性](../stat-system.md)、[视觉规范](../visual-style.md)及[视觉资产清单](../visual-assets.md)；规划中行为不得提前写成已实现。
+后续模块说明分别更新[输入与 UI](../../input-ui-system.md)、[物品工作台](../../item-ui-workbench.md)、[属性](../../stat-system.md)、[视觉规范](../../visual-style.md)及[视觉资产清单](../../visual-assets.md)；规划中行为不得提前写成已实现。
+
+## 最终验收
+
+2026-09-11 完成可见 Windows Player 验收与退出提示定位。全量回归 EditMode 434/434、PlayMode 63/63；版本 `0.3.4-alpha`。证据和已知依赖警告见[十槽综合验收](../../assets/acceptance/alpha-0.3.4-equipment/README.md)。临时入口已清理，模块文档已同步。

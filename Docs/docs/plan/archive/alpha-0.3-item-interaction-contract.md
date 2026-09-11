@@ -2,7 +2,7 @@
 
 > 状态：0.3.0 合同已验收并归档；十槽导航与最终视觉继续约束后续阶段复验
 > 更新日期：2026-09-08
-> 上位计划：[alpha 0.3](../alpha-0.3-plan.md)、[首阶段](alpha-0.3.0-independent-ui-windows-plan.md)
+> 上位计划：[alpha 0.3](alpha-0.3-plan.md)、[首阶段](alpha-0.3.0-independent-ui-windows-plan.md)
 
 ## 首先修复菜单交接
 

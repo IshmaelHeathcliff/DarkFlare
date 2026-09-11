@@ -1,0 +1,6 @@
+fallbackValid=True
+count=64
+stride=64
+managerCreated=False
+clearRequested=True
+validAfterClear=False

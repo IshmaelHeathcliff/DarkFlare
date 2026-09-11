@@ -2,7 +2,7 @@
 
 > 状态：已完成；归档日期 2026-09-08
 > 建立日期：2026-09-08
-> 上位计划：[alpha 0.3 UI 迭代](../alpha-0.3-plan.md)
+> 上位计划：[alpha 0.3 UI 迭代](alpha-0.3-plan.md)
 > 实现基线：`fa4c85e`，运行版本 `0.3.0-alpha`
 > 前置验收：[0.3.0 代表视觉组件与布局收尾](../../assets/acceptance/alpha-0.3.0-visual-pilot/README.md)
 

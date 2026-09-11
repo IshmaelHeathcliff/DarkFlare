@@ -69,10 +69,13 @@
 | [alpha 0.2.6 日志、错误处理与 Addressables 资源治理执行计划](./alpha-0.2.6-logging-error-addressables-plan.md) | alpha 0.2.6 | [日志、错误处理与 Addressables 资源治理](../../infrastructure/logging-error-addressables-governance.md) |
 | [alpha 0.2.7 综合验收与封板执行计划](./alpha-0.2.7-integrated-acceptance-release-sealing-plan.md) | alpha 0.2.7 | [alpha 0.2 综合验收记录](../../infrastructure/alpha-0.2-acceptance.md) |
 | [alpha 0.2 基础设施开发计划](./alpha-0.2-plan.md) | alpha 0.2.0–0.2.7 | [alpha 0.2 长期运行时契约](../../infrastructure/alpha-0.2-runtime-contract.md)、[综合验收记录](../../infrastructure/alpha-0.2-acceptance.md) |
-| [alpha 0.3 启动准备](./alpha-0.3-startup.md) | alpha 0.3 规划前置准备 | [alpha 0.3 UI 迭代计划](../alpha-0.3-plan.md)；归档仅表示资料梳理完成，不表示版本功能已实现 |
+| [alpha 0.3 启动准备](./alpha-0.3-startup.md) | alpha 0.3 规划前置准备 | [alpha 0.3 UI 迭代计划](alpha-0.3-plan.md)；归档仅表示资料梳理完成，不表示版本功能已实现 |
 | [测试审计与精简](./test-suite-maintenance-plan.md) | alpha 0.3 测试维护前置 | [测试维护规范](../../testing/test-maintenance.md)、[审计报告](../../testing/test-suite-audit.md) |
 | [alpha 0.3.0 统一物品操作与事务](./alpha-0.3.0-unified-item-actions-plan.md) | alpha 0.3.0 操作切片 | [物品 UI 工作台](../../item-ui-workbench.md)、[验收记录](../../assets/acceptance/alpha-0.3.0-actions/README.md) |
 
 最近归档日期：2026-09-08。
 
 - [alpha 0.3.3 统一 UI 视觉组件](./alpha-0.3.3-unified-ui-visual-plan.md)：已完成，见[组件验收](../../assets/acceptance/alpha-0.3.3-ui-style/README.md)。
+
+- [alpha 0.3.4 十槽装备与内容补齐](./alpha-0.3.4-equipment-completion-plan.md)：2026-09-11 完成，见[验收记录](../../assets/acceptance/alpha-0.3.4-equipment/README.md)。
+- [alpha 0.3 UI 与装备总计划](./alpha-0.3-plan.md)：0.3.0–0.3.4 全部完成并归档。
