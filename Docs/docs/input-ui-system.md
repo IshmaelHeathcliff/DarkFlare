@@ -51,6 +51,7 @@ Point / Look 在 Context 切换后会回放当前指针位置；相同控件的�
 | 上一个 / 下一个窗口 | [ / ] | 左 / 右肩键 |
 | UI 提交 | Enter | 南键 |
 | 物品拿起 / 放置 | Space | 西键 |
+| 按住对比装备 | 左 Shift | 左扳机 |
 | UI 返回 / 关闭 | Escape | 东键 |
 
 `Look` 与 `Attack` 仍作为后续手动瞄准和攻击入口保留；当前战斗原型继续使用自动攻击逻辑。
@@ -79,7 +80,7 @@ Point / Look 在 Context 切换后会回放当前指针位置；相同控件的�
 
 `Bootstrap.unity` 挂载 `ApplicationShell.uxml/.uss` 和唯一 EventSystem。Shell 负责 FrontEnd Page、Busy、Modal、Toast、Fatal 与跨场景焦点；Main 不再序列化 EventSystem，隐藏的 Application 层不得抢占玩法 UI 焦点。两个文档共用 PanelSettings，Bootstrap 的 `UIDocument.sortingOrder` 为 200，Main 为 100，保证应用层位于 HUD 和物品界面之上并正确接收指针。
 
-当前窗口结构、详情、安全区与导航以[物品 UI 工作台](./item-ui-workbench.md)为准：背包、商店、打造与属性四种窗口独立显示，背包可与商店或打造并排，并打开属性；暂停有独立入口。商店 / 打造有自己的物品来源选择器。背包标题栏与 HUD 打开[独立属性详情](./attribute-details.md)，组标题与展开项参与跨窗导航。物品详情优先位于组合窗口外侧，三窗拥挤时临时替换属性阅读区，切回属性恢复。`Windows.uss` 与 `Attributes.uss` 定义组合布局，当前版本为 `0.3.2-alpha`。
+当前窗口结构、详情、安全区与导航以[物品 UI 工作台](./item-ui-workbench.md)为准：背包、商店、打造与属性四种窗口独立显示，商店 / 打造默认联动背包，并可打开属性；暂停有独立入口。商店 / 打造与背包同为 560 px，窗口组居中，背包打开时隐藏重复来源列表。顶部标签栏关闭直接清理所有窗口返回游戏，各窗口标题栏关闭仍作用于单窗。背包标题栏与 HUD 打开[独立属性详情](./attribute-details.md)，组标题与展开项参与跨窗导航。物品详情不再显示图标；普通详情优先位于组合窗口外侧，三窗拥挤时临时替换属性阅读区，切回属性恢复。按住 `UI/Compare` 显示兼容槽已装备物品的并排信息栏，双戒指同时比较左右槽；松开、取消、暂停与关闭清理对比。动作菜单捕获方向导航并约束焦点，拖放跨窗允许高度不对齐的合法目标，普通浏览仍限制方向夹角。`Windows.uss` 与 `Attributes.uss` 定义组合布局。
 
 `alpha 0.2.3` 已将 Game Menu、HUD、背包 / 四槽装备、商店、打造、共享物品详情和场景交互提示的动态界面文本接入 Application 级 Localization Service。快照只传递属性 ID、数值、装备槽、伤害与修改器等语义数据，Controller / View 在当前 Locale 下解析显示文本；Locale 变化只重绘现有状态，不重新查询或改动背包、装备、拖拽、交易、打造和焦点。商店反馈保存 `LocalizedMessage`，打造结果保存领域 `CraftingResult`，避免缓存旧语言字符串。`alpha 0.2.5` 以后交互提示从 Application 输入服务取得当前显示设备族的绑定与 Glyph。
 

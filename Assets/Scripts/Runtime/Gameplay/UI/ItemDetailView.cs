@@ -13,7 +13,6 @@ namespace DarkFlare
         const string DenseClass = "item-detail--dense";
 
         readonly VisualElement _root;
-        readonly VisualElement _icon;
         readonly Label _nameLabel;
         readonly Label _metaLabel;
         readonly Label _baseLabel;
@@ -35,7 +34,6 @@ namespace DarkFlare
             }
 
             _nameLabel = _root.Q<Label>("item-detail-name");
-            _icon = _root.Q<VisualElement>("item-detail-icon");
             _metaLabel = _root.Q<Label>("item-detail-meta");
             _baseLabel = _root.Q<Label>("item-detail-base");
             _implicitList = _root.Q<VisualElement>("item-detail-implicit-list");
@@ -44,7 +42,6 @@ namespace DarkFlare
         }
 
         public bool IsValid => _root != null
-            && _icon != null
             && _nameLabel != null
             && _metaLabel != null
             && _baseLabel != null
@@ -59,7 +56,7 @@ namespace DarkFlare
 
         public void Show(ItemDetailSnapshot detail)
         {
-            Show(detail, ItemVisualPresenter.GetSprite(detail.IconGuid));
+            Show(detail, null);
         }
 
         public void Show(ItemDetailSnapshot detail, Sprite icon)
@@ -71,10 +68,6 @@ namespace DarkFlare
 
             ApplyRarityClass(detail.Rarity);
             _root.EnableInClassList(DenseClass, detail.AffixCount >= 4);
-            _icon.EnableInClassList("item-icon--missing", detail.Item != null && icon == null);
-            _icon.style.backgroundImage = icon != null
-                ? new StyleBackground(icon)
-                : new StyleBackground(StyleKeyword.None);
             _nameLabel.text = detail.Item != null
                 ? Resolve(detail.Name, detail.InstanceId)
                 : Localize("ui", "item.detail.none_name");

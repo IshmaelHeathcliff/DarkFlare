@@ -1,8 +1,8 @@
-.game-menu-overlay { justify-content: flex-start; padding-top: 24px; padding-bottom: 160px; background-color: rgba(5, 7, 10, 0.64); }
-.game-menu-panel { width: auto; max-width: 97%; height: 896px; max-height: 100%; padding: 0; background-color: rgba(0,0,0,0); border-width: 0; }
+.game-menu-overlay { justify-content: flex-start; padding-top: 12px; padding-bottom: 144px; background-color: rgba(5, 7, 10, 0.64); }
+.game-menu-panel { width: auto; max-width: 97%; height: 924px; max-height: 100%; padding: 0; background-color: rgba(0,0,0,0); border-width: 0; }
 .game-menu-header { height: 44px; min-height: 44px; margin-bottom: 12px; justify-content: center; border-width: 0; }
 .game-menu-content { flex-direction: row; align-items: stretch; flex-grow: 1; min-height: 0; }
-.item-window { width: 760px; min-width: 0; flex-shrink: 0; margin-left: 8px; margin-right: 8px; padding: 12px; background-color: rgb(14,17,22); border-width: 2px; border-color: rgb(91,76,53); }
+.item-window { width: 560px; min-width: 0; flex-shrink: 0; margin-left: 8px; margin-right: 8px; padding: 12px; background-color: rgb(14,17,22); border-width: 2px; border-color: rgb(91,76,53); }
 .inventory-window { width: 560px; }
 .item-window--active { border-color: rgb(173,134,74); }
 .item-window-header { flex-direction: row; align-items: center; min-height: 38px; height: 38px; margin-bottom: 8px; border-bottom-width: 1px; border-bottom-color: rgb(91,76,53); }
@@ -11,9 +11,9 @@
 .item-window .item-context-header, .item-window .item-context-help, .item-window .item-workbench-help, .item-window .item-workbench-section-kicker, .item-window .equipment-silhouette { display: none; }
 .item-workbench-template { width: auto; max-width: 100%; min-width: 0; flex-grow: 0; }
 .item-workbench-shared { flex-grow: 0; }
-.item-workbench-equipment { min-height: 168px; height: 168px; padding: 0; margin-bottom: 6px; flex-grow: 0; }
+.item-workbench-equipment { min-height: 316px; height: 316px; padding: 0; margin-bottom: 6px; flex-grow: 0; }
 .item-workbench-equipment .item-workbench-section-header { display: none; }
-.equipment-canvas { min-height: 162px; height: 162px; margin-top: 0; }
+.equipment-canvas { min-height: 316px; height: 316px; margin-top: 0; }
 .equipment-slot-layout { left: 4px; right: 4px; top: 4px; bottom: 4px; }
 .item-workbench-inventory { height: 346px; min-height: 346px; padding: 0; }
 .item-workbench-inventory .item-workbench-section-header { height: 28px; }
@@ -33,7 +33,7 @@
 .item-source-name { flex-grow: 1; white-space: normal; font-size: 16px; }
 .item-source-row--selected { border-color: rgb(208,164,88); background-color: rgb(55,45,32); }
 .item-source-empty { font-size: 14px; color: rgb(174,169,160); }
-.shop-merchant-frame { flex-grow: 0; height: 324px; min-height: 324px; padding: 6px; }
+.shop-merchant-frame { flex-grow: 0; height: 324px; min-height: 324px; padding: 0; }
 .shop-window .shop-feedback { min-height: 36px; padding: 6px; }
 .crafting-window .item-context-subtitle { margin-top: 4px; margin-bottom: 4px; min-height: 20px; }
 .crafting-window .crafting-selection-card { min-height: 160px; padding: 4px; }
@@ -47,7 +47,7 @@
 .game-menu-save-status { min-height: 30px; white-space: normal; }
 .item-tooltip { width: 400px; height: auto; min-height: 0; max-height: 824px; }
 
-.game-menu-panel { margin-right: 416px; }
+.game-menu-panel { margin-right: 0; }
 
 .inventory-grid-frame { height: 310px; min-height: 310px; margin-bottom: 0; }
 .item-workbench-inventory .item-workbench-section-header { flex-shrink: 0; }
@@ -99,19 +99,32 @@
 .item-operation-status { flex-basis: 0; }
 .item-operation-button { width: 144px; min-width: 144px; max-width: 144px; flex-shrink: 0; }
 
-/* Ten slots keep persistence identities independent of their visual arrangement. */
-.equipment-slot-layout { left: 20px; right: 4px; }
-.equipment-slot-layout > .inventory-equipment-slot { position: absolute; margin: 0; width: 60px; height: 72px; }
-.equipment-slot-layout > .equipment-slot--weapon { left: 0; top: 0; width: 100px; height: 152px; }
-.equipment-slot-layout > .equipment-slot--armor { left: 108px; top: 0; width: 100px; height: 152px; }
-.equipment-slot-layout > .equipment-slot--head { left: 216px; top: 0; }
-.equipment-slot-layout > .equipment-slot--ring-left { left: 216px; top: 80px; }
-.equipment-slot-layout > .equipment-slot--hands { left: 284px; top: 0; }
-.equipment-slot-layout > .equipment-slot--ring-right { left: 284px; top: 80px; }
-.equipment-slot-layout > .equipment-slot--legs { left: 352px; top: 0; }
-.equipment-slot-layout > .equipment-slot--necklace { left: 352px; top: 80px; }
-.equipment-slot-layout > .equipment-slot--off-hand { left: 420px; top: 0; }
-.equipment-slot-layout > .equipment-slot--belt { left: 420px; top: 80px; }
+/* Slot dimensions follow the same 48 px cells and 4 px gaps as items. */
+.equipment-slot-layout { left: 4px; right: 4px; }
+.equipment-slot-layout > .inventory-equipment-slot { position: absolute; margin: 0; width: 100px; height: 100px; }
+.equipment-slot-layout > .equipment-slot--head { left: 208px; top: 0; }
+.equipment-slot-layout > .equipment-slot--armor { left: 208px; top: 104px; height: 152px; }
+.equipment-slot-layout > .equipment-slot--weapon { left: 28px; top: 48px; height: 152px; }
+.equipment-slot-layout > .equipment-slot--off-hand { left: 388px; top: 48px; height: 152px; }
+.equipment-slot-layout > .equipment-slot--hands { left: 52px; top: 208px; }
+.equipment-slot-layout > .equipment-slot--legs { left: 364px; top: 208px; }
+.equipment-slot-layout > .equipment-slot--ring-left { left: 156px; top: 156px; width: 48px; height: 48px; }
+.equipment-slot-layout > .equipment-slot--ring-right { left: 312px; top: 156px; width: 48px; height: 48px; }
+.equipment-slot-layout > .equipment-slot--necklace { left: 312px; top: 52px; width: 48px; height: 100px; }
+.equipment-slot-layout > .equipment-slot--belt { left: 208px; top: 260px; height: 48px; }
+.inventory-equipment-slot-icon--empty { filter: grayscale(1); opacity: 0.16; }
+.inventory-window .inventory-target-slot, .inventory-window .inventory-feedback { display: none; }
+.game-menu-panel--with-inventory .item-source-section { display: none; }
+.shop-window #shop-selected-source, .crafting-window #crafting-selected-value { display: none; }
+.shop-merchant-scroll .unity-scroller--vertical { width: 10px; }
+.item-tooltip-comparison { width: 360px; }
 
 .shop-merchant-scroll { flex-grow: 1; min-height: 0; width: 100%; }
 .shop-merchant-scroll .unity-scroll-view__content-container { align-self: center; }
+
+
+.inventory-window .item-context-action { flex-shrink: 0; min-height: 48px; }
+
+
+.item-window .item-workbench-inventory .item-workbench-section-header { display: none; }
+.item-workbench-inventory { height: 314px; min-height: 314px; }

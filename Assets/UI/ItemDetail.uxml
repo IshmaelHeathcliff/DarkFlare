@@ -1,7 +1,6 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:l="UnityEngine.Localization" editor-extension-mode="False">
   <ui:VisualElement class="item-detail" picking-mode="Position">
     <ui:VisualElement class="item-detail-header">
-      <ui:VisualElement name="item-detail-icon" class="item-detail-icon" picking-mode="Ignore" />
       <ui:VisualElement class="item-detail-heading">
         <ui:Label name="item-detail-name" text="" class="item-detail-name" />
         <ui:Label name="item-detail-meta" text="" class="item-detail-meta" />

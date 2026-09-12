@@ -554,7 +554,7 @@ namespace DarkFlare
 
         void PreviewItem(ItemInstance item)
         {
-            if (IsDragging || _suppressTooltipUntilPreview)
+            if (_workspace == null || !IsVisible || IsDragging || _suppressTooltipUntilPreview)
             {
                 return;
             }

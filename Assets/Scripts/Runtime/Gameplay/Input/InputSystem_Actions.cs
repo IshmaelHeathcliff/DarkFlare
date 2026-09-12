@@ -510,6 +510,16 @@ namespace DarkFlare
                     ""interactions"": """",
                     ""initialStateCheck"": false,
                     ""priority"": 0
+                },
+                {
+                    ""name"": ""Compare"",
+                    ""type"": ""Button"",
+                    ""id"": ""5e7e3cd7-0470-4d9a-826e-577997055379"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true,
+                    ""priority"": 0
                 }
             ],
             ""bindings"": [
@@ -930,6 +940,28 @@ namespace DarkFlare
                     ""action"": ""NextWindow"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""977f93ee-60c9-4ec8-a36f-4dc95a683d68"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Compare"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7b9dfd0c-de78-4e44-bd9a-c2bdebd38f6d"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Compare"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -988,6 +1020,7 @@ namespace DarkFlare
             m_UI_Pause = m_UI.FindAction("Pause", throwIfNotFound: true);
             m_UI_PreviousWindow = m_UI.FindAction("PreviousWindow", throwIfNotFound: true);
             m_UI_NextWindow = m_UI.FindAction("NextWindow", throwIfNotFound: true);
+            m_UI_Compare = m_UI.FindAction("Compare", throwIfNotFound: true);
         }
 
         ~@InputSystem_Actions()
@@ -1234,6 +1267,7 @@ namespace DarkFlare
         private readonly InputAction m_UI_Pause;
         private readonly InputAction m_UI_PreviousWindow;
         private readonly InputAction m_UI_NextWindow;
+        private readonly InputAction m_UI_Compare;
         /// <summary>
         /// Provides access to input actions defined in input action map "UI".
         /// </summary>
@@ -1302,6 +1336,10 @@ namespace DarkFlare
             /// </summary>
             public InputAction @NextWindow => m_Wrapper.m_UI_NextWindow;
             /// <summary>
+            /// Provides access to the underlying input action "UI/Compare".
+            /// </summary>
+            public InputAction @Compare => m_Wrapper.m_UI_Compare;
+            /// <summary>
             /// Provides access to the underlying input action map instance.
             /// </summary>
             public InputActionMap Get() { return m_Wrapper.m_UI; }
@@ -1369,6 +1407,9 @@ namespace DarkFlare
                 @NextWindow.started += instance.OnNextWindow;
                 @NextWindow.performed += instance.OnNextWindow;
                 @NextWindow.canceled += instance.OnNextWindow;
+                @Compare.started += instance.OnCompare;
+                @Compare.performed += instance.OnCompare;
+                @Compare.canceled += instance.OnCompare;
             }
 
             /// <summary>
@@ -1422,6 +1463,9 @@ namespace DarkFlare
                 @NextWindow.started -= instance.OnNextWindow;
                 @NextWindow.performed -= instance.OnNextWindow;
                 @NextWindow.canceled -= instance.OnNextWindow;
+                @Compare.started -= instance.OnCompare;
+                @Compare.performed -= instance.OnCompare;
+                @Compare.canceled -= instance.OnCompare;
             }
 
             /// <summary>
@@ -1636,6 +1680,13 @@ namespace DarkFlare
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnNextWindow(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Compare" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnCompare(InputAction.CallbackContext context);
         }
     }
 }

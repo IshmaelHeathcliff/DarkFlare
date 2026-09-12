@@ -22,6 +22,7 @@ namespace DarkFlare
         readonly VisualElement _grid;
         readonly VisualElement _dragLayer;
         readonly VisualElement _actionMenu;
+        VisualElement _actionMenuFocus;
         readonly VisualElement _bar;
         readonly Label _status;
         readonly Button _actions;
@@ -112,6 +113,7 @@ namespace DarkFlare
         public void Refresh()
         {
             if (_disposed) { return; }
+            _workspace.RefreshPreview();
             bool hasItems = (_menu.OpenWindows & (GameMenuAccess.Inventory | GameMenuAccess.Shop | GameMenuAccess.Crafting)) != 0;
             _bar.style.display = _menu.IsOpen && !_menu.IsPauseOpen && hasItems ? DisplayStyle.Flex : DisplayStyle.None;
             SyncBarWidth();
@@ -205,6 +207,21 @@ namespace DarkFlare
 
         void OnFocusIn(FocusInEvent evt)
         {
+            if (IsMenuOpen)
+            {
+                if (IsUnder(evt.target as VisualElement, "item-action-menu"))
+                {
+                    _actionMenuFocus = evt.target as VisualElement;
+                }
+                else
+                {
+                    _overlay.schedule.Execute(() =>
+                    {
+                        if (!_disposed && IsMenuOpen) { _actionMenuFocus?.Focus(); }
+                    });
+                }
+                return;
+            }
             if (!IsDragging && !IsMenuOpen && TrySource(evt.target as VisualElement, out ItemActionSource source)) { Select(source); }
         }
 
@@ -440,7 +457,7 @@ namespace DarkFlare
                 targets.Add(target);
                 bounds.Add(target.Element.worldBound);
             }
-            int neighbor = SpatialNavigation.FindNeighbor(from, bounds, direction);
+            int neighbor = SpatialNavigation.FindNeighbor(from, bounds, direction, false);
             if (neighbor < 0) { return; }
             ItemActionTarget selected = targets[neighbor];
             if (selected.Origin.HasValue) { _gridOrigin = selected.Origin.Value; }
@@ -670,6 +687,7 @@ namespace DarkFlare
         public bool CloseMenu(bool restoreFocus)
         {
             if (!IsMenuOpen) { return false; }
+            _actionMenuFocus = null;
             _actionMenu.style.display = DisplayStyle.None;
             _actionMenu.Clear();
             if (restoreFocus && GameMenuController.IsNavigable(_selected.Element)) { _selected.Element.Focus(); }

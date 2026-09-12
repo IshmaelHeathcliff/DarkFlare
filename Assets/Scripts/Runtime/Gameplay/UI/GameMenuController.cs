@@ -55,7 +55,8 @@ namespace DarkFlare
         public GameMenuAccess OpenWindows { get; private set; }
         public bool IsPauseOpen => _pauseOpen;
         public ItemWorkspace Workspace => _workspace ??= new ItemWorkspace(
-            _document.rootVisualElement, IsWindowVisible, ActivateWindow);
+            _document.rootVisualElement, IsWindowVisible, ActivateWindow,
+            () => this.SendQuery(new GetInventorySnapshotQuery()));
 
         SceneSessionBinding _sessionBinding;
         GameInput _gameInput;
@@ -101,6 +102,10 @@ namespace DarkFlare
         {
             if (!IsPageAvailable(page) || _gameInput == null) { return; }
             OpenWindows |= page.ToAccess();
+            if (page == GameMenuPage.Shop || page == GameMenuPage.Crafting)
+            {
+                OpenWindows |= GameMenuAccess.Inventory;
+            }
             CurrentPage = page;
             _pauseOpen = false;
             if (_gameInput.CurrentMode != GameInputMode.UI) { _gameInput.SwitchToUi(); }
@@ -398,7 +403,7 @@ namespace DarkFlare
             if (_inventoryClose != null) { _inventoryClose.clicked -= OnInventoryClose; }
             if (_shopClose != null) { _shopClose.clicked -= OnShopClose; }
             if (_craftingClose != null) { _craftingClose.clicked -= OnCraftingClose; }
-            _panel?.UnregisterCallback<NavigationMoveEvent>(OnNavigationMove, TrickleDown.TrickleDown);
+            _overlay?.UnregisterCallback<NavigationMoveEvent>(OnNavigationMove, TrickleDown.TrickleDown);
             _panel?.UnregisterCallback<FocusInEvent>(OnWindowFocus, TrickleDown.TrickleDown);
             _inventoryTemplate?.UnregisterCallback<PointerDownEvent>(OnInventoryActivated, TrickleDown.TrickleDown);
             _shopTemplate?.UnregisterCallback<PointerDownEvent>(OnShopActivated, TrickleDown.TrickleDown);
@@ -530,7 +535,7 @@ namespace DarkFlare
             _inventoryClose.clicked += OnInventoryClose;
             _shopClose.clicked += OnShopClose;
             _craftingClose.clicked += OnCraftingClose;
-            _panel.RegisterCallback<NavigationMoveEvent>(OnNavigationMove, TrickleDown.TrickleDown);
+            _overlay.RegisterCallback<NavigationMoveEvent>(OnNavigationMove, TrickleDown.TrickleDown);
             _panel.RegisterCallback<FocusInEvent>(OnWindowFocus, TrickleDown.TrickleDown);
             _inventoryTemplate.RegisterCallback<PointerDownEvent>(OnInventoryActivated, TrickleDown.TrickleDown);
             _shopTemplate.RegisterCallback<PointerDownEvent>(OnShopActivated, TrickleDown.TrickleDown);
@@ -632,6 +637,7 @@ namespace DarkFlare
             SetTemplateVisible(_attributesTemplate, attributes);
             _attributes?.SetVisible(attributes);
             _panel.EnableInClassList("game-menu-panel--attributes", attributes);
+            _panel.EnableInClassList("game-menu-panel--with-inventory", inventory);
             _attributesTab.SetEnabled(!_pauseOpen);
             SetTabActive(_attributesTab, attributes);
             SetTemplateVisible(_inventoryTemplate, inventory);
@@ -764,8 +770,7 @@ namespace DarkFlare
 
         void OnCloseClicked()
         {
-            if (_pauseOpen) { TogglePause(); }
-            else { ClosePage(CurrentPage); }
+            _gameInput?.SwitchToGameplay();
         }
 
         void OnSaveClicked()

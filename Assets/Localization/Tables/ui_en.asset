@@ -1762,6 +1762,21 @@ MonoBehaviour:
     m_Localized: Belt
     m_Metadata:
       m_Items: []
+  - m_Id: 8615480699904000
+    m_Localized: Hold {0} to compare equipped items
+    m_Metadata:
+      m_Items:
+      - rid: 6738608143192817845
+  - m_Id: 8615480821538816
+    m_Localized: "Equipped \xB7 {0}"
+    m_Metadata:
+      m_Items:
+      - rid: 6738608143192817845
+  - m_Id: 8615480821538817
+    m_Localized: Compare equipment (hold)
+    m_Metadata:
+      m_Items:
+      - rid: 6738608143192817845
   references:
     version: 2
     RefIds:
@@ -1815,3 +1830,6 @@ MonoBehaviour:
         - id: 7191908215414800
         - id: 7191908215414808
         - id: 7409032787648512
+        - id: 8615480699904000
+        - id: 8615480821538816
+        - id: 8615480821538817

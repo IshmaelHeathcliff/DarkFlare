@@ -1695,6 +1695,18 @@ MonoBehaviour:
     m_Key: equipment.slot.belt
     m_Metadata:
       m_Items: []
+  - m_Id: 8615480699904000
+    m_Key: item.compare.hint
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8615480821538816
+    m_Key: item.compare.equipped
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8615480821538817
+    m_Key: settings.input.action.ui_compare
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

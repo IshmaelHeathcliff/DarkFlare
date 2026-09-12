@@ -164,6 +164,14 @@
           <ui:Instance template="ItemDetail" name="item-tooltip-detail" class="item-tooltip-detail" />
           <ui:Label name="item-tooltip-context" text="" class="item-tooltip-context" />
         </ui:VisualElement>
+        <ui:VisualElement name="item-comparison-0" class="item-tooltip item-tooltip-comparison ui-panel-frame" picking-mode="Ignore">
+          <ui:Instance template="ItemDetail" name="item-tooltip-detail" class="item-tooltip-detail" />
+          <ui:Label name="item-tooltip-context" class="item-tooltip-context" />
+        </ui:VisualElement>
+        <ui:VisualElement name="item-comparison-1" class="item-tooltip item-tooltip-comparison ui-panel-frame" picking-mode="Ignore">
+          <ui:Instance template="ItemDetail" name="item-tooltip-detail" class="item-tooltip-detail" />
+          <ui:Label name="item-tooltip-context" class="item-tooltip-context" />
+        </ui:VisualElement>
       </ui:VisualElement>
       <ui:VisualElement name="item-action-menu" class="item-action-menu ui-panel-frame" />
       <ui:VisualElement name="item-drag-layer" class="item-drag-layer" picking-mode="Ignore" />

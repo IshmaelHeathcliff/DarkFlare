@@ -402,6 +402,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Compare",
+                    "type": "Button",
+                    "id": "5e7e3cd7-0470-4d9a-826e-577997055379",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -820,6 +829,28 @@
                     "processors": "",
                     "groups": "Gamepad",
                     "action": "NextWindow",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "977f93ee-60c9-4ec8-a36f-4dc95a683d68",
+                    "path": "<Keyboard>/leftShift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Compare",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7b9dfd0c-de78-4e44-bd9a-c2bdebd38f6d",
+                    "path": "<Gamepad>/leftTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Compare",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -5,7 +5,8 @@ namespace DarkFlare
 {
     public static class SpatialNavigation
     {
-        public static int FindNeighbor(Rect source, IReadOnlyList<Rect> candidates, Vector2 direction)
+        public static int FindNeighbor(Rect source, IReadOnlyList<Rect> candidates, Vector2 direction,
+            bool requireDirectionalCone = true)
         {
             if (direction.sqrMagnitude < 0.001f) { return -1; }
             bool horizontal = Mathf.Abs(direction.x) >= Mathf.Abs(direction.y);
@@ -28,7 +29,7 @@ namespace DarkFlare
                 bool aligned = crossGap <= 0f;
                 float distance = Mathf.Max(0f, gap) + Mathf.Max(0f, crossGap);
                 float offset = horizontal ? Mathf.Abs(source.center.y - target.center.y) : Mathf.Abs(source.center.x - target.center.x);
-                if (!aligned && forward * sign < offset) { continue; }
+                if (requireDirectionalCone && !aligned && forward * sign < offset) { continue; }
                 if (best < 0 || aligned && !bestAligned
                     || aligned == bestAligned && (distance < bestDistance - 0.5f
                         || Mathf.Abs(distance - bestDistance) <= 0.5f && offset < bestOffset - 0.5f))

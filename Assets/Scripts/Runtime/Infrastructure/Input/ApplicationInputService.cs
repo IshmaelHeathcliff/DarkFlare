@@ -4,6 +4,7 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.InputSystem.Utilities;
 
 namespace DarkFlare
@@ -74,8 +75,6 @@ namespace DarkFlare
         Vector2 _lastPointerPosition;
         bool _rebindCancelledByToken;
         bool _rebindDeviceRemoved;
-        float _rebindStartedAt;
-        float _rebindTimeoutSeconds;
         bool _dispatchingCancel;
         bool _sessionMenuActive;
         bool _contextRefreshPending;
@@ -94,6 +93,8 @@ namespace DarkFlare
             _actions.asset.FindAction("UI/NextWindow", true).performed += OnNextWindow;
             _actions.UI.Navigate.performed += OnNavigate;
             _actions.UI.Rearrange.performed += OnRearrange;
+            _actions.asset.FindAction("UI/Compare", true).performed += OnCompare;
+            _actions.asset.FindAction("UI/Compare", true).canceled += OnCompare;
             _actions.UI.Cancel.performed += OnCancel;
             _actions.Player.Get().actionTriggered += OnActionTriggered;
             _actions.UI.Get().actionTriggered += OnActionTriggered;
@@ -121,6 +122,7 @@ namespace DarkFlare
         public event Action<Vector2> NavigatePerformed;
 
         public event Action RearrangePerformed;
+        public event Action<bool> CompareChanged;
 
         public event Action CancelPerformed;
 
@@ -567,8 +569,6 @@ namespace DarkFlare
             _activeRebindFamily = target.DeviceFamily;
             _rebindCancelledByToken = false;
             _rebindDeviceRemoved = false;
-            _rebindStartedAt = Time.realtimeSinceStartup;
-            _rebindTimeoutSeconds = timeoutSeconds;
             _rebindSuspension = AcquireSuspension(InputSuspensionReason.Rebinding);
             _rebindOperation = action.PerformInteractiveRebinding(bindingIndex)
                 .WithControlsHavingToMatchPath(GetDeviceLayout(target.DeviceFamily))
@@ -579,7 +579,7 @@ namespace DarkFlare
                 .WithTimeout(timeoutSeconds)
                 .OnApplyBinding((operation, path) => capturedPath = path)
                 .OnCancel(operation => completion.TrySetResult(
-                    CreateInteractiveCancellationResult(target)))
+                    CreateInteractiveCancellationResult(target, operation)))
                 .OnComplete(operation => CompleteInteractiveRebindAsync(
                     completion,
                     target,
@@ -644,7 +644,8 @@ namespace DarkFlare
             completion.TrySetResult(result);
         }
 
-        InputRebindResult CreateInteractiveCancellationResult(InputBindingTarget target)
+        InputRebindResult CreateInteractiveCancellationResult(InputBindingTarget target,
+            InputActionRebindingExtensions.RebindingOperation operation)
         {
             if (_rebindDeviceRemoved)
             {
@@ -658,8 +659,8 @@ namespace DarkFlare
                 return InputRebindResult.Failure(InputRebindResultCode.Cancelled, target);
             }
 
-            bool timedOut = Time.realtimeSinceStartup - _rebindStartedAt
-                >= _rebindTimeoutSeconds - 0.01f;
+            bool timedOut = operation.timeout > 0f
+                && InputState.currentTime - operation.startTime > operation.timeout;
             return InputRebindResult.Failure(
                 timedOut
                     ? InputRebindResultCode.TimedOut
@@ -678,8 +679,6 @@ namespace DarkFlare
             _activeRebindFamily = InputDeviceFamily.Unknown;
             _rebindCancelledByToken = false;
             _rebindDeviceRemoved = false;
-            _rebindStartedAt = 0f;
-            _rebindTimeoutSeconds = 0f;
         }
 
         InputRebindResult LoadInitialBindingOverrides()
@@ -1194,6 +1193,8 @@ namespace DarkFlare
             _actions.asset.FindAction("UI/NextWindow", true).performed -= OnNextWindow;
             _actions.UI.Navigate.performed -= OnNavigate;
             _actions.UI.Rearrange.performed -= OnRearrange;
+            _actions.asset.FindAction("UI/Compare", true).performed -= OnCompare;
+            _actions.asset.FindAction("UI/Compare", true).canceled -= OnCompare;
             _actions.UI.Cancel.performed -= OnCancel;
             _actions.Player.Get().actionTriggered -= OnActionTriggered;
             _actions.UI.Get().actionTriggered -= OnActionTriggered;
@@ -1225,6 +1226,7 @@ namespace DarkFlare
             CycleWindowPerformed = null;
             NavigatePerformed = null;
             RearrangePerformed = null;
+            CompareChanged = null;
             CancelPerformed = null;
             CancelRequested = null;
             RequestedContextChanged = null;
@@ -1289,6 +1291,7 @@ namespace DarkFlare
                 _actions.asset.FindAction("UI/Pause", true).Disable();
                 _actions.asset.FindAction("UI/PreviousWindow", true).Disable();
                 _actions.asset.FindAction("UI/NextWindow", true).Disable();
+                _actions.asset.FindAction("UI/Compare", true).Disable();
             }
         }
 
@@ -1327,6 +1330,11 @@ namespace DarkFlare
         void OnNavigate(InputAction.CallbackContext context)
         {
             NavigatePerformed?.Invoke(context.ReadValue<Vector2>());
+        }
+
+        void OnCompare(InputAction.CallbackContext context)
+        {
+            CompareChanged?.Invoke(context.performed && IsUiEnabled && !HasUiContextOverride);
         }
 
         void OnRearrange(InputAction.CallbackContext context)

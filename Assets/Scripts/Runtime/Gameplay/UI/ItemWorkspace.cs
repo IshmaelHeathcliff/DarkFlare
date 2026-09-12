@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -10,6 +11,12 @@ namespace DarkFlare
         readonly Action<GameMenuPage> _activate;
         readonly ItemTooltipView _tooltip;
         readonly VisualElement _windowArea;
+        readonly ItemTooltipView[] _comparisons = new ItemTooltipView[2];
+        readonly Func<InventorySnapshot> _getInventory;
+        readonly ApplicationInputService _input;
+        readonly LocalizationService _locale;
+        ItemInstance _previewItem;
+        string _previewContext;
         VisualElement _highlight;
         string _highlightClass;
         GameMenuPage _previewOwner;
@@ -18,8 +25,10 @@ namespace DarkFlare
         bool _disposed;
         bool _previewSuppressed;
 
-        public ItemWorkspace(VisualElement root, Func<GameMenuPage, bool> isVisible, Action<GameMenuPage> activate)
+        public ItemWorkspace(VisualElement root, Func<GameMenuPage, bool> isVisible, Action<GameMenuPage> activate,
+            Func<InventorySnapshot> getInventory)
         {
+            _getInventory = getInventory;
             _isVisible = isVisible;
             _activate = activate;
             _windowArea = root.Q("game-menu-content");
@@ -27,7 +36,17 @@ namespace DarkFlare
                 root.Q("game-menu-panel"), root.Q<Label>("item-tooltip-context"));
             if (ApplicationHost.TryGetCurrent(out ApplicationHost host))
             {
-                _tooltip.SetLocalizationService(host.Localization);
+                _input = host.Input;
+                _locale = host.Localization;
+                _input.CompareChanged += OnCompareChanged;
+                _tooltip.SetLocalizationService(_locale);
+            }
+            for (int i = 0; i < _comparisons.Length; i++)
+            {
+                VisualElement comparison = root.Q($"item-comparison-{i}");
+                _comparisons[i] = new ItemTooltipView(comparison, root.Q("item-tooltip-layer"),
+                    _windowArea, comparison?.Q<Label>("item-tooltip-context"));
+                _comparisons[i].SetLocalizationService(_locale);
             }
         }
 
@@ -46,7 +65,7 @@ namespace DarkFlare
             if (ActiveWindow != page)
             {
                 ClearHighlight();
-                _tooltip.Hide();
+                ClearPreview();
             }
             ActiveWindow = page;
             _activate(page);
@@ -84,15 +103,17 @@ namespace DarkFlare
 
         public void Preview(GameMenuPage owner, VisualElement anchor, ItemInstance item, string context)
         {
-            if (_disposed || IsDragging || _previewSuppressed || !_isVisible(owner) || ActiveWindow != owner) { return; }
+            if (_disposed || IsDragging || !_isVisible(owner) || ActiveWindow != owner) { return; }
             _previewOwner = owner;
+            _previewItem = item;
+            _previewContext = context;
             _tooltip.SetAnchor(_windowArea ?? anchor);
-            _tooltip.Show(item, context, ItemTooltipSide.Right);
+            RefreshPreview();
         }
 
         public void HidePreview(GameMenuPage owner)
         {
-            if (_previewOwner == owner) { _tooltip.Hide(); }
+            if (_previewOwner == owner) { ClearPreview(); }
         }
 
         public void BeginDrag(Func<bool> cancel, Action<Vector2> navigate)
@@ -101,7 +122,7 @@ namespace DarkFlare
             _cancelDrag = cancel;
             _navigateDrag = navigate;
             ClearHighlight();
-            _tooltip.Hide();
+            ClearPreview();
         }
 
         public void EndDrag()
@@ -109,12 +130,12 @@ namespace DarkFlare
             bool hadDrag = _cancelDrag != null;
             _cancelDrag = null;
             _navigateDrag = null;
-            _tooltip.Hide();
+            ClearPreview();
             if (hadDrag) { _previewSuppressed = true; }
         }
 
         public void AllowPreview() { _previewSuppressed = false; }
-        public void SuppressPreview() { _previewSuppressed = true; _tooltip.Hide(); }
+        public void SuppressPreview() { _previewSuppressed = true; ClearPreview(); }
 
         public bool CancelDrag()
         {
@@ -133,11 +154,12 @@ namespace DarkFlare
             Suspending?.Invoke();
             CancelDrag();
             ClearHighlight();
-            _tooltip.Hide();
+            ClearPreview();
         }
 
         public void Dispose()
         {
+            if (_input != null) { _input.CompareChanged -= OnCompareChanged; }
             Interactions?.Dispose();
             Interactions = null;
             Suspend();
@@ -147,6 +169,56 @@ namespace DarkFlare
             InventorySelectionChanged = null;
             CraftingItemChanged = null;
             Suspending = null;
+        }
+
+        void OnCompareChanged(bool held)
+        {
+            if (held && !IsDragging && Interactions?.IsMenuOpen != true) { _previewSuppressed = false; }
+            RefreshPreview();
+        }
+
+        public void RefreshPreview()
+        {
+            foreach (ItemTooltipView comparison in _comparisons) { comparison.Hide(); }
+            if (_disposed || _previewItem == null || IsDragging || _previewSuppressed
+                || !_isVisible(_previewOwner)) { _tooltip.Hide(); return; }
+            List<EquipmentSlotSnapshot> equipped = new List<EquipmentSlotSnapshot>();
+            bool held = _input != null && _input.IsUiEnabled && !_input.HasUiContextOverride
+                && _input.ActionAsset.FindAction("UI/Compare", true).IsPressed();
+            if (held && _previewItem.BaseDefinition != null)
+            {
+                foreach (EquipmentSlotSnapshot slot in _getInventory().EquipmentSlots)
+                {
+                    if (slot.Item != null && slot.Item != _previewItem
+                        && _previewItem.BaseDefinition.CanEquipTo(slot.Slot)) { equipped.Add(slot); }
+                }
+            }
+            int count = Mathf.Min(equipped.Count, _comparisons.Length);
+            _tooltip.SetComparisonGroup(0, count + 1);
+            string hint = _input != null ? _input.GetBindingDisplayString(new InputBindingTarget(
+                RebindableInputAction.UiCompare, InputBindingPart.Primary,
+                _input.DisplayDeviceFamily)) : string.Empty;
+            string context = _previewContext;
+            if (!held && _previewItem.BaseDefinition != null
+                && _previewItem.BaseDefinition.AllowedEquipmentSlots != EquipmentSlotMask.None)
+            {
+                context += "\n" + _locale?.GetString("ui", "item.compare.hint", new object[] { hint });
+            }
+            _tooltip.Show(_previewItem, context, ItemTooltipSide.Right);
+            for (int i = 0; i < count; i++)
+            {
+                _comparisons[i].SetComparisonGroup(i + 1, count + 1);
+                string slotName = _locale?.GetString("ui", "equipment.slot." + EquipmentSlots.GetKey(equipped[i].Slot));
+                _comparisons[i].Show(equipped[i].Item,
+                    _locale?.GetString("ui", "item.compare.equipped", new object[] { slotName }), ItemTooltipSide.Right);
+            }
+        }
+
+        void ClearPreview()
+        {
+            _previewItem = null;
+            _tooltip.Hide();
+            foreach (ItemTooltipView comparison in _comparisons) { comparison.Hide(); }
         }
 
         void ClearHighlight()

@@ -41,6 +41,7 @@ namespace DarkFlare
         UiPause,
         UiPreviousWindow,
         UiNextWindow,
+        UiCompare,
     }
 
     public enum InputBindingPart
@@ -297,6 +298,7 @@ namespace DarkFlare
                 RebindableInputAction.UiPause,
                 RebindableInputAction.UiPreviousWindow,
                 RebindableInputAction.UiNextWindow,
+                RebindableInputAction.UiCompare,
             });
 
         public static IReadOnlyList<RebindableInputAction> Actions => ActionsValue;
@@ -317,6 +319,7 @@ namespace DarkFlare
                 case RebindableInputAction.UiPause:
                 case RebindableInputAction.UiPreviousWindow:
                 case RebindableInputAction.UiNextWindow:
+                case RebindableInputAction.UiCompare:
                     return "UI";
                 default:
                     throw new ArgumentOutOfRangeException(nameof(action), action, null);
@@ -348,6 +351,8 @@ namespace DarkFlare
                     return "PreviousWindow";
                 case RebindableInputAction.UiNextWindow:
                     return "NextWindow";
+                case RebindableInputAction.UiCompare:
+                    return "Compare";
                 default:
                     throw new ArgumentOutOfRangeException(nameof(action), action, null);
             }

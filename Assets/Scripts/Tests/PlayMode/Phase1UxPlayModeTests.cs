@@ -410,6 +410,8 @@ namespace DarkFlare.Tests
             Assert.IsTrue(architecture.SendCommand(new OpenGameMenuCommand(FindTarget(GameMenuPage.Crafting))));
             yield return null;
             yield return null;
+            menu.ClosePage(GameMenuPage.Inventory);
+            yield return null;
             Button candidate = root.Q("crafting-candidates").Query<Button>().ToList().First(button => button.userData == third);
             RectInt original = inventory.Grid.Placements[third];
             yield return RightClickPointer(mouse, root, candidate.worldBound.center);
@@ -536,7 +538,10 @@ namespace DarkFlare.Tests
             Assert.IsTrue(architecture.SendCommand(new OpenGameMenuCommand(merchant)));
             yield return null;
             yield return null;
-            Assert.IsFalse(menu.IsWindowVisible(GameMenuPage.Inventory));
+            Assert.IsTrue(menu.IsWindowVisible(GameMenuPage.Inventory));
+            Assert.AreEqual(root.Q("inventory-window").worldBound.width, root.Q("shop-window").worldBound.width);
+            menu.ClosePage(GameMenuPage.Inventory);
+            yield return null;
             ShopPanelController shop = menu.GetComponent<ShopPanelController>();
             Button stock = root.Q("shop-merchant-list").Query<Button>().First();
             ItemInstance purchased = (ItemInstance)stock.userData;
@@ -572,7 +577,10 @@ namespace DarkFlare.Tests
             yield return null;
             yield return null;
             Assert.IsFalse(menu.IsWindowVisible(GameMenuPage.Shop));
-            Assert.IsFalse(menu.IsWindowVisible(GameMenuPage.Inventory));
+            Assert.IsTrue(menu.IsWindowVisible(GameMenuPage.Inventory));
+            Assert.AreEqual(root.Q("inventory-window").worldBound.width, root.Q("crafting-window").worldBound.width);
+            menu.ClosePage(GameMenuPage.Inventory);
+            yield return null;
             CraftingPanelController crafting = menu.GetComponent<CraftingPanelController>();
             Button candidate = root.Q("crafting-candidates").Query<Button>().ToList()
                 .First(button => button.userData == item);
@@ -612,6 +620,12 @@ namespace DarkFlare.Tests
             Assert.AreEqual(original, inventory.Grid.Placements[item]);
             menu.OpenPage(GameMenuPage.Crafting);
             Assert.IsFalse(menu.IsWindowVisible(GameMenuPage.Crafting), "失效目标不能沿用旧授权重开");
+            menu.OpenPage(GameMenuPage.Attributes);
+            InvokeButton(root.Q<Button>("game-menu-close"));
+            yield return null;
+            Assert.AreEqual(GameMenuAccess.None, menu.OpenWindows);
+            Assert.IsFalse(menu.IsOpen);
+            Assert.IsTrue(architecture.GetUtility<GameInput>().IsGameplayEnabled);
             InputSystem.RemoveDevice(keyboard);
             InputSystem.RemoveDevice(pad);
         }

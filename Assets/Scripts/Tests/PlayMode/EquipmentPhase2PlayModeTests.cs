@@ -157,6 +157,41 @@ namespace DarkFlare.Tests
             Assert.AreSame(rightRing, equipment.GetItem(player, EquipmentSlot.RingRight));
             Assert.AreSame(leftRing, equipment.GetItem(player, EquipmentSlot.RingLeft));
 
+            ItemInstance candidateRing = CreateItem("compare_ring", "对比戒指", ItemType.Accessory, EquipmentSlotMask.Rings);
+            Assert.IsTrue(inventory.TryAddItem(candidateRing));
+            yield return null;
+            FindInventoryButton(root, "对比戒指").Focus();
+            yield return null;
+            _inputFixture.Press(keyboard.leftShiftKey);
+            yield return null;
+            yield return null;
+            yield return null;
+            VisualElement firstComparison = root.Q("item-comparison-0");
+            VisualElement secondComparison = root.Q("item-comparison-1");
+            Assert.AreEqual(Visibility.Visible, firstComparison.resolvedStyle.visibility);
+            Assert.AreEqual(Visibility.Visible, secondComparison.resolvedStyle.visibility);
+            Assert.LessOrEqual(root.Q("item-tooltip").worldBound.xMax, firstComparison.worldBound.xMin);
+            Assert.LessOrEqual(firstComparison.worldBound.xMax, secondComparison.worldBound.xMin);
+            Assert.IsNull(root.Q("item-detail-icon"));
+            Assert.AreEqual(ApplicationHost.Current.Localization.GetString(leftRing.BaseDefinition.LocalizedName.Message),
+                firstComparison.Q<Label>("item-detail-name").text);
+            Assert.AreEqual(ApplicationHost.Current.Localization.GetString(rightRing.BaseDefinition.LocalizedName.Message),
+                secondComparison.Q<Label>("item-detail-name").text);
+            _inputFixture.Release(keyboard.leftShiftKey);
+            yield return null;
+            Assert.AreEqual(DisplayStyle.None, firstComparison.resolvedStyle.display);
+            Assert.AreEqual(DisplayStyle.None, secondComparison.resolvedStyle.display);
+            _inputFixture.Press(gamepad.leftTrigger);
+            yield return null;
+            yield return null;
+            yield return null;
+            Assert.AreEqual(Visibility.Visible, firstComparison.resolvedStyle.visibility);
+            menu.Workspace.SuppressPreview();
+            yield return null;
+            Assert.AreEqual(DisplayStyle.None, firstComparison.resolvedStyle.display);
+            _inputFixture.Release(gamepad.leftTrigger);
+            menu.Workspace.AllowPreview();
+
             yield return Submit(root.Q<Button>("inventory-slot-ring-left"), gamepad.buttonSouth);
             yield return Submit(root.Q<Button>("item-action-unequip"), gamepad.buttonSouth);
             Assert.IsNull(equipment.GetItem(player, EquipmentSlot.RingLeft));
@@ -232,8 +267,8 @@ namespace DarkFlare.Tests
                 yield return Submit(root.Q<Button>("item-action-equip-" + slot), gamepad.buttonSouth);
                 Assert.AreSame(item, equipment.GetItem(player, slot), slot.ToString());
             }
-            string[] upper = { "head", "hands", "legs", "off-hand" };
-            string[] lower = { "ring-left", "ring-right", "necklace", "belt" };
+            string[] upper = { "head", "weapon", "off-hand", "necklace" };
+            string[] lower = { "armor", "hands", "legs", "ring-right" };
             for (int i = 0; i < upper.Length; i++)
             {
                 root.Q<Button>("inventory-slot-" + upper[i]).Focus();
@@ -251,21 +286,7 @@ namespace DarkFlare.Tests
                 yield return null;
                 yield return null;
                 Assert.AreSame(root.Q<Button>("inventory-slot-" + upper[i]), root.focusController.focusedElement);
-                if (i + 1 < upper.Length)
-                {
-                    _inputFixture.Press(gamepad.dpad.right);
-                    yield return null;
-                    _inputFixture.Release(gamepad.dpad.right);
-                    yield return null;
-                    yield return null;
-                    Assert.AreSame(root.Q<Button>("inventory-slot-" + upper[i + 1]), root.focusController.focusedElement);
-                    _inputFixture.Press(gamepad.dpad.left);
-                    yield return null;
-                    _inputFixture.Release(gamepad.dpad.left);
-                    yield return null;
-                    yield return null;
-                    Assert.AreSame(root.Q<Button>("inventory-slot-" + upper[i]), root.focusController.focusedElement);
-                }
+
             }
 
             _architecture.GetUtility<GameInput>().SwitchToGameplay();

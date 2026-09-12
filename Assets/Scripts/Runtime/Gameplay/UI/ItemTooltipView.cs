@@ -23,6 +23,9 @@ namespace DarkFlare
         readonly ItemDetailView _detailView;
 
         int _positionGeneration;
+        int _groupIndex;
+        int _groupCount;
+        ItemTooltipSide _side;
 
         public ItemTooltipView(
             VisualElement root,
@@ -34,6 +37,7 @@ namespace DarkFlare
             _layer = layer;
             _panel = panel;
             _contextLabel = contextLabel;
+            _root?.RegisterCallback<GeometryChangedEvent>(_ => Position(_side, _positionGeneration, 0));
             DisablePicking(_root);
             _detailView = new ItemDetailView(root != null
                 ? root.Q<VisualElement>("item-tooltip-detail")
@@ -56,6 +60,14 @@ namespace DarkFlare
             if (panel != null) { _panel = panel; }
         }
 
+        public void SetComparisonGroup(int index, int count)
+        {
+            _groupIndex = index;
+            bool changed = _groupCount != count;
+            _groupCount = count;
+            if (_root != null && changed) { _root.style.width = count > 1 ? 360f : 400f; }
+        }
+
         public void Show(ItemInstance item, string context, ItemTooltipSide side)
         {
             if (!IsValid || item == null)
@@ -65,7 +77,8 @@ namespace DarkFlare
             }
 
             ItemDetailSnapshot detail = ItemDetailSnapshotFactory.Create(item);
-            _detailView.Show(detail, ItemVisualPresenter.GetSprite(detail.IconGuid));
+            _side = side;
+            _detailView.Show(detail);
             _contextLabel.text = context ?? string.Empty;
             _contextLabel.style.display = string.IsNullOrWhiteSpace(context)
                 ? DisplayStyle.None
@@ -123,6 +136,30 @@ namespace DarkFlare
             }
 
             float tooltipWidth = Mathf.Max(1f, tooltipBounds.width);
+            float sideSpace = Mathf.Max(panelBounds.xMin - screenBounds.xMin,
+                screenBounds.xMax - panelBounds.xMax) - PanelGap - EdgePadding;
+            if (_groupCount <= 1 && sideSpace >= 340f && tooltipWidth > sideSpace + 0.5f)
+            {
+                _root.style.width = sideSpace;
+                _root.schedule.Execute(() => Position(side, generation, attempt + 1));
+                return;
+            }
+            if (_groupCount > 1)
+            {
+                RestoreAttributeContent();
+                float width = Mathf.Min(360f, (screenBounds.width - EdgePadding * 2f
+                    - PanelGap * (_groupCount - 1)) / _groupCount);
+                float groupWidth = width * _groupCount + PanelGap * (_groupCount - 1);
+                Vector2 position = _layer.WorldToLocal(new Vector2(
+                    screenBounds.center.x - groupWidth * 0.5f + _groupIndex * (width + PanelGap),
+                    Mathf.Clamp(panelBounds.yMin, screenBounds.yMin + EdgePadding,
+                        Mathf.Max(screenBounds.yMin + EdgePadding, screenBounds.yMax - tooltipBounds.height - EdgePadding))));
+                _root.style.width = width;
+                _root.style.left = position.x;
+                _root.style.top = position.y;
+                _root.style.visibility = Visibility.Visible;
+                return;
+            }
             float preferredX = side == ItemTooltipSide.Left
                 ? panelBounds.xMin - tooltipWidth - PanelGap
                 : panelBounds.xMax + PanelGap;
