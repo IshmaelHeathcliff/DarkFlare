@@ -72,7 +72,7 @@ Alpha 0.3 前置[测试审计](./testing/test-suite-audit.md)已完成；新增�
 
 - `Assets/UI/ApplicationShell.uxml` 组合 FrontEnd、共享 Settings Page、Busy、Modal、Toast 与 Fatal 覆盖层，常驻 Bootstrap。
 - `Assets/UI/GameRoot.uxml` 组合 Main 的 HUD、背包、商店、打造和独立属性模板。
-- 唯一 `EventSystem` 位于 Bootstrap；Main 的 `UIRoot` 只保留玩法 UIDocument 与场景 Controller。
+- 唯一 `EventSystem` 位于 Bootstrap；Main 的 `UIRoot` 只保留玩法 PanelRenderer 与场景 Controller。
 - `GameMenuController` 管理共享遮罩、四类窗口页签、设置、保存、返回前台、关闭和玩法输入模式；NewGame、Continue、语言与设置入口位于 FrontEnd。
 - 各面板 Controller 通过 `SceneSessionBinding` 等待有效 Session，只通过 Query、Command 与领域事件工作，不直接修改 Model。
 

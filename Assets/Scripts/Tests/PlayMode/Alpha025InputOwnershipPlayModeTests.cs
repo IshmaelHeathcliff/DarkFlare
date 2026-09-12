@@ -38,6 +38,61 @@ namespace DarkFlare.Tests
         }
 
         [UnityTest]
+        public IEnumerator ShellPanelReload_PreservesModalActionSettingsAndOwnership()
+        {
+            ApplicationHost host = ApplicationHost.Current;
+            RuntimePanelView view = Object.FindAnyObjectByType<ApplicationShellBootstrap>().GetComponent<RuntimePanelView>();
+            VisualTreeAsset source = view.Renderer.visualTreeAsset;
+            VisualTreeAsset replacement = Object.Instantiate(source);
+            ApplicationShellController shell = host.ApplicationShell;
+            int confirmations = 0;
+            try
+            {
+                shell.OpenSettings();
+                shell.ShowConfirmation(LocalizedMessage.Ui("flow.modal.title"),
+                    LocalizedMessage.Ui("menu.return_confirm.message"), () => confirmations++);
+                string message = view.Root.Q<Label>("application-modal-message").text;
+                view.Renderer.visualTreeAsset = replacement;
+                yield return null;
+                yield return null;
+                Assert.AreSame(shell, host.ApplicationShell);
+                Assert.IsTrue(shell.IsSettingsOpen);
+                Assert.IsTrue(shell.BlocksGameplay);
+                view.gameObject.SetActive(false);
+                yield return null;
+                view.gameObject.SetActive(true);
+                yield return null;
+                yield return null;
+                Assert.IsTrue(shell.IsSettingsOpen, "宿主重新启用后应恢复设置页");
+                Assert.AreEqual(InputContext.UI, host.Input.CurrentContext);
+                Assert.AreEqual(message, view.Root.Q<Label>("application-modal-message").text);
+                Assert.AreEqual(DisplayStyle.Flex, view.Root.Q("application-modal").resolvedStyle.display);
+                Assert.AreSame(view.Root.Q<Button>("application-modal-retry"), view.Root.focusController.focusedElement,
+                    "重载与启用后应恢复模态确认焦点");
+                using (NavigationSubmitEvent submit = NavigationSubmitEvent.GetPooled())
+                {
+                    view.Root.Q<Button>("application-modal-retry").SendEvent(submit);
+                }
+                yield return null;
+                Assert.AreEqual(1, confirmations, "确认回调应保留且只执行一次");
+                yield return new WaitForSecondsRealtime(0.15f);
+                Assert.IsTrue(shell.IsSettingsOpen);
+                view.Root.Q<Button>("settings-back").Focus();
+                using (NavigationSubmitEvent submit = NavigationSubmitEvent.GetPooled())
+                {
+                    view.Root.Q<Button>("settings-back").SendEvent(submit);
+                }
+                yield return null;
+                Assert.IsFalse(shell.IsSettingsOpen);
+            }
+            finally
+            {
+                view.Renderer.visualTreeAsset = source;
+                Object.Destroy(replacement);
+            }
+        }
+
+        [UnityTest]
         [Timeout(180000)]
         public IEnumerator BootstrapAndThreeSessionsShareOneRuntimeActionAsset()
         {
@@ -172,6 +227,7 @@ namespace DarkFlare.Tests
 
             GameMenuController menu = Object.FindAnyObjectByType<GameMenuController>();
             Assert.IsNotNull(menu);
+            yield return _fixture.WaitForGameplayUi();
             menu.OpenPage(GameMenuPage.Inventory);
             yield return null;
             Assert.IsTrue(menu.IsOpen);
@@ -199,12 +255,12 @@ namespace DarkFlare.Tests
 
         static Button FindButton(string name)
         {
-            UIDocument[] documents = Object.FindObjectsByType<UIDocument>(
+            RuntimePanelView[] documents = Object.FindObjectsByType<RuntimePanelView>(
                 FindObjectsInactive.Include);
 
             for (int i = 0; i < documents.Length; i++)
             {
-                Button button = documents[i].rootVisualElement?.Q<Button>(name);
+                Button button = documents[i].Root?.Q<Button>(name);
 
                 if (button != null)
                 {

@@ -7,7 +7,7 @@ using UnityEngine.UIElements;
 namespace DarkFlare
 {
     [DisallowMultipleComponent]
-    [RequireComponent(typeof(UIDocument))]
+    [RequireComponent(typeof(RuntimePanelView))]
     [RequireComponent(typeof(InventoryPanelController))]
     [RequireComponent(typeof(ShopPanelController))]
     [RequireComponent(typeof(CraftingPanelController))]
@@ -16,7 +16,7 @@ namespace DarkFlare
         const string ActiveTabClass = "game-menu-tab--active";
 
         [SerializeField]
-        UIDocument _document;
+        RuntimePanelView _uiPanel;
 
         [SerializeField]
         InventoryPanelController _inventoryPanel;
@@ -55,7 +55,7 @@ namespace DarkFlare
         public GameMenuAccess OpenWindows { get; private set; }
         public bool IsPauseOpen => _pauseOpen;
         public ItemWorkspace Workspace => _workspace ??= new ItemWorkspace(
-            _document.rootVisualElement, IsWindowVisible, ActivateWindow,
+            _uiPanel.Root, IsWindowVisible, ActivateWindow,
             () => this.SendQuery(new GetInventorySnapshotQuery()));
 
         SceneSessionBinding _sessionBinding;
@@ -88,6 +88,7 @@ namespace DarkFlare
             && !(_applicationShell?.BlocksGameplay ?? false);
 
         public int SessionBindCount => _sessionBinding?.BindCount ?? 0;
+        public bool IsReady => _sessionBinding?.IsBound ?? false;
 
         public bool IsSaveOperationBusy => _saveOperationBusy;
 
@@ -232,11 +233,26 @@ namespace DarkFlare
                 this,
                 BindSession,
                 UnbindSession);
+            _uiPanel.Reloading += OnPanelReloading;
+            _uiPanel.Reloaded += OnPanelReloaded;
             _sessionBinding.Enable();
+        }
+
+        void OnPanelReloading()
+        {
+            if (_gameInput != null) { _gameInput.SwitchToGameplay(); }
+            _sessionBinding?.Disable();
+        }
+
+        void OnPanelReloaded()
+        {
+            _sessionBinding?.Enable();
         }
 
         void OnDisable()
         {
+            _uiPanel.Reloading -= OnPanelReloading;
+            _uiPanel.Reloaded -= OnPanelReloaded;
             if (_sessionBinding != null
                 && _sessionBinding.IsBound
                 && _gameInput != null
@@ -250,13 +266,13 @@ namespace DarkFlare
 
         SceneSessionBindResult BindSession(IArchitecture architecture)
         {
-            if (_document == null || _document.panelSettings == null)
+            if (_uiPanel == null || _uiPanel.Renderer.panelSettings == null)
             {
-                ApplicationLog.Error(LogEventIds.GameplayUi, "[GameMenuController] 缺少 UIDocument 或 PanelSettings，无法初始化菜单", this);
+                ApplicationLog.Error(LogEventIds.GameplayUi, "[GameMenuController] 缺少 RuntimePanelView 或 PanelSettings，无法初始化菜单", this);
                 return SceneSessionBindResult.Failed;
             }
 
-            VisualElement root = _document.rootVisualElement;
+            VisualElement root = _uiPanel.Root;
 
             if (root == null || root.panel == null)
             {
@@ -434,14 +450,14 @@ namespace DarkFlare
 
         void EnsureComponents()
         {
-            if (_document == null)
+            if (_uiPanel == null)
             {
-                _document = GetComponent<UIDocument>();
+                _uiPanel = GetComponent<RuntimePanelView>();
             }
 
-            if (_document == null && gameObject.scene.IsValid())
+            if (_uiPanel == null && gameObject.scene.IsValid())
             {
-                _document = gameObject.AddComponent<UIDocument>();
+                _uiPanel = gameObject.AddComponent<RuntimePanelView>();
             }
 
             if (_inventoryPanel == null)
@@ -462,13 +478,13 @@ namespace DarkFlare
 
         bool BindVisualTree()
         {
-            if (_document == null)
+            if (_uiPanel == null)
             {
-                ApplicationLog.Error(LogEventIds.GameplayUi, "[GameMenuController] 缺少 UIDocument，无法初始化菜单", this);
+                ApplicationLog.Error(LogEventIds.GameplayUi, "[GameMenuController] 缺少 RuntimePanelView，无法初始化菜单", this);
                 return false;
             }
 
-            VisualElement root = _document.rootVisualElement;
+            VisualElement root = _uiPanel.Root;
             _overlay = root.Q<VisualElement>("game-menu-overlay");
             _panel = root.Q<VisualElement>("game-menu-panel");
             _inventoryTemplate = root.Q("inventory-window");

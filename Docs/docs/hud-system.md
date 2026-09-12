@@ -4,7 +4,7 @@
 
 ## 布局与内容
 
-Main 的 `GameRoot.uxml` 组合 `Hud.uxml`，共享原有 UIDocument、PanelSettings 与 Application EventSystem。1920×1080 下仪表位于 y=932–1068：左右各 300×136 的生命 / 法力底板，中间 840×136 的技能与窗口入口区，间距 12。既有物品窗口宽度与网格保持原值。
+Main 的 `GameRoot.uxml` 组合 `Hud.uxml`，共享原有 PanelRenderer、PanelSettings 与 Application EventSystem。1920×1080 下仪表位于 y=932–1068：左右各 300×136 的生命 / 法力底板，中间 840×136 的技能与窗口入口区，间距 12。既有物品窗口宽度与网格保持原值。
 
 Unity 6.6 下技能详情保留至少 44px 高度以容纳伪本地化的两行文字，中区上下留白为 5px；外层仪表尺寸与窗口安全区保持原值。
 

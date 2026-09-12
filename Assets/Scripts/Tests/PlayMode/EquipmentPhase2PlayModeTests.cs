@@ -57,21 +57,21 @@ namespace DarkFlare.Tests
             int originalHeight = Screen.height;
             yield return _fixture.EnterMain();
             GameMenuController menu = null;
-            UIDocument document = null;
+            RuntimePanelView document = null;
             CombatActor player = null;
             float timeout = Time.realtimeSinceStartup + 15f;
 
-            while ((menu == null || document == null || document.rootVisualElement.panel == null || player == null)
+            while ((menu == null || document == null || document.Root?.panel == null || player == null)
                    && Time.realtimeSinceStartup < timeout)
             {
                 menu = Object.FindAnyObjectByType<GameMenuController>();
-                document = menu != null ? menu.GetComponent<UIDocument>() : null;
+                document = menu != null ? menu.GetComponent<RuntimePanelView>() : null;
                 player = FindPlayer();
                 yield return null;
             }
 
             Assert.IsNotNull(menu, "Main 场景未初始化 GameMenuController");
-            Assert.IsNotNull(document, "UIRoot 缺少 UIDocument");
+            Assert.IsNotNull(document, "UIRoot 缺少 RuntimePanelView");
             Assert.IsNotNull(player, "Main 场景未生成玩家");
             _architecture = menu.GetArchitecture();
             float baseMaxHealth = player.MaxHealth;
@@ -107,7 +107,7 @@ namespace DarkFlare.Tests
             menu.OpenPage(GameMenuPage.Inventory);
             yield return null;
             yield return null;
-            VisualElement root = document.rootVisualElement;
+            VisualElement root = document.Root;
             Assert.IsNull(root.Q<VisualElement>("attribute-card"), "HUD 不应继续显示当前属性窗口");
             Assert.IsNotNull(root.Q<VisualElement>("inventory-attribute-card"), "背包右侧缺少当前属性窗口");
             Assert.IsNotNull(root.Q<Button>("inventory-attributes-open"), "背包必须提供独立属性详情入口");

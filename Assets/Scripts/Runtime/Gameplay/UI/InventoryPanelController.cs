@@ -6,7 +6,7 @@ using UnityEngine.UIElements;
 namespace DarkFlare
 {
     [DisallowMultipleComponent]
-    [RequireComponent(typeof(UIDocument))]
+    [RequireComponent(typeof(RuntimePanelView))]
     public class InventoryPanelController : MonoBehaviour, IController
     {
         const float CellSize = 48f;
@@ -20,7 +20,7 @@ namespace DarkFlare
         }
 
         [SerializeField]
-        UIDocument _document;
+        RuntimePanelView _uiPanel;
 
         readonly List<IUnRegister> _eventRegistrations = new List<IUnRegister>();
         readonly Dictionary<ItemInstance, Button> _itemButtons = new Dictionary<ItemInstance, Button>();
@@ -201,23 +201,37 @@ namespace DarkFlare
                 this,
                 BindSession,
                 UnbindSession);
+            _uiPanel.Reloading += OnPanelReloading;
+            _uiPanel.Reloaded += OnPanelReloaded;
             _sessionBinding.Enable();
+        }
+
+        void OnPanelReloading()
+        {
+            _sessionBinding?.Disable();
+        }
+
+        void OnPanelReloaded()
+        {
+            _sessionBinding?.Enable();
         }
 
         void OnDisable()
         {
+            _uiPanel.Reloading -= OnPanelReloading;
+            _uiPanel.Reloaded -= OnPanelReloaded;
             _sessionBinding?.Disable();
         }
 
         SceneSessionBindResult BindSession(IArchitecture architecture)
         {
-            if (_document == null || _document.panelSettings == null)
+            if (_uiPanel == null || _uiPanel.Renderer.panelSettings == null)
             {
-                ApplicationLog.Error(LogEventIds.GameplayUi, "[InventoryPanelController] 缺少 UIDocument 或 PanelSettings，无法初始化背包", this);
+                ApplicationLog.Error(LogEventIds.GameplayUi, "[InventoryPanelController] 缺少 RuntimePanelView 或 PanelSettings，无法初始化背包", this);
                 return SceneSessionBindResult.Failed;
             }
 
-            VisualElement root = _document.rootVisualElement;
+            VisualElement root = _uiPanel.Root;
 
             if (root == null || root.panel == null)
             {
@@ -291,26 +305,26 @@ namespace DarkFlare
 
         void EnsureComponents()
         {
-            if (_document == null)
+            if (_uiPanel == null)
             {
-                _document = GetComponent<UIDocument>();
+                _uiPanel = GetComponent<RuntimePanelView>();
             }
 
-            if (_document == null && gameObject.scene.IsValid())
+            if (_uiPanel == null && gameObject.scene.IsValid())
             {
-                _document = gameObject.AddComponent<UIDocument>();
+                _uiPanel = gameObject.AddComponent<RuntimePanelView>();
             }
         }
 
         bool BindVisualTree()
         {
-            if (_document == null)
+            if (_uiPanel == null)
             {
-                ApplicationLog.Error(LogEventIds.GameplayUi, "[InventoryPanelController] 缺少 UIDocument，无法初始化背包面板", this);
+                ApplicationLog.Error(LogEventIds.GameplayUi, "[InventoryPanelController] 缺少 RuntimePanelView，无法初始化背包面板", this);
                 return false;
             }
 
-            VisualElement root = _document.rootVisualElement;
+            VisualElement root = _uiPanel.Root;
             _page = root.Q<VisualElement>("inventory-page");
             _workbench = root.Q<VisualElement>("game-menu-overlay");
             _grid = root.Q<VisualElement>("inventory-grid");
@@ -761,7 +775,7 @@ namespace DarkFlare
 
             if (_previewItem != null)
             {
-                _workspace.Preview(GameMenuPage.Inventory, _document.rootVisualElement.Q("inventory-window"),
+                _workspace.Preview(GameMenuPage.Inventory, _uiPanel.Root.Q("inventory-window"),
                     _previewItem, BuildTooltipContext(_previewItem));
                 return;
             }

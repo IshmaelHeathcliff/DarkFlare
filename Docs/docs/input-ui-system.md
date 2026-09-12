@@ -4,9 +4,20 @@
 
 输入与运行时 UI 模块负责统一键鼠 / 手柄输入、Gameplay / UI 模式切换、HUD 展示、背包 / 商店 / 打造菜单、当前 Session 保存区，以及场景交互提示和菜单暂停。Application 级 FrontEnd、场景 Busy、Modal、Toast 与 Fatal 由独立 Shell 管理。
 
-Main 玩法 UI 复用一个 `UIDocument` 和一个 `PanelSettings`；常驻 Bootstrap 持有 Application Shell 与唯一 `EventSystem`。界面 Controller 通过 Query、Command 与领域 Event 接入 QFramework，不直接修改运行时 Model。
+Main 玩法 UI 复用一个 `PanelRenderer` 和一个 `PanelSettings`；常驻 Bootstrap 持有 Application Shell 与唯一 `EventSystem`。界面 Controller 通过 Query、Command 与领域 Event 接入 QFramework，不直接修改运行时 Model。
 
 Main / Shell 在模块 USS 后加载公共 `Components.uss`，按钮按下只改变材质和轮廓，不缩放或改变边框盒尺寸。物品 Focus / Hover 服从共享选择，投放反馈优先；下拉弹层通过共享 Panel 的运行主题着色。皮肤不新增焦点 / 命中层，见[组件规范](./ui-component-style.md)。
+
+## 面板生命周期
+
+Bootstrap 和 Main 均使用原生 `PanelRenderer`，通过 `RuntimePanelView` 的版本化 `RegisterUIReloadCallback` 接收根节点。Controller 只从 `RuntimePanelView.Root` 获取视觉树，不自行克隆 UXML。原生 Renderer 持有 `visualTreeAsset`、`panelSettings` 和 `sortingOrder`，共享视图组件只协调生命周期。
+
+- `RuntimePanelView` 在根节点 `DetachFromPanelEvent` 时先通知全部消费者解绑，避免重载回调到达时旧元素已释放。重载完成后统一发布新根与新版本，避免多个窗口混用旧 Workspace 和新视觉树。
+- 玩法 Controller 在重载时清理旧窗口、拖放、对比、焦点、动画与 Session 订阅，恢复 Gameplay；随后通过既有 `SceneSessionBinding` 绑定新树与当前 Session。业务数据不变。`GameMenuController.IsReady` 表示绑定就绪，测试夹具等待该状态，不假设 Scene Flow 完成的同一帧即可访问 UI。
+- 单独禁用 Renderer 保留视觉内容；禁用并重新启用宿主时 Controller 解除并重新建立订阅。首次绑定仍等待 Panel 附着，适配 Reload Scene Only。
+- Shell 保持同一 Controller 身份；重载前保存设置页、Busy、Modal、Toast、Fatal 的展示状态和确认动作，保留输入 / 暂停所有权，绑定后恢复层级与模态焦点。Settings 重绑定捕获在解绑时取消，Toast 在恢复后重新计时。
+
+迁移依据：[Unity 6.6 官方迁移指南](https://docs.unity3d.com/6000.6/Documentation/Manual/UIE-create-ui-document-component.html#migration-to-panel-renderer)。具体 API 以当前 Editor 反射确认的 `visualTreeAsset` 和版本化回调为准。
 
 ## 输入层
 
@@ -76,9 +87,9 @@ Point / Look 在 Context 切换后会回放当前指针位置；相同控件的�
 - `GameMenu.uss`
 - `Theme.uss`
 
-`Main.unity/UIRoot` 挂载 `UIDocument`、`GameMenuController`、四个数据显示 Controller 和 `InteractionPromptController`。常驻 Bootstrap 的 `InputSystemUIInputModule` 与 Application / Session 共享同一个运行时 Input Actions 实例。
+`Main.unity/UIRoot` 挂载 `PanelRenderer`、`GameMenuController`、四个数据显示 Controller 和 `InteractionPromptController`。常驻 Bootstrap 的 `InputSystemUIInputModule` 与 Application / Session 共享同一个运行时 Input Actions 实例。
 
-`Bootstrap.unity` 挂载 `ApplicationShell.uxml/.uss` 和唯一 EventSystem。Shell 负责 FrontEnd Page、Busy、Modal、Toast、Fatal 与跨场景焦点；Main 不再序列化 EventSystem，隐藏的 Application 层不得抢占玩法 UI 焦点。两个文档共用 PanelSettings，Bootstrap 的 `UIDocument.sortingOrder` 为 200，Main 为 100，保证应用层位于 HUD 和物品界面之上并正确接收指针。
+`Bootstrap.unity` 挂载 `ApplicationShell.uxml/.uss` 和唯一 EventSystem。Shell 负责 FrontEnd Page、Busy、Modal、Toast、Fatal 与跨场景焦点；Main 不再序列化 EventSystem，隐藏的 Application 层不得抢占玩法 UI 焦点。两个文档共用 PanelSettings，Bootstrap 的 `PanelRenderer.sortingOrder` 为 200，Main 为 100，保证应用层位于 HUD 和物品界面之上并正确接收指针。
 
 当前窗口结构、详情、安全区与导航以[物品 UI 工作台](./item-ui-workbench.md)为准：背包、商店、打造与属性四种窗口独立显示，商店 / 打造默认联动背包，并可打开属性；暂停有独立入口。商店 / 打造与背包同为 560 px，窗口组居中，背包打开时隐藏重复来源列表。顶部标签栏关闭直接清理所有窗口返回游戏，各窗口标题栏关闭仍作用于单窗。背包标题栏与 HUD 打开[独立属性详情](./attribute-details.md)，组标题与展开项参与跨窗导航。物品详情不再显示图标；普通详情优先位于组合窗口外侧，三窗拥挤时临时替换属性阅读区，切回属性恢复。按住 `UI/Compare` 显示兼容槽已装备物品的并排信息栏，双戒指同时比较左右槽；松开、取消、暂停与关闭清理对比。动作菜单捕获方向导航并约束焦点，拖放跨窗允许高度不对齐的合法目标，普通浏览仍限制方向夹角。`Windows.uss` 与 `Attributes.uss` 定义组合布局。
 

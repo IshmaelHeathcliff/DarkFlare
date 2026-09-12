@@ -95,9 +95,9 @@ namespace DarkFlare.Tests
             Assert.AreEqual(192f, actor.CurrentMana, 0.001f);
             Assert.AreEqual(192f, hud.LastSnapshot.CurrentMana, 0.001f);
             Object.Destroy(firstCast.Projectile.gameObject);
-            UIDocument document = hud.GetComponent<UIDocument>();
-            ProgressBar manaBar = document.rootVisualElement.Q<ProgressBar>("mana-bar");
-            Label skillStatus = document.rootVisualElement.Q<Label>("skill-status-label");
+            RuntimePanelView document = hud.GetComponent<RuntimePanelView>();
+            ProgressBar manaBar = document.Root.Q<ProgressBar>("mana-bar");
+            Label skillStatus = document.Root.Q<Label>("skill-status-label");
             Assert.IsNotNull(manaBar);
             Assert.IsNotNull(skillStatus);
             Assert.AreEqual("192 / 200", manaBar.title);

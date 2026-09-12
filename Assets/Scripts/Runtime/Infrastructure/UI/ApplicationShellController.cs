@@ -7,7 +7,6 @@ namespace DarkFlare
     {
         const string BrandName = "DARKFLARE";
 
-        readonly UIDocument _document;
         readonly ApplicationHost _host;
 
         ApplicationFrontEndController _frontEndController;
@@ -40,14 +39,15 @@ namespace DarkFlare
         bool _refreshingOwnership;
         bool _submittingModal;
         bool _bound;
+        Action<VisualElement> _restoreAfterReload;
 
         public bool BlocksGameplay { get; private set; }
 
         public event Action<bool> BlockingChanged;
 
-        public ApplicationShellController(UIDocument document, ApplicationHost host)
+        public ApplicationShellController(VisualElement root, ApplicationHost host)
         {
-            _document = document ?? throw new ArgumentNullException(nameof(document));
+            _root = root ?? throw new ArgumentNullException(nameof(root));
             _host = host ?? throw new ArgumentNullException(nameof(host));
         }
 
@@ -58,7 +58,6 @@ namespace DarkFlare
                 return;
             }
 
-            _root = _document.rootVisualElement;
             _frontEndPage = Require<VisualElement>("application-front-end");
             _frontEndBrand = Require<Label>("front-end-brand");
             _frontEndVersion = Require<Label>("front-end-version");
@@ -256,6 +255,84 @@ namespace DarkFlare
 
         public void Dispose()
         {
+            Unbind();
+            _restoreAfterReload = null;
+            _uiContextLease?.Dispose();
+            _uiContextLease = null;
+            _pauseLease?.Dispose();
+            _pauseLease = null;
+            BlockingChanged = null;
+            BlocksGameplay = false;
+        }
+
+        public void PrepareReload()
+        {
+            if (!_bound || _restoreAfterReload != null) { return; }
+            bool settingsOpen = IsSettingsOpen;
+            Action modalAction = _modalPrimaryAction;
+            SceneFlowRequest? retryRequest = _retryRequest;
+            VisualElement[] layers = { _busyLayer, _modalLayer, _toastLayer, _fatalLayer,
+                _busyProgress, _busyCancel, _modalRetry };
+            string[] layerNames = Array.ConvertAll(layers, layer => layer.name);
+            StyleEnum<DisplayStyle>[] displays = Array.ConvertAll(layers, layer => layer.style.display);
+            TextElement[] labels = { _busyLabel, _modalTitle, _modalMessage, _modalRetry,
+                _modalCancel, _toastMessage, _fatalMessage };
+            string[] labelNames = Array.ConvertAll(labels, label => label.name);
+            string[] texts = Array.ConvertAll(labels, label => label.text);
+            float progress = _busyProgress.value;
+            bool canCancel = _busyCancel.enabledSelf;
+            string focusName = (_root.panel?.focusController?.focusedElement as VisualElement)?.name;
+            _refreshingOwnership = true;
+            Unbind();
+            _restoreAfterReload = root =>
+            {
+                _root = root;
+                Bind();
+                if (settingsOpen) { OpenSettings(); }
+                _modalPrimaryAction = modalAction;
+                _retryRequest = retryRequest;
+                for (int i = 0; i < layerNames.Length; i++)
+                {
+                    _root.Q(layerNames[i]).style.display = displays[i];
+                }
+                for (int i = 0; i < labelNames.Length; i++)
+                {
+                    _root.Q<TextElement>(labelNames[i]).text = texts[i];
+                }
+                _busyProgress.value = progress;
+                _busyCancel.SetEnabled(canCancel);
+                if (_toastLayer.style.display == DisplayStyle.Flex)
+                {
+                    _toastLayer.schedule.Execute(HideToast).StartingIn(2500);
+                }
+                _focusBeforeModal = null;
+                if (!string.IsNullOrEmpty(focusName)) { _root.Q(focusName)?.Focus(); }
+                if (_fatalLayer.style.display == DisplayStyle.Flex) { _fatalQuit.Focus(); }
+                else if (_modalLayer.style.display == DisplayStyle.Flex)
+                {
+                    (_modalRetry.style.display == DisplayStyle.Flex ? _modalRetry : _modalCancel).Focus();
+                }
+            };
+        }
+
+        public void Reload(VisualElement root)
+        {
+            if (root == null) { return; }
+            PrepareReload();
+            try
+            {
+                _restoreAfterReload?.Invoke(root);
+            }
+            finally
+            {
+                _restoreAfterReload = null;
+                _refreshingOwnership = false;
+                RefreshInputOwnership();
+            }
+        }
+
+        void Unbind()
+        {
             if (!_bound)
             {
                 return;
@@ -284,12 +361,6 @@ namespace DarkFlare
                 _inputService.CancelRequested -= HandleCancel;
                 _inputService = null;
             }
-            _uiContextLease?.Dispose();
-            _uiContextLease = null;
-            _pauseLease?.Dispose();
-            _pauseLease = null;
-            BlockingChanged = null;
-            BlocksGameplay = false;
         }
 
         void RunRequest(SceneFlowRequest request)

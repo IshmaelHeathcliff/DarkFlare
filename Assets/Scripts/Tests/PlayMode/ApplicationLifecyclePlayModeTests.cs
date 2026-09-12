@@ -88,10 +88,10 @@ namespace DarkFlare.Tests
             MonsterSpawner spawner = UnityEngine.Object.FindAnyObjectByType<MonsterSpawner>();
             GameMenuController gameMenu =
                 UnityEngine.Object.FindAnyObjectByType<GameMenuController>();
-            UIDocument uiDocument = gameMenu != null
-                ? gameMenu.GetComponent<UIDocument>()
+            RuntimePanelView uiDocument = gameMenu != null
+                ? gameMenu.GetComponent<RuntimePanelView>()
                 : null;
-            Label localizedMenuTitle = uiDocument?.rootVisualElement.Q<Label>(
+            Label localizedMenuTitle = uiDocument?.Root.Q<Label>(
                 className: "item-window-title");
 
             Assert.AreEqual(1, hosts.Length, "冷启动后必须只有一个 ApplicationHost");

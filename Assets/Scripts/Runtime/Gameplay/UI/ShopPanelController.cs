@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 namespace DarkFlare
 {
     [DisallowMultipleComponent]
-    [RequireComponent(typeof(UIDocument))]
+    [RequireComponent(typeof(RuntimePanelView))]
     public class ShopPanelController : MonoBehaviour, IController
     {
         const int MerchantGridWidth = 10;
@@ -14,7 +14,7 @@ namespace DarkFlare
         const float CellGap = 4f;
 
         [SerializeField]
-        UIDocument _document;
+        RuntimePanelView _uiPanel;
 
         ItemWorkspace _workspace;
         GameMenuController _menu;
@@ -142,23 +142,37 @@ namespace DarkFlare
                 this,
                 BindSession,
                 UnbindSession);
+            _uiPanel.Reloading += OnPanelReloading;
+            _uiPanel.Reloaded += OnPanelReloaded;
             _sessionBinding.Enable();
+        }
+
+        void OnPanelReloading()
+        {
+            _sessionBinding?.Disable();
+        }
+
+        void OnPanelReloaded()
+        {
+            _sessionBinding?.Enable();
         }
 
         void OnDisable()
         {
+            _uiPanel.Reloading -= OnPanelReloading;
+            _uiPanel.Reloaded -= OnPanelReloaded;
             _sessionBinding?.Disable();
         }
 
         SceneSessionBindResult BindSession(IArchitecture architecture)
         {
-            if (_document == null || _document.panelSettings == null)
+            if (_uiPanel == null || _uiPanel.Renderer.panelSettings == null)
             {
-                ApplicationLog.Error(LogEventIds.GameplayUi, "[ShopPanelController] 缺少 UIDocument 或 PanelSettings，无法初始化商店", this);
+                ApplicationLog.Error(LogEventIds.GameplayUi, "[ShopPanelController] 缺少 RuntimePanelView 或 PanelSettings，无法初始化商店", this);
                 return SceneSessionBindResult.Failed;
             }
 
-            VisualElement root = _document.rootVisualElement;
+            VisualElement root = _uiPanel.Root;
 
             if (root == null || root.panel == null)
             {
@@ -241,14 +255,14 @@ namespace DarkFlare
 
         void EnsureComponents()
         {
-            if (_document == null)
+            if (_uiPanel == null)
             {
-                _document = GetComponent<UIDocument>();
+                _uiPanel = GetComponent<RuntimePanelView>();
             }
 
-            if (_document == null && gameObject.scene.IsValid())
+            if (_uiPanel == null && gameObject.scene.IsValid())
             {
-                _document = gameObject.AddComponent<UIDocument>();
+                _uiPanel = gameObject.AddComponent<RuntimePanelView>();
             }
 
             _menu = GetComponent<GameMenuController>();
@@ -256,13 +270,13 @@ namespace DarkFlare
 
         bool BindVisualTree()
         {
-            if (_document == null || _workspace == null)
+            if (_uiPanel == null || _workspace == null)
             {
-                ApplicationLog.Error(LogEventIds.GameplayUi, "[ShopPanelController] 缺少 UIDocument 或物品窗口宿主", this);
+                ApplicationLog.Error(LogEventIds.GameplayUi, "[ShopPanelController] 缺少 RuntimePanelView 或物品窗口宿主", this);
                 return false;
             }
 
-            VisualElement root = _document.rootVisualElement;
+            VisualElement root = _uiPanel.Root;
             _page = root.Q<VisualElement>("shop-page");
             _merchantFrame = root.Q<VisualElement>("shop-merchant-frame");
             _merchantList = root.Q<VisualElement>("shop-merchant-list");
@@ -503,13 +517,13 @@ namespace DarkFlare
             {
                 if (source == ShopItemSource.Merchant)
                 {
-                    _workspace.Preview(GameMenuPage.Shop, _document.rootVisualElement.Q("shop-window"),
+                    _workspace.Preview(GameMenuPage.Shop, _uiPanel.Root.Q("shop-window"),
                         item,
                         Localize("shop.tooltip.merchant", snapshot.Price));
                 }
                 else
                 {
-                    _workspace.Preview(GameMenuPage.Shop, _document.rootVisualElement.Q("shop-window"),
+                    _workspace.Preview(GameMenuPage.Shop, _uiPanel.Root.Q("shop-window"),
                         item,
                         Localize("shop.tooltip.player", snapshot.Price));
                 }

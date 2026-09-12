@@ -363,9 +363,9 @@ namespace DarkFlare.Tests
                 Assert.AreEqual(1, FindComponentsInScene<ApplicationShellBootstrap>(bootstrapScene).Count);
                 Assert.AreEqual(1, FindComponentsInScene<EventSystem>(bootstrapScene).Count);
                 Assert.AreEqual(0, FindComponentsInScene<CombatPrototypeBootstrap>(bootstrapScene).Count);
-                UIDocument document = FindComponentsInScene<UIDocument>(bootstrapScene)[0];
-                Assert.AreSame(shellTree, document.visualTreeAsset);
-                Assert.IsNotNull(document.panelSettings);
+                RuntimePanelView document = FindComponentsInScene<RuntimePanelView>(bootstrapScene)[0];
+                Assert.AreSame(shellTree, document.Renderer.visualTreeAsset);
+                Assert.IsNotNull(document.Renderer.panelSettings);
 
                 Scene mainScene = EditorSceneManager.OpenScene(mainPath, OpenSceneMode.Additive);
                 Assert.AreEqual(0, FindComponentsInScene<EventSystem>(mainScene).Count);

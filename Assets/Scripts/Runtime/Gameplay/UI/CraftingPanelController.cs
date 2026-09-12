@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 namespace DarkFlare
 {
     [DisallowMultipleComponent]
-    [RequireComponent(typeof(UIDocument))]
+    [RequireComponent(typeof(RuntimePanelView))]
     public class CraftingPanelController : MonoBehaviour, IController
     {
         const string SelectedScopeClass = "crafting-scope--selected";
@@ -17,7 +17,7 @@ namespace DarkFlare
         LocalizationService _localizationService;
 
         [SerializeField]
-        UIDocument _document;
+        RuntimePanelView _uiPanel;
 
         ItemWorkspace _workspace;
         GameMenuController _menu;
@@ -137,23 +137,37 @@ namespace DarkFlare
                 this,
                 BindSession,
                 UnbindSession);
+            _uiPanel.Reloading += OnPanelReloading;
+            _uiPanel.Reloaded += OnPanelReloaded;
             _sessionBinding.Enable();
+        }
+
+        void OnPanelReloading()
+        {
+            _sessionBinding?.Disable();
+        }
+
+        void OnPanelReloaded()
+        {
+            _sessionBinding?.Enable();
         }
 
         void OnDisable()
         {
+            _uiPanel.Reloading -= OnPanelReloading;
+            _uiPanel.Reloaded -= OnPanelReloaded;
             _sessionBinding?.Disable();
         }
 
         SceneSessionBindResult BindSession(IArchitecture architecture)
         {
-            if (_document == null || _document.panelSettings == null)
+            if (_uiPanel == null || _uiPanel.Renderer.panelSettings == null)
             {
-                ApplicationLog.Error(LogEventIds.GameplayUi, "[CraftingPanelController] 缺少 UIDocument 或 PanelSettings，无法初始化打造", this);
+                ApplicationLog.Error(LogEventIds.GameplayUi, "[CraftingPanelController] 缺少 RuntimePanelView 或 PanelSettings，无法初始化打造", this);
                 return SceneSessionBindResult.Failed;
             }
 
-            VisualElement root = _document.rootVisualElement;
+            VisualElement root = _uiPanel.Root;
 
             if (root == null || root.panel == null)
             {
@@ -213,14 +227,14 @@ namespace DarkFlare
 
         void EnsureComponents()
         {
-            if (_document == null)
+            if (_uiPanel == null)
             {
-                _document = GetComponent<UIDocument>();
+                _uiPanel = GetComponent<RuntimePanelView>();
             }
 
-            if (_document == null && gameObject.scene.IsValid())
+            if (_uiPanel == null && gameObject.scene.IsValid())
             {
-                _document = gameObject.AddComponent<UIDocument>();
+                _uiPanel = gameObject.AddComponent<RuntimePanelView>();
             }
 
             _menu = GetComponent<GameMenuController>();
@@ -228,13 +242,13 @@ namespace DarkFlare
 
         bool BindVisualTree()
         {
-            if (_document == null || _workspace == null)
+            if (_uiPanel == null || _workspace == null)
             {
-                ApplicationLog.Error(LogEventIds.GameplayUi, "[CraftingPanelController] 缺少 UIDocument 或物品窗口宿主", this);
+                ApplicationLog.Error(LogEventIds.GameplayUi, "[CraftingPanelController] 缺少 RuntimePanelView 或物品窗口宿主", this);
                 return false;
             }
 
-            VisualElement root = _document.rootVisualElement;
+            VisualElement root = _uiPanel.Root;
             _page = root.Q<VisualElement>("crafting-page");
             _sourceList = new ItemSourceListView(root.Q("crafting-candidates"), _candidateButtons);
             _goldLabel = root.Q<Label>("crafting-gold");
@@ -382,7 +396,7 @@ namespace DarkFlare
             {
                 _workspace.Highlight(GameMenuPage.Crafting, entry.Value, "item-source-row--selected", entry.Key == item);
             }
-            _workspace.Preview(GameMenuPage.Crafting, _document.rootVisualElement.Q("crafting-window"), item, string.Empty);
+            _workspace.Preview(GameMenuPage.Crafting, _uiPanel.Root.Q("crafting-window"), item, string.Empty);
         }
 
         void EndCandidatePreview(ItemInstance item)
@@ -671,7 +685,7 @@ namespace DarkFlare
                 _previewItem = _slottedItem;
                 _workspace.Activate(GameMenuPage.Crafting);
                 _workspace.Highlight(GameMenuPage.Crafting, _inputSlotButton, "item-source-row--selected", true);
-                _workspace.Preview(GameMenuPage.Crafting, _document.rootVisualElement.Q("crafting-window"),
+                _workspace.Preview(GameMenuPage.Crafting, _uiPanel.Root.Q("crafting-window"),
                     _slottedItem,
                     Localize("crafting.tooltip.slotted"));
             }

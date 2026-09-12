@@ -85,6 +85,19 @@ namespace DarkFlare.Tests
             Assert.AreEqual(GameFlowState.InGame, host.SceneFlow.State);
             Assert.IsNotNull(host.CurrentSession);
             Assert.AreEqual(GameSessionState.Running, host.CurrentSession.State);
+            yield return WaitForGameplayUi();
+        }
+
+        public IEnumerator WaitForGameplayUi()
+        {
+            float timeout = Time.realtimeSinceStartup + ReadyTimeoutSeconds;
+            GameMenuController menu = Object.FindAnyObjectByType<GameMenuController>();
+            while (menu != null && !menu.IsReady && Time.realtimeSinceStartup < timeout)
+            {
+                yield return null;
+            }
+            Assert.IsNotNull(menu);
+            Assert.IsTrue(menu.IsReady, "PanelRenderer 视觉树与玩法 UI 未在超时前就绪");
         }
     }
 }

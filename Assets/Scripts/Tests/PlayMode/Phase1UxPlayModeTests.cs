@@ -52,6 +52,71 @@ namespace DarkFlare.Tests
         }
 
         [UnityTest]
+        public IEnumerator PanelReload_RebindsGameplayAndPreservesRendererDisabledContent()
+        {
+            yield return _fixture.EnterMain();
+            GameMenuController menu = Object.FindAnyObjectByType<GameMenuController>();
+            RuntimePanelView view = menu.GetComponent<RuntimePanelView>();
+            HudController hud = menu.GetComponent<HudController>();
+            Keyboard keyboard = InputSystem.AddDevice<Keyboard>();
+            Gamepad pad = InputSystem.AddDevice<Gamepad>();
+            VisualTreeAsset source = view.Renderer.visualTreeAsset;
+            float deadline = Time.realtimeSinceStartup + 5f;
+            while ((view.Root?.panel == null || menu.SessionBindCount == 0) && Time.realtimeSinceStartup < deadline)
+            {
+                yield return null;
+            }
+            Assert.IsNotNull(view.Root?.panel);
+            try
+            {
+                for (int cycle = 0; cycle < 2; cycle++)
+                {
+                    VisualElement entry = view.Root.Q("game-hud-inventory");
+                    view.Renderer.enabled = false;
+                    yield return null;
+                    view.Renderer.enabled = true;
+                    yield return null;
+                    Assert.AreSame(entry, view.Root.Q("game-hud-inventory"), "禁用 Renderer 必须保留视觉内容");
+                    view.gameObject.SetActive(false);
+                    yield return null;
+                    view.gameObject.SetActive(true);
+                    yield return null;
+                    yield return null;
+                    Assert.AreSame(entry, view.Root.Q("game-hud-inventory"), "禁用宿主后应复用内容并重建 Controller 订阅");
+                    menu.OpenPage(GameMenuPage.Inventory);
+                    yield return null;
+                    int binds = menu.SessionBindCount;
+                    VisualTreeAsset replacement = Object.Instantiate(source);
+                    _objects.Add(replacement);
+                    view.Renderer.visualTreeAsset = replacement;
+                    yield return null;
+                    yield return null;
+                    Assert.AreNotSame(entry, view.Root.Q("game-hud-inventory"), "重载后必须绑定新子树");
+                    Assert.AreEqual(binds + 1, menu.SessionBindCount);
+                    Assert.IsFalse(menu.IsOpen, "重建视觉树应结束旧窗口与拖放事务");
+                    Assert.IsTrue(ApplicationHost.Current.Input.IsGameplayEnabled);
+                    Assert.AreEqual(Object.FindAnyObjectByType<PlayerController>().Actor.CurrentHealth, hud.RuntimeSnapshot.Health);
+                    _inputFixture.PressAndRelease(keyboard.tabKey);
+                    yield return null;
+                    yield return null;
+                    Assert.IsTrue(menu.IsWindowVisible(GameMenuPage.Inventory), "重载后一次输入只能切换一次");
+                    _inputFixture.PressAndRelease(pad.buttonEast);
+                    yield return null;
+                    yield return null;
+                    Assert.IsFalse(menu.IsOpen);
+                    Assert.IsTrue(ApplicationHost.Current.Input.IsGameplayEnabled);
+                }
+            }
+            finally
+            {
+                view.gameObject.SetActive(true);
+                view.Renderer.enabled = true;
+                view.Renderer.visualTreeAsset = source;
+            }
+            yield return null;
+        }
+
+        [UnityTest]
         public IEnumerator Hud_CurrentResourcesMotionAndEntriesRespectInputOwnership()
         {
             yield return _fixture.EnterMain();
@@ -61,7 +126,7 @@ namespace DarkFlare.Tests
             yield return host.Input.SetGlyphPreferenceAsync(InputGlyphPreference.Auto).ToCoroutine();
             GameMenuController menu = Object.FindAnyObjectByType<GameMenuController>();
             HudController hud = Object.FindAnyObjectByType<HudController>();
-            VisualElement root = hud.GetComponent<UIDocument>().rootVisualElement;
+            VisualElement root = hud.GetComponent<RuntimePanelView>().Root;
             IArchitecture architecture = menu.GetArchitecture();
             architecture.GetUtility<GameInput>().SwitchToGameplay();
             PlayerController player = Object.FindAnyObjectByType<PlayerController>();
@@ -125,7 +190,7 @@ namespace DarkFlare.Tests
             yield return _fixture.EnterMain();
             GameMenuController menu = Object.FindAnyObjectByType<GameMenuController>();
             IArchitecture architecture = menu.GetArchitecture();
-            VisualElement root = menu.GetComponent<UIDocument>().rootVisualElement;
+            VisualElement root = menu.GetComponent<RuntimePanelView>().Root;
             ApplicationHost host = ApplicationHost.Current;
             Gamepad pad = InputSystem.AddDevice<Gamepad>();
             try
@@ -276,7 +341,7 @@ namespace DarkFlare.Tests
             menu.OpenPage(GameMenuPage.Inventory);
             yield return null;
             yield return null;
-            VisualElement root = menu.GetComponent<UIDocument>().rootVisualElement;
+            VisualElement root = menu.GetComponent<RuntimePanelView>().Root;
             CombatActor player = architecture.SendQuery(new GetInventorySnapshotQuery()).Player;
             EquipmentModel equipment = architecture.GetModel<EquipmentModel>();
             Mouse mouse = InputSystem.AddDevice<Mouse>();
@@ -329,7 +394,7 @@ namespace DarkFlare.Tests
             IArchitecture architecture = menu.GetArchitecture();
             InventoryModel inventory = architecture.GetModel<InventoryModel>();
             inventory.AddGold(10000);
-            VisualElement root = menu.GetComponent<UIDocument>().rootVisualElement;
+            VisualElement root = menu.GetComponent<RuntimePanelView>().Root;
             InventoryPanelController panel = menu.GetComponent<InventoryPanelController>();
             CraftingPanelController crafting = menu.GetComponent<CraftingPanelController>();
             Assert.IsTrue(architecture.SendCommand(new OpenGameMenuCommand(FindTarget(GameMenuPage.Shop))));
@@ -454,7 +519,7 @@ namespace DarkFlare.Tests
             menu.OpenPage(GameMenuPage.Inventory);
             yield return null;
             yield return null;
-            VisualElement root = menu.GetComponent<UIDocument>().rootVisualElement;
+            VisualElement root = menu.GetComponent<RuntimePanelView>().Root;
             Button itemButton = FindItemButton(root, item, "inventory-item");
             itemButton.Focus();
             Gamepad pad = InputSystem.AddDevice<Gamepad>();
@@ -530,7 +595,7 @@ namespace DarkFlare.Tests
             yield return null;
             GameMenuController menu = Object.FindAnyObjectByType<GameMenuController>();
             IArchitecture architecture = menu.GetArchitecture();
-            VisualElement root = menu.GetComponent<UIDocument>().rootVisualElement;
+            VisualElement root = menu.GetComponent<RuntimePanelView>().Root;
             InventoryModel inventory = architecture.GetModel<InventoryModel>();
             inventory.AddGold(10000);
             WorldInteractionTarget merchant = FindTarget(GameMenuPage.Shop);
@@ -637,19 +702,19 @@ namespace DarkFlare.Tests
             int originalHeight = Screen.height;
             yield return _fixture.EnterMain();
             GameMenuController menu = null;
-            UIDocument document = null;
+            RuntimePanelView document = null;
             float timeout = Time.realtimeSinceStartup + 15f;
 
-            while ((menu == null || document == null || document.rootVisualElement.panel == null)
+            while ((menu == null || document == null || document.Root?.panel == null)
                    && Time.realtimeSinceStartup < timeout)
             {
                 menu = Object.FindAnyObjectByType<GameMenuController>();
-                document = menu != null ? menu.GetComponent<UIDocument>() : null;
+                document = menu != null ? menu.GetComponent<RuntimePanelView>() : null;
                 yield return null;
             }
 
             Assert.IsNotNull(menu, "Main 场景未初始化 GameMenuController");
-            Assert.IsNotNull(document, "UIRoot 缺少 UIDocument");
+            Assert.IsNotNull(document, "UIRoot 缺少 RuntimePanelView");
             IArchitecture architecture = menu.GetArchitecture();
             Assert.IsTrue(ApplicationHost.TryGetCurrent(out ApplicationHost host));
             Assert.IsNotNull(host.Localization);
@@ -686,7 +751,7 @@ namespace DarkFlare.Tests
             yield return null;
 
             ShopPanelController shop = menu.GetComponent<ShopPanelController>();
-            VisualElement root = document.rootVisualElement;
+            VisualElement root = document.Root;
             VisualElement merchantList = root.Q<VisualElement>("shop-merchant-list");
             VisualElement merchantFrame = root.Q<VisualElement>("shop-merchant-frame");
             Assert.IsNotNull(merchantFrame, "商店缺少固定视口框架");
@@ -995,19 +1060,19 @@ namespace DarkFlare.Tests
         {
             yield return _fixture.EnterMain();
             GameMenuController menu = null;
-            UIDocument document = null;
+            RuntimePanelView document = null;
             float timeout = Time.realtimeSinceStartup + 15f;
 
-            while ((menu == null || document == null || document.rootVisualElement.panel == null)
+            while ((menu == null || document == null || document.Root?.panel == null)
                    && Time.realtimeSinceStartup < timeout)
             {
                 menu = Object.FindAnyObjectByType<GameMenuController>();
-                document = menu != null ? menu.GetComponent<UIDocument>() : null;
+                document = menu != null ? menu.GetComponent<RuntimePanelView>() : null;
                 yield return null;
             }
 
             Assert.IsNotNull(menu, "Main 场景未初始化 GameMenuController");
-            Assert.IsNotNull(document, "UIRoot 缺少 UIDocument");
+            Assert.IsNotNull(document, "UIRoot 缺少 RuntimePanelView");
             IArchitecture architecture = menu.GetArchitecture();
             InventorySnapshot setupInventory = default;
             timeout = Time.realtimeSinceStartup + 15f;
@@ -1038,7 +1103,7 @@ namespace DarkFlare.Tests
             yield return null;
             yield return null;
 
-            VisualElement root = document.rootVisualElement;
+            VisualElement root = document.Root;
             menu.OpenPage(GameMenuPage.Inventory);
             yield return null;
             yield return null;

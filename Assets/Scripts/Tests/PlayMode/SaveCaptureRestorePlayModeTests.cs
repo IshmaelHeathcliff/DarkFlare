@@ -258,7 +258,7 @@ namespace DarkFlare.Tests
         {
             yield return _fixture.EnterMain();
             GameMenuController menu = UnityEngine.Object.FindAnyObjectByType<GameMenuController>();
-            UIDocument document = menu != null ? menu.GetComponent<UIDocument>() : null;
+            RuntimePanelView document = menu != null ? menu.GetComponent<RuntimePanelView>() : null;
             Assert.IsNotNull(menu);
             Assert.IsNotNull(document);
             menu.OpenPage(GameMenuPage.Inventory);
@@ -270,7 +270,7 @@ namespace DarkFlare.Tests
             }
 
             Assert.IsFalse(menu.IsSaveOperationBusy, "自动存档探测超时");
-            VisualElement root = document.rootVisualElement;
+            VisualElement root = document.Root;
             menu.TogglePause();
             yield return null;
             Button save = root.Q<Button>("game-menu-save");

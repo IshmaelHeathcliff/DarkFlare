@@ -64,7 +64,7 @@ namespace DarkFlare
             _input = input;
             _applicationInput = ApplicationHost.Current.Input;
             _locale = ApplicationHost.Current.Localization;
-            _root = menu.GetComponent<UIDocument>().rootVisualElement;
+            _root = menu.GetComponent<RuntimePanelView>().Root;
             _overlay = _root.Q("game-menu-overlay");
             _grid = _root.Q("inventory-grid");
             _dragLayer = _root.Q("item-drag-layer");

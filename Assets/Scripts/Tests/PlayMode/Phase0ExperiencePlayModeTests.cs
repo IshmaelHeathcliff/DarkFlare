@@ -47,22 +47,22 @@ namespace DarkFlare.Tests
             yield return _fixture.EnterMain();
 
             GameMenuController menu = null;
-            UIDocument document = null;
+            RuntimePanelView document = null;
             float timeout = Time.realtimeSinceStartup + 15f;
 
             while ((menu == null
                     || menu.SessionBindCount == 0
                     || document == null
-                    || document.rootVisualElement.panel == null)
+                    || document.Root?.panel == null)
                    && Time.realtimeSinceStartup < timeout)
             {
                 menu = UnityEngine.Object.FindAnyObjectByType<GameMenuController>();
-                document = menu != null ? menu.GetComponent<UIDocument>() : null;
+                document = menu != null ? menu.GetComponent<RuntimePanelView>() : null;
                 yield return null;
             }
 
             Assert.IsNotNull(menu, "Main 场景未在 15 秒内初始化 GameMenuController");
-            Assert.IsNotNull(document, "UIRoot 缺少 UIDocument");
+            Assert.IsNotNull(document, "UIRoot 缺少 RuntimePanelView");
             IArchitecture architecture = menu.GetArchitecture();
             ShopSnapshot shop = default;
             InventorySnapshot inventory = default;
@@ -114,7 +114,7 @@ namespace DarkFlare.Tests
                 Assert.AreEqual(resolution.x, Screen.width, $"Game View 宽度未切换为 {resolution.x}");
                 Assert.AreEqual(resolution.y, Screen.height, $"Game View 高度未切换为 {resolution.y}");
                 AssertMenuOpen(menu, document, "1920×1080");
-                AssertLayoutInsideRoot(document.rootVisualElement);
+                AssertLayoutInsideRoot(document.Root);
                 menu.GetArchitecture().GetUtility<GameInput>().SwitchToGameplay();
                 yield return null;
 
@@ -140,7 +140,7 @@ namespace DarkFlare.Tests
         {
             yield return _fixture.EnterMain();
             GameMenuController menu = null;
-            UIDocument document = null;
+            RuntimePanelView document = null;
             InventorySnapshot inventory = default;
             ShopSnapshot shop = default;
             float timeout = Time.realtimeSinceStartup + 15f;
@@ -148,14 +148,14 @@ namespace DarkFlare.Tests
             while ((menu == null
                     || menu.SessionBindCount == 0
                     || document == null
-                    || document.rootVisualElement.panel == null
+                    || document.Root?.panel == null
                     || !inventory.HasPlayer
                     || shop.MerchantItems == null
                     || shop.MerchantItems.Count == 0)
                    && Time.realtimeSinceStartup < timeout)
             {
                 menu = UnityEngine.Object.FindAnyObjectByType<GameMenuController>();
-                document = menu != null ? menu.GetComponent<UIDocument>() : null;
+                document = menu != null ? menu.GetComponent<RuntimePanelView>() : null;
 
                 if (menu != null && menu.SessionBindCount > 0)
                 {
@@ -168,7 +168,7 @@ namespace DarkFlare.Tests
             }
 
             Assert.IsNotNull(menu, "Main 场景未初始化菜单");
-            Assert.IsNotNull(document, "UIRoot 缺少 UIDocument");
+            Assert.IsNotNull(document, "UIRoot 缺少 RuntimePanelView");
             Assert.IsTrue(inventory.HasPlayer, "Main 场景未生成玩家");
             IArchitecture architecture = menu.GetArchitecture();
             ItemInstance weapon = null;
@@ -194,7 +194,7 @@ namespace DarkFlare.Tests
 
             InventoryPanelController panel = menu.GetComponent<InventoryPanelController>();
             Assert.IsNotNull(panel, "UIRoot 缺少 InventoryPanelController");
-            VisualElement root = document.rootVisualElement;
+            VisualElement root = document.Root;
             InventoryItemSnapshot before = FindInventoryItem(architecture, weapon);
             Vector2Int targetOrigin = FindMoveTarget(architecture, weapon, before.Placement);
             Button itemButton = FindInventoryButton(root, weapon.BaseDefinition.DisplayName);
@@ -429,18 +429,18 @@ namespace DarkFlare.Tests
 
         static void AssertMenuOpen(
             GameMenuController menu,
-            UIDocument document,
+            RuntimePanelView document,
             string inputPath)
         {
-            VisualElement overlay = document.rootVisualElement.Q<VisualElement>("game-menu-overlay");
-            Focusable focusedElement = document.rootVisualElement.focusController.focusedElement;
-            VisualElement detailRoot = document.rootVisualElement.Q<VisualElement>("item-tooltip");
+            VisualElement overlay = document.Root.Q<VisualElement>("game-menu-overlay");
+            Focusable focusedElement = document.Root.focusController.focusedElement;
+            VisualElement detailRoot = document.Root.Q<VisualElement>("item-tooltip");
             Assert.IsTrue(menu.IsOpen, $"{inputPath} 未打开菜单");
             Assert.AreEqual(DisplayStyle.Flex, overlay.resolvedStyle.display, $"{inputPath} 菜单遮罩不可见");
             Assert.AreEqual(0f, Time.timeScale, $"{inputPath} 打开菜单后未暂停玩法");
             Assert.IsNotNull(focusedElement, $"{inputPath} 打开菜单后没有默认焦点");
             Assert.IsNull(
-                document.rootVisualElement.Q<VisualElement>(className: "inventory-item--selected"),
+                document.Root.Q<VisualElement>(className: "inventory-item--selected"),
                 $"{inputPath} 在没有操作物品时错误创建了默认选择");
             Assert.AreEqual(
                 DisplayStyle.None,
@@ -448,9 +448,9 @@ namespace DarkFlare.Tests
                 $"{inputPath} 在没有悬停物品时错误显示了默认物品信息");
         }
 
-        static void AssertMenuClosed(GameMenuController menu, UIDocument document, string inputPath)
+        static void AssertMenuClosed(GameMenuController menu, RuntimePanelView document, string inputPath)
         {
-            VisualElement overlay = document.rootVisualElement.Q<VisualElement>("game-menu-overlay");
+            VisualElement overlay = document.Root.Q<VisualElement>("game-menu-overlay");
             Assert.IsFalse(menu.IsOpen, $"{inputPath} 未关闭菜单");
             Assert.AreEqual(DisplayStyle.None, overlay.resolvedStyle.display, $"{inputPath} 关闭后菜单遮罩仍可见");
             Assert.AreEqual(1f, Time.timeScale, $"{inputPath} 关闭菜单后未恢复玩法");

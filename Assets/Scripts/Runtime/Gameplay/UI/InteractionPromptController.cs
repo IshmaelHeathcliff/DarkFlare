@@ -4,11 +4,11 @@ using UnityEngine.UIElements;
 namespace DarkFlare
 {
     [DisallowMultipleComponent]
-    [RequireComponent(typeof(UIDocument))]
+    [RequireComponent(typeof(RuntimePanelView))]
     public class InteractionPromptController : MonoBehaviour, IController
     {
         [SerializeField]
-        UIDocument _document;
+        RuntimePanelView _uiPanel;
 
         SceneSessionBinding _sessionBinding;
         GameInput _gameInput;
@@ -41,23 +41,37 @@ namespace DarkFlare
                 this,
                 BindSession,
                 UnbindSession);
+            _uiPanel.Reloading += OnPanelReloading;
+            _uiPanel.Reloaded += OnPanelReloaded;
             _sessionBinding.Enable();
+        }
+
+        void OnPanelReloading()
+        {
+            _sessionBinding?.Disable();
+        }
+
+        void OnPanelReloaded()
+        {
+            _sessionBinding?.Enable();
         }
 
         void OnDisable()
         {
+            _uiPanel.Reloading -= OnPanelReloading;
+            _uiPanel.Reloaded -= OnPanelReloaded;
             _sessionBinding?.Disable();
         }
 
         SceneSessionBindResult BindSession(IArchitecture architecture)
         {
-            if (_document == null || _document.panelSettings == null)
+            if (_uiPanel == null || _uiPanel.Renderer.panelSettings == null)
             {
-                ApplicationLog.Error(LogEventIds.GameplayUi, "[InteractionPromptController] 缺少 UIDocument 或 PanelSettings，无法初始化交互提示", this);
+                ApplicationLog.Error(LogEventIds.GameplayUi, "[InteractionPromptController] 缺少 RuntimePanelView 或 PanelSettings，无法初始化交互提示", this);
                 return SceneSessionBindResult.Failed;
             }
 
-            VisualElement root = _document.rootVisualElement;
+            VisualElement root = _uiPanel.Root;
 
             if (root == null || root.panel == null)
             {
@@ -116,26 +130,26 @@ namespace DarkFlare
 
         void EnsureComponents()
         {
-            if (_document == null)
+            if (_uiPanel == null)
             {
-                _document = GetComponent<UIDocument>();
+                _uiPanel = GetComponent<RuntimePanelView>();
             }
 
-            if (_document == null && gameObject.scene.IsValid())
+            if (_uiPanel == null && gameObject.scene.IsValid())
             {
-                _document = gameObject.AddComponent<UIDocument>();
+                _uiPanel = gameObject.AddComponent<RuntimePanelView>();
             }
         }
 
         bool BindVisualTree()
         {
-            if (_document == null)
+            if (_uiPanel == null)
             {
-                ApplicationLog.Error(LogEventIds.GameplayUi, "[InteractionPromptController] 缺少 UIDocument，无法初始化交互提示", this);
+                ApplicationLog.Error(LogEventIds.GameplayUi, "[InteractionPromptController] 缺少 RuntimePanelView，无法初始化交互提示", this);
                 return false;
             }
 
-            VisualElement root = _document.rootVisualElement;
+            VisualElement root = _uiPanel.Root;
             _prompt = root.Q<VisualElement>("interaction-prompt");
             _promptLabel = root.Q<Label>("interaction-prompt-label");
 

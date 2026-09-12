@@ -7,7 +7,7 @@ using UnityEngine.UIElements;
 namespace DarkFlare
 {
     [DisallowMultipleComponent]
-    [RequireComponent(typeof(UIDocument))]
+    [RequireComponent(typeof(RuntimePanelView))]
     public sealed class ApplicationShellBootstrap : MonoBehaviour
     {
         [SerializeField]
@@ -17,13 +17,37 @@ namespace DarkFlare
         ContentCatalogDefinition _contentCatalog;
 
         [SerializeField]
-        UIDocument _document;
+        RuntimePanelView _uiPanel;
 
         ApplicationShellController _controller;
 
         void Awake()
         {
             EnsureComponents();
+        }
+
+        void OnEnable()
+        {
+            EnsureComponents();
+            _uiPanel.Reloading += OnPanelReloading;
+            _uiPanel.Reloaded += OnPanelReloaded;
+            if (_uiPanel.Root?.panel != null) { OnPanelReloaded(); }
+        }
+
+        void OnDisable()
+        {
+            _uiPanel.Reloading -= OnPanelReloading;
+            _uiPanel.Reloaded -= OnPanelReloaded;
+        }
+
+        void OnPanelReloading()
+        {
+            _controller?.PrepareReload();
+        }
+
+        void OnPanelReloaded()
+        {
+            _controller?.Reload(_uiPanel.Root);
         }
 
         void Start()
@@ -100,11 +124,11 @@ namespace DarkFlare
             }
 
             await UniTask.WaitUntil(
-                () => _document != null
-                    && _document.rootVisualElement != null
-                    && _document.rootVisualElement.panel != null,
+                () => _uiPanel != null
+                    && _uiPanel.Root != null
+                    && _uiPanel.Root.panel != null,
                 cancellationToken: cancellationToken);
-            _controller = new ApplicationShellController(_document, host);
+            _controller = new ApplicationShellController(_uiPanel.Root, host);
             _controller.Bind();
             host.RegisterApplicationShell(_controller);
             SceneFlowResult frontEnd = await host.SceneFlow.RequestAsync(
@@ -119,14 +143,14 @@ namespace DarkFlare
 
         void EnsureComponents()
         {
-            if (_document == null)
+            if (_uiPanel == null)
             {
-                _document = GetComponent<UIDocument>();
+                _uiPanel = GetComponent<RuntimePanelView>();
             }
 
-            if (_document == null)
+            if (_uiPanel == null)
             {
-                _document = gameObject.AddComponent<UIDocument>();
+                _uiPanel = gameObject.AddComponent<RuntimePanelView>();
             }
         }
     }

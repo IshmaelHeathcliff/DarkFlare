@@ -9,11 +9,11 @@ using UnityEngine.UIElements;
 namespace DarkFlare
 {
     [DisallowMultipleComponent]
-    [RequireComponent(typeof(UIDocument))]
+    [RequireComponent(typeof(RuntimePanelView))]
     public class HudController : MonoBehaviour, IController
     {
         const float LowHealthThreshold = 0.25f;
-        [SerializeField] UIDocument _document;
+        [SerializeField] RuntimePanelView _uiPanel;
         readonly List<IUnRegister> _eventRegistrations = new List<IUnRegister>();
         SceneSessionBinding _sessionBinding;
         LifecycleScope _scope;
@@ -104,7 +104,7 @@ namespace DarkFlare
 
         void RefreshBindings()
         {
-            VisualElement root = _document.rootVisualElement;
+            VisualElement root = _uiPanel.Root;
             ApplicationInputService input = ApplicationHost.Current.Input;
             Set("hud-inventory-binding", RebindableInputAction.PlayerToggleMenu);
             Set("hud-pause-binding", RebindableInputAction.PlayerPause);
@@ -130,20 +130,37 @@ namespace DarkFlare
         {
             EnsureComponents();
             _sessionBinding ??= new SceneSessionBinding(this, BindSession, UnbindSession);
+            _uiPanel.Reloading += OnPanelReloading;
+            _uiPanel.Reloaded += OnPanelReloaded;
             _sessionBinding.Enable();
         }
-        void OnDisable() { _sessionBinding?.Disable(); }
+        void OnPanelReloading()
+        {
+            _sessionBinding?.Disable();
+        }
+
+        void OnPanelReloaded()
+        {
+            _sessionBinding?.Enable();
+        }
+
+        void OnDisable()
+        {
+            _uiPanel.Reloading -= OnPanelReloading;
+            _uiPanel.Reloaded -= OnPanelReloaded;
+            _sessionBinding?.Disable();
+        }
         void OnValidate() { EnsureComponents(); }
         void EnsureComponents()
         {
-            if (_document == null) { _document = GetComponent<UIDocument>(); }
-            if (_document == null && gameObject.scene.IsValid()) { _document = gameObject.AddComponent<UIDocument>(); }
+            if (_uiPanel == null) { _uiPanel = GetComponent<RuntimePanelView>(); }
+            if (_uiPanel == null && gameObject.scene.IsValid()) { _uiPanel = gameObject.AddComponent<RuntimePanelView>(); }
         }
 
         SceneSessionBindResult BindSession(IArchitecture architecture)
         {
-            if (_document == null || _document.panelSettings == null) { return SceneSessionBindResult.Failed; }
-            VisualElement root = _document.rootVisualElement;
+            if (_uiPanel == null || _uiPanel.Renderer.panelSettings == null) { return SceneSessionBindResult.Failed; }
+            VisualElement root = _uiPanel.Root;
             if (root?.panel == null) { return SceneSessionBindResult.Retry; }
             _healthBar = root.Q<ProgressBar>("health-bar");
             _manaBar = root.Q<ProgressBar>("mana-bar");

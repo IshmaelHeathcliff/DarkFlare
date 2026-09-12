@@ -54,7 +54,7 @@ FrontEnd、Settings、Modal、Busy、Fatal、Toast 使用 Main 共用材质与�
 
 1. Bootstrap 加载，`ApplicationBootstrap` 创建宿主。
 2. Application 完成 Settings、Input、Audio、Accessibility、Platform、Localization、Profile 和持久化服务启动。
-3. `ApplicationShellBootstrap` 安装正式 Content Catalog，配置 Scene Flow 并绑定 UIDocument。
+3. `ApplicationShellBootstrap` 安装正式 Content Catalog，配置 Scene Flow 并绑定 PanelRenderer。
 4. Scene Flow 提交 `Boot → FrontEnd`。此时 Main 未加载，也不会隐式创建 Session。
 
 ### 新游戏与继续游戏
@@ -81,7 +81,9 @@ FrontEnd、Settings、Modal、Busy、Fatal、Toast 使用 Main 共用材质与�
 
 ## UI 外壳与焦点
 
-`ApplicationShell.uxml/.uss` 使用现有 Theme、Localization 和字体链，固定包含 FrontEnd Page、共享 Settings Page、Toast、Modal、Busy 与 Fatal 层。Bootstrap 与 Main 共用 PanelSettings，使用 `UIDocument.sortingOrder` 确定文档顺序：Bootstrap 为 200，Main 为 100。不能让两个文档同序，否则后加载的 HUD 模板会挡住设置页指针命中。
+Unity 6.6 已迁移原生 `PanelRenderer` 与 `RuntimePanelView`。Shell 在视觉树脱离前释放旧绑定，重载后恢复设置、提示、确认动作和焦点，保持同一 Controller 与输入 / 暂停所有权；详见[面板生命周期](../input-ui-system.md#面板生命周期)。
+
+`ApplicationShell.uxml/.uss` 使用现有 Theme、Localization 和字体链，固定包含 FrontEnd Page、共享 Settings Page、Toast、Modal、Busy 与 Fatal 层。Bootstrap 与 Main 共用 PanelSettings，使用 `PanelRenderer.sortingOrder` 确定文档顺序：Bootstrap 为 200，Main 为 100。不能让两个文档同序，否则后加载的 HUD 模板会挡住设置页指针命中。
 
 - FrontEnd 只在 `FrontEnd` 可交互，Continue 由 Profile 级存档预检决定是否启用。
 - 删除自动档和恢复全部默认设置复用 Modal 二次确认、Busy、Toast 与焦点恢复；失败后以真实服务状态刷新页面。

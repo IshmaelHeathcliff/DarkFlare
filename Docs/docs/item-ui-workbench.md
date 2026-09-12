@@ -2,7 +2,7 @@
 
 ## 模块职责
 
-`GameMenuController` 在同一个 UIDocument 中管理独立背包、商店、打造和属性窗口。`OpenWindows` 表示打开集合，`CurrentPage` 表示活动窗口；暂停页面和 Application Shell 的阻挡分别处理。背包可以与商店或打造同时显示，并打开独立属性，关闭一个窗口不关闭另一个。
+`GameMenuController` 在同一个 PanelRenderer 中管理独立背包、商店、打造和属性窗口。`OpenWindows` 表示打开集合，`CurrentPage` 表示活动窗口；暂停页面和 Application Shell 的阻挡分别处理。背包可以与商店或打造同时显示，并打开独立属性，关闭一个窗口不关闭另一个。
 
 `ItemWorkspace` 由菜单宿主持有，协调唯一物品高亮、普通 / 对比详情和拖放会话，并保存背包选择与打造槽的表现占用。它不复制领域 Model；宿主持有的 `ItemInteractionSession` 负责单一拖放 / 动作菜单，`ItemActionRouter` 用 Query 预检并通过 Command 提交领域意图。商店与打造在背包关闭时通过 `ItemSourceListView` 呈现自己的玩家物品来源，不依赖隐藏的 `InventoryPanelController` 转接选择、浮窗或焦点。
 

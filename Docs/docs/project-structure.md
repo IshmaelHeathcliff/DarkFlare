@@ -298,7 +298,7 @@ Addressables 的配置目录，包含资源组、模板和构建器配置。后�
 
 `ProjectSettings/EditorBuildSettings.asset` 按 Bootstrap 0、Main 1 注册；Main 只通过 Scene Flow additive 加载。
 
-`Bootstrap.unity` 的 `ApplicationShellBootstrap` 引用正式内容目录、Scene Flow 配置、Application Shell UXML 与 Panel Settings。`Main.unity` 当前包含玩法 `UIRoot`（`UIDocument` + HUD / 菜单 / 背包 / 商店 / 打造 / 交互提示控制器）、唯一 Gameplay 配置提供者，以及可交互的 `Merchant` 与 `CraftingStation` 原型对象；Main 不再包含 EventSystem。视觉地表位于 `GroundGrid`，包含 5×5 全覆盖的 `GroundBaseTilemap` 和 11 格稀疏的 `GroundDetailTilemap`；两层均不带 Collider，玩法边界仍由独立 `WorldBounds` 提供。唯一 `ApplicationHost` 不序列化在场景中，而由 `ApplicationBootstrap` 在 `BeforeSceneLoad` 创建。
+`Bootstrap.unity` 的 `ApplicationShellBootstrap` 引用正式内容目录、Scene Flow 配置、Application Shell UXML 与 Panel Settings。`Main.unity` 当前包含玩法 `UIRoot`（`PanelRenderer` + HUD / 菜单 / 背包 / 商店 / 打造 / 交互提示控制器）、唯一 Gameplay 配置提供者，以及可交互的 `Merchant` 与 `CraftingStation` 原型对象；Main 不再包含 EventSystem。视觉地表位于 `GroundGrid`，包含 5×5 全覆盖的 `GroundBaseTilemap` 和 11 格稀疏的 `GroundDetailTilemap`；两层均不带 Collider，玩法边界仍由独立 `WorldBounds` 提供。唯一 `ApplicationHost` 不序列化在场景中，而由 `ApplicationBootstrap` 在 `BeforeSceneLoad` 创建。
 
 ### `Assets/Scripts`
 

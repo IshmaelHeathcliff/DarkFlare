@@ -93,7 +93,7 @@
 - `SpriteAssetLoader` 统一负责图标去重预热、缓存、取消清理与释放，`GameArchitecture.Deinit()` 与 Prefab Loader 一并释放资源。
 - 地图在 5×5 基础 Tilemap、稀疏细节 Tilemap 和 `WorldBounds` 上布置营地、路径、边界装饰与火盆，不改变生成、碰撞、交互或 AI 规则。
 - 商人与打造台改为独立 Prefab，通过 `WorldInteractionVisual` 响应既有焦点消息；战斗表现包含伤害数字、怪物血条、死亡淡出，以及独立的投射物飞行、命中、普通受击和暴击受击多帧动画，旧命中闪白与静态 Sprite 缩放冲击已移除。
-- `Theme.uss` 统一 HUD 与三个菜单的图标、稀有度、按钮和焦点状态，继续复用唯一 `UIDocument` 和 `EventSystem`。
+- `Theme.uss` 统一 HUD 与三个菜单的图标、稀有度、按钮和焦点状态，继续复用唯一 `PanelRenderer` 和 `EventSystem`。
 
 完整规格、资产与验收截图见 [视觉规范](./visual-style.md) 和 [视觉资产清单](./visual-assets.md)。
 

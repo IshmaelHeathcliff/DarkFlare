@@ -255,12 +255,12 @@ namespace DarkFlare.Tests
 
         static T FindElement<T>(string name) where T : VisualElement
         {
-            UIDocument[] documents = UnityEngine.Object.FindObjectsByType<UIDocument>(
+            RuntimePanelView[] documents = UnityEngine.Object.FindObjectsByType<RuntimePanelView>(
                 FindObjectsInactive.Include);
 
             for (int i = 0; i < documents.Length; i++)
             {
-                T element = documents[i].rootVisualElement?.Q<T>(name);
+                T element = documents[i].Root?.Q<T>(name);
 
                 if (element != null)
                 {

@@ -821,15 +821,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 073797afb82c5a1438f328866b10b3f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ComponentVersion: 2
+  m_ComponentVersion: 4
   m_LightType: 4
   m_BlendStyleIndex: 0
+  m_Light2DProvider:
+    rid: -2
+  m_SelectionSources:
+    rid: 6877600543325552734
   m_FalloffIntensity: 0.5
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 1
   m_LightVolumeIntensity: 1
   m_LightVolumeEnabled: 0
-  m_ApplyToSortingLayers: 0000000029460f002a460f002b460f002c460f00
+  m_ApplyToSortingLayers: 0000000029460f002a460f002b460f002c460f00i
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: 0
@@ -844,6 +848,9 @@ MonoBehaviour:
   m_ShadowSoftnessFalloffIntensity: 0.5
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
+  m_RenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
   m_LocalBounds:
     m_Center: {x: 0, y: -0.00000011920929, z: 0}
     m_Extent: {x: 0.9985302, y: 0.99853027, z: 0}
@@ -861,6 +868,19 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   - {x: 0.5, y: 0.5, z: 0}
   - {x: -0.5, y: 0.5, z: 0}
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
+    - rid: 6877600543325552734
+      type: {class: Light2DProviderSources, ns: UnityEngine.Rendering.Universal, asm: Unity.RenderPipelines.Universal.2D.Runtime}
+      data:
+        m_SelectedHashCode: 4
+        m_SelectedSource:
+          rid: -2
+        m_Provider2DCache:
+          rid: -2
 --- !u!224 &619394802
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2361,13 +2381,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1678824117}
-  - component: {fileID: 1678824116}
   - component: {fileID: 1678824115}
   - component: {fileID: 1678824118}
   - component: {fileID: 1678824120}
   - component: {fileID: 1678824119}
   - component: {fileID: 1678824121}
   - component: {fileID: 1678824122}
+  - component: {fileID: 1678824124}
+  - component: {fileID: 1678824123}
   m_Layer: 0
   m_Name: UIRoot
   m_TagString: Untagged
@@ -2387,30 +2408,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86dd02307a8366046a22a835d3b22667, type: 3}
   m_Name: 
   m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.HudController
-  _document: {fileID: 1678824116}
---- !u!114 &1678824116
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1678824114}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 19102, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.dll::UnityEngine.UIElements.UIDocument
-  m_PanelSettings: {fileID: 11400000, guid: 4c96a728e090624498ccfae2c2ea9c94, type: 2}
-  m_ParentUI: {fileID: 0}
-  sourceAsset: {fileID: 9197481963319205126, guid: 1950dced0c8117848a093d83ee5175c8, type: 3}
-  m_SortingOrder: 100
-  m_Position: 0
-  m_WorldSpaceSizeMode: 1
-  m_WorldSpaceWidth: 1920
-  m_WorldSpaceHeight: 1080
-  m_PivotReferenceSize: 0
-  m_Pivot: 0
-  m_WorldSpaceCollider: {fileID: 0}
+  _uiPanel: {fileID: 1678824123}
 --- !u!4 &1678824117
 Transform:
   m_ObjectHideFlags: 0
@@ -2438,7 +2436,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 210e8c0882626164caf01dca1f6541ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.InventoryPanelController
-  _document: {fileID: 1678824116}
+  _uiPanel: {fileID: 1678824123}
 --- !u!114 &1678824119
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2451,7 +2449,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52756951759b9af4c8330e86550ad852, type: 3}
   m_Name: 
   m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.GameMenuController
-  _document: {fileID: 1678824116}
+  _uiPanel: {fileID: 1678824123}
   _inventoryPanel: {fileID: 1678824118}
   _shopPanel: {fileID: 1678824120}
   _craftingPanel: {fileID: 1678824121}
@@ -2467,8 +2465,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1325c4f09fa910d43a48e2954827b769, type: 3}
   m_Name: 
   m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.ShopPanelController
-  _document: {fileID: 1678824116}
-  _inventoryPanel: {fileID: 1678824118}
+  _uiPanel: {fileID: 1678824123}
 --- !u!114 &1678824121
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2481,8 +2478,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 813b57bd95345494c8231868404879b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.CraftingPanelController
-  _document: {fileID: 1678824116}
-  _inventoryPanel: {fileID: 1678824118}
+  _uiPanel: {fileID: 1678824123}
 --- !u!114 &1678824122
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2495,7 +2491,78 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 134e2f1e0aad9854ba3ea3271a0f4f21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.InteractionPromptController
-  _document: {fileID: 1678824116}
+  _uiPanel: {fileID: 1678824123}
+--- !u!114 &1678824123
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1678824114}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bdf43357b7c78104e8b7f185c1b93fe4, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.RuntimePanelView
+  _renderer: {fileID: 1678824124}
+--- !u!1931382934 &1678824124
+PanelRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1678824114}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 0
+  m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 100
+  m_MaskInteraction: 0
+  serializedVersion: 1
+  m_PanelSettings: {fileID: 11400000, guid: 4c96a728e090624498ccfae2c2ea9c94, type: 2}
+  sourceAsset: {fileID: 9197481963319205126, guid: 1950dced0c8117848a093d83ee5175c8, type: 3}
+  m_ParentUI: {fileID: 0}
+  m_WorldSpaceSizeMode: 1
+  m_WorldSpaceWidth: 1920
+  m_WorldSpaceHeight: 1080
+  m_PivotReferenceSize: 0
+  m_Pivot: 0
+  m_Position: 0
 --- !u!1 &1716815136
 GameObject:
   m_ObjectHideFlags: 0
