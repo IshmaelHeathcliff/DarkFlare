@@ -228,7 +228,7 @@ namespace DarkFlare
             {
                 supportedDamage &= modifier.Operation == ModifierOperation.Increase || modifier.Operation == ModifierOperation.More;
             }
-            string status = direct ? modifier.Matches(TagSet.Empty) ? "active" : "unmatched"
+            string status = direct ? modifier.Matches(new CombatTagContext(sourceActorTags: _details.ActorTags, legacyTags: _details.ActorTags)) ? "active" : "unmatched"
                 : supportedDamage ? "conditional" : "unsupported";
             text.Append("\n").Append(L("scope." + modifier.Scope)).Append(" · ").Append(L("modifier." + status));
             if (modifier.Query.HasConditions)
@@ -241,6 +241,8 @@ namespace DarkFlare
 
         string Origin(ModifierOrigin origin)
         {
+            if (origin.Kind == ModifierOriginKind.Status) { return L("source.status", origin.StatusId, origin.StackCount); }
+            if (origin.Kind == ModifierOriginKind.Monster) { return L("source.monster"); }
             if (string.IsNullOrEmpty(origin.ItemId)) { return L("source.actor"); }
             string slot = EquipmentSlots.GetKey(origin.Slot);
             return _localization.GetString("ui", "equipment.slot." + slot) + " · " + Message(origin.ItemName) + " · " + Message(origin.AffixName);

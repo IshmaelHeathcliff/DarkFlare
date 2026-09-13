@@ -15,23 +15,8 @@ namespace DarkFlare.Tests
     {
         const string ManifestRoot = "Docs/docs/assets/visual-assets/alpha-0.1.7/manifests";
 
-        static readonly string[] ExpectedTopLevelTypes =
-        {
-            "DarkFlare.AffixDefinition",
-            "DarkFlare.CharacterDefinition",
-            "DarkFlare.CraftingDefinition",
-            "DarkFlare.ItemBaseDefinition",
-            "DarkFlare.LootTableDefinition",
-            "DarkFlare.MonsterAffixDefinition",
-            "DarkFlare.MonsterDefinition",
-            "DarkFlare.MonsterSpawnDefinition",
-            "DarkFlare.ProjectileSkillDefinition",
-            "DarkFlare.StatDefinition",
-            "DarkFlare.TagDefinition",
-            "DarkFlare.TraderDefinition",
-        };
-
-        static readonly string[] ExpectedNestedTypes =
+        // 代表直接嵌套、列表元素和递归条件；允许后续模块增加自己的数据结构。
+        static readonly string[] RequiredNestedTypes =
         {
             "DarkFlare.DamageRollDefinition",
             "DarkFlare.LocalizedContentReference",
@@ -70,17 +55,21 @@ namespace DarkFlare.Tests
         }
 
         [Test]
-        public void ConfigurationDiscovery_FreezesTwelveTopLevelAndSevenNestedStructures()
+        public void ConfigurationDiscovery_FindsRegisteredContentAndReachableNestedStructures()
         {
             IReadOnlyList<Type> topLevelTypes = ConfigurationTypeDiscovery.FindTopLevelTypes();
             IReadOnlyList<Type> nestedTypes = ConfigurationTypeDiscovery.FindNestedSerializedTypes(topLevelTypes);
 
-            CollectionAssert.AreEqual(
-                ExpectedTopLevelTypes,
-                topLevelTypes.Select(type => type.FullName).ToArray());
-            CollectionAssert.AreEqual(
-                ExpectedNestedTypes,
+            CollectionAssert.IsSubsetOf(
+                ContentDefinitionRegistry.All.Select(metadata => metadata.DefinitionType).ToArray(),
+                topLevelTypes.ToArray());
+            CollectionAssert.IsSubsetOf(
+                RequiredNestedTypes,
                 nestedTypes.Select(type => type.FullName).ToArray());
+            Assert.That(nestedTypes.Any(type => typeof(UnityEngine.Object).IsAssignableFrom(type)), Is.False,
+                "嵌套发现不能把资产引用当作内联数据递归");
+            Assert.That(nestedTypes.Contains(typeof(ModifierInstance)), Is.False,
+                "运行时只读属性不是 Unity 序列化字段");
             Assert.Greater(ConfigurationTypeDiscovery.CountSerializedFields(topLevelTypes), 0);
             Assert.Greater(ConfigurationTypeDiscovery.CountSerializedFields(nestedTypes), 0);
 

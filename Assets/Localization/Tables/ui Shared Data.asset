@@ -1743,6 +1743,14 @@ MonoBehaviour:
     m_Key: item.type.quest_item
     m_Metadata:
       m_Items: []
+  - m_Id: 8974749538443264
+    m_Key: attributes.source.status
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8974749613940736
+    m_Key: attributes.source.monster
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

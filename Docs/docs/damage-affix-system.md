@@ -420,3 +420,9 @@ Assets/Data/Preset/
 - 不要把所有标签写死在枚举里，设计期会频繁增删标签。
 - 不要让伤害计算读取实时对象状态，必须使用快照。
 - 不要过早做复杂异常状态，先让命中伤害、装备词条和打造闭环稳定。
+
+## 已实现的状态周期接入
+
+`DamageForm` 区分 Hit 和 Periodic。周期使用 NotApplicable 命中结果，复用来源计算和目标防御阶段：Base 在施加时冻结来源转换 / 额外伤害 / 增伤，SourceResolved 每跳仅执行当前目标的承伤及抗性。物理周期跳过护甲，不进行命中或暴击，不消耗攻击随机流。CombatSystem 共用资源及一次性死亡提交，死亡事件携带稳定归属；表现层只为 Hit 播放受击动画和命中特效。见[状态战斗接入](./status-combat.md)。
+
+`Temporary` 仍是预留作用域；实际状态修改器使用 GlobalActor / Skill / TargetTaken，由状态容器管理独立寿命，不能仅靠 Temporary 枚举获得效果。

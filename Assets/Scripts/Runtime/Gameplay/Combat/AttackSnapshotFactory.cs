@@ -69,7 +69,7 @@ namespace DarkFlare
                 legacyTags: skill.RuntimeTags.Union(sourceItemTags));
 
             return new AttackSnapshot(
-                attacker.ActorId,
+                attacker.CombatIdentity,
                 attacker.Team,
                 skill.Id,
                 sourceWeapon != null ? sourceWeapon.InstanceId : string.Empty,
@@ -139,7 +139,7 @@ namespace DarkFlare
             int randomSeed)
         {
             return new AttackSnapshot(
-                attacker != null ? attacker.ActorId : "environment",
+                attacker != null ? attacker.CombatIdentity : "environment",
                 attacker != null ? attacker.Team : default,
                 skillId,
                 sourceItemId,

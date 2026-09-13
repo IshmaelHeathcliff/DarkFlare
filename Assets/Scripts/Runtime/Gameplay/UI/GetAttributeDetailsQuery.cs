@@ -23,6 +23,7 @@ namespace DarkFlare
 
     public sealed class AttributeDetailsSnapshot
     {
+        public TagSet ActorTags { get; }
         public int StatsRevision { get; }
         public bool HasPlayer { get; }
         public IReadOnlyList<AttributeDetail> Attributes { get; }
@@ -36,6 +37,7 @@ namespace DarkFlare
         public AttributeDetailsSnapshot(CombatActor actor, EquipmentModel equipment, PlayerSkillState skillState)
         {
             HasPlayer = actor != null;
+            ActorTags = actor != null ? actor.Tags : TagSet.Empty;
             var attributes = new List<AttributeDetail>();
             var modifiers = new List<ModifierInstance>();
             var damages = new List<DamageDetailSnapshot>();
@@ -46,7 +48,7 @@ namespace DarkFlare
             StatsRevision = actor.StatsRevision;
             StatBlock baseStats = actor.CaptureBaseStats();
             var steps = new List<StatCalculationStep>();
-            CombatStatResolver.Build(baseStats, actor.Modifiers, steps);
+            CombatStatResolver.Build(baseStats, actor.Modifiers, steps, actor.Tags);
             foreach (string id in StatIds.All)
             {
                 var selected = steps.FindAll(step => step.StatId == id);

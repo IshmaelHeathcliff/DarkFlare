@@ -118,7 +118,7 @@ namespace DarkFlare
                 || _actor == null
                 || !_actor.IsAlive
                 || e.Result == null
-                || !e.Result.DidDealDamage)
+                || e.Result.Form != DamageForm.Hit || !e.Result.DidDealDamage)
             {
                 return;
             }

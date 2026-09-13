@@ -128,7 +128,7 @@ namespace DarkFlare
             }
 
             this.GetModel<EquipmentModel>().RestoreLoadout(actor, loadout);
-            actor.SetModifiers(EquipmentEffectResolver.CollectActorModifiers(loadout));
+            actor.SetModifierSource("equipment", EquipmentEffectResolver.CollectActorModifiers(loadout));
         }
 
         public bool Unequip(CombatActor actor, EquipmentSlot slot)
@@ -289,7 +289,7 @@ namespace DarkFlare
         {
             CombatResourceSnapshot previousResources = actor.Resources;
             List<ModifierInstance> modifiers = EquipmentEffectResolver.CollectActorModifiers(loadout);
-            actor.SetModifiers(modifiers);
+            actor.SetModifierSource("equipment", modifiers);
             this.GetSystem<CombatSystem>().PublishResourceChanges(
                 actor,
                 previousResources,
@@ -331,7 +331,7 @@ namespace DarkFlare
 
             if (e.Actor != null)
             {
-                e.Actor.SetModifiers(null);
+                e.Actor.SetModifierSource("equipment", null);
             }
         }
     }

@@ -27,6 +27,7 @@ namespace DarkFlare
         public const string Spawn = "spawn";
         public const string Trader = "trader";
         public const string Crafting = "crafting";
+        public const string Status = "status";
     }
 
     public interface IContentDefinition

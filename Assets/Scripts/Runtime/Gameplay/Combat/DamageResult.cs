@@ -48,12 +48,15 @@ namespace DarkFlare
         readonly Dictionary<DamageType, DamageTypeBreakdown> _breakdowns;
 
         public HitOutcome Outcome { get; }
+        public DamageForm Form { get; }
+        public DamageSourceSnapshot Source { get; }
 
-        public bool IsHit => Outcome == HitOutcome.Hit || Outcome == HitOutcome.NoDamage;
+        public bool IsHit => Form == DamageForm.Hit && (Outcome == HitOutcome.Hit || Outcome == HitOutcome.NoDamage);
 
         public bool IsCritical { get; }
 
-        public bool DidDealDamage => Outcome == HitOutcome.Hit && TotalDamage > DamageEpsilon;
+        public bool DidDealDamage => (Outcome == HitOutcome.Hit || Form == DamageForm.Periodic && Outcome == HitOutcome.NotApplicable)
+            && TotalDamage > DamageEpsilon && !float.IsInfinity(TotalDamage) && !float.IsNaN(TotalDamage);
 
         public float HitChance { get; }
 
@@ -94,8 +97,11 @@ namespace DarkFlare
             float hitRoll,
             float criticalChance,
             float criticalRoll,
-            Dictionary<DamageType, DamageTypeBreakdown> breakdowns)
+            Dictionary<DamageType, DamageTypeBreakdown> breakdowns, DamageForm form = DamageForm.Hit,
+            DamageSourceSnapshot source = null)
         {
+            Form = form;
+            Source = source;
             Outcome = outcome;
             IsCritical = isCritical && IsHit;
             HitChance = hitChance;

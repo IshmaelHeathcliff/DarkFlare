@@ -1797,6 +1797,15 @@ MonoBehaviour:
     m_Localized: "\u4EFB\u52A1\u9053\u5177"
     m_Metadata:
       m_Items: []
+  - m_Id: 8974749538443264
+    m_Localized: "\u72B6\u6001 {0} \xB7 {1} \u5C42"
+    m_Metadata:
+      m_Items:
+      - rid: 6738608143192817844
+  - m_Id: 8974749613940736
+    m_Localized: "\u602A\u7269\u8BCD\u6761"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:
@@ -1855,3 +1864,4 @@ MonoBehaviour:
         - id: 8615480821538817
         - id: 8678977106337792
         - id: 8678977169252353
+        - id: 8974749538443264

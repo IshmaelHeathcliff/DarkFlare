@@ -2,8 +2,14 @@ using System;
 
 namespace DarkFlare
 {
+    public enum ModifierOriginKind { Legacy, Equipment, Monster, Status }
+
     public readonly struct ModifierOrigin
     {
+        public ModifierOriginKind Kind { get; }
+        public string StatusId { get; }
+        public long LayerId { get; }
+        public int StackCount { get; }
         public string ItemId { get; }
         public EquipmentSlot Slot { get; }
         public LocalizedMessage ItemName { get; }
@@ -11,10 +17,18 @@ namespace DarkFlare
 
         public ModifierOrigin(string itemId, EquipmentSlot slot, LocalizedMessage itemName, LocalizedMessage affixName)
         {
+            Kind = ModifierOriginKind.Equipment;
+            StatusId = null; LayerId = 0; StackCount = 0;
             ItemId = itemId;
             Slot = slot;
             ItemName = itemName;
             AffixName = affixName;
+        }
+
+        public ModifierOrigin(ModifierOriginKind kind, string statusId = null, long layerId = 0, int stackCount = 1)
+        {
+            Kind = kind; StatusId = statusId; LayerId = layerId; StackCount = stackCount;
+            ItemId = null; Slot = default; ItemName = default; AffixName = default;
         }
     }
 

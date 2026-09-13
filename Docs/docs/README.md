@@ -23,6 +23,8 @@
 - [物品 UI 工作台](./item-ui-workbench.md)
 - [装备系统](./equipment-system.md)
 - [统一物品系统](./item-system.md)
+- [状态系统](./status-system.md)
+- [状态与角色战斗接入](./status-combat.md)
 - [属性定义与调用关系](./stat-system.md)
 - [独立属性详情](./attribute-details.md)
 - [战斗 HUD](./hud-system.md)
@@ -43,7 +45,7 @@
 
 ## 计划状态
 
-[alpha 0.4 状态系统](./plan/alpha-0.4-status-system-plan.md)已于 2026-09-13 开始规划，建议交付版本 `0.4.1-alpha`：通用状态、叠层 / 刷新 / 消耗、七种异常及抗性、周期伤害、图标详情和存档恢复。当前处于计划阶段，运行版本仍为 `0.4.0-alpha`。
+[alpha 0.4 状态系统](./plan/alpha-0.4-status-system-plan.md)已完成阶段 1 核心及[阶段 2 角色战斗接入](./plan/archive/alpha-0.4-status-combat-plan.md)：属性来源共存、周期伤害、行动限制、生命周期及一致提交，EditMode 507/507、PlayMode 68/68 全部通过。实现范围见[状态模块](./status-system.md)和[战斗接入](./status-combat.md)。下一步为七异常、抗性与来源样例；自动计时、存档和图标 UI 仍属后续阶段。运行版本保持 0.4.0-alpha。
 
 状态系统完成后实施[统一物品使用与消耗品](./plan/alpha-0.4-usable-items-plan.md)，建议版本 `0.4.2-alpha`：所有主动使用物品共用能力配置与执行事务，首批支持回血、回蓝、临时状态和驱散异常。该阶段已规划，尚未实现。
 

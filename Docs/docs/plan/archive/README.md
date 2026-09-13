@@ -27,6 +27,8 @@
 
 ## 归档清单
 
+- [alpha 0.4 状态核心与通用接口](./alpha-0.4-status-core-plan.md)：2026-09-13 完成，EditMode 486/486、PlayMode 67/67；状态总计划仍在进行，见[状态系统](../../status-system.md)。
+
 - [alpha 0.4 统一物品系统](./alpha-0.4-item-system-plan.md)：2026-09-12 完成，EditMode 442/442、PlayMode 67/67；见[物品系统](../../item-system.md)。
 
 - [alpha 0.3.2 暗黑像素 HUD 与战斗状态](./alpha-0.3.2-dark-pixel-hud-plan.md)：已完成，见[HUD 验收](../../assets/acceptance/alpha-0.3.2-hud/README.md)。
@@ -78,9 +80,11 @@
 | [测试审计与精简](./test-suite-maintenance-plan.md) | alpha 0.3 测试维护前置 | [测试维护规范](../../testing/test-maintenance.md)、[审计报告](../../testing/test-suite-audit.md) |
 | [alpha 0.3.0 统一物品操作与事务](./alpha-0.3.0-unified-item-actions-plan.md) | alpha 0.3.0 操作切片 | [物品 UI 工作台](../../item-ui-workbench.md)、[验收记录](../../assets/acceptance/alpha-0.3.0-actions/README.md) |
 
-最近归档日期：2026-09-08。
+最近归档日期：2026-09-13。
 
 - [alpha 0.3.3 统一 UI 视觉组件](./alpha-0.3.3-unified-ui-visual-plan.md)：已完成，见[组件验收](../../assets/acceptance/alpha-0.3.3-ui-style/README.md)。
 
 - [alpha 0.3.4 十槽装备与内容补齐](./alpha-0.3.4-equipment-completion-plan.md)：2026-09-11 完成，见[验收记录](../../assets/acceptance/alpha-0.3.4-equipment/README.md)。
 - [alpha 0.3 UI 与装备总计划](./alpha-0.3-plan.md)：0.3.0–0.3.4 全部完成并归档。
+
+- [状态阶段 2：角色战斗接入](./alpha-0.4-status-combat-plan.md)：2026-09-13 完成，EditMode 507/507、PlayMode 68/68 通过，见[模块说明](../../status-combat.md)。

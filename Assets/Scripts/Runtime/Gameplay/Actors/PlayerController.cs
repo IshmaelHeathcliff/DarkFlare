@@ -102,6 +102,7 @@ namespace DarkFlare
             _defaultSkill = skill;
             _spawnPosition = transform.position;
             _actor.ConfigureFromCharacter(_definition, ActorTeam.Player);
+            this.SendCommand(new BindActorStatusesCommand(_actor));
             _sortParticipant?.ConfigureIdentity(WorldSortCategory.Player, _actor.ActorId);
 
             if (startRuntime)
@@ -155,7 +156,7 @@ namespace DarkFlare
 
         void FixedUpdate()
         {
-            if (_actor == null || !_actor.IsAlive)
+            if (!this.SendQuery(new GetActorActionsQuery(_actor)).CanMove)
             {
                 if (_rigidbody != null)
                 {

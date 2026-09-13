@@ -58,7 +58,8 @@ namespace DarkFlare
         InvalidOwner,
         InvalidDamageSource,
         InsufficientMana,
-        SpawnFailed
+        SpawnFailed,
+        ActionBlocked
     }
 
     public readonly struct SkillCastRejectedEvent
@@ -117,6 +118,8 @@ namespace DarkFlare
     public struct ActorDiedEvent
     {
         public CombatActor Actor;
+        public DamageSourceSnapshot Source { get; set; }
+        public DamageForm Form { get; set; }
     }
 
     public struct ActorRevivedEvent

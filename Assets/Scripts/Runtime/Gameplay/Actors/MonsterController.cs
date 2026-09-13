@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -50,6 +51,7 @@ namespace DarkFlare
             _definition = definition;
             _instance = instance;
             ApplyDefinition();
+            this.SendCommand(new BindActorStatusesCommand(_actor));
             _sortParticipant?.ConfigureIdentity(
                 WorldSortCategory.Monster,
                 _instance.Id.Value);
@@ -126,7 +128,8 @@ namespace DarkFlare
 
             Vector2 offset = target.transform.position - transform.position;
             Vector2 direction = GetMoveDirection(target, offset);
-            _rigidbody.linearVelocity = direction * GetMoveSpeed();
+            _rigidbody.linearVelocity = this.SendQuery(new GetActorActionsQuery(_actor)).CanMove
+                ? direction * GetMoveSpeed() : Vector2.zero;
             TryDealContactDamage(target, offset.magnitude);
         }
 
@@ -163,7 +166,7 @@ namespace DarkFlare
                 _instance.BaseMaxHealth,
                 _instance.BaseStats,
                 _definition.RuntimeTags);
-            _actor.SetModifiers(_instance.Modifiers);
+            _actor.SetModifierSource("monster", _instance.Modifiers.Select(modifier => modifier.WithOrigin(new ModifierOrigin(ModifierOriginKind.Monster))));
 
             if (_affixVisual != null)
             {
@@ -209,24 +212,10 @@ namespace DarkFlare
 
         void TryDealContactDamage(CombatActor target, float distance)
         {
-            if (distance > _definition.ContactDamageRadius || Time.time < _lastContactDamageTime + _definition.ContactDamageInterval)
-            {
-                return;
-            }
-
-            if (_definition.ContactDamages.Count == 0)
-            {
-                ApplicationLog.Error(LogEventIds.GameplayActor, $"[MonsterController] {_definition.Id} 没有可用的碰撞伤害配置", _definition);
-                return;
-            }
-
-            _lastContactDamageTime = Time.time;
-            int seed = this.GetSystem<GameplayRandomSystem>().NextSeed(GameplayRandomChannel.MonsterAttack);
-            AttackRandomRolls rolls = AttackRandomRolls.FromRootSeed(seed);
-            List<DamagePacket> packets = _definition.CreateContactDamagePackets(rolls.BaseDamageSeed);
-            this.SendCommand(new NotifyActorAttackCommand(_actor));
-            this.SendCommand(new ApplyDamageCommand(_actor, target, "monster_contact", packets, seed));
+            this.SendCommand(new ContactAttackCommand(this, target));
         }
+
+        internal void MarkContactAttack() { _lastContactDamageTime = Time.time; }
 
         void OnActorDied(ActorDiedEvent e)
         {

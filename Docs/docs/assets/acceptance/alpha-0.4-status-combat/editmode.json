@@ -1,0 +1,159 @@
+{
+  "status": "completed",
+  "summary": {
+    "total": 507,
+    "passed": 507,
+    "failed": 0,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "results": [
+    {
+      "FullName": "DarkFlare.Tests.StatusCombatIntegrationTests.AttributeTagsAndOrigins_AreResolvedFromHeldStatuses",
+      "Status": "Passed",
+      "Duration": 0.0294536,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.StatusCombatIntegrationTests.DeferredCommit_RollbackAndStaleResourcesNeverLeakEffects",
+      "Status": "Passed",
+      "Duration": 0.0032243,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.StatusCombatIntegrationTests.EffectiveLayers_PreserveDistinctMoreSemantics(Uniform,130.0f)",
+      "Status": "Passed",
+      "Duration": 0.0089459,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.StatusCombatIntegrationTests.EffectiveLayers_PreserveDistinctMoreSemantics(Independent,133.1f)",
+      "Status": "Passed",
+      "Duration": 0.0026165,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.StatusCombatIntegrationTests.FrozenProjectile_DoesNotRecheckSourceActionOrLife",
+      "Status": "Passed",
+      "Duration": 0.0045451,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.StatusCombatIntegrationTests.MissingDamageContextAndFriendlyPeriodicDamage_AreRejected",
+      "Status": "Passed",
+      "Duration": 0.0026692,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.StatusCombatIntegrationTests.OverflowPreparation_IsRejectedWithoutChangingStateOrResources",
+      "Status": "Passed",
+      "Duration": 0.002382,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.StatusCombatIntegrationTests.PeriodicBase_IsFrozenOnceAndUsesLiveTargetResistance",
+      "Status": "Passed",
+      "Duration": 0.008848,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.StatusCombatIntegrationTests.PeriodicLayers_DoNotMultiplyEachTickByStackCount(Uniform)",
+      "Status": "Passed",
+      "Duration": 0.0049769,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.StatusCombatIntegrationTests.PeriodicLayers_DoNotMultiplyEachTickByStackCount(Independent)",
+      "Status": "Passed",
+      "Duration": 0.0056061,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.StatusCombatIntegrationTests.PeriodicPhysical_SkipsArmorHitRandomAndImpact",
+      "Status": "Passed",
+      "Duration": 0.0051557,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.StatusCombatIntegrationTests.PreparedAura_RejectsProviderLossBeforePublication",
+      "Status": "Passed",
+      "Duration": 0.0042852,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.StatusCombatIntegrationTests.RefreshAndTick_DoNotRebuildUnchangedEffects",
+      "Status": "Passed",
+      "Duration": 0.0030543,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.StatusCombatIntegrationTests.ReusedActorWithNewIdentity_DoesNotKeepPreviousTargetOrEffects",
+      "Status": "Passed",
+      "Duration": 0.0037823,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.StatusCombatIntegrationTests.SourceCleanup_OperatesDuringPendingClockAndCancelsPreparedTarget",
+      "Status": "Passed",
+      "Duration": 0.0044132,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.StatusCombatIntegrationTests.SourceDeath_ReleasesAuraButPreservesFrozenTimedDamageAndAttribution",
+      "Status": "Passed",
+      "Duration": 0.0072283,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.StatusCombatIntegrationTests.SourceOrder_OverridesRemainDeterministic",
+      "Status": "Passed",
+      "Duration": 0.0029496,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.StatusCombatIntegrationTests.SourcesAndResources_CommitOnceAndSurviveOtherSourceRemoval",
+      "Status": "Passed",
+      "Duration": 0.0041882,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.StatusCombatIntegrationTests.SpellGate_LeavesManaRandomAndAttackEventsUntouched",
+      "Status": "Passed",
+      "Duration": 0.0043282,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.StatusCombatIntegrationTests.Strongest_UsesWholeCandidateAndKeepsTagsFromSuppressedLayers",
+      "Status": "Passed",
+      "Duration": 0.0041096,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.StatusCombatIntegrationTests.UnbindAndRebind_InvalidateOldRequestsAndPreserveEquipment",
+      "Status": "Passed",
+      "Duration": 0.0032562,
+      "Message": null,
+      "StackTrace": null
+    }
+  ]
+}

@@ -104,7 +104,7 @@ namespace DarkFlare
     public static class CombatStatResolver
     {
         public static StatBlock Build(StatBlock baseStats, IEnumerable<ModifierInstance> modifiers,
-            List<StatCalculationStep> steps = null)
+            List<StatCalculationStep> steps = null, TagSet contextTags = null)
         {
             List<ModifierInstance> statModifiers = new List<ModifierInstance>();
 
@@ -112,7 +112,7 @@ namespace DarkFlare
             {
                 foreach (ModifierInstance modifier in modifiers)
                 {
-                    if (!CanAggregate(modifier))
+                    if (!CanAggregate(modifier) || !modifier.Matches(new CombatTagContext(sourceActorTags: contextTags, legacyTags: contextTags)))
                     {
                         continue;
                     }
@@ -121,7 +121,7 @@ namespace DarkFlare
                 }
             }
 
-            StatBlock directStats = StatAggregator.Build(baseStats, statModifiers, TagSet.Empty, steps);
+            StatBlock directStats = StatAggregator.Build(baseStats, statModifiers, contextTags ?? TagSet.Empty, steps);
             return PrimaryAttributeResolver.Apply(directStats, steps);
         }
 

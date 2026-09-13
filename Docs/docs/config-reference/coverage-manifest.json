@@ -2,6 +2,11 @@
   "schemaVersion": 1,
   "entries": [
     {
+      "type": "DarkFlare.StatusDefinition",
+      "document": "Docs/docs/config-reference/statuses.md",
+      "anchor": "statusdefinition"
+    },
+    {
       "type": "DarkFlare.TagDefinition",
       "document": "Docs/docs/config-reference/tags-and-queries.md",
       "anchor": "tagdefinition"

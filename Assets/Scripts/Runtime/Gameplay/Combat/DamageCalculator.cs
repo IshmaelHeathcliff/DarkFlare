@@ -4,7 +4,25 @@ namespace DarkFlare
 {
     public static class DamageCalculator
     {
-        public static DamageResult Calculate(DamageContext context)
+        public static List<DamagePacket> ResolveSource(IEnumerable<DamagePacket> damage, StatBlock stats,
+            IEnumerable<ModifierInstance> modifiers, CombatTagContext tags)
+        {
+            List<DamagePacket> packets = ApplyConversion(new List<DamagePacket>(damage), modifiers, tags);
+            packets = ApplyGainAsExtra(packets, modifiers, tags);
+            return ApplyAttackerScaling(packets, stats, modifiers, tags);
+        }
+
+        public static DamageResult CalculatePeriodic(IEnumerable<DamagePacket> resolvedDamage, DamageSourceSnapshot source,
+            StatBlock defenderStats, IEnumerable<ModifierInstance> defenderModifiers, TagSet defenderTags)
+        {
+            var packets = new List<DamagePacket>(resolvedDamage);
+            CombatTagContext tags = source.Tags.WithTargetActorTags(defenderTags);
+            return new DamageResult(HitOutcome.NotApplicable, false, 0, 0, 0, 0,
+                ApplyDefense(SumByType(packets), ApplyTargetTaken(packets, defenderModifiers, tags), defenderStats, true),
+                DamageForm.Periodic, source);
+        }
+
+        public static DamageResult Calculate(DamageContext context, DamageSourceSnapshot source = null)
         {
             if (!context.IsHit)
             {
@@ -17,11 +35,7 @@ namespace DarkFlare
                     false));
             }
 
-            List<DamagePacket> packets = new List<DamagePacket>(context.BaseDamages);
-
-            packets = ApplyConversion(packets, context.AttackerModifiers, context.TagContext);
-            packets = ApplyGainAsExtra(packets, context.AttackerModifiers, context.TagContext);
-            packets = ApplyAttackerScaling(packets, context.AttackerStats, context.AttackerModifiers, context.TagContext);
+            List<DamagePacket> packets = ResolveSource(context.BaseDamages, context.AttackerStats, context.AttackerModifiers, context.TagContext);
 
             if (context.IsCritical)
             {
@@ -45,7 +59,7 @@ namespace DarkFlare
                 context.HitRoll,
                 context.CriticalChance,
                 context.CriticalRoll,
-                breakdowns);
+                breakdowns, source: source);
         }
 
         static List<DamagePacket> ApplyConversion(
@@ -318,7 +332,7 @@ namespace DarkFlare
         static Dictionary<DamageType, DamageTypeBreakdown> ApplyDefense(
             IReadOnlyDictionary<DamageType, float> beforeDefense,
             IReadOnlyDictionary<DamageType, float> afterTargetTaken,
-            StatBlock defenderStats)
+            StatBlock defenderStats, bool periodic = false)
         {
             Dictionary<DamageType, DamageTypeBreakdown> result = new Dictionary<DamageType, DamageTypeBreakdown>();
 
@@ -328,7 +342,7 @@ namespace DarkFlare
                     ? storedAmount
                     : 0f;
                 float effectiveResistance = GetEffectiveResistance(pair.Key, defenderStats);
-                float armor = pair.Key == DamageType.Physical
+                float armor = pair.Key == DamageType.Physical && !periodic
                     ? Max(0f, defenderStats.GetValue(StatIds.Armor))
                     : 0f;
                 float armorReduction = 0f;

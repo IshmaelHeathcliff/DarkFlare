@@ -137,7 +137,7 @@ namespace DarkFlare
 
         void OnDamageResolved(DamageResolvedEvent e)
         {
-            if (e.Actor != _actor || e.Result == null || e.Result.DidDealDamage)
+            if (e.Actor != _actor || e.Result == null || e.Result.Form != DamageForm.Hit || e.Result.DidDealDamage)
             {
                 return;
             }

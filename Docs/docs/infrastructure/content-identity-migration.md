@@ -18,7 +18,7 @@
 
 `ContentId` 的规范形式为 `<namespace>:<local_id>`。命名空间和本地 ID 均使用小写 `snake_case`，比较、排序与查找全部使用 Ordinal 语义。大小写变体、连字符、空段、多余冒号和连续下划线均非法。
 
-当前登记 12 个命名空间：
+当前登记 13 个命名空间（状态类型已登记，正式状态资产尚未创建）：
 
 | 命名空间 | 配置类型 |
 | --- | --- |
@@ -34,6 +34,7 @@
 | `spawn` | `MonsterSpawnDefinition` |
 | `trader` | `TraderDefinition` |
 | `crafting` | `CraftingDefinition` |
+| `status` | `StatusDefinition` |
 
 所有正式配置实现 `IContentDefinition` 并声明 `ContentDefinitionAttribute`。`ContentDefinitionRegistry` 通过运行时程序集反射建立唯一的“类型 ↔ 命名空间”登记；新增类型若未登记、登记重复或不是 `ScriptableObject`，测试和验证器会失败。
 

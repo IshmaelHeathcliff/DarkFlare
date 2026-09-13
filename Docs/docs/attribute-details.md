@@ -19,7 +19,7 @@ HUD 共用 `GetAttributeRuntimeQuery` 的资源 / 技能状态，运行快照提
 | `GetAttributeRuntimeQuery` | 轻量读取生命、法力、恢复能力、剩余间隔、资源 / 技能状态与属性修订号 |
 | `PlayerSkillStateRegistry` | Session System 登记 PlayerController 的技能状态读取器；OnEnable 注册、OnDisable 注销、Session 销毁清空；仅读取现有冷却时钟 |
 
-资源、基础与移动、攻击、防御、修改器五组可折叠；单项可展开基础值、计算步骤、聚合值、生效值及来源。修改器按属性 ID 与 Scope 分组，显示操作、必需 / 任一 / 排除标签和标签作用域。非装备来源明确显示为角色来源，不伪归属到装备。
+资源、基础与移动、攻击、防御、修改器五组可折叠；单项可展开基础值、计算步骤、聚合值、生效值及来源。修改器按属性 ID 与 Scope 分组，显示操作、必需 / 任一 / 排除标签和标签作用域。ModifierOrigin 区分装备、怪物词条、状态和兼容角色来源。状态展示定义 ID 与有效层数，Increase / More 计算步骤保留来源；条件解释读取同一角色标签，见[状态战斗接入](./status-combat.md)。
 
 `CombatStatValues` 与正式消费者共享暴击率 0–100%、抗性 -100–75% 和暴击倍率边界。额外暴伤 50% 对应最终 1.5 倍。法力恢复复用正式恢复 System 的计算；移动、主属性和额外暴伤不统一强制非负。生命 / 法力上限读取 Actor 的有效上限。
 

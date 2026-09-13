@@ -4,6 +4,12 @@ namespace DarkFlare
     {
         public ModifierOrigin Origin { get; private set; }
 
+        public ModifierInstance WithValue(float value)
+        {
+            return new ModifierInstance(StatId, Operation, Scope, value, FromDamageType,
+                ToDamageType, Query, UsesLegacyTagMatching) { Origin = Origin };
+        }
+
         public ModifierInstance WithOrigin(ModifierOrigin origin)
         {
             return new ModifierInstance(StatId, Operation, Scope, Value, FromDamageType,

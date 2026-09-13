@@ -27,7 +27,7 @@ namespace DarkFlare
     }
 
     [DisallowMultipleComponent]
-    public class CombatActor : MonoBehaviour, IController
+    public partial class CombatActor : MonoBehaviour, IController
     {
         [SerializeField]
         string _actorId = string.Empty;
@@ -55,6 +55,8 @@ namespace DarkFlare
         bool _isAlive;
 
         public string ActorId => string.IsNullOrWhiteSpace(_actorId) ? name : _actorId;
+        internal string StatusActorKey { get; set; }
+        public string CombatIdentity => StatusActorKey ?? ActorId;
 
         public ActorTeam Team => _team;
 
@@ -73,6 +75,7 @@ namespace DarkFlare
             MaxMana);
 
         public bool IsAlive => _isAlive;
+        public bool IsConfigured { get; private set; }
 
         public StatBlock Stats => _stats;
         public int StatsRevision { get; private set; }
@@ -98,8 +101,9 @@ namespace DarkFlare
             _maxHealth = Mathf.Max(1f, maxHealth);
             _baseStats = stats != null ? stats.Clone() : new StatBlock();
             _baseStats.SetValue(StatIds.MaxHealth, _maxHealth);
+            _staticTags = CombatTagResolver.ResolveActorTags(team, tags);
+            _tags = _staticTags.Union(_statusTags);
             RebuildStats();
-            _tags = CombatTagResolver.ResolveActorTags(team, tags);
             _currentHealth = MaxHealth;
             _currentMana = MaxMana;
 
@@ -107,6 +111,7 @@ namespace DarkFlare
             {
                 Revive(transform.position);
             }
+            IsConfigured = true;
         }
 
         public void ConfigureFromCharacter(CharacterDefinition definition, ActorTeam team)
@@ -174,28 +179,7 @@ namespace DarkFlare
 
         public void SetModifiers(IEnumerable<ModifierInstance> modifiers)
         {
-            float previousMaxHealth = MaxHealth;
-            float healthRatio = previousMaxHealth > 0f
-                ? Mathf.Clamp01(_currentHealth / previousMaxHealth)
-                : 1f;
-            float previousMaxMana = MaxMana;
-            float manaRatio = previousMaxMana > 0f
-                ? Mathf.Clamp01(_currentMana / previousMaxMana)
-                : 1f;
-            _modifiers.Clear();
-
-            if (modifiers != null)
-            {
-                _modifiers.AddRange(modifiers);
-            }
-
-            RebuildStats();
-            _currentHealth = MaxHealth * healthRatio;
-            _currentMana = MaxMana <= 0f
-                ? 0f
-                : previousMaxMana > 0f
-                    ? MaxMana * manaRatio
-                    : MaxMana;
+            SetModifierSource("legacy", modifiers);
         }
 
         public void Revive(Vector3 position)
@@ -283,7 +267,7 @@ namespace DarkFlare
 
         void RebuildStats()
         {
-            _stats = CombatStatResolver.Build(_baseStats, _modifiers);
+            _stats = CombatStatResolver.Build(_baseStats, _modifiers, contextTags: _tags);
             StatsRevision++;
         }
 

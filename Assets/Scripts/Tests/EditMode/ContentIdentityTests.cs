@@ -70,6 +70,7 @@ namespace DarkFlare.Tests
                 ContentNamespaces.Spawn,
                 ContentNamespaces.Trader,
                 ContentNamespaces.Crafting,
+                ContentNamespaces.Status,
             };
 
             CollectionAssert.AreEquivalent(

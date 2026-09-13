@@ -74,3 +74,7 @@ EditMode 回归覆盖当前物品—词条候选矩阵、作用域隔离、旧�
 - [标签配置参考](./config-reference/combat-tags.md)
 - [伤害系统与词条系统](./damage-affix-system.md)
 - [归档：战斗标签系统改进计划](./plan/archive/combat-tag-system-improvement-plan.md)
+
+## 状态标签
+
+状态规则的标签按持有层合并到 Actor 静态标签，数值及行动限制按有效层投影；移除一层不会抹掉其他持有层提供的同标签。非伤害 GlobalActor 的状态条件仅接受 SourceActor 域，在角色聚合时读取持有者标签；技能、目标与伤害条件在伤害管线解析。周期来源标签施加时冻结，目标标签逐跳读取。见[状态战斗接入](./status-combat.md)。

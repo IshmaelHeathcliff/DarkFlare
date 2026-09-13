@@ -194,6 +194,10 @@ namespace DarkFlare.Editor
             List<CraftingDefinition> craftingDefinitions = LoadAssets<CraftingDefinition>($"{PresetRoot}/Crafting");
 
             ValidateRegisteredDefinitions(issues);
+            foreach (StatusDefinition status in LoadAssets<StatusDefinition>(PresetRoot))
+            {
+                foreach (string issue in status.ValidateConfiguration()) { AddError(issues, status, issue); }
+            }
             ValidateOfficialCatalog(issues);
             ValidateExpectedIds(tags, ExpectedTagIds, tag => tag.Id, "标签", false, issues);
             ValidateExpectedIds(stats, StatIds.All, stat => stat.Id, "属性", true, issues);

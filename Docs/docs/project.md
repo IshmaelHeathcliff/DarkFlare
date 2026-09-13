@@ -12,7 +12,7 @@ alpha 版本内的阶段使用三段式名称：`alpha 0.1` 的首个阶段为 `
 
 alpha 0.4.0 已完成[统一物品系统](./item-system.md)：金币与材料入栏、独立堆叠 / 消耗属性、材料打造、掉落权重和 core v3 / Schema 2 旧档迁移。最新 EditMode 442/442、PlayMode 67/67 通过；见[验收记录](./assets/acceptance/alpha-0.4-items/README.md)。
 
-当前新增工作为[alpha 0.4 状态系统实施计划](./plan/alpha-0.4-status-system-plan.md)，建议以 `0.4.1-alpha` 交付。需求、规则和工程接点已整理；状态系统尚未进入运行时实现，现有版本及已通过验收的记录保持原意。
+[alpha 0.4 状态系统](./plan/alpha-0.4-status-system-plan.md)已完成阶段 1 核心及[阶段 2 角色战斗接入](./plan/archive/alpha-0.4-status-combat-plan.md)：属性来源共存、周期伤害、行动限制、生命周期及一致提交，EditMode 507/507、PlayMode 68/68 全部通过。实现范围见[状态模块](./status-system.md)和[战斗接入](./status-combat.md)。下一步为七异常、抗性与来源样例；自动计时、存档和图标 UI 仍属后续阶段。运行版本保持 0.4.0-alpha。
 
 按用户指定顺序，状态系统验收后继续[统一物品使用与消耗品](./plan/alpha-0.4-usable-items-plan.md)，建议以 `0.4.2-alpha` 交付；统一使用入口承载回血、回蓝、临时状态和驱散异常，复用状态系统并保证效果与物品扣除一致提交。
 

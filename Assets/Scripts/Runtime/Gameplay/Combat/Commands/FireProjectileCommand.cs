@@ -8,7 +8,8 @@ namespace DarkFlare
         InvalidOwner,
         InvalidDamageSource,
         InsufficientMana,
-        SpawnFailed
+        SpawnFailed,
+        ActionBlocked
     }
 
     public readonly struct SkillCastResult
@@ -55,6 +56,12 @@ namespace DarkFlare
                 return Reject(
                     SkillCastStatus.InvalidDamageSource,
                     SkillCastRejectionReason.InvalidDamageSource);
+            }
+
+            ActorActionPermission permission = this.SendQuery(new GetActorActionsQuery(_owner));
+            if (!permission.CanCast || _skill.DamageSource == ProjectileDamageSource.EquippedWeapon && !permission.CanAttack)
+            {
+                return Reject(SkillCastStatus.ActionBlocked, SkillCastRejectionReason.ActionBlocked);
             }
 
             if (!_owner.CanSpendMana(_skill.ManaCost))

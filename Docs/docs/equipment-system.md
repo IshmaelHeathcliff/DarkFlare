@@ -103,3 +103,7 @@ HUD 不再展示武器或装备摘要，完整槽位信息集中在背包。背�
 - Actor 注销会清理运行时 Loadout；当前流程不把被清理的装备自动送回背包，注销只用于场景或架构生命周期结束。
 
 伤害公式和词条 Scope 见 [伤害系统与词条系统设计](./damage-affix-system.md)，配置字段见[角色、物品与攻击配置参考](./config-reference/combat-content.md)，菜单交互见 [输入与运行时 UI](./input-ui-system.md)。
+
+## 与状态来源共存
+
+换装、RestoreLoadout 和装备注销仅更新 CombatActor 的 `equipment` 来源；怪物词条及状态使用独立来源。状态消费、到期或死亡清理不会清除装备。来源汇总按稳定键排序，从基础属性计算一次最终资源比例；完整合同见[状态战斗接入](./status-combat.md)。整个 Actor 注销仍执行既有 Loadout 清理，不能与单独释放状态混淆。

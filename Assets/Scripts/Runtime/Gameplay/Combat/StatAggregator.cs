@@ -8,8 +8,8 @@ namespace DarkFlare
             List<StatCalculationStep> steps = null)
         {
             StatBlock result = baseStats != null ? baseStats.Clone() : new StatBlock();
-            Dictionary<string, float> increases = new Dictionary<string, float>();
-            Dictionary<string, List<float>> moreValues = new Dictionary<string, List<float>>();
+            var increases = new Dictionary<string, List<ModifierInstance>>();
+            var moreValues = new Dictionary<string, List<ModifierInstance>>();
 
             foreach (ModifierInstance modifier in modifiers)
             {
@@ -30,29 +30,35 @@ namespace DarkFlare
                 }
                 else if (modifier.Operation == ModifierOperation.Increase)
                 {
-                    AddValue(increases, modifier.StatId, modifier.Value);
+                    AddModifier(increases, modifier);
                 }
                 else if (modifier.Operation == ModifierOperation.More)
                 {
-                    AddMoreValue(moreValues, modifier.StatId, modifier.Value);
+                    AddModifier(moreValues, modifier);
                 }
             }
 
-            foreach (KeyValuePair<string, float> pair in increases)
+            foreach (KeyValuePair<string, List<ModifierInstance>> pair in increases)
             {
                 float current = result.GetValue(pair.Key);
-                result.SetValue(pair.Key, current * (1f + pair.Value / 100f));
-                steps?.Add(new StatCalculationStep(pair.Key, ModifierOperation.Increase, pair.Value, result.GetValue(pair.Key)));
+                float total = 0;
+                foreach (ModifierInstance modifier in pair.Value)
+                {
+                    total += modifier.Value;
+                    steps?.Add(new StatCalculationStep(pair.Key, ModifierOperation.Increase, modifier.Value,
+                        current * (1f + total / 100f), modifier.Origin));
+                }
+                result.SetValue(pair.Key, current * (1f + total / 100f));
             }
 
-            foreach (KeyValuePair<string, List<float>> pair in moreValues)
+            foreach (KeyValuePair<string, List<ModifierInstance>> pair in moreValues)
             {
                 float current = result.GetValue(pair.Key);
 
                 for (int i = 0; i < pair.Value.Count; i++)
                 {
-                    current *= 1f + pair.Value[i] / 100f;
-                    steps?.Add(new StatCalculationStep(pair.Key, ModifierOperation.More, pair.Value[i], current));
+                    current *= 1f + pair.Value[i].Value / 100f;
+                    steps?.Add(new StatCalculationStep(pair.Key, ModifierOperation.More, pair.Value[i].Value, current, pair.Value[i].Origin));
                 }
 
                 result.SetValue(pair.Key, current);
@@ -61,8 +67,9 @@ namespace DarkFlare
             return result;
         }
 
-        static void AddValue(Dictionary<string, float> values, string statId, float value)
+        static void AddModifier(Dictionary<string, List<ModifierInstance>> values, ModifierInstance modifier)
         {
+            string statId = modifier.StatId;
             if (string.IsNullOrWhiteSpace(statId))
             {
                 return;
@@ -70,25 +77,10 @@ namespace DarkFlare
 
             if (!values.ContainsKey(statId))
             {
-                values[statId] = 0f;
+                values[statId] = new List<ModifierInstance>();
             }
 
-            values[statId] += value;
-        }
-
-        static void AddMoreValue(Dictionary<string, List<float>> values, string statId, float value)
-        {
-            if (string.IsNullOrWhiteSpace(statId))
-            {
-                return;
-            }
-
-            if (!values.ContainsKey(statId))
-            {
-                values[statId] = new List<float>();
-            }
-
-            values[statId].Add(value);
+            values[statId].Add(modifier);
         }
     }
 }

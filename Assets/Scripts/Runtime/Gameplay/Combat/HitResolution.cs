@@ -7,7 +7,8 @@ namespace DarkFlare
         Evaded,
         Hit,
         NoDamage,
-        Invulnerable
+        Invulnerable,
+        NotApplicable
     }
 
     public readonly struct HitResolution

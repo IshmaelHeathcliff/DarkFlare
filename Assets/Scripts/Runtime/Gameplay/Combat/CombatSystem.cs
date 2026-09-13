@@ -12,11 +12,13 @@ namespace DarkFlare
         public void RegisterActor(CombatActor actor)
         {
             this.GetModel<CombatModel>().RegisterActor(actor);
+            this.GetSystem<StatusSystem>().BindConfiguredActor(actor);
             this.SendEvent(new ActorRegisteredEvent(actor));
         }
 
         public void UnregisterActor(CombatActor actor)
         {
+            this.GetSystem<StatusSystem>().Unbind(actor);
             this.GetModel<CombatModel>().UnregisterActor(actor);
             this.SendEvent(new ActorUnregisteredEvent(actor));
         }
@@ -72,22 +74,40 @@ namespace DarkFlare
                 defender.Modifiers,
                 resolution);
 
-            DamageResult result = DamageCalculator.Calculate(context);
+            var source = new DamageSourceSnapshot(attack.AttackerId, attack.AttackerTeam, attack.SkillId, attack.SourceItemId, attack.TagContext);
+            DamageResult result = DamageCalculator.Calculate(context, source);
+            return CommitDamage(defender, result, source);
+        }
+
+        public DamageResult ApplyPeriodicDamage(DamageSourceSnapshot source, CombatActor defender, IEnumerable<DamagePacket> damage)
+        {
+            if (source == null || defender == null || !defender.isActiveAndEnabled || !defender.IsAlive
+                || source.Team == defender.Team || !this.GetSystem<StatusSystem>().GetTarget(defender).IsValid)
+            {
+                return new DamageResult(HitOutcome.InvalidTarget, false, 0, 0, 0, 0, null, DamageForm.Periodic, source);
+            }
+            DamageResult result = DamageCalculator.CalculatePeriodic(damage, source, defender.Stats, defender.Modifiers, defender.Tags);
+            return CommitDamage(defender, result, source);
+        }
+
+        DamageResult CommitDamage(CombatActor defender, DamageResult result, DamageSourceSnapshot source)
+        {
             CombatResourceSnapshot previousResources = defender.Resources;
             bool justDied = result.DidDealDamage && defender.ReceiveDamage(result);
+            if (justDied) { this.GetSystem<StatusSystem>().Unbind(defender); }
             PublishResourceChanges(defender, previousResources, ActorResourceChangeReason.Damage);
             this.SendEvent(new DamageResolvedEvent { Actor = defender, Result = result });
 
             if (result.DidDealDamage)
             {
-                ApplicationLog.Info(LogEventIds.GameplayCombat, $"[CombatSystem] {context.AttackerId} 对 {defender.ActorId} 造成 {result.TotalDamage:0.#} 点伤害");
+                ApplicationLog.Info(LogEventIds.GameplayCombat, $"[CombatSystem] {source.ActorKey} 对 {defender.ActorId} 造成 {result.TotalDamage:0.#} 点伤害 ({result.Form})");
                 this.SendEvent(new ActorDamagedEvent { Actor = defender, Result = result });
             }
 
             if (justDied)
             {
                 ApplicationLog.Info(LogEventIds.GameplayCombat, $"[CombatSystem] {defender.ActorId} 死亡");
-                this.SendEvent(new ActorDiedEvent { Actor = defender });
+                this.SendEvent(new ActorDiedEvent { Actor = defender, Source = source, Form = result.Form });
             }
 
             return result;
@@ -205,6 +225,7 @@ namespace DarkFlare
         {
             CombatResourceSnapshot previousResources = actor.Resources;
             actor.Revive(position);
+            this.GetSystem<StatusSystem>().BindConfiguredActor(actor);
             PublishResourceChanges(actor, previousResources, ActorResourceChangeReason.Revive);
             ApplicationLog.Info(LogEventIds.GameplayCombat, $"[CombatSystem] {actor.ActorId} 复活");
             this.SendEvent(new ActorRevivedEvent { Actor = actor });

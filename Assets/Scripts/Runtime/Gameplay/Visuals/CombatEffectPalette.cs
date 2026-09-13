@@ -22,7 +22,7 @@ namespace DarkFlare
 
         public static bool ShouldPlayActorHit(DamageResult result)
         {
-            return result != null && result.DidDealDamage;
+            return result != null && result.Form == DamageForm.Hit && result.DidDealDamage;
         }
 
         public static bool TryGetPrimaryDamageType(DamageResult result, out DamageType damageType)

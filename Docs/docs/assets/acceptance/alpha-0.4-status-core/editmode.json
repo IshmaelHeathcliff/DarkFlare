@@ -1,0 +1,238 @@
+{
+  "recordedAtUtc": "2026-09-13T06:42:22.8394203Z",
+  "mode": "EditMode",
+  "assembly": "DarkFlare.Tests.EditMode",
+  "baseCommit": "2e6ab0f",
+  "workingTree": "status-core implementation, uncommitted",
+  "status": "completed",
+  "summary": {
+    "total": 486,
+    "passed": 486,
+    "failed": 0,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "statusTests": [
+    {
+      "FullName": "DarkFlare.Tests.StatusSystemTests.Architecture_CommandQueryEventsAndRestartUseSessionOwnedState",
+      "Status": "Passed",
+      "Message": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.StatusSystemTests.Clock_BudgetLargeAndSmallStepsProduceSameSequence",
+      "Status": "Passed",
+      "Message": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.StatusSystemTests.Clock_CallbackCanRemoveTargetBeforeFutureTicks",
+      "Status": "Passed",
+      "Message": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.StatusSystemTests.Clock_DecimalIntervalsKeepBoundaryTick",
+      "Status": "Passed",
+      "Message": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.StatusSystemTests.Clock_PendingAtDeadlineMustStillDrainExpiry",
+      "Status": "Passed",
+      "Message": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.StatusSystemTests.Clock_RefreshDoesNotResetPhaseAndReplacementDoes",
+      "Status": "Passed",
+      "Message": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.StatusSystemTests.Clock_ResolvesLastFullTickBeforeExpiryWithoutTailTick(3,3)",
+      "Status": "Passed",
+      "Message": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.StatusSystemTests.Clock_ResolvesLastFullTickBeforeExpiryWithoutTailTick(2.5d,2)",
+      "Status": "Passed",
+      "Message": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.StatusSystemTests.Clock_SuppressedCandidateKeepsPhaseWithoutCatchUp",
+      "Status": "Passed",
+      "Message": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.StatusSystemTests.Composite_ApplyAndDispelShareCandidateState",
+      "Status": "Passed",
+      "Message": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.StatusSystemTests.Consume_InsufficientIsAtomicAndActiveSelectionReturnsExactLayer",
+      "Status": "Passed",
+      "Message": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.StatusSystemTests.Consume_SpecifiedStaleOrDuplicateIdsDoNotPartiallyRemove",
+      "Status": "Passed",
+      "Message": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.StatusSystemTests.Definition_ValidatesAndProducesFrozenRules",
+      "Status": "Passed",
+      "Message": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.StatusSystemTests.Dispel_FiltersCategoryTagsProtectionAndCount",
+      "Status": "Passed",
+      "Message": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.StatusSystemTests.Dispose_RevokesUnpublishedCommitAndQueuedWork",
+      "Status": "Passed",
+      "Message": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.StatusSystemTests.Identity_SameBaseMonstersAndReboundTargetRemainIsolated",
+      "Status": "Passed",
+      "Message": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.StatusSystemTests.Independent_EqualExpiryReplacesEarlierInstance",
+      "Status": "Passed",
+      "Message": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.StatusSystemTests.Independent_ReplacesEarliestExpiryAndPreservesOtherLayers",
+      "Status": "Passed",
+      "Message": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.StatusSystemTests.InvalidCombinationsAndRuleReplacementAreRejected",
+      "Status": "Passed",
+      "Message": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.StatusSystemTests.InvalidNumbers_FailWithoutChangingTimeOrLayers(double.NaN)",
+      "Status": "Passed",
+      "Message": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.StatusSystemTests.InvalidNumbers_FailWithoutChangingTimeOrLayers(double.PositiveInfinity)",
+      "Status": "Passed",
+      "Message": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.StatusSystemTests.InvalidNumbers_FailWithoutChangingTimeOrLayers(-1)",
+      "Status": "Passed",
+      "Message": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.StatusSystemTests.Prepare_DoesNotMutateAndRollbackRestoresExactState",
+      "Status": "Passed",
+      "Message": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.StatusSystemTests.Prepare_MultipleEffectsFailAsOneTransaction",
+      "Status": "Passed",
+      "Message": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.StatusSystemTests.Prepare_RejectsVersionClockAndTargetChanges",
+      "Status": "Passed",
+      "Message": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.StatusSystemTests.PreparedTarget_IsNotInvalidatedByOtherTargetsAtSameTime",
+      "Status": "Passed",
+      "Message": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.StatusSystemTests.Publish_NotifiesOnceAndQueuedConsumeRechecksVersion",
+      "Status": "Passed",
+      "Message": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.StatusSystemTests.RefreshTime_PreservesSelectedPayloadIdentitySourceAndPhase",
+      "Status": "Passed",
+      "Message": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.StatusSystemTests.RejectedBatch_RollsBackEarlierAcceptedLayersAndIds",
+      "Status": "Passed",
+      "Message": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.StatusSystemTests.RejectPolicy_DoesNotRefreshOrReplace(Uniform)",
+      "Status": "Passed",
+      "Message": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.StatusSystemTests.RejectPolicy_DoesNotRefreshOrReplace(Strongest)",
+      "Status": "Passed",
+      "Message": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.StatusSystemTests.RejectPolicy_DoesNotRefreshOrReplace(Independent)",
+      "Status": "Passed",
+      "Message": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.StatusSystemTests.Snapshot_DoesNotExposeMutableListsOrFollowLaterChanges",
+      "Status": "Passed",
+      "Message": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.StatusSystemTests.Source_FullUniformGroupCannotRefreshAnotherOwnersContribution",
+      "Status": "Passed",
+      "Message": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.StatusSystemTests.Source_RebindingIsIdempotentAndReleaseOnlyRemovesOwnedContribution",
+      "Status": "Passed",
+      "Message": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.StatusSystemTests.Strongest_AtCapacityKeepsBestAndOldestTies",
+      "Status": "Passed",
+      "Message": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.StatusSystemTests.Strongest_ChoosesWholePayload",
+      "Status": "Passed",
+      "Message": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.StatusSystemTests.Strongest_ResumesOriginalWeakCandidateWithoutExtendingIt",
+      "Status": "Passed",
+      "Message": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.StatusSystemTests.Transaction_WorkBudgetFailureLeavesOriginalStateAndIds",
+      "Status": "Passed",
+      "Message": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.StatusSystemTests.Uniform_EquivalentPayloadAtSameTimeIsNoChange",
+      "Status": "Passed",
+      "Message": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.StatusSystemTests.Uniform_PerLayerExpiryCanPreserveExistingTimersWhileSharingValues",
+      "Status": "Passed",
+      "Message": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.StatusSystemTests.Uniform_PerLayerFullStackStillUsesConfiguredOverflowRefresh",
+      "Status": "Passed",
+      "Message": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.StatusSystemTests.Uniform_RefreshesAllParametersAndCapsStacks(PerLayer)",
+      "Status": "Passed",
+      "Message": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.StatusSystemTests.Uniform_RefreshesAllParametersAndCapsStacks(Shared)",
+      "Status": "Passed",
+      "Message": null
+    }
+  ],
+  "failures": []
+}
