@@ -307,7 +307,7 @@ Addressables 的配置目录，包含资源组、模板和构建器配置。后�
 | 程序集 | 目录 | 平台 | 依赖 |
 | --- | --- | --- | --- |
 | `DarkFlare.Core` | `Runtime/Core/` | 全部 | 无（仅 `QFramework.cs`，稳定框架层，隔离后迭代玩法不再重编框架） |
-| `DarkFlare.Runtime` | `Runtime/` | 全部 | `DarkFlare.Core`、`UniTask`、`Unity.InputSystem`、`Unity.Addressables`、`Unity.ResourceManager`、`Unity.Newtonsoft.Json`、`Unity.Localization` |
+| `DarkFlare.Runtime` | `Runtime/` | 全部 | `DarkFlare.Core`、`UniTask`、`PrimeTween.Runtime`、`Unity.TextMeshPro`、`Unity.InputSystem`、`Unity.Addressables`、`Unity.ResourceManager`、`Unity.Newtonsoft.Json`、`Unity.Localization` |
 | `DarkFlare.Editor` | `Editor/` | 仅 Editor | `DarkFlare.Runtime`、`DarkFlare.Core` |
 | `DarkFlare.Tests.EditMode` | `Tests/EditMode/` | 仅 Editor | `DarkFlare.Runtime`、`DarkFlare.Core`、`Unity.InputSystem`、`Unity.InputSystem.TestFramework`、`Unity.Addressables.Editor`、`Unity.Newtonsoft.Json`、`UnityEngine.TestRunner`、`UnityEditor.TestRunner`、`nunit.framework.dll`、`Newtonsoft.Json.dll` |
 | `DarkFlare.Tests.PlayMode` | `Tests/PlayMode/` | 全部 | `DarkFlare.Runtime`、`DarkFlare.Core`、`UniTask` 及 Unity 测试依赖；覆盖场景循环、生命周期、输入、装备、随机化与运行时资源加载 |

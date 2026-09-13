@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "ok": true,
+  "command": "deliver",
+  "type": "architecture",
+  "input": "C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Docs\\docs\\architecture\\darkflare.architecture.json",
+  "output": "C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Docs\\docs\\architecture\\darkflare.html",
+  "specification": {
+    "sha256": "cd99cca800af8aa7f5cab3eb70e1519c7a2130e08561ccae64eeb1a3727590e3",
+    "bytes": 6341
+  },
+  "artifact": {
+    "sha256": "5a6b6ad31a03bab7d542fe19f46ff5977417e3b3471dc9c179712ba8cd403b79",
+    "bytes": 816064
+  },
+  "validation": {
+    "checksPassed": 9,
+    "checkCount": 9,
+    "compositionProfile": "showcase",
+    "compositionStatus": "pass",
+    "errors": 0,
+    "warnings": 0
+  }
+}

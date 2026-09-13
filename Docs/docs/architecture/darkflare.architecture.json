@@ -1,0 +1,314 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "DarkFlare · Unity 高层架构",
+    "locale": "zh-CN",
+    "quality_profile": "showcase",
+    "viewBox": [
+      1395,
+      790
+    ]
+  },
+  "components": [
+    {
+      "id": "app",
+      "type": "backend",
+      "label": "应用宿主与场景流",
+      "sublabel": "ApplicationHost · SceneFlow",
+      "pos": [
+        40,
+        70
+      ],
+      "size": [
+        240,
+        86
+      ]
+    },
+    {
+      "id": "content",
+      "type": "database",
+      "label": "内容配置与目录",
+      "sublabel": "ScriptableObject · ContentId",
+      "pos": [
+        410,
+        70
+      ],
+      "size": [
+        240,
+        86
+      ]
+    },
+    {
+      "id": "assets",
+      "type": "backend",
+      "label": "资源与对象生命周期",
+      "sublabel": "资源租约 · Prefab / Sprite 池",
+      "pos": [
+        780,
+        70
+      ],
+      "size": [
+        240,
+        86
+      ]
+    },
+    {
+      "id": "assetSdk",
+      "type": "external",
+      "label": "Unity 资源依赖",
+      "sublabel": "Addressables · UniTask",
+      "pos": [
+        1150,
+        70
+      ],
+      "size": [
+        240,
+        86
+      ]
+    },
+    {
+      "id": "controllers",
+      "type": "frontend",
+      "label": "玩家、场景与 UI",
+      "sublabel": "Controller · HUD / 物品工作台",
+      "pos": [
+        40,
+        335
+      ],
+      "size": [
+        240,
+        86
+      ]
+    },
+    {
+      "id": "session",
+      "type": "backend",
+      "label": "Session 组合与调度",
+      "sublabel": "GameArchitecture · QFramework",
+      "pos": [
+        410,
+        335
+      ],
+      "size": [
+        240,
+        86
+      ]
+    },
+    {
+      "id": "systems",
+      "type": "backend",
+      "label": "玩法系统",
+      "sublabel": "战斗 / 状态 · 装备 / 掉落 / 交易 / 打造",
+      "pos": [
+        780,
+        335
+      ],
+      "size": [
+        240,
+        86
+      ]
+    },
+    {
+      "id": "models",
+      "type": "database",
+      "label": "会话状态与领域对象",
+      "sublabel": "Combat / Status / Inventory / Economy",
+      "pos": [
+        1150,
+        335
+      ],
+      "size": [
+        240,
+        86
+      ]
+    },
+    {
+      "id": "viewSdk",
+      "type": "external",
+      "label": "输入与表现依赖",
+      "sublabel": "InputSystem · UI Toolkit · PrimeTween",
+      "pos": [
+        40,
+        630
+      ],
+      "size": [
+        240,
+        86
+      ]
+    },
+    {
+      "id": "events",
+      "type": "messagebus",
+      "label": "领域事件",
+      "sublabel": "QFramework 进程内事件",
+      "pos": [
+        410,
+        630
+      ],
+      "size": [
+        240,
+        86
+      ]
+    },
+    {
+      "id": "save",
+      "type": "backend",
+      "label": "存档与恢复",
+      "sublabel": "快照 / DTO / 迁移 · SaveCoordinator",
+      "pos": [
+        780,
+        630
+      ],
+      "size": [
+        240,
+        86
+      ]
+    },
+    {
+      "id": "disk",
+      "type": "database",
+      "label": "本地持久化",
+      "sublabel": "JSON · persistentDataPath",
+      "pos": [
+        1150,
+        630
+      ],
+      "size": [
+        240,
+        86
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "app-bind",
+      "from": "app",
+      "to": "controllers",
+      "label": "场景与输入绑定",
+      "labelAt": [
+        160,
+        245
+      ]
+    },
+    {
+      "id": "app-session",
+      "from": "app",
+      "to": "session",
+      "label": "创建 / 销毁"
+    },
+    {
+      "id": "content-session",
+      "from": "content",
+      "to": "session",
+      "label": "配置注入",
+      "labelAt": [
+        530,
+        245
+      ]
+    },
+    {
+      "id": "sdk-assets",
+      "from": "assets",
+      "to": "assetSdk",
+      "label": "异步加载依赖",
+      "variant": "dashed"
+    },
+    {
+      "id": "systems-assets",
+      "from": "systems",
+      "to": "assets",
+      "label": "加载 / 释放"
+    },
+    {
+      "id": "input-command",
+      "from": "controllers",
+      "to": "session",
+      "label": "Command / Query",
+      "variant": "emphasis",
+      "labelAt": [
+        391,
+        440
+      ]
+    },
+    {
+      "id": "dispatch",
+      "from": "session",
+      "to": "systems",
+      "label": "调度",
+      "variant": "emphasis"
+    },
+    {
+      "id": "state-write",
+      "from": "systems",
+      "to": "models",
+      "label": "读写状态",
+      "variant": "emphasis"
+    },
+    {
+      "id": "view-deps",
+      "from": "controllers",
+      "to": "viewSdk",
+      "label": "输入 / 渲染依赖",
+      "variant": "dashed",
+      "labelAt": [
+        160,
+        525
+      ]
+    },
+    {
+      "id": "publish",
+      "from": "systems",
+      "to": "events",
+      "label": "发送事件"
+    },
+    {
+      "id": "refresh",
+      "from": "events",
+      "to": "controllers",
+      "label": "订阅刷新"
+    },
+    {
+      "id": "snapshot",
+      "from": "models",
+      "to": "save",
+      "label": "快照 / 恢复映射"
+    },
+    {
+      "id": "save-file",
+      "from": "save",
+      "to": "disk",
+      "label": "写入 / 读取",
+      "labelAt": [
+        1085,
+        695
+      ]
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "生命周期与程序集",
+      "items": [
+        "Bootstrap 常驻；Main additive 加载，Session 可重建。",
+        "依赖方向：Editor / Tests → Runtime → Core。"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "玩法数据流",
+      "items": [
+        "击杀 → 掉落 → 背包 → 装备 / 交易 / 打造。",
+        "状态、属性与装备参与战斗结算；Query 读取，Event 刷新。"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "横切与开发依赖",
+      "items": [
+        "宿主管理设置、本地化、音频、时间、平台与诊断。",
+        "Localization / Newtonsoft.Json；Odin 配置工具，URP 2D 渲染。"
+      ]
+    }
+  ]
+}

@@ -3,6 +3,7 @@
 ## 当前文档
 
 - [项目概览](./project.md)
+- [Unity 高层架构图与代码依据](./architecture/README.md)
 - [Unity 6.6 升级兼容](./infrastructure/unity-6.6-upgrade.md)
 - [Domain Reload 兼容检查](./infrastructure/domain-reload-compatibility.md)
 - [测试维护规范](./testing/test-maintenance.md)
