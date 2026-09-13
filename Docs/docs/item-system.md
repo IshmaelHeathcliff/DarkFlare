@@ -36,3 +36,7 @@ Save Schema 2 保存 `ItemInstanceDto.Quantity`，历史 Schema 1 经迁移为�
 新档 `Profile.Gold` 保留为余额摘要，恢复预检要求与实际背包金币一致；它不再是第二份运行时钱包。非法数量、未知未来内容或所有权冲突仍拒绝恢复。
 
 配置字段见[物品与掉落](./config-reference/items-and-loot.md)和[交易与打造](./config-reference/trade-and-crafting.md)。
+
+## 后续计划
+
+[统一物品使用与消耗品](./plan/alpha-0.4-usable-items-plan.md)将在状态系统完成后实施：可主动使用性独立于现有可消耗性，统一处理回血、回蓝、临时状态及异常驱散。当前仍未实现主动使用与正式消耗品内容；本节仅记录阶段依赖。

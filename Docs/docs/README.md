@@ -43,6 +43,10 @@
 
 ## 计划状态
 
+[alpha 0.4 状态系统](./plan/alpha-0.4-status-system-plan.md)已于 2026-09-13 开始规划，建议交付版本 `0.4.1-alpha`：通用状态、叠层 / 刷新 / 消耗、七种异常及抗性、周期伤害、图标详情和存档恢复。当前处于计划阶段，运行版本仍为 `0.4.0-alpha`。
+
+状态系统完成后实施[统一物品使用与消耗品](./plan/alpha-0.4-usable-items-plan.md)，建议版本 `0.4.2-alpha`：所有主动使用物品共用能力配置与执行事务，首批支持回血、回蓝、临时状态和驱散异常。该阶段已规划，尚未实现。
+
 [alpha 0.4 统一物品系统](./plan/archive/alpha-0.4-item-system-plan.md)已完成：金币与材料入栏、堆叠 / 消耗、材料打造、掉落及旧档迁移。运行版本 `0.4.0-alpha`，EditMode 442/442、PlayMode 67/67；见[验收证据](./assets/acceptance/alpha-0.4-items/README.md)。
 
 [alpha 0.3.4：十槽装备与内容补齐](plan/archive/alpha-0.3.4-equipment-completion-plan.md)已于 2026-09-11 完成并归档：十槽、二十件装备、滚动商店、旧档兼容；434/434 EditMode、63/63 PlayMode 和可见 Windows Player 验收通过。当时版本 `0.3.4-alpha`，见[验收证据及包级退出警告说明](./assets/acceptance/alpha-0.3.4-equipment/README.md)。[alpha 0.3 总计划](plan/archive/alpha-0.3-plan.md)同时归档。

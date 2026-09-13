@@ -332,7 +332,7 @@ Assets/Data/Preset/
 
 ## 与 QFramework 的关系
 
-- `EquipmentSystem` 负责四槽事务与装备效果重建。
+- `EquipmentSystem` 负责十槽事务与装备效果重建。
 - `CombatSystem` 负责组织伤害、生死和 Actor 生命周期，调用纯计算的 `DamageCalculator`。
 - `ItemGenerator` 负责装备实例和词条随机，由掉落、交易和测试等入口调用。
 - `CraftingSystem` 负责修改物品实例。
@@ -371,7 +371,7 @@ Assets/Data/Preset/
 - `ModifierInstance`、`StatBlock`、`StatAggregator`：运行时词条和属性聚合结构。
 - `AttackRandomRolls`、`HitResolutionCalculator`：从攻击根种子派生具名子流，并纯逻辑计算命中、闪避和暴击。
 - `DamageContext`、`DamagePacket`、`DamageResult`、`DamageCalculator`：纯 C# 命中伤害计算管线；伤害包区分最终类型、缩放血统和自定义标签，结果按类型解释承伤、防御和最终值。
-- `EquipmentEffectResolver`、`CombatStatResolver`：从四槽分流 LocalItem 与角色效果，并聚合护甲、抗性等有效属性。
+- `EquipmentEffectResolver`、`CombatStatResolver`：从十槽分流 LocalItem 与角色效果，并聚合护甲、抗性等有效属性。
 - `CombatActor`：从有效属性读取 `max_health` 与 `mana`，保存当前生命 / 法力；穿脱装备时按资源上限变化保持当前比例，并由资源和装备事件触发 HUD 刷新。
 - `AttackSnapshot`、`AttackSnapshotFactory`：在攻击发起时冻结来源角色、技能、来源物品、本次攻击、随机伤害包、攻击者属性和修改器。
 - `GameplayRandomSystem`：提供根种子与独立随机通道，隔离生成位置、怪物实例、玩家攻击、怪物攻击和掉落序列。
@@ -402,6 +402,8 @@ Assets/Data/Preset/
 `ActorDamagedEvent` 只表示实际正数生命损失；未命中、闪避和无伤害通过统一结算结果事件驱动文字反馈，不触发 Hit 动画、闪白或 `-0`。
 
 暂缓实现：
+
+持续伤害、异常状态及临时效果已于 2026-09-13 纳入[alpha 0.4 状态系统实施计划](./plan/alpha-0.4-status-system-plan.md)，目前仍属于待实现能力。现有 `Temporary` Scope 尚不提供计时 / 叠层行为；计划复用实际计算作用域，由状态模块独立管理寿命和来源。
 
 - 持续伤害
 - 异常状态
