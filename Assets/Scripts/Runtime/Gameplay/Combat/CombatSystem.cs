@@ -76,7 +76,13 @@ namespace DarkFlare
 
             var source = new DamageSourceSnapshot(attack.AttackerId, attack.AttackerTeam, attack.SkillId, attack.SourceItemId, attack.TagContext);
             DamageResult result = DamageCalculator.Calculate(context, source);
-            return CommitDamage(defender, result, source);
+            CommitDamage(defender, result, source);
+            if (result.IsHit && defender != null && defender.IsAlive && attack.OnHitStatus != null)
+            {
+                StatusSystem statuses = this.GetSystem<StatusSystem>();
+                statuses.ApplyStatus(statuses.GetTarget(defender), attack.OnHitStatus.CreateMutation());
+            }
+            return result;
         }
 
         public DamageResult ApplyPeriodicDamage(DamageSourceSnapshot source, CombatActor defender, IEnumerable<DamagePacket> damage)

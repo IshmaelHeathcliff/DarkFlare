@@ -260,8 +260,15 @@ namespace DarkFlare.Tests
                 ["affixes"] = new HashSet<string>(StringComparer.Ordinal),
                 ["monsters"] = new HashSet<string>(StringComparer.Ordinal),
                 ["stats"] = new HashSet<string>(StringComparer.Ordinal),
+                ["statuses"] = new HashSet<string>(StringComparer.Ordinal),
             };
             List<string> violations = new List<string>();
+
+            ValidateAssets<StatusDefinition>("Assets/Data/Preset/Statuses", "statuses",
+                asset => $"{asset.Id}.name", asset => asset.LocalizedName, expectedKeys, violations);
+            ValidateAssets<StatusDefinition>("Assets/Data/Preset/Statuses", "statuses",
+                asset => $"{asset.Id}.description", asset => asset.LocalizedDescription, expectedKeys, violations);
+            ValidateTable("statuses", expectedKeys["statuses"], violations);
 
             ValidateAssets<ItemBaseDefinition>(
                 "Assets/Data/Preset/Items",
@@ -372,6 +379,7 @@ namespace DarkFlare.Tests
                          "stats",
                          "affixes",
                          "monsters",
+                         "statuses",
                      })
             {
                 StringTableCollection collection = LocalizationEditorSettings

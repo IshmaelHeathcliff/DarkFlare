@@ -20,6 +20,8 @@ namespace DarkFlare
         AssetReferenceSprite _icon;
         [SerializeField, LabelText("分类")]
         StatusCategory _category = StatusCategory.Skill;
+        [SerializeField, LabelText("异常类型（无则不计算异常抗性）")]
+        AilmentKind _ailment;
         [SerializeField, LabelText("状态标签")]
         List<TagDefinition> _tags = new List<TagDefinition>();
         [SerializeField, LabelText("可驱散")]
@@ -64,7 +66,7 @@ namespace DarkFlare
                 throw new ArgumentException("状态标签不能包含空引用或非法 ID");
             }
             return new StatusRules(_id, _repeat, _maxStacks, _duration, _interval, _lifetime, _clock,
-                _overflow, _category, _canDispel, _canConsume, TagSet.FromDefinitions(_tags), _refreshExistingLayers);
+                _overflow, _category, _canDispel, _canConsume, TagSet.FromDefinitions(_tags), _refreshExistingLayers, _ailment);
         }
 
         public StatusEffectSnapshot CreateEffects(System.Random random)
@@ -87,7 +89,9 @@ namespace DarkFlare
                 packets.Add(damage.CreatePacket(random));
             }
             if (packets.Count > 0 && _interval <= 0) { throw new ArgumentException("周期伤害必须配置正间隔"); }
-            return new StatusEffectSnapshot(_strength, modifiers, packets, _blockedActions, StatusDamageStage.Base);
+            var effects = new StatusEffectSnapshot(_strength, modifiers, packets, _blockedActions, StatusDamageStage.Base);
+            AilmentResistanceResolver.Validate(CreateRules(), effects);
+            return effects;
         }
 
         public IReadOnlyList<string> ValidateConfiguration()

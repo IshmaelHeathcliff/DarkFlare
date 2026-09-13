@@ -379,6 +379,183 @@ namespace DarkFlare.Tests
             return actor;
         }
 
+        [TestCase("weakness")]
+        [TestCase("stun")]
+        [TestCase("bleeding")]
+        [TestCase("burning")]
+        [TestCase("chill")]
+        [TestCase("shock")]
+        [TestCase("poison")]
+        public void AilmentResistance_ScalesOnlyItsEffectAndFreezes(string id)
+        {
+            StatusDefinition definition = UnityEditor.AssetDatabase.LoadAssetAtPath<StatusDefinition>("Assets/Data/Preset/Statuses/" + id + ".asset");
+            Assert.That(definition.ValidateConfiguration(), Is.Empty);
+            StatusApplication application = StatusApplication.Capture(definition, _source, new StatBlock(), null,
+                new DamageSourceSnapshot("enemy", ActorTeam.Monster), 123);
+            _actor.SetModifierSource("resistance", new[] { Mod(50, stat: id + "_resistance") });
+            StatusResult result = _statuses.ApplyStatus(_target, application.CreateMutation()).Result;
+            Assert.That(result.Code, Is.EqualTo(StatusResultCode.Success));
+            StatusLayerSnapshot layer = result.Snapshot.Layers.Single();
+            Assert.That(layer.Effects.Resistance.EffectiveResistance, Is.EqualTo(50));
+            Assert.That(layer.RemainingSeconds, Is.EqualTo(definition.CreateRules().Duration * (id == "stun" ? .5 : 1)));
+            if (layer.Effects.Modifiers.Count > 0)
+            {
+                Assert.That(layer.Effects.Modifiers[0].Value, Is.EqualTo(application.Effects.Modifiers[0].Value * .5));
+            }
+            if (layer.Effects.PeriodicDamage.Count > 0)
+            {
+                Assert.That(layer.Effects.PeriodicDamage[0].Amount, Is.EqualTo(application.Effects.PeriodicDamage[0].Amount * .5));
+            }
+            _actor.SetModifierSource("resistance", new[] { Mod(100, stat: id + "_resistance") });
+            Assert.That(_statuses.ApplyStatus(_target, application.CreateMutation()).Result.Code, Is.EqualTo(StatusResultCode.Resisted));
+            StatusLayerSnapshot unchanged = _statuses.GetStatusSnapshot(_target).Layers.Single();
+            Assert.That(unchanged.InstanceId, Is.EqualTo(layer.InstanceId));
+            Assert.That(unchanged.ExpiresAt, Is.EqualTo(layer.ExpiresAt));
+            Assert.That(unchanged.Effects, Is.SameAs(layer.Effects));
+            _statuses.DispelStatuses(_target, new StatusFilter(category: StatusCategory.Ailment));
+            Assert.That(_statuses.GetStatusSnapshot(_target).Layers, Is.Empty);
+        }
+
+        [Test]
+        public void ResistedBatch_DoesNotConsumeMarkerOrPublish()
+        {
+            Apply(new StatusRules("charge", maxStacks: 3), StatusEffectSnapshot.Marker, 2);
+            _actor.SetModifierSource("resistance", new[] { Mod(100, stat: StatIds.StunResistance) });
+            StatusDefinition definition = UnityEditor.AssetDatabase.LoadAssetAtPath<StatusDefinition>("Assets/Data/Preset/Statuses/stun.asset");
+            StatusApplication effect = StatusApplication.Capture(definition, _source, new StatBlock(), null,
+                new DamageSourceSnapshot("enemy", ActorTeam.Monster), 0);
+            long version = _statuses.GetStatusSnapshot(_target).Version;
+            var command = new ConsumeStatusForEffectCommand(_target, "charge", 1, effect, version);
+            _architecture.SendCommand(command);
+            Assert.That(command.Operation.Result.Code, Is.EqualTo(StatusResultCode.Resisted));
+            Assert.That(_statuses.GetStatusSnapshot(_target).GetStacks(), Is.EqualTo(2));
+            Assert.That(_statuses.GetStatusSnapshot(_target).Version, Is.EqualTo(version));
+        }
+
+        [TestCase(-20f, 0f, StatusResultCode.Success)]
+        [TestCase(0f, 0f, StatusResultCode.Success)]
+        [TestCase(150f, 100f, StatusResultCode.Resisted)]
+        public void AilmentResistance_ClampsAtApplicationBoundary(float raw, float effective, StatusResultCode code)
+        {
+            _actor.SetModifierSource("resistance", new[] { Mod(raw, stat: StatIds.ChillResistance) });
+            StatusDefinition definition = UnityEditor.AssetDatabase.LoadAssetAtPath<StatusDefinition>("Assets/Data/Preset/Statuses/chill.asset");
+            StatusResult result = _statuses.ApplyStatus(_target,
+                StatusMutation.Apply(definition.CreateRules(), _source, definition.CreateEffects(new System.Random(0)))).Result;
+            Assert.That(result.Code, Is.EqualTo(code));
+            Assert.That(CombatStatValues.Effective(_actor.Stats, StatIds.ChillResistance), Is.EqualTo(effective));
+            if (result.Succeeded) { Assert.That(result.Snapshot.Layers.Single().Effects.Resistance.EffectiveResistance, Is.EqualTo(effective)); }
+            else { Assert.That(result.Snapshot.Layers, Is.Empty); }
+        }
+
+        [Test]
+        public void ConsumeMarker_GrantsEffectAtomicallyAndDoesNotRepeatAtExpiry()
+        {
+            Apply(new StatusRules("charge", maxStacks: 3), StatusEffectSnapshot.Marker, 2);
+            var effect = new StatusApplication(new StatusRules("empowered", duration: 2),
+                new StatusEffectSnapshot(modifiers: new[] { Mod(20) }), new StatusSource(StatusSourceKind.Talent, "node"));
+            long version = _statuses.GetStatusSnapshot(_target).Version;
+            var command = new ConsumeStatusForEffectCommand(_target, "charge", 2, effect, version);
+            _architecture.SendCommand(command);
+            Assert.That(command.Operation.Result.Code, Is.EqualTo(StatusResultCode.Success));
+            Assert.That(command.Operation.Result.Changes.Count(change => change.Reason == StatusChangeReason.Consumed), Is.EqualTo(2));
+            Assert.That(_actor.MaxHealth, Is.EqualTo(120));
+            _statuses.Advance(2);
+            Assert.That(_actor.MaxHealth, Is.EqualTo(100));
+            Assert.That(_statuses.GetStatusSnapshot(_target).Layers, Is.Empty);
+            _architecture.SendCommand(new ConsumeStatusForEffectCommand(_target, "charge", 2, effect, version));
+            Assert.That(_actor.MaxHealth, Is.EqualTo(100));
+        }
+
+        [TestCase(StatusSourceKind.Skill)]
+        [TestCase(StatusSourceKind.Equipment)]
+        [TestCase(StatusSourceKind.Talent)]
+        [TestCase(StatusSourceKind.Consumable)]
+        [TestCase(StatusSourceKind.Mechanism)]
+        public void SharedAilmentEntry_ReapplyingSnapshotUsesOriginalMagnitudeAndNewResistance(StatusSourceKind kind)
+        {
+            StatusDefinition definition = UnityEditor.AssetDatabase.LoadAssetAtPath<StatusDefinition>("Assets/Data/Preset/Statuses/chill.asset");
+            var source = new StatusSource(kind, "provider");
+            _actor.SetModifierSource("resistance", new[] { Mod(50, stat: StatIds.ChillResistance) });
+            StatusEffectSnapshot original = _statuses.ApplyStatus(_target, StatusMutation.Apply(definition.CreateRules(), source,
+                definition.CreateEffects(new System.Random(0)))).Result.Snapshot.Layers.Single().Effects;
+            _actor.SetModifierSource("resistance", new[] { Mod(75, stat: StatIds.ChillResistance) });
+            StatusResult applied = _statuses.ApplyStatus(_target, StatusMutation.Apply(definition.CreateRules(), source, original)).Result;
+            Assert.That(applied.Code, Is.EqualTo(StatusResultCode.Success));
+            Assert.That(applied.Snapshot.Layers.Last().Effects.Modifiers.Single().Value, Is.EqualTo(-5));
+            Assert.That(applied.Snapshot.Layers.First().Effects.Modifiers.Single().Value, Is.EqualTo(-10));
+            Assert.That(applied.Snapshot.Layers.First().IsActive, Is.True);
+            _statuses.ReleaseStatusSource(_target, source);
+            Assert.That(_statuses.GetStatusSnapshot(_target).GetStacks(), Is.EqualTo(2), "限时状态不依赖来源继续存在");
+            _statuses.TryConsumeStatusStacks(_target, "chill", 1);
+            Assert.That(_statuses.GetStatusSnapshot(_target).Layers.Single().IsActive, Is.True);
+            _statuses.DispelStatuses(_target, new StatusFilter(category: StatusCategory.Ailment));
+            Assert.That(_statuses.GetStatusSnapshot(_target).Layers, Is.Empty);
+        }
+
+        [Test]
+        public void ProjectileAilment_UsesFrozenSourceAndCurrentTargetResistanceAfterSourceLeaves()
+        {
+            CombatActor enemy = Enemy(7);
+            _actor.SetModifierSource("accuracy", new[] { Mod(100000, stat: StatIds.Accuracy) });
+            ItemBaseDefinition weapon = UnityEditor.AssetDatabase.FindAssets("t:ItemBaseDefinition", new[] { "Assets/Data/Preset" })
+                .Select(guid => UnityEditor.AssetDatabase.LoadAssetAtPath<ItemBaseDefinition>(UnityEditor.AssetDatabase.GUIDToAssetPath(guid)))
+                .First(item => item.CanEquipTo(EquipmentSlot.Weapon));
+            Assert.That(_architecture.GetSystem<EquipmentSystem>().GrantAndEquipStartingWeapon(_actor, weapon), Is.True);
+            ProjectileSkillDefinition skill = UnityEditor.AssetDatabase.LoadAssetAtPath<ProjectileSkillDefinition>("Assets/Data/Preset/Skills/status_burning_example.asset");
+            AttackSnapshot attack = AttackSnapshotFactory.CreateProjectile(_actor, skill, _architecture.GetModel<EquipmentModel>(), 123);
+            Assert.That(attack.OnHitStatus, Is.Not.Null);
+            enemy.SetModifierSource("resistance", new[] { Mod(50, stat: StatIds.BurningResistance) });
+            _statuses.Unbind(_actor);
+            DamageResult result = _architecture.GetSystem<CombatSystem>().ApplyDamage(attack, enemy);
+            Assert.That(result.IsHit, Is.True);
+            StatusLayerSnapshot layer = _statuses.GetStatusSnapshot(_statuses.GetTarget(enemy)).Layers.Single();
+            Assert.That(layer.Effects.Resistance.EffectiveResistance, Is.EqualTo(50));
+            float health = enemy.CurrentHealth;
+            _statuses.Advance(1);
+            Assert.That(enemy.CurrentHealth, Is.LessThan(health));
+            Assert.That(_statuses.GetStatusSnapshot(_statuses.GetTarget(enemy)).GetStacks(), Is.EqualTo(1), "周期不递归施加");
+            var dispel = new UseStatusSkillCommand(enemy, enemy, dispel: true);
+            _architecture.SendCommand(dispel);
+            Assert.That(dispel.Operation.Result.Succeeded, Is.True);
+            Assert.That(_statuses.GetStatusSnapshot(_statuses.GetTarget(enemy)).Layers, Is.Empty);
+        }
+
+        [Test]
+        public void EquipmentStatus_FailedReplacementPreservesLoadoutInventoryAndLayers()
+        {
+            ItemBaseDefinition original = UnityEditor.AssetDatabase.FindAssets("t:ItemBaseDefinition", new[] { "Assets/Data/Preset" })
+                .Select(guid => UnityEditor.AssetDatabase.LoadAssetAtPath<ItemBaseDefinition>(UnityEditor.AssetDatabase.GUIDToAssetPath(guid)))
+                .First(item => item.CanEquipTo(EquipmentSlot.Weapon));
+            ItemBaseDefinition definition = Object.Instantiate(original);
+            _objects.Add(definition);
+            StatusDefinition aura = UnityEditor.AssetDatabase.LoadAssetAtPath<StatusDefinition>("Assets/Data/Preset/Statuses/equipment_guard.asset");
+            typeof(ItemBaseDefinition).GetField("_providedStatus", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(definition, aura);
+            ItemInstance item = definition.CreateInstance("00000000000000000000000000000001:item:999", 1, 0);
+            InventoryModel inventory = _architecture.GetModel<InventoryModel>();
+            Assert.That(inventory.TryAddItemWithoutEvents(item), Is.True);
+            EquipmentSystem equipment = _architecture.GetSystem<EquipmentSystem>();
+            Assert.That(equipment.Equip(_actor, item, EquipmentSlot.Weapon), Is.True);
+            Assert.That(_statuses.GetStatusSnapshot(_target).GetStacks(new StatusFilter("equipment_guard")), Is.EqualTo(1));
+            EquipmentLoadout loadout = _architecture.GetModel<EquipmentModel>().GetLoadout(_actor);
+            equipment.RestoreLoadout(_actor, loadout);
+            Assert.That(_statuses.GetStatusSnapshot(_target).GetStacks(new StatusFilter("equipment_guard")), Is.EqualTo(1));
+            StatusDefinition invalid = Object.Instantiate(aura);
+            _objects.Add(invalid);
+            typeof(StatusDefinition).GetField("_lifetime", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(invalid, StatusLifetime.Timed);
+            typeof(ItemBaseDefinition).GetField("_providedStatus", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(definition, invalid);
+            ItemInstance replacement = definition.CreateInstance("00000000000000000000000000000001:item:998", 1, 0);
+            var originalOrigin = new Vector2Int(5, 0);
+            Assert.That(inventory.TryAddItemAtWithoutEvents(replacement, originalOrigin), Is.True);
+            Assert.That(equipment.Equip(_actor, replacement, EquipmentSlot.Weapon), Is.False);
+            Assert.That(loadout.Get(EquipmentSlot.Weapon), Is.SameAs(item));
+            Assert.That(inventory.Grid.Placements.ContainsKey(replacement), Is.True);
+            Assert.That(inventory.Grid.Placements[replacement].position, Is.EqualTo(originalOrigin));
+            Assert.That(inventory.Grid.Placements.ContainsKey(item), Is.False);
+            Assert.That(_statuses.GetStatusSnapshot(_target).GetStacks(new StatusFilter("equipment_guard")), Is.EqualTo(1));
+            Assert.That(equipment.Unequip(_actor, EquipmentSlot.Weapon), Is.True);
+            Assert.That(_statuses.GetStatusSnapshot(_target).Layers, Is.Empty);
+        }
+
         void Apply(StatusRules rules, StatusEffectSnapshot effects, int count = 1)
         {
             Assert.That(_statuses.ApplyStatus(_target, StatusMutation.Apply(rules, _source, effects, count)).Result.Succeeded, Is.True);

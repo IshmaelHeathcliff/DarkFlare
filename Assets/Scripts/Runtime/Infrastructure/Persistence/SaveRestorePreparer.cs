@@ -133,7 +133,7 @@ namespace DarkFlare
             }
 
             if (document.Header.CatalogId == "core" && catalog.CatalogId == "core"
-                && document.Header.ContentVersion == 1 && (catalog.ContentVersion == 2 || catalog.ContentVersion == 3))
+                && document.Header.ContentVersion == 1 && (catalog.ContentVersion == 2 || catalog.ContentVersion == 3 || catalog.ContentVersion == 4))
             {
                 // v1 stores four stable slots. New slots start empty; rolled values and stock stay intact.
                 if (document.Payload.Profile.Equipment.Any(loadout =>
@@ -148,7 +148,7 @@ namespace DarkFlare
             }
 
             if (document.Header.CatalogId == "core" && catalog.CatalogId == "core"
-                && document.Header.ContentVersion == 2 && catalog.ContentVersion == 3)
+                && document.Header.ContentVersion == 2 && (catalog.ContentVersion == 3 || catalog.ContentVersion == 4))
             {
                 document = JObject.FromObject(document).ToObject<SaveDocumentDto>();
                 ItemBaseDefinition gold = catalog.GetAll<ItemBaseDefinition>().FirstOrDefault(item => item.ItemType == ItemType.Currency);
@@ -196,6 +196,14 @@ namespace DarkFlare
                     document.Header.Summary.ItemCount = document.Payload.Items.Count;
                 }
                 document.Header.ContentVersion = 3;
+            }
+
+            if (document.Header.CatalogId == "core" && catalog.CatalogId == "core"
+                && document.Header.ContentVersion == 3 && catalog.ContentVersion == 4)
+            {
+                // 新增异常、抗性和词条，不改写旧实例掷值；缺少抗性属性自然解析为 0。
+                document = JObject.FromObject(document).ToObject<SaveDocumentDto>();
+                document.Header.ContentVersion = 4;
             }
 
             if (!string.Equals(document.Header.CatalogId, catalog.CatalogId, StringComparison.Ordinal)

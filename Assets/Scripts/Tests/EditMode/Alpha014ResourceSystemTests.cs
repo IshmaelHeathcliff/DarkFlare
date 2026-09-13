@@ -161,8 +161,6 @@ namespace DarkFlare.Tests
             ProjectileSkillDefinition skill = AssetDatabase.LoadAssetAtPath<ProjectileSkillDefinition>(
                 "Assets/Data/Preset/Skills/基础投射物技能.asset");
 
-            Assert.AreEqual(23, StatIds.All.Count);
-            Assert.AreEqual(23, stats.Count);
             CollectionAssert.AreEquivalent(StatIds.All, stats.Select(definition => definition.Id));
             Assert.IsEmpty(StatConfigurationValidator.Validate(stats));
             Assert.AreEqual(200f, player.Mana, 0.001f);

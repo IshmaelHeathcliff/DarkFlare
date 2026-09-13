@@ -96,7 +96,7 @@ namespace DarkFlare.Tests
             Assert.AreEqual(LocalizationService.EnglishLocaleCode, service.CurrentLocaleCode);
             Assert.AreEqual(LocalizationService.EnglishLocaleCode, runtime.SelectedLocaleCode);
             CollectionAssert.AreEquivalent(
-                new[] { "ui", "system", "items", "stats", "affixes", "monsters" },
+                new[] { "ui", "system", "items", "stats", "affixes", "monsters", "statuses" },
                 runtime.LastPreloadTables);
         }
 

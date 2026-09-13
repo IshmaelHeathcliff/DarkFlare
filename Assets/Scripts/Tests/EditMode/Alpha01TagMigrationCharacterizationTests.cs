@@ -310,6 +310,9 @@ namespace DarkFlare.Tests
         public void ReleasedItems_AffixCompatibilityMatchesFrozenCandidateMatrix()
         {
             List<AffixDefinition> affixes = LoadAssets<AffixDefinition>($"{PresetRoot}/Affixes");
+            // 只核对迁移历史中的词条，后续新增内容由正式覆盖测试保护。
+            var historicalIds = new HashSet<string>(CandidateMatrix.Values.SelectMany(value => value.PrefixIds.Concat(value.SuffixIds)));
+            affixes = affixes.Where(affix => historicalIds.Contains(affix.Id)).ToList();
             List<ItemBaseDefinition> items = LoadAssets<ItemBaseDefinition>($"{PresetRoot}/Items");
 
             items = items.Where(item => CandidateMatrix.ContainsKey(item.Id)).ToList();

@@ -51,6 +51,13 @@ namespace DarkFlare
             new AttributeDefinition(StatIds.ColdDamage),
             new AttributeDefinition(StatIds.LightningDamage),
             new AttributeDefinition(StatIds.ChaosDamage),
+            new AttributeDefinition(StatIds.WeaknessResistance, true),
+            new AttributeDefinition(StatIds.StunResistance, true),
+            new AttributeDefinition(StatIds.BleedingResistance, true),
+            new AttributeDefinition(StatIds.BurningResistance, true),
+            new AttributeDefinition(StatIds.ChillResistance, true),
+            new AttributeDefinition(StatIds.ShockResistance, true),
+            new AttributeDefinition(StatIds.PoisonResistance, true),
         };
 
         public IReadOnlyList<HudAttributeValue> Values => _values ?? EmptyValues;

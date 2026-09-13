@@ -165,6 +165,7 @@ namespace DarkFlare
                                 ? participant.Normalize(target, mutation) : mutation;
                             code = StatusMutationResolver.Apply(after, normalized, _time, changes);
                         }
+                        catch (AilmentResistedException) { code = StatusResultCode.Resisted; }
                         catch (ArgumentException) { code = StatusResultCode.InvalidRequest; }
                         if (code != StatusResultCode.Success) { break; }
                     }

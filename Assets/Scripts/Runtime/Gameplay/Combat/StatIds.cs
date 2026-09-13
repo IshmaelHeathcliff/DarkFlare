@@ -4,6 +4,13 @@ namespace DarkFlare
 {
     public static class StatIds
     {
+        public const string WeaknessResistance = "weakness_resistance";
+        public const string StunResistance = "stun_resistance";
+        public const string BleedingResistance = "bleeding_resistance";
+        public const string BurningResistance = "burning_resistance";
+        public const string ChillResistance = "chill_resistance";
+        public const string ShockResistance = "shock_resistance";
+        public const string PoisonResistance = "poison_resistance";
         public const string Armor = "armor";
         public const string Accuracy = "accuracy";
         public const string ChaosResistance = "chaos_resistance";
@@ -53,6 +60,13 @@ namespace DarkFlare
             ColdDamage,
             LightningDamage,
             ChaosDamage,
+            WeaknessResistance,
+            StunResistance,
+            BleedingResistance,
+            BurningResistance,
+            ChillResistance,
+            ShockResistance,
+            PoisonResistance,
         };
 
         public static IReadOnlyList<string> All => AllIds;

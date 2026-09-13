@@ -20,6 +20,7 @@
 | `_tags` | `List<TagDefinition>` / 空 | 只允许非派生 Skill 标签；正式投射物技能当前为空 | `CombatTagResolver` 自动派生 `projectile`，不得重复手填 |
 | `_damageSource` | `ProjectileDamageSource` / `Skill` | 必填；Skill 或 EquippedWeapon | `AttackSnapshotFactory` 决定伤害唯一所有者；切换必须同步 `_baseDamages` |
 | `_baseDamages` | `List<DamageRollDefinition>` / 空 | Skill 必须非空；EquippedWeapon 必须为空 | Skill 来源按攻击伤害种子掷值；武器来源只读取 Weapon 槽物品基础伤害 |
+| `_onHitStatus` | `StatusDefinition` / 空 | 可选，限时状态 | 发出时冻结规则及来源伤害，命中存活目标后按当前异常抗性施加；空值保持原技能行为，周期不触发 |
 
 `EquippedWeapon` 找不到有效 Weapon 槽来源时，攻击构建失败：不生成投射物、不发送攻击事件、不消耗法力或 PlayerAttack 根种子。法力不足遵循同一原子边界。两种来源都没有代码级固定伤害保护。
 
@@ -29,4 +30,3 @@
 - `CreateDamagePackets(seed)` 只为 Skill 自有伤害创建本地 `System.Random`；命中、暴击与闪避仍由攻击根种子的其他子种子负责。
 - 从 Skill 迁到 EquippedWeapon 时先确保所有可用武器具有合法 `_baseDamages`，再清空技能伤害；反向迁移则必须补齐技能伤害。
 - 调整半径、速度或寿命后需验证投射物 Prefab、视觉特效与命中空间，不得靠 Transform 缩放补偿配置错误。
-

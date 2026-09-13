@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4c79e76a7f01c4418b770552f07f2e8, type: 3}
+  m_Name: weakness
+  m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.StatusDefinition
+  _id: weakness
+  _localizedName:
+    _tableName: statuses
+    _entryKey: weakness.name
+  _localizedDescription:
+    _tableName: statuses
+    _entryKey: weakness.description
+  _icon:
+    m_AssetGUID:
+    m_SubObjectName:
+    m_SubObjectType:
+    m_SubObjectGUID:
+    m_EditorAssetChanged: 0
+  _category: 2
+  _ailment: 1
+  _tags: []
+  _canDispel: 1
+  _canConsume: 1
+  _repeat: 1
+  _clock: 0
+  _refreshExistingLayers: 1
+  _lifetime: 0
+  _overflow: 0
+  _maxStacks: 8
+  _duration: 5
+  _interval: 0
+  _strength: 0
+  _modifiers:
+  - _stat: {fileID: 11400000, guid: 82e204183d947d249b17fb3c9ade3530, type: 2}
+    _operation: 2
+    _scope: 1
+    _valueRange: {x: -20, y: -20}
+    _fromDamageType: 0
+    _toDamageType: 1
+    _condition:
+      _scopeMask: 0
+      _requiredAll: []
+      _requiredAny: []
+      _blockedAny: []
+    _requiredTags: []
+    _blockedTags: []
+  _periodicDamage: []
+  _blockedActions: 0

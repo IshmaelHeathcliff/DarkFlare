@@ -1,0 +1,92 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
+  m_Name: statuses Shared Data
+  m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.SharedTableData
+  m_TableCollectionName: statuses
+  m_TableCollectionNameGuidString: 905ba58381c380f439527c98f3f6b5cd
+  m_Entries:
+  - m_Id: 938467328
+    m_Key: weakness.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 976216064
+    m_Key: weakness.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1911545856
+    m_Key: stun.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1911545857
+    m_Key: stun.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2842681344
+    m_Key: bleeding.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2842681345
+    m_Key: bleeding.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3794788352
+    m_Key: burning.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3794788353
+    m_Key: burning.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4721729536
+    m_Key: chill.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4721729537
+    m_Key: chill.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5602533376
+    m_Key: shock.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5602533377
+    m_Key: shock.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6529474560
+    m_Key: poison.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6529474561
+    m_Key: poison.description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6844047360
+    m_Key: equipment_guard.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6844047361
+    m_Key: equipment_guard.description
+    m_Metadata:
+      m_Items: []
+  m_Metadata:
+    m_Items: []
+  m_KeyGenerator:
+    rid: 6877600548207460446
+  references:
+    version: 2
+    RefIds:
+    - rid: 6877600548207460446
+      type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
+      data:
+        m_CustomEpoch: 1789298183924

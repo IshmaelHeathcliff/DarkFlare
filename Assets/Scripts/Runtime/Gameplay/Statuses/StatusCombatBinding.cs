@@ -44,7 +44,65 @@ namespace DarkFlare
             actor.StatusActorKey = target.ActorKey;
             _targetActors.Add(target, actor);
             _store.Attach(target, new Binding(this, actor, target));
+            EquipmentLoadout loadout = this.GetModel<EquipmentModel>().GetLoadout(actor);
+            if (loadout != null && !TryRebuildEquipment(actor, loadout)) { throw new ArgumentException("装备状态恢复失败"); }
             return target;
+        }
+
+        internal bool TryRebuildEquipment(CombatActor actor, EquipmentLoadout loadout)
+        {
+            try
+            {
+                StatusTargetId target = GetTarget(actor);
+                var equipment = EquipmentEffectResolver.CollectActorModifiers(loadout);
+                if (!target.IsValid)
+                {
+                    if (loadout.Slots.Any(pair => pair.Value?.BaseDefinition?.ProvidedStatus != null)) { return false; }
+                    CombatResourceSnapshot before = actor.Resources;
+                    actor.SetModifierSource("equipment", equipment);
+                    this.GetSystem<CombatSystem>().PublishResourceChanges(actor, before, ActorResourceChangeReason.MaximumChanged);
+                    return true;
+                }
+                var desired = new Dictionary<StatusSource, StatusMutation>();
+                foreach (var pair in loadout.Slots)
+                {
+                    ItemInstance item = pair.Value;
+                    StatusDefinition definition = item?.BaseDefinition?.ProvidedStatus;
+                    if (definition == null) { continue; }
+                    StatusRules rules = definition.CreateRules();
+                    if (rules.Lifetime != StatusLifetime.SourceOwned || rules.Category == StatusCategory.Ailment || rules.Interval != 0)
+                    {
+                        throw new ArgumentException("装备提供状态必须由来源维持且不是异常");
+                    }
+                    var source = new StatusSource(StatusSourceKind.Equipment, item.InstanceId + ":" + definition.Id, target);
+                    desired.Add(source, StatusMutation.Apply(rules, source, definition.CreateEffects(new Random(item.Seed))));
+                }
+                var changes = new List<StatusMutation>();
+                foreach (StatusSource source in _store.Capture(target).Layers
+                    .Where(layer => layer.Source.Kind == StatusSourceKind.Equipment && layer.Source.Actor == target
+                        && layer.Rules.Lifetime == StatusLifetime.SourceOwned).Select(layer => layer.Source).Distinct())
+                {
+                    if (!desired.ContainsKey(source)) { changes.Add(StatusMutation.ReleaseSource(source)); }
+                }
+                changes.AddRange(desired.OrderBy(pair => pair.Key.Key, StringComparer.Ordinal).Select(pair => pair.Value));
+                StatusPreparation preparation = _store.Prepare(target, changes);
+                if (!preparation.Preview.Succeeded) { return false; }
+                IStatusProjection projection = new Binding(this, actor, target).Prepare(preparation.Preview.Snapshot, equipment);
+                preparation.Projection = projection;
+                using (StatusCommit commit = _store.Commit(preparation))
+                {
+                    if (!commit.Result.Succeeded) { return false; }
+                    if (commit.Result.Code == StatusResultCode.NoChange)
+                    {
+                        if (!projection.IsCurrent) { return false; }
+                        projection.Apply();
+                        projection.Publish();
+                        return true;
+                    }
+                    return commit.Publish();
+                }
+            }
+            catch (ArgumentException) { return false; }
         }
 
         public void BindConfiguredActor(CombatActor actor)
@@ -89,10 +147,12 @@ namespace DarkFlare
             public StatusMutation Normalize(StatusTargetId target, StatusMutation mutation)
             {
                 if (mutation?.Effects == null) { return mutation; }
-                if (mutation.Source.Actor.IsValid && (!_system._targetActors.TryGetValue(mutation.Source.Actor, out CombatActor provider)
+                bool frozenSource = mutation.Rules.Lifetime == StatusLifetime.Timed && mutation.Effects.DamageSource != null
+                    && mutation.Effects.DamageStage == StatusDamageStage.SourceResolved;
+                if (!frozenSource && mutation.Source.Actor.IsValid && (!_system._targetActors.TryGetValue(mutation.Source.Actor, out CombatActor provider)
                     || provider == null || !provider.IsAlive)) { throw new ArgumentException("状态施加来源角色已失效"); }
                 StatusEffectSnapshot effects = mutation.Effects;
-                if (effects.PeriodicDamage.Count == 0) { return mutation; }
+                if (effects.PeriodicDamage.Count == 0) { return AilmentResistanceResolver.Normalize(mutation, _actor.Stats); }
                 _system._targetActors.TryGetValue(mutation.Source.Actor, out CombatActor sourceActor);
                 DamageSourceSnapshot source = effects.DamageSource;
                 if (source == null && sourceActor != null && sourceActor.IsAlive)
@@ -110,11 +170,16 @@ namespace DarkFlare
                     damage = DamageCalculator.ResolveSource(damage, sourceActor.Stats, sourceActor.Modifiers,
                         source.Tags.WithTargetActorTags(_actor.Tags));
                 }
-                return mutation.WithEffects(new StatusEffectSnapshot(effects.Strength, effects.Modifiers, damage,
-                    effects.BlockedActions, StatusDamageStage.SourceResolved, source));
+                return AilmentResistanceResolver.Normalize(mutation.WithEffects(new StatusEffectSnapshot(effects.Strength, effects.Modifiers, damage,
+                    effects.BlockedActions, StatusDamageStage.SourceResolved, source, effects.Resistance)), _actor.Stats);
             }
 
             public IStatusProjection Prepare(StatusTargetSnapshot snapshot)
+            {
+                return Prepare(snapshot, null);
+            }
+
+            internal IStatusProjection Prepare(StatusTargetSnapshot snapshot, IEnumerable<ModifierInstance> equipment)
             {
                 if (_actor == null) { return null; }
                 var modifiers = new List<ModifierInstance>();
@@ -138,8 +203,9 @@ namespace DarkFlare
                         }
                     }
                 }
-                CombatActor.ActorEffectPreparation preparation = _actor.PrepareEffects(
-                    new Dictionary<string, IEnumerable<ModifierInstance>> { ["status"] = modifiers }, tags, blocks);
+                var replacements = new Dictionary<string, IEnumerable<ModifierInstance>> { ["status"] = modifiers };
+                if (equipment != null) { replacements["equipment"] = equipment; }
+                CombatActor.ActorEffectPreparation preparation = _actor.PrepareEffects(replacements, tags, blocks);
                 return new Projection(_system, _actor, _target, snapshot.IsRegistered, preparation,
                     snapshot.Layers.Where(layer => layer.Rules.Lifetime == StatusLifetime.SourceOwned && layer.Source.Actor.IsValid)
                         .Select(layer => layer.Source.Actor).Distinct().ToArray());

@@ -69,6 +69,9 @@ namespace DarkFlare
         [SerializeField]
         [LabelText("基础伤害")]
         List<DamageRollDefinition> _baseDamages = new List<DamageRollDefinition>();
+        [SerializeField, LabelText("命中附加状态（显式启用）")]
+        StatusDefinition _onHitStatus;
+        public StatusDefinition OnHitStatus => _onHitStatus;
 
         public string Id => _id;
 

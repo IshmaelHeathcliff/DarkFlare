@@ -1,6 +1,6 @@
 # 状态与角色战斗接入
 
-本模块承接[状态核心](./status-system.md)，实现阶段 2 的角色效果、周期伤害与行动限制。自动时间任务、正式七异常及抗性、存档、状态图标仍按[总计划](./plan/alpha-0.4-status-system-plan.md)推进；当前通过 `StatusSystem.Advance` 显式推进时间，不会自动生成异常或药水玩法。
+本模块承接[状态核心](./status-system.md)，实现阶段 2 的角色效果、周期伤害与行动限制。正式七异常及抗性见[异常与来源](./status-ailments.md)；自动时间任务、存档、状态图标仍按[总计划](./plan/alpha-0.4-status-system-plan.md)推进；当前通过 `StatusSystem.Advance` 显式推进时间，不会自动生成异常或药水玩法。
 
 ## 身份和生命周期
 
@@ -27,7 +27,7 @@ CombatActor 按来源键管理修改器：`equipment`、`monster`、`status` 分
 
 每笔变更从原生命、法力比例缩放到最终上限。例如 50/100 → 100/200 → 50/100。仅刷新时间、推进周期相位而有效投影不变时不重建属性，也不增加 StatsRevision。
 
-ModifierOrigin 区分装备、怪物词条、状态和兼容来源；状态带定义 ID、层 ID 和合并层数。Increase 与 More 的正式计算步骤保留具体来源，属性详情使用角色标签判断条件，并提供中英状态来源文本。状态图标和正式异常名称配置由后续阶段补充。
+ModifierOrigin 区分装备、怪物词条、状态和兼容来源；状态带定义 ID、层 ID 和合并层数。Increase 与 More 的正式计算步骤保留具体来源，属性详情使用角色标签判断条件，并提供中英状态来源文本。正式异常名称见[异常模块](./status-ailments.md)，状态图标在阶段 4 补齐。
 
 ## 一致提交
 
@@ -45,7 +45,7 @@ StatusStore 为受管理目标安装内部 IStatusParticipant，适用于公开 
 DamageForm 将 Hit 与 Periodic 分开；周期的 HitOutcome 为 NotApplicable，IsHit / IsCritical 为 false，正伤害仍使 DidDealDamage 为 true。无效或零值周期不会显示未命中、闪避、暴击或受击动画；正常伤害数字、血条及统一死亡流程继续使用。
 
 - Base 效果在施加准备时执行一次来源转换、额外伤害和增伤，冻结为 SourceResolved；需要有效来源角色。
-- SourceResolved 不再重复来源计算，每跳只读取当前目标标签、TargetTaken 和类型抗性。物理周期跳过护甲；元素与混沌保留类型抗性。异常抗性由阶段 3 接入。
+- SourceResolved 不再重复来源计算，每跳只读取当前目标标签、TargetTaken 和类型抗性。物理周期跳过护甲；元素与混沌保留类型抗性。异常抗性在施加时冻结，见异常模块。
 - DamageSourceSnapshot 保存稳定身份、施加时阵营、技能 / 物品来源及标签。没有来源角色的机制必须显式提供上下文，缺失则拒绝。
 - 周期不使用命中、闪避、暴击随机流，不自动追加异常。核心按有效层逐条产生周期，每条只结算这一层，不能再次乘组层数。
 - 内部战斗接点先提交伤害和必要的死亡清理，再发布 StatusTickEvent；处理队列后才查找下一事件。大步推进中首个致死后不再对该目标结算，死亡事件只发一次。

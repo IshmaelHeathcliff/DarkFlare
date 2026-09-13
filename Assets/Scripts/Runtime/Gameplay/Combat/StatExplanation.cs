@@ -62,7 +62,13 @@ namespace DarkFlare
 
         public static bool IsPercentage(string id)
         {
-            return IsResistance(id) || id == StatIds.CriticalChance || id == StatIds.CriticalDamage;
+            return IsResistance(id) || IsAilmentResistance(id) || id == StatIds.CriticalChance || id == StatIds.CriticalDamage;
+        }
+
+        public static bool IsAilmentResistance(string id)
+        {
+            return id == StatIds.WeaknessResistance || id == StatIds.StunResistance || id == StatIds.BleedingResistance
+                || id == StatIds.BurningResistance || id == StatIds.ChillResistance || id == StatIds.ShockResistance || id == StatIds.PoisonResistance;
         }
 
         public static float CriticalChance(float value)
@@ -83,6 +89,10 @@ namespace DarkFlare
         public static float Effective(StatBlock stats, string id)
         {
             float value = stats.GetValue(id);
+            if (IsAilmentResistance(id))
+            {
+                return Math.Clamp(value, 0, 100);
+            }
             if (IsResistance(id)) { return Resistance(value); }
             if (id == StatIds.CriticalChance) { return CriticalChance(value); }
             if (id == StatIds.ManaRegeneration)

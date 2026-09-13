@@ -81,6 +81,15 @@ namespace DarkFlare
             }
 
             bool requiresSkillDamage = definition.DamageSource == ProjectileDamageSource.Skill;
+            if (definition.OnHitStatus != null)
+            {
+                issues.AddRange(definition.OnHitStatus.ValidateConfiguration());
+                try
+                {
+                    if (definition.OnHitStatus.CreateRules().Lifetime != StatusLifetime.Timed) { issues.Add("命中附加状态必须限时"); }
+                }
+                catch (System.ArgumentException exception) { issues.Add(exception.Message); }
+            }
             ValidateDamageRolls(definition.BaseDamages, "基础伤害", issues, requiresSkillDamage);
 
             if (definition.DamageSource == ProjectileDamageSource.EquippedWeapon

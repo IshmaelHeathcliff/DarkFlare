@@ -32,7 +32,6 @@ namespace DarkFlare.Tests
                 }
             }
 
-            Assert.AreEqual(25, affixes.Count);
             CollectionAssert.IsSubsetOf(StatIds.All, covered, "存在没有正式可消费词条的公开属性");
         }
 

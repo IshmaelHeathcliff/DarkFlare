@@ -25,6 +25,7 @@
 - [统一物品系统](./item-system.md)
 - [状态系统](./status-system.md)
 - [状态与角色战斗接入](./status-combat.md)
+- [异常、抗性与状态来源](./status-ailments.md)
 - [属性定义与调用关系](./stat-system.md)
 - [独立属性详情](./attribute-details.md)
 - [战斗 HUD](./hud-system.md)
@@ -45,7 +46,7 @@
 
 ## 计划状态
 
-[alpha 0.4 状态系统](./plan/alpha-0.4-status-system-plan.md)已完成阶段 1 核心及[阶段 2 角色战斗接入](./plan/archive/alpha-0.4-status-combat-plan.md)：属性来源共存、周期伤害、行动限制、生命周期及一致提交，EditMode 507/507、PlayMode 68/68 全部通过。实现范围见[状态模块](./status-system.md)和[战斗接入](./status-combat.md)。下一步为七异常、抗性与来源样例；自动计时、存档和图标 UI 仍属后续阶段。运行版本保持 0.4.0-alpha。
+[alpha 0.4 状态系统](./plan/alpha-0.4-status-system-plan.md)已完成阶段 1 核心、阶段 2 角色战斗与[阶段 3 七异常、抗性及来源接入](./plan/archive/alpha-0.4-status-ailments-plan.md)。EditMode 全量 527/527、随后本地化专项 20/20、PlayMode 68/68 通过，见[验收记录](./assets/acceptance/alpha-0.4-status-ailments/README.md)与[异常模块](./status-ailments.md)。下一步为阶段 4 自动计时、存档和图标 UI。运行版本保持 0.4.0-alpha，core v4、Schema 2。
 
 状态系统完成后实施[统一物品使用与消耗品](./plan/alpha-0.4-usable-items-plan.md)，建议版本 `0.4.2-alpha`：所有主动使用物品共用能力配置与执行事务，首批支持回血、回蓝、临时状态和驱散异常。该阶段已规划，尚未实现。
 

@@ -8,7 +8,7 @@
 
 - `SettingsService` 维护不可变 `UserSettingsSnapshot`，通过 `LocalSettingsStorage` 在应用作用域内读写 JSON；写入使用串行协调，不允许业务 Controller 直接访问路径。
 - `LocalizationService` 支持 `Auto`、`SimplifiedChinese`、`English` 三种用户偏好，最终解析为 `zh-Hans` 或 `en`。语言切换采用 latest-wins：新请求取消旧请求，完成字符串表预载后再提交设置并广播 `LocaleChanged`。
-- 启动预载表固定为 `ui`、`system`、`items`、`stats`、`affixes`、`monsters`。当前语言缺失条目时回退 `zh-Hans`，仍缺失则显示 `[table.key]`，不静默返回旧语言文本。
+- 启动预载表固定为 `ui`、`system`、`items`、`stats`、`affixes`、`monsters`、`statuses`。当前语言缺失条目时回退 `zh-Hans`，仍缺失则显示 `[table.key]`，不静默返回旧语言文本。
 - `qps-ploc` 只用于 Editor 回归，不写入用户设置。其字符替换与扩展配置必须保持在字体链覆盖范围内。
 
 Settings Schema 仍为 1。`UserSettingsSnapshot` 使用 `WithLanguage`、`WithAudio`、`WithInput` 和 `WithReduceMotion` 生成不可变候选值；输入、音频和可访问性服务先尝试原子提交，失败时恢复旧运行时状态，不允许磁盘与内存设置分叉。
@@ -59,7 +59,7 @@ Text Scale、High Contrast、Screen Shake 与 Display Mode 尚无完整运行时
 - UI Toolkit 的 `GamePanelSettings` 绑定 `GamePanelTextSettings`；主字体为动态 `GameCjkFont`（QiushuiShotai），回退为动态 `GameLatinFont`（Liberation Sans）。
 - TextMesh Pro 的 `QiushuiShotai SDF` 回退到 `LiberationSans SDF`。字体材质必须使用包含 `_TextureWidth` / `_TextureHeight` 的 Distance Field Shader。
 - 秋水书体按 SIL Open Font License 1.1 使用；授权和来源说明位于 `Assets/TextMesh Pro/Fonts/QiushuiShotai - OFL.txt` 与 `QiushuiShotai - ATTRIBUTION.txt`。
-- `LocalizationPolicyTests` 从六张表收集中英字符，并加入实际 `qps-ploc` 结果，验证整条字体链零缺字。
+- `LocalizationPolicyTests` 从职责表收集中英字符，并加入实际 `qps-ploc` 结果，验证整条字体链零缺字。
 
 ## 验证与维护
 
@@ -69,3 +69,5 @@ Text Scale、High Contrast、Screen Shake 与 Display Mode 尚无完整运行时
 - `Alpha025ProductionAssetTests` 验证 Settings Page 控件、38 个新增中英条目、Glyph 资产与 Audio 配置；输入、音频和可访问性测试覆盖提交失败回滚。
 - `SettingsServiceTests` 覆盖完整默认快照持久化与存储失败回滚；`Alpha027IntegratedAcceptancePlayModeTests` 覆盖重置后消费者收敛及 Host 重启保持。
 - 新增正式内容类型或字段时，先更新对应配置参考与 `coverage-manifest.json`，再添加字符串表键和正式资产引用。
+
+状态阶段 3：新增 statuses/<id>.name 与 statuses/<id>.description 中英条目，纳入启动和语言切换预载；状态图标与浮窗仍待阶段 4。

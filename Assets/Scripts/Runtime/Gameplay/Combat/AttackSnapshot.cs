@@ -9,6 +9,7 @@ namespace DarkFlare
         readonly StatBlock _attackerStats;
 
         public string AttackerId { get; }
+        public StatusApplication OnHitStatus { get; }
 
         public ActorTeam AttackerTeam { get; }
 
@@ -68,8 +69,10 @@ namespace DarkFlare
             IEnumerable<DamagePacket> baseDamages,
             CombatTagContext tagContext,
             StatBlock attackerStats,
-            IEnumerable<ModifierInstance> attackerModifiers)
+            IEnumerable<ModifierInstance> attackerModifiers,
+            StatusApplication onHitStatus = null)
         {
+            OnHitStatus = onHitStatus;
             AttackerId = string.IsNullOrWhiteSpace(attackerId) ? "environment" : attackerId;
             AttackerTeam = attackerTeam;
             SkillId = skillId ?? string.Empty;

@@ -141,6 +141,9 @@ namespace DarkFlare
         [SerializeField]
         [LabelText("隐式修改器")]
         List<StatModifierDefinition> _implicitModifiers = new List<StatModifierDefinition>();
+        [SerializeField, LabelText("装备维持状态（显式启用）")]
+        StatusDefinition _providedStatus;
+        public StatusDefinition ProvidedStatus => _providedStatus;
 
         public string Id => _id;
 

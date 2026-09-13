@@ -65,14 +65,22 @@ namespace DarkFlare
         public bool CanConsume { get; }
         public bool RefreshExistingLayers { get; }
         public TagSet Tags { get; }
+        public AilmentKind Ailment { get; }
 
         public StatusRules(string id, StatusRepeatMode repeat = StatusRepeatMode.Uniform,
             int maxStacks = 1, double duration = 5, double interval = 0,
             StatusLifetime lifetime = StatusLifetime.Timed, StatusClockMode clock = StatusClockMode.PerLayer,
             StatusOverflow overflow = StatusOverflow.Default, StatusCategory category = StatusCategory.Skill,
-            bool canDispel = true, bool canConsume = true, TagSet tags = null, bool refreshExistingLayers = true)
+            bool canDispel = true, bool canConsume = true, TagSet tags = null, bool refreshExistingLayers = true,
+            AilmentKind ailment = AilmentKind.None)
         {
             Id = new ContentId(ContentNamespaces.Status, id);
+            if (!Enum.IsDefined(typeof(AilmentKind), ailment)
+                || (ailment != AilmentKind.None && (category != StatusCategory.Ailment || lifetime != StatusLifetime.Timed)))
+            {
+                throw new ArgumentException("异常必须使用异常分类和限时生命周期");
+            }
+            Ailment = ailment;
             if (!Enum.IsDefined(typeof(StatusRepeatMode), repeat)
                 || !Enum.IsDefined(typeof(StatusClockMode), clock)
                 || !Enum.IsDefined(typeof(StatusLifetime), lifetime)
@@ -107,7 +115,7 @@ namespace DarkFlare
 
         internal bool Matches(StatusRules other)
         {
-            return other != null && Id == other.Id && Repeat == other.Repeat && Clock == other.Clock
+            return other != null && Id == other.Id && Ailment == other.Ailment && Repeat == other.Repeat && Clock == other.Clock
                 && Lifetime == other.Lifetime && Overflow == other.Overflow && Category == other.Category
                 && MaxStacks == other.MaxStacks && Duration == other.Duration && Interval == other.Interval
                 && CanDispel == other.CanDispel && CanConsume == other.CanConsume && RefreshExistingLayers == other.RefreshExistingLayers
@@ -132,10 +140,12 @@ namespace DarkFlare
         public StatusActionBlock BlockedActions { get; }
         public StatusDamageStage DamageStage { get; }
         public DamageSourceSnapshot DamageSource { get; }
+        public AilmentResistanceSnapshot Resistance { get; }
 
         public StatusEffectSnapshot(double strength = 0, IEnumerable<ModifierInstance> modifiers = null,
             IEnumerable<DamagePacket> periodicDamage = null, StatusActionBlock blockedActions = StatusActionBlock.None,
-            StatusDamageStage damageStage = StatusDamageStage.SourceResolved, DamageSourceSnapshot damageSource = null)
+            StatusDamageStage damageStage = StatusDamageStage.SourceResolved, DamageSourceSnapshot damageSource = null,
+            AilmentResistanceSnapshot resistance = null)
         {
             if (!StatusRules.IsFinite(strength) || strength < 0 || ((int)blockedActions & ~15) != 0
                 || !Enum.IsDefined(typeof(StatusDamageStage), damageStage))
@@ -181,6 +191,7 @@ namespace DarkFlare
             BlockedActions = blockedActions;
             DamageStage = damageStage;
             DamageSource = damageSource;
+            Resistance = resistance;
         }
 
         internal bool Matches(StatusEffectSnapshot other)

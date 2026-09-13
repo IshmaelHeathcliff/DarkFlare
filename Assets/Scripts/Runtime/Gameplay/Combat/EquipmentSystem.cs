@@ -44,6 +44,8 @@ namespace DarkFlare
                 return false;
             }
 
+            Vector2Int originalOrigin = inventory.Grid.Placements[item].position;
+
             EquipmentLoadout loadout = equipment.GetOrCreateLoadout(actor);
 
             if (!inventory.TryExchangeItemWithoutEvents(item, previousItem))
@@ -53,11 +55,16 @@ namespace DarkFlare
 
             if (!loadout.TrySet(slot, item))
             {
-                RollbackEquipInventory(inventory, item, previousItem);
+                RollbackPreciseEquipInventory(inventory, item, previousItem, originalOrigin);
                 return false;
             }
 
-            RebuildActorEffects(actor, loadout);
+            if (!RebuildActorEffects(actor, loadout))
+            {
+                loadout.TrySet(slot, previousItem);
+                RollbackPreciseEquipInventory(inventory, item, previousItem, originalOrigin);
+                return false;
+            }
             inventory.NotifyItemChanged(item, InventoryChangeType.Removed);
 
             if (previousItem != null)
@@ -127,8 +134,15 @@ namespace DarkFlare
                 throw new System.ArgumentNullException(nameof(loadout));
             }
 
-            this.GetModel<EquipmentModel>().RestoreLoadout(actor, loadout);
-            actor.SetModifierSource("equipment", EquipmentEffectResolver.CollectActorModifiers(loadout));
+            EquipmentModel model = this.GetModel<EquipmentModel>();
+            EquipmentLoadout previous = model.GetLoadout(actor);
+            model.RestoreLoadout(actor, loadout);
+            if (!RebuildActorEffects(actor, loadout))
+            {
+                if (previous != null) { model.RestoreLoadout(actor, previous); }
+                else { model.RemoveActor(actor); }
+                throw new System.ArgumentException("装备与状态恢复失败");
+            }
         }
 
         public bool Unequip(CombatActor actor, EquipmentSlot slot)
@@ -160,7 +174,12 @@ namespace DarkFlare
                 return false;
             }
 
-            RebuildActorEffects(actor, loadout);
+            if (!RebuildActorEffects(actor, loadout))
+            {
+                loadout.TrySet(slot, previousItem);
+                inventory.RemoveItemWithoutEvents(previousItem);
+                return false;
+            }
             inventory.NotifyItemChanged(previousItem, InventoryChangeType.Added);
             this.SendEvent(new EquipmentChangedEvent(actor, slot, previousItem, null));
             ApplicationLog.Info(LogEventIds.GameplayCombat, $"[EquipmentSystem] {actor.ActorId} 卸下了{EquipmentSlots.GetDisplayName(slot)} {previousItem.BaseDefinition.DisplayName}");
@@ -212,7 +231,12 @@ namespace DarkFlare
                 return false;
             }
 
-            RebuildActorEffects(actor, loadout);
+            if (!RebuildActorEffects(actor, loadout))
+            {
+                loadout.TrySet(slot, previousItem);
+                RollbackPreciseEquipInventory(inventory, item, previousItem, sourcePlacement.position);
+                return false;
+            }
             inventory.NotifyItemChanged(item, InventoryChangeType.Removed);
 
             if (previousItem != null)
@@ -255,7 +279,12 @@ namespace DarkFlare
                 return false;
             }
 
-            RebuildActorEffects(actor, loadout);
+            if (!RebuildActorEffects(actor, loadout))
+            {
+                loadout.TrySet(slot, previousItem);
+                inventory.RemoveItemWithoutEvents(previousItem);
+                return false;
+            }
             inventory.NotifyItemChanged(previousItem, InventoryChangeType.Added);
             this.SendEvent(new EquipmentChangedEvent(actor, slot, previousItem, null));
             ApplicationLog.Info(LogEventIds.GameplayCombat, $"[EquipmentSystem] {actor.ActorId} 从{EquipmentSlots.GetDisplayName(slot)}精确卸下了 {previousItem.BaseDefinition.DisplayName}");
@@ -278,36 +307,20 @@ namespace DarkFlare
                 return false;
             }
 
-            RebuildActorEffects(actor, loadout);
+            if (!RebuildActorEffects(actor, loadout))
+            {
+                loadout.TryMove(targetSlot, sourceSlot);
+                return false;
+            }
             this.SendEvent(new EquipmentChangedEvent(actor, sourceSlot, sourceItem, targetItem));
             this.SendEvent(new EquipmentChangedEvent(actor, targetSlot, targetItem, sourceItem));
             ApplicationLog.Info(LogEventIds.GameplayCombat, $"[EquipmentSystem] {actor.ActorId} 将装备从{EquipmentSlots.GetDisplayName(sourceSlot)}移动到{EquipmentSlots.GetDisplayName(targetSlot)}");
             return true;
         }
 
-        void RebuildActorEffects(CombatActor actor, EquipmentLoadout loadout)
+        bool RebuildActorEffects(CombatActor actor, EquipmentLoadout loadout)
         {
-            CombatResourceSnapshot previousResources = actor.Resources;
-            List<ModifierInstance> modifiers = EquipmentEffectResolver.CollectActorModifiers(loadout);
-            actor.SetModifierSource("equipment", modifiers);
-            this.GetSystem<CombatSystem>().PublishResourceChanges(
-                actor,
-                previousResources,
-                ActorResourceChangeReason.MaximumChanged);
-        }
-
-        static void RollbackEquipInventory(
-            InventoryModel inventory,
-            ItemInstance equippedItem,
-            ItemInstance previousItem)
-        {
-            if (previousItem == null)
-            {
-                inventory.TryAddItemWithoutEvents(equippedItem);
-                return;
-            }
-
-            inventory.TryExchangeItemWithoutEvents(previousItem, equippedItem);
+            return this.GetSystem<StatusSystem>().TryRebuildEquipment(actor, loadout);
         }
 
         static void RollbackPreciseEquipInventory(

@@ -16,12 +16,12 @@
 
 | 职责 | 类型 | 字段数 | 字段参考 | 模块说明 |
 | --- | --- | ---: | --- | --- |
-| 状态 | `StatusDefinition` | 20 | [完整](./statuses.md) | [状态系统](../status-system.md) |
+| 状态 | `StatusDefinition` | 21 | [完整](./statuses.md) | [状态系统](../status-system.md) |
 | 标签与查询 | `TagDefinition`、`TagQueryDefinition` | 10 | [完整](./tags-and-queries.md) | [战斗标签系统](../combat-tag-system.md) |
 | 属性与词缀 | `StatDefinition`、`AffixDefinition`、`StatModifierDefinition` | 30 | [完整](./stats-and-affixes.md) | [属性系统](../stat-system.md)、[伤害与词缀](../damage-affix-system.md) |
 | 角色与怪物 | `CharacterDefinition`、`MonsterDefinition`、`MonsterAffixDefinition`、`MonsterSpawnDefinition`、`MonsterSpawnRule` | 63 | [完整](./actors-and-monsters.md) | [玩法循环](../gameplay-loop.md)、[首批内容池](../content-system.md) |
-| 物品与掉落 | `ItemBaseDefinition`、`DamageRollDefinition`、`LootTableDefinition`、`LootTableEntry` | 25 | [完整](./items-and-loot.md) | [装备系统](../equipment-system.md)、[随机化与掉落](../randomization-system.md) |
-| 技能 | `ProjectileSkillDefinition` | 12 | [完整](./skills.md) | [伤害与词缀](../damage-affix-system.md) |
+| 物品与掉落 | `ItemBaseDefinition`、`DamageRollDefinition`、`LootTableDefinition`、`LootTableEntry` | 26 | [完整](./items-and-loot.md) | [装备系统](../equipment-system.md)、[随机化与掉落](../randomization-system.md) |
+| 技能 | `ProjectileSkillDefinition` | 13 | [完整](./skills.md) | [伤害与词缀](../damage-affix-system.md) |
 | 交易与打造 | `TraderDefinition`、`TraderStockEntry`、`CraftingDefinition` | 21 | [完整](./trade-and-crafting.md) | [打造系统](../crafting-system.md)、[首批内容池](../content-system.md) |
 | 本地化内容引用 | `LocalizedContentReference` | 2 | [完整](../infrastructure/user-settings-localization.md#localizedcontentreference) | [用户设置与本地化](../infrastructure/user-settings-localization.md) |
 

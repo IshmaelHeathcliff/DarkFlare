@@ -24,6 +24,7 @@
 | `_tags` | `List<TagDefinition>` / 空 | 仅允许非派生 ItemSpawn 标签；正式物品当前为空 | `CombatTagResolver` 从类型/槽位派生 weapon/armor/ring 等事实 |
 | `_baseDamages` | `List<DamageRollDefinition>` / 空 | Weapon 必须非空；非武器必须为空 | `AttackSnapshotFactory` 仅从装备武器建立基础伤害；无固定伤害回退 |
 | `_implicitModifiers` | `List<StatModifierDefinition>` / 空 | 可空；每项必须有合法当前消费者 | `CreateInstance` 使用传入种子生成固定实例隐式值；装备结算和详情消费 |
+| `_providedStatus` | `StatusDefinition` / 空 | 可选，非异常 SourceOwned 状态 | 装备实例维持来源；穿脱、换槽、恢复与重绑统一协调；失败回退背包与槽位 |
 
 显式前后缀容量不属于基底字段，由 `ItemRarityRules` 按实例稀有度决定。普通物品无显式词缀；魔法、稀有、传奇分别受对应最小总数与两侧容量约束。
 

@@ -158,6 +158,34 @@ MonoBehaviour:
     m_Localized: Swift
     m_Metadata:
       m_Items: []
+  - m_Id: 9003630177804288
+    m_Localized: Resist weakness
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9003632270761984
+    m_Localized: Resist stun
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9003633206091776
+    m_Localized: Resist bleeding
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9003634162393088
+    m_Localized: Resist burning
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9003635097722880
+    m_Localized: Resist chill
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9003635991109632
+    m_Localized: Resist shock
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9003636867719168
+    m_Localized: Resist poison
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

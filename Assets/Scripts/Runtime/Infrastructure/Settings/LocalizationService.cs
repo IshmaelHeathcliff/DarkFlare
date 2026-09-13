@@ -256,6 +256,7 @@ namespace DarkFlare
             "stats",
             "affixes",
             "monsters",
+            "statuses",
         };
 
         readonly SettingsService _settings;

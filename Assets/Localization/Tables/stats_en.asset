@@ -110,6 +110,34 @@ MonoBehaviour:
     m_Localized: Chaos Damage
     m_Metadata:
       m_Items: []
+  - m_Id: 9003630177804288
+    m_Localized: weakness resistance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9003632409174016
+    m_Localized: stun resistance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9003633302560768
+    m_Localized: bleeding resistance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9003634246279168
+    m_Localized: burning resistance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9003635185803264
+    m_Localized: chill resistance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9003636116938752
+    m_Localized: shock resistance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9003636989353984
+    m_Localized: poison resistance
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

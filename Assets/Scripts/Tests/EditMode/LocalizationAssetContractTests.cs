@@ -26,6 +26,7 @@ namespace DarkFlare.Tests
             "stats",
             "affixes",
             "monsters",
+            "statuses",
         };
 
         string _rootPath;

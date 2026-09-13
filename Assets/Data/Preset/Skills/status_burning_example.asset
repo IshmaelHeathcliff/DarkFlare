@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a37ef93e2c29dbd43a669c6bd8ac0328, type: 3}
+  m_Name: status_burning_example
+  m_EditorClassIdentifier: Assembly-CSharp::DarkFlare.ProjectileSkillDefinition
+  _id: status_burning_example
+  _displayName: "\u71C3\u70E7\u6295\u5C04\u7269\u6837\u4F8B"
+  _projectilePrefab:
+    m_AssetGUID: 3b6e21dfbc7f54e4f9e0312efd6c6af5
+    m_SubObjectName:
+    m_SubObjectType:
+    m_SubObjectGUID:
+    m_EditorAssetChanged: 0
+  _cooldown: 0.6
+  _manaCost: 8
+  _targetRange: 10
+  _projectileSpeed: 12
+  _projectileRadius: 0.16
+  _projectileLifetime: 2
+  _tags: []
+  _damageSource: 1
+  _baseDamages: []
+  _onHitStatus: {fileID: 11400000, guid: bd5c108293865da4b932c29f8022b0b0, type: 2}

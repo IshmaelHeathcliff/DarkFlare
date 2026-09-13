@@ -57,8 +57,12 @@
 
 ### 校验、随机与迁移
 
-- 配置中心检查 23 个正式属性、完整词缀 ID、稳定组、权重、查询、合法消费者和每个正式属性的词缀覆盖。
+- 配置中心检查 StatIds 登记的全部正式属性、完整词缀 ID、稳定组、权重、查询、合法消费者和每个正式属性的词缀覆盖。
 - 词缀候选选择、数值生成和打造分别由调用方提供根种子；共享 ScriptableObject 从不在运行时改写。
 - “没有任何兼容装备”通常表示 SpawnQuery Domain/Scope 错误或候选物品缺少派生类别。
 - “修改器没有当前运行时消费者”必须修改建模或实现消费者，不能仅关闭验证。
 - 兼容字段正式资产必须为空；移除兼容层前先通过内容扫描确认零使用。
+
+## 异常抗性属性
+
+状态阶段 3 新增 weakness_resistance、stun_resistance、bleeding_resistance、burning_resistance、chill_resistance、shock_resistance、poison_resistance。基础缺省 0，有效值在施加时裁剪到 0–100%；属性异常缩幅、伤害异常缩伤、眩晕缩时。对应后缀配置为固定 20 点抗性，已加入打造与掉落池。参数和来源快照详见[异常与来源](../status-ailments.md)。

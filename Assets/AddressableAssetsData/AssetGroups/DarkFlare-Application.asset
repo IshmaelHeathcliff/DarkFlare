@@ -15,12 +15,127 @@ MonoBehaviour:
   m_GroupName: DarkFlare-Application
   m_GUID: a294947bb95629042bd4871f7375692e
   m_SerializeEntries:
+  - m_GUID: 09164dc0cb99be248bd95a593f674154
+    m_Address: Assets/Data/Preset/Statuses/chill.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0f7aecbcfdeeac742a35559b9ca1bc4e
+    m_Address: Assets/Data/Preset/Statuses/bleeding.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 114089b602d66914e8f79f05dccefff0
+    m_Address: Assets/Data/Preset/Affixes/bleeding_resistance.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 21d301746ce5f8646b4e1f42a64a8993
+    m_Address: Assets/Data/Preset/Affixes/chill_resistance.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3272ebf1d8ef7be44abe881e238afe52
+    m_Address: Assets/Data/Preset/Statuses/shock.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3ebe7dead03836a4db280ddec651e52b
+    m_Address: Assets/Data/Preset/Skills/status_burning_example.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 435b8c84d3303c546b05ecd413ace45b
+    m_Address: Assets/Data/Preset/Stats/chill_resistance.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4dff6e388356bf24a84a2b4361789135
+    m_Address: Assets/Data/Preset/Stats/weakness_resistance.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 4fe1306a12212b747b1e41fb8c4aa53f
     m_Address: infrastructure/audio/configuration
     m_ReadOnly: 0
     m_SerializedLabels:
     - df.application
     - df.configuration
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 593eb5bf660d89f49a73ba62f3635dcb
+    m_Address: Assets/Data/Preset/Stats/burning_resistance.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 678d20b72aa5c8f4e9c4452d02e589ce
+    m_Address: Assets/Data/Preset/Affixes/stun_resistance.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6ef26b4dc274f594c87783d7d3498a46
+    m_Address: Assets/Data/Preset/Affixes/burning_resistance.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7b34bb258fea5ef4399b02895d4d1a38
+    m_Address: Assets/Data/Preset/Affixes/weakness_resistance.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8329d4fa00f586e47b4b743bfa2b9b3e
+    m_Address: Assets/Data/Preset/Statuses/equipment_guard.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 94a7bf623276d0d4e958905c77f61f51
+    m_Address: Assets/Data/Preset/Affixes/poison_resistance.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9d0dac9890870fd41b3e52a2643b9e0a
+    m_Address: Assets/Data/Preset/Stats/bleeding_resistance.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a364ceceb3eed4544a16fda7f005880d
+    m_Address: Assets/Data/Preset/Statuses/poison.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: aefcda3ab066dc64c935242043a5b3ee
+    m_Address: Assets/Data/Preset/Statuses/stun.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ba4995c9e730ff14eb54300066258af5
+    m_Address: Assets/Data/Preset/Stats/shock_resistance.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bd5c108293865da4b932c29f8022b0b0
+    m_Address: Assets/Data/Preset/Statuses/burning.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bf5b0b37a9238d44f9562601dd97eef8
+    m_Address: Assets/Data/Preset/Statuses/weakness.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c8ba7b6030a825241aa068f1094b44dd
+    m_Address: Assets/Data/Preset/Affixes/shock_resistance.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ce8b67fd38266f14a833ba4928023284
+    m_Address: Assets/Data/Preset/Stats/poison_resistance.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: daeb4446396405648bdaeb193c4c0f6b
+    m_Address: Assets/Data/Preset/Stats/stun_resistance.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 2a89337400d536944bcf12b9576d1482, type: 2}

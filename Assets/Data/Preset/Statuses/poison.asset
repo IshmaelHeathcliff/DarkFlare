@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4c79e76a7f01c4418b770552f07f2e8, type: 3}
+  m_Name: poison
+  m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.StatusDefinition
+  _id: poison
+  _localizedName:
+    _tableName: statuses
+    _entryKey: poison.name
+  _localizedDescription:
+    _tableName: statuses
+    _entryKey: poison.description
+  _icon:
+    m_AssetGUID:
+    m_SubObjectName:
+    m_SubObjectType:
+    m_SubObjectGUID:
+    m_EditorAssetChanged: 0
+  _category: 2
+  _ailment: 7
+  _tags: []
+  _canDispel: 1
+  _canConsume: 1
+  _repeat: 2
+  _clock: 0
+  _refreshExistingLayers: 1
+  _lifetime: 0
+  _overflow: 0
+  _maxStacks: 8
+  _duration: 5
+  _interval: 1
+  _strength: 0
+  _modifiers: []
+  _periodicDamage:
+  - _damageType: 4
+    _amountRange: {x: 3, y: 3}
+    _tags: []
+  _blockedActions: 0

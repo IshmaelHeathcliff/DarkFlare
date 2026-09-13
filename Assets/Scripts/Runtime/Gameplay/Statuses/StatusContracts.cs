@@ -7,7 +7,7 @@ namespace DarkFlare
     public enum StatusResultCode
     {
         Success, NoChange, InvalidTarget, InvalidRequest, RuleConflict, Capacity,
-        InsufficientStacks, Protected, StaleVersion, AlreadyCommitted, Busy
+        InsufficientStacks, Protected, StaleVersion, AlreadyCommitted, Busy, Resisted
     }
 
     public enum StatusChangeReason
@@ -59,6 +59,11 @@ namespace DarkFlare
         internal StatusMutation WithEffects(StatusEffectSnapshot effects)
         {
             return new StatusMutation(Kind, Rules, effects, Source, Count, Filter, Selection, InstanceIds, Duration, RefreshInstanceId);
+        }
+
+        internal StatusMutation WithResistance(StatusEffectSnapshot effects, double? duration)
+        {
+            return new StatusMutation(Kind, Rules, effects, Source, Count, Filter, Selection, InstanceIds, duration, RefreshInstanceId);
         }
 
         StatusMutation(StatusMutationKind kind, StatusRules rules = null, StatusEffectSnapshot effects = null,

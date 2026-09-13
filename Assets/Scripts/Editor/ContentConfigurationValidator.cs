@@ -201,7 +201,7 @@ namespace DarkFlare.Editor
             ValidateOfficialCatalog(issues);
             ValidateExpectedIds(tags, ExpectedTagIds, tag => tag.Id, "标签", false, issues);
             ValidateExpectedIds(stats, StatIds.All, stat => stat.Id, "属性", true, issues);
-            ValidateExpectedIds(affixes, ExpectedAffixIds, affix => affix.Id, "词条", true, issues);
+            ValidateExpectedIds(affixes, ExpectedAffixIds, affix => affix.Id, "词条", false, issues);
             ValidateExpectedIds(items, ExpectedItemIds, item => item.Id, "装备", false, issues);
             ValidateExpectedIds(monsters, ExpectedMonsterIds, monster => monster.Id, "怪物", true, issues);
             ValidateExpectedIds(

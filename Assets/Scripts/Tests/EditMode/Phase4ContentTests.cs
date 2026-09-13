@@ -169,7 +169,7 @@ namespace DarkFlare.Tests
             for (int i = 0; i < lootTables.Count; i++)
             {
                 CollectionAssert.AreEquivalent(items, lootTables[i].Entries.Select(entry => entry.Item));
-                Assert.AreEqual(25, lootTables[i].AffixPool.Count);
+                CollectionAssert.AreEquivalent(LoadAssets<AffixDefinition>($"{PresetRoot}/Affixes"), lootTables[i].AffixPool);
             }
 
             TraderDefinition trader = AssetDatabase.LoadAssetAtPath<TraderDefinition>(
@@ -179,7 +179,7 @@ namespace DarkFlare.Tests
             Assert.IsNotNull(trader);
             Assert.IsNotNull(crafting);
             CollectionAssert.AreEquivalent(items.Where(item => item.IsEquipment), trader.Stock.Select(entry => entry.Item));
-            Assert.AreEqual(25, crafting.AffixPool.Count);
+            CollectionAssert.AreEquivalent(LoadAssets<AffixDefinition>($"{PresetRoot}/Affixes"), crafting.AffixPool);
         }
 
         static List<T> LoadAssets<T>(string root) where T : UnityEngine.Object

@@ -1,12 +1,12 @@
 # 状态系统
 
-2026-09-13：阶段 1 / 2 已完成，EditMode 507/507、PlayMode 68/68 全部通过，见[阶段 2 验收记录](./assets/acceptance/alpha-0.4-status-combat/README.md)。运行版本保持 0.4.0-alpha，后续安排见[状态系统总计划](./plan/alpha-0.4-status-system-plan.md)。
+2026-09-13：阶段 1–3 已完成，EditMode 全量 527/527、随后本地化专项 20/20、PlayMode 68/68 通过，见[阶段 3 验收记录](./assets/acceptance/alpha-0.4-status-ailments/README.md)。运行版本 0.4.0-alpha、core v4、Schema 2；后续安排见[总计划](./plan/alpha-0.4-status-system-plan.md)。
 
 ## 当前职责
 
 `StatusDefinition` 提供中文 Odin 配置和稳定 `status:` 内容身份；`StatusRules`、`StatusEffectSnapshot` 冻结规则和效果。`StatusStore` 是不依赖场景的纯状态容器，管理目标、来源、层数、择强、时间、消费、驱散及事务。配置字段参考见[状态配置](./config-reference/statuses.md)。
 
-`StatusModel` 在 Session 中持有容器，`StatusSystem` 管理角色绑定、效果参与者及 QFramework 通知。[角色战斗接入](./status-combat.md)已实现属性来源共存、周期扣血和行动门禁。七异常与抗性、自动时间任务、存档及状态 UI 尚未接入；当前不会在游戏中自动出现状态或药水效果。
+`StatusModel` 在 Session 中持有容器，`StatusSystem` 管理角色绑定、效果参与者及 QFramework 通知。[角色战斗接入](./status-combat.md)已实现属性来源共存、周期扣血和行动门禁。七异常与抗性已接入，详见[异常与来源](./status-ailments.md)；自动时间任务、存档及状态 UI 尚未接入；当前不会在游戏中自动出现状态或药水效果。
 
 代码位于 `Assets/Scripts/Runtime/Data/Statuses/` 和 `Assets/Scripts/Runtime/Gameplay/Statuses/`。所有状态共用核心，未为各异常创建独立 MonoBehaviour 或计时任务。
 
@@ -63,4 +63,4 @@ Controller 使用 `ChangeStatusesCommand` 提交 StatusMutation 列表，使用 
 
 `StatusSystemTests` 长期保护层数、择强接替、周期、容量、只读快照、事务失败回退、来源隔离、重入及 QFramework Session 释放。配置文档覆盖和内容身份复用已有测试套件。
 
-阶段 2 已接入[角色战斗模块](./status-combat.md)，新增集成与 PlayMode 生命周期回归。下一步为阶段 3 七异常正式配置、抗性及来源接入样例；自动时间、存档与图标按阶段 4 继续。消耗品在完整状态系统验收后实施。
+阶段 2 已接入[角色战斗模块](./status-combat.md)，新增集成与 PlayMode 生命周期回归。阶段 3 已接入[七异常、抗性及来源样例](./status-ailments.md)；自动时间、存档与图标按阶段 4 继续。消耗品在完整状态系统验收后实施。

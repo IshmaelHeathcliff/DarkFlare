@@ -20,6 +20,20 @@ namespace DarkFlare
             }
 
             ValidateSlots(definition, issues);
+            if (definition.ProvidedStatus != null)
+            {
+                issues.AddRange(definition.ProvidedStatus.ValidateConfiguration());
+                try
+                {
+                    StatusRules rules = definition.ProvidedStatus.CreateRules();
+                    if (!definition.IsEquipment || rules.Lifetime != StatusLifetime.SourceOwned
+                        || rules.Category == StatusCategory.Ailment || rules.Interval != 0)
+                    {
+                        issues.Add("装备提供状态必须为非异常、无周期的来源维持状态");
+                    }
+                }
+                catch (System.ArgumentException exception) { issues.Add(exception.Message); }
+            }
             if (definition.IsStackable && (definition.ImplicitModifiers.Count > 0 || definition.DefaultRarity != ItemRarity.Normal))
             {
                 issues.Add("可堆叠物品必须为普通且没有隐式词条");

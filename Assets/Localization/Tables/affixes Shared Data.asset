@@ -155,6 +155,34 @@ MonoBehaviour:
     m_Key: monster_affix.monster_swift.name
     m_Metadata:
       m_Items: []
+  - m_Id: 9003630177804288
+    m_Key: item_affix.resist_weakness.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9003632270761984
+    m_Key: item_affix.resist_stun.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9003633206091776
+    m_Key: item_affix.resist_bleeding.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9003634162393088
+    m_Key: item_affix.resist_burning.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9003635097722880
+    m_Key: item_affix.resist_chill.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9003635991109632
+    m_Key: item_affix.resist_shock.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9003636867719168
+    m_Key: item_affix.resist_poison.name
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

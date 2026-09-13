@@ -1,0 +1,87 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: statuses_en
+  m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.StringTable
+  m_LocaleId:
+    m_Code: en
+  m_SharedData: {fileID: 11400000, guid: 905ba58381c380f439527c98f3f6b5cd, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 938467328
+    m_Localized: weakness
+    m_Metadata:
+      m_Items: []
+  - m_Id: 976216064
+    m_Localized: Deal 20% less damage.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1911545856
+    m_Localized: stun
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1911545857
+    m_Localized: Cannot move, attack or cast.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2842681344
+    m_Localized: bleeding
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2842681345
+    m_Localized: Each stack deals 4 physical damage per second.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3794788352
+    m_Localized: burning
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3794788353
+    m_Localized: Deal 6 fire damage per second; only the strongest effect applies.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4721729536
+    m_Localized: chill
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4721729537
+    m_Localized: 20% less movement speed.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5602533376
+    m_Localized: shock
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5602533377
+    m_Localized: Take 20% more damage.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6529474560
+    m_Localized: poison
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6529474561
+    m_Localized: Each stack deals 3 chaos damage per second.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6844047360
+    m_Localized: Equipment guard
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6844047361
+    m_Localized: Gain 10 armor while the source is active.
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []

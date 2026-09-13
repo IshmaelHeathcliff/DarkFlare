@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Linq;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
@@ -42,8 +43,12 @@ namespace DarkFlare.Tests
             yield return new WaitForFixedUpdate();
             Assert.That(actor.GetComponent<Rigidbody2D>().linearVelocity.sqrMagnitude, Is.GreaterThan(0));
             var source = new StatusSource(StatusSourceKind.Mechanism, "playmode");
-            Assert.That(statuses.ApplyStatus(original, StatusMutation.Apply(new StatusRules("control"), source,
-                new StatusEffectSnapshot(blockedActions: StatusActionBlock.Move | StatusActionBlock.Attack | StatusActionBlock.Cast))).Result.Succeeded, Is.True);
+            StatusDefinition stun = ApplicationHost.Current.ContentCatalog.GetAll<StatusDefinition>().Single(definition => definition.Id == "stun");
+            actor.SetModifierSource("test_resistance", new[] { new ModifierInstance(StatIds.StunResistance,
+                ModifierOperation.Flat, ModifierScope.GlobalActor, 50, default, default, TagQuery.Empty) });
+            Assert.That(statuses.ApplyStatus(original, StatusMutation.Apply(stun.CreateRules(), source,
+                stun.CreateEffects(new System.Random(0)))).Result.Succeeded, Is.True);
+            Assert.That(statuses.GetStatusSnapshot(original).Layers.Single().RemainingSeconds, Is.EqualTo(1));
             yield return new WaitForFixedUpdate();
             Assert.That(actor.GetComponent<Rigidbody2D>().linearVelocity, Is.EqualTo(Vector2.zero));
             Assert.That(architecture.SendQuery(new GetActorActionsQuery(actor)).CanUseItem, Is.True);
@@ -59,6 +64,10 @@ namespace DarkFlare.Tests
             CollectionAssert.AreEquivalent(before.NextSequences, random.CaptureState().NextSequences);
             attackObserver.UnRegister();
             actor.transform.position = player.transform.position + Vector3.right * 5;
+            statuses.Advance(1);
+            yield return new WaitForFixedUpdate();
+            Assert.That(actor.GetComponent<Rigidbody2D>().linearVelocity.sqrMagnitude, Is.GreaterThan(0));
+            actor.SetModifierSource("test_resistance", null);
             actor.enabled = false;
             Assert.That(statuses.GetTarget(actor).IsValid, Is.False);
             Assert.That(actor.BlockedActions, Is.EqualTo(StatusActionBlock.None));

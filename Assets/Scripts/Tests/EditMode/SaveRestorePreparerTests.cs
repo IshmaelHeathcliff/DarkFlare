@@ -61,6 +61,20 @@ namespace DarkFlare.Tests
         }
 
         [Test]
+        public void Prepare_AdditiveAilmentContentPreservesLegacyValuesAndSourceDocument()
+        {
+            SaveDocumentDto document = SaveRestorePreparer.Prepare(SaveDataContractTests.CreateValidDocument(), _catalog).Value.Document;
+            document.Header.ContentVersion = 3;
+            string before = JObject.FromObject(document).ToString();
+            PreparedRestoreResult result = SaveRestorePreparer.Prepare(document, _catalog);
+            Assert.That(result.Succeeded, Is.True, Describe(result));
+            Assert.That(result.Value.Document.Header.ContentVersion, Is.EqualTo(_catalog.ContentVersion));
+            Assert.That(JObject.FromObject(document).ToString(), Is.EqualTo(before));
+            Assert.That(JToken.DeepEquals(JToken.FromObject(document.Payload), JToken.FromObject(result.Value.Document.Payload)), Is.True);
+            Assert.That(result.Value.Monsters[0].Instance.EffectiveStats.GetValue(StatIds.BurningResistance), Is.Zero);
+        }
+
+        [Test]
         public void Prepare_MigratesGoldIntoFullLegacyInventoryWithoutMovingExistingItems()
         {
             SaveDocumentDto document = SaveDataContractTests.CreateValidDocument();

@@ -13,6 +13,11 @@ namespace DarkFlare
             {
                 return false;
             }
+            if (skill.OnHitStatus != null)
+            {
+                if (skill.OnHitStatus.ValidateConfiguration().Count != 0) { return false; }
+                if (skill.OnHitStatus.CreateRules().Lifetime != StatusLifetime.Timed) { return false; }
+            }
 
             if (skill.DamageSource == ProjectileDamageSource.Skill)
             {
@@ -77,7 +82,12 @@ namespace DarkFlare
                 baseDamages,
                 tagContext,
                 attacker.Stats,
-                modifiers);
+                modifiers,
+                skill.OnHitStatus != null ? StatusApplication.Capture(skill.OnHitStatus,
+                    new StatusSource(StatusSourceKind.Skill, skill.Id), attacker.Stats, modifiers,
+                    new DamageSourceSnapshot(attacker.CombatIdentity, attacker.Team, skill.Id,
+                        sourceWeapon != null ? sourceWeapon.InstanceId : string.Empty, tagContext),
+                    unchecked(randomSeed ^ 0x37A24913)) : null);
         }
 
         static bool IsValidWeapon(ItemInstance weapon)
