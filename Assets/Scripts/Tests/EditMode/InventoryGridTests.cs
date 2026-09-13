@@ -116,6 +116,82 @@ public class InventoryGridTests
         Assert.IsFalse(grid.Placements.ContainsKey(oversizedPreviousWeapon));
     }
 
+    [Test]
+    public void StackPickup_FillsExistingStackAndPlacesRemainderWithoutLosingQuantity()
+    {
+        var fixture = new DarkFlare.Tests.GameArchitectureTestFixture();
+        try
+        {
+            InventoryModel inventory = fixture.Start().GetModel<InventoryModel>();
+            ItemInstance first = CreateStack(8);
+            ItemInstance incoming = first.BaseDefinition.CreateInstance("incoming", 1, 2);
+            Assert.IsTrue(incoming.TrySetQuantity(5));
+            Assert.IsTrue(inventory.TryAddItem(first));
+            Assert.IsTrue(inventory.TryAddItem(incoming));
+            Assert.AreEqual(10, first.Quantity);
+            Assert.AreEqual(3, incoming.Quantity);
+            Assert.AreEqual(13, inventory.CountItems(first.BaseDefinition));
+            Assert.IsTrue(inventory.Grid.Placements.ContainsKey(incoming));
+        }
+        finally { fixture.Stop(); }
+    }
+
+    [Test]
+    public void StackPickup_WhenRemainderCannotFit_PreservesBothStacks()
+    {
+        var fixture = new DarkFlare.Tests.GameArchitectureTestFixture();
+        try
+        {
+            InventoryModel inventory = fixture.Start().GetModel<InventoryModel>();
+            inventory.RestoreState(new InventoryGrid(1, 1), 0);
+            ItemInstance first = CreateStack(8);
+            ItemInstance incoming = first.BaseDefinition.CreateInstance("incoming", 1, 2);
+            incoming.TrySetQuantity(5);
+            Assert.IsTrue(inventory.TryAddItem(first));
+            Assert.IsFalse(inventory.TryAddItem(incoming));
+            Assert.AreEqual(8, first.Quantity);
+            Assert.AreEqual(5, incoming.Quantity);
+            incoming.TrySetQuantity(2);
+            Assert.IsTrue(inventory.TryAddItem(incoming));
+            Assert.AreEqual(10, first.Quantity);
+            Assert.IsFalse(inventory.Grid.Placements.ContainsKey(incoming));
+        }
+        finally { fixture.Stop(); }
+    }
+
+    [Test]
+    public void StackDrag_MergesAndRemovesEmptySource_EquipmentRemainsSingle()
+    {
+        var fixture = new DarkFlare.Tests.GameArchitectureTestFixture();
+        try
+        {
+            InventoryModel inventory = fixture.Start().GetModel<InventoryModel>();
+            ItemInstance first = CreateStack(3);
+            ItemInstance second = first.BaseDefinition.CreateInstance("second", 1, 2);
+            second.TrySetQuantity(4);
+            inventory.Grid.TryAddAt(first, Vector2Int.zero);
+            inventory.Grid.TryAddAt(second, new Vector2Int(1, 0));
+            Assert.IsTrue(inventory.CanMoveItem(second, Vector2Int.zero));
+            Assert.IsTrue(inventory.TryMoveItem(second, Vector2Int.zero));
+            Assert.AreEqual(7, first.Quantity);
+            Assert.IsFalse(inventory.Grid.Placements.ContainsKey(second));
+            Assert.IsFalse(CreateItem(1, 1, "weapon").TrySetQuantity(2));
+        }
+        finally { fixture.Stop(); }
+    }
+
+    ItemInstance CreateStack(int quantity)
+    {
+        ItemInstance item = CreateItem(1, 1, "material");
+        const BindingFlags Flags = BindingFlags.NonPublic | BindingFlags.Instance;
+        typeof(ItemBaseDefinition).GetField("_itemType", Flags).SetValue(item.BaseDefinition, ItemType.Material);
+        typeof(ItemBaseDefinition).GetField("_stackable", Flags).SetValue(item.BaseDefinition, true);
+        typeof(ItemBaseDefinition).GetField("_maxStackSize", Flags).SetValue(item.BaseDefinition, 10);
+        Assert.IsTrue(item.TrySetQuantity(quantity));
+        Assert.IsFalse(item.BaseDefinition.IsConsumable, "堆叠性不隐含可消耗性");
+        return item;
+    }
+
     ItemInstance CreateItem(int width, int height, string id)
     {
         ItemBaseDefinition definition = ScriptableObject.CreateInstance<ItemBaseDefinition>();

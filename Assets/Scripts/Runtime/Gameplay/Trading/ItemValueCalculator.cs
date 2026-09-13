@@ -13,17 +13,17 @@ namespace DarkFlare
 
             int affixCount = item.Prefixes.Count + item.Suffixes.Count;
             float value = item.BaseDefinition.BaseValue * GetRarityMultiplier(item.Rarity) * (1f + 0.25f * affixCount);
-            return Mathf.RoundToInt(value);
+            return (int)System.Math.Min(int.MaxValue, System.Math.Max(0, System.Math.Round((double)value * item.Quantity)));
         }
 
         public static int GetBuyPrice(ItemInstance item, float buyMultiplier)
         {
-            return Mathf.CeilToInt(GetValue(item) * buyMultiplier);
+            return (int)System.Math.Min(int.MaxValue, System.Math.Max(0, System.Math.Ceiling((double)GetValue(item) * buyMultiplier)));
         }
 
         public static int GetSellPrice(ItemInstance item, float sellMultiplier)
         {
-            return Mathf.FloorToInt(GetValue(item) * sellMultiplier);
+            return (int)System.Math.Min(int.MaxValue, System.Math.Max(0, System.Math.Floor((double)GetValue(item) * sellMultiplier)));
         }
 
         static float GetRarityMultiplier(ItemRarity rarity)

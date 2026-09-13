@@ -49,7 +49,11 @@ namespace DarkFlare.Tests
             Assert.IsNotNull(spawner);
             Assert.IsNotNull(bootstrap);
             InventoryModel oldInventory = oldArchitecture.GetModel<InventoryModel>();
-            oldInventory.AddGold(10000);
+            oldInventory.AddGold(1000);
+            ItemBaseDefinition material = UnityEditor.AssetDatabase.LoadAssetAtPath<ItemBaseDefinition>("Assets/Data/Preset/Items/锻造矿石.asset");
+            ItemInstance materials = material.CreateInstance(oldArchitecture.GetUtility<IItemInstanceIdGenerator>().Next(), 1, 0, ItemRarity.Normal);
+            materials.TrySetQuantity(5);
+            Assert.IsTrue(oldInventory.TryAddItem(materials));
             EquipmentModel equipped = oldArchitecture.GetModel<EquipmentModel>();
             EconomyModel economy = oldArchitecture.GetModel<EconomyModel>();
             foreach (EquipmentSlot slot in EquipmentSlots.All)

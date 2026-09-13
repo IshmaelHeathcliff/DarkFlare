@@ -128,3 +128,12 @@
 
 .item-window .item-workbench-inventory .item-workbench-section-header { display: none; }
 .item-workbench-inventory { height: 314px; min-height: 314px; }
+
+/* Keep inventory rows reachable when text wraps or a legacy save adds a row. */
+.inventory-window .item-workbench-template, .inventory-window .item-workbench-shared { min-height: 0; flex-shrink: 1; }
+.inventory-window .item-workbench-inventory { min-height: 200px; flex-shrink: 1; }
+.inventory-window .inventory-grid-frame { min-height: 0; flex-grow: 1; flex-shrink: 1; align-items: stretch; }
+.inventory-grid-frame .unity-scroll-view__content-container { align-self: center; flex-shrink: 0; }
+.inventory-grid-frame .unity-scroller--vertical { width: 10px; }
+.inventory-grid { flex-shrink: 0; }
+.inventory-window .inventory-template, .inventory-window .inventory-page { flex-shrink: 0; flex-grow: 0; }

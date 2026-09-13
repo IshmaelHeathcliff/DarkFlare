@@ -26,6 +26,32 @@ namespace DarkFlare
 
         public int Revision { get; private set; }
 
+        public int Quantity { get; private set; } = 1;
+
+        public bool CanStackWith(ItemInstance other)
+        {
+            return other != null && other != this && BaseDefinition != null
+                && BaseDefinition.IsStackable && other.BaseDefinition == BaseDefinition
+                && Rarity == other.Rarity && Quality == other.Quality && Durability == other.Durability
+                && _implicitModifiers.Count == 0 && other.ImplicitModifiers.Count == 0
+                && _prefixes.Count == 0 && _suffixes.Count == 0
+                && other.Prefixes.Count == 0 && other.Suffixes.Count == 0;
+        }
+
+        public bool TrySetQuantity(int quantity)
+        {
+            if (BaseDefinition == null || quantity < 1 || quantity > BaseDefinition.MaxStackSize)
+            {
+                return false;
+            }
+            if (quantity != Quantity)
+            {
+                Quantity = quantity;
+                Revision++;
+            }
+            return true;
+        }
+
         public IReadOnlyList<ModifierInstance> ImplicitModifiers => _implicitModifiers;
 
         public IReadOnlyList<AffixInstance> Prefixes => _prefixes;
@@ -76,7 +102,7 @@ namespace DarkFlare
 
         public bool TryAddAffix(AffixInstance affix)
         {
-            if (affix == null || affix.Definition == null || BaseDefinition == null)
+            if (affix == null || affix.Definition == null || BaseDefinition == null || !BaseDefinition.IsEquipment)
             {
                 return false;
             }

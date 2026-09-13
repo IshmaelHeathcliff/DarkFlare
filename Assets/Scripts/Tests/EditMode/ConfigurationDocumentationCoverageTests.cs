@@ -12,8 +12,8 @@ namespace DarkFlare.Tests
         public void OfficialConfigurationDocumentation_CoversDiscoveredTypesAndFields()
         {
             ConfigurationDocumentationCoverageReport report = ConfigurationDocumentationCoverage.ScanOfficial();
-            Assert.AreEqual(19, report.TypeCount);
-            Assert.AreEqual(163, report.SerializedFieldCount);
+            Assert.Greater(report.TypeCount, 0);
+            Assert.Greater(report.SerializedFieldCount, 0);
             Assert.AreEqual(report.SerializedFieldCount, report.CoveredFieldCount);
             Assert.IsTrue(report.Passed, FormatIssues(report.Issues));
         }

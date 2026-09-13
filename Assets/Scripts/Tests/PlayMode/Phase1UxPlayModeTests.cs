@@ -239,7 +239,7 @@ namespace DarkFlare.Tests
                 yield return null;
                 Assert.IsTrue(menu.IsWindowVisible(GameMenuPage.Attributes));
                 InventoryModel inventory = architecture.GetModel<InventoryModel>();
-                inventory.AddGold(10000);
+                inventory.AddGold(1000);
                 ItemInstance armor = architecture.GetModel<EconomyModel>().MerchantStock.First(item => item.BaseDefinition.CanEquipTo(EquipmentSlot.Armor));
                 Assert.IsTrue(architecture.SendCommand(new BuyItemCommand(armor)));
                 CombatActor player = architecture.SendQuery(new GetInventorySnapshotQuery()).Player;
@@ -332,7 +332,7 @@ namespace DarkFlare.Tests
             GameMenuController menu = Object.FindAnyObjectByType<GameMenuController>();
             IArchitecture architecture = menu.GetArchitecture();
             InventoryModel inventory = architecture.GetModel<InventoryModel>();
-            inventory.AddGold(10000);
+            inventory.AddGold(1000);
             EconomyModel economy = architecture.GetModel<EconomyModel>();
             ItemInstance weapon = economy.MerchantStock.First(item => item.BaseDefinition.CanEquipTo(EquipmentSlot.Weapon));
             ItemInstance ring = economy.MerchantStock.First(item => item.BaseDefinition.CanEquipTo(EquipmentSlot.RingLeft));
@@ -393,7 +393,14 @@ namespace DarkFlare.Tests
             GameMenuController menu = Object.FindAnyObjectByType<GameMenuController>();
             IArchitecture architecture = menu.GetArchitecture();
             InventoryModel inventory = architecture.GetModel<InventoryModel>();
-            inventory.AddGold(10000);
+            inventory.AddGold(1000);
+            // 留出上侧跨窗落点；金币现在实际占格，不能作为不可见钱包处理。
+            int currencyCell = 0;
+            foreach (ItemInstance coins in inventory.Grid.Placements.Keys.Where(item => item.BaseDefinition.ItemType == ItemType.Currency).ToArray())
+            {
+                Assert.IsTrue(inventory.TryMoveItem(coins, new Vector2Int(currencyCell % inventory.Grid.Width, inventory.Grid.Height - 1 - currencyCell / inventory.Grid.Width)));
+                currencyCell++;
+            }
             VisualElement root = menu.GetComponent<RuntimePanelView>().Root;
             InventoryPanelController panel = menu.GetComponent<InventoryPanelController>();
             CraftingPanelController crafting = menu.GetComponent<CraftingPanelController>();
@@ -592,19 +599,20 @@ namespace DarkFlare.Tests
         public IEnumerator IndependentWindows_TradeAndCraftWithoutInventoryAndRevokeInvalidTargets()
         {
             yield return _fixture.EnterMain();
+            GrantCraftingMaterials();
             yield return null;
             GameMenuController menu = Object.FindAnyObjectByType<GameMenuController>();
             IArchitecture architecture = menu.GetArchitecture();
             VisualElement root = menu.GetComponent<RuntimePanelView>().Root;
             InventoryModel inventory = architecture.GetModel<InventoryModel>();
-            inventory.AddGold(10000);
+            inventory.AddGold(1000);
             WorldInteractionTarget merchant = FindTarget(GameMenuPage.Shop);
             WorldInteractionTarget craftingTarget = FindTarget(GameMenuPage.Crafting);
             Assert.IsTrue(architecture.SendCommand(new OpenGameMenuCommand(merchant)));
             yield return null;
             yield return null;
             Assert.IsTrue(menu.IsWindowVisible(GameMenuPage.Inventory));
-            Assert.AreEqual(root.Q("inventory-window").worldBound.width, root.Q("shop-window").worldBound.width);
+            Assert.AreEqual(root.Q("inventory-window").worldBound.width, root.Q("shop-window").worldBound.width, root.worldBound.width / Screen.width + 0.01f);
             menu.ClosePage(GameMenuPage.Inventory);
             yield return null;
             ShopPanelController shop = menu.GetComponent<ShopPanelController>();
@@ -643,7 +651,7 @@ namespace DarkFlare.Tests
             yield return null;
             Assert.IsFalse(menu.IsWindowVisible(GameMenuPage.Shop));
             Assert.IsTrue(menu.IsWindowVisible(GameMenuPage.Inventory));
-            Assert.AreEqual(root.Q("inventory-window").worldBound.width, root.Q("crafting-window").worldBound.width);
+            Assert.AreEqual(root.Q("inventory-window").worldBound.width, root.Q("crafting-window").worldBound.width, root.worldBound.width / Screen.width + 0.01f);
             menu.ClosePage(GameMenuPage.Inventory);
             yield return null;
             CraftingPanelController crafting = menu.GetComponent<CraftingPanelController>();
@@ -736,7 +744,7 @@ namespace DarkFlare.Tests
             Assert.IsTrue(setupInventory.HasPlayer, "Main 场景未完成玩家初始化");
             EconomyModel economy = architecture.GetModel<EconomyModel>();
             InventoryModel inventory = architecture.GetModel<InventoryModel>();
-            inventory.AddGold(10000);
+            inventory.AddGold(1000);
 
             for (int i = 0; i < 80; i++)
             {
@@ -1059,6 +1067,7 @@ namespace DarkFlare.Tests
         public IEnumerator Crafting_OnlyUsesItemsPlacedInTheInputSlot()
         {
             yield return _fixture.EnterMain();
+            GrantCraftingMaterials();
             GameMenuController menu = null;
             RuntimePanelView document = null;
             float timeout = Time.realtimeSinceStartup + 15f;
@@ -1093,7 +1102,7 @@ namespace DarkFlare.Tests
                 101,
                 ItemRarity.Normal);
             InventoryModel inventory = architecture.GetModel<InventoryModel>();
-            inventory.AddGold(10000);
+            inventory.AddGold(1000);
             Assert.IsTrue(inventory.TryAddItem(item), "无法添加打造槽验收物品");
             WorldInteractionTarget craftingTarget = FindTarget(GameMenuPage.Crafting);
             Assert.IsNotNull(craftingTarget, "Main 场景缺少打造台交互目标");
@@ -1613,12 +1622,14 @@ namespace DarkFlare.Tests
             }
 
 
-            Rect gridFrame = root.Q<VisualElement>("inventory-grid-frame").worldBound;
+            ScrollView inventoryScroll = root.Q<ScrollView>("inventory-grid-frame");
+            Rect gridFrame = inventoryScroll.contentViewport.worldBound;
             Rect grid = root.Q<VisualElement>("inventory-grid").worldBound;
             Assert.GreaterOrEqual(grid.xMin, gridFrame.xMin - 1f, "背包格超出左边界");
-            Assert.GreaterOrEqual(grid.yMin, gridFrame.yMin - 1f, "背包格超出上边界");
             Assert.LessOrEqual(grid.xMax, gridFrame.xMax + 1f, "背包格超出右边界");
-            Assert.LessOrEqual(grid.yMax, gridFrame.yMax + 1f, "背包格超出下边界");
+            Assert.Greater(gridFrame.height, 0f, "背包滚动视口必须可见");
+            Assert.GreaterOrEqual(inventoryScroll.verticalScroller.highValue,
+                grid.height - gridFrame.height - 1f, "滚动范围必须能到达背包最后一行");
         }
 
         static void AssertElementsDoNotOverlap(VisualElement root, string firstName, string secondName)
@@ -1711,6 +1722,15 @@ namespace DarkFlare.Tests
             Assert.AreEqual(left.yMin, right.yMin, 1f, $"{leftName} 与 {rightName} 未处于同一行");
             Assert.AreEqual(left.width, right.width, 2f, $"{leftName} 与 {rightName} 宽度不一致");
             Assert.Less(left.xMax, right.xMin, $"{leftName} 与 {rightName} 发生重叠");
+        }
+
+        static void GrantCraftingMaterials()
+        {
+            IArchitecture architecture = GameArchitectureProvider.RequireCurrent();
+            ItemBaseDefinition definition = UnityEditor.AssetDatabase.LoadAssetAtPath<ItemBaseDefinition>("Assets/Data/Preset/Items/锻造矿石.asset");
+            ItemInstance item = definition.CreateInstance(architecture.GetUtility<IItemInstanceIdGenerator>().Next(), 1, 0, ItemRarity.Normal);
+            item.TrySetQuantity(10);
+            Assert.IsTrue(architecture.GetModel<InventoryModel>().TryAddItem(item));
         }
 
         static void SetField(object target, string fieldName, object value)

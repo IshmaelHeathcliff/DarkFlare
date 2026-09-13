@@ -545,6 +545,10 @@ namespace DarkFlare
             }
 
             button.text = Localize("crafting.action.cost", label, action.Cost);
+            if (action.Material != null)
+            {
+                button.text += Localize("crafting.action.material", Resolve(action.Material.LocalizedName.Message), action.MaterialOwned, action.MaterialCost);
+            }
             button.tooltip = action.IsAvailable
                 ? Localize("crafting.action.tooltip", label, action.Cost)
                 : GetFailureText(action.FailureReason);
@@ -588,6 +592,7 @@ namespace DarkFlare
 
         public bool CanAcceptItem(ItemInstance item)
         {
+            if (item?.BaseDefinition == null || !item.BaseDefinition.IsEquipment) { return false; }
             if (!IsVisible || !_menu.IsPageAvailable(GameMenuPage.Crafting)) { return false; }
             foreach (CraftingItemSnapshot candidate in this.SendQuery(new GetCraftingSnapshotQuery()).Items)
             {
@@ -827,6 +832,8 @@ namespace DarkFlare
                 CraftingFailureReason.ItemMissing => "crafting.failure.item_not_in_inventory",
                 CraftingFailureReason.ItemNotInInventory => "crafting.failure.item_not_in_inventory",
                 CraftingFailureReason.InsufficientGold => "crafting.failure.insufficient_gold",
+                CraftingFailureReason.InsufficientMaterial => "crafting.failure.insufficient_material",
+                CraftingFailureReason.NotEquipment => "crafting.failure.not_equipment",
                 CraftingFailureReason.MaximumRarity => "crafting.failure.maximum_rarity",
                 CraftingFailureReason.NoChange => "crafting.failure.no_change",
                 CraftingFailureReason.NoCapacity => "crafting.failure.no_capacity",

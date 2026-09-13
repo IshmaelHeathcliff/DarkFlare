@@ -73,7 +73,10 @@ namespace DarkFlare
             for (int i = 0; i < inventorySnapshot.Items.Count; i++)
             {
                 ItemInstance item = inventorySnapshot.Items[i].Item;
-                playerItems.Add(new ShopItemSnapshot(item, ShopItemSource.Player, trading.GetSellPrice(item)));
+                if (item.BaseDefinition.ItemType != ItemType.Currency)
+                {
+                    playerItems.Add(new ShopItemSnapshot(item, ShopItemSource.Player, trading.GetSellPrice(item)));
+                }
             }
 
             return new ShopSnapshot(inventory.Gold, merchantItems, playerItems);

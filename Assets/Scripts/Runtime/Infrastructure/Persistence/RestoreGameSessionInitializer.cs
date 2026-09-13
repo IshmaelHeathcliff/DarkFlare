@@ -50,6 +50,7 @@ namespace DarkFlare
 
             ValidateCatalogCompatibility(context.ContentCatalog);
             IArchitecture architecture = context.Architecture;
+            architecture.GetModel<InventoryModel>().ConfigureCurrency(context.ContentCatalog);
             IReadOnlyList<MonsterDefinition> monsterDefinitions = _prepared.SpawnDefinition
                 .AllMonsters
                 .Concat(_prepared.Monsters.Select(monster => monster.Definition))

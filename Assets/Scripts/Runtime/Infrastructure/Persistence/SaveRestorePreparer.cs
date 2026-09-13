@@ -133,7 +133,7 @@ namespace DarkFlare
             }
 
             if (document.Header.CatalogId == "core" && catalog.CatalogId == "core"
-                && document.Header.ContentVersion == 1 && catalog.ContentVersion == 2)
+                && document.Header.ContentVersion == 1 && (catalog.ContentVersion == 2 || catalog.ContentVersion == 3))
             {
                 // v1 stores four stable slots. New slots start empty; rolled values and stock stay intact.
                 if (document.Payload.Profile.Equipment.Any(loadout =>
@@ -145,6 +145,57 @@ namespace DarkFlare
                 }
                 document = JObject.FromObject(document).ToObject<SaveDocumentDto>();
                 document.Header.ContentVersion = 2;
+            }
+
+            if (document.Header.CatalogId == "core" && catalog.CatalogId == "core"
+                && document.Header.ContentVersion == 2 && catalog.ContentVersion == 3)
+            {
+                document = JObject.FromObject(document).ToObject<SaveDocumentDto>();
+                ItemBaseDefinition gold = catalog.GetAll<ItemBaseDefinition>().FirstOrDefault(item => item.ItemType == ItemType.Currency);
+                if (gold == null)
+                {
+                    Add(issues, DtoMapIssueCode.MissingContent, "catalog", "迁移缺少金币配置");
+                    return Failure(issues);
+                }
+                ProfileSaveData profile = document.Payload.Profile;
+                if (profile.Gold > 0)
+                {
+                    long stacks = ((long)profile.Gold + gold.MaxStackSize - 1) / gold.MaxStackSize;
+                    if (stacks + document.Payload.Items.Count > LocalSaveFormat.MaximumItems)
+                    {
+                        Add(issues, DtoMapIssueCode.InvalidValue, "payload.profile.gold", "金币迁移超出存档物品容量，请提高金币堆叠上限");
+                        return Failure(issues);
+                    }
+                    InventoryLayoutDto inventory = profile.Inventory;
+                    int x = 0;
+                    int y = 0;
+                    int remainingGold = profile.Gold;
+                    while (remainingGold > 0)
+                    {
+                        while (y < inventory.Height && inventory.Placements.Any(placement =>
+                            x >= placement.X && x < placement.X + placement.Width && y >= placement.Y && y < placement.Y + placement.Height))
+                        {
+                            x++;
+                            if (x >= inventory.Width) { x = 0; y++; }
+                        }
+                        // 历史满背包增加一行，以保留所有旧物品的身份和原位置。
+                        if (y == inventory.Height) { inventory.Height++; }
+                        string id = new UuidItemInstanceIdGenerator().Next().Value;
+                        catalog.TryGetContentId(gold, out ContentId contentId);
+                        document.Payload.Items.Add(new ItemInstanceDto
+                        {
+                            InstanceId = id, BaseContentId = contentId.ToString(), Quantity = Math.Min(remainingGold, gold.MaxStackSize),
+                            Rarity = ItemRarity.Normal, ItemLevel = 1, Durability = 1f
+                        });
+                        inventory.Placements.Add(new InventoryPlacementDto
+                        {
+                            ItemInstanceId = id, X = x, Y = y, Width = 1, Height = 1
+                        });
+                        remainingGold -= Math.Min(remainingGold, gold.MaxStackSize);
+                    }
+                    document.Header.Summary.ItemCount = document.Payload.Items.Count;
+                }
+                document.Header.ContentVersion = 3;
             }
 
             if (!string.Equals(document.Header.CatalogId, catalog.CatalogId, StringComparison.Ordinal)
@@ -175,6 +226,16 @@ namespace DarkFlare
             }
 
             PlayerRunStateDto playerState = document.Payload.Run.Player;
+            if (document.Header.CatalogId == "core" && document.Header.ContentVersion >= 3)
+            {
+                long gold = runtimeResult.Value.Inventory.Placements.Keys
+                    .Where(item => item.BaseDefinition.ItemType == ItemType.Currency).Sum(item => (long)item.Quantity);
+                if (gold != document.Payload.Profile.Gold)
+                {
+                    Add(issues, DtoMapIssueCode.InvalidValue, "payload.profile.gold", "背包金币与摘要不一致");
+                    return Failure(issues);
+                }
+            }
             CharacterDefinition playerDefinition = Resolve<CharacterDefinition>(
                 playerState.DefinitionContentId,
                 catalog,

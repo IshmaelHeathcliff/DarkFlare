@@ -58,6 +58,8 @@ namespace DarkFlare.Tests
             }
 
             Architecture = GameArchitectureProvider.RequireCurrent();
+            Architecture.GetModel<InventoryModel>().ConfigureCurrency(
+                UnityEditor.AssetDatabase.LoadAssetAtPath<ItemBaseDefinition>("Assets/Data/Preset/Items/金币.asset"));
         }
 
         public IEnumerator EnterMain(GameStartIntent intent = GameStartIntent.NewGame)

@@ -15,7 +15,7 @@ namespace DarkFlare
 
         protected override bool OnDo()
         {
-            return this.GetModel<InventoryModel>().Grid.CanMove(_item, _origin, out _);
+            return this.GetModel<InventoryModel>().CanMoveItem(_item, _origin);
         }
     }
 

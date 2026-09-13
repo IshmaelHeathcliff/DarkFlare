@@ -706,7 +706,7 @@ namespace DarkFlare
             foreach (VisualElement button in _panel.Query<VisualElement>().ToList())
             {
                 if (button is not Button && button is not Toggle) { continue; }
-                if (button == current || !IsNavigable(button)) { continue; }
+                if (button == current || !button.focusable || !IsNavigable(button)) { continue; }
                 if (GetWindow(button) != GetWindow(current) && !IsInScrollViewport(button)) { continue; }
                 candidates.Add(button);
                 rectangles.Add(button.worldBound);

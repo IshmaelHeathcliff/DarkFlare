@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "family": "forging-material",
+  "alpha_threshold": 5,
+  "canvas": { "width": 1254, "height": 1254 },
+  "alpha_required": true,
+  "assets": [
+    {
+      "name": "forging_ore",
+      "image": "../../../../../Assets/Art/Sprites/Items/Materials/item_forging_ore.png",
+      "visible_width": [750, 855],
+      "visible_height": [850, 905],
+      "alpha_coverage": [0.25, 0.5],
+      "visual_center_x": [560, 710],
+      "visual_center_y": [560, 710],
+      "edge_clearance": 150
+    }
+  ]
+}

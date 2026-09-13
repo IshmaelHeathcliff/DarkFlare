@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace DarkFlare
@@ -10,7 +12,42 @@ namespace DarkFlare
 
         public InventoryGrid Grid { get; private set; }
 
-        public int Gold { get; private set; }
+        ItemBaseDefinition _goldDefinition;
+
+        public int Gold => CountItems(_goldDefinition);
+
+        public void ConfigureCurrency(ItemBaseDefinition definition)
+        {
+            if (definition == null || definition.ItemType != ItemType.Currency || !definition.IsStackable || !definition.IsConsumable)
+            {
+                throw new ArgumentException("金币必须是可堆叠、可消耗的通货", nameof(definition));
+            }
+            _goldDefinition = definition;
+        }
+
+        public void ConfigureCurrency(ContentCatalog catalog)
+        {
+            foreach (ItemBaseDefinition definition in catalog.GetAll<ItemBaseDefinition>())
+            {
+                if (definition.ItemType == ItemType.Currency)
+                {
+                    ConfigureCurrency(definition);
+                    return;
+                }
+            }
+            throw new InvalidOperationException("内容目录缺少金币配置");
+        }
+
+        public int CountItems(ItemBaseDefinition definition)
+        {
+            if (definition == null) { return 0; }
+            long count = 0;
+            foreach (ItemInstance item in Grid.Placements.Keys)
+            {
+                if (item.BaseDefinition == definition) { count += item.Quantity; }
+            }
+            return (int)Math.Min(int.MaxValue, count);
+        }
 
         protected override void OnInit()
         {
@@ -30,16 +67,21 @@ namespace DarkFlare
             }
 
             Grid = grid;
-            Gold = gold;
+            if (Gold != gold)
+            {
+                throw new InvalidOperationException("背包金币与存档摘要不一致");
+            }
         }
 
         public bool TryAddItem(ItemInstance item)
         {
-            bool added = Grid.TryAdd(item);
+            int previousGold = Gold;
+            bool added = TryAddItemWithoutEvents(item);
 
             if (added)
             {
                 this.SendEvent(new InventoryChangedEvent(item, InventoryChangeType.Added));
+                NotifyGoldChanged(previousGold);
             }
 
             return added;
@@ -47,7 +89,8 @@ namespace DarkFlare
 
         public bool TryAddItemAt(ItemInstance item, Vector2Int origin)
         {
-            bool added = Grid.TryAddAt(item, origin);
+            int previousGold = Gold;
+            bool added = TryAddItemAtWithoutEvents(item, origin);
 
             if (added)
             {
@@ -55,7 +98,8 @@ namespace DarkFlare
                     item,
                     InventoryChangeType.Added,
                     default,
-                    Grid.Placements[item]));
+                    Grid.Placements.TryGetValue(item, out RectInt placement) ? placement : default));
+                NotifyGoldChanged(previousGold);
             }
 
             return added;
@@ -66,6 +110,18 @@ namespace DarkFlare
             if (item == null || !Grid.Placements.TryGetValue(item, out RectInt previousPlacement))
             {
                 return false;
+            }
+
+            ItemInstance stack = FindMergeTarget(item, origin);
+            if (stack != null)
+            {
+                int moved = Math.Min(item.Quantity, stack.BaseDefinition.MaxStackSize - stack.Quantity);
+                stack.TrySetQuantity(stack.Quantity + moved);
+                if (moved == item.Quantity) { Grid.Remove(item); }
+                else { item.TrySetQuantity(item.Quantity - moved); }
+                NotifyItemChanged(item, Grid.Placements.ContainsKey(item) ? InventoryChangeType.Moved : InventoryChangeType.Removed);
+                NotifyItemChanged(stack, InventoryChangeType.Added);
+                return true;
             }
 
             if (!Grid.CanMove(item, origin, out ItemInstance exchangedItem))
@@ -97,11 +153,13 @@ namespace DarkFlare
 
         public bool RemoveItem(ItemInstance item)
         {
+            int previousGold = Gold;
             bool removed = Grid.Remove(item);
 
             if (removed)
             {
                 this.SendEvent(new InventoryChangedEvent(item, InventoryChangeType.Removed));
+                NotifyGoldChanged(previousGold);
             }
 
             return removed;
@@ -151,22 +209,22 @@ namespace DarkFlare
 
         public bool CanAddItem(ItemInstance item)
         {
-            return Grid.CanAdd(item);
+            return CanReceive(item, null);
         }
 
         public bool CanAddItemAt(ItemInstance item, Vector2Int origin)
         {
-            return Grid.CanAddAt(item, origin);
+            return CanReceive(item, origin);
         }
 
         public bool TryAddItemWithoutEvents(ItemInstance item)
         {
-            return Grid.TryAdd(item);
+            return TryReceive(item, null);
         }
 
         public bool TryAddItemAtWithoutEvents(ItemInstance item, Vector2Int origin)
         {
-            return Grid.TryAddAt(item, origin);
+            return TryReceive(item, origin);
         }
 
         public bool RemoveItemWithoutEvents(ItemInstance item)
@@ -193,8 +251,11 @@ namespace DarkFlare
             if (amount > 0)
             {
                 int previousGold = Gold;
-                Gold += amount;
-                this.SendEvent(new GoldChangedEvent(previousGold, Gold));
+                if (!TryChangeGoldWithoutEvents(amount))
+                {
+                    throw new InvalidOperationException("金币发放失败：配置缺失、背包空间不足或数量溢出");
+                }
+                NotifyGoldChanged(previousGold);
             }
         }
 
@@ -206,7 +267,45 @@ namespace DarkFlare
                 return false;
             }
 
-            Gold = (int)next;
+            if (change == 0) { return true; }
+            if (_goldDefinition == null) { return false; }
+            if (change < 0) { return TryConsumeWithoutEvents(_goldDefinition, -change); }
+            int remaining = change;
+            foreach (ItemInstance stack in Grid.Placements.Keys)
+            {
+                if (stack.BaseDefinition == _goldDefinition)
+                {
+                    remaining = Math.Max(0, remaining - (_goldDefinition.MaxStackSize - stack.Quantity));
+                }
+            }
+            InventoryGrid planned = new InventoryGrid(Grid.Width, Grid.Height);
+            foreach (KeyValuePair<ItemInstance, RectInt> pair in Grid.Placements)
+            {
+                planned.TryAddAt(pair.Key, pair.Value.position);
+            }
+            List<ItemInstance> newStacks = new List<ItemInstance>();
+            while (remaining > 0)
+            {
+                ItemInstance coins = _goldDefinition.CreateInstance(
+                    this.GetUtility<IItemInstanceIdGenerator>().Next(), 1, 0, ItemRarity.Normal);
+                int quantity = Math.Min(remaining, _goldDefinition.MaxStackSize);
+                coins.TrySetQuantity(quantity);
+                if (!planned.TryAdd(coins)) { return false; }
+                newStacks.Add(coins);
+                remaining -= quantity;
+            }
+            remaining = change;
+            foreach (ItemInstance stack in Grid.Placements.Keys)
+            {
+                if (stack.BaseDefinition != _goldDefinition) { continue; }
+                int moved = Math.Min(remaining, _goldDefinition.MaxStackSize - stack.Quantity);
+                stack.TrySetQuantity(stack.Quantity + moved);
+                remaining -= moved;
+            }
+            foreach (ItemInstance stack in newStacks)
+            {
+                Grid.TryAddAt(stack, planned.Placements[stack].position);
+            }
             return true;
         }
 
@@ -214,6 +313,7 @@ namespace DarkFlare
         {
             if (previousGold != Gold)
             {
+                this.SendEvent(new InventoryChangedEvent(null, InventoryChangeType.Added));
                 this.SendEvent(new GoldChangedEvent(previousGold, Gold));
             }
         }
@@ -231,9 +331,76 @@ namespace DarkFlare
             }
 
             int previousGold = Gold;
-            Gold -= amount;
-            this.SendEvent(new GoldChangedEvent(previousGold, Gold));
+            if (!TryChangeGoldWithoutEvents(-amount)) { return false; }
+            NotifyGoldChanged(previousGold);
             return true;
+        }
+
+        internal bool TryConsumeWithoutEvents(ItemBaseDefinition definition, int quantity)
+        {
+            if (definition == null || !definition.IsConsumable || quantity < 0 || CountItems(definition) < quantity)
+            {
+                return false;
+            }
+            List<ItemInstance> items = new List<ItemInstance>(Grid.Placements.Keys);
+            foreach (ItemInstance item in items)
+            {
+                if (quantity == 0) { break; }
+                if (item.BaseDefinition != definition) { continue; }
+                int consumed = Math.Min(quantity, item.Quantity);
+                if (consumed == item.Quantity) { Grid.Remove(item); }
+                else { item.TrySetQuantity(item.Quantity - consumed); }
+                quantity -= consumed;
+            }
+            return true;
+        }
+
+        bool CanReceive(ItemInstance item, Vector2Int? origin)
+        {
+            if (item == null || item.BaseDefinition == null || Grid.Placements.ContainsKey(item)) { return false; }
+            if (item.BaseDefinition == _goldDefinition && (long)Gold + item.Quantity > int.MaxValue) { return false; }
+            long remaining = item.Quantity;
+            foreach (KeyValuePair<ItemInstance, RectInt> pair in Grid.Placements)
+            {
+                if (origin.HasValue && !pair.Value.Contains(origin.Value)) { continue; }
+                if (pair.Key.CanStackWith(item)) { remaining -= pair.Key.BaseDefinition.MaxStackSize - pair.Key.Quantity; }
+            }
+            return remaining <= 0 || (origin.HasValue ? Grid.CanAddAt(item, origin.Value) : Grid.CanAdd(item));
+        }
+
+        public bool CanMoveItem(ItemInstance item, Vector2Int origin)
+        {
+            return item != null && Grid.Placements.ContainsKey(item)
+                && (FindMergeTarget(item, origin) != null || Grid.CanMove(item, origin, out _));
+        }
+
+        ItemInstance FindMergeTarget(ItemInstance item, Vector2Int origin)
+        {
+            foreach (KeyValuePair<ItemInstance, RectInt> pair in Grid.Placements)
+            {
+                if (pair.Value.Contains(origin) && pair.Key.CanStackWith(item) && pair.Key.Quantity < pair.Key.BaseDefinition.MaxStackSize)
+                {
+                    return pair.Key;
+                }
+            }
+            return null;
+        }
+
+        bool TryReceive(ItemInstance item, Vector2Int? origin)
+        {
+            if (!CanReceive(item, origin)) { return false; }
+            int remaining = item.Quantity;
+            foreach (KeyValuePair<ItemInstance, RectInt> pair in Grid.Placements)
+            {
+                if (origin.HasValue && !pair.Value.Contains(origin.Value)) { continue; }
+                if (!pair.Key.CanStackWith(item)) { continue; }
+                int moved = Math.Min(remaining, pair.Key.BaseDefinition.MaxStackSize - pair.Key.Quantity);
+                pair.Key.TrySetQuantity(pair.Key.Quantity + moved);
+                remaining -= moved;
+                if (remaining == 0) { return true; }
+            }
+            item.TrySetQuantity(remaining);
+            return origin.HasValue ? Grid.TryAddAt(item, origin.Value) : Grid.TryAdd(item);
         }
     }
 }

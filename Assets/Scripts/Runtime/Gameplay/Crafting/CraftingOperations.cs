@@ -152,6 +152,10 @@ namespace DarkFlare
             {
                 return CraftingFailureReason.ItemMissing;
             }
+            if (!item.BaseDefinition.IsEquipment)
+            {
+                return CraftingFailureReason.NotEquipment;
+            }
 
             if (!Enum.IsDefined(typeof(CraftOperation), operation))
             {

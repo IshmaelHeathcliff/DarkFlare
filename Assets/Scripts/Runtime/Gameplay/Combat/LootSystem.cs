@@ -37,6 +37,7 @@ namespace DarkFlare
 
             InventoryModel inventory = this.GetModel<InventoryModel>();
             ItemInstance item = pickup.Item;
+            int previousGold = inventory.Gold;
             if (!inventory.TryAddItemWithoutEvents(item))
             {
                 ApplicationLog.Info(LogEventIds.GameplayCombat, $"[LootSystem] 背包已满，无法拾取 {DescribeItem(pickup.Item)}");
@@ -46,6 +47,7 @@ namespace DarkFlare
             pickup.ClearItem();
             this.GetUtility<SessionObjectRegistry>().Release(pickup.gameObject);
             inventory.NotifyItemChanged(item, InventoryChangeType.Added);
+            inventory.NotifyGoldChanged(previousGold);
             ApplicationLog.Info(LogEventIds.GameplayCombat, $"[LootSystem] {collector.ActorId} 拾取了 {DescribeItem(item)}，放入背包");
             return true;
         }
@@ -64,6 +66,7 @@ namespace DarkFlare
 
             InventoryModel inventory = this.GetModel<InventoryModel>();
             RectInt placement = inventory.Grid.Placements[item];
+            int previousGold = inventory.Gold;
             LootPickupController pickup = null;
             bool removed = false;
             try
@@ -92,6 +95,7 @@ namespace DarkFlare
             }
 
             inventory.NotifyItemChanged(item, InventoryChangeType.Removed);
+            inventory.NotifyGoldChanged(previousGold);
             ApplicationLog.Info(LogEventIds.GameplayCombat, $"[LootSystem] 丢弃 {DescribeItem(item)}，世界身份 {pickup.Id.Value}");
             return true;
         }

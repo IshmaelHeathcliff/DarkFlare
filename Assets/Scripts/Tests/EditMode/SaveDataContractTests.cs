@@ -81,7 +81,7 @@ namespace DarkFlare.Tests
             SaveDataValidationResult result = SaveDataValidator.ValidateDocument(document);
 
             Assert.IsTrue(result.Succeeded, Describe(result.Issues));
-            Assert.AreEqual(1, SaveSchemaVersion.Current.Value);
+            Assert.AreEqual(SaveSchemaVersion.Current.Value, new SaveHeaderDto().SaveSchemaVersion);
         }
 
         [Test]

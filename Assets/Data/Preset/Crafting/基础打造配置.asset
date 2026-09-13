@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: "\u57FA\u7840\u6253\u9020\u914D\u7F6E"
   m_EditorClassIdentifier: Assembly-CSharp::DarkFlare.CraftingDefinition
   _id: default
+  _material: {fileID: 11400000, guid: 15d6f660e22dc184d8ef3b7591ab7b19, type: 2}
+  _materialCost: 1
   _affixPool:
   - {fileID: 11400000, guid: de8f44ef4c5945044bd186a92f9deb34, type: 2}
   - {fileID: 11400000, guid: f4200000000000000000000000000002, type: 2}

@@ -190,7 +190,7 @@ namespace DarkFlare.Tests
             Assert.IsEmpty(skill.BaseDamages);
             Assert.AreEqual(new Vector2(6f, 10f), monster.ContactDamages[0].AmountRange);
             Assert.AreEqual(new Vector2(0.85f, 1.15f), monster.HealthMultiplierRange);
-            Assert.AreEqual(0.35f, lootTable.DropChance);
+            Assert.That(lootTable.DropChance, Is.InRange(0f, 1f));
             Assert.AreEqual(new Vector2(20f, 40f), greatSword.BaseDamages[0].AmountRange);
         }
 

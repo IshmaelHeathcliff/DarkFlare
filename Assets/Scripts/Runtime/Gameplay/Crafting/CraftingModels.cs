@@ -35,7 +35,9 @@ namespace DarkFlare
         NoVariableAffix,
         NoLegalAffix,
         CannotBuildCompleteResult,
-        CommitFailed
+        CommitFailed,
+        InsufficientMaterial,
+        NotEquipment
     }
 
     public readonly struct CraftingEvaluation
@@ -46,10 +48,20 @@ namespace DarkFlare
 
         public int Cost { get; }
 
-        public CraftingEvaluation(CraftingFailureReason failureReason, int cost)
+        public ItemBaseDefinition Material { get; }
+
+        public int MaterialCost { get; }
+
+        public int MaterialOwned { get; }
+
+        public CraftingEvaluation(CraftingFailureReason failureReason, int cost,
+            ItemBaseDefinition material = null, int materialCost = 0, int materialOwned = 0)
         {
             FailureReason = failureReason;
             Cost = cost;
+            Material = material;
+            MaterialCost = materialCost;
+            MaterialOwned = materialOwned;
         }
     }
 

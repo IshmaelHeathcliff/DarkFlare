@@ -13,108 +13,140 @@ MonoBehaviour:
   m_Name: "\u57FA\u7840\u602A\u7269\u6389\u843D\u8868"
   m_EditorClassIdentifier: Assembly-CSharp::DarkFlare.LootTableDefinition
   _id: wasteland_wraith
-  _dropChance: 0.35
+  _dropChance: 0.5
   _entries:
   - _item: {fileID: 11400000, guid: 97909e3c17a4418428112ff92c410eb5, type: 2}
-    _weight: 16
+    _weight: 100
     _rarity: 1
     _prefixCount: 1
     _suffixCount: 1
+    _quantityRange: {x: 1, y: 1}
   - _item: {fileID: 11400000, guid: f4300000000000000000000000000002, type: 2}
-    _weight: 14
+    _weight: 100
     _rarity: 1
     _prefixCount: 1
     _suffixCount: 1
+    _quantityRange: {x: 1, y: 1}
   - _item: {fileID: 11400000, guid: a03568360f4764b498e15d98263706c8, type: 2}
-    _weight: 16
+    _weight: 100
     _rarity: 1
     _prefixCount: 1
     _suffixCount: 1
+    _quantityRange: {x: 1, y: 1}
   - _item: {fileID: 11400000, guid: f4300000000000000000000000000004, type: 2}
-    _weight: 12
+    _weight: 100
     _rarity: 1
     _prefixCount: 1
     _suffixCount: 1
+    _quantityRange: {x: 1, y: 1}
   - _item: {fileID: 11400000, guid: c8a3f702d370824459a1eea34e50de52, type: 2}
-    _weight: 14
+    _weight: 100
     _rarity: 1
     _prefixCount: 1
     _suffixCount: 1
+    _quantityRange: {x: 1, y: 1}
   - _item: {fileID: 11400000, guid: f4300000000000000000000000000006, type: 2}
-    _weight: 14
+    _weight: 100
     _rarity: 1
     _prefixCount: 1
     _suffixCount: 1
+    _quantityRange: {x: 1, y: 1}
   - _item: {fileID: 11400000, guid: f4300000000000000000000000000007, type: 2}
-    _weight: 14
+    _weight: 100
     _rarity: 1
     _prefixCount: 1
     _suffixCount: 1
+    _quantityRange: {x: 1, y: 1}
   - _item: {fileID: 11400000, guid: fa765d287165a3d4ebdfe7cf40b6ae34, type: 2}
-    _weight: 12
+    _weight: 100
     _rarity: 1
     _prefixCount: 1
     _suffixCount: 1
+    _quantityRange: {x: 1, y: 1}
   - _item: {fileID: 11400000, guid: cc27877c7a2bc6b43a57ede39e273033, type: 2}
-    _weight: 12
+    _weight: 100
     _rarity: 1
     _prefixCount: 1
     _suffixCount: 1
+    _quantityRange: {x: 1, y: 1}
   - _item: {fileID: 11400000, guid: eaa62df3bc3f6d848abc6d976822e95b, type: 2}
-    _weight: 12
+    _weight: 100
     _rarity: 1
     _prefixCount: 1
     _suffixCount: 1
+    _quantityRange: {x: 1, y: 1}
   - _item: {fileID: 11400000, guid: 802afc9b5687ee547be786b18842fc24, type: 2}
-    _weight: 12
+    _weight: 100
     _rarity: 1
     _prefixCount: 1
     _suffixCount: 1
+    _quantityRange: {x: 1, y: 1}
   - _item: {fileID: 11400000, guid: ae12e6b1ab7baa942a4de2151eef0994, type: 2}
-    _weight: 12
+    _weight: 100
     _rarity: 1
     _prefixCount: 1
     _suffixCount: 1
+    _quantityRange: {x: 1, y: 1}
   - _item: {fileID: 11400000, guid: b33f0e21d81094644a8b22172867b66e, type: 2}
-    _weight: 12
+    _weight: 100
     _rarity: 1
     _prefixCount: 1
     _suffixCount: 1
+    _quantityRange: {x: 1, y: 1}
   - _item: {fileID: 11400000, guid: beee9bdf3ea263042b24230ee88c6f0a, type: 2}
-    _weight: 12
+    _weight: 100
     _rarity: 1
     _prefixCount: 1
     _suffixCount: 1
+    _quantityRange: {x: 1, y: 1}
   - _item: {fileID: 11400000, guid: 4b04c334dd1b7b9408e33068d5d431d3, type: 2}
-    _weight: 12
+    _weight: 100
     _rarity: 1
     _prefixCount: 1
     _suffixCount: 1
+    _quantityRange: {x: 1, y: 1}
   - _item: {fileID: 11400000, guid: 571e837e909923a41b918d0e4db35a96, type: 2}
-    _weight: 12
+    _weight: 100
     _rarity: 1
     _prefixCount: 1
     _suffixCount: 1
+    _quantityRange: {x: 1, y: 1}
   - _item: {fileID: 11400000, guid: cfe6b0bbe920f2645a1a2df92fcda427, type: 2}
-    _weight: 12
+    _weight: 100
     _rarity: 1
     _prefixCount: 1
     _suffixCount: 1
+    _quantityRange: {x: 1, y: 1}
   - _item: {fileID: 11400000, guid: 4d5a7c97b0b175a418a5cdee3e137585, type: 2}
-    _weight: 12
+    _weight: 100
     _rarity: 1
     _prefixCount: 1
     _suffixCount: 1
+    _quantityRange: {x: 1, y: 1}
   - _item: {fileID: 11400000, guid: 53344c572c2ea1442b5717c7c2441def, type: 2}
-    _weight: 12
+    _weight: 100
     _rarity: 1
     _prefixCount: 1
     _suffixCount: 1
+    _quantityRange: {x: 1, y: 1}
   - _item: {fileID: 11400000, guid: faef06477340bd14f81abb11b778e07f, type: 2}
-    _weight: 12
+    _weight: 100
     _rarity: 1
     _prefixCount: 1
     _suffixCount: 1
+    _quantityRange: {x: 1, y: 1}
+  - _item: {fileID: 11400000, guid: 76f4e92a3a2228a4480669c86a0151b2, type: 2}
+    _weight: 2000
+    _rarity: 0
+    _prefixCount: 0
+    _suffixCount: 0
+    _quantityRange: {x: 8, y: 24}
+  - _item: {fileID: 11400000, guid: 15d6f660e22dc184d8ef3b7591ab7b19, type: 2}
+    _weight: 500
+    _rarity: 0
+    _prefixCount: 0
+    _suffixCount: 0
+    _quantityRange: {x: 1, y: 3}
   _affixPool:
   - {fileID: 11400000, guid: de8f44ef4c5945044bd186a92f9deb34, type: 2}
   - {fileID: 11400000, guid: f4200000000000000000000000000002, type: 2}

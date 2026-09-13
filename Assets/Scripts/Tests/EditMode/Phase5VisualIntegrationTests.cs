@@ -140,6 +140,11 @@ namespace DarkFlare.Tests
                 Assert.IsTrue(iconGuids.Add(item.Icon.AssetGUID), $"{item.Id} 与其他装备共用了图标");
 
                 string path = AssetDatabase.GUIDToAssetPath(item.Icon.AssetGUID);
+                if (!item.IsEquipment)
+                {
+                    AssertSingleSpriteContract(path);
+                    continue;
+                }
                 Assert.That(
                     path,
                     Does.StartWith("Assets/Art/Sprites/Items/Equipment/"),

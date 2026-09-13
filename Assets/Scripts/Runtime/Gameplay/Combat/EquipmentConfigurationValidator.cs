@@ -20,6 +20,10 @@ namespace DarkFlare
             }
 
             ValidateSlots(definition, issues);
+            if (definition.IsStackable && (definition.ImplicitModifiers.Count > 0 || definition.DefaultRarity != ItemRarity.Normal))
+            {
+                issues.Add("可堆叠物品必须为普通且没有隐式词条");
+            }
             ValidateModifiers(definition, issues);
             RandomizationConfigurationValidator.ValidateDamageRolls(
                 definition.BaseDamages,
@@ -84,7 +88,7 @@ namespace DarkFlare
             {
                 issues.Add("饰品只能允许戒指、项链或腰带槽");
             }
-            else if ((definition.ItemType == ItemType.Material || definition.ItemType == ItemType.Currency)
+            else if (!definition.IsEquipment
                      && slots != EquipmentSlotMask.None)
             {
                 issues.Add("材料和货币不能配置装备槽");

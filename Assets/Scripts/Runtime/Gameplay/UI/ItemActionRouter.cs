@@ -145,6 +145,7 @@ namespace DarkFlare
                     return this.SendQuery(new GetShopSnapshotQuery()).Gold < Price(source.Item, true)
                         ? "item.action.no_gold" : "item.action.no_space";
                 case ItemActionKind.Sell:
+                    if (source.Item.BaseDefinition.ItemType == ItemType.Currency) { break; }
                     if (carried && _menu.IsWindowVisible(GameMenuPage.Shop)
                         && (long)this.SendQuery(new GetShopSnapshotQuery()).Gold + Price(source.Item, false) <= int.MaxValue) { return null; }
                     break;

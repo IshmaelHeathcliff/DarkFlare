@@ -50,14 +50,14 @@
           </Bindings>
         </ui:Label>
       </ui:VisualElement>
-      <ui:VisualElement name="inventory-grid-frame" class="inventory-grid-frame">
+      <ui:ScrollView name="inventory-grid-frame" class="inventory-grid-frame" mode="Vertical" horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="Auto">
         <ui:VisualElement name="inventory-grid" class="inventory-grid" picking-mode="Position" />
         <ui:Label name="inventory-empty" text="" class="inventory-empty" picking-mode="Ignore">
           <Bindings>
             <l:LocalizedString property="text" table="ui" entry="workbench.inventory.empty" />
           </Bindings>
         </ui:Label>
-      </ui:VisualElement>
+      </ui:ScrollView>
       <ui:Label text="" class="item-workbench-help">
         <Bindings>
           <l:LocalizedString property="text" table="ui" entry="workbench.inventory.help" />

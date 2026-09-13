@@ -32,7 +32,8 @@ namespace DarkFlare
         {
             int cost = GetCost(operation, scope, item != null ? item.Rarity : ItemRarity.Normal);
 
-            if (_definition == null)
+            if (_definition == null || (_definition.Material != null
+                && (_definition.Material.ItemType != ItemType.Material || !_definition.Material.IsConsumable)))
             {
                 return new CraftingEvaluation(CraftingFailureReason.NotConfigured, cost);
             }
@@ -43,6 +44,11 @@ namespace DarkFlare
             }
 
             InventoryModel inventory = this.GetModel<InventoryModel>();
+
+            if (item.BaseDefinition == null || !item.BaseDefinition.IsEquipment)
+            {
+                return new CraftingEvaluation(CraftingFailureReason.NotEquipment, cost);
+            }
 
             if (!inventory.Grid.Placements.ContainsKey(item))
             {
@@ -60,9 +66,11 @@ namespace DarkFlare
                 return new CraftingEvaluation(domainFailure, cost);
             }
 
-            return inventory.Gold >= cost
-                ? new CraftingEvaluation(CraftingFailureReason.None, cost)
-                : new CraftingEvaluation(CraftingFailureReason.InsufficientGold, cost);
+            int materialCost = _definition.GetMaterialCost(scope);
+            int materialOwned = inventory.CountItems(_definition.Material);
+            CraftingFailureReason failure = inventory.Gold < cost ? CraftingFailureReason.InsufficientGold
+                : materialOwned < materialCost ? CraftingFailureReason.InsufficientMaterial : CraftingFailureReason.None;
+            return new CraftingEvaluation(failure, cost, _definition.Material, materialCost, materialOwned);
         }
 
         public CraftingResult Craft(
@@ -101,7 +109,8 @@ namespace DarkFlare
                 return result.WithEconomy(evaluation.Cost, inventory.Gold);
             }
 
-            if (!inventory.TrySpendGold(evaluation.Cost))
+            int previousGold = inventory.Gold;
+            if (!inventory.TryChangeGoldWithoutEvents(-evaluation.Cost))
             {
                 item.TryApplyAffixState(
                     item.Revision,
@@ -117,6 +126,13 @@ namespace DarkFlare
                     inventory.Gold,
                     rootSeed);
             }
+
+            if (evaluation.MaterialCost > 0)
+            {
+                inventory.TryConsumeWithoutEvents(evaluation.Material, evaluation.MaterialCost);
+            }
+            inventory.NotifyItemChanged(item, InventoryChangeType.Added);
+            inventory.NotifyGoldChanged(previousGold);
 
             CraftingResult committed = result.WithEconomy(evaluation.Cost, inventory.Gold);
             this.SendEvent(new ItemCraftedEvent(committed));

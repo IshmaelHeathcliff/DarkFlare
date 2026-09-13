@@ -1,7 +1,7 @@
 # 本地存档与 Session 恢复
 
-> 状态：`alpha 0.2.2` 已实现；`alpha 0.2.7` 已补齐自动档删除闭环
-> 最近更新：2026-08-26
+> 状态：已实现本地存档闭环；`alpha 0.4.0` 增加数量及金币物品迁移
+> 最近更新：2026-09-12
 
 ## 模块目标
 
@@ -31,13 +31,13 @@ V1 文件格式固定为：
 
 - `formatId = "darkflare-save"`
 - `formatVersion = 1`
-- `saveSchemaVersion = 1`
+- `saveSchemaVersion = 2`
 - 最大文档 16 MiB，最大 JSON 深度 64
 - 最大物品 8192、存活怪物 512、世界掉落 4096
 - Header 包含游戏版本、内容目录 ID / 版本、槽位、提交序号、UTC 创建 / 更新时间、Payload SHA-256 和显示摘要
 - Payload 分为 `ProfileSaveData` 与 `RunSaveData`，所有引用使用稳定 ContentId 或强类型实例 ID
 
-Serializer 使用项目已有 `Unity.Newtonsoft.Json`。写出前先把 Payload 转为按属性名 Ordinal 排序的规范 JSON，并把 Single 数值归一为 double 表示，再计算小写 SHA-256；这避免同一浮点值在 Single / Double 文本往返后产生伪校验失败。Header 不参与校验值。读取顺序为格式 / 槽位 / 提交序号检查、Payload 校验、Schema 兼容与逐级迁移、强类型验证。当前登记了历史 `0 → 1` 迁移；未来 Schema 会被安全拒绝。
+Serializer 使用项目已有 `Unity.Newtonsoft.Json`。写出前先把 Payload 转为按属性名 Ordinal 排序的规范 JSON，并把 Single 数值归一为 double 表示，再计算小写 SHA-256；这避免同一浮点值在 Single / Double 文本往返后产生伪校验失败。Header 不参与校验值。读取顺序为格式 / 槽位 / 提交序号检查、Payload 校验、Schema 兼容与逐级迁移、强类型验证。当前登记了历史 `0 → 1 → 2` 迁移，新增物品数量字段；未来 Schema 会被安全拒绝。
 
 禁止把 `UnityEngine.Object`、Asset GUID、Addressables 地址、资源路径、场景对象引用、显示文本或本地化 Key 写入存档身份。
 
@@ -64,7 +64,7 @@ Application.persistentDataPath/
 
 当前快照覆盖：
 
-- Profile：玩家 ID、金币、物品完整关系图、10×6 背包位置、十槽装备。已发布四槽 `core` v1 存档经分离 DTO 内容兼容转换后恢复；新槽为空，不改写源档或重掷数值，未知未来内容仍拒绝。
+- Profile：玩家 ID、金币数量摘要、物品数量及完整关系图、背包尺寸 / 位置、十槽装备。默认背包 10×6，历史金币迁移可按需扩行。已发布四槽 `core` v1 存档经分离 DTO 内容兼容转换后恢复；新槽为空，不改写源档或重掷数值，未知未来内容仍拒绝。
 - Run：Run ID 与怪物 / 世界掉落下一序号、全部登记随机通道及其消费位置。
 - 玩家：内容 ID、位置、生命 / 法力、存活状态和有效属性。
 - 怪物：实例 ID、内容、随机种子、词条实例、基础 / 有效属性、位置、资源和接触攻击剩余时间。

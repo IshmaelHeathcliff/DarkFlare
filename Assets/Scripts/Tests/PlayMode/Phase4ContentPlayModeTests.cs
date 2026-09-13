@@ -46,7 +46,7 @@ namespace DarkFlare.Tests
             }
 
             Assert.IsNotNull(player, "Main 场景未在时限内生成玩家");
-            CollectionAssert.AreEquivalent(ApplicationHost.Current.ContentCatalog.GetAll<ItemBaseDefinition>(),
+            CollectionAssert.AreEquivalent(ApplicationHost.Current.ContentCatalog.GetAll<ItemBaseDefinition>().Where(item => item.IsEquipment),
                 economy.MerchantStock.Select(item => item.BaseDefinition), "商人未加载完整正式装备池");
             Assert.IsTrue(crafting.IsConfigured, "打造系统未加载词条池");
 
@@ -69,7 +69,11 @@ namespace DarkFlare.Tests
             }
             ItemInstance[] purchased = primary.ToArray();
             ItemInstance[] alternatives = economy.MerchantStock.Where(item => !primary.Contains(item)).ToArray();
-            architecture.GetSystem<TradingSystem>().GrantGold(10000);
+            architecture.GetSystem<TradingSystem>().GrantGold(1000);
+            ItemBaseDefinition material = UnityEditor.AssetDatabase.LoadAssetAtPath<ItemBaseDefinition>("Assets/Data/Preset/Items/锻造矿石.asset");
+            ItemInstance materials = material.CreateInstance(architecture.GetUtility<IItemInstanceIdGenerator>().Next(), 1, 0, ItemRarity.Normal);
+            materials.TrySetQuantity(30);
+            Assert.IsTrue(architecture.GetModel<InventoryModel>().TryAddItem(materials));
 
             for (int i = 0; i < purchased.Length; i++)
             {
@@ -117,16 +121,13 @@ namespace DarkFlare.Tests
 
             for (int i = 0; i < slots.Count; i++)
             {
+                ItemInstance unequipped = equipment.GetItem(actor, slots[i]);
                 Assert.IsTrue(architecture.SendCommand(new UnequipItemCommand(actor, slots[i])));
-            }
-
-            for (int i = 0; i < purchased.Length; i++)
-            {
-                Assert.IsTrue(inventory.Grid.Placements.ContainsKey(purchased[i]));
+                Assert.IsTrue(inventory.Grid.Placements.ContainsKey(unequipped));
                 Assert.IsTrue(
-                    architecture.SendCommand(new SellItemCommand(purchased[i])),
-                    $"出售 {purchased[i].BaseDefinition.Id} 失败");
-                Assert.IsFalse(inventory.Grid.Placements.ContainsKey(purchased[i]));
+                    architecture.SendCommand(new SellItemCommand(unequipped)),
+                    $"出售 {unequipped.BaseDefinition.Id} 失败");
+                Assert.IsFalse(inventory.Grid.Placements.ContainsKey(unequipped));
             }
             foreach (ItemInstance item in alternatives)
             {

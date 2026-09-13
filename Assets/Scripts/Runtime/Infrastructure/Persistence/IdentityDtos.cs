@@ -40,6 +40,8 @@ namespace DarkFlare
 
     public sealed class ItemInstanceDto : IPersistenceDto
     {
+        public int Quantity { get; set; } = 1;
+
         public string InstanceId { get; set; } = string.Empty;
 
         public string BaseContentId { get; set; } = string.Empty;

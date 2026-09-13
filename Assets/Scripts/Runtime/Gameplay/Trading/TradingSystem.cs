@@ -33,7 +33,7 @@ namespace DarkFlare
 
         public bool SellItem(ItemInstance item)
         {
-            if (item == null)
+            if (item == null || item.BaseDefinition == null || item.BaseDefinition.ItemType == ItemType.Currency)
             {
                 return false;
             }
@@ -41,6 +41,7 @@ namespace DarkFlare
             InventoryModel inventory = this.GetModel<InventoryModel>();
 
             int price = GetSellPrice(item);
+            if (!inventory.Grid.Placements.TryGetValue(item, out RectInt placement)) { return false; }
             if ((long)inventory.Gold + price > int.MaxValue || !inventory.RemoveItemWithoutEvents(item))
             {
                 ApplicationLog.Info(LogEventIds.GameplayTrading, $"[TradingSystem] 出售失败：{DescribeItem(item)} 不在背包中");
@@ -48,7 +49,11 @@ namespace DarkFlare
             }
 
             int previousGold = inventory.Gold;
-            inventory.TryChangeGoldWithoutEvents(price);
+            if (!inventory.TryChangeGoldWithoutEvents(price))
+            {
+                inventory.TryAddItemAtWithoutEvents(item, placement.position);
+                return false;
+            }
             inventory.NotifyItemChanged(item, InventoryChangeType.Removed);
             inventory.NotifyGoldChanged(previousGold);
             this.SendEvent(new TradeCompletedEvent(TradeOperation.Sell, item, price));
@@ -60,13 +65,14 @@ namespace DarkFlare
         {
             InventoryModel inventory = this.GetModel<InventoryModel>();
             return item != null && this.GetModel<EconomyModel>().HasStock(item)
+                && item.BaseDefinition != null && item.BaseDefinition.ItemType != ItemType.Currency
                 && inventory.Gold >= GetBuyPrice(item)
                 && (origin.HasValue ? inventory.CanAddItemAt(item, origin.Value) : inventory.CanAddItem(item));
         }
 
         public bool BuyItem(ItemInstance item, Vector2Int? origin = null)
         {
-            if (item == null)
+            if (item == null || item.BaseDefinition == null || item.BaseDefinition.ItemType == ItemType.Currency)
             {
                 return false;
             }

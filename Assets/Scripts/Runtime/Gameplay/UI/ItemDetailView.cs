@@ -82,6 +82,12 @@ namespace DarkFlare
             _baseLabel.text = detail.Item != null
                 ? BuildBaseSummary(detail)
                 : Localize("ui", "item.detail.base_empty");
+            if (detail.Item?.BaseDefinition != null)
+            {
+                ItemBaseDefinition definition = detail.Item.BaseDefinition;
+                _baseLabel.text += "\n" + Localize("ui", "item.detail.quantity", detail.Item.Quantity, definition.MaxStackSize)
+                    + "\n" + Localize("ui", definition.IsConsumable ? "item.detail.consumable" : "item.detail.not_consumable");
+            }
             BindModifiers(
                 _implicitList,
                 detail.ImplicitModifiers,

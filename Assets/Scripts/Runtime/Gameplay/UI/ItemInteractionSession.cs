@@ -410,7 +410,9 @@ namespace DarkFlare
             {
                 if (target.Element.worldBound.Contains(position)) { SetTarget(target); return; }
             }
-            if (_menu.IsWindowVisible(GameMenuPage.Inventory) && _grid.worldBound.Contains(position))
+            ScrollView inventoryScroll = _grid.GetFirstAncestorOfType<ScrollView>();
+            if (_menu.IsWindowVisible(GameMenuPage.Inventory) && _grid.worldBound.Contains(position)
+                && (inventoryScroll == null || inventoryScroll.contentViewport.worldBound.Contains(position)))
             {
                 Vector2 local = _grid.WorldToLocal(position);
                 SetTarget(GridTarget(new Vector2Int(Mathf.FloorToInt(local.x / CellStep) - _grab.x,
@@ -503,6 +505,10 @@ namespace DarkFlare
                         int index = row * width + column;
                         if (column < 0 || column >= width || row < 0 || index >= cells.Count) { continue; }
                         Mark(cells[index], valid ? "inventory-cell--drop-valid" : "inventory-cell--drop-invalid");
+                        if (_keyboard && x == size.x - 1 && y == size.y - 1)
+                        {
+                            _grid.GetFirstAncestorOfType<ScrollView>()?.ScrollTo(cells[index]);
+                        }
                     }
                 }
             }

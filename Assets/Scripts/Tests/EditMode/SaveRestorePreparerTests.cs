@@ -33,8 +33,10 @@ namespace DarkFlare.Tests
             Assert.AreEqual("player", result.Value.PlayerDefinition.Id);
             Assert.AreEqual("basic_projectile", result.Value.PlayerSkill.Id);
             Assert.AreEqual("main", result.Value.SpawnDefinition.Id);
-            Assert.AreEqual(4, result.Value.RuntimeState.Items.Count);
-            Assert.AreEqual(1, result.Value.RuntimeState.Inventory.Placements.Count);
+            ItemInstance[] coins = result.Value.RuntimeState.Inventory.Placements.Keys.Where(item => item.BaseDefinition.ItemType == ItemType.Currency).ToArray();
+            Assert.AreEqual(document.Payload.Items.Count + coins.Length, result.Value.RuntimeState.Items.Count);
+            Assert.AreEqual(document.Payload.Profile.Gold, coins.Sum(item => item.Quantity));
+            Assert.AreEqual(document.Payload.Profile.Inventory.Placements.Count + coins.Length, result.Value.RuntimeState.Inventory.Placements.Count);
             Assert.AreEqual(
                 "22222222222222222222222222222222",
                 result.Value.PlayerEquipment.Get(EquipmentSlot.Weapon).Id.Value);
@@ -56,6 +58,33 @@ namespace DarkFlare.Tests
             Assert.AreEqual(
                 30f,
                 result.Value.Monsters[0].Instance.EffectiveStats.GetValue(StatIds.MaxHealth));
+        }
+
+        [Test]
+        public void Prepare_MigratesGoldIntoFullLegacyInventoryWithoutMovingExistingItems()
+        {
+            SaveDocumentDto document = SaveDataContractTests.CreateValidDocument();
+            InventoryPlacementDto existing = document.Payload.Profile.Inventory.Placements[0];
+            document.Payload.Profile.Inventory.Width = existing.Width;
+            document.Payload.Profile.Inventory.Height = existing.Height;
+            JObject original = JObject.FromObject(document);
+            PreparedRestoreResult result = SaveRestorePreparer.Prepare(document, _catalog);
+            Assert.IsTrue(result.Succeeded, Describe(result));
+            Assert.IsTrue(JToken.DeepEquals(original, JObject.FromObject(document)));
+            ItemInstance originalItem = result.Value.RuntimeState.Items[ItemInstanceId.Parse(existing.ItemInstanceId)];
+            UnityEngine.RectInt placement = result.Value.RuntimeState.Inventory.Placements[originalItem];
+            Assert.AreEqual(existing.X, placement.x);
+            Assert.AreEqual(existing.Y, placement.y);
+            ItemInstance[] stacks = result.Value.RuntimeState.Inventory.Placements.Keys.Where(item => item.BaseDefinition.ItemType == ItemType.Currency).ToArray();
+            Assert.AreEqual(existing.Height + (int)Math.Ceiling(stacks.Length / (double)existing.Width), result.Value.RuntimeState.Inventory.Height);
+            Assert.AreEqual(document.Payload.Profile.Gold, stacks.Sum(item => item.Quantity));
+            ItemInstance coins = stacks[0];
+            DtoMapResult<ItemInstanceDto> saved = RuntimeStateMapper.ToDto(coins, _catalog);
+            Assert.IsTrue(saved.Succeeded);
+            Assert.AreEqual(coins.Quantity, saved.Value.Quantity);
+            Assert.AreEqual(coins.Quantity, RuntimeStateMapper.FromDto(saved.Value, _catalog).Value.Quantity);
+            saved.Value.Quantity = 0;
+            Assert.IsFalse(RuntimeStateMapper.FromDto(saved.Value, _catalog).Succeeded);
         }
 
         [Test]
@@ -140,7 +169,7 @@ namespace DarkFlare.Tests
         public void Prepare_RoundTripsAllEquipmentSlotsAndRejectsDuplicateOwnership()
         {
             SaveDocumentDto document = SaveDataContractTests.CreateValidDocument();
-            document.Header.ContentVersion = _catalog.ContentVersion;
+            document = SaveRestorePreparer.Prepare(document, _catalog).Value.Document;
             document.Payload.Items.RemoveAll(item => item.InstanceId == "22222222222222222222222222222222");
             document.Payload.Profile.Equipment[0].Entries.Clear();
             ItemBaseDefinition[] definitions = AssetDatabase.FindAssets("t:ItemBaseDefinition", new[] { "Assets/Data/Preset/Items" })

@@ -35,6 +35,8 @@
 | 字段 | 类型 / CLR 默认 | 必填、范围与稳定性 | 所有权、消费者、迁移 |
 | --- | --- | --- | --- |
 | `_id` | `string` / 空 | 必填；小写 `snake_case`；正式值为 `default` | 完整内容 ID 为 `crafting:default`；存档与迁移不保存资产路径或显示名 |
+| `_material` | `ItemBaseDefinition` / `null` | 正式配置必须引用可消耗的材料 | 打造资格、扣费与 UI 需求显示消费 |
+| `_materialCost` | `int` / `1` | 至少 1；精准范围乘以精准倍率 | 成功打造一次性扣除对应数量，失败保持资源不变 |
 | `_affixPool` | `List<AffixDefinition>` / 空 | 正式配置必须覆盖完整合法物品词缀；无空/重复引用；每件装备至少有足够前后缀组 | `CraftingOperations` 过滤候选；配置只提供池，不指定最终词缀 |
 | `_normalToMagicCost` | `int` / `15` | 不得小于 `0` | 普通升魔法基础价；成功提交后由 `InventoryModel` 扣除 |
 | `_magicToRareCost` | `int` / `60` | 不得小于 `0` | 魔法升稀有基础价 |

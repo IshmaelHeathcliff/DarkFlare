@@ -46,6 +46,7 @@ namespace DarkFlare
             }
 
             IArchitecture architecture = context.Architecture;
+            architecture.GetModel<InventoryModel>().ConfigureCurrency(context.ContentCatalog);
             architecture.GetSystem<GameplayRandomSystem>().Configure(
                 _configuration.UseFixedRandomSeed,
                 _configuration.FixedRandomSeed);

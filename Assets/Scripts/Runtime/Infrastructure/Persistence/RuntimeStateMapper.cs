@@ -127,6 +127,7 @@ namespace DarkFlare
                 ItemLevel = item.ItemLevel,
                 Seed = item.Seed,
                 Quality = item.Quality,
+                Quantity = item.Quantity,
                 Durability = item.Durability,
                 ImplicitModifiers = MapModifiersToDto(item.ImplicitModifiers, catalog, "item.implicitModifiers", issues),
                 Prefixes = MapAffixesToDto(item.Prefixes, catalog, "item.prefixes", issues),
@@ -363,6 +364,7 @@ namespace DarkFlare
             if (!Enum.IsDefined(typeof(ItemRarity), dto.Rarity)
                 || dto.ItemLevel <= 0
                 || dto.Quality < 0
+                || dto.Quantity < 1 || dto.Quantity > definition.MaxStackSize
                 || dto.Durability < 0f
                 || dto.Durability > 1f)
             {
@@ -386,6 +388,7 @@ namespace DarkFlare
                 Quality = dto.Quality,
                 Durability = dto.Durability,
             };
+            item.TrySetQuantity(dto.Quantity);
             RestoreAffixes(item, dto.Prefixes, catalog, $"{path}.prefixes", issues);
             RestoreAffixes(item, dto.Suffixes, catalog, $"{path}.suffixes", issues);
             return item;

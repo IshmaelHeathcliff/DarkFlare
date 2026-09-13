@@ -27,6 +27,8 @@
 
 ## 归档清单
 
+- [alpha 0.4 统一物品系统](./alpha-0.4-item-system-plan.md)：2026-09-12 完成，EditMode 442/442、PlayMode 67/67；见[物品系统](../../item-system.md)。
+
 - [alpha 0.3.2 暗黑像素 HUD 与战斗状态](./alpha-0.3.2-dark-pixel-hud-plan.md)：已完成，见[HUD 验收](../../assets/acceptance/alpha-0.3.2-hud/README.md)。
 
 | 计划 | 完成阶段 | 当前总结 |

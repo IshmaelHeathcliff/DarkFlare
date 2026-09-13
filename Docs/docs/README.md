@@ -22,6 +22,7 @@
 - [输入与运行时 UI](./input-ui-system.md)
 - [物品 UI 工作台](./item-ui-workbench.md)
 - [装备系统](./equipment-system.md)
+- [统一物品系统](./item-system.md)
 - [属性定义与调用关系](./stat-system.md)
 - [独立属性详情](./attribute-details.md)
 - [战斗 HUD](./hud-system.md)
@@ -42,7 +43,9 @@
 
 ## 计划状态
 
-[alpha 0.3.4：十槽装备与内容补齐](plan/archive/alpha-0.3.4-equipment-completion-plan.md)已于 2026-09-11 完成并归档：十槽、二十件装备、滚动商店、旧档兼容；434/434 EditMode、63/63 PlayMode 和可见 Windows Player 验收通过。当前版本 `0.3.4-alpha`，见[验收证据及包级退出警告说明](./assets/acceptance/alpha-0.3.4-equipment/README.md)。[alpha 0.3 总计划](plan/archive/alpha-0.3-plan.md)同时归档。
+[alpha 0.4 统一物品系统](./plan/archive/alpha-0.4-item-system-plan.md)已完成：金币与材料入栏、堆叠 / 消耗、材料打造、掉落及旧档迁移。运行版本 `0.4.0-alpha`，EditMode 442/442、PlayMode 67/67；见[验收证据](./assets/acceptance/alpha-0.4-items/README.md)。
+
+[alpha 0.3.4：十槽装备与内容补齐](plan/archive/alpha-0.3.4-equipment-completion-plan.md)已于 2026-09-11 完成并归档：十槽、二十件装备、滚动商店、旧档兼容；434/434 EditMode、63/63 PlayMode 和可见 Windows Player 验收通过。当时版本 `0.3.4-alpha`，见[验收证据及包级退出警告说明](./assets/acceptance/alpha-0.3.4-equipment/README.md)。[alpha 0.3 总计划](plan/archive/alpha-0.3-plan.md)同时归档。
 
 [alpha 0.3.3：统一 UI 视觉组件](./plan/archive/alpha-0.3.3-unified-ui-visual-plan.md)已完成：共享材质、正式按钮 / 槽位、Shell 控件与三语言排版通过验收。当时运行版本 `0.3.3-alpha`，EditMode 432/432、PlayMode 63/63；见[组件规范](./ui-component-style.md)与[验收证据](./assets/acceptance/alpha-0.3.3-ui-style/README.md)。收尾阶段 [0.3.4 十槽装备与内容补齐](plan/archive/alpha-0.3.4-equipment-completion-plan.md)。
 

@@ -12,6 +12,10 @@ namespace DarkFlare
 
         public int Cost { get; }
 
+        public ItemBaseDefinition Material { get; }
+        public int MaterialCost { get; }
+        public int MaterialOwned { get; }
+
         public bool IsAvailable => FailureReason == CraftingFailureReason.None;
 
         public CraftingActionSnapshot(
@@ -23,6 +27,9 @@ namespace DarkFlare
             Scope = scope;
             FailureReason = evaluation.FailureReason;
             Cost = evaluation.Cost;
+            Material = evaluation.Material;
+            MaterialCost = evaluation.MaterialCost;
+            MaterialOwned = evaluation.MaterialOwned;
         }
     }
 
@@ -166,6 +173,7 @@ namespace DarkFlare
             for (int i = 0; i < inventorySnapshot.Items.Count; i++)
             {
                 ItemInstance item = inventorySnapshot.Items[i].Item;
+                if (!item.BaseDefinition.IsEquipment) { continue; }
                 items.Add(new CraftingItemSnapshot(item, trading.GetSellPrice(item), crafting));
             }
 

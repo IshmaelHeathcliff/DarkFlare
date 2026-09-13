@@ -357,6 +357,7 @@ namespace DarkFlare
             string displayName = Resolve(name);
             ItemRarity rarity = _item.Rarity;
             _label.text = Localize("loot.label", displayName, Localize(GetRarityKey(rarity)));
+            if (_item.BaseDefinition.IsStackable) { _label.text += $" ×{_item.Quantity}"; }
             _label.color = Color.Lerp(Color.white, GetRarityColor(rarity), 0.35f);
         }
 

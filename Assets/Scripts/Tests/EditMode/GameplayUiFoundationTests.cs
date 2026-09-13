@@ -18,6 +18,8 @@ public class GameplayUiFoundationTests
     {
         _originalTimeScale = Time.timeScale;
         _architecture = _architectureFixture.Start();
+        _architecture.GetModel<InventoryModel>().ConfigureCurrency(
+            UnityEditor.AssetDatabase.LoadAssetAtPath<ItemBaseDefinition>("Assets/Data/Preset/Items/金币.asset"));
     }
 
     [TearDown]
@@ -132,9 +134,9 @@ public class GameplayUiFoundationTests
         Assert.AreEqual(0, goldEvents[0].PreviousGold);
         Assert.AreEqual(20, goldEvents[0].CurrentGold);
         Assert.AreEqual(15, goldEvents[1].CurrentGold);
-        Assert.AreEqual(2, inventoryEvents.Count);
-        Assert.AreEqual(InventoryChangeType.Added, inventoryEvents[0].ChangeType);
-        Assert.AreEqual(InventoryChangeType.Removed, inventoryEvents[1].ChangeType);
+        Assert.AreEqual(4, inventoryEvents.Count);
+        Assert.AreEqual(InventoryChangeType.Added, inventoryEvents[2].ChangeType);
+        Assert.AreEqual(InventoryChangeType.Removed, inventoryEvents[3].ChangeType);
     }
 
     [Test]
@@ -377,13 +379,13 @@ public class GameplayUiFoundationTests
         Assert.IsTrue(economy.HasStock(expensiveItem));
         Assert.AreEqual(0, inventory.Gold);
 
-        for (int i = 0; i < 60; i++)
+        inventory.AddGold(100);
+        for (int i = 0; i < 59; i++)
         {
             Assert.IsTrue(inventory.TryAddItem(CreateItem($"trade_blocker_{i}", $"交易占位物 {i}")));
         }
 
         economy.AddStock(fullBagItem);
-        inventory.AddGold(100);
 
         Assert.IsFalse(_architecture.SendCommand(new BuyItemCommand(fullBagItem)));
         Assert.IsTrue(economy.HasStock(fullBagItem));
@@ -451,6 +453,109 @@ public class GameplayUiFoundationTests
         Assert.AreEqual(1, eventCount);
         Assert.AreEqual(CraftOperation.AddAffix, craftedEvent.Operation);
         Assert.AreSame(item, craftedEvent.Item);
+    }
+
+    [Test]
+    public void CraftingSystem_ConsumesMaterialAndGoldOnlyOnSuccess()
+    {
+        CraftingDefinition definition = UnityEditor.AssetDatabase.LoadAssetAtPath<CraftingDefinition>("Assets/Data/Preset/Crafting/基础打造配置.asset");
+        InventoryModel inventory = _architecture.GetModel<InventoryModel>();
+        CraftingSystem crafting = _architecture.GetSystem<CraftingSystem>();
+        crafting.Setup(definition);
+        ItemInstance weapon = CreateItem("material_craft", "材料打造");
+        inventory.AddGold(100);
+        inventory.TryAddItem(weapon);
+        int revision = weapon.Revision;
+        int events = 0;
+        _architecture.RegisterEvent<ItemCraftedEvent>(_ => events++);
+        CraftingResult missing = crafting.Craft(CraftOperation.UpgradeRarity, CraftingAffixScope.Any, weapon);
+        Assert.AreEqual(CraftingFailureReason.InsufficientMaterial, missing.FailureReason);
+        Assert.AreEqual(revision, weapon.Revision);
+        Assert.AreEqual(100, inventory.Gold);
+        Assert.AreEqual(0, events);
+        ItemInstance materials = definition.Material.CreateInstance("craft_material", 1, 0);
+        materials.TrySetQuantity(2);
+        inventory.TryAddItem(materials);
+        Assert.AreEqual(CraftingFailureReason.NotEquipment, crafting.Evaluate(CraftOperation.UpgradeRarity, CraftingAffixScope.Any, materials).FailureReason);
+        CraftingResult success = crafting.Craft(CraftOperation.UpgradeRarity, CraftingAffixScope.Any, weapon);
+        Assert.IsTrue(success.Succeeded, success.FailureReason.ToString());
+        Assert.AreEqual(85, inventory.Gold);
+        Assert.AreEqual(1, materials.Quantity);
+        Assert.AreEqual(1, events);
+        Assert.IsFalse(inventory.TrySpendGold(100));
+        Assert.AreEqual(85, inventory.Gold);
+    }
+
+    [Test]
+    public void Currency_SplitsAcrossStacks_AndRejectsFullInventoryWithoutPartialGrant()
+    {
+        InventoryModel inventory = _architecture.GetModel<InventoryModel>();
+        ItemBaseDefinition definition = Object.Instantiate(UnityEditor.AssetDatabase.LoadAssetAtPath<ItemBaseDefinition>("Assets/Data/Preset/Items/金币.asset"));
+        _objects.Add(definition);
+        SetField(definition, "_maxStackSize", 10);
+        inventory.ConfigureCurrency(definition);
+        inventory.RestoreState(new InventoryGrid(2, 1), 0);
+        inventory.AddGold(15);
+        Assert.AreEqual(15, inventory.Gold);
+        Assert.AreEqual(2, inventory.Grid.Placements.Count);
+        Assert.Throws<System.InvalidOperationException>(() => inventory.AddGold(6));
+        Assert.AreEqual(15, inventory.Gold);
+        Assert.AreEqual(2, inventory.Grid.Placements.Count);
+        Assert.IsTrue(inventory.TrySpendGold(12));
+        Assert.AreEqual(3, inventory.Gold);
+        Assert.AreEqual(1, inventory.Grid.Placements.Count);
+        inventory.AddGold(17);
+        Assert.AreEqual(20, inventory.Gold);
+        foreach (ItemInstance coins in inventory.Grid.Placements.Keys)
+        {
+            Assert.AreEqual(10, coins.Quantity);
+        }
+    }
+
+    [Test]
+    public void Selling_RestoresItemAndCurrency_WhenProceedsDoNotFit()
+    {
+        InventoryModel inventory = _architecture.GetModel<InventoryModel>();
+        ItemBaseDefinition definition = Object.Instantiate(UnityEditor.AssetDatabase.LoadAssetAtPath<ItemBaseDefinition>("Assets/Data/Preset/Items/金币.asset"));
+        _objects.Add(definition);
+        SetField(definition, "_maxStackSize", 10);
+        inventory.ConfigureCurrency(definition);
+        inventory.RestoreState(new InventoryGrid(2, 1), 0);
+        inventory.AddGold(5);
+        ItemInstance item = CreateItem("sale_rollback", "出售回退物品", baseValue: 1000);
+        Assert.IsTrue(inventory.TryAddItemAt(item, new Vector2Int(1, 0)));
+        TradingSystem trading = _architecture.GetSystem<TradingSystem>();
+        Assert.Greater(trading.GetSellPrice(item), 20);
+        int tradeEvents = 0;
+        _architecture.RegisterEvent<TradeCompletedEvent>(_ => tradeEvents++);
+        Assert.IsFalse(trading.SellItem(item));
+        Assert.AreEqual(5, inventory.Gold);
+        Assert.AreEqual(2, inventory.Grid.Placements.Count);
+        Assert.AreEqual(new Vector2Int(1, 0), inventory.Grid.Placements[item].position);
+        Assert.AreEqual(0, tradeEvents);
+    }
+
+    [Test]
+    public void Currency_RejectsOverflowAndSellingItself_AndTracksInventoryOwnership()
+    {
+        InventoryModel inventory = _architecture.GetModel<InventoryModel>();
+        ItemBaseDefinition definition = Object.Instantiate(UnityEditor.AssetDatabase.LoadAssetAtPath<ItemBaseDefinition>("Assets/Data/Preset/Items/金币.asset"));
+        _objects.Add(definition);
+        SetField(definition, "_maxStackSize", int.MaxValue);
+        inventory.ConfigureCurrency(definition);
+        inventory.AddGold(int.MaxValue);
+        ItemInstance coins = null;
+        foreach (ItemInstance item in inventory.Grid.Placements.Keys) { coins = item; }
+        Assert.IsNotNull(coins);
+        ItemInstance overflow = coins.BaseDefinition.CreateInstance("overflow", 1, 0);
+        Assert.IsFalse(inventory.TryAddItem(overflow));
+        Assert.IsFalse(_architecture.GetSystem<TradingSystem>().SellItem(coins));
+        Assert.AreEqual(int.MaxValue, inventory.Gold);
+        Assert.IsTrue(inventory.RemoveItem(coins));
+        Assert.AreEqual(0, inventory.Gold);
+        Assert.IsTrue(inventory.TryAddItem(coins));
+        Assert.IsTrue(inventory.TrySpendGold(int.MaxValue));
+        Assert.IsEmpty(inventory.Grid.Placements);
     }
 
     [Test]

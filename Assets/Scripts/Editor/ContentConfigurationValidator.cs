@@ -715,7 +715,7 @@ namespace DarkFlare.Editor
                     }
                 }
 
-                if (candidateCount < 4)
+                if (item.IsEquipment && candidateCount < 4)
                 {
                     AddError(issues, item, $"兼容词条不足 4 个，当前为 {candidateCount}");
                 }
@@ -764,9 +764,9 @@ namespace DarkFlare.Editor
             if (importer.textureType != TextureImporterType.Sprite
                 || importer.filterMode != FilterMode.Point
                 || importer.textureCompression != TextureImporterCompression.Uncompressed
-                || Math.Abs(importer.spritePixelsPerUnit - 64f) > 0.01f)
+                || Math.Abs(sprite.rect.width / importer.spritePixelsPerUnit - 1.5f) > 0.01f)
             {
-                AddError(issues, item, "装备图标导入规格必须为 Sprite、64 PPU、Point、无压缩");
+                AddError(issues, item, "物品图标必须为 Sprite、Point、无压缩，完整画布对应 1.5 世界单位");
             }
         }
 
@@ -1059,7 +1059,7 @@ namespace DarkFlare.Editor
                     covered.Add(entry.Item);
                 }
 
-                ValidateCoverage(trader, covered, items, "商人库存缺少装备", issues);
+                ValidateCoverage(trader, covered, items.Where(item => item.IsEquipment).ToArray(), "商人库存缺少装备", issues);
             }
         }
 
@@ -1077,6 +1077,10 @@ namespace DarkFlare.Editor
             for (int i = 0; i < craftingDefinitions.Count; i++)
             {
                 CraftingDefinition definition = craftingDefinitions[i];
+                if (definition.Material == null || definition.Material.ItemType != ItemType.Material || !definition.Material.IsConsumable)
+                {
+                    AddError(issues, definition, "正式打造必须配置可消耗材料");
+                }
                 HashSet<AffixDefinition> pool = new HashSet<AffixDefinition>();
 
                 for (int affixIndex = 0; affixIndex < definition.AffixPool.Count; affixIndex++)
@@ -1119,7 +1123,7 @@ namespace DarkFlare.Editor
 
                 for (int itemIndex = 0; itemIndex < items.Count; itemIndex++)
                 {
-                    ValidateCraftingPoolCapacity(definition, items[itemIndex], pool, issues);
+                    if (items[itemIndex].IsEquipment) { ValidateCraftingPoolCapacity(definition, items[itemIndex], pool, issues); }
                 }
             }
         }

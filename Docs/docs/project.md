@@ -4,11 +4,13 @@
 
 `DarkFlare` 已完成首版最小循环、初步体验优化、`alpha 0.1` 封板和 `alpha 0.2.0–0.2.7` 基础设施封板。当前可从常驻 `Bootstrap.unity` 的 FrontEnd 新建或继续游戏，additive 进入 `Main.unity` 完成战斗、掉落、十槽装备、交易和打造，暂停后保存并安全返回前台；FrontEnd 可二次确认删除自动档，共享设置页可恢复完整默认设置，中英语言、音量、按键、设备 Glyph 和降低动态效果即时收敛。
 
-alpha 版本内的阶段使用三段式名称：`alpha 0.1` 的首个阶段为 `alpha 0.1.0`，后续依次为 `alpha 0.1.1`、`alpha 0.1.2`；`alpha 0.2` 同样从 `alpha 0.2.0` 开始。当前版本为 `0.3.4-alpha`；完成记录见[alpha 0.2 综合验收记录](./infrastructure/alpha-0.2-acceptance.md)与[计划归档](./plan/archive/README.md)。
+alpha 版本内的阶段使用三段式名称：`alpha 0.1` 的首个阶段为 `alpha 0.1.0`，后续依次为 `alpha 0.1.1`、`alpha 0.1.2`；`alpha 0.2` 同样从 `alpha 0.2.0` 开始。当前版本为 `0.4.0-alpha`；完成记录见[alpha 0.2 综合验收记录](./infrastructure/alpha-0.2-acceptance.md)与[计划归档](./plan/archive/README.md)。
 
 当前 [alpha 0.3 UI 迭代](./plan/archive/alpha-0.3-plan.md)已全部完成：独立物品窗口、统一拖放、实时属性、暗黑像素 HUD、共享皮肤及十槽装备。二十件装备覆盖每槽至少两件，core v1 → v2 旧档兼容完成；EditMode 434/434、PlayMode 63/63、可见 Windows Player 验收通过。退出时的 2D Animation 回退缓冲区警告已在空场景中复现并定位，作为既有依赖问题保留记录。见[综合验收](./assets/acceptance/alpha-0.3.4-equipment/README.md)。
 
 0.3.4 之后完成[物品窗口 UI 修正](./assets/acceptance/item-workspace-refinement/README.md)：十槽按物品尺寸重排、空槽灰阶、按住装备对比、商店 / 打造默认联动背包并统一宽度和居中、顶部关闭全部返回游戏。最新 EditMode 434/434、PlayMode 65/65 通过。
+
+alpha 0.4.0 已完成[统一物品系统](./item-system.md)：金币与材料入栏、独立堆叠 / 消耗属性、材料打造、掉落权重和 core v3 / Schema 2 旧档迁移。最新 EditMode 442/442、PlayMode 67/67 通过；见[验收记录](./assets/acceptance/alpha-0.4-items/README.md)。
 
 ## 游戏定位
 
@@ -83,7 +85,7 @@ Alpha 0.3 前置[测试审计](./testing/test-suite-audit.md)已完成；新增�
 
 ## 当前资源与配置
 
-- `Assets/Data/Preset` 已有玩家、技能、怪物、刷怪、掉落、物品、词条、商人和打造配置；唯一正式内容目录 `core` v2 收录 104 个配置，其中二十件独立装备覆盖十槽。
+- `Assets/Data/Preset` 已有玩家、技能、怪物、刷怪、掉落、物品、词条、商人和打造配置；唯一正式内容目录 `core` v3 收录 106 个配置，其中二十件独立装备覆盖十槽。
 - 玩家、怪物、投射物和掉落物 Prefab 位于 `Assets/Prefabs`，通过 Addressables 加载。
 - Prefab、Sprite、Audio 与 Application 配置统一通过 Resource Service 按稳定键单航班加载；Application / Session owner 持有 Asset Lease，并在关闭后回到资源基线。
 - `Assets/UI` 已有 `GameRoot`、`Hud`、`Inventory`、`Shop`、`Crafting` 的 UXML / USS。
@@ -102,8 +104,8 @@ Alpha 0.3 前置[测试审计](./testing/test-suite-audit.md)已完成；新增�
 - 当前场景流只覆盖常驻 Bootstrap 与单一 Main 玩法场景；尚无多地图、关卡选择、Profile 选择或 Addressables Scene。
 - 当前已有 `auto` 槽位、确定性 JSON、Payload SHA-256、两代有效文件保留、损坏回退、单写者协调、Restore Session、二次确认删除和退出前有界 Flush；尚无手动槽位管理、Profile 选择或云同步。
 - Settings V1 已有语言、音频、输入与 Reduce Motion 真实消费者；Text Scale、High Contrast、Screen Shake 和 Display Mode 仍为数据预留，不在玩家 UI 中开放。
-- 背包已支持拖拽换位、单目标原子交换和键鼠 / 手柄拿起放置，尚无旋转、堆叠和重量；装备已实现十槽及精确拖入 / 拖回，每槽至少两件正式基底，但没有耐久、套装、完整纸娃娃或唯一装备特效。
-- 交易没有回购或多商人独立库存；打造没有配方、材料和批量操作。
+- 背包已支持拖拽换位、单目标原子交换和键鼠 / 手柄拿起放置，已支持物品堆叠与材料消耗，尚无旋转和重量；装备已实现十槽及精确拖入 / 拖回，每槽至少两件正式基底，但没有耐久、套装、完整纸娃娃或唯一装备特效。
+- 交易没有回购或多商人独立库存；打造已消耗锻造矿石，尚无配方和批量操作。
 - 战斗内容密度、场景规模和 UI 功能深度仍属于原型基线；现有首批视觉不视为最终美术质量。
 
 完整流程与模块边界见 [`gameplay-loop.md`](./gameplay-loop.md)，生命周期见[应用生命周期与会话作用域](./infrastructure/application-lifecycle.md)，稳定身份和迁移见[稳定身份、内容目录与迁移框架](./infrastructure/content-identity-migration.md)，本地持久化见[本地存档与 Session 恢复](./infrastructure/local-save.md)，设置与语言见[用户设置与本地化](./infrastructure/user-settings-localization.md)，输入、菜单和场景交互结构见 [`input-ui-system.md`](./input-ui-system.md)。

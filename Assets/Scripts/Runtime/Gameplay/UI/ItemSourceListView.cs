@@ -38,7 +38,7 @@ namespace DarkFlare
                 icon.AddToClassList("item-source-icon");
                 ItemVisualPresenter.ApplyIcon(icon, ItemDetailSnapshotFactory.Create(item).IconGuid);
                 button.Add(icon);
-                var label = new Label(title(item)) { pickingMode = PickingMode.Ignore };
+                var label = new Label(title(item) + (item.BaseDefinition.IsStackable ? $" ×{item.Quantity}" : string.Empty)) { pickingMode = PickingMode.Ignore };
                 label.AddToClassList("item-source-name");
                 button.Add(label);
                 button.RegisterCallback<PointerEnterEvent>(_ => { if (generation == _generation) { preview(item); } });
@@ -54,7 +54,8 @@ namespace DarkFlare
         {
             foreach (var entry in _buttons)
             {
-                entry.Value.Q<Label>(className: "item-source-name").text = title(entry.Key);
+                entry.Value.Q<Label>(className: "item-source-name").text = title(entry.Key)
+                    + (entry.Key.BaseDefinition.IsStackable ? $" ×{entry.Key.Quantity}" : string.Empty);
             }
         }
     }

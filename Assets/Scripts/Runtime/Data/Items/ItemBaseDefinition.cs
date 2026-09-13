@@ -12,7 +12,20 @@ namespace DarkFlare
         Armor,
         Accessory,
         Material,
-        Currency
+        Currency,
+        Consumable,
+        TradeGood,
+        QuestItem
+    }
+
+    public enum ItemCategory
+    {
+        [LabelText("通货")] Currency,
+        [LabelText("材料")] Material,
+        [LabelText("装备")] Equipment,
+        [LabelText("消耗品（预留）")] Consumable,
+        [LabelText("交易物（预留）")] TradeGood,
+        [LabelText("任务道具（预留）")] QuestItem
     }
 
     public enum ItemRarity
@@ -81,6 +94,15 @@ namespace DarkFlare
         [LabelText("物品类型")]
         ItemType _itemType;
 
+        [SerializeField, LabelText("可堆叠")]
+        bool _stackable;
+
+        [SerializeField, MinValue(1), LabelText("堆叠上限"), ShowIf(nameof(_stackable))]
+        int _maxStackSize = 999;
+
+        [SerializeField, LabelText("可消耗")]
+        bool _consumable;
+
         [SerializeField]
         [LabelText("图标")]
         AssetReferenceSprite _icon;
@@ -128,6 +150,23 @@ namespace DarkFlare
 
         public ItemType ItemType => _itemType;
 
+        public bool IsEquipment => _itemType == ItemType.Weapon || _itemType == ItemType.Armor || _itemType == ItemType.Accessory;
+
+        public bool IsStackable => _stackable && !IsEquipment;
+
+        public bool IsConsumable => _consumable;
+
+        public int MaxStackSize => IsStackable ? Mathf.Max(1, _maxStackSize) : 1;
+
+        public ItemCategory Category => IsEquipment ? ItemCategory.Equipment : _itemType switch
+        {
+            ItemType.Currency => ItemCategory.Currency,
+            ItemType.Material => ItemCategory.Material,
+            ItemType.Consumable => ItemCategory.Consumable,
+            ItemType.TradeGood => ItemCategory.TradeGood,
+            _ => ItemCategory.QuestItem
+        };
+
         public AssetReferenceSprite Icon => _icon;
 
         public EquipmentSlotMask AllowedEquipmentSlots => _allowedEquipmentSlots;
@@ -154,7 +193,7 @@ namespace DarkFlare
         public bool CanEquipTo(EquipmentSlot slot)
         {
             EquipmentSlotMask slotMask = EquipmentSlots.ToMask(slot);
-            return slotMask != EquipmentSlotMask.None && (_allowedEquipmentSlots & slotMask) != 0;
+            return IsEquipment && slotMask != EquipmentSlotMask.None && (_allowedEquipmentSlots & slotMask) != 0;
         }
 
         public ItemInstance CreateInstance(string instanceId, int itemLevel, int seed)

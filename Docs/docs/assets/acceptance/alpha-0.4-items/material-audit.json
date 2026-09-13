@@ -1,0 +1,46 @@
+{
+  "manifest": "C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Docs\\docs\\assets\\acceptance\\alpha-0.4-items\\material-contract.json",
+  "family": "forging-material",
+  "canvas": [
+    1254,
+    1254
+  ],
+  "errors": [],
+  "assets": [
+    {
+      "name": "forging_ore",
+      "image": "C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Art\\Sprites\\Items\\Materials\\item_forging_ore.png",
+      "canvas": [
+        1254,
+        1254
+      ],
+      "visible_bbox": [
+        252,
+        195,
+        1044,
+        1078
+      ],
+      "visible_width": 792,
+      "visible_height": 883,
+      "margins": {
+        "left": 252,
+        "top": 195,
+        "right": 210,
+        "bottom": 176
+      },
+      "alpha_coverage": 0.2779965354883511,
+      "visual_center": [
+        641.4379148261954,
+        653.6924123858203
+      ],
+      "errors": [],
+      "warnings": []
+    }
+  ],
+  "summary": {
+    "assets": 1,
+    "errors": 0,
+    "warnings": 0,
+    "passed": true
+  }
+}

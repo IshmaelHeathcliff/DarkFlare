@@ -1707,6 +1707,42 @@ MonoBehaviour:
     m_Key: settings.input.action.ui_compare
     m_Metadata:
       m_Items: []
+  - m_Id: 8678977106337792
+    m_Key: crafting.action.material
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8678977165058048
+    m_Key: crafting.failure.insufficient_material
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8678977169252352
+    m_Key: crafting.failure.not_equipment
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8678977169252353
+    m_Key: item.detail.quantity
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8678977169252354
+    m_Key: item.detail.consumable
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8678977169252355
+    m_Key: item.detail.not_consumable
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8678977169252356
+    m_Key: item.type.consumable
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8678977169252357
+    m_Key: item.type.trade_good
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8678977169252358
+    m_Key: item.type.quest_item
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

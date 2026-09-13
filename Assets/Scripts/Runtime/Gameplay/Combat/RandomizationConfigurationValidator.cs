@@ -164,6 +164,11 @@ namespace DarkFlare
                 {
                     issues.Add($"掉落条目 {i} 缺少物品");
                 }
+                else if (entry.QuantityRange.x < 1 || entry.QuantityRange.y < entry.QuantityRange.x
+                    || entry.QuantityRange.y > entry.Item.MaxStackSize)
+                {
+                    issues.Add($"掉落条目 {i} 数量范围超出堆叠上限");
+                }
 
                 if (!ItemRarityRules.IsNormalGenerationValid(
                         entry.Rarity,

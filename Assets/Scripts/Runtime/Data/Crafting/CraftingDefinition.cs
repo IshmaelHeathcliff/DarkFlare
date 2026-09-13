@@ -12,6 +12,19 @@ namespace DarkFlare
         [LabelText("稳定ID")]
         string _id = string.Empty;
 
+        [SerializeField, LabelText("打造材料")]
+        ItemBaseDefinition _material;
+
+        [SerializeField, MinValue(1), LabelText("每次材料数量")]
+        int _materialCost = 1;
+
+        public ItemBaseDefinition Material => _material;
+
+        public int GetMaterialCost(CraftingAffixScope scope)
+        {
+            return _material == null ? 0 : Mathf.Max(1, Mathf.CeilToInt(_materialCost * (scope == CraftingAffixScope.Any ? 1f : _precisionMultiplier)));
+        }
+
         [SerializeField]
         [LabelText("词条池")]
         List<AffixDefinition> _affixPool = new List<AffixDefinition>();

@@ -22,6 +22,9 @@ namespace DarkFlare
                 ItemType.Accessory => "item.type.accessory",
                 ItemType.Material => "item.type.material",
                 ItemType.Currency => "item.type.currency",
+                ItemType.Consumable => "item.type.consumable",
+                ItemType.TradeGood => "item.type.trade_good",
+                ItemType.QuestItem => "item.type.quest_item",
                 _ => "item.type.unknown",
             };
             return Localize(entryKey);

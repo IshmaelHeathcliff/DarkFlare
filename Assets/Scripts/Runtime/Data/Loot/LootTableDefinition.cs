@@ -31,6 +31,11 @@ namespace DarkFlare
         [LabelText("后缀数量")]
         int _suffixCount;
 
+        [SerializeField, MinValue(1), LabelText("掉落数量范围")]
+        Vector2Int _quantityRange = Vector2Int.one;
+
+        public Vector2Int QuantityRange => _quantityRange;
+
         public ItemBaseDefinition Item => _item;
 
         public int Weight => _weight;
@@ -113,7 +118,16 @@ namespace DarkFlare
 
             try
             {
-                return ItemGenerator.Generate(entry.Item, _affixPool, options);
+                ItemInstance item = ItemGenerator.Generate(entry.Item, _affixPool, options);
+                if (entry.QuantityRange.x < 1 || entry.QuantityRange.y < entry.QuantityRange.x
+                    || entry.QuantityRange.y > entry.Item.MaxStackSize)
+                {
+                    throw new InvalidOperationException("掉落数量超出堆叠合同");
+                }
+                int quantity = entry.QuantityRange.x == entry.QuantityRange.y ? entry.QuantityRange.x
+                    : (int)(entry.QuantityRange.x + random.NextDouble() * ((long)entry.QuantityRange.y - entry.QuantityRange.x + 1));
+                item.TrySetQuantity(quantity);
+                return item;
             }
             catch (InvalidOperationException exception)
             {

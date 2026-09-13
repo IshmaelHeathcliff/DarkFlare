@@ -12,6 +12,9 @@
 | `_displayName` | `string` / 空 | 正式资产必填；中文名称 | 物品信息浮窗、交易与调试消费 |
 | `_localizedName` | `LocalizedContentReference` / 空引用 | 正式资产必填；固定使用 `items/item.<id>.name` | 玩家可见名称由 `LocalizationService` 按当前语言解析；`_displayName` 仅保留作者识别与日志兼容 |
 | `_itemType` | `ItemType` / `Weapon` | 必填；必须与槽位、伤害和标签派生一致 | 背包/装备、词缀 SpawnQuery 和 UI 消费；改变类型属于实例迁移 |
+| `_stackable` | `bool` / `false` | 独立堆叠开关；装备始终不可堆叠 | 背包自动合并与拖动合并消费 |
+| `_maxStackSize` | `int` / `999` | 至少 1；不堆叠物品有效上限为 1 | 拾取、数量校验和存档恢复消费；金币正式上限为 100，锻造矿石为 50 |
+| `_consumable` | `bool` / `false` | 独立消耗开关，不由物品类型或堆叠性推导 | 金币支付与材料消耗校验；预留消耗品尚无使用效果 |
 | `_icon` | `AssetReferenceSprite` / `null` | 正式资产必填；Addressable GUID 有效且各正式物品独立 | `SpriteAssetLoader` 预热/缓存/释放；禁止 Resources 与直接路径加载 |
 | `_allowedEquipmentSlots` | `EquipmentSlotMask` / `None` | 可装备物品必须非空；Weapon 只能 Weapon，护甲/饰品遵循对应槽位 | 拖拽装备与装备模型校验消费 |
 | `_defaultRarity` | `ItemRarity` / `Normal` | 必填枚举；必须与初始显式词缀状态相容 | `CreateInstance` 未另传稀有度时使用；正式掉落通常由条目覆盖 |
@@ -54,6 +57,7 @@
 | 字段 | 类型 / CLR 默认 | 必填、范围与稳定性 | 所有权、消费者、迁移 |
 | --- | --- | --- | --- |
 | `_item` | `ItemBaseDefinition` / `null` | 正权重条目必填 | 父掉落表持有引用；所选基底创建新 `ItemInstance` |
+| `_quantityRange` | `Vector2Int` / `(1, 1)` | 两端至少 1，最大值不超过物品堆叠上限 | 同掉落随机流抽取闭区间数量；装备保持 1 |
 | `_weight` | `int` / `100` | 不得小于 `0`；大于 `0` 才参与抽取 | `PickEntry` 的相对整数权重，不是百分比 |
 | `_rarity` | `ItemRarity` / `Normal` | 必填；必须与指定前后缀数量满足 `ItemRarityRules` | 生成实例稀有度；不会自动提升或降级 |
 | `_prefixCount` | `int` / `0` | 非负、不超过当前稀有度前缀容量；与后缀合计满足最小/最大数 | `ItemGenerator` 精确请求前缀数；候选不足时整次生成失败 |

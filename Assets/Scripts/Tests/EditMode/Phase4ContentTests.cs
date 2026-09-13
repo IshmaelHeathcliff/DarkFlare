@@ -34,6 +34,7 @@ namespace DarkFlare.Tests
             for (int itemIndex = 0; itemIndex < items.Count; itemIndex++)
             {
                 ItemBaseDefinition item = items[itemIndex];
+                if (!item.IsEquipment) { continue; }
                 int candidateCount = 0;
                 if (item.ItemType == ItemType.Accessory)
                 {
@@ -177,7 +178,7 @@ namespace DarkFlare.Tests
                 $"{PresetRoot}/Crafting/基础打造配置.asset");
             Assert.IsNotNull(trader);
             Assert.IsNotNull(crafting);
-            CollectionAssert.AreEquivalent(items, trader.Stock.Select(entry => entry.Item));
+            CollectionAssert.AreEquivalent(items.Where(item => item.IsEquipment), trader.Stock.Select(entry => entry.Item));
             Assert.AreEqual(25, crafting.AffixPool.Count);
         }
 

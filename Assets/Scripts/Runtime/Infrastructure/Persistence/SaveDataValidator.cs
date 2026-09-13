@@ -243,6 +243,10 @@ namespace DarkFlare
                 {
                     Add(issues, SaveDataIssueCode.InvalidValue, $"{itemPath}.itemLevel", "物品等级必须大于 0");
                 }
+                if (item.Quantity <= 0)
+                {
+                    Add(issues, SaveDataIssueCode.InvalidValue, path, "物品数量必须大于 0");
+                }
 
                 ValidateFinite(item.Durability, $"{itemPath}.durability", issues);
                 ValidateModifiers(item.ImplicitModifiers, $"{itemPath}.implicitModifiers", issues);

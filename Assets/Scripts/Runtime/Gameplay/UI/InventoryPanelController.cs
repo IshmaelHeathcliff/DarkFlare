@@ -329,6 +329,17 @@ namespace DarkFlare
             _workbench = root.Q<VisualElement>("game-menu-overlay");
             _grid = root.Q<VisualElement>("inventory-grid");
             _gridFrame = root.Q<VisualElement>("inventory-grid-frame");
+            if (_gridFrame is ScrollView scroll)
+            {
+                scroll.focusable = false;
+                scroll.contentContainer.focusable = false;
+                foreach (VisualElement control in scroll.verticalScroller.Query<VisualElement>().ToList())
+                {
+                    control.focusable = false;
+                    control.tabIndex = -1;
+                }
+                scroll.verticalScroller.focusable = false;
+            }
             _emptyLabel = root.Q<Label>("inventory-empty");
             _targetSlotLabel = root.Q<Label>("inventory-target-slot");
             _feedbackLabel = root.Q<Label>("inventory-feedback");
@@ -472,6 +483,17 @@ namespace DarkFlare
             icon.AddToClassList("inventory-item-icon");
             ItemVisualPresenter.ApplyIcon(icon, item.Detail.IconGuid);
             button.Add(icon);
+            if (item.Item.BaseDefinition.IsStackable)
+            {
+                Label quantity = new Label(item.Item.Quantity.ToString()) { pickingMode = PickingMode.Ignore };
+                quantity.style.position = Position.Absolute;
+                quantity.style.right = 3;
+                quantity.style.bottom = 1;
+                quantity.style.fontSize = 16;
+                quantity.style.color = Color.white;
+                quantity.style.backgroundColor = new Color(0f, 0f, 0f, 0.75f);
+                button.Add(quantity);
+            }
             button.RegisterCallback<PointerEnterEvent>(_ => PreviewItem(item.Item));
             button.RegisterCallback<PointerLeaveEvent>(_ => EndPreview(item.Item));
             button.RegisterCallback<FocusInEvent>(_ => PreviewItem(item.Item));

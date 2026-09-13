@@ -169,6 +169,13 @@ MonoBehaviour:
     - df.session
     - df.sprite
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d8ac47a9d99c13247946bc4941ac2d60
+    m_Address: ui/icons/items/gold
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - df.session
+    - df.sprite
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d8c5c86107920ab4d9e117e19d6ed11e
     m_Address: ui/icons/items/jade-ring
     m_ReadOnly: 0
@@ -178,6 +185,13 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: dada93ae602fc6b4fac4c23ee7b69a84
     m_Address: ui/icons/items/silver-pendant
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - df.session
+    - df.sprite
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: de10016a657a2274087916e5c348b164
+    m_Address: ui/icons/items/forging-ore
     m_ReadOnly: 0
     m_SerializedLabels:
     - df.session

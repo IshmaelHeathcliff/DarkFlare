@@ -369,6 +369,23 @@ namespace DarkFlare
         }
     }
 
+    public sealed class ItemQuantitySaveMigration : IJsonMigrationStep
+    {
+        public string Id => "save_1_to_2_item_quantity";
+        public MigrationDataDomain Domain => MigrationDataDomain.Save;
+        public int FromVersion => 1;
+        public int ToVersion => 2;
+
+        public void Apply(JObject document)
+        {
+            if (document["payload"]?["items"] is not JArray items) { return; }
+            foreach (JToken token in items)
+            {
+                if (token is JObject item) { item["quantity"] = 1; }
+            }
+        }
+    }
+
     public sealed class LegacySaveV0ToV1Migration : IJsonMigrationStep
     {
         public string Id => "save_0_to_1_content_ids";
