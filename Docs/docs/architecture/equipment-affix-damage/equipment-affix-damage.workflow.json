@@ -1,0 +1,263 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "装备、词条与伤害 · 实际作用流程",
+    "locale": "zh-CN",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "auto",
+      "entries": {
+        "frontend": {
+          "label": "反馈表现"
+        },
+        "messagebus": {
+          "label": "领域事件"
+        },
+        "database": {
+          "label": "实例与快照"
+        },
+        "backend": {
+          "label": "运行时计算"
+        }
+      }
+    }
+  },
+  "lanes": [
+    {
+      "id": "equipment",
+      "label": "装备与词条"
+    },
+    {
+      "id": "attack",
+      "label": "攻击快照"
+    },
+    {
+      "id": "damage",
+      "label": "伤害结算"
+    },
+    {
+      "id": "defenseLane",
+      "label": "目标防御"
+    },
+    {
+      "id": "commit",
+      "label": "结果提交"
+    }
+  ],
+  "mainPath": [
+    "item",
+    "equip",
+    "effects",
+    "snapshot",
+    "hit",
+    "convert",
+    "scale",
+    "defense",
+    "result"
+  ],
+  "nodes": [
+    {
+      "id": "item",
+      "lane": "equipment",
+      "col": 0,
+      "type": "database",
+      "label": "生成物品实例",
+      "sublabel": "基底 + 隐式 / 前缀 / 后缀",
+      "width": 160
+    },
+    {
+      "id": "equip",
+      "lane": "equipment",
+      "col": 1,
+      "type": "backend",
+      "label": "原子穿戴事务",
+      "sublabel": "槽位 / 背包校验；失败回滚",
+      "width": 160
+    },
+    {
+      "id": "effects",
+      "lane": "equipment",
+      "col": 2,
+      "type": "backend",
+      "label": "重建装备来源",
+      "sublabel": "遍历十槽；按 Scope 分流",
+      "width": 160
+    },
+    {
+      "id": "stats",
+      "lane": "equipment",
+      "col": 3,
+      "type": "database",
+      "label": "有效角色属性",
+      "sublabel": "非伤害全局词条 → 主属性派生",
+      "width": 160
+    },
+    {
+      "id": "snapshot",
+      "lane": "attack",
+      "col": 2,
+      "type": "database",
+      "label": "冻结攻击快照",
+      "sublabel": "基础包 / 词条 / 标签 / 随机数",
+      "width": 160
+    },
+    {
+      "id": "hit",
+      "lane": "attack",
+      "col": 3,
+      "type": "backend",
+      "label": "读取目标并判命中",
+      "sublabel": "当前防御；命中与暴击独立掷值",
+      "width": 160
+    },
+    {
+      "id": "convert",
+      "lane": "damage",
+      "col": 3,
+      "type": "backend",
+      "label": "转换 → 额外获得",
+      "sublabel": "转换封顶；保留伤害类型血统",
+      "width": 160
+    },
+    {
+      "id": "scale",
+      "lane": "damage",
+      "col": 4,
+      "type": "backend",
+      "label": "来源增伤与暴击",
+      "sublabel": "Flat → Increase → More → 暴击",
+      "width": 160
+    },
+    {
+      "id": "defense",
+      "lane": "defenseLane",
+      "col": 4,
+      "type": "backend",
+      "label": "承伤与类型防御",
+      "sublabel": "TargetTaken → 护甲 / 抗性",
+      "width": 160
+    },
+    {
+      "id": "result",
+      "lane": "commit",
+      "col": 4,
+      "type": "messagebus",
+      "label": "扣血与领域事件",
+      "sublabel": "结算 / 受伤 / 死亡 → UI 与掉落",
+      "width": 160
+    },
+    {
+      "id": "miss",
+      "lane": "commit",
+      "col": 3,
+      "type": "frontend",
+      "label": "未命中 / 闪避反馈",
+      "sublabel": "零伤害；不发送受伤事件",
+      "width": 160
+    }
+  ],
+  "edges": [
+    {
+      "id": "item-equip",
+      "from": "item",
+      "to": "equip",
+      "label": "选择物品",
+      "role": "main"
+    },
+    {
+      "id": "equip-effects",
+      "from": "equip",
+      "to": "effects",
+      "label": "提交装备",
+      "role": "main"
+    },
+    {
+      "id": "effects-stats",
+      "from": "effects",
+      "to": "stats",
+      "label": "静态聚合"
+    },
+    {
+      "id": "effects-snapshot",
+      "from": "effects",
+      "to": "snapshot",
+      "label": "发起攻击",
+      "role": "main"
+    },
+    {
+      "id": "stats-snapshot",
+      "from": "stats",
+      "to": "snapshot",
+      "label": "冻结有效属性"
+    },
+    {
+      "id": "snapshot-hit",
+      "from": "snapshot",
+      "to": "hit",
+      "label": "投射物碰撞",
+      "role": "main"
+    },
+    {
+      "id": "hit-convert",
+      "from": "hit",
+      "to": "convert",
+      "label": "命中",
+      "role": "main"
+    },
+    {
+      "id": "convert-scale",
+      "from": "convert",
+      "to": "scale",
+      "label": "逐包匹配",
+      "role": "main"
+    },
+    {
+      "id": "scale-defense",
+      "from": "scale",
+      "to": "defense",
+      "label": "来源伤害",
+      "role": "main"
+    },
+    {
+      "id": "defense-result",
+      "from": "defense",
+      "to": "result",
+      "label": "最终伤害",
+      "role": "main"
+    },
+    {
+      "id": "hit-miss",
+      "from": "hit",
+      "to": "miss",
+      "label": "未命中 / 闪避",
+      "role": "error"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "LocalItem 的实际时机",
+      "items": [
+        "武器局部词条在发射时加入快照，和全局词条共走伤害管线。",
+        "换装只影响后续攻击；目标属性在碰撞时读取。"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "两条数值路径",
+      "items": [
+        "非伤害 GlobalActor 在换装时聚合；伤害词条逐包结算。",
+        "来源 Increase 加算、More 连乘；目标 Increase / More 均连乘。"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "边界与后续响应",
+      "items": [
+        "武器来源技能无武器则拒绝发射；技能来源使用自身基础伤害。",
+        "存活目标可附加命中状态；周期伤害另走无命中、无暴击路径。"
+      ]
+    }
+  ]
+}

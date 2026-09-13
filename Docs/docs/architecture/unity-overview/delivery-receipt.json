@@ -3,8 +3,8 @@
   "ok": true,
   "command": "deliver",
   "type": "architecture",
-  "input": "C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Docs\\docs\\architecture\\darkflare.architecture.json",
-  "output": "C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Docs\\docs\\architecture\\darkflare.html",
+  "input": "C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Docs\\docs\\architecture\\unity-overview\\darkflare.architecture.json",
+  "output": "C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Docs\\docs\\architecture\\unity-overview\\darkflare.html",
   "specification": {
     "sha256": "cd99cca800af8aa7f5cab3eb70e1519c7a2130e08561ccae64eeb1a3727590e3",
     "bytes": 6341

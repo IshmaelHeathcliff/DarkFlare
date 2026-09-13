@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "ok": true,
+  "command": "deliver",
+  "type": "workflow",
+  "input": "C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Docs\\docs\\architecture\\equipment-affix-damage\\equipment-affix-damage.workflow.json",
+  "output": "C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Docs\\docs\\architecture\\equipment-affix-damage\\equipment-affix-damage.html",
+  "specification": {
+    "sha256": "0ac0c2c4d74bc5fe2b1719e7ad4172adcd586b7192273a2a124a125605aedc98",
+    "bytes": 5814
+  },
+  "artifact": {
+    "sha256": "8f3b0676316dd40701d94b05b97cd038b7a474494fa722d5d9be49d53c71b425",
+    "bytes": 815650
+  },
+  "validation": {
+    "checksPassed": 9,
+    "checkCount": 9,
+    "compositionProfile": "showcase",
+    "compositionStatus": "pass",
+    "errors": 0,
+    "warnings": 0
+  }
+}

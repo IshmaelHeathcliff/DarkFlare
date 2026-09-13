@@ -49,7 +49,7 @@ Mask 使用对应编号的位。`Defenses` 包含身体、头部、手部、腿�
 
 `EquipmentEffectResolver` 每次从完整 Loadout 重建效果，避免逐件增减造成旧词条残留。
 
-- `LocalItem` 只允许进入 Weapon 槽物品的本地伤害解析。
+- `LocalItem` 只从 Weapon 槽物品收集，在发射时加入攻击快照；当前与 `GlobalActor` / `Skill` 一起进入统一伤害管线，并没有独立的武器本地预结算阶段。
 - `GlobalActor`、`Skill`、`TargetTaken` 等已支持 Scope 进入角色修改器集合。
 - 护甲、抗性等非伤害属性由 `CombatStatResolver` 聚合到 Actor 有效属性；直接修改器处理完成后，再统一派生力量对应的最大生命、敏捷对应的命中 / 闪避和智力对应的最大法力。
 - 最大生命统一使用稳定 ID `max_health`。`CombatActor.MaxHealth`、当前生命和 HUD 均读取聚合后的有效属性；穿脱装备时保持当前生命比例，避免通过反复换装恢复生命。
@@ -105,6 +105,8 @@ HUD 不再展示武器或装备摘要，完整槽位信息集中在背包。背�
 - Actor 注销会清理运行时 Loadout；当前流程不把被清理的装备自动送回背包，注销只用于场景或架构生命周期结束。
 
 伤害公式和词条 Scope 见 [伤害系统与词条系统设计](./damage-affix-system.md)，配置字段见[角色、物品与攻击配置参考](./config-reference/combat-content.md)，菜单交互见 [输入与运行时 UI](./input-ui-system.md)。
+
+实际调用顺序、公式与代码依据见[装备、词条与伤害作用流程](./architecture/equipment-affix-damage/README.md)。
 
 ## 与状态来源共存
 
