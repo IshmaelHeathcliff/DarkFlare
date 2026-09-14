@@ -12,9 +12,11 @@ alpha 版本内的阶段使用三段式名称：`alpha 0.1` 的首个阶段为 `
 
 alpha 0.4.0 已完成[统一物品系统](./item-system.md)：金币与材料入栏、独立堆叠 / 消耗属性、材料打造、掉落权重和 core v3 / Schema 2 旧档迁移。最新 EditMode 442/442、PlayMode 67/67 通过；见[验收记录](./assets/acceptance/alpha-0.4-items/README.md)。
 
-[alpha 0.4 状态系统](./plan/alpha-0.4-status-system-plan.md)已完成阶段 1–3：[核心](./status-system.md)、[角色战斗](./status-combat.md)、[七异常、抗性与来源](./status-ailments.md)。EditMode 全量 527/527、随后本地化专项 20/20、PlayMode 68/68 通过，见[阶段 3 验收](./assets/acceptance/alpha-0.4-status-ailments/README.md)。下一步为阶段 4 自动计时、状态存档和图标 UI。运行版本 0.4.0-alpha，core v4、Schema 2。
+[alpha 0.4 状态系统](./plan/alpha-0.4-status-system-plan.md)已完成阶段 1–4：核心、战斗、异常抗性与来源，以及[自动计时、存档与图标查看](./status-lifecycle-ui.md)。EditMode 534/534、PlayMode 72/72 通过，见[阶段 4 验收](./assets/acceptance/alpha-0.4-status-lifecycle-ui/README.md)。下一步进入阶段 5 综合验收，再推进统一物品使用与消耗品。运行版本 0.4.0-alpha，core v4、Schema 3。
 
 按用户指定顺序，状态系统验收后继续[统一物品使用与消耗品](./plan/alpha-0.4-usable-items-plan.md)，建议以 `0.4.2-alpha` 交付；统一使用入口承载回血、回蓝、临时状态和驱散异常，复用状态系统并保证效果与物品扣除一致提交。
+
+状态查看已补充三档显示策略、HUD / 状态窗口共用隐藏开关及右上角状态条。最新 EditMode 540/540、PlayMode 73 项长期回归及 1 项临时截图检查通过，见[显示与 HUD 验收](./assets/acceptance/status-visibility-hud/README.md)。
 
 ## 游戏定位
 

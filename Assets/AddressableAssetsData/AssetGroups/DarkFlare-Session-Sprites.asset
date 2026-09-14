@@ -15,8 +15,43 @@ MonoBehaviour:
   m_GroupName: DarkFlare-Session-Sprites
   m_GUID: 13797427c9aa77b4eab823a4b4b8aabc
   m_SerializeEntries:
+  - m_GUID: 01181768009028a4ab0b661b89b0bd2f
+    m_Address: gameplay/sprites/statuses/weakness
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - df.session
+    - df.sprite
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 01f0910ffa9fbc34dbd44c566c9f7c23
     m_Address: ui/icons/equipment-slots/ui-icon-necklace
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - df.session
+    - df.sprite
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 08ad860b80cedd44e95e8feee056c114
+    m_Address: gameplay/sprites/statuses/poison
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - df.session
+    - df.sprite
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0d0cfb023d79f274d9a106852e120815
+    m_Address: gameplay/sprites/statuses/chill
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - df.session
+    - df.sprite
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 119ee3479621e8243b7f24b92a29347e
+    m_Address: gameplay/sprites/statuses/shock
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - df.session
+    - df.sprite
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 18b49cc5353df08469e0f007e870c98a
+    m_Address: gameplay/sprites/statuses/burning
     m_ReadOnly: 0
     m_SerializedLabels:
     - df.session
@@ -155,6 +190,13 @@ MonoBehaviour:
     - df.session
     - df.sprite
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c86fcc1a858a50e4e801710766077e97
+    m_Address: gameplay/sprites/statuses/stun
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - df.session
+    - df.sprite
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c9f93ca3e42410d45b479e3d65265e61
     m_Address: ui/icons/equipment-slots/ui-icon-belt
     m_ReadOnly: 0
@@ -185,6 +227,20 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: dada93ae602fc6b4fac4c23ee7b69a84
     m_Address: ui/icons/items/silver-pendant
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - df.session
+    - df.sprite
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: dd11b812efe2f0e4bb2f3758c9e10504
+    m_Address: gameplay/sprites/statuses/bleeding
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - df.session
+    - df.sprite
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ddfd5ef3d65f3b145900bf174e194cea
+    m_Address: gameplay/sprites/statuses/equipment_guard
     m_ReadOnly: 0
     m_SerializedLabels:
     - df.session

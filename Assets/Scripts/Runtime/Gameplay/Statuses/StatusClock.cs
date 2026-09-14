@@ -113,8 +113,8 @@ namespace DarkFlare
                     if (double.IsPositiveInfinity(candidateTime)) { continue; }
                     if (candidateTime < due || (candidateTime == due && (layer == null
                         || (candidateTick && !tick) || (candidateTick == tick
-                            && (pair.Key.Registration < target.Registration
-                                || (pair.Key.Registration == target.Registration && candidate.Id < layer.Id))))))
+                            && (pair.Value.EventOrder < _targets[target].EventOrder
+                                || (pair.Value.EventOrder == _targets[target].EventOrder && candidate.Id < layer.Id))))))
                     {
                         target = pair.Key;
                         layer = candidate;

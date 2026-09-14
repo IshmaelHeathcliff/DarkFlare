@@ -2,7 +2,7 @@
 
 ## 状态与基线
 
-2026-09-13：阶段 1–3 已完成；EditMode 全量 527/527、随后本地化专项 20/20、PlayMode 68/68 通过，见[异常模块](../status-ailments.md)与[阶段 3 验收](../assets/acceptance/alpha-0.4-status-ailments/README.md)。下一步为阶段 4 自动计时、状态存档与图标 UI。运行版本保持 0.4.0-alpha，core v4、Schema 2；完整状态验收后再升级运行版本。
+2026-09-14：阶段 1–4 已完成；EditMode 534/534、PlayMode 72/72 通过，见[生命周期与 UI](../status-lifecycle-ui.md)及[阶段 4 验收](../assets/acceptance/alpha-0.4-status-lifecycle-ui/README.md)。[阶段 4 执行计划](./archive/alpha-0.4-status-lifecycle-ui-plan.md)已归档，下一步进入阶段 5 综合验收。运行版本保持 0.4.0-alpha，core v4、Schema 3。
 
 计划配套文档：
 
@@ -12,7 +12,7 @@
 - [阶段 2：角色效果与战斗接入（已归档）](./archive/alpha-0.4-status-combat-plan.md)
 - [阶段 3：七异常、抗性与来源接入（已归档）](./archive/alpha-0.4-status-ailments-plan.md)
 
-阶段 1–3 已提供核心、角色效果、正式异常、抗性与来源样例；自动时间、状态存档和状态 UI 按阶段 4 继续，完整状态系统尚未交付。
+阶段 1–4 已提供核心、角色效果、七异常、来源样例、自动时间、状态存档与图标 UI；完整版本仍待阶段 5 综合验收。
 
 ## 交付范围
 
@@ -89,6 +89,8 @@
 完成条件：七种异常可通过统一入口获得、检测、减弱及驱散；来源重复绑定和解绑不会重复叠加或误删其他来源。
 
 ### 4. 生命周期、存档与界面
+
+2026-09-14：已完成并[归档执行计划](./archive/alpha-0.4-status-lifecycle-ui-plan.md)。唯一时间驱动、Schema 3 专用恢复、八图标、浮窗与键鼠手柄查看入口均已接入。
 
 - 在 Session 中统一启动并取消状态时间推进；接入暂停、禁用、死亡和恢复。
 - 新增状态 DTO 与历史空状态迁移，恢复时先重建状态和属性，再恢复生命 / 法力。

@@ -142,7 +142,8 @@ namespace DarkFlare
             MonsterInstanceData instanceData,
             Vector3 position,
             CombatResourceSnapshot resources,
-            float contactDamageCooldownRemainingSeconds)
+            float contactDamageCooldownRemainingSeconds,
+            bool deferResources = false)
         {
             if (definition == null || instanceData == null)
             {
@@ -158,7 +159,7 @@ namespace DarkFlare
 
             CombatResourceSnapshot previousResources = controller.Actor.Resources;
             controller.Configure(definition, instanceData);
-            controller.RestoreRuntime(resources, contactDamageCooldownRemainingSeconds);
+            if (!deferResources) { controller.RestoreRuntime(resources, contactDamageCooldownRemainingSeconds); }
             this.GetSystem<CombatSystem>().PublishResourceChanges(
                 controller.Actor,
                 previousResources,

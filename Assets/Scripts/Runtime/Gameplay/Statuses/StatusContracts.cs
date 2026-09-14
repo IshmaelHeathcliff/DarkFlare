@@ -255,13 +255,14 @@ namespace DarkFlare
 
     internal sealed class StatusTargetState
     {
+        internal long EventOrder { get; set; }
         internal long Version { get; set; }
         internal long NextId { get; set; } = 1;
         internal List<StatusLayer> Layers { get; } = new List<StatusLayer>();
 
         internal StatusTargetState Copy()
         {
-            var copy = new StatusTargetState { Version = Version, NextId = NextId };
+            var copy = new StatusTargetState { Version = Version, NextId = NextId, EventOrder = EventOrder };
             copy.Layers.AddRange(Layers.Select(layer => layer.Copy()));
             return copy;
         }

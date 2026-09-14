@@ -34,6 +34,44 @@ namespace DarkFlare.Tests
         }
 
         [UnityTest]
+        public IEnumerator DeadPlayer_RestoresWithoutStatusProjectionAndRebindsOnRevive()
+        {
+            yield return _fixture.EnterMain();
+            ApplicationHost host = ApplicationHost.Current;
+            GameSessionHost session = host.CurrentSession;
+            PlayerController player = UnityEngine.Object.FindAnyObjectByType<PlayerController>();
+            MonsterSpawner spawner = UnityEngine.Object.FindAnyObjectByType<MonsterSpawner>();
+            CombatPrototypeBootstrap bootstrap = UnityEngine.Object.FindAnyObjectByType<CombatPrototypeBootstrap>();
+            CombatSystem combat = session.Architecture.GetSystem<CombatSystem>();
+            combat.ApplyPeriodicDamage(new DamageSourceSnapshot("death-test", ActorTeam.Monster), player.Actor,
+                new[] { new DamagePacket(DamageType.Physical, player.Actor.MaxHealth * 100, TagSet.Empty) });
+            Assert.IsFalse(player.Actor.IsAlive);
+            var source = new SessionSnapshotSource(session, host.ContentCatalog, spawner);
+            SessionSnapshotResult snapshot = source.Capture();
+            Assert.IsTrue(snapshot.Succeeded, Describe(snapshot));
+            Assert.IsFalse(snapshot.Payload.Run.Statuses.Actors.Any(actor => actor.ActorKey.StartsWith("player:")));
+            PreparedRestoreResult prepared = SaveRestorePreparer.Prepare(CreateDocument(snapshot.Payload, host.ContentCatalog), host.ContentCatalog);
+            Assert.IsTrue(prepared.Succeeded, Describe(prepared));
+            bool finished = false;
+            LifecycleResult completion = default;
+            host.BeginSceneSessionInitialization(SceneManager.GetActiveScene(),
+                new RestoreGameSessionInitializer(bootstrap.CreateSceneConfiguration(), prepared.Value),
+                onCompleted: result => { completion = result; finished = true; });
+            float deadline = Time.realtimeSinceStartup + TimeoutSeconds;
+            while (!finished && Time.realtimeSinceStartup < deadline) { yield return null; }
+            Assert.IsTrue(finished);
+            Assert.IsTrue(completion.IsSuccess, completion.Exception?.ToString());
+            player = UnityEngine.Object.FindAnyObjectByType<PlayerController>();
+            Assert.IsFalse(player.Actor.IsAlive);
+            StatusSystem statuses = host.CurrentSession.Architecture.GetSystem<StatusSystem>();
+            Assert.IsFalse(statuses.GetTarget(player.Actor).IsValid);
+            deadline = Time.realtimeSinceStartup + 10;
+            while (!player.Actor.IsAlive && Time.realtimeSinceStartup < deadline) { yield return null; }
+            Assert.IsTrue(player.Actor.IsAlive, "恢复后自然复活任务必须继续完成");
+            Assert.IsTrue(statuses.GetTarget(player.Actor).IsValid);
+        }
+
+        [UnityTest]
         public IEnumerator MainSession_CapturePrepareRestorePreservesStateWithoutNewGameGrant()
         {
             yield return _fixture.EnterMain();
@@ -105,6 +143,12 @@ namespace DarkFlare.Tests
                 host.ContentCatalog,
                 spawner);
 
+            StatusSystem oldStatuses = oldArchitecture.GetSystem<StatusSystem>();
+            StatusDefinition weakness = host.ContentCatalog.GetAll<StatusDefinition>().Single(value => value.Id == "weakness");
+            StatusTargetId statusTarget = oldStatuses.GetTarget(oldPlayer.Actor);
+            Assert.IsTrue(oldStatuses.ApplyStatus(statusTarget, StatusMutation.Apply(weakness.CreateRules(),
+                new StatusSource(StatusSourceKind.Skill, "save_test", statusTarget), weakness.CreateEffects(new System.Random(1)), duration: 60)).Result.Succeeded);
+
             SessionSnapshotResult captured = source.Capture();
 
             Assert.IsTrue(captured.Succeeded, Describe(captured));
@@ -169,6 +213,14 @@ namespace DarkFlare.Tests
 
             PlayerController restoredPlayer = UnityEngine.Object.FindAnyObjectByType<PlayerController>();
             Assert.IsNotNull(restoredPlayer);
+            StatusSystem restoredStatuses = restoredArchitecture.GetSystem<StatusSystem>();
+            StatusTargetId restoredTarget = restoredStatuses.GetTarget(restoredPlayer.Actor);
+            StatusLayerSnapshot restoredWeakness = restoredStatuses.GetStatusSnapshot(restoredTarget).Layers.Single();
+            StatusLayerDto savedWeakness = captured.Payload.Run.Statuses.Actors.Single(value => value.ActorKey == statusTarget.ActorKey).Layers.Single();
+            Assert.That(restoredWeakness.Rules.Id.LocalId, Is.EqualTo("weakness"));
+            Assert.That(restoredWeakness.Source.Actor, Is.EqualTo(restoredTarget));
+            Assert.That(restoredWeakness.ExpiresAt, Is.EqualTo(savedWeakness.ExpiresAt));
+            Assert.That(restoredWeakness.Effects.Resistance.RawResistance, Is.EqualTo(savedWeakness.Effects.Resistance.Raw));
             Assert.AreEqual(expectedHealth, restoredPlayer.Actor.CurrentHealth, 0.001f);
             Assert.AreEqual(capturedGold, restoredArchitecture.GetModel<InventoryModel>().Gold);
             Assert.AreEqual(

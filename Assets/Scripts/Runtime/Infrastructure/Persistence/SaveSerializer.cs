@@ -340,7 +340,7 @@ namespace DarkFlare
             JsonMigrationRegistryBuildResult result = JsonMigrationRegistry.Build(
                 MigrationDataDomain.Save,
                 SaveSchemaVersion.Current.Value,
-                new IJsonMigrationStep[] { new LegacySaveV0ToV1Migration(), new ItemQuantitySaveMigration() });
+                new IJsonMigrationStep[] { new LegacySaveV0ToV1Migration(), new ItemQuantitySaveMigration(), new StatusSaveMigration() });
 
             if (!result.Succeeded)
             {

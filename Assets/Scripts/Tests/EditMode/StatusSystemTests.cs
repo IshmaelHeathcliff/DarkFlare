@@ -25,6 +25,180 @@ namespace DarkFlare.Tests
             _store.Dispose();
         }
 
+        [Test]
+        public void SaveRestore_PreservesIndependentPhasesAndNewGeneration()
+        {
+            var rules = new StatusRules("periodic", StatusRepeatMode.Independent, 4, duration: 5, interval: 1);
+            var source = new StatusSource(StatusSourceKind.Skill, "test_skill", _target);
+            Push(StatusMutation.Apply(rules, source, new StatusEffectSnapshot(3)));
+            _store.Advance(.375);
+            Push(StatusMutation.Apply(rules, source, new StatusEffectSnapshot(7)));
+            _store.Advance(.5);
+            var issues = new List<DtoMapIssue>();
+            StatusSaveDto dto = Newtonsoft.Json.Linq.JObject.FromObject(_store.CaptureSave(null, issues)).ToObject<StatusSaveDto>();
+            using (var restored = new StatusStore(2))
+            {
+                StatusTargetId target = restored.RegisterTarget(PlayerId.LocalPlayer);
+                restored.ImportSave(dto, null, issues);
+                Assert.That(issues, Is.Empty);
+                StatusTargetSnapshot snapshot = restored.Capture(target);
+                Assert.That(snapshot.Layers.All(layer => layer.Source.Actor == target), Is.True);
+                CollectionAssert.AreEqual(new[] { 1d, 1.375d }, snapshot.Layers.Select(layer => layer.NextTickAt));
+                var expected = new List<(double, long)>();
+                var actual = new List<(double, long)>();
+                _store.Ticked += tick => expected.Add((tick.Time, tick.Layer.InstanceId));
+                restored.Ticked += tick => actual.Add((tick.Time, tick.Layer.InstanceId));
+                _store.Advance(5);
+                restored.Advance(5);
+                CollectionAssert.AreEqual(expected, actual);
+                Assert.That(restored.Capture(target).Layers, Is.Empty);
+            }
+        }
+
+        [TestCase(StatusVisibility.Show, false, true)]
+        [TestCase(StatusVisibility.Show, true, true)]
+        [TestCase(StatusVisibility.Hideable, false, true)]
+        [TestCase(StatusVisibility.Hideable, true, false)]
+        [TestCase(StatusVisibility.Never, false, false)]
+        [TestCase(StatusVisibility.Never, true, false)]
+        public void Visibility_OnlyOptionalStatusesRespondToHideSwitch(StatusVisibility visibility, bool hide, bool expected)
+        {
+            var definition = ScriptableObject.CreateInstance<StatusDefinition>();
+            try
+            {
+                Assert.IsTrue(definition.ShouldDisplay(true), "旧配置默认显示");
+                typeof(StatusDefinition).GetField("_visibility", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
+                    .SetValue(definition, visibility);
+                Assert.That(definition.ShouldDisplay(hide), Is.EqualTo(expected));
+            }
+            finally { UnityEngine.Object.DestroyImmediate(definition); }
+        }
+
+        [Test]
+        public void SaveRestore_DoesNotNormalizeResistanceOrLoseSuppressedCandidate()
+        {
+            var rules = new StatusRules("burning", StatusRepeatMode.Strongest, 4, duration: 5, interval: 1,
+                category: StatusCategory.Ailment, ailment: AilmentKind.Burning);
+            var before = new StatusEffectSnapshot(10);
+            var resistance = new AilmentResistanceSnapshot(AilmentKind.Burning, 50, before, 5);
+            Push(StatusMutation.Apply(rules, _source, new StatusEffectSnapshot(5, resistance: resistance), duration: 2));
+            Push(StatusMutation.Apply(rules, _source, new StatusEffectSnapshot(3, resistance: resistance)));
+            _store.Advance(.75);
+            var issues = new List<DtoMapIssue>();
+            StatusSaveDto dto = _store.CaptureSave(null, issues);
+            using (var restored = new StatusStore(2))
+            {
+                StatusTargetId target = restored.RegisterTarget(PlayerId.LocalPlayer);
+                restored.ImportSave(dto, null, issues);
+                StatusLayerSnapshot layer = restored.Capture(target).Layers[0];
+                Assert.That(layer.Effects.Strength, Is.EqualTo(5));
+                Assert.That(layer.Effects.Resistance.Before.Strength, Is.EqualTo(10));
+                Assert.That(layer.RemainingSeconds, Is.EqualTo(1.25));
+                restored.Advance(1.25);
+                Assert.That(restored.Capture(target).Layers.Single().Effects.Strength, Is.EqualTo(3));
+            }
+        }
+
+        [Test]
+        public void SaveCapture_RejectsUnpublishedTransactionAndPendingTime()
+        {
+            var rules = new StatusRules("periodic", interval: 1);
+            using (StatusCommit commit = _store.Commit(_store.Prepare(_target, new[] { StatusMutation.Apply(rules, _source) })))
+            {
+                Assert.That(_store.IsQuiescent, Is.False);
+                Assert.Throws<InvalidOperationException>(() => _store.CaptureSave(null, new List<DtoMapIssue>()));
+                commit.Publish();
+            }
+            _store.Advance(4, 1);
+            Assert.That(_store.IsQuiescent, Is.False);
+            Assert.Throws<InvalidOperationException>(() => _store.CaptureSave(null, new List<DtoMapIssue>()));
+            Assert.That(_store.RegisterTarget(new PlayerId("late_actor")).IsValid, Is.True, "时间积压期间新角色仍可登记");
+            _store.Advance(0);
+            Assert.That(_store.IsQuiescent, Is.True);
+        }
+
+        [Test]
+        public void SaveRestore_DetachedSourceKeepsAttributionWithoutAuthorityOverNewActor()
+        {
+            StatusTargetId departed = _store.RegisterTarget(new PlayerId("departed"));
+            Push(StatusMutation.Apply(new StatusRules("dot", interval: 1),
+                new StatusSource(StatusSourceKind.Skill, "source", departed)));
+            _store.UnregisterTarget(departed);
+            var issues = new List<DtoMapIssue>();
+            StatusSaveDto dto = _store.CaptureSave(null, issues);
+            using (var restored = new StatusStore(2))
+            {
+                StatusTargetId target = restored.RegisterTarget(PlayerId.LocalPlayer);
+                StatusTargetId replacement = restored.RegisterTarget(new PlayerId("departed"));
+                restored.ImportSave(dto, null, issues);
+                StatusTargetId source = restored.Capture(target).Layers.Single().Source.Actor;
+                Assert.That(source.ActorKey, Is.EqualTo("player:departed"));
+                Assert.That(source, Is.Not.EqualTo(departed));
+                Assert.That(source, Is.Not.EqualTo(replacement));
+                Assert.That(restored.Execute(source, new[] { StatusMutation.Dispel(new StatusFilter()) }).Result.Succeeded, Is.False);
+                int ticks = 0;
+                restored.Ticked += _ => ticks++;
+                restored.Advance(1);
+                Assert.That(ticks, Is.EqualTo(1));
+            }
+        }
+
+        [Test]
+        public void SaveValidation_RequiresSourceProviderAndRejectsInvalidPhase()
+        {
+            Push(StatusMutation.Apply(new StatusRules("aura", lifetime: StatusLifetime.SourceOwned),
+                new StatusSource(StatusSourceKind.Talent, "owned", _target)));
+            var issues = new List<DtoMapIssue>();
+            StatusSaveDto dto = _store.CaptureSave(null, issues);
+            SavePayloadDto payload = SaveDataContractTests.CreateValidDocument().Payload;
+            payload.Profile.PlayerId = PlayerId.LocalPlayer.Value;
+            StatusSaveValidation.Validate(dto, payload, null, issues);
+            Assert.That(issues, Is.Not.Empty);
+            issues.Clear();
+            var provider = new TestRestoreProvider();
+            StatusSaveValidation.Validate(dto, payload, null, issues, new[] { provider });
+            Assert.That(issues, Is.Empty);
+            Assert.That(provider.Called, Is.True);
+            dto.Actors[0].Layers[0].NextTickAt = 0;
+            StatusSaveValidation.Validate(dto, payload, null, issues, new[] { provider });
+            Assert.That(issues, Is.Not.Empty);
+        }
+
+        sealed class TestRestoreProvider : IStatusSourceRestoreProvider
+        {
+            public StatusSourceKind Kind => StatusSourceKind.Talent;
+            public bool Called { get; private set; }
+            public void Validate(StatusActorDto actor, StatusLayerDto layer, SavePayloadDto payload,
+                ContentCatalog catalog, List<DtoMapIssue> issues)
+            {
+                Called = true;
+                Assert.That(layer.SourceKey, Is.EqualTo("owned"));
+                Assert.That(layer.SourceActorKey, Is.EqualTo(actor.ActorKey));
+            }
+        }
+
+        [Test]
+        public void SaveRestore_MultipleRoundTripsPreservePhaseExactly()
+        {
+            Push(StatusMutation.Apply(new StatusRules("periodic", duration: 50, interval: .3), _source));
+            _store.Advance(.125);
+            var issues = new List<DtoMapIssue>();
+            StatusSaveDto original = _store.CaptureSave(null, issues);
+            StatusSaveDto dto = original;
+            for (int i = 2; i < 12; i++)
+            {
+                using (var restored = new StatusStore(i))
+                {
+                    restored.RegisterTarget(PlayerId.LocalPlayer);
+                    restored.ImportSave(dto, null, issues);
+                    dto = Newtonsoft.Json.Linq.JObject.FromObject(restored.CaptureSave(null, issues)).ToObject<StatusSaveDto>();
+                }
+            }
+            Assert.That(dto.Time, Is.EqualTo(original.Time));
+            Assert.That(dto.Actors[0].Layers[0].NextTickAt, Is.EqualTo(original.Actors[0].Layers[0].NextTickAt));
+            Assert.That(dto.Actors[0].Layers[0].ExpiresAt, Is.EqualTo(original.Actors[0].Layers[0].ExpiresAt));
+        }
+
         [TestCase(StatusClockMode.PerLayer)]
         [TestCase(StatusClockMode.Shared)]
         public void Uniform_RefreshesAllParametersAndCapsStacks(StatusClockMode clock)

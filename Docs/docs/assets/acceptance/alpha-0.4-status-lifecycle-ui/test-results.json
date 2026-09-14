@@ -1,0 +1,318 @@
+{
+  "date": "2026-09-14",
+  "editMode": {
+    "total": 534,
+    "passed": 534,
+    "failed": 0,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "playModeLongTerm": {
+    "total": 72,
+    "passed": 72,
+    "failed": 0
+  },
+  "playModeOriginalRunIncludingTemporaryCapture": {
+    "total": 73,
+    "passed": 72,
+    "failed": 1,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "temporaryCaptureAfterFix": {
+    "total": 1,
+    "passed": 1,
+    "failed": 0
+  },
+  "explanation": "原全量 PlayMode 唯一失败为随后已修复并通过的临时截图采集器；长期套件 72 项全部通过。临时工具现已移除。",
+  "longTermPlayModeTests": [
+    {
+      "name": "DarkFlare.Tests.ActorAnimationPlayModeTests.MainScene_ActorEventsSwitchAttackHitDeathAndRevive",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.Alpha012DamageResolutionPlayModeTests.MainScene_EquipsStartingWeaponBeforeSpawnerAndSupportsUnequipRecovery",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.Alpha013CollisionSafetyPlayModeTests.DefaultLayerTrigger_StillReceivesPlayerAndMonsterActors",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.Alpha013CollisionSafetyPlayModeTests.PlayerPassesThroughMonsterCrowd_ButWorldObstacleStillBlocksMovement",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.Alpha014ResourceSystemPlayModeTests.MainScene_CastsAtomicallyRegeneratesAndUpdatesManaHud",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.Alpha015MonsterAffixPlayModeTests.Controller_AppliesModifiersAndVisualTracksLifecycle",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.Alpha015MonsterAffixPlayModeTests.Visual_HidesEmptyInstancesAndCapsPresentationAtTwoLines",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.Alpha017BaselinePlayModeTests.ProjectileTryHit_ConsumesSnapshotAndResolvesExactlyOnce",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.Alpha017EffectRuntimePlayModeTests.Pool_IsPrewarmedBoundedReusableAndReleasedWithArchitecture",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.Alpha017WorldSortingPlayModeTests.Participants_RemainStableAcrossCrossingFlipDisableAndIdentityReuse",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.Alpha024SceneFlowPlayModeTests.Continue_RestoresCommittedRunWithoutNewGameGrant",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.Alpha024SceneFlowPlayModeTests.ThreeCycles_NewGamePauseAndReturnKeepTopologyUnique",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.Alpha025InputOwnershipPlayModeTests.AudioAccessibilityAndPlatformServicesUseApplicationLifetime",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.Alpha025InputOwnershipPlayModeTests.BootstrapAndThreeSessionsShareOneRuntimeActionAsset",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.Alpha025InputOwnershipPlayModeTests.SettingsPageOpensFromFrontEndAndPausedMenuWithoutReleasingPause",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.Alpha025InputOwnershipPlayModeTests.ShellPanelReload_PreservesModalActionSettingsAndOwnership",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.Alpha027ApplicationDataIsolationPlayModeTests.ApplicationHost_UsesTemporaryIsolatedDataRoots",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.Alpha027IntegratedAcceptancePlayModeTests.FullPlayerPath_DeleteAndResetPersistAcrossHostRestart",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.Alpha027ShellUiMatrixPlayModeTests.FrontEndSettingsAndErrorModal_FitThreeLocalesAtStandardResolution",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.Alpha027ShellUiMatrixPlayModeTests.GameplayMenu_SettingsAndConfirmationOwnInputUntilDismissed",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.ApplicationHostSceneTransitionPlayModeTests.ApplicationScopeTimeout_ShutdownReturnsFailureAndKeepsDiagnostics",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.ApplicationHostSceneTransitionPlayModeTests.BootCancellation_DoesNotReclassifyCancelledLocalizationAsFailure",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.ApplicationHostSceneTransitionPlayModeTests.ControlledStop_CleanupFailureAfterSessionClearsMarksApplicationFailed",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.ApplicationHostSceneTransitionPlayModeTests.DirectCreateBindInitialize_NotifiesExactlyOncePerGeneration",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.ApplicationHostSceneTransitionPlayModeTests.EmergencyShutdown_LateControlledStopCannotOverwriteShutdown",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.ApplicationHostSceneTransitionPlayModeTests.HangingRollback_SettlesRequestsAndShutdownWithoutStartingLatestGeneration",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.ApplicationHostSceneTransitionPlayModeTests.MainReloadDuringPreviousRollback_LatestInitializationEventuallyRuns",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.ApplicationHostSceneTransitionPlayModeTests.MultipleComponentTimeouts_StopSessionOnceAndPreserveAbandonedLease",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.ApplicationHostSceneTransitionPlayModeTests.ProfileScopeTimeout_ShutdownReturnsFailureAndKeepsDiagnostics",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.ApplicationHostSceneTransitionPlayModeTests.ThreeRapidSceneRequests_OnlyLatestRequestReachesRunning",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.ApplicationLifecyclePlayModeTests.ConcurrentInitializationRequest_IsRejectedSynchronously",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.ApplicationLifecyclePlayModeTests.ConcurrentStop_IsIdempotentAndClearsOnlyTheCapturedSession",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.ApplicationLifecyclePlayModeTests.DestroyedSessionObject_UnregistersFromRegistry",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.ApplicationLifecyclePlayModeTests.DirectMainReload_CoordinatesStopCreateBindAndInitialize",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.ApplicationLifecyclePlayModeTests.ExternalInitializationCancellation_RollsBackAndNeverCommits",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.ApplicationLifecyclePlayModeTests.InvalidNewGameConfiguration_RollsBackWithoutRuntimeObjects",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.ApplicationLifecyclePlayModeTests.MainColdStart_HasUniqueHostArchitecturePlayerAndCommittedSpawner",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.ApplicationLifecyclePlayModeTests.PreCancelledInitializationRequest_ReturnsCallbackExactlyOnce",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.ApplicationLifecyclePlayModeTests.RepeatedPlayInitialization_ReplacesIsolatedPathsWithoutRetainingOldInstallation",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.ApplicationLifecyclePlayModeTests.ThreeSessionRestarts_DoNotDuplicateHostPlayerOrArchitecture",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.ApplicationLifecyclePlayModeTests.UnloadingBoundMainScene_StopsSessionAndReleasesArchitecture",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.EquipmentPhase2PlayModeTests.InventorySlots_SupportKeyboardGamepadLayoutAndProjectileSnapshot",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.Phase0ExperiencePlayModeTests.MainScene_InventorySupportsKeyboardGamepadAndStandardResolution",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.Phase0ExperiencePlayModeTests.MainScene_PointerDragMovesInventoryItemAndEquipsIt",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.Phase1UxPlayModeTests.Attributes_IndependentWindowsRefreshAndNavigateWithoutTakingItemOwnership",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.Phase1UxPlayModeTests.Crafting_OnlyUsesItemsPlacedInTheInputSlot",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.Phase1UxPlayModeTests.GamepadNavigation_MovesHeldGridItemsAndCrossesCraftingBoundary",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.Phase1UxPlayModeTests.Hud_CurrentResourcesMotionAndEntriesRespectInputOwnership",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.Phase1UxPlayModeTests.IndependentWindows_TradeAndCraftWithoutInventoryAndRevokeInvalidTargets",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.Phase1UxPlayModeTests.ItemActions_EquipmentMenuDiscardAndDeviceLossKeepOwnership",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.Phase1UxPlayModeTests.ItemActions_TradeByPointerAndGamepadAndReturnCraftingToExactCell",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.Phase1UxPlayModeTests.PanelReload_RebindsGameplayAndPreservesRendererDisabledContent",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.Phase1UxPlayModeTests.ShopPurchase_UsesGridAndRestoresNeighborFocusFeedbackAndTooltip",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.Phase1UxPlayModeTests.StatusDetails_GamepadScrollBackAndDispelKeepFocusReachable",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.Phase4ContentPlayModeTests.MainScene_OfficialEquipmentCompletesTradeCraftAndRegisteredSlotFlow",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.RandomizationPhase3PlayModeTests.MainScene_DefaultRandomSeedChangesBetweenRuns",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.RandomizationPhase3PlayModeTests.MainScene_SameFixedSeedReplaysMonsterHealthDamageAndLoot",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.SaveCaptureRestorePlayModeTests.DeadPlayer_RestoresWithoutStatusProjectionAndRebindsOnRevive",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.SaveCaptureRestorePlayModeTests.GameMenu_SaveActionsArePresentFocusableAndReflectSlotProbe",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.SaveCaptureRestorePlayModeTests.MainSession_CapturePrepareRestorePreservesStateWithoutNewGameGrant",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.SaveCaptureRestorePlayModeTests.SessionFacade_SaveIsSessionScopedAndCrossSessionMethodsAreRemoved",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.SceneSessionComponentBindingPlayModeTests.BindingException_RollsBackWithoutReportingSuccess",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.SceneSessionComponentBindingPlayModeTests.MainToMain_PreplacedConsumersBindNewSessionExactlyOnce",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.SceneSessionComponentBindingPlayModeTests.NoProviderEmptySceneToMain_ConsumersWaitForRunningSessionAndBindExactlyOnce",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.SceneSessionComponentBindingPlayModeTests.RetryResult_DoesNotExposeFalseBindingAndBindsExactlyOnceAfterLaterFrame",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.SceneSessionComponentBindingPlayModeTests.TaintedScene_DisableEnableDoesNotRebindOrScheduleRetry",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.SessionObjectRegistryOwnershipPlayModeTests.DelayedDestroy_UnregistersCapturedRegistryOnly",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.StatusCombatPlayModeTests.ClockHold_DrainsBudgetAndCancellationReleasesPause",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.StatusCombatPlayModeTests.ConfiguredActors_BlockMovementAndRebindAfterDisableAndDeath",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.StatusCombatPlayModeTests.SessionClock_AdvancesPausesAndCancelsWithSession",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.VisualExperiencePhase05PlayModeTests.LootRarityRing_RotatesAndUsesRuntimeRarityColor",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.VisualExperiencePhase05PlayModeTests.MainScene_UsesSharedBoundsAndKeepsCameraOnGround",
+      "status": "Passed"
+    }
+  ]
+}

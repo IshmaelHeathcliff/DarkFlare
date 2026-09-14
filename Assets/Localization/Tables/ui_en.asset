@@ -1812,13 +1812,141 @@ MonoBehaviour:
     m_Localized: Monster affix
     m_Metadata:
       m_Items: []
+  - m_Id: 9222604584902656
+    m_Localized: Statuses
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9222604622651392
+    m_Localized: Actor
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9222604622651393
+    m_Localized: Actor unavailable
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9222604622651394
+    m_Localized: No visible statuses
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9222604622651395
+    m_Localized: Select an actor and focus an icon to inspect its effects and individual layers.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9222604622651396
+    m_Localized: "Stored: {0} \xB7 Active: {1}"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9222604622651397
+    m_Localized: "Layer {0} \xB7 {1} \xB7 {2}"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9222604622651398
+    m_Localized: Active
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9222604622651399
+    m_Localized: Suppressed candidate
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9222604622651400
+    m_Localized: '{0}s remaining'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9222604622651401
+    m_Localized: Source maintained
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9222604622651402
+    m_Localized: Infinite
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9222604622651403
+    m_Localized: "Source: {0} \xB7 {1}"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9222604622651404
+    m_Localized: 'Every {0}s: {1} {2} damage'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9222604622651405
+    m_Localized: 'Ailment resistance at application: {0}%'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9222604622651406
+    m_Localized: Aura
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9222604622651407
+    m_Localized: Skill effect
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9222604622651408
+    m_Localized: Ailment
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9222604622651409
+    m_Localized: Uniform effect per layer
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9222604622651410
+    m_Localized: Candidates coexist; strongest layer applies
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9222604622651411
+    m_Localized: Each layer applies independently
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9222604622651412
+    m_Localized: Skill
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9222604622651413
+    m_Localized: Talent
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9222604622651414
+    m_Localized: Equipment
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9222604622651415
+    m_Localized: Consumable
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9222604622651416
+    m_Localized: Mechanism
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9222604622651417
+    m_Localized: Movement blocked
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9222604622651418
+    m_Localized: Attacks blocked
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9222604622651419
+    m_Localized: Casting blocked
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9222604622651420
+    m_Localized: Item use blocked
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9279383784120320
+    m_Localized: Hide optional statuses
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9279383842840576
+    m_Localized: Show optional statuses
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:
     - rid: 6738608143192817845
       type: {class: SmartFormatTag, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
       data:
-        m_Entries:
+        m_Entries: 
         m_SharedEntries:
         - id: 18975395143680
         - id: 18975453863938

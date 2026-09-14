@@ -223,6 +223,8 @@ namespace DarkFlare
 
     public sealed class RunSaveData : IPersistenceDto
     {
+        public StatusSaveDto Statuses { get; set; } = new StatusSaveDto();
+
         public RunInstanceIdStateDto InstanceIds { get; set; } = new RunInstanceIdStateDto();
 
         public GameplayRandomStateDto Random { get; set; } = new GameplayRandomStateDto();

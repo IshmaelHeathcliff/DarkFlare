@@ -369,6 +369,21 @@ namespace DarkFlare
         }
     }
 
+    public sealed class StatusSaveMigration : IJsonMigrationStep
+    {
+        public string Id => "save_2_to_3_statuses";
+        public MigrationDataDomain Domain => MigrationDataDomain.Save;
+        public int FromVersion => 2;
+        public int ToVersion => 3;
+        public void Apply(JObject document)
+        {
+            if (document["payload"]?["run"] is JObject run)
+            {
+                run["statuses"] = new JObject { ["time"] = 0, ["actors"] = new JArray() };
+            }
+        }
+    }
+
     public sealed class ItemQuantitySaveMigration : IJsonMigrationStep
     {
         public string Id => "save_1_to_2_item_quantity";

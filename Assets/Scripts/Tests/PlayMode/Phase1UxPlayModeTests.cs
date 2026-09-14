@@ -52,6 +52,133 @@ namespace DarkFlare.Tests
         }
 
         [UnityTest]
+        public IEnumerator StatusVisibility_FiltersHudAndMenuWithoutRemovingGameplayLayers()
+        {
+            yield return _fixture.EnterMain();
+            GameMenuController menu = Object.FindAnyObjectByType<GameMenuController>();
+            VisualElement root = menu.GetComponent<RuntimePanelView>().Root;
+            Gamepad pad = InputSystem.AddDevice<Gamepad>();
+            Mouse mouse = InputSystem.AddDevice<Mouse>();
+            PlayerController player = Object.FindAnyObjectByType<PlayerController>();
+            StatusSystem statuses = _architecture.GetSystem<StatusSystem>();
+            StatusTargetId target = statuses.GetTarget(player.Actor);
+            var definitions = ApplicationHost.Current.ContentCatalog.GetAll<StatusDefinition>().ToDictionary(value => value.Id);
+            FieldInfo field = typeof(StatusDefinition).GetField("_visibility", BindingFlags.Instance | BindingFlags.NonPublic);
+            object beforePoison = field.GetValue(definitions["poison"]);
+            object beforeStun = field.GetValue(definitions["stun"]);
+            using (GamePauseLease pause = GameTimeService.Shared.AcquirePause("visibility-test"))
+            try
+            {
+                field.SetValue(definitions["poison"], StatusVisibility.Hideable);
+                field.SetValue(definitions["stun"], StatusVisibility.Never);
+                foreach (string id in new[] { "weakness", "poison", "stun" })
+                {
+                    var source = new StatusSource(StatusSourceKind.Skill, "visibility-test", target);
+                    StatusApplication application = StatusApplication.Capture(definitions[id], source, player.Actor.Stats, player.Actor.Modifiers,
+                        new DamageSourceSnapshot(target.ActorKey, ActorTeam.Player), 1);
+                    Assert.IsTrue(statuses.ApplyStatus(target, StatusMutation.Apply(application.Rules, source, application.Effects)).Result.Succeeded);
+                }
+                yield return new WaitForSecondsRealtime(.2f);
+                Assert.IsNotNull(root.Q("status-hud-poison"));
+                Assert.IsNotNull(root.Q("status-hud-weakness"));
+                Assert.IsNull(root.Q("status-hud-stun"));
+                Rect hud = root.Q("status-hud").worldBound;
+                Assert.Greater(hud.xMin, root.worldBound.center.x);
+                Assert.Less(hud.yMin, root.worldBound.yMin + root.worldBound.height * .1f);
+                menu.TogglePause(); menu.OpenStatuses();
+                yield return null;
+                Assert.IsNull(root.Q("status-icon-stun"));
+                root.Q<Button>("status-icon-poison").Focus();
+                yield return null;
+                root.Q<Button>("status-visibility-toggle").Focus();
+                _inputFixture.PressAndRelease(pad.buttonSouth);
+                yield return null;
+                yield return null;
+                Assert.IsNull(root.Q("status-icon-poison"));
+                Assert.IsNotNull(root.Q("status-icon-weakness"));
+                Assert.AreEqual(DisplayStyle.None, root.Q("status-tooltip").resolvedStyle.display);
+                Assert.IsNotNull(root.panel.focusController.focusedElement);
+                Assert.That(statuses.GetStatusSnapshot(target).Layers, Has.Count.EqualTo(3));
+                menu.CloseStatuses(); menu.TogglePause();
+                yield return null;
+                Assert.IsNull(root.Q("status-hud-poison"));
+                VisualElement toggle = root.Q("status-hud-visibility-toggle");
+                _inputFixture.Set(mouse.position, PanelToScreen(root, toggle.worldBound.center));
+                yield return null;
+                _inputFixture.PressAndRelease(mouse.leftButton);
+                yield return null;
+                yield return null;
+                Assert.IsNotNull(root.Q("status-hud-poison"));
+                Assert.IsNull(root.Q("status-hud-stun"));
+                Assert.IsTrue(ApplicationHost.Current.Input.IsGameplayEnabled);
+            }
+            finally
+            {
+                field.SetValue(definitions["poison"], beforePoison);
+                field.SetValue(definitions["stun"], beforeStun);
+                statuses.ApplyStatus(target, StatusMutation.Dispel(new StatusFilter(category: StatusCategory.Ailment)));
+            }
+        }
+
+        [UnityTest]
+        public IEnumerator StatusDetails_GamepadScrollBackAndDispelKeepFocusReachable()
+        {
+            yield return _fixture.EnterMain();
+            GameMenuController menu = Object.FindAnyObjectByType<GameMenuController>();
+            VisualElement root = menu.GetComponent<RuntimePanelView>().Root;
+            Gamepad pad = InputSystem.AddDevice<Gamepad>();
+            Mouse mouse = InputSystem.AddDevice<Mouse>();
+            PlayerController player = Object.FindAnyObjectByType<PlayerController>();
+            StatusSystem statuses = _architecture.GetSystem<StatusSystem>();
+            StatusTargetId target = statuses.GetTarget(player.Actor);
+            menu.TogglePause();
+            StatusDefinition definition = ApplicationHost.Current.ContentCatalog.GetAll<StatusDefinition>().Single(value => value.Id == "poison");
+            var source = new StatusSource(StatusSourceKind.Skill, "ui_test", target);
+            StatusApplication application = StatusApplication.Capture(definition, source, player.Actor.Stats, player.Actor.Modifiers,
+                new DamageSourceSnapshot(target.ActorKey, ActorTeam.Player), 1);
+            Assert.IsTrue(statuses.ApplyStatus(target, StatusMutation.Apply(application.Rules, source, application.Effects, 5)).Result.Succeeded);
+            menu.OpenStatuses();
+            yield return new WaitForSecondsRealtime(.3f);
+            Button icon = root.Q<Button>("status-icon-poison");
+            Assert.IsNotNull(icon);
+            Assert.IsNotNull(icon.Q("picture"));
+            Assert.That(icon.Q<Label>("count").text, Is.EqualTo("5"));
+            _inputFixture.Set(mouse.position, PanelToScreen(root, icon.worldBound.center));
+            yield return null;
+            Assert.AreEqual(DisplayStyle.Flex, root.Q("status-tooltip").resolvedStyle.display);
+            _inputFixture.Set(mouse.position, Vector2.zero);
+            icon.Focus();
+            yield return null;
+            _inputFixture.PressAndRelease(pad.buttonSouth);
+            yield return null;
+            yield return null;
+            ScrollView details = root.Q<ScrollView>("status-detail-scroll");
+            Assert.AreSame(details, root.panel.focusController.focusedElement);
+            _inputFixture.Press(pad.dpad.down);
+            yield return null;
+            yield return null;
+            _inputFixture.Release(pad.dpad.down);
+            Assert.Greater(details.scrollOffset.y, 0);
+            _inputFixture.PressAndRelease(pad.buttonEast);
+            yield return null;
+            yield return null;
+            Assert.IsTrue(menu.IsStatusOpen);
+            Assert.AreSame(icon, root.panel.focusController.focusedElement);
+            Assert.IsTrue(GameTimeService.Shared.IsPaused);
+            statuses.ApplyStatus(target, StatusMutation.Dispel(new StatusFilter(category: StatusCategory.Ailment)));
+            yield return null;
+            Assert.IsNull(root.Q("status-icon-poison"));
+            Assert.AreEqual(DisplayStyle.None, root.Q("status-tooltip").resolvedStyle.display);
+            Assert.IsNotNull(root.panel.focusController.focusedElement);
+            _inputFixture.PressAndRelease(pad.buttonEast);
+            yield return null;
+            yield return null;
+            Assert.IsFalse(menu.IsStatusOpen);
+            Assert.IsTrue(GameTimeService.Shared.IsPaused);
+            menu.TogglePause();
+        }
+
+        [UnityTest]
         public IEnumerator PanelReload_RebindsGameplayAndPreservesRendererDisabledContent()
         {
             yield return _fixture.EnterMain();

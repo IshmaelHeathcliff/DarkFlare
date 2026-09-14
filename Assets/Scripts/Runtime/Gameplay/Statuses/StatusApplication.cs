@@ -3,6 +3,16 @@ using System.Collections.Generic;
 
 namespace DarkFlare
 {
+    public sealed class GetStatusClockDebugQuery : AbstractQuery<string>
+    {
+        protected override string OnDo()
+        {
+            StatusSystem system = this.GetSystem<StatusSystem>();
+            string mode = system.IsClockRunning ? (GameTimeService.Shared.IsPaused ? "自动（暂停，可手动）" : "自动") : "手动";
+            return $"{mode} / 时间 {system.Store.Time:0.###} / 积压 {system.Store.HasPendingTime} / 待提交 {system.PendingElapsed:0.###} 秒";
+        }
+    }
+
     public sealed class GetActorStatusQuery : AbstractQuery<StatusTargetSnapshot>
     {
         readonly CombatActor _actor;
@@ -18,7 +28,7 @@ namespace DarkFlare
     {
         readonly double _seconds;
         public AdvanceStatusesCommand(double seconds) { _seconds = seconds; }
-        protected override StatusAdvanceResult OnExecute() { return this.GetSystem<StatusSystem>().Advance(_seconds); }
+        protected override StatusAdvanceResult OnExecute() { return this.GetSystem<StatusSystem>().AdvanceManually(_seconds); }
     }
 
     // 发出攻击时冻结规则和来源效果；目标抗性留到实际施加时解析。

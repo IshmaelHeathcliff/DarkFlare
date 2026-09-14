@@ -19,7 +19,9 @@
   <ui:Template name="Crafting" src="project://database/Assets/UI/Crafting.uxml" />
   <ui:Template name="ItemDetail" src="project://database/Assets/UI/ItemDetail.uxml" />
   <ui:Style src="project://database/Assets/UI/Components.uss" />
+  <ui:Style src="project://database/Assets/UI/Statuses.uss" />
   <ui:VisualElement name="game-ui-root" class="game-ui-root" picking-mode="Ignore">
+    <ui:VisualElement name="status-hud" class="status-hud" picking-mode="Ignore"><ui:Button name="status-hud-visibility-toggle" class="status-visibility-toggle" /><ui:VisualElement name="status-hud-icons" class="status-icons" picking-mode="Ignore" /></ui:VisualElement>
     <ui:Instance template="Hud" class="hud-template" picking-mode="Ignore" />
     <ui:VisualElement name="game-menu-overlay" class="game-menu-overlay" picking-mode="Position">
       <ui:VisualElement name="game-menu-panel" class="game-menu-panel" picking-mode="Ignore">
@@ -44,6 +46,7 @@
               <l:LocalizedString property="text" table="ui" entry="attributes.title" />
             </Bindings>
           </ui:Button>
+          <ui:Button name="game-menu-statuses" class="game-menu-tab"><Bindings><l:LocalizedString property="text" table="ui" entry="status.title" /></Bindings></ui:Button>
           <ui:Button name="game-menu-pause" class="game-menu-tab">
             <Bindings>
               <l:LocalizedString property="text" table="ui" entry="window.pause" />
@@ -126,6 +129,10 @@
             </Bindings>
           </ui:Button>
         </ui:VisualElement>
+        <ui:VisualElement name="status-window" class="status-window ui-panel-frame">
+          <ui:VisualElement class="item-window-header"><ui:Label class="item-window-title"><Bindings><l:LocalizedString property="text" table="ui" entry="status.title" /></Bindings></ui:Label><ui:Button name="status-visibility-toggle" class="status-visibility-toggle" /><ui:Button name="status-close" class="item-window-close"><Bindings><l:LocalizedString property="text" table="ui" entry="window.close" /></Bindings></ui:Button></ui:VisualElement>
+          <ui:VisualElement class="status-body"><ui:ScrollView name="status-actors" class="status-actors" mode="Vertical" /><ui:VisualElement class="status-main"><ui:Label name="status-actor-title" class="status-actor-title" /><ui:VisualElement name="status-icons" class="status-icons" /><ui:Label name="status-empty" class="status-empty" /><ui:Label class="status-help"><Bindings><l:LocalizedString property="text" table="ui" entry="status.help" /></Bindings></ui:Label></ui:VisualElement></ui:VisualElement>
+        </ui:VisualElement>
         <ui:VisualElement name="game-pause-panel" class="game-pause-panel ui-panel-frame">
           <ui:Label name="" class="item-window-title" picking-mode="Ignore">
             <Bindings>
@@ -176,5 +183,6 @@
       <ui:VisualElement name="item-action-menu" class="item-action-menu ui-panel-frame" />
       <ui:VisualElement name="item-drag-layer" class="item-drag-layer" picking-mode="Ignore" />
     </ui:VisualElement>
+    <ui:VisualElement name="status-tooltip" class="status-tooltip ui-panel-frame" picking-mode="Ignore"><ui:ScrollView name="status-detail-scroll" mode="Vertical" focusable="true"><ui:Label name="status-details" class="status-details" picking-mode="Ignore" /></ui:ScrollView></ui:VisualElement>
   </ui:VisualElement>
 </ui:UXML>

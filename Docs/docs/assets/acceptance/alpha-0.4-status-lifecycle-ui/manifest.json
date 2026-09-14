@@ -1,0 +1,204 @@
+{
+  "schema_version": 1,
+  "family": "status-icons-dark",
+  "alpha_threshold": 8,
+  "canvas": {
+    "width": 96,
+    "height": 96
+  },
+  "alpha_required": false,
+  "assets": [
+    {
+      "name": "burning",
+      "image": "../../../../../Assets/Art/Sprites/UI/Statuses/status_burning.png",
+      "visible_width": [
+        96,
+        96
+      ],
+      "visible_height": [
+        96,
+        96
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        47,
+        49
+      ],
+      "visual_center_y": [
+        47,
+        49
+      ]
+    },
+    {
+      "name": "bleeding",
+      "image": "../../../../../Assets/Art/Sprites/UI/Statuses/status_bleeding.png",
+      "visible_width": [
+        96,
+        96
+      ],
+      "visible_height": [
+        96,
+        96
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        47,
+        49
+      ],
+      "visual_center_y": [
+        47,
+        49
+      ]
+    },
+    {
+      "name": "poison",
+      "image": "../../../../../Assets/Art/Sprites/UI/Statuses/status_poison.png",
+      "visible_width": [
+        96,
+        96
+      ],
+      "visible_height": [
+        96,
+        96
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        47,
+        49
+      ],
+      "visual_center_y": [
+        47,
+        49
+      ]
+    },
+    {
+      "name": "stun",
+      "image": "../../../../../Assets/Art/Sprites/UI/Statuses/status_stun.png",
+      "visible_width": [
+        96,
+        96
+      ],
+      "visible_height": [
+        96,
+        96
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        47,
+        49
+      ],
+      "visual_center_y": [
+        47,
+        49
+      ]
+    },
+    {
+      "name": "chill",
+      "image": "../../../../../Assets/Art/Sprites/UI/Statuses/status_chill.png",
+      "visible_width": [
+        96,
+        96
+      ],
+      "visible_height": [
+        96,
+        96
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        47,
+        49
+      ],
+      "visual_center_y": [
+        47,
+        49
+      ]
+    },
+    {
+      "name": "shock",
+      "image": "../../../../../Assets/Art/Sprites/UI/Statuses/status_shock.png",
+      "visible_width": [
+        96,
+        96
+      ],
+      "visible_height": [
+        96,
+        96
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        47,
+        49
+      ],
+      "visual_center_y": [
+        47,
+        49
+      ]
+    },
+    {
+      "name": "weakness",
+      "image": "../../../../../Assets/Art/Sprites/UI/Statuses/status_weakness.png",
+      "visible_width": [
+        96,
+        96
+      ],
+      "visible_height": [
+        96,
+        96
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        47,
+        49
+      ],
+      "visual_center_y": [
+        47,
+        49
+      ]
+    },
+    {
+      "name": "equipment_guard",
+      "image": "../../../../../Assets/Art/Sprites/UI/Statuses/status_equipment_guard.png",
+      "visible_width": [
+        96,
+        96
+      ],
+      "visible_height": [
+        96,
+        96
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        47,
+        49
+      ],
+      "visual_center_y": [
+        47,
+        49
+      ]
+    }
+  ]
+}

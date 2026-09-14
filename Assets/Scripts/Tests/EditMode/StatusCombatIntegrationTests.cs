@@ -537,8 +537,16 @@ namespace DarkFlare.Tests
             Assert.That(equipment.Equip(_actor, item, EquipmentSlot.Weapon), Is.True);
             Assert.That(_statuses.GetStatusSnapshot(_target).GetStacks(new StatusFilter("equipment_guard")), Is.EqualTo(1));
             EquipmentLoadout loadout = _architecture.GetModel<EquipmentModel>().GetLoadout(_actor);
+            var catalogDefinition = UnityEditor.AssetDatabase.LoadAssetAtPath<ContentCatalogDefinition>("Assets/Data/Preset/Content/正式内容目录.asset");
+            ContentCatalog catalog = ContentCatalog.Build(catalogDefinition).Catalog;
+            var issues = new List<DtoMapIssue>();
+            StatusSaveDto saved = _statuses.Store.CaptureSave(catalog, issues);
+            long layerId = _statuses.GetStatusSnapshot(_target).Layers.Single().InstanceId;
+            _statuses.Store.ImportSave(saved, catalog, issues);
+            Assert.That(issues, Is.Empty);
             equipment.RestoreLoadout(_actor, loadout);
             Assert.That(_statuses.GetStatusSnapshot(_target).GetStacks(new StatusFilter("equipment_guard")), Is.EqualTo(1));
+            Assert.That(_statuses.GetStatusSnapshot(_target).Layers.Single().InstanceId, Is.EqualTo(layerId), "恢复装备不能再次施加已导入的维持状态");
             StatusDefinition invalid = Object.Instantiate(aura);
             _objects.Add(invalid);
             typeof(StatusDefinition).GetField("_lifetime", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(invalid, StatusLifetime.Timed);

@@ -20,10 +20,10 @@ MonoBehaviour:
     _tableName: statuses
     _entryKey: equipment_guard.description
   _icon:
-    m_AssetGUID:
-    m_SubObjectName:
-    m_SubObjectType:
-    m_SubObjectGUID:
+    m_AssetGUID: ddfd5ef3d65f3b145900bf174e194cea
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
     m_EditorAssetChanged: 0
   _category: 0
   _ailment: 0

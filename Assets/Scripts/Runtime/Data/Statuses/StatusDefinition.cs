@@ -6,6 +6,13 @@ using UnityEngine.AddressableAssets;
 
 namespace DarkFlare
 {
+    public enum StatusVisibility
+    {
+        [LabelText("显示")] Show = 0,
+        [LabelText("可隐藏")] Hideable = 1,
+        [LabelText("从不显示")] Never = 2
+    }
+
     [ContentDefinition(ContentNamespaces.Status)]
     [CreateAssetMenu(menuName = "DarkFlare/Data/Statuses/Status Definition", fileName = "StatusDefinition")]
     public sealed class StatusDefinition : ScriptableObject, IContentDefinition
@@ -18,6 +25,8 @@ namespace DarkFlare
         LocalizedContentReference _localizedDescription = new LocalizedContentReference("statuses", string.Empty);
         [SerializeField, LabelText("状态图标")]
         AssetReferenceSprite _icon;
+        [SerializeField, LabelText("显示档位")]
+        StatusVisibility _visibility;
         [SerializeField, LabelText("分类")]
         StatusCategory _category = StatusCategory.Skill;
         [SerializeField, LabelText("异常类型（无则不计算异常抗性）")]
@@ -57,6 +66,12 @@ namespace DarkFlare
         public LocalizedContentReference LocalizedName => _localizedName;
         public LocalizedContentReference LocalizedDescription => _localizedDescription;
         public AssetReferenceSprite Icon => _icon;
+        public StatusVisibility Visibility => _visibility;
+
+        public bool ShouldDisplay(bool hideOptional)
+        {
+            return _visibility == StatusVisibility.Show || (_visibility == StatusVisibility.Hideable && !hideOptional);
+        }
         bool CanConfigureLayerRefresh => _repeat == StatusRepeatMode.Uniform && _clock == StatusClockMode.PerLayer;
 
         public StatusRules CreateRules()
@@ -97,6 +112,7 @@ namespace DarkFlare
         public IReadOnlyList<string> ValidateConfiguration()
         {
             var issues = new List<string>();
+            if (!Enum.IsDefined(typeof(StatusVisibility), _visibility)) { issues.Add("状态显示档位非法"); }
             try { CreateRules(); }
             catch (ArgumentException exception) { issues.Add(exception.Message); }
             if (_tags == null || _tags.Exists(tag => tag == null || !ContentId.IsValidSegment(tag.Id)))

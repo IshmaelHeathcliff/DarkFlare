@@ -70,7 +70,7 @@ namespace DarkFlare
                 architecture.GetUtility<SpriteAssetLoader>().PreloadAsync(itemIcons, token));
             token.ThrowIfCancellationRequested();
             ValidatePreloadedAssets(architecture, monsterDefinitions, itemIcons);
-            CommitPreparedState(architecture, token);
+            CommitPreparedState(architecture, context.ContentCatalog, token);
         }
 
         public async UniTask RollbackAsync(
@@ -93,7 +93,7 @@ namespace DarkFlare
                 .ReleaseAllAsync();
         }
 
-        void CommitPreparedState(IArchitecture architecture, CancellationToken token)
+        void CommitPreparedState(IArchitecture architecture, ContentCatalog catalog, CancellationToken token)
         {
             token.ThrowIfCancellationRequested();
             architecture.GetSystem<GameplayRandomSystem>().RestoreState(_prepared.RandomState);
@@ -115,19 +115,14 @@ namespace DarkFlare
             architecture.GetModel<InventoryModel>().RestoreState(
                 _prepared.RuntimeState.Inventory,
                 profile.Gold);
+            if (!playerState.Resources.IsAlive)
+            {
+                player.Actor.RestoreResources(new CombatResourceSnapshot(0, player.Actor.MaxHealth, 0, player.Actor.MaxMana), false);
+                architecture.GetSystem<StatusSystem>().Unbind(player.Actor);
+            }
             architecture.GetSystem<EquipmentSystem>().RestoreLoadout(
                 player.Actor,
                 _prepared.PlayerEquipment);
-            CombatResourceSnapshot previousPlayerResources = player.Actor.Resources;
-            player.RestoreRuntime(
-                ToResources(playerState.Resources),
-                playerState.Resources.IsAlive,
-                playerState.RespawnRemainingSeconds,
-                playerState.AutoCastCooldownRemainingSeconds);
-            architecture.GetSystem<CombatSystem>().PublishResourceChanges(
-                player.Actor,
-                previousPlayerResources,
-                ActorResourceChangeReason.Configure);
             MerchantInventoryDto merchant = _prepared.Document.Payload.Run.Merchant;
             architecture.GetModel<EconomyModel>().RestoreState(
                 _prepared.RuntimeState.Trader,
@@ -147,7 +142,8 @@ namespace DarkFlare
                         monster.Instance,
                         ToVector(monster.State.Position),
                         ToResources(monster.State.Resources),
-                        monster.State.ContactDamageCooldownRemainingSeconds);
+                        monster.State.ContactDamageCooldownRemainingSeconds,
+                        deferResources: true);
 
                 if (controller == null)
                 {
@@ -156,6 +152,25 @@ namespace DarkFlare
                 }
 
                 restoredMonsters.Add(controller);
+            }
+
+            var statusIssues = new List<DtoMapIssue>();
+            architecture.GetSystem<StatusSystem>().Store.ImportSave(_prepared.Document.Payload.Run.Statuses, catalog, statusIssues);
+            // SourceOwned 的装备来源由真实装备重建，现有来源键幂等，不重复增加层数。
+            if (!architecture.GetSystem<StatusSystem>().TryRebuildEquipment(player.Actor, _prepared.PlayerEquipment))
+            {
+                throw new InvalidOperationException("恢复装备状态失败");
+            }
+            CombatResourceSnapshot previousPlayerResources = player.Actor.Resources;
+            player.RestoreRuntime(ToResources(playerState.Resources), playerState.Resources.IsAlive,
+                playerState.RespawnRemainingSeconds, playerState.AutoCastCooldownRemainingSeconds);
+            architecture.GetSystem<CombatSystem>().PublishResourceChanges(player.Actor, previousPlayerResources, ActorResourceChangeReason.Configure);
+            for (int i = 0; i < restoredMonsters.Count; i++)
+            {
+                MonsterController monster = restoredMonsters[i];
+                CombatResourceSnapshot before = monster.Actor.Resources;
+                monster.RestoreRuntime(ToResources(_prepared.Monsters[i].State.Resources), _prepared.Monsters[i].State.ContactDamageCooldownRemainingSeconds);
+                architecture.GetSystem<CombatSystem>().PublishResourceChanges(monster.Actor, before, ActorResourceChangeReason.Configure);
             }
 
             for (int i = 0; i < _prepared.WorldDrops.Count; i++)

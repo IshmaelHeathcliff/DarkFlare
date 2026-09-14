@@ -20,10 +20,10 @@ MonoBehaviour:
     _tableName: statuses
     _entryKey: chill.description
   _icon:
-    m_AssetGUID:
-    m_SubObjectName:
-    m_SubObjectType:
-    m_SubObjectGUID:
+    m_AssetGUID: 0d0cfb023d79f274d9a106852e120815
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
     m_EditorAssetChanged: 0
   _category: 2
   _ailment: 5

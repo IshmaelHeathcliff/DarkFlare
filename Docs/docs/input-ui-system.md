@@ -1,5 +1,7 @@
 # 输入与运行时 UI
 
+状态条与菜单“状态”入口已接入：按定义显示图标、持有层数与下次到期时间，支持玩家 / 怪物选择、焦点浮窗及手柄滚动 / 返回。保持 Gameplay 与 UI 导航隔离，资源和刷新任务归属 Session，详见[状态生命周期与查看](./status-lifecycle-ui.md)。
+
 ## 模块职责
 
 输入与运行时 UI 模块负责统一键鼠 / 手柄输入、Gameplay / UI 模式切换、HUD 展示、背包 / 商店 / 打造菜单、当前 Session 保存区，以及场景交互提示和菜单暂停。Application 级 FrontEnd、场景 Busy、Modal、Toast 与 Fatal 由独立 Shell 管理。

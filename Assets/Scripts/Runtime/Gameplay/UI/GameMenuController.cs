@@ -11,7 +11,7 @@ namespace DarkFlare
     [RequireComponent(typeof(InventoryPanelController))]
     [RequireComponent(typeof(ShopPanelController))]
     [RequireComponent(typeof(CraftingPanelController))]
-    public class GameMenuController : MonoBehaviour, IController
+    public partial class GameMenuController : MonoBehaviour, IController
     {
         const string ActiveTabClass = "game-menu-tab--active";
 
@@ -102,6 +102,7 @@ namespace DarkFlare
         public void OpenPage(GameMenuPage page)
         {
             if (!IsPageAvailable(page) || _gameInput == null) { return; }
+            _statusOpen = false;
             OpenWindows |= page.ToAccess();
             if (page == GameMenuPage.Shop || page == GameMenuPage.Crafting)
             {
@@ -116,7 +117,7 @@ namespace DarkFlare
 
         public bool IsWindowVisible(GameMenuPage page)
         {
-            return IsOpen && !_pauseOpen && OpenWindows.Contains(page) && IsPageAvailable(page);
+            return IsOpen && !_pauseOpen && !_statusOpen && OpenWindows.Contains(page) && IsPageAvailable(page);
         }
 
         public void ClosePage(GameMenuPage page)
@@ -139,6 +140,7 @@ namespace DarkFlare
         public void TogglePause()
         {
             if (_gameInput == null || (_applicationShell?.BlocksGameplay ?? false)) { return; }
+            if (_statusOpen) { CloseStatuses(); return; }
             _pauseOpen = !_pauseOpen;
             Workspace.Suspend();
             if (_pauseOpen) { _gameInput.SwitchToUi(); }
@@ -186,6 +188,7 @@ namespace DarkFlare
         bool OnCancelRequested()
         {
             if (!IsOpen) { return false; }
+            if (_statusOpen) { if (!_statuses.LeaveDetails()) { CloseStatuses(); } return true; }
             if (_pauseOpen) { TogglePause(); return true; }
             if (Workspace.Interactions?.CloseMenu(true) == true) { return true; }
             if (Workspace.CancelDrag()) { return true; }
@@ -203,7 +206,7 @@ namespace DarkFlare
 
         void OnCycleWindow(int step)
         {
-            if (!IsOpen || _pauseOpen || Workspace.IsDragging || Workspace.Interactions?.IsMenuOpen == true) { return; }
+            if (!IsOpen || _pauseOpen || _statusOpen || Workspace.IsDragging || Workspace.Interactions?.IsMenuOpen == true) { return; }
             for (int i = 1; i <= 4; i++)
             {
                 GameMenuPage page = (GameMenuPage)(((int)CurrentPage + step * i + 8) % 4);
@@ -297,6 +300,7 @@ namespace DarkFlare
             _localizationService = ResolveLocalizationService();
             _attributes = new AttributePanelController(architecture, _attributesTemplate, _localizationService,
                 ApplicationHost.Current.CurrentSession.SceneScope);
+            BindStatuses(architecture);
             _saveOperationBusy = false;
             SetSaveStatus(_saveFacade != null
                 ? "save.status.ready"
@@ -335,6 +339,7 @@ namespace DarkFlare
 
         void UnbindSession()
         {
+            UnbindStatuses();
             _attributes?.Dispose();
             _attributes = null;
             if (_attributesTab != null) { _attributesTab.clicked -= OnAttributesOpen; }
@@ -619,6 +624,7 @@ namespace DarkFlare
                 _craftingPanel?.CloseWindow();
                 OpenWindows = GameMenuAccess.None;
                 _pauseOpen = false;
+                _statusOpen = false;
                 AvailablePages = GameMenuAccess.Inventory;
                 ReleaseTarget();
             }
@@ -644,8 +650,9 @@ namespace DarkFlare
             SetTemplateVisible(_hudAttributes, hudEntries);
             SetTemplateVisible(_hudInventory, hudEntries);
             SetTemplateVisible(_hudPauseButton, hudEntries);
-            _windows.style.display = IsOpen && !_pauseOpen ? DisplayStyle.Flex : DisplayStyle.None;
-            _pausePanel.style.display = IsOpen && _pauseOpen ? DisplayStyle.Flex : DisplayStyle.None;
+            _windows.style.display = IsOpen && !_pauseOpen && !_statusOpen ? DisplayStyle.Flex : DisplayStyle.None;
+            _pausePanel.style.display = IsOpen && _pauseOpen && !_statusOpen ? DisplayStyle.Flex : DisplayStyle.None;
+            _statuses?.SetVisible(IsOpen && _statusOpen, hudEntries);
             bool inventory = IsWindowVisible(GameMenuPage.Inventory);
             bool shop = IsWindowVisible(GameMenuPage.Shop);
             bool crafting = IsWindowVisible(GameMenuPage.Crafting);
@@ -685,6 +692,11 @@ namespace DarkFlare
 
         void OnNavigationMove(NavigationMoveEvent evt)
         {
+            if (IsOpen && _statusOpen)
+            {
+                _statuses?.Navigate(evt);
+                return;
+            }
             if (!IsOpen || _pauseOpen) { return; }
             Vector2 direction = evt.direction switch
             {

@@ -1,10 +1,10 @@
 # 状态配置参考
 
-配置、纯规则核心、角色战斗及七异常抗性已接入；自动计时与状态图标尚待阶段 4。模块说明见[状态系统](../status-system.md)。正式七异常及装备守护样例位于 `Assets/Data/Preset/Statuses/`，阶段 3 已通过验收。
+配置、纯规则核心、角色战斗及七异常抗性已接入；已接入[自动计时、状态存档与图标](../status-lifecycle-ui.md)。模块说明见[状态系统](../status-system.md)。正式七异常及装备守护样例位于 `Assets/Data/Preset/Statuses/`，阶段 3 已通过验收。
 
 ## StatusDefinition
 
-类型：`DarkFlare.StatusDefinition`。创建菜单：`DarkFlare/Data/Statuses/Status Definition`。建议正式资产目录：`Assets/Data/Preset/Statuses/`；稳定内容身份为 `status:<id>`，通过 `ContentDefinitionRegistry` 登记，缺失策略为 `BlockLoad`。新增正式资产时须加入内容目录并设置 Addressables；当前 core 内容版本为 4，存档 Schema 仍为 2；状态实例保存恢复尚未交付。
+类型：`DarkFlare.StatusDefinition`。创建菜单：`DarkFlare/Data/Statuses/Status Definition`。建议正式资产目录：`Assets/Data/Preset/Statuses/`；稳定内容身份为 `status:<id>`，通过 `ContentDefinitionRegistry` 登记，缺失策略为 `BlockLoad`。新增正式资产时须加入内容目录并设置 Addressables；当前 core 内容版本为 4，存档 Schema 为 3，已支持状态实例保存恢复。
 
 | 字段 | 类型 | 默认 | 规则与消费者 |
 | --- | --- | --- | --- |
@@ -12,6 +12,7 @@
 | `_localizedName` | LocalizedContentReference | statuses / 空键 | 正式内容须提供本地化名称；展示阶段读取，不参与规则比较 |
 | `_localizedDescription` | LocalizedContentReference | statuses / 空键 | 正式内容须提供本地化说明；正式名称和说明来自 statuses 中英表 |
 | `_icon` | AssetReferenceSprite | null | 展示阶段经 Session Addressables 加载；纯核心允许未配置，不加载资源 |
+| `_visibility` | StatusVisibility | Show（显示） | Show 始终显示；Hideable 默认显示，可被界面共用开关隐藏；Never 不进入 HUD 和状态查看。纯展示配置，不进入冻结规则或存档 |
 | `_category` | StatusCategory | Skill | 光环、特殊技能或异常；用于快照和驱散筛选 |
 | `_ailment` | AilmentKind | None | 七异常显式身份；非 None 必须为异常分类、限时生命周期；决定对应抗性与合法效果组合 |
 | `_tags` | List&lt;TagDefinition&gt; | 空列表 | 冻结为只读 TagSet；禁止空引用或非法 ID；筛选要求包含全部指定标签 |
@@ -34,6 +35,6 @@
 
 `ValidateConfiguration` 和 Odin“校验状态规则”按钮检查 ID、范围、效果与组合；正式配置中心同样调用此校验。随机范围必须在生成前校验，不能只依赖一次掷值恰好合法。传入请求时还检查持续时间覆盖、来源、总容量和统一叠层数值溢出。
 
-本类型没有历史正式资产或兼容字段。运行中的同 ID 状态组拒绝不同规则混入；编辑配置不会修改已持有层。后续新增图标时补齐展示资源验收，不把缺省展示资源当成完整状态已交付。
+运行中的同 ID 状态组拒绝不同战斗规则混入；编辑配置不会修改已持有层的冻结规则。名称、图标、显示档位属于即时展示配置；旧资产缺少显示字段时默认为 Show。新增正式图标仍需完成资源验收。
 
 SourceOwned 的新提供方需要实际层身份。Uniform 组满层时拒绝新的提供方，避免未登记的新来源改写旧来源效果；同提供方重复绑定幂等，参数变化走 UpdateSource。多个持续来源需要择强竞争时配置 Strongest。

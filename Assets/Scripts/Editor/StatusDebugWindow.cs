@@ -25,6 +25,8 @@ namespace DarkFlare.Editor
         string _result;
         [ShowInInspector, ReadOnly, LabelText("逐层快照"), ShowIf(nameof(HasSession))]
         StatusTargetSnapshot Snapshot => this.SendQuery(new GetActorStatusQuery(_target));
+        [ShowInInspector, ReadOnly, LabelText("时间驱动"), ShowIf(nameof(HasSession))]
+        string Clock => this.SendQuery(new GetStatusClockDebugQuery());
         bool HasSession => GameArchitectureProvider.TryGetCurrent(out _);
 
         [MenuItem("DarkFlare/调试/状态系统")]

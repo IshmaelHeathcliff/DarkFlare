@@ -20,10 +20,10 @@ MonoBehaviour:
     _tableName: statuses
     _entryKey: weakness.description
   _icon:
-    m_AssetGUID:
-    m_SubObjectName:
-    m_SubObjectType:
-    m_SubObjectGUID:
+    m_AssetGUID: 01181768009028a4ab0b661b89b0bd2f
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
     m_EditorAssetChanged: 0
   _category: 2
   _ailment: 1

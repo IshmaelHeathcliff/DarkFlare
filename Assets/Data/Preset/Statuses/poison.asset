@@ -20,10 +20,10 @@ MonoBehaviour:
     _tableName: statuses
     _entryKey: poison.description
   _icon:
-    m_AssetGUID:
-    m_SubObjectName:
-    m_SubObjectType:
-    m_SubObjectGUID:
+    m_AssetGUID: 08ad860b80cedd44e95e8feee056c114
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
     m_EditorAssetChanged: 0
   _category: 2
   _ailment: 7

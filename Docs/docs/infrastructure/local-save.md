@@ -1,7 +1,7 @@
 # 本地存档与 Session 恢复
 
 > 状态：已实现本地存档闭环；`alpha 0.4.0` 增加数量及金币物品迁移
-> 最近更新：2026-09-12
+> 最近更新：2026-09-14
 
 ## 模块目标
 
@@ -31,13 +31,13 @@ V1 文件格式固定为：
 
 - `formatId = "darkflare-save"`
 - `formatVersion = 1`
-- `saveSchemaVersion = 2`
+- `saveSchemaVersion = 3`
 - 最大文档 16 MiB，最大 JSON 深度 64
 - 最大物品 8192、存活怪物 512、世界掉落 4096
 - Header 包含游戏版本、内容目录 ID / 版本、槽位、提交序号、UTC 创建 / 更新时间、Payload SHA-256 和显示摘要
 - Payload 分为 `ProfileSaveData` 与 `RunSaveData`，所有引用使用稳定 ContentId 或强类型实例 ID
 
-Serializer 使用项目已有 `Unity.Newtonsoft.Json`。写出前先把 Payload 转为按属性名 Ordinal 排序的规范 JSON，并把 Single 数值归一为 double 表示，再计算小写 SHA-256；这避免同一浮点值在 Single / Double 文本往返后产生伪校验失败。Header 不参与校验值。读取顺序为格式 / 槽位 / 提交序号检查、Payload 校验、Schema 兼容与逐级迁移、强类型验证。当前登记了历史 `0 → 1 → 2` 迁移，新增物品数量字段；未来 Schema 会被安全拒绝。
+Serializer 使用项目已有 `Unity.Newtonsoft.Json`。写出前先把 Payload 转为按属性名 Ordinal 排序的规范 JSON，并把 Single 数值归一为 double 表示，再计算小写 SHA-256；这避免同一浮点值在 Single / Double 文本往返后产生伪校验失败。Header 不参与校验值。读取顺序为格式 / 槽位 / 提交序号检查、Payload 校验、Schema 兼容与逐级迁移、强类型验证。当前登记了历史 `0 → 1 → 2 → 3` 迁移，分别补充物品数量与空状态图；未来 Schema 会被安全拒绝。
 
 禁止把 `UnityEngine.Object`、Asset GUID、Addressables 地址、资源路径、场景对象引用、显示文本或本地化 Key 写入存档身份。
 
@@ -71,6 +71,7 @@ Application.persistentDataPath/
 - 世界掉落：世界实体 ID、所含物品实例 ID 和位置。
 - 商人：内容 ID、有序库存和买卖倍率。
 - 刷怪器：是否运行、下一次生成剩余时间和当前存活数。
+- 状态：玩家 / 存活怪物的冻结效果、来源、层数、逻辑时钟和周期相位；先恢复属性投影再恢复绝对资源，不重复抵抗或首跳。完整合同见[状态生命周期](../status-lifecycle-ui.md)。
 
 不持久化 UI 焦点、Hover、拖拽状态、展开页、动画播放进度、在途投射物、特效、音频实例或纯缓存。恢复后由持久状态和当前配置重建这些瞬态表现。
 
@@ -79,7 +80,7 @@ Application.persistentDataPath/
 ### 保存
 
 1. `SessionSaveFacade.SaveAutoAsync` 校验自己仍属于当前 Running Session。
-2. `SaveCoordinator` 在主线程同步调用 `SessionSnapshotSource.Capture()`，快照返回后不再访问架构。
+2. `SaveCoordinator` 在主线程调用 `CaptureAsync`，以短暂暂停租约分帧结清状态积压并捕获一致快照；取消时释放租约，IO 阶段不暂停玩法。兼容不需要准备的同步快照源。
 3. 同槽位当前写事务继续运行；密集请求最多形成一次待重捕获，每个调用者保留独立且恰好一次的完成结果。
 4. 线程池读取上一有效代际、生成严格递增序号并提交新文件。
 5. 只有当前 generation 的成功提交才更新已持久化 Dirty revision。

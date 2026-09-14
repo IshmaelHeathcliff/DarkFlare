@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace DarkFlare
@@ -33,7 +35,12 @@ namespace DarkFlare
         }
     }
 
-    public sealed class SessionSnapshotSource : ISessionSnapshotSource
+    public interface IPreparedSessionSnapshotSource
+    {
+        UniTask<SessionSnapshotResult> CaptureAsync(CancellationToken token);
+    }
+
+    public sealed class SessionSnapshotSource : ISessionSnapshotSource, IPreparedSessionSnapshotSource
     {
         readonly GameSessionHost _session;
         readonly ContentCatalog _catalog;
@@ -63,6 +70,20 @@ namespace DarkFlare
             _invalidated = true;
         }
 
+        public async UniTask<SessionSnapshotResult> CaptureAsync(CancellationToken token)
+        {
+            LifecycleScope scope = _session.SessionScope.CreateChild("status-snapshot", token);
+            try
+            {
+                using (await _session.Architecture.GetSystem<StatusSystem>().HoldClockAsync(scope.Token))
+                {
+                    scope.Token.ThrowIfCancellationRequested();
+                    return Capture();
+                }
+            }
+            finally { await scope.StopAsync(); }
+        }
+
         public SessionSnapshotResult Capture()
         {
             List<DtoMapIssue> issues = new List<DtoMapIssue>();
@@ -74,6 +95,11 @@ namespace DarkFlare
             }
 
             IArchitecture architecture = _session.Architecture;
+            if (!architecture.GetSystem<StatusSystem>().Store.IsQuiescent)
+            {
+                Add(issues, DtoMapIssueCode.InvalidValue, "payload.run.statuses", "状态尚未到达保存边界");
+                return Failure(issues);
+            }
             IReadOnlyList<GameObject> objects = architecture
                 .GetUtility<SessionObjectRegistry>()
                 .CaptureObjects();
@@ -123,6 +149,7 @@ namespace DarkFlare
                 },
                 Run = new RunSaveData
                 {
+                    Statuses = architecture.GetSystem<StatusSystem>().Store.CaptureSave(_catalog, issues),
                     InstanceIds = MapInstanceIds(
                         architecture.GetUtility<IRunInstanceIdGenerator>().CaptureState()),
                     Random = MapRandom(
@@ -135,6 +162,7 @@ namespace DarkFlare
                 },
             };
 
+            StatusSaveValidation.Validate(payload.Run.Statuses, payload, _catalog, issues);
             SaveDataValidationResult validation = SaveDataValidator.ValidatePayload(payload);
 
             for (int i = 0; i < validation.Issues.Count; i++)

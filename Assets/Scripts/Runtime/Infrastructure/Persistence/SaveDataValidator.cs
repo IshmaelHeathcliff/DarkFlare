@@ -180,6 +180,15 @@ namespace DarkFlare
             Dictionary<ItemInstanceId, string> ownership = new Dictionary<ItemInstanceId, string>();
             ValidateProfile(payload.Profile, items, ownership, $"{path}.profile", issues);
             ValidateRun(payload.Run, payload.Profile, items, ownership, $"{path}.run", issues);
+            if (issues.Count == 0)
+            {
+                var statusIssues = new List<DtoMapIssue>();
+                StatusSaveValidation.Validate(payload.Run.Statuses, payload, null, statusIssues);
+                foreach (DtoMapIssue issue in statusIssues)
+                {
+                    Add(issues, SaveDataIssueCode.InvalidValue, issue.Path, issue.Message);
+                }
+            }
 
             foreach (KeyValuePair<ItemInstanceId, ItemInstanceDto> pair in items)
             {

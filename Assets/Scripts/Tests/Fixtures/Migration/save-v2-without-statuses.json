@@ -1,0 +1,226 @@
+{
+  "header": {
+    "catalogId": "core",
+    "commitSequence": 1,
+    "contentVersion": 1,
+    "createdUtc": "2026-08-19T00:00:00.0000000+00:00",
+    "formatId": "darkflare-save",
+    "formatVersion": 1,
+    "gameVersion": "0.2.2-alpha",
+    "payloadSha256": "869cd6526683751135bd0c3c0ac9c82f3adb9edfaea399b499c44f4f3e86ec6b",
+    "saveSchemaVersion": 2,
+    "slotId": "auto",
+    "summary": {
+      "currentHealth": 75.0,
+      "gold": 250,
+      "itemCount": 4,
+      "maxHealth": 100.0,
+      "runId": "0123456789abcdef0123456789abcdef"
+    },
+    "updatedUtc": "2026-08-19T00:00:00.0000000+00:00"
+  },
+  "payload": {
+    "items": [
+      {
+        "baseContentId": "item:leather_armor",
+        "durability": 1.0,
+        "implicitModifiers": [],
+        "instanceId": "11111111111111111111111111111111",
+        "itemLevel": 1,
+        "prefixes": [],
+        "quality": 0,
+        "quantity": 1,
+        "rarity": 0,
+        "seed": 42,
+        "suffixes": []
+      },
+      {
+        "baseContentId": "item:great_sword",
+        "durability": 1.0,
+        "implicitModifiers": [],
+        "instanceId": "22222222222222222222222222222222",
+        "itemLevel": 1,
+        "prefixes": [],
+        "quality": 0,
+        "quantity": 1,
+        "rarity": 0,
+        "seed": 42,
+        "suffixes": []
+      },
+      {
+        "baseContentId": "item:iron_ring",
+        "durability": 1.0,
+        "implicitModifiers": [],
+        "instanceId": "33333333333333333333333333333333",
+        "itemLevel": 1,
+        "prefixes": [],
+        "quality": 0,
+        "quantity": 1,
+        "rarity": 0,
+        "seed": 42,
+        "suffixes": []
+      },
+      {
+        "baseContentId": "item:war_axe",
+        "durability": 1.0,
+        "implicitModifiers": [],
+        "instanceId": "44444444444444444444444444444444",
+        "itemLevel": 1,
+        "prefixes": [],
+        "quality": 0,
+        "quantity": 1,
+        "rarity": 0,
+        "seed": 42,
+        "suffixes": []
+      }
+    ],
+    "profile": {
+      "equipment": [
+        {
+          "actorInstanceId": "local_player",
+          "entries": [
+            {
+              "itemInstanceId": "22222222222222222222222222222222",
+              "slot": 0
+            }
+          ]
+        }
+      ],
+      "gold": 250,
+      "inventory": {
+        "height": 6,
+        "placements": [
+          {
+            "height": 3,
+            "itemInstanceId": "11111111111111111111111111111111",
+            "width": 2,
+            "x": 0,
+            "y": 0
+          }
+        ],
+        "width": 10
+      },
+      "playerId": "local_player",
+      "profileId": "local_default"
+    },
+    "run": {
+      "instanceIds": {
+        "nextMonsterSequence": 3,
+        "nextWorldDropSequence": 5,
+        "runId": "0123456789abcdef0123456789abcdef"
+      },
+      "merchant": {
+        "buyMultiplier": 1.5,
+        "orderedItemInstanceIds": [
+          "33333333333333333333333333333333"
+        ],
+        "sellMultiplier": 0.4000000059604645,
+        "traderContentId": "trader:basic_trader"
+      },
+      "monsters": [
+        {
+          "affixes": [],
+          "baseMaxHealth": 30.0,
+          "baseStats": [
+            {
+              "statContentId": "stat:max_health",
+              "value": 30.0
+            }
+          ],
+          "contactDamageCooldownRemainingSeconds": 0.0,
+          "definitionContentId": "monster:razor_hound",
+          "effectiveStats": [
+            {
+              "statContentId": "stat:max_health",
+              "value": 30.0
+            }
+          ],
+          "instanceId": "0123456789abcdef0123456789abcdef:monster:2",
+          "modifiers": [],
+          "position": {
+            "x": 5.0,
+            "y": -1.0,
+            "z": 0.0
+          },
+          "randomSeeds": {
+            "affixCountSeed": -274020690,
+            "affixSelectionSeed": 1279653501,
+            "healthSeed": 648611611,
+            "rootSeed": 9876
+          },
+          "resources": {
+            "currentHealth": 12.0,
+            "currentMana": 0.0,
+            "isAlive": true,
+            "maxHealth": 30.0,
+            "maxMana": 0.0
+          }
+        }
+      ],
+      "player": {
+        "autoCastCooldownRemainingSeconds": 0.0,
+        "definitionContentId": "actor:player",
+        "playerId": "local_player",
+        "position": {
+          "x": 1.0,
+          "y": 2.0,
+          "z": 0.0
+        },
+        "resources": {
+          "currentHealth": 75.0,
+          "currentMana": 20.0,
+          "isAlive": true,
+          "maxHealth": 100.0,
+          "maxMana": 200.0
+        },
+        "respawnRemainingSeconds": 0.0,
+        "skillContentId": "skill:basic_projectile"
+      },
+      "random": {
+        "channels": [
+          {
+            "channel": 0,
+            "nextSequence": 1
+          },
+          {
+            "channel": 1,
+            "nextSequence": 2
+          },
+          {
+            "channel": 2,
+            "nextSequence": 3
+          },
+          {
+            "channel": 3,
+            "nextSequence": 4
+          },
+          {
+            "channel": 4,
+            "nextSequence": 5
+          },
+          {
+            "channel": 5,
+            "nextSequence": 6
+          }
+        ],
+        "rootSeed": 12345
+      },
+      "spawner": {
+        "isRunning": true,
+        "nextSpawnRemainingSeconds": 0.75,
+        "spawnContentId": "spawn:main"
+      },
+      "worldDrops": [
+        {
+          "instanceId": "0123456789abcdef0123456789abcdef:drop:4",
+          "itemInstanceId": "44444444444444444444444444444444",
+          "position": {
+            "x": -2.0,
+            "y": 3.0,
+            "z": 0.0
+          }
+        }
+      ]
+    }
+  }
+}

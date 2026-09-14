@@ -1751,6 +1751,134 @@ MonoBehaviour:
     m_Key: attributes.source.monster
     m_Metadata:
       m_Items: []
+  - m_Id: 9222604584902656
+    m_Key: status.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9222604622651392
+    m_Key: status.actor
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9222604622651393
+    m_Key: status.actor_unavailable
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9222604622651394
+    m_Key: status.empty
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9222604622651395
+    m_Key: status.help
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9222604622651396
+    m_Key: status.layers
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9222604622651397
+    m_Key: status.layer
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9222604622651398
+    m_Key: status.active
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9222604622651399
+    m_Key: status.suppressed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9222604622651400
+    m_Key: status.seconds
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9222604622651401
+    m_Key: status.source_owned
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9222604622651402
+    m_Key: status.infinite
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9222604622651403
+    m_Key: status.source
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9222604622651404
+    m_Key: status.periodic
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9222604622651405
+    m_Key: status.resistance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9222604622651406
+    m_Key: status.category.aura
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9222604622651407
+    m_Key: status.category.skill
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9222604622651408
+    m_Key: status.category.ailment
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9222604622651409
+    m_Key: status.repeat.uniform
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9222604622651410
+    m_Key: status.repeat.strongest
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9222604622651411
+    m_Key: status.repeat.independent
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9222604622651412
+    m_Key: status.source.skill
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9222604622651413
+    m_Key: status.source.talent
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9222604622651414
+    m_Key: status.source.equipment
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9222604622651415
+    m_Key: status.source.consumable
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9222604622651416
+    m_Key: status.source.mechanism
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9222604622651417
+    m_Key: status.block.move
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9222604622651418
+    m_Key: status.block.attack
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9222604622651419
+    m_Key: status.block.cast
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9222604622651420
+    m_Key: status.block.useitem
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9279383784120320
+    m_Key: status.hide_optional
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9279383842840576
+    m_Key: status.show_optional
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

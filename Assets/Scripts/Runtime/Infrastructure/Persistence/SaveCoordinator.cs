@@ -539,7 +539,8 @@ namespace DarkFlare
                     ISessionSnapshotSource source = _snapshotSource;
                     int generation = source?.ArchitectureGeneration ?? 0;
                     SessionSnapshotResult snapshot = source != null && source.IsAvailable
-                        ? source.Capture()
+                        ? source is IPreparedSessionSnapshotSource preparedSource
+                            ? await preparedSource.CaptureAsync(cancellationToken) : source.Capture()
                         : null;
 
                     if (snapshot == null || !snapshot.Succeeded)
@@ -721,6 +722,8 @@ namespace DarkFlare
             _dirtyRegistrations.Add(architecture.RegisterEvent<TradeCompletedEvent>(_ => MarkDirty()));
             _dirtyRegistrations.Add(architecture.RegisterEvent<ItemCraftedEvent>(_ => MarkDirty()));
             _dirtyRegistrations.Add(architecture.RegisterEvent<ActorResourceChangedEvent>(_ => MarkDirty()));
+            _dirtyRegistrations.Add(architecture.RegisterEvent<StatusChangedEvent>(_ => MarkDirty()));
+            _dirtyRegistrations.Add(architecture.RegisterEvent<StatusTimeChangedEvent>(_ => MarkDirty()));
             _dirtyRegistrations.Add(architecture.RegisterEvent<ActorRegisteredEvent>(_ => MarkDirty()));
             _dirtyRegistrations.Add(architecture.RegisterEvent<ActorUnregisteredEvent>(_ => MarkDirty()));
         }

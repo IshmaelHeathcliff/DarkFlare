@@ -320,6 +320,10 @@ namespace DarkFlare
 
         void StartSessionTasks()
         {
+            SessionScope.Tasks.Run(
+                "status-clock",
+                RunStatusClockAsync,
+                failurePolicy: LifecycleTaskFailurePolicy.Report);
             _rollbackHandle = SessionScope.Tasks.Run(
                 "session-rollback-coordinator",
                 RunRollbackCoordinatorAsync,
@@ -330,6 +334,21 @@ namespace DarkFlare
                 "resource-regeneration",
                 token => RunResourceRegenerationAsync(regenerationSystem, token),
                 failurePolicy: LifecycleTaskFailurePolicy.Report);
+        }
+
+        async UniTask RunStatusClockAsync(CancellationToken token)
+        {
+            try
+            {
+                await _architecture.GetSystem<StatusSystem>().RunClockAsync(
+                    () => State == GameSessionState.Running && IsCurrentArchitectureLease, token);
+            }
+            catch (OperationCanceledException) when (token.IsCancellationRequested) { throw; }
+            catch
+            {
+                _controlledStopRequested?.Invoke(this, "status-clock-failure");
+                throw;
+            }
         }
 
         async UniTask RunResourceRegenerationAsync(

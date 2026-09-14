@@ -11,6 +11,22 @@ namespace DarkFlare.Tests
         readonly NewtonsoftSaveSerializer _serializer = new NewtonsoftSaveSerializer();
 
         [Test]
+        public void Deserialize_PreStatusHistoryAddsEmptyClockAndPreservesRuntimeData()
+        {
+            byte[] bytes = System.IO.File.ReadAllBytes("Assets/Scripts/Tests/Fixtures/Migration/save-v2-without-statuses.json");
+            JObject historical = JObject.Parse(Encoding.UTF8.GetString(bytes));
+            SaveDeserializationResult result = _serializer.Deserialize(bytes);
+            Assert.IsTrue(result.Succeeded, Describe(result));
+            Assert.That(result.Document.Payload.Run.Statuses.Time, Is.Zero);
+            Assert.That(result.Document.Payload.Run.Statuses.Actors, Is.Empty);
+            var serialized = _serializer.Serialize(result.Document);
+            Assert.IsTrue(serialized.Succeeded, Describe(serialized));
+            JObject current = JObject.Parse(Encoding.UTF8.GetString(serialized.Bytes));
+            ((JObject)current["payload"]["run"]).Remove("statuses");
+            Assert.IsTrue(JToken.DeepEquals(historical["payload"], current["payload"]), "迁移不能改变物品、资源、随机数和运行时数据");
+        }
+
+        [Test]
         public void Serialize_IsDeterministicComputesChecksumAndDoesNotMutateInput()
         {
             SaveDocumentDto source = SaveDataContractTests.CreateValidDocument();

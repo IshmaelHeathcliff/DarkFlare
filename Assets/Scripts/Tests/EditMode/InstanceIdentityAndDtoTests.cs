@@ -271,6 +271,13 @@ namespace DarkFlare.Tests
                 return;
             }
 
+            Type nullable = Nullable.GetUnderlyingType(type);
+            if (nullable != null)
+            {
+                CollectForbiddenTypes(nullable, path, visiting, violations);
+                return;
+            }
+
             if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(List<>))
             {
                 CollectForbiddenTypes(type.GetGenericArguments()[0], $"{path}[]", visiting, violations);

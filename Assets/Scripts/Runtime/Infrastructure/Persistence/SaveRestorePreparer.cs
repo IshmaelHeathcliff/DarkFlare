@@ -282,6 +282,9 @@ namespace DarkFlare
                 return Failure(issues);
             }
 
+            StatusSaveValidation.Validate(document.Payload.Run.Statuses, document.Payload, catalog, issues);
+            if (issues.Count > 0) { return Failure(issues); }
+
             PreparedRestore prepared = new PreparedRestore(
                 document,
                 playerDefinition,

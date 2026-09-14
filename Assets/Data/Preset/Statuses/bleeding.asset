@@ -20,10 +20,10 @@ MonoBehaviour:
     _tableName: statuses
     _entryKey: bleeding.description
   _icon:
-    m_AssetGUID:
-    m_SubObjectName:
-    m_SubObjectType:
-    m_SubObjectGUID:
+    m_AssetGUID: dd11b812efe2f0e4bb2f3758c9e10504
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
     m_EditorAssetChanged: 0
   _category: 2
   _ailment: 3

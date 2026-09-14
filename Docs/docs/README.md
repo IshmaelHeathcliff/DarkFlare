@@ -13,6 +13,7 @@
 - [目录结构](./project-structure.md)
 - [应用生命周期与会话作用域](./infrastructure/application-lifecycle.md)
 - [稳定身份、内容目录与迁移框架](./infrastructure/content-identity-migration.md)
+- [状态时间、保存与查看](./status-lifecycle-ui.md)
 - [本地存档与 Session 恢复](./infrastructure/local-save.md)
 - [用户设置与本地化](./infrastructure/user-settings-localization.md)
 - [游戏状态、场景流与应用 UI 外壳](./infrastructure/game-state-scene-flow-ui-shell.md)
@@ -49,7 +50,9 @@
 
 ## 计划状态
 
-[alpha 0.4 状态系统](./plan/alpha-0.4-status-system-plan.md)已完成阶段 1 核心、阶段 2 角色战斗与[阶段 3 七异常、抗性及来源接入](./plan/archive/alpha-0.4-status-ailments-plan.md)。EditMode 全量 527/527、随后本地化专项 20/20、PlayMode 68/68 通过，见[验收记录](./assets/acceptance/alpha-0.4-status-ailments/README.md)与[异常模块](./status-ailments.md)。下一步为阶段 4 自动计时、存档和图标 UI。运行版本保持 0.4.0-alpha，core v4、Schema 2。
+状态显示已补充“显示 / 可隐藏 / 从不显示”三档及右上角 HUD，共用隐藏开关。最新 EditMode 540/540、PlayMode 73 项长期回归及 1 项临时截图检查通过，见[验收记录](./assets/acceptance/status-visibility-hud/README.md)和[已归档计划](./plan/archive/status-visibility-hud-plan.md)。
+
+[alpha 0.4 状态系统](./plan/alpha-0.4-status-system-plan.md)已完成阶段 1–4：核心、战斗、异常抗性与来源，以及[自动计时、存档与图标查看](./status-lifecycle-ui.md)。EditMode 534/534、PlayMode 72/72 通过，见[阶段 4 验收](./assets/acceptance/alpha-0.4-status-lifecycle-ui/README.md)。下一步进入阶段 5 综合验收，再推进统一物品使用与消耗品。运行版本 0.4.0-alpha，core v4、Schema 3。
 
 状态系统完成后实施[统一物品使用与消耗品](./plan/alpha-0.4-usable-items-plan.md)，建议版本 `0.4.2-alpha`：所有主动使用物品共用能力配置与执行事务，首批支持回血、回蓝、临时状态和驱散异常。该阶段已规划，尚未实现。
 

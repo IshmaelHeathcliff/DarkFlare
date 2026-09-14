@@ -68,6 +68,7 @@ namespace DarkFlare
         readonly Dictionary<StatusTargetId, StatusCommit> _locks = new Dictionary<StatusTargetId, StatusCommit>();
         readonly Queue<(StatusOperation Operation, Func<StatusResult> Execute)> _queue = new Queue<(StatusOperation, Func<StatusResult>)>();
         long _nextRegistration = 1;
+        long _nextEventOrder = 1;
         bool _notifying;
         bool _draining;
         bool _eventBoundary;
@@ -80,6 +81,9 @@ namespace DarkFlare
         public int Generation { get; }
         public double Time => _time;
         public bool HasPendingTime => _pending;
+        public bool IsQuiescent => !_disposed && !_pending && !_advancing && !_notifying
+            && !_draining && _locks.Count == 0 && _queue.Count == 0;
+        public bool HasLayers => _targets.Values.Any(state => state.Layers.Count > 0);
         internal bool IsRegistered(StatusTargetId target) { return _targets.ContainsKey(target); }
         public int PendingOperations => _queue.Count;
         public event Action<StatusResult> Changed;
@@ -105,14 +109,14 @@ namespace DarkFlare
 
         StatusTargetId Register(string key)
         {
-            if (_disposed || _notifying || _pending || _advancing || _locks.Count > 0 || _queue.Count > 0)
+            if (_disposed || _notifying || _advancing || _locks.Count > 0 || _queue.Count > 0)
             {
                 throw new InvalidOperationException("状态系统当前不能登记目标");
             }
             if (_registrations.TryGetValue(key, out StatusTargetId existing)) { return existing; }
             if (_nextRegistration == long.MaxValue) { throw new InvalidOperationException("状态目标序号已耗尽"); }
             var target = new StatusTargetId(Generation, _nextRegistration++, key);
-            _targets.Add(target, new StatusTargetState());
+            _targets.Add(target, new StatusTargetState { EventOrder = _nextEventOrder++ });
             _registrations.Add(key, target);
             return target;
         }

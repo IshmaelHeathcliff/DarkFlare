@@ -1,8 +1,11 @@
+using System;
 using System.Collections;
 using System.Linq;
+using Cysharp.Threading.Tasks;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
+using Object = UnityEngine.Object;
 
 namespace DarkFlare.Tests
 {
@@ -15,6 +18,70 @@ namespace DarkFlare.Tests
 
         [UnityTearDown]
         public IEnumerator TearDown() { yield return _fixture.Restart(); }
+
+        [UnityTest]
+        public IEnumerator ClockHold_DrainsBudgetAndCancellationReleasesPause()
+        {
+            yield return _fixture.EnterMain();
+            var session = ApplicationHost.Current.CurrentSession;
+            StatusSystem statuses = session.Architecture.GetSystem<StatusSystem>();
+            CombatActor player = UnityEngine.Object.FindAnyObjectByType<PlayerController>().Actor;
+            StatusTargetId target = statuses.GetTarget(player);
+            statuses.ApplyStatus(target, StatusMutation.Apply(new StatusRules("clock", duration: 1, interval: .001),
+                new StatusSource(StatusSourceKind.Mechanism, "budget")));
+            statuses.Store.Advance(.8, 1);
+            Assert.IsTrue(statuses.Store.HasPendingTime);
+            LifecycleScope scope = session.SessionScope.CreateChild("clock-hold-test");
+            UniTask<IDisposable> hold = statuses.HoldClockAsync(scope.Token);
+            while (hold.Status == UniTaskStatus.Pending) { yield return null; }
+            using (hold.GetAwaiter().GetResult())
+            {
+                Assert.IsTrue(statuses.Store.IsQuiescent);
+                Assert.GreaterOrEqual(statuses.Store.Time, .8);
+                Assert.IsTrue(GameTimeService.Shared.IsPaused);
+            }
+            Assert.IsFalse(GameTimeService.Shared.IsPaused);
+            using (StatusCommit commit = statuses.Store.Commit(statuses.Store.Prepare(target,
+                new[] { StatusMutation.Consume("clock", 1) })))
+            {
+                UniTask<IDisposable> blocked = statuses.HoldClockAsync(scope.Token);
+                yield return null;
+                Assert.AreEqual(UniTaskStatus.Pending, blocked.Status);
+                scope.BeginStop();
+                while (blocked.Status == UniTaskStatus.Pending) { yield return null; }
+                Assert.Throws<OperationCanceledException>(() => blocked.GetAwaiter().GetResult());
+                Assert.IsFalse(GameTimeService.Shared.IsPaused);
+            }
+            statuses.ApplyStatus(target, StatusMutation.Consume("clock", 1));
+            yield return scope.StopAsync().ToCoroutine();
+        }
+
+        [UnityTest]
+        public IEnumerator SessionClock_AdvancesPausesAndCancelsWithSession()
+        {
+            yield return _fixture.EnterMain();
+            PlayerController player = Object.FindAnyObjectByType<PlayerController>();
+            Assert.That(player, Is.Not.Null);
+            IArchitecture architecture = GameArchitectureProvider.RequireCurrent();
+            StatusSystem statuses = architecture.GetSystem<StatusSystem>();
+            StatusTargetId target = statuses.GetTarget(player.Actor);
+            var source = new StatusSource(StatusSourceKind.Mechanism, "clock_test");
+            statuses.ApplyStatus(target, StatusMutation.Apply(new StatusRules("clock", duration: .3), source));
+            using (GamePauseLease pause = GameTimeService.Shared.AcquirePause("clock-test"))
+            {
+                yield return null;
+                double time = statuses.Store.Time;
+                yield return new WaitForSecondsRealtime(.1f);
+                Assert.That(statuses.Store.Time, Is.EqualTo(time));
+                Assert.That(statuses.GetStatusSnapshot(target).Layers, Has.Count.EqualTo(1));
+            }
+            yield return new WaitForSeconds(.4f);
+            Assert.That(statuses.GetStatusSnapshot(target).Layers, Is.Empty);
+            Assert.That(statuses.IsClockRunning, Is.True);
+            Assert.That(statuses.AdvanceManually(1).Code, Is.EqualTo(StatusResultCode.Busy));
+            yield return _fixture.Restart();
+            Assert.That(statuses.IsClockRunning, Is.False);
+        }
 
         [UnityTest]
         public IEnumerator ConfiguredActors_BlockMovementAndRebindAfterDisableAndDeath()

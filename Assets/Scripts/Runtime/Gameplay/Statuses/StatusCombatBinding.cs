@@ -57,7 +57,7 @@ namespace DarkFlare
                 var equipment = EquipmentEffectResolver.CollectActorModifiers(loadout);
                 if (!target.IsValid)
                 {
-                    if (loadout.Slots.Any(pair => pair.Value?.BaseDefinition?.ProvidedStatus != null)) { return false; }
+                    if (actor.IsAlive && loadout.Slots.Any(pair => pair.Value?.BaseDefinition?.ProvidedStatus != null)) { return false; }
                     CombatResourceSnapshot before = actor.Resources;
                     actor.SetModifierSource("equipment", equipment);
                     this.GetSystem<CombatSystem>().PublishResourceChanges(actor, before, ActorResourceChangeReason.MaximumChanged);

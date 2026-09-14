@@ -1,6 +1,6 @@
 # 状态与角色战斗接入
 
-本模块承接[状态核心](./status-system.md)，实现阶段 2 的角色效果、周期伤害与行动限制。正式七异常及抗性见[异常与来源](./status-ailments.md)；自动时间任务、存档、状态图标仍按[总计划](./plan/alpha-0.4-status-system-plan.md)推进；当前通过 `StatusSystem.Advance` 显式推进时间，不会自动生成异常或药水玩法。
+本模块承接[状态核心](./status-system.md)，实现阶段 2 的角色效果、周期伤害与行动限制。正式七异常及抗性见[异常与来源](./status-ailments.md)；已接入[Session 自动时间、状态存档与图标查看](./status-lifecycle-ui.md)，调试推进受暂停与提交门禁约束。消耗品仍按总计划继续。
 
 ## 身份和生命周期
 
@@ -27,7 +27,7 @@ CombatActor 按来源键管理修改器：`equipment`、`monster`、`status` 分
 
 每笔变更从原生命、法力比例缩放到最终上限。例如 50/100 → 100/200 → 50/100。仅刷新时间、推进周期相位而有效投影不变时不重建属性，也不增加 StatsRevision。
 
-ModifierOrigin 区分装备、怪物词条、状态和兼容来源；状态带定义 ID、层 ID 和合并层数。Increase 与 More 的正式计算步骤保留具体来源，属性详情使用角色标签判断条件，并提供中英状态来源文本。正式异常名称见[异常模块](./status-ailments.md)，状态图标在阶段 4 补齐。
+ModifierOrigin 区分装备、怪物词条、状态和兼容来源；状态带定义 ID、层 ID 和合并层数。Increase 与 More 的正式计算步骤保留具体来源，属性详情使用角色标签判断条件，并提供中英状态来源文本。正式异常名称见[异常模块](./status-ailments.md)，八个状态图标已通过统一 Addressables 资源接入。
 
 ## 一致提交
 

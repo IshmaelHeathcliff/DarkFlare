@@ -1,12 +1,12 @@
 # 状态系统
 
-2026-09-13：阶段 1–3 已完成，EditMode 全量 527/527、随后本地化专项 20/20、PlayMode 68/68 通过，见[阶段 3 验收记录](./assets/acceptance/alpha-0.4-status-ailments/README.md)。运行版本 0.4.0-alpha、core v4、Schema 2；后续安排见[总计划](./plan/alpha-0.4-status-system-plan.md)。
+2026-09-14：阶段 1–4 已完成，EditMode 534/534、PlayMode 72/72 通过。运行版本 0.4.0-alpha、core v4、Schema 3；下一步为[总计划](./plan/alpha-0.4-status-system-plan.md)阶段 5 综合验收，见[阶段 4 记录](./assets/acceptance/alpha-0.4-status-lifecycle-ui/README.md)。
 
 ## 当前职责
 
 `StatusDefinition` 提供中文 Odin 配置和稳定 `status:` 内容身份；`StatusRules`、`StatusEffectSnapshot` 冻结规则和效果。`StatusStore` 是不依赖场景的纯状态容器，管理目标、来源、层数、择强、时间、消费、驱散及事务。配置字段参考见[状态配置](./config-reference/statuses.md)。
 
-`StatusModel` 在 Session 中持有容器，`StatusSystem` 管理角色绑定、效果参与者及 QFramework 通知。[角色战斗接入](./status-combat.md)已实现属性来源共存、周期扣血和行动门禁。七异常与抗性已接入，详见[异常与来源](./status-ailments.md)；自动时间任务、存档及状态 UI 尚未接入；当前不会在游戏中自动出现状态或药水效果。
+`StatusModel` 在 Session 中持有容器，`StatusSystem` 管理角色绑定、效果参与者及 QFramework 通知。[角色战斗接入](./status-combat.md)已实现属性来源共存、周期扣血和行动门禁。七异常与抗性已接入，详见[异常与来源](./status-ailments.md)；已接入[自动时间、状态存档与图标查看](./status-lifecycle-ui.md)，消耗品玩法在完整状态验收后继续。
 
 代码位于 `Assets/Scripts/Runtime/Data/Statuses/` 和 `Assets/Scripts/Runtime/Gameplay/Statuses/`。所有状态共用核心，未为各异常创建独立 MonoBehaviour 或计时任务。
 
@@ -53,7 +53,7 @@ Controller 使用 `ChangeStatusesCommand` 提交 StatusMutation 列表，使用 
 
 宿主显式 `Advance(elapsed, eventBudget)`；核心使用游戏时间，无后台任务，也不从现实时间补算离线伤害。默认每次处理最多 256 个周期或到期事件；预算耗尽用 `Advance(0, budget)` 续处理，HasPending 即使 Time 等于 PendingUntil 也可能为 true，因为同刻到期仍未处理。积压期间新的非零增量和普通写入返回 Busy。
 
-事件按发生时刻、周期优先、目标注册次序、实例次序排列。同刻先结算当时有效层应有的周期，后移除到期层。第一跳在完整间隔以后，尾段不补跳；刷新不改变相位，替换从新实例开始。受压制层仍推进相位但不发布周期，恢复后不补发受压制期间的跳数。
+事件按发生时刻、周期优先、目标事件次序、实例次序排列；目标事件次序跨存档保持。同刻先结算当时有效层应有的周期，后移除到期层。第一跳在完整间隔以后，尾段不补跳；刷新不改变相位，替换从新实例开始。受压制层仍推进相位但不发布周期，恢复后不补发受压制期间的跳数。
 
 受管理角色每跳先执行内部战斗提交和死亡清理，再发送 StatusTickEvent；处理回调队列后寻找下一事件。纯容器仍只发布周期记录。StatusDamageStage 区分 Base 与 SourceResolved：战斗参与者在施加准备时将 Base 结算并冻结为 SourceResolved，每跳只读取实时目标防御。
 
@@ -63,4 +63,4 @@ Controller 使用 `ChangeStatusesCommand` 提交 StatusMutation 列表，使用 
 
 `StatusSystemTests` 长期保护层数、择强接替、周期、容量、只读快照、事务失败回退、来源隔离、重入及 QFramework Session 释放。配置文档覆盖和内容身份复用已有测试套件。
 
-阶段 2 已接入[角色战斗模块](./status-combat.md)，新增集成与 PlayMode 生命周期回归。阶段 3 已接入[七异常、抗性及来源样例](./status-ailments.md)；自动时间、存档与图标按阶段 4 继续。消耗品在完整状态系统验收后实施。
+阶段 2 已接入[角色战斗模块](./status-combat.md)，新增集成与 PlayMode 生命周期回归。阶段 3 已接入[七异常、抗性及来源样例](./status-ailments.md)；自动时间、存档与图标已接入，见[生命周期与 UI](./status-lifecycle-ui.md)。消耗品在完整状态系统验收后实施。

@@ -2,6 +2,10 @@
 
 本目录保存已经完成的执行计划与阶段性设计记录。归档文档保留当时的目标、执行顺序、验收标准和验证数据，不再作为当前模块说明维护。
 
+- [状态显示分档与右上角 HUD](./status-visibility-hud-plan.md)：2026-09-14 完成；EditMode 540/540、PlayMode 73 项长期回归及 1 项临时截图检查通过。
+
+- [状态阶段 4：自动计时、存档与图标 UI](./alpha-0.4-status-lifecycle-ui-plan.md)：2026-09-14 完成；EditMode 534/534、PlayMode 72/72 通过。
+
 - [状态阶段 3：七异常、抗性与来源](./alpha-0.4-status-ailments-plan.md)：2026-09-13 完成；EditMode 527/527、本地化专项 20/20、PlayMode 68/68 通过。
 
 - [物品窗口 UI 修正](./item-workspace-ui-refinement.md)：尺寸、灰阶、按住对比、工作台联动与统一关闭，2026-09-12 完成。
