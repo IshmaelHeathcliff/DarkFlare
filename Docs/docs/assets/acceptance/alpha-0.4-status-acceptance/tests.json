@@ -1,0 +1,19 @@
+{
+  "date": "2026-09-14",
+  "unity": "6000.6.0f1",
+  "editmode": {
+    "total": 540,
+    "passed": 540,
+    "failed": 0,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "playmode": {
+    "total": 73,
+    "passed": 73,
+    "failed": 0,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "temporaryTestsRetained": 0
+}

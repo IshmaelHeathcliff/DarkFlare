@@ -1,6 +1,6 @@
 # 状态系统阶段 1：核心规则与通用接口
 
-所属总计划：[alpha 0.4 状态系统](../alpha-0.4-status-system-plan.md)。规则依据：[状态、叠层与效果规则](../status-system/rules.md)；后续接入见[工程接入与验收](../status-system/integration-and-validation.md)。
+所属总计划：[alpha 0.4 状态系统](alpha-0.4-status-system-plan.md)。规则依据：[状态、叠层与效果规则](status-system/rules.md)；后续接入见[工程接入与验收](status-system/integration-and-validation.md)。
 
 2026-09-13：阶段 1 已实现并归档。EditMode 486/486（状态核心 44 项）、PlayMode 67/67 通过；见[验收记录](../../assets/acceptance/alpha-0.4-status-core/README.md)和[状态模块](../../status-system.md)。实施基线为计划提交 `2e6ab0f`，运行版本保持 `0.4.0-alpha`。下文保留原目标与实施顺序，实际 API 以模块文档为准。
 

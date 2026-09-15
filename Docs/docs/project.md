@@ -4,7 +4,7 @@
 
 `DarkFlare` 已完成首版最小循环、初步体验优化、`alpha 0.1` 封板和 `alpha 0.2.0–0.2.7` 基础设施封板。当前可从常驻 `Bootstrap.unity` 的 FrontEnd 新建或继续游戏，additive 进入 `Main.unity` 完成战斗、掉落、十槽装备、交易和打造，暂停后保存并安全返回前台；FrontEnd 可二次确认删除自动档，共享设置页可恢复完整默认设置，中英语言、音量、按键、设备 Glyph 和降低动态效果即时收敛。
 
-alpha 版本内的阶段使用三段式名称：`alpha 0.1` 的首个阶段为 `alpha 0.1.0`，后续依次为 `alpha 0.1.1`、`alpha 0.1.2`；`alpha 0.2` 同样从 `alpha 0.2.0` 开始。当前版本为 `0.4.0-alpha`；完成记录见[alpha 0.2 综合验收记录](./infrastructure/alpha-0.2-acceptance.md)与[计划归档](./plan/archive/README.md)。
+alpha 版本内的阶段使用三段式名称：`alpha 0.1` 的首个阶段为 `alpha 0.1.0`，后续依次为 `alpha 0.1.1`、`alpha 0.1.2`；`alpha 0.2` 同样从 `alpha 0.2.0` 开始。当前版本为 `0.4.1-alpha`；完成记录见[alpha 0.2 综合验收记录](./infrastructure/alpha-0.2-acceptance.md)与[计划归档](./plan/archive/README.md)。
 
 当前 [alpha 0.3 UI 迭代](./plan/archive/alpha-0.3-plan.md)已全部完成：独立物品窗口、统一拖放、实时属性、暗黑像素 HUD、共享皮肤及十槽装备。二十件装备覆盖每槽至少两件，core v1 → v2 旧档兼容完成；EditMode 434/434、PlayMode 63/63、可见 Windows Player 验收通过。退出时的 2D Animation 回退缓冲区警告已在空场景中复现并定位，作为既有依赖问题保留记录。见[综合验收](./assets/acceptance/alpha-0.3.4-equipment/README.md)。
 
@@ -12,7 +12,7 @@ alpha 版本内的阶段使用三段式名称：`alpha 0.1` 的首个阶段为 `
 
 alpha 0.4.0 已完成[统一物品系统](./item-system.md)：金币与材料入栏、独立堆叠 / 消耗属性、材料打造、掉落权重和 core v3 / Schema 2 旧档迁移。最新 EditMode 442/442、PlayMode 67/67 通过；见[验收记录](./assets/acceptance/alpha-0.4-items/README.md)。
 
-[alpha 0.4 状态系统](./plan/alpha-0.4-status-system-plan.md)已完成阶段 1–4：核心、战斗、异常抗性与来源，以及[自动计时、存档与图标查看](./status-lifecycle-ui.md)。EditMode 534/534、PlayMode 72/72 通过，见[阶段 4 验收](./assets/acceptance/alpha-0.4-status-lifecycle-ui/README.md)。下一步进入阶段 5 综合验收，再推进统一物品使用与消耗品。运行版本 0.4.0-alpha，core v4、Schema 3。
+[alpha 0.4 状态系统](./plan/archive/alpha-0.4-status-system-plan.md)已完成全部五个阶段，并以 `0.4.1-alpha` 交付；core v4、Schema 3 保持不变。本轮 EditMode 540/540、PlayMode 73/73，独立 Windows Player 的状态效果、输入、显示与跨进程存档恢复通过，见[综合验收](./assets/acceptance/alpha-0.4-status-acceptance/README.md)。总计划及配套文档已归档，下一步为统一物品使用与消耗品。
 
 按用户指定顺序，状态系统验收后继续[统一物品使用与消耗品](./plan/alpha-0.4-usable-items-plan.md)，建议以 `0.4.2-alpha` 交付；统一使用入口承载回血、回蓝、临时状态和驱散异常，复用状态系统并保证效果与物品扣除一致提交。
 

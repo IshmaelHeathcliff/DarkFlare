@@ -1,5 +1,7 @@
 # 已完成计划归档
 
+- [alpha 0.4 状态系统总计划](./alpha-0.4-status-system-plan.md)及[阶段 5 综合验收](./alpha-0.4-status-acceptance-plan.md)：2026-09-14 完成，交付 `0.4.1-alpha`；EditMode 540/540、PlayMode 73/73，独立 Windows Player 验收通过。
+
 本目录保存已经完成的执行计划与阶段性设计记录。归档文档保留当时的目标、执行顺序、验收标准和验证数据，不再作为当前模块说明维护。
 
 - [状态显示分档与右上角 HUD](./status-visibility-hud-plan.md)：2026-09-14 完成；EditMode 540/540、PlayMode 73 项长期回归及 1 项临时截图检查通过。

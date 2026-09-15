@@ -1,0 +1,49 @@
+{
+  "status": "completed:input",
+  "version": "0.4.1-alpha",
+  "editor": false,
+  "dataRoot": "C:\\Users\\darkf\\home\\projects\\darkflare\\temp\\statusacceptance\\UserData\\Saves",
+  "checks": [
+    "flow:DarkFlare.SceneFlowRequest:None",
+    "process restart preserves layer values and absolute phases without offline ticks",
+    "flow:DarkFlare.SceneFlowRequest:None",
+    "flow:DarkFlare.SceneFlowRequest:None",
+    "front-end continue preserves state",
+    "flow:DarkFlare.SceneFlowRequest:None",
+    "flow:DarkFlare.SceneFlowRequest:None",
+    "new session has no old layers",
+    "apply:weakness:Success",
+    "apply:stun:Success",
+    "apply:bleeding:Success",
+    "apply:burning:Success",
+    "apply:chill:Success",
+    "apply:shock:Success",
+    "apply:poison:Success",
+    "HUD right aligned:zh-Hans",
+    "tooltip bounds:zh-Hans",
+    "HUD right aligned:en",
+    "tooltip bounds:en",
+    "HUD right aligned:pseudo",
+    "tooltip bounds:pseudo",
+    "HUD right aligned:small",
+    "tooltip bounds:small",
+    "gamepad hides optional status",
+    "hiding leaves gameplay layers unchanged",
+    "gamepad restores optional status",
+    "mouse hides optional HUD status",
+    "mouse restores optional HUD status",
+    "keyboard opens pause",
+    "keyboard returns gameplay input"
+  ],
+  "error": null,
+  "actors": [
+    {
+      "scene": "Main",
+      "IsAlive": true,
+      "IsConfigured": true,
+      "targetValid": true,
+      "StatusActorKey": "player:local_player",
+      "currentArchitecture": true
+    }
+  ]
+}

@@ -6,7 +6,7 @@
 
 本阶段让状态随游戏时间自动运行，保存并准确恢复玩家与怪物状态，并通过图标、层数、剩余时间和焦点浮窗向玩家解释效果。按 4A、4B 顺序实施；先完成时间与持久化，再接入界面。完整状态系统仍须通过总计划阶段 5 综合验收，之后才实施统一物品使用与消耗品。
 
-依据：[状态核心](../../status-system.md)、[战斗接入](../../status-combat.md)、[异常与来源](../../status-ailments.md)、[本地存档](../../infrastructure/local-save.md)、[HUD](../../hud-system.md)、[工程接入与验收](../status-system/integration-and-validation.md)。本计划不调整已确认的异常抗性、叠层和刷新规则，不改变首批平衡数值。
+依据：[状态核心](../../status-system.md)、[战斗接入](../../status-combat.md)、[异常与来源](../../status-ailments.md)、[本地存档](../../infrastructure/local-save.md)、[HUD](../../hud-system.md)、[工程接入与验收](status-system/integration-and-validation.md)。本计划不调整已确认的异常抗性、叠层和刷新规则，不改变首批平衡数值。
 
 ## 已核对的接入点
 

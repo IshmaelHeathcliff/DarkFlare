@@ -1,0 +1,39 @@
+{
+  "status": "completed:save",
+  "version": "0.4.1-alpha",
+  "editor": false,
+  "dataRoot": "C:\\Users\\darkf\\home\\projects\\darkflare\\temp\\statusacceptance\\UserData\\Saves",
+  "checks": [
+    "flow:DarkFlare.SceneFlowRequest:None",
+    "player loaded",
+    "marker applied",
+    "marker consumed",
+    "one marker remains",
+    "apply:stun:Success",
+    "stun blocks cast",
+    "pause freezes time",
+    "expiry restores action",
+    "apply:poison:Success",
+    "periodic damage reduces health",
+    "ailment dispelled",
+    "dispel clears layers",
+    "apply:poison:Success",
+    "periodic damage can kill",
+    "death unbinds status target",
+    "revive does not restore expired death layers",
+    "apply:poison:Success",
+    "apply:weakness:Success",
+    "save succeeded"
+  ],
+  "error": null,
+  "actors": [
+    {
+      "scene": "Main",
+      "IsAlive": true,
+      "IsConfigured": true,
+      "targetValid": true,
+      "StatusActorKey": "player:local_player",
+      "currentArchitecture": true
+    }
+  ]
+}

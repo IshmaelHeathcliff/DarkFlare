@@ -1,0 +1,27 @@
+{
+  "status": "completed:cycle",
+  "version": "0.4.1-alpha",
+  "editor": false,
+  "dataRoot": "C:\\Users\\darkf\\home\\projects\\darkflare\\temp\\statusacceptance\\UserData\\Saves",
+  "checks": [
+    "flow:DarkFlare.SceneFlowRequest:None",
+    "process restart preserves layer values and absolute phases without offline ticks",
+    "flow:DarkFlare.SceneFlowRequest:None",
+    "flow:DarkFlare.SceneFlowRequest:None",
+    "front-end continue preserves state",
+    "flow:DarkFlare.SceneFlowRequest:None",
+    "flow:DarkFlare.SceneFlowRequest:None",
+    "new session has no old layers"
+  ],
+  "error": null,
+  "actors": [
+    {
+      "scene": "Main",
+      "IsAlive": true,
+      "IsConfigured": true,
+      "targetValid": true,
+      "StatusActorKey": "player:local_player",
+      "currentArchitecture": true
+    }
+  ]
+}

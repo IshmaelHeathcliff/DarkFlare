@@ -42,4 +42,6 @@ HUD 隐藏开关仅在玩家拥有可隐藏状态时出现；状态窗口始终�
 
 鼠标悬停或键鼠 / 手柄焦点打开同一浮窗。确认进入详情滚动，方向键滚动，返回先回图标、再关闭状态查看。状态消失时清除浮窗并移至相邻图标或关闭入口；从暂停进入查看保留暂停租约。Gameplay 不启用 UI Navigate，不抢角色移动。
 
+自定义方向导航通过 `FocusController.IgnoreEvent` 配合 `StopPropagation` 阻止同次事件再次执行默认焦点移动；详情滚动保持当前焦点，兼容 Unity 6.6 事件接口。
+
 八个正式图标每图一个 96×96 PNG，Sprite Single、PPU64，来自统一暗色像素家族。通过 `DarkFlare-Session-Sprites` Addressables 组和 Session `SpriteAssetLoader` 预热；视图子作用域取消刷新，Session 结束统一释放资源。缺图保留可读名称；倒计时每 100ms 刷新，复用图标节点，不推进玩法时间。资产合同与可见验收见[阶段 4 证据](./assets/acceptance/alpha-0.4-status-lifecycle-ui/README.md)。

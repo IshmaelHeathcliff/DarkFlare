@@ -52,9 +52,9 @@
 
 状态显示已补充“显示 / 可隐藏 / 从不显示”三档及右上角 HUD，共用隐藏开关。最新 EditMode 540/540、PlayMode 73 项长期回归及 1 项临时截图检查通过，见[验收记录](./assets/acceptance/status-visibility-hud/README.md)和[已归档计划](./plan/archive/status-visibility-hud-plan.md)。
 
-[alpha 0.4 状态系统](./plan/alpha-0.4-status-system-plan.md)已完成阶段 1–4：核心、战斗、异常抗性与来源，以及[自动计时、存档与图标查看](./status-lifecycle-ui.md)。EditMode 534/534、PlayMode 72/72 通过，见[阶段 4 验收](./assets/acceptance/alpha-0.4-status-lifecycle-ui/README.md)。下一步进入阶段 5 综合验收，再推进统一物品使用与消耗品。运行版本 0.4.0-alpha，core v4、Schema 3。
+[alpha 0.4 状态系统](./plan/archive/alpha-0.4-status-system-plan.md)已完成全部五个阶段，并以 `0.4.1-alpha` 交付；core v4、Schema 3 保持不变。本轮 EditMode 540/540、PlayMode 73/73，独立 Windows Player 的状态效果、输入、显示与跨进程存档恢复通过，见[综合验收](./assets/acceptance/alpha-0.4-status-acceptance/README.md)。总计划及配套文档已归档，下一步为统一物品使用与消耗品。
 
-状态系统完成后实施[统一物品使用与消耗品](./plan/alpha-0.4-usable-items-plan.md)，建议版本 `0.4.2-alpha`：所有主动使用物品共用能力配置与执行事务，首批支持回血、回蓝、临时状态和驱散异常。该阶段已规划，尚未实现。
+状态前置已完成，下一步实施[统一物品使用与消耗品](./plan/alpha-0.4-usable-items-plan.md)，建议版本 `0.4.2-alpha`：所有主动使用物品共用能力配置与执行事务，首批支持回血、回蓝、临时状态和驱散异常。该阶段已规划，尚未实现。
 
 [alpha 0.4 统一物品系统](./plan/archive/alpha-0.4-item-system-plan.md)已完成：金币与材料入栏、堆叠 / 消耗、材料打造、掉落及旧档迁移。运行版本 `0.4.0-alpha`，EditMode 442/442、PlayMode 67/67；见[验收证据](./assets/acceptance/alpha-0.4-items/README.md)。
 

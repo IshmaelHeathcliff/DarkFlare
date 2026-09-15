@@ -110,7 +110,8 @@ namespace DarkFlare
                 float direction = evt.direction == NavigationMoveEvent.Direction.Up ? -1 : 1;
                 _detailScroll.scrollOffset += new Vector2(0, direction * 64);
             }
-            evt.PreventDefault(); evt.StopPropagation();
+            _root.panel?.focusController.IgnoreEvent(evt);
+            evt.StopPropagation();
         }
 
         void OnDetailEnter(PointerEnterEvent evt) { _pointerInDetails = true; }
@@ -157,7 +158,8 @@ namespace DarkFlare
                 _ => Vector2.zero
             };
             if (direction == Vector2.zero) { return; }
-            evt.StopPropagation(); evt.PreventDefault();
+            _root.panel?.focusController.IgnoreEvent(evt);
+            evt.StopPropagation();
             VisualElement current = _root.panel?.focusController.focusedElement as VisualElement;
             if (current == null) { FocusDefault(); return; }
             var candidates = _window.Query<Button>().ToList().Where(button => button != current && button.enabledInHierarchy

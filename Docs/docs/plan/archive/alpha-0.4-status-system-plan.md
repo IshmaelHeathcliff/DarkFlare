@@ -2,17 +2,19 @@
 
 ## 状态与基线
 
-2026-09-14：阶段 1–4 已完成；EditMode 534/534、PlayMode 72/72 通过，见[生命周期与 UI](../status-lifecycle-ui.md)及[阶段 4 验收](../assets/acceptance/alpha-0.4-status-lifecycle-ui/README.md)。[阶段 4 执行计划](./archive/alpha-0.4-status-lifecycle-ui-plan.md)已归档，下一步进入阶段 5 综合验收。运行版本保持 0.4.0-alpha，core v4、Schema 3。
+显示分档与右上角 HUD 已随 a418188 提交；最新 EditMode 540/540、PlayMode 73 项长期回归及 1 项临时截图检查通过，见[补充验收](../../assets/acceptance/status-visibility-hud/README.md)。
+
+2026-09-14：阶段 1–5 全部完成并归档，运行版本 `0.4.1-alpha`，core v4、Schema 3。最终 EditMode 540/540、PlayMode 73/73，Windows Player 综合验收通过；见[阶段 5 记录](../../assets/acceptance/alpha-0.4-status-acceptance/README.md)与[执行计划](./alpha-0.4-status-acceptance-plan.md)。
 
 计划配套文档：
 
 - [状态、叠层与效果规则](./status-system/rules.md)
 - [工程接入与验收](./status-system/integration-and-validation.md)
-- [阶段 1：核心规则与通用接口（已归档）](./archive/alpha-0.4-status-core-plan.md)
-- [阶段 2：角色效果与战斗接入（已归档）](./archive/alpha-0.4-status-combat-plan.md)
-- [阶段 3：七异常、抗性与来源接入（已归档）](./archive/alpha-0.4-status-ailments-plan.md)
+- [阶段 1：核心规则与通用接口（已归档）](./alpha-0.4-status-core-plan.md)
+- [阶段 2：角色效果与战斗接入（已归档）](./alpha-0.4-status-combat-plan.md)
+- [阶段 3：七异常、抗性与来源接入（已归档）](./alpha-0.4-status-ailments-plan.md)
 
-阶段 1–4 已提供核心、角色效果、七异常、来源样例、自动时间、状态存档与图标 UI；完整版本仍待阶段 5 综合验收。
+阶段 1–4 已提供核心、角色效果、七异常、来源样例、自动时间、状态存档与图标 UI；阶段 5 综合验收已完成。
 
 ## 交付范围
 
@@ -57,7 +59,7 @@
 
 ### 1. 状态纯规则与通用接口
 
-2026-09-13：已完成并[归档阶段 1](./archive/alpha-0.4-status-core-plan.md)。核心规则、事务、显式计时和 QFramework Command / Query / Event 已实现；44 项状态核心用例及项目全量回归通过。
+2026-09-13：已完成并[归档阶段 1](./alpha-0.4-status-core-plan.md)。核心规则、事务、显式计时和 QFramework Command / Query / Event 已实现；44 项状态核心用例及项目全量回归通过。
 
 - 定义 `StatusDefinition`、运行时状态层、来源身份、不可变查询快照和操作结果。
 - 实现施加、刷新、择强、到期、消耗、驱散；将数值模型、计时方式、重复策略和满层处理分开。
@@ -68,7 +70,7 @@
 
 ### 2. 角色效果聚合与战斗接入
 
-2026-09-13：已完成并[归档阶段 2](./archive/alpha-0.4-status-combat-plan.md)。来源共存、角色绑定、一致提交、周期伤害、行动限制与反馈均已落地，EditMode 507/507、PlayMode 68/68 通过。
+2026-09-13：已完成并[归档阶段 2](./alpha-0.4-status-combat-plan.md)。来源共存、角色绑定、一致提交、周期伤害、行动限制与反馈均已落地，EditMode 507/507、PlayMode 68/68 通过。
 
 - 将装备、怪物词条和状态接入同一个来源集合；保留资源上限变化时的比例语义。
 - 扩展来源解释与状态标记查询，新增周期伤害形式和统一行动限制。
@@ -79,7 +81,7 @@
 
 ### 3. 异常、抗性与来源接入样例
 
-2026-09-13：已完成并[归档阶段 3](./archive/alpha-0.4-status-ailments-plan.md)。七异常、抵抗快照、来源接入、标记消费、Odin 调试及 core v3 → v4 兼容已落地。具体平衡参数作为可调验证配置；自动计时与状态存档完成前，来源样例显式启用，不默认加入常规战斗。
+2026-09-13：已完成并[归档阶段 3](./alpha-0.4-status-ailments-plan.md)。七异常、抵抗快照、来源接入、标记消费、Odin 调试及 core v3 → v4 兼容已落地。具体平衡参数作为可调验证配置；自动计时与状态存档完成前，来源样例显式启用，不默认加入常规战斗。
 
 - 创建七种异常配置、对应抗性属性及内容校验；所有正式字段使用中文 Odin 标注。
 - 接通技能施加 / 驱散样例、装备持续来源样例，以及状态层消耗后触发效果的最小机制。
@@ -90,7 +92,7 @@
 
 ### 4. 生命周期、存档与界面
 
-2026-09-14：已完成并[归档执行计划](./archive/alpha-0.4-status-lifecycle-ui-plan.md)。唯一时间驱动、Schema 3 专用恢复、八图标、浮窗与键鼠手柄查看入口均已接入。
+2026-09-14：已完成并[归档执行计划](./alpha-0.4-status-lifecycle-ui-plan.md)。唯一时间驱动、Schema 3 专用恢复、八图标、浮窗与键鼠手柄查看入口均已接入。
 
 - 在 Session 中统一启动并取消状态时间推进；接入暂停、禁用、死亡和恢复。
 - 新增状态 DTO 与历史空状态迁移，恢复时先重建状态和属性，再恢复生命 / 法力。
@@ -100,6 +102,8 @@
 完成条件：保存重进保持数值与计时，不重复生效；中英及伪本地化、键鼠 / 手柄、暂停 / 重绑定可用。
 
 ### 5. 综合验收与收尾
+
+2026-09-14 已完成：复用现有长期测试，修正 UI 导航弃用 API，完成独立 Player 效果、输入、跨进程及 Session 验证，清理临时入口并构建 `0.4.1-alpha`。
 
 - 按配套验收矩阵补充现有模块测试；新建的状态规则套件按模块命名。
 - 完成项目 EditMode / PlayMode，记录当前实际结果，不以历史测试数量作为通过条件。
@@ -113,4 +117,4 @@
 
 ## 后续阶段
 
-用户于 2026-09-13 指定：状态完成后继续[统一物品使用与消耗品](./alpha-0.4-usable-items-plan.md)，提供回血、回蓝、临时状态和异常驱散。状态阶段需准备可组合事务的 Apply / Dispel 接点，并区分物品使用许可与施法许可；限时药剂状态不能因源物品被消耗完而失效。
+用户于 2026-09-13 指定：状态完成后继续[统一物品使用与消耗品](../alpha-0.4-usable-items-plan.md)，提供回血、回蓝、临时状态和异常驱散。状态阶段需准备可组合事务的 Apply / Dispel 接点，并区分物品使用许可与施法许可；限时药剂状态不能因源物品被消耗完而失效。

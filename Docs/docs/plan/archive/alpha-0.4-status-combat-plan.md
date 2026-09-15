@@ -1,6 +1,6 @@
 # 状态系统阶段 2：角色效果与战斗接入
 
-所属总计划：[alpha 0.4 状态系统](../alpha-0.4-status-system-plan.md)。已实现合同见[状态模块](../../status-system.md)，完整目标见[规则](../status-system/rules.md)和[工程接入与验收](../status-system/integration-and-validation.md)。
+所属总计划：[alpha 0.4 状态系统](alpha-0.4-status-system-plan.md)。已实现合同见[状态模块](../../status-system.md)，完整目标见[规则](status-system/rules.md)和[工程接入与验收](status-system/integration-and-validation.md)。
 
 2026-09-13：阶段 2 已完成并归档，EditMode 507/507、PlayMode 68/68 全部通过。以下代码核对表保留实施前问题与计划，实际合同见[状态战斗模块](../../status-combat.md)。运行版本仍为 0.4.0-alpha，自动时间、正式异常与存档 UI 不在本阶段交付范围。
 
