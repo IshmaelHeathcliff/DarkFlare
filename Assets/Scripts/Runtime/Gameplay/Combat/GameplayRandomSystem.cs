@@ -166,7 +166,7 @@ namespace DarkFlare
             }
         }
 
-        static int CreateRootSeed()
+        internal static int CreateRootSeed()
         {
             return unchecked(Guid.NewGuid().GetHashCode() ^ Environment.TickCount);
         }

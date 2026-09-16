@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 namespace DarkFlare
 {
     public enum ItemSourceKind { Inventory, Equipment, Merchant, Crafting }
-    public enum ItemActionKind { None, Move, Equip, Unequip, Buy, Sell, Place, Return, Discard }
+    public enum ItemActionKind { None, Move, Equip, Unequip, Buy, Sell, Place, Return, Discard, Use }
 
     public readonly struct ItemActionSource
     {
@@ -47,6 +47,9 @@ namespace DarkFlare
         readonly CraftingPanelController _crafting;
         readonly IArchitecture _architecture;
         readonly LifecycleScope _scope;
+        ItemUseRequest _useRequest;
+        ItemInstance _useItem;
+        public string LastFailure { get; private set; }
 
         public ItemActionRouter(GameMenuController menu)
         {
@@ -105,6 +108,7 @@ namespace DarkFlare
             if (source.Kind == ItemSourceKind.Crafting) { return new ItemActionTarget(ItemActionKind.Return); }
             if (_menu.IsWindowVisible(GameMenuPage.Shop)) { return new ItemActionTarget(ItemActionKind.Sell); }
             if (_menu.IsWindowVisible(GameMenuPage.Crafting)) { return new ItemActionTarget(ItemActionKind.Place); }
+            if (source.Item.BaseDefinition.UseDefinition != null) { return new ItemActionTarget(ItemActionKind.Use); }
             EquipmentSlot? compatible = null;
             foreach (EquipmentSlot slot in EquipmentSlots.All)
             {
@@ -122,6 +126,9 @@ namespace DarkFlare
             bool carried = source.Kind == ItemSourceKind.Inventory;
             switch (target.Kind)
             {
+                case ItemActionKind.Use:
+                    if (!carried || source.Item.BaseDefinition.UseDefinition == null) { break; }
+                    return ItemUseFeedback.GetKey(PreviewUse(source.Item), source.Item.BaseDefinition.UseDefinition);
                 case ItemActionKind.Move:
                     if (!target.Origin.HasValue || !_menu.IsWindowVisible(GameMenuPage.Inventory)) { break; }
                     if (IsOriginalCraftingCell(source, target.Origin.Value)) { return null; }
@@ -164,10 +171,17 @@ namespace DarkFlare
 
         public bool Execute(ItemActionSource source, ItemActionTarget target)
         {
-            if (Validate(source, target) != null) { return false; }
+            LastFailure = Validate(source, target);
+            if (LastFailure != null) { return false; }
             CombatActor player = Inventory.Player;
             switch (target.Kind)
             {
+                case ItemActionKind.Use:
+                    ItemUseRequest request = _useRequest;
+                    ClearUsePreview();
+                    ItemUseResult result = this.SendCommand(new UseItemCommand(request));
+                    LastFailure = ItemUseFeedback.GetKey(result, source.Item.BaseDefinition.UseDefinition);
+                    return result.Succeeded;
                 case ItemActionKind.Move:
                     if (IsOriginalCraftingCell(source, target.Origin.Value)) { return _crafting.ReturnItem(); }
                     bool moved = this.SendCommand(new MoveInventoryItemCommand(source.Item, target.Origin.Value));
@@ -193,6 +207,22 @@ namespace DarkFlare
                 default:
                     return false;
             }
+        }
+
+        public ItemUseResult PreviewUse(ItemInstance item)
+        {
+            if (_useItem != item || _useRequest == null)
+            {
+                _useItem = item;
+                _useRequest = this.SendCommand(new CreateItemUseRequestCommand(Inventory.Player, item));
+            }
+            return this.SendQuery(new GetItemUseSnapshotQuery(_useRequest));
+        }
+
+        public void ClearUsePreview()
+        {
+            _useItem = null;
+            _useRequest = null;
         }
 
         public int Price(ItemInstance item, bool buying)

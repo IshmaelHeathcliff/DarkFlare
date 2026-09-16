@@ -133,7 +133,7 @@ namespace DarkFlare
             }
 
             if (document.Header.CatalogId == "core" && catalog.CatalogId == "core"
-                && document.Header.ContentVersion == 1 && (catalog.ContentVersion == 2 || catalog.ContentVersion == 3 || catalog.ContentVersion == 4))
+                && document.Header.ContentVersion == 1 && (catalog.ContentVersion >= 2 && catalog.ContentVersion <= 5))
             {
                 // v1 stores four stable slots. New slots start empty; rolled values and stock stay intact.
                 if (document.Payload.Profile.Equipment.Any(loadout =>
@@ -148,7 +148,7 @@ namespace DarkFlare
             }
 
             if (document.Header.CatalogId == "core" && catalog.CatalogId == "core"
-                && document.Header.ContentVersion == 2 && (catalog.ContentVersion == 3 || catalog.ContentVersion == 4))
+                && document.Header.ContentVersion == 2 && (catalog.ContentVersion >= 3 && catalog.ContentVersion <= 5))
             {
                 document = JObject.FromObject(document).ToObject<SaveDocumentDto>();
                 ItemBaseDefinition gold = catalog.GetAll<ItemBaseDefinition>().FirstOrDefault(item => item.ItemType == ItemType.Currency);
@@ -199,11 +199,19 @@ namespace DarkFlare
             }
 
             if (document.Header.CatalogId == "core" && catalog.CatalogId == "core"
-                && document.Header.ContentVersion == 3 && catalog.ContentVersion == 4)
+                && document.Header.ContentVersion == 3 && (catalog.ContentVersion == 4 || catalog.ContentVersion == 5))
             {
                 // 新增异常、抗性和词条，不改写旧实例掷值；缺少抗性属性自然解析为 0。
                 document = JObject.FromObject(document).ToObject<SaveDocumentDto>();
                 document.Header.ContentVersion = 4;
+            }
+
+            if (document.Header.CatalogId == "core" && catalog.CatalogId == "core"
+                && document.Header.ContentVersion == 4 && catalog.ContentVersion == 5)
+            {
+                // 消耗品为追加内容；保留历史库存与资源，不执行使用效果或补发商品。
+                document = JObject.FromObject(document).ToObject<SaveDocumentDto>();
+                document.Header.ContentVersion = 5;
             }
 
             if (!string.Equals(document.Header.CatalogId, catalog.CatalogId, StringComparison.Ordinal)

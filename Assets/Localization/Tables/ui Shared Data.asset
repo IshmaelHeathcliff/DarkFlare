@@ -1879,6 +1879,134 @@ MonoBehaviour:
     m_Key: status.show_optional
     m_Metadata:
       m_Items: []
+  - m_Id: 9642988039823360
+    m_Key: item.action.use
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9642988077572096
+    m_Key: item.use.consume
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9642988077572097
+    m_Key: item.use.effect.health
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9642988077572098
+    m_Key: item.use.effect.mana
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9642988077572099
+    m_Key: item.use.effect.health_percent
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9642988077572100
+    m_Key: item.use.effect.mana_percent
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9642988077572101
+    m_Key: item.use.effect.status
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9642988077572102
+    m_Key: item.use.effect.dispel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9642988077572103
+    m_Key: item.use.all_ailments
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9642988077572104
+    m_Key: item.use.preview
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9642988077572105
+    m_Key: item.use.health_full
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9642988077572106
+    m_Key: item.use.mana_full
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9642988077572107
+    m_Key: item.use.no_ailment
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9642988077572108
+    m_Key: item.use.no_change
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9642988077572109
+    m_Key: item.use.blocked
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9642988077572110
+    m_Key: item.use.quantity
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9642988077572111
+    m_Key: item.use.configuration
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9642988077572112
+    m_Key: item.use.not_usable
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9642988077572113
+    m_Key: item.use.status_rejected
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9642988077572114
+    m_Key: item.use.busy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9642988077572115
+    m_Key: item.use.unavailable
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9642988077572116
+    m_Key: item.use.refresh_required
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9644787417210880
+    m_Key: item.use.effects
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9645938032238592
+    m_Key: item.use.status_capacity
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9645938086764544
+    m_Key: item.use.status_protected
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9645938086764545
+    m_Key: item.use.status_stacks
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9645938086764546
+    m_Key: item.use.status_conflict
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9648970832797696
+    m_Key: item.use.status_source
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9648970874740736
+    m_Key: item.use.effect.tags
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10004824660631552
+    m_Key: shop.refresh.action
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10004824706768896
+    m_Key: shop.feedback.refreshed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10004824706768897
+    m_Key: shop.feedback.refresh_failed
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

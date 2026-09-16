@@ -199,6 +199,8 @@ namespace DarkFlare
                 RebindableInputAction.UiCompare, InputBindingPart.Primary,
                 _input.DisplayDeviceFamily)) : string.Empty;
             string context = _previewContext;
+            string usePreview = Interactions?.GetUsePreviewText(_previewItem);
+            if (!string.IsNullOrEmpty(usePreview)) { context += "\n" + usePreview; }
             if (!held && _previewItem.BaseDefinition != null
                 && _previewItem.BaseDefinition.AllowedEquipmentSlots != EquipmentSlotMask.None)
             {

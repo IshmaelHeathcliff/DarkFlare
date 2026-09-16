@@ -13,11 +13,7 @@
         </Bindings>
       </ui:Label>
       <ui:Label name="item-detail-base" text="" class="item-detail-base" />
-      <ui:Label text="" class="item-detail-group-title">
-        <Bindings>
-          <l:LocalizedString property="text" table="ui" entry="item.detail.inherent.title" />
-        </Bindings>
-      </ui:Label>
+      <ui:Label name="item-detail-inherent-title" text="" class="item-detail-group-title" />
       <ui:VisualElement name="item-detail-implicit-list" class="item-detail-list" />
       <ui:Label text="" class="item-detail-group-title">
         <Bindings>

@@ -1,0 +1,23 @@
+{
+  "status": "completed:history",
+  "version": "0.4.1-alpha",
+  "editor": false,
+  "dataRoot": "C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Temp\\ItemAcceptance\\UserData\\Saves",
+  "checks": [
+    "flow:DarkFlare.SceneFlowRequest:None",
+    "historical inventory not granted potions",
+    "historical merchant not refilled",
+    "historical restore resaved in current catalog"
+  ],
+  "error": null,
+  "actors": [
+    {
+      "scene": "Main",
+      "IsAlive": true,
+      "IsConfigured": true,
+      "targetValid": true,
+      "StatusActorKey": "player:local_player",
+      "currentArchitecture": true
+    }
+  ]
+}

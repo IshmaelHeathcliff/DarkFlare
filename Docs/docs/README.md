@@ -27,6 +27,8 @@
 - [物品 UI 工作台](./item-ui-workbench.md)
 - [装备系统](./equipment-system.md)
 - [统一物品系统](./item-system.md)
+- [统一物品使用](./item-use-system.md)
+- [正式消耗品与使用交互](./consumables.md)
 - [状态系统](./status-system.md)
 - [状态与角色战斗接入](./status-combat.md)
 - [异常、抗性与状态来源](./status-ailments.md)
@@ -35,6 +37,7 @@
 - [战斗 HUD](./hud-system.md)
 - [随机化与掉落规则](./randomization-system.md)
 - [首批内容池](./content-system.md)
+- [商店与随机库存](./trading-system.md)
 - [打造系统](./crafting-system.md)
 - [伤害系统与词条系统设计](./damage-affix-system.md)
 - [战斗标签系统](./combat-tag-system.md)
@@ -54,7 +57,7 @@
 
 [alpha 0.4 状态系统](./plan/archive/alpha-0.4-status-system-plan.md)已完成全部五个阶段，并以 `0.4.1-alpha` 交付；core v4、Schema 3 保持不变。本轮 EditMode 540/540、PlayMode 73/73，独立 Windows Player 的状态效果、输入、显示与跨进程存档恢复通过，见[综合验收](./assets/acceptance/alpha-0.4-status-acceptance/README.md)。总计划及配套文档已归档，下一步为统一物品使用与消耗品。
 
-状态前置已完成，下一步实施[统一物品使用与消耗品](./plan/alpha-0.4-usable-items-plan.md)，建议版本 `0.4.2-alpha`：所有主动使用物品共用能力配置与执行事务，首批支持回血、回蓝、临时状态和驱散异常。该阶段已规划，尚未实现。
+状态前置已完成，下一步实施[统一物品使用与消耗品](plan/archive/alpha-0.4-usable-items-plan.md)，建议版本 `0.4.2-alpha`：所有主动使用物品共用能力配置与执行事务，首批支持回血、回蓝、临时状态和驱散异常。使用核心、四种正式消耗品与 UI 已接入。[统一使用核心与复合事务](./plan/archive/alpha-0.4-item-use-core-plan.md)已完成，EditMode 562/562、PlayMode 73/73 通过。[正式消耗品与背包交互](./plan/archive/alpha-0.4-consumables-ui-plan.md)已完成，EditMode 563/563、PlayMode 74/74 通过。[消耗品综合验收](plan/archive/alpha-0.4-item-use-acceptance-plan.md)已完成，交付 `0.4.2-alpha`，core v5、Schema 3；独立 Player、EditMode 563/563、PlayMode 74/74 通过，见[证据](./assets/acceptance/alpha-0.4-item-use-acceptance/README.md)。
 
 [alpha 0.4 统一物品系统](./plan/archive/alpha-0.4-item-system-plan.md)已完成：金币与材料入栏、堆叠 / 消耗、材料打造、掉落及旧档迁移。运行版本 `0.4.0-alpha`，EditMode 442/442、PlayMode 67/67；见[验收证据](./assets/acceptance/alpha-0.4-items/README.md)。
 
@@ -84,3 +87,5 @@ Alpha 0.3 前置[测试审计与精简](./testing/test-suite-audit.md)已完成�
 
 当前项目已完成首版最小循环、初步体验优化、`alpha 0.1` 封板和 `alpha 0.2` 基础设施封板。文档以现有目录、包依赖和脚本入口为准整理；已完成的执行计划统一保存在 `Docs/docs/plan/archive/`。
 后续新增系统、配置或流程时，应优先更新对应文档，避免 `Docs/docs/` 与实现脱节。游戏设计文档位于 `Docs/design/`，不属于 Agent 的常规维护范围。
+
+[随机商店与主动刷新](./trading-system.md)已完成：每批 16 件、随机装备品质和词条、买一件减一件、免费主动刷新及库存保存恢复。EditMode 568/568、PlayMode 75/75；见[验收记录](./assets/acceptance/random-shop/README.md)与[归档计划](./plan/archive/alpha-0.4-random-shop-plan.md)。

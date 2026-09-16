@@ -15,6 +15,7 @@ namespace DarkFlare
 
         public bool IsClockRunning => _clockRunning;
         public double PendingElapsed => _elapsed;
+        internal bool IsClockHeld => _clockHeld;
 
         public async UniTask RunClockAsync(Func<bool> canAdvance, CancellationToken token)
         {

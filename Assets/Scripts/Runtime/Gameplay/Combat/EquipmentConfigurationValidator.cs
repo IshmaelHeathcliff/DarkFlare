@@ -20,6 +20,7 @@ namespace DarkFlare
             }
 
             ValidateSlots(definition, issues);
+            if (definition.UseDefinition != null) { issues.AddRange(definition.UseDefinition.ValidateConfiguration(definition)); }
             if (definition.ProvidedStatus != null)
             {
                 issues.AddRange(definition.ProvidedStatus.ValidateConfiguration());

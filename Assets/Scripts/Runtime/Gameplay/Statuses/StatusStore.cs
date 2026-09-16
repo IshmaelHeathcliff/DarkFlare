@@ -12,6 +12,7 @@ namespace DarkFlare
         internal double Time { get; }
         internal bool Used { get; set; }
         internal IStatusProjection Projection { get; set; }
+        internal bool CommitExternalProjection { get; set; }
         public StatusTargetId Target { get; }
         public StatusResult Preview { get; }
 
@@ -213,7 +214,7 @@ namespace DarkFlare
             {
                 return Rejected(preparation, StatusResultCode.StaleVersion);
             }
-            bool changed = preparation.Preview.Code == StatusResultCode.Success;
+            bool changed = preparation.Preview.Code == StatusResultCode.Success || preparation.CommitExternalProjection;
             var commit = new StatusCommit(this, preparation, preparation.Preview, !changed);
             if (changed)
             {
@@ -248,7 +249,14 @@ namespace DarkFlare
             else
             {
                 preparation.Projection?.Apply();
-                Notify(() => { preparation.Projection?.Publish(); Changed?.Invoke(commit.Result); });
+                Notify(() =>
+                {
+                    try { preparation.Projection?.Publish(); }
+                    finally
+                    {
+                        if (commit.Result.Code == StatusResultCode.Success) { Changed?.Invoke(commit.Result); }
+                    }
+                });
                 DrainOperations();
             }
             return commit.Result.Succeeded;

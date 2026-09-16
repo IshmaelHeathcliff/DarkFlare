@@ -19,6 +19,7 @@ namespace DarkFlare
         public const string Stat = "stat";
         public const string Affix = "affix";
         public const string Item = "item";
+        public const string ItemUse = "item_use";
         public const string Actor = "actor";
         public const string Skill = "skill";
         public const string Monster = "monster";

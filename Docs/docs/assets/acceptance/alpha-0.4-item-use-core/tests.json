@@ -1,0 +1,115 @@
+{
+  "date": "2026-09-15",
+  "version": "0.4.1-alpha",
+  "unity": "6000.6.0f1",
+  "editmode": {
+    "total": 562,
+    "passed": 562,
+    "failed": 0,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "editmodeRelevantResults": [
+    {
+      "name": "DarkFlare.Tests.ItemUseTests.ConsumableFlagAndUseCapabilityAreIndependent",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.ItemUseTests.DispelProtectsBuffsAndProtectedAilments_AndStunDoesNotBlockUse",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.ItemUseTests.DisposedPreparationDoesNotApplyOrConsume",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.ItemUseTests.ExplicitUseBlockAndDeadTargetAreRejected",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.ItemUseTests.ForeignPlayerCannotUseLocalInventory",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.ItemUseTests.FullyResistedStatusIsNoChange_AndOtherEffectsMayStillSucceed",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.ItemUseTests.InvalidLateEffectDoesNotLeakEarlierRecovery",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.ItemUseTests.LateRuleConflictRollsBackRecoveryAndEarlierStatus",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.ItemUseTests.NoChangeDoesNotConsume_ButPartialChangeDoes",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.ItemUseTests.NonStackableConsumableAndMonotonicRequestWatermark",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.ItemUseTests.NotificationExceptionLeavesCommittedResultAndPreventsReplay",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.ItemUseTests.NotificationReentryCannotConsumeTwice_AndPauseAllowsUse",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.ItemUseTests.OwnershipQuantityAndMovedPreparedItemAreChecked",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.ItemUseTests.PercentageRecoveryUsesCandidateMaximum_AndClamps",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.ItemUseTests.PreviewIsReadOnly_CompositeCommitIsVisibleFromFirstEvent_AndCannotReplay",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.ItemUseTests.SessionStopRejectsPreparedAndOldRequests",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.ItemUseTests.StalePreparationKeepsExternalChanges(0)",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.ItemUseTests.StalePreparationKeepsExternalChanges(1)",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.ItemUseTests.StalePreparationKeepsExternalChanges(2)",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.ItemUseTests.StatusAndHealingFollowConfiguredOrder(False,100.0f)",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.ItemUseTests.StatusAndHealingFollowConfiguredOrder(True,70.0f)",
+      "status": "Passed"
+    },
+    {
+      "name": "DarkFlare.Tests.ItemUseTests.UnrelatedGoldChangeDoesNotProduceDuplicateBalanceNotification",
+      "status": "Passed"
+    }
+  ],
+  "playmode": {
+    "total": 73,
+    "passed": 73,
+    "failed": 0,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "playmodeRelevantResults": [
+    {
+      "name": "DarkFlare.Tests.SaveCaptureRestorePlayModeTests.MainSession_CapturePrepareRestorePreservesStateWithoutNewGameGrant",
+      "status": "Passed"
+    }
+  ]
+}

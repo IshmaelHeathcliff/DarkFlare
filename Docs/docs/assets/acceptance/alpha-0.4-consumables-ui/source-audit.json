@@ -1,0 +1,118 @@
+[
+  {
+    "name": "health",
+    "image": "C:\\Users\\darkf\\.codex\\generated_images\\01a095d4-1a4c-7593-9e32-7f2c7b839867\\exec-cfd60cb7-7b79-4b5d-910e-3877a8732b33.png",
+    "canvas": [
+      1254,
+      1254
+    ],
+    "visible_bbox": [
+      239,
+      138,
+      1016,
+      1136
+    ],
+    "visible_width": 777,
+    "visible_height": 998,
+    "margins": {
+      "left": 239,
+      "top": 138,
+      "right": 238,
+      "bottom": 118
+    },
+    "alpha_coverage": 0.33363221741464,
+    "visual_center": [
+      627.3079766459508,
+      701.5783730436082
+    ],
+    "errors": [],
+    "warnings": []
+  },
+  {
+    "name": "mana",
+    "image": "C:\\Users\\darkf\\.codex\\generated_images\\01a095d4-1a4c-7593-9e32-7f2c7b839867\\exec-eaccbf26-c9f8-4d15-99f9-866412094465.png",
+    "canvas": [
+      1254,
+      1254
+    ],
+    "visible_bbox": [
+      238,
+      137,
+      1017,
+      1137
+    ],
+    "visible_width": 779,
+    "visible_height": 1000,
+    "margins": {
+      "left": 238,
+      "top": 137,
+      "right": 237,
+      "bottom": 117
+    },
+    "alpha_coverage": 0.335118370814669,
+    "visual_center": [
+      627.3594457866794,
+      701.6799016300263
+    ],
+    "errors": [],
+    "warnings": []
+  },
+  {
+    "name": "fortitude",
+    "image": "C:\\Users\\darkf\\.codex\\generated_images\\01a095d4-1a4c-7593-9e32-7f2c7b839867\\exec-b8c9de10-5a1a-41b1-9a41-4533ddaf44e0.png",
+    "canvas": [
+      1254,
+      1254
+    ],
+    "visible_bbox": [
+      238,
+      137,
+      1017,
+      1137
+    ],
+    "visible_width": 779,
+    "visible_height": 1000,
+    "margins": {
+      "left": 238,
+      "top": 137,
+      "right": 237,
+      "bottom": 117
+    },
+    "alpha_coverage": 0.33461789895937466,
+    "visual_center": [
+      627.4768343562173,
+      701.3301900914461
+    ],
+    "errors": [],
+    "warnings": []
+  },
+  {
+    "name": "cleansing",
+    "image": "C:\\Users\\darkf\\.codex\\generated_images\\01a095d4-1a4c-7593-9e32-7f2c7b839867\\exec-9f0078cf-e370-4231-8482-e1bbf7cc7244.png",
+    "canvas": [
+      1254,
+      1254
+    ],
+    "visible_bbox": [
+      238,
+      137,
+      1018,
+      1137
+    ],
+    "visible_width": 780,
+    "visible_height": 1000,
+    "margins": {
+      "left": 238,
+      "top": 137,
+      "right": 236,
+      "bottom": 117
+    },
+    "alpha_coverage": 0.336332984847213,
+    "visual_center": [
+      627.4524784710819,
+      700.9798500993693
+    ],
+    "errors": [],
+    "warnings": []
+  }
+]

@@ -79,6 +79,16 @@ namespace DarkFlare
             readonly int _revision;
             readonly bool _alive;
             public CombatResourceSnapshot Before { get; }
+            internal CombatResourceSnapshot? ResourceOverride { get; set; }
+
+            internal CombatResourceSnapshot ProjectResources(CombatResourceSnapshot resources)
+            {
+                float health = UnityEngine.Mathf.Max(1, _stats.GetValue(StatIds.MaxHealth));
+                float mana = UnityEngine.Mathf.Max(0, _stats.GetValue(StatIds.Mana));
+                if (health == resources.MaxHealth && mana == resources.MaxMana) { return resources; }
+                return new CombatResourceSnapshot(health * (resources.MaxHealth > 0 ? resources.CurrentHealth / resources.MaxHealth : 1),
+                    health, mana * (resources.MaxMana > 0 ? resources.CurrentMana / resources.MaxMana : 1), mana);
+            }
 
             internal ActorEffectPreparation(CombatActor actor, SortedDictionary<string, ModifierInstance[]> sources,
                 ModifierInstance[] modifiers, StatBlock stats, TagSet statusTags, TagSet tags, StatusActionBlock blocks, bool changed)
@@ -97,7 +107,11 @@ namespace DarkFlare
                 _actor._modifierSources.Clear();
                 foreach (var pair in _sources) { _actor._modifierSources.Add(pair.Key, pair.Value); }
                 _actor._statusTags = _statusTags;
-                if (!_changed) { return; }
+                if (!_changed)
+                {
+                    ApplyResourceOverride();
+                    return;
+                }
                 _actor._modifiers.Clear();
                 _actor._modifiers.AddRange(_modifiers);
                 _actor._stats = _stats;
@@ -106,6 +120,14 @@ namespace DarkFlare
                 _actor._currentHealth = _actor.MaxHealth * (Before.MaxHealth > 0 ? Before.CurrentHealth / Before.MaxHealth : 1);
                 _actor._currentMana = _actor.MaxMana * (Before.MaxMana > 0 ? Before.CurrentMana / Before.MaxMana : 1);
                 _actor.StatsRevision++;
+                ApplyResourceOverride();
+            }
+
+            void ApplyResourceOverride()
+            {
+                if (!ResourceOverride.HasValue) { return; }
+                _actor._currentHealth = ResourceOverride.Value.CurrentHealth;
+                _actor._currentMana = ResourceOverride.Value.CurrentMana;
             }
         }
     }

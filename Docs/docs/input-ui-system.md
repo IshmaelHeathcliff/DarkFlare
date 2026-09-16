@@ -173,4 +173,6 @@ alpha 0.3.2 将 HUD 改为底部双资源仪表与技能状态区，背包 / 属
 
 物品的 Enter / 手柄南键打开动作菜单，Space / 手柄西键拿起或放置；右键执行当前可见上下文动作。共享会话独占指针捕获与放置导航，设备断开和上层接管取消未提交事务。
 
+药水复用统一动作路由：背包右键使用，Enter / 手柄南键打开动作菜单并确认；商店玩家物品默认出售，菜单另有使用。末件消耗后沿邻居恢复焦点；Shell 接管取消菜单，旧 Session 请求不能消费新 Session 物品。详见[消耗品交互](./consumables.md)。
+
 完整工作台结构见[物品 UI 工作台](./item-ui-workbench.md)，场景状态和应用 Shell 见[游戏状态、场景流与应用 UI 外壳](./infrastructure/game-state-scene-flow-ui-shell.md)，存档入口与错误语义见[本地存档与 Session 恢复](./infrastructure/local-save.md)，设置与语言见[用户设置与本地化](./infrastructure/user-settings-localization.md)，玩法链见[首版玩法循环](./gameplay-loop.md)，装备规则见[装备系统](./equipment-system.md)，打造页的数据和事务规则见[打造系统](./crafting-system.md)。

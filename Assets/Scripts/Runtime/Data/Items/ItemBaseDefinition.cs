@@ -23,7 +23,7 @@ namespace DarkFlare
         [LabelText("通货")] Currency,
         [LabelText("材料")] Material,
         [LabelText("装备")] Equipment,
-        [LabelText("消耗品（预留）")] Consumable,
+        [LabelText("消耗品")] Consumable,
         [LabelText("交易物（预留）")] TradeGood,
         [LabelText("任务道具（预留）")] QuestItem
     }
@@ -144,6 +144,10 @@ namespace DarkFlare
         [SerializeField, LabelText("装备维持状态（显式启用）")]
         StatusDefinition _providedStatus;
         public StatusDefinition ProvidedStatus => _providedStatus;
+
+        [SerializeField, LabelText("主动使用能力（可选）")]
+        ItemUseDefinition _useDefinition;
+        public ItemUseDefinition UseDefinition => _useDefinition;
 
         public string Id => _id;
 

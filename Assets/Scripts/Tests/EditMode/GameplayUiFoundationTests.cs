@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Reflection;
+using System.Linq;
 using DarkFlare;
 using DarkFlare.Tests;
 using NUnit.Framework;
@@ -37,6 +38,82 @@ public class GameplayUiFoundationTests
         _architectureFixture.Stop();
         _architecture = null;
         Time.timeScale = _originalTimeScale;
+    }
+
+    [Test]
+    public void MerchantRefresh_ReplacesOnlyStock_RejectsStaleOffersAndRollsBackGenerationFailure()
+    {
+        var trader = CreateScriptableObject<TraderDefinition>();
+        var entry = new TraderStockEntry();
+        SetField(entry, "_item", CreateItem("offer", "商品", baseValue: 1).BaseDefinition);
+        SetField(trader, "_stock", new List<TraderStockEntry> { entry });
+        SetField(trader, "_randomStock", true);
+        SetField(trader, "_stockSize", 3);
+        SetField(trader, "_rarityWeights", new Vector4(1, 0, 0, 0));
+        TradingSystem trading = _architecture.GetSystem<TradingSystem>();
+        trading.SetupMerchant(trader);
+        EconomyModel economy = _architecture.GetModel<EconomyModel>();
+        InventoryModel inventory = _architecture.GetModel<InventoryModel>();
+        inventory.AddGold(100);
+        ItemInstance[] before = economy.MerchantStock.ToArray();
+        Assert.IsTrue(trading.BuyItem(before[0]));
+        Assert.AreEqual(2, economy.MerchantStock.Count);
+        Assert.IsFalse(trading.BuyItem(before[0]));
+        int gold = inventory.Gold;
+        int notifications = 0;
+        bool reentered = true;
+        IUnRegister subscription = _architecture.RegisterEvent<MerchantStockRefreshedEvent>(_ =>
+        {
+            notifications++;
+            Assert.AreEqual(3, economy.MerchantStock.Count);
+            reentered = trading.RefreshMerchant();
+        });
+        try
+        {
+            Assert.IsTrue(_architecture.SendCommand(new RefreshMerchantCommand()));
+            Assert.IsFalse(reentered);
+            Assert.AreEqual(1, notifications);
+            Assert.AreEqual(gold, inventory.Gold);
+            Assert.IsTrue(inventory.Grid.Placements.ContainsKey(before[0]));
+            Assert.IsFalse(trading.BuyItem(before[1]));
+            Assert.IsFalse(economy.MerchantStock.Any(before.Contains));
+            ItemInstance[] valid = economy.MerchantStock.ToArray();
+            SetField(trader, "_rarityWeights", new Vector4(0, 0, 0, 1));
+            Assert.IsFalse(trading.RefreshMerchant(), "缺少合法词条时必须保留原库存");
+            CollectionAssert.AreEqual(valid, economy.MerchantStock);
+            Assert.AreEqual(gold, inventory.Gold);
+            Assert.AreEqual(1, notifications);
+        }
+        finally { subscription.UnRegister(); }
+    }
+
+    [TestCase(ItemRarity.Normal)]
+    [TestCase(ItemRarity.Magic)]
+    [TestCase(ItemRarity.Rare)]
+    [TestCase(ItemRarity.Unique)]
+    public void MerchantGeneration_ReplaysSeedAndGeneratesLegalEquipmentAffixes(ItemRarity rarity)
+    {
+        TraderDefinition source = UnityEditor.AssetDatabase.LoadAssetAtPath<TraderDefinition>("Assets/Data/Preset/Traders/基础商人.asset");
+        TraderDefinition trader = Object.Instantiate(source); _objects.Add(trader);
+        SetField(trader, "_stock", source.Stock.Where(entry => entry.Item.IsEquipment).ToList());
+        SetField(trader, "_randomStock", true);
+        Vector4 weights = Vector4.zero; weights[(int)rarity] = 1; SetField(trader, "_rarityWeights", weights);
+        ItemInstance[] first = trader.CreateStock(new System.Random(123), new UuidItemInstanceIdGenerator()).ToArray();
+        ItemInstance[] second = trader.CreateStock(new System.Random(123), new UuidItemInstanceIdGenerator()).ToArray();
+        Assert.AreEqual(trader.StockSize, first.Length);
+        Assert.Greater(first.Select(item => item.BaseDefinition.Id).Distinct().Count(), 1);
+        for (int i = 0; i < first.Length; i++)
+        {
+            Assert.AreEqual(rarity, first[i].Rarity);
+            Assert.AreEqual(1, first[i].Quantity);
+            Assert.IsTrue(ItemRarityRules.IsNormalGenerationValid(rarity, first[i].Prefixes.Count, first[i].Suffixes.Count));
+            Assert.AreEqual(first[i].BaseDefinition.Id, second[i].BaseDefinition.Id);
+            Assert.AreEqual(first[i].Seed, second[i].Seed);
+            CollectionAssert.AreEqual(first[i].Prefixes.Concat(first[i].Suffixes).Select(a => a.Definition.Id),
+                second[i].Prefixes.Concat(second[i].Suffixes).Select(a => a.Definition.Id));
+            CollectionAssert.AreEqual(first[i].Prefixes.Concat(first[i].Suffixes).SelectMany(a => a.Modifiers).Select(m => m.Value),
+                second[i].Prefixes.Concat(second[i].Suffixes).SelectMany(a => a.Modifiers).Select(m => m.Value));
+        }
     }
 
     [Test]

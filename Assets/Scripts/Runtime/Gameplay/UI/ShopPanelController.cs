@@ -39,6 +39,7 @@ namespace DarkFlare
         Label _feedbackLabel;
         Button _buyButton;
         Button _sellButton;
+        Button _refreshButton;
         ItemInstance _selectedItem;
         ItemInstance _previewItem;
         ShopItemSource _selectedSource;
@@ -206,6 +207,7 @@ namespace DarkFlare
             {
                 _sellButton.clicked -= OnSellClicked;
             }
+            if (_refreshButton != null) { _refreshButton.clicked -= OnRefreshClicked; }
 
             if (_workspace != null)
             {
@@ -242,6 +244,7 @@ namespace DarkFlare
             _feedbackLabel = null;
             _buyButton = null;
             _sellButton = null;
+            _refreshButton = null;
             _selectedItem = null;
             _previewItem = null;
             _isTransactionInProgress = false;
@@ -290,6 +293,7 @@ namespace DarkFlare
             _feedbackLabel = root.Q<Label>("shop-feedback");
             _buyButton = root.Q<Button>("shop-buy");
             _sellButton = root.Q<Button>("shop-sell");
+            _refreshButton = root.Q<Button>("shop-refresh");
 
             if (_page == null
                 || _merchantFrame == null
@@ -301,7 +305,7 @@ namespace DarkFlare
                 || _selectedPriceLabel == null
                 || _feedbackLabel == null
                 || _buyButton == null
-                || _sellButton == null)
+                || _sellButton == null || _refreshButton == null)
             {
                 ApplicationLog.Error(LogEventIds.GameplayUi, "[ShopPanelController] 商店 UXML 缺少格子背包所需的命名元素", this);
                 return false;
@@ -309,6 +313,7 @@ namespace DarkFlare
 
             _buyButton.clicked += OnBuyClicked;
             _sellButton.clicked += OnSellClicked;
+            _refreshButton.clicked += OnRefreshClicked;
             return true;
         }
 
@@ -320,6 +325,7 @@ namespace DarkFlare
             }
 
             _eventRegistrations.Add(this.RegisterEvent<TradeCompletedEvent>(OnTradeCompleted));
+            _eventRegistrations.Add(this.RegisterEvent<MerchantStockRefreshedEvent>(_ => OnStockRefreshed()));
             _eventRegistrations.Add(this.RegisterEvent<ItemCraftedEvent>(_ => RefreshShop()));
         }
 
@@ -430,6 +436,27 @@ namespace DarkFlare
             RefreshShop();
             SetFeedback(trade.Operation == TradeOperation.Buy ? "shop.feedback.buy_succeeded" : "shop.feedback.sell_succeeded",
                 Resolve(ItemDetailSnapshotFactory.Create(trade.Item).Name));
+        }
+
+        void OnRefreshClicked()
+        {
+            if (!IsVisible || !_menu.IsPageAvailable(GameMenuPage.Shop)) { return; }
+            bool refreshed = this.SendCommand(new RefreshMerchantCommand());
+            SetFeedback(refreshed ? "shop.feedback.refreshed" : "shop.feedback.refresh_failed");
+        }
+
+        void OnStockRefreshed()
+        {
+            _workspace.CancelDrag();
+            _workspace.Interactions.CloseMenu(false);
+            _workspace.SuppressPreview();
+            _selectedItem = null;
+            _previewItem = null;
+            _viewState.Merchant.Reset();
+            _viewState.FocusTarget = ShopFocusTarget.RefreshAction;
+            _isTransactionInProgress = true;
+            try { RefreshShop(); }
+            finally { _isTransactionInProgress = false; }
         }
 
         void PreviewItem(ItemInstance item, ShopItemSource source)
@@ -704,6 +731,10 @@ namespace DarkFlare
             {
                 _viewState.FocusTarget = ShopFocusTarget.BuyAction;
             }
+            else if (focused == _refreshButton)
+            {
+                _viewState.FocusTarget = ShopFocusTarget.RefreshAction;
+            }
             else if (focused == _sellButton)
             {
                 _viewState.FocusTarget = ShopFocusTarget.SellAction;
@@ -822,6 +853,12 @@ namespace DarkFlare
                 || _page.panel == null
                 || !IsVisible || _workspace.ActiveWindow != GameMenuPage.Shop)
             {
+                return;
+            }
+
+            if (_viewState.FocusTarget == ShopFocusTarget.RefreshAction)
+            {
+                _refreshButton.Focus();
                 return;
             }
 

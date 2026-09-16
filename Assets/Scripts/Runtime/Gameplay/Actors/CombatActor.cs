@@ -145,7 +145,7 @@ namespace DarkFlare
             }
 
             float previousHealth = _currentHealth;
-            _currentHealth = Mathf.Min(MaxHealth, _currentHealth + amount);
+            _currentHealth = RecoverResource(_currentHealth, MaxHealth, amount);
             return _currentHealth - previousHealth;
         }
 
@@ -173,13 +173,18 @@ namespace DarkFlare
             }
 
             float previousMana = _currentMana;
-            _currentMana = Mathf.Min(MaxMana, _currentMana + amount);
+            _currentMana = RecoverResource(_currentMana, MaxMana, amount);
             return _currentMana - previousMana;
         }
 
         public void SetModifiers(IEnumerable<ModifierInstance> modifiers)
         {
             SetModifierSource("legacy", modifiers);
+        }
+
+        internal static float RecoverResource(float current, float maximum, float amount)
+        {
+            return Mathf.Min(maximum, current + amount);
         }
 
         public void Revive(Vector3 position)

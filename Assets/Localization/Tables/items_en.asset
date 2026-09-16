@@ -166,6 +166,22 @@ MonoBehaviour:
     m_Localized: Forging ore
     m_Metadata:
       m_Items: []
+  - m_Id: 9642986294992896
+    m_Localized: Health Potion
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9642986341130240
+    m_Localized: Mana Potion
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9642986341130241
+    m_Localized: Fortitude Elixir
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9642986341130242
+    m_Localized: Cleansing Elixir
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

@@ -1020,7 +1020,8 @@ namespace DarkFlare.Editor
                     }
                 }
 
-                ValidateCoverage(table, coveredItems, items, "掉落池缺少装备", issues);
+                ValidateCoverage(table, coveredItems, items.Where(item => item.IsEquipment
+                    || item.ItemType == ItemType.Currency || item.ItemType == ItemType.Material).ToArray(), "掉落池缺少物品", issues);
                 ValidateCoverage(
                     table,
                     new HashSet<AffixDefinition>(table.AffixPool),
@@ -1043,6 +1044,7 @@ namespace DarkFlare.Editor
             for (int i = 0; i < traders.Count; i++)
             {
                 TraderDefinition trader = traders[i];
+                foreach (string issue in trader.ValidateConfiguration()) { AddError(issues, trader, issue); }
                 HashSet<ItemBaseDefinition> covered = new HashSet<ItemBaseDefinition>();
 
                 for (int stockIndex = 0; stockIndex < trader.Stock.Count; stockIndex++)
@@ -1055,12 +1057,22 @@ namespace DarkFlare.Editor
                         continue;
                     }
 
-                    if (entry.Rarity != ItemRarity.Normal || entry.ItemLevel != 1 || entry.Count != 1)
+                    if (entry.Rarity != ItemRarity.Normal || entry.ItemLevel < 1 || entry.Count < 1)
                     {
-                        AddError(issues, trader, $"商人库存 {stockIndex} 必须为普通、1 级、1 件");
+                        AddError(issues, trader, $"商人库存 {stockIndex} 必须为普通，等级和份数至少为 1");
                     }
 
                     covered.Add(entry.Item);
+                    if (trader.RandomStock && entry.Weight > 0 && entry.Item.IsEquipment)
+                    {
+                        for (int rarity = 1; rarity < 4; rarity++)
+                        {
+                            if (trader.RarityWeights[rarity] <= 0) { continue; }
+                            ItemInstance probe = entry.Item.CreateInstance("merchant_validation", entry.ItemLevel, 0, (ItemRarity)rarity);
+                            if (CraftingOperations.Evaluate(CraftOperation.RerollAffixes, CraftingAffixScope.Any, probe, trader.AffixPool) != CraftingFailureReason.None)
+                            { AddError(issues, trader, $"{entry.Item.Id} 缺少可生成 {(ItemRarity)rarity} 的词条候选"); }
+                        }
+                    }
                 }
 
                 ValidateCoverage(trader, covered, items.Where(item => item.IsEquipment).ToArray(), "商人库存缺少装备", issues);

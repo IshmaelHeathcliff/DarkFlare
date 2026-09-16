@@ -81,6 +81,8 @@ namespace DarkFlare.Tests
             Assert.IsNotNull(shop.MerchantItems, "Main 场景未初始化商人库存");
             Assert.IsNotEmpty(shop.MerchantItems, "Main 场景商人库存为空");
             Assert.IsTrue(inventory.HasPlayer, "Main 场景未生成玩家");
+            GameArchitectureTestFixture.PrepareCompleteMerchant(architecture);
+            shop = architecture.SendQuery(new GetShopSnapshotQuery());
             ItemInstance acceptanceItem = shop.MerchantItems[0].Item;
             Assert.IsTrue(architecture.SendCommand(new BuyItemCommand(acceptanceItem)), "无法购买验收装备");
             yield return null;
@@ -172,6 +174,8 @@ namespace DarkFlare.Tests
             Assert.IsTrue(inventory.HasPlayer, "Main 场景未生成玩家");
             IArchitecture architecture = menu.GetArchitecture();
             ItemInstance weapon = null;
+            GameArchitectureTestFixture.PrepareCompleteMerchant(architecture);
+            shop = architecture.SendQuery(new GetShopSnapshotQuery());
 
             for (int i = 0; i < shop.MerchantItems.Count; i++)
             {

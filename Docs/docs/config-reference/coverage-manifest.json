@@ -2,6 +2,16 @@
   "schemaVersion": 1,
   "entries": [
     {
+      "type": "DarkFlare.ItemUseDefinition",
+      "document": "Docs/docs/config-reference/item-use.md",
+      "anchor": "itemusedefinition"
+    },
+    {
+      "type": "DarkFlare.ItemUseEffect",
+      "document": "Docs/docs/config-reference/item-use.md",
+      "anchor": "itemuseeffect"
+    },
+    {
       "type": "DarkFlare.StatusDefinition",
       "document": "Docs/docs/config-reference/statuses.md",
       "anchor": "statusdefinition"

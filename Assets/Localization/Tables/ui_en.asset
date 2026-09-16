@@ -1940,6 +1940,134 @@ MonoBehaviour:
     m_Localized: Show optional statuses
     m_Metadata:
       m_Items: []
+  - m_Id: 9642988039823360
+    m_Localized: Use
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9642988077572096
+    m_Localized: Consumes {0} per use
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9642988077572097
+    m_Localized: Restore {0} health
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9642988077572098
+    m_Localized: Restore {0} mana
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9642988077572099
+    m_Localized: Restore {0}% of maximum health
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9642988077572100
+    m_Localized: Restore {0}% of maximum mana
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9642988077572101
+    m_Localized: "Gain {0} \xD7{1} for {2}s. {3}"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9642988077572102
+    m_Localized: Dispel {1}, up to {0} stacks (protected statuses excluded)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9642988077572103
+    m_Localized: all ailments
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9642988077572104
+    m_Localized: "After use: health {0} \xB7 mana {1} \xB7 consumes {2}"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9642988077572105
+    m_Localized: Health is full
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9642988077572106
+    m_Localized: Mana is full
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9642988077572107
+    m_Localized: No dispellable ailments
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9642988077572108
+    m_Localized: No effect would change; item is not consumed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9642988077572109
+    m_Localized: Item use is blocked by an active status
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9642988077572110
+    m_Localized: Not enough items
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9642988077572111
+    m_Localized: Item effects are unavailable
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9642988077572112
+    m_Localized: This item cannot be used
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9642988077572113
+    m_Localized: Status effect cannot be applied; check active statuses
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9642988077572114
+    m_Localized: Another effect is resolving; try again shortly
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9642988077572115
+    m_Localized: Item use is currently unavailable
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9642988077572116
+    m_Localized: State refreshed; check items and resources before continuing
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9644787417210880
+    m_Localized: Use effects
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9645938032238592
+    m_Localized: Status stack limit reached
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9645938086764544
+    m_Localized: Target status is protected
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9645938086764545
+    m_Localized: Not enough status stacks
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9645938086764546
+    m_Localized: Current status cannot accept this effect
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9648970832797696
+    m_Localized: 'Source: consumable'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9648970874740736
+    m_Localized: 'Requires tags: {0}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10004824660631552
+    m_Localized: Refresh stock (free)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10004824706768896
+    m_Localized: Stock refreshed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10004824706768897
+    m_Localized: Unable to refresh. Stock retained.
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:

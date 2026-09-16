@@ -56,6 +56,20 @@ namespace DarkFlare
         public bool IsPointerPending { get; private set; }
         public bool IsMenuOpen => _actionMenu.style.display == DisplayStyle.Flex;
 
+        public string GetUsePreviewText(ItemInstance item)
+        {
+            if (_disposed || item?.BaseDefinition?.UseDefinition == null) { return null; }
+            InventorySnapshot inventory = _router.Inventory;
+            bool owned = false;
+            foreach (InventoryItemSnapshot entry in inventory.Items) { if (entry.Item == item) { owned = true; break; } }
+            if (!owned) { return null; }
+            ItemUseResult result = _router.PreviewUse(item);
+            string reason = ItemUseFeedback.GetKey(result, item.BaseDefinition.UseDefinition);
+            return reason != null ? Text(reason) : _locale.GetString("ui", "item.use.preview",
+                new object[] { ItemDetailFormatter.FormatNumber(result.Resources.CurrentHealth),
+                    ItemDetailFormatter.FormatNumber(result.Resources.CurrentMana), result.ConsumeCount });
+        }
+
         public ItemInteractionSession(GameMenuController menu, GameInput input)
         {
             _menu = menu;
@@ -599,14 +613,21 @@ namespace DarkFlare
             _executing = true;
             Vector2 previous = source.Element?.worldBound.center ?? Vector2.zero;
             string reason = _router.Validate(source, target);
-            bool success;
+            bool success = false;
             try
             {
                 success = reason == null && _router.Execute(source, target);
+                reason ??= _router.LastFailure;
+            }
+            catch (Exception exception)
+            {
+                ApplicationLog.Warning(LogEventIds.GameplayUi, "[ItemInteractionSession] " + exception);
+                reason = "item.use.refresh_required";
             }
             finally
             {
                 _executing = false;
+                _router.ClearUsePreview();
             }
             _feedback = success ? "item.action.completed" : reason ?? "item.action.stale";
             _feedbackItem = source.Item;
@@ -653,6 +674,7 @@ namespace DarkFlare
         void OpenMenu(ItemActionSource source)
         {
             if (!_router.IsCurrent(source)) { return; }
+            _router.ClearUsePreview();
             Cancel();
             Select(source);
             _actionMenu.Clear();
@@ -666,6 +688,8 @@ namespace DarkFlare
                 }
             }
             if (source.Kind == ItemSourceKind.Inventory) { Add(new ItemActionTarget(ItemActionKind.Discard)); }
+            if (source.Kind == ItemSourceKind.Inventory && source.Item.BaseDefinition.UseDefinition != null
+                && primary.Kind != ItemActionKind.Use) { Add(new ItemActionTarget(ItemActionKind.Use)); }
             var close = new Button(() => CloseMenu(true)) { text = Text("window.close") };
             close.AddToClassList("item-action-option");
             _actionMenu.Add(close);
@@ -727,8 +751,8 @@ namespace DarkFlare
         }
 
         string Text(string key) { return _locale.GetString(new LocalizedMessage("ui", key)); }
-        void OnSourceChanged() { if (!_executing) { Refresh(); } }
-        void OnSuspending() { ++_generation; Cancel(); CloseMenu(false); }
+        void OnSourceChanged() { if (!_executing) { _router.ClearUsePreview(); Refresh(); } }
+        void OnSuspending() { ++_generation; _router.ClearUsePreview(); Cancel(); CloseMenu(false); }
         void OnLocaleChanged(string code) { CloseMenu(false); Refresh(); }
         void OnSuspensionChanged(InputSuspensionReason reasons) { if (reasons != InputSuspensionReason.None) { OnSuspending(); } }
         void OnDeviceChange(InputDevice device, InputDeviceChange change)

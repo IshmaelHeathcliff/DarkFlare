@@ -18,7 +18,7 @@
 
 `ContentId` 的规范形式为 `<namespace>:<local_id>`。命名空间和本地 ID 均使用小写 `snake_case`，比较、排序与查找全部使用 Ordinal 语义。大小写变体、连字符、空段、多余冒号和连续下划线均非法。
 
-当前登记 13 个命名空间（状态类型已登记，正式状态资产尚未创建）：
+当前登记 14 个命名空间：
 
 | 命名空间 | 配置类型 |
 | --- | --- |
@@ -35,12 +35,13 @@
 | `trader` | `TraderDefinition` |
 | `crafting` | `CraftingDefinition` |
 | `status` | `StatusDefinition` |
+| `item_use` | `ItemUseDefinition` |
 
 所有正式配置实现 `IContentDefinition` 并声明 `ContentDefinitionAttribute`。`ContentDefinitionRegistry` 通过运行时程序集反射建立唯一的“类型 ↔ 命名空间”登记；新增类型若未登记、登记重复或不是 `ScriptableObject`，测试和验证器会失败。
 
 ## 内容目录与所有权
 
-`ContentCatalogDefinition` 是可编辑的目录资产；`ContentCatalog.Build` 一次性验证后生成不可变运行时目录，支持强类型正向解析、反向查询和结构化错误。当前正式目录为 `core`、内容版本 `4`，新增七异常、抗性、词缀与来源样例。`SaveRestorePreparer` 支持已发布 `core` v1 → v2 → v3 → v4 路径，复制 DTO 后迁移：v1 的旧四槽和已掷装备保持不变，新槽为空；v2 的独立金币按当前堆叠上限转换为背包物品，空间不足时扩行。v3 → v4 仅追加内容，保留旧实例数值，新抗性缺省为 0，状态实例存档尚未实现。之后仍执行严格目录、数量、金币摘要和所有权校验。v1 文档含新增槽、未知目录及未来版本一律拒绝。SaveSchemaVersion 为 2，v0 → v1 → v2 结构迁移独立保留；新增数量字段对历史物品初始化为 1。
+`ContentCatalogDefinition` 是可编辑的目录资产；`ContentCatalog.Build` 一次性验证后生成不可变运行时目录，支持强类型正向解析、反向查询和结构化错误。当前正式目录为 `core`、内容版本 `5`。v4 增加七异常、抗性、词缀与来源样例，v5 追加四种药水、四个使用能力和坚韧状态。`SaveRestorePreparer` 支持已发布 `core` v1 → v2 → v3 → v4 → v5 路径，复制 DTO 后迁移：v1 的旧四槽和已掷装备保持不变，新槽为空；v2 的独立金币按当前堆叠上限转换为背包物品，空间不足时扩行。v3 → v4 仅追加内容，保留旧实例数值，新抗性缺省为 0，状态实例现已由 Schema 3 保存。v4 → v5 只更新内容版本，不补发商人库存、不执行物品效果。之后仍执行严格目录、数量、金币摘要和所有权校验。v1 文档含新增槽、未知目录及未来版本一律拒绝。SaveSchemaVersion 为 3，v0 → v1 → v2 → v3 结构迁移独立保留；历史数量初始化为 1，旧档状态初始化为空。
 
 目录由 `ApplicationHost` 拥有：
 

@@ -133,6 +133,39 @@ namespace DarkFlare
             return value.ToString("0.##", CultureInfo.InvariantCulture);
         }
 
+        public string FormatUseEffect(ItemUseEffect effect)
+        {
+            if (effect == null) { return Localize("item.use.configuration"); }
+            string amount = FormatNumber(effect.Amount);
+            switch (effect.Kind)
+            {
+                case ItemUseEffectKind.Heal:
+                case ItemUseEffectKind.RestoreMana:
+                    return Localize("item.use.effect." + (effect.Kind == ItemUseEffectKind.Heal ? "health" : "mana")
+                        + (effect.RecoveryMode == ItemRecoveryMode.Percent ? "_percent" : string.Empty), amount);
+                case ItemUseEffectKind.ApplyStatus:
+                    if (effect.Status == null || effect.Status.ValidateConfiguration().Count > 0) { return Localize("item.use.configuration"); }
+                    return Localize("item.use.effect.status", Resolve(effect.Status.LocalizedName.Message), effect.Count,
+                        effect.Status.CreateRules().Duration, Resolve(effect.Status.LocalizedDescription.Message));
+                case ItemUseEffectKind.Dispel:
+                    string description = Localize("item.use.effect.dispel", effect.Count,
+                        effect.Status != null ? Resolve(effect.Status.LocalizedName.Message) : Localize("item.use.all_ailments"));
+                    if (!effect.RequiredTags.IsEmpty)
+                    {
+                        var names = new System.Collections.Generic.List<string>();
+                        foreach (string id in effect.RequiredTags.Ids) { names.Add(_localize("items", "tag." + id + ".name", System.Array.Empty<object>())); }
+                        description += " " + Localize("item.use.effect.tags", string.Join(", ", names));
+                    }
+                    return description;
+                default: return string.Empty;
+            }
+        }
+
+        string Resolve(LocalizedMessage message)
+        {
+            return _localize(message.TableName, message.EntryKey, System.Array.Empty<object>());
+        }
+
         string Localize(string entryKey, params object[] arguments)
         {
             return _localize("ui", entryKey, arguments);

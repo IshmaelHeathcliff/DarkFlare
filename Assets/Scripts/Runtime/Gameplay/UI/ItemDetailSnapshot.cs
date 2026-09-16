@@ -114,6 +114,7 @@ namespace DarkFlare
         public IReadOnlyList<AffixDetailSnapshot> Suffixes { get; }
 
         public int AffixCount => Prefixes.Count + Suffixes.Count;
+        public ItemUseDefinition UseDefinition { get; }
 
         public ItemDetailSnapshot(
             ItemInstance item,
@@ -147,6 +148,7 @@ namespace DarkFlare
             ImplicitModifiers = implicitModifiers;
             Prefixes = prefixes;
             Suffixes = suffixes;
+            UseDefinition = item?.BaseDefinition?.UseDefinition;
         }
     }
 }

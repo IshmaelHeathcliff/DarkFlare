@@ -6,7 +6,7 @@
 
 `StatusDefinition` 提供中文 Odin 配置和稳定 `status:` 内容身份；`StatusRules`、`StatusEffectSnapshot` 冻结规则和效果。`StatusStore` 是不依赖场景的纯状态容器，管理目标、来源、层数、择强、时间、消费、驱散及事务。配置字段参考见[状态配置](./config-reference/statuses.md)。
 
-`StatusModel` 在 Session 中持有容器，`StatusSystem` 管理角色绑定、效果参与者及 QFramework 通知。[角色战斗接入](./status-combat.md)已实现属性来源共存、周期扣血和行动门禁。七异常与抗性已接入，详见[异常与来源](./status-ailments.md)；已接入[自动时间、状态存档与图标查看](./status-lifecycle-ui.md)，消耗品玩法按[后续计划](./plan/alpha-0.4-usable-items-plan.md)继续。
+`StatusModel` 在 Session 中持有容器，`StatusSystem` 管理角色绑定、效果参与者及 QFramework 通知。[角色战斗接入](./status-combat.md)已实现属性来源共存、周期扣血和行动门禁。七异常与抗性已接入，详见[异常与来源](./status-ailments.md)；已接入[自动时间、状态存档与图标查看](./status-lifecycle-ui.md)，消耗品玩法按[后续计划](plan/archive/alpha-0.4-usable-items-plan.md)继续。
 
 代码位于 `Assets/Scripts/Runtime/Data/Statuses/` 和 `Assets/Scripts/Runtime/Gameplay/Statuses/`。所有状态共用核心，未为各异常创建独立 MonoBehaviour 或计时任务。
 
@@ -46,6 +46,8 @@ Controller 使用 `ChangeStatusesCommand` 提交 StatusMutation 列表，使用 
 复合事务先 `Prepare(target, mutations, expectedVersion)`，在候选状态中顺序模拟，无真实写入、ID 消费或通知。`Commit` 复核目标、状态版本及逻辑时间；准备结果只能使用一次。不同目标在同刻的普通变更不使彼此的准备失效。
 
 提交回执实现 IDisposable，宿主必须选择 Publish 或 Rollback；未处理而 Dispose 时自动回退。未发布期间锁定目标写入和全局时间，公开查询与角色属性保留原状态，候选最终状态通过回执 Result 读取。Rollback 精确还原原层、时间、周期和 ID 进度。受管理角色在 Publish 时再次验证属性和资源，同步公开投影后通知；若角色已变化则返回 false、Result 为 StaleVersion，回退候选状态并保留外部变化。完整合同见[一致提交](./status-combat.md#一致提交)。此接点供后续物品事务使用，不用“反向扣血”或重新 Apply 模拟恢复。
+
+物品使用核心已接入该合同，内部允许无状态变化时提交外部资源 / 消费投影；未改变状态时不额外发送 StatusChangedEvent。详情见[统一物品使用](./item-use-system.md)。
 
 事件回调产生的新写请求排队，StatusOperation.IsCompleted 在执行完后变为 true，最终结果独立复核版本。回调不能将“已排队”视作已消费成功。每轮默认排空最多 256 个排队操作，宿主可检查 PendingOperations 并续调 DrainOperations；时间推进也在事件边界处理队列。
 

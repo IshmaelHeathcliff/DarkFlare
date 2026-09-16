@@ -163,6 +163,22 @@ MonoBehaviour:
     m_Key: item.forging_ore.name
     m_Metadata:
       m_Items: []
+  - m_Id: 9642986294992896
+    m_Key: item.health_potion.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9642986341130240
+    m_Key: item.mana_potion.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9642986341130241
+    m_Key: item.fortitude_potion.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9642986341130242
+    m_Key: item.cleansing_potion.name
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

@@ -14,7 +14,8 @@
 | `_itemType` | `ItemType` / `Weapon` | 必填；必须与槽位、伤害和标签派生一致 | 背包/装备、词缀 SpawnQuery 和 UI 消费；改变类型属于实例迁移 |
 | `_stackable` | `bool` / `false` | 独立堆叠开关；装备始终不可堆叠 | 背包自动合并与拖动合并消费 |
 | `_maxStackSize` | `int` / `999` | 至少 1；不堆叠物品有效上限为 1 | 拾取、数量校验和存档恢复消费；金币正式上限为 100，锻造矿石为 50 |
-| `_consumable` | `bool` / `false` | 独立消耗开关，不由物品类型或堆叠性推导 | 金币支付与材料消耗校验；预留消耗品尚无使用效果 |
+| `_consumable` | `bool` / `false` | 独立消耗开关，不由物品类型或堆叠性推导 | 金币支付、材料及使用扣除校验；不等于具有主动使用能力 |
+| `_useDefinition` | `ItemUseDefinition` / 空 | 可选，引用合法使用能力 | ItemUseSystem 消费；缺省物品无主动效果，字段不进入实例存档；见[使用配置](./item-use.md) |
 | `_icon` | `AssetReferenceSprite` / `null` | 正式资产必填；Addressable GUID 有效且各正式物品独立 | `SpriteAssetLoader` 预热/缓存/释放；禁止 Resources 与直接路径加载 |
 | `_allowedEquipmentSlots` | `EquipmentSlotMask` / `None` | 可装备物品必须非空；Weapon 只能 Weapon，护甲/饰品遵循对应槽位 | 拖拽装备与装备模型校验消费 |
 | `_defaultRarity` | `ItemRarity` / `Normal` | 必填枚举；必须与初始显式词缀状态相容 | `CreateInstance` 未另传稀有度时使用；正式掉落通常由条目覆盖 |

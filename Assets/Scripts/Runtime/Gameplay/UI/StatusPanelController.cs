@@ -314,7 +314,9 @@ namespace DarkFlare
             foreach (StatusLayerSnapshot layer in layers)
             {
                 text.AppendLine().AppendLine(L("status.layer", ++layerIndex, L(layer.IsActive ? "status.active" : "status.suppressed"), Duration(layer)));
-                text.AppendLine(L("status.source", L("status.source." + layer.Source.Kind.ToString().ToLowerInvariant()), layer.Source.Key));
+                text.AppendLine(layer.Source.Kind == StatusSourceKind.Consumable
+                    ? L("item.use.status_source")
+                    : L("status.source", L("status.source." + layer.Source.Kind.ToString().ToLowerInvariant()), layer.Source.Key));
                 foreach (ModifierInstance modifier in layer.Effects.Modifiers)
                 {
                     string statName = _stats.TryGetValue(modifier.StatId ?? string.Empty, out StatDefinition stat)

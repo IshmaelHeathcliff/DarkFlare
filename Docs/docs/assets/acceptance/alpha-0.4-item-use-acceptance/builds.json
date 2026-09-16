@@ -1,0 +1,47 @@
+{
+  "version": "0.4.2-alpha",
+  "smoke": {
+    "status": "completed",
+    "buildId": "build_72c3be910cfa",
+    "result": "Succeeded",
+    "platform": "StandaloneWindows64",
+    "outputPath": "C:/Users/darkf/Home/Projects/DarkFlare/Temp/ItemCleanSmoke/DarkFlare.exe",
+    "totalSizeBytes": 204665496,
+    "buildTimeMs": 28873,
+    "buildStartedAt": "2026-09-15T11:12:43.1621362Z",
+    "buildEndedAt": "2026-09-15T11:13:12.0355860Z",
+    "totalWarnings": 2,
+    "totalErrors": 0,
+    "errors": [],
+    "warnings": [
+      {
+        "message": "Pipeline: No RuntimePipelineConfig asset found (Project Settings > Pipeline > Runtime). Pipeline will be disabled in Player builds."
+      },
+      {
+        "message": "Shader warning in 'TextMeshPro/Mobile/Distance Field': #pragma enable_d3d11_debug_symbols has been deprecated, instead please use #pragma enable_debug_symbols at line 84"
+      }
+    ]
+  },
+  "release": {
+    "status": "completed",
+    "buildId": "build_d7bc5294bdd6",
+    "result": "Succeeded",
+    "platform": "StandaloneWindows64",
+    "outputPath": "C:/Users/darkf/Home/Projects/DarkFlare/Builds/Alpha042/DarkFlare.exe",
+    "totalSizeBytes": 204665270,
+    "buildTimeMs": 18608,
+    "buildStartedAt": "2026-09-15T11:14:17.6024678Z",
+    "buildEndedAt": "2026-09-15T11:14:36.2109152Z",
+    "totalWarnings": 2,
+    "totalErrors": 0,
+    "errors": [],
+    "warnings": [
+      {
+        "message": "Pipeline: No RuntimePipelineConfig asset found (Project Settings > Pipeline > Runtime). Pipeline will be disabled in Player builds."
+      },
+      {
+        "message": "Shader warning in 'TextMeshPro/Mobile/Distance Field': #pragma enable_d3d11_debug_symbols has been deprecated, instead please use #pragma enable_debug_symbols at line 84"
+      }
+    ]
+  }
+}

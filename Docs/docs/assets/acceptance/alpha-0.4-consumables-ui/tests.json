@@ -1,0 +1,47 @@
+{
+  "date": "2026-09-15",
+  "editMode": {
+    "total": 563,
+    "passed": 563,
+    "failed": 0,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "playMode": {
+    "total": 74,
+    "passed": 74,
+    "failed": 0,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "selected": [
+    {
+      "FullName": "DarkFlare.Tests.SaveRestorePreparerTests.Prepare_AdditiveContentPreservesLegacyValuesStockAndSourceDocument(3)",
+      "Status": "Passed",
+      "Duration": 0.0763463,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SaveRestorePreparerTests.Prepare_AdditiveContentPreservesLegacyValuesStockAndSourceDocument(4)",
+      "Status": "Passed",
+      "Duration": 0.0044601,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.Consumables_BuyMergeUseAndRestoreFocusThroughKeyboardAndGamepad",
+      "Status": "Passed",
+      "Duration": 0.6951084,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SaveCaptureRestorePlayModeTests.MainSession_CapturePrepareRestorePreservesStateWithoutNewGameGrant",
+      "Status": "Passed",
+      "Duration": 0.6699186,
+      "Message": null,
+      "StackTrace": null
+    }
+  ]
+}

@@ -720,6 +720,7 @@ namespace DarkFlare
             _dirtyRegistrations.Add(architecture.RegisterEvent<GoldChangedEvent>(_ => MarkDirty()));
             _dirtyRegistrations.Add(architecture.RegisterEvent<EquipmentChangedEvent>(_ => MarkDirty()));
             _dirtyRegistrations.Add(architecture.RegisterEvent<TradeCompletedEvent>(_ => MarkDirty()));
+            _dirtyRegistrations.Add(architecture.RegisterEvent<MerchantStockRefreshedEvent>(_ => MarkDirty()));
             _dirtyRegistrations.Add(architecture.RegisterEvent<ItemCraftedEvent>(_ => MarkDirty()));
             _dirtyRegistrations.Add(architecture.RegisterEvent<ActorResourceChangedEvent>(_ => MarkDirty()));
             _dirtyRegistrations.Add(architecture.RegisterEvent<StatusChangedEvent>(_ => MarkDirty()));

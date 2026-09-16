@@ -1,5 +1,11 @@
 # 已完成计划归档
 
+- [随机商店与主动刷新](./alpha-0.4-random-shop-plan.md)：2026-09-16 完成，每批随机商品、品质词条、免费刷新、库存恢复；EditMode 568/568、PlayMode 75/75。
+
+- [消耗品阶段 2：正式内容与背包使用交互](./alpha-0.4-consumables-ui-plan.md)：四类药水、统一 Use、商人库存、图标与本地化，2026-09-15 完成。
+
+- [消耗品阶段 1：统一使用核心与复合事务](./alpha-0.4-item-use-core-plan.md)：2026-09-15 完成，EditMode 562/562、PlayMode 73/73；正式内容与背包 UI 由后续阶段接入。
+
 - [alpha 0.4 状态系统总计划](./alpha-0.4-status-system-plan.md)及[阶段 5 综合验收](./alpha-0.4-status-acceptance-plan.md)：2026-09-14 完成，交付 `0.4.1-alpha`；EditMode 540/540、PlayMode 73/73，独立 Windows Player 验收通过。
 
 本目录保存已经完成的执行计划与阶段性设计记录。归档文档保留当时的目标、执行顺序、验收标准和验证数据，不再作为当前模块说明维护。
@@ -96,3 +102,6 @@
 - [alpha 0.3 UI 与装备总计划](./alpha-0.3-plan.md)：0.3.0–0.3.4 全部完成并归档。
 
 - [状态阶段 2：角色战斗接入](./alpha-0.4-status-combat-plan.md)：2026-09-13 完成，EditMode 507/507、PlayMode 68/68 通过，见[模块说明](../../status-combat.md)。
+
+- [统一物品使用与消耗品总计划](./alpha-0.4-usable-items-plan.md)：三个阶段完成，交付 `0.4.2-alpha`。
+- [消耗品综合验收与交付](./alpha-0.4-item-use-acceptance-plan.md)：独立 Player、旧档与跨进程恢复、正式构建验收。

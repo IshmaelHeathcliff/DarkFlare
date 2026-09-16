@@ -52,6 +52,146 @@ namespace DarkFlare.Tests
         }
 
         [UnityTest]
+        public IEnumerator Shop_RefreshSupportsKeyboardAndGamepadAndReopeningPreservesStock()
+        {
+            yield return _fixture.EnterMain();
+            GameMenuController menu = Object.FindAnyObjectByType<GameMenuController>();
+            _architecture = menu.GetArchitecture();
+            VisualElement root = menu.GetComponent<RuntimePanelView>().Root;
+            EconomyModel economy = _architecture.GetModel<EconomyModel>();
+            InventoryModel inventory = _architecture.GetModel<InventoryModel>();
+            Keyboard keyboard = InputSystem.AddDevice<Keyboard>();
+            Gamepad pad = InputSystem.AddDevice<Gamepad>();
+            using (GamePauseLease pause = GameTimeService.Shared.AcquirePause("shop-refresh-test"))
+            {
+                Assert.IsTrue(_architecture.SendCommand(new OpenGameMenuCommand(FindTarget(GameMenuPage.Shop))));
+                yield return null;
+                ItemInstance[] previous = economy.MerchantStock.ToArray();
+                int gold = inventory.Gold;
+                Button refresh = root.Q<Button>("shop-refresh");
+                Assert.IsNotNull(refresh);
+                refresh.Focus(); yield return null;
+                _inputFixture.PressAndRelease(keyboard.enterKey); yield return null; yield return null;
+                Assert.AreEqual(economy.Trader.StockSize, economy.MerchantStock.Count);
+                Assert.IsFalse(economy.MerchantStock.Any(previous.Contains));
+                Assert.AreEqual(gold, inventory.Gold);
+                Assert.AreSame(refresh, root.focusController.focusedElement);
+                previous = economy.MerchantStock.ToArray();
+                _inputFixture.PressAndRelease(pad.buttonSouth); yield return null; yield return null;
+                Assert.IsFalse(economy.MerchantStock.Any(previous.Contains));
+                Assert.AreSame(refresh, root.focusController.focusedElement);
+                ItemInstance bought = economy.MerchantStock.OrderBy(item => _architecture.GetSystem<TradingSystem>().GetBuyPrice(item)).First();
+                int price = _architecture.GetSystem<TradingSystem>().GetBuyPrice(bought);
+                inventory.AddGold(Mathf.Max(0, price - inventory.Gold));
+                Assert.IsTrue(_architecture.SendCommand(new BuyItemCommand(bought)));
+                Assert.AreEqual(economy.Trader.StockSize - 1, economy.MerchantStock.Count);
+                previous = economy.MerchantStock.ToArray();
+                menu.ClosePage(GameMenuPage.Shop); yield return null;
+                Assert.IsTrue(_architecture.SendCommand(new OpenGameMenuCommand(FindTarget(GameMenuPage.Shop))));
+                yield return null;
+                CollectionAssert.AreEqual(previous, economy.MerchantStock);
+                Assert.IsFalse(_architecture.SendCommand(new BuyItemCommand(bought)));
+            }
+        }
+
+        [UnityTest]
+        public IEnumerator Consumables_BuyMergeUseAndRestoreFocusThroughKeyboardAndGamepad()
+        {
+            yield return _fixture.EnterMain();
+            GameArchitectureTestFixture.PrepareCompleteMerchant(GameArchitectureProvider.RequireCurrent());
+            GameMenuController menu = Object.FindAnyObjectByType<GameMenuController>();
+            _architecture = menu.GetArchitecture();
+            VisualElement root = menu.GetComponent<RuntimePanelView>().Root;
+            CombatActor actor = Object.FindAnyObjectByType<PlayerController>().Actor;
+            InventoryModel inventory = _architecture.GetModel<InventoryModel>();
+            Keyboard keyboard = InputSystem.AddDevice<Keyboard>();
+            Gamepad pad = InputSystem.AddDevice<Gamepad>();
+            Mouse mouse = InputSystem.AddDevice<Mouse>();
+            using (GamePauseLease pause = GameTimeService.Shared.AcquirePause("consumable-ui-test"))
+            {
+                inventory.AddGold(300);
+                Assert.IsTrue(_architecture.SendCommand(new OpenGameMenuCommand(FindTarget(GameMenuPage.Shop))));
+                menu.OpenPage(GameMenuPage.Inventory);
+                yield return null;
+                var router = new ItemActionRouter(menu);
+                ItemInstance[] offers = _architecture.SendQuery(new GetShopSnapshotQuery()).MerchantItems
+                    .Where(entry => entry.Item.BaseDefinition.Id == "health_potion").Select(entry => entry.Item).ToArray();
+                Assert.GreaterOrEqual(offers.Length, 2);
+                Assert.IsNotNull(router.Validate(new ItemActionSource(offers[0], ItemSourceKind.Merchant, GameMenuPage.Shop, null), new ItemActionTarget(ItemActionKind.Use)));
+                Assert.IsTrue(_architecture.SendCommand(new BuyItemCommand(offers[0])));
+                Assert.IsTrue(_architecture.SendCommand(new BuyItemCommand(offers[1])));
+                ItemInstance potion = inventory.Grid.Placements.Keys.Single(item => item.BaseDefinition.Id == "health_potion");
+                Assert.AreEqual(2, potion.Quantity);
+                yield return null;
+                var source = new ItemActionSource(potion, ItemSourceKind.Inventory, GameMenuPage.Inventory, null);
+                Assert.AreEqual(ItemActionKind.Sell, router.Primary(source).Kind);
+                Assert.AreEqual("item.use.health_full", router.Validate(source, new ItemActionTarget(ItemActionKind.Use)));
+                Assert.AreEqual(2, potion.Quantity);
+                actor.RestoreResources(new CombatResourceSnapshot(1, actor.MaxHealth, actor.CurrentMana, actor.MaxMana), true);
+                Button itemButton = FindItemButton(root, potion, "inventory-item");
+                itemButton.Focus(); yield return null;
+                _inputFixture.PressAndRelease(keyboard.enterKey); yield return null; yield return null;
+                Button use = root.Q<Button>("item-action-use");
+                Assert.IsNotNull(use, "商店默认出售时仍须有明确使用入口");
+                use.Focus(); yield return null;
+                _inputFixture.PressAndRelease(keyboard.enterKey); yield return null; yield return null;
+                Assert.AreEqual(1, potion.Quantity);
+                Assert.AreEqual(41, actor.CurrentHealth, .01f);
+                Assert.AreSame(potion, (root.focusController.focusedElement as Button)?.userData);
+                menu.ClosePage(GameMenuPage.Shop); yield return null;
+                Assert.AreEqual(ItemActionKind.Use, router.Primary(source).Kind);
+                itemButton = FindItemButton(root, potion, "inventory-item");
+                itemButton.Focus(); yield return null;
+                _inputFixture.PressAndRelease(pad.buttonSouth); yield return null; yield return null;
+                root.Q<Button>("item-action-use").Focus(); yield return null;
+                _inputFixture.PressAndRelease(pad.buttonSouth); yield return null; yield return null;
+                Assert.IsFalse(inventory.Grid.Placements.ContainsKey(potion));
+                Assert.IsNotNull(root.focusController.focusedElement);
+                Assert.IsFalse(menu.Workspace.Interactions.IsMenuOpen);
+
+                ItemBaseDefinition cleanse = ApplicationHost.Current.ContentCatalog.GetAll<ItemBaseDefinition>().Single(item => item.Id == "cleansing_potion");
+                ItemInstance elixir = cleanse.CreateInstance(_architecture.GetUtility<IItemInstanceIdGenerator>().Next(), 1, 7, ItemRarity.Normal);
+                Assert.IsTrue(inventory.TryAddItem(elixir));
+                StatusSystem statuses = _architecture.GetSystem<StatusSystem>();
+                StatusTargetId target = statuses.GetTarget(actor);
+                StatusDefinition stun = ApplicationHost.Current.ContentCatalog.GetAll<StatusDefinition>().Single(s => s.Id == "stun");
+                var statusSource = new StatusSource(StatusSourceKind.Skill, "cleanse-ui-test", target);
+                StatusApplication application = StatusApplication.Capture(stun, statusSource, actor.Stats, actor.Modifiers,
+                    new DamageSourceSnapshot(target.ActorKey, ActorTeam.Player), 1);
+                Assert.IsTrue(statuses.ApplyStatus(target, StatusMutation.Apply(application.Rules, statusSource, application.Effects)).Result.Succeeded);
+                yield return null; yield return null;
+                Button cleanseButton = FindItemButton(root, elixir, "inventory-item");
+                yield return RightClickPointer(mouse, root, cleanseButton.worldBound.center);
+                Assert.IsFalse(inventory.Grid.Placements.ContainsKey(elixir), "眩晕应允许鼠标快捷净化");
+                Assert.IsEmpty(statuses.GetStatusSnapshot(target).Layers);
+                Assert.IsNotNull(root.focusController.focusedElement);
+
+                ItemBaseDefinition fortitude = ApplicationHost.Current.ContentCatalog.GetAll<ItemBaseDefinition>().Single(item => item.Id == "fortitude_potion");
+                ItemInstance buff = fortitude.CreateInstance(_architecture.GetUtility<IItemInstanceIdGenerator>().Next(), 1, 9, ItemRarity.Normal);
+                Assert.IsTrue(inventory.TryAddItem(buff));
+                float beforeMax = actor.MaxHealth;
+                Assert.IsTrue(_architecture.SendCommand(new UseItemCommand(_architecture.SendCommand(new CreateItemUseRequestCommand(actor, buff)))).Succeeded);
+                Assert.Greater(actor.MaxHealth, beforeMax);
+                Assert.IsFalse(inventory.Grid.Placements.ContainsKey(buff));
+                menu.ClosePage(GameMenuPage.Inventory);
+                yield return new WaitForSecondsRealtime(.1f);
+                Assert.IsNotNull(root.Q("status-hud-fortitude"), "药剂耗尽后临时状态仍应显示");
+                Assert.IsTrue(_architecture.SendCommand(new OpenGameMenuCommand(FindTarget(GameMenuPage.Crafting))));
+                ItemInstance spare = cleanse.CreateInstance(_architecture.GetUtility<IItemInstanceIdGenerator>().Next(), 1, 12, ItemRarity.Normal);
+                Assert.IsTrue(inventory.TryAddItem(spare));
+                actor.RestoreResources(new CombatResourceSnapshot(1, actor.MaxHealth, actor.CurrentMana, actor.MaxMana), true);
+                yield return null;
+                var spareSource = new ItemActionSource(spare, ItemSourceKind.Inventory, GameMenuPage.Inventory, null);
+                Assert.IsNotNull(router.Validate(spareSource, new ItemActionTarget(ItemActionKind.Place)));
+                Assert.IsNull(router.Validate(spareSource, new ItemActionTarget(ItemActionKind.Use)));
+                menu.TogglePause();
+                ApplicationHost.Current.ApplicationShell.OpenSettings();
+                Assert.IsFalse(router.Execute(spareSource, new ItemActionTarget(ItemActionKind.Use)));
+                Assert.IsTrue(inventory.Grid.Placements.ContainsKey(spare));
+            }
+        }
+
+        [UnityTest]
         public IEnumerator StatusVisibility_FiltersHudAndMenuWithoutRemovingGameplayLayers()
         {
             yield return _fixture.EnterMain();
@@ -367,6 +507,7 @@ namespace DarkFlare.Tests
                 Assert.IsTrue(menu.IsWindowVisible(GameMenuPage.Attributes));
                 InventoryModel inventory = architecture.GetModel<InventoryModel>();
                 inventory.AddGold(1000);
+                GameArchitectureTestFixture.PrepareCompleteMerchant(architecture);
                 ItemInstance armor = architecture.GetModel<EconomyModel>().MerchantStock.First(item => item.BaseDefinition.CanEquipTo(EquipmentSlot.Armor));
                 Assert.IsTrue(architecture.SendCommand(new BuyItemCommand(armor)));
                 CombatActor player = architecture.SendQuery(new GetInventorySnapshotQuery()).Player;
@@ -456,6 +597,7 @@ namespace DarkFlare.Tests
         public IEnumerator ItemActions_EquipmentMenuDiscardAndDeviceLossKeepOwnership()
         {
             yield return _fixture.EnterMain();
+            GameArchitectureTestFixture.PrepareCompleteMerchant(GameArchitectureProvider.RequireCurrent());
             GameMenuController menu = Object.FindAnyObjectByType<GameMenuController>();
             IArchitecture architecture = menu.GetArchitecture();
             InventoryModel inventory = architecture.GetModel<InventoryModel>();
@@ -517,6 +659,7 @@ namespace DarkFlare.Tests
         public IEnumerator ItemActions_TradeByPointerAndGamepadAndReturnCraftingToExactCell()
         {
             yield return _fixture.EnterMain();
+            GameArchitectureTestFixture.PrepareCompleteMerchant(GameArchitectureProvider.RequireCurrent());
             GameMenuController menu = Object.FindAnyObjectByType<GameMenuController>();
             IArchitecture architecture = menu.GetArchitecture();
             InventoryModel inventory = architecture.GetModel<InventoryModel>();

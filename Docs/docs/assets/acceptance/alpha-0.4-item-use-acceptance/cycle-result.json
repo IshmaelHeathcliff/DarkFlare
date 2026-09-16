@@ -1,0 +1,30 @@
+{
+  "status": "completed:cycle",
+  "version": "0.4.1-alpha",
+  "editor": false,
+  "dataRoot": "C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Temp\\ItemAcceptance\\UserData\\Saves",
+  "checks": [
+    "flow:DarkFlare.SceneFlowRequest:None",
+    "cross-process restore preserves quantity resources status phase and merchant stock",
+    "status restored without consumed source item",
+    "flow:DarkFlare.SceneFlowRequest:None",
+    "flow:DarkFlare.SceneFlowRequest:None",
+    "session continue preserves full snapshot",
+    "old session request rejected",
+    "flow:DarkFlare.SceneFlowRequest:None",
+    "flow:DarkFlare.SceneFlowRequest:None",
+    "new session contains no prior status",
+    "new character contains no old potion"
+  ],
+  "error": null,
+  "actors": [
+    {
+      "scene": "Main",
+      "IsAlive": true,
+      "IsConfigured": true,
+      "targetValid": true,
+      "StatusActorKey": "player:local_player",
+      "currentArchitecture": true
+    }
+  ]
+}

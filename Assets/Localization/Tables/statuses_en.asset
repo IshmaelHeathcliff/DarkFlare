@@ -82,6 +82,14 @@ MonoBehaviour:
     m_Localized: Gain 10 armor while the source is active.
     m_Metadata:
       m_Items: []
+  - m_Id: 640281887105024
+    m_Localized: Maximum health increased by 20%; current health scales proportionally. Reapplication refreshes duration.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 640281836773376
+    m_Localized: Fortitude
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

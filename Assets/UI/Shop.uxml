@@ -13,6 +13,11 @@
       </ui:Label>
     </ui:VisualElement>
     <ui:Label name="shop-gold" text="" class="shop-gold" />
+    <ui:Button name="shop-refresh" class="item-context-action">
+      <Bindings>
+        <l:LocalizedString property="text" table="ui" entry="shop.refresh.action" />
+      </Bindings>
+    </ui:Button>
     <ui:VisualElement name="shop-merchant-frame" class="shop-merchant-frame">
       <ui:ScrollView name="shop-merchant-scroll" mode="Vertical" class="shop-merchant-scroll">
         <ui:VisualElement name="shop-merchant-list" class="shop-merchant-grid" picking-mode="Position" />

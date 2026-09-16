@@ -4,7 +4,7 @@
 
 `DarkFlare` 已完成首版最小循环、初步体验优化、`alpha 0.1` 封板和 `alpha 0.2.0–0.2.7` 基础设施封板。当前可从常驻 `Bootstrap.unity` 的 FrontEnd 新建或继续游戏，additive 进入 `Main.unity` 完成战斗、掉落、十槽装备、交易和打造，暂停后保存并安全返回前台；FrontEnd 可二次确认删除自动档，共享设置页可恢复完整默认设置，中英语言、音量、按键、设备 Glyph 和降低动态效果即时收敛。
 
-alpha 版本内的阶段使用三段式名称：`alpha 0.1` 的首个阶段为 `alpha 0.1.0`，后续依次为 `alpha 0.1.1`、`alpha 0.1.2`；`alpha 0.2` 同样从 `alpha 0.2.0` 开始。当前版本为 `0.4.1-alpha`；完成记录见[alpha 0.2 综合验收记录](./infrastructure/alpha-0.2-acceptance.md)与[计划归档](./plan/archive/README.md)。
+alpha 版本内的阶段使用三段式名称：`alpha 0.1` 的首个阶段为 `alpha 0.1.0`，后续依次为 `alpha 0.1.1`、`alpha 0.1.2`；`alpha 0.2` 同样从 `alpha 0.2.0` 开始。当前版本为 `0.4.2-alpha`；完成记录见[alpha 0.2 综合验收记录](./infrastructure/alpha-0.2-acceptance.md)与[计划归档](./plan/archive/README.md)。
 
 当前 [alpha 0.3 UI 迭代](./plan/archive/alpha-0.3-plan.md)已全部完成：独立物品窗口、统一拖放、实时属性、暗黑像素 HUD、共享皮肤及十槽装备。二十件装备覆盖每槽至少两件，core v1 → v2 旧档兼容完成；EditMode 434/434、PlayMode 63/63、可见 Windows Player 验收通过。退出时的 2D Animation 回退缓冲区警告已在空场景中复现并定位，作为既有依赖问题保留记录。见[综合验收](./assets/acceptance/alpha-0.3.4-equipment/README.md)。
 
@@ -14,7 +14,7 @@ alpha 0.4.0 已完成[统一物品系统](./item-system.md)：金币与材料入
 
 [alpha 0.4 状态系统](./plan/archive/alpha-0.4-status-system-plan.md)已完成全部五个阶段，并以 `0.4.1-alpha` 交付；core v4、Schema 3 保持不变。本轮 EditMode 540/540、PlayMode 73/73，独立 Windows Player 的状态效果、输入、显示与跨进程存档恢复通过，见[综合验收](./assets/acceptance/alpha-0.4-status-acceptance/README.md)。总计划及配套文档已归档，下一步为统一物品使用与消耗品。
 
-按用户指定顺序，状态系统验收后继续[统一物品使用与消耗品](./plan/alpha-0.4-usable-items-plan.md)，建议以 `0.4.2-alpha` 交付；统一使用入口承载回血、回蓝、临时状态和驱散异常，复用状态系统并保证效果与物品扣除一致提交。
+按用户指定顺序，状态系统验收后继续[统一物品使用与消耗品](plan/archive/alpha-0.4-usable-items-plan.md)，建议以 `0.4.2-alpha` 交付；统一使用入口承载回血、回蓝、临时状态和驱散异常，复用状态系统并保证效果与物品扣除一致提交。 [统一使用核心与复合事务](./plan/archive/alpha-0.4-item-use-core-plan.md)已完成，EditMode 562/562、PlayMode 73/73 通过；见[验收记录](./assets/acceptance/alpha-0.4-item-use-core/README.md)。[正式消耗品与背包交互](./plan/archive/alpha-0.4-consumables-ui-plan.md)已完成：四类药水、商人库存、键鼠 / 手柄使用与详情反馈；core v5、Schema 3，EditMode 563/563、PlayMode 74/74 通过。[消耗品综合验收](plan/archive/alpha-0.4-item-use-acceptance-plan.md)已完成，以 `0.4.2-alpha` 交付；独立 Player 与全量回归通过，见[证据](./assets/acceptance/alpha-0.4-item-use-acceptance/README.md)。
 
 状态查看已补充三档显示策略、HUD / 状态窗口共用隐藏开关及右上角状态条。最新 EditMode 540/540、PlayMode 73 项长期回归及 1 项临时截图检查通过，见[显示与 HUD 验收](./assets/acceptance/status-visibility-hud/README.md)。
 
@@ -91,7 +91,7 @@ Alpha 0.3 前置[测试审计](./testing/test-suite-audit.md)已完成；新增�
 
 ## 当前资源与配置
 
-- `Assets/Data/Preset` 已有玩家、技能、怪物、刷怪、掉落、物品、词条、商人和打造配置；唯一正式内容目录 `core` v3 收录 106 个配置，其中二十件独立装备覆盖十槽。
+- `Assets/Data/Preset` 已有玩家、技能、怪物、刷怪、掉落、物品、词条、商人和打造配置；唯一正式内容目录 `core` v5 收录全部正式配置，其中二十件独立装备覆盖十槽，四种药水接入统一使用。
 - 玩家、怪物、投射物和掉落物 Prefab 位于 `Assets/Prefabs`，通过 Addressables 加载。
 - Prefab、Sprite、Audio 与 Application 配置统一通过 Resource Service 按稳定键单航班加载；Application / Session owner 持有 Asset Lease，并在关闭后回到资源基线。
 - `Assets/UI` 已有 `GameRoot`、`Hud`、`Inventory`、`Shop`、`Crafting` 的 UXML / USS。
@@ -121,3 +121,5 @@ Alpha 0.3 前置[测试审计](./testing/test-suite-audit.md)已完成；新增�
 - 文档内容以代码和目录现状为准。
 - 目录调整后同步更新 `project-structure.md`。
 - 新增核心模块时补充项目概览和对应模块文档。
+
+[随机商店与主动刷新](./trading-system.md)已完成：每批 16 件、随机装备品质和词条、买一件减一件、免费主动刷新及库存保存恢复。EditMode 568/568、PlayMode 75/75；见[验收记录](./assets/acceptance/random-shop/README.md)与[归档计划](./plan/archive/alpha-0.4-random-shop-plan.md)。

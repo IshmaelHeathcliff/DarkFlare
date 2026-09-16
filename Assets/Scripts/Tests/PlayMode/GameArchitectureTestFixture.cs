@@ -12,6 +12,22 @@ namespace DarkFlare.Tests
 
         public IArchitecture Architecture { get; private set; }
 
+        // Tests of equipment/use interactions require specific offers independently of random shop selection.
+        internal static void PrepareCompleteMerchant(IArchitecture architecture)
+        {
+            EconomyModel economy = architecture.GetModel<EconomyModel>();
+            var stock = new System.Collections.Generic.List<ItemInstance>();
+            foreach (TraderStockEntry entry in economy.Trader.Stock)
+            {
+                for (int i = 0; i < entry.Count; i++)
+                {
+                    stock.Add(entry.Item.CreateInstance(architecture.GetUtility<IItemInstanceIdGenerator>().Next(),
+                        entry.ItemLevel, i, ItemRarity.Normal));
+                }
+            }
+            economy.RestoreState(economy.Trader, stock, economy.BuyMultiplier, economy.SellMultiplier);
+        }
+
         public IEnumerator Restart()
         {
             if (ApplicationHost.TryGetCurrent(out ApplicationHost divergentHost)

@@ -89,6 +89,7 @@ namespace DarkFlare.Tests
             "item-detail-name",
             "item-detail-meta",
             "item-detail-base",
+            "item-detail-inherent-title",
         };
 
         [Test]

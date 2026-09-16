@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "family": "fortitude-status",
+  "alpha_threshold": 8,
+  "canvas": {
+    "width": 96,
+    "height": 96
+  },
+  "alpha_required": false,
+  "assets": [
+    {
+      "name": "fortitude",
+      "image": "C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Art\\Sprites\\UI\\Statuses\\status_fortitude.png"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "oldCore": 4,
+  "newCore": 5,
+  "schema": 3,
+  "payloadDifferences": [
+    "/run/spawner/nextSpawnRemainingSeconds"
+  ],
+  "sourceSha256": "1dcc76d9fd32df222b920e346755c0d2e6e8d25cb105c1ab79c55081b343697a"
+}

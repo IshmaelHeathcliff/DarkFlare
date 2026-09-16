@@ -100,6 +100,29 @@ namespace DarkFlare
                 _suffixList,
                 detail.Suffixes,
                 Localize("ui", "item.detail.no_suffix"));
+            if (detail.UseDefinition != null)
+            {
+                _implicitList.Clear();
+                AddLine(_implicitList, Localize("ui", "item.use.consume", detail.UseDefinition.ConsumeCount), "item-detail-modifier");
+                foreach (ItemUseEffect effect in detail.UseDefinition.Effects)
+                {
+                    AddLine(_implicitList, _formatter.FormatUseEffect(effect), "item-detail-modifier");
+                }
+            }
+            SetGroupVisibility(_prefixList, detail.UseDefinition == null || detail.Prefixes.Count > 0);
+            SetGroupVisibility(_suffixList, detail.UseDefinition == null || detail.Suffixes.Count > 0);
+            Label title = _root.Q<Label>("item-detail-inherent-title");
+            if (title != null) { title.text = Localize("ui", detail.UseDefinition != null ? "item.use.effects" : "item.detail.inherent.title"); }
+        }
+
+        static void SetGroupVisibility(VisualElement list, bool visible)
+        {
+            list.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
+            int index = list.parent.IndexOf(list);
+            if (index > 0 && list.parent[index - 1] is Label heading)
+            {
+                heading.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
+            }
         }
 
         public void Clear()

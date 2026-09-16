@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de56d17a7ac2ea64db43d68bd7da6bc8, type: 3}
+  m_Name: "\u751F\u547D\u836F\u6C34"
+  m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.ItemBaseDefinition
+  _id: health_potion
+  _displayName: "\u751F\u547D\u836F\u6C34"
+  _localizedName:
+    _tableName: items
+    _entryKey: item.health_potion.name
+  _itemType: 5
+  _stackable: 1
+  _maxStackSize: 10
+  _consumable: 1
+  _icon:
+    m_AssetGUID: 0f2baeba32b18b4438f66ad29c0d8840
+    m_SubObjectName:
+    m_SubObjectType:
+    m_SubObjectGUID:
+    m_EditorAssetChanged: 0
+  _allowedEquipmentSlots: 0
+  _defaultRarity: 0
+  _baseValue: 10
+  _gridSize: {x: 1, y: 1}
+  _weight: 0
+  _tags: []
+  _baseDamages: []
+  _implicitModifiers: []
+  _providedStatus: {fileID: 0}
+  _useDefinition: {fileID: 11400000, guid: 21710a34d412f854d8bbeca24e32cfd9, type: 2}

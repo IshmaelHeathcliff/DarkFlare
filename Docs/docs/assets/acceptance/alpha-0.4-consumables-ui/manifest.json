@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "family": "consumable-potions",
+  "alpha_threshold": 8,
+  "canvas": {
+    "width": 96,
+    "height": 96
+  },
+  "alpha_required": true,
+  "assets": [
+    {
+      "name": "health",
+      "image": "C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Art\\Sprites\\Items\\Consumables\\item_health_potion.png",
+      "visible_width": [
+        53,
+        66
+      ],
+      "visible_height": [
+        72,
+        81
+      ],
+      "visual_center_x": [
+        43,
+        52
+      ],
+      "visual_center_y": [
+        45,
+        62
+      ],
+      "edge_clearance": 7
+    },
+    {
+      "name": "mana",
+      "image": "C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Art\\Sprites\\Items\\Consumables\\item_mana_potion.png",
+      "visible_width": [
+        53,
+        66
+      ],
+      "visible_height": [
+        72,
+        81
+      ],
+      "visual_center_x": [
+        43,
+        52
+      ],
+      "visual_center_y": [
+        45,
+        62
+      ],
+      "edge_clearance": 7
+    },
+    {
+      "name": "fortitude",
+      "image": "C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Art\\Sprites\\Items\\Consumables\\item_fortitude_potion.png",
+      "visible_width": [
+        53,
+        66
+      ],
+      "visible_height": [
+        72,
+        81
+      ],
+      "visual_center_x": [
+        43,
+        52
+      ],
+      "visual_center_y": [
+        45,
+        62
+      ],
+      "edge_clearance": 7
+    },
+    {
+      "name": "cleansing",
+      "image": "C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Art\\Sprites\\Items\\Consumables\\item_cleansing_potion.png",
+      "visible_width": [
+        53,
+        66
+      ],
+      "visible_height": [
+        72,
+        81
+      ],
+      "visual_center_x": [
+        43,
+        52
+      ],
+      "visual_center_y": [
+        45,
+        62
+      ],
+      "edge_clearance": 7
+    }
+  ]
+}

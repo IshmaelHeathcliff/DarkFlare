@@ -43,6 +43,13 @@ MonoBehaviour:
     - df.session
     - df.sprite
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0f2baeba32b18b4438f66ad29c0d8840
+    m_Address: gameplay/sprites/items/health_potion
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - df.session
+    - df.sprite
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 119ee3479621e8243b7f24b92a29347e
     m_Address: gameplay/sprites/statuses/shock
     m_ReadOnly: 0
@@ -85,6 +92,13 @@ MonoBehaviour:
     - df.session
     - df.sprite
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 46b17262e95dcf94aa5541c87bb0df77
+    m_Address: gameplay/sprites/items/mana_potion
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - df.session
+    - df.sprite
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 4a332dccf7ba1c243bf7ec03103acb8f
     m_Address: ui/icons/items/scout-boots
     m_ReadOnly: 0
@@ -101,6 +115,13 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 83510c26851949145b53ddaa7fd05749
     m_Address: ui/icons/items/plated-greaves
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - df.session
+    - df.sprite
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 84a274ee131612d49950b7c7abcce919
+    m_Address: gameplay/sprites/items/cleansing_potion
     m_ReadOnly: 0
     m_SerializedLabels:
     - df.session
@@ -127,8 +148,22 @@ MonoBehaviour:
     - df.session
     - df.sprite
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9d17e7178383e4e40876ff746046ee68
+    m_Address: gameplay/sprites/statuses/fortitude
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - df.session
+    - df.sprite
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9fad0c26610c6044391a45574b771208
     m_Address: ui/icons/items/iron-gauntlets
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - df.session
+    - df.sprite
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a171ac149f09be34bb18787f2bb5e8be
+    m_Address: gameplay/sprites/items/fortitude_potion
     m_ReadOnly: 0
     m_SerializedLabels:
     - df.session

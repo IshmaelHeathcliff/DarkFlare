@@ -60,11 +60,12 @@ namespace DarkFlare.Tests
                 result.Value.Monsters[0].Instance.EffectiveStats.GetValue(StatIds.MaxHealth));
         }
 
-        [Test]
-        public void Prepare_AdditiveAilmentContentPreservesLegacyValuesAndSourceDocument()
+        [TestCase(3)]
+        [TestCase(4)]
+        public void Prepare_AdditiveContentPreservesLegacyValuesStockAndSourceDocument(int version)
         {
             SaveDocumentDto document = SaveRestorePreparer.Prepare(SaveDataContractTests.CreateValidDocument(), _catalog).Value.Document;
-            document.Header.ContentVersion = 3;
+            document.Header.ContentVersion = version;
             string before = JObject.FromObject(document).ToString();
             PreparedRestoreResult result = SaveRestorePreparer.Prepare(document, _catalog);
             Assert.That(result.Succeeded, Is.True, Describe(result));

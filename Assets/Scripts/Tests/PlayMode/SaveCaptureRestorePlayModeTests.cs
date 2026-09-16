@@ -94,6 +94,7 @@ namespace DarkFlare.Tests
             Assert.IsTrue(oldInventory.TryAddItem(materials));
             EquipmentModel equipped = oldArchitecture.GetModel<EquipmentModel>();
             EconomyModel economy = oldArchitecture.GetModel<EconomyModel>();
+            GameArchitectureTestFixture.PrepareCompleteMerchant(oldArchitecture);
             foreach (EquipmentSlot slot in EquipmentSlots.All)
             {
                 if (equipped.GetItem(oldPlayer.Actor, slot) != null) { continue; }
@@ -146,9 +147,52 @@ namespace DarkFlare.Tests
             StatusSystem oldStatuses = oldArchitecture.GetSystem<StatusSystem>();
             StatusDefinition weakness = host.ContentCatalog.GetAll<StatusDefinition>().Single(value => value.Id == "weakness");
             StatusTargetId statusTarget = oldStatuses.GetTarget(oldPlayer.Actor);
-            Assert.IsTrue(oldStatuses.ApplyStatus(statusTarget, StatusMutation.Apply(weakness.CreateRules(),
-                new StatusSource(StatusSourceKind.Skill, "save_test", statusTarget), weakness.CreateEffects(new System.Random(1)), duration: 60)).Result.Succeeded);
+            // 在已登记材料上临时挂使用能力，验证真实 Command 与历史物品 DTO；不添加正式药水资产。
+            var use = ScriptableObject.CreateInstance<ItemUseDefinition>();
+            var useField = typeof(ItemBaseDefinition).GetField("_useDefinition", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+            object originalUse = useField.GetValue(material);
+            int expectedMaterialCount = materials.Quantity - 1;
+            ItemUseRequest usedRequest;
+            try
+            {
+                typeof(ItemUseDefinition).GetField("_id", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
+                    .SetValue(use, "save_test_use");
+                typeof(ItemUseDefinition).GetField("_effects", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
+                    .SetValue(use, new List<ItemUseEffect> { new ItemUseEffect(ItemUseEffectKind.Heal, 5),
+                        new ItemUseEffect(ItemUseEffectKind.ApplyStatus, status: weakness) });
+                useField.SetValue(material, use);
+                usedRequest = oldArchitecture.SendCommand(new CreateItemUseRequestCommand(oldPlayer.Actor, materials));
+                using (GamePauseLease pause = host.GameTime.AcquirePause("item-use-save-test"))
+                {
+                    Assert.That(oldArchitecture.SendCommand(new UseItemCommand(usedRequest)).Code, Is.EqualTo(ItemUseCode.Success));
+                }
+                expectedHealth += 5;
+                Assert.That(materials.Quantity, Is.EqualTo(expectedMaterialCount));
+            }
+            finally
+            {
+                useField.SetValue(material, originalUse);
+                UnityEngine.Object.DestroyImmediate(use);
+            }
 
+            ItemBaseDefinition manaPotion = host.ContentCatalog.GetAll<ItemBaseDefinition>().Single(item => item.Id == "mana_potion");
+            ItemInstance potionStack = manaPotion.CreateInstance(oldArchitecture.GetUtility<IItemInstanceIdGenerator>().Next(), 1, 17, ItemRarity.Normal);
+            potionStack.TrySetQuantity(2);
+            Assert.IsTrue(oldInventory.TryAddItem(potionStack));
+            CombatResourceSnapshot beforeManaUse = oldPlayer.Actor.Resources;
+            oldPlayer.Actor.RestoreResources(new CombatResourceSnapshot(beforeManaUse.CurrentHealth, beforeManaUse.MaxHealth,
+                0, beforeManaUse.MaxMana), true);
+            ItemUseRequest potionRequest = oldArchitecture.SendCommand(new CreateItemUseRequestCommand(oldPlayer.Actor, potionStack));
+            using (GamePauseLease pause = host.GameTime.AcquirePause("formal-potion-save-test"))
+            {
+                Assert.IsTrue(oldArchitecture.SendCommand(new UseItemCommand(potionRequest)).Succeeded);
+            }
+            float expectedMana = oldPlayer.Actor.CurrentMana;
+            Assert.AreEqual(1, potionStack.Quantity);
+            long beforeRefreshRevision = host.SaveCoordinator.DirtyRevision;
+            Assert.IsTrue(oldArchitecture.SendCommand(new RefreshMerchantCommand()));
+            Assert.Greater(host.SaveCoordinator.DirtyRevision, beforeRefreshRevision);
+            ItemInstance[] savedOffers = economy.MerchantStock.ToArray();
             SessionSnapshotResult captured = source.Capture();
 
             Assert.IsTrue(captured.Succeeded, Describe(captured));
@@ -219,10 +263,30 @@ namespace DarkFlare.Tests
             StatusLayerDto savedWeakness = captured.Payload.Run.Statuses.Actors.Single(value => value.ActorKey == statusTarget.ActorKey).Layers.Single();
             Assert.That(restoredWeakness.Rules.Id.LocalId, Is.EqualTo("weakness"));
             Assert.That(restoredWeakness.Source.Actor, Is.EqualTo(restoredTarget));
+            Assert.That(restoredWeakness.Source.Kind, Is.EqualTo(StatusSourceKind.Consumable));
+            Assert.That(restoredArchitecture.GetModel<InventoryModel>().Grid.Placements.Keys.Single(item => item.Id == materials.Id).Quantity,
+                Is.EqualTo(expectedMaterialCount));
+            Assert.That(restoredArchitecture.SendCommand(new UseItemCommand(usedRequest)).Succeeded, Is.False, "新 Session 拒绝旧使用请求");
+            Assert.That(material.UseDefinition, Is.Null, "恢复旧物品不能残留测试能力或再次恢复生命");
             Assert.That(restoredWeakness.ExpiresAt, Is.EqualTo(savedWeakness.ExpiresAt));
             Assert.That(restoredWeakness.Effects.Resistance.RawResistance, Is.EqualTo(savedWeakness.Effects.Resistance.Raw));
             Assert.AreEqual(expectedHealth, restoredPlayer.Actor.CurrentHealth, 0.001f);
+            Assert.AreEqual(expectedMana, restoredPlayer.Actor.CurrentMana, 0.001f, "恢复不能再次执行即时回蓝");
+            ItemInstance restoredPotion = restoredArchitecture.GetModel<InventoryModel>().Grid.Placements.Keys.Single(item => item.InstanceId == potionStack.InstanceId);
+            Assert.AreEqual(1, restoredPotion.Quantity);
+            Assert.AreSame(manaPotion.UseDefinition, restoredPotion.BaseDefinition.UseDefinition);
+            Assert.IsFalse(restoredArchitecture.SendCommand(new UseItemCommand(potionRequest)).Succeeded);
             Assert.AreEqual(capturedGold, restoredArchitecture.GetModel<InventoryModel>().Gold);
+            ItemInstance[] restoredOffers = restoredArchitecture.GetModel<EconomyModel>().MerchantStock.ToArray();
+            CollectionAssert.AreEqual(savedOffers.Select(item => item.InstanceId), restoredOffers.Select(item => item.InstanceId));
+            for (int i = 0; i < savedOffers.Length; i++)
+            {
+                Assert.AreEqual(savedOffers[i].Rarity, restoredOffers[i].Rarity);
+                CollectionAssert.AreEqual(savedOffers[i].Prefixes.Concat(savedOffers[i].Suffixes).Select(affix => affix.Definition.Id),
+                    restoredOffers[i].Prefixes.Concat(restoredOffers[i].Suffixes).Select(affix => affix.Definition.Id));
+                CollectionAssert.AreEqual(savedOffers[i].Prefixes.Concat(savedOffers[i].Suffixes).SelectMany(affix => affix.Modifiers).Select(modifier => modifier.Value),
+                    restoredOffers[i].Prefixes.Concat(restoredOffers[i].Suffixes).SelectMany(affix => affix.Modifiers).Select(modifier => modifier.Value));
+            }
             Assert.AreEqual(
                 capturedMerchantCount,
                 restoredArchitecture.GetModel<EconomyModel>().MerchantStock.Count);

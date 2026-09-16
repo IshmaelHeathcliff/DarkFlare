@@ -1,0 +1,19 @@
+{
+  "release": {
+    "temporaryHarnessAbsent": true,
+    "sha256": {
+      "DarkFlare.exe": "a4c71b1bfc3e42d02f2f129fe04adef3ebf2343a662884e4b99598e9dfc90e7d",
+      "DarkFlare_Data/Managed/DarkFlare.Runtime.dll": "d4169cac4c626628e0d6c43d117e6fc940bcb6547352a252c481fc037ae0d33f",
+      "DarkFlare_Data/StreamingAssets/aa/catalog.bin": "e77f913f930f059d36f364c8845ba403029ee617b27d2d10bd08d1009b77d479"
+    }
+  },
+  "smoke": {
+    "temporaryHarnessAbsent": true,
+    "sha256": {
+      "DarkFlare.exe": "a4c71b1bfc3e42d02f2f129fe04adef3ebf2343a662884e4b99598e9dfc90e7d",
+      "DarkFlare_Data/Managed/DarkFlare.Runtime.dll": "d4169cac4c626628e0d6c43d117e6fc940bcb6547352a252c481fc037ae0d33f",
+      "DarkFlare_Data/StreamingAssets/aa/catalog.bin": "e77f913f930f059d36f364c8845ba403029ee617b27d2d10bd08d1009b77d479"
+    }
+  },
+  "sameRuntimeAssembly": true
+}

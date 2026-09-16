@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using UnityEngine;
 
 namespace DarkFlare
@@ -17,6 +19,44 @@ namespace DarkFlare
 
     public class TradingSystem : AbstractSystem
     {
+        bool _refreshing;
+        bool _disposed;
+
+        protected override void OnDeinit() { _disposed = true; }
+
+        public bool RefreshMerchant()
+        {
+            if (_disposed || _refreshing) { return false; }
+            if (ApplicationHost.TryGetCurrent(out ApplicationHost host) && host.CurrentSession != null
+                && (host.CurrentSession.Architecture.GetSystem<TradingSystem>() != this
+                    || host.CurrentSession.State != GameSessionState.Running
+                    || !host.CurrentSession.SceneScope.CanAcceptWork || host.Input.IsSuspended
+                    || host.ApplicationShell.BlocksGameplay
+                    || host.SceneFlow.State != GameFlowState.InGame && host.SceneFlow.State != GameFlowState.Paused))
+            { return false; }
+            EconomyModel economy = this.GetModel<EconomyModel>();
+            if (economy.Trader == null) { return false; }
+            _refreshing = true;
+            try
+            {
+                ItemInstance[] stock;
+                int seed = GameplayRandomSystem.CreateRootSeed();
+                try
+                {
+                    stock = economy.Trader.CreateStock(new System.Random(seed), this.GetUtility<IItemInstanceIdGenerator>()).ToArray();
+                }
+                catch (Exception exception)
+                {
+                    ApplicationLog.Warning(LogEventIds.GameplayTrading, $"[TradingSystem] 刷新失败，保留原库存：{exception.Message}");
+                    return false;
+                }
+                economy.RestoreState(economy.Trader, stock, economy.BuyMultiplier, economy.SellMultiplier);
+                ApplicationLog.Info(LogEventIds.GameplayTrading, $"[TradingSystem] 库存刷新：seed={seed}，共 {stock.Length} 件");
+                this.SendEvent(new MerchantStockRefreshedEvent());
+                return true;
+            }
+            finally { _refreshing = false; }
+        }
         protected override void OnInit()
         {
         }
@@ -116,25 +156,18 @@ namespace DarkFlare
         public void SetupMerchant(TraderDefinition trader)
         {
             EconomyModel economy = this.GetModel<EconomyModel>();
-            economy.ClearStock();
-
             if (trader == null)
             {
+                economy.ClearStock();
                 return;
             }
-
+            ItemInstance[] stock = trader.CreateStock(new System.Random(GameplayRandomSystem.CreateRootSeed()),
+                this.GetUtility<IItemInstanceIdGenerator>()).ToArray();
             economy.RestoreState(
                 trader,
-                System.Array.Empty<ItemInstance>(),
+                stock,
                 trader.BuyMultiplier,
                 trader.SellMultiplier);
-
-            foreach (ItemInstance item in trader.CreateStock(
-                         new System.Random(),
-                         this.GetUtility<IItemInstanceIdGenerator>()))
-            {
-                economy.AddStock(item);
-            }
 
             ApplicationLog.Info(LogEventIds.GameplayTrading, $"[TradingSystem] 商人库存初始化完成，共 {economy.MerchantStock.Count} 件");
         }
@@ -148,6 +181,16 @@ namespace DarkFlare
         static string DescribeItem(ItemInstance item)
         {
             return item.BaseDefinition != null ? $"{item.BaseDefinition.DisplayName}[{item.Rarity}]" : item.InstanceId;
+        }
+    }
+
+    public readonly struct MerchantStockRefreshedEvent { }
+
+    public sealed class RefreshMerchantCommand : AbstractCommand<bool>
+    {
+        protected override bool OnExecute()
+        {
+            return this.GetSystem<TradingSystem>().RefreshMerchant();
         }
     }
 }

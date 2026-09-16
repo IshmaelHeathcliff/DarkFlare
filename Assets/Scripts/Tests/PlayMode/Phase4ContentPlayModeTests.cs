@@ -46,8 +46,9 @@ namespace DarkFlare.Tests
             }
 
             Assert.IsNotNull(player, "Main 场景未在时限内生成玩家");
-            CollectionAssert.AreEquivalent(ApplicationHost.Current.ContentCatalog.GetAll<ItemBaseDefinition>().Where(item => item.IsEquipment),
-                economy.MerchantStock.Select(item => item.BaseDefinition), "商人未加载完整正式装备池");
+            Assert.AreEqual(economy.Trader.StockSize, economy.MerchantStock.Count);
+            Assert.IsTrue(economy.MerchantStock.All(item => economy.Trader.Stock.Any(entry => entry.Item == item.BaseDefinition)));
+            GameArchitectureTestFixture.PrepareCompleteMerchant(architecture);
             Assert.IsTrue(crafting.IsConfigured, "打造系统未加载词条池");
 
             player.enabled = false;
@@ -68,7 +69,7 @@ namespace DarkFlare.Tests
                 if ((int)slot >= 4) { primary.Add(economy.MerchantStock.First(item => item.BaseDefinition.CanEquipTo(slot))); }
             }
             ItemInstance[] purchased = primary.ToArray();
-            ItemInstance[] alternatives = economy.MerchantStock.Where(item => !primary.Contains(item)).ToArray();
+            ItemInstance[] alternatives = economy.MerchantStock.Where(item => item.BaseDefinition.IsEquipment && !primary.Contains(item)).ToArray();
             architecture.GetSystem<TradingSystem>().GrantGold(1000);
             ItemBaseDefinition material = UnityEditor.AssetDatabase.LoadAssetAtPath<ItemBaseDefinition>("Assets/Data/Preset/Items/锻造矿石.asset");
             ItemInstance materials = material.CreateInstance(architecture.GetUtility<IItemInstanceIdGenerator>().Next(), 1, 0, ItemRarity.Normal);

@@ -9,7 +9,8 @@ namespace DarkFlare
         Item,
         BuyAction,
         SellAction,
-        CloseFallback
+        CloseFallback,
+        RefreshAction
     }
 
     public sealed class ItemListViewState

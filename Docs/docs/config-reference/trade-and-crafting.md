@@ -4,18 +4,22 @@
 
 ## TraderDefinition
 
-创建入口：`DarkFlare/Data/Trading/Trader Definition`。用途：声明商人身份、买卖倍率和固定库存模板。
+创建入口：`DarkFlare/Data/Trading/Trader Definition`。用途：声明商人身份、买卖倍率、商品候选池与库存生成规则。
 
 | 字段 | 类型 / CLR 默认 | 必填、范围与稳定性 | 所有权、消费者、迁移 |
 | --- | --- | --- | --- |
-| `_id` | `string` / 空 | 正式资产必填；唯一小写 `snake_case`，发布后稳定 | 库存实例 ID 前缀、调试与潜在存档消费；改名会改变新实例标识 |
+| `_id` | `string` / 空 | 正式资产必填；唯一小写 `snake_case`，发布后稳定 | 内容目录与存档商人引用消费；改名需要身份迁移 |
 | `_displayName` | `string` / 空 | 正式资产必填；中文名称 | 商店 UI、Inspector 与调试消费 |
-| `_localizedName` | `LocalizedContentReference` / 空引用 | 正式资产必填；固定使用 `monsters/trader.<id>.name` | 商店与交互 UI 按当前语言解析；库存实例 ID 仍由 `_id` 派生 |
-| `_buyMultiplier` | `float` / `1.5` | 不得小于 `0` | `EconomyModel` 与 `ItemValueCalculator.GetBuyPrice` 消费；表示玩家购买溢价 |
-| `_sellMultiplier` | `float` / `0.4` | 不得小于 `0` | `EconomyModel` 与 `ItemValueCalculator.GetSellPrice` 消费；表示玩家出售回收比例 |
-| `_stock` | `List<TraderStockEntry>` / 空 | 正式商人必须有可售条目；无空引用、非法数量或无意义重复项 | `CreateStock(random)` 逐条创建实例并填入商人网格背包 |
+| `_localizedName` | `LocalizedContentReference` / 空引用 | 正式资产必填；固定使用 `monsters/trader.<id>.name` | 商店与交互 UI 按当前语言解析；不参与实例身份生成 |
+| `_buyMultiplier` | `float` / `1.5` | 有限且大于 `0` | `EconomyModel` 与 `ItemValueCalculator.GetBuyPrice` 消费；表示玩家购买溢价 |
+| `_sellMultiplier` | `float` / `0.4` | 有限且大于 `0` | `EconomyModel` 与 `ItemValueCalculator.GetSellPrice` 消费；表示玩家出售回收比例 |
+| `_stock` | `List<TraderStockEntry>` / 空 | 正式商人必须有可售条目；无空引用、非法数量或无意义重复项 | 随机模式按权重抽取；固定模式逐条创建实例 |
+| `_randomStock` | `bool` / `false` | 正式商人为 `true` | 启用随机候选池；旧配置默认保留固定库存行为 |
+| `_stockSize` | `int` / `16` | 随机模式 `1–256` | 每批独立商品数量 |
+| `_rarityWeights` | `Vector4` / `(40,40,18,2)` | 有限非负，合计大于 0 | 普通 / 魔法 / 稀有 / 传奇的抽取权重，仅装备使用 |
+| `_affixPool` | `List<AffixDefinition>` / 空 | 无空项，须满足候选装备品质的词条容量 | 复用 `CraftingOperations` 随机生成合法前后缀与数值 |
 
-`SetupMerchant` 清空旧库存、设置倍率并使用新的 `System.Random` 创建库存。当前库存每次启动可变化；若未来要求存档复现，必须把根种子纳入存档，而不是写回 TraderDefinition。
+`SetupMerchant` 用于新建库存，设置倍率并以独立随机种子生成实例。免费主动刷新先生成完整新批次，再原子替换并通知 UI / 存档；失败保留原库存。刷新日志记录种子，不推进战斗 / 掉落 / 打造随机通道。恢复存档使用保存的商人实例与顺序，不重新初始化或补发药水。
 
 ## TraderStockEntry
 
@@ -24,9 +28,12 @@
 | 字段 | 类型 / CLR 默认 | 必填、范围与稳定性 | 所有权、消费者、迁移 |
 | --- | --- | --- | --- |
 | `_item` | `ItemBaseDefinition` / `null` | 正数量条目必填 | 父商人资产持有；每份库存调用 `CreateInstance` 创建独立实例 |
-| `_rarity` | `ItemRarity` / `Normal` | 必填；初始状态必须能由当前基底合法创建 | 决定库存实例稀有度和价值；当前条目不额外生成显式前后缀 |
+| `_rarity` | `ItemRarity` / `Normal` | 必填；初始状态必须能由当前基底合法创建 | 决定库存实例稀有度和价值；仅固定模式使用；随机装备按品质权重生成合法前后缀 |
 | `_itemLevel` | `int` / `1` | 至少 `1` | 传入物品实例，影响等级门槛与详情 |
-| `_count` | `int` / `1` | 至少 `1` | `CreateStock` 精确创建份数；每份拥有独立 GUID 实例 ID 与随机 seed |
+| `_count` | `int` / `1` | 至少 `1` | 仅固定模式精确创建份数；随机模式忽略此数量，每个抽取结果为一件，药水买入后可合堆 |
+| `_weight` | `int` / `100` | 非负；随机池至少有一个正权重 | 有放回抽样；正式装备各 100、药水各 300，0 表示不参与抽取 |
+
+正式随机库存每批 16 件，候选池包含二十件装备和四种药水；每次购买只移除对应一件，不自动补货。
 
 ## CraftingDefinition
 
@@ -57,4 +64,4 @@
 - 购买先验证库存、金币和玩家背包空间，再扣金币并移除商人库存；出售先从玩家背包移除，再增加金币。
 - 打造先无副作用评估，成功构造新状态后原子提交，再扣金币；扣款失败会回滚词缀状态。
 - 配置中心检查倍率、库存引用/等级/数量、打造非负价格、精准倍率和每件装备的合法词缀候选覆盖。
-- 调价只影响新查询结果，不迁移现有金币；改变库存数量或基底 ID 时，存档系统上线后必须提供显式版本迁移。
+- 调价只影响新查询结果，不迁移现有金币；修改候选权重或库存数量仅影响下一次生成；现有库存按实例原样恢复。改变稳定基底 ID 仍需显式迁移。

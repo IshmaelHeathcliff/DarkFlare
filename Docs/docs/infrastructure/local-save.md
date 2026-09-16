@@ -1,7 +1,7 @@
 # 本地存档与 Session 恢复
 
 > 状态：已实现本地存档闭环；`alpha 0.4.0` 增加数量及金币物品迁移
-> 最近更新：2026-09-14
+> 最近更新：2026-09-15
 
 ## 模块目标
 
@@ -24,6 +24,10 @@
 | 玩家入口 | `SessionSaveFacade`、`GameMenuController`、`ApplicationFrontEndController` | 对当前 generation 暴露保存；在 FrontEnd 二次确认删除 `auto`；跨 Session 操作由 Scene Flow 负责 |
 
 `ApplicationHost` 拥有 PathProvider、Serializer、Storage 和 Profile 级 Coordinator；每个 Running Session 只绑定一个 generation-bound Snapshot Source 与 Facade。Session 停止时先解绑这些入口，再释放场景与架构。
+
+## 消耗品保存与兼容
+
+统一使用事务只保存已提交的物品余量、角色资源和状态快照，不持久化半完成请求，也不会在读取时重放即时回血 / 回蓝。来源物品用尽后，其临时状态仍独立保存恢复。core v4 → v5 是追加内容迁移，保持 Schema 3，旧商人库存原样恢复，不补发新增药水。独立 Player 的退出重启与真实历史文件验收见[alpha 0.4.2 综合验收](../assets/acceptance/alpha-0.4-item-use-acceptance/README.md)。
 
 ## 文件格式与 Schema
 
@@ -151,3 +155,5 @@ FrontEnd 只在无活动 Session、Coordinator 空闲且 Flow 为 `FrontEnd` 时
 - Settings、Locale、Toast / Modal / Fatal 错误外壳、统一 Logger 和平台挂起恢复均已落地。
 - 退出门禁覆盖当前桌面流程；平台差异由 Platform Lifecycle 统一编排。
 - Settings 已使用独立路径域、Schema 和服务，未写入游戏存档；存档 Storage 原语继续只服务 Save Domain。
+
+商店主动刷新通过 `MerchantStockRefreshedEvent` 标记待保存。当前剩余商品身份、顺序、稀有度与词条数值沿既有物品数据恢复，不重新抽样或补货；见[商店与随机库存](../trading-system.md)。

@@ -62,6 +62,7 @@ namespace DarkFlare.Tests
                 ContentNamespaces.Stat,
                 ContentNamespaces.Affix,
                 ContentNamespaces.Item,
+                ContentNamespaces.ItemUse,
                 ContentNamespaces.Actor,
                 ContentNamespaces.Skill,
                 ContentNamespaces.Monster,

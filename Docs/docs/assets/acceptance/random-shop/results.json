@@ -1,0 +1,24 @@
+{
+  "edit": {
+    "status": "completed",
+    "summary": {
+      "total": 568,
+      "passed": 568,
+      "failed": 0,
+      "skipped": 0,
+      "inconclusive": 0
+    },
+    "duration": 11.93
+  },
+  "play": {
+    "status": "completed",
+    "summary": {
+      "total": 75,
+      "passed": 75,
+      "failed": 0,
+      "skipped": 0,
+      "inconclusive": 0
+    },
+    "duration": 79.91
+  }
+}

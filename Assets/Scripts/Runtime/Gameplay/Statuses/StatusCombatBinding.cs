@@ -14,6 +14,11 @@ namespace DarkFlare
             return actor != null && _actorTargets.TryGetValue(actor, out StatusTargetId target) && _store.IsRegistered(target) ? target : default;
         }
 
+        internal CombatActor.ActorEffectPreparation GetEffectPreparation(StatusPreparation preparation)
+        {
+            return preparation.Projection is Projection projection ? projection.Effects : null;
+        }
+
         public StatusTargetId Bind(CombatActor actor, PlayerId id)
         {
             if (!ContentId.IsValidSegment(id.Value)) { throw new ArgumentException("玩家身份非法", nameof(id)); }
@@ -224,6 +229,7 @@ namespace DarkFlare
 
         sealed class Projection : IStatusProjection
         {
+            internal CombatActor.ActorEffectPreparation Effects => _preparation;
             readonly StatusSystem _system;
             readonly CombatActor _actor;
             readonly StatusTargetId _target;
@@ -241,7 +247,8 @@ namespace DarkFlare
             public void Apply() { _preparation.Apply(); }
             public void Publish()
             {
-                _system.GetSystem<CombatSystem>().PublishResourceChanges(_actor, _preparation.Before, ActorResourceChangeReason.MaximumChanged);
+                _system.GetSystem<CombatSystem>().PublishResourceChanges(_actor, _preparation.Before,
+                    _preparation.ResourceOverride.HasValue ? ActorResourceChangeReason.Restore : ActorResourceChangeReason.MaximumChanged);
             }
         }
     }

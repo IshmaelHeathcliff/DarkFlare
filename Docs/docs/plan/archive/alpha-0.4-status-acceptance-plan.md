@@ -1,6 +1,6 @@
 # 状态阶段 5：综合验收与收尾
 
-2026-09-14：已完成并归档。承接[状态总计划](./alpha-0.4-status-system-plan.md)，完成后再进入[统一物品使用与消耗品](../alpha-0.4-usable-items-plan.md)。覆盖核对见[合同与长期测试](../../assets/acceptance/alpha-0.4-status-acceptance/coverage.md)。
+2026-09-14：已完成并归档。承接[状态总计划](./alpha-0.4-status-system-plan.md)，完成后再进入[统一物品使用与消耗品](alpha-0.4-usable-items-plan.md)。覆盖核对见[合同与长期测试](../../assets/acceptance/alpha-0.4-status-acceptance/coverage.md)。
 
 ## 基线与目标
 
