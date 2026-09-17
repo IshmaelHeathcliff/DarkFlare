@@ -1,0 +1,88 @@
+# Alpha 0.5：地图编辑器与 AI 编辑
+
+状态：计划，未实现。入口：[总计划](../alpha-0.5-plan.md)，数据规则见[地图数据](./map-data-terrain.md)。
+
+## 工具选择
+
+在 Unity 内提供 Odin 地图工作台和 SceneView 绘制工具，复用 Unity Undo、Selection、AssetDatabase、SceneView Handles、Tilemap 显示及现有配置中心；不另造通用二维画布。Odin 负责配置 / 属性面板，地图预览通过 Editor API 构建。
+
+Tiled 的 Terrain Brush / Corner Wang 概念可用于规则核对，但首期不同时维护第二个完整外部编辑器，也不承诺任意 TMX 地图无损导入。正式交换格式是项目 JSON；需要 Tiled 等适配器时通过同一个 DTO / 校验入口转换。
+
+## 手工绘制
+
+| 工具 | 首期行为 |
+| --- | --- |
+| 地表笔刷 | 选择泥土 / 草地 / 水 / 道路，尺寸、画笔、擦除到默认地表、吸管、矩形 / 连续线、区域填充；绘制逻辑格，自动更新 Dual Grid 显示 |
+| 变体 | 稳定自动分配、选定显示格显式指定兼容 VariantId、清除 override；不改变地表语义 |
+| 对象 | 障碍 / 装饰 / 交互点目录搜索，吸附放置、移动、合法旋转、复制、批量删除；显示 footprint 和接地点 |
+| 区域 | 矩形与简单多边形、顶点修改、优先级与类型属性；可玩 / 刷怪 / 禁刷范围及传送入口可视化 |
+| 检查 | 图层显示 / 锁定、逻辑格 / 显示格切换、碰撞 / 通行 / 净空 / 区域叠加、错误定位、目标流场预览 |
+| 文档 | 新建、打开、保存、另存为、导入、导出、校验、重建预览、撤销 / 重做、显示未保存状态 |
+
+一次拖拽笔画视作一个撤销事务；重复刷同一值不制造无效 revision。地图复制生成新 MapId，并显式处理入口引用；普通导出不改 ID。缩小地图尺寸会移除数据时显示具体差异，不静默裁掉对象。
+
+地图预览是派生内容，不能直接拖动预览对象后只改 Scene Transform；选中派生对象应定位原记录，编辑操作仍写文档。预览重建采用 staging，失败保留旧预览并标注失配，保存 / 导出错误不覆盖原文件。关闭窗口或重载域释放临时对象、材质、Native 数据和输入注册。
+
+编辑器自身以键鼠为主；键盘可选工具、撤销、保存和导航属性。游戏中的地图出口、交易、打造等入口同时覆盖键鼠与手柄，不要求在 Unity SceneView 用手柄画地图。
+
+## 导入导出与文件合同
+
+- 提供带格式版本的 JSON Schema、枚举 / 内容目录快照、最小有效样例、命令样例和稳定错误码。使用已安装 Newtonsoft JSON，不增加另一套 JSON 库。
+- JSON 属性与集合按规范顺序输出；chunk / 对象按坐标 / ID 排序，浮点使用固定规则；同一文档重复导出字节稳定。
+- 数据引用使用 ContentId，导入不根据名字近似匹配，不把任意类型名或任意脚本表达式反序列化为可执行对象。
+- 执行结构校验、资源 / 内容引用校验、几何 / 拓扑校验、入口与必达交互点连通检查。结果包含 severity、code、JSON path、对象 ID / 格坐标及修复建议。
+- 导入先预检并显示差异，通过后作为一个事务替换当前文档；未知版本、引用缺失、非法地图完整拒绝。外部文件在编辑期间变化时检查 baseHash，阻止覆盖较新的磁盘版本。
+- 同目录临时文件完成写入和校验后原子替换；失败保留原文档。Map 文档格式版本与玩家 Save Schema 分别迁移。
+- 首期外部交换包为 JSON + 所需 ContentId 清单；不把贴图与 Prefab 偷偷嵌入 JSON。另一工程缺少内容时给出完整缺项列表。
+
+## AI 与手工共用事务
+
+建立不依赖窗口的 `MapEditService`，供 SceneView 工具、Editor 静态入口及 Unity CLI / MCP 调用。AI 读取结构化信息并发出批量操作，不靠模拟鼠标，也不直接编辑开放场景 YAML。
+
+| 接口（计划名） | 输出 / 操作 |
+| --- | --- |
+| DescribeSchema / ListDefinitions | 格式、坐标、约束、可用地表 / 对象 / 区域定义 |
+| ReadMap / ReadRegion | MapId、revision、hash、范围内逻辑格和对象，支持按区域分页 |
+| Validate / PreviewPatch | 完整预检、diff、影响矩形、阻挡和连通性变化；不写文件 |
+| ApplyPatch | 通过 revision + hash 复核后一次提交全部操作，返回新 revision / hash 和结果 |
+| Export / Import | 与手工按钮使用同一规范序列化和校验，不另建 AI 专用数据格式 |
+
+操作集首期包含 PaintCells、FillRect、PaintLine、FillRegion、SetVariant、UpsertObject、RemoveObject、UpsertRegion、RemoveRegion、SetMapMetadata。算法只接受显式输入；自然语言如何转成操作由调用方 AI 完成。
+
+示意批量请求，字段在 0.5.0 Schema 中正式冻结：
+
+```json
+{
+  "mapId": "core:map_town",
+  "baseRevision": 12,
+  "baseHash": "<读取文档得到的哈希>",
+  "operationId": "town-main-road-001",
+  "operations": [
+    {
+      "type": "FillRect",
+      "layer": "terrain",
+      "rect": { "x": 4, "y": 8, "width": 16, "height": 3 },
+      "terrainId": "core:terrain_road"
+    },
+    {
+      "type": "UpsertObject",
+      "objectId": "town_trader",
+      "definitionId": "core:map_object_trader",
+      "position": { "x": 12.5, "y": 12.5 },
+      "rotationQuarterTurns": 0
+    }
+  ]
+}
+```
+
+示例 ID 为计划中的目录键，不代表已有正式资产。对象 position 为地图局部世界单位，格操作为逻辑格整数；坐标类型必须在 Schema 中区分，不能将一个通用 x / y 字段同时解释为格号和像素。
+
+操作在副本模拟，全部验证后一次提交；任何操作失败不保留前半笔。重复发送同一 operationId + payload 在同一编辑会话返回原回执，不重复执行；不同 payload 复用 ID 报冲突。重启后的重试通过 revision / hash 拒绝过期请求并要求重新读取，不能无界累积永久操作历史。
+
+AI 可导出截图帮助目视检查，但成功判据是结构 / 行为校验和实际预览一致；仅有“已执行”文本不能代表地图生成正确。接口提供 Editor 内同步调用与批处理入口；运行 Editor 已持有工程时使用连接中的 Editor，不启动第二个写入进程。
+
+## 验收
+
+从空图分别用手绘和同等命令创建同一地表 / 对象 / 区域，语义导出一致；撤销 / 重做恢复布局与稳定变体。覆盖重复命令、过期 revision、磁盘冲突、坏 JSON、未知字段 / 版本策略、失效 ContentId、半笔失败、超大范围、负坐标、对象复制及关闭窗口清理。
+
+两张正式地图应保留可复现创建 / 修改样例；验证 AI 可以读取局部地图、增加绕行通道、修改刷怪区、预览并提交，再由人工继续编辑，不丢失任何一层数据。

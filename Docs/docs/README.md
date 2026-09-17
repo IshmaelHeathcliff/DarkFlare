@@ -53,39 +53,13 @@
 
 ## 计划状态
 
-状态显示已补充“显示 / 可隐藏 / 从不显示”三档及右上角 HUD，共用隐藏开关。最新 EditMode 540/540、PlayMode 73 项长期回归及 1 项临时截图检查通过，见[验收记录](./assets/acceptance/status-visibility-hud/README.md)和[已归档计划](./plan/archive/status-visibility-hud-plan.md)。
+2026-09-17：**Alpha 0.5 总计划已建立，待实施**，见[地图、地图编辑器与动态寻路总计划](./plan/alpha-0.5-plan.md)及[0.5.0 地图基础执行计划](./plan/alpha-0.5.0-map-foundation-plan.md)。范围包含 Dual Grid + Wang Tile 四种地表、五类地图数据、手工 / AI 编辑、Y 排序、城镇 / 野外与 Job / Burst 批量寻路。用户确认 500 活动怪物、1000 压力测试，以及切图保留状态、离场暂停。尚未开始功能实现，运行版本保持 `0.4.2-alpha`。
 
-[alpha 0.4 状态系统](./plan/archive/alpha-0.4-status-system-plan.md)已完成全部五个阶段，并以 `0.4.1-alpha` 交付；core v4、Schema 3 保持不变。本轮 EditMode 540/540、PlayMode 73/73，独立 Windows Player 的状态效果、输入、显示与跨进程存档恢复通过，见[综合验收](./assets/acceptance/alpha-0.4-status-acceptance/README.md)。总计划及配套文档已归档，下一步为统一物品使用与消耗品。
+Alpha 0.4 已完成统一物品、状态、统一使用与四类消耗品，并补充状态 HUD 和随机商店。当前 core v5、Schema 3；最近记录为 2026-09-16 EditMode 568/568、PlayMode 75/75 通过，见[随机商店验收](./assets/acceptance/random-shop/README.md)。该轮未重建 Windows Player；最近的独立 Player 验收属于 2026-09-15 [消耗品交付](./assets/acceptance/alpha-0.4-item-use-acceptance/README.md)，不能代替随机商店实机验收。本次文档梳理未重跑测试。
 
-状态前置已完成，下一步实施[统一物品使用与消耗品](plan/archive/alpha-0.4-usable-items-plan.md)，建议版本 `0.4.2-alpha`：所有主动使用物品共用能力配置与执行事务，首批支持回血、回蓝、临时状态和驱散异常。使用核心、四种正式消耗品与 UI 已接入。[统一使用核心与复合事务](./plan/archive/alpha-0.4-item-use-core-plan.md)已完成，EditMode 562/562、PlayMode 73/73 通过。[正式消耗品与背包交互](./plan/archive/alpha-0.4-consumables-ui-plan.md)已完成，EditMode 563/563、PlayMode 74/74 通过。[消耗品综合验收](plan/archive/alpha-0.4-item-use-acceptance-plan.md)已完成，交付 `0.4.2-alpha`，core v5、Schema 3；独立 Player、EditMode 563/563、PlayMode 74/74 通过，见[证据](./assets/acceptance/alpha-0.4-item-use-acceptance/README.md)。
-
-[alpha 0.4 统一物品系统](./plan/archive/alpha-0.4-item-system-plan.md)已完成：金币与材料入栏、堆叠 / 消耗、材料打造、掉落及旧档迁移。运行版本 `0.4.0-alpha`，EditMode 442/442、PlayMode 67/67；见[验收证据](./assets/acceptance/alpha-0.4-items/README.md)。
-
-[alpha 0.3.4：十槽装备与内容补齐](plan/archive/alpha-0.3.4-equipment-completion-plan.md)已于 2026-09-11 完成并归档：十槽、二十件装备、滚动商店、旧档兼容；434/434 EditMode、63/63 PlayMode 和可见 Windows Player 验收通过。当时版本 `0.3.4-alpha`，见[验收证据及包级退出警告说明](./assets/acceptance/alpha-0.3.4-equipment/README.md)。[alpha 0.3 总计划](plan/archive/alpha-0.3-plan.md)同时归档。
-
-[alpha 0.3.3：统一 UI 视觉组件](./plan/archive/alpha-0.3.3-unified-ui-visual-plan.md)已完成：共享材质、正式按钮 / 槽位、Shell 控件与三语言排版通过验收。当时运行版本 `0.3.3-alpha`，EditMode 432/432、PlayMode 63/63；见[组件规范](./ui-component-style.md)与[验收证据](./assets/acceptance/alpha-0.3.3-ui-style/README.md)。收尾阶段 [0.3.4 十槽装备与内容补齐](plan/archive/alpha-0.3.4-equipment-completion-plan.md)。
-
-[alpha 0.3.2：暗黑像素 HUD 与战斗状态](./plan/archive/alpha-0.3.2-dark-pixel-hud-plan.md)已完成，当时版本 `0.3.2-alpha`；EditMode 432/432、PlayMode 63/63。见[HUD 模块](./hud-system.md)与[验收证据](./assets/acceptance/alpha-0.3.2-hud/README.md)。0.3.3 统一 UI 视觉组件也已完成。
-
-[alpha 0.3.1：独立属性详情与实时解释](./plan/archive/alpha-0.3.1-realtime-attributes-plan.md)已完成，当时运行版本为 `0.3.1-alpha`。模块行为见[独立属性详情](./attribute-details.md)，全量回归与视觉证据见[验收记录](./assets/acceptance/alpha-0.3.1-attributes/README.md)。0.3.2 HUD 也已完成。
-
-Alpha 0.3 前置[测试审计与精简](./testing/test-suite-audit.md)已完成：EditMode 424/424、PlayMode 56/56 通过，一次性 / 过时测试已清理，后续维护规则已建立。[执行计划已归档](./plan/archive/test-suite-maintenance-plan.md)。
-
-`alpha 0.2.0–0.2.7` 已完成。规划期总计划、阶段计划与验收过程已移入[已完成计划归档](./plan/archive/README.md)；后续实现以长期运行时契约和各基础设施模块文档为准。
-
-`alpha 0.3` 已开始 [UI 迭代](plan/archive/alpha-0.3-plan.md)：独立背包 / 商店 / 打造窗口、实时属性详情、暗黑像素 HUD 和统一视觉组件。[alpha 0.3.0 首阶段](plan/archive/alpha-0.3.0-independent-ui-windows-plan.md)已完成设置 / 返回确认与背包的交接修复；独立窗口、单窗买卖 / 打造、共享物品表现及空间导航已完成；统一拖放事务、快捷动作与代表视觉组件均已完成，运行版本更新为 `0.3.0-alpha`。[启动资料梳理](./plan/archive/alpha-0.3-startup.md)已归档。
-
-首阶段优先修复设置 / 返回主菜单与背包的交互阻塞，并按[统一物品交互合同](plan/archive/alpha-0.3-item-interaction-contract.md)验收拖动、右键、手柄、单一高亮与详情排版。
-
-[独立窗口可用闭环已归档](./plan/archive/alpha-0.3.0-window-workspace-plan.md)：EditMode 429/429、PlayMode 59/59 通过，[18 种组合截图与十槽空间线框](./assets/acceptance/alpha-0.3.0-windows/README.md)已留档。[统一物品操作与事务](./plan/archive/alpha-0.3.0-unified-item-actions-plan.md)已接通指定格购买、出售 / 丢弃、打造取回落点和统一快捷动作；[当前验收记录](./assets/acceptance/alpha-0.3.0-actions/README.md)。0.3.0–0.3.4 已全部完成。
-
-[代表视觉组件与布局收尾](plan/archive/alpha-0.3.0-visual-pilot-plan.md)已完成：正式窗口底板、独立属性 / HUD 空间线框、展开属性排版与关闭图标通过验证。完整 EditMode 430/430、PlayMode 61/61，见[阶段验收](./assets/acceptance/alpha-0.3.0-visual-pilot/README.md)。
-
-手柄导航须按实际视觉位置四向移动并支持面板边缘自然跨窗；[alpha 0.3.4 收尾计划](plan/archive/alpha-0.3.4-equipment-completion-plan.md)扩充十槽装备，每个部位至少两件正式配置，并完成旧档兼容与综合验收。
+Alpha 0.1、0.2 基础设施、0.3 UI 与十槽装备，以及 0.4 已完成计划均见[归档索引](./plan/archive/README.md)。当前功能以各模块文档为准，归档中的“下一阶段”保留历史含义。
 
 ## 说明
 
-当前项目已完成首版最小循环、初步体验优化、`alpha 0.1` 封板和 `alpha 0.2` 基础设施封板。文档以现有目录、包依赖和脚本入口为准整理；已完成的执行计划统一保存在 `Docs/docs/plan/archive/`。
+当前项目已完成首版最小循环、初步体验优化及 Alpha 0.1–0.4 已归档计划，现已建立 Alpha 0.5 总计划及首阶段执行计划。已完成的执行计划统一保存在 `Docs/docs/plan/archive/`。
 后续新增系统、配置或流程时，应优先更新对应文档，避免 `Docs/docs/` 与实现脱节。游戏设计文档位于 `Docs/design/`，不属于 Agent 的常规维护范围。
-
-[随机商店与主动刷新](./trading-system.md)已完成：每批 16 件、随机装备品质和词条、买一件减一件、免费主动刷新及库存保存恢复。EditMode 568/568、PlayMode 75/75；见[验收记录](./assets/acceptance/random-shop/README.md)与[归档计划](./plan/archive/alpha-0.4-random-shop-plan.md)。
