@@ -1,0 +1,30 @@
+{
+  "complete": true,
+  "unity": "6000.6.0f1",
+  "cpu": "AMD Ryzen 7 PRO 8845HS w/ Radeon 780M Graphics",
+  "resolution": "1920x1080",
+  "platform": "WindowsPlayer",
+  "results": [],
+  "gc": [
+    {
+      "count": 1628,
+      "ticks": 512,
+      "marker": "GC.Alloc",
+      "positiveControlAllocationBytes": 512,
+      "positiveControlEvents": 1,
+      "counterValid": true,
+      "allocationEventsInsideSortingTick": 0,
+      "bytesInsideSortingTick": 0
+    },
+    {
+      "count": 2128,
+      "ticks": 512,
+      "marker": "GC.Alloc",
+      "positiveControlAllocationBytes": 512,
+      "positiveControlEvents": 1,
+      "counterValid": true,
+      "allocationEventsInsideSortingTick": 0,
+      "bytesInsideSortingTick": 0
+    }
+  ]
+}

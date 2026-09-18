@@ -75,6 +75,41 @@ namespace DarkFlare.Tests
         }
 
         [Test]
+        public void BatchRegistrationIsAtomicAndOldLeaseCannotRemoveReplacement()
+        {
+            var system = new WorldSortingSystem(2);
+            WorldSortParticipant a = CreateParticipant("batch_a", WorldSortCategory.StaticProp, 0, false);
+            WorldSortParticipant b = CreateParticipant("batch_b", WorldSortCategory.StaticProp, 1, false);
+            a.ConfigureExplicit(WorldSortCategory.StaticProp, "same", a.transform);
+            b.ConfigureExplicit(WorldSortCategory.StaticProp, "same", b.transform);
+            Assert.IsFalse(system.TryRegisterBatch(new[] { a, b }, out _, out _));
+            Assert.AreEqual(0, system.ParticipantCount);
+            b.ConfigureExplicit(WorldSortCategory.StaticProp, "b", b.transform);
+            Assert.IsTrue(system.TryRegisterBatch(new[] { a, b }, out WorldSortRegistration[] leases, out _));
+            Assert.IsFalse(system.TryRegisterBatch(new[] { a }, out _, out _));
+            Assert.AreEqual(2, system.ParticipantCount);
+            leases[0].Dispose();
+            Assert.IsTrue(system.Register(a));
+            leases[0].Dispose();
+            Assert.AreEqual(2, system.ParticipantCount);
+            system.Tick(); long sorts = system.SortCount; system.Tick();
+            Assert.AreEqual(sorts, system.SortCount); Assert.AreEqual(0, system.LastOrderWrites);
+            system.ReleaseAll(); Assert.IsFalse(a.IsRegistered); Assert.IsFalse(b.IsRegistered);
+        }
+
+        [Test]
+        public void ExplicitParticipantsStayUnregisteredUntilActivationAndIdentityIsUnambiguous()
+        {
+            WorldSortParticipant p = CreateParticipant("staging", WorldSortCategory.StaticProp, 0, false);
+            p.ConfigureExplicit(WorldSortCategory.StaticProp, "staging", p.transform);
+            p.gameObject.SetActive(true);
+            Assert.IsFalse(p.IsRegistered);
+            Assert.AreNotEqual(WorldSortingSystem.ComposeIdentity("a/b", "c", "d"), WorldSortingSystem.ComposeIdentity("a", "b/c", "d"));
+            Assert.Throws<System.ArgumentOutOfRangeException>(() => WorldSortingSystem.QuantizeY(float.NaN));
+            Assert.Throws<System.ArgumentOutOfRangeException>(() => new WorldSortingSystem(WorldSortingSystem.MaximumParticipants + 1));
+        }
+
+        [Test]
         public void SortingSystem_UpdatesOnlyAfterQuantizedMovementAndAssignsUniqueOrders()
         {
             WorldSortingSystem system = _architecture.GetUtility<WorldSortingSystem>();
@@ -97,27 +132,37 @@ namespace DarkFlare.Tests
         }
 
         [Test]
-        public void SortingSystem_UnchangedKeysAllocateNoManagedMemory()
+        public void SortingSystem_StationaryAndChangedKeysAllocateNoManagedMemory()
         {
             WorldSortingSystem system = _architecture.GetUtility<WorldSortingSystem>();
-            CreateParticipant("allocation_a", WorldSortCategory.StaticProp, 2f);
-            CreateParticipant("allocation_b", WorldSortCategory.Monster, 1f);
-            system.Tick();
-
-            for (int i = 0; i < 64; i++)
+            WorldSortParticipant moving = CreateParticipant("moving", WorldSortCategory.Monster, 0f);
+            CreateParticipant("tie_a", WorldSortCategory.StaticProp, 1f);
+            CreateParticipant("tie_b", WorldSortCategory.Player, 1f);
+            bool previous = UnityEngine.Profiling.Profiler.enabled;
+            UnityEngine.Profiling.Profiler.enabled = true;
+            try
             {
                 system.Tick();
+                using var recorder = Unity.Profiling.ProfilerRecorder.StartNew(Unity.Profiling.ProfilerCategory.Memory,
+                    "GC.Alloc", 1024, Unity.Profiling.ProfilerRecorderOptions.CollectOnlyOnCurrentThread);
+                recorder.Start();
+                byte[] probe = new byte[512];
+                recorder.Stop();
+                bool valid = recorder.Valid && recorder.Count > 0;
+                System.GC.KeepAlive(probe);
+                Assert.IsTrue(valid, "必须先观测到正向分配探针，不能把不可用计数器视作零分配");
+                long events = 0;
+                for (int i = 0; i < 128; i++)
+                {
+                    if (i >= 64) { moving.transform.position = Vector3.up * (i % 2 == 0 ? 0f : 2f); }
+                    recorder.Reset(); recorder.Start();
+                    system.Tick();
+                    recorder.Stop();
+                    for (int sample = 0; sample < recorder.Count; sample++) { events += recorder.GetSample(sample).Count; }
+                }
+                Assert.AreEqual(0, events, "静止、移动重排和同 Y 比较均不得产生托管分配");
             }
-
-            long allocatedBefore = System.GC.GetAllocatedBytesForCurrentThread();
-
-            for (int i = 0; i < 1024; i++)
-            {
-                system.Tick();
-            }
-
-            long allocatedAfter = System.GC.GetAllocatedBytesForCurrentThread();
-            Assert.AreEqual(0L, allocatedAfter - allocatedBefore, "排序键未变化时不得产生托管分配");
+            finally { UnityEngine.Profiling.Profiler.enabled = previous; }
         }
 
         [Test]
@@ -176,12 +221,12 @@ namespace DarkFlare.Tests
         }
 
         [Test]
-        public void DedicatedEffectPrefabs_UseFrozenLayersAndOrders()
+        public void EffectPrefabs_UseWorldObjectLocalOrders()
         {
-            AssertRendererContract("Assets/Prefabs/Combat/Projectile_Default.prefab", "WorldEffect", 0);
-            AssertRendererContract("Assets/Prefabs/Effects/Projectile_Arcane_Impact.prefab", "WorldEffect", 10);
-            AssertRendererContract("Assets/Prefabs/Effects/Actor_Hit_Default.prefab", "WorldEffect", 10);
-            AssertRendererContract("Assets/Prefabs/Effects/Actor_Hit_Critical.prefab", "WorldEffect", 10);
+            AssertRendererContract("Assets/Prefabs/Combat/Projectile_Default.prefab", "WorldObject", 0);
+            AssertRendererContract("Assets/Prefabs/Effects/Projectile_Arcane_Impact.prefab", "WorldObject", 10);
+            AssertRendererContract("Assets/Prefabs/Effects/Actor_Hit_Default.prefab", "WorldObject", 10);
+            AssertRendererContract("Assets/Prefabs/Effects/Actor_Hit_Critical.prefab", "WorldObject", 10);
         }
 
         [Test]

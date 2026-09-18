@@ -1,0 +1,103 @@
+{
+  "cellSize": 1.0,
+  "chunks": [],
+  "defaultTerrainId": "terrain:dirt",
+  "formatVersion": 1,
+  "height": 32,
+  "mapId": "map:world_sorting",
+  "objects": [
+    {
+      "appearanceVariant": null,
+      "definitionId": "map_object:editor_rock",
+      "interaction": null,
+      "objectId": "rock",
+      "position": {
+        "x": 13.0,
+        "y": 10.0
+      },
+      "rotation": 0
+    },
+    {
+      "appearanceVariant": null,
+      "definitionId": "map_object:editor_tent",
+      "interaction": null,
+      "objectId": "tent",
+      "position": {
+        "x": 17.0,
+        "y": 10.0
+      },
+      "rotation": 0
+    },
+    {
+      "appearanceVariant": null,
+      "definitionId": "map_object:editor_tree",
+      "interaction": null,
+      "objectId": "tree",
+      "position": {
+        "x": 9.0,
+        "y": 10.0
+      },
+      "rotation": 0
+    },
+    {
+      "appearanceVariant": null,
+      "definitionId": "map_object:editor_long_barrier",
+      "interaction": null,
+      "objectId": "wall_0",
+      "position": {
+        "x": 10.0,
+        "y": 17.0
+      },
+      "rotation": 0
+    },
+    {
+      "appearanceVariant": null,
+      "definitionId": "map_object:editor_long_barrier",
+      "interaction": null,
+      "objectId": "wall_180",
+      "position": {
+        "x": 10.0,
+        "y": 24.0
+      },
+      "rotation": 180
+    },
+    {
+      "appearanceVariant": null,
+      "definitionId": "map_object:editor_long_barrier",
+      "interaction": null,
+      "objectId": "wall_270",
+      "position": {
+        "x": 26.0,
+        "y": 19.0
+      },
+      "rotation": 270
+    },
+    {
+      "appearanceVariant": null,
+      "definitionId": "map_object:editor_long_barrier",
+      "interaction": null,
+      "objectId": "wall_90",
+      "position": {
+        "x": 20.0,
+        "y": 19.0
+      },
+      "rotation": 90
+    }
+  ],
+  "origin": {
+    "x": 0.0,
+    "y": 0.0
+  },
+  "regions": [],
+  "revision": 0,
+  "seed": 1805,
+  "terrainPalette": [
+    "terrain:dirt",
+    "terrain:grass",
+    "terrain:water",
+    "terrain:road"
+  ],
+  "terrainSetId": "terrain_set:basic",
+  "variantOverrides": [],
+  "width": 32
+}

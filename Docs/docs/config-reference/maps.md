@@ -68,7 +68,29 @@ Editor 发布校验源修订、输出内容、地址唯一性、标签与运行�
 | `_id` | string / null | 必填、唯一稳定本地 ID |
 | `_kind` | MapRegionKind / Named | Named、Safe、Spawn；Spawn 要求类型为 spawn 的定义绑定，其余不得携带刷怪参数 |
 
-## 错误与所有权
+## MapObjectPresentationCatalog
+
+创建菜单 `Object Presentation Catalog`，在配置中心按类型编辑。目录只保存表现绑定，不改变 `.dfmap` V1、对象 footprint 或交互数据。运行时由 Addressables owner 持有，编辑器使用相同引用定位纯表现 Prefab。
+
+| 字段 | 类型 / 默认 | 合同 |
+| --- | --- | --- |
+| `_entries` | MapObjectPresentationEntry[] / 空 | 对象定义不可重复；缺失绑定只阻止正式表现装配，不阻止纯布局编辑 |
+
+## MapObjectPresentationEntry
+
+| 字段 | 类型 / 默认 | 合同 |
+| --- | --- | --- |
+| `_definition` | MapObjectDefinition / null | 明确对象定义，不使用名称近似匹配 |
+| `_appearances` | MapObjectAppearance[] / 空 | 必须有唯一默认项；所有定义中的外观 ID 必须覆盖，未知 ID 不可登记 |
+
+## MapObjectAppearance
+
+| 字段 | 类型 / 默认 | 合同 |
+| --- | --- | --- |
+| `_variantId` | string / 空 | 空表示默认外观，非空必须属于对应对象定义 |
+| `_prefab` | AssetReferenceGameObject / null | 必填、Addressables 登记；资源只包含 Sprite 表现、显式排序单元和分段组件，不允许物理或玩法脚本 |
+
+## 校验与资源释放
 
 内容校验及 `.dfmap` 导入均验证定义、引用、能力与布局。源损坏生成错误报告并撤销有效 MapDefinition，配置中心显示原因；标准 Player 构建前执行地图校验。新增缺失定义或删除冲突后会触发重新导入。
 

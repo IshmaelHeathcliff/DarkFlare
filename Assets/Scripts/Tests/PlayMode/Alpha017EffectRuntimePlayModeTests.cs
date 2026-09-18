@@ -83,5 +83,34 @@ namespace DarkFlare.Tests
 
             Assert.IsTrue(poolRoot == null, "本测试创建的特效池根未在帧末销毁");
         }
+
+        [UnityTest]
+        public IEnumerator WorldAndAttachedEffectsReleaseSortingOnCancellationAndHostDisable()
+        {
+            VisualEffectPool pool = _architecture.GetUtility<VisualEffectPool>();
+            WorldSortingSystem sorting = _architecture.GetUtility<WorldSortingSystem>();
+            using var cancellation = new System.Threading.CancellationTokenSource();
+            Assert.IsTrue(pool.TryPlay(_effectPrefab, Vector3.up, Color.white,
+                new WorldEffectContext(sorting, "feedback:first", Vector3.zero, cancellation.Token)));
+            Assert.AreEqual(1, sorting.ParticipantCount);
+            cancellation.Cancel(); yield return null; yield return null;
+            Assert.AreEqual(0, sorting.ParticipantCount); Assert.AreEqual(0, pool.GetStats(_effectPrefab).Active);
+            Assert.IsTrue(pool.TryPlay(_effectPrefab, Vector3.up, Color.white, new WorldEffectContext(sorting, "feedback:second", Vector3.up)));
+            Assert.AreEqual(1, sorting.ParticipantCount);
+            var host = new GameObject("Feedback host"); host.SetActive(false);
+            WorldSortParticipant participant = host.AddComponent<WorldSortParticipant>();
+            participant.ConfigureExplicit(WorldSortCategory.Monster, "host", host.transform); host.SetActive(true); sorting.Register(participant);
+            try
+            {
+                Assert.IsTrue(pool.TryPlay(_effectPrefab, host.transform.position, Color.red, new WorldEffectContext(participant)));
+                Assert.AreEqual(1, host.GetComponentsInChildren<UnityEngine.Rendering.SortingGroup>(true).Length, "附着效果不能嵌套 Group");
+                Assert.AreEqual(2, sorting.ParticipantCount, "附着效果不新增独立排序登记");
+                host.SetActive(false); yield return null; yield return null;
+                Assert.AreEqual(1, sorting.ParticipantCount); Assert.AreEqual(1, pool.GetStats(_effectPrefab).Active);
+                yield return new WaitForSeconds(.3f);
+                Assert.AreEqual(0, sorting.ParticipantCount); Assert.AreEqual(0, pool.GetStats(_effectPrefab).Active);
+            }
+            finally { Object.DestroyImmediate(host); }
+        }
     }
 }

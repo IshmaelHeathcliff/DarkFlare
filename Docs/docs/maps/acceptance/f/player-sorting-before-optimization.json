@@ -1,0 +1,121 @@
+{
+  "complete": false,
+  "unity": "6000.6.0f1",
+  "cpu": "AMD Ryzen 7 PRO 8845HS w/ Radeon 780M Graphics",
+  "resolution": "1920x1080",
+  "platform": "WindowsPlayer",
+  "results": [
+    {
+      "dynamicCount": 500,
+      "staticParts": 1000,
+      "effects": 128,
+      "total": 1628,
+      "mode": "stationary",
+      "round": 0,
+      "seconds": 60,
+      "samples": 7198,
+      "current": {
+        "p50": 0.3044,
+        "p95": 0.4539,
+        "p99": 0.6673
+      },
+      "baseline": {
+        "p50": 0.1706,
+        "p95": 0.2949,
+        "p99": 0.4046
+      },
+      "registration": {
+        "p50": 0.0,
+        "p95": 0.0,
+        "p99": 0.0
+      },
+      "allocationCounterAvailable": false,
+      "currentAllocatedBytes": null,
+      "baselineAllocatedBytes": null
+    },
+    {
+      "dynamicCount": 500,
+      "staticParts": 1000,
+      "effects": 128,
+      "total": 1628,
+      "mode": "stationary",
+      "round": 1,
+      "seconds": 60,
+      "samples": 7198,
+      "current": {
+        "p50": 0.30360000000000004,
+        "p95": 0.4042,
+        "p99": 0.6543
+      },
+      "baseline": {
+        "p50": 0.1748,
+        "p95": 0.22410000000000002,
+        "p99": 0.4162
+      },
+      "registration": {
+        "p50": 0.0,
+        "p95": 0.0,
+        "p99": 0.0
+      },
+      "allocationCounterAvailable": false,
+      "currentAllocatedBytes": null,
+      "baselineAllocatedBytes": null
+    },
+    {
+      "dynamicCount": 500,
+      "staticParts": 1000,
+      "effects": 128,
+      "total": 1628,
+      "mode": "stationary",
+      "round": 2,
+      "seconds": 60,
+      "samples": 7192,
+      "current": {
+        "p50": 0.2972,
+        "p95": 0.4031,
+        "p99": 0.5713
+      },
+      "baseline": {
+        "p50": 0.1731,
+        "p95": 0.2359,
+        "p99": 0.4126
+      },
+      "registration": {
+        "p50": 0.0,
+        "p95": 0.0,
+        "p99": 0.0
+      },
+      "allocationCounterAvailable": false,
+      "currentAllocatedBytes": null,
+      "baselineAllocatedBytes": null
+    },
+    {
+      "dynamicCount": 500,
+      "staticParts": 1000,
+      "effects": 128,
+      "total": 1628,
+      "mode": "moving",
+      "round": 0,
+      "seconds": 60,
+      "samples": 7197,
+      "current": {
+        "p50": 0.96000000000000008,
+        "p95": 1.472,
+        "p99": 2.4294000000000002
+      },
+      "baseline": {
+        "p50": 0.87420000000000009,
+        "p95": 1.7703,
+        "p99": 2.6756
+      },
+      "registration": {
+        "p50": 0.0,
+        "p95": 0.0,
+        "p99": 0.0
+      },
+      "allocationCounterAvailable": false,
+      "currentAllocatedBytes": null,
+      "baselineAllocatedBytes": null
+    }
+  ]
+}

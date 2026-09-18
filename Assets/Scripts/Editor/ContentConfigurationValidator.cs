@@ -195,6 +195,7 @@ namespace DarkFlare.Editor
 
             ValidateRegisteredDefinitions(issues);
             issues.AddRange(MapEditorValidation.Scan());
+            issues.AddRange(MapObjectPresentationSetup.Scan());
             foreach (StatusDefinition status in LoadAssets<StatusDefinition>(PresetRoot))
             {
                 foreach (string issue in status.ValidateConfiguration()) { AddError(issues, status, issue); }

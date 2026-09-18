@@ -1,0 +1,166 @@
+{
+  "passed": true,
+  "error": null,
+  "product": "DarkFlare-WorldVisual-Audit",
+  "version": "0.5.1-alpha",
+  "resolution": "1920x1080",
+  "checks": [
+    {
+      "name": "Main startup",
+      "passed": true,
+      "detail": "None"
+    },
+    {
+      "name": "Input System movement",
+      "passed": true,
+      "detail": "(0.00, 0.00, 0.00) -> (0.00, -2.44, 0.00)"
+    },
+    {
+      "name": "Interact Shop",
+      "passed": true,
+      "detail": "keyboard E; specific page visible"
+    },
+    {
+      "name": "Close interaction Shop",
+      "passed": true,
+      "detail": "close target and inventory"
+    },
+    {
+      "name": "Interact Crafting",
+      "passed": true,
+      "detail": "keyboard E; specific page visible"
+    },
+    {
+      "name": "Close interaction Crafting",
+      "passed": true,
+      "detail": "close target and inventory"
+    },
+    {
+      "name": "Addressables visual activation",
+      "passed": true,
+      "detail": "parts=19"
+    },
+    {
+      "name": "Occlusion tree/body/1",
+      "passed": true,
+      "detail": "actor=26, prop=29"
+    },
+    {
+      "name": "Occlusion tree/body/-1",
+      "passed": true,
+      "detail": "actor=29, prop=28"
+    },
+    {
+      "name": "Occlusion wall_0/stone_0/1",
+      "passed": true,
+      "detail": "actor=13, prop=15"
+    },
+    {
+      "name": "Occlusion wall_0/stone_0/-1",
+      "passed": true,
+      "detail": "actor=22, prop=14"
+    },
+    {
+      "name": "Occlusion wall_0/stone_3/1",
+      "passed": true,
+      "detail": "actor=13, prop=18"
+    },
+    {
+      "name": "Occlusion wall_0/stone_3/-1",
+      "passed": true,
+      "detail": "actor=23, prop=18"
+    },
+    {
+      "name": "Occlusion wall_90/stone_3/1",
+      "passed": true,
+      "detail": "actor=4, prop=5"
+    },
+    {
+      "name": "Occlusion wall_90/stone_3/-1",
+      "passed": true,
+      "detail": "actor=6, prop=4"
+    },
+    {
+      "name": "Occlusion wall_180/stone_0/1",
+      "passed": true,
+      "detail": "actor=0, prop=1"
+    },
+    {
+      "name": "Occlusion wall_180/stone_0/-1",
+      "passed": true,
+      "detail": "actor=5, prop=1"
+    },
+    {
+      "name": "Occlusion wall_270/stone_3/1",
+      "passed": true,
+      "detail": "actor=16, prop=24"
+    },
+    {
+      "name": "Occlusion wall_270/stone_3/-1",
+      "passed": true,
+      "detail": "actor=24, prop=23"
+    },
+    {
+      "name": "Projectile occlusion 1",
+      "passed": true,
+      "detail": "29 / tree=32"
+    },
+    {
+      "name": "Impact play 1",
+      "passed": true,
+      "detail": "effect:12:audit-impact:13"
+    },
+    {
+      "name": "Impact occlusion 1",
+      "passed": true,
+      "detail": "30 / tree=33"
+    },
+    {
+      "name": "Attached hit 1",
+      "passed": true,
+      "detail": "host group"
+    },
+    {
+      "name": "Attached group ownership 1",
+      "passed": true,
+      "detail": "one host group"
+    },
+    {
+      "name": "Projectile occlusion -1",
+      "passed": true,
+      "detail": "32 / tree=30"
+    },
+    {
+      "name": "Impact play -1",
+      "passed": true,
+      "detail": "effect:12:audit-impact:15"
+    },
+    {
+      "name": "Impact occlusion -1",
+      "passed": true,
+      "detail": "32 / tree=30"
+    },
+    {
+      "name": "Attached hit -1",
+      "passed": true,
+      "detail": "host group"
+    },
+    {
+      "name": "Attached group ownership -1",
+      "passed": true,
+      "detail": "one host group"
+    },
+    {
+      "name": "Addressables release",
+      "passed": true,
+      "detail": "42 -> 42"
+    },
+    {
+      "name": "Main frame times",
+      "p50": 16.666702926158905,
+      "p95": 16.668800264596939,
+      "frames": 600,
+      "participants": 19
+    }
+  ]
+}

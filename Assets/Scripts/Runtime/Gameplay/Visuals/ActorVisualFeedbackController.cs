@@ -223,7 +223,8 @@ namespace DarkFlare
             this.GetUtility<VisualEffectPool>().TryPlay(
                 prefab,
                 position,
-                CombatEffectPalette.GetHitTint(result));
+                CombatEffectPalette.GetHitTint(result),
+                new WorldEffectContext(GetComponentInParent<WorldSortParticipant>()));
         }
 
         void StopTweens()

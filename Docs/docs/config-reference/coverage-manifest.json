@@ -2,6 +2,21 @@
   "schemaVersion": 1,
   "entries": [
     {
+      "type": "DarkFlare.MapObjectPresentationCatalog",
+      "document": "Docs/docs/config-reference/maps.md",
+      "anchor": "mapobjectpresentationcatalog"
+    },
+    {
+      "type": "DarkFlare.MapObjectPresentationEntry",
+      "document": "Docs/docs/config-reference/maps.md",
+      "anchor": "mapobjectpresentationentry"
+    },
+    {
+      "type": "DarkFlare.MapObjectAppearance",
+      "document": "Docs/docs/config-reference/maps.md",
+      "anchor": "mapobjectappearance"
+    },
+    {
       "type": "DarkFlare.TerrainDefinition",
       "document": "Docs/docs/config-reference/maps.md",
       "anchor": "terraindefinition"

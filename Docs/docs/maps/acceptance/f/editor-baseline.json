@@ -1,0 +1,7 @@
+{
+  "scope": "Before F1, Editor synchronous smoke, 60 warmup and 1000 measured ticks; not Player acceptance",
+  "samples": [
+    { "dynamic": 500, "total": 1628, "p50Ms": 0.8078, "p95Ms": 1.4956, "p99Ms": 3.4132 },
+    { "dynamic": 1000, "total": 2128, "p50Ms": 1.0556, "p95Ms": 2.1161, "p99Ms": 4.298 }
+  ]
+}

@@ -1,0 +1,58 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: DarkFlare-Map-Objects
+  m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
+  m_GroupName: DarkFlare-Map-Objects
+  m_GUID: 680ef8c8c12b4dc45930571f0e6d0112
+  m_SerializeEntries:
+  - m_GUID: 05a61a13b29e91d49a1e33cf87d80ce8
+    m_Address: Assets/Prefabs/World/MapObjects/trader.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 074db93d6a2a8a14f9d5fd0234b35543
+    m_Address: Assets/Prefabs/World/MapObjects/long_barrier.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4e5de6604528a5f4593139e3c7bfa7dc
+    m_Address: Assets/Prefabs/World/MapObjects/rock.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a028d1fde9ec0804cbde99703cef7440
+    m_Address: Assets/Data/Maps/Presentation/map_object_presentations.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a28f3a785787d574481e2ac082f17f73
+    m_Address: Assets/Prefabs/World/MapObjects/tree.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a667abb3d9de6ec4e90ef3c447d1c1a7
+    m_Address: Assets/Prefabs/World/MapObjects/crafting.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d8c086b75b2ed4b418f6e86924f57b7b
+    m_Address: Assets/Prefabs/World/MapObjects/tent.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 2a89337400d536944bcf12b9576d1482, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: b4090e8e8e7d75247bb92be9e70dc4f0, type: 2}
+    - {fileID: 11400000, guid: 14f78534b150dfe46b4081e0f83762a9, type: 2}

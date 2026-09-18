@@ -25,8 +25,11 @@ namespace DarkFlare
         WorldSortKey _sortKey;
         WorldSortingSystem _sortingSystem;
         ApplicationHost _host;
-        bool _registered;
+        [SerializeField] bool _explicitRegistration;
+        WorldSortRegistration _registration;
         bool _runtimeIdentityConfigured;
+        int _appliedOrder = int.MinValue;
+        int _appliedLayer = int.MinValue;
 
         public WorldSortCategory Category => _category;
 
@@ -37,6 +40,29 @@ namespace DarkFlare
         public SortingGroup SortingGroup => _sortingGroup;
 
         public WorldSortKey SortKey => _sortKey;
+        public bool IsRegistered => _registration != null && _registration.IsActive;
+        public bool ExplicitRegistration => _explicitRegistration;
+        public WorldSortRegistration Registration => _registration;
+        public bool HasValidAnchor
+        {
+            get
+            {
+                if (_sortingGroup == null || _sortAnchor == null) { return false; }
+                Vector3 position = _sortAnchor.position;
+                return float.IsFinite(position.x) && float.IsFinite(position.y) && float.IsFinite(position.z)
+                    && System.Math.Abs((double)position.y * WorldSortingSystem.QuantizationUnitsPerWorldUnit) < int.MaxValue - 1d;
+            }
+        }
+
+        public void ConfigureExplicit(WorldSortCategory category, string stableSortId, Transform anchor)
+        {
+            ReleaseRegistration(); _explicitRegistration = true;
+            _category = category; _stableSortId = stableSortId; _sortAnchor = anchor;
+            _runtimeIdentityConfigured = true; EnsureComponents();
+        }
+
+        internal void AttachRegistration(WorldSortRegistration registration) { _registration = registration; }
+        public void ReleaseRegistration() { _registration?.Dispose(); _registration = null; }
 
         public IArchitecture GetArchitecture()
         {
@@ -45,18 +71,11 @@ namespace DarkFlare
 
         public void ConfigureIdentity(WorldSortCategory category, string stableSortId)
         {
-            WorldSortingSystem sortingSystem = ResolveSortingSystem();
-
-            if (_registered)
-            {
-                sortingSystem.Unregister(this);
-                _registered = false;
-            }
-
+            ReleaseRegistration();
             _category = category;
             _stableSortId = stableSortId;
             _runtimeIdentityConfigured = true;
-            _registered = isActiveAndEnabled && sortingSystem.Register(this);
+            if (isActiveAndEnabled) { TryRegister(); }
         }
 
         void Awake()
@@ -67,6 +86,7 @@ namespace DarkFlare
         void OnEnable()
         {
             EnsureComponents();
+            if (_explicitRegistration) { return; }
 
             if (ApplicationHost.TryGetCurrent(out ApplicationHost host))
             {
@@ -90,12 +110,7 @@ namespace DarkFlare
                 _host = null;
             }
 
-            if (_registered)
-            {
-                _sortingSystem?.Unregister(this);
-            }
-
-            _registered = false;
+            ReleaseRegistration();
             _sortingSystem = null;
         }
 
@@ -106,31 +121,43 @@ namespace DarkFlare
 
         internal bool RefreshSortKey()
         {
-            Transform anchor = _sortAnchor != null ? _sortAnchor : transform;
-            WorldSortKey nextKey = WorldSortingSystem.CreateKey(anchor.position.y, _category, _stableSortId);
-            bool changed = nextKey.QuantizedY != _sortKey.QuantizedY
-                || nextKey.Category != _sortKey.Category
-                || !string.Equals(nextKey.StableSortId, _sortKey.StableSortId, System.StringComparison.Ordinal);
-            _sortKey = nextKey;
+            if (!TryRefreshSortKey(out bool changed)) { throw new System.InvalidOperationException("排序锚点无效"); }
             return changed;
         }
 
-        internal void ApplySortingOrder(int sortingOrder)
+        internal bool TryRefreshSortKey(out bool changed)
+        {
+            changed = false;
+            Transform anchor = _sortAnchor != null ? _sortAnchor : transform;
+            Vector3 position = anchor.position;
+            if (_sortingGroup == null || !float.IsFinite(position.x) || !float.IsFinite(position.y) || !float.IsFinite(position.z)
+                || System.Math.Abs((double)position.y * WorldSortingSystem.QuantizationUnitsPerWorldUnit) >= int.MaxValue - 1d) { return false; }
+            var nextKey = new WorldSortKey(Mathf.RoundToInt(position.y * WorldSortingSystem.QuantizationUnitsPerWorldUnit), _category, _stableSortId);
+            changed = nextKey.QuantizedY != _sortKey.QuantizedY
+                || nextKey.Category != _sortKey.Category
+                || !string.Equals(nextKey.StableSortId, _sortKey.StableSortId, System.StringComparison.Ordinal);
+            _sortKey = nextKey;
+            return true;
+        }
+
+        internal bool ApplySortingOrder(int sortingOrder, int layer)
         {
             if (_sortingGroup == null)
             {
-                return;
+                return false;
             }
 
-            if (_sortingGroup.sortingLayerName != "WorldObject")
+            bool changed = false;
+            if (_appliedLayer != layer)
             {
-                _sortingGroup.sortingLayerName = "WorldObject";
+                _sortingGroup.sortingLayerID = layer; _appliedLayer = layer; changed = true;
             }
 
-            if (_sortingGroup.sortingOrder != sortingOrder)
+            if (_appliedOrder != sortingOrder)
             {
-                _sortingGroup.sortingOrder = sortingOrder;
+                _sortingGroup.sortingOrder = sortingOrder; _appliedOrder = sortingOrder; changed = true;
             }
+            return changed;
         }
 
         void OnSessionRunning(GameSessionHost session)
@@ -143,7 +170,7 @@ namespace DarkFlare
 
         void TryRegister()
         {
-            if (_registered)
+            if (IsRegistered || _explicitRegistration || (_requiresRuntimeIdentity && !_runtimeIdentityConfigured))
             {
                 return;
             }
@@ -157,7 +184,7 @@ namespace DarkFlare
                 return;
             }
 
-            _registered = ResolveSortingSystem().Register(this);
+            ResolveSortingSystem().Register(this);
         }
 
         void EnsureComponents()
@@ -165,6 +192,7 @@ namespace DarkFlare
             if (_sortingGroup == null)
             {
                 _sortingGroup = GetComponent<SortingGroup>();
+                _appliedLayer = int.MinValue; _appliedOrder = int.MinValue;
             }
 
             if (_sortAnchor == null)

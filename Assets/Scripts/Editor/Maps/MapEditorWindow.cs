@@ -29,7 +29,7 @@ namespace DarkFlare.Editor
         [SerializeField, TabGroup("文档"), LabelText("新地图 ID")] string _newId = "new_map";
         [SerializeField, TabGroup("文档"), LabelText("地表集"), AssetsOnly] TerrainSetDefinition _set;
         [SerializeField, TabGroup("文档"), LabelText("新图尺寸")] Vector2Int _size = new(64, 64);
-        [SerializeField, TabGroup("文档"), LabelText("正式地表资源"), AssetsOnly, OnValueChanged(nameof(SchedulePreview))] TerrainTextureSources _materials;
+        [SerializeField, TabGroup("文档"), LabelText("正式地表资源"), AssetsOnly, OnValueChanged(nameof(TerrainMaterialsChanged))] TerrainTextureSources _materials;
         [SerializeField, TabGroup("绘制"), LabelText("工具"), EnumToggleButtons] MapPaintTool _tool;
         [SerializeField, TabGroup("绘制"), LabelText("地表"), ValueDropdown(nameof(TerrainChoices))] string _terrain = "terrain:grass";
         [SerializeField, TabGroup("绘制"), LabelText("笔刷边长"), Range(1, 16)] int _brushSize = 1;
@@ -132,6 +132,7 @@ namespace DarkFlare.Editor
 
         void ReleasePreview()
         {
+            ReleaseObjectPreview();
             CancelStroke(); _preview?.Dispose(); _preview = null; _geometry = null;
             if (_stage != null && StageUtility.GetCurrentStage() == _stage) { StageUtility.GoBackToPreviousStage(); }
             _stage = null;
@@ -370,6 +371,7 @@ namespace DarkFlare.Editor
             {
                 EditorGUILayout.LabelField($"{_session.Current.MapId} · r{_session.Current.Revision} · {(_session.IsDirty ? "未保存" : "已保存")}");
                 EditorGUILayout.HelpBox(_session.Notice + "\n" + (_preview?.Status ?? "舞台未开启") + "\n" + _geometryStatus, MessageType.None);
+                EditorGUILayout.HelpBox(_objectStatus, MessageType.None);
             }
         }
 
@@ -394,10 +396,10 @@ namespace DarkFlare.Editor
             SchedulePreview(); Repaint();
         }
 
-        void DefinitionsChanged() { _lookup = MapEditorDefinitionIndex.Capture(); _objectCatalog = MapEditorDefinitionIndex.LoadDefinitions().OfType<MapObjectDefinition>().ToArray(); _geometry = null; _geometryStatus = "定义已改变，请重新诊断"; CancelStroke(); SchedulePreview(); }
+        void DefinitionsChanged() { _terrainPreviewKey = null; _lookup = MapEditorDefinitionIndex.Capture(); _objectCatalog = MapEditorDefinitionIndex.LoadDefinitions().OfType<MapObjectDefinition>().ToArray(); _geometry = null; _geometryStatus = "定义已改变，请重新诊断"; CancelStroke(); SchedulePreview(); }
         void SchedulePreview()
         {
-            _preview?.Cancel();
+            if (_session == null || TerrainPreviewKey() != _terrainPreviewKey) { _preview?.Cancel(); }
             EditorApplication.delayCall -= Rebuild; EditorApplication.delayCall += Rebuild;
         }
         void Rebuild()
@@ -407,6 +409,9 @@ namespace DarkFlare.Editor
         }
         async UniTask RebuildAsync()
         {
+            RebuildObjectsAsync().Forget();
+            string terrainKey = TerrainPreviewKey();
+            if (_preview != null && _preview.IsValid && _terrainPreviewKey == terrainKey) { return; }
             _preview ??= new MapTerrainPreviewSession();
             MapTerrainPreviewSession preview = _preview;
             await preview.RebuildAsync(() =>
@@ -417,6 +422,7 @@ namespace DarkFlare.Editor
             }, _materials != null && _materials.TerrainSet != null && "terrain_set:" + _materials.TerrainSet.Id == _session.Current.TerrainSetId.ToString() ? () => _materials.RequireCurrent() : null);
             if (this == null || _preview != preview || _stage == null || !preview.IsValid) { return; }
             preview.Current.MoveToScene(_stage.scene);
+            _terrainPreviewKey = terrainKey;
             if (_fit && SceneView.lastActiveSceneView != null) { SceneView.lastActiveSceneView.Frame(preview.Current.Bounds, true); _fit = false; }
             SceneView.RepaintAll(); Repaint();
         }

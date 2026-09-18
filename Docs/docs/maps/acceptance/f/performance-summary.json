@@ -1,0 +1,705 @@
+{
+  "passed": true,
+  "rounds": 24,
+  "baselineCommit": "7cf9de1",
+  "cpu": "AMD Ryzen 7 PRO 8845HS w/ Radeon 780M Graphics",
+  "unity": "6000.6.0f1",
+  "resolution": "1920x1080",
+  "baselineAndCurrentSameFrame": true,
+  "warmupSeconds": 3,
+  "sampleSecondsPerRound": 60,
+  "selectedSources": [
+    "player-sorting.json excluding 500/churn and 1000/moving",
+    "player-500-churn-quiet.json all 3 rounds",
+    "player-1000-moving-quiet.json all 3 rounds"
+  ],
+  "scope": "WorldSortingSystem.Tick only; registration measured separately; excludes full navigation and combat",
+  "sourceHashes": [
+    {
+      "Path": "C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Runtime\\Gameplay\\Visuals\\WorldSortingSystem.cs",
+      "Hash": "7A2D19C0F98CA261FACB258AE29C6CE371ABDC18FCC8EE37B29F31E0DA07648D"
+    },
+    {
+      "Path": "C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Runtime\\Gameplay\\Visuals\\WorldSortParticipant.cs",
+      "Hash": "4D5E2D65EE39EE20F5247A16089A27AB00611DF530E72F5FF8789E2A86ACAE6B"
+    }
+  ],
+  "gc": [
+    {
+      "count": 1628,
+      "ticks": 512,
+      "marker": "GC.Alloc",
+      "positiveControlAllocationBytes": 512,
+      "positiveControlEvents": 1,
+      "counterValid": true,
+      "allocationEventsInsideSortingTick": 0,
+      "bytesInsideSortingTick": 0
+    },
+    {
+      "count": 2128,
+      "ticks": 512,
+      "marker": "GC.Alloc",
+      "positiveControlAllocationBytes": 512,
+      "positiveControlEvents": 1,
+      "counterValid": true,
+      "allocationEventsInsideSortingTick": 0,
+      "bytesInsideSortingTick": 0
+    }
+  ],
+  "results": [
+    {
+      "dynamicCount": 500,
+      "staticParts": 1000,
+      "effects": 128,
+      "total": 1628,
+      "mode": "churn",
+      "round": 0,
+      "seconds": 60,
+      "samples": 7199,
+      "current": {
+        "p50": 0.5066,
+        "p95": 0.7606,
+        "p99": 1.1493
+      },
+      "baseline": {
+        "p50": 0.8631000000000001,
+        "p95": 1.7083000000000002,
+        "p99": 2.5500000000000003
+      },
+      "registration": {
+        "p50": 0.10500000000000001,
+        "p95": 0.1277,
+        "p99": 0.1721
+      }
+    },
+    {
+      "dynamicCount": 500,
+      "staticParts": 1000,
+      "effects": 128,
+      "total": 1628,
+      "mode": "churn",
+      "round": 1,
+      "seconds": 60,
+      "samples": 7199,
+      "current": {
+        "p50": 0.5138,
+        "p95": 0.8430000000000001,
+        "p99": 1.9584000000000001
+      },
+      "baseline": {
+        "p50": 0.8707,
+        "p95": 1.7027,
+        "p99": 2.4495
+      },
+      "registration": {
+        "p50": 0.10400000000000001,
+        "p95": 0.13090000000000002,
+        "p99": 0.30060000000000003
+      }
+    },
+    {
+      "dynamicCount": 500,
+      "staticParts": 1000,
+      "effects": 128,
+      "total": 1628,
+      "mode": "churn",
+      "round": 2,
+      "seconds": 60,
+      "samples": 7198,
+      "current": {
+        "p50": 0.5102,
+        "p95": 0.7966000000000001,
+        "p99": 1.2452
+      },
+      "baseline": {
+        "p50": 0.8639,
+        "p95": 1.6844000000000001,
+        "p99": 2.4583
+      },
+      "registration": {
+        "p50": 0.1056,
+        "p95": 0.13190000000000002,
+        "p99": 0.4126
+      }
+    },
+    {
+      "dynamicCount": 500,
+      "staticParts": 1000,
+      "effects": 128,
+      "total": 1628,
+      "mode": "moving",
+      "round": 0,
+      "seconds": 60,
+      "samples": 7198,
+      "current": {
+        "p50": 0.6457,
+        "p95": 0.9904000000000001,
+        "p99": 1.3214000000000001
+      },
+      "baseline": {
+        "p50": 0.9834,
+        "p95": 1.8775000000000002,
+        "p99": 2.9266
+      },
+      "registration": {
+        "p50": 0.0,
+        "p95": 0.0,
+        "p99": 0.0
+      },
+      "allocationCounterAvailable": false,
+      "currentAllocatedBytes": null,
+      "baselineAllocatedBytes": null
+    },
+    {
+      "dynamicCount": 500,
+      "staticParts": 1000,
+      "effects": 128,
+      "total": 1628,
+      "mode": "moving",
+      "round": 1,
+      "seconds": 60,
+      "samples": 7199,
+      "current": {
+        "p50": 0.5804,
+        "p95": 0.8684000000000001,
+        "p99": 1.3254000000000001
+      },
+      "baseline": {
+        "p50": 0.9058,
+        "p95": 1.7429000000000001,
+        "p99": 2.6598
+      },
+      "registration": {
+        "p50": 0.0,
+        "p95": 0.0,
+        "p99": 0.0
+      },
+      "allocationCounterAvailable": false,
+      "currentAllocatedBytes": null,
+      "baselineAllocatedBytes": null
+    },
+    {
+      "dynamicCount": 500,
+      "staticParts": 1000,
+      "effects": 128,
+      "total": 1628,
+      "mode": "moving",
+      "round": 2,
+      "seconds": 60,
+      "samples": 7198,
+      "current": {
+        "p50": 0.5670000000000001,
+        "p95": 0.8346,
+        "p99": 1.1827
+      },
+      "baseline": {
+        "p50": 0.8754000000000001,
+        "p95": 1.6959000000000002,
+        "p99": 2.524
+      },
+      "registration": {
+        "p50": 0.0,
+        "p95": 0.0,
+        "p99": 0.0
+      },
+      "allocationCounterAvailable": false,
+      "currentAllocatedBytes": null,
+      "baselineAllocatedBytes": null
+    },
+    {
+      "dynamicCount": 500,
+      "staticParts": 1000,
+      "effects": 128,
+      "total": 1628,
+      "mode": "same-y",
+      "round": 0,
+      "seconds": 60,
+      "samples": 7199,
+      "current": {
+        "p50": 0.1822,
+        "p95": 0.27240000000000003,
+        "p99": 0.5271
+      },
+      "baseline": {
+        "p50": 0.1824,
+        "p95": 0.22,
+        "p99": 0.44780000000000003
+      },
+      "registration": {
+        "p50": 0.0,
+        "p95": 0.0,
+        "p99": 0.0
+      },
+      "allocationCounterAvailable": false,
+      "currentAllocatedBytes": null,
+      "baselineAllocatedBytes": null
+    },
+    {
+      "dynamicCount": 500,
+      "staticParts": 1000,
+      "effects": 128,
+      "total": 1628,
+      "mode": "same-y",
+      "round": 1,
+      "seconds": 60,
+      "samples": 7199,
+      "current": {
+        "p50": 0.1834,
+        "p95": 0.2666,
+        "p99": 0.42650000000000005
+      },
+      "baseline": {
+        "p50": 0.1834,
+        "p95": 0.2233,
+        "p99": 0.38420000000000004
+      },
+      "registration": {
+        "p50": 0.0,
+        "p95": 0.0,
+        "p99": 0.0
+      },
+      "allocationCounterAvailable": false,
+      "currentAllocatedBytes": null,
+      "baselineAllocatedBytes": null
+    },
+    {
+      "dynamicCount": 500,
+      "staticParts": 1000,
+      "effects": 128,
+      "total": 1628,
+      "mode": "same-y",
+      "round": 2,
+      "seconds": 60,
+      "samples": 7198,
+      "current": {
+        "p50": 0.1797,
+        "p95": 0.2777,
+        "p99": 0.4375
+      },
+      "baseline": {
+        "p50": 0.1802,
+        "p95": 0.24530000000000002,
+        "p99": 0.4237
+      },
+      "registration": {
+        "p50": 0.0,
+        "p95": 0.0,
+        "p99": 0.0
+      },
+      "allocationCounterAvailable": false,
+      "currentAllocatedBytes": null,
+      "baselineAllocatedBytes": null
+    },
+    {
+      "dynamicCount": 500,
+      "staticParts": 1000,
+      "effects": 128,
+      "total": 1628,
+      "mode": "stationary",
+      "round": 0,
+      "seconds": 60,
+      "samples": 7199,
+      "current": {
+        "p50": 0.19720000000000001,
+        "p95": 0.3376,
+        "p99": 0.5548000000000001
+      },
+      "baseline": {
+        "p50": 0.1842,
+        "p95": 0.3325,
+        "p99": 0.4828
+      },
+      "registration": {
+        "p50": 0.0,
+        "p95": 0.0,
+        "p99": 0.0
+      },
+      "allocationCounterAvailable": false,
+      "currentAllocatedBytes": null,
+      "baselineAllocatedBytes": null
+    },
+    {
+      "dynamicCount": 500,
+      "staticParts": 1000,
+      "effects": 128,
+      "total": 1628,
+      "mode": "stationary",
+      "round": 1,
+      "seconds": 60,
+      "samples": 7199,
+      "current": {
+        "p50": 0.22,
+        "p95": 0.40590000000000004,
+        "p99": 0.5962000000000001
+      },
+      "baseline": {
+        "p50": 0.1888,
+        "p95": 0.34490000000000004,
+        "p99": 0.4872
+      },
+      "registration": {
+        "p50": 0.0,
+        "p95": 0.0,
+        "p99": 0.0
+      },
+      "allocationCounterAvailable": false,
+      "currentAllocatedBytes": null,
+      "baselineAllocatedBytes": null
+    },
+    {
+      "dynamicCount": 500,
+      "staticParts": 1000,
+      "effects": 128,
+      "total": 1628,
+      "mode": "stationary",
+      "round": 2,
+      "seconds": 60,
+      "samples": 7198,
+      "current": {
+        "p50": 0.20670000000000002,
+        "p95": 0.3386,
+        "p99": 0.4868
+      },
+      "baseline": {
+        "p50": 0.1923,
+        "p95": 0.29550000000000004,
+        "p99": 0.4143
+      },
+      "registration": {
+        "p50": 0.0,
+        "p95": 0.0,
+        "p99": 0.0
+      },
+      "allocationCounterAvailable": false,
+      "currentAllocatedBytes": null,
+      "baselineAllocatedBytes": null
+    },
+    {
+      "dynamicCount": 1000,
+      "staticParts": 1000,
+      "effects": 128,
+      "total": 2128,
+      "mode": "churn",
+      "round": 0,
+      "seconds": 60,
+      "samples": 7198,
+      "current": {
+        "p50": 0.9380000000000001,
+        "p95": 1.6214000000000002,
+        "p99": 2.3120000000000003
+      },
+      "baseline": {
+        "p50": 1.4504000000000001,
+        "p95": 2.8501000000000003,
+        "p99": 3.6389
+      },
+      "registration": {
+        "p50": 0.1199,
+        "p95": 0.1517,
+        "p99": 0.2137
+      },
+      "allocationCounterAvailable": false,
+      "currentAllocatedBytes": null,
+      "baselineAllocatedBytes": null
+    },
+    {
+      "dynamicCount": 1000,
+      "staticParts": 1000,
+      "effects": 128,
+      "total": 2128,
+      "mode": "churn",
+      "round": 1,
+      "seconds": 60,
+      "samples": 7198,
+      "current": {
+        "p50": 0.8357,
+        "p95": 1.5096,
+        "p99": 2.1415
+      },
+      "baseline": {
+        "p50": 1.3215000000000001,
+        "p95": 2.5692,
+        "p99": 3.4009
+      },
+      "registration": {
+        "p50": 0.11660000000000001,
+        "p95": 0.1424,
+        "p99": 0.20400000000000001
+      },
+      "allocationCounterAvailable": false,
+      "currentAllocatedBytes": null,
+      "baselineAllocatedBytes": null
+    },
+    {
+      "dynamicCount": 1000,
+      "staticParts": 1000,
+      "effects": 128,
+      "total": 2128,
+      "mode": "churn",
+      "round": 2,
+      "seconds": 60,
+      "samples": 7198,
+      "current": {
+        "p50": 0.7999,
+        "p95": 1.4481000000000002,
+        "p99": 2.4779
+      },
+      "baseline": {
+        "p50": 1.2784,
+        "p95": 2.5891,
+        "p99": 3.4755000000000003
+      },
+      "registration": {
+        "p50": 0.1155,
+        "p95": 0.1409,
+        "p99": 0.2164
+      },
+      "allocationCounterAvailable": false,
+      "currentAllocatedBytes": null,
+      "baselineAllocatedBytes": null
+    },
+    {
+      "dynamicCount": 1000,
+      "staticParts": 1000,
+      "effects": 128,
+      "total": 2128,
+      "mode": "moving",
+      "round": 0,
+      "seconds": 60,
+      "samples": 7199,
+      "current": {
+        "p50": 0.7245,
+        "p95": 1.1167,
+        "p99": 2.0868
+      },
+      "baseline": {
+        "p50": 1.1212,
+        "p95": 2.3237,
+        "p99": 3.0269
+      },
+      "registration": {
+        "p50": 0.0002,
+        "p95": 0.0004,
+        "p99": 0.0008
+      }
+    },
+    {
+      "dynamicCount": 1000,
+      "staticParts": 1000,
+      "effects": 128,
+      "total": 2128,
+      "mode": "moving",
+      "round": 1,
+      "seconds": 60,
+      "samples": 7199,
+      "current": {
+        "p50": 0.7229,
+        "p95": 1.1231,
+        "p99": 1.7272
+      },
+      "baseline": {
+        "p50": 1.1247,
+        "p95": 2.0437000000000003,
+        "p99": 2.8381000000000003
+      },
+      "registration": {
+        "p50": 0.0002,
+        "p95": 0.0005,
+        "p99": 0.0008
+      }
+    },
+    {
+      "dynamicCount": 1000,
+      "staticParts": 1000,
+      "effects": 128,
+      "total": 2128,
+      "mode": "moving",
+      "round": 2,
+      "seconds": 60,
+      "samples": 7198,
+      "current": {
+        "p50": 0.7504000000000001,
+        "p95": 1.2018,
+        "p99": 1.814
+      },
+      "baseline": {
+        "p50": 1.1697,
+        "p95": 2.3324000000000003,
+        "p99": 3.1428000000000003
+      },
+      "registration": {
+        "p50": 0.0002,
+        "p95": 0.0005,
+        "p99": 0.0007
+      }
+    },
+    {
+      "dynamicCount": 1000,
+      "staticParts": 1000,
+      "effects": 128,
+      "total": 2128,
+      "mode": "same-y",
+      "round": 0,
+      "seconds": 60,
+      "samples": 7192,
+      "current": {
+        "p50": 0.2489,
+        "p95": 0.41960000000000003,
+        "p99": 0.6037
+      },
+      "baseline": {
+        "p50": 0.2393,
+        "p95": 0.41910000000000003,
+        "p99": 0.6296
+      },
+      "registration": {
+        "p50": 0.0,
+        "p95": 0.0,
+        "p99": 0.0
+      },
+      "allocationCounterAvailable": false,
+      "currentAllocatedBytes": null,
+      "baselineAllocatedBytes": null
+    },
+    {
+      "dynamicCount": 1000,
+      "staticParts": 1000,
+      "effects": 128,
+      "total": 2128,
+      "mode": "same-y",
+      "round": 1,
+      "seconds": 60,
+      "samples": 7187,
+      "current": {
+        "p50": 0.2722,
+        "p95": 0.4597,
+        "p99": 1.0466
+      },
+      "baseline": {
+        "p50": 0.2403,
+        "p95": 0.42710000000000004,
+        "p99": 0.8073
+      },
+      "registration": {
+        "p50": 0.0,
+        "p95": 0.0,
+        "p99": 0.0
+      },
+      "allocationCounterAvailable": false,
+      "currentAllocatedBytes": null,
+      "baselineAllocatedBytes": null
+    },
+    {
+      "dynamicCount": 1000,
+      "staticParts": 1000,
+      "effects": 128,
+      "total": 2128,
+      "mode": "same-y",
+      "round": 2,
+      "seconds": 60,
+      "samples": 7196,
+      "current": {
+        "p50": 0.2404,
+        "p95": 0.3569,
+        "p99": 0.5076
+      },
+      "baseline": {
+        "p50": 0.23450000000000001,
+        "p95": 0.34650000000000003,
+        "p99": 0.6119
+      },
+      "registration": {
+        "p50": 0.0,
+        "p95": 0.0,
+        "p99": 0.0
+      },
+      "allocationCounterAvailable": false,
+      "currentAllocatedBytes": null,
+      "baselineAllocatedBytes": null
+    },
+    {
+      "dynamicCount": 1000,
+      "staticParts": 1000,
+      "effects": 128,
+      "total": 2128,
+      "mode": "stationary",
+      "round": 0,
+      "seconds": 60,
+      "samples": 7198,
+      "current": {
+        "p50": 0.24080000000000001,
+        "p95": 0.374,
+        "p99": 0.6475000000000001
+      },
+      "baseline": {
+        "p50": 0.23850000000000002,
+        "p95": 0.35900000000000004,
+        "p99": 0.6112000000000001
+      },
+      "registration": {
+        "p50": 0.0,
+        "p95": 0.0,
+        "p99": 0.0
+      },
+      "allocationCounterAvailable": false,
+      "currentAllocatedBytes": null,
+      "baselineAllocatedBytes": null
+    },
+    {
+      "dynamicCount": 1000,
+      "staticParts": 1000,
+      "effects": 128,
+      "total": 2128,
+      "mode": "stationary",
+      "round": 1,
+      "seconds": 60,
+      "samples": 7198,
+      "current": {
+        "p50": 0.2847,
+        "p95": 0.5489,
+        "p99": 0.7415
+      },
+      "baseline": {
+        "p50": 0.2313,
+        "p95": 0.5055000000000001,
+        "p99": 0.6922
+      },
+      "registration": {
+        "p50": 0.0,
+        "p95": 0.0,
+        "p99": 0.0
+      },
+      "allocationCounterAvailable": false,
+      "currentAllocatedBytes": null,
+      "baselineAllocatedBytes": null
+    },
+    {
+      "dynamicCount": 1000,
+      "staticParts": 1000,
+      "effects": 128,
+      "total": 2128,
+      "mode": "stationary",
+      "round": 2,
+      "seconds": 60,
+      "samples": 7197,
+      "current": {
+        "p50": 0.2671,
+        "p95": 0.48040000000000005,
+        "p99": 0.6542
+      },
+      "baseline": {
+        "p50": 0.20120000000000002,
+        "p95": 0.49410000000000004,
+        "p99": 0.683
+      },
+      "registration": {
+        "p50": 0.0,
+        "p95": 0.0,
+        "p99": 0.0
+      },
+      "allocationCounterAvailable": false,
+      "currentAllocatedBytes": null,
+      "baselineAllocatedBytes": null
+    }
+  ]
+}

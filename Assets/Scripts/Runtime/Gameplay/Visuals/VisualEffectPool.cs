@@ -27,6 +27,12 @@ namespace DarkFlare
         readonly Dictionary<GameObject, PoolBucket> _buckets = new Dictionary<GameObject, PoolBucket>();
 
         Transform _root;
+        long _playSerial;
+
+        public string NextIdentity(string source)
+        {
+            return "effect:" + source.Length + ":" + source + ":" + (++_playSerial).ToString(System.Globalization.CultureInfo.InvariantCulture);
+        }
 
         public void Prewarm(GameObject prefab, int count = DefaultPrewarmCount)
         {
@@ -46,7 +52,15 @@ namespace DarkFlare
                 return false;
             }
 
-            return GetOrCreateBucket(prefab).TryPlay(position, tint);
+            return TryPlay(prefab, position, tint, new WorldEffectContext(GameArchitectureProvider.RequireCurrent().GetUtility<WorldSortingSystem>(), NextIdentity("world"), position));
+        }
+
+        public bool TryPlay(GameObject prefab, Vector3 position, Color tint, WorldEffectContext context)
+        {
+            if (prefab == null || context.Token.IsCancellationRequested || (context.IsAttached && (context.Host == null || !context.Host.isActiveAndEnabled))) { return false; }
+            if (ApplicationHost.TryGetCurrent(out ApplicationHost host)
+                && (host.CurrentSceneScope == null || host.CurrentSceneScope.State != LifecycleScopeState.Active)) { return false; }
+            return GetOrCreateBucket(prefab).TryPlay(position, tint, context);
         }
 
         public VisualEffectPoolStats GetStats(GameObject prefab)
@@ -156,7 +170,7 @@ namespace DarkFlare
                 }
             }
 
-            public bool TryPlay(Vector3 position, Color tint)
+            public bool TryPlay(Vector3 position, Color tint, WorldEffectContext context)
             {
                 RemoveDestroyedReferences();
                 PooledSpriteEffect effect;
@@ -175,8 +189,8 @@ namespace DarkFlare
                 }
 
                 _active.Add(effect);
-                effect.Play(position, tint, Return);
-                return true;
+                if (effect.Play(position, tint, Return, context)) { return true; }
+                Return(effect); return false;
             }
 
             public VisualEffectPoolStats GetStats()
@@ -192,11 +206,13 @@ namespace DarkFlare
             {
                 foreach (PooledSpriteEffect effect in _active)
                 {
+                    if (effect != null) { effect.DetachForRelease(); }
                     DestroyObject(effect != null ? effect.gameObject : null);
                 }
 
                 foreach (PooledSpriteEffect effect in _available)
                 {
+                    if (effect != null) { effect.DetachForRelease(); }
                     DestroyObject(effect != null ? effect.gameObject : null);
                 }
 
@@ -238,6 +254,7 @@ namespace DarkFlare
                 }
 
                 _available.Push(effect);
+                effect.ResetWorldRoot();
             }
 
             void RemoveDestroyedReferences()

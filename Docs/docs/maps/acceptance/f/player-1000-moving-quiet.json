@@ -1,0 +1,84 @@
+{
+  "complete": true,
+  "unity": "6000.6.0f1",
+  "cpu": "AMD Ryzen 7 PRO 8845HS w/ Radeon 780M Graphics",
+  "resolution": "1920x1080",
+  "platform": "WindowsPlayer",
+  "results": [
+    {
+      "dynamicCount": 1000,
+      "staticParts": 1000,
+      "effects": 128,
+      "total": 2128,
+      "mode": "moving",
+      "round": 0,
+      "seconds": 60,
+      "samples": 7199,
+      "current": {
+        "p50": 0.7245,
+        "p95": 1.1167,
+        "p99": 2.0868
+      },
+      "baseline": {
+        "p50": 1.1212,
+        "p95": 2.3237,
+        "p99": 3.0269
+      },
+      "registration": {
+        "p50": 0.0002,
+        "p95": 0.0004,
+        "p99": 0.0008
+      }
+    },
+    {
+      "dynamicCount": 1000,
+      "staticParts": 1000,
+      "effects": 128,
+      "total": 2128,
+      "mode": "moving",
+      "round": 1,
+      "seconds": 60,
+      "samples": 7199,
+      "current": {
+        "p50": 0.7229,
+        "p95": 1.1231,
+        "p99": 1.7272
+      },
+      "baseline": {
+        "p50": 1.1247,
+        "p95": 2.0437000000000003,
+        "p99": 2.8381000000000003
+      },
+      "registration": {
+        "p50": 0.0002,
+        "p95": 0.0005,
+        "p99": 0.0008
+      }
+    },
+    {
+      "dynamicCount": 1000,
+      "staticParts": 1000,
+      "effects": 128,
+      "total": 2128,
+      "mode": "moving",
+      "round": 2,
+      "seconds": 60,
+      "samples": 7198,
+      "current": {
+        "p50": 0.75040000000000007,
+        "p95": 1.2018,
+        "p99": 1.814
+      },
+      "baseline": {
+        "p50": 1.1697,
+        "p95": 2.3324000000000003,
+        "p99": 3.1428000000000003
+      },
+      "registration": {
+        "p50": 0.0002,
+        "p95": 0.0005,
+        "p99": 0.0007
+      }
+    }
+  ]
+}

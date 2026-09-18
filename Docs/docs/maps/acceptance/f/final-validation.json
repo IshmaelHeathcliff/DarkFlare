@@ -1,0 +1,12 @@
+{
+  "contentIssues": [],
+  "coveragePassed": true,
+  "TypeCount": 30,
+  "SerializedFieldCount": 231,
+  "CoveredFieldCount": 231,
+  "Issues": [],
+  "scene": "Assets/Scenes/Bootstrap.unity",
+  "dirty": false,
+  "reload": "DisableDomainReload",
+  "profiler": false
+}

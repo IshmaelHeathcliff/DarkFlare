@@ -1,0 +1,88 @@
+[
+  {
+    "name": "fVisualCompleteBuild",
+    "buildId": "build_86f776559a29",
+    "result": "Succeeded",
+    "outputPath": "C:/Users/darkf/Home/Projects/DarkFlare/Builds/Alpha052VisualComplete/DarkFlareVisual.exe",
+    "totalErrors": 0,
+    "totalWarnings": 8,
+    "buildTimeMs": 25962,
+    "buildStartedAt": "2026-09-18T11:40:57.2190133Z",
+    "buildEndedAt": "2026-09-18T11:41:23.1811557Z",
+    "warnings": [
+      {
+        "message": "Pipeline: No RuntimePipelineConfig asset found (Project Settings > Pipeline > Runtime). Pipeline will be disabled in Player builds."
+      },
+      {
+        "message": "warning CS0618: 'Object.FindFirstObjectByType<T>()' is obsolete: 'FindFirstObjectByType has been deprecated because it relies on instance ID ordering. Use FindAnyObjectByType instead, which does not depend on ordering.'",
+        "file": "Assets\\Scripts\\Runtime\\SortingAudit\\WorldVisualAudit.cs"
+      },
+      {
+        "message": "warning CS0618: 'FindObjectsSortMode' is obsolete: 'FindObjectsSortMode has been deprecated. Use the FindObjectsByType overloads that do not take a FindObjectsSortMode parameter.'",
+        "file": "Assets\\Scripts\\Runtime\\SortingAudit\\WorldVisualAudit.cs"
+      },
+      {
+        "message": "warning CS0618: 'Object.FindObjectsByType<T>(FindObjectsSortMode)' is obsolete: 'FindObjectsByType with FindObjectsSortMode parameter has been deprecated. Use FindObjectsByType<T>() or FindObjectsByType<T>(FindObjectsInactive) instead. InstanceID will be replaced in the future with EntityId and previous sort order cannot be maintained.'",
+        "file": "Assets\\Scripts\\Runtime\\SortingAudit\\WorldVisualAudit.cs"
+      },
+      {
+        "message": "warning CS0618: 'Object.FindFirstObjectByType<T>()' is obsolete: 'FindFirstObjectByType has been deprecated because it relies on instance ID ordering. Use FindAnyObjectByType instead, which does not depend on ordering.'",
+        "file": "Assets\\Scripts\\Runtime\\SortingAudit\\WorldVisualAudit.cs"
+      },
+      {
+        "message": "warning CS0618: 'FindObjectsSortMode' is obsolete: 'FindObjectsSortMode has been deprecated. Use the FindObjectsByType overloads that do not take a FindObjectsSortMode parameter.'",
+        "file": "Assets\\Scripts\\Runtime\\SortingAudit\\WorldVisualAudit.cs"
+      },
+      {
+        "message": "warning CS0618: 'Object.FindObjectsByType<T>(FindObjectsSortMode)' is obsolete: 'FindObjectsByType with FindObjectsSortMode parameter has been deprecated. Use FindObjectsByType<T>() or FindObjectsByType<T>(FindObjectsInactive) instead. InstanceID will be replaced in the future with EntityId and previous sort order cannot be maintained.'",
+        "file": "Assets\\Scripts\\Runtime\\SortingAudit\\WorldVisualAudit.cs"
+      },
+      {
+        "message": "Shader warning in 'TextMeshPro/Mobile/Distance Field': #pragma enable_d3d11_debug_symbols has been deprecated, instead please use #pragma enable_debug_symbols at line 84"
+      }
+    ]
+  },
+  {
+    "name": "fSortingAcceptedBuild",
+    "buildId": "build_844cc9d7b668",
+    "result": "Succeeded",
+    "outputPath": "C:/Users/darkf/Home/Projects/DarkFlare/Builds/Alpha052SortingAccepted/DarkFlareSorting.exe",
+    "totalErrors": 0,
+    "totalWarnings": 8,
+    "buildTimeMs": 26383,
+    "buildStartedAt": "2026-09-18T11:42:20.9557838Z",
+    "buildEndedAt": "2026-09-18T11:42:47.3396200Z",
+    "warnings": [
+      {
+        "message": "Pipeline: No RuntimePipelineConfig asset found (Project Settings > Pipeline > Runtime). Pipeline will be disabled in Player builds."
+      },
+      {
+        "message": "warning CS0618: 'Object.FindFirstObjectByType<T>()' is obsolete: 'FindFirstObjectByType has been deprecated because it relies on instance ID ordering. Use FindAnyObjectByType instead, which does not depend on ordering.'",
+        "file": "Assets\\Scripts\\Runtime\\SortingAudit\\WorldVisualAudit.cs"
+      },
+      {
+        "message": "warning CS0618: 'FindObjectsSortMode' is obsolete: 'FindObjectsSortMode has been deprecated. Use the FindObjectsByType overloads that do not take a FindObjectsSortMode parameter.'",
+        "file": "Assets\\Scripts\\Runtime\\SortingAudit\\WorldVisualAudit.cs"
+      },
+      {
+        "message": "warning CS0618: 'Object.FindObjectsByType<T>(FindObjectsSortMode)' is obsolete: 'FindObjectsByType with FindObjectsSortMode parameter has been deprecated. Use FindObjectsByType<T>() or FindObjectsByType<T>(FindObjectsInactive) instead. InstanceID will be replaced in the future with EntityId and previous sort order cannot be maintained.'",
+        "file": "Assets\\Scripts\\Runtime\\SortingAudit\\WorldVisualAudit.cs"
+      },
+      {
+        "message": "warning CS0618: 'Object.FindFirstObjectByType<T>()' is obsolete: 'FindFirstObjectByType has been deprecated because it relies on instance ID ordering. Use FindAnyObjectByType instead, which does not depend on ordering.'",
+        "file": "Assets\\Scripts\\Runtime\\SortingAudit\\WorldVisualAudit.cs"
+      },
+      {
+        "message": "warning CS0618: 'FindObjectsSortMode' is obsolete: 'FindObjectsSortMode has been deprecated. Use the FindObjectsByType overloads that do not take a FindObjectsSortMode parameter.'",
+        "file": "Assets\\Scripts\\Runtime\\SortingAudit\\WorldVisualAudit.cs"
+      },
+      {
+        "message": "warning CS0618: 'Object.FindObjectsByType<T>(FindObjectsSortMode)' is obsolete: 'FindObjectsByType with FindObjectsSortMode parameter has been deprecated. Use FindObjectsByType<T>() or FindObjectsByType<T>(FindObjectsInactive) instead. InstanceID will be replaced in the future with EntityId and previous sort order cannot be maintained.'",
+        "file": "Assets\\Scripts\\Runtime\\SortingAudit\\WorldVisualAudit.cs"
+      },
+      {
+        "message": "Shader warning in 'TextMeshPro/Mobile/Distance Field': #pragma enable_d3d11_debug_symbols has been deprecated, instead please use #pragma enable_debug_symbols at line 84"
+      }
+    ]
+  }
+]

@@ -21,6 +21,8 @@ namespace DarkFlare
         LifecycleScope _lifetimeScope;
         bool _initialized;
         uint _lifetimeVersion;
+        WorldSortParticipant _sortParticipant;
+        string _visualIdentity;
 
         public IArchitecture GetArchitecture()
         {
@@ -34,6 +36,11 @@ namespace DarkFlare
         {
             EnsureComponents();
             _attack = attack;
+            _sortParticipant = GetComponent<WorldSortParticipant>();
+            if (_sortParticipant == null) { _sortParticipant = gameObject.AddComponent<WorldSortParticipant>(); }
+            _visualIdentity = this.GetUtility<VisualEffectPool>().NextIdentity(attack.AttackerId);
+            _sortParticipant.ConfigureExplicit(WorldSortCategory.Effect, _visualIdentity, transform);
+            this.GetUtility<WorldSortingSystem>().Register(_sortParticipant);
             _direction = direction.sqrMagnitude > 0f ? direction.normalized : Vector2.right;
             _initialized = true;
             transform.right = _direction;
@@ -72,7 +79,8 @@ namespace DarkFlare
                 this.GetUtility<VisualEffectPool>().TryPlay(
                     _impactEffectPrefab,
                     transform.position,
-                    CombatEffectPalette.ArcaneProjectileTint);
+                    CombatEffectPalette.ArcaneProjectileTint,
+                    new WorldEffectContext(this.GetUtility<WorldSortingSystem>(), _visualIdentity + ":impact", transform.position));
             }
 
             Destroy(gameObject);
@@ -94,6 +102,7 @@ namespace DarkFlare
 
         void OnDisable()
         {
+            _sortParticipant?.ReleaseRegistration();
             _initialized = false;
             _lifetimeVersion++;
             _lifetimeScope?.BeginStop();

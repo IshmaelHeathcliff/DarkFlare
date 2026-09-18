@@ -65,6 +65,7 @@ namespace DarkFlare.Tests
                     .Where(type => type != typeof(MapDefinition)).ToArray(),
                 topLevelTypes.ToArray());
             Assert.IsFalse(topLevelTypes.Contains(typeof(MapDefinition)), "地图只能从源导入，不能创建第二份可编辑布局");
+            Assert.Contains(typeof(MapObjectPresentationCatalog), topLevelTypes.ToArray(), "无 ContentId 的表现目录仍应可配置");
             Assert.IsNull(typeof(MapDefinition).GetCustomAttribute<CreateAssetMenuAttribute>());
             CollectionAssert.IsSubsetOf(
                 RequiredNestedTypes,
@@ -80,7 +81,10 @@ namespace DarkFlare.Tests
             {
                 CreateAssetMenuAttribute menu = topLevelTypes[i].GetCustomAttribute<CreateAssetMenuAttribute>();
                 Assert.IsNotNull(menu, topLevelTypes[i].FullName);
-                StringAssert.StartsWith(ConfigurationTypeDiscovery.ConfigMenuPrefix, menu.menuName);
+                if (topLevelTypes[i] != typeof(MapObjectPresentationCatalog))
+                {
+                    StringAssert.StartsWith(ConfigurationTypeDiscovery.ConfigMenuPrefix, menu.menuName);
+                }
             }
         }
 

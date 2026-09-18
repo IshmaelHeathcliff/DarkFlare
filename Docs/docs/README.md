@@ -58,18 +58,21 @@
 - [四材质与运行时地表资源](./maps/terrain-materials.md)
 - [地图静态几何与通行查询](./maps/map-geometry.md)
 - [地图编辑器与 AI 事务](./maps/map-editor.md)
+- [地图对象表现与分段遮挡](./maps/object-presentation.md)
 - [世界渲染与稳定层级](./world-rendering.md)
 - [已完成计划归档](./plan/archive/README.md)
 
 ## 计划状态
 
-2026-09-18：**Alpha 0.5.0 地图基础 A–D 与 0.5.1 地图编辑器 E1–E5 已完成**，见[地图模块](./maps/README.md)、[静态几何](./maps/map-geometry.md)、[地图编辑器](./maps/map-editor.md)及 [E 计划归档](./plan/archive/alpha-0.5.1-map-editor-plan.md)。EditMode **697/697**、PlayMode **77/77**，内容校验 0 项问题，见 [E 验收](./maps/acceptance/e/README.md)。当前版本 `0.5.1-alpha`，core v5、Schema 3；下一阶段为 0.5.2 世界层级，Main 尚未迁移。
+阶段 F 已完成并[归档](./plan/archive/alpha-0.5.2-world-sorting-plan.md)。当前版本 `0.5.2-alpha`；下一阶段为总计划中的 0.5.3 城镇 / 野外与地图作用域，尚未实施。
+
+2026-09-18：**Alpha 0.5 的 A–F 已完成**，见[地图模块](./maps/README.md)、[编辑器](./maps/map-editor.md)、[对象表现](./maps/object-presentation.md)和[世界渲染](./world-rendering.md)。最新 EditMode **707/707**、PlayMode **78/78**，内容校验和配置覆盖通过，见 [F 验收](./maps/acceptance/f/README.md)。core v5、Schema 3 保持不变，Main 尚未切换到双地图。
 
 A 已提交 `2bf3843`，B1 / B2+B3 / B4 为 `0c866f7` / `dc33aaa` / `b1cdb06`，C1–C4 为 `9a3f7a9`，D 为 `e396485`。D 本轮 EditMode **676/676**、PlayMode **77/77** 通过，内容校验 0 项问题，见 [D 验收](./maps/acceptance/d/README.md)。未重建 Windows Player。
 
-Alpha 0.5 后续仍包含 Y 排序、城镇 / 野外、保留状态并暂停离场模拟，以及 Grid / Flow Field / A* / Spatial Hash / Separation / Job / Burst；500 活动怪物、1000 压测目标未提前计为完成。Alpha 0.1–0.4 历史记录见[归档索引](./plan/archive/README.md)。
+Alpha 0.5 后续仍包含城镇 / 野外、保留状态并暂停离场模拟，以及 Grid / Flow Field / A* / Spatial Hash / Separation / Job / Burst；500 活动怪物、1000 压测目标未提前计为完成。Alpha 0.1–0.4 历史记录见[归档索引](./plan/archive/README.md)。
 
 ## 说明
 
-当前项目已完成首版最小循环、初步体验优化及 Alpha 0.1–0.4 已归档计划，Alpha 0.5 的地图基础与地图编辑器已完成，后续进入世界层级。已完成的执行计划统一保存在 `Docs/docs/plan/archive/`。
+当前项目已完成首版最小循环、初步体验优化及 Alpha 0.1–0.4 已归档计划，Alpha 0.5 的地图基础、编辑器与世界层级已完成，后续进入双地图。已完成的执行计划统一保存在 `Docs/docs/plan/archive/`。
 后续新增系统、配置或流程时，应优先更新对应文档，避免 `Docs/docs/` 与实现脱节。游戏设计文档位于 `Docs/design/`，不属于 Agent 的常规维护范围。

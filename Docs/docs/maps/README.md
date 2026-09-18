@@ -2,7 +2,7 @@
 
 Alpha 0.5.0 地图基础已完成，当前包含文档服务、SO 定义、严格校验、规范导出、只读导入、地表资源发布与[静态几何 / 通行查询](./map-geometry.md)。已增加[手绘 / AI 地图编辑器](./map-editor.md)，动态寻路尚未实现，Main 继续使用[旧地表](../ground-tilemap.md)。
 
-B 阶段已完成：[共享坐标、四角 Key 与稳定变体规则](./terrain-resolution.md)、[分区、边签名与增量解析](./terrain-partition.md)、[独立地表诊断预览](./terrain-preview.md)及[持久样例和压力记录](./terrain-samples.md)。地图校验与解析共用四角采样。C1 的[正式地表家族合同](./terrain-art-contract.md)和[泥土源 Pilot](./acceptance/c1/README.md)已完成；C2 的[确定性纹理编译与正式预览](./terrain-texture-compilation.md)已完成，真实泥土样例可从地图菜单打开；C3 的[四材质双变体与资源发布](./terrain-materials.md)已完成，[C4 正式样例与压力验收](./acceptance/c4/README.md)也已完成，C 已提交 `9a3f7a9`，[D 同源碰撞与静态导航几何](./map-geometry.md)也已完成：默认 4×4 子格、圆足迹 / 线段 / 落点查询、碰撞投影及预览。D 已提交 `e396485`。[地图编辑器 E1–E5](./map-editor.md)已完成，下一阶段为世界层级。
+B 阶段已完成：[共享坐标、四角 Key 与稳定变体规则](./terrain-resolution.md)、[分区、边签名与增量解析](./terrain-partition.md)、[独立地表诊断预览](./terrain-preview.md)及[持久样例和压力记录](./terrain-samples.md)。地图校验与解析共用四角采样。C1 的[正式地表家族合同](./terrain-art-contract.md)和[泥土源 Pilot](./acceptance/c1/README.md)已完成；C2 的[确定性纹理编译与正式预览](./terrain-texture-compilation.md)已完成，真实泥土样例可从地图菜单打开；C3 的[四材质双变体与资源发布](./terrain-materials.md)已完成，[C4 正式样例与压力验收](./acceptance/c4/README.md)也已完成，C 已提交 `9a3f7a9`，[D 同源碰撞与静态导航几何](./map-geometry.md)也已完成：默认 4×4 子格、圆足迹 / 线段 / 落点查询、碰撞投影及预览。D 已提交 `e396485`。[地图编辑器 E1–E5](./map-editor.md)已完成，[世界对象表现与分段排序](./object-presentation.md)阶段 F 也已完成，下一阶段为正式双地图与作用域。
 
 ## 唯一源与内容身份
 
@@ -53,6 +53,9 @@ Editor 定义索引只查询地表 / 对象 / 区域及交互、刷怪定义，�
 SO 字段仍在“按类型”页编辑；地图没有独立 CreateAssetMenu，不允许直接修改只读布局产物。完整画笔、SceneView 舞台、Undo 和 AI Patch 事务已由[地图工作台](./map-editor.md)提供；配置中心可跳转进入。有编辑会话的地图必须在工作台导入 / 保存，旧入口拒绝旁路覆盖。
 
 ## 验证
+
+2026-09-18 F 收尾：EditMode **707/707**、PlayMode **78/78**，内容与配置覆盖通过，版本 `0.5.2-alpha`。对象表现、独立 Windows Player 与性能边界见 [F 验收](./acceptance/f/README.md)。
+
 
 2026-09-18 E 收尾：EditMode **697/697**、PlayMode **77/77**，内容校验 0 项问题。当前版本 `0.5.1-alpha`；地图编辑器、输入与性能见 [E 验收](./acceptance/e/README.md)。以下保留 A–D 历史验证记录。
 

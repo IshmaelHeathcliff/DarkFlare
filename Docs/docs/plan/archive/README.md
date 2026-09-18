@@ -1,5 +1,7 @@
 # 已完成计划归档
 
+- [Alpha 0.5.2 世界对象表现与稳定 Y 排序](./alpha-0.5.2-world-sorting-plan.md)：2026-09-18 F1–F5 完成，版本 `0.5.2-alpha`；EditMode 707/707、PlayMode 78/78，Windows Player 及性能验收通过。
+
 - [Alpha 0.5.1 地图编辑器与 AI 事务](./alpha-0.5.1-map-editor-plan.md)：2026-09-18 E1–E5 完成，版本 `0.5.1-alpha`；EditMode 697/697、PlayMode 77/77，下一阶段世界层级。
 
 - [Alpha 0.5.0 地图数据与地表基础](./alpha-0.5.0-map-foundation-plan.md)：2026-09-18 完成 A–D，数据 / 地表 / 碰撞 / 静态通行完整闭环；版本 `0.5.0-alpha`，下一阶段地图编辑器。
