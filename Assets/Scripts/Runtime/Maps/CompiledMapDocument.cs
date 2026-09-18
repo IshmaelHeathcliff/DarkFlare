@@ -26,6 +26,7 @@ namespace DarkFlare
         public int Revision { get; }
         public ContentId TerrainSetId { get; }
         public ContentId DefaultTerrainId => _terrainIds[_defaultIndex];
+        public IReadOnlyList<ContentId> TerrainPalette { get; }
 
         internal CompiledMapDocument(MapDocument document, int[] cells, int defaultIndex, string json)
         {
@@ -40,6 +41,7 @@ namespace DarkFlare
             TerrainSetId = ContentId.Parse(document.TerrainSetId);
             _palette = (string[])document.TerrainPalette.Clone();
             _terrainIds = _palette.Select(ContentId.Parse).ToArray();
+            TerrainPalette = Array.AsReadOnly(_terrainIds);
             _cells = (int[])cells.Clone();
             _defaultIndex = defaultIndex;
             // 重复覆盖仍由编译器定位并拒绝；尚未通过校验的快照不会对外发布。

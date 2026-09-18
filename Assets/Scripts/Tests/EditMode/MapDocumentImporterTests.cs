@@ -137,6 +137,35 @@ namespace DarkFlare.Tests
             yield return Await(() => AssetDatabase.LoadAssetAtPath<MapDefinition>(_path) != null, "删除冲突定义后未恢复");
         }
 
+        [UnityTest]
+        public IEnumerator PreviewWindow_ReimportInvalidatesAndRecoversWithoutKeepingResourcesAfterClose()
+        {
+            MapDocument document = _definitions.Document();
+            MapDocumentPage.SaveSource(_path, MapDocumentJson.Write(document));
+            var window = MapTerrainPreviewWindow.OpenSource(_path);
+            MapTerrainPreviewSession session = window.Session;
+            try
+            {
+                yield return Await(() => session.IsValid, "初次地图预览未完成：" + session.Status);
+                document.Revision++;
+                document.DefaultTerrainId = "terrain:test_water";
+                MapDocumentPage.SaveSource(_path, MapDocumentJson.Write(document));
+                yield return Await(() => session.IsValid && session.Current.Resolution.Map.Revision == document.Revision, "重新导入后预览未刷新");
+                MapTerrainPreviewFrame lastGood = session.Current;
+                LogAssert.ignoreFailingMessages = true;
+                File.WriteAllText(_path, "{ broken");
+                AssetDatabase.ImportAsset(_path, ImportAssetOptions.ForceSynchronousImport | ImportAssetOptions.ForceUpdate);
+                yield return Await(() => !session.IsBuilding && !session.IsValid && session.Status.Contains("失败"), "非法源未标记过期");
+                Assert.AreSame(lastGood, session.Current);
+                MapDocumentPage.SaveSource(_path, MapDocumentJson.Write(document));
+                yield return Await(() => session.IsValid, "修复源后预览未恢复");
+                Assert.IsTrue(lastGood.Tilemap == null);
+            }
+            finally { window.Close(); }
+            Assert.IsNull(session.Current);
+            Assert.AreEqual(0, session.ResourceCount);
+        }
+
         static IEnumerator Await(Func<bool> predicate, string message)
         {
             double deadline = EditorApplication.timeSinceStartup + 15;

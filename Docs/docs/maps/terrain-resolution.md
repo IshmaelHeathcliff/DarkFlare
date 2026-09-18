@@ -1,6 +1,6 @@
 # Dual Grid 坐标与地表规则
 
-当前实现 Alpha 0.5.0 B1：共享坐标、四角身份、不可变候选快照与确定性变体选择。分区采样、边签名、增量显示和可见预览尚未实现，后续步骤见 [B 执行计划](../plan/alpha-0.5.0-wang-preview-plan.md)。本模块不创建纹理、Tile、碰撞或导航数据。
+本文描述 Alpha 0.5.0 B1：共享坐标、四角身份、不可变候选快照与确定性变体选择，已提交为 `0c866f7`。后续 B2 的[分区、边签名与增量解析](./terrain-partition.md)及 B3 的[诊断预览](./terrain-preview.md)已实现；后续步骤见 [B 执行计划](../plan/alpha-0.5.0-wang-preview-plan.md)。本模块不创建纹理、Tile、碰撞或导航数据。
 
 ## 数据入口
 
@@ -42,10 +42,10 @@
 
 固定参考向量：seed=−123、x=−1、y=32，地表集 `terrain_set:test_set`，四角依次为 `terrain:test_dirt`、`terrain:test_grass`、`terrain:test_water`、`terrain:test_road`，共 153 字节，结果 `03a5643bdc5a01e8`。该值由独立 BigInt 实现核对。
 
-RuleHash 是 SHA256，输入包括规则域 `DarkFlare.TerrainRules.v1`、地表集 ID、有序地表 ID、按 ID 排序的候选及其四角，字段带长度 / 数量。它描述本模块的候选与 Key 配置，不包含尚未实现的分区、像素尺寸、颜色、Sprite 资源，也不包含步行 / 移动代价。后续显示和导航缓存必须补充各自依赖，不能把 RuleHash 或地图 SourceHash 单独当作所有派生数据的版本。
+RuleHash 是 SHA256，输入包括规则域 `DarkFlare.TerrainRules.v1`、地表集 ID、有序地表 ID、按 ID 排序的候选及其四角，字段带长度 / 数量。它描述本模块的候选与 Key 配置，不包含分区、像素尺寸、颜色、Sprite 资源，也不包含步行 / 移动代价。B2 独立记录分区修订；后续显示和导航缓存必须补充各自依赖，不能把 RuleHash 或地图 SourceHash 单独当作所有派生数据的版本。
 
 ## 验证
 
-2026-09-18：TerrainResolverTests **20/20**、完整 EditMode **623/623**、PlayMode **75/75** 通过。内容校验 0 项问题，配置文档字段覆盖通过。本轮未构建 Player，尚未进行新地表的视觉验收。
+2026-09-18 B1 提交前：TerrainResolverTests **20/20**、完整 EditMode **623/623**、PlayMode **75/75** 通过。内容校验 0 项问题，配置文档字段覆盖通过。后续最新结果见[B2 验证](./terrain-partition.md#验证)。本轮未构建 Player，尚未进行新地表的视觉验收。
 
 新增长期测试覆盖实际地图四角采样的 256 组合、二元 16 模式、64 材质地表集、负原点 / 显示 chunk、跨 31/32 源 chunk、坐标往返和越界、候选顺序、覆盖冲突、稳定 Hash 及定义快照隔离。MapDocumentTests / MapDocumentImporterTests 保留导入数据完整性和失败恢复回归，没有删除旧 Main 地表测试。本模块测试不代表已通过可见接缝或寻路验收。

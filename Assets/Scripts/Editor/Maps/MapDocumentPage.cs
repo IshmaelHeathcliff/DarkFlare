@@ -58,6 +58,12 @@ namespace DarkFlare.Editor
             Execute(() => UnityEditorInternal.InternalEditorUtility.OpenFileAtLineExternal(GetSourcePath(), 1));
         }
 
+        [Button("打开地表诊断预览")]
+        public void OpenPreview()
+        {
+            Execute(() => MapTerrainPreviewWindow.OpenSource(GetSourcePath()));
+        }
+
         [Button("导入交换 JSON")]
         public void ImportJson()
         {

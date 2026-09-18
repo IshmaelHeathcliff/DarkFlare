@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace DarkFlare.Tests
 {
-    public sealed class TerrainResolverTests
+    public sealed partial class TerrainResolverTests
     {
         MapTestDefinitions _definitions;
 

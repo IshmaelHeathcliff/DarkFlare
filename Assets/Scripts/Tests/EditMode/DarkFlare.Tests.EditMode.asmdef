@@ -26,6 +26,7 @@
     "overrideReferences": true,
     "precompiledReferences": [
         "nunit.framework.dll",
+        "Sirenix.OdinInspector.Editor.dll",
         "Newtonsoft.Json.dll"
     ],
     "autoReferenced": false,
