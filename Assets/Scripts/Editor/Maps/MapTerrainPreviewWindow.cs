@@ -39,6 +39,9 @@ namespace DarkFlare.Editor
 
         public MapTerrainPreviewSession Session => _session;
 
+        [ShowInInspector, ReadOnly, LabelText("源路径"), HideIf(nameof(_gallery))]
+        string SourcePath => _sourcePath;
+
         [MenuItem("DarkFlare/地图/地表诊断预览")]
         public static void Open()
         {

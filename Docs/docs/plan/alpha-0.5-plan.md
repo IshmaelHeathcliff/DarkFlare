@@ -1,6 +1,6 @@
 # Alpha 0.5：地图创建、地图数据与动态寻路
 
-状态：2026-09-18，0.5.0 的 A 数据与导入、B1 共享规则、B2 分区解析及 B3 诊断预览已实现，见[地图文档模块](../maps/README.md)、[地表规则](../maps/terrain-resolution.md)、[分区解析](../maps/terrain-partition.md)与[诊断预览](../maps/terrain-preview.md)。下一步为 B4 样例、视觉与压力验收；C 正式地表、D 几何尚未完成，因此未交付整个 0.5.0。当前运行版本 `0.4.2-alpha`，core v5、Schema 3；版本号只在对应阶段完成验收后更新。
+状态：2026-09-18，0.5.0 的 A 数据与导入、B Wang 解析与诊断预览均已完成；B4 的[持久样例、视觉与压力验收](../maps/terrain-samples.md)已收尾，B 计划已归档。当前行为见[地图文档模块](../maps/README.md)。下一步为 C 正式地表家族合同与 Pilot，之后 D 几何；因此未交付整个 0.5.0。当前运行版本 `0.4.2-alpha`，core v5、Schema 3；版本号只在对应阶段完成验收后更新。
 
 ## 目标与已确认范围
 
@@ -26,7 +26,7 @@
 | [世界排序、双地图与保存恢复](./alpha-0.5/world-maps-lifecycle.md) | 场景容器、Y 排序、地图切换事务、离场冻结、旧档迁移 |
 | [批量动态寻路与性能验收](./alpha-0.5/navigation.md) | 网格、Flow Field / A* 策略、空间索引、分离、Job 所有权和预算 |
 | [0.5.0 首阶段执行计划](./alpha-0.5.0-map-foundation-plan.md) | 可直接开工的数据 / 地表最小闭环与完成条件 |
-| [0.5.0 B：Wang 解析与预览](./alpha-0.5.0-wang-preview-plan.md) | A 提交后的下一步：坐标 / Key、稳定变体、增量重建、独立诊断预览及验收 |
+| [0.5.0 B：Wang 解析与预览（归档）](./archive/alpha-0.5.0-wang-preview-plan.md) | 已完成坐标 / Key、稳定变体、增量重建、独立诊断预览、技术样例及压力验收 |
 
 ## 已核对的实现与差距
 

@@ -1,5 +1,7 @@
 # 已完成计划归档
 
+- [Alpha 0.5.0 Wang 解析与预览](./alpha-0.5.0-wang-preview-plan.md)：2026-09-18 完成切片 B，确定性四角规则、分区与增量解析、隔离预览、持久样例及 256×256 压力验收；项目 EditMode 650/650、PlayMode 75/75。下一步为 C 正式地表家族合同与 Pilot。
+
 - [Alpha 0.5.0 数据与导入合同](./alpha-0.5.0-map-foundation-contract.md)：2026-09-18 完成切片 A，`.dfmap`、规范校验 / 导出、只读导入与配置中心入口；EditMode 603/603。0.5.0 的 Wang 预览、正式地表和几何仍待完成。
 
 - [Alpha 0.5 启动准备](./alpha-0.5-startup.md)：2026-09-17 完成基线梳理，目标已由[正式总计划](../alpha-0.5-plan.md)接管；归档仅指启动准备完成，功能待实施。

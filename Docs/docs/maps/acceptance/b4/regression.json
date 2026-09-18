@@ -1,0 +1,60 @@
+{
+  "date": "2026-09-18",
+  "editor": {
+    "total": 651,
+    "passed": 651,
+    "failed": 0,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "playmode": {
+    "total": 79,
+    "passed": 77,
+    "failed": 0,
+    "skipped": 2,
+    "inconclusive": 0
+  },
+  "project": {
+    "editorPassed": 650,
+    "playmodePassed": 75
+  },
+  "packageEditor": [
+    {
+      "FullName": "AddressableAssets.DocExampleCode.TestStub.RequiredTest",
+      "Status": "Passed",
+      "Duration": 0.0004489,
+      "Message": null,
+      "StackTrace": null
+    }
+  ],
+  "packagePlay": [
+    {
+      "FullName": "IntegrationTests.Integration_CanChangeInputBackendPlayerSettingInEditor",
+      "Status": "Passed",
+      "Duration": 0.0029167,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "IntegrationTests.Integration_CanSendAndReceiveEvents",
+      "Status": "Passed",
+      "Duration": 0.0007946,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "IntegrationTests.WindowsInput_MouseMovements_AreDetected",
+      "Status": "Skipped",
+      "Duration": 0.0003029,
+      "Message": "Unstable due to 1252825",
+      "StackTrace": null
+    },
+    {
+      "FullName": "IntegrationTests.WindowsInput_RemoteDesktopMouseMovements_AreDetected",
+      "Status": "Skipped",
+      "Duration": 0.000001,
+      "Message": "Unstable due to 1252825",
+      "StackTrace": null
+    }
+  ]
+}

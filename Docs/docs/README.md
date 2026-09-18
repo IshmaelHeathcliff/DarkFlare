@@ -52,16 +52,17 @@
 - [Dual Grid 坐标与地表规则](./maps/terrain-resolution.md)
 - [地表分区与增量解析](./maps/terrain-partition.md)
 - [地表诊断预览](./maps/terrain-preview.md)
+- [地表诊断样例](./maps/terrain-samples.md)
 - [世界渲染与稳定层级](./world-rendering.md)
 - [已完成计划归档](./plan/archive/README.md)
 
 ## 计划状态
 
-2026-09-18：**Alpha 0.5.0 的 A 数据导入与 B1–B3 地表规则、分区解析及诊断预览已实现**，见[地图文档模块](./maps/README.md)及[阶段计划](./plan/alpha-0.5.0-map-foundation-plan.md)。下一步为 B4 技术样例、视觉矩阵和压力验收，随后正式地表和静态几何；整个 0.5.0 尚未完成。总范围仍含手工 / AI 编辑、Y 排序、双地图与 Grid / Flow Field / A* / Job / Burst 导航。规模为 500 活动怪物、1000 压测，切图保留状态并暂停离场模拟。运行版本保持 `0.4.2-alpha`，core v5、Schema 3。
+2026-09-18：**Alpha 0.5.0 的 A 数据导入与 B Wang 解析、诊断预览及样例验收已完成**，见[地图文档模块](./maps/README.md)及[阶段计划](./plan/alpha-0.5.0-map-foundation-plan.md)。下一步为 C 正式地表家族合同与 Pilot，之后 D 静态几何；整个 0.5.0 尚未完成。总范围仍含手工 / AI 编辑、Y 排序、双地图与 Grid / Flow Field / A* / Job / Burst 导航。规模为 500 活动怪物、1000 压测，切图保留状态并暂停离场模拟。运行版本保持 `0.4.2-alpha`，core v5、Schema 3。
 
-A 已提交为 `2bf3843`，B1 已提交为 `0c866f7`；[B 执行计划](./plan/alpha-0.5.0-wang-preview-plan.md)已实现 B3 独立诊断预览，可查看真实地图源或 256 Key 画廊；尚未完成正式地表资产。
+A 已提交为 `2bf3843`，B1 为 `0c866f7`，B2/B3 为 `dc33aaa`；[B 执行计划](./plan/archive/alpha-0.5.0-wang-preview-plan.md)随 B4 收尾归档。可直接打开持久拓扑 / 边界样例和生成压力地图；尚未完成正式地表资产。
 
-本轮完整 EditMode 650/650、PlayMode 75/75 通过，B3 补充 7 项预览资源 / 生命周期 / 导入刷新回归；内容与配置文档覆盖校验通过，见[预览验证](./maps/terrain-preview.md#验证与边界)。本轮未构建 Windows Player。Alpha 0.4 历史记录仍见[随机商店验收](./assets/acceptance/random-shop/README.md)及[消耗品交付](./assets/acceptance/alpha-0.4-item-use-acceptance/README.md)。
+本轮项目完整 EditMode 650/650、PlayMode 75/75 通过，内容与配置文档覆盖校验通过；279168 对原始边像素无差异，256×256 冷 / 热 / 局部构建、内存与取消记录见 [B4 验收](./maps/acceptance/b4/README.md)。本轮未构建 Windows Player。Alpha 0.4 历史记录仍见[随机商店验收](./assets/acceptance/random-shop/README.md)及[消耗品交付](./assets/acceptance/alpha-0.4-item-use-acceptance/README.md)。
 
 Alpha 0.1、0.2 基础设施、0.3 UI 与十槽装备，以及 0.4 已完成计划均见[归档索引](./plan/archive/README.md)。当前功能以各模块文档为准，归档中的“下一阶段”保留历史含义。
 

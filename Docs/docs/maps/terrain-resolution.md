@@ -1,6 +1,6 @@
 # Dual Grid 坐标与地表规则
 
-本文描述 Alpha 0.5.0 B1：共享坐标、四角身份、不可变候选快照与确定性变体选择，已提交为 `0c866f7`。后续 B2 的[分区、边签名与增量解析](./terrain-partition.md)及 B3 的[诊断预览](./terrain-preview.md)已实现；后续步骤见 [B 执行计划](../plan/alpha-0.5.0-wang-preview-plan.md)。本模块不创建纹理、Tile、碰撞或导航数据。
+本文描述 Alpha 0.5.0 B1：共享坐标、四角身份、不可变候选快照与确定性变体选择，已提交为 `0c866f7`。B2 的[分区、边签名与增量解析](./terrain-partition.md)、B3 的[诊断预览](./terrain-preview.md)及 B4 的[样例与压力记录](./terrain-samples.md)均已完成，见 [B 计划归档](../plan/archive/alpha-0.5.0-wang-preview-plan.md)。本模块不创建纹理、Tile、碰撞或导航数据。
 
 ## 数据入口
 

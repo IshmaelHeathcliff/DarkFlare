@@ -1,14 +1,14 @@
 # Alpha 0.5.0 B：Dual Grid / Wang 解析与预览
 
-状态：2026-09-18，B1 已提交为 `0c866f7`；B2 分区解析及 B3 独立可见预览已实现，最新行为、截图与回归结果见[诊断预览模块](../maps/terrain-preview.md)。下一步为 B4 持久技术样例、完整视觉矩阵与压力记录；整个 B 尚未收尾。前置提交 `2bf3843` 的 A 基线为 EditMode 603/603、PlayMode 75/75；不将其当作 B 的验收。
+状态：2026-09-18，B1–B4 已完成并归档。B1 提交 `0c866f7`，B2/B3 提交 `dc33aaa`；B4 交付持久拓扑 / 边界样例、可生成压力源、1920×1080 与原始像素证据。当前行为见[诊断预览模块](../../maps/terrain-preview.md)与[样例模块](../../maps/terrain-samples.md)，实际性能、取消和回归结果见 [B4 验收](../../maps/acceptance/b4/README.md)。项目 EditMode 650/650、PlayMode 75/75、内容和文档覆盖通过。下一步为 C 正式地表家族合同与 Pilot；0.5.0 尚未整体交付。
 
-入口：[0.5.0 阶段计划](./alpha-0.5.0-map-foundation-plan.md)；现状：[地图文档模块](../maps/README.md)；后续总体规则：[地图数据与地表](./alpha-0.5/map-data-terrain.md)。
+入口：[0.5.0 阶段计划](../alpha-0.5.0-map-foundation-plan.md)；现状：[地图文档模块](../../maps/README.md)；后续总体规则：[地图数据与地表](../alpha-0.5/map-data-terrain.md)。
 
 ## 交付范围
 
 让有效 `.dfmap` 在独立 Editor 预览中显示四材质 Dual Grid 地表，四角解析、稳定变体、边界与局部更新可检查。交付完整 256 Key 的诊断调色板、真实源地图预览、接缝与生命周期验证，以及后续正式地表可以复用的纯解析接口。
 
-B 只使用算法生成的诊断色、覆盖区和内部变体标记，不生产正式材质纹理，不替换 Main，不创建商人 / 怪物玩法对象，也不实现画笔、AI Patch、碰撞或寻路。C 才按 [unity-2d-sprite-workflow](../../../.agents/skills/unity-2d-sprite-workflow/SKILL.md) 固定正式参考、Pilot 和单 PNG / Single Sprite 家族；诊断调色板是查看界面，不是生产 SpriteSheet。
+B 只使用算法生成的诊断色、覆盖区和内部变体标记，不生产正式材质纹理，不替换 Main，不创建商人 / 怪物玩法对象，也不实现画笔、AI Patch、碰撞或寻路。C 才按 [unity-2d-sprite-workflow](../../../../.agents/skills/unity-2d-sprite-workflow/SKILL.md) 固定正式参考、Pilot 和单 PNG / Single Sprite 家族；诊断调色板是查看界面，不是生产 SpriteSheet。
 
 ## 代码基线与改动入口
 
@@ -85,7 +85,7 @@ Preview Scene / URP 渲染是否按预期隔离，必须在 B3 用现有 Unity 6
 | B1（完成） | 共享坐标、四角 Key、不可变规则与确定性选择 | 20 项专项及完整 EditMode 623/623 通过，覆盖负 origin、负显示格、边界、二元 16 模式、四材质 256 Key、64 材质输入及固定 Hash 向量 |
 | B2（完成） | 技术分区、边签名、变体选择结果、全量 / 局部解析 | 专项 40/40；256 Key 独立权重预期、全部兼容边、跨 chunk 增量等价、缓存失效与失败隔离通过；变体内部诊断标记由 B3 实现 |
 | B3（完成） | 隔离 Tilemap 预览、资源缓存与取消 | 6 项资源 / 会话及 1 项真实导入窗口专项通过；当前 Unity / URP 可见，负 origin / cellSize 的 bounds、鼠标检查 / 缩放 / 平移已实测 |
-| B4（下一步） | 样例、压力记录、完整回归与文档 | 1920×1080 全图及原始像素截图可检查四材质交界；256×256 记录实际耗时 / 内存，窗口可取消；相关测试与内容校验通过 |
+| B4（完成） | 样例、压力记录、完整回归与文档 | 两张持久源图、256 Key 画廊、1920×1080 与原始像素证据；279168 对边像素无差异；256×256 三轮冷 / 热 / 局部中位数 942 / 211 / 222 ms；取消释放与完整回归通过 |
 
 测试优先扩展 MapDocumentTests 的兼容校验，新增 TerrainResolver / MapTerrainPreview 等按模块命名的行为覆盖；保留旧 GroundTilemapTests。接缝检查使用解析结果及独立边界预期，不只比较同一函数的两次输出。稳定快照、取消后释放、导入后自动刷新需真实生命周期测试；一次性采集脚本完成后清理。
 
