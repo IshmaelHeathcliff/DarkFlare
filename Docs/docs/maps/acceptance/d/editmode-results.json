@@ -1,0 +1,13 @@
+{
+  "mode": "editor",
+  "assembly": "DarkFlare.Tests.EditMode",
+  "duration": 93.35,
+  "summary": {
+    "total": 676,
+    "passed": 676,
+    "failed": 0,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "failures": []
+}

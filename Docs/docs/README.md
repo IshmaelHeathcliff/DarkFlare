@@ -56,20 +56,19 @@
 - [正式地表材质家族合同](./maps/terrain-art-contract.md)
 - [正式地表纹理编译](./maps/terrain-texture-compilation.md)
 - [四材质与运行时地表资源](./maps/terrain-materials.md)
+- [地图静态几何与通行查询](./maps/map-geometry.md)
 - [世界渲染与稳定层级](./world-rendering.md)
 - [已完成计划归档](./plan/archive/README.md)
 
 ## 计划状态
 
-2026-09-18：**Alpha 0.5.0 的 A/B 已完成，C1–C4 正式四材质、编译 / 预览、发布与压力验收已完成并归档**，见[地图文档模块](./maps/README.md)及[阶段计划](./plan/alpha-0.5.0-map-foundation-plan.md)。下一步为 [D 同源碰撞与静态导航几何](./plan/alpha-0.5.0-map-foundation-plan.md)；整个 0.5.0 尚未完成。总范围仍含手工 / AI 编辑、Y 排序、双地图与 Grid / Flow Field / A* / Job / Burst 导航。规模为 500 活动怪物、1000 压测，切图保留状态并暂停离场模拟。运行版本保持 `0.4.2-alpha`，core v5、Schema 3。
+2026-09-18：**Alpha 0.5.0 地图基础 A–D 已完成并归档**：文档导入、Dual Grid / Wang、四材质资源、同源碰撞与静态通行查询已形成闭环，见[地图模块](./maps/README.md)、[静态几何](./maps/map-geometry.md)及[阶段归档](plan/archive/alpha-0.5.0-map-foundation-plan.md)。下一阶段为 **0.5.1 手工 / AI 地图编辑器**。运行版本为 `0.5.0-alpha`，core v5、Schema 3；Main 仍使用旧地图。
 
-A 已提交为 `2bf3843`，B1 为 `0c866f7`，B2/B3 为 `dc33aaa`，B4 为 `b1cdb06`；[B 执行计划](./plan/archive/alpha-0.5.0-wang-preview-plan.md)已归档。C1 泥土源与 C2 编译 Tile 均已通过审计和 Main 临时采集；C3 四材质资源包已完成，见[模块说明](./maps/terrain-materials.md)；Main 场景资产仍使用旧地表。
+A 已提交 `2bf3843`，B1 / B2+B3 / B4 为 `0c866f7` / `dc33aaa` / `b1cdb06`，C1–C4 为 `9a3f7a9`。D 本轮 EditMode **676/676**、PlayMode **77/77** 通过，内容校验 0 项问题，见 [D 验收](./maps/acceptance/d/README.md)。未重建 Windows Player。
 
-C4 本轮项目 EditMode 662/662、完整 PlayMode 76/76 通过，正式渲染边像素和三轮大图 / 取消验收见 [C4 记录](./maps/acceptance/c4/README.md)；真实 Main 同框沿用同修订的 C3 采集。源图证据见 [C1 验收](./maps/acceptance/c1/README.md)，诊断像素 / 压力历史记录见 [B4 验收](./maps/acceptance/b4/README.md)。未构建 Windows Player。Alpha 0.4 历史记录仍见[随机商店验收](./assets/acceptance/random-shop/README.md)及[消耗品交付](./assets/acceptance/alpha-0.4-item-use-acceptance/README.md)。
-
-Alpha 0.1、0.2 基础设施、0.3 UI 与十槽装备，以及 0.4 已完成计划均见[归档索引](./plan/archive/README.md)。当前功能以各模块文档为准，归档中的“下一阶段”保留历史含义。
+Alpha 0.5 后续仍包含手绘 / AI 编辑、Y 排序、城镇 / 野外、保留状态并暂停离场模拟，以及 Grid / Flow Field / A* / Spatial Hash / Separation / Job / Burst；500 活动怪物、1000 压测目标未提前计为完成。Alpha 0.1–0.4 历史记录见[归档索引](./plan/archive/README.md)。
 
 ## 说明
 
-当前项目已完成首版最小循环、初步体验优化及 Alpha 0.1–0.4 已归档计划，Alpha 0.5 正在执行首阶段，数据与导入切片已完成。已完成的执行计划统一保存在 `Docs/docs/plan/archive/`。
+当前项目已完成首版最小循环、初步体验优化及 Alpha 0.1–0.4 已归档计划，Alpha 0.5 的首阶段地图基础已完成，后续进入地图编辑器。已完成的执行计划统一保存在 `Docs/docs/plan/archive/`。
 后续新增系统、配置或流程时，应优先更新对应文档，避免 `Docs/docs/` 与实现脱节。游戏设计文档位于 `Docs/design/`，不属于 Agent 的常规维护范围。

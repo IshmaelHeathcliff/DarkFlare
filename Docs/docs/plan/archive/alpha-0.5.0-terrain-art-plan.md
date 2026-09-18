@@ -1,6 +1,6 @@
 # Alpha 0.5.0 C：正式地表资产
 
-状态：2026-09-18，C1 尺度与泥土源、C2 确定性编译与正式预览、C3 四材质双变体与资源发布已完成，见 [C1](../../maps/acceptance/c1/README.md)、[C2](../../maps/acceptance/c2/README.md)和 [C3 验收](../../maps/acceptance/c3/README.md)；C4 正式样例、像素、压力与生命周期验收也已完成，见 [C4 记录](../../maps/acceptance/c4/README.md)；下一步为 D 同源几何。B4 已提交 `b1cdb06`。上级为[地图基础阶段](../alpha-0.5.0-map-foundation-plan.md)，B 的[解析](../../maps/terrain-partition.md)与[预览](../../maps/terrain-preview.md)作为基线。C1–C4 全部完成，本计划归档。
+状态：2026-09-18，C1 尺度与泥土源、C2 确定性编译与正式预览、C3 四材质双变体与资源发布已完成，见 [C1](../../maps/acceptance/c1/README.md)、[C2](../../maps/acceptance/c2/README.md)和 [C3 验收](../../maps/acceptance/c3/README.md)；C4 正式样例、像素、压力与生命周期验收也已完成，见 [C4 记录](../../maps/acceptance/c4/README.md)；下一步为 D 同源几何。B4 已提交 `b1cdb06`。上级为[地图基础阶段](alpha-0.5.0-map-foundation-plan.md)，B 的[解析](../../maps/terrain-partition.md)与[预览](../../maps/terrain-preview.md)作为基线。C1–C4 全部完成，本计划归档。
 
 ## 分步交付
 

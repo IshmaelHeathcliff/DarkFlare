@@ -44,4 +44,4 @@ Unity 6000.6.0f1 Editor，AMD Ryzen 7 PRO 8845HS / 16 逻辑线程、Radeon 780M
 
 最终项目 EditMode **662/662**、PlayMode **76/76** 通过，见 [EditMode](./editmode-results.json)和 [PlayMode](./playmode-results.json)。[最终校验](./final-validation.json)无内容问题，现有样例重复创建保持字节不变，Main 场景资产与 core v5 / SaveSchema 3 未改变。未重新构建 Windows Player，C3 资源包加载证据继续有效。
 
-C1–C4 已完成，C 计划归档；下一步为 [D 同源碰撞与静态导航几何](../../../plan/alpha-0.5.0-map-foundation-plan.md)。运行版本仍为 `0.4.2-alpha`；本次压力测试不等于后续 500 活动怪物 / 1000 怪物的导航验收。
+C1–C4 已完成，C 计划归档；下一步为 [D 同源碰撞与静态导航几何](../../../plan/archive/alpha-0.5.0-map-foundation-plan.md)。运行版本仍为 `0.4.2-alpha`；本次压力测试不等于后续 500 活动怪物 / 1000 怪物的导航验收。

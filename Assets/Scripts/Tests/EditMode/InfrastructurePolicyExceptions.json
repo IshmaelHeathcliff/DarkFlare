@@ -48,6 +48,12 @@
       "path": "Assets/Scripts/Tests/PlayMode/SceneSessionComponentBindingPlayModeTests.cs",
       "reason": "SceneSessionBinding 的空场景、污染场景与卸载故障测试需要直接管理测试 Scene。",
       "removeByStage": "scene-session-binding-test-adapter"
+    },
+    {
+      "ruleId": "business-scene-loading",
+      "path": "Assets/Scripts/Tests/PlayMode/MapGeometryPlayModeTests.cs",
+      "reason": "静态几何物理回归创建独立 Physics2D 测试 Scene，TearDown 等待卸载以隔离碰撞世界；不切换业务地图或 Session。",
+      "removeByStage": "shared-isolated-physics-test-adapter"
     }
   ]
 }

@@ -1,5 +1,7 @@
 # 地表诊断样例
 
+D 阶段另有 **DarkFlare/地图/打开同源几何样例**，源为 `Assets/Data/Development/Maps/terrain_geometry.dfmap`，复用正式四材质拓扑并加入 U 形障碍、Spawn / Safe 区域；可查看原始阻挡、通行节点与足迹 / 线段查询。实现与限制见[地图几何](./map-geometry.md)，[D 验收](./acceptance/d/README.md)包含物理和导出重导入证据。
+
 Alpha 0.5.0 B 的持久技术输入，配合[诊断预览](./terrain-preview.md)使用。样例仅含地表和变体，不是最终城镇 / 野外，也没有碰撞、交互或刷怪对象。
 
 ## 入口与文件

@@ -18,6 +18,10 @@ namespace DarkFlare.Editor
         [SerializeField, HorizontalGroup("图层"), LabelText("Chunk 边界")] bool _chunkGrid;
         [SerializeField, LabelText("正式材质模式"), HideIf(nameof(_gallery)), OnValueChanged(nameof(ScheduleRefresh))] bool _formal;
         [SerializeField, LabelText("正式材质源"), ShowIf(nameof(ShowFormalSource)), OnValueChanged(nameof(ScheduleRefresh))] TerrainTextureSources _formalSources;
+        [SerializeField, LabelText("构建碰撞与通行"), HideIf(nameof(_gallery)), OnValueChanged(nameof(ScheduleRefresh))] bool _geometry;
+        [SerializeField, LabelText("检查半径"), MinValue(0.001), ShowIf(nameof(_geometry))] float _radius = 0.36f;
+        MapGeometryPoint? _queryStart;
+        MapGeometryPoint? _queryEnd;
         MapTerrainPreviewSession _session;
         Vector2 _center;
         float _halfHeight = 18;
@@ -69,6 +73,14 @@ namespace DarkFlare.Editor
             var window = OpenSource(path);
             window._formal = true;
             window._formalSources = sources;
+            window.ScheduleRefresh();
+            return window;
+        }
+
+        public static MapTerrainPreviewWindow OpenGeometry(string path, TerrainTextureSources sources)
+        {
+            MapTerrainPreviewWindow window = OpenFormal(path, sources);
+            window._geometry = true;
             window.ScheduleRefresh();
             return window;
         }
@@ -137,7 +149,8 @@ namespace DarkFlare.Editor
         {
             MapTerrainPreviewSession session = _session;
             if (_gallery) { await session.RebuildAsync(); }
-            else { await session.RebuildAsync(CaptureSource, _formal ? CaptureTiles : null); }
+            else { await session.RebuildAsync(CaptureSource, _formal ? CaptureTiles : null,
+                _geometry ? map => MapGeometryInput.Capture(map, MapEditorDefinitionIndex.Capture()) : null); }
             if (this != null && _session == session) { Repaint(); }
         }
 
@@ -178,6 +191,8 @@ namespace DarkFlare.Editor
             {
                 if (_lastFrame == null || _lastFrame.IsGallery != frame.IsGallery) { _fit = true; }
                 _lastFrame = frame;
+                _queryStart = null;
+                _queryEnd = null;
             }
             float aspect = rect.width / Mathf.Max(1, rect.height);
             if (_fit)
@@ -192,6 +207,7 @@ namespace DarkFlare.Editor
                 Texture texture = frame.Render(Mathf.Max(1, (int)rect.width), Mathf.Max(1, (int)rect.height), _center, _halfHeight);
                 GUI.DrawTexture(rect, texture, ScaleMode.StretchToFill, false);
                 MapTerrainPreviewOverlay.Draw(rect, frame, _center, _halfHeight, _logicalGrid, _displayGrid, _chunkGrid, ref _labelStyle);
+                if (frame.Geometry != null) { MapGeometryPreviewOverlay.Draw(rect, frame.Geometry, _center, _halfHeight, _radius, _queryStart, _queryEnd); }
                 if (!_session.IsValid) { GUI.Label(new Rect(rect.x + 12, rect.y + 12, rect.width - 24, 30), "过期画面 · 检查已禁用", EditorStyles.whiteLargeLabel); }
             }
             if (_session.IsBuilding) { Repaint(); }
@@ -216,6 +232,16 @@ namespace DarkFlare.Editor
             else if (input.type == EventType.MouseDown && input.button == 0 && _session.IsValid)
             {
                 Vector2 world = _center + new Vector2(input.mousePosition.x - rect.center.x, rect.center.y - input.mousePosition.y) * (2 * _halfHeight / rect.height);
+                if (frame.Geometry != null)
+                {
+                    var point = new MapGeometryPoint(world.x, world.y);
+                    var profile = new MapGroundProfile(Math.Max(0.001, _radius));
+                    if (input.shift && _queryStart.HasValue) { _queryEnd = point; }
+                    else { _queryStart = point; _queryEnd = null; }
+                    MapGeometryResult result = _queryEnd.HasValue ? frame.Geometry.CheckSegment(_queryStart.Value, point, profile) : frame.Geometry.CheckPoint(point, profile);
+                    _inspection = $"净空查询：{result}；半径 {profile.Radius:F3} + 安全余量 {profile.Margin:F3}\n红线：原始阻挡；绿点：可走节点（放大查看）；圆圈：足迹 / 净空\n左键设置起点，Shift+左键检查移动线段。\n几何 {frame.Geometry.GeometryHash.Substring(0, 12)}；数组 {frame.Geometry.ArrayBytes / 1048576.0:F2} MiB";
+                    input.Use(); Repaint(); return;
+                }
                 if (frame.TryInspect(world, out Vector2Int cell, out TerrainWangKey key, out string variant))
                 {
                     _inspection = $"显示格 {cell} / Chunk {DualGridCoordinates.GetDisplayChunk(cell.x, cell.y)}\nNW {key.NorthWest}   NE {key.NorthEast}\nSW {key.SouthWest}   SE {key.SouthEast}\nVariant：{variant ?? "基准材质"}";

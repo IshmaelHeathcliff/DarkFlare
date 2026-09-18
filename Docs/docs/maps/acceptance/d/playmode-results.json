@@ -1,0 +1,13 @@
+{
+  "mode": "playmode",
+  "assembly": "DarkFlare.Tests.PlayMode",
+  "duration": 83.61,
+  "summary": {
+    "total": 77,
+    "passed": 77,
+    "failed": 0,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "failures": []
+}

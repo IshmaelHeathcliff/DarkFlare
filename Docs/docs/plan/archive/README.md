@@ -1,5 +1,8 @@
 # 已完成计划归档
 
+- [Alpha 0.5.0 地图数据与地表基础](./alpha-0.5.0-map-foundation-plan.md)：2026-09-18 完成 A–D，数据 / 地表 / 碰撞 / 静态通行完整闭环；版本 `0.5.0-alpha`，下一阶段地图编辑器。
+- [Alpha 0.5.0 同源碰撞与静态导航几何](./alpha-0.5.0-map-geometry-plan.md)：2026-09-18 完成 D1–D4，EditMode 676/676、PlayMode 77/77；窄路保守拒绝与极端地图容量边界见验收。
+
 - [Alpha 0.5.0 正式地表资产](./alpha-0.5.0-terrain-art-plan.md)：2026-09-18 完成 C1–C4，四材质双变体、完整 Wang 编译、资源发布、正式样例与压力验收；EditMode 662/662、PlayMode 76/76。下一步 D 同源几何。
 
 - [Alpha 0.5.0 Wang 解析与预览](./alpha-0.5.0-wang-preview-plan.md)：2026-09-18 完成切片 B，确定性四角规则、分区与增量解析、隔离预览、持久样例及 256×256 压力验收；项目 EditMode 650/650、PlayMode 75/75。下一步为 C 正式地表家族合同与 Pilot。

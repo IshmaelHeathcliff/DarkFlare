@@ -1,8 +1,8 @@
 # 地图文档与导入
 
-Alpha 0.5.0 的数据与导入切片。当前实现纯文档服务、SO 定义、严格校验、规范导出、只读导入资产和配置中心入口；尚无运行时新地表渲染、绘制工作台或寻路，Main 继续使用[旧地表](../ground-tilemap.md)。
+Alpha 0.5.0 地图基础已完成，当前包含文档服务、SO 定义、严格校验、规范导出、只读导入、地表资源发布与[静态几何 / 通行查询](./map-geometry.md)。尚无正式绘制工作台或动态寻路，Main 继续使用[旧地表](../ground-tilemap.md)。
 
-B 阶段已完成：[共享坐标、四角 Key 与稳定变体规则](./terrain-resolution.md)、[分区、边签名与增量解析](./terrain-partition.md)、[独立地表诊断预览](./terrain-preview.md)及[持久样例和压力记录](./terrain-samples.md)。地图校验与解析共用四角采样。C1 的[正式地表家族合同](./terrain-art-contract.md)和[泥土源 Pilot](./acceptance/c1/README.md)已完成；C2 的[确定性纹理编译与正式预览](./terrain-texture-compilation.md)已完成，真实泥土样例可从地图菜单打开；C3 的[四材质双变体与资源发布](./terrain-materials.md)已完成，[C4 正式样例与压力验收](./acceptance/c4/README.md)也已完成，下一步 D 同源碰撞与静态导航几何。
+B 阶段已完成：[共享坐标、四角 Key 与稳定变体规则](./terrain-resolution.md)、[分区、边签名与增量解析](./terrain-partition.md)、[独立地表诊断预览](./terrain-preview.md)及[持久样例和压力记录](./terrain-samples.md)。地图校验与解析共用四角采样。C1 的[正式地表家族合同](./terrain-art-contract.md)和[泥土源 Pilot](./acceptance/c1/README.md)已完成；C2 的[确定性纹理编译与正式预览](./terrain-texture-compilation.md)已完成，真实泥土样例可从地图菜单打开；C3 的[四材质双变体与资源发布](./terrain-materials.md)已完成，[C4 正式样例与压力验收](./acceptance/c4/README.md)也已完成，C 已提交 `9a3f7a9`，[D 同源碰撞与静态导航几何](./map-geometry.md)也已完成：默认 4×4 子格、圆足迹 / 线段 / 落点查询、碰撞投影及预览。下一阶段为地图编辑器。
 
 ## 唯一源与内容身份
 
@@ -53,6 +53,8 @@ Editor 定义索引只查询地表 / 对象 / 区域及交互、刷怪定义，�
 SO 字段仍在“按类型”页编辑；地图没有独立 CreateAssetMenu，不允许直接修改只读布局产物。该入口尚不包含画笔、场景预览、Undo 和 AI Patch 事务，后续编辑器将复用文档服务。
 
 ## 验证
+
+2026-09-18 D 收尾：EditMode **676/676**、PlayMode **77/77**，内容校验 0 项问题。物理余量、离散窄路误拒绝、几何容量及未构建 Player 的边界见 [D 验收](./acceptance/d/README.md)。下段为 B 阶段历史记录。
 
 2026-09-18：B4 完成后项目完整 EditMode **650/650**、PlayMode **75/75** 通过；A 的 35 项地图回归及 40 项地表规则回归、B3 的 7 项[预览与导入刷新回归](./terrain-preview.md#验证与边界)保留。内容校验 0 项问题，配置文档字段覆盖通过。1920×1080、原始像素与 256×256 压力记录见 [B4 验收](./acceptance/b4/README.md)，其中单独记录工具附带运行的包测试。本轮未构建 Player。
 

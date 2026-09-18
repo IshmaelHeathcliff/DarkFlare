@@ -61,7 +61,7 @@ Editor 发布校验源修订、输出内容、地址唯一性、标签与运行�
 
 ## MapRegionDefinition
 
-创建菜单 `Map Region Definition`；命名空间 `map_region`。源区域可为矩形或简单多边形。当前消费者是语义校验器，运行中的安全区与刷怪接入后续地图阶段。
+创建菜单 `Map Region Definition`；命名空间 `map_region`。源区域可为矩形或简单多边形。当前消费者包含语义校验器和[静态几何查询](../maps/map-geometry.md)：Safe 排除刷怪足迹，不阻挡行走；Spawn 落点必须完整位于指定区域。运行中的刷怪接入后续地图阶段。
 
 | 字段 | 类型 / 默认 | 合同 |
 | --- | --- | --- |
@@ -73,3 +73,5 @@ Editor 发布校验源修订、输出内容、地址唯一性、标签与运行�
 内容校验及 `.dfmap` 导入均验证定义、引用、能力与布局。源损坏生成错误报告并撤销有效 MapDefinition，配置中心显示原因；标准 Player 构建前执行地图校验。新增缺失定义或删除冲突后会触发重新导入。
 
 MapDefinition 是只读导入产物，不属于可创建配置，也不进入本文件的字段覆盖列表。仅由 `.dfmap` 生成，不能创建第二份 `.asset` 布局。地表显示目录已单独登记 Addressables；地图内容目录及运行时场景接入在后续阶段完成。
+
+静态几何通过 `MapGeometryInput.Capture` / `MapGeometryCompiler.Compile` 按需派生，不增加可手工编辑的 SO。默认 4×4 导航子格与 0.0125 物理余量，容量和坐标精度限制见[模块合同](../maps/map-geometry.md)。预览中勾选“构建碰撞与通行”即可检查；导入成功不代表任意派生预算都可接受该地图。

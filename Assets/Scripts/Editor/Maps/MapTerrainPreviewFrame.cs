@@ -22,6 +22,8 @@ namespace DarkFlare.Editor
         public Tilemap Tilemap { get; }
         public TilemapRenderer Renderer { get; }
         public TerrainResolution Resolution { get; }
+        public MapGeometrySnapshot Geometry { get; }
+        public MapGeometryProjection Projection { get; private set; }
         public bool IsGallery => Resolution == null;
         public Bounds Bounds { get; private set; }
         public int ResourceCount => _leases.Count;
@@ -34,10 +36,11 @@ namespace DarkFlare.Editor
             ContentId.Parse("terrain:preview_water"), ContentId.Parse("terrain:preview_road")
         });
 
-        public MapTerrainPreviewFrame(DiagnosticTileLibrary library, TerrainResolution resolution, TerrainTileCatalog formalTiles = null)
+        public MapTerrainPreviewFrame(DiagnosticTileLibrary library, TerrainResolution resolution, TerrainTileCatalog formalTiles = null, MapGeometrySnapshot geometry = null)
         {
             _library = library;
             Resolution = resolution;
+            Geometry = geometry;
             _formalTiles = formalTiles;
             _preview = new PreviewRenderUtility();
             try
@@ -138,6 +141,11 @@ namespace DarkFlare.Editor
             Tilemap.CompressBounds();
             Tilemap.RefreshAllTiles();
             Bounds = Renderer.bounds;
+            if (Geometry != null)
+            {
+                Projection = new MapGeometryProjection(Geometry, Tilemap.gameObject.scene);
+                await Projection.PopulateAsync(token);
+            }
         }
 
         public Texture Render(int width, int height, Vector2 center, float halfHeight)
@@ -177,6 +185,7 @@ namespace DarkFlare.Editor
         {
             if (_disposed) { return; }
             _disposed = true;
+            Projection?.Dispose();
             _preview?.Cleanup();
             if (_material != null) { Object.DestroyImmediate(_material); }
             foreach (DiagnosticTileLibrary.Lease lease in _leases.Values) { lease.Dispose(); }
