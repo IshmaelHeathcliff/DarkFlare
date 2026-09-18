@@ -194,6 +194,7 @@ namespace DarkFlare.Editor
             List<CraftingDefinition> craftingDefinitions = LoadAssets<CraftingDefinition>($"{PresetRoot}/Crafting");
 
             ValidateRegisteredDefinitions(issues);
+            issues.AddRange(MapEditorValidation.Scan());
             foreach (StatusDefinition status in LoadAssets<StatusDefinition>(PresetRoot))
             {
                 foreach (string issue in status.ValidateConfiguration()) { AddError(issues, status, issue); }

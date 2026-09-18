@@ -1,12 +1,12 @@
 # Alpha 0.5：地图编辑器与 AI 编辑
 
-状态：计划，未实现。入口：[总计划](../alpha-0.5-plan.md)，数据规则见[地图数据](./map-data-terrain.md)。
+状态：完整绘制工作台与 AI Patch 待实施；2026-09-18 已提供配置中心“地图文档”的源创建、打开、校验和 JSON 交换入口，见[现有能力](../../maps/README.md)。入口：[总计划](../alpha-0.5-plan.md)，后续数据规则见[地图数据](./map-data-terrain.md)。
 
 ## 工具选择
 
 在 Unity 内提供 Odin 地图工作台和 SceneView 绘制工具，复用 Unity Undo、Selection、AssetDatabase、SceneView Handles、Tilemap 显示及现有配置中心；不另造通用二维画布。Odin 负责配置 / 属性面板，地图预览通过 Editor API 构建。
 
-Tiled 的 Terrain Brush / Corner Wang 概念可用于规则核对，但首期不同时维护第二个完整外部编辑器，也不承诺任意 TMX 地图无损导入。正式交换格式是项目 JSON；需要 Tiled 等适配器时通过同一个 DTO / 校验入口转换。
+Tiled 的 Terrain Brush / Corner Wang 概念可用于规则核对，但首期不同时维护第二个完整外部编辑器，也不承诺任意 TMX 地图无损导入。正式交换格式是项目 JSON，工程内源文件使用 `.dfmap` 专用后缀；需要 Tiled 等适配器时通过同一个 DTO / 校验入口转换。
 
 ## 手工绘制
 
@@ -53,7 +53,7 @@ Tiled 的 Terrain Brush / Corner Wang 概念可用于规则核对，但首期不
 
 ```json
 {
-  "mapId": "core:map_town",
+  "mapId": "map:town",
   "baseRevision": 12,
   "baseHash": "<读取文档得到的哈希>",
   "operationId": "town-main-road-001",
@@ -62,12 +62,12 @@ Tiled 的 Terrain Brush / Corner Wang 概念可用于规则核对，但首期不
       "type": "FillRect",
       "layer": "terrain",
       "rect": { "x": 4, "y": 8, "width": 16, "height": 3 },
-      "terrainId": "core:terrain_road"
+      "terrainId": "terrain:road"
     },
     {
       "type": "UpsertObject",
       "objectId": "town_trader",
-      "definitionId": "core:map_object_trader",
+      "definitionId": "map_object:trader",
       "position": { "x": 12.5, "y": 12.5 },
       "rotationQuarterTurns": 0
     }

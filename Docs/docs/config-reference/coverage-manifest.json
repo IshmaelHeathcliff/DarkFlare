@@ -2,6 +2,31 @@
   "schemaVersion": 1,
   "entries": [
     {
+      "type": "DarkFlare.TerrainDefinition",
+      "document": "Docs/docs/config-reference/maps.md",
+      "anchor": "terraindefinition"
+    },
+    {
+      "type": "DarkFlare.TerrainSetDefinition",
+      "document": "Docs/docs/config-reference/maps.md",
+      "anchor": "terrainsetdefinition"
+    },
+    {
+      "type": "DarkFlare.TerrainTileVariant",
+      "document": "Docs/docs/config-reference/maps.md",
+      "anchor": "terraintilevariant"
+    },
+    {
+      "type": "DarkFlare.MapObjectDefinition",
+      "document": "Docs/docs/config-reference/maps.md",
+      "anchor": "mapobjectdefinition"
+    },
+    {
+      "type": "DarkFlare.MapRegionDefinition",
+      "document": "Docs/docs/config-reference/maps.md",
+      "anchor": "mapregiondefinition"
+    },
+    {
       "type": "DarkFlare.ItemUseDefinition",
       "document": "Docs/docs/config-reference/item-use.md",
       "anchor": "itemusedefinition"

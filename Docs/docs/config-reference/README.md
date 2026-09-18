@@ -16,6 +16,7 @@
 
 | 职责 | 类型 | 字段数 | 字段参考 | 模块说明 |
 | --- | --- | ---: | --- | --- |
+| 地图与地表 | `TerrainDefinition`、`TerrainSetDefinition`、`TerrainTileVariant`、`MapObjectDefinition`、`MapRegionDefinition` | 18 | [完整](./maps.md) | [地图文档与导入](../maps/README.md) |
 | 状态 | `StatusDefinition` | 21 | [完整](./statuses.md) | [状态系统](../status-system.md) |
 | 物品使用 | `ItemUseDefinition`、`ItemUseEffect` | 9 | [完整](./item-use.md) | [统一物品使用](../item-use-system.md) |
 | 标签与查询 | `TagDefinition`、`TagQueryDefinition` | 10 | [完整](./tags-and-queries.md) | [战斗标签系统](../combat-tag-system.md) |

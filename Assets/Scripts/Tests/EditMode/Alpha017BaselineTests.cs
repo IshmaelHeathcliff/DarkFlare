@@ -61,8 +61,11 @@ namespace DarkFlare.Tests
             IReadOnlyList<Type> nestedTypes = ConfigurationTypeDiscovery.FindNestedSerializedTypes(topLevelTypes);
 
             CollectionAssert.IsSubsetOf(
-                ContentDefinitionRegistry.All.Select(metadata => metadata.DefinitionType).ToArray(),
+                ContentDefinitionRegistry.All.Select(metadata => metadata.DefinitionType)
+                    .Where(type => type != typeof(MapDefinition)).ToArray(),
                 topLevelTypes.ToArray());
+            Assert.IsFalse(topLevelTypes.Contains(typeof(MapDefinition)), "地图只能从源导入，不能创建第二份可编辑布局");
+            Assert.IsNull(typeof(MapDefinition).GetCustomAttribute<CreateAssetMenuAttribute>());
             CollectionAssert.IsSubsetOf(
                 RequiredNestedTypes,
                 nestedTypes.Select(type => type.FullName).ToArray());

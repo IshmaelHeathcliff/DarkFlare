@@ -35,6 +35,7 @@ namespace DarkFlare.Editor
             List<ConfigTypeInfo> configTypes = FindConfigTypes();
             tree.Add("配置概览", new ConfigOverviewPage(configTypes));
             tree.Add("内容校验", new ContentValidationPage(OpenAssetForEdit));
+            tree.Add("地图文档", new MapDocumentPage());
 
             for (int i = 0; i < configTypes.Count; i++)
             {

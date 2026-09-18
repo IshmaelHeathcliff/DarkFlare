@@ -29,6 +29,11 @@ namespace DarkFlare
         public const string Trader = "trader";
         public const string Crafting = "crafting";
         public const string Status = "status";
+        public const string Map = "map";
+        public const string Terrain = "terrain";
+        public const string TerrainSet = "terrain_set";
+        public const string MapObject = "map_object";
+        public const string MapRegion = "map_region";
     }
 
     public interface IContentDefinition

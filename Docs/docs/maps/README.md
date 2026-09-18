@@ -1,0 +1,57 @@
+# 地图文档与导入
+
+Alpha 0.5.0 的数据与导入切片。当前实现纯文档服务、SO 定义、严格校验、规范导出、只读导入资产和配置中心入口；未实现地表渲染、绘制工作台或寻路，Main 继续使用[旧地表](../ground-tilemap.md)。
+
+## 唯一源与内容身份
+
+- 布局源：`Assets/Data/Maps/<name>.dfmap`，UTF-8 JSON；交换导出使用 `.json`。
+- ScriptedImporter 固定主资产键 `map_definition`，生成 MapDefinition；源文件 `.meta` 决定 GUID，重新导入保持 local file ID。
+- `MapDefinition.Id` 是本地 ID，完整身份为 `map:<id>`。地表、地表集、对象、区域分别使用 `terrain`、`terrain_set`、`map_object`、`map_region`。
+- 定义资产按[地图配置参考](../config-reference/maps.md)创建。没有加入正式 core 目录或增加内容版本。
+
+## V1 交换合同
+
+[最小样例](./sample.dfmap)使用四种地表，须先建立对应定义。[JSON Schema](./map-document.schema.json)由 `MapDocumentJson.CreateSchema()` 从 DTO 生成，与读取器共享属性、枚举和集合上限；它检查结构，引用、坐标、拓扑和几何必须继续运行 `MapDocumentCompiler.Compile`。
+
+字段全部必填，允许空值的字段仍须显式写 `null`。枚举采用精确名称字符串，不接受数字或大小写转换；拒绝未知字段、重复属性、缺字段、类型强制转换、非有限数值和尾部第二份文档。只有 formatVersion=1，revision 非负，seed 为 Int32。
+
+| 数据 | 规则 |
+| --- | --- |
+| origin / cellSize | origin 是世界平移，可为负；世界范围限制 ±1000000，格宽 (0,1024] |
+| width / height | 每轴 1..1024，总格数 ≤1048576；先验容量再分配网格 |
+| terrainPalette | 1..64 个不重复完整 TerrainId，必须属于选定地表集；顺序是 chunk 索引含义 |
+| defaultTerrainId | 必须在 palette 中；省略块和地图边界虚拟样本使用它 |
+| chunks | 固定 32×32，1024 槽，索引 `x+y*32`；块坐标从零起，不可重复；末端地图外填充必须为默认地表 |
+| variantOverrides | 显示格范围 x=−1..width−1、y=−1..height−1；左下、右下、左上、右上取逻辑样本 (x,y)、(x+1,y)、(x,y+1)、(x+1,y+1)；显示中心为 origin+((x+1),(y+1))×cellSize；兼容四角的稳定变体 ID，不接受重复覆盖 |
+| objects | 地图内唯一 objectId，definitionId、局部世界 position、rotation=0/90/180/270、可空 appearanceVariant、可空 interaction；障碍足迹不可越界 |
+| interaction | kind 为 Trader 或 Crafting，contentId 指向对应现有定义；跨图出口绑定在双地图阶段扩展，当前 V1 不接受任意参数包 |
+| regions | 唯一 regionId、definitionId、Int32 priority、Rectangle/Polygon、points、可空 spawnDefinitionId；坐标为逻辑格，可含小数 |
+| Rectangle | points 为左下和右上两个点，面积为正 |
+| Polygon | 3..64 点，顺时针或逆时针均可；不重复首点；不允许自交、自接触、相邻共线或零面积 |
+| Spawn 区域 | spawnDefinitionId 必填并解析现有 MonsterSpawnDefinition；其他区域必须为 null |
+
+对象 position 尚未叠加 origin，消费者只能在局部转世界时加一次。源布局不保存对象的运行时状态；保留状态、暂停离场模拟由后续 MapScope / 快照实现。
+
+单文件读取上限 8 MiB、嵌套深度 16、字符串长度 256；对象 ≤16384、区域 ≤1024、块 ≤1024。规范输出也受 8 MiB 限制，大图应保留默认块的稀疏表示；256×256 全块样例属于已覆盖范围。
+
+## 调用与失败行为
+
+`MapDocumentJson.Read` → `MapDocumentCompiler.Compile(dto, lookup)` → `CompiledMapDocument`。核心服务不调用 AssetDatabase；调用方显式提供 `IMapDefinitionLookup`。MapDocumentException 提供字段路径和原因，首个错误即停止，无半成品网格对外发布。
+
+快照拥有独立网格、规范 JSON 和 SHA256，`GetTerrain` 提供只读地表查询，`CreateEditableCopy` 返回脱离快照的 DTO。规范导出按名称排序属性，按坐标排序块 / 覆盖，按稳定 ID 排序对象 / 区域；palette 和多边形顶点保留语义次序。SHA256 表示规范源内容，不是定义版本或导航缓存键。
+
+Editor 定义索引只查询地表 / 对象 / 区域及交互、刷怪定义，不读取地图或 ContentCatalog，避免包含地图的目录形成导入环。索引读取过身份的定义登记源依赖，成功解析的定义额外登记产物依赖；因此缺引用导入仍能观察已有 SO 的 ID 恢复。新增 / 删除定义通过索引 Hash 失效，在导入回调外注册并受控刷新；当前改动任一索引定义可能重导入多张地图，尚未实现按 ID 分片索引。遵循 [Unity 依赖 API](https://docs.unity3d.com/6000.0/Documentation/ScriptReference/AssetImporters.AssetImportContext.DependsOnCustomDependency.html)。
+
+坏源替换为 TextAsset 错误报告，旧 MapDefinition 不继续有效；引用修复后自动恢复。配置中心内容校验检查所有地图源和产物，标准 Player 构建前阻断错误地图。后续 Addressables 地图发布流程必须复用同一校验。
+
+## 编辑入口
+
+打开 `DarkFlare/配置中心` → `地图文档`：选择地表集、输入新地图 ID 和尺寸以创建 `.dfmap`；选择地图源可以读取摘要、打开文本源、导入 / 导出交换 JSON。写入前完整校验，同目录临时文件替换后再导入，失败不覆盖旧源。
+
+SO 字段仍在“按类型”页编辑；地图没有独立 CreateAssetMenu，不允许直接修改只读布局产物。该入口尚不包含画笔、场景预览、Undo 和 AI Patch 事务，后续编辑器将复用文档服务。
+
+## 验证
+
+2026-09-18：完整 EditMode **603/603**、PlayMode **75/75**；其中地图模块新增 35 项长期行为测试。内容校验 0 项问题，配置文档字段覆盖通过。本轮未构建 Player，也未进行新地表的视觉验收。
+
+长期测试：MapDocumentTests、MapDocumentImporterTests，以及内容 ID、配置文档覆盖和现有地图回归。新增测试覆盖数据完整性、导入稳定身份、缺引用 / ID 改名 / 冲突恢复、失败不覆盖旧源，以及不同区域设置的规范交换。导入器测试使用唯一临时目录，结束删除源、配置和 `.meta`，不向正式内容池写入测试资产。原配置发现测试修正“所有登记类型均可手动创建”的假设，明确验证导入地图不能另建布局资产；旧 GroundTilemapTests 保留。

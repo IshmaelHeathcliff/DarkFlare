@@ -1,0 +1,296 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "formatVersion": {
+      "type": "integer",
+      "minimum": -2147483648,
+      "maximum": 2147483647
+    },
+    "mapId": {
+      "type": "string",
+      "maxLength": 256
+    },
+    "revision": {
+      "type": "integer",
+      "minimum": -2147483648,
+      "maximum": 2147483647
+    },
+    "seed": {
+      "type": "integer",
+      "minimum": -2147483648,
+      "maximum": 2147483647
+    },
+    "origin": {
+      "type": "object",
+      "properties": {
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "x",
+        "y"
+      ],
+      "additionalProperties": false
+    },
+    "cellSize": {
+      "type": "number"
+    },
+    "width": {
+      "type": "integer",
+      "minimum": -2147483648,
+      "maximum": 2147483647
+    },
+    "height": {
+      "type": "integer",
+      "minimum": -2147483648,
+      "maximum": 2147483647
+    },
+    "terrainSetId": {
+      "type": "string",
+      "maxLength": 256
+    },
+    "terrainPalette": {
+      "type": "array",
+      "maxItems": 64,
+      "items": {
+        "type": "string",
+        "maxLength": 256
+      }
+    },
+    "defaultTerrainId": {
+      "type": "string",
+      "maxLength": 256
+    },
+    "chunks": {
+      "type": "array",
+      "maxItems": 1024,
+      "items": {
+        "type": "object",
+        "properties": {
+          "x": {
+            "type": "integer",
+            "minimum": -2147483648,
+            "maximum": 2147483647
+          },
+          "y": {
+            "type": "integer",
+            "minimum": -2147483648,
+            "maximum": 2147483647
+          },
+          "cells": {
+            "type": "array",
+            "maxItems": 1024,
+            "items": {
+              "type": "integer",
+              "minimum": -2147483648,
+              "maximum": 2147483647
+            }
+          }
+        },
+        "required": [
+          "x",
+          "y",
+          "cells"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "variantOverrides": {
+      "type": "array",
+      "maxItems": 1050625,
+      "items": {
+        "type": "object",
+        "properties": {
+          "x": {
+            "type": "integer",
+            "minimum": -2147483648,
+            "maximum": 2147483647
+          },
+          "y": {
+            "type": "integer",
+            "minimum": -2147483648,
+            "maximum": 2147483647
+          },
+          "variantId": {
+            "type": "string",
+            "maxLength": 256
+          }
+        },
+        "required": [
+          "x",
+          "y",
+          "variantId"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "objects": {
+      "type": "array",
+      "maxItems": 16384,
+      "items": {
+        "type": "object",
+        "properties": {
+          "objectId": {
+            "type": "string",
+            "maxLength": 256
+          },
+          "definitionId": {
+            "type": "string",
+            "maxLength": 256
+          },
+          "position": {
+            "type": "object",
+            "properties": {
+              "x": {
+                "type": "number"
+              },
+              "y": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "x",
+              "y"
+            ],
+            "additionalProperties": false
+          },
+          "rotation": {
+            "type": "integer",
+            "minimum": -2147483648,
+            "maximum": 2147483647
+          },
+          "appearanceVariant": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 256
+          },
+          "interaction": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "None",
+                  "Trader",
+                  "Crafting"
+                ]
+              },
+              "contentId": {
+                "type": "string",
+                "maxLength": 256
+              }
+            },
+            "required": [
+              "kind",
+              "contentId"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "objectId",
+          "definitionId",
+          "position",
+          "rotation",
+          "appearanceVariant",
+          "interaction"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "regions": {
+      "type": "array",
+      "maxItems": 1024,
+      "items": {
+        "type": "object",
+        "properties": {
+          "regionId": {
+            "type": "string",
+            "maxLength": 256
+          },
+          "definitionId": {
+            "type": "string",
+            "maxLength": 256
+          },
+          "priority": {
+            "type": "integer",
+            "minimum": -2147483648,
+            "maximum": 2147483647
+          },
+          "shape": {
+            "type": "string",
+            "enum": [
+              "Rectangle",
+              "Polygon"
+            ]
+          },
+          "points": {
+            "type": "array",
+            "maxItems": 64,
+            "items": {
+              "type": "object",
+              "properties": {
+                "x": {
+                  "type": "number"
+                },
+                "y": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "x",
+                "y"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "spawnDefinitionId": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 256
+          }
+        },
+        "required": [
+          "regionId",
+          "definitionId",
+          "priority",
+          "shape",
+          "points",
+          "spawnDefinitionId"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "formatVersion",
+    "mapId",
+    "revision",
+    "seed",
+    "origin",
+    "cellSize",
+    "width",
+    "height",
+    "terrainSetId",
+    "terrainPalette",
+    "defaultTerrainId",
+    "chunks",
+    "variantOverrides",
+    "objects",
+    "regions"
+  ],
+  "additionalProperties": false,
+  "description": "DarkFlare 地图 V1 结构合同；须继续运行 MapDocumentCompiler 校验内容引用、坐标、地表与几何语义。"
+}

@@ -48,18 +48,19 @@
 - [UI 组件视觉规范](./ui-component-style.md)
 - [视觉资产清单](./visual-assets.md)
 - [双层地表 Tilemap](./ground-tilemap.md)
+- [地图文档与导入](./maps/README.md)
 - [世界渲染与稳定层级](./world-rendering.md)
 - [已完成计划归档](./plan/archive/README.md)
 
 ## 计划状态
 
-2026-09-17：**Alpha 0.5 总计划已建立，待实施**，见[地图、地图编辑器与动态寻路总计划](./plan/alpha-0.5-plan.md)及[0.5.0 地图基础执行计划](./plan/alpha-0.5.0-map-foundation-plan.md)。范围包含 Dual Grid + Wang Tile 四种地表、五类地图数据、手工 / AI 编辑、Y 排序、城镇 / 野外与 Job / Burst 批量寻路。用户确认 500 活动怪物、1000 压力测试，以及切图保留状态、离场暂停。尚未开始功能实现，运行版本保持 `0.4.2-alpha`。
+2026-09-18：**Alpha 0.5.0 的 A 数据与导入切片已实现**，见[地图文档模块](./maps/README.md)及[阶段计划](./plan/alpha-0.5.0-map-foundation-plan.md)。下一步为 B：Dual Grid / Wang 解析与预览，随后正式地表和静态几何；整个 0.5.0 尚未完成。总范围仍含手工 / AI 编辑、Y 排序、双地图与 Grid / Flow Field / A* / Job / Burst 导航。规模为 500 活动怪物、1000 压测，切图保留状态并暂停离场模拟。运行版本保持 `0.4.2-alpha`，core v5、Schema 3。
 
-Alpha 0.4 已完成统一物品、状态、统一使用与四类消耗品，并补充状态 HUD 和随机商店。当前 core v5、Schema 3；最近记录为 2026-09-16 EditMode 568/568、PlayMode 75/75 通过，见[随机商店验收](./assets/acceptance/random-shop/README.md)。该轮未重建 Windows Player；最近的独立 Player 验收属于 2026-09-15 [消耗品交付](./assets/acceptance/alpha-0.4-item-use-acceptance/README.md)，不能代替随机商店实机验收。本次文档梳理未重跑测试。
+本轮完整 EditMode 603/603、PlayMode 75/75 通过，其中地图模块新增 35 项行为回归；内容与配置文档覆盖校验通过，见[地图模块验证](./maps/README.md#验证)。本轮未构建 Windows Player。Alpha 0.4 历史记录仍见[随机商店验收](./assets/acceptance/random-shop/README.md)及[消耗品交付](./assets/acceptance/alpha-0.4-item-use-acceptance/README.md)。
 
 Alpha 0.1、0.2 基础设施、0.3 UI 与十槽装备，以及 0.4 已完成计划均见[归档索引](./plan/archive/README.md)。当前功能以各模块文档为准，归档中的“下一阶段”保留历史含义。
 
 ## 说明
 
-当前项目已完成首版最小循环、初步体验优化及 Alpha 0.1–0.4 已归档计划，现已建立 Alpha 0.5 总计划及首阶段执行计划。已完成的执行计划统一保存在 `Docs/docs/plan/archive/`。
+当前项目已完成首版最小循环、初步体验优化及 Alpha 0.1–0.4 已归档计划，Alpha 0.5 正在执行首阶段，数据与导入切片已完成。已完成的执行计划统一保存在 `Docs/docs/plan/archive/`。
 后续新增系统、配置或流程时，应优先更新对应文档，避免 `Docs/docs/` 与实现脱节。游戏设计文档位于 `Docs/design/`，不属于 Agent 的常规维护范围。

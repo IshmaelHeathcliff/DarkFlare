@@ -1,0 +1,17 @@
+{
+  "formatVersion": 1,
+  "mapId": "map:foundation_sample",
+  "revision": 0,
+  "seed": 1,
+  "origin": { "x": 0, "y": 0 },
+  "cellSize": 1,
+  "width": 4,
+  "height": 4,
+  "terrainSetId": "terrain_set:basic",
+  "terrainPalette": ["terrain:dirt", "terrain:grass", "terrain:water", "terrain:road"],
+  "defaultTerrainId": "terrain:dirt",
+  "chunks": [],
+  "variantOverrides": [],
+  "objects": [],
+  "regions": []
+}

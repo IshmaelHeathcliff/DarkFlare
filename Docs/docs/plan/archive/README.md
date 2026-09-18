@@ -1,5 +1,7 @@
 # 已完成计划归档
 
+- [Alpha 0.5.0 数据与导入合同](./alpha-0.5.0-map-foundation-contract.md)：2026-09-18 完成切片 A，`.dfmap`、规范校验 / 导出、只读导入与配置中心入口；EditMode 603/603。0.5.0 的 Wang 预览、正式地表和几何仍待完成。
+
 - [Alpha 0.5 启动准备](./alpha-0.5-startup.md)：2026-09-17 完成基线梳理，目标已由[正式总计划](../alpha-0.5-plan.md)接管；归档仅指启动准备完成，功能待实施。
 
 - [随机商店与主动刷新](./alpha-0.4-random-shop-plan.md)：2026-09-16 完成，每批随机商品、品质词条、免费刷新、库存恢复；EditMode 568/568、PlayMode 75/75。

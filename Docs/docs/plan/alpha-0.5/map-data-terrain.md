@@ -1,10 +1,10 @@
 # Alpha 0.5：地图数据与地表方案
 
-状态：计划，未实现。上级入口：[总计划](../alpha-0.5-plan.md)。
+状态：部分实现。2026-09-18 已完成数据与导入，当前 V1 见[地图文档模块](../../maps/README.md)；本方案中的渲染、静态几何和运行时地图管理仍待实施。上级入口：[总计划](../alpha-0.5-plan.md)。
 
 ## 权威数据与派生资产
 
-地图以 `Assets/Data/Maps/<map-id>.dfmap.json` 为唯一可编辑布局源，UTF-8 / LF，具有独立格式版本与稳定内容 ID。Unity ScriptedImporter 将其导入为只读 `MapDefinition` ScriptableObject；地表、Wang 规则、障碍、装饰、交互及区域类型仍使用 Odin 中文字段的 ScriptableObject 配置，通过 ContentId 引用。
+地图以 `Assets/Data/Maps/<name>.dfmap` 为唯一可编辑布局源，内容为 JSON、UTF-8 / LF，具有独立格式版本与稳定内容 ID。专用后缀用于 Unity 导入，普通 `.json` 用于交换；类型命名空间、数据 V1 与导入合同见[首轮细化归档](../archive/alpha-0.5.0-map-foundation-contract.md)。Unity ScriptedImporter 将其导入为只读 `MapDefinition` ScriptableObject；地表、Wang 规则、障碍、装饰、交互及区域类型仍使用 Odin 中文字段的 ScriptableObject 配置，通过 ContentId 引用。
 
 编辑器修改内存文档并保存 JSON，不能同时维护一份可独立修改的布局 SO。JSON 不存 Unity Instance ID、GUID、Sprite 索引、场景层级路径或生成后的 Tile 编号。Importer 注册稳定子资产标识，重复导入保持 `.meta` / 子资产引用；内容目录和 Addressables 只引用导入产物与正式定义。
 
@@ -42,7 +42,7 @@ Corner Wang Key 固定按 `NW, NE, SE, SW` 编码；对单材质二元遮罩，�
 
 地图外虚拟样本由边界规则提供视觉材质，导航一律不可通行；显示边缘最多向外延伸半格，由不可玩边界与镜头覆盖合同控制，不把额外显示范围当可玩区。四边、四角及负坐标都必须有一致结果。
 
-建议技术样例先用 `cellSize = 1`；导航分辨率允许为其整数细分，首期建议每逻辑格 2×2 个导航格，最终根据怪物碰撞半径与窄路实测冻结。现有 8 单位地砖不作为新逻辑网格大小。
+建议技术样例先用 `cellSize = 1`；导航分辨率允许为其整数细分，根据已测角色半径 0.30–0.36，首轮优先验证每逻辑格 4×4 个导航格（子格 0.25），并与 2×2 比较窄路误判；最终根据安全边距与可达性实测冻结。现有 8 单位地砖不作为新逻辑网格大小。
 
 Dual Grid 的偏移和四角选择可参考[原理说明](https://www.boristhebrave.com/2023/05/31/quarter-tile-autotiling/)；本项目仍采用用户指定的 Dual Grid，不改用文中的 quarter-tile 替代方案。
 

@@ -72,6 +72,11 @@ namespace DarkFlare.Tests
                 ContentNamespaces.Trader,
                 ContentNamespaces.Crafting,
                 ContentNamespaces.Status,
+                ContentNamespaces.Map,
+                ContentNamespaces.Terrain,
+                ContentNamespaces.TerrainSet,
+                ContentNamespaces.MapObject,
+                ContentNamespaces.MapRegion,
             };
 
             CollectionAssert.AreEquivalent(
