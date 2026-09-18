@@ -64,11 +64,13 @@ namespace DarkFlare
                 architecture.GetUtility<SpriteAssetLoader>().PreloadAsync(itemIcons, token));
             token.ThrowIfCancellationRequested();
             ValidatePreloadedAssets(architecture, itemIcons);
+            WorldMapRuntime maps = architecture.GetUtility<WorldMapRuntime>();
+            if (_configuration.WorldMaps != null) { await maps.InitializeAsync(context, _configuration, null, token); }
 
             CombatActor player = architecture.SendCommand(new SpawnPlayerCommand(
                 _configuration.PlayerCharacter,
                 _configuration.PlayerSkill,
-                _configuration.PlayerSpawnPosition));
+                maps.IsConfigured ? maps.StartingPosition : _configuration.PlayerSpawnPosition));
 
             if (player == null)
             {
@@ -91,8 +93,16 @@ namespace DarkFlare
             _previousCameraTarget = _configuration.CameraFollowTarget.Target;
             _configuration.CameraFollowTarget.SetTarget(player.transform);
             _cameraBound = true;
-            _configuration.MonsterSpawner.gameObject.SetActive(true);
-            _configuration.MonsterSpawner.BeginSpawning();
+            if (!maps.IsConfigured)
+            {
+                _configuration.MonsterSpawner.gameObject.SetActive(true);
+                _configuration.MonsterSpawner.BeginSpawning();
+            }
+            else
+            {
+                architecture.GetSystem<GameplayRandomSystem>().RestoreMapState(architecture.GetSystem<GameplayRandomSystem>().CreateMapState(maps.Active.Map.MapId));
+                if (maps.Active.Spawner.SpawnDefinition != null) { maps.Active.Spawner.BeginSpawning(); }
+            }
             ApplicationLog.Info(LogEventIds.GameplayBootstrap, "[NewGameSessionInitializer] 新游戏 Session 初始化完成");
         }
 
@@ -100,6 +110,7 @@ namespace DarkFlare
             SessionInitializationContext context,
             CancellationToken token)
         {
+            await context.Architecture.GetUtility<WorldMapRuntime>().DisposeAsync();
             if (_configuration.MonsterSpawner != null)
             {
                 _configuration.MonsterSpawner.PrepareForInitialization(
@@ -135,7 +146,7 @@ namespace DarkFlare
                 _configuration.LootPickupPrefab,
                 "掉落物 Prefab");
 
-            foreach (MonsterDefinition monster in _configuration.MonsterSpawnDefinition.AllMonsters)
+            foreach (MonsterDefinition monster in _configuration.MonsterSpawnDefinition?.AllMonsters ?? Array.Empty<MonsterDefinition>())
             {
                 RequirePrefabComponent<MonsterController>(
                     prefabLoader,

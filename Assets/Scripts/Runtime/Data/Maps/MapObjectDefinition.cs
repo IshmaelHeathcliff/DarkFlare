@@ -18,7 +18,8 @@ namespace DarkFlare
     {
         [LabelText("无")] None,
         [LabelText("商人")] Trader,
-        [LabelText("打造台")] Crafting
+        [LabelText("打造台")] Crafting,
+        [LabelText("地图出口")] Portal
     }
 
     [ContentDefinition(ContentNamespaces.MapObject)]

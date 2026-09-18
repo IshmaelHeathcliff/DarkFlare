@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
@@ -7,6 +8,19 @@ namespace DarkFlare
     public class MonsterSpawner : MonoBehaviour, IController
     {
         const int MaxSpawnPositionAttempts = 8;
+        MapGeometrySnapshot _mapGeometry;
+        MapGeometryRegion[] _spawnRegions;
+        public int RejectedSpawnAttempts { get; private set; }
+
+        public void ConfigureMap(MapGeometrySnapshot geometry, IMapDefinitionLookup definitions)
+        {
+            StopSpawning();
+            _mapGeometry = geometry;
+            _spawnRegions = geometry.Regions.Where(region => region.Kind == MapRegionKind.Spawn).ToArray();
+            if (_spawnRegions.Select(region => region.SpawnDefinitionId).Distinct().Count() > 1)
+            { throw new System.InvalidOperationException("同图首期刷怪区域必须使用相同生成定义"); }
+            _spawnDefinition = _spawnRegions.Length == 0 ? null : definitions.Resolve<MonsterSpawnDefinition>(ContentId.Parse(_spawnRegions[0].SpawnDefinitionId));
+        }
 
         [SerializeField]
         MonsterSpawnDefinition _spawnDefinition;
@@ -148,6 +162,7 @@ namespace DarkFlare
 
                 while (!token.IsCancellationRequested)
                 {
+                    while (GameTimeService.Shared.IsPaused) { await UniTask.Yield(PlayerLoopTiming.Update, token); }
                     CleanupAliveList();
 
                     if (_aliveMonsters.Count < _spawnDefinition.MaxAliveCount)
@@ -190,8 +205,15 @@ namespace DarkFlare
             GameplayRandomSystem randomSystem = architecture.GetSystem<GameplayRandomSystem>();
             int positionSeed = randomSystem.NextSeed(GameplayRandomChannel.SpawnPosition);
             int monsterSeed = randomSystem.NextSeed(GameplayRandomChannel.MonsterInstance);
+            Vector3 position;
+            if (_mapGeometry != null)
+            {
+                if (!TryGetMapSpawnPosition(new System.Random(positionSeed), out position))
+                { RejectedSpawnAttempts++; return; }
+            }
+            else { position = GetSpawnPosition(new System.Random(positionSeed)); }
             MonsterController monster = architecture.SendCommand(
-                new SpawnMonsterCommand(_spawnDefinition, monsterSeed, GetSpawnPosition(new System.Random(positionSeed))));
+                new SpawnMonsterCommand(_spawnDefinition, monsterSeed, position));
 
             if (monster != null)
             {
@@ -225,6 +247,23 @@ namespace DarkFlare
             Vector2 fallbackOffset = GetRandomDirection(random) * _spawnDefinition.SpawnRadius;
             Vector3 fallback = center + new Vector3(fallbackOffset.x, fallbackOffset.y, 0f);
             return ClampToBounds(fallback, bounds, _spawnBoundsPadding);
+        }
+
+        bool TryGetMapSpawnPosition(System.Random random, out Vector3 position)
+        {
+            Vector3 center = GetTarget() != null ? GetTarget().position : transform.position;
+            for (int i = 0; i < 32; i++)
+            {
+                Vector2 offset = GetRandomDirection(random) * _spawnDefinition.SpawnRadius;
+                var candidate = new MapGeometryPoint(center.x + offset.x, center.y + offset.y);
+                foreach (MapGeometryRegion region in _spawnRegions)
+                {
+                    if (_mapGeometry.CheckPoint(candidate, new MapGroundProfile(0.4), region.Id) == MapGeometryResult.Valid)
+                    { position = new Vector3((float)candidate.X, (float)candidate.Y, 0); return true; }
+                }
+            }
+            position = default;
+            return false;
         }
 
         Transform GetTarget()

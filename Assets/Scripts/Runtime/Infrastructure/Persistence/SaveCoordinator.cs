@@ -284,7 +284,8 @@ namespace DarkFlare
                 {
                     return ContinueFailure(
                         slotId,
-                        ClassifyPreparationFailure(prepared.Issues));
+                        ClassifyPreparationFailure(prepared.Issues),
+                        new InvalidOperationException(string.Join("; ", prepared.Issues.Select(issue => issue.Path + ": " + issue.Message))));
                 }
 
                 SaveRecoverySource recoverySource = loadResult.RecoveredFromBackup
@@ -927,14 +928,15 @@ namespace DarkFlare
 
         static PrepareContinueResult ContinueFailure(
             SaveSlotId slotId,
-            SaveErrorCode errorCode)
+            SaveErrorCode errorCode,
+            Exception exception = null)
         {
             return new PrepareContinueResult(
                 SaveOperationResult.Failure(
                     SaveOperation.PrepareContinue,
                     slotId,
                     errorCode,
-                    IsRetryable(errorCode)),
+                    IsRetryable(errorCode), exception),
                 null);
         }
 

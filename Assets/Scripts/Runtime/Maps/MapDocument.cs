@@ -7,7 +7,7 @@ namespace DarkFlare
     [JsonObject(MemberSerialization.OptIn)]
     public sealed class MapDocument
     {
-        [JsonProperty("formatVersion", Required = Required.Always)] public int FormatVersion { get; set; } = 1;
+        [JsonProperty("formatVersion", Required = Required.Always)] public int FormatVersion { get; set; } = 2;
         [JsonProperty("mapId", Required = Required.Always)] public string MapId { get; set; }
         [JsonProperty("revision", Required = Required.Always)] public int Revision { get; set; }
         [JsonProperty("seed", Required = Required.Always)] public int Seed { get; set; }
@@ -22,6 +22,7 @@ namespace DarkFlare
         [JsonProperty("variantOverrides", Required = Required.Always)] public MapVariantOverride[] VariantOverrides { get; set; } = Array.Empty<MapVariantOverride>();
         [JsonProperty("objects", Required = Required.Always)] public MapObjectRecord[] Objects { get; set; } = Array.Empty<MapObjectRecord>();
         [JsonProperty("regions", Required = Required.Always)] public MapRegionRecord[] Regions { get; set; } = Array.Empty<MapRegionRecord>();
+        [JsonProperty("entries", Required = Required.Always)] public MapEntryRecord[] Entries { get; set; } = Array.Empty<MapEntryRecord>();
     }
 
     [JsonObject(MemberSerialization.OptIn)]
@@ -51,7 +52,24 @@ namespace DarkFlare
     public sealed class MapInteractionBinding
     {
         [JsonProperty("kind", Required = Required.Always)] public MapInteractionKind Kind { get; set; }
-        [JsonProperty("contentId", Required = Required.Always)] public string ContentId { get; set; }
+        [JsonProperty("contentId", Required = Required.AllowNull)] public string ContentId { get; set; }
+        [JsonProperty("targetMapId", Required = Required.AllowNull)] public string TargetMapId { get; set; }
+        [JsonProperty("targetEntryId", Required = Required.AllowNull)] public string TargetEntryId { get; set; }
+    }
+
+    public enum MapEntryKind
+    {
+        [Sirenix.OdinInspector.LabelText("到达 / 返回")] Arrival,
+        [Sirenix.OdinInspector.LabelText("新游戏")] NewGame,
+        [Sirenix.OdinInspector.LabelText("复活")] Respawn
+    }
+
+    [JsonObject(MemberSerialization.OptIn)]
+    public sealed class MapEntryRecord
+    {
+        [JsonProperty("entryId", Required = Required.Always)] public string EntryId { get; set; }
+        [JsonProperty("kind", Required = Required.Always)] public MapEntryKind Kind { get; set; }
+        [JsonProperty("position", Required = Required.Always)] public MapPoint Position { get; set; } = new MapPoint();
     }
 
     [JsonObject(MemberSerialization.OptIn)]

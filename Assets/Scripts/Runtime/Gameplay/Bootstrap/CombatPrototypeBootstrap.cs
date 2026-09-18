@@ -8,6 +8,7 @@ namespace DarkFlare
     {
         [SerializeField]
         ContentCatalogDefinition _contentCatalog;
+        [SerializeField, LabelText("世界地图配置")] WorldMapConfiguration _worldMaps;
 
         [SerializeField]
         CharacterDefinition _playerCharacter;
@@ -76,7 +77,8 @@ namespace DarkFlare
                 _monsterSpawner,
                 ResolveCameraFollowTarget(),
                 _useFixedRandomSeed,
-                _fixedRandomSeed);
+                _fixedRandomSeed,
+                _worldMaps);
         }
 
         CameraFollowTarget ResolveCameraFollowTarget()

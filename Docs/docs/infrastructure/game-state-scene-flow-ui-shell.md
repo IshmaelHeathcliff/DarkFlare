@@ -135,3 +135,7 @@ Unity 6.6 已迁移原生 `PanelRenderer` 与 `RuntimePanelView`。Shell 在视�
 - FrontEnd 提供新游戏、继续、删除自动档、语言、设置和退出；仍没有 Profile 选择、手动槽位、重命名或云同步。
 - Shell 是当前真实消费者所需的最小闭环，不是通用多 Page 导航框架；设置页只开放已有真实消费者的 Audio、Input、Glyph 与 Reduce Motion。
 - Shell 不拥有领域恢复事务；日志、异常和资源错误的映射与所有权见[日志、错误处理与 Addressables 资源治理](./logging-error-addressables-governance.md)。
+
+## 地图切换
+
+`ChangeMap(MapId, EntryId)` 复用活动请求与最新待处理请求仲裁，允许从 InGame / Paused 进入 Loading 并返回原稳定状态，不卸载 Main 或更换 Session。准备阶段可取消，提交为同步安装；提交后先完成源图清理。可回退故障保留源图，回退或清理失败进入 Fatal。出口复用 Interact 与输入释放门禁，保存捕获等待地图稳定。完整合同见[双地图生命周期](../maps/world-map-lifecycle.md)。

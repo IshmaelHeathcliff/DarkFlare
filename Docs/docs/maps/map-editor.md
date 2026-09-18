@@ -1,6 +1,6 @@
 # 地图编辑器与 AI 编辑
 
-Alpha 0.5.1 编辑器模块。入口：`DarkFlare/地图/地图编辑器`，或配置中心“地图文档”→“打开地图绘制工作台”。地图仍使用 [V1 文档](./README.md)，不改变 core v5、玩家 Schema 3 或 Main 的旧地图。
+地图编辑器模块。入口：`DarkFlare/地图/地图编辑器`，或配置中心“地图文档”→“打开地图绘制工作台”。阶段 G 扩展为 [V2 文档](./README.md)，支持入口及跨图出口；运行时装配见[双地图生命周期](./world-map-lifecycle.md)。
 
 ## 手工操作
 
@@ -8,12 +8,16 @@ Alpha 0.5.1 编辑器模块。入口：`DarkFlare/地图/地图编辑器`，或�
 2. “绘制”→“进入 / 适配绘制舞台”，在独立 SceneView 舞台编辑 XY 平面；退出舞台回到原场景。临时 Tilemap、材质和标记不写入 Main。
 3. B 画笔、E 擦除、I 吸管、R 矩形、L 直线、F 四邻接同材质填充、V 显示格变体、Q 选择、O 放置对象、Z 矩形区域。尺寸控制方形笔刷；快速拖动插值补格，整笔只有一次 Undo。大笔画超过 4096 格时以范围框反馈，不逐格画轮廓；超出事务预算整笔拒绝。
 4. Ctrl/Cmd+S 保存；Ctrl/Cmd+Z 撤销，Ctrl/Cmd+Shift+Z 或 Ctrl/Cmd+Y 重做。Esc、失焦到非 SceneView、切舞台和进入 Play 取消未完成笔画。Alt 和中键保留 SceneView 浏览，文本输入不触发绘图快捷键。
-5. 对象目录按 ID 与能力筛选；选择足迹后可移动、编辑直角旋转、外观和 Trader / Crafting 绑定。Shift 多选对象，支持复制与批量删除；复制分配新 ID。属性编辑通过“应用对象属性”提交。
+5. 对象目录按 ID 与能力筛选；选择足迹后可移动、编辑直角旋转、外观和 Trader / Crafting / Portal 绑定。Shift 多选对象，支持复制与批量删除；复制分配新 ID。属性编辑通过“应用对象属性”提交。
 6. 区域支持矩形、多边形和顶点列表。选中区域可拖顶点，在“应用区域 / 顶点属性”时完整校验并形成一次撤销事务；未应用的候选形状允许暂时无效。区域类型来自 Named / Safe / Spawn 定义，刷怪区绑定现有 Spawn 定义。
 
 各层可以显示 / 隐藏、锁定。“对象与区域”页可选择正式表现目录并切换正式对象 / 诊断轮廓；布局选择仍以足迹、接地点与 ObjectId 为准。对象标签默认只显示选中项，可手动显示全部标签。表现目录、分段排序和资源生命周期见[对象表现](./object-presentation.md)。显示格变体必须与四角地表兼容；默认拒绝重绘引起的失配，也可显式启用“清除受影响变体”。
 
 新建 / 另存为不得覆盖已有源或重复 MapId；另存为输入新的本地 ID，普通导出保留身份。导入先显示差异，再替换工作副本；必须保持当前 MapId。元数据仅支持 seed、origin、cellSize、width、height，提交前显示尺度和差异；不提供静默裁剪、palette 重排或地表集迁移。
+
+## 地图入口与出口
+
+入口页维护 EntryId、Arrival / NewGame / Respawn 用途和局部世界坐标，SceneView P 工具放置入口。Portal 对象填写目标 MapId 与 EntryId；Trader / Crafting 仍绑定内容 ID。AI 的 `UpsertEntry` 使用完整 `record`，`RemoveEntry` 使用 `id`，与手工操作共享校验、Undo 和修订。正式资源位于 `Assets/Data/Maps/World/`，编辑样例保持独立。
 
 ## 事务、撤销与恢复
 
@@ -42,7 +46,7 @@ Alpha 0.5.1 编辑器模块。入口：`DarkFlare/地图/地图编辑器`，或�
 | `DescribeSchema()` | 独立 Patch V1 JSON Schema、坐标、操作、记录结构与预算 |
 | `ListDefinitions(filter, offset, count)` | 按 ID / 名称搜索目录，返回完整 ContentId、类型、配置与变体；每页 ≤256 条 |
 | `ReadMap(path)` | 元数据、当前 revision / hash、dirty 与源路径；大集合通过分页读取 |
-| `ReadRegion(path, x, y, width, height, offset, count)` | 指定窗口地表最多 4096 格；对象、区域、override 分别按整图稳定顺序分页，每类最多 256 条，返回总数与下一 offset；记录不按矩形中心裁掉跨界对象 |
+| `ReadRegion(path, x, y, width, height, offset, count)` | 指定窗口地表最多 4096 格；对象、区域、入口、override 分别按整图稳定顺序分页，每类最多 256 条，返回总数与下一 offset；记录不按矩形中心裁掉跨界对象 |
 | `PreviewPatch(path, json)` | 校验候选并输出改格数量、受影响显示范围、对象 / 区域 / override 的增删改；不修改内存或磁盘 |
 | `ApplyPatch(path, json)` | 重新校验基线、定义与全部操作，原子修改工作副本 |
 | `Save(path)` | 按独立磁盘基线保存 |
@@ -65,7 +69,7 @@ Patch ≤1 MiB、≤256 操作、≤262144 次格子 / 候选访问。洪水填�
 }
 ```
 
-支持 PaintCells、FillRect、PaintLine、FillRegion、SetVariant、UpsertObject / RemoveObject、UpsertRegion / RemoveRegion、SetMapMetadata。Upsert 使用完整 `record`；对象 position 为局部世界单位，rotation 是角度，区域顶点为逻辑格单位。未知字段 / 类型 / 版本拒绝，不执行任意脚本或按名称近似匹配内容。
+支持 PaintCells、FillRect、PaintLine、FillRegion、SetVariant、UpsertObject / RemoveObject、UpsertRegion / RemoveRegion、UpsertEntry / RemoveEntry、SetMapMetadata。Upsert 使用完整 `record`；对象 position 为局部世界单位，rotation 是角度，区域顶点为逻辑格单位。未知字段 / 类型 / 版本拒绝，不执行任意脚本或按名称近似匹配内容。
 
 同一会话保留最近 256 份 operationId + 规范 payload 回执；相同请求返回原回执及当前版本，不再次执行，Undo 不清除回执。ID 对应不同 payload 报 Conflict；淘汰 / 重启后依靠 revision + hash 拒绝旧请求，不承诺永久去重。分页结果带版本，跨页期间变化应重新读取。
 

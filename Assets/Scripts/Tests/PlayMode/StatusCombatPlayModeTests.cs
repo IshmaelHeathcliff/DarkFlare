@@ -87,6 +87,10 @@ namespace DarkFlare.Tests
         public IEnumerator ConfiguredActors_BlockMovementAndRebindAfterDisableAndDeath()
         {
             yield return _fixture.EnterMain();
+            SceneFlowResult changed = null;
+            yield return ApplicationHost.Current.SceneFlow.RequestAsync(SceneFlowRequest.ChangeMap("map:wilderness", "arrival"))
+                .ToCoroutine(result => changed = result);
+            Assert.IsTrue(changed.Succeeded);
             PlayerController player = null;
             MonsterController monster = null;
             float timeout = Time.realtimeSinceStartup + 20;

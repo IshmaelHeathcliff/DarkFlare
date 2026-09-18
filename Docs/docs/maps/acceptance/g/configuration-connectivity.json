@@ -1,0 +1,32 @@
+{
+  "content": [],
+  "coverage": {
+    "TypeCount": 31,
+    "SerializedFieldCount": 235,
+    "CoveredFieldCount": 235,
+    "Issues": [],
+    "Passed": true
+  },
+  "connections": {
+    "town 0,0 -> (-4.00, 0.00)": "{\r\n  \"code\": \"NoLegalEndpoint\",\r\n  \"hash\": \"dcee92de0a0fbb91432bc9b8a4a3c4d80ff6d9b95cbb1c2838e742aa82bfd7a5\",\r\n  \"geometryHash\": \"c78591b517542bd77d05696bd5c295cf4ab0438dbf6e80a7bb5d59e3ae55ca48\"\r\n}",
+    "town 0,0 -> (4.00, 0.00)": "{\r\n  \"code\": \"NoLegalEndpoint\",\r\n  \"hash\": \"dcee92de0a0fbb91432bc9b8a4a3c4d80ff6d9b95cbb1c2838e742aa82bfd7a5\",\r\n  \"geometryHash\": \"c78591b517542bd77d05696bd5c295cf4ab0438dbf6e80a7bb5d59e3ae55ca48\"\r\n}",
+    "town 0,0 -> (0.00, 4.00)": "{\r\n  \"code\": \"Connected\",\r\n  \"hash\": \"dcee92de0a0fbb91432bc9b8a4a3c4d80ff6d9b95cbb1c2838e742aa82bfd7a5\",\r\n  \"geometryHash\": \"c78591b517542bd77d05696bd5c295cf4ab0438dbf6e80a7bb5d59e3ae55ca48\"\r\n}",
+    "town 0,0 -> (1.00, 0.00)": "{\r\n  \"code\": \"Connected\",\r\n  \"hash\": \"dcee92de0a0fbb91432bc9b8a4a3c4d80ff6d9b95cbb1c2838e742aa82bfd7a5\",\r\n  \"geometryHash\": \"c78591b517542bd77d05696bd5c295cf4ab0438dbf6e80a7bb5d59e3ae55ca48\"\r\n}",
+    "town 0,0 -> (0.00, -2.00)": "{\r\n  \"code\": \"Connected\",\r\n  \"hash\": \"dcee92de0a0fbb91432bc9b8a4a3c4d80ff6d9b95cbb1c2838e742aa82bfd7a5\",\r\n  \"geometryHash\": \"c78591b517542bd77d05696bd5c295cf4ab0438dbf6e80a7bb5d59e3ae55ca48\"\r\n}",
+    "wild entry -> exit": "{\r\n  \"code\": \"Connected\",\r\n  \"hash\": \"2d0339b663af92501d32a4219a2e9b093768504880ab389746ca711ac248bf6b\",\r\n  \"geometryHash\": \"d8253b69154393d403758a434903ee5a7986a068a03dd0922c8527d6c4d1694f\"\r\n}",
+    "wild respawn -> entry": "{\r\n  \"code\": \"Connected\",\r\n  \"hash\": \"2d0339b663af92501d32a4219a2e9b093768504880ab389746ca711ac248bf6b\",\r\n  \"geometryHash\": \"d8253b69154393d403758a434903ee5a7986a068a03dd0922c8527d6c4d1694f\"\r\n}"
+  },
+  "interactionApproach": {
+    "crafting": {
+      "code": "Connected",
+      "hash": "dcee92de0a0fbb91432bc9b8a4a3c4d80ff6d9b95cbb1c2838e742aa82bfd7a5",
+      "geometryHash": "c78591b517542bd77d05696bd5c295cf4ab0438dbf6e80a7bb5d59e3ae55ca48"
+    },
+    "merchant": {
+      "code": "Connected",
+      "hash": "dcee92de0a0fbb91432bc9b8a4a3c4d80ff6d9b95cbb1c2838e742aa82bfd7a5",
+      "geometryHash": "c78591b517542bd77d05696bd5c295cf4ab0438dbf6e80a7bb5d59e3ae55ca48"
+    },
+    "y": -0.5
+  }
+}

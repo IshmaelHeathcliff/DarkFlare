@@ -85,7 +85,7 @@ namespace DarkFlare.Editor
             return new JObject { ["type"] = "UpsertObject", ["record"] = new JObject
             {
                 ["objectId"] = id, ["definitionId"] = "map_object:" + definition, ["position"] = new JObject { ["x"] = x, ["y"] = y },
-                ["rotation"] = 0, ["appearanceVariant"] = null, ["interaction"] = kind == null ? null : new JObject { ["kind"] = kind, ["contentId"] = content }
+                ["rotation"] = 0, ["appearanceVariant"] = null, ["interaction"] = kind == null ? null : new JObject { ["kind"] = kind, ["contentId"] = content, ["targetMapId"] = null, ["targetEntryId"] = null }
             } };
         }
         static JObject Region(string id, string definition, int x, int y, int endX, int endY, string spawn = null)

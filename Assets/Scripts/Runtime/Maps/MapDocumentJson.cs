@@ -21,6 +21,7 @@ namespace DarkFlare
         public const int MaxPalette = 64;
         public const int MaxObjects = 16384;
         public const int MaxRegions = 1024;
+        public const int MaxEntries = 256;
         public const int MaxPolygonPoints = 64;
         public const int MaxStringLength = 256;
         public const double MaxWorldCoordinate = 1000000;
@@ -76,6 +77,7 @@ namespace DarkFlare
                     CommentHandling = CommentHandling.Load
                 });
                 if (reader.Read()) { throw new MapDocumentException("$", "文档末尾存在额外内容"); }
+                Upgrade(token);
                 CheckShape(token, typeof(MapDocument), "$", false);
                 return token.ToObject<MapDocument>(CreateSerializer());
             }
@@ -92,10 +94,12 @@ namespace DarkFlare
             JToken token = JToken.FromObject(document, CreateSerializer());
             CheckShape(token, typeof(MapDocument), "$", false);
             var root = (JObject)token;
+            Upgrade(root);
             SortArray(root, "chunks", item => ((int)item["y"]).ToString("D8") + ((int)item["x"]).ToString("D8"));
             SortArray(root, "variantOverrides", item => ((int)item["y"]).ToString("D8") + ((int)item["x"]).ToString("D8"));
             SortArray(root, "objects", item => (string)item["objectId"]);
             SortArray(root, "regions", item => (string)item["regionId"]);
+            SortArray(root, "entries", item => (string)item["entryId"]);
             using var output = new StringWriter(CultureInfo.InvariantCulture) { NewLine = "\n" };
             using var writer = new JsonTextWriter(output) { Formatting = Formatting.Indented, Indentation = 2 };
             OrderProperties(root).WriteTo(writer);
@@ -118,8 +122,29 @@ namespace DarkFlare
         {
             JObject schema = DescribeType(typeof(MapDocument), "$", false);
             schema.AddFirst(new JProperty("$schema", "https://json-schema.org/draft/2020-12/schema"));
-            schema.Add("description", "DarkFlare 地图 V1 结构合同；须继续运行 MapDocumentCompiler 校验内容引用、坐标、地表与几何语义。");
+            schema.Add("description", "DarkFlare 地图 V2 结构合同；V1 读取时纯数据升级。须继续运行 MapDocumentCompiler 校验内容引用、坐标、地表与几何语义。");
+            schema["properties"]["formatVersion"]["const"] = 2;
             return schema.ToString(Formatting.Indented).Replace("\r\n", "\n") + "\n";
+        }
+
+        static void Upgrade(JToken token)
+        {
+            Require(token is JObject && token["formatVersion"]?.Type == JTokenType.Integer, "$.formatVersion", "需要地图格式版本");
+            Require(token["formatVersion"].ToString() is "1" or "2", "$.formatVersion", "仅支持格式版本 1 / 2");
+            if ((int)token["formatVersion"] != 1) { return; }
+            token["formatVersion"] = 2;
+            token["entries"] ??= new JArray();
+            if (token["objects"] is JArray objects)
+            {
+                foreach (JToken item in objects)
+                {
+                    if (item["interaction"] is JObject interaction)
+                    {
+                        interaction["targetMapId"] ??= JValue.CreateNull();
+                        interaction["targetEntryId"] ??= JValue.CreateNull();
+                    }
+                }
+            }
         }
 
         static JObject DescribeType(Type type, string path, bool allowNull)
@@ -224,6 +249,7 @@ namespace DarkFlare
             if (path.EndsWith(".cells", StringComparison.Ordinal)) { return MapDocumentLimits.ChunkCells; }
             if (path.EndsWith(".objects", StringComparison.Ordinal)) { return MapDocumentLimits.MaxObjects; }
             if (path.EndsWith(".regions", StringComparison.Ordinal)) { return MapDocumentLimits.MaxRegions; }
+            if (path.EndsWith(".entries", StringComparison.Ordinal)) { return MapDocumentLimits.MaxEntries; }
             if (path.EndsWith(".points", StringComparison.Ordinal)) { return MapDocumentLimits.MaxPolygonPoints; }
             return (MapDocumentLimits.MaxSide + 1) * (MapDocumentLimits.MaxSide + 1);
         }

@@ -116,6 +116,11 @@ namespace DarkFlare.Tests
                 SceneManager.sceneLoaded -= ConfigureBootstrapSeed;
             }
 
+            SceneFlowResult changed = null;
+            yield return ApplicationHost.Current.SceneFlow.RequestAsync(SceneFlowRequest.ChangeMap("map:wilderness", "arrival"))
+                .ToCoroutine(result => changed = result);
+            Assert.IsTrue(changed.Succeeded);
+
             CombatPrototypeBootstrap bootstrap = UnityEngine.Object.FindAnyObjectByType<CombatPrototypeBootstrap>();
             Assert.IsNotNull(bootstrap, "Main 场景缺少 CombatPrototypeBootstrap");
             Assert.IsNotNull(PlayerSkillField, "未找到玩家技能序列化字段");

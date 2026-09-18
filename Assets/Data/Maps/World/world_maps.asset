@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 807793da0963c8540a72eca229c2e2b6, type: 3}
+  m_Name: world_maps
+  m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.WorldMapConfiguration
+  _startingMap: {fileID: 2734238712649213884, guid: 0bc3c02d1ad8c1644bf3bf0d2c9e8a40, type: 3}
+  _startingEntryId: new_game
+  _terrainPresentation:
+    m_AssetGUID: 244d3a41410e0914db9c74c10c28fa1f
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  _objects: {fileID: 11400000, guid: a028d1fde9ec0804cbde99703cef7440, type: 2}

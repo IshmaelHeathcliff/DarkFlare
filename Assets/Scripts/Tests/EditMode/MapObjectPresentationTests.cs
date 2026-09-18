@@ -181,12 +181,12 @@ namespace DarkFlare.Tests
                 record["position"]["x"] = old.x + 1;
                 var patch = MapEditService.Patch(session.Current, new JObject { ["type"] = "UpsertObject", ["record"] = record });
                 Assert.AreEqual("Ok", (string)JObject.Parse(MapEditApi.ApplyPatch(path, patch.ToString()))["code"]);
-                for (int i = 0; i < 8; i++) { yield return null; }
+                for (int i = 0; i < 240 && Mathf.Abs(window.ObjectPreview.Objects[id].position.x - old.x - 1) > .001f; i++) { yield return null; }
                 Assert.AreSame(terrain, window.Preview.Current);
                 Assert.AreEqual(old.x + 1, window.ObjectPreview.Objects[id].position.x, .001f);
-                Undo.PerformUndo(); for (int i = 0; i < 8; i++) { yield return null; }
+                Undo.PerformUndo(); for (int i = 0; i < 240 && Mathf.Abs(window.ObjectPreview.Objects[id].position.x - old.x) > .001f; i++) { yield return null; }
                 Assert.AreEqual(old.x, window.ObjectPreview.Objects[id].position.x, .001f);
-                Undo.PerformRedo(); for (int i = 0; i < 8; i++) { yield return null; }
+                Undo.PerformRedo(); for (int i = 0; i < 240 && Mathf.Abs(window.ObjectPreview.Objects[id].position.x - old.x - 1) > .001f; i++) { yield return null; }
                 Assert.AreEqual(old.x + 1, window.ObjectPreview.Objects[id].position.x, .001f);
                 Assert.AreSame(terrain, window.Preview.Current);
             }

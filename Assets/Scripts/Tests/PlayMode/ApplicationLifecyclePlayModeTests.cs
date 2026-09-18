@@ -131,7 +131,12 @@ namespace DarkFlare.Tests
                 GameArchitectureProvider.RequireCurrent());
             Assert.IsNotNull(spawner);
             Assert.IsTrue(spawner.gameObject.activeInHierarchy);
-            Assert.IsTrue(spawner.IsSpawning, "刷怪器必须只在初始化事务提交后进入运行状态");
+            Assert.IsFalse(spawner.IsSpawning, "城镇不应启动刷怪");
+            SceneFlowResult changed = null;
+            yield return host.SceneFlow.RequestAsync(SceneFlowRequest.ChangeMap("map:wilderness", "arrival"))
+                .ToCoroutine(result => changed = result);
+            Assert.IsTrue(changed.Succeeded);
+            Assert.IsTrue(UnityEngine.Object.FindAnyObjectByType<MonsterSpawner>().IsSpawning, "野外刷怪必须在切图提交后启动");
         }
 
         [UnityTest]

@@ -14,7 +14,7 @@ namespace DarkFlare
             // 脱离调用者的可变数据，同时校验程序创建 DTO 的字段、容量及数值类型。
             string canonical = Write(source);
             MapDocument document = Read(canonical);
-            Require(document.FormatVersion == 1, "$.formatVersion", "仅支持格式版本 1");
+            Require(document.FormatVersion == 2, "$.formatVersion", "需要升级后的格式版本 2");
             Require(document.Revision >= 0, "$.revision", "修订不能为负数");
             TypedId(document.MapId, ContentNamespaces.Map, "$.mapId");
             Require(document.Width > 0 && document.Width <= MapDocumentLimits.MaxSide, "$.width", "尺寸必须为 1..1024");
@@ -77,6 +77,12 @@ namespace DarkFlare
             }
             ValidateObjects(document, definitions);
             ValidateRegions(document, definitions);
+            var entryIds = new HashSet<string>(StringComparer.Ordinal);
+            foreach (MapEntryRecord entry in document.Entries)
+            {
+                Require(ContentId.IsValidSegment(entry.EntryId) && entryIds.Add(entry.EntryId), "$.entries", "入口 ID 非法或重复");
+                Require(entry.Position.X >= 0 && entry.Position.Y >= 0 && entry.Position.X < document.Width * document.CellSize && entry.Position.Y < document.Height * document.CellSize, "$.entries", "入口必须在地图内");
+            }
             return compiled;
         }
 
@@ -155,13 +161,23 @@ namespace DarkFlare
                 else
                 {
                     Require(obj.Interaction != null && obj.Interaction.Kind == definition.InteractionKind, path + ".interaction", "缺少或不兼容的交互绑定");
-                    if (obj.Interaction.Kind == MapInteractionKind.Trader)
+                    if (obj.Interaction.Kind == MapInteractionKind.Portal)
+                    {
+                        Require(obj.Interaction.ContentId == null, path + ".interaction.contentId", "出口不能绑定领域内容");
+                        TypedId(obj.Interaction.TargetMapId, ContentNamespaces.Map, path + ".interaction.targetMapId");
+                        Require(ContentId.IsValidSegment(obj.Interaction.TargetEntryId), path + ".interaction.targetEntryId", "出口需要有效入口 ID");
+                    }
+                    else if (obj.Interaction.Kind == MapInteractionKind.Trader)
                     {
                         Resolve<TraderDefinition>(definitions, obj.Interaction.ContentId, ContentNamespaces.Trader, path + ".interaction.contentId");
                     }
                     else
                     {
                         Resolve<CraftingDefinition>(definitions, obj.Interaction.ContentId, ContentNamespaces.Crafting, path + ".interaction.contentId");
+                    }
+                    if (obj.Interaction.Kind != MapInteractionKind.Portal)
+                    {
+                        Require(obj.Interaction.TargetMapId == null && obj.Interaction.TargetEntryId == null, path + ".interaction", "非出口不能绑定地图入口");
                     }
                 }
             }

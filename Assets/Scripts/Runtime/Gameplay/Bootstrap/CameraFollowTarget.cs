@@ -25,6 +25,14 @@ namespace DarkFlare
 
         Vector3 _velocity;
         Camera _camera;
+        Bounds? _mapBounds;
+
+        public void SetMapBounds(MapGeometryRect bounds)
+        {
+            _mapBounds = new Bounds(new Vector3((float)((bounds.MinX + bounds.MaxX) / 2), (float)((bounds.MinY + bounds.MaxY) / 2), 0),
+                new Vector3((float)(bounds.MaxX - bounds.MinX), (float)(bounds.MaxY - bounds.MinY), 0));
+            _velocity = Vector3.zero;
+        }
 
         public Transform Target => _target;
 
@@ -49,13 +57,13 @@ namespace DarkFlare
 
         public Vector3 ClampToWorldBounds(Vector3 position)
         {
-            if (_worldBounds == null)
+            if (_worldBounds == null && !_mapBounds.HasValue)
             {
                 return position;
             }
 
             EnsureComponents();
-            Bounds bounds = _worldBounds.bounds;
+            Bounds bounds = _mapBounds ?? _worldBounds.bounds;
 
             if (bounds.size.x <= 0f || bounds.size.y <= 0f)
             {

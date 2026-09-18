@@ -51,8 +51,7 @@ namespace DarkFlare
             ValidateCatalogCompatibility(context.ContentCatalog);
             IArchitecture architecture = context.Architecture;
             architecture.GetModel<InventoryModel>().ConfigureCurrency(context.ContentCatalog);
-            IReadOnlyList<MonsterDefinition> monsterDefinitions = _prepared.SpawnDefinition
-                .AllMonsters
+            IReadOnlyList<MonsterDefinition> monsterDefinitions = (_prepared.SpawnDefinition?.AllMonsters ?? Array.Empty<MonsterDefinition>())
                 .Concat(_prepared.Monsters.Select(monster => monster.Definition))
                 .Where(monster => monster != null)
                 .Distinct()
@@ -70,6 +69,8 @@ namespace DarkFlare
                 architecture.GetUtility<SpriteAssetLoader>().PreloadAsync(itemIcons, token));
             token.ThrowIfCancellationRequested();
             ValidatePreloadedAssets(architecture, monsterDefinitions, itemIcons);
+            if (_configuration.WorldMaps != null)
+            { await architecture.GetUtility<WorldMapRuntime>().InitializeAsync(context, _configuration, _prepared.Document.Payload.Run, token); }
             CommitPreparedState(architecture, context.ContentCatalog, token);
         }
 
@@ -77,6 +78,7 @@ namespace DarkFlare
             SessionInitializationContext context,
             CancellationToken token)
         {
+            await context.Architecture.GetUtility<WorldMapRuntime>().DisposeAsync();
             if (_configuration.MonsterSpawner != null)
             {
                 _configuration.MonsterSpawner.PrepareForInitialization(_prepared.SpawnDefinition);
@@ -97,6 +99,8 @@ namespace DarkFlare
         {
             token.ThrowIfCancellationRequested();
             architecture.GetSystem<GameplayRandomSystem>().RestoreState(_prepared.RandomState);
+            architecture.GetSystem<GameplayRandomSystem>().RestoreMapState(SaveRestorePreparer.RestoreRandomState(
+                _prepared.Document.Payload.Run.MapRandom ?? _prepared.Document.Payload.Run.Random, new List<DtoMapIssue>()));
             architecture.RegisterUtility<IRunInstanceIdGenerator>(
                 new RunInstanceIdGenerator(_prepared.InstanceIdState));
             PlayerRunStateDto playerState = _prepared.Document.Payload.Run.Player;
@@ -188,21 +192,23 @@ namespace DarkFlare
 
             token.ThrowIfCancellationRequested();
             MonsterSpawnerStateDto spawnerState = _prepared.Document.Payload.Run.Spawner;
-            _configuration.MonsterSpawner.PrepareForInitialization(_prepared.SpawnDefinition);
+            MonsterSpawner spawner = architecture.GetUtility<WorldMapRuntime>().Active?.Spawner ?? _configuration.MonsterSpawner;
+            spawner.PrepareForInitialization(_prepared.SpawnDefinition);
 
             for (int i = 0; i < restoredMonsters.Count; i++)
             {
-                _configuration.MonsterSpawner.RegisterRestoredMonster(restoredMonsters[i]);
+                spawner.RegisterRestoredMonster(restoredMonsters[i]);
             }
 
             _previousCameraTarget = _configuration.CameraFollowTarget.Target;
             _configuration.CameraFollowTarget.SetTarget(player.transform);
             _cameraBound = true;
 
+            if (architecture.GetUtility<WorldMapRuntime>().IsConfigured) { spawner.gameObject.SetActive(true); }
             if (spawnerState.IsRunning)
             {
-                _configuration.MonsterSpawner.gameObject.SetActive(true);
-                _configuration.MonsterSpawner.BeginSpawning(
+                spawner.gameObject.SetActive(true);
+                spawner.BeginSpawning(
                     spawnerState.NextSpawnRemainingSeconds);
             }
 

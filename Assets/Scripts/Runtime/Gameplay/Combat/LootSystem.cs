@@ -116,7 +116,8 @@ namespace DarkFlare
             CircleCollider2D pickupCollider = prefab != null ? prefab.GetComponent<CircleCollider2D>() : null;
             CameraFollowTarget camera = Object.FindAnyObjectByType<CameraFollowTarget>();
             Collider2D world = camera != null ? camera.WorldBounds : null;
-            if (pickupCollider == null || prefab.GetComponent<LootPickupController>() == null || world == null)
+            MapGeometrySnapshot geometry = this.GetUtility<WorldMapRuntime>().Active?.Geometry;
+            if (pickupCollider == null || prefab.GetComponent<LootPickupController>() == null || (geometry == null && world == null))
             {
                 return false;
             }
@@ -137,9 +138,17 @@ namespace DarkFlare
                 float angle = i % 8 * Mathf.PI / 4f;
                 Vector2 direction = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
                 Vector2 candidate = center + direction * (distance + i / 8);
-                Bounds bounds = world.bounds;
-                if (candidate.x - pickupRadius < bounds.min.x || candidate.x + pickupRadius > bounds.max.x
-                    || candidate.y - pickupRadius < bounds.min.y || candidate.y + pickupRadius > bounds.max.y) { continue; }
+                if (geometry != null)
+                {
+                    if (geometry.CheckSegment(new MapGeometryPoint(center.x, center.y), new MapGeometryPoint(candidate.x, candidate.y),
+                        new MapGroundProfile(pickupRadius)) != MapGeometryResult.Valid) { continue; }
+                }
+                else
+                {
+                    Bounds bounds = world.bounds;
+                    if (candidate.x - pickupRadius < bounds.min.x || candidate.x + pickupRadius > bounds.max.x
+                        || candidate.y - pickupRadius < bounds.min.y || candidate.y + pickupRadius > bounds.max.y) { continue; }
+                }
                 bool blocked = false;
                 foreach (RaycastHit2D hit in Physics2D.CircleCastAll(center, pickupRadius, direction, Vector2.Distance(center, candidate)))
                 {
@@ -212,7 +221,7 @@ namespace DarkFlare
             }
 
             GameObject instance = Object.Instantiate(prefab, position, Quaternion.identity);
-            this.GetUtility<SessionObjectRegistry>().Register(instance);
+            this.GetUtility<SessionObjectRegistry>().RegisterMapObject(instance);
             LootPickupController controller = instance.GetComponent<LootPickupController>();
 
             if (controller == null)

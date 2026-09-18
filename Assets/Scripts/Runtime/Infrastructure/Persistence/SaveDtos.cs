@@ -14,7 +14,8 @@ namespace DarkFlare
 
         public const int MaximumItems = 8192;
 
-        public const int MaximumMonsters = 512;
+        public const int MaximumMonsters = 2048;
+        public const int MaximumMapMonsters = 1024;
 
         public const int MaximumWorldDrops = 4096;
     }
@@ -223,6 +224,10 @@ namespace DarkFlare
 
     public sealed class RunSaveData : IPersistenceDto
     {
+        public string ActiveMapId { get; set; } = "map:wilderness";
+        public int MapRevision { get; set; }
+        public List<MapStateDto> FrozenMaps { get; set; } = new();
+        public GameplayRandomStateDto MapRandom { get; set; }
         public StatusSaveDto Statuses { get; set; } = new StatusSaveDto();
 
         public RunInstanceIdStateDto InstanceIds { get; set; } = new RunInstanceIdStateDto();

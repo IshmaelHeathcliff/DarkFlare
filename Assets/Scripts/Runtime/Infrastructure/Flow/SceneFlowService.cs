@@ -64,6 +64,11 @@ namespace DarkFlare
         UniTask<LifecycleResult> StopSessionAsync();
     }
 
+    public interface IMapFlowApplication
+    {
+        UniTask ChangeMapAsync(string mapId, string entryId, CancellationToken token);
+    }
+
     public sealed class SceneFlowService : IDisposable
     {
         sealed class DirectProgress<T> : IProgress<T>
@@ -316,6 +321,8 @@ namespace DarkFlare
 
                 switch (queued.Request.Operation)
                 {
+                    case SceneFlowOperation.ChangeMap:
+                        return await ChangeMapAsync(queued, fromState, linked.Token);
                     case SceneFlowOperation.EnterFrontEnd:
                         return await EnterFrontEndAsync(queued, fromState, linked.Token);
                     case SceneFlowOperation.StartGame:
@@ -359,6 +366,34 @@ namespace DarkFlare
                 linked.Dispose();
                 timeoutRegistration.Dispose();
                 timeout.Dispose();
+            }
+        }
+
+        async UniTask<SceneFlowResult> ChangeMapAsync(QueuedRequest queued, GameFlowState fromState, CancellationToken token)
+        {
+            if (_application is not IMapFlowApplication maps)
+            { return CreateFailure(queued.Request, SceneFlowErrorCode.ConfigurationInvalid, fromState, SceneFlowPhase.Preparing); }
+            SetState(GameFlowState.Loading);
+            Report(SceneFlowPhase.LoadingScene, SceneId.Main, null, true);
+            try
+            {
+                await maps.ChangeMapAsync(queued.Request.MapId, queued.Request.EntryId, token);
+                SetState(fromState);
+                Report(SceneFlowPhase.Completed, SceneId.Main, 1, false);
+                return SceneFlowResult.Success(queued.Request.Operation, fromState, fromState, SceneId.Main);
+            }
+            catch (MapTransitionFatalException error)
+            {
+                SetState(GameFlowState.FatalError);
+                return CreateFailure(queued.Request, SceneFlowErrorCode.FatalCleanupFailed, fromState, SceneFlowPhase.Recovering, SceneFlowRecoveryAction.Quit, error);
+            }
+            catch (Exception error)
+            {
+                SetState(fromState);
+                SceneFlowErrorCode code = error is OperationCanceledException
+                    ? queued.IsSuperseded ? SceneFlowErrorCode.Superseded : queued.CancellationToken.IsCancellationRequested ? SceneFlowErrorCode.Cancelled : SceneFlowErrorCode.Timeout
+                    : SceneFlowErrorCode.LoadFailed;
+                return CreateFailure(queued.Request, code, fromState, SceneFlowPhase.LoadingScene, SceneFlowRecoveryAction.Retry | SceneFlowRecoveryAction.CancelTransition, error);
             }
         }
 
@@ -765,6 +800,7 @@ namespace DarkFlare
                 case SceneFlowOperation.StartGame:
                     return state == GameFlowState.FrontEnd;
                 case SceneFlowOperation.ReturnToFrontEnd:
+                case SceneFlowOperation.ChangeMap:
                     return state == GameFlowState.InGame || state == GameFlowState.Paused;
                 default:
                     return false;
@@ -840,7 +876,7 @@ namespace DarkFlare
                 operation,
                 errorCode,
                 fromState,
-                ResolveTargetState(operation),
+                operation == SceneFlowOperation.ChangeMap ? fromState : ResolveTargetState(operation),
                 phase,
                 sceneId,
                 recoveryActions,

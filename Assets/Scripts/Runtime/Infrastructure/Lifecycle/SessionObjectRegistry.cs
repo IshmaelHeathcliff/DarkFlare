@@ -7,6 +7,31 @@ namespace DarkFlare
     public sealed class SessionObjectRegistry : IUtility
     {
         readonly HashSet<GameObject> _objects = new HashSet<GameObject>();
+        readonly Dictionary<GameObject, object> _owners = new Dictionary<GameObject, object>();
+
+        public object MapOwner { get; set; }
+
+        public void RegisterMapObject(GameObject instance)
+        {
+            Register(instance);
+            if (instance != null && MapOwner != null) { _owners[instance] = MapOwner; }
+        }
+
+        public IReadOnlyList<GameObject> CaptureOwner(object owner)
+        {
+            var result = new List<GameObject>();
+            foreach (var pair in _owners)
+            {
+                if (ReferenceEquals(pair.Value, owner) && pair.Key != null) { result.Add(pair.Key); }
+            }
+            return result;
+        }
+
+        public async UniTask ReleaseOwnerAsync(object owner)
+        {
+            foreach (GameObject instance in CaptureOwner(owner)) { Release(instance); }
+            if (Application.isPlaying) { await UniTask.NextFrame(); }
+        }
 
         public int Count => _objects.Count;
 
@@ -38,6 +63,7 @@ namespace DarkFlare
             if (instance != null)
             {
                 _objects.Remove(instance);
+                _owners.Remove(instance);
             }
         }
 
@@ -49,6 +75,7 @@ namespace DarkFlare
             }
 
             _objects.Remove(instance);
+            _owners.Remove(instance);
             DisableAndDestroy(instance);
         }
 
@@ -62,6 +89,7 @@ namespace DarkFlare
             GameObject[] instances = new GameObject[_objects.Count];
             _objects.CopyTo(instances);
             _objects.Clear();
+            _owners.Clear();
 
             for (int i = instances.Length - 1; i >= 0; i--)
             {
@@ -79,6 +107,7 @@ namespace DarkFlare
             GameObject[] instances = new GameObject[_objects.Count];
             _objects.CopyTo(instances);
             _objects.Clear();
+            _owners.Clear();
 
             for (int i = instances.Length - 1; i >= 0; i--)
             {

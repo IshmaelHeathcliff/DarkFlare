@@ -1,0 +1,48 @@
+{
+  "total": 713,
+  "passed": 703,
+  "failed": 10,
+  "duration": 183.4458167,
+  "failures": [
+    {
+      "name": "DarkFlare.Tests.Alpha013CollisionSafetyTests.PhysicsLayersPrefabsAndMainWorldBounds_MatchContract",
+      "message": "  Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "DarkFlare.Tests.Alpha017BaselineTests.ConfigurationDiscovery_FindsRegisteredContentAndReachableNestedStructures",
+      "message": "  Expected: String starting with \"DarkFlare/Data/\"\n  But was:  \"DarkFlare/Maps/World Map Configuration\"\n"
+    },
+    {
+      "name": "DarkFlare.Tests.Alpha024GameFlowContractTests.GameFlowTransitionRules_AllowExactlyTheFrozenGraph",
+      "message": "  未冻结的状态转换：Loading → Paused\n  Expected: False\n  But was:  True\n"
+    },
+    {
+      "name": "DarkFlare.Tests.Alpha024GameFlowContractTests.SceneFlowEnums_ContainTheFrozenPhasesErrorsAndRecoveryActions",
+      "message": "  Expected is <System.String[4]>, actual is <System.String[5]>\n  Values differ at index [4]\n  Extra:    < \"ChangeMap\" >"
+    },
+    {
+      "name": "DarkFlare.Tests.ContentIdentityTests.OfficialContentCatalog_ContainsEveryRegisteredPresetDefinition",
+      "message": "  Expected: 138\n  But was:  155\n"
+    },
+    {
+      "name": "DarkFlare.Tests.InfrastructurePolicyTests.SourcePolicy_HasNoUnregisteredViolations(\"runtime-time-scale-owner\")",
+      "message": "  发现未登记的基础设施策略违规：\n[runtime-time-scale-owner] Assets/Scripts/Runtime/Gameplay/Spawning/MonsterSpawner.cs:165 | while (Time.timeScale == 0f) { await UniTask.Yield(PlayerLoopTiming.Update, token); }\n\n  Expected: <empty>\n  But was:  < <DarkFlare.Tests.InfrastructurePolicyTests+PolicyViolation> >\n"
+    },
+    {
+      "name": "DarkFlare.Tests.InfrastructurePolicyTests.SourcePolicy_HasNoUnregisteredViolations(\"cancellation-token-source-owner\")",
+      "message": "  发现未登记的基础设施策略违规：\n[cancellation-token-source-owner] Assets/Scripts/Runtime/Maps/MapScope.cs:43 | using var linked = CancellationTokenSource.CreateLinkedTokenSource(token, scope.Token);\n\n  Expected: <empty>\n  But was:  < <DarkFlare.Tests.InfrastructurePolicyTests+PolicyViolation> >\n"
+    },
+    {
+      "name": "DarkFlare.Tests.Phase4ContentTests.OfficialContent_CoversEquipmentSlotsAndHasNoValidationIssues",
+      "message": "Unhandled log message: '[Error] FMOD failed to switch back to normal output ... : \"Error initializing output device. \" (60)'. Use UnityEngine.TestTools.LogAssert.Expect"
+    },
+    {
+      "name": "DarkFlare.Tests.SaveDataContractTests.SaveDataValidator_RejectsHeaderSummaryAndDerivedSeedMismatch",
+      "message": "  Expected: some item equal to InconsistentState\n  But was:  < InvalidValue >\n"
+    },
+    {
+      "name": "DarkFlare.Tests.WorldMapStateTests.FrozenMaps_ValidateGlobalIdentityAndRoundTripThousandMonsters",
+      "message": "  状态剩余时间或周期相位非法\n  Expected: True\n  But was:  False\n"
+    }
+  ]
+}

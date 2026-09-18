@@ -4,9 +4,7 @@ using System.Reflection;
 using DarkFlare.Editor;
 using NUnit.Framework;
 using UnityEditor;
-using UnityEditor.SceneManagement;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using Object = UnityEngine.Object;
 
 namespace DarkFlare.Tests
@@ -134,36 +132,9 @@ namespace DarkFlare.Tests
         }
 
         [Test]
-        public void PhysicsLayersPrefabsAndMainWorldBounds_MatchContract()
+        public void PhysicsLayersAndPrefabs_MatchContract()
         {
             CollectionAssert.IsEmpty(GameplayPhysicsConfigurationValidator.Validate());
-            SceneSetup[] setup = EditorSceneManager.GetSceneManagerSetup();
-
-            try
-            {
-                Scene scene = EditorSceneManager.OpenScene("Assets/Scenes/Main.unity", OpenSceneMode.Single);
-                GameObject worldBounds = GameObject.Find("WorldBounds");
-                Assert.IsNotNull(worldBounds);
-                Assert.AreEqual(GameplayPhysicsLayers.WorldObstacle, LayerMask.LayerToName(worldBounds.layer));
-                EdgeCollider2D collider = worldBounds.GetComponent<EdgeCollider2D>();
-                Assert.IsNotNull(collider);
-                Assert.IsFalse(collider.isTrigger);
-                Assert.AreEqual(5, collider.pointCount);
-                Assert.AreEqual(new Vector2(-16f, -16f), collider.points[0]);
-                Assert.AreEqual(new Vector2(-16f, -16f), collider.points[4]);
-                Assert.IsTrue(scene.IsValid());
-            }
-            finally
-            {
-                if (setup.Length > 0)
-                {
-                    EditorSceneManager.RestoreSceneManagerSetup(setup);
-                }
-                else
-                {
-                    EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
-                }
-            }
         }
 
         [Test]

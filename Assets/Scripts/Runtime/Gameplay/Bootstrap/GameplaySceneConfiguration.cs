@@ -20,7 +20,8 @@ namespace DarkFlare
             MonsterSpawner monsterSpawner,
             CameraFollowTarget cameraFollowTarget,
             bool useFixedRandomSeed,
-            int fixedRandomSeed)
+            int fixedRandomSeed,
+            WorldMapConfiguration worldMaps = null)
         {
             ContentCatalogDefinition = contentCatalog;
             PlayerCharacter = playerCharacter;
@@ -36,6 +37,7 @@ namespace DarkFlare
             CameraFollowTarget = cameraFollowTarget;
             UseFixedRandomSeed = useFixedRandomSeed;
             FixedRandomSeed = fixedRandomSeed;
+            WorldMaps = worldMaps;
         }
 
         public ContentCatalogDefinition ContentCatalogDefinition { get; }
@@ -65,6 +67,7 @@ namespace DarkFlare
         public bool UseFixedRandomSeed { get; }
 
         public int FixedRandomSeed { get; }
+        public WorldMapConfiguration WorldMaps { get; }
 
         public IReadOnlyList<string> Validate(ContentCatalog catalog)
         {
@@ -75,7 +78,7 @@ namespace DarkFlare
             RequireAsset(PlayerSkill, "玩家默认技能", errors);
             RequireAddressable(PlayerSkill != null ? PlayerSkill.Prefab : null, "投射物 Prefab", errors);
             RequireAsset(StartingWeapon, "初始武器", errors);
-            RequireAsset(MonsterSpawnDefinition, "怪物生成定义", errors);
+            if (WorldMaps == null) { RequireAsset(MonsterSpawnDefinition, "怪物生成定义", errors); }
             RequireAddressable(LootPickupPrefab, "掉落物 Prefab", errors);
             RequireAsset(Trader, "商人定义", errors);
             RequireAsset(CraftingDefinition, "打造定义", errors);
@@ -99,7 +102,7 @@ namespace DarkFlare
                 errors.Add("初始金币不能为负数");
             }
 
-            if (MonsterSpawner == null)
+            if (MonsterSpawner == null && WorldMaps == null)
             {
                 errors.Add("场景缺少 MonsterSpawner");
             }
@@ -107,6 +110,11 @@ namespace DarkFlare
             if (CameraFollowTarget == null)
             {
                 errors.Add("场景缺少 CameraFollowTarget");
+            }
+            if (WorldMaps != null)
+            {
+                try { WorldMaps.Validate(); }
+                catch (System.Exception error) { errors.Add(error.Message); }
             }
 
             if (MonsterSpawnDefinition != null)

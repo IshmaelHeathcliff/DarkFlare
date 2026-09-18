@@ -79,6 +79,24 @@ namespace DarkFlare
         bool _sessionMenuActive;
         bool _contextRefreshPending;
         bool _closed;
+        bool _waitForInteractRelease;
+
+        public void WaitForInteractRelease()
+        {
+            _waitForInteractRelease = true;
+            InputSystem.onAfterUpdate -= CheckInteractRelease;
+            InputSystem.onAfterUpdate += CheckInteractRelease;
+        }
+
+        void CheckInteractRelease()
+        {
+            foreach (InputControl control in _actions.Player.Interact.controls)
+            {
+                if (control is UnityEngine.InputSystem.Controls.ButtonControl button && button.isPressed) { return; }
+            }
+            _waitForInteractRelease = false;
+            InputSystem.onAfterUpdate -= CheckInteractRelease;
+        }
 
         public ApplicationInputService(SettingsService settings = null)
         {
@@ -1186,6 +1204,7 @@ namespace DarkFlare
             _closed = true;
             CancelPendingContextRefresh();
             _actions.Player.Interact.performed -= OnInteract;
+            InputSystem.onAfterUpdate -= CheckInteractRelease;
             _actions.Player.ToggleMenu.performed -= OnToggleMenu;
             _actions.asset.FindAction("Player/Pause", true).performed -= OnPause;
             _actions.asset.FindAction("UI/Pause", true).performed -= OnPause;
@@ -1297,6 +1316,7 @@ namespace DarkFlare
 
         void OnInteract(InputAction.CallbackContext context)
         {
+            if (_waitForInteractRelease) { return; }
             InteractPerformed?.Invoke();
         }
 

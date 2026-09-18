@@ -1,0 +1,375 @@
+{
+  "succeeded": true,
+  "error": null,
+  "version": "0.5.3-alpha",
+  "platform": "WindowsPlayer",
+  "device": "AMD Ryzen 7 PRO 8845HS w/ Radeon 780M Graphics",
+  "graphics": "AMD Radeon 780M Graphics",
+  "records": [
+    {
+      "wallContact": "(-31.300000, 0.000000)",
+      "clearance": "Valid"
+    },
+    {
+      "interaction": "Trader",
+      "player": "(-4.0000, 0.0000, 0.0000)",
+      "body": "(-4.0000, 0.0000)",
+      "target": "(-4.0000, 1.0000, 0.0000)",
+      "focused": "Interaction merchant",
+      "scale": 1.0,
+      "radius": 1.5,
+      "targetsEnabled": true,
+      "touching": true
+    },
+    {
+      "interaction": "Crafting",
+      "player": "(4.0000, 0.0000, 0.0000)",
+      "body": "(4.0000, 0.0000)",
+      "target": "(4.0000, 1.0000, 0.0000)",
+      "focused": "Interaction crafting",
+      "scale": 1.0,
+      "radius": 1.5,
+      "targetsEnabled": true,
+      "touching": true
+    },
+    {
+      "interaction": "Portal",
+      "player": "(0.0000, 4.0000, 0.0000)",
+      "body": "(0.0000, 4.0000)",
+      "target": "(0.0000, 5.0000, 0.0000)",
+      "focused": "Interaction exit",
+      "scale": 1.0,
+      "radius": 1.5,
+      "targetsEnabled": true,
+      "touching": true
+    },
+    {
+      "portalInput": "keyboard-e",
+      "map": "map:wilderness"
+    },
+    {
+      "actualAutoCastKillAndDrop": true
+    },
+    {
+      "interaction": "Portal",
+      "player": "(0.0000, 4.0000, 0.0000)",
+      "body": "(0.0000, 4.0000)",
+      "target": "(0.0000, 5.0000, 0.0000)",
+      "focused": "Interaction exit",
+      "scale": 1.0,
+      "radius": 1.5,
+      "targetsEnabled": true,
+      "touching": true
+    },
+    {
+      "portalInput": "gamepad-north",
+      "map": "map:wilderness"
+    },
+    {
+      "frozenSeconds": 30.000018701321096,
+      "monsterId": "68194e223492482b838814c80b45f77b:monster:3",
+      "dropId": "68194e223492482b838814c80b45f77b:drop:2",
+      "remaining": 11.895295301816077
+    },
+    {
+      "round": 1,
+      "milliseconds": 798.64019999999414,
+      "metrics": {
+        "ActiveOwners": 6,
+        "ActiveLeases": 46,
+        "ActiveEntries": 46,
+        "registry": 5,
+        "sorting": 38,
+        "interactions": 1,
+        "players": 1,
+        "spawners": 1
+      },
+      "memoryBytes": 305521941
+    },
+    {
+      "round": 2,
+      "milliseconds": 826.49750000000211,
+      "metrics": {
+        "ActiveOwners": 6,
+        "ActiveLeases": 46,
+        "ActiveEntries": 46,
+        "registry": 5,
+        "sorting": 38,
+        "interactions": 1,
+        "players": 1,
+        "spawners": 1
+      },
+      "memoryBytes": 305534009
+    },
+    {
+      "round": 3,
+      "milliseconds": 790.6402999999998,
+      "metrics": {
+        "ActiveOwners": 6,
+        "ActiveLeases": 46,
+        "ActiveEntries": 46,
+        "registry": 5,
+        "sorting": 38,
+        "interactions": 1,
+        "players": 1,
+        "spawners": 1
+      },
+      "memoryBytes": 305543005
+    },
+    {
+      "round": 4,
+      "milliseconds": 780.05590000000075,
+      "metrics": {
+        "ActiveOwners": 6,
+        "ActiveLeases": 46,
+        "ActiveEntries": 46,
+        "registry": 5,
+        "sorting": 38,
+        "interactions": 1,
+        "players": 1,
+        "spawners": 1
+      },
+      "memoryBytes": 305555073
+    },
+    {
+      "round": 5,
+      "milliseconds": 813.37719999999786,
+      "metrics": {
+        "ActiveOwners": 6,
+        "ActiveLeases": 46,
+        "ActiveEntries": 46,
+        "registry": 5,
+        "sorting": 38,
+        "interactions": 1,
+        "players": 1,
+        "spawners": 1
+      },
+      "memoryBytes": 305567141
+    },
+    {
+      "round": 6,
+      "milliseconds": 751.312200000001,
+      "metrics": {
+        "ActiveOwners": 6,
+        "ActiveLeases": 46,
+        "ActiveEntries": 46,
+        "registry": 5,
+        "sorting": 38,
+        "interactions": 1,
+        "players": 1,
+        "spawners": 1
+      },
+      "memoryBytes": 305579209
+    },
+    {
+      "round": 7,
+      "milliseconds": 778.56169999999736,
+      "metrics": {
+        "ActiveOwners": 6,
+        "ActiveLeases": 46,
+        "ActiveEntries": 46,
+        "registry": 5,
+        "sorting": 38,
+        "interactions": 1,
+        "players": 1,
+        "spawners": 1
+      },
+      "memoryBytes": 305591277
+    },
+    {
+      "round": 8,
+      "milliseconds": 766.90669999999977,
+      "metrics": {
+        "ActiveOwners": 6,
+        "ActiveLeases": 46,
+        "ActiveEntries": 46,
+        "registry": 5,
+        "sorting": 38,
+        "interactions": 1,
+        "players": 1,
+        "spawners": 1
+      },
+      "memoryBytes": 305606417
+    },
+    {
+      "round": 9,
+      "milliseconds": 843.27840000000265,
+      "metrics": {
+        "ActiveOwners": 6,
+        "ActiveLeases": 46,
+        "ActiveEntries": 46,
+        "registry": 5,
+        "sorting": 38,
+        "interactions": 1,
+        "players": 1,
+        "spawners": 1
+      },
+      "memoryBytes": 305622581
+    },
+    {
+      "round": 10,
+      "milliseconds": 841.93609999999808,
+      "metrics": {
+        "ActiveOwners": 6,
+        "ActiveLeases": 46,
+        "ActiveEntries": 46,
+        "registry": 5,
+        "sorting": 38,
+        "interactions": 1,
+        "players": 1,
+        "spawners": 1
+      },
+      "memoryBytes": 305627993
+    },
+    {
+      "round": 11,
+      "milliseconds": 943.25620000000049,
+      "metrics": {
+        "ActiveOwners": 6,
+        "ActiveLeases": 46,
+        "ActiveEntries": 46,
+        "registry": 5,
+        "sorting": 38,
+        "interactions": 1,
+        "players": 1,
+        "spawners": 1
+      },
+      "memoryBytes": 305640061
+    },
+    {
+      "round": 12,
+      "milliseconds": 837.22699999999861,
+      "metrics": {
+        "ActiveOwners": 6,
+        "ActiveLeases": 46,
+        "ActiveEntries": 46,
+        "registry": 5,
+        "sorting": 38,
+        "interactions": 1,
+        "players": 1,
+        "spawners": 1
+      },
+      "memoryBytes": 305652129
+    },
+    {
+      "round": 13,
+      "milliseconds": 791.77370000000019,
+      "metrics": {
+        "ActiveOwners": 6,
+        "ActiveLeases": 46,
+        "ActiveEntries": 46,
+        "registry": 5,
+        "sorting": 38,
+        "interactions": 1,
+        "players": 1,
+        "spawners": 1
+      },
+      "memoryBytes": 305664197
+    },
+    {
+      "round": 14,
+      "milliseconds": 824.19910000000129,
+      "metrics": {
+        "ActiveOwners": 6,
+        "ActiveLeases": 46,
+        "ActiveEntries": 46,
+        "registry": 5,
+        "sorting": 38,
+        "interactions": 1,
+        "players": 1,
+        "spawners": 1
+      },
+      "memoryBytes": 305676265
+    },
+    {
+      "round": 15,
+      "milliseconds": 807.62630000000263,
+      "metrics": {
+        "ActiveOwners": 6,
+        "ActiveLeases": 46,
+        "ActiveEntries": 46,
+        "registry": 5,
+        "sorting": 38,
+        "interactions": 1,
+        "players": 1,
+        "spawners": 1
+      },
+      "memoryBytes": 305688333
+    },
+    {
+      "round": 16,
+      "milliseconds": 841.89229999999782,
+      "metrics": {
+        "ActiveOwners": 6,
+        "ActiveLeases": 46,
+        "ActiveEntries": 46,
+        "registry": 5,
+        "sorting": 38,
+        "interactions": 1,
+        "players": 1,
+        "spawners": 1
+      },
+      "memoryBytes": 305700401
+    },
+    {
+      "round": 17,
+      "milliseconds": 833.44229999999448,
+      "metrics": {
+        "ActiveOwners": 6,
+        "ActiveLeases": 46,
+        "ActiveEntries": 46,
+        "registry": 5,
+        "sorting": 38,
+        "interactions": 1,
+        "players": 1,
+        "spawners": 1
+      },
+      "memoryBytes": 305712469
+    },
+    {
+      "round": 18,
+      "milliseconds": 796.95949999999982,
+      "metrics": {
+        "ActiveOwners": 6,
+        "ActiveLeases": 46,
+        "ActiveEntries": 46,
+        "registry": 5,
+        "sorting": 38,
+        "interactions": 1,
+        "players": 1,
+        "spawners": 1
+      },
+      "memoryBytes": 305724537
+    },
+    {
+      "round": 19,
+      "milliseconds": 814.62309999999866,
+      "metrics": {
+        "ActiveOwners": 6,
+        "ActiveLeases": 46,
+        "ActiveEntries": 46,
+        "registry": 5,
+        "sorting": 38,
+        "interactions": 1,
+        "players": 1,
+        "spawners": 1
+      },
+      "memoryBytes": 305736605
+    },
+    {
+      "round": 20,
+      "milliseconds": 798.81970000000274,
+      "metrics": {
+        "ActiveOwners": 6,
+        "ActiveLeases": 46,
+        "ActiveEntries": 46,
+        "registry": 5,
+        "sorting": 38,
+        "interactions": 1,
+        "players": 1,
+        "spawners": 1
+      },
+      "memoryBytes": 305748673
+    }
+  ]
+}

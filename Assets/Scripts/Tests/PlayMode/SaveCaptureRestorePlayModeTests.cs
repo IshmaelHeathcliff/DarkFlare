@@ -75,6 +75,10 @@ namespace DarkFlare.Tests
         public IEnumerator MainSession_CapturePrepareRestorePreservesStateWithoutNewGameGrant()
         {
             yield return _fixture.EnterMain();
+            SceneFlowResult changed = null;
+            yield return ApplicationHost.Current.SceneFlow.RequestAsync(SceneFlowRequest.ChangeMap("map:wilderness", "arrival"))
+                .ToCoroutine(result => changed = result);
+            Assert.IsTrue(changed.Succeeded);
             yield return WaitForRunningSession();
             ApplicationHost host = ApplicationHost.Current;
             GameSessionHost oldSession = host.CurrentSession;

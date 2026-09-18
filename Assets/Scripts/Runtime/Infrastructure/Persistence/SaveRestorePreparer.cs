@@ -132,8 +132,9 @@ namespace DarkFlare
                 return Failure(issues);
             }
 
+            document = MapStateData.Copy(document);
             if (document.Header.CatalogId == "core" && catalog.CatalogId == "core"
-                && document.Header.ContentVersion == 1 && (catalog.ContentVersion >= 2 && catalog.ContentVersion <= 5))
+                && document.Header.ContentVersion == 1 && (catalog.ContentVersion >= 2 && catalog.ContentVersion <= 6))
             {
                 // v1 stores four stable slots. New slots start empty; rolled values and stock stay intact.
                 if (document.Payload.Profile.Equipment.Any(loadout =>
@@ -148,7 +149,7 @@ namespace DarkFlare
             }
 
             if (document.Header.CatalogId == "core" && catalog.CatalogId == "core"
-                && document.Header.ContentVersion == 2 && (catalog.ContentVersion >= 3 && catalog.ContentVersion <= 5))
+                && document.Header.ContentVersion == 2 && (catalog.ContentVersion >= 3 && catalog.ContentVersion <= 6))
             {
                 document = JObject.FromObject(document).ToObject<SaveDocumentDto>();
                 ItemBaseDefinition gold = catalog.GetAll<ItemBaseDefinition>().FirstOrDefault(item => item.ItemType == ItemType.Currency);
@@ -199,7 +200,7 @@ namespace DarkFlare
             }
 
             if (document.Header.CatalogId == "core" && catalog.CatalogId == "core"
-                && document.Header.ContentVersion == 3 && (catalog.ContentVersion == 4 || catalog.ContentVersion == 5))
+                && document.Header.ContentVersion == 3 && (catalog.ContentVersion >= 4 && catalog.ContentVersion <= 6))
             {
                 // 新增异常、抗性和词条，不改写旧实例掷值；缺少抗性属性自然解析为 0。
                 document = JObject.FromObject(document).ToObject<SaveDocumentDto>();
@@ -207,11 +208,18 @@ namespace DarkFlare
             }
 
             if (document.Header.CatalogId == "core" && catalog.CatalogId == "core"
-                && document.Header.ContentVersion == 4 && catalog.ContentVersion == 5)
+                && document.Header.ContentVersion == 4 && catalog.ContentVersion >= 5 && catalog.ContentVersion <= 6)
             {
                 // 消耗品为追加内容；保留历史库存与资源，不执行使用效果或补发商品。
                 document = JObject.FromObject(document).ToObject<SaveDocumentDto>();
                 document.Header.ContentVersion = 5;
+            }
+
+            if (document.Header.CatalogId == "core" && catalog.CatalogId == "core"
+                && document.Header.ContentVersion == 5 && catalog.ContentVersion == 6)
+            {
+                document = MapStateData.Copy(document);
+                document.Header.ContentVersion = 6;
             }
 
             if (!string.Equals(document.Header.CatalogId, catalog.CatalogId, StringComparison.Ordinal)
@@ -230,7 +238,13 @@ namespace DarkFlare
                 return Failure(issues);
             }
 
-            RuntimeStateDto runtimeDto = CreateRuntimeStateDto(document.Payload);
+            if (catalog.GetAll<MapDefinition>().Any())
+            {
+                try { WorldMapCatalog.FromContent(catalog).ValidateSave(document.Payload.Run); }
+                catch (Exception error) when (error is InvalidOperationException or ArgumentException or MapDocumentException)
+                { Add(issues, DtoMapIssueCode.InvalidValue, "payload.run.maps", error.Message); return Failure(issues); }
+            }
+            RuntimeStateDto runtimeDto = CreateRuntimeStateDto(MapStateData.Flatten(document.Payload));
             DtoMapResult<DetachedRuntimeState> runtimeResult = RuntimeStateMapper.Restore(
                 runtimeDto,
                 catalog);
@@ -262,7 +276,7 @@ namespace DarkFlare
                 catalog,
                 "payload.run.player.skillContentId",
                 issues);
-            MonsterSpawnDefinition spawnDefinition = Resolve<MonsterSpawnDefinition>(
+            MonsterSpawnDefinition spawnDefinition = string.IsNullOrEmpty(document.Payload.Run.Spawner.SpawnContentId) ? null : Resolve<MonsterSpawnDefinition>(
                 document.Payload.Run.Spawner.SpawnContentId,
                 catalog,
                 "payload.run.spawner.spawnContentId",
@@ -291,6 +305,15 @@ namespace DarkFlare
             }
 
             StatusSaveValidation.Validate(document.Payload.Run.Statuses, document.Payload, catalog, issues);
+            var items = document.Payload.Items.ToDictionary(item => item.InstanceId, StringComparer.Ordinal);
+            foreach (MapStateDto map in document.Payload.Run.FrozenMaps)
+            {
+                RestoreMonsters(map.Monsters, catalog, issues);
+                MapStateData.LoadItems(map, items);
+                var local = new SavePayloadDto { Profile = document.Payload.Profile, Items = document.Payload.Items,
+                    Run = new RunSaveData { Player = document.Payload.Run.Player, Monsters = map.Monsters } };
+                StatusSaveValidation.Validate(map.Statuses, local, catalog, issues);
+            }
             if (issues.Count > 0) { return Failure(issues); }
 
             PreparedRestore prepared = new PreparedRestore(
@@ -378,7 +401,7 @@ namespace DarkFlare
             return result;
         }
 
-        static List<PreparedMonsterRestore> RestoreMonsters(
+        internal static List<PreparedMonsterRestore> RestoreMonsters(
             IReadOnlyList<MonsterRunStateDto> states,
             ContentCatalog catalog,
             List<DtoMapIssue> issues)
@@ -536,7 +559,7 @@ namespace DarkFlare
             return result;
         }
 
-        static GameplayRandomState RestoreRandomState(
+        internal static GameplayRandomState RestoreRandomState(
             GameplayRandomStateDto dto,
             List<DtoMapIssue> issues)
         {

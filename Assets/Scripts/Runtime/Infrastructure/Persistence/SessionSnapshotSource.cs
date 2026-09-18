@@ -75,6 +75,7 @@ namespace DarkFlare
             LifecycleScope scope = _session.SessionScope.CreateChild("status-snapshot", token);
             try
             {
+                await _session.Architecture.GetUtility<WorldMapRuntime>().WaitStableAsync(scope.Token);
                 using (await _session.Architecture.GetSystem<StatusSystem>().HoldClockAsync(scope.Token))
                 {
                     scope.Token.ThrowIfCancellationRequested();
@@ -95,6 +96,9 @@ namespace DarkFlare
             }
 
             IArchitecture architecture = _session.Architecture;
+            WorldMapRuntime maps = architecture.GetUtility<WorldMapRuntime>();
+            if (maps.IsTransitioning)
+            { Add(issues, DtoMapIssueCode.InvalidValue, "payload.run.maps", "切图尚未到达保存边界"); return Failure(issues); }
             if (!architecture.GetSystem<StatusSystem>().Store.IsQuiescent)
             {
                 Add(issues, DtoMapIssueCode.InvalidValue, "payload.run.statuses", "状态尚未到达保存边界");
@@ -154,6 +158,7 @@ namespace DarkFlare
                         architecture.GetUtility<IRunInstanceIdGenerator>().CaptureState()),
                     Random = MapRandom(
                         architecture.GetSystem<GameplayRandomSystem>().CaptureState()),
+                    MapRandom = MapRandom(architecture.GetSystem<GameplayRandomSystem>().CaptureMapState()),
                     Player = MapPlayer(player, issues),
                     Monsters = MapMonsters(monsters, issues),
                     WorldDrops = MapWorldDrops(worldDrops),
@@ -161,6 +166,8 @@ namespace DarkFlare
                     Spawner = MapSpawner(issues),
                 },
             };
+
+            maps.AppendFrozenStates(payload);
 
             StatusSaveValidation.Validate(payload.Run.Statuses, payload, _catalog, issues);
             SaveDataValidationResult validation = SaveDataValidator.ValidatePayload(payload);
@@ -174,6 +181,27 @@ namespace DarkFlare
             return issues.Count == 0
                 ? new SessionSnapshotResult(payload, Array.Empty<DtoMapIssue>())
                 : Failure(issues);
+        }
+
+        internal MapStateDto CaptureMap(MapScope scope)
+        {
+            IArchitecture architecture = _session.Architecture;
+            IReadOnlyList<GameObject> objects = architecture.GetUtility<SessionObjectRegistry>().CaptureOwner(scope);
+            var issues = new List<DtoMapIssue>();
+            List<MonsterController> monsters = CaptureComponents<MonsterController>(objects).Where(m => m.Actor.IsAlive).ToList();
+            List<LootPickupController> drops = CaptureComponents<LootPickupController>(objects).Where(drop => drop.Item != null).ToList();
+            StatusSaveDto statuses = architecture.GetSystem<StatusSystem>().Store.CaptureSave(_catalog, issues);
+            var ids = new HashSet<string>(monsters.Select(monster => monster.Instance.Id.Value));
+            statuses.Actors.RemoveAll(actor => !ids.Contains(actor.ActorKey));
+            var result = new MapStateDto
+            {
+                MapId = scope.Map.MapId, Revision = scope.Map.Revision, Monsters = MapMonsters(monsters, issues),
+                WorldDrops = MapWorldDrops(drops), Items = MapItems(drops.Select(drop => drop.Item).ToList(), issues),
+                Spawner = MapSpawner(issues), Statuses = statuses,
+                Random = MapRandom(architecture.GetSystem<GameplayRandomSystem>().CaptureMapState())
+            };
+            if (issues.Count != 0) { throw new InvalidOperationException(string.Join("; ", issues.Select(issue => issue.Message))); }
+            return result;
         }
 
         static List<T> CaptureComponents<T>(IReadOnlyList<GameObject> objects)
@@ -452,16 +480,18 @@ namespace DarkFlare
 
         MonsterSpawnerStateDto MapSpawner(List<DtoMapIssue> issues)
         {
+            MonsterSpawner current = _session.Architecture.GetUtility<WorldMapRuntime>().Active?.Spawner ?? _spawner;
+            if (current.SpawnDefinition == null) { return new MonsterSpawnerStateDto(); }
             string contentId = RuntimeStateMapper.GetContentId(
-                _spawner.SpawnDefinition,
+                current.SpawnDefinition,
                 _catalog,
                 "payload.run.spawner.spawnContentId",
                 issues);
             return new MonsterSpawnerStateDto
             {
                 SpawnContentId = contentId,
-                IsRunning = _spawner.IsSpawning,
-                NextSpawnRemainingSeconds = _spawner.NextSpawnRemainingSeconds,
+                IsRunning = current.IsSpawning,
+                NextSpawnRemainingSeconds = current.NextSpawnRemainingSeconds,
             };
         }
 
@@ -475,7 +505,7 @@ namespace DarkFlare
             };
         }
 
-        static GameplayRandomStateDto MapRandom(GameplayRandomState state)
+        internal static GameplayRandomStateDto MapRandom(GameplayRandomState state)
         {
             GameplayRandomStateDto result = new GameplayRandomStateDto
             {

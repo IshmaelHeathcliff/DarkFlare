@@ -1,0 +1,12 @@
+{
+  "total": 713,
+  "failed": 1,
+  "duration": 215.731,
+  "passed": 712,
+  "failures": [
+    {
+      "name": "DarkFlare.Tests.ContentIdentityTests.EveryDarkFlareDataConfiguration_IsExplicitlyRegistered",
+      "detail": "  DarkFlare.WorldMapConfiguration\n  Expected: <empty>\n  But was:  < \"DarkFlare.WorldMapConfiguration\" >\nat DarkFlare.Tests.ContentIdentityTests.EveryDarkFlareDataConfiguration_IsExplicitlyRegistered () [0x0009d] in C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Tests\\EditMode\\ContentIdentityTests.cs:117\n"
+    }
+  ]
+}

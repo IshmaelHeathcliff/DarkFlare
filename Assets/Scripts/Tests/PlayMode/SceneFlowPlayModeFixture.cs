@@ -81,7 +81,8 @@ namespace DarkFlare.Tests
             SceneFlowResult startResult = null;
             yield return host.SceneFlow.RequestAsync(SceneFlowRequest.StartGame(intent))
                 .ToCoroutine(result => startResult = result);
-            Assert.IsTrue(startResult.Succeeded, startResult.Exception?.ToString());
+            Assert.IsTrue(startResult.Succeeded, startResult.Exception?.ToString() ?? startResult.ErrorCode.ToString());
+            while (host.SaveCoordinator.IsBusy) { yield return null; }
             Assert.AreEqual(GameFlowState.InGame, host.SceneFlow.State);
             Assert.IsNotNull(host.CurrentSession);
             Assert.AreEqual(GameSessionState.Running, host.CurrentSession.State);

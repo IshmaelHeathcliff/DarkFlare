@@ -63,7 +63,7 @@ namespace DarkFlare.Tests
                 }
             }
 
-            Assert.AreEqual(15, allowedCount);
+            Assert.AreEqual(16, allowedCount);
         }
 
         [Test]
@@ -224,6 +224,7 @@ namespace DarkFlare.Tests
                     nameof(SceneFlowOperation.EnterFrontEnd),
                     nameof(SceneFlowOperation.StartGame),
                     nameof(SceneFlowOperation.ReturnToFrontEnd),
+                    nameof(SceneFlowOperation.ChangeMap),
                 },
                 Enum.GetNames(typeof(SceneFlowOperation)));
             CollectionAssert.AreEqual(
@@ -407,6 +408,7 @@ namespace DarkFlare.Tests
                     return toState == GameFlowState.Loading;
                 case GameFlowState.Loading:
                     return toState == GameFlowState.InGame
+                        || toState == GameFlowState.Paused
                         || toState == GameFlowState.FrontEnd
                         || toState == GameFlowState.Recovering
                         || toState == GameFlowState.FatalError;

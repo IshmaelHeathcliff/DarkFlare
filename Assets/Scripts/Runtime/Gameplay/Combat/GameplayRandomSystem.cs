@@ -87,6 +87,7 @@ namespace DarkFlare
 
         bool _configured;
         int _rootSeed;
+        int _mapRootSeed;
 
         public int RootSeed
         {
@@ -104,6 +105,7 @@ namespace DarkFlare
         public void Configure(bool useFixedSeed, int fixedSeed)
         {
             _rootSeed = useFixedSeed ? fixedSeed : CreateRootSeed();
+            _mapRootSeed = _rootSeed;
             _sequences.Clear();
             _configured = true;
             ApplicationLog.Info(LogEventIds.GameplayCombat, $"[GameplayRandomSystem] 根种子: {_rootSeed}（{(useFixedSeed ? "固定" : "随机")}）");
@@ -120,7 +122,7 @@ namespace DarkFlare
 
             _sequences.TryGetValue(channel, out int sequence);
             _sequences[channel] = checked(sequence + 1);
-            return Mix(_rootSeed, channel, sequence);
+            return Mix(IsMapChannel(channel) ? _mapRootSeed : _rootSeed, channel, sequence);
         }
 
         public GameplayRandomState CaptureState()
@@ -148,6 +150,7 @@ namespace DarkFlare
             }
 
             _rootSeed = state.RootSeed;
+            _mapRootSeed = _rootSeed;
             _sequences.Clear();
 
             foreach (KeyValuePair<GameplayRandomChannel, int> pair in state.NextSequences)
@@ -164,6 +167,36 @@ namespace DarkFlare
             {
                 Configure(false, 0);
             }
+        }
+
+        public GameplayRandomState CaptureMapState()
+        {
+            return new GameplayRandomState(_mapRootSeed, CaptureState().NextSequences);
+        }
+
+        public GameplayRandomState CreateMapState(string mapId)
+        {
+            EnsureConfigured();
+            uint seed = unchecked((uint)_rootSeed ^ 2166136261u);
+            foreach (char value in mapId) { seed = unchecked((seed ^ value) * 16777619u); }
+            var channels = new List<KeyValuePair<GameplayRandomChannel, int>>();
+            foreach (GameplayRandomChannel channel in Enum.GetValues(typeof(GameplayRandomChannel)))
+            { channels.Add(new KeyValuePair<GameplayRandomChannel, int>(channel, 0)); }
+            return new GameplayRandomState(unchecked((int)seed), channels);
+        }
+
+        public void RestoreMapState(GameplayRandomState state)
+        {
+            _mapRootSeed = state.RootSeed;
+            foreach (var pair in state.NextSequences)
+            {
+                if (IsMapChannel(pair.Key)) { _sequences[pair.Key] = pair.Value; }
+            }
+        }
+
+        static bool IsMapChannel(GameplayRandomChannel channel)
+        {
+            return channel != GameplayRandomChannel.PlayerAttack && channel != GameplayRandomChannel.Crafting;
         }
 
         internal static int CreateRootSeed()

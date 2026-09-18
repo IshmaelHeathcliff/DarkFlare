@@ -1,0 +1,21 @@
+{
+  "status": "completed",
+  "buildId": "build_159cabfc28c1",
+  "result": "Succeeded",
+  "platform": "StandaloneWindows64",
+  "outputPath": "C:/Users/darkf/Home/Projects/DarkFlare/Builds/Alpha053/DarkFlare.exe",
+  "totalSizeBytes": 206520350,
+  "buildStartedAt": "2026-09-18T15:06:22.1528693Z",
+  "buildEndedAt": "2026-09-18T15:06:52.5830945Z",
+  "totalWarnings": 2,
+  "totalErrors": 0,
+  "errors": [],
+  "warnings": [
+    {
+      "message": "Pipeline: No RuntimePipelineConfig asset found (Project Settings > Pipeline > Runtime). Pipeline will be disabled in Player builds."
+    },
+    {
+      "message": "Shader warning in 'TextMeshPro/Mobile/Distance Field': #pragma enable_d3d11_debug_symbols has been deprecated, instead please use #pragma enable_debug_symbols at line 84"
+    }
+  ]
+}

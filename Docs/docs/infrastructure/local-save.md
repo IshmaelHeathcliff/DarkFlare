@@ -1,7 +1,7 @@
 # 本地存档与 Session 恢复
 
 > 状态：已实现本地存档闭环；`alpha 0.4.0` 增加数量及金币物品迁移
-> 最近更新：2026-09-15
+> 最近更新：2026-09-18
 
 ## 模块目标
 
@@ -25,6 +25,12 @@
 
 `ApplicationHost` 拥有 PathProvider、Serializer、Storage 和 Profile 级 Coordinator；每个 Running Session 只绑定一个 generation-bound Snapshot Source 与 Facade。Session 停止时先解绑这些入口，再释放场景与架构。
 
+## 双地图保存与兼容
+
+Schema 4 保存当前 `ActiveMapId / MapRevision / MapRandom` 和非活动 `FrozenMaps`；当前图使用原怪物、掉落、刷怪与状态字段。物品保持唯一总表，冻结图参与全局身份、分配器、归属和容量校验。core 5→6 追加正式地图；Schema 3→4 将历史 Main 映射到野外，保留原地图随机流和商人库存。恢复预检拒绝未知地图、修订冲突和无通行净空的位置，不改写源文件。
+
+保存捕获等待切图稳定，再取得状态时钟；切图等待既有状态捕获完成。写盘只使用已冻结 DTO，允许与后续模拟并行。返回前台先等既有保存结束，再提交退出检查点。FrontEnd 摘要预检与 Continue 共用协调器，继续请求等待摘要预检结束。完整冻结和所有权合同见[双地图模块](../maps/world-map-lifecycle.md)。
+
 ## 消耗品保存与兼容
 
 统一使用事务只保存已提交的物品余量、角色资源和状态快照，不持久化半完成请求，也不会在读取时重放即时回血 / 回蓝。来源物品用尽后，其临时状态仍独立保存恢复。core v4 → v5 是追加内容迁移，保持 Schema 3，旧商人库存原样恢复，不补发新增药水。独立 Player 的退出重启与真实历史文件验收见[alpha 0.4.2 综合验收](../assets/acceptance/alpha-0.4-item-use-acceptance/README.md)。
@@ -35,13 +41,13 @@ V1 文件格式固定为：
 
 - `formatId = "darkflare-save"`
 - `formatVersion = 1`
-- `saveSchemaVersion = 3`
+- `saveSchemaVersion = 4`
 - 最大文档 16 MiB，最大 JSON 深度 64
-- 最大物品 8192、存活怪物 512、世界掉落 4096
+- 最大物品 8192、每图存活怪物 1024 / 全档 2048、世界掉落 4096
 - Header 包含游戏版本、内容目录 ID / 版本、槽位、提交序号、UTC 创建 / 更新时间、Payload SHA-256 和显示摘要
 - Payload 分为 `ProfileSaveData` 与 `RunSaveData`，所有引用使用稳定 ContentId 或强类型实例 ID
 
-Serializer 使用项目已有 `Unity.Newtonsoft.Json`。写出前先把 Payload 转为按属性名 Ordinal 排序的规范 JSON，并把 Single 数值归一为 double 表示，再计算小写 SHA-256；这避免同一浮点值在 Single / Double 文本往返后产生伪校验失败。Header 不参与校验值。读取顺序为格式 / 槽位 / 提交序号检查、Payload 校验、Schema 兼容与逐级迁移、强类型验证。当前登记了历史 `0 → 1 → 2 → 3` 迁移，分别补充物品数量与空状态图；未来 Schema 会被安全拒绝。
+Serializer 使用项目已有 `Unity.Newtonsoft.Json`。写出前先把 Payload 转为按属性名 Ordinal 排序的规范 JSON，并把 Single 数值归一为 double 表示，再计算小写 SHA-256；这避免同一浮点值在 Single / Double 文本往返后产生伪校验失败。Header 不参与校验值。读取顺序为格式 / 槽位 / 提交序号检查、Payload 校验、Schema 兼容与逐级迁移、强类型验证。当前登记了历史 `0 → 1 → 2 → 3 → 4` 迁移，依次补充旧结构、物品数量、空状态图和双地图身份；未来 Schema 会被安全拒绝。
 
 禁止把 `UnityEngine.Object`、Asset GUID、Addressables 地址、资源路径、场景对象引用、显示文本或本地化 Key 写入存档身份。
 

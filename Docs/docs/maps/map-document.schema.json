@@ -5,7 +5,8 @@
     "formatVersion": {
       "type": "integer",
       "minimum": -2147483648,
-      "maximum": 2147483647
+      "maximum": 2147483647,
+      "const": 2
     },
     "mapId": {
       "type": "string",
@@ -182,17 +183,37 @@
                 "enum": [
                   "None",
                   "Trader",
-                  "Crafting"
+                  "Crafting",
+                  "Portal"
                 ]
               },
               "contentId": {
-                "type": "string",
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "maxLength": 256
+              },
+              "targetMapId": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "maxLength": 256
+              },
+              "targetEntryId": {
+                "type": [
+                  "string",
+                  "null"
+                ],
                 "maxLength": 256
               }
             },
             "required": [
               "kind",
-              "contentId"
+              "contentId",
+              "targetMapId",
+              "targetEntryId"
             ],
             "additionalProperties": false
           }
@@ -272,6 +293,49 @@
         ],
         "additionalProperties": false
       }
+    },
+    "entries": {
+      "type": "array",
+      "maxItems": 256,
+      "items": {
+        "type": "object",
+        "properties": {
+          "entryId": {
+            "type": "string",
+            "maxLength": 256
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "Arrival",
+              "NewGame",
+              "Respawn"
+            ]
+          },
+          "position": {
+            "type": "object",
+            "properties": {
+              "x": {
+                "type": "number"
+              },
+              "y": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "x",
+              "y"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "entryId",
+          "kind",
+          "position"
+        ],
+        "additionalProperties": false
+      }
     }
   },
   "required": [
@@ -289,8 +353,9 @@
     "chunks",
     "variantOverrides",
     "objects",
-    "regions"
+    "regions",
+    "entries"
   ],
   "additionalProperties": false,
-  "description": "DarkFlare 地图 V1 结构合同；须继续运行 MapDocumentCompiler 校验内容引用、坐标、地表与几何语义。"
+  "description": "DarkFlare 地图 V2 结构合同；V1 读取时纯数据升级。须继续运行 MapDocumentCompiler 校验内容引用、坐标、地表与几何语义。"
 }

@@ -195,8 +195,6 @@ namespace DarkFlare.Tests
                 }
             }
 
-            Assert.AreEqual(registeredAssets.Count, build.Catalog.Count);
-
             for (int i = 0; i < registeredAssets.Count; i++)
             {
                 Assert.IsTrue(

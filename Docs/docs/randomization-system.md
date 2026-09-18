@@ -129,3 +129,7 @@ MonsterSpawner
 落点避开玩家所有有效碰撞 / 交互范围，并在场景矩形边界内按确定性方向寻找；沿途实体阻挡则换候选，没有合法位置时拒绝丢弃。边界使用当前封闭 `EdgeCollider2D` 的包围范围，不能把边界线的 `OverlapPoint` 当成内部区域判断。
 
 拾取成功先清除拾取物中的实例、禁用并释放 Session 对象，再发布背包事件；重复碰撞和事件回调重入无法重复获得物品。保存继续保留世界 ID、物品 ID、种子和词缀，恢复后也不会因丢弃位置重叠而自动拾回。对应长期回归合并在 `SaveCaptureRestorePlayModeTests` 的完整快照恢复流程。
+
+## 地图随机流
+
+`SpawnPosition / MonsterInstance / MonsterAttack / Loot` 随地图冻结恢复，`PlayerAttack / Crafting` 留在 Session。首次访问通过固定哈希从运行根种子与 MapId 派生地图根，往返恢复序号，不重掷。历史 Schema 3→4 把旧通道原根及序号迁到野外，保留下一次结果。见[双地图存档](./maps/world-map-lifecycle.md)。

@@ -45,6 +45,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cf19e63e87cd184419559297cbef9531
+    m_Address: Assets/Prefabs/World/MapObjects/portal.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d8c086b75b2ed4b418f6e86924f57b7b
     m_Address: Assets/Prefabs/World/MapObjects/tent.prefab
     m_ReadOnly: 0

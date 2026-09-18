@@ -15,55 +15,64 @@ MonoBehaviour:
   _entries:
   - _definition: {fileID: 11400000, guid: a511c50a8b1f248498eb33ba86317213, type: 2}
     _appearances:
-    - _variantId:
+    - _variantId: 
       _prefab:
         m_AssetGUID: a28f3a785787d574481e2ac082f17f73
-        m_SubObjectName:
-        m_SubObjectType:
-        m_SubObjectGUID:
+        m_SubObjectName: 
+        m_SubObjectType: 
+        m_SubObjectGUID: 
         m_EditorAssetChanged: 0
   - _definition: {fileID: 11400000, guid: caf82fd4f5df199439ee479d33f90c80, type: 2}
     _appearances:
-    - _variantId:
+    - _variantId: 
       _prefab:
         m_AssetGUID: 4e5de6604528a5f4593139e3c7bfa7dc
-        m_SubObjectName:
-        m_SubObjectType:
-        m_SubObjectGUID:
+        m_SubObjectName: 
+        m_SubObjectType: 
+        m_SubObjectGUID: 
         m_EditorAssetChanged: 0
   - _definition: {fileID: 11400000, guid: 8d8966137187c464c8ce12b36e5c4b45, type: 2}
     _appearances:
-    - _variantId:
+    - _variantId: 
       _prefab:
         m_AssetGUID: d8c086b75b2ed4b418f6e86924f57b7b
-        m_SubObjectName:
-        m_SubObjectType:
-        m_SubObjectGUID:
+        m_SubObjectName: 
+        m_SubObjectType: 
+        m_SubObjectGUID: 
         m_EditorAssetChanged: 0
   - _definition: {fileID: 11400000, guid: cc3a4f71e8078aa4eb83babc8a7f3aa8, type: 2}
     _appearances:
-    - _variantId:
+    - _variantId: 
       _prefab:
         m_AssetGUID: 074db93d6a2a8a14f9d5fd0234b35543
-        m_SubObjectName:
-        m_SubObjectType:
-        m_SubObjectGUID:
+        m_SubObjectName: 
+        m_SubObjectType: 
+        m_SubObjectGUID: 
         m_EditorAssetChanged: 0
   - _definition: {fileID: 11400000, guid: 1186fa4986a900a439812114020e0f21, type: 2}
     _appearances:
-    - _variantId:
+    - _variantId: 
       _prefab:
         m_AssetGUID: 05a61a13b29e91d49a1e33cf87d80ce8
-        m_SubObjectName:
-        m_SubObjectType:
-        m_SubObjectGUID:
+        m_SubObjectName: 
+        m_SubObjectType: 
+        m_SubObjectGUID: 
         m_EditorAssetChanged: 0
   - _definition: {fileID: 11400000, guid: 93afea4ea3abde14e878a32be8ea63d3, type: 2}
     _appearances:
-    - _variantId:
+    - _variantId: 
       _prefab:
         m_AssetGUID: a667abb3d9de6ec4e90ef3c447d1c1a7
-        m_SubObjectName:
-        m_SubObjectType:
-        m_SubObjectGUID:
+        m_SubObjectName: 
+        m_SubObjectType: 
+        m_SubObjectGUID: 
+        m_EditorAssetChanged: 0
+  - _definition: {fileID: 11400000, guid: 925b3fa57c8e58940b91fbe074fd0dc7, type: 2}
+    _appearances:
+    - _variantId: 
+      _prefab:
+        m_AssetGUID: cf19e63e87cd184419559297cbef9531
+        m_SubObjectName: 
+        m_SubObjectType: 
+        m_SubObjectGUID: 
         m_EditorAssetChanged: 0

@@ -595,6 +595,11 @@ namespace DarkFlare
 
         SceneFlowRequest? CreateRetryRequest(SceneFlowResult result)
         {
+            SceneFlowRequest? active = _host.SceneFlow.ActiveRequest;
+            if (result.Operation == SceneFlowOperation.ChangeMap && active?.Operation == result.Operation)
+            {
+                return active;
+            }
             if (_lastRequest.HasValue
                 && _lastRequest.Value.Operation == result.Operation)
             {

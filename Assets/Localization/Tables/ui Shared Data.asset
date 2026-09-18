@@ -2007,6 +2007,18 @@ MonoBehaviour:
     m_Key: shop.feedback.refresh_failed
     m_Metadata:
       m_Items: []
+  - m_Id: 10852788740284416
+    m_Key: world.map_exit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10853539159990272
+    m_Key: world.trader
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10853539172573184
+    m_Key: world.crafting
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

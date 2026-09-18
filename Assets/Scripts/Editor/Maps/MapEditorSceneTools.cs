@@ -37,7 +37,7 @@ namespace DarkFlare.Editor
                 if (input.keyCode == KeyCode.Delete) { DeleteSelection(); input.Use(); return; }
                 if (!input.control && !input.command && !input.alt)
                 {
-                    string keys = "beirlfvqoz";
+                    string keys = "beirlfvqozp";
                     int key = keys.IndexOf(char.ToLowerInvariant((char)input.keyCode));
                     if (key >= 0) { CancelStroke(); _tool = (MapPaintTool)key; input.Use(); Repaint(); return; }
                 }
@@ -57,6 +57,12 @@ namespace DarkFlare.Editor
             {
                 if (_tool == MapPaintTool.Eyedropper) { _terrain = map.GetTerrain(cell.x, cell.y); input.Use(); Repaint(); return; }
                 if (_tool == MapPaintTool.Select) { SelectAt(world, input.shift); input.Use(); return; }
+                if (_tool == MapPaintTool.Entry)
+                {
+                    if (_lockEntries) { return; }
+                    _entryPosition = world - new Vector2((float)map.OriginX, (float)map.OriginY);
+                    UpsertEntry(); input.Use(); return;
+                }
                 if ((_tool <= MapPaintTool.Variant && _lockTerrain) || (_tool == MapPaintTool.Object && _lockObjects) || (_tool == MapPaintTool.Region && _lockRegions)) { return; }
                 _anchor = _last = cell; _strokeHash = map.SourceHash; _dragging = true; _strokeOverflow = false; _stroke.Clear();
                 AddBrush(cell, map); GUIUtility.hotControl = _control; input.Use();
@@ -133,7 +139,8 @@ namespace DarkFlare.Editor
 
         void SelectAt(Vector2 world, bool additive)
         {
-            if (!additive) { _selection.Clear(); _selectedRegion = null; }
+            if (!additive) { _selection.Clear(); _selectedRegion = null; _selectedEntry = null; }
+            if (SelectEntry(world)) { return; }
             if (_showObjects && !_lockObjects)
             {
                 MapObjectRecord found = _viewDocument.Objects.OrderBy(item => Vector2.Distance(world, ObjectWorld(item))).FirstOrDefault(item => HitObject(item, world));
@@ -141,7 +148,8 @@ namespace DarkFlare.Editor
                 {
                     _selection.Add(found.ObjectId); _objectId = found.ObjectId; _objectPosition = new Vector2((float)found.Position.X, (float)found.Position.Y);
                     _objectDefinition = _lookup.Resolve<MapObjectDefinition>(ContentId.Parse(found.DefinitionId)); _rotation = found.Rotation; _appearance = found.AppearanceVariant ?? "";
-                    _interaction = found.Interaction == null ? null : found.Interaction.Kind == MapInteractionKind.Trader ? (ScriptableObject)_lookup.Resolve<TraderDefinition>(ContentId.Parse(found.Interaction.ContentId)) : _lookup.Resolve<CraftingDefinition>(ContentId.Parse(found.Interaction.ContentId));
+                    _interaction = found.Interaction == null || found.Interaction.Kind == MapInteractionKind.Portal ? null : found.Interaction.Kind == MapInteractionKind.Trader ? (ScriptableObject)_lookup.Resolve<TraderDefinition>(ContentId.Parse(found.Interaction.ContentId)) : _lookup.Resolve<CraftingDefinition>(ContentId.Parse(found.Interaction.ContentId));
+                    _targetMapId = found.Interaction?.TargetMapId; _targetEntryId = found.Interaction?.TargetEntryId;
                     Repaint(); return;
                 }
             }
@@ -186,6 +194,7 @@ namespace DarkFlare.Editor
         void DrawOverlays(CompiledMapDocument map)
         {
             if (_viewDocument == null) { return; }
+            DrawEntries();
             Handles.color = new Color(1, 1, 1, 0.15f);
             if (_showGrid)
             {

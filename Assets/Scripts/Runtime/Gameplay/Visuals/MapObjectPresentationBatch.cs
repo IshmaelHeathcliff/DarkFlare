@@ -112,6 +112,15 @@ namespace DarkFlare
             return _disposeTask.Value;
         }
 
+        public void Deactivate()
+        {
+            if (_disposed || !IsActive) { return; }
+            foreach (WorldSortRegistration registration in _registrations) { registration.Dispose(); }
+            _registrations = Array.Empty<WorldSortRegistration>();
+            if (Root != null) { Root.SetActive(false); }
+            IsActive = false;
+        }
+
         async UniTask DisposeCoreAsync()
         {
             if (_disposed) { return; }

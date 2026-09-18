@@ -1,0 +1,573 @@
+{
+  "status": "completed",
+  "duration": 199.15,
+  "summary": {
+    "total": 80,
+    "passed": 66,
+    "failed": 14,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "results": [
+    {
+      "FullName": "DarkFlare.Tests.ActorAnimationPlayModeTests.MainScene_ActorEventsSwitchAttackHitDeathAndRevive",
+      "Status": "Passed",
+      "Duration": 4.0910574,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Alpha012DamageResolutionPlayModeTests.MainScene_EquipsStartingWeaponBeforeSpawnerAndSupportsUnequipRecovery",
+      "Status": "Passed",
+      "Duration": 0.8815821,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Alpha013CollisionSafetyPlayModeTests.DefaultLayerTrigger_StillReceivesPlayerAndMonsterActors",
+      "Status": "Passed",
+      "Duration": 0.567992,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Alpha013CollisionSafetyPlayModeTests.PlayerPassesThroughMonsterCrowd_ButWorldObstacleStillBlocksMovement",
+      "Status": "Passed",
+      "Duration": 4.7083387,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Alpha014ResourceSystemPlayModeTests.MainScene_CastsAtomicallyRegeneratesAndUpdatesManaHud",
+      "Status": "Passed",
+      "Duration": 0.9468185,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Alpha015MonsterAffixPlayModeTests.Controller_AppliesModifiersAndVisualTracksLifecycle",
+      "Status": "Passed",
+      "Duration": 0.5525369,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Alpha015MonsterAffixPlayModeTests.Visual_HidesEmptyInstancesAndCapsPresentationAtTwoLines",
+      "Status": "Passed",
+      "Duration": 0.0181508,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Alpha017BaselinePlayModeTests.ProjectileTryHit_ConsumesSnapshotAndResolvesExactlyOnce",
+      "Status": "Passed",
+      "Duration": 0.0255077,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Alpha017EffectRuntimePlayModeTests.Pool_IsPrewarmedBoundedReusableAndReleasedWithArchitecture",
+      "Status": "Passed",
+      "Duration": 0.3185454,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Alpha017EffectRuntimePlayModeTests.WorldAndAttachedEffectsReleaseSortingOnCancellationAndHostDisable",
+      "Status": "Passed",
+      "Duration": 0.3230307,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Alpha017WorldSortingPlayModeTests.Participants_RemainStableAcrossCrossingFlipDisableAndIdentityReuse",
+      "Status": "Passed",
+      "Duration": 0.0216155,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Alpha024SceneFlowPlayModeTests.Continue_RestoresCommittedRunWithoutNewGameGrant",
+      "Status": "Passed",
+      "Duration": 2.8761889,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Alpha024SceneFlowPlayModeTests.ThreeCycles_NewGamePauseAndReturnKeepTopologyUnique",
+      "Status": "Passed",
+      "Duration": 3.1412733,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Alpha025InputOwnershipPlayModeTests.AudioAccessibilityAndPlatformServicesUseApplicationLifetime",
+      "Status": "Passed",
+      "Duration": 0.6578802,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Alpha025InputOwnershipPlayModeTests.BootstrapAndThreeSessionsShareOneRuntimeActionAsset",
+      "Status": "Passed",
+      "Duration": 2.458139,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Alpha025InputOwnershipPlayModeTests.SettingsPageOpensFromFrontEndAndPausedMenuWithoutReleasingPause",
+      "Status": "Passed",
+      "Duration": 1.4714625,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Alpha025InputOwnershipPlayModeTests.ShellPanelReload_PreservesModalActionSettingsAndOwnership",
+      "Status": "Passed",
+      "Duration": 1.3463578,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Alpha027ApplicationDataIsolationPlayModeTests.ApplicationHost_UsesTemporaryIsolatedDataRoots",
+      "Status": "Passed",
+      "Duration": 0.5503579,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Alpha027IntegratedAcceptancePlayModeTests.FullPlayerPath_DeleteAndResetPersistAcrossHostRestart",
+      "Status": "Passed",
+      "Duration": 5.0161833,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Alpha027ShellUiMatrixPlayModeTests.FrontEndSettingsAndErrorModal_FitThreeLocalesAtStandardResolution",
+      "Status": "Passed",
+      "Duration": 0.4439969,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Alpha027ShellUiMatrixPlayModeTests.GameplayMenu_SettingsAndConfirmationOwnInputUntilDismissed",
+      "Status": "Passed",
+      "Duration": 1.7100214,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.ApplicationHostSceneTransitionPlayModeTests.ApplicationScopeTimeout_ShutdownReturnsFailureAndKeepsDiagnostics",
+      "Status": "Passed",
+      "Duration": 0.1434391,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.ApplicationHostSceneTransitionPlayModeTests.BootCancellation_DoesNotReclassifyCancelledLocalizationAsFailure",
+      "Status": "Passed",
+      "Duration": 0.5057277,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.ApplicationHostSceneTransitionPlayModeTests.ControlledStop_CleanupFailureAfterSessionClearsMarksApplicationFailed",
+      "Status": "Passed",
+      "Duration": 0.0534433,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.ApplicationHostSceneTransitionPlayModeTests.DirectCreateBindInitialize_NotifiesExactlyOncePerGeneration",
+      "Status": "Passed",
+      "Duration": 0.5565749,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.ApplicationHostSceneTransitionPlayModeTests.EmergencyShutdown_LateControlledStopCannotOverwriteShutdown",
+      "Status": "Passed",
+      "Duration": 0.0431947,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.ApplicationHostSceneTransitionPlayModeTests.HangingRollback_SettlesRequestsAndShutdownWithoutStartingLatestGeneration",
+      "Status": "Passed",
+      "Duration": 10.0433169,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.ApplicationHostSceneTransitionPlayModeTests.MainReloadDuringPreviousRollback_LatestInitializationEventuallyRuns",
+      "Status": "Passed",
+      "Duration": 1.1565757,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.ApplicationHostSceneTransitionPlayModeTests.MultipleComponentTimeouts_StopSessionOnceAndPreserveAbandonedLease",
+      "Status": "Passed",
+      "Duration": 0.1728045,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.ApplicationHostSceneTransitionPlayModeTests.ProfileScopeTimeout_ShutdownReturnsFailureAndKeepsDiagnostics",
+      "Status": "Passed",
+      "Duration": 0.1326717,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.ApplicationHostSceneTransitionPlayModeTests.ThreeRapidSceneRequests_OnlyLatestRequestReachesRunning",
+      "Status": "Passed",
+      "Duration": 0.0276,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.ApplicationLifecyclePlayModeTests.ConcurrentInitializationRequest_IsRejectedSynchronously",
+      "Status": "Passed",
+      "Duration": 0.0250397,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.ApplicationLifecyclePlayModeTests.ConcurrentStop_IsIdempotentAndClearsOnlyTheCapturedSession",
+      "Status": "Passed",
+      "Duration": 0.0165909,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.ApplicationLifecyclePlayModeTests.DestroyedSessionObject_UnregistersFromRegistry",
+      "Status": "Passed",
+      "Duration": 0.0176931,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.ApplicationLifecyclePlayModeTests.DirectMainReload_CoordinatesStopCreateBindAndInitialize",
+      "Status": "Passed",
+      "Duration": 2.1077495,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.ApplicationLifecyclePlayModeTests.ExternalInitializationCancellation_RollsBackAndNeverCommits",
+      "Status": "Passed",
+      "Duration": 0.5114107,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.ApplicationLifecyclePlayModeTests.InvalidNewGameConfiguration_RollsBackWithoutRuntimeObjects",
+      "Status": "Passed",
+      "Duration": 0.0157875,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.ApplicationLifecyclePlayModeTests.MainColdStart_HasUniqueHostArchitecturePlayerAndCommittedSpawner",
+      "Status": "Failed",
+      "Duration": 0.9477007,
+      "Message": "  刷怪器必须只在初始化事务提交后进入运行状态\r\n  Expected: True\r\n  But was:  False\r\n",
+      "StackTrace": "at DarkFlare.Tests.ApplicationLifecyclePlayModeTests+<MainColdStart_HasUniqueHostArchitecturePlayerAndCommittedSpawner>d__5.MoveNext () [0x00264] in C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Tests\\PlayMode\\ApplicationLifecyclePlayModeTests.cs:134\r\nat UnityEngine.TestTools.TestEnumerator+<Execute>d__8.MoveNext () [0x0003a] in .\\Library\\PackageCache\\com.unity.test-framework@7a3849e09bd0\\UnityEngine.TestRunner\\NUnitExtensions\\Attributes\\TestEnumerator.cs:52\r\n"
+    },
+    {
+      "FullName": "DarkFlare.Tests.ApplicationLifecyclePlayModeTests.PreCancelledInitializationRequest_ReturnsCallbackExactlyOnce",
+      "Status": "Passed",
+      "Duration": 0.5724105,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.ApplicationLifecyclePlayModeTests.RepeatedPlayInitialization_ReplacesIsolatedPathsWithoutRetainingOldInstallation",
+      "Status": "Passed",
+      "Duration": 0.4157885,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.ApplicationLifecyclePlayModeTests.ThreeSessionRestarts_DoNotDuplicateHostPlayerOrArchitecture",
+      "Status": "Passed",
+      "Duration": 3.9982811,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.ApplicationLifecyclePlayModeTests.UnloadingBoundMainScene_StopsSessionAndReleasesArchitecture",
+      "Status": "Failed",
+      "Duration": 1.4882276,
+      "Message": "Unhandled log message: '[Error] [infrastructure.lifecycle.message] [ApplicationHost] 生命周期任务失败: Application/controlled-session-stop:scene-unloaded:Main\nUnityEngine.MissingReferenceException: The object of type 'UnityEngine.GameObject' has been destroyed but you are still trying to access it.\nYour script should either check if it is null or you should not destroy the object.\r\n  at UnityEngine.Object+MarshalledUnityObject.TryThrowEditorNullExceptionObject (UnityEngine.Object unityObj, System.String parameterName) [0x00065] in <d5ea965f39d74501b56f4006ef80da34>:0 \r\n  at UnityEngine.Bindings.ThrowHelper.ThrowNullReferenceException (System.Object obj) [0x0000a] in <d5ea965f39d74501b56f4006ef80da34>:0 \r\n  at UnityEngine.GameObject.SetActive (System.Boolean value) [0x00006] in <d5ea965f39d74501b56f4006ef80da34>:0 \r\n  at DarkFlare.MapScope.Deactivate () [0x00011] in C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Runtime\\Maps\\MapScope.cs:128 \r\n  at DarkFlare.MapScope.DisposeCoreAsync () [0x00020] in C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Runtime\\Maps\\MapScope.cs:140 \r\n  at Cysharp.Threading.Tasks.UniTask+ExceptionResultSource.GetResult (System.Int16 token) [0x00015] in .\\Library\\PackageCache\\com.cysharp.unitask@dc216dc4183d\\Runtime\\UniTask.Factory.cs:326 \r\n  at Cysharp.Threading.Tasks.UniTask+MemoizeSource.GetResult (System.Int16 token) [0x00057] in .\\Library\\PackageCache\\com.cysharp.unitask@dc216dc4183d\\Runtime\\UniTask.cs:248 \r\n  at DarkFlare.WorldMapRuntime.DisposeAsync () [0x000a5] in C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Runtime\\Maps\\WorldMapRuntime.cs:269 \r\n  at Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask`1[TStateMachine].GetResult (System.Int16 token) [0x00000] in .\\Library\\PackageCache\\com.cysharp.unitask@dc216dc4183d\\Runtime\\CompilerServices\\StateMachineRunner.cs:218 \r\n  at DarkFlare.NewGameSessionInitializer.RollbackAsync (DarkFlare.SessionInitializationContext context, System.Threading.CancellationToken token) [0x00036] in C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Runtime\\Gameplay\\Bootstrap\\NewGameSessionInitializer.cs:113 \r\n  at DarkFlare.ApplicationHost.StopControlledSessionAsync (DarkFlare.GameSessionHost session) [0x000b3] in C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Runtime\\Infrastructure\\Lifecycle\\ApplicationHost.cs:1225 \r\n  at Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask`1[TStateMachine].GetResult (System.Int16 token) [0x00000] in .\\Library\\PackageCache\\com.cysharp.unitask@dc216dc4183d\\Runtime\\CompilerServices\\StateMachineRunner.cs:218 \r\n  at DarkFlare.LifecycleTaskGroup.ExecuteAsync (System.String operationName, System.Func`2[T,TResult] operation, System.Threading.CancellationToken externalToken, DarkFlare.LifecycleTaskFailurePolicy failurePolicy, DarkFlare.LifecycleTaskGroup+ActiveTask activeTask) [0x0007e] in C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Runtime\\Infrastructure\\Lifecycle\\LifecycleTaskGroup.cs:206 '. Use UnityEngine.TestTools.LogAssert.Expect",
+      "StackTrace": "DarkFlare.UnityConsoleLogSink:Write (DarkFlare.ApplicationLogEntry) (at Assets/Scripts/Runtime/Infrastructure/Diagnostics/ApplicationLogging.cs:297)\r\nDarkFlare.MinimumLevelLogSink:Write (DarkFlare.ApplicationLogEntry) (at Assets/Scripts/Runtime/Infrastructure/Diagnostics/ApplicationLogging.cs:262)\r\nDarkFlare.ApplicationLogger:WriteToSinks (DarkFlare.ApplicationLogEntry) (at Assets/Scripts/Runtime/Infrastructure/Diagnostics/ApplicationLogging.cs:442)\r\nDarkFlare.ApplicationLogger:Write (DarkFlare.ApplicationLogLevel,DarkFlare.LogEventId,string,System.Exception,UnityEngine.Object,DarkFlare.ApplicationLogContext) (at Assets/Scripts/Runtime/Infrastructure/Diagnostics/ApplicationLogging.cs:386)\r\nDarkFlare.ApplicationLog:Write (DarkFlare.ApplicationLogLevel,DarkFlare.LogEventId,object,System.Exception,UnityEngine.Object,DarkFlare.ApplicationLogContext) (at Assets/Scripts/Runtime/Infrastructure/Diagnostics/ApplicationLogging.cs:639)\r\nDarkFlare.ApplicationLog:Error (DarkFlare.LogEventId,object,UnityEngine.Object,DarkFlare.ApplicationLogContext) (at Assets/Scripts/Runtime/Infrastructure/Diagnostics/ApplicationLogging.cs:597)\r\nDarkFlare.ApplicationHost:OnLifecycleTaskFailure (DarkFlare.LifecycleTaskFailure) (at Assets/Scripts/Runtime/Infrastructure/Lifecycle/ApplicationHost.cs:1140)\r\nDarkFlare.LifecycleTaskGroup/<ExecuteAsync>d__24:MoveNext () (at Assets/Scripts/Runtime/Infrastructure/Lifecycle/LifecycleTaskGroup.cs:223)\r\nCysharp.Threading.Tasks.CompilerServices.AsyncUniTask`1<DarkFlare.LifecycleTaskGroup/<ExecuteAsync>d__24>:Run () (at ./Library/PackageCache/com.cysharp.unitask@dc216dc4183d/Runtime/CompilerServices/StateMachineRunner.cs:189)\r\nCysharp.Threading.Tasks.AwaiterActions:Continuation (object) (at ./Library/PackageCache/com.cysharp.unitask@dc216dc4183d/Runtime/UniTask.cs:25)\r\nCysharp.Threading.Tasks.UniTaskCompletionSourceCore`1<Cysharp.Threading.Tasks.AsyncUnit>:TrySetException (System.Exception) (at ./Library/PackageCache/com.cysharp.unitask@dc216dc4183d/Runtime/UniTaskCompletionSource.cs:167)\r\nCysharp.Threading.Tasks.CompilerServices.AsyncUniTask`1<DarkFlare.ApplicationHost/<StopControlledSessionAsync>d__167>:SetException (System.Exception) (at ./Library/PackageCache/com.cysharp.unitask@dc216dc4183d/Runtime/CompilerServices/StateMachineRunner.cs:210)\r\nDarkFlare.ApplicationHost/<StopControlledSessionAsync>d__167:MoveNext () (at Assets/Scripts/Runtime/Infrastructure/Lifecycle/ApplicationHost.cs:1225)\r\nCysharp.Threading.Tasks.CompilerServices.AsyncUniTask`1<DarkFlare.ApplicationHost/<StopControlledSessionAsync>d__167>:Run () (at ./Library/PackageCache/com.cysharp.unitask@dc216dc4183d/Runtime/CompilerServices/StateMachineRunner.cs:189)\r\nCysharp.Threading.Tasks.AwaiterActions:Continuation (object) (at ./Library/PackageCache/com.cysharp.unitask@dc216dc4183d/Runtime/UniTask.cs:25)\r\nCysharp.Threading.Tasks.UniTaskCompletionSourceCore`1<DarkFlare.LifecycleResult>:TrySetResult (DarkFlare.LifecycleResult) (at ./Library/PackageCache/com.cysharp.unitask@dc216dc4183d/Runtime/UniTaskCompletionSource.cs:139)\r\nCysharp.Threading.Tasks.CompilerServices.AsyncUniTask`2<DarkFlare.ApplicationHost/<StopCurrentSessionAsync>d__143, DarkFlare.LifecycleResult>:SetResult (DarkFlare.LifecycleResult) (at ./Library/PackageCache/com.cysharp.unitask@dc216dc4183d/Runtime/CompilerServices/StateMachineRunner.cs:328)\r\nDarkFlare.ApplicationHost/<StopCurrentSessionAsync>d__143:MoveNext () (at Assets/Scripts/Runtime/Infrastructure/Lifecycle/ApplicationHost.cs:734)\r\nCysharp.Threading.Tasks.CompilerServices.AsyncUniTask`2<DarkFlare.ApplicationHost/<StopCurrentSessionAsync>d__143, DarkFlare.LifecycleResult>:Run () (at ./Library/PackageCache/com.cysharp.unitask@dc216dc4183d/Runtime/CompilerServices/StateMachineRunner.cs:313)\r\nCysharp.Threading.Tasks.AwaiterActions:Continuation (object) (at ./Library/PackageCache/com.cysharp.unitask@dc216dc4183d/Runtime/UniTask.cs:25)\r\nCysharp.Threading.Tasks.UniTaskCompletionSource`1<DarkFlare.LifecycleResult>:TrySignalCompletion (Cysharp.Threading.Tasks.UniTaskStatus) (at ./Library/PackageCache/com.cysharp.unitask@dc216dc4183d/Runtime/UniTaskCompletionSource.cs:912)\r\nCysharp.Threading.Tasks.UniTaskCompletionSource`1<DarkFlare.LifecycleResult>:TrySetResult (DarkFlare.LifecycleResult) (at ./Library/PackageCache/com.cysharp.unitask@dc216dc4183d/Runtime/UniTaskCompletionSource.cs:797)\r\nDarkFlare.GameSessionHost/<CompleteStopAsync>d__51:MoveNext () (at Assets/Scripts/Runtime/Infrastructure/Lifecycle/GameSessionHost.cs:622)\r\nCysharp.Threading.Tasks.CompilerServices.AsyncUniTask`1<DarkFlare.GameSessionHost/<CompleteStopAsync>d__51>:Run () (at ./Library/PackageCache/com.cysharp.unitask@dc216dc4183d/Runtime/CompilerServices/StateMachineRunner.cs:189)\r\nCysharp.Threading.Tasks.AwaiterActions:Continuation (object) (at ./Library/PackageCache/com.cysharp.unitask@dc216dc4183d/Runtime/UniTask.cs:25)\r\nCysharp.Threading.Tasks.UniTaskCompletionSourceCore`1<DarkFlare.LifecycleResult>:TrySetResult (DarkFlare.LifecycleResult) (at ./Library/PackageCache/com.cysharp.unitask@dc216dc4183d/Runtime/UniTaskCompletionSource.cs:139)\r\nCysharp.Threading.Tasks.CompilerServices.AsyncUniTask`2<DarkFlare.GameSessionHost/<StopCoreAsync>d__48, DarkFlare.LifecycleResult>:SetResult (DarkFlare.LifecycleResult) (at ./Library/PackageCache/com.cysharp.unitask@dc216dc4183d/Runtime/CompilerServices/StateMachineRunner.cs:328)\r\nDarkFlare.GameSessionHost/<StopCoreAsync>d__48:MoveNext () (at Assets/Scripts/Runtime/Infrastructure/Lifecycle/GameSessionHost.cs:562)\r\nCysharp.Threading.Tasks.CompilerServices.AsyncUniTask`2<DarkFlare.GameSessionHost/<StopCoreAsync>d__48, DarkFlare.LifecycleResult>:Run () (at ./Library/PackageCache/com.cysharp.unitask@dc216dc4183d/Runtime/CompilerServices/StateMachineRunner.cs:313)\r\nCysharp.Threading.Tasks.AwaiterActions:Continuation (object) (at ./Library/PackageCache/com.cysharp.unitask@dc216dc4183d/Runtime/UniTask.cs:25)\r\nCysharp.Threading.Tasks.UniTaskCompletionSource:TrySignalCompletion (Cysharp.Threading.Tasks.UniTaskStatus) (at ./Library/PackageCache/com.cysharp.unitask@dc216dc4183d/Runtime/UniTaskCompletionSource.cs:721)\r\nCysharp.Threading.Tasks.UniTaskCompletionSource:TrySetResult () (at ./Library/PackageCache/com.cysharp.unitask@dc216dc4183d/Runtime/UniTaskCompletionSource.cs:612)\r\nDarkFlare.LifecycleScope/<CompleteStopAsync>d__33:MoveNext () (at Assets/Scripts/Runtime/Infrastructure/Lifecycle/LifecycleScope.cs:190)\r\nCysharp.Threading.Tasks.CompilerServices.AsyncUniTask`1<DarkFlare.LifecycleScope/<CompleteStopAsync>d__33>:Run () (at ./Library/PackageCache/com.cysharp.unitask@dc216dc4183d/Runtime/CompilerServices/StateMachineRunner.cs:189)\r\nCysharp.Threading.Tasks.AwaiterActions:Continuation (object) (at ./Library/PackageCache/com.cysharp.unitask@dc216dc4183d/Runtime/UniTask.cs:25)\r\nCysharp.Threading.Tasks.UniTaskCompletionSourceCore`1<Cysharp.Threading.Tasks.AsyncUnit>:TrySetResult (Cysharp.Threading.Tasks.AsyncUnit) (at ./Library/PackageCache/com.cysharp.unitask@dc216dc4183d/Runtime/UniTaskCompletionSource.cs:139)\r\nCysharp.Threading.Tasks.CompilerServices.AsyncUniTask`1<DarkFlare.LifecycleScope/<StopCoreAsync>d__32>:SetResult () (at ./Library/PackageCache/com.cysharp.unitask@dc216dc4183d/Runtime/CompilerServices/StateMachineRunner.cs:204)\r\nDarkFlare.LifecycleScope/<StopCoreAsync>d__32:MoveNext () (at Assets/Scripts/Runtime/Infrastructure/Lifecycle/LifecycleScope.cs:177)\r\nCysharp.Threading.Tasks.CompilerServices.AsyncUniTask`1<DarkFlare.LifecycleScope/<StopCoreAsync>d__32>:Run () (at ./Library/PackageCache/com.cysharp.unitask@dc216dc4183d/Runtime/CompilerServices/StateMachineRunner.cs:189)\r\nCysharp.Threading.Tasks.AwaiterActions:Continuation (object) (at ./Library/PackageCache/com.cysharp.unitask@dc216dc4183d/Runtime/UniTask.cs:25)\r\nCysharp.Threading.Tasks.UniTaskCompletionSource:TrySignalCompletion (Cysharp.Threading.Tasks.UniTaskStatus) (at ./Library/PackageCache/com.cysharp.unitask@dc216dc4183d/Runtime/UniTaskCompletionSource.cs:721)\r\nCysharp.Threading.Tasks.UniTaskCompletionSource:TrySetResult () (at ./Library/PackageCache/com.cysharp.unitask@dc216dc4183d/Runtime/UniTaskCompletionSource.cs:612)\r\nDarkFlare.LifecycleTaskGroup/<CompleteStopAsync>d__26:MoveNext () (at Assets/Scripts/Runtime/Infrastructure/Lifecycle/LifecycleTaskGroup.cs:350)\r\nCysharp.Threading.Tasks.CompilerServices.AsyncUniTask`1<DarkFlare.LifecycleTaskGroup/<CompleteStopAsync>d__26>:Run () (at ./Library/PackageCache/com.cysharp.unitask@dc216dc4183d/Runtime/CompilerServices/StateMachineRunner.cs:189)\r\nCysharp.Threading.Tasks.AwaiterActions:Continuation (object) (at ./Library/PackageCache/com.cysharp.unitask@dc216dc4183d/Runtime/UniTask.cs:25)\r\nCysharp.Threading.Tasks.UniTaskCompletionSourceCore`1<Cysharp.Threading.Tasks.AsyncUnit>:TrySetResult (Cysharp.Threading.Tasks.AsyncUnit) (at ./Library/PackageCache/com.cysharp.unitask@dc216dc4183d/Runtime/UniTaskCompletionSource.cs:139)\r\nCysharp.Threading.Tasks.CompilerServices.AsyncUniTask`1<DarkFlare.LifecycleTaskGroup/<StopCoreAsync>d__25>:SetResult () (at ./Library/PackageCache/com.cysharp.unitask@dc216dc4183d/Runtime/CompilerServices/StateMachineRunner.cs:204)\r\nDarkFlare.LifecycleTaskGroup/<StopCoreAsync>d__25:MoveNext () (at Assets/Scripts/Runtime/Infrastructure/Lifecycle/LifecycleTaskGroup.cs:338)\r\nCysharp.Threading.Tasks.CompilerServices.AsyncUniTask`1<DarkFlare.LifecycleTaskGroup/<StopCoreAsync>d__25>:Run () (at ./Library/PackageCache/com.cysharp.unitask@dc216dc4183d/Runtime/CompilerServices/StateMachineRunner.cs:189)\r\nCysharp.Threading.Tasks.AwaiterActions:Continuation (object) (at ./Library/PackageCache/com.cysharp.unitask@dc216dc4183d/Runtime/UniTask.cs:25)\r\nCysharp.Threading.Tasks.UniTaskCompletionSourceCore`1<bool>:TrySetResult (bool) (at ./Library/PackageCache/com.cysharp.unitask@dc216dc4183d/Runtime/UniTaskCompletionSource.cs:139)\r\nCysharp.Threading.Tasks.CompilerServices.AsyncUniTask`2<Cysharp.Threading.Tasks.UniTaskExtensions/<TimeoutWithoutException>d__46, bool>:SetResult (bool) (at ./Library/PackageCach\n... (truncated)"
+    },
+    {
+      "FullName": "DarkFlare.Tests.EquipmentPhase2PlayModeTests.InventorySlots_SupportKeyboardGamepadLayoutAndProjectileSnapshot",
+      "Status": "Passed",
+      "Duration": 3.4105034,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.MapGeometryPlayModeTests.PhysicalActor_StopsAtWaterAndBoundsAndRepeatedProjectionReleases",
+      "Status": "Passed",
+      "Duration": 0.1002874,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase0ExperiencePlayModeTests.MainScene_InventorySupportsKeyboardGamepadAndStandardResolution",
+      "Status": "Passed",
+      "Duration": 1.3561146,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase0ExperiencePlayModeTests.MainScene_PointerDragMovesInventoryItemAndEquipsIt",
+      "Status": "Passed",
+      "Duration": 1.5918791,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.Attributes_IndependentWindowsRefreshAndNavigateWithoutTakingItemOwnership",
+      "Status": "Failed",
+      "Duration": 2.3905946,
+      "Message": "  inventory-window 宽度无效\r\n  Expected: greater than 0.0f\r\n  But was:  0.0f\r\n",
+      "StackTrace": "at DarkFlare.Tests.Phase1UxPlayModeTests.AssertLayoutInsideRoot (UnityEngine.UIElements.VisualElement root, System.Collections.Generic.IReadOnlyList`1[T] names) [0x0016c] in C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Tests\\PlayMode\\Phase1UxPlayModeTests.cs:1886\r\nat DarkFlare.Tests.Phase1UxPlayModeTests+<Attributes_IndependentWindowsRefreshAndNavigateWithoutTakingItemOwnership>d__12.MoveNext () [0x009e2] in C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Tests\\PlayMode\\Phase1UxPlayModeTests.cs:534\r\nat UnityEngine.TestTools.TestEnumerator+<Execute>d__8.MoveNext () [0x0003a] in .\\Library\\PackageCache\\com.unity.test-framework@7a3849e09bd0\\UnityEngine.TestRunner\\NUnitExtensions\\Attributes\\TestEnumerator.cs:52\r\n"
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.Consumables_BuyMergeUseAndRestoreFocusThroughKeyboardAndGamepad",
+      "Status": "Passed",
+      "Duration": 1.6700374,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.Crafting_OnlyUsesItemsPlacedInTheInputSlot",
+      "Status": "Passed",
+      "Duration": 1.4495602,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.GamepadNavigation_MovesHeldGridItemsAndCrossesCraftingBoundary",
+      "Status": "Passed",
+      "Duration": 1.548028,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.Hud_CurrentResourcesMotionAndEntriesRespectInputOwnership",
+      "Status": "Passed",
+      "Duration": 1.7019041,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.IndependentWindows_TradeAndCraftWithoutInventoryAndRevokeInvalidTargets",
+      "Status": "Passed",
+      "Duration": 1.6769546,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.ItemActions_EquipmentMenuDiscardAndDeviceLossKeepOwnership",
+      "Status": "Failed",
+      "Duration": 1.6971952,
+      "Message": "  明确丢弃区未转移物品\r\n  Expected: False\r\n  But was:  True\r\n",
+      "StackTrace": "at DarkFlare.Tests.Phase1UxPlayModeTests+<ItemActions_EquipmentMenuDiscardAndDeviceLossKeepOwnership>d__13.MoveNext () [0x0067f] in C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Tests\\PlayMode\\Phase1UxPlayModeTests.cs:649\r\nat UnityEngine.TestTools.TestEnumerator+<Execute>d__8.MoveNext () [0x0003a] in .\\Library\\PackageCache\\com.unity.test-framework@7a3849e09bd0\\UnityEngine.TestRunner\\NUnitExtensions\\Attributes\\TestEnumerator.cs:52\r\n"
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.ItemActions_TradeByPointerAndGamepadAndReturnCraftingToExactCell",
+      "Status": "Passed",
+      "Duration": 2.251384,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.PanelReload_RebindsGameplayAndPreservesRendererDisabledContent",
+      "Status": "Passed",
+      "Duration": 1.6495033,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.Shop_RefreshSupportsKeyboardAndGamepadAndReopeningPreservesStock",
+      "Status": "Failed",
+      "Duration": 1.4133529,
+      "Message": "  Expected: False\r\n  But was:  True\r\n",
+      "StackTrace": "at DarkFlare.Tests.Phase1UxPlayModeTests+<Shop_RefreshSupportsKeyboardAndGamepadAndReopeningPreservesStock>d__6.MoveNext () [0x00235] in C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Tests\\PlayMode\\Phase1UxPlayModeTests.cs:76\r\nat UnityEngine.TestTools.TestEnumerator+<Execute>d__8.MoveNext () [0x0003a] in .\\Library\\PackageCache\\com.unity.test-framework@7a3849e09bd0\\UnityEngine.TestRunner\\NUnitExtensions\\Attributes\\TestEnumerator.cs:52\r\n"
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.ShopPurchase_UsesGridAndRestoresNeighborFocusFeedbackAndTooltip",
+      "Status": "Failed",
+      "Duration": 1.346733,
+      "Message": "  未生成可用于滚动验收的商店按钮\r\n  Expected: not null\r\n  But was:  null\r\n",
+      "StackTrace": "at DarkFlare.Tests.Phase1UxPlayModeTests+<ShopPurchase_UsesGridAndRestoresNeighborFocusFeedbackAndTooltip>d__17.MoveNext () [0x004ba] in C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Tests\\PlayMode\\Phase1UxPlayModeTests.cs:1039\r\nat UnityEngine.TestTools.TestEnumerator+<Execute>d__8.MoveNext () [0x0003a] in .\\Library\\PackageCache\\com.unity.test-framework@7a3849e09bd0\\UnityEngine.TestRunner\\NUnitExtensions\\Attributes\\TestEnumerator.cs:52\r\n"
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.StatusDetails_GamepadScrollBackAndDispelKeepFocusReachable",
+      "Status": "Passed",
+      "Duration": 1.563022,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.StatusVisibility_FiltersHudAndMenuWithoutRemovingGameplayLayers",
+      "Status": "Passed",
+      "Duration": 1.8971463,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase4ContentPlayModeTests.MainScene_OfficialEquipmentCompletesTradeCraftAndRegisteredSlotFlow",
+      "Status": "Passed",
+      "Duration": 3.0384103,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.RandomizationPhase3PlayModeTests.MainScene_DefaultRandomSeedChangesBetweenRuns",
+      "Status": "Passed",
+      "Duration": 2.3610007,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.RandomizationPhase3PlayModeTests.MainScene_SameFixedSeedReplaysMonsterHealthDamageAndLoot",
+      "Status": "Failed",
+      "Duration": 36.2500529,
+      "Message": "  Main 场景未在时限内生成足够的怪物样本\r\n  Expected: 12\r\n  But was:  0\r\n",
+      "StackTrace": "at DarkFlare.Tests.RandomizationPhase3PlayModeTests+<CaptureMainRun>d__11.MoveNext () [0x00294] in C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Tests\\PlayMode\\RandomizationPhase3PlayModeTests.cs:171\r\nat UnityEngine.TestTools.TestEnumerator+<Execute>d__8.MoveNext () [0x0003a] in .\\Library\\PackageCache\\com.unity.test-framework@7a3849e09bd0\\UnityEngine.TestRunner\\NUnitExtensions\\Attributes\\TestEnumerator.cs:52\r\n"
+    },
+    {
+      "FullName": "DarkFlare.Tests.SaveCaptureRestorePlayModeTests.DeadPlayer_RestoresWithoutStatusProjectionAndRebindsOnRevive",
+      "Status": "Passed",
+      "Duration": 4.3675531,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SaveCaptureRestorePlayModeTests.GameMenu_SaveActionsArePresentFocusableAndReflectSlotProbe",
+      "Status": "Passed",
+      "Duration": 1.2992044,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SaveCaptureRestorePlayModeTests.MainSession_CapturePrepareRestorePreservesStateWithoutNewGameGrant",
+      "Status": "Failed",
+      "Duration": 1.6440837,
+      "Message": "  Expected: True\r\n  But was:  False\r\n",
+      "StackTrace": "at DarkFlare.Tests.SaveCaptureRestorePlayModeTests+<MainSession_CapturePrepareRestorePreservesStateWithoutNewGameGrant>d__6.MoveNext () [0x0049b] in C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Tests\\PlayMode\\SaveCaptureRestorePlayModeTests.cs:123\r\nat UnityEngine.TestTools.TestEnumerator+<Execute>d__8.MoveNext () [0x0003a] in .\\Library\\PackageCache\\com.unity.test-framework@7a3849e09bd0\\UnityEngine.TestRunner\\NUnitExtensions\\Attributes\\TestEnumerator.cs:52\r\n"
+    },
+    {
+      "FullName": "DarkFlare.Tests.SaveCaptureRestorePlayModeTests.SessionFacade_SaveIsSessionScopedAndCrossSessionMethodsAreRemoved",
+      "Status": "Passed",
+      "Duration": 1.4906516,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SceneSessionComponentBindingPlayModeTests.BindingException_RollsBackWithoutReportingSuccess",
+      "Status": "Passed",
+      "Duration": 1.5027347,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SceneSessionComponentBindingPlayModeTests.MainToMain_PreplacedConsumersBindNewSessionExactlyOnce",
+      "Status": "Failed",
+      "Duration": 2.126783,
+      "Message": "  Expected: 1\r\n  But was:  0\r\n",
+      "StackTrace": "at DarkFlare.Tests.SceneSessionComponentBindingPlayModeTests.AssertPreplacedConsumersUse (IArchitecture architecture) [0x000fa] in C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Tests\\PlayMode\\SceneSessionComponentBindingPlayModeTests.cs:393\r\nat DarkFlare.Tests.SceneSessionComponentBindingPlayModeTests+<MainToMain_PreplacedConsumersBindNewSessionExactlyOnce>d__10.MoveNext () [0x00122] in C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Tests\\PlayMode\\SceneSessionComponentBindingPlayModeTests.cs:96\r\nat UnityEngine.TestTools.TestEnumerator+<Execute>d__8.MoveNext () [0x0003a] in .\\Library\\PackageCache\\com.unity.test-framework@7a3849e09bd0\\UnityEngine.TestRunner\\NUnitExtensions\\Attributes\\TestEnumerator.cs:52\r\n"
+    },
+    {
+      "FullName": "DarkFlare.Tests.SceneSessionComponentBindingPlayModeTests.NoProviderEmptySceneToMain_ConsumersWaitForRunningSessionAndBindExactlyOnce",
+      "Status": "Failed",
+      "Duration": 1.4113057,
+      "Message": "  Expected: 1\r\n  But was:  0\r\n",
+      "StackTrace": "at DarkFlare.Tests.SceneSessionComponentBindingPlayModeTests.AssertPreplacedConsumersUse (IArchitecture architecture) [0x000fa] in C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Tests\\PlayMode\\SceneSessionComponentBindingPlayModeTests.cs:393\r\nat DarkFlare.Tests.SceneSessionComponentBindingPlayModeTests+<NoProviderEmptySceneToMain_ConsumersWaitForRunningSessionAndBindExactlyOnce>d__11.MoveNext () [0x00278] in C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Tests\\PlayMode\\SceneSessionComponentBindingPlayModeTests.cs:138\r\nat UnityEngine.TestTools.TestEnumerator+<Execute>d__8.MoveNext () [0x0003a] in .\\Library\\PackageCache\\com.unity.test-framework@7a3849e09bd0\\UnityEngine.TestRunner\\NUnitExtensions\\Attributes\\TestEnumerator.cs:52\r\n"
+    },
+    {
+      "FullName": "DarkFlare.Tests.SceneSessionComponentBindingPlayModeTests.RetryResult_DoesNotExposeFalseBindingAndBindsExactlyOnceAfterLaterFrame",
+      "Status": "Passed",
+      "Duration": 1.3822065,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SceneSessionComponentBindingPlayModeTests.TaintedScene_DisableEnableDoesNotRebindOrScheduleRetry",
+      "Status": "Passed",
+      "Duration": 1.5311874,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SessionObjectRegistryOwnershipPlayModeTests.DelayedDestroy_UnregistersCapturedRegistryOnly",
+      "Status": "Passed",
+      "Duration": 0.0129657,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.StatusCombatPlayModeTests.ClockHold_DrainsBudgetAndCancellationReleasesPause",
+      "Status": "Passed",
+      "Duration": 1.0656097,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.StatusCombatPlayModeTests.ConfiguredActors_BlockMovementAndRebindAfterDisableAndDeath",
+      "Status": "Failed",
+      "Duration": 21.315748,
+      "Message": "  Expected: not null\r\n  But was:  null\r\n",
+      "StackTrace": "at DarkFlare.Tests.StatusCombatPlayModeTests+<ConfiguredActors_BlockMovementAndRebindAfterDisableAndDeath>d__5.MoveNext () [0x000ee] in C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Tests\\PlayMode\\StatusCombatPlayModeTests.cs:100\r\nat UnityEngine.TestTools.TestEnumerator+<Execute>d__8.MoveNext () [0x0003a] in .\\Library\\PackageCache\\com.unity.test-framework@7a3849e09bd0\\UnityEngine.TestRunner\\NUnitExtensions\\Attributes\\TestEnumerator.cs:52\r\n"
+    },
+    {
+      "FullName": "DarkFlare.Tests.StatusCombatPlayModeTests.SessionClock_AdvancesPausesAndCancelsWithSession",
+      "Status": "Passed",
+      "Duration": 2.3605356,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.TerrainPresentationPlayModeTests.PublishedTerrain_LoadsCompleteTilesAndReleasesBetweenOwners",
+      "Status": "Passed",
+      "Duration": 0.0268993,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.VisualExperiencePhase05PlayModeTests.LootRarityRing_RotatesAndUsesRuntimeRarityColor",
+      "Status": "Passed",
+      "Duration": 0.267323,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.VisualExperiencePhase05PlayModeTests.MainScene_UsesSharedBoundsAndKeepsCameraOnGround",
+      "Status": "Failed",
+      "Duration": 0.9725327,
+      "Message": "  相机与刷怪器未共用同一边界\r\n  Expected: same as <WorldBounds (UnityEngine.EdgeCollider2D)>\r\n  But was:  null\r\n",
+      "StackTrace": "at DarkFlare.Tests.VisualExperiencePhase05PlayModeTests+<MainScene_UsesSharedBoundsAndKeepsCameraOnGround>d__3.MoveNext () [0x00175] in C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Tests\\PlayMode\\VisualExperiencePhase05PlayModeTests.cs:52\r\nat UnityEngine.TestTools.TestEnumerator+<Execute>d__8.MoveNext () [0x0003a] in .\\Library\\PackageCache\\com.unity.test-framework@7a3849e09bd0\\UnityEngine.TestRunner\\NUnitExtensions\\Attributes\\TestEnumerator.cs:52\r\n"
+    },
+    {
+      "FullName": "DarkFlare.Tests.WorldMapPlayModeTests.FrozenMap_RoundTripsMonstersDropsRandomAndReleasesOwners",
+      "Status": "Failed",
+      "Duration": 28.6339161,
+      "Message": "  Expected: True\r\n  But was:  False\r\n",
+      "StackTrace": "at DarkFlare.Tests.SceneFlowPlayModeFixture+<EnterMain>d__3.MoveNext () [0x000bc] in C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Tests\\PlayMode\\SceneFlowPlayModeFixture.cs:84\r\nat UnityEngine.TestTools.TestEnumerator+<Execute>d__8.MoveNext () [0x0003a] in .\\Library\\PackageCache\\com.unity.test-framework@7a3849e09bd0\\UnityEngine.TestRunner\\NUnitExtensions\\Attributes\\TestEnumerator.cs:52\r\n"
+    },
+    {
+      "FullName": "DarkFlare.Tests.WorldMapPlayModeTests.MapSwitch_RollsBackEveryCommitBoundaryAndKeepsSessionPlayer",
+      "Status": "Failed",
+      "Duration": 0.820369,
+      "Message": "  Expected: InGame\r\n  But was:  Paused\r\n",
+      "StackTrace": "at DarkFlare.Tests.SceneFlowPlayModeFixture+<EnterMain>d__3.MoveNext () [0x000f2] in C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Tests\\PlayMode\\SceneFlowPlayModeFixture.cs:85\r\nat UnityEngine.TestTools.TestEnumerator+<Execute>d__8.MoveNext () [0x0003a] in .\\Library\\PackageCache\\com.unity.test-framework@7a3849e09bd0\\UnityEngine.TestRunner\\NUnitExtensions\\Attributes\\TestEnumerator.cs:52\r\n"
+    }
+  ]
+}

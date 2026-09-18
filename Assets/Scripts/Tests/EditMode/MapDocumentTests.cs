@@ -19,6 +19,25 @@ namespace DarkFlare.Tests
         public void TearDown() { _definitions.Dispose(); }
 
         [Test]
+        public void LegacyDocument_UpgradesWithoutChangingLayoutAndEntriesRoundTrip()
+        {
+            var raw = Newtonsoft.Json.Linq.JObject.Parse(MapDocumentJson.Write(_definitions.Document()));
+            raw["formatVersion"] = 1;
+            raw.Remove("entries");
+            MapDocument upgraded = MapDocumentJson.Read(raw.ToString());
+            Assert.AreEqual(2, upgraded.FormatVersion);
+            Assert.IsEmpty(upgraded.Entries);
+            upgraded.Entries = new[] { new MapEntryRecord { EntryId = "arrival", Position = new MapPoint { X = 2, Y = 3 } } };
+            MapDocument restored = Compile(upgraded).CreateEditableCopy();
+            Assert.AreEqual("arrival", restored.Entries[0].EntryId);
+            Assert.AreEqual(3, restored.Entries[0].Position.Y);
+            upgraded.Entries = new[] { restored.Entries[0], restored.Entries[0] };
+            Reject(upgraded, "$.entries");
+            upgraded.Entries = new[] { new MapEntryRecord { EntryId = "outside", Position = new MapPoint { X = -1 } } };
+            Reject(upgraded, "$.entries");
+        }
+
+        [Test]
         public void RoundTrip_PreservesCombinedObjectsRegionsAndDetachedSnapshot()
         {
             MapDocument source = _definitions.Document();
@@ -131,7 +150,7 @@ namespace DarkFlare.Tests
             MapDocument document = _definitions.Document();
             switch (mutation)
             {
-                case "version": document.FormatVersion = 2; break;
+                case "version": document.FormatVersion = 3; break;
                 case "revision": document.Revision = -1; break;
                 case "namespace": document.MapId = "item:test_map"; break;
                 case "missing": document.TerrainSetId = "terrain_set:missing"; break;

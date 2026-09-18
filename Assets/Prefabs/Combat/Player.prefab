@@ -46,7 +46,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &387292515771217056
 SpriteRenderer:
-  serializedVersion: 2
+  serializedVersion: 3
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -103,6 +103,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+  m_BlendShapeWeights: []
 --- !u!50 &1611017116423489912
 Rigidbody2D:
   serializedVersion: 5
@@ -294,6 +295,7 @@ MonoBehaviour:
   _sortAnchor: {fileID: 7438127821612102436}
   _sortingGroup: {fileID: 6378390395135502149}
   _requiresRuntimeIdentity: 1
+  _explicitRegistration: 0
 --- !u!1 &6114262601562674721
 GameObject:
   m_ObjectHideFlags: 0

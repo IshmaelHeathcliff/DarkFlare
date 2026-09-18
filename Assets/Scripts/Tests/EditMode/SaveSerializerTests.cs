@@ -23,6 +23,10 @@ namespace DarkFlare.Tests
             Assert.IsTrue(serialized.Succeeded, Describe(serialized));
             JObject current = JObject.Parse(Encoding.UTF8.GetString(serialized.Bytes));
             ((JObject)current["payload"]["run"]).Remove("statuses");
+            foreach (string field in new[] { "activeMapId", "mapRevision", "mapRandom", "frozenMaps" })
+            { ((JObject)current["payload"]["run"]).Remove(field); }
+            Assert.AreEqual("map:wilderness", result.Document.Payload.Run.ActiveMapId);
+            Assert.IsTrue(JToken.DeepEquals(JToken.FromObject(result.Document.Payload.Run.Random), JToken.FromObject(result.Document.Payload.Run.MapRandom)));
             Assert.IsTrue(JToken.DeepEquals(historical["payload"], current["payload"]), "迁移不能改变物品、资源、随机数和运行时数据");
         }
 

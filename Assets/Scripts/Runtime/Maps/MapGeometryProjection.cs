@@ -46,7 +46,7 @@ namespace DarkFlare
             catch { Dispose(); throw; }
         }
 
-        public async UniTask PopulateAsync(CancellationToken token = default)
+        public async UniTask PopulateAsync(CancellationToken token = default, bool activate = true)
         {
             if (_disposed) { throw new ObjectDisposedException(nameof(MapGeometryProjection)); }
             if (Root.GetComponents<PolygonCollider2D>().Length != 0) { throw new InvalidOperationException("投影只允许填充一次"); }
@@ -70,7 +70,8 @@ namespace DarkFlare
                     await UniTask.Yield(PlayerLoopTiming.Update, token);
                 }
                 token.ThrowIfCancellationRequested();
-                Root.SetActive(true);
+                // 候选可以在禁用状态下构建；只有提交者能够启用物理投影。
+                Root.SetActive(activate);
                 Collider.GenerateGeometry();
                 if (Collider.errorState != ColliderErrorState2D.None) { throw new InvalidOperationException("碰撞轮廓生成失败：" + Collider.errorState); }
                 token.ThrowIfCancellationRequested();

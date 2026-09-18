@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 
 namespace DarkFlare
 {
@@ -61,7 +62,10 @@ namespace DarkFlare
             }
 
             ValidateHeader(document.Header, "header", issues);
-            ValidatePayloadCore(document.Payload, "payload", issues);
+            int headerIssues = issues.Count;
+            ValidateMapStates(document.Payload, issues);
+            if (issues.Count != headerIssues) { return Result(issues); }
+            ValidatePayloadCore(MapStateData.Flatten(document.Payload), "payload", issues);
 
             if (document.Header != null && document.Payload != null)
             {
@@ -74,8 +78,46 @@ namespace DarkFlare
         public static SaveDataValidationResult ValidatePayload(SavePayloadDto payload)
         {
             List<SaveDataIssue> issues = new List<SaveDataIssue>();
-            ValidatePayloadCore(payload, "payload", issues);
+            ValidateMapStates(payload, issues);
+            if (issues.Count != 0) { return Result(issues); }
+            ValidatePayloadCore(MapStateData.Flatten(payload), "payload", issues);
             return Result(issues);
+        }
+
+        static void ValidateMapStates(SavePayloadDto payload, List<SaveDataIssue> issues)
+        {
+            RunSaveData run = payload?.Run;
+            if (run == null) { return; }
+            var ids = new HashSet<string>(StringComparer.Ordinal);
+            if (!ContentId.TryParse(run.ActiveMapId, out ContentId active) || active.Namespace != ContentNamespaces.Map
+                || run.MapRevision < 0 || run.FrozenMaps == null || run.FrozenMaps.Count > 64)
+            { Add(issues, SaveDataIssueCode.InvalidValue, "payload.run.maps", "地图身份、修订或容量非法"); return; }
+            ids.Add(run.ActiveMapId);
+            if (run.MapRandom != null || run.MapRevision != 0)
+            { ValidateRandom(run.MapRandom, "payload.run.mapRandom", issues); }
+            if (run.Monsters?.Count > LocalSaveFormat.MaximumMapMonsters)
+            { Add(issues, SaveDataIssueCode.LimitExceeded, "payload.run.monsters", "当前地图怪物超限"); }
+            int layers = run.Statuses?.Actors?.Sum(actor => actor?.Layers?.Count ?? 0) ?? 0;
+            foreach (MapStateDto map in run.FrozenMaps)
+            {
+                if (map == null || !ContentId.TryParse(map.MapId, out ContentId id) || id.Namespace != ContentNamespaces.Map
+                    || !ids.Add(map.MapId) || map.Revision < 0 || map.Monsters == null || map.WorldDrops == null
+                    || map.Monsters.Count > LocalSaveFormat.MaximumMapMonsters || map.Statuses?.Actors == null)
+                { Add(issues, SaveDataIssueCode.InvalidValue, "payload.run.maps", "冻结地图数据非法或重复"); continue; }
+                ValidateRandom(map.Random, "payload.run.maps.random", issues);
+                ValidateSpawner(map.Spawner, "payload.run.maps.spawner", issues);
+                if (map.Statuses.Time > (run.Statuses?.Time ?? 0)
+                    || map.Statuses.Actors.Any(actor => actor?.ActorKey?.StartsWith("player:", StringComparison.Ordinal) == true))
+                { Add(issues, SaveDataIssueCode.InvalidValue, "payload.run.maps.statuses", "冻结地图不能包含玩家状态或未来时钟"); }
+                var local = new SavePayloadDto { Profile = payload.Profile, Items = payload.Items,
+                    Run = new RunSaveData { Player = run.Player, Monsters = map.Monsters } };
+                var statusIssues = new List<DtoMapIssue>();
+                StatusSaveValidation.Validate(map.Statuses, local, null, statusIssues);
+                foreach (DtoMapIssue issue in statusIssues) { Add(issues, SaveDataIssueCode.InvalidValue, "payload.run.maps.statuses", issue.Message); }
+                layers += map.Statuses.Actors.Sum(actor => actor?.Layers?.Count ?? 0);
+            }
+            if (layers > StatusSaveValidation.MaximumLayers)
+            { Add(issues, SaveDataIssueCode.LimitExceeded, "payload.run.maps.statuses", "全图状态层超限"); }
         }
 
         static void ValidateHeader(
@@ -770,7 +812,8 @@ namespace DarkFlare
                 return;
             }
 
-            ValidateContentId(spawner.SpawnContentId, ContentNamespaces.Spawn, $"{path}.spawnContentId", issues);
+            if (!string.IsNullOrEmpty(spawner.SpawnContentId) || spawner.IsRunning)
+            { ValidateContentId(spawner.SpawnContentId, ContentNamespaces.Spawn, $"{path}.spawnContentId", issues); }
             ValidateNonNegativeFinite(spawner.NextSpawnRemainingSeconds, $"{path}.nextSpawnRemainingSeconds", issues);
         }
 

@@ -369,6 +369,22 @@ namespace DarkFlare
         }
     }
 
+    public sealed class WorldMapSaveMigration : IJsonMigrationStep
+    {
+        public string Id => "save_3_to_4_world_maps";
+        public MigrationDataDomain Domain => MigrationDataDomain.Save;
+        public int FromVersion => 3;
+        public int ToVersion => 4;
+        public void Apply(JObject document)
+        {
+            if (document["payload"]?["run"] is not JObject run) { throw new InvalidOperationException("缺少 Run 数据"); }
+            run["activeMapId"] = "map:wilderness";
+            run["mapRevision"] = 0;
+            run["frozenMaps"] = new JArray();
+            run["mapRandom"] = run["random"]?.DeepClone();
+        }
+    }
+
     public sealed class StatusSaveMigration : IJsonMigrationStep
     {
         public string Id => "save_2_to_3_statuses";

@@ -48,21 +48,15 @@ namespace DarkFlare.Tests
             Assert.IsNotNull(spawner, "Main 场景缺少 MonsterSpawner");
             Rigidbody2D body = player.GetComponent<Rigidbody2D>();
             Assert.AreEqual(RigidbodyInterpolation2D.Interpolate, body.interpolation);
-            Assert.IsNotNull(follow.WorldBounds, "相机未绑定 WorldBounds");
-            Assert.AreSame(follow.WorldBounds, spawner.WorldBounds, "相机与刷怪器未共用同一边界");
-
-            GameObject ground = GameObject.Find("GroundGrid");
-            GameObject boundsObject = GameObject.Find("WorldBounds");
-            Assert.IsNotNull(ground);
-            Assert.AreEqual(2, ground.transform.childCount);
-            Tilemap baseTilemap = ground.transform.Find("GroundBaseTilemap").GetComponent<Tilemap>();
-            Tilemap detailTilemap = ground.transform.Find("GroundDetailTilemap").GetComponent<Tilemap>();
-            Assert.AreEqual(25, CountTiles(baseTilemap));
-            Assert.AreEqual(11, CountTiles(detailTilemap));
-            Assert.IsNotNull(boundsObject);
-            Assert.AreEqual(follow.WorldBounds, boundsObject.GetComponent<EdgeCollider2D>());
-
-            Bounds groundBounds = GetRendererBounds(ground);
+            MapScope map = GameArchitectureProvider.RequireCurrent().GetUtility<WorldMapRuntime>().Active;
+            Assert.AreSame(map.Spawner, spawner);
+            Tilemap tiles = map.Root.GetComponentInChildren<Tilemap>();
+            Assert.IsNotNull(tiles);
+            Assert.Greater(CountTiles(tiles), map.Map.Width * map.Map.Height);
+            Assert.IsNotNull(map.Root.GetComponentInChildren<CompositeCollider2D>());
+            MapGeometryRect bounds = map.Geometry.Bounds;
+            Bounds groundBounds = new Bounds(new Vector3((float)((bounds.MinX + bounds.MaxX) / 2), (float)((bounds.MinY + bounds.MaxY) / 2)),
+                new Vector3((float)(bounds.MaxX - bounds.MinX), (float)(bounds.MaxY - bounds.MinY)));
             Camera camera = Camera.main;
             Vector3 clamped = follow.ClampToWorldBounds(new Vector3(100f, 100f, camera.transform.position.z));
             float halfHeight = camera.orthographicSize;
@@ -100,20 +94,6 @@ namespace DarkFlare.Tests
             Object.Destroy(root);
             Object.Destroy(definition);
             yield return null;
-        }
-
-        static Bounds GetRendererBounds(GameObject root)
-        {
-            Renderer[] renderers = root.GetComponentsInChildren<Renderer>();
-            Assert.IsNotEmpty(renderers);
-            Bounds bounds = renderers[0].bounds;
-
-            for (int i = 1; i < renderers.Length; i++)
-            {
-                bounds.Encapsulate(renderers[i].bounds);
-            }
-
-            return bounds;
         }
 
         static int CountTiles(Tilemap tilemap)

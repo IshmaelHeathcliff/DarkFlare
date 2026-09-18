@@ -45,3 +45,7 @@ HUD 隐藏开关仅在玩家拥有可隐藏状态时出现；状态窗口始终�
 自定义方向导航通过 `FocusController.IgnoreEvent` 配合 `StopPropagation` 阻止同次事件再次执行默认焦点移动；详情滚动保持当前焦点，兼容 Unity 6.6 事件接口。
 
 八个正式图标每图一个 96×96 PNG，Sprite Single、PPU64，来自统一暗色像素家族。通过 `DarkFlare-Session-Sprites` Addressables 组和 Session `SpriteAssetLoader` 预热；视图子作用域取消刷新，Session 结束统一释放资源。缺图保留可读名称；倒计时每 100ms 刷新，复用图标节点，不推进玩法时间。资产合同与可见验收见[阶段 4 证据](./assets/acceptance/alpha-0.4-status-lifecycle-ui/README.md)。
+
+## 地图离场冻结
+
+离场时只导出地图怪物的状态，解绑实体并销毁地图对象；不保留隐藏模拟。返回时把 AppliedAt / ExpiresAt / NextTickAt 一起平移到当前 Session 时钟，保持层身份、周期序号及来源证明，不重放首跳。玩家限时状态在其他活动地图继续计时，装备来源状态仍归 Session。见[双地图冻结合同](./maps/world-map-lifecycle.md)。

@@ -147,6 +147,11 @@
       "anchor": "traderstockentry"
     },
     {
+      "type": "DarkFlare.WorldMapConfiguration",
+      "document": "Docs/docs/config-reference/maps.md",
+      "anchor": "worldmapconfiguration"
+    },
+    {
       "type": "DarkFlare.CraftingDefinition",
       "document": "Docs/docs/config-reference/trade-and-crafting.md",
       "anchor": "craftingdefinition"

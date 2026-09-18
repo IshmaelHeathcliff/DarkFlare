@@ -22,6 +22,18 @@ namespace DarkFlare
 
         [SerializeField]
         CircleCollider2D _collider;
+        public MapInteractionBinding MapBinding { get; private set; }
+        public int MapGeneration { get; private set; }
+
+        public void ConfigureMap(MapInteractionBinding binding, int generation)
+        {
+            MapBinding = binding; MapGeneration = generation;
+            _menuPage = binding.Kind == MapInteractionKind.Portal ? GameMenuPage.Inventory
+                : binding.Kind == MapInteractionKind.Crafting ? GameMenuPage.Crafting : GameMenuPage.Shop;
+            _displayName = binding.Kind == MapInteractionKind.Portal ? "地图出口" : binding.Kind == MapInteractionKind.Crafting ? "打造台" : "商人";
+            _localizedName = new LocalizedContentReference("ui", binding.Kind == MapInteractionKind.Portal ? "world.map_exit" : binding.Kind == MapInteractionKind.Crafting ? "world.crafting" : "world.trader");
+            EnsureComponents();
+        }
 
         public string DisplayName => string.IsNullOrWhiteSpace(_displayName) ? GetDefaultDisplayName() : _displayName;
 
@@ -29,9 +41,10 @@ namespace DarkFlare
 
         public GameMenuPage MenuPage => _menuPage;
 
-        public GameMenuAccess AvailablePages => GameMenuAccess.Inventory | _menuPage.ToAccess();
+        public GameMenuAccess AvailablePages => MapBinding?.Kind == MapInteractionKind.Portal
+            ? GameMenuAccess.None : GameMenuAccess.Inventory | _menuPage.ToAccess();
 
-        public bool CanInteract => isActiveAndEnabled && _menuPage != GameMenuPage.Inventory;
+        public bool CanInteract => isActiveAndEnabled && (MapBinding?.Kind == MapInteractionKind.Portal || _menuPage != GameMenuPage.Inventory);
 
         public IArchitecture GetArchitecture()
         {

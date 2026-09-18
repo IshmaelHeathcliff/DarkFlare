@@ -111,7 +111,7 @@ namespace DarkFlare
             }
 
             GameObject instance = Object.Instantiate(prefab, position, Quaternion.identity);
-            this.GetUtility<SessionObjectRegistry>().Register(instance);
+            this.GetUtility<SessionObjectRegistry>().RegisterMapObject(instance);
             MonsterController controller = instance.GetComponent<MonsterController>();
 
             if (controller == null)
@@ -204,7 +204,7 @@ namespace DarkFlare
             }
 
             GameObject instance = Object.Instantiate(prefab, position, Quaternion.identity);
-            this.GetUtility<SessionObjectRegistry>().Register(instance);
+            this.GetUtility<SessionObjectRegistry>().RegisterMapObject(instance);
             MonsterController controller = instance.GetComponent<MonsterController>();
 
             if (controller == null)
@@ -279,7 +279,7 @@ namespace DarkFlare
             }
 
             GameObject instance = Object.Instantiate(prefab, position, Quaternion.identity);
-            this.GetUtility<SessionObjectRegistry>().Register(instance);
+            this.GetUtility<SessionObjectRegistry>().RegisterMapObject(instance);
             ProjectileController controller = instance.GetComponent<ProjectileController>();
 
             if (controller == null)

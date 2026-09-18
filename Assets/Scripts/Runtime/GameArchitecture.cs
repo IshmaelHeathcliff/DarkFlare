@@ -5,6 +5,7 @@ namespace DarkFlare
         protected override void Init()
         {
             this.RegisterUtility(new SessionObjectRegistry());
+            this.RegisterUtility(new WorldMapRuntime());
             this.RegisterSystem(new PlayerSkillStateRegistry());
             this.RegisterUtility<IItemInstanceIdGenerator>(new UuidItemInstanceIdGenerator());
             this.RegisterUtility<IRunInstanceIdGenerator>(RunInstanceIdGenerator.Create());

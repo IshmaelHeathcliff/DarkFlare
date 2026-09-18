@@ -368,8 +368,7 @@ namespace DarkFlare.Tests
             ShopPanelController shop = Object.FindAnyObjectByType<ShopPanelController>();
             CraftingPanelController crafting = Object.FindAnyObjectByType<CraftingPanelController>();
             InteractionPromptController prompt = Object.FindAnyObjectByType<InteractionPromptController>();
-            WorldInteractionVisual[] interactionVisuals = Object.FindObjectsByType<WorldInteractionVisual>(
-                FindObjectsInactive.Include);
+            WorldInteractionTarget[] interactions = Object.FindObjectsByType<WorldInteractionTarget>();
 
             Assert.IsNotNull(hud);
             Assert.IsNotNull(menu);
@@ -377,7 +376,7 @@ namespace DarkFlare.Tests
             Assert.IsNotNull(shop);
             Assert.IsNotNull(crafting);
             Assert.IsNotNull(prompt);
-            Assert.AreEqual(2, interactionVisuals.Length);
+            Assert.IsNotEmpty(interactions);
             Assert.AreEqual(1, hud.SessionBindCount);
             Assert.AreEqual(1, menu.SessionBindCount);
             Assert.AreEqual(1, prompt.SessionBindCount);
@@ -388,10 +387,11 @@ namespace DarkFlare.Tests
             Assert.AreSame(architecture, crafting.GetArchitecture());
             Assert.AreSame(architecture, prompt.GetArchitecture());
 
-            for (int i = 0; i < interactionVisuals.Length; i++)
+            foreach (WorldInteractionTarget interaction in interactions)
             {
-                Assert.AreEqual(1, interactionVisuals[i].SessionBindCount);
-                Assert.AreSame(architecture, interactionVisuals[i].GetArchitecture());
+                Assert.AreSame(architecture, interaction.GetArchitecture());
+                Assert.AreEqual(architecture.GetUtility<WorldMapRuntime>().Active.Generation, interaction.MapGeneration);
+                Assert.IsNotNull(interaction.MapBinding);
             }
         }
 

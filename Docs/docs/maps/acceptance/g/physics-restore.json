@@ -1,0 +1,20 @@
+{
+  "status": "completed",
+  "duration": 4.94,
+  "summary": {
+    "total": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "results": [
+    {
+      "FullName": "DarkFlare.Tests.WorldMapPlayModeTests.FormalInteractions_ReceivePhysicsFocusAndWallContactsCanRestore",
+      "Status": "Passed",
+      "Duration": 4.8577449,
+      "Message": null,
+      "StackTrace": null
+    }
+  ]
+}

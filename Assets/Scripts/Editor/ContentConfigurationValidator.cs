@@ -348,7 +348,6 @@ namespace DarkFlare.Editor
             }
 
             List<ScriptableObject> assets = LoadAssets<ScriptableObject>(PresetRoot);
-            int registeredCount = 0;
 
             for (int i = 0; i < assets.Count; i++)
             {
@@ -359,7 +358,6 @@ namespace DarkFlare.Editor
                     continue;
                 }
 
-                registeredCount++;
 
                 if (!result.Catalog.Contains(asset))
                 {
@@ -370,12 +368,19 @@ namespace DarkFlare.Editor
                 }
             }
 
-            if (result.Catalog.Count != registeredCount)
+            // 地图正式源位于 Data/Maps，不能以 Preset 文件夹数量代替目录完整性。
+            if (result.Catalog.GetAll<MapDefinition>().Any())
             {
-                AddError(
-                    issues,
-                    definition,
-                    $"内容目录条目数量应为 {registeredCount}，当前为 {result.Catalog.Count}");
+                try
+                {
+                    WorldMapCatalog maps = WorldMapCatalog.FromContent(result.Catalog);
+                    foreach (WorldMapConfiguration configuration in LoadAssets<WorldMapConfiguration>("Assets/Data/Maps"))
+                    {
+                        configuration.Validate();
+                        maps.GetEntry("map:" + configuration.StartingMap.Id, configuration.StartingEntryId);
+                    }
+                }
+                catch (Exception error) { AddError(issues, definition, error.Message); }
             }
         }
 

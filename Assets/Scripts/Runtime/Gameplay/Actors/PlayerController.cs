@@ -341,7 +341,8 @@ namespace DarkFlare
                 System.TimeSpan.FromSeconds(delaySeconds),
                 cancellationToken: token);
             token.ThrowIfCancellationRequested();
-            this.SendCommand(new ReviveActorCommand(_actor, _spawnPosition));
+            WorldMapRuntime maps = this.GetUtility<WorldMapRuntime>();
+            this.SendCommand(new ReviveActorCommand(_actor, maps.IsConfigured ? maps.RespawnPosition : _spawnPosition));
         }
     }
 }

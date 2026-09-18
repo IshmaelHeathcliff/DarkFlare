@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 namespace DarkFlare
 {
     [DisallowMultipleComponent]
-    public sealed class ApplicationHost : MonoBehaviour, ISceneFlowApplication
+    public sealed class ApplicationHost : MonoBehaviour, ISceneFlowApplication, IMapFlowApplication
     {
         const string DefaultProfileId = "local-default";
         const string StopTimeoutOperationName = "stop-timeout";
@@ -219,12 +219,18 @@ namespace DarkFlare
                     new InvalidOperationException("Save Coordinator 尚未就绪"));
             }
 
+            // FrontEnd 的存档摘要预检可能尚未结束；继续请求等待同一协调器，避免把正常并发显示为损坏存档。
+            while (_saveCoordinator.IsBusy)
+            {
+                await UniTask.Yield(PlayerLoopTiming.Update, cancellationToken);
+            }
             PrepareContinueResult result = await _saveCoordinator.PrepareContinueAsync(
                 SaveCoordinator.AutoSlot,
                 cancellationToken);
             return result.Succeeded
                 ? SceneFlowContinuePreparation.Success(result.PreparedRestore)
-                : SceneFlowContinuePreparation.Failure(result.OperationResult.Exception);
+                : SceneFlowContinuePreparation.Failure(result.OperationResult.Exception
+                    ?? new InvalidOperationException("继续游戏预检失败：" + result.OperationResult.ErrorCode));
         }
 
         public UniTask<SaveOperationResult> DeleteAutoSaveAsync(
@@ -251,6 +257,28 @@ namespace DarkFlare
             return _saveCoordinator.DeleteSlotAsync(
                 SaveCoordinator.AutoSlot,
                 cancellationToken);
+        }
+
+        public async UniTask ChangeMapAsync(string mapId, string entryId, CancellationToken token)
+        {
+            GameSessionHost session = _session;
+            if (session == null || session.State != GameSessionState.Running || !session.IsCurrentArchitectureLease)
+            { throw new InvalidOperationException("Session 当前不可切图"); }
+            using (GameTime.AcquirePause("map-transition"))
+            {
+                await session.Architecture.GetUtility<WorldMapRuntime>().ChangeAsync(mapId, entryId, token);
+            }
+            _saveCoordinator.MarkDirty();
+            // 切图成功后的保存失败保持当前 Session；既有保存 UI 仍可重试。
+            session.SessionScope.Tasks.Run("save-map-transition", async cancellation =>
+            {
+                SaveOperationResult result = await _saveCoordinator.SaveAsync(SaveCoordinator.AutoSlot, cancellation);
+                if (!result.Succeeded)
+                {
+                    ApplicationLog.Warning(LogEventIds.InfrastructureLifecycle, "切图已完成，自动保存未成功：" + result.ErrorCode);
+                    _applicationShellController?.ShowToast(PlayerErrorCatalog.From(result).Message);
+                }
+            });
         }
 
         public IGameSessionInitializer CreateSessionInitializer(
@@ -298,6 +326,11 @@ namespace DarkFlare
             CancellationToken cancellationToken)
         {
             SessionSaveFacade facade = _sessionSaveFacade;
+
+            while (facade != null && facade.IsBusy)
+            {
+                await UniTask.Yield(PlayerLoopTiming.Update, cancellationToken);
+            }
 
             if (facade == null || !facade.IsAvailable)
             {
@@ -1821,7 +1854,8 @@ namespace DarkFlare
                 return;
             }
 
-            MonsterSpawner spawner = FindSceneComponent<MonsterSpawner>(session.BoundScene);
+            MonsterSpawner spawner = session.Architecture.GetUtility<WorldMapRuntime>().Active?.Spawner
+                ?? FindSceneComponent<MonsterSpawner>(session.BoundScene);
             CombatPrototypeBootstrap bootstrap = FindSceneComponent<CombatPrototypeBootstrap>(
                 session.BoundScene);
 

@@ -1,6 +1,6 @@
 # Alpha 0.5：地图创建、地图数据与动态寻路
 
-状态：2026-09-18，A–F 已完成并归档。当前实现见[地图模块](../maps/README.md)、[编辑器](../maps/map-editor.md)、[对象表现](../maps/object-presentation.md)和[世界渲染](../world-rendering.md)。EditMode 707/707、PlayMode 78/78；运行版本 `0.5.2-alpha`，core v5、Schema 3。下一阶段 0.5.3 城镇与野外；Main 尚未迁移为双地图。
+状态：2026-09-18，A–G 已完成并归档。当前实现见[地图模块](../maps/README.md)与[双地图生命周期](../maps/world-map-lifecycle.md)。版本 `0.5.3-alpha`、core v6、Schema 4、地图文档 V2；EditMode 713/713、PlayMode 83/83，独立 Player 通过。下一阶段 0.5.4 批量导航，见[导航方案](./alpha-0.5/navigation.md)。
 
 ## 目标与已确认范围
 
@@ -25,6 +25,7 @@
 | [编辑器与 AI 编辑](./alpha-0.5/map-editor.md) | 手绘、撤销、导入导出、JSON Schema、批量命令与预检 |
 | [0.5.1 地图编辑器执行计划](./archive/alpha-0.5.1-map-editor-plan.md) | E1–E5 已完成：共享事务、手绘、对象区域、AI 与验收，已归档 |
 | [0.5.2 世界层级执行计划](./archive/alpha-0.5.2-world-sorting-plan.md) | F1–F5 已完成并归档：注册所有权、地图对象表现与分段、实体特效遮挡、编辑器接入及压力验收 |
+| [0.5.3 城镇与野外执行计划](./archive/alpha-0.5.3-world-maps-plan.md) | G1–G7 已完成：入口与兼容、地图作用域、冻结恢复、切图事务、分地图存档、正式地图与验收 |
 | [世界排序、双地图与保存恢复](./alpha-0.5/world-maps-lifecycle.md) | 场景容器、Y 排序、地图切换事务、离场冻结、旧档迁移 |
 | [批量动态寻路与性能验收](./alpha-0.5/navigation.md) | 网格、Flow Field / A* 策略、空间索引、分离、Job 所有权和预算 |
 | [0.5.0 首阶段执行计划](archive/alpha-0.5.0-map-foundation-plan.md) | 已完成 A–D 的数据 / 地表 / 几何闭环与完成记录 |
@@ -34,12 +35,12 @@
 
 ## 已核对的实现与差距
 
-路径相对 `Assets/Scripts/`。此表是本轮定向阅读结论，不代表全仓代码审计或新测试结果。
+路径相对 `Assets/Scripts/`。此表保留 Alpha 0.5 启动时的差距与处理方向；A–G 当前实现以模块文档为准。
 
 | 现有实现 | 本版处理 |
 | --- | --- |
 | `Editor/GroundTilemapSetup.cs`、[地表模块](../ground-tilemap.md)：5×5、8 单位大地砖，只承担视觉 | 替换为数据编译出的 Dual Grid 地表，新增四材质及导航语义；旧资源待消费者迁完再清理 |
-| `Runtime/Gameplay/Visuals/WorldSortingSystem.cs` 已有接地点 Y、类别、稳定 ID 排序 | 扩展覆盖地图对象和实体特效，保留稳定规则，评估大量动态对象排序开销 |
+| `Runtime/Gameplay/Visuals/WorldSortingSystem.cs` 已完成地图对象 / 实体特效覆盖和 500 / 1000 动态排序验证 | 0.5.3 复用注册所有权和候选批次，验证真实切图时注册与资源收敛 |
 | `Runtime/Gameplay/Actors/MonsterController.cs` 每只 FixedUpdate 直线追逐并遍历全部怪物分离 | 集中采样与 Job 计算，替换全量邻居遍历，行为命令仍走现有战斗系统 |
 | `Runtime/Gameplay/Spawning/MonsterSpawner.cs`、`Bootstrap/CameraFollowTarget.cs` 只看矩形 Bounds | 出生采样改用区域 + 导航净空，镜头使用地图范围，障碍几何来自同一地图源 |
 | `GameplaySceneConfiguration` 强制同时存在刷怪器、商人和打造配置 | 拆出地图能力配置，使城镇可不刷怪、野外可没有商人和打造台 |
@@ -56,7 +57,7 @@
 | **0.5.0 地图基础（完成）** | 地图 DTO / Schema / 导入资产、四地表、Dual Grid / Wang 解析、稳定变体、碰撞与导航静态派生 | 四角组合可覆盖，边 / 角无裂缝，数据往返一致，语义与派生可重建；先技术样例，再正式地表样例 |
 | **0.5.1 地图编辑器（完成）** | Odin 工作台 + SceneView 绘制、五类数据编辑、撤销、导入导出、AI 原子批量接口 | 人工与 AI 对同一操作得到相同结果；冲突 / 非法输入完整拒绝；编辑可视化一致 |
 | **0.5.2 世界层级（完成）** | 新对象注册、接地点、长障碍分段、实体特效遮挡、光照层覆盖 | 角色从树 / 建筑 / 怪物前后通过正确遮挡，同 Y 稳定，表现批次反复激活 / 释放无旧注册残留；实际切图由 0.5.3 验收 |
-| **0.5.3 城镇与野外** | 两份正式地图、地图作用域、往返入口、出生 / 刷怪区域、分地图存档与迁移 | 交易 / 打造 / 野外战斗闭环；离场暂停、回图恢复、跨进程一致，失败切图不丢数据 |
+| **0.5.3 城镇与野外（完成）** | 两份正式地图、地图作用域、往返入口、出生 / 刷怪区域、分地图存档与迁移 | 交易 / 打造 / 野外战斗闭环；离场暂停、回图恢复、跨进程一致，失败切图不丢数据 |
 | **0.5.4 批量导航** | Grid + Flow Field / A* + Spatial Hash + Separation、Job / Burst、集中怪物移动 | 特殊单位独立路径、策略切换、绕障、动态目标 / 阻挡、安全停止、状态门禁；500 常规与 1000 压力混合策略数据达到记录的预算 |
 | **0.5.5 综合交付** | 双地图全流程、正式美术 / 编辑路径、Player 与历史存档、性能记录、模块文档 | 最新 Windows Player 覆盖全范围；回归通过、资源和原生内存收敛、计划归档 |
 
@@ -76,4 +77,4 @@
 
 优先扩展现有地表、排序、Scene Flow、Session / 存档、交易、战斗与输入测试。新地图 / 导航纯规则按模块建套件，不按版本复制套件。测试遵守[维护规范](../testing/test-maintenance.md)，使用隔离用户目录。
 
-最新 F 验证为 EditMode 707/707、PlayMode 78/78，Windows Player、画面与排序性能见 [F 验收](../maps/acceptance/f/README.md)。起始基线见[启动记录](./archive/alpha-0.5-startup.md)。完成模块后维护当前说明，再归档对应执行计划。
+最新 G 验证为 EditMode 713/713、PlayMode 83/83，Windows Player、容量与测量边界见 [G 验收](../maps/acceptance/g/README.md)。起始基线见[启动记录](./archive/alpha-0.5-startup.md)。每阶段完成后维护模块说明并归档执行计划。

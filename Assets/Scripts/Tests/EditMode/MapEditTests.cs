@@ -52,6 +52,21 @@ namespace DarkFlare.Tests
         }
 
         [Test]
+        public void EntryPatch_PreviewUndoRedoAndRemoveShareTheAtomicDocument()
+        {
+            var operation = new JObject { ["type"] = "UpsertEntry", ["record"] = new JObject
+            { ["entryId"] = "arrival", ["kind"] = "Arrival", ["position"] = new JObject { ["x"] = 1, ["y"] = 2 } } };
+            JObject patch = MapEditService.Patch(_session.Current, operation);
+            Assert.AreEqual("arrival", _session.Preview(patch).CreateEditableCopy().Entries.Single().EntryId);
+            Assert.IsEmpty(_session.Current.CreateEditableCopy().Entries);
+            _session.Apply(patch);
+            Undo.PerformUndo(); Assert.IsEmpty(_session.Current.CreateEditableCopy().Entries);
+            Undo.PerformRedo(); Assert.AreEqual(2, _session.Current.CreateEditableCopy().Entries.Single().Position.Y);
+            _session.Apply(MapEditService.Patch(_session.Current, new JObject { ["type"] = "RemoveEntry", ["id"] = "arrival" }));
+            Assert.IsEmpty(_session.Current.CreateEditableCopy().Entries);
+        }
+
+        [Test]
         public void AtomicBatchRejectsLateFailureAndCancellation()
         {
             string before = _session.Current.SourceHash;

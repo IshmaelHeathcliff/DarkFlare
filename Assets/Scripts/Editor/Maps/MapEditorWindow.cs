@@ -18,7 +18,7 @@ namespace DarkFlare.Editor
         [LabelText("画笔 B")] Brush, [LabelText("擦除 E")] Erase, [LabelText("吸管 I")] Eyedropper,
         [LabelText("矩形 R")] Rectangle, [LabelText("直线 L")] Line, [LabelText("洪水填充 F")] Flood,
         [LabelText("显示格变体 V")] Variant, [LabelText("选择 / 移动 Q")] Select,
-        [LabelText("放置对象 O")] Object, [LabelText("矩形区域 Z")] Region
+        [LabelText("放置对象 O")] Object, [LabelText("矩形区域 Z")] Region, [LabelText("放置入口 P")] Entry
     }
 
     public sealed partial class MapEditorWindow : OdinEditorWindow
@@ -52,6 +52,8 @@ namespace DarkFlare.Editor
         [SerializeField, TabGroup("对象与区域"), LabelText("旋转角度"), ValueDropdown(nameof(Rotations))] int _rotation;
         [SerializeField, TabGroup("对象与区域"), LabelText("外观变体"), ValueDropdown(nameof(AppearanceChoices))] string _appearance = "";
         [SerializeField, TabGroup("对象与区域"), LabelText("交互定义"), AssetsOnly] ScriptableObject _interaction;
+        [SerializeField, TabGroup("对象与区域"), LabelText("出口目标地图 ID")] string _targetMapId;
+        [SerializeField, TabGroup("对象与区域"), LabelText("出口目标入口 ID")] string _targetEntryId;
         [SerializeField, TabGroup("对象与区域"), LabelText("区域定义"), AssetsOnly] MapRegionDefinition _regionDefinition;
         [SerializeField, TabGroup("对象与区域"), LabelText("区域 ID")] string _regionId = "region";
         [SerializeField, TabGroup("对象与区域"), LabelText("区域优先级")] int _priority;
@@ -270,7 +272,12 @@ namespace DarkFlare.Editor
                 ["objectId"] = id, ["definitionId"] = "map_object:" + _objectDefinition.Id,
                 ["position"] = new JObject { ["x"] = position.x, ["y"] = position.y }, ["rotation"] = _rotation,
                 ["appearanceVariant"] = string.IsNullOrEmpty(_appearance) ? null : _appearance,
-                ["interaction"] = kind == MapInteractionKind.None ? null : new JObject { ["kind"] = kind.ToString(), ["contentId"] = content }
+                ["interaction"] = kind == MapInteractionKind.None ? null : new JObject
+                {
+                    ["kind"] = kind.ToString(), ["contentId"] = kind == MapInteractionKind.Portal ? null : content,
+                    ["targetMapId"] = kind == MapInteractionKind.Portal ? _targetMapId : null,
+                    ["targetEntryId"] = kind == MapInteractionKind.Portal ? _targetEntryId : null
+                }
             } };
         }
 

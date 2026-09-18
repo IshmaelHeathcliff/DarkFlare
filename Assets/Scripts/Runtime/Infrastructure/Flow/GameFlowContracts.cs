@@ -18,7 +18,8 @@ namespace DarkFlare
         None,
         EnterFrontEnd,
         StartGame,
-        ReturnToFrontEnd
+        ReturnToFrontEnd,
+        ChangeMap
     }
 
     public enum GameStartIntent
@@ -196,11 +197,15 @@ namespace DarkFlare
         SceneFlowRequest(
             SceneFlowOperation operation,
             GameStartIntent startIntent,
-            SceneId targetScene)
+            SceneId targetScene,
+            string mapId = null,
+            string entryId = null)
         {
             Operation = operation;
             StartIntent = startIntent;
             TargetScene = targetScene;
+            MapId = mapId;
+            EntryId = entryId;
         }
 
         public SceneFlowOperation Operation { get; }
@@ -208,6 +213,8 @@ namespace DarkFlare
         public GameStartIntent StartIntent { get; }
 
         public SceneId TargetScene { get; }
+        public string MapId { get; }
+        public string EntryId { get; }
 
         public bool IsValid
         {
@@ -215,6 +222,9 @@ namespace DarkFlare
             {
                 switch (Operation)
                 {
+                    case SceneFlowOperation.ChangeMap:
+                        return TargetScene == SceneId.Main && StartIntent == GameStartIntent.None
+                            && ContentId.TryParse(MapId, out ContentId id) && id.Namespace == ContentNamespaces.Map && ContentId.IsValidSegment(EntryId);
                     case SceneFlowOperation.EnterFrontEnd:
                     case SceneFlowOperation.ReturnToFrontEnd:
                         return StartIntent == GameStartIntent.None
@@ -227,6 +237,13 @@ namespace DarkFlare
                         return false;
                 }
             }
+        }
+
+        public static SceneFlowRequest ChangeMap(string mapId, string entryId)
+        {
+            var request = new SceneFlowRequest(SceneFlowOperation.ChangeMap, GameStartIntent.None, SceneId.Main, mapId, entryId);
+            if (!request.IsValid) { throw new ArgumentException("地图请求身份无效"); }
+            return request;
         }
 
         public static SceneFlowRequest EnterFrontEnd()
@@ -472,6 +489,7 @@ namespace DarkFlare
                     return toState == GameFlowState.Loading;
                 case GameFlowState.Loading:
                     return toState == GameFlowState.InGame
+                        || toState == GameFlowState.Paused
                         || toState == GameFlowState.FrontEnd
                         || toState == GameFlowState.Recovering
                         || toState == GameFlowState.FatalError;

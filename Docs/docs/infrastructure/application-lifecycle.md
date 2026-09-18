@@ -163,3 +163,7 @@ Unity 6.6 下的默认重载、关闭 Domain Reload、同时关闭 Domain / Scen
 - 一旦进入 `Abandoned`，本次运行不得继续创建 Session；应终止运行或执行测试静态重置。
 
 本模块的边界是提供可靠的生命周期、所有权和注入时机；稳定身份、内容目录和迁移合同见[稳定身份、内容目录与迁移框架](./content-identity-migration.md)，文件格式、保存与 Restore 顺序见[本地存档与 Session 恢复](./local-save.md)，本地化见[用户设置与本地化](./user-settings-localization.md)，场景状态与 UI 外壳见[游戏状态、场景流与应用 UI 外壳](./game-state-scene-flow-ui-shell.md)，音频见 [Application Audio](./application-audio.md)，日志与资源见[日志、错误处理与 Addressables 资源治理](./logging-error-addressables-governance.md)，降低动态与平台挂起见[可访问性与平台生命周期](./accessibility-platform-lifecycle.md)。历史验收范围和测试记录见顶部归档计划。
+
+## 地图子作用域
+
+Session 内的地图由 `WorldMapRuntime` 和 `MapScope` 管理，使用 SceneScope 子生命周期。候选地表、碰撞和交互在提交前禁用；源图实例释放后才释放资源 lease。玩家与 UI 保持 Session 所有权，怪物、掉落和投射物使用地图 owner 定向释放。外部卸载 Main 后仍安全排空资源，不访问已销毁的 Unity 根节点。详见[双地图生命周期](../maps/world-map-lifecycle.md)。
