@@ -69,14 +69,11 @@ namespace DarkFlare
             {
                 MapVariantOverride entry = document.VariantOverrides[i];
                 string path = $"$.variantOverrides[{i}]";
-                Require(entry.X >= -1 && entry.Y >= -1 && entry.X < document.Width && entry.Y < document.Height, path, "显示格坐标越界");
+                Require(DualGridCoordinates.ContainsDisplay(compiled, entry.X, entry.Y), path, "显示格坐标越界");
                 Require(positions.Add(new Vector2Int(entry.X, entry.Y)), path, "重复变体覆盖");
                 TerrainTileVariant variant = set.Variants.SingleOrDefault(candidate => candidate.Id == entry.VariantId);
                 Require(variant != null, path + ".variantId", "未知变体");
-                Require(Matches(variant.SouthWest, compiled.GetTerrain(entry.X, entry.Y))
-                    && Matches(variant.SouthEast, compiled.GetTerrain(entry.X + 1, entry.Y))
-                    && Matches(variant.NorthWest, compiled.GetTerrain(entry.X, entry.Y + 1))
-                    && Matches(variant.NorthEast, compiled.GetTerrain(entry.X + 1, entry.Y + 1)), path, "变体四角与地表不兼容");
+                Require(TerrainWangKey.FromVariant(variant) == DualGridCoordinates.Sample(compiled, entry.X, entry.Y), path, "变体四角与地表不兼容");
             }
             ValidateObjects(document, definitions);
             ValidateRegions(document, definitions);
@@ -224,11 +221,6 @@ namespace DarkFlare
         static double Cross(MapPoint a, MapPoint b, MapPoint c)
         {
             return (b.X - a.X) * (c.Y - a.Y) - (b.Y - a.Y) * (c.X - a.X);
-        }
-
-        static bool Matches(TerrainDefinition terrain, string id)
-        {
-            return "terrain:" + terrain.Id == id;
         }
 
         static void ValidateReference(ScriptableObject asset, IMapDefinitionLookup definitions, string path)

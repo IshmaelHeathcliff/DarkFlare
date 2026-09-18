@@ -2,6 +2,8 @@
 
 Alpha 0.5.0 的数据与导入切片。当前实现纯文档服务、SO 定义、严格校验、规范导出、只读导入资产和配置中心入口；未实现地表渲染、绘制工作台或寻路，Main 继续使用[旧地表](../ground-tilemap.md)。
 
+B1 已补充[共享坐标、四角 Key 与稳定变体规则](./terrain-resolution.md)，地图校验与后续解析共用四角采样。该能力不代表已完成地表分区或可见预览。
+
 ## 唯一源与内容身份
 
 - 布局源：`Assets/Data/Maps/<name>.dfmap`，UTF-8 JSON；交换导出使用 `.json`。
@@ -38,7 +40,7 @@ Alpha 0.5.0 的数据与导入切片。当前实现纯文档服务、SO 定义�
 
 `MapDocumentJson.Read` → `MapDocumentCompiler.Compile(dto, lookup)` → `CompiledMapDocument`。核心服务不调用 AssetDatabase；调用方显式提供 `IMapDefinitionLookup`。MapDocumentException 提供字段路径和原因，首个错误即停止，无半成品网格对外发布。
 
-快照拥有独立网格、规范 JSON 和 SHA256，`GetTerrain` 提供只读地表查询，`CreateEditableCopy` 返回脱离快照的 DTO。规范导出按名称排序属性，按坐标排序块 / 覆盖，按稳定 ID 排序对象 / 区域；palette 和多边形顶点保留语义次序。SHA256 表示规范源内容，不是定义版本或导航缓存键。
+快照拥有独立网格、规范 JSON 和 SHA256，`GetTerrain` / `GetTerrainId` 提供只读地表查询，头字段与覆盖查询可直接读取，`CreateEditableCopy` 返回脱离快照的 DTO。规范导出按名称排序属性，按坐标排序块 / 覆盖，按稳定 ID 排序对象 / 区域；palette 和多边形顶点保留语义次序。SHA256 表示规范源内容，不是定义版本或导航缓存键；候选规则版本另见地表规则模块。
 
 Editor 定义索引只查询地表 / 对象 / 区域及交互、刷怪定义，不读取地图或 ContentCatalog，避免包含地图的目录形成导入环。索引读取过身份的定义登记源依赖，成功解析的定义额外登记产物依赖；因此缺引用导入仍能观察已有 SO 的 ID 恢复。新增 / 删除定义通过索引 Hash 失效，在导入回调外注册并受控刷新；当前改动任一索引定义可能重导入多张地图，尚未实现按 ID 分片索引。遵循 [Unity 依赖 API](https://docs.unity3d.com/6000.0/Documentation/ScriptReference/AssetImporters.AssetImportContext.DependsOnCustomDependency.html)。
 
@@ -52,6 +54,6 @@ SO 字段仍在“按类型”页编辑；地图没有独立 CreateAssetMenu，�
 
 ## 验证
 
-2026-09-18：完整 EditMode **603/603**、PlayMode **75/75**；其中地图模块新增 35 项长期行为测试。内容校验 0 项问题，配置文档字段覆盖通过。本轮未构建 Player，也未进行新地表的视觉验收。
+2026-09-18：B1 完成后完整 EditMode **623/623**、PlayMode **75/75** 通过；A 的 35 项地图行为回归保留，B1 新增 20 项[地表规则测试](./terrain-resolution.md#验证)。内容校验 0 项问题，配置文档字段覆盖通过。本轮未构建 Player，也未进行新地表的视觉验收。
 
 长期测试：MapDocumentTests、MapDocumentImporterTests，以及内容 ID、配置文档覆盖和现有地图回归。新增测试覆盖数据完整性、导入稳定身份、缺引用 / ID 改名 / 冲突恢复、失败不覆盖旧源，以及不同区域设置的规范交换。导入器测试使用唯一临时目录，结束删除源、配置和 `.meta`，不向正式内容池写入测试资产。原配置发现测试修正“所有登记类型均可手动创建”的假设，明确验证导入地图不能另建布局资产；旧 GroundTilemapTests 保留。

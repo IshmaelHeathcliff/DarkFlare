@@ -49,14 +49,17 @@
 - [视觉资产清单](./visual-assets.md)
 - [双层地表 Tilemap](./ground-tilemap.md)
 - [地图文档与导入](./maps/README.md)
+- [Dual Grid 坐标与地表规则](./maps/terrain-resolution.md)
 - [世界渲染与稳定层级](./world-rendering.md)
 - [已完成计划归档](./plan/archive/README.md)
 
 ## 计划状态
 
-2026-09-18：**Alpha 0.5.0 的 A 数据与导入切片已实现**，见[地图文档模块](./maps/README.md)及[阶段计划](./plan/alpha-0.5.0-map-foundation-plan.md)。下一步为 B：Dual Grid / Wang 解析与预览，随后正式地表和静态几何；整个 0.5.0 尚未完成。总范围仍含手工 / AI 编辑、Y 排序、双地图与 Grid / Flow Field / A* / Job / Burst 导航。规模为 500 活动怪物、1000 压测，切图保留状态并暂停离场模拟。运行版本保持 `0.4.2-alpha`，core v5、Schema 3。
+2026-09-18：**Alpha 0.5.0 的 A 数据导入与 B1 地表规则已实现**，见[地图文档模块](./maps/README.md)及[阶段计划](./plan/alpha-0.5.0-map-foundation-plan.md)。下一步为 B2 地表分区与解析，随后可见预览、正式地表和静态几何；整个 0.5.0 尚未完成。总范围仍含手工 / AI 编辑、Y 排序、双地图与 Grid / Flow Field / A* / Job / Burst 导航。规模为 500 活动怪物、1000 压测，切图保留状态并暂停离场模拟。运行版本保持 `0.4.2-alpha`，core v5、Schema 3。
 
-本轮完整 EditMode 603/603、PlayMode 75/75 通过，其中地图模块新增 35 项行为回归；内容与配置文档覆盖校验通过，见[地图模块验证](./maps/README.md#验证)。本轮未构建 Windows Player。Alpha 0.4 历史记录仍见[随机商店验收](./assets/acceptance/random-shop/README.md)及[消耗品交付](./assets/acceptance/alpha-0.4-item-use-acceptance/README.md)。
+A 已提交为 `2bf3843`；[B 执行计划](./plan/alpha-0.5.0-wang-preview-plan.md)已实现 B1 的共享坐标、四角 Key、不可变规则和稳定选择。下一步为 B2 分区、边签名及全量 / 局部解析，尚无新地表的可见预览。
+
+本轮完整 EditMode 623/623、PlayMode 75/75 通过，B1 新增 20 项地表规则行为回归；内容与配置文档覆盖校验通过，见[地图模块验证](./maps/README.md#验证)。本轮未构建 Windows Player。Alpha 0.4 历史记录仍见[随机商店验收](./assets/acceptance/random-shop/README.md)及[消耗品交付](./assets/acceptance/alpha-0.4-item-use-acceptance/README.md)。
 
 Alpha 0.1、0.2 基础设施、0.3 UI 与十槽装备，以及 0.4 已完成计划均见[归档索引](./plan/archive/README.md)。当前功能以各模块文档为准，归档中的“下一阶段”保留历史含义。
 
