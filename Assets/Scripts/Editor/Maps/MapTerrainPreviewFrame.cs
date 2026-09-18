@@ -18,6 +18,7 @@ namespace DarkFlare.Editor
         readonly Material _material;
         readonly TerrainTileCatalog _formalTiles;
         bool _disposed;
+        GameObject _stageRoot;
 
         public Tilemap Tilemap { get; }
         public TilemapRenderer Renderer { get; }
@@ -161,6 +162,14 @@ namespace DarkFlare.Editor
             return texture;
         }
 
+        // 已完成的帧转交编辑舞台显示，所有 Tile / 材质仍由本帧持有。
+        public void MoveToScene(UnityEngine.SceneManagement.Scene scene)
+        {
+            if (_disposed) { throw new ObjectDisposedException(nameof(MapTerrainPreviewFrame)); }
+            _stageRoot = Tilemap.transform.root.gameObject;
+            UnityEngine.SceneManagement.SceneManager.MoveGameObjectToScene(_stageRoot, scene);
+        }
+
         public bool TryInspect(Vector2 world, out Vector2Int coordinate, out TerrainWangKey key, out string variant)
         {
             Vector3Int cell = Tilemap.WorldToCell(world);
@@ -186,6 +195,7 @@ namespace DarkFlare.Editor
             if (_disposed) { return; }
             _disposed = true;
             Projection?.Dispose();
+            if (_stageRoot != null) { Object.DestroyImmediate(_stageRoot); }
             _preview?.Cleanup();
             if (_material != null) { Object.DestroyImmediate(_material); }
             foreach (DiagnosticTileLibrary.Lease lease in _leases.Values) { lease.Dispose(); }

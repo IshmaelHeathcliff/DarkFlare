@@ -1,0 +1,854 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "patchVersion",
+    "mapId",
+    "baseRevision",
+    "baseHash",
+    "operationId",
+    "operations",
+    "clearAffectedOverrides"
+  ],
+  "properties": {
+    "patchVersion": {
+      "const": 1
+    },
+    "mapId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "baseRevision": {
+      "type": "integer",
+      "minimum": -2147483648,
+      "maximum": 2147483647
+    },
+    "baseHash": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "operationId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "clearAffectedOverrides": {
+      "type": "boolean"
+    },
+    "operations": {
+      "type": "array",
+      "maxItems": 256,
+      "items": {
+        "oneOf": [
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "type",
+              "cells",
+              "terrainId"
+            ],
+            "properties": {
+              "type": {
+                "const": "PaintCells"
+              },
+              "cells": {
+                "type": "array",
+                "maxItems": 262144,
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "x",
+                    "y"
+                  ],
+                  "properties": {
+                    "x": {
+                      "type": "integer",
+                      "minimum": -2147483648,
+                      "maximum": 2147483647
+                    },
+                    "y": {
+                      "type": "integer",
+                      "minimum": -2147483648,
+                      "maximum": 2147483647
+                    }
+                  }
+                }
+              },
+              "terrainId": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 256
+              }
+            }
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "type",
+              "x",
+              "y",
+              "width",
+              "height",
+              "terrainId"
+            ],
+            "properties": {
+              "type": {
+                "const": "FillRect"
+              },
+              "x": {
+                "type": "integer",
+                "minimum": -2147483648,
+                "maximum": 2147483647
+              },
+              "y": {
+                "type": "integer",
+                "minimum": -2147483648,
+                "maximum": 2147483647
+              },
+              "width": {
+                "type": "integer",
+                "minimum": -2147483648,
+                "maximum": 2147483647
+              },
+              "height": {
+                "type": "integer",
+                "minimum": -2147483648,
+                "maximum": 2147483647
+              },
+              "terrainId": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 256
+              }
+            }
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "type",
+              "x",
+              "y",
+              "endX",
+              "endY",
+              "terrainId"
+            ],
+            "properties": {
+              "type": {
+                "const": "PaintLine"
+              },
+              "x": {
+                "type": "integer",
+                "minimum": -2147483648,
+                "maximum": 2147483647
+              },
+              "y": {
+                "type": "integer",
+                "minimum": -2147483648,
+                "maximum": 2147483647
+              },
+              "endX": {
+                "type": "integer",
+                "minimum": -2147483648,
+                "maximum": 2147483647
+              },
+              "endY": {
+                "type": "integer",
+                "minimum": -2147483648,
+                "maximum": 2147483647
+              },
+              "terrainId": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 256
+              }
+            }
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "type",
+              "x",
+              "y",
+              "terrainId"
+            ],
+            "properties": {
+              "type": {
+                "const": "FillRegion"
+              },
+              "x": {
+                "type": "integer",
+                "minimum": -2147483648,
+                "maximum": 2147483647
+              },
+              "y": {
+                "type": "integer",
+                "minimum": -2147483648,
+                "maximum": 2147483647
+              },
+              "terrainId": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 256
+              }
+            }
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "type",
+              "x",
+              "y",
+              "variantId"
+            ],
+            "properties": {
+              "type": {
+                "const": "SetVariant"
+              },
+              "x": {
+                "type": "integer",
+                "minimum": -2147483648,
+                "maximum": 2147483647
+              },
+              "y": {
+                "type": "integer",
+                "minimum": -2147483648,
+                "maximum": 2147483647
+              },
+              "variantId": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "minLength": 1,
+                "maxLength": 256
+              }
+            }
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "type",
+              "record"
+            ],
+            "properties": {
+              "type": {
+                "const": "UpsertObject"
+              },
+              "record": {
+                "type": "object",
+                "properties": {
+                  "objectId": {
+                    "type": "string",
+                    "maxLength": 256
+                  },
+                  "definitionId": {
+                    "type": "string",
+                    "maxLength": 256
+                  },
+                  "position": {
+                    "type": "object",
+                    "properties": {
+                      "x": {
+                        "type": "number"
+                      },
+                      "y": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "x",
+                      "y"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "rotation": {
+                    "type": "integer",
+                    "minimum": -2147483648,
+                    "maximum": 2147483647
+                  },
+                  "appearanceVariant": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "maxLength": 256
+                  },
+                  "interaction": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "enum": [
+                          "None",
+                          "Trader",
+                          "Crafting"
+                        ]
+                      },
+                      "contentId": {
+                        "type": "string",
+                        "maxLength": 256
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "contentId"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "objectId",
+                  "definitionId",
+                  "position",
+                  "rotation",
+                  "appearanceVariant",
+                  "interaction"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "type",
+              "id"
+            ],
+            "properties": {
+              "type": {
+                "const": "RemoveObject"
+              },
+              "id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 256
+              }
+            }
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "type",
+              "record"
+            ],
+            "properties": {
+              "type": {
+                "const": "UpsertRegion"
+              },
+              "record": {
+                "type": "object",
+                "properties": {
+                  "regionId": {
+                    "type": "string",
+                    "maxLength": 256
+                  },
+                  "definitionId": {
+                    "type": "string",
+                    "maxLength": 256
+                  },
+                  "priority": {
+                    "type": "integer",
+                    "minimum": -2147483648,
+                    "maximum": 2147483647
+                  },
+                  "shape": {
+                    "type": "string",
+                    "enum": [
+                      "Rectangle",
+                      "Polygon"
+                    ]
+                  },
+                  "points": {
+                    "type": "array",
+                    "maxItems": 64,
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "x": {
+                          "type": "number"
+                        },
+                        "y": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "x",
+                        "y"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "spawnDefinitionId": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "maxLength": 256
+                  }
+                },
+                "required": [
+                  "regionId",
+                  "definitionId",
+                  "priority",
+                  "shape",
+                  "points",
+                  "spawnDefinitionId"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "type",
+              "id"
+            ],
+            "properties": {
+              "type": {
+                "const": "RemoveRegion"
+              },
+              "id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 256
+              }
+            }
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "type",
+              "values"
+            ],
+            "properties": {
+              "type": {
+                "const": "SetMapMetadata"
+              },
+              "values": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "seed": {
+                    "type": "integer",
+                    "minimum": -2147483648,
+                    "maximum": 2147483647
+                  },
+                  "origin": {
+                    "type": "object",
+                    "properties": {
+                      "x": {
+                        "type": "number"
+                      },
+                      "y": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "x",
+                      "y"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "cellSize": {
+                    "type": "number"
+                  },
+                  "width": {
+                    "type": "integer",
+                    "minimum": -2147483648,
+                    "maximum": 2147483647
+                  },
+                  "height": {
+                    "type": "integer",
+                    "minimum": -2147483648,
+                    "maximum": 2147483647
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "patchVersion": 1,
+  "maxBytes": 1048576,
+  "maxOperations": 256,
+  "maxVisits": 262144,
+  "requiredEnvelope": [
+    "patchVersion",
+    "mapId",
+    "baseRevision",
+    "baseHash",
+    "operationId",
+    "operations",
+    "clearAffectedOverrides"
+  ],
+  "operations": {
+    "PaintCells": [
+      "cells",
+      "terrainId"
+    ],
+    "FillRect": [
+      "x",
+      "y",
+      "width",
+      "height",
+      "terrainId"
+    ],
+    "PaintLine": [
+      "x",
+      "y",
+      "endX",
+      "endY",
+      "terrainId"
+    ],
+    "FillRegion": [
+      "x",
+      "y",
+      "terrainId"
+    ],
+    "SetVariant": [
+      "x",
+      "y",
+      "variantId"
+    ],
+    "UpsertObject": [
+      "record"
+    ],
+    "RemoveObject": [
+      "id"
+    ],
+    "UpsertRegion": [
+      "record"
+    ],
+    "RemoveRegion": [
+      "id"
+    ],
+    "SetMapMetadata": [
+      "values"
+    ]
+  },
+  "recordSchema": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "properties": {
+      "formatVersion": {
+        "type": "integer",
+        "minimum": -2147483648,
+        "maximum": 2147483647
+      },
+      "mapId": {
+        "type": "string",
+        "maxLength": 256
+      },
+      "revision": {
+        "type": "integer",
+        "minimum": -2147483648,
+        "maximum": 2147483647
+      },
+      "seed": {
+        "type": "integer",
+        "minimum": -2147483648,
+        "maximum": 2147483647
+      },
+      "origin": {
+        "type": "object",
+        "properties": {
+          "x": {
+            "type": "number"
+          },
+          "y": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "x",
+          "y"
+        ],
+        "additionalProperties": false
+      },
+      "cellSize": {
+        "type": "number"
+      },
+      "width": {
+        "type": "integer",
+        "minimum": -2147483648,
+        "maximum": 2147483647
+      },
+      "height": {
+        "type": "integer",
+        "minimum": -2147483648,
+        "maximum": 2147483647
+      },
+      "terrainSetId": {
+        "type": "string",
+        "maxLength": 256
+      },
+      "terrainPalette": {
+        "type": "array",
+        "maxItems": 64,
+        "items": {
+          "type": "string",
+          "maxLength": 256
+        }
+      },
+      "defaultTerrainId": {
+        "type": "string",
+        "maxLength": 256
+      },
+      "chunks": {
+        "type": "array",
+        "maxItems": 1024,
+        "items": {
+          "type": "object",
+          "properties": {
+            "x": {
+              "type": "integer",
+              "minimum": -2147483648,
+              "maximum": 2147483647
+            },
+            "y": {
+              "type": "integer",
+              "minimum": -2147483648,
+              "maximum": 2147483647
+            },
+            "cells": {
+              "type": "array",
+              "maxItems": 1024,
+              "items": {
+                "type": "integer",
+                "minimum": -2147483648,
+                "maximum": 2147483647
+              }
+            }
+          },
+          "required": [
+            "x",
+            "y",
+            "cells"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "variantOverrides": {
+        "type": "array",
+        "maxItems": 1050625,
+        "items": {
+          "type": "object",
+          "properties": {
+            "x": {
+              "type": "integer",
+              "minimum": -2147483648,
+              "maximum": 2147483647
+            },
+            "y": {
+              "type": "integer",
+              "minimum": -2147483648,
+              "maximum": 2147483647
+            },
+            "variantId": {
+              "type": "string",
+              "maxLength": 256
+            }
+          },
+          "required": [
+            "x",
+            "y",
+            "variantId"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "objects": {
+        "type": "array",
+        "maxItems": 16384,
+        "items": {
+          "type": "object",
+          "properties": {
+            "objectId": {
+              "type": "string",
+              "maxLength": 256
+            },
+            "definitionId": {
+              "type": "string",
+              "maxLength": 256
+            },
+            "position": {
+              "type": "object",
+              "properties": {
+                "x": {
+                  "type": "number"
+                },
+                "y": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "x",
+                "y"
+              ],
+              "additionalProperties": false
+            },
+            "rotation": {
+              "type": "integer",
+              "minimum": -2147483648,
+              "maximum": 2147483647
+            },
+            "appearanceVariant": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "maxLength": 256
+            },
+            "interaction": {
+              "type": [
+                "object",
+                "null"
+              ],
+              "properties": {
+                "kind": {
+                  "type": "string",
+                  "enum": [
+                    "None",
+                    "Trader",
+                    "Crafting"
+                  ]
+                },
+                "contentId": {
+                  "type": "string",
+                  "maxLength": 256
+                }
+              },
+              "required": [
+                "kind",
+                "contentId"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "objectId",
+            "definitionId",
+            "position",
+            "rotation",
+            "appearanceVariant",
+            "interaction"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "regions": {
+        "type": "array",
+        "maxItems": 1024,
+        "items": {
+          "type": "object",
+          "properties": {
+            "regionId": {
+              "type": "string",
+              "maxLength": 256
+            },
+            "definitionId": {
+              "type": "string",
+              "maxLength": 256
+            },
+            "priority": {
+              "type": "integer",
+              "minimum": -2147483648,
+              "maximum": 2147483647
+            },
+            "shape": {
+              "type": "string",
+              "enum": [
+                "Rectangle",
+                "Polygon"
+              ]
+            },
+            "points": {
+              "type": "array",
+              "maxItems": 64,
+              "items": {
+                "type": "object",
+                "properties": {
+                  "x": {
+                    "type": "number"
+                  },
+                  "y": {
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "x",
+                  "y"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "spawnDefinitionId": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "maxLength": 256
+            }
+          },
+          "required": [
+            "regionId",
+            "definitionId",
+            "priority",
+            "shape",
+            "points",
+            "spawnDefinitionId"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    "required": [
+      "formatVersion",
+      "mapId",
+      "revision",
+      "seed",
+      "origin",
+      "cellSize",
+      "width",
+      "height",
+      "terrainSetId",
+      "terrainPalette",
+      "defaultTerrainId",
+      "chunks",
+      "variantOverrides",
+      "objects",
+      "regions"
+    ],
+    "additionalProperties": false,
+    "description": "DarkFlare 地图 V1 结构合同；须继续运行 MapDocumentCompiler 校验内容引用、坐标、地表与几何语义。"
+  },
+  "coordinates": "地表：逻辑格整数；变体：显示格 -1..size-1；对象：局部世界单位 / 角度 0/90/180/270；区域：逻辑格单位；FillRegion：四邻接同材质洪水填充",
+  "metadata": [
+    "seed",
+    "origin",
+    "cellSize",
+    "width",
+    "height"
+  ],
+  "saving": "Apply 只修改工作副本；Save 显式落盘；移除不存在 ID / 相同值为 no-op"
+}

@@ -1,5 +1,7 @@
 # 已完成计划归档
 
+- [Alpha 0.5.1 地图编辑器与 AI 事务](./alpha-0.5.1-map-editor-plan.md)：2026-09-18 E1–E5 完成，版本 `0.5.1-alpha`；EditMode 697/697、PlayMode 77/77，下一阶段世界层级。
+
 - [Alpha 0.5.0 地图数据与地表基础](./alpha-0.5.0-map-foundation-plan.md)：2026-09-18 完成 A–D，数据 / 地表 / 碰撞 / 静态通行完整闭环；版本 `0.5.0-alpha`，下一阶段地图编辑器。
 - [Alpha 0.5.0 同源碰撞与静态导航几何](./alpha-0.5.0-map-geometry-plan.md)：2026-09-18 完成 D1–D4，EditMode 676/676、PlayMode 77/77；窄路保守拒绝与极端地图容量边界见验收。
 

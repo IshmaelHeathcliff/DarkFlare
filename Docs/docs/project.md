@@ -4,9 +4,9 @@
 
 `DarkFlare` 已完成首版最小循环、初步体验优化、`alpha 0.1` 封板和 `alpha 0.2.0–0.2.7` 基础设施封板。当前可从常驻 `Bootstrap.unity` 的 FrontEnd 新建或继续游戏，additive 进入 `Main.unity` 完成战斗、掉落、十槽装备、交易和打造，暂停后保存并安全返回前台；FrontEnd 可二次确认删除自动档，共享设置页可恢复完整默认设置，中英语言、音量、按键、设备 Glyph 和降低动态效果即时收敛。
 
-alpha 版本内的阶段使用三段式名称：`alpha 0.1` 的首个阶段为 `alpha 0.1.0`，后续依次为 `alpha 0.1.1`、`alpha 0.1.2`；`alpha 0.2` 同样从 `alpha 0.2.0` 开始。当前版本为 `0.5.0-alpha`；完成记录见[alpha 0.2 综合验收记录](./infrastructure/alpha-0.2-acceptance.md)与[计划归档](./plan/archive/README.md)。
+alpha 版本内的阶段使用三段式名称：`alpha 0.1` 的首个阶段为 `alpha 0.1.0`，后续依次为 `alpha 0.1.1`、`alpha 0.1.2`；`alpha 0.2` 同样从 `alpha 0.2.0` 开始。当前版本为 `0.5.1-alpha`；完成记录见[alpha 0.2 综合验收记录](./infrastructure/alpha-0.2-acceptance.md)与[计划归档](./plan/archive/README.md)。
 
-2026-09-18：[Alpha 0.5 总计划](./plan/alpha-0.5-plan.md)已完成 [0.5.0 地图基础 A–D](plan/archive/alpha-0.5.0-map-foundation-plan.md)，包含数据 / 导入、Wang 解析与预览、正式四材质发布，以及[同源碰撞和静态通行](./maps/map-geometry.md)。下一阶段为 0.5.1 手工 / AI 地图编辑器；世界排序、城镇 / 野外和 Flow Field / A* / Job / Burst 仍按总计划推进。目标为 500 活动怪物、1000 压力测试，地图离场暂停并保留状态。Main 尚未迁移。
+2026-09-18：[Alpha 0.5 总计划](./plan/alpha-0.5-plan.md)已完成 [0.5.0 地图基础 A–D](plan/archive/alpha-0.5.0-map-foundation-plan.md)，包含数据 / 导入、Wang 解析与预览、正式四材质发布，以及[同源碰撞和静态通行](./maps/map-geometry.md)。D 已提交 `e396485`。[0.5.1 手工 / AI 地图编辑器](./maps/map-editor.md)的 E1–E5 也已完成并[归档](./plan/archive/alpha-0.5.1-map-editor-plan.md)，当前 EditMode 697/697、PlayMode 77/77，见 [E 验收](./maps/acceptance/e/README.md)。下一阶段为 0.5.2 世界层级；世界排序、城镇 / 野外和 Flow Field / A* / Job / Burst 仍按总计划推进。目标为 500 活动怪物、1000 压力测试，地图离场暂停并保留状态。Main 尚未迁移。
 
 - Alpha 0.3：独立物品窗口、统一拖放、实时属性、暗黑像素 HUD、共享皮肤与十槽二十件装备已完成，后续补充物品窗口布局与交互修正。
 - Alpha 0.4.0：[统一物品系统](./item-system.md)完成金币与材料入栏、堆叠 / 消耗、材料打造与旧档迁移。

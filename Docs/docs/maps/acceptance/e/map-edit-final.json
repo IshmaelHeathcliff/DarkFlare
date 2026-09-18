@@ -1,0 +1,157 @@
+{
+  "results": [
+    {
+      "FullName": "DarkFlare.Tests.MapEditTests.AtomicBatchRejectsLateFailureAndCancellation",
+      "Status": "Passed",
+      "Duration": 0.0222152,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.MapEditTests.AtomicFileWriteDetectsChangesAndKeepsWholeFileOnFailure",
+      "Status": "Passed",
+      "Duration": 0.0129151,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.MapEditTests.ConnectivityDistinguishesDisconnectedEndpointAndBudget",
+      "Status": "Passed",
+      "Duration": 0.0693883,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.MapEditTests.DefinitionsAreRevalidatedBetweenPreviewAndApply",
+      "Status": "Passed",
+      "Duration": 0.0256933,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.MapEditTests.FloodDoesNotCrossDifferentTerrainAndLineHasNoGaps",
+      "Status": "Passed",
+      "Duration": 0.0979835,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.MapEditTests.NoOpSparseChunkAndEraseRestoreSemanticDirtyState",
+      "Status": "Passed",
+      "Duration": 0.0729515,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.MapEditTests.ObjectRegionBatchRetainsBindingsAndRejectsInvalidPolygonAtomically",
+      "Status": "Passed",
+      "Duration": 0.0662559,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.MapEditTests.OverrideConflictRequiresExplicitClearAndCanBeClearedWithinBatch",
+      "Status": "Passed",
+      "Duration": 0.0447112,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.MapEditTests.PickingRespectsNegativeOriginHalfCellAndBorders",
+      "Status": "Passed",
+      "Duration": 0.0086996,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.MapEditTests.PreviewAndApplyAreIdenticalButOnlyApplyMutates",
+      "Status": "Passed",
+      "Duration": 0.0391379,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.MapEditTests.PreviewStageOwnsPublishedTilesAndRestoresOriginalScene",
+      "Status": "Passed",
+      "Duration": 0.2258038,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.MapEditTests.RecoveryDoesNotOverwriteExternalFile",
+      "Status": "Passed",
+      "Duration": 0.0768366,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.MapEditTests.RecoveryPreservesDraftAndRejectsOldRequestEvenAfterUndoToClean",
+      "Status": "Passed",
+      "Duration": 0.0980728,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.MapEditTests.SceneViewStrokeEscapeAndSavedUndoUseTheSameSession",
+      "Status": "Passed",
+      "Duration": 10.2117533,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.MapEditTests.StrictPatchRejectsAmbiguityAndBudgets(\"unknown\")",
+      "Status": "Passed",
+      "Duration": 0.0089462,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.MapEditTests.StrictPatchRejectsAmbiguityAndBudgets(\"duplicate\")",
+      "Status": "Passed",
+      "Duration": 0.0073604,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.MapEditTests.StrictPatchRejectsAmbiguityAndBudgets(\"integer\")",
+      "Status": "Passed",
+      "Duration": 0.008313,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.MapEditTests.StrictPatchRejectsAmbiguityAndBudgets(\"oversize\")",
+      "Status": "Passed",
+      "Duration": 0.0083448,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.MapEditTests.StrictPatchRejectsAmbiguityAndBudgets(\"wrongrecord\")",
+      "Status": "Passed",
+      "Duration": 0.008826,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.MapEditTests.UndoBudgetKeepsOtherEditorObjectsHistory",
+      "Status": "Passed",
+      "Duration": 2.2288369,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.MapEditTests.UndoRedoIsMonotonicAndRetryDoesNotReapplyUndoneRequest",
+      "Status": "Passed",
+      "Duration": 0.0534784,
+      "Message": null,
+      "StackTrace": null
+    }
+  ],
+  "status": "completed",
+  "summary": {
+    "passed": 21,
+    "failed": 0,
+    "total": 21
+  }
+}

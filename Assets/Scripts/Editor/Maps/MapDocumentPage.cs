@@ -64,6 +64,12 @@ namespace DarkFlare.Editor
             Execute(() => MapTerrainPreviewWindow.OpenSource(GetSourcePath()));
         }
 
+        [Button("打开地图绘制工作台")]
+        public void OpenEditor()
+        {
+            Execute(() => MapEditorWindow.OpenSource(GetSourcePath()));
+        }
+
         [Button("导入交换 JSON")]
         public void ImportJson()
         {
@@ -88,7 +94,7 @@ namespace DarkFlare.Editor
                 CompiledMapDocument map = MapDocumentCompiler.Compile(MapDocumentImporter.ReadSource(GetSourcePath()), MapEditorDefinitionIndex.Capture());
                 string path = EditorUtility.SaveFilePanel("导出地图 JSON", "", ContentId.Parse(map.MapId).LocalId, "json");
                 if (string.IsNullOrEmpty(path)) { return; }
-                AtomicWrite(path, map.CanonicalJson);
+                MapEditFiles.Write(path, map.CanonicalJson, MapEditFiles.Hash(path));
                 Status = "已导出：" + path;
             });
         }
@@ -103,22 +109,11 @@ namespace DarkFlare.Editor
             }
             MapEditorDefinitionIndex.UpdateDependency();
             CompiledMapDocument map = MapDocumentCompiler.Compile(MapDocumentJson.Read(json), MapEditorDefinitionIndex.Capture());
-            AtomicWrite(fullPath, map.CanonicalJson);
             string assetPath = "Assets/" + fullPath.Substring(assetsRoot.Length).Replace('\\', '/');
+            MapEditSessions.RequireUnique(map.MapId, assetPath);
+            if (MapEditSessions.HasOpen(assetPath)) { throw new InvalidOperationException("地图已有编辑会话，请在工作台导入 / 保存"); }
+            MapEditFiles.Write(fullPath, map.CanonicalJson, MapEditFiles.Hash(fullPath));
             AssetDatabase.ImportAsset(assetPath, ImportAssetOptions.ForceSynchronousImport);
-        }
-
-        static void AtomicWrite(string path, string json)
-        {
-            Directory.CreateDirectory(Path.GetDirectoryName(Path.GetFullPath(path)));
-            string temporary = path + "~";
-            try
-            {
-                File.WriteAllBytes(temporary, MapDocumentJson.Encode(json));
-                if (File.Exists(path)) { File.Replace(temporary, path, null); }
-                else { File.Move(temporary, path); }
-            }
-            finally { if (File.Exists(temporary)) { File.Delete(temporary); } }
         }
 
         string GetSourcePath()
@@ -131,7 +126,7 @@ namespace DarkFlare.Editor
         void Execute(Action action)
         {
             try { action(); }
-            catch (Exception error) when (error is MapDocumentException || error is IOException || error is ArgumentException || error is UnauthorizedAccessException)
+            catch (Exception error) when (error is MapDocumentException || error is MapEditException || error is InvalidOperationException || error is IOException || error is ArgumentException || error is UnauthorizedAccessException)
             {
                 Status = "失败：" + error.Message;
             }

@@ -1,0 +1,92 @@
+[
+  {
+    "size": 64,
+    "round": 0,
+    "feedbackRepaintP95Ms": 4.795100000000001,
+    "commitMs": 97.81230000000001,
+    "strokeToTerrainMs": 435.6082,
+    "objects": 64,
+    "regions": 16,
+    "batchMs": 355.0117
+  },
+  {
+    "size": 64,
+    "round": 1,
+    "feedbackRepaintP95Ms": 6.399,
+    "commitMs": 231.22250000000003,
+    "strokeToTerrainMs": 595.1433000000001,
+    "objects": 64,
+    "regions": 16,
+    "batchMs": 418.1096
+  },
+  {
+    "size": 64,
+    "round": 2,
+    "feedbackRepaintP95Ms": 5.188400000000001,
+    "commitMs": 240.562,
+    "strokeToTerrainMs": 610.6989,
+    "objects": 64,
+    "regions": 16,
+    "batchMs": 343.66650000000004
+  },
+  {
+    "size": 128,
+    "round": 0,
+    "feedbackRepaintP95Ms": 3.1046,
+    "commitMs": 74.7514,
+    "strokeToTerrainMs": 475.4691,
+    "objects": 64,
+    "regions": 16,
+    "batchMs": 270.4679
+  },
+  {
+    "size": 128,
+    "round": 1,
+    "feedbackRepaintP95Ms": 5.732,
+    "commitMs": 213.73420000000002,
+    "strokeToTerrainMs": 633.8021,
+    "objects": 64,
+    "regions": 16,
+    "batchMs": 356.952
+  },
+  {
+    "size": 128,
+    "round": 2,
+    "feedbackRepaintP95Ms": 6.4065,
+    "commitMs": 231.7159,
+    "strokeToTerrainMs": 607.3508,
+    "objects": 64,
+    "regions": 16,
+    "batchMs": 307.01550000000003
+  },
+  {
+    "size": 256,
+    "round": 0,
+    "feedbackRepaintP95Ms": 3.8979000000000004,
+    "commitMs": 78.74130000000001,
+    "strokeToTerrainMs": 573.2878000000001,
+    "objects": 64,
+    "regions": 16,
+    "batchMs": 259.93940000000003
+  },
+  {
+    "size": 256,
+    "round": 1,
+    "feedbackRepaintP95Ms": 7.6770000000000005,
+    "commitMs": 279.4171,
+    "strokeToTerrainMs": 702.9998,
+    "objects": 64,
+    "regions": 16,
+    "batchMs": 365.43710000000004
+  },
+  {
+    "size": 256,
+    "round": 2,
+    "feedbackRepaintP95Ms": 5.7235000000000005,
+    "commitMs": 195.75650000000002,
+    "strokeToTerrainMs": 671.2008000000001,
+    "objects": 64,
+    "regions": 16,
+    "batchMs": 307.7307
+  }
+]

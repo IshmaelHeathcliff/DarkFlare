@@ -1,8 +1,8 @@
 # 地图文档与导入
 
-Alpha 0.5.0 地图基础已完成，当前包含文档服务、SO 定义、严格校验、规范导出、只读导入、地表资源发布与[静态几何 / 通行查询](./map-geometry.md)。尚无正式绘制工作台或动态寻路，Main 继续使用[旧地表](../ground-tilemap.md)。
+Alpha 0.5.0 地图基础已完成，当前包含文档服务、SO 定义、严格校验、规范导出、只读导入、地表资源发布与[静态几何 / 通行查询](./map-geometry.md)。已增加[手绘 / AI 地图编辑器](./map-editor.md)，动态寻路尚未实现，Main 继续使用[旧地表](../ground-tilemap.md)。
 
-B 阶段已完成：[共享坐标、四角 Key 与稳定变体规则](./terrain-resolution.md)、[分区、边签名与增量解析](./terrain-partition.md)、[独立地表诊断预览](./terrain-preview.md)及[持久样例和压力记录](./terrain-samples.md)。地图校验与解析共用四角采样。C1 的[正式地表家族合同](./terrain-art-contract.md)和[泥土源 Pilot](./acceptance/c1/README.md)已完成；C2 的[确定性纹理编译与正式预览](./terrain-texture-compilation.md)已完成，真实泥土样例可从地图菜单打开；C3 的[四材质双变体与资源发布](./terrain-materials.md)已完成，[C4 正式样例与压力验收](./acceptance/c4/README.md)也已完成，C 已提交 `9a3f7a9`，[D 同源碰撞与静态导航几何](./map-geometry.md)也已完成：默认 4×4 子格、圆足迹 / 线段 / 落点查询、碰撞投影及预览。下一阶段为地图编辑器。
+B 阶段已完成：[共享坐标、四角 Key 与稳定变体规则](./terrain-resolution.md)、[分区、边签名与增量解析](./terrain-partition.md)、[独立地表诊断预览](./terrain-preview.md)及[持久样例和压力记录](./terrain-samples.md)。地图校验与解析共用四角采样。C1 的[正式地表家族合同](./terrain-art-contract.md)和[泥土源 Pilot](./acceptance/c1/README.md)已完成；C2 的[确定性纹理编译与正式预览](./terrain-texture-compilation.md)已完成，真实泥土样例可从地图菜单打开；C3 的[四材质双变体与资源发布](./terrain-materials.md)已完成，[C4 正式样例与压力验收](./acceptance/c4/README.md)也已完成，C 已提交 `9a3f7a9`，[D 同源碰撞与静态导航几何](./map-geometry.md)也已完成：默认 4×4 子格、圆足迹 / 线段 / 落点查询、碰撞投影及预览。D 已提交 `e396485`。[地图编辑器 E1–E5](./map-editor.md)已完成，下一阶段为世界层级。
 
 ## 唯一源与内容身份
 
@@ -50,9 +50,11 @@ Editor 定义索引只查询地表 / 对象 / 区域及交互、刷怪定义，�
 
 打开 `DarkFlare/配置中心` → `地图文档`：选择地表集、输入新地图 ID 和尺寸以创建 `.dfmap`；选择地图源可以读取摘要、打开文本源、导入 / 导出交换 JSON，或打开独立地表诊断预览。写入前完整校验，同目录临时文件替换后再导入，失败不覆盖旧源。
 
-SO 字段仍在“按类型”页编辑；地图没有独立 CreateAssetMenu，不允许直接修改只读布局产物。该入口尚不包含画笔、场景预览、Undo 和 AI Patch 事务，后续编辑器将复用文档服务。
+SO 字段仍在“按类型”页编辑；地图没有独立 CreateAssetMenu，不允许直接修改只读布局产物。完整画笔、SceneView 舞台、Undo 和 AI Patch 事务已由[地图工作台](./map-editor.md)提供；配置中心可跳转进入。有编辑会话的地图必须在工作台导入 / 保存，旧入口拒绝旁路覆盖。
 
 ## 验证
+
+2026-09-18 E 收尾：EditMode **697/697**、PlayMode **77/77**，内容校验 0 项问题。当前版本 `0.5.1-alpha`；地图编辑器、输入与性能见 [E 验收](./acceptance/e/README.md)。以下保留 A–D 历史验证记录。
 
 2026-09-18 D 收尾：EditMode **676/676**、PlayMode **77/77**，内容校验 0 项问题。物理余量、离散窄路误拒绝、几何容量及未构建 Player 的边界见 [D 验收](./acceptance/d/README.md)。下段为 B 阶段历史记录。
 

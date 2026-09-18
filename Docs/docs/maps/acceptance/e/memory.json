@@ -1,0 +1,32 @@
+[
+  {
+    "size": 64,
+    "allocatedRecorderValid": true,
+    "usedRecorderValid": true,
+    "samples": 2,
+    "editorFrameAllocatedBytes": 11344573,
+    "editorPeakUsedBytes": 201060352,
+    "scope": "整个 Editor 采样帧，包含工具调用和后台编辑器开销；不是纯操作分配",
+    "candidateBytes": 45764
+  },
+  {
+    "size": 128,
+    "allocatedRecorderValid": true,
+    "usedRecorderValid": true,
+    "samples": 2,
+    "editorFrameAllocatedBytes": 40534129,
+    "editorPeakUsedBytes": 210812928,
+    "scope": "整个 Editor 采样帧，包含工具调用和后台编辑器开销；不是纯操作分配",
+    "candidateBytes": 181714
+  },
+  {
+    "size": 256,
+    "allocatedRecorderValid": true,
+    "usedRecorderValid": true,
+    "samples": 2,
+    "editorFrameAllocatedBytes": 159184571,
+    "editorPeakUsedBytes": 234090496,
+    "scope": "整个 Editor 采样帧，包含工具调用和后台编辑器开销；不是纯操作分配",
+    "candidateBytes": 725506
+  }
+]
