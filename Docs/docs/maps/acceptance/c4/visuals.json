@@ -1,0 +1,31 @@
+{
+  "records": [
+    {
+      "map": "map:terrain_topology",
+      "Width": 40,
+      "Height": 24,
+      "CellSize": 1.0,
+      "cells": 1025,
+      "boundsCenter": "(20.00, 12.00, 0.50)",
+      "boundsSize": "(41.00, 25.00, 1.00)",
+      "mismatches": 0,
+      "diagnosticResources": 0,
+      "revision": "6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0"
+    },
+    {
+      "map": "map:terrain_boundary",
+      "Width": 35,
+      "Height": 33,
+      "CellSize": 0.5,
+      "cells": 1224,
+      "boundsCenter": "(-4.50, 15.75, 0.50)",
+      "boundsSize": "(18.00, 17.00, 1.00)",
+      "mismatches": 0,
+      "diagnosticResources": 0,
+      "revision": "6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0"
+    }
+  ],
+  "retainedSources": true,
+  "previewsAfter": 1,
+  "activeSceneDirty": false
+}

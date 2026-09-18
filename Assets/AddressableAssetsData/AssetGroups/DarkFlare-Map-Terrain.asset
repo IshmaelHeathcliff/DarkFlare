@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: DarkFlare-Map-Terrain
+  m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
+  m_GroupName: DarkFlare-Map-Terrain
+  m_GUID: dba251a39b685164aac29f7835d6dde7
+  m_SerializeEntries:
+  - m_GUID: 244d3a41410e0914db9c74c10c28fa1f
+    m_Address: maps/terrain/basic
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - df.session
+    - df.terrain
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 2a89337400d536944bcf12b9576d1482, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: a8b6a538102cbcc4380f73edd01e21d3, type: 2}
+    - {fileID: 11400000, guid: 947f967cb59af414d8b0c964b10504b2, type: 2}

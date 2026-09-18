@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "family": "terrain-basic-v1-initial-canvas",
+  "alpha_threshold": 8,
+  "canvas": { "width": 1024, "height": 1024 },
+  "alpha_required": false,
+  "assets": [
+    {
+      "name": "rejected_dirt_pilot",
+      "image": "inputs/dirt-draft-01.png",
+      "alpha_coverage": [1, 1]
+    }
+  ]
+}

@@ -18,7 +18,7 @@ namespace DarkFlare.Editor
         public string Status { get; private set; } = "请选择地图或打开 Key 画廊。";
         public int ResourceCount => _library.Count;
 
-        public async UniTask RebuildAsync(Func<(CompiledMapDocument Map, TerrainRuleSnapshot Rules)> capture = null)
+        public async UniTask RebuildAsync(Func<(CompiledMapDocument Map, TerrainRuleSnapshot Rules)> capture = null, Func<TerrainTileCatalog> captureTiles = null)
         {
             if (_disposed) { throw new ObjectDisposedException(nameof(MapTerrainPreviewSession)); }
             Cancel();
@@ -31,9 +31,16 @@ namespace DarkFlare.Editor
             try
             {
                 TerrainResolution resolution = null;
+                TerrainTileCatalog formalTiles = null;
                 if (capture != null)
                 {
                     (CompiledMapDocument map, TerrainRuleSnapshot rules) = capture();
+                    if (captureTiles != null)
+                    {
+                        formalTiles = captureTiles();
+                        if (formalTiles == null || formalTiles.RuleHash != rules.RuleHash || formalTiles.TerrainSetId != map.TerrainSetId.ToString()) { throw new InvalidOperationException("正式 Tile 与当前地图规则不匹配"); }
+                        formalTiles.Validate();
+                    }
                     TerrainResolution previous = Current?.Resolution;
                     // 明确回到 Unity 主线程后才能创建或释放 Editor 资源。
                     await UniTask.SwitchToThreadPool();
@@ -41,7 +48,7 @@ namespace DarkFlare.Editor
                     finally { await UniTask.SwitchToMainThread(); }
                 }
                 token.ThrowIfCancellationRequested();
-                pending = new MapTerrainPreviewFrame(_library, resolution);
+                pending = new MapTerrainPreviewFrame(_library, resolution, formalTiles);
                 _building = pending;
                 await pending.PopulateAsync(token);
                 token.ThrowIfCancellationRequested();
@@ -53,7 +60,7 @@ namespace DarkFlare.Editor
                 old?.Dispose();
                 IsValid = true;
                 Status = resolution == null ? "诊断 Key 画廊：256 个独立 Key + 8 个纯地表变体示例。"
-                    : $"诊断地图：{resolution.Map.MapId}，{resolution.CellCount} 显示格，重算 {resolution.RebuiltCells.Count}；比较 {resolution.ComparisonMilliseconds:F2} ms / 求解 {resolution.ResolutionMilliseconds:F2} ms。";
+                    : $"{(formalTiles != null ? "正式材质" : "诊断地图")}：{resolution.Map.MapId}，{resolution.CellCount} 显示格，重算 {resolution.RebuiltCells.Count}；比较 {resolution.ComparisonMilliseconds:F2} ms / 求解 {resolution.ResolutionMilliseconds:F2} ms。";
             }
             catch (OperationCanceledException)
             {

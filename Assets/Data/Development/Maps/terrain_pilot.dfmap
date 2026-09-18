@@ -1,0 +1,22 @@
+{
+  "cellSize": 1.0,
+  "chunks": [],
+  "defaultTerrainId": "terrain:pilot_dirt",
+  "formatVersion": 1,
+  "height": 16,
+  "mapId": "map:terrain_pilot",
+  "objects": [],
+  "origin": {
+    "x": -12.0,
+    "y": -8.0
+  },
+  "regions": [],
+  "revision": 0,
+  "seed": 0,
+  "terrainPalette": [
+    "terrain:pilot_dirt"
+  ],
+  "terrainSetId": "terrain_set:pilot_set",
+  "variantOverrides": [],
+  "width": 24
+}

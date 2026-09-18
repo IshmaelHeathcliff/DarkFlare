@@ -1,0 +1,16 @@
+{
+  "png": "Assets/Art/Tiles/Environment/WangCompiled/6dab843342e06a141ad9fefa468fb26f/0364ce05b507980aaf3d215fea70f1e29ab154e198e38566542b97f2349299b3/tile_0000.png",
+  "sha256": "980377ec228206b22e7f45b934c59f976161c4e123131de80711ca68db8beb34",
+  "size": [
+    64,
+    64
+  ],
+  "alpha_min": 255,
+  "alpha_max": 255,
+  "horizontal_edge_max_rgba_delta": 0,
+  "vertical_edge_max_rgba_delta": 0,
+  "second_horizontal_band_max_rgba_delta": 0,
+  "second_vertical_band_max_rgba_delta": 0,
+  "mean_luminance": 0.2030380807674632,
+  "p95_luminance": 0.23380627450980393
+}

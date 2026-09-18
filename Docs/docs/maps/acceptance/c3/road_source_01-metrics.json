@@ -1,0 +1,7 @@
+{
+  "name": "road_source_01",
+  "sha256": "c7b88c4418041e3c3eef89cc3378246290b68f9ca77a6bfc7a6557ab1f756408",
+  "mean_luminance": 0.2727373710151221,
+  "p95_luminance": 0.3338007843137255,
+  "min_alpha": 255
+}

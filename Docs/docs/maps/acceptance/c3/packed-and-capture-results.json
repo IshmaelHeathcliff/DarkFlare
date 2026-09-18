@@ -1,0 +1,30 @@
+{
+  "playModeScript": "Use Existing Build (BuildScriptPackedPlayMode)",
+  "address": "maps/terrain/basic",
+  "revision": "6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0",
+  "status": "completed",
+  "duration": 2.04,
+  "summary": {
+    "total": 2,
+    "passed": 2,
+    "failed": 0,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "results": [
+    {
+      "FullName": "DarkFlare.Tests.TerrainMaterialsCaptureTests.CaptureAddressableMaterialsInMain",
+      "Status": "Passed",
+      "Duration": 1.8041604,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.TerrainPresentationPlayModeTests.PublishedTerrain_LoadsCompleteTilesAndReleasesBetweenOwners",
+      "Status": "Passed",
+      "Duration": 0.0871373,
+      "Message": null,
+      "StackTrace": null
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "date": "2026-09-18",
+  "assembly": "DarkFlare.Tests.EditMode",
+  "summary": {
+    "total": 650,
+    "passed": 650,
+    "failed": 0,
+    "skipped": 0,
+    "inconclusive": 0
+  }
+}

@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03d16b32cbd8b5b4c9af4b4e0536bed0, type: 3}
+  m_Name: terrain_pilot_sources
+  m_EditorClassIdentifier: DarkFlare.Editor::DarkFlare.Editor.TerrainTextureSources
+  _terrainSet: {fileID: 11400000, guid: fad01cbb0fe307f46b78c14dcca1f951, type: 2}
+  _materials:
+  - _terrain: {fileID: 11400000, guid: fc28eea32a6ced745aba8914d8029495, type: 2}
+    _source: {fileID: 2800000, guid: 8ec21afb5dd6a194dbc020c251646696, type: 3}
+  _variants: []
+  _compiled: {fileID: 11400000, guid: 43bc76c691a980b48bfeddc36f02522e, type: 2}

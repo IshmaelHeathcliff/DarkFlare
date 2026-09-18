@@ -16,6 +16,7 @@ namespace DarkFlare.Editor
         readonly Dictionary<(TerrainWangKey Key, string Variant), DiagnosticTileLibrary.Lease> _leases = new();
         readonly Dictionary<Vector2Int, (TerrainWangKey Key, string Variant)> _gallery = new();
         readonly Material _material;
+        readonly TerrainTileCatalog _formalTiles;
         bool _disposed;
 
         public Tilemap Tilemap { get; }
@@ -25,6 +26,7 @@ namespace DarkFlare.Editor
         public Bounds Bounds { get; private set; }
         public int ResourceCount => _leases.Count;
         public Camera Camera => _preview.camera;
+        public string DisplayRevision => _formalTiles != null ? _formalTiles.Revision : DiagnosticTileLibrary.DisplayRevision;
         public IReadOnlyDictionary<Vector2Int, (TerrainWangKey Key, string Variant)> Gallery => _gallery;
         public static IReadOnlyList<ContentId> GalleryTerrains { get; } = Array.AsReadOnly(new[]
         {
@@ -32,10 +34,11 @@ namespace DarkFlare.Editor
             ContentId.Parse("terrain:preview_water"), ContentId.Parse("terrain:preview_road")
         });
 
-        public MapTerrainPreviewFrame(DiagnosticTileLibrary library, TerrainResolution resolution)
+        public MapTerrainPreviewFrame(DiagnosticTileLibrary library, TerrainResolution resolution, TerrainTileCatalog formalTiles = null)
         {
             _library = library;
             Resolution = resolution;
+            _formalTiles = formalTiles;
             _preview = new PreviewRenderUtility();
             try
             {
@@ -104,14 +107,23 @@ namespace DarkFlare.Editor
                     key = selection.Key;
                     variant = selection.VariantId;
                 }
-                if (!_leases.TryGetValue((key, variant), out DiagnosticTileLibrary.Lease lease))
+                TileBase tile;
+                if (_formalTiles != null)
                 {
-                    lease = _library.Acquire(Resolution?.RuleHash ?? "diagnostic-gallery-v1", key, variant);
-                    _leases.Add((key, variant), lease);
-                    created++;
+                    tile = _formalTiles.GetTile(key, variant);
+                }
+                else
+                {
+                    if (!_leases.TryGetValue((key, variant), out DiagnosticTileLibrary.Lease lease))
+                    {
+                        lease = _library.Acquire(Resolution?.RuleHash ?? "diagnostic-gallery-v1", key, variant);
+                        _leases.Add((key, variant), lease);
+                        created++;
+                    }
+                    tile = lease.Tile;
                 }
                 positions.Add(new Vector3Int(coordinate.x, coordinate.y, 0));
-                tiles.Add(lease.Tile);
+                tiles.Add(tile);
                 // 即使 Key 很多也分批让出主线程，资源只由当前构建帧持有。
                 if (positions.Count == 1024 || created == 8 || i == count - 1)
                 {

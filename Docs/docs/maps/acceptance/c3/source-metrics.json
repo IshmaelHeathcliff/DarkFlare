@@ -1,0 +1,50 @@
+[
+  {
+    "file": "Assets/Art/Sprites/Environment/TerrainSources/terrain_dirt_source_00.png",
+    "sha256": "29f81593da1906ebbb85038ea286ce261b432557504dfbae40852b818e114a05",
+    "mean_luminance": 0.2025718113811766,
+    "p95_luminance": 0.2444541176470588
+  },
+  {
+    "file": "Assets/Art/Sprites/Environment/TerrainSources/terrain_dirt_source_01.png",
+    "sha256": "c108796a2c8539fdff03f6ac9057329c1b70b640354645f1af99bf2115830e86",
+    "mean_luminance": 0.2105421427861403,
+    "p95_luminance": 0.261241568627451
+  },
+  {
+    "file": "Assets/Art/Sprites/Environment/TerrainSources/terrain_grass_source_00.png",
+    "sha256": "299d94cd6c800de839b1b4f76ca3cba9d5ad9249d0a4d1d23a5c926dacb0b5fe",
+    "mean_luminance": 0.24431692093634483,
+    "p95_luminance": 0.32742823529411763
+  },
+  {
+    "file": "Assets/Art/Sprites/Environment/TerrainSources/terrain_grass_source_01.png",
+    "sha256": "b14f2c59f4602f65fddd2f22eeab2a21dd2a45661077d88f0097bcf54885c383",
+    "mean_luminance": 0.24886288447702568,
+    "p95_luminance": 0.3590682352941176
+  },
+  {
+    "file": "Assets/Art/Sprites/Environment/TerrainSources/terrain_road_source_00.png",
+    "sha256": "2073dc4f960ec87a0f8fcc1c11247f8443b60860b78f05ad9aa4f8be6fd2541b",
+    "mean_luminance": 0.2769520949796502,
+    "p95_luminance": 0.33353333333333335
+  },
+  {
+    "file": "Assets/Art/Sprites/Environment/TerrainSources/terrain_road_source_01.png",
+    "sha256": "c7b88c4418041e3c3eef89cc3378246290b68f9ca77a6bfc7a6557ab1f756408",
+    "mean_luminance": 0.2727373710151221,
+    "p95_luminance": 0.3338007843137255
+  },
+  {
+    "file": "Assets/Art/Sprites/Environment/TerrainSources/terrain_water_source_00.png",
+    "sha256": "8426b21bca392995d41b649ded20b79bdb79074c35d44e9ff31534c2fc21b5ae",
+    "mean_luminance": 0.19874616540327356,
+    "p95_luminance": 0.2556078431372549
+  },
+  {
+    "file": "Assets/Art/Sprites/Environment/TerrainSources/terrain_water_source_01.png",
+    "sha256": "7cec2a8cfeea059a86ab927b138ee5d3e09edee1b500fa3542b179f58d15e990",
+    "mean_luminance": 0.19263432001888917,
+    "p95_luminance": 0.25310666666666665
+  }
+]

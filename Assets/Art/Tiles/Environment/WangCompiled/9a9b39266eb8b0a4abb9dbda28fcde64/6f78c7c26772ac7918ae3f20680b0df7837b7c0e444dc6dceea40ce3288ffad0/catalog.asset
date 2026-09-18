@@ -1,0 +1,1866 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ba9b836ee6159d4c8c1bd2c5e27d46d, type: 3}
+  m_Name: catalog
+  m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.TerrainTileCatalog
+  _terrainSetId: terrain_set:basic
+  _ruleHash: a19cce0cfff6015029e950b396844245bd0f6bd5fa27ac0797d6a75b09d3f33a
+  _revision: 6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0
+  _entries:
+  - _northWest: terrain:dirt
+    _northEast: terrain:dirt
+    _southEast: terrain:dirt
+    _southWest: terrain:dirt
+    _variant: 
+    _tile: {fileID: 11400000, guid: 9f9517b59a7be1d4cbe8f98ed5915e89, type: 2}
+    _textureHash: 980377ec228206b22e7f45b934c59f976161c4e123131de80711ca68db8beb34
+  - _northWest: terrain:dirt
+    _northEast: terrain:dirt
+    _southEast: terrain:dirt
+    _southWest: terrain:dirt
+    _variant: dirt_00
+    _tile: {fileID: 11400000, guid: de8aef86d202ffd47a2585a20b6da067, type: 2}
+    _textureHash: 3787319afcefd50f4977037437a1672af34d5f5d08f260d015ae4d5bf3853d0e
+  - _northWest: terrain:dirt
+    _northEast: terrain:dirt
+    _southEast: terrain:dirt
+    _southWest: terrain:dirt
+    _variant: dirt_01
+    _tile: {fileID: 11400000, guid: 419bfc6d18f12fc4bb35c6b3a63c10a8, type: 2}
+    _textureHash: 0bf41f209e0d029317a1278a5f24f9b505ac6fc28ddf4a752f541cff7c5b89ca
+  - _northWest: terrain:dirt
+    _northEast: terrain:dirt
+    _southEast: terrain:dirt
+    _southWest: terrain:grass
+    _variant: 
+    _tile: {fileID: 11400000, guid: 0f537dc8585956242bb4c8557f3d8e41, type: 2}
+    _textureHash: d2994b8a2675c0ef36ff55d270d54f98e147d7a72146ab7d49a443723943ae44
+  - _northWest: terrain:dirt
+    _northEast: terrain:dirt
+    _southEast: terrain:dirt
+    _southWest: terrain:road
+    _variant: 
+    _tile: {fileID: 11400000, guid: a86f085d4416c954eb185fc3854c88bc, type: 2}
+    _textureHash: 326970ff66a80335268e77f7d036d76e1f9a105afd43e306750cbdbee71a7632
+  - _northWest: terrain:dirt
+    _northEast: terrain:dirt
+    _southEast: terrain:dirt
+    _southWest: terrain:water
+    _variant: 
+    _tile: {fileID: 11400000, guid: ae0a4143d102c0f4f8fe6f0d6b71f2ba, type: 2}
+    _textureHash: 02b256dee5587bad1d60a97f14c85afcb68079525f3a17f2c72022f7aee754f2
+  - _northWest: terrain:dirt
+    _northEast: terrain:dirt
+    _southEast: terrain:grass
+    _southWest: terrain:dirt
+    _variant: 
+    _tile: {fileID: 11400000, guid: c496956ed31b9694ab96d91b8f3d8414, type: 2}
+    _textureHash: bf3afe61f29fecdde8cb501b30ed4f8637b17fe998105fdf37ba7f4afb00e840
+  - _northWest: terrain:dirt
+    _northEast: terrain:dirt
+    _southEast: terrain:grass
+    _southWest: terrain:grass
+    _variant: 
+    _tile: {fileID: 11400000, guid: a314ca7982aa52f4f981b9ea4ccac58e, type: 2}
+    _textureHash: 6b1ca05e02664381db2b130d8c81328523f26a0d6c796093e134016b1b9a305f
+  - _northWest: terrain:dirt
+    _northEast: terrain:dirt
+    _southEast: terrain:grass
+    _southWest: terrain:road
+    _variant: 
+    _tile: {fileID: 11400000, guid: 3ee66472ac533b3428e207c5f8896713, type: 2}
+    _textureHash: 667ec01771efb0d59b94563af79a51acac8a75f3f00c480e08c0aacfe3615a07
+  - _northWest: terrain:dirt
+    _northEast: terrain:dirt
+    _southEast: terrain:grass
+    _southWest: terrain:water
+    _variant: 
+    _tile: {fileID: 11400000, guid: 9249cf5eb1ec1b0419054e1e57738447, type: 2}
+    _textureHash: a0739ced8b37334bff625a267056c4998f08a9b0cbbfec3f4066db72c67d48f9
+  - _northWest: terrain:dirt
+    _northEast: terrain:dirt
+    _southEast: terrain:road
+    _southWest: terrain:dirt
+    _variant: 
+    _tile: {fileID: 11400000, guid: 98814c7f21c6e524991663eb0def6f1e, type: 2}
+    _textureHash: 9af7753775818b0a170bc1f3ea00d251e6125f191e18d8bf7007fcb6d548f3bc
+  - _northWest: terrain:dirt
+    _northEast: terrain:dirt
+    _southEast: terrain:road
+    _southWest: terrain:grass
+    _variant: 
+    _tile: {fileID: 11400000, guid: 419140f3fb909d84295b4f40e786a17e, type: 2}
+    _textureHash: 112e47cdae363a6026cfe92dd902bc34e3bc7268d9afcfd5e3ee81c1094d6ed7
+  - _northWest: terrain:dirt
+    _northEast: terrain:dirt
+    _southEast: terrain:road
+    _southWest: terrain:road
+    _variant: 
+    _tile: {fileID: 11400000, guid: 7a4ece8dcea082441a210d3822cec9c1, type: 2}
+    _textureHash: e31d76e3181a11b0f64e8770e62449d7cfe6a986084e73faad15a5824e286a91
+  - _northWest: terrain:dirt
+    _northEast: terrain:dirt
+    _southEast: terrain:road
+    _southWest: terrain:water
+    _variant: 
+    _tile: {fileID: 11400000, guid: ddb5c081ed1b68e47b56fac722edf310, type: 2}
+    _textureHash: ed533c5b6ce07dab3e0a4d498b1d54dbabced19e6d838ac92bc1e48edceefb4b
+  - _northWest: terrain:dirt
+    _northEast: terrain:dirt
+    _southEast: terrain:water
+    _southWest: terrain:dirt
+    _variant: 
+    _tile: {fileID: 11400000, guid: c4fb33a17998c184a94b413b7dfabfa4, type: 2}
+    _textureHash: f03cc50affb88aa1398cbd44750b50be92e1bb88e41aeb100d3921023aa4c8ff
+  - _northWest: terrain:dirt
+    _northEast: terrain:dirt
+    _southEast: terrain:water
+    _southWest: terrain:grass
+    _variant: 
+    _tile: {fileID: 11400000, guid: e08ccafb7e36aba48ababa3ef88bcd7f, type: 2}
+    _textureHash: 460430495e2966ca61dd43188bf2a1b6a424fadfaaf791bf68a702deef43d388
+  - _northWest: terrain:dirt
+    _northEast: terrain:dirt
+    _southEast: terrain:water
+    _southWest: terrain:road
+    _variant: 
+    _tile: {fileID: 11400000, guid: 525cc936f8c397e49b988625cbc7e851, type: 2}
+    _textureHash: e8f8a4b59e34fb2cb7e3cc6594c0cd64fc854bcc0027e5d4195743311ea16a88
+  - _northWest: terrain:dirt
+    _northEast: terrain:dirt
+    _southEast: terrain:water
+    _southWest: terrain:water
+    _variant: 
+    _tile: {fileID: 11400000, guid: 38a68154be3ba4b4bbca597e8903fc48, type: 2}
+    _textureHash: b9fe6c54da702697650a5796cf397b15130233c65fed675e2b3cd1fe6e0ad3aa
+  - _northWest: terrain:dirt
+    _northEast: terrain:grass
+    _southEast: terrain:dirt
+    _southWest: terrain:dirt
+    _variant: 
+    _tile: {fileID: 11400000, guid: f0845d251fd354a48872f29ab29ad49e, type: 2}
+    _textureHash: 549962f7c6d0022b989a80fe0cbfa94cea79be21837e8e8330b51de23a3431d7
+  - _northWest: terrain:dirt
+    _northEast: terrain:grass
+    _southEast: terrain:dirt
+    _southWest: terrain:grass
+    _variant: 
+    _tile: {fileID: 11400000, guid: 58aee832dc5ef864987fb321d26b5e16, type: 2}
+    _textureHash: 398b1f97865c01ecaaaea8f84327eeb81a64871a1215ea8ba386bcd37a71972a
+  - _northWest: terrain:dirt
+    _northEast: terrain:grass
+    _southEast: terrain:dirt
+    _southWest: terrain:road
+    _variant: 
+    _tile: {fileID: 11400000, guid: 1105ad36b7b4011419ce2ae5454c6fae, type: 2}
+    _textureHash: c6bdcdeebf1baa358366685ce89b5a78b21b6aa5c5b4ebd71b6a27d2fd4f2ca6
+  - _northWest: terrain:dirt
+    _northEast: terrain:grass
+    _southEast: terrain:dirt
+    _southWest: terrain:water
+    _variant: 
+    _tile: {fileID: 11400000, guid: 3c8bb46bb6b21f647831fe60498d8ba5, type: 2}
+    _textureHash: 411f5e2e6cb761ba00da8c240bf258f779912208cd2be2a12d9d2284cdde74b4
+  - _northWest: terrain:dirt
+    _northEast: terrain:grass
+    _southEast: terrain:grass
+    _southWest: terrain:dirt
+    _variant: 
+    _tile: {fileID: 11400000, guid: 29a9838d58921004d9b837199a726cbd, type: 2}
+    _textureHash: 1c83013390c47f7150dd26aac0c554954fb883a8b535f3a06fb7aaa442e4fec0
+  - _northWest: terrain:dirt
+    _northEast: terrain:grass
+    _southEast: terrain:grass
+    _southWest: terrain:grass
+    _variant: 
+    _tile: {fileID: 11400000, guid: e18f77532ef933c41b26eefa93743d3b, type: 2}
+    _textureHash: 285e62ed7b583933d7cc04167140f110a4b3d44c6bf005b5e6a23d91751429cb
+  - _northWest: terrain:dirt
+    _northEast: terrain:grass
+    _southEast: terrain:grass
+    _southWest: terrain:road
+    _variant: 
+    _tile: {fileID: 11400000, guid: ce6eab9e1bc3827479c3e012b2df0995, type: 2}
+    _textureHash: a325a9b05e9a0d82231562cbaa5509af2dcba29e270549cf2904977f690b7af3
+  - _northWest: terrain:dirt
+    _northEast: terrain:grass
+    _southEast: terrain:grass
+    _southWest: terrain:water
+    _variant: 
+    _tile: {fileID: 11400000, guid: 5a6121bd1adf8df4b8ed2d376f319235, type: 2}
+    _textureHash: 247b87b8064825f3e2d3172f890544d28150c8e556b29bc4583afb3f1e88cbb9
+  - _northWest: terrain:dirt
+    _northEast: terrain:grass
+    _southEast: terrain:road
+    _southWest: terrain:dirt
+    _variant: 
+    _tile: {fileID: 11400000, guid: 5ad52956b50a93046884db518bde2bf9, type: 2}
+    _textureHash: 9ceaf9c099491849ae1b1f4658ed5de12fab63b614359f5da7d1bcba94798fe4
+  - _northWest: terrain:dirt
+    _northEast: terrain:grass
+    _southEast: terrain:road
+    _southWest: terrain:grass
+    _variant: 
+    _tile: {fileID: 11400000, guid: f72d850c56bd3924296e10fc52a6abef, type: 2}
+    _textureHash: 8709187cc17354b529d19cc24d7de7fe9815e9f5cfd8fc9cbfdcda5a5a3307c4
+  - _northWest: terrain:dirt
+    _northEast: terrain:grass
+    _southEast: terrain:road
+    _southWest: terrain:road
+    _variant: 
+    _tile: {fileID: 11400000, guid: 9ef2a973a6a50604aa5f32b07b4e32b6, type: 2}
+    _textureHash: beb956688c2267d1185d7f1f55da10989fdee5890e248e2a25e8dfa0124a7205
+  - _northWest: terrain:dirt
+    _northEast: terrain:grass
+    _southEast: terrain:road
+    _southWest: terrain:water
+    _variant: 
+    _tile: {fileID: 11400000, guid: 1387289ee5f3b494eb65f831a0f35aad, type: 2}
+    _textureHash: 76b2da5fb90d751523eae41c1ccda5902ff1b6993aaceceb448fb02138b199af
+  - _northWest: terrain:dirt
+    _northEast: terrain:grass
+    _southEast: terrain:water
+    _southWest: terrain:dirt
+    _variant: 
+    _tile: {fileID: 11400000, guid: 10b542d422b15b8478fe0f8dc4e54938, type: 2}
+    _textureHash: f7219ee064ed3b4467c280bb1b2d33f20d376b0aee3c16b8afd7af165e92026e
+  - _northWest: terrain:dirt
+    _northEast: terrain:grass
+    _southEast: terrain:water
+    _southWest: terrain:grass
+    _variant: 
+    _tile: {fileID: 11400000, guid: 8caeb6b774e4c9547a24abe9b8e28c0e, type: 2}
+    _textureHash: 5dec550470e82a9a061f24582e7904198cb4767c7adf2cf6e90fa120f6149682
+  - _northWest: terrain:dirt
+    _northEast: terrain:grass
+    _southEast: terrain:water
+    _southWest: terrain:road
+    _variant: 
+    _tile: {fileID: 11400000, guid: 85d04684a7ecb4541a168931bb176f39, type: 2}
+    _textureHash: 75cb3de57a8d6967d8c714172b1a875c66cd440964047de793ea48a210f6ee78
+  - _northWest: terrain:dirt
+    _northEast: terrain:grass
+    _southEast: terrain:water
+    _southWest: terrain:water
+    _variant: 
+    _tile: {fileID: 11400000, guid: 2a9e6ec32019b694683d3d327da2878b, type: 2}
+    _textureHash: f306af387c34b1290dce6e4fb84b27990cbc307eec578176fca08fb9bb1be275
+  - _northWest: terrain:dirt
+    _northEast: terrain:road
+    _southEast: terrain:dirt
+    _southWest: terrain:dirt
+    _variant: 
+    _tile: {fileID: 11400000, guid: 2e61e7a8f9360fe46b97d35b96cb5465, type: 2}
+    _textureHash: 38cb007d468200eb9869ac4cf91335314e7cc94aa74d8cda9ed67348a51232f5
+  - _northWest: terrain:dirt
+    _northEast: terrain:road
+    _southEast: terrain:dirt
+    _southWest: terrain:grass
+    _variant: 
+    _tile: {fileID: 11400000, guid: f41219805ae9e0344b2939f50579a260, type: 2}
+    _textureHash: 0eb5df34d553305980c2644acbed11014e5ce8f8dc680fa5f359446b0b82b1fb
+  - _northWest: terrain:dirt
+    _northEast: terrain:road
+    _southEast: terrain:dirt
+    _southWest: terrain:road
+    _variant: 
+    _tile: {fileID: 11400000, guid: f754702eb721b0b4faa9505f0b9ca981, type: 2}
+    _textureHash: b4f7e64732f86c5c921e2f17f278785c216219849f590e922233bfdb50f9a2a6
+  - _northWest: terrain:dirt
+    _northEast: terrain:road
+    _southEast: terrain:dirt
+    _southWest: terrain:water
+    _variant: 
+    _tile: {fileID: 11400000, guid: 7095a433ca25ea643955e46338aa3327, type: 2}
+    _textureHash: b639f70c2043f0d558d83bbf23b8a44dcc3710c4b665696a701b314498dafd4d
+  - _northWest: terrain:dirt
+    _northEast: terrain:road
+    _southEast: terrain:grass
+    _southWest: terrain:dirt
+    _variant: 
+    _tile: {fileID: 11400000, guid: 9c8e8e0ebc457e941856c9148e57656f, type: 2}
+    _textureHash: 81f4dc694722d66d733df76b62ed7952cbf23c19398de8f37268a0e1dc261ad9
+  - _northWest: terrain:dirt
+    _northEast: terrain:road
+    _southEast: terrain:grass
+    _southWest: terrain:grass
+    _variant: 
+    _tile: {fileID: 11400000, guid: a9957dd5ffb93404fae56141ec9fb52a, type: 2}
+    _textureHash: 0676603fdf7c008a7218ba13b9c872ed660c67c5f6ff27650ea1367265442499
+  - _northWest: terrain:dirt
+    _northEast: terrain:road
+    _southEast: terrain:grass
+    _southWest: terrain:road
+    _variant: 
+    _tile: {fileID: 11400000, guid: 65cade6a36a2f884faedcb17105b0ad3, type: 2}
+    _textureHash: 60504f0ccf0b14806054351941545c2e7da0c690377e8dab695edbd9fc74adc6
+  - _northWest: terrain:dirt
+    _northEast: terrain:road
+    _southEast: terrain:grass
+    _southWest: terrain:water
+    _variant: 
+    _tile: {fileID: 11400000, guid: a3686f344cf498d4d8bdbc851accd6f0, type: 2}
+    _textureHash: 7c484690146f9bcc28782ec37bd7cb4bfb75b869927e9acb102cb976ae7ac216
+  - _northWest: terrain:dirt
+    _northEast: terrain:road
+    _southEast: terrain:road
+    _southWest: terrain:dirt
+    _variant: 
+    _tile: {fileID: 11400000, guid: a84ee71b5f971e44bac1a302a3b7c21c, type: 2}
+    _textureHash: 658dd768a87b675c1bc87b2fb15c703aab9c9071ec5dd82c1dd372093f98adfa
+  - _northWest: terrain:dirt
+    _northEast: terrain:road
+    _southEast: terrain:road
+    _southWest: terrain:grass
+    _variant: 
+    _tile: {fileID: 11400000, guid: cd375c087d09e5b4595cb7065b557ca5, type: 2}
+    _textureHash: eba326703e341bfa9e2afa4d58d2d1deaf0ca3a85431394bb9873ef714b2ca62
+  - _northWest: terrain:dirt
+    _northEast: terrain:road
+    _southEast: terrain:road
+    _southWest: terrain:road
+    _variant: 
+    _tile: {fileID: 11400000, guid: e1aaf071286299f4e88ceba9975cfff2, type: 2}
+    _textureHash: af8f436b934d3ecee22adf5418cb1f21eeb55b4dee70d0a3cb3e9975ea131054
+  - _northWest: terrain:dirt
+    _northEast: terrain:road
+    _southEast: terrain:road
+    _southWest: terrain:water
+    _variant: 
+    _tile: {fileID: 11400000, guid: 9484331f927862a40b1835b59c30a218, type: 2}
+    _textureHash: 678723786227289c96eeb2b04a34afbad9ffc4ac1d8463580650d610c3cdd23d
+  - _northWest: terrain:dirt
+    _northEast: terrain:road
+    _southEast: terrain:water
+    _southWest: terrain:dirt
+    _variant: 
+    _tile: {fileID: 11400000, guid: 21881248e6a04b544a1819701af55fb6, type: 2}
+    _textureHash: a1a5ed84f5d0bd7d109ed909e337621013e713dc2019dd27630fad423a6eb856
+  - _northWest: terrain:dirt
+    _northEast: terrain:road
+    _southEast: terrain:water
+    _southWest: terrain:grass
+    _variant: 
+    _tile: {fileID: 11400000, guid: 29086150347ca7f49a97d53f49a9700f, type: 2}
+    _textureHash: 9f4ab5915f342e4acdb1a6ef82696345070ad82fb941870222f4080d1fe50e0d
+  - _northWest: terrain:dirt
+    _northEast: terrain:road
+    _southEast: terrain:water
+    _southWest: terrain:road
+    _variant: 
+    _tile: {fileID: 11400000, guid: 170ba183e3af7744ab96836412c14609, type: 2}
+    _textureHash: fa5a6d1d52bf0913e3640d39b67d14669d11dcffdb26a5c9d0e396951dd0e716
+  - _northWest: terrain:dirt
+    _northEast: terrain:road
+    _southEast: terrain:water
+    _southWest: terrain:water
+    _variant: 
+    _tile: {fileID: 11400000, guid: da41ca7e91cce554aaa48282307ee830, type: 2}
+    _textureHash: 0539a35b9f3bcc2504e774127e6d9daaf955377a9245b434ca80a8f172a432c6
+  - _northWest: terrain:dirt
+    _northEast: terrain:water
+    _southEast: terrain:dirt
+    _southWest: terrain:dirt
+    _variant: 
+    _tile: {fileID: 11400000, guid: f4a7b1d168dae58459e135a5c33dc550, type: 2}
+    _textureHash: 097c318be2e470fdf91188b805c586a5a523007b8ef3ba0b42e4e3caf3fe0dff
+  - _northWest: terrain:dirt
+    _northEast: terrain:water
+    _southEast: terrain:dirt
+    _southWest: terrain:grass
+    _variant: 
+    _tile: {fileID: 11400000, guid: 6a532878ef536e74c8c57aeb97b54398, type: 2}
+    _textureHash: 8ee36565a6ff393faae89096671c126e6f34460e78551b7f5d207c0ab308412c
+  - _northWest: terrain:dirt
+    _northEast: terrain:water
+    _southEast: terrain:dirt
+    _southWest: terrain:road
+    _variant: 
+    _tile: {fileID: 11400000, guid: 859cd80e79c389f4eb8f2276d36d346c, type: 2}
+    _textureHash: b9d4c2db717e8f12cc6ac22bb00a7b66298b5a841561374d9cdfcbc323a4817a
+  - _northWest: terrain:dirt
+    _northEast: terrain:water
+    _southEast: terrain:dirt
+    _southWest: terrain:water
+    _variant: 
+    _tile: {fileID: 11400000, guid: c8e4c19d1091bbb4c9c5fe727020f59b, type: 2}
+    _textureHash: 28dea40efe5fd30632d7fc5ca0e34069b0bd9832f44a8e1ef8b932c2c22bfd45
+  - _northWest: terrain:dirt
+    _northEast: terrain:water
+    _southEast: terrain:grass
+    _southWest: terrain:dirt
+    _variant: 
+    _tile: {fileID: 11400000, guid: 7143067971dc41e41ac8ed89d4aa0160, type: 2}
+    _textureHash: 4cdea9f4233e759b18585970e8e5be53bf25a61f5125e231f8e89549204668a6
+  - _northWest: terrain:dirt
+    _northEast: terrain:water
+    _southEast: terrain:grass
+    _southWest: terrain:grass
+    _variant: 
+    _tile: {fileID: 11400000, guid: 973e40158c996ef42baaaaf03a9f79ca, type: 2}
+    _textureHash: d325ba2f0a49547e07f31347ecfae3ceb52a42e40b145f1168dc265ca7a4b9e5
+  - _northWest: terrain:dirt
+    _northEast: terrain:water
+    _southEast: terrain:grass
+    _southWest: terrain:road
+    _variant: 
+    _tile: {fileID: 11400000, guid: 31c7a67b5a3e32e489eb97d7b7b89f9d, type: 2}
+    _textureHash: 2d02faec8613ac91f2106c72bcf7ea398f8351560eae8946ba4a2c6ba646d330
+  - _northWest: terrain:dirt
+    _northEast: terrain:water
+    _southEast: terrain:grass
+    _southWest: terrain:water
+    _variant: 
+    _tile: {fileID: 11400000, guid: 23c442641d52cea4fbf46d956d6e9d11, type: 2}
+    _textureHash: a2885091d6ccbe7aabe618e4fa1683331152ecc356ee3174c5427823a989c49f
+  - _northWest: terrain:dirt
+    _northEast: terrain:water
+    _southEast: terrain:road
+    _southWest: terrain:dirt
+    _variant: 
+    _tile: {fileID: 11400000, guid: e0eeb5b941f0a0345bfeb203225f460f, type: 2}
+    _textureHash: 377fd5eceae7a7275f88806688c91330be3df0227cbd26e61644492804534c6f
+  - _northWest: terrain:dirt
+    _northEast: terrain:water
+    _southEast: terrain:road
+    _southWest: terrain:grass
+    _variant: 
+    _tile: {fileID: 11400000, guid: 0516b12f5070d514bb7405cbc1b46aeb, type: 2}
+    _textureHash: 4ca5bf4d3d1c9c1019d0f10d23a2a557abe8d61017eb2f73ca26ec9d683ffa44
+  - _northWest: terrain:dirt
+    _northEast: terrain:water
+    _southEast: terrain:road
+    _southWest: terrain:road
+    _variant: 
+    _tile: {fileID: 11400000, guid: 0a7c37ffce8fcdb4b80512e7319c2110, type: 2}
+    _textureHash: db94cf2bd922a86f136d6f49aeef9e95582627f9a5c6b019701d6739de597ad4
+  - _northWest: terrain:dirt
+    _northEast: terrain:water
+    _southEast: terrain:road
+    _southWest: terrain:water
+    _variant: 
+    _tile: {fileID: 11400000, guid: afb741af69805354bbdb965b7655070f, type: 2}
+    _textureHash: 0185f1f6cef7e33703a7041f05c0e8db967336374c704f9adaaea3dcf2e35a9b
+  - _northWest: terrain:dirt
+    _northEast: terrain:water
+    _southEast: terrain:water
+    _southWest: terrain:dirt
+    _variant: 
+    _tile: {fileID: 11400000, guid: 4a85976ffae08bd418e91e19d10dad4a, type: 2}
+    _textureHash: 2652b10cded01630703d3dfc29ed59c3100ffc83cebe17049693feabf5d8a879
+  - _northWest: terrain:dirt
+    _northEast: terrain:water
+    _southEast: terrain:water
+    _southWest: terrain:grass
+    _variant: 
+    _tile: {fileID: 11400000, guid: 0263bb2d94848ca459fd2b5c58fd92ae, type: 2}
+    _textureHash: e8bd0da5d1afabd87cdca3c7b53e0fa98c434bde65dacae51bb6632a2854f0fe
+  - _northWest: terrain:dirt
+    _northEast: terrain:water
+    _southEast: terrain:water
+    _southWest: terrain:road
+    _variant: 
+    _tile: {fileID: 11400000, guid: 8adaa23e1fe5506478fea636e97850f4, type: 2}
+    _textureHash: 10fb9ac362ace9d01a0e3333cbc856024da259f1f64c3392b320b21a2d2a41cb
+  - _northWest: terrain:dirt
+    _northEast: terrain:water
+    _southEast: terrain:water
+    _southWest: terrain:water
+    _variant: 
+    _tile: {fileID: 11400000, guid: bb50dde4b88565044ab944aec341848c, type: 2}
+    _textureHash: 0cda13482806d16e5344f8c8677b8a9f8b1c987ad53dc933c8d23fa69c738d35
+  - _northWest: terrain:grass
+    _northEast: terrain:dirt
+    _southEast: terrain:dirt
+    _southWest: terrain:dirt
+    _variant: 
+    _tile: {fileID: 11400000, guid: 5e691ac06f6d2804e8f331f3568423ef, type: 2}
+    _textureHash: 9f537a5a2b27c69917a877750e29d811a481bb92aeabca0b835462d2f4563ed9
+  - _northWest: terrain:grass
+    _northEast: terrain:dirt
+    _southEast: terrain:dirt
+    _southWest: terrain:grass
+    _variant: 
+    _tile: {fileID: 11400000, guid: f294e0c3c71d39a4b8181368033815ec, type: 2}
+    _textureHash: 7471c1df3c135ebc3c62cb60f50d55600822c63788cee494dca537434b6814d2
+  - _northWest: terrain:grass
+    _northEast: terrain:dirt
+    _southEast: terrain:dirt
+    _southWest: terrain:road
+    _variant: 
+    _tile: {fileID: 11400000, guid: 51f4223537a53af4b95f3fa85cc14e87, type: 2}
+    _textureHash: 41cc31d4e8b658ff395035416574cebe1b1359b74bf034550b91c75790bd8752
+  - _northWest: terrain:grass
+    _northEast: terrain:dirt
+    _southEast: terrain:dirt
+    _southWest: terrain:water
+    _variant: 
+    _tile: {fileID: 11400000, guid: 214ff523d276c0e428770b7c5a8fb468, type: 2}
+    _textureHash: ad2be5ac13a5e3059e439c6a7d7833e6e53eff6431d0b314f8313ba124abcadc
+  - _northWest: terrain:grass
+    _northEast: terrain:dirt
+    _southEast: terrain:grass
+    _southWest: terrain:dirt
+    _variant: 
+    _tile: {fileID: 11400000, guid: 647f8674040708b4d9f2add39f34dcc8, type: 2}
+    _textureHash: b9c85c5299ba1e3a4f316b600cd6a9e7fd285a53651c1fed9696d71733718d5e
+  - _northWest: terrain:grass
+    _northEast: terrain:dirt
+    _southEast: terrain:grass
+    _southWest: terrain:grass
+    _variant: 
+    _tile: {fileID: 11400000, guid: e7965237f15015542ab2577ff8981b05, type: 2}
+    _textureHash: 924c060f5844913cfcfea885fa77b9e913714482477850d0bed7a471aae20ebb
+  - _northWest: terrain:grass
+    _northEast: terrain:dirt
+    _southEast: terrain:grass
+    _southWest: terrain:road
+    _variant: 
+    _tile: {fileID: 11400000, guid: 1ea4cb3e1d99a624580d9bbcba1f00ba, type: 2}
+    _textureHash: bca82bac71280273c8eb17cd21e8f0a9d4ffd50339c411e4f08c81333f42ef6e
+  - _northWest: terrain:grass
+    _northEast: terrain:dirt
+    _southEast: terrain:grass
+    _southWest: terrain:water
+    _variant: 
+    _tile: {fileID: 11400000, guid: 0b92ac3e4dd06dd4b8a7e34c9fd52020, type: 2}
+    _textureHash: 3ed86e2cd72a0f2eb9f87fa0aa832570251857f1fdc3c575341484ae0f512178
+  - _northWest: terrain:grass
+    _northEast: terrain:dirt
+    _southEast: terrain:road
+    _southWest: terrain:dirt
+    _variant: 
+    _tile: {fileID: 11400000, guid: 4bfe3d88200db2743adc17fd210593a3, type: 2}
+    _textureHash: 2cbda54c8d89ea499880a259235724706b7fadf63d2e3cd17242c0ecfc0ee220
+  - _northWest: terrain:grass
+    _northEast: terrain:dirt
+    _southEast: terrain:road
+    _southWest: terrain:grass
+    _variant: 
+    _tile: {fileID: 11400000, guid: 3dda3cf1b4d200643bca6da80bf582d1, type: 2}
+    _textureHash: ef550d7892cf8e3818250da429e80dd42ad6f9a50aa828b618ccc07021848ab5
+  - _northWest: terrain:grass
+    _northEast: terrain:dirt
+    _southEast: terrain:road
+    _southWest: terrain:road
+    _variant: 
+    _tile: {fileID: 11400000, guid: 68f4c788e966e15479bfdc7b86a72200, type: 2}
+    _textureHash: e6c679e5293e01290bd7e75422a9a628de51a080478073d1f17abf65ea7c63d0
+  - _northWest: terrain:grass
+    _northEast: terrain:dirt
+    _southEast: terrain:road
+    _southWest: terrain:water
+    _variant: 
+    _tile: {fileID: 11400000, guid: 94119d9e10d36734391b318536c8ee66, type: 2}
+    _textureHash: 2e30321bd690c87f024b33f8cb028d21e25ae1dd1eca4cccd76775b81510e8b2
+  - _northWest: terrain:grass
+    _northEast: terrain:dirt
+    _southEast: terrain:water
+    _southWest: terrain:dirt
+    _variant: 
+    _tile: {fileID: 11400000, guid: e3c040aec51ea1648b1eb80b571a39eb, type: 2}
+    _textureHash: ba3dc0d83f37d077418f8df4d3608cbf4c42c30923337077a6b4746db860e76f
+  - _northWest: terrain:grass
+    _northEast: terrain:dirt
+    _southEast: terrain:water
+    _southWest: terrain:grass
+    _variant: 
+    _tile: {fileID: 11400000, guid: 8898c21aa45848846962b7d8da6ae25f, type: 2}
+    _textureHash: 36c06231cc2c9a814c8f11d4cb0a00b86a1c3639de77cc453398d9706ee8994b
+  - _northWest: terrain:grass
+    _northEast: terrain:dirt
+    _southEast: terrain:water
+    _southWest: terrain:road
+    _variant: 
+    _tile: {fileID: 11400000, guid: 84bbdedcb43f62e49aa9df3efade375b, type: 2}
+    _textureHash: 7cdde3f2eae8926d41a8f642cefb2bb299bf612a411dc31cd157c214d7734a7c
+  - _northWest: terrain:grass
+    _northEast: terrain:dirt
+    _southEast: terrain:water
+    _southWest: terrain:water
+    _variant: 
+    _tile: {fileID: 11400000, guid: 030280e3caeaad94ab8c73eca5ee3603, type: 2}
+    _textureHash: d0c73b072d496e7fb7710a32549706289e5364d5dcde31a7e33a2be4ad543332
+  - _northWest: terrain:grass
+    _northEast: terrain:grass
+    _southEast: terrain:dirt
+    _southWest: terrain:dirt
+    _variant: 
+    _tile: {fileID: 11400000, guid: b4293772b0b107f4f89e68414a6678f9, type: 2}
+    _textureHash: 614e62546bac9706825c3c0a3d41b9f408a16e51f6ffce8e0dc09e9626da9b20
+  - _northWest: terrain:grass
+    _northEast: terrain:grass
+    _southEast: terrain:dirt
+    _southWest: terrain:grass
+    _variant: 
+    _tile: {fileID: 11400000, guid: 95846dd7377521c4fbcbeac7628cca69, type: 2}
+    _textureHash: c7dcad5ffbe825f6822452e24dd99fcce2d4c2c0a44ba42a4d8680365cc58be3
+  - _northWest: terrain:grass
+    _northEast: terrain:grass
+    _southEast: terrain:dirt
+    _southWest: terrain:road
+    _variant: 
+    _tile: {fileID: 11400000, guid: f902fb6fe1d67e741b3cc311880124e7, type: 2}
+    _textureHash: b6466b7e9f59b27080550e4f1b360f380024cd93df1a2ebf1c644ac860aa801b
+  - _northWest: terrain:grass
+    _northEast: terrain:grass
+    _southEast: terrain:dirt
+    _southWest: terrain:water
+    _variant: 
+    _tile: {fileID: 11400000, guid: 778c9d7438bbd4145bf4794f99d1c1e8, type: 2}
+    _textureHash: a4b120c92b9b8c32e428e92fce4b00d405d3d7d06536249fdecedb3a2b28df7e
+  - _northWest: terrain:grass
+    _northEast: terrain:grass
+    _southEast: terrain:grass
+    _southWest: terrain:dirt
+    _variant: 
+    _tile: {fileID: 11400000, guid: 08074b6083b94594daf5e81b6e070e43, type: 2}
+    _textureHash: a964def16ab73e6ba5b73d8359efe01dcc9d0018a26d4394b7f69241d4b35b52
+  - _northWest: terrain:grass
+    _northEast: terrain:grass
+    _southEast: terrain:grass
+    _southWest: terrain:grass
+    _variant: 
+    _tile: {fileID: 11400000, guid: 206ed1357a7c0534b98b78d3e315d7f2, type: 2}
+    _textureHash: 622b784ab1156e79a73cea5827a92e847cc5a5249ede5b178dadffe0dff03e18
+  - _northWest: terrain:grass
+    _northEast: terrain:grass
+    _southEast: terrain:grass
+    _southWest: terrain:grass
+    _variant: grass_00
+    _tile: {fileID: 11400000, guid: 0d0966ac47a016644970ba9b38d9dda0, type: 2}
+    _textureHash: 56d9fb1ec7f35bfd62fa144dd6c3d62d2c1698c3e12bce0a5f4ccace1745ebfb
+  - _northWest: terrain:grass
+    _northEast: terrain:grass
+    _southEast: terrain:grass
+    _southWest: terrain:grass
+    _variant: grass_01
+    _tile: {fileID: 11400000, guid: aac0d9290e6dc3748b153a6b06c9b44f, type: 2}
+    _textureHash: 2f5afd8375688cf381e5eca5be94df9cfee23c5b96e07f0aa084a32f0a6c831e
+  - _northWest: terrain:grass
+    _northEast: terrain:grass
+    _southEast: terrain:grass
+    _southWest: terrain:road
+    _variant: 
+    _tile: {fileID: 11400000, guid: 0ab5ea9afd69c7749b8f9200f001572f, type: 2}
+    _textureHash: c774919f5a251c99e23decf413b604a7d685d6558ff4a71724be3e4f6040548e
+  - _northWest: terrain:grass
+    _northEast: terrain:grass
+    _southEast: terrain:grass
+    _southWest: terrain:water
+    _variant: 
+    _tile: {fileID: 11400000, guid: 5c7556d19a2dbec4a8fb9d8c8baccd6c, type: 2}
+    _textureHash: 796e27d59008d99c9a8bb644842b4916b2a7e705e443b4b4ae2993d442c82cab
+  - _northWest: terrain:grass
+    _northEast: terrain:grass
+    _southEast: terrain:road
+    _southWest: terrain:dirt
+    _variant: 
+    _tile: {fileID: 11400000, guid: b3547ca6075ef544e81e1352e0f18a5e, type: 2}
+    _textureHash: 4b737f2875a6a251f5eb0d545ba52040b843f5b7bcde8db2644900159b397407
+  - _northWest: terrain:grass
+    _northEast: terrain:grass
+    _southEast: terrain:road
+    _southWest: terrain:grass
+    _variant: 
+    _tile: {fileID: 11400000, guid: 47a50f95d2a00ca48a15ae7d4340e85f, type: 2}
+    _textureHash: 2a643a269186f50a5150ad6b869b117645021c652dcafea61170cf1aee20a42a
+  - _northWest: terrain:grass
+    _northEast: terrain:grass
+    _southEast: terrain:road
+    _southWest: terrain:road
+    _variant: 
+    _tile: {fileID: 11400000, guid: babf2eefad022084f899607adc78afcf, type: 2}
+    _textureHash: 216ecebfab5d3e389f5aa893e7a12c5ccbcb81d582613b55b7a651092957cfcf
+  - _northWest: terrain:grass
+    _northEast: terrain:grass
+    _southEast: terrain:road
+    _southWest: terrain:water
+    _variant: 
+    _tile: {fileID: 11400000, guid: 9455704544cf69b4280445942ea38f68, type: 2}
+    _textureHash: fbd2ea1440391b084f07e23a209c9461cc0661b6eea4ccc4ef813ca0216bec2c
+  - _northWest: terrain:grass
+    _northEast: terrain:grass
+    _southEast: terrain:water
+    _southWest: terrain:dirt
+    _variant: 
+    _tile: {fileID: 11400000, guid: f5f676db24607db4fbe82632148494db, type: 2}
+    _textureHash: 0dac98eccc0d4042584cca72704e14fc6978df3b6494cd42d13bd69986068053
+  - _northWest: terrain:grass
+    _northEast: terrain:grass
+    _southEast: terrain:water
+    _southWest: terrain:grass
+    _variant: 
+    _tile: {fileID: 11400000, guid: 94f23f170dd42864793ecfb3cc5528e4, type: 2}
+    _textureHash: c15050dad72b9ca72f5c0cd587d981fd9a57bb016e9cdf39995f30d19da24c94
+  - _northWest: terrain:grass
+    _northEast: terrain:grass
+    _southEast: terrain:water
+    _southWest: terrain:road
+    _variant: 
+    _tile: {fileID: 11400000, guid: 13212a6553d105a46a074b38abe924f6, type: 2}
+    _textureHash: 909ec688f88a1156945543e45de14503b1b94d4c567a0064eaf3a5f2aa665ac4
+  - _northWest: terrain:grass
+    _northEast: terrain:grass
+    _southEast: terrain:water
+    _southWest: terrain:water
+    _variant: 
+    _tile: {fileID: 11400000, guid: 95cd7663d29b65b4cae04760b68adee4, type: 2}
+    _textureHash: 31a5f97015461cf52340ca5739f6688622e0ed0072c6d9e7f0cb3ba4173a0a28
+  - _northWest: terrain:grass
+    _northEast: terrain:road
+    _southEast: terrain:dirt
+    _southWest: terrain:dirt
+    _variant: 
+    _tile: {fileID: 11400000, guid: 42fa2b42b5372634cba8b9856b86c97c, type: 2}
+    _textureHash: 78403e56a01a928035c5282869a288d6f1a3f7d7f504319aca5331b05389b590
+  - _northWest: terrain:grass
+    _northEast: terrain:road
+    _southEast: terrain:dirt
+    _southWest: terrain:grass
+    _variant: 
+    _tile: {fileID: 11400000, guid: 1aadb508d5bc3e141886dbfa8c4c3540, type: 2}
+    _textureHash: ed99cfe0f7dbe88c9c63dc707d0d73d7ebc709344962c760a9d1a72db836cd95
+  - _northWest: terrain:grass
+    _northEast: terrain:road
+    _southEast: terrain:dirt
+    _southWest: terrain:road
+    _variant: 
+    _tile: {fileID: 11400000, guid: 0f5f4e25d7f5dba488a83fee3249b1a2, type: 2}
+    _textureHash: a2de03abfefc98f06ae7211f83f49f8aff5e38ccb55fe482bc2b28a59d0e2944
+  - _northWest: terrain:grass
+    _northEast: terrain:road
+    _southEast: terrain:dirt
+    _southWest: terrain:water
+    _variant: 
+    _tile: {fileID: 11400000, guid: 0ae859259483f3945bdff9a72c17f006, type: 2}
+    _textureHash: 85087dcd4417f642ce714625f31a4a8f3240b9c150db0897230af6a2e5ccee49
+  - _northWest: terrain:grass
+    _northEast: terrain:road
+    _southEast: terrain:grass
+    _southWest: terrain:dirt
+    _variant: 
+    _tile: {fileID: 11400000, guid: 385cb3f023d151849b7a93d8fc6a8213, type: 2}
+    _textureHash: 738978305ced03a8c3ac5d4e25bfb2e486d9f7fb1457299390e6fe22cf32c08f
+  - _northWest: terrain:grass
+    _northEast: terrain:road
+    _southEast: terrain:grass
+    _southWest: terrain:grass
+    _variant: 
+    _tile: {fileID: 11400000, guid: af0d2d0ce1661594ba9e92cfad8e28f8, type: 2}
+    _textureHash: 2269b71997f387bbf4976ba2e64f805d0fae11fc5353d48b6c9d50822b3ed583
+  - _northWest: terrain:grass
+    _northEast: terrain:road
+    _southEast: terrain:grass
+    _southWest: terrain:road
+    _variant: 
+    _tile: {fileID: 11400000, guid: 6b9f4ca89694f6c4fa9e49c3a21441fd, type: 2}
+    _textureHash: d16e064b80d6fd15bb607f62ac1fa74b4780a6a9ddf1f52a324da6dfa1cd4387
+  - _northWest: terrain:grass
+    _northEast: terrain:road
+    _southEast: terrain:grass
+    _southWest: terrain:water
+    _variant: 
+    _tile: {fileID: 11400000, guid: e190e121aff8d674e8f7c889597124f9, type: 2}
+    _textureHash: a8e3a9a731585bd5d1f229c7e96d0efe86f183bcc68a8b9789dc37c77d117ee4
+  - _northWest: terrain:grass
+    _northEast: terrain:road
+    _southEast: terrain:road
+    _southWest: terrain:dirt
+    _variant: 
+    _tile: {fileID: 11400000, guid: b53a3a5e9a71ad54c8d1140d0793ed18, type: 2}
+    _textureHash: d81f9dc79dc116bf653154a6e46b63ed574e76034221432200bdd037ca56eb90
+  - _northWest: terrain:grass
+    _northEast: terrain:road
+    _southEast: terrain:road
+    _southWest: terrain:grass
+    _variant: 
+    _tile: {fileID: 11400000, guid: f04f170438555b74985f682fb8c673b8, type: 2}
+    _textureHash: d4e7ef0dce2924f40b8f2996b2b9c38c8eba21369231010292aa3673d28c0419
+  - _northWest: terrain:grass
+    _northEast: terrain:road
+    _southEast: terrain:road
+    _southWest: terrain:road
+    _variant: 
+    _tile: {fileID: 11400000, guid: 3faec5019fb574e468d23a5ea1e2520a, type: 2}
+    _textureHash: 423532244136c593f4d5a41a6e588dc91332bd326cd5f43802687a7f907c641a
+  - _northWest: terrain:grass
+    _northEast: terrain:road
+    _southEast: terrain:road
+    _southWest: terrain:water
+    _variant: 
+    _tile: {fileID: 11400000, guid: 5469d3bcb986caf419e8970558b6104c, type: 2}
+    _textureHash: b297f3239de7a4d114799e8d576a27b9621db24656ce02c60fd22b70db4c94b7
+  - _northWest: terrain:grass
+    _northEast: terrain:road
+    _southEast: terrain:water
+    _southWest: terrain:dirt
+    _variant: 
+    _tile: {fileID: 11400000, guid: b155da73b0021fa48b4412e17025c738, type: 2}
+    _textureHash: f34955457ddefd92b7d145ecef65c6d8640cf94573f2b92c5ec5c06222803eaf
+  - _northWest: terrain:grass
+    _northEast: terrain:road
+    _southEast: terrain:water
+    _southWest: terrain:grass
+    _variant: 
+    _tile: {fileID: 11400000, guid: 394c5b160991d234eacc52ff218ec6b0, type: 2}
+    _textureHash: d36306e92e1ca67be8339875cb19ca330dfc694d13c485332a1e65de246e7f2d
+  - _northWest: terrain:grass
+    _northEast: terrain:road
+    _southEast: terrain:water
+    _southWest: terrain:road
+    _variant: 
+    _tile: {fileID: 11400000, guid: 4c124eec40b8a424abd262058a50b3c4, type: 2}
+    _textureHash: 01883a2a4f7030fd897ae304e785d5e273337424f04f6e47d8bbcc68e5fd162c
+  - _northWest: terrain:grass
+    _northEast: terrain:road
+    _southEast: terrain:water
+    _southWest: terrain:water
+    _variant: 
+    _tile: {fileID: 11400000, guid: 17026a9a06199d14fb99e45e3253fecd, type: 2}
+    _textureHash: 339e29ec44355913f9b2072d429fa04fefaab46e7e3d4336ccbcd202823291f7
+  - _northWest: terrain:grass
+    _northEast: terrain:water
+    _southEast: terrain:dirt
+    _southWest: terrain:dirt
+    _variant: 
+    _tile: {fileID: 11400000, guid: f96fc3d6f490f574fb87a1383e526405, type: 2}
+    _textureHash: 33106af30c968d99865c71e3089904a2c8f930ed27e7ce72f6989010a1bbd752
+  - _northWest: terrain:grass
+    _northEast: terrain:water
+    _southEast: terrain:dirt
+    _southWest: terrain:grass
+    _variant: 
+    _tile: {fileID: 11400000, guid: 47b35d9750d0930479037174c803ab5f, type: 2}
+    _textureHash: 52738bc2b545ac25b2d075a176a13c4a55434fcdd43706db032b038344b9ea6e
+  - _northWest: terrain:grass
+    _northEast: terrain:water
+    _southEast: terrain:dirt
+    _southWest: terrain:road
+    _variant: 
+    _tile: {fileID: 11400000, guid: 29db1b59cdcfb284b97626fa6a07b213, type: 2}
+    _textureHash: a7a1f724c06812db3c8a12d2a1e830262bcf35e716984875b3ad26e264846235
+  - _northWest: terrain:grass
+    _northEast: terrain:water
+    _southEast: terrain:dirt
+    _southWest: terrain:water
+    _variant: 
+    _tile: {fileID: 11400000, guid: 7aa346e233d0242499e5edc33bb34e88, type: 2}
+    _textureHash: 2e28bbec8ad7ffb651edc9020e1000c1789caecd0cb75342c344d1e541acccff
+  - _northWest: terrain:grass
+    _northEast: terrain:water
+    _southEast: terrain:grass
+    _southWest: terrain:dirt
+    _variant: 
+    _tile: {fileID: 11400000, guid: 0317821a95a38ef47aec14a31fc5ad1e, type: 2}
+    _textureHash: ac242ffd77e4151fd81429823a8d31f48589175aba6f774fc250aeed55643fc0
+  - _northWest: terrain:grass
+    _northEast: terrain:water
+    _southEast: terrain:grass
+    _southWest: terrain:grass
+    _variant: 
+    _tile: {fileID: 11400000, guid: be816265c02ac27468259abf697d98ea, type: 2}
+    _textureHash: 55b94fcfd7691e9e8f8f4b706b9442fae10b264de901bd1e42475be0b5a36b6c
+  - _northWest: terrain:grass
+    _northEast: terrain:water
+    _southEast: terrain:grass
+    _southWest: terrain:road
+    _variant: 
+    _tile: {fileID: 11400000, guid: 041f26b7479eb694394ce4f951ffe49d, type: 2}
+    _textureHash: 9c3e2c7ce52f36887b4384a6fc0e94e06e78c7a3efd8a9315d00879c9a625c0e
+  - _northWest: terrain:grass
+    _northEast: terrain:water
+    _southEast: terrain:grass
+    _southWest: terrain:water
+    _variant: 
+    _tile: {fileID: 11400000, guid: eceea65edd7e2ad4c8210f5de6a2d5c7, type: 2}
+    _textureHash: a463f970974baa1e988282cd8fc4f8bf8bf482c1599acc3586efa38ccec014c7
+  - _northWest: terrain:grass
+    _northEast: terrain:water
+    _southEast: terrain:road
+    _southWest: terrain:dirt
+    _variant: 
+    _tile: {fileID: 11400000, guid: 1256a464689720e40a0b292b1b427c02, type: 2}
+    _textureHash: 546bdbec88b5247c6705af6245bb2559386c5af3b2d3134c157d38f36c12f90b
+  - _northWest: terrain:grass
+    _northEast: terrain:water
+    _southEast: terrain:road
+    _southWest: terrain:grass
+    _variant: 
+    _tile: {fileID: 11400000, guid: 1ac69ff8cee69704684eae1ff75a5614, type: 2}
+    _textureHash: 5ec028e8717efb4a2b054604f211ff9799fcc860aca24a4f5a3609faa337aed8
+  - _northWest: terrain:grass
+    _northEast: terrain:water
+    _southEast: terrain:road
+    _southWest: terrain:road
+    _variant: 
+    _tile: {fileID: 11400000, guid: 5ea6bd76444107f43bf82a2a705a8be8, type: 2}
+    _textureHash: 3f6fd03f3074458ed273b864acd1c0c8173c96d61c966c220635df50622b3a65
+  - _northWest: terrain:grass
+    _northEast: terrain:water
+    _southEast: terrain:road
+    _southWest: terrain:water
+    _variant: 
+    _tile: {fileID: 11400000, guid: c3858dbd50e4ddb45a6a021b5165195a, type: 2}
+    _textureHash: 30020b444fa800b46566e1007a6684a9deafb086e8ebb30a7ca9fd96582001a1
+  - _northWest: terrain:grass
+    _northEast: terrain:water
+    _southEast: terrain:water
+    _southWest: terrain:dirt
+    _variant: 
+    _tile: {fileID: 11400000, guid: 9ae53dd8a067531408eb65d4275c157d, type: 2}
+    _textureHash: 686cf07938874ea68dfd914b3e32ee02e736e079e5525a6e2e8e4b159d50bb36
+  - _northWest: terrain:grass
+    _northEast: terrain:water
+    _southEast: terrain:water
+    _southWest: terrain:grass
+    _variant: 
+    _tile: {fileID: 11400000, guid: 1e3e9b8ca5dee6045af917e01ec157c1, type: 2}
+    _textureHash: b9ac5be9e820e65ac744bf6a0ecd4789b98d115ae89faba7f174fed0f029fee4
+  - _northWest: terrain:grass
+    _northEast: terrain:water
+    _southEast: terrain:water
+    _southWest: terrain:road
+    _variant: 
+    _tile: {fileID: 11400000, guid: a2766c1c1baa2824b9688bf3a81f2995, type: 2}
+    _textureHash: bf1521ebc19f106cc2bd52ddc87bf8d910947acc2fac677f9b1a3827d112b887
+  - _northWest: terrain:grass
+    _northEast: terrain:water
+    _southEast: terrain:water
+    _southWest: terrain:water
+    _variant: 
+    _tile: {fileID: 11400000, guid: 75facde207163ff45b7586449ecc7c49, type: 2}
+    _textureHash: ff88dad563d01d53e39e67c3562231c9ba64aed4d0377e176ac9109e0b4e7ccb
+  - _northWest: terrain:road
+    _northEast: terrain:dirt
+    _southEast: terrain:dirt
+    _southWest: terrain:dirt
+    _variant: 
+    _tile: {fileID: 11400000, guid: aea8dd678b2019344a210622f910fa7b, type: 2}
+    _textureHash: 627a6b4a44441a08621c0e638a78edb2b7eca2c95e6b38d4d84c82b996622dbd
+  - _northWest: terrain:road
+    _northEast: terrain:dirt
+    _southEast: terrain:dirt
+    _southWest: terrain:grass
+    _variant: 
+    _tile: {fileID: 11400000, guid: 3076ac737c3de2743a16d0b0213dc834, type: 2}
+    _textureHash: 907a802e42de3406d6ce6bfcfcbe8d0ddc5a9432c0c2c94d1e2073c36fb56945
+  - _northWest: terrain:road
+    _northEast: terrain:dirt
+    _southEast: terrain:dirt
+    _southWest: terrain:road
+    _variant: 
+    _tile: {fileID: 11400000, guid: fbfa287e52727874091cc33cb1360f63, type: 2}
+    _textureHash: 3df9ba5866dcab2eaaab582d922901e9f924098043ab1968bb92bcf4e4fd0348
+  - _northWest: terrain:road
+    _northEast: terrain:dirt
+    _southEast: terrain:dirt
+    _southWest: terrain:water
+    _variant: 
+    _tile: {fileID: 11400000, guid: f36af8785a737b84082fc00bdecc1f83, type: 2}
+    _textureHash: 8e985fabfed33e4f13babc4e36297273af08858601afdfab0f9aa75f0c3901c5
+  - _northWest: terrain:road
+    _northEast: terrain:dirt
+    _southEast: terrain:grass
+    _southWest: terrain:dirt
+    _variant: 
+    _tile: {fileID: 11400000, guid: 69f70ba06687c724d863bc85c4ef327d, type: 2}
+    _textureHash: d72c1e65d32856b695c1943b4cc3fd3ed4a02f1305ea58b9681a1db485cdf7f3
+  - _northWest: terrain:road
+    _northEast: terrain:dirt
+    _southEast: terrain:grass
+    _southWest: terrain:grass
+    _variant: 
+    _tile: {fileID: 11400000, guid: ffbc824830bdebf41b7454b54549be7b, type: 2}
+    _textureHash: ba1aea92283593a983f7c809f77df0c0f0291eaf06d0c7b2f61f80c9481b534c
+  - _northWest: terrain:road
+    _northEast: terrain:dirt
+    _southEast: terrain:grass
+    _southWest: terrain:road
+    _variant: 
+    _tile: {fileID: 11400000, guid: 5b122e2264e86dc4cb93433848597e4f, type: 2}
+    _textureHash: 2860734a79c0cb0f83e062d9b3251693e6e0e3c4797d46bfe551fea93e88ab68
+  - _northWest: terrain:road
+    _northEast: terrain:dirt
+    _southEast: terrain:grass
+    _southWest: terrain:water
+    _variant: 
+    _tile: {fileID: 11400000, guid: a3b2a52df1492a34caf1e00ab49b4dce, type: 2}
+    _textureHash: c4f2edb910a2cabc009bdaa62b16b961e1ead8624b1233e8aaae87ad41b0f861
+  - _northWest: terrain:road
+    _northEast: terrain:dirt
+    _southEast: terrain:road
+    _southWest: terrain:dirt
+    _variant: 
+    _tile: {fileID: 11400000, guid: f38f906d801c00f4bbe5abdc1a02b937, type: 2}
+    _textureHash: 6156adb79e2fad64f613cc0f644d9a34312ecfcaf5ed2f59b9289aae3b5a9134
+  - _northWest: terrain:road
+    _northEast: terrain:dirt
+    _southEast: terrain:road
+    _southWest: terrain:grass
+    _variant: 
+    _tile: {fileID: 11400000, guid: 2cc3bc607f3a5b64eb1d9afb252571a9, type: 2}
+    _textureHash: a7354453b8d761505b64e3fbf3ac642e001fc683c58d49e5fe8cf751d09b2ca4
+  - _northWest: terrain:road
+    _northEast: terrain:dirt
+    _southEast: terrain:road
+    _southWest: terrain:road
+    _variant: 
+    _tile: {fileID: 11400000, guid: cebd4e66c2c4c1a449ce7ffb6c389993, type: 2}
+    _textureHash: 8fb83ecc88507366cdaa5c2daa5b7e0b3a92b872ffc4a437dc02d34e6122a27b
+  - _northWest: terrain:road
+    _northEast: terrain:dirt
+    _southEast: terrain:road
+    _southWest: terrain:water
+    _variant: 
+    _tile: {fileID: 11400000, guid: a95850909de1a24489995a426971dc73, type: 2}
+    _textureHash: 4e085d4558cf0ce4de545f900059fd25386d11fe5f7b085511578af362162e3f
+  - _northWest: terrain:road
+    _northEast: terrain:dirt
+    _southEast: terrain:water
+    _southWest: terrain:dirt
+    _variant: 
+    _tile: {fileID: 11400000, guid: 96d1f973e04789046aa1bbc99244ec58, type: 2}
+    _textureHash: e92559a20349c39f502e4379bef6c4a2d3040faa4004c717a3536ee172a8d8c1
+  - _northWest: terrain:road
+    _northEast: terrain:dirt
+    _southEast: terrain:water
+    _southWest: terrain:grass
+    _variant: 
+    _tile: {fileID: 11400000, guid: 02c8aedca7afd87468fc196d89960dbd, type: 2}
+    _textureHash: ab0c34fcb2368ed545717f00c9bf28c3112afbd9de429d787c8b8a41dffca4f7
+  - _northWest: terrain:road
+    _northEast: terrain:dirt
+    _southEast: terrain:water
+    _southWest: terrain:road
+    _variant: 
+    _tile: {fileID: 11400000, guid: 6625a90d8fd49744aac42570eab7091b, type: 2}
+    _textureHash: 101fd989ea176f7817757d6142ad5cd4349e49791277858ac792d883917e9d5b
+  - _northWest: terrain:road
+    _northEast: terrain:dirt
+    _southEast: terrain:water
+    _southWest: terrain:water
+    _variant: 
+    _tile: {fileID: 11400000, guid: 3f945ae9923f4d349a7671ac8b670a1b, type: 2}
+    _textureHash: ee5e8415747a92a6f633e89cfd0062b3875eba68eccef1a30e2f5cbdff46ddff
+  - _northWest: terrain:road
+    _northEast: terrain:grass
+    _southEast: terrain:dirt
+    _southWest: terrain:dirt
+    _variant: 
+    _tile: {fileID: 11400000, guid: ba1a5c1078fb7424a8ca106b79efbc5f, type: 2}
+    _textureHash: 24343c966a2920b499c5036da4d3194acbd24be427eaf0c1c8f7f70811afda47
+  - _northWest: terrain:road
+    _northEast: terrain:grass
+    _southEast: terrain:dirt
+    _southWest: terrain:grass
+    _variant: 
+    _tile: {fileID: 11400000, guid: 207cb3f5c6f1cb541806adc4af47b88a, type: 2}
+    _textureHash: 5de351490586143d1b5fe051d7ee80a564ec0540b5de76dcf5f65e3f55b7a40d
+  - _northWest: terrain:road
+    _northEast: terrain:grass
+    _southEast: terrain:dirt
+    _southWest: terrain:road
+    _variant: 
+    _tile: {fileID: 11400000, guid: 4a18734508d1788419b4910629996c28, type: 2}
+    _textureHash: 62a60988b32c2b6811d07292ef0e775ea3f2b7874e62261892069d489996b784
+  - _northWest: terrain:road
+    _northEast: terrain:grass
+    _southEast: terrain:dirt
+    _southWest: terrain:water
+    _variant: 
+    _tile: {fileID: 11400000, guid: c02309934d477e14da239576aadc0f38, type: 2}
+    _textureHash: f53dcfb2024e2d16385ad1455ef2fde1700496e375eb453c9ff60b6e0bab8bba
+  - _northWest: terrain:road
+    _northEast: terrain:grass
+    _southEast: terrain:grass
+    _southWest: terrain:dirt
+    _variant: 
+    _tile: {fileID: 11400000, guid: e8d5d0bd56b776d419646f4a3f049a2a, type: 2}
+    _textureHash: 931eb7c4ed1ceb1d0ef78efa2d7f8c94746a947599f13142f595d1ce0f293196
+  - _northWest: terrain:road
+    _northEast: terrain:grass
+    _southEast: terrain:grass
+    _southWest: terrain:grass
+    _variant: 
+    _tile: {fileID: 11400000, guid: 47caf3372cbc9194b907f65231c5e337, type: 2}
+    _textureHash: 1a2649a8fa8e51d3f96adfeda399275f26b06e99b6fdae34e0053b03e64bfafe
+  - _northWest: terrain:road
+    _northEast: terrain:grass
+    _southEast: terrain:grass
+    _southWest: terrain:road
+    _variant: 
+    _tile: {fileID: 11400000, guid: 7b275dd97a49afc4192e9dcec0962cb3, type: 2}
+    _textureHash: 295099d73ba1a45d2088b141f7a22e33aaa777363e7d2d3500198dc6fb99c2b9
+  - _northWest: terrain:road
+    _northEast: terrain:grass
+    _southEast: terrain:grass
+    _southWest: terrain:water
+    _variant: 
+    _tile: {fileID: 11400000, guid: 39552d571494cf34ba518bcdc158e343, type: 2}
+    _textureHash: 957aa2e1e8c05a7b004f938dca7dbfb6c517db306a5bd1bc4e928a2569693dcf
+  - _northWest: terrain:road
+    _northEast: terrain:grass
+    _southEast: terrain:road
+    _southWest: terrain:dirt
+    _variant: 
+    _tile: {fileID: 11400000, guid: 57c6954139b8dde4293235da5f8439ad, type: 2}
+    _textureHash: 22f9def965621a44d0d0cd06939e36aecefb95c7faffb4e7cc1677838e2e2ccb
+  - _northWest: terrain:road
+    _northEast: terrain:grass
+    _southEast: terrain:road
+    _southWest: terrain:grass
+    _variant: 
+    _tile: {fileID: 11400000, guid: bbb1c1d92fb50514fa7e2d7fdaf5b2f4, type: 2}
+    _textureHash: 5afb93ed6f6e44320631ef0707fe0eaa606f3695460f0e390fa659c2879f255f
+  - _northWest: terrain:road
+    _northEast: terrain:grass
+    _southEast: terrain:road
+    _southWest: terrain:road
+    _variant: 
+    _tile: {fileID: 11400000, guid: 5a4109a2542f72e4aacdb35ad4921dfc, type: 2}
+    _textureHash: 7f8617fc03d15fd582d4d589f0589bc21dfe71f51ec52d9c525271dfd8deceaf
+  - _northWest: terrain:road
+    _northEast: terrain:grass
+    _southEast: terrain:road
+    _southWest: terrain:water
+    _variant: 
+    _tile: {fileID: 11400000, guid: b8aaad97d6930bb46aafe2559eae07ba, type: 2}
+    _textureHash: 75a8b32493657ed8b4adce6a6894110b03d25532447033f8d5d50bfaa974d944
+  - _northWest: terrain:road
+    _northEast: terrain:grass
+    _southEast: terrain:water
+    _southWest: terrain:dirt
+    _variant: 
+    _tile: {fileID: 11400000, guid: d722bce85a05bc042ac9a6d70126c6d4, type: 2}
+    _textureHash: ac2934ecc17e557b159ef215cbcc07c89ce09fcd22a8dd8b9a5a0b3fcf80cb88
+  - _northWest: terrain:road
+    _northEast: terrain:grass
+    _southEast: terrain:water
+    _southWest: terrain:grass
+    _variant: 
+    _tile: {fileID: 11400000, guid: 7a354d87ad2f8324896004d28d326176, type: 2}
+    _textureHash: 7206a70c45ed24d1f0f26f555641e43fb042daf925b38b5d04cdbcfc445bf92b
+  - _northWest: terrain:road
+    _northEast: terrain:grass
+    _southEast: terrain:water
+    _southWest: terrain:road
+    _variant: 
+    _tile: {fileID: 11400000, guid: c603493cd98ccca4dbcea18279c7f689, type: 2}
+    _textureHash: 975c6869b83830b84af8b03037998938f3c94182399517628416f084c82d4a6b
+  - _northWest: terrain:road
+    _northEast: terrain:grass
+    _southEast: terrain:water
+    _southWest: terrain:water
+    _variant: 
+    _tile: {fileID: 11400000, guid: ed8b2ae877b0d69448134114e37cde10, type: 2}
+    _textureHash: bbcb43a9e147a5b1882d738fa3d2207b51454c59e54cb2b8ce5075237e161e52
+  - _northWest: terrain:road
+    _northEast: terrain:road
+    _southEast: terrain:dirt
+    _southWest: terrain:dirt
+    _variant: 
+    _tile: {fileID: 11400000, guid: 7cb77b032e18a0042b5e6d836fe07c7f, type: 2}
+    _textureHash: ecd8276c2866b2c1ee271feca981b286c6bf499c99f418cbfe69d9d1d51d8a14
+  - _northWest: terrain:road
+    _northEast: terrain:road
+    _southEast: terrain:dirt
+    _southWest: terrain:grass
+    _variant: 
+    _tile: {fileID: 11400000, guid: c13711e7f03c170448e7f0d1283f059d, type: 2}
+    _textureHash: 8eae4e11d76faa905be574dd5ed98b49e0a4e1d289ff4574135df1f3f9b4b455
+  - _northWest: terrain:road
+    _northEast: terrain:road
+    _southEast: terrain:dirt
+    _southWest: terrain:road
+    _variant: 
+    _tile: {fileID: 11400000, guid: d4eda7b50918e4247876ced24e54e476, type: 2}
+    _textureHash: 28d9495e55d9f682f40c4d9d65b21ba920bcaa925128b90407c4ad0e8cbf4030
+  - _northWest: terrain:road
+    _northEast: terrain:road
+    _southEast: terrain:dirt
+    _southWest: terrain:water
+    _variant: 
+    _tile: {fileID: 11400000, guid: e8fb502c2b5271444b0e2a2b548a495d, type: 2}
+    _textureHash: 5dafa0e29c1890d0400c4b1bb00cf7ab0edc327fb53761a10f1cd2f2f607712d
+  - _northWest: terrain:road
+    _northEast: terrain:road
+    _southEast: terrain:grass
+    _southWest: terrain:dirt
+    _variant: 
+    _tile: {fileID: 11400000, guid: 08f40fda16ce4e441936caaefc39b2ed, type: 2}
+    _textureHash: ef8d573b014cc2ea3cc0051ea1a00e9d1175aadbaaaa8ac589e64f5c2eb62012
+  - _northWest: terrain:road
+    _northEast: terrain:road
+    _southEast: terrain:grass
+    _southWest: terrain:grass
+    _variant: 
+    _tile: {fileID: 11400000, guid: 5b876e040515c144f9c009b24fb7fe2e, type: 2}
+    _textureHash: e530c1a7b8e93f45df2c7bd4bda08096ca810529115f50c31a7f66d83c603aff
+  - _northWest: terrain:road
+    _northEast: terrain:road
+    _southEast: terrain:grass
+    _southWest: terrain:road
+    _variant: 
+    _tile: {fileID: 11400000, guid: 8e89c34004ba2264e82ed0a3a7809d95, type: 2}
+    _textureHash: 1b2ee67c558ecdd09820ca0540aa73b35b2c1f60ee9d03858495990b2386db0a
+  - _northWest: terrain:road
+    _northEast: terrain:road
+    _southEast: terrain:grass
+    _southWest: terrain:water
+    _variant: 
+    _tile: {fileID: 11400000, guid: 1b6e233bb1b8d704fb8ed609dac13821, type: 2}
+    _textureHash: 18c92a6e3475e0f9ce7e9c45d4d4604270a048fe80640930d022226a8db78575
+  - _northWest: terrain:road
+    _northEast: terrain:road
+    _southEast: terrain:road
+    _southWest: terrain:dirt
+    _variant: 
+    _tile: {fileID: 11400000, guid: fc30ffd2835e35c4b9f318f47b2e1f8c, type: 2}
+    _textureHash: 6b4c01c3cc7a906b90c7b3d4e048eb7cf023c4446131187c6e40f425f56a9654
+  - _northWest: terrain:road
+    _northEast: terrain:road
+    _southEast: terrain:road
+    _southWest: terrain:grass
+    _variant: 
+    _tile: {fileID: 11400000, guid: 377e5dc0aaaaa6945b858fcb86103615, type: 2}
+    _textureHash: e5b2750bc112888419c6bbf3431ea93da46b118ee13f7d362a3b6c6e1c23f2c2
+  - _northWest: terrain:road
+    _northEast: terrain:road
+    _southEast: terrain:road
+    _southWest: terrain:road
+    _variant: 
+    _tile: {fileID: 11400000, guid: 446167274dfb1ad438d5128283874a80, type: 2}
+    _textureHash: eb7be272d73189e76822a41342f8f961e44dcb6b74293c0f9830874f858198ba
+  - _northWest: terrain:road
+    _northEast: terrain:road
+    _southEast: terrain:road
+    _southWest: terrain:road
+    _variant: road_00
+    _tile: {fileID: 11400000, guid: 27d342b5788f2f24b9407f3e58994c1c, type: 2}
+    _textureHash: d5f014b25ec14524cf1f3fdebd11986843ddfadf7036f088ab463b48f8155be2
+  - _northWest: terrain:road
+    _northEast: terrain:road
+    _southEast: terrain:road
+    _southWest: terrain:road
+    _variant: road_01
+    _tile: {fileID: 11400000, guid: 5d79494055f1ca74b8618a81dbb73b8e, type: 2}
+    _textureHash: ce4b081c9ad5054e4a21f6c0e993a66fba2fdf87bf41232a7cb8821907547cd9
+  - _northWest: terrain:road
+    _northEast: terrain:road
+    _southEast: terrain:road
+    _southWest: terrain:water
+    _variant: 
+    _tile: {fileID: 11400000, guid: 17508fc7a12b43d47a9a07020b2d7604, type: 2}
+    _textureHash: 14a64a371b787ca08835e6fd60b14e6fddcbe400c1f44fab474c8642389bd4fe
+  - _northWest: terrain:road
+    _northEast: terrain:road
+    _southEast: terrain:water
+    _southWest: terrain:dirt
+    _variant: 
+    _tile: {fileID: 11400000, guid: d418eee454d52da45848217cccd9ca90, type: 2}
+    _textureHash: 16dac0a16eaa2cc791f958179b4602b9dd474e44bc91df06bcfba06e8714deea
+  - _northWest: terrain:road
+    _northEast: terrain:road
+    _southEast: terrain:water
+    _southWest: terrain:grass
+    _variant: 
+    _tile: {fileID: 11400000, guid: 24cf4aa61da6e3a4f816428b028ba8bf, type: 2}
+    _textureHash: a17c8c5f4f3050843e02bd282b97cc5f3f403102b932295b736ec717da3b123b
+  - _northWest: terrain:road
+    _northEast: terrain:road
+    _southEast: terrain:water
+    _southWest: terrain:road
+    _variant: 
+    _tile: {fileID: 11400000, guid: aa30b65cf33055a4685f74d8d256d81c, type: 2}
+    _textureHash: c96008469994e6a12d64fab1adc21fa7b7ab3f7c026a67715c9b3a11ba5ce167
+  - _northWest: terrain:road
+    _northEast: terrain:road
+    _southEast: terrain:water
+    _southWest: terrain:water
+    _variant: 
+    _tile: {fileID: 11400000, guid: a1991a825764a744baed94a617cd9aa3, type: 2}
+    _textureHash: 5a76011f352fde7c52a87f40d337dc366c026b9dca985b1543a0497ce374aac6
+  - _northWest: terrain:road
+    _northEast: terrain:water
+    _southEast: terrain:dirt
+    _southWest: terrain:dirt
+    _variant: 
+    _tile: {fileID: 11400000, guid: 9331443bc1e217b479700ee2244eb206, type: 2}
+    _textureHash: 69a55ab53969e001820882f6b97533bfb5b22232fc6fcec2929bef96aa63f2c8
+  - _northWest: terrain:road
+    _northEast: terrain:water
+    _southEast: terrain:dirt
+    _southWest: terrain:grass
+    _variant: 
+    _tile: {fileID: 11400000, guid: 0a95cde76eb38bd4e993bda200364354, type: 2}
+    _textureHash: 0151299689de24b4209134db4055a45b80091d663ad577126319b2aa33ca811e
+  - _northWest: terrain:road
+    _northEast: terrain:water
+    _southEast: terrain:dirt
+    _southWest: terrain:road
+    _variant: 
+    _tile: {fileID: 11400000, guid: fe5eb165ffbda3944ad6b0983aa81974, type: 2}
+    _textureHash: 41091b7ecce3e4b11a6270048135bfef0056844d01edc20664000110fe9b4b42
+  - _northWest: terrain:road
+    _northEast: terrain:water
+    _southEast: terrain:dirt
+    _southWest: terrain:water
+    _variant: 
+    _tile: {fileID: 11400000, guid: 79a42395065ae3648b7916448a0828f9, type: 2}
+    _textureHash: fbf03414effec0ed9af1c4b3405381d688fdc11ff06b83b3533762819763aa9c
+  - _northWest: terrain:road
+    _northEast: terrain:water
+    _southEast: terrain:grass
+    _southWest: terrain:dirt
+    _variant: 
+    _tile: {fileID: 11400000, guid: b8bfa7351dbf17d4cb513de6e8593345, type: 2}
+    _textureHash: ea94f8588c903560b2208dea3e362e018d912287c2d6bb01e4c67fd6cb86e527
+  - _northWest: terrain:road
+    _northEast: terrain:water
+    _southEast: terrain:grass
+    _southWest: terrain:grass
+    _variant: 
+    _tile: {fileID: 11400000, guid: 3c10d301fe450f94eb08fd1493b6b433, type: 2}
+    _textureHash: b86d618821eb557c125d8f0647b459576cbb775a149c2b0f2b1c14d85ca80682
+  - _northWest: terrain:road
+    _northEast: terrain:water
+    _southEast: terrain:grass
+    _southWest: terrain:road
+    _variant: 
+    _tile: {fileID: 11400000, guid: 2239758f35892c64588789641ad3b97f, type: 2}
+    _textureHash: 7bcfe5cac8882b7adbc1b7d25137adb56bfb2eb17692d73649a05beb6391f872
+  - _northWest: terrain:road
+    _northEast: terrain:water
+    _southEast: terrain:grass
+    _southWest: terrain:water
+    _variant: 
+    _tile: {fileID: 11400000, guid: 1231ffd40bee0ab46af8a1459bc025ed, type: 2}
+    _textureHash: dd86e3c382e5b856a9b85707bb7dbd1c4ac51f5290cd513f337e577721b1490d
+  - _northWest: terrain:road
+    _northEast: terrain:water
+    _southEast: terrain:road
+    _southWest: terrain:dirt
+    _variant: 
+    _tile: {fileID: 11400000, guid: 7bc52d79ff199aa488c39024f34fbacb, type: 2}
+    _textureHash: 0ba453470f9c6c4151353f9c6e9a447bed1c06d45611a24d11fe5bcb4aa9e836
+  - _northWest: terrain:road
+    _northEast: terrain:water
+    _southEast: terrain:road
+    _southWest: terrain:grass
+    _variant: 
+    _tile: {fileID: 11400000, guid: 9000d259f9c412c4dbb37cbb8f9ca557, type: 2}
+    _textureHash: a4ea0498916306523f01f85984bd0548380a31d1b8ffb90af9476191acd8e244
+  - _northWest: terrain:road
+    _northEast: terrain:water
+    _southEast: terrain:road
+    _southWest: terrain:road
+    _variant: 
+    _tile: {fileID: 11400000, guid: 7a3961bf85b8102469e4effdab5a4a13, type: 2}
+    _textureHash: 927a38da88b31416348d26f42aaba4da467ad5ca30a5889e8158307bcad7fc1d
+  - _northWest: terrain:road
+    _northEast: terrain:water
+    _southEast: terrain:road
+    _southWest: terrain:water
+    _variant: 
+    _tile: {fileID: 11400000, guid: 10d8987c57e99084ea659809cc6df8ca, type: 2}
+    _textureHash: 1a49fc5cd1994b965201599549d669d2dd172dd4b0689a40086d72779611b19b
+  - _northWest: terrain:road
+    _northEast: terrain:water
+    _southEast: terrain:water
+    _southWest: terrain:dirt
+    _variant: 
+    _tile: {fileID: 11400000, guid: ef18c75e5d31b0349bdc6696a1dfdd90, type: 2}
+    _textureHash: ae30ae2874747172b18392e55d90a08ea2b6872b0b4149712bd065ec26fa29ca
+  - _northWest: terrain:road
+    _northEast: terrain:water
+    _southEast: terrain:water
+    _southWest: terrain:grass
+    _variant: 
+    _tile: {fileID: 11400000, guid: 5418cc6faee235f4e83e84363151a0aa, type: 2}
+    _textureHash: 3c280ceaa77fe7e9323b1f6425ba1cd186fd9c67421f6bf68a895790c89737ea
+  - _northWest: terrain:road
+    _northEast: terrain:water
+    _southEast: terrain:water
+    _southWest: terrain:road
+    _variant: 
+    _tile: {fileID: 11400000, guid: 3bfcc9fc6df588f4aa29724767aebe87, type: 2}
+    _textureHash: 5105086a94ca6156e23e2a0bbe8aac7adb74c9ca598cc25f17075e52f206a0b1
+  - _northWest: terrain:road
+    _northEast: terrain:water
+    _southEast: terrain:water
+    _southWest: terrain:water
+    _variant: 
+    _tile: {fileID: 11400000, guid: f9b85d72b05911648a40b6ed15c1c184, type: 2}
+    _textureHash: 898b3b11b0452086a6146613eb7fa860640ff211940559bc23a482dc6f7595d8
+  - _northWest: terrain:water
+    _northEast: terrain:dirt
+    _southEast: terrain:dirt
+    _southWest: terrain:dirt
+    _variant: 
+    _tile: {fileID: 11400000, guid: 36a8bd70a6e9cab439cd5e116691c239, type: 2}
+    _textureHash: 19bdd14a6f875337eaa044367a70077ee52aa074fdc9ff05bc19e9830cfce90f
+  - _northWest: terrain:water
+    _northEast: terrain:dirt
+    _southEast: terrain:dirt
+    _southWest: terrain:grass
+    _variant: 
+    _tile: {fileID: 11400000, guid: 76eb89cd3bfc6314e9bfc331dd486c55, type: 2}
+    _textureHash: bdff9b14164790a4455849aefaf8a59f0e1c962a4a995947f6f1f60c87fc4287
+  - _northWest: terrain:water
+    _northEast: terrain:dirt
+    _southEast: terrain:dirt
+    _southWest: terrain:road
+    _variant: 
+    _tile: {fileID: 11400000, guid: 29767bd1c3f83534fb4cf492fd49e7e8, type: 2}
+    _textureHash: 8ee9a5f831e0527cd277b6544bf7a07a60e01e49262ddd22544cb917b1d865b7
+  - _northWest: terrain:water
+    _northEast: terrain:dirt
+    _southEast: terrain:dirt
+    _southWest: terrain:water
+    _variant: 
+    _tile: {fileID: 11400000, guid: 9b87e88eb9493c740a55f3c446112252, type: 2}
+    _textureHash: 0cbf8b260c0a1b5c26a9b0e242878906cc9aa97bbba14f2795e503e859c1c340
+  - _northWest: terrain:water
+    _northEast: terrain:dirt
+    _southEast: terrain:grass
+    _southWest: terrain:dirt
+    _variant: 
+    _tile: {fileID: 11400000, guid: 79bc15a40d2281c41b882885987bcc39, type: 2}
+    _textureHash: ebea64d13bbd453b2e640dcab627244664854d9093e4ea04f6bce9e19af04fc6
+  - _northWest: terrain:water
+    _northEast: terrain:dirt
+    _southEast: terrain:grass
+    _southWest: terrain:grass
+    _variant: 
+    _tile: {fileID: 11400000, guid: 48d76fe1b84d8f943802d178a67fc15a, type: 2}
+    _textureHash: 3c13f9fe6bd9b03dc933b081a2789186fcc59f289c2270c936c342a515f72114
+  - _northWest: terrain:water
+    _northEast: terrain:dirt
+    _southEast: terrain:grass
+    _southWest: terrain:road
+    _variant: 
+    _tile: {fileID: 11400000, guid: 99f11b512b4312d4ea65426014bcc813, type: 2}
+    _textureHash: a32c709126f4f97d58f383070d49cac1c5ea713fc3fd58217e17fe71bee7053d
+  - _northWest: terrain:water
+    _northEast: terrain:dirt
+    _southEast: terrain:grass
+    _southWest: terrain:water
+    _variant: 
+    _tile: {fileID: 11400000, guid: 5f129cc6ce8a8fa4d84ad871a0cb69ca, type: 2}
+    _textureHash: 06ccd2a3c3655e78f22fee37202c4976f7d0663b314b96fd131b833da60efef1
+  - _northWest: terrain:water
+    _northEast: terrain:dirt
+    _southEast: terrain:road
+    _southWest: terrain:dirt
+    _variant: 
+    _tile: {fileID: 11400000, guid: c4d8b59b6ff9c554f936f19fe9c541f7, type: 2}
+    _textureHash: d9dcba84f960d3e867ec24f78fd4583db1519ae048e225bcc6561db78f7b2819
+  - _northWest: terrain:water
+    _northEast: terrain:dirt
+    _southEast: terrain:road
+    _southWest: terrain:grass
+    _variant: 
+    _tile: {fileID: 11400000, guid: 885dba3a449c28f44a864e030a8b87e0, type: 2}
+    _textureHash: 51b04ecb00bff756c6811f091422d39e87dc96fa2a380810a9a64d48aef7cedf
+  - _northWest: terrain:water
+    _northEast: terrain:dirt
+    _southEast: terrain:road
+    _southWest: terrain:road
+    _variant: 
+    _tile: {fileID: 11400000, guid: 11bf20f5657099d4ba165dbd2fe4df6e, type: 2}
+    _textureHash: b6f23bdcff19f6f3267de5804d729f3c6bfad5b1a396a001767f686c885d542b
+  - _northWest: terrain:water
+    _northEast: terrain:dirt
+    _southEast: terrain:road
+    _southWest: terrain:water
+    _variant: 
+    _tile: {fileID: 11400000, guid: b80f8207467a7f0499715ee2a7db6555, type: 2}
+    _textureHash: bade7cff3c037b77248a0ad5a335e7e17c49813a2c50d793cb2ba48562896a2c
+  - _northWest: terrain:water
+    _northEast: terrain:dirt
+    _southEast: terrain:water
+    _southWest: terrain:dirt
+    _variant: 
+    _tile: {fileID: 11400000, guid: 79a3894e36d226b49ba20b666daa2e20, type: 2}
+    _textureHash: e0fe0f2f5ea940c29cc3f10fb1f36b7b85634de4efc1caf4e4c1871865d5fc14
+  - _northWest: terrain:water
+    _northEast: terrain:dirt
+    _southEast: terrain:water
+    _southWest: terrain:grass
+    _variant: 
+    _tile: {fileID: 11400000, guid: 4616fef009241ac45a12e9b34992d107, type: 2}
+    _textureHash: e10cd8dc00b99dca45172c351cbd8d034394ebba0c02a790452390dd56ad7a18
+  - _northWest: terrain:water
+    _northEast: terrain:dirt
+    _southEast: terrain:water
+    _southWest: terrain:road
+    _variant: 
+    _tile: {fileID: 11400000, guid: 22a93fb0dfe4c9349973e5166a5a2035, type: 2}
+    _textureHash: d573f67d93c0c992e769a7fec93b48ed3290b092b83b30ba97a4cdfca679983c
+  - _northWest: terrain:water
+    _northEast: terrain:dirt
+    _southEast: terrain:water
+    _southWest: terrain:water
+    _variant: 
+    _tile: {fileID: 11400000, guid: 25e66aac2a0fbd94386ebb1f2042ebec, type: 2}
+    _textureHash: 0d92e6ab07332a0edc59bff426623a1042ebbc69887aa0967cdf8841b34772f7
+  - _northWest: terrain:water
+    _northEast: terrain:grass
+    _southEast: terrain:dirt
+    _southWest: terrain:dirt
+    _variant: 
+    _tile: {fileID: 11400000, guid: f4f0e31b0d0a9084581f8e5cb33daf30, type: 2}
+    _textureHash: 2a0523df95ed9b8aeb1bf2f45ec826693d143856b9f5066bb5d814d8368f1367
+  - _northWest: terrain:water
+    _northEast: terrain:grass
+    _southEast: terrain:dirt
+    _southWest: terrain:grass
+    _variant: 
+    _tile: {fileID: 11400000, guid: 17fdc11fafd4cb54daf34a25c03b5828, type: 2}
+    _textureHash: 50479f9d99042ef245be8aca67f52e7d98b7b64970513e701a0ee854bbe077cb
+  - _northWest: terrain:water
+    _northEast: terrain:grass
+    _southEast: terrain:dirt
+    _southWest: terrain:road
+    _variant: 
+    _tile: {fileID: 11400000, guid: 7072f57d1403c58408cc8b1eecbe2558, type: 2}
+    _textureHash: ee772a6e9fe76f31ce0a7e071241b3dea5dd84662b2fa642e5bb3fa3f15bfc62
+  - _northWest: terrain:water
+    _northEast: terrain:grass
+    _southEast: terrain:dirt
+    _southWest: terrain:water
+    _variant: 
+    _tile: {fileID: 11400000, guid: e3cab543c9638dc4ca6a8b94d7ea083e, type: 2}
+    _textureHash: c8f1a27cc7ed53cf55faf66844060ffeb1b9ecabfe592811cf79be0006d76b50
+  - _northWest: terrain:water
+    _northEast: terrain:grass
+    _southEast: terrain:grass
+    _southWest: terrain:dirt
+    _variant: 
+    _tile: {fileID: 11400000, guid: b8c890148adec314684372adfb904dd2, type: 2}
+    _textureHash: 43dcff10e7fb7f6b3655b297349483f08cfd5cc97eee964d8473b62b1e52d9be
+  - _northWest: terrain:water
+    _northEast: terrain:grass
+    _southEast: terrain:grass
+    _southWest: terrain:grass
+    _variant: 
+    _tile: {fileID: 11400000, guid: 8784a4404cc03da48b80e9f339d877e6, type: 2}
+    _textureHash: d03bcca14a7f4e3adb49d04aa5759097eb036587b99123b691b3101ea017991d
+  - _northWest: terrain:water
+    _northEast: terrain:grass
+    _southEast: terrain:grass
+    _southWest: terrain:road
+    _variant: 
+    _tile: {fileID: 11400000, guid: 3424ee0b1f259464c8dd8b571d0c4294, type: 2}
+    _textureHash: ffc0993c07c283c3d6b5f8d3b417bff2d9cdb3e3fe123b3dcd2a68e3f8382410
+  - _northWest: terrain:water
+    _northEast: terrain:grass
+    _southEast: terrain:grass
+    _southWest: terrain:water
+    _variant: 
+    _tile: {fileID: 11400000, guid: 016583b7917f0d8449736eeaaa6196a7, type: 2}
+    _textureHash: 5c797d077e2277f758743cac8607f9dce68c47492bd7c0c35c95fbbaf926fcf0
+  - _northWest: terrain:water
+    _northEast: terrain:grass
+    _southEast: terrain:road
+    _southWest: terrain:dirt
+    _variant: 
+    _tile: {fileID: 11400000, guid: 2bba5d7d82186984ca5aa7ee7434f3a2, type: 2}
+    _textureHash: a4d9f3cbf7d40016c753fdf80c6f15f195af5a84ea596a4ba45cff42640c146f
+  - _northWest: terrain:water
+    _northEast: terrain:grass
+    _southEast: terrain:road
+    _southWest: terrain:grass
+    _variant: 
+    _tile: {fileID: 11400000, guid: a447009eec4dc5342bdc9209a00c98c1, type: 2}
+    _textureHash: dd7d0b913d7a166fe49ac816fae9a1e088c3d51a87929b6cb0d07dfc911c27d5
+  - _northWest: terrain:water
+    _northEast: terrain:grass
+    _southEast: terrain:road
+    _southWest: terrain:road
+    _variant: 
+    _tile: {fileID: 11400000, guid: a47e3ffb52ba77041beee7abb6ef04ec, type: 2}
+    _textureHash: 99c5f0d6b95c06542f9e508d3636b4f01d054b8fa8f8995e55192b8a9193be00
+  - _northWest: terrain:water
+    _northEast: terrain:grass
+    _southEast: terrain:road
+    _southWest: terrain:water
+    _variant: 
+    _tile: {fileID: 11400000, guid: 645f5e59825d25448afeb3400ebcb1f7, type: 2}
+    _textureHash: 0e49840040b69c2b5b6c896c727a7e6e628d6c63f3a7fe8be1d1b7301cca5f2e
+  - _northWest: terrain:water
+    _northEast: terrain:grass
+    _southEast: terrain:water
+    _southWest: terrain:dirt
+    _variant: 
+    _tile: {fileID: 11400000, guid: dbcb11d3d4005fa40953308d4eaaeeb2, type: 2}
+    _textureHash: 6e46a486ecf5df2b2925cedf39d6f7bac6918eee81c2d45304ddc3187bf808a0
+  - _northWest: terrain:water
+    _northEast: terrain:grass
+    _southEast: terrain:water
+    _southWest: terrain:grass
+    _variant: 
+    _tile: {fileID: 11400000, guid: 733de1aa466ca8945a639583b0065a1d, type: 2}
+    _textureHash: 22cadf658c42602442e2d2dd466ee7b3e08046e42958e7335155d97db5139417
+  - _northWest: terrain:water
+    _northEast: terrain:grass
+    _southEast: terrain:water
+    _southWest: terrain:road
+    _variant: 
+    _tile: {fileID: 11400000, guid: c61ad40d321bed247affd061636ba1f8, type: 2}
+    _textureHash: bb4d331f762669480ec627cc9f42ba46fc65a0edd96356903e0eedee8ddab8fd
+  - _northWest: terrain:water
+    _northEast: terrain:grass
+    _southEast: terrain:water
+    _southWest: terrain:water
+    _variant: 
+    _tile: {fileID: 11400000, guid: 0bd6eaa9da043074c884ba37fa1fe12b, type: 2}
+    _textureHash: 76e786223778c3389433d8c930e529a97bb23dc2ea4f60fb344e102f25f2459c
+  - _northWest: terrain:water
+    _northEast: terrain:road
+    _southEast: terrain:dirt
+    _southWest: terrain:dirt
+    _variant: 
+    _tile: {fileID: 11400000, guid: a3e96152db284174683fd5a5bb978c8a, type: 2}
+    _textureHash: 9c1ff3cc63ce5b7f9614ff71aa72514752b321db360f6af127d6024bd7f24aac
+  - _northWest: terrain:water
+    _northEast: terrain:road
+    _southEast: terrain:dirt
+    _southWest: terrain:grass
+    _variant: 
+    _tile: {fileID: 11400000, guid: 16a141ac8778fad459c576296358514d, type: 2}
+    _textureHash: 5225a40156fab3a336be05c512636db1ea4bb7ad62706f3c309d04b312d7f885
+  - _northWest: terrain:water
+    _northEast: terrain:road
+    _southEast: terrain:dirt
+    _southWest: terrain:road
+    _variant: 
+    _tile: {fileID: 11400000, guid: c3306d04d23f33f49824985498625764, type: 2}
+    _textureHash: d563d6e497700ed9f72828f4a520fe409d8596fca571942a62b66d5314d24405
+  - _northWest: terrain:water
+    _northEast: terrain:road
+    _southEast: terrain:dirt
+    _southWest: terrain:water
+    _variant: 
+    _tile: {fileID: 11400000, guid: b12ae22b6dd431c49a0a7949cbfecc9c, type: 2}
+    _textureHash: ad0775e8df88ddca9c4c9e0ebd6d01521c94189d3a171f18ea3bf4c63ecf7e5a
+  - _northWest: terrain:water
+    _northEast: terrain:road
+    _southEast: terrain:grass
+    _southWest: terrain:dirt
+    _variant: 
+    _tile: {fileID: 11400000, guid: 9a0d90ad13a9880429eef68fff57ac54, type: 2}
+    _textureHash: e5a973fa7c49b9d9227e75022943038f923a284000e0336d9c3ab414581d0859
+  - _northWest: terrain:water
+    _northEast: terrain:road
+    _southEast: terrain:grass
+    _southWest: terrain:grass
+    _variant: 
+    _tile: {fileID: 11400000, guid: e71c6249fc937d14598a9a3532fe3734, type: 2}
+    _textureHash: 69968b413d6ad657f7b1b0f888294a39ec3bdeaa4109b91ea3c001be9f26c788
+  - _northWest: terrain:water
+    _northEast: terrain:road
+    _southEast: terrain:grass
+    _southWest: terrain:road
+    _variant: 
+    _tile: {fileID: 11400000, guid: 8bf65e467014af6409d8060e3bc7823e, type: 2}
+    _textureHash: d1123ab7dfa23ce51b1b113a8ac82789aab6f4ba5d8c889003c86c36e2205d63
+  - _northWest: terrain:water
+    _northEast: terrain:road
+    _southEast: terrain:grass
+    _southWest: terrain:water
+    _variant: 
+    _tile: {fileID: 11400000, guid: 8b53d7dc580ce8640a177bdd9e25facb, type: 2}
+    _textureHash: fdb6e27fbd512b84a8e6d6b8082bcf119309fa2dc8db718b01b4bd9a0d52b9ed
+  - _northWest: terrain:water
+    _northEast: terrain:road
+    _southEast: terrain:road
+    _southWest: terrain:dirt
+    _variant: 
+    _tile: {fileID: 11400000, guid: 84e4ce00e4a95044a95a277767801ebf, type: 2}
+    _textureHash: fe5dbbfeb6945cf3d04c13355929e898592ef0703080360cbe4de5d0f96522ba
+  - _northWest: terrain:water
+    _northEast: terrain:road
+    _southEast: terrain:road
+    _southWest: terrain:grass
+    _variant: 
+    _tile: {fileID: 11400000, guid: 9971d24464c7bef42adb39ed33e3b185, type: 2}
+    _textureHash: 4a1ba3a974d3ab84a3b2a5df95d382f3c263be6fc1b6b1aa38130a6ab44f916a
+  - _northWest: terrain:water
+    _northEast: terrain:road
+    _southEast: terrain:road
+    _southWest: terrain:road
+    _variant: 
+    _tile: {fileID: 11400000, guid: 4f1b05c1de8593247bfa1a630eb6bde4, type: 2}
+    _textureHash: 4a35b270345cf031ea79ee310d899cc9419cd42a1b45c00a94f2849cfd6b6d94
+  - _northWest: terrain:water
+    _northEast: terrain:road
+    _southEast: terrain:road
+    _southWest: terrain:water
+    _variant: 
+    _tile: {fileID: 11400000, guid: b93202422e0d5a84fbfca88b6df919ce, type: 2}
+    _textureHash: 0df53a7dec6fee126c4f79b4fd1c106391bf30501124db5b67130fcda9f41d25
+  - _northWest: terrain:water
+    _northEast: terrain:road
+    _southEast: terrain:water
+    _southWest: terrain:dirt
+    _variant: 
+    _tile: {fileID: 11400000, guid: b69f168437fa81044a6bb51799dcfa91, type: 2}
+    _textureHash: 7fa49975a2fbb053225364b751b4eed404093ced0e61a2b953e1be9cefde167b
+  - _northWest: terrain:water
+    _northEast: terrain:road
+    _southEast: terrain:water
+    _southWest: terrain:grass
+    _variant: 
+    _tile: {fileID: 11400000, guid: e4b8c3f08444a014eaca075afa8041f7, type: 2}
+    _textureHash: 80bac7915b7ea49837fef3e2df8800262f74b937248be61c5992e868b916f987
+  - _northWest: terrain:water
+    _northEast: terrain:road
+    _southEast: terrain:water
+    _southWest: terrain:road
+    _variant: 
+    _tile: {fileID: 11400000, guid: ced472eba5eb01441af2249845e0198c, type: 2}
+    _textureHash: afb60a25492b215ad84e701ccebb5b5e77e44627aaa025d0d30f233c621d03c5
+  - _northWest: terrain:water
+    _northEast: terrain:road
+    _southEast: terrain:water
+    _southWest: terrain:water
+    _variant: 
+    _tile: {fileID: 11400000, guid: 7b0b4dc74e0d81649ac5559076213c9b, type: 2}
+    _textureHash: e3bfc5202303b941dcf9c58101b89335e6078ee17943a40f9f000516b043c2a8
+  - _northWest: terrain:water
+    _northEast: terrain:water
+    _southEast: terrain:dirt
+    _southWest: terrain:dirt
+    _variant: 
+    _tile: {fileID: 11400000, guid: 95246a512464c1e45bcad9dc3d935490, type: 2}
+    _textureHash: 83fdb543e7661491fd9e6216d185ef176b5847af98dc70f385459bc6f4f38909
+  - _northWest: terrain:water
+    _northEast: terrain:water
+    _southEast: terrain:dirt
+    _southWest: terrain:grass
+    _variant: 
+    _tile: {fileID: 11400000, guid: 06d2037375a09e84cb283eee5f76214b, type: 2}
+    _textureHash: 474b7ed9c77fbfb97326a6fa661f6ebfc0534d813e1ea31c56cbe60d72fae938
+  - _northWest: terrain:water
+    _northEast: terrain:water
+    _southEast: terrain:dirt
+    _southWest: terrain:road
+    _variant: 
+    _tile: {fileID: 11400000, guid: a25f53b0154860e4ea49c068c9658521, type: 2}
+    _textureHash: 49ad2ccafca342bddd58da3989967372d14ec6fca1c71ac83ed7eaffb81a7985
+  - _northWest: terrain:water
+    _northEast: terrain:water
+    _southEast: terrain:dirt
+    _southWest: terrain:water
+    _variant: 
+    _tile: {fileID: 11400000, guid: 4e38aaff467003f4f9a37e388e30c6f8, type: 2}
+    _textureHash: 4327f61ce6d8157578502b9457f368cdb2d8eb8e6a8c00d0364641ddbc81350c
+  - _northWest: terrain:water
+    _northEast: terrain:water
+    _southEast: terrain:grass
+    _southWest: terrain:dirt
+    _variant: 
+    _tile: {fileID: 11400000, guid: 29fbf12b0033e874aad8cf1647f14522, type: 2}
+    _textureHash: 874bd34906906a754d018f7fcba44acddf52bfc738a8402796ac727007f69578
+  - _northWest: terrain:water
+    _northEast: terrain:water
+    _southEast: terrain:grass
+    _southWest: terrain:grass
+    _variant: 
+    _tile: {fileID: 11400000, guid: 8600e06c14dfb314481c2ab693e25941, type: 2}
+    _textureHash: 92b63c7778d668f6419fb0219528bc956a12e6c9eafb4c183fed4eb1f7a71ef3
+  - _northWest: terrain:water
+    _northEast: terrain:water
+    _southEast: terrain:grass
+    _southWest: terrain:road
+    _variant: 
+    _tile: {fileID: 11400000, guid: efc06e218c0620c45b4d310c73f38bb3, type: 2}
+    _textureHash: bb496164c9582abc63152a8d8a71f48a7df26134aace3730c466807aa715df7a
+  - _northWest: terrain:water
+    _northEast: terrain:water
+    _southEast: terrain:grass
+    _southWest: terrain:water
+    _variant: 
+    _tile: {fileID: 11400000, guid: 479b5ae68cc0d944dbb1f4e60c7f3465, type: 2}
+    _textureHash: b77c911aa11b03695e7087a830553e6bcc5f2686017a729a62431c581e1fcf1d
+  - _northWest: terrain:water
+    _northEast: terrain:water
+    _southEast: terrain:road
+    _southWest: terrain:dirt
+    _variant: 
+    _tile: {fileID: 11400000, guid: b2f2d2ff45518e149b71e5672ae801cb, type: 2}
+    _textureHash: 83eb63a268b46527e97bfbdb53f37ca87cbce995b0ee7e1df05f3c61765adfc2
+  - _northWest: terrain:water
+    _northEast: terrain:water
+    _southEast: terrain:road
+    _southWest: terrain:grass
+    _variant: 
+    _tile: {fileID: 11400000, guid: 83cc8e85575cf1046a1e4d82e2905de0, type: 2}
+    _textureHash: bfd8a050e4d5cb0c68adcf87d1d5fd8276ff3d66f6f1c28af61c83b090b6eb5b
+  - _northWest: terrain:water
+    _northEast: terrain:water
+    _southEast: terrain:road
+    _southWest: terrain:road
+    _variant: 
+    _tile: {fileID: 11400000, guid: c5ffe6e99dc3c0842ac786b8e0aa67e1, type: 2}
+    _textureHash: d441cea4b30e3c3d5d607a51bac326c75bc0afe6711f93c7a6d3dff087cb633c
+  - _northWest: terrain:water
+    _northEast: terrain:water
+    _southEast: terrain:road
+    _southWest: terrain:water
+    _variant: 
+    _tile: {fileID: 11400000, guid: 91c2c95d494dbc646896809a0a14d860, type: 2}
+    _textureHash: f1e4f53fcaa57b816b63c53cc27d60cdebce22b460d8e419d9afb730f97f34e8
+  - _northWest: terrain:water
+    _northEast: terrain:water
+    _southEast: terrain:water
+    _southWest: terrain:dirt
+    _variant: 
+    _tile: {fileID: 11400000, guid: 0780e5bf0f59f3a44928f6a11bf15596, type: 2}
+    _textureHash: 55159f0fafd8dfc32872e3d098f6531b3c84cb98cb1dce421bb3db912945e2ea
+  - _northWest: terrain:water
+    _northEast: terrain:water
+    _southEast: terrain:water
+    _southWest: terrain:grass
+    _variant: 
+    _tile: {fileID: 11400000, guid: 08e5c75d17544b6429db196824be6be2, type: 2}
+    _textureHash: 8e477166edee2e957a4a9daf978ffa038f72143012fa9893bd7b9f2f4cf991f6
+  - _northWest: terrain:water
+    _northEast: terrain:water
+    _southEast: terrain:water
+    _southWest: terrain:road
+    _variant: 
+    _tile: {fileID: 11400000, guid: db21f0053ad9c634d903ee93f9866036, type: 2}
+    _textureHash: fa95d9954e238a6fcb5ad6fee6ebc1d876fd395ae3a7885e805f95be8d28ab6f
+  - _northWest: terrain:water
+    _northEast: terrain:water
+    _southEast: terrain:water
+    _southWest: terrain:water
+    _variant: 
+    _tile: {fileID: 11400000, guid: 1126aacdf08bc404c80bdae2888182c0, type: 2}
+    _textureHash: f932b045d7a4c2a093036046b20cb8d90d2a8ae6436d615719f1c9e78ddc238b
+  - _northWest: terrain:water
+    _northEast: terrain:water
+    _southEast: terrain:water
+    _southWest: terrain:water
+    _variant: water_00
+    _tile: {fileID: 11400000, guid: ef38b21c1b4a2184c8c1f0d08fb4c874, type: 2}
+    _textureHash: 91b67f9433187e134f4cf237e5901f288ad2cbd20e95954c8694671ae19ac045
+  - _northWest: terrain:water
+    _northEast: terrain:water
+    _southEast: terrain:water
+    _southWest: terrain:water
+    _variant: water_01
+    _tile: {fileID: 11400000, guid: 590732266386d024b89b1b6441b83ee3, type: 2}
+    _textureHash: 7f80743f264b936c37b201516212e0b6469c722150783726c91d9a46373ea511

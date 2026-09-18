@@ -1,0 +1,48 @@
+{
+  "manifest": "C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Docs\\docs\\maps\\acceptance\\c2\\compiled-manifest.json",
+  "family": "terrain-basic-v1-compiled",
+  "canvas": [
+    64,
+    64
+  ],
+  "errors": [],
+  "assets": [
+    {
+      "name": "terrain_dirt_compiled_00",
+      "image": "C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Art\\Tiles\\Environment\\WangCompiled\\6dab843342e06a141ad9fefa468fb26f\\0364ce05b507980aaf3d215fea70f1e29ab154e198e38566542b97f2349299b3\\tile_0000.png",
+      "canvas": [
+        64,
+        64
+      ],
+      "visible_bbox": [
+        0,
+        0,
+        64,
+        64
+      ],
+      "visible_width": 64,
+      "visible_height": 64,
+      "margins": {
+        "left": 0,
+        "top": 0,
+        "right": 0,
+        "bottom": 0
+      },
+      "alpha_coverage": 1.0,
+      "visual_center": [
+        32.0,
+        32.0
+      ],
+      "errors": [],
+      "warnings": [
+        "visible pixels touch the canvas edge"
+      ]
+    }
+  ],
+  "summary": {
+    "assets": 1,
+    "errors": 0,
+    "warnings": 1,
+    "passed": true
+  }
+}

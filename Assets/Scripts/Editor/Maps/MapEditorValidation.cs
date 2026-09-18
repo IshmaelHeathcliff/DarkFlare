@@ -12,6 +12,7 @@ namespace DarkFlare.Editor
         public static List<ContentValidationIssue> Scan()
         {
             var issues = new List<ContentValidationIssue>();
+            issues.AddRange(TerrainPresentationPublisher.Scan());
             List<ScriptableObject> definitions = MapEditorDefinitionIndex.LoadDefinitions();
             var lookup = new MapDefinitionLookup(definitions);
             foreach (var group in definitions.GroupBy(asset => asset.GetType().FullName + ":" + ((IContentDefinition)asset).Id))

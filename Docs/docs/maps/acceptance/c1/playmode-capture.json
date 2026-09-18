@@ -1,0 +1,18 @@
+{
+  "summary": {
+    "total": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "results": [
+    {
+      "FullName": "DarkFlare.Tests.TerrainPilotCaptureTests.CaptureSourceInRunningMain",
+      "Status": "Passed",
+      "Duration": 1.5336753,
+      "Message": null,
+      "StackTrace": null
+    }
+  ]
+}

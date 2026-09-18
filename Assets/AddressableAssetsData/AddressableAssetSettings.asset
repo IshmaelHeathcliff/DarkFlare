@@ -15,7 +15,9 @@ MonoBehaviour:
   m_DefaultGroup: 53f4518ea4317d2438bd52f912fcec08
   m_currentHash:
     serializedVersion: 2
-    Hash: 00000000000000000000000000000000
+    Hash: b0532e5863fadd597428913a4793411e
+  m_ExtractTypeTreeData: 0
+  m_DisableWriteTypeTree: 0
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 0
   m_CatalogRequestsTimeout: 0
@@ -70,6 +72,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 40dd20966053f6d4d969ac98d2073c9c, type: 2}
   - {fileID: 11400000, guid: 649e4d36fda33b74690321a42afa1d7d, type: 2}
   - {fileID: 11400000, guid: c071a6d35d3b5c84f819d3f5db936066, type: 2}
+  - {fileID: 11400000, guid: fdd5a33cd8fa94342b77179bb154a642, type: 2}
   - {fileID: 11400000, guid: 915532b5a78dac44bb95338cad805016, type: 2}
   m_BuildSettings:
     m_LogResourceManagerExceptions: 1
@@ -120,6 +123,7 @@ MonoBehaviour:
     - df.prefab
     - df.sprite
     - df.audio
+    - df.terrain
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: 7965e0bb3ee464c42a000fe610981361, type: 2}

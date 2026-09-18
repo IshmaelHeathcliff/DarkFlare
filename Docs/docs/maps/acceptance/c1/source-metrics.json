@@ -1,0 +1,9 @@
+{
+  "sourceSha256": "29f81593da1906ebbb85038ea286ce261b432557504dfbae40852b818e114a05",
+  "meanSrgbLuminance": 0.2025718113811766,
+  "p95SrgbLuminance": 0.2444541176470588,
+  "alphaMin": 255,
+  "rawHorizontalEdgeMeanDifferenceByte": 4.904837852206273,
+  "rawVerticalEdgeMeanDifferenceByte": 5.2620946305156835,
+  "notes": "Raw material source, not periodic compiled Tile; RGB byte edge differences are intentionally measured before C2 edge compilation."
+}

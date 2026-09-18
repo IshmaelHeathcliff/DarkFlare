@@ -1,6 +1,6 @@
 # Alpha 0.5：地图数据与地表方案
 
-状态：部分实现。2026-09-18 已完成数据与导入，当前 V1 见[地图文档模块](../../maps/README.md)；本方案中的渲染、静态几何和运行时地图管理仍待实施。上级入口：[总计划](../alpha-0.5-plan.md)。
+状态：部分实现。2026-09-18 已完成数据导入、Wang 解析及隔离诊断预览；C1 已交付[家族合同与泥土源 Pilot](../../maps/terrain-art-contract.md)，C2 已交付[正式材质编译与预览](../../maps/terrain-texture-compilation.md)。当前 V1 见[地图文档模块](../../maps/README.md)；C3 四材质双变体和[地表资源发布](../../maps/terrain-materials.md)已完成；[C4 正式验收](../../maps/acceptance/c4/README.md)已完成；运行时新地图渲染、静态几何和地图管理仍待实施。上级入口：[总计划](../alpha-0.5-plan.md)。
 
 ## 权威数据与派生资产
 

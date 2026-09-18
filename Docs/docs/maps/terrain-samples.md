@@ -26,6 +26,16 @@ Alpha 0.5.0 B 的持久技术输入，配合[诊断预览](./terrain-preview.md)
 
 压力菜单以默认 seed=19260817 的固定整数坐标 Hash 生成四材质 256×256 地图，编译后写入 `Temp/DarkFlare/preview_stress.dfmap`，源路径显示在窗口中。该文件可删除、可重建，不纳入版本库。它有 66049 个显示格，适合测试缓存、全量填充和取消；不是 500 / 1000 怪物导航压测。
 
+## 正式材质样例
+
+C4 的 `MapFormalSamples` 复用上述三种布局生成器，映射到 `terrain_set:basic`、正式 dirt / grass / water / road 和 `_00` / `_01` 变体。几何、seed、chunk 布局保持一致，诊断源与既有 GUID 不被覆盖。
+
+`DarkFlare/地图` 新增“创建正式验收样例（仅补缺失）”“打开正式拓扑样例”“打开正式边界样例”“生成并预览正式 256×256 压力地图”。前两张持久源为 `Assets/Data/Development/Maps/terrain_topology.dfmap` 和 `terrain_boundary.dfmap`，压力源为 `Temp/DarkFlare/terrain_stress.dfmap`。已有文件只读取，不自动重置。
+
+正式入口要求 `Assets/Data/Maps/Terrain/terrain_basic_sources.asset` 的编译修订当前有效，打开既有预览窗口的正式模式，不生成诊断贴图或静默补洞。变更正式源后须先按[纹理编译流程](./terrain-texture-compilation.md)更新，再打开样例。样例不是运行时地图，不写入 Addressables 或 core。
+
+正式 Key 画廊、接点 / 跨块渲染像素和大图验收记录见 [C4 验收](./acceptance/c4/README.md)。角色与真实 Main 镜头的尺度证据沿用同一编译修订的 [C3 采集](./acceptance/c3/materials-main-1920.png)。
+
 ## 验证
 
 2026-09-18 完成全图、原始像素、取消和三轮压力采集，详见 [B4 验收记录](./acceptance/b4/README.md)。原始像素的 279168 对相邻边像素全部一致，无透明孔洞。重复生成保持已有文件字节不变；诊断资产无直接或隐式 Addressables 条目。项目完整 EditMode 650/650、PlayMode 75/75、内容校验 0 问题、配置文档覆盖通过。

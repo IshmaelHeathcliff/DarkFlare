@@ -57,6 +57,8 @@ Editor 治理器 `Alpha026AddressablesGovernance` 通过 Addressables Editor API
 | `DarkFlare-Session-Sprites` | 7 | `df.session`、`df.sprite` | `ui/icons/items/` |
 | `DarkFlare-Audio` | 1 | `df.application`、`df.audio` | `audio/ui/confirm` |
 
+C3 另有独立的 `DarkFlare-Map-Terrain` 组，入口 `maps/terrain/basic`，标签为 `df.session` / `df.terrain`。该条目由 `TerrainPresentationPublisher` 校验，不归上述历史 15 条目的治理器创建；见[地表资源发布](../maps/terrain-materials.md)。
+
 验证器检查 GUID、目标组、规范地址、必需 Label、资源类型、缺失资源、重复地址和默认组误放。Localization 自动管理组与 Unity 包组不做结构迁移，只参与通用重复地址检查。地址与 GUID 都不是存档身份；持久化继续只使用 `ContentId` / `InstanceId`。
 
 ## 验证与禁止事项

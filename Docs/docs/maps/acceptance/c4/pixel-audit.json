@@ -1,0 +1,19 @@
+{
+  "maps": [
+    {
+      "sample": "topology",
+      "compared_pixel_pairs": 126976,
+      "max_rgba_delta": 0,
+      "alpha_min": 255,
+      "sha256": "6fa58573161982450c3f482ae9c1c809791ea9b8c37e181c5937767d63b84184"
+    },
+    {
+      "sample": "boundary",
+      "compared_pixel_pairs": 152192,
+      "max_rgba_delta": 0,
+      "alpha_min": 255,
+      "sha256": "62d5ad80757d4b9916737531fef35d9a2dacff09daebcaa0928bb4036bd4ed19"
+    }
+  ],
+  "source_and_tile_hashes_match_c3": true
+}

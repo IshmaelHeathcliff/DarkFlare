@@ -12,7 +12,9 @@ namespace DarkFlare.Editor
         static void OnPostprocessAllAssets(string[] imported, string[] deleted, string[] moved, string[] movedFrom)
         {
             if (!imported.Concat(deleted).Concat(moved).Concat(movedFrom)
-                .Any(path => path.EndsWith(".dfmap", StringComparison.OrdinalIgnoreCase))) { return; }
+                .Any(path => path.EndsWith(".dfmap", StringComparison.OrdinalIgnoreCase)
+                    || path.EndsWith(".png", StringComparison.OrdinalIgnoreCase)
+                    || path.EndsWith(".asset", StringComparison.OrdinalIgnoreCase))) { return; }
             EditorApplication.delayCall -= Notify;
             EditorApplication.delayCall += Notify;
         }

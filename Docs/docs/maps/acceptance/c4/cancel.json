@@ -1,0 +1,22 @@
+{
+  "records": [
+    {
+      "action": "cancel",
+      "cancelMs": 0.171,
+      "filled": "Position: (-1, -1, 0), Size: (257, 4, 1)",
+      "oldFrameRetained": true,
+      "diagnosticResources": 0
+    },
+    {
+      "action": "dispose",
+      "cancelMs": 0.2335,
+      "filled": "Position: (-1, -1, 0), Size: (257, 4, 1)",
+      "oldFrameRetained": false,
+      "diagnosticResources": 0
+    }
+  ],
+  "previewsBefore": 1,
+  "previewsAfter": 1,
+  "objectsBefore": 0,
+  "objectsAfter": 0
+}

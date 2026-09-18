@@ -1,0 +1,48 @@
+{
+  "manifest": "C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Docs\\docs\\maps\\acceptance\\c3\\dirt_source_01-manifest.json",
+  "family": "terrain-basic-v1",
+  "canvas": [
+    1254,
+    1254
+  ],
+  "errors": [],
+  "assets": [
+    {
+      "name": "dirt_source_01",
+      "image": "C:\\Users\\darkf\\.codex\\generated_images\\01a0afbd-4262-78c0-a2f6-4cc6122025d9\\exec-6cd7e117-02e2-4d05-b80c-cd0a9d36d78b.png",
+      "canvas": [
+        1254,
+        1254
+      ],
+      "visible_bbox": [
+        0,
+        0,
+        1254,
+        1254
+      ],
+      "visible_width": 1254,
+      "visible_height": 1254,
+      "margins": {
+        "left": 0,
+        "top": 0,
+        "right": 0,
+        "bottom": 0
+      },
+      "alpha_coverage": 1.0,
+      "visual_center": [
+        627.0,
+        627.0
+      ],
+      "errors": [],
+      "warnings": [
+        "visible pixels touch the canvas edge"
+      ]
+    }
+  ],
+  "summary": {
+    "assets": 1,
+    "errors": 0,
+    "warnings": 1,
+    "passed": true
+  }
+}

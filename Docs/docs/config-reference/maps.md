@@ -1,12 +1,12 @@
 # 地图配置参考
 
-地图源与导入流程见[地图文档模块](../maps/README.md)。本轮只建立数据配置，没有加入正式 core 目录，也未替换 Main 地表。四个顶层配置在 `DarkFlare/Data/Maps/` 菜单创建，测试使用隔离定义；正式资产以后放在 `Assets/Data/Preset/Maps/`。
+地图源与导入流程见[地图文档模块](../maps/README.md)。地图内容尚未加入正式 core 目录，也未替换 Main 地表。四个内容定义在 `DarkFlare/Data/Maps/` 菜单创建；C3 正式四材质位于 `Assets/Data/Maps/Terrain/`，通过独立的[地表资源包](../maps/terrain-materials.md)发布。显示配置与 Editor 源配置使用 `DarkFlare/Maps/` 菜单，不另建内容身份。
 
 所有 ID 均为小写 snake_case 的本地 ID，JSON 中使用带命名空间的完整 ContentId。配置属于共享内容定义，不保存地图实例状态。字段变更暂无历史资产迁移；不能静默重命名已经被地图引用的 ID。
 
 ## TerrainDefinition
 
-创建菜单 `Terrain Definition`；命名空间 `terrain`，表示泥土、草地、水、道路等逻辑材质。当前消费者为地图编译器；导航和渲染消费留到后续切片。
+创建菜单 `Terrain Definition`；命名空间 `terrain`，表示泥土、草地、水、道路等逻辑材质。当前消费者为地图文档编译、Wang 规则与正式纹理编译 / 预览；导航和运行时地图渲染留到后续切片。
 
 | 字段 | 类型 / 默认 | 合同 |
 | --- | --- | --- |
@@ -16,7 +16,7 @@
 
 ## TerrainSetDefinition
 
-创建菜单 `Terrain Set Definition`；命名空间 `terrain_set`，引用可共存的有序材质和兼容变体。次序保留，不用 Unity 实例 ID 作为随机种子。当前不要求全量 Wang Key；切片 B 增加解析与缺省变体选择。
+创建菜单 `Terrain Set Definition`；命名空间 `terrain_set`，引用可共存的有序材质和兼容变体。次序保留，不用 Unity 实例 ID 作为随机种子。B 已提供解析和缺省变体选择；C2 正式纹理编译为所选材质生成完整 Key 基准和全部候选。
 
 | 字段 | 类型 / 默认 | 合同 |
 | --- | --- | --- |
@@ -26,7 +26,7 @@
 
 ## TerrainTileVariant
 
-地表集拥有的嵌套记录，无独立资产或 CreateAssetMenu。四角顺序固定为左下、右下、左上、右上。当前保存兼容合同，尚无 Sprite 引用或渲染器。
+地表集拥有的嵌套记录，无独立资产或 CreateAssetMenu。四角顺序固定为左下、右下、左上、右上。该记录只保存兼容合同；Sprite / Tile 与源 PNG 分离，见[正式纹理配置](../maps/terrain-texture-compilation.md)。
 
 | 字段 | 类型 / 默认 | 合同 |
 | --- | --- | --- |
@@ -35,6 +35,17 @@
 | `_southEast` | TerrainDefinition / null | 必填，右下；必须来自所属地表集 |
 | `_northWest` | TerrainDefinition / null | 必填，左上；必须来自所属地表集 |
 | `_northEast` | TerrainDefinition / null | 必填，右上；必须来自所属地表集 |
+
+## TerrainPresentationDefinition
+
+创建菜单 `DarkFlare/Maps/Terrain Presentation`。稳定 Addressables 入口为 `maps/terrain/<地表集本地 ID>`，由发布器更新编译目录引用；它不是内容定义，不写入 core 或存档。当前真实示例为 `Assets/Data/Maps/Terrain/terrain_basic_presentation.asset`，消费者通过既有 AddressableAssetService 的 owner / lease 加载并调用 Validate。
+
+| 字段 | 类型 / 默认 | 合同 |
+| --- | --- | --- |
+| `_terrainSet` | TerrainSetDefinition / null | 必填、与源配置相同；首期 1–4 材质；不应在发布后静默更改身份 |
+| `_tiles` | TerrainTileCatalog / null | 发布器拥有的只读字段，必须覆盖全部 Key 和候选，与当前规则摘要一致；不引用高分辨率源 |
+
+Editor 发布校验源修订、输出内容、地址唯一性、标签与运行时依赖；失败恢复旧引用。首次创建没有历史迁移。暂不加载地图实例或替换 Main。
 
 ## MapObjectDefinition
 
@@ -61,4 +72,4 @@
 
 内容校验及 `.dfmap` 导入均验证定义、引用、能力与布局。源损坏生成错误报告并撤销有效 MapDefinition，配置中心显示原因；标准 Player 构建前执行地图校验。新增缺失定义或删除冲突后会触发重新导入。
 
-MapDefinition 是只读导入产物，不属于可创建配置，也不进入本文件的字段覆盖列表。仅由 `.dfmap` 生成，不能创建第二份 `.asset` 布局。正式内容目录和 Addressables 的交付在后续地图接入时完成。
+MapDefinition 是只读导入产物，不属于可创建配置，也不进入本文件的字段覆盖列表。仅由 `.dfmap` 生成，不能创建第二份 `.asset` 布局。地表显示目录已单独登记 Addressables；地图内容目录及运行时场景接入在后续阶段完成。

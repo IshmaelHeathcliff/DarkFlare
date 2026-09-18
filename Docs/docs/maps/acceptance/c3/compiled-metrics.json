@@ -1,0 +1,30 @@
+{
+  "revision": "6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0",
+  "tiles": 264,
+  "horizontal_edge_signatures": 16,
+  "vertical_edge_signatures": 16,
+  "compatible_edge_comparisons": 1024,
+  "max_rgba_edge_delta": 0,
+  "variants": {
+    "dirt": {
+      "different_interior_pixels": 2302,
+      "interior_pixels": 2304,
+      "two_pixel_border_max_delta": 0
+    },
+    "grass": {
+      "different_interior_pixels": 2301,
+      "interior_pixels": 2304,
+      "two_pixel_border_max_delta": 0
+    },
+    "water": {
+      "different_interior_pixels": 2303,
+      "interior_pixels": 2304,
+      "two_pixel_border_max_delta": 0
+    },
+    "road": {
+      "different_interior_pixels": 2304,
+      "interior_pixels": 2304,
+      "two_pixel_border_max_delta": 0
+    }
+  }
+}

@@ -1,0 +1,61 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a4ae3bfaf3c46944914f63a08049300, type: 3}
+  m_Name: terrain_basic_set
+  m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.TerrainSetDefinition
+  _id: basic
+  _terrains:
+  - {fileID: 11400000, guid: 694566c086b8fc545b57efc9a3e84146, type: 2}
+  - {fileID: 11400000, guid: fe975d4610860e04fbbeba70a9c94e48, type: 2}
+  - {fileID: 11400000, guid: 966f68f2085e550438332a3c9352c729, type: 2}
+  - {fileID: 11400000, guid: bf3a5db59acb1df469fbb24f5fb55347, type: 2}
+  _variants:
+  - _id: dirt_00
+    _southWest: {fileID: 11400000, guid: 694566c086b8fc545b57efc9a3e84146, type: 2}
+    _southEast: {fileID: 11400000, guid: 694566c086b8fc545b57efc9a3e84146, type: 2}
+    _northWest: {fileID: 11400000, guid: 694566c086b8fc545b57efc9a3e84146, type: 2}
+    _northEast: {fileID: 11400000, guid: 694566c086b8fc545b57efc9a3e84146, type: 2}
+  - _id: dirt_01
+    _southWest: {fileID: 11400000, guid: 694566c086b8fc545b57efc9a3e84146, type: 2}
+    _southEast: {fileID: 11400000, guid: 694566c086b8fc545b57efc9a3e84146, type: 2}
+    _northWest: {fileID: 11400000, guid: 694566c086b8fc545b57efc9a3e84146, type: 2}
+    _northEast: {fileID: 11400000, guid: 694566c086b8fc545b57efc9a3e84146, type: 2}
+  - _id: grass_00
+    _southWest: {fileID: 11400000, guid: fe975d4610860e04fbbeba70a9c94e48, type: 2}
+    _southEast: {fileID: 11400000, guid: fe975d4610860e04fbbeba70a9c94e48, type: 2}
+    _northWest: {fileID: 11400000, guid: fe975d4610860e04fbbeba70a9c94e48, type: 2}
+    _northEast: {fileID: 11400000, guid: fe975d4610860e04fbbeba70a9c94e48, type: 2}
+  - _id: grass_01
+    _southWest: {fileID: 11400000, guid: fe975d4610860e04fbbeba70a9c94e48, type: 2}
+    _southEast: {fileID: 11400000, guid: fe975d4610860e04fbbeba70a9c94e48, type: 2}
+    _northWest: {fileID: 11400000, guid: fe975d4610860e04fbbeba70a9c94e48, type: 2}
+    _northEast: {fileID: 11400000, guid: fe975d4610860e04fbbeba70a9c94e48, type: 2}
+  - _id: water_00
+    _southWest: {fileID: 11400000, guid: 966f68f2085e550438332a3c9352c729, type: 2}
+    _southEast: {fileID: 11400000, guid: 966f68f2085e550438332a3c9352c729, type: 2}
+    _northWest: {fileID: 11400000, guid: 966f68f2085e550438332a3c9352c729, type: 2}
+    _northEast: {fileID: 11400000, guid: 966f68f2085e550438332a3c9352c729, type: 2}
+  - _id: water_01
+    _southWest: {fileID: 11400000, guid: 966f68f2085e550438332a3c9352c729, type: 2}
+    _southEast: {fileID: 11400000, guid: 966f68f2085e550438332a3c9352c729, type: 2}
+    _northWest: {fileID: 11400000, guid: 966f68f2085e550438332a3c9352c729, type: 2}
+    _northEast: {fileID: 11400000, guid: 966f68f2085e550438332a3c9352c729, type: 2}
+  - _id: road_00
+    _southWest: {fileID: 11400000, guid: bf3a5db59acb1df469fbb24f5fb55347, type: 2}
+    _southEast: {fileID: 11400000, guid: bf3a5db59acb1df469fbb24f5fb55347, type: 2}
+    _northWest: {fileID: 11400000, guid: bf3a5db59acb1df469fbb24f5fb55347, type: 2}
+    _northEast: {fileID: 11400000, guid: bf3a5db59acb1df469fbb24f5fb55347, type: 2}
+  - _id: road_01
+    _southWest: {fileID: 11400000, guid: bf3a5db59acb1df469fbb24f5fb55347, type: 2}
+    _southEast: {fileID: 11400000, guid: bf3a5db59acb1df469fbb24f5fb55347, type: 2}
+    _northWest: {fileID: 11400000, guid: bf3a5db59acb1df469fbb24f5fb55347, type: 2}
+    _northEast: {fileID: 11400000, guid: bf3a5db59acb1df469fbb24f5fb55347, type: 2}

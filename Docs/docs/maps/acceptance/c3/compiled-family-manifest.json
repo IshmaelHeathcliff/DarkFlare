@@ -1,0 +1,7404 @@
+{
+  "schema_version": 1,
+  "family": "compiled-family",
+  "alpha_threshold": 8,
+  "canvas": {
+    "width": 64,
+    "height": 64
+  },
+  "alpha_required": false,
+  "assets": [
+    {
+      "name": "tile_0000",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0000.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0001",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0001.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0002",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0002.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0003",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0003.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0004",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0004.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0005",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0005.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0006",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0006.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0007",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0007.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0008",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0008.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0009",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0009.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0010",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0010.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0011",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0011.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0012",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0012.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0013",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0013.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0014",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0014.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0015",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0015.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0016",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0016.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0017",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0017.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0018",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0018.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0019",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0019.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0020",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0020.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0021",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0021.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0022",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0022.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0023",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0023.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0024",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0024.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0025",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0025.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0026",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0026.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0027",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0027.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0028",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0028.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0029",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0029.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0030",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0030.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0031",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0031.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0032",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0032.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0033",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0033.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0034",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0034.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0035",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0035.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0036",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0036.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0037",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0037.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0038",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0038.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0039",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0039.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0040",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0040.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0041",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0041.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0042",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0042.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0043",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0043.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0044",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0044.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0045",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0045.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0046",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0046.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0047",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0047.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0048",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0048.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0049",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0049.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0050",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0050.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0051",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0051.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0052",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0052.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0053",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0053.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0054",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0054.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0055",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0055.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0056",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0056.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0057",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0057.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0058",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0058.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0059",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0059.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0060",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0060.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0061",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0061.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0062",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0062.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0063",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0063.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0064",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0064.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0065",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0065.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0066",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0066.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0067",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0067.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0068",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0068.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0069",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0069.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0070",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0070.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0071",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0071.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0072",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0072.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0073",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0073.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0074",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0074.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0075",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0075.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0076",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0076.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0077",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0077.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0078",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0078.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0079",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0079.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0080",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0080.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0081",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0081.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0082",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0082.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0083",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0083.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0084",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0084.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0085",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0085.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0086",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0086.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0087",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0087.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0088",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0088.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0089",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0089.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0090",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0090.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0091",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0091.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0092",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0092.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0093",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0093.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0094",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0094.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0095",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0095.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0096",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0096.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0097",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0097.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0098",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0098.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0099",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0099.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0100",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0100.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0101",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0101.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0102",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0102.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0103",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0103.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0104",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0104.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0105",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0105.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0106",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0106.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0107",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0107.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0108",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0108.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0109",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0109.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0110",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0110.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0111",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0111.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0112",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0112.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0113",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0113.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0114",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0114.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0115",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0115.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0116",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0116.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0117",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0117.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0118",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0118.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0119",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0119.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0120",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0120.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0121",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0121.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0122",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0122.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0123",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0123.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0124",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0124.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0125",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0125.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0126",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0126.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0127",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0127.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0128",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0128.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0129",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0129.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0130",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0130.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0131",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0131.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0132",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0132.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0133",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0133.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0134",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0134.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0135",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0135.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0136",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0136.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0137",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0137.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0138",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0138.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0139",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0139.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0140",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0140.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0141",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0141.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0142",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0142.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0143",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0143.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0144",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0144.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0145",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0145.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0146",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0146.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0147",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0147.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0148",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0148.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0149",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0149.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0150",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0150.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0151",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0151.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0152",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0152.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0153",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0153.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0154",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0154.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0155",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0155.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0156",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0156.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0157",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0157.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0158",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0158.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0159",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0159.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0160",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0160.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0161",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0161.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0162",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0162.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0163",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0163.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0164",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0164.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0165",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0165.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0166",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0166.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0167",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0167.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0168",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0168.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0169",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0169.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0170",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0170.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0171",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0171.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0172",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0172.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0173",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0173.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0174",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0174.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0175",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0175.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0176",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0176.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0177",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0177.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0178",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0178.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0179",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0179.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0180",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0180.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0181",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0181.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0182",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0182.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0183",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0183.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0184",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0184.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0185",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0185.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0186",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0186.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0187",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0187.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0188",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0188.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0189",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0189.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0190",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0190.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0191",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0191.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0192",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0192.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0193",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0193.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0194",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0194.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0195",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0195.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0196",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0196.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0197",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0197.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0198",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0198.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0199",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0199.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0200",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0200.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0201",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0201.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0202",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0202.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0203",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0203.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0204",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0204.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0205",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0205.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0206",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0206.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0207",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0207.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0208",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0208.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0209",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0209.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0210",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0210.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0211",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0211.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0212",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0212.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0213",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0213.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0214",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0214.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0215",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0215.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0216",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0216.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0217",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0217.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0218",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0218.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0219",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0219.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0220",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0220.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0221",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0221.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0222",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0222.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0223",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0223.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0224",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0224.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0225",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0225.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0226",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0226.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0227",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0227.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0228",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0228.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0229",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0229.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0230",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0230.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0231",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0231.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0232",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0232.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0233",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0233.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0234",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0234.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0235",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0235.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0236",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0236.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0237",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0237.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0238",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0238.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0239",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0239.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0240",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0240.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0241",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0241.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0242",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0242.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0243",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0243.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0244",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0244.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0245",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0245.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0246",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0246.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0247",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0247.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0248",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0248.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0249",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0249.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0250",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0250.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0251",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0251.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0252",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0252.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0253",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0253.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0254",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0254.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0255",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0255.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0256",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0256.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0257",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0257.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0258",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0258.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0259",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0259.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0260",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0260.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0261",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0261.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0262",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0262.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "tile_0263",
+      "image": "../../../../../Assets/Art/Tiles/Environment/WangCompiled/9a9b39266eb8b0a4abb9dbda28fcde64/6f78c7c26772ac7918ae3f20680b0df7837b7c0e444dc6dceea40ce3288ffad0/tile_0263.png",
+      "visible_width": [
+        64,
+        64
+      ],
+      "visible_height": [
+        64,
+        64
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        31.5,
+        32.5
+      ],
+      "visual_center_y": [
+        31.5,
+        32.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    }
+  ]
+}

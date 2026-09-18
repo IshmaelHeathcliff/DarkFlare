@@ -6,7 +6,7 @@
 
 alpha 版本内的阶段使用三段式名称：`alpha 0.1` 的首个阶段为 `alpha 0.1.0`，后续依次为 `alpha 0.1.1`、`alpha 0.1.2`；`alpha 0.2` 同样从 `alpha 0.2.0` 开始。当前版本为 `0.4.2-alpha`；完成记录见[alpha 0.2 综合验收记录](./infrastructure/alpha-0.2-acceptance.md)与[计划归档](./plan/archive/README.md)。
 
-2026-09-18：[Alpha 0.5 总计划](./plan/alpha-0.5-plan.md)正在推进[地图数据与地表基础](./plan/alpha-0.5.0-map-foundation-plan.md)，已完成 A 数据导入与 B Wang 解析、[诊断预览](./maps/terrain-preview.md)、[样例及压力验收](./maps/terrain-samples.md)。下一步是 C 正式地表家族合同与 Pilot，之后 D 静态几何，再继续手工 / AI 编辑、Y 排序、双地图、Flow Field / A* 与 Job / Burst 导航。目标为 500 活动怪物、1000 压力测试，地图离场暂停并保留状态；运行版本不提前升级。
+2026-09-18：[Alpha 0.5 总计划](./plan/alpha-0.5-plan.md)正在推进[地图数据与地表基础](./plan/alpha-0.5.0-map-foundation-plan.md)，A 数据导入与 B 解析 / 诊断预览已完成并提交；[C1 泥土材质源](./maps/acceptance/c1/README.md)与 [C2 正式纹理 / Wang 编译和预览](./maps/acceptance/c2/README.md)已完成。[C3 四材质双变体与资源发布](./maps/acceptance/c3/README.md)也已完成。[C4 样例与压力验收](./maps/acceptance/c4/README.md)已完成，C 计划归档；下一步 D 静态几何，随后继续手工 / AI 编辑、Y 排序、双地图、Flow Field / A* 与 Job / Burst 导航。目标为 500 活动怪物、1000 压力测试，地图离场暂停并保留状态；运行版本不提前升级。
 
 - Alpha 0.3：独立物品窗口、统一拖放、实时属性、暗黑像素 HUD、共享皮肤与十槽二十件装备已完成，后续补充物品窗口布局与交互修正。
 - Alpha 0.4.0：[统一物品系统](./item-system.md)完成金币与材料入栏、堆叠 / 消耗、材料打造与旧档迁移。
@@ -14,7 +14,7 @@ alpha 版本内的阶段使用三段式名称：`alpha 0.1` 的首个阶段为 `
 - Alpha 0.4.2：[统一使用](./item-use-system.md)与[消耗品](./consumables.md)完成回血、回蓝、临时状态和驱散；core v5、Schema 3。2026-09-15 EditMode 563/563、PlayMode 74/74 及独立 Windows Player 验收通过，见[交付证据](./assets/acceptance/alpha-0.4-item-use-acceptance/README.md)。
 - 后续[随机商店](./trading-system.md)已完成每批 16 件、随机品质 / 词条、购买减单件、免费刷新与库存恢复，运行版本仍为 `0.4.2-alpha`。2026-09-16 EditMode 568/568、PlayMode 75/75 通过；该轮未重建 Windows Player，见[验收记录](./assets/acceptance/random-shop/README.md)。
 
-上述为历史验收记录；本轮 B4 收尾后重跑项目 EditMode 650/650、PlayMode 75/75，内容校验和配置文档覆盖通过，未重建 Player。地图视觉、像素与压力记录见 [B4 验收](./maps/acceptance/b4/README.md)。既有构建警告及音频验证边界见[启动归档](./plan/archive/alpha-0.5-startup.md)，新功能范围见 Alpha 0.5 总计划。
+上述为历史验收记录；C4 本轮项目 EditMode 662/662、完整 PlayMode 76/76、正式样例像素与三轮压力 / 取消验收通过，未重建 Player，见 [C4 验收](./maps/acceptance/c4/README.md)；角色同框复用同修订 C3 采集。新材质尺度与生成证据见 [C1 验收](./maps/acceptance/c1/README.md)。既有构建警告及音频验证边界见[启动归档](./plan/archive/alpha-0.5-startup.md)。
 
 ## 游戏定位
 

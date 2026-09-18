@@ -1,0 +1,226 @@
+[
+  {
+    "name": "grass_00",
+    "prompt": "Use case: style-transfer. Create ONE independent square 1254x1254 opaque game terrain material source. Image 1 is the immutable approved dirt style reference, not an edit target to preserve dirt: match its very chunky low-resolution pixel clusters, dark low-contrast background level, flat orthographic top-down camera, diffuse light and texture scale. Change the material to a dense carpet of short desaturated gray-olive grass. Full canvas uniformly covered in short grass clusters: broad stepped 2-4 logical-pixel clumps, a few short blades, dark mossy olive green (rough mean RGB 40,52,34), subtle gray-green accents below RGB 80. Roughly 64x64 logical pixels enlarged across the 1254 canvas; the smallest color block about 20 source pixels. 6-8 quiet colors, hard chunky pixel transitions, no tiny grain. No dirt islands, flowers, bushes, rocks, objects, dew, tall blades, bright grass tips, border, outlines of terrain patches, vignette, shadow, perspective, text, sheet, grid lines, transparent margin or multiple variants. Edge-to-edge uniform full-bleed grass, a single meter of quiet ground behind characters. Output exactly 1254x1254, do not crop or add padding.",
+    "tool": "built-in image_gen",
+    "referencePaths": [
+      "Assets/Art/Sprites/Environment/TerrainSources/terrain_dirt_source_00.png"
+    ],
+    "generatedFile": "exec-8ce38a8e-f4de-4929-a64f-e3cb6a09cca3.png",
+    "sha256": "299d94cd6c800de839b1b4f76ca3cba9d5ad9249d0a4d1d23a5c926dacb0b5fe",
+    "mean_luminance": 0.24431692093634483,
+    "p95_luminance": 0.32742823529411763,
+    "accepted": true,
+    "referenceHashes": [
+      "29f81593da1906ebbb85038ea286ce261b432557504dfbae40852b818e114a05"
+    ]
+  },
+  {
+    "name": "water_00",
+    "prompt": "Use case: style-transfer. Output ONE independent 1254x1254 fully opaque square game terrain source. Always use image 1 (approved dirt Pilot) as immutable style and scale reference: very chunky roughly 64x64 logical pixel clusters enlarged over full canvas, smallest block about 20 pixels, dark low-contrast flat top-down diffuse lighting, 6-8 muted colors, no tiny grain or photographic texture. Uniform full-bleed single material, no borders, transparent margins, text, grids, sheets, collage, objects, perspective, vignette or central patch. Create dark still WATER, distinguishable from the brown dirt reference by desaturated cool slate-blue color, mean RGB around (32,46,55), highlights under (65,78,85). Use broad quiet pixel patches with only a few very short thin interrupted horizontal ripple marks. Redesign the internal pattern as water; do not merely recolor the dirt clusters. No pebbles, foam, shoreline, bank, land, waves, blue sky reflection or reflections of any object. Image 1 is STYLE reference, not geometry to copy. One full square of water viewed straight from above. Match quiet background luminance, not luminous tropical water. Exactly 1254x1254.",
+    "tool": "built-in image_gen",
+    "referencePaths": [
+      "Assets/Art/Sprites/Environment/TerrainSources/terrain_dirt_source_00.png"
+    ],
+    "generatedFile": "exec-5f92cafc-5c65-4fa6-a134-2275857948b2.png",
+    "sha256": "8426b21bca392995d41b649ded20b79bdb79074c35d44e9ff31534c2fc21b5ae",
+    "mean_luminance": 0.19874616540327356,
+    "p95_luminance": 0.2556078431372549,
+    "accepted": true,
+    "referenceHashes": [
+      "29f81593da1906ebbb85038ea286ce261b432557504dfbae40852b818e114a05"
+    ]
+  },
+  {
+    "name": "road_00",
+    "prompt": "Use case: style-transfer. Output ONE independent 1254x1254 fully opaque square game terrain source. Always use image 1 (approved dirt Pilot) as immutable style and scale reference: very chunky roughly 64x64 logical pixel clusters enlarged over full canvas, smallest block about 20 pixels, dark low-contrast flat top-down diffuse lighting, 6-8 muted colors, no tiny grain or photographic texture. Uniform full-bleed single material, no borders, transparent margins, text, grids, sheets, collage, objects, perspective, vignette or central patch. Create packed GRAVEL ROAD SURFACE. Only the road material, no path outline: gray-brown compacted fine aggregate, visibly cooler and slightly lighter than dirt (mean RGB 60,58,53, brightest under 85). Broad low-contrast patches and a few short broken shallow horizontal wheel scuffs, subdued small square gravel clusters. Redesign internal distribution, do not copy reference shapes. No paved slabs, bricks, cobblestone outlines, curbs, lane markings, grass, standalone rocks, light streaks or coherent road edge. One square meter of worn village track material. Reference is dirt STYLE only. Exactly 1254x1254.",
+    "tool": "built-in image_gen",
+    "referencePaths": [
+      "Assets/Art/Sprites/Environment/TerrainSources/terrain_dirt_source_00.png"
+    ],
+    "generatedFile": "exec-640e8bde-5040-4701-8c9d-c07d40f046cb.png",
+    "sha256": "2073dc4f960ec87a0f8fcc1c11247f8443b60860b78f05ad9aa4f8be6fd2541b",
+    "mean_luminance": 0.2769520949796502,
+    "p95_luminance": 0.33353333333333335,
+    "accepted": true,
+    "referenceHashes": [
+      "29f81593da1906ebbb85038ea286ce261b432557504dfbae40852b818e114a05"
+    ]
+  },
+  {
+    "name": "dirt_01",
+    "prompt": "Use case: style-transfer. Output ONE independent 1254x1254 fully opaque square game terrain source. Always use image 1 (approved dirt Pilot) as immutable style and scale reference: very chunky roughly 64x64 logical pixel clusters enlarged over full canvas, smallest block about 20 pixels, dark low-contrast flat top-down diffuse lighting, 6-8 muted colors, no tiny grain or photographic texture. Uniform full-bleed single material, no borders, transparent margins, text, grids, sheets, collage, objects, perspective, vignette or central patch. Create a SECOND DIRT texture variant of image 1. Keep exactly the same gray-brown compacted fine earth identity and low brightness (mean RGB about 52,48,42, bright accents under 77), same visual cluster size and roughness, but use a noticeably different arrangement of clumps and short shallow cracks throughout the interior. More small broken quiet clumps, fewer connected dark channels. No stones, paving slabs, grass, water, roads or isolated objects. This must be a new texture distribution, not a recolor, translation, rotation or copy of the reference. Keep all four edges fully opaque. Exactly 1254x1254.",
+    "tool": "built-in image_gen",
+    "referencePaths": [
+      "Assets/Art/Sprites/Environment/TerrainSources/terrain_dirt_source_00.png"
+    ],
+    "generatedFile": "exec-6cd7e117-02e2-4d05-b80c-cd0a9d36d78b.png",
+    "sha256": "c108796a2c8539fdff03f6ac9057329c1b70b640354645f1af99bf2115830e86",
+    "mean_luminance": 0.2105421427861403,
+    "p95_luminance": 0.261241568627451,
+    "accepted": true,
+    "referenceHashes": [
+      "29f81593da1906ebbb85038ea286ce261b432557504dfbae40852b818e114a05"
+    ]
+  },
+  {
+    "name": "grass_01",
+    "prompt": "Use case: style-transfer. Output ONE independent 1254x1254 fully opaque square game terrain source. Always use image 1 (approved dirt Pilot) as immutable style and scale reference: very chunky roughly 64x64 logical pixel clusters enlarged over full canvas, smallest block about 20 pixels, dark low-contrast flat top-down diffuse lighting, 6-8 muted colors, no tiny grain or photographic texture. Uniform full-bleed single material, no borders, transparent margins, text, grids, sheets, collage, objects, perspective, vignette or central patch. Image 2 is the approved GRASS baseline material identity reference. Create a SECOND GRASS texture variant: retain its desaturated dark gray olive green hue and brightness, broad short grass carpet, but rearrange the short grass clumps into different small broken clusters and a few tiny stepped two-pixel blade shapes. Preserve scale of image 1 dirt Pilot. Mean RGB around (53,61,42), highlights below 90. Do not copy the baseline layout, recolor dirt, rotate or translate a pattern. No flowers, weeds, bushes, rocks, dirt patches, blades with bright tips or dew. Keep it quiet behind characters; full canvas one grass material. Exactly 1254x1254.",
+    "tool": "built-in image_gen",
+    "referencePaths": [
+      "Assets/Art/Sprites/Environment/TerrainSources/terrain_dirt_source_00.png",
+      "Assets/Art/Sprites/Environment/TerrainSources/terrain_grass_source_00.png"
+    ],
+    "generatedFile": "exec-7ce39d49-7037-4f11-8fab-1bf3cc307cf4.png",
+    "sha256": "b14f2c59f4602f65fddd2f22eeab2a21dd2a45661077d88f0097bcf54885c383",
+    "mean_luminance": 0.24886288447702568,
+    "p95_luminance": 0.3590682352941176,
+    "accepted": true,
+    "referenceHashes": [
+      "29f81593da1906ebbb85038ea286ce261b432557504dfbae40852b818e114a05",
+      "299d94cd6c800de839b1b4f76ca3cba9d5ad9249d0a4d1d23a5c926dacb0b5fe"
+    ]
+  },
+  {
+    "name": "water_01",
+    "prompt": "Use case: style-transfer. Output ONE independent 1254x1254 fully opaque square game terrain source. Always use image 1 (approved dirt Pilot) as immutable style and scale reference: very chunky roughly 64x64 logical pixel clusters enlarged over full canvas, smallest block about 20 pixels, dark low-contrast flat top-down diffuse lighting, 6-8 muted colors, no tiny grain or photographic texture. Uniform full-bleed single material, no borders, transparent margins, text, grids, sheets, collage, objects, perspective, vignette or central patch. Image 2 is the approved WATER baseline identity and color reference. Create its SECOND WATER variant: same very dark desaturated slate blue, same low contrast and faint short horizontal ripples, but use a different arrangement of broad water patches and sparse interrupted ripple strokes. Mean RGB about (33,47,56), highlights under 80. Keep the chunky source scale of image 1. No shoreline, foam, white crests, land, reflection of sky or objects, no luminous turquoise, and no long stripes. Do not translate or rotate the baseline; redesign the internal texture distribution. Single full-bleed square still-water texture. Exactly 1254x1254.",
+    "tool": "built-in image_gen",
+    "referencePaths": [
+      "Assets/Art/Sprites/Environment/TerrainSources/terrain_dirt_source_00.png",
+      "Assets/Art/Sprites/Environment/TerrainSources/terrain_water_source_00.png"
+    ],
+    "generatedFile": "exec-d550dbee-e3e9-42e5-8574-e726833f3e2b.png",
+    "sha256": "7cec2a8cfeea059a86ab927b138ee5d3e09edee1b500fa3542b179f58d15e990",
+    "mean_luminance": 0.19263432001888917,
+    "p95_luminance": 0.25310666666666665,
+    "accepted": true,
+    "referenceHashes": [
+      "29f81593da1906ebbb85038ea286ce261b432557504dfbae40852b818e114a05",
+      "8426b21bca392995d41b649ded20b79bdb79074c35d44e9ff31534c2fc21b5ae"
+    ]
+  },
+  {
+    "name": "road_01",
+    "prompt": "Use case: style-transfer. Output ONE independent 1254x1254 fully opaque square game terrain source. Always use image 1 (approved dirt Pilot) as immutable style and scale reference: very chunky roughly 64x64 logical pixel clusters enlarged over full canvas, smallest block about 20 pixels, dark low-contrast flat top-down diffuse lighting, 6-8 muted colors, no tiny grain or photographic texture. Uniform full-bleed single material, no borders, transparent margins, text, grids, sheets, collage, objects, perspective, vignette or central patch. Image 2 is approved GRAVEL ROAD baseline identity. Create its SECOND ROAD surface variant, same cool gray-brown packed fine gravel, same scale and roughness, use an independent arrangement of small square aggregate clusters and a few very short shallow interrupted wheel scuffs. Keep brightness slightly subdued: mean RGB about (64,62,57), highlights below 87, no bright aggregate. Image 1 anchors overall dark-fantasy style. No coherent path shape, road edges, marking, curb, bricks, cobblestone or paving slabs, no grass, rocks or props. Recompose texture distribution rather than shifting, rotating or recoloring baseline. One square meter quiet road surface, full bleed, exactly 1254x1254.",
+    "tool": "built-in image_gen",
+    "referencePaths": [
+      "Assets/Art/Sprites/Environment/TerrainSources/terrain_dirt_source_00.png",
+      "Assets/Art/Sprites/Environment/TerrainSources/terrain_road_source_00.png"
+    ],
+    "generatedFile": "exec-c5c00e0c-35ec-475b-96b5-977a5e8b2db6.png",
+    "sha256": "a5159fabf53dbd8a1a1fb1471394ec2d0fa42c9e5dc79016d1ed255f8dd7e144",
+    "mean_luminance": 0.23221173981159407,
+    "p95_luminance": 0.2946007843137255,
+    "accepted": false,
+    "referenceHashes": [
+      "29f81593da1906ebbb85038ea286ce261b432557504dfbae40852b818e114a05",
+      "2073dc4f960ec87a0f8fcc1c11247f8443b60860b78f05ad9aa4f8be6fd2541b"
+    ]
+  },
+  {
+    "name": "road_01_retry",
+    "prompt": "Image 1 is the immutable approved dirt STYLE AND PIXEL SCALE reference. Image 2 is the ROAD BASELINE EDIT TARGET. Create ONE second road variant by changing ONLY the internal spatial arrangement of gravel clusters in image 2. PRESERVE image 2's actual color palette and overall brightness precisely: mean RGB approximately (76,71,64), mean sRGB luminance about 0.277, NOT darker than image 2, same contrast. Keep exactly its gray-brown hue, fine compacted gravel material and coarse pixel scale. Rearrange the clusters without changing color balance or adding dark patches. The previous attempt was too dark and produced a checkerboard when tiled: this version MUST match image 2 brightness, with no darker interior. Full-bleed 1254x1254 completely opaque single square texture, top-down flat diffuse quiet material, no objects, paving slabs, borders, path shape, text, transparency, vignette, sheet or grid. Do not copy reference layout unchanged: change spatial distribution only, keeping the same average luminance and distribution of light and dark colors.",
+    "tool": "built-in image_gen",
+    "generatedFile": "exec-45b4e6bb-9ade-4890-9d10-ae4c1d8ea54c.png",
+    "sha256": "9633271c580a14895c6ad78ba83530b41d927daf1de491d790cb6bf7e55a7b4b",
+    "mean_luminance": 0.29268398491160336,
+    "p95_luminance": 0.36909490196078426,
+    "accepted": false,
+    "referencePaths": [
+      "Assets/Art/Sprites/Environment/TerrainSources/terrain_dirt_source_00.png",
+      "Assets/Art/Sprites/Environment/TerrainSources/terrain_road_source_00.png"
+    ],
+    "referenceHashes": [
+      "29f81593da1906ebbb85038ea286ce261b432557504dfbae40852b818e114a05",
+      "2073dc4f960ec87a0f8fcc1c11247f8443b60860b78f05ad9aa4f8be6fd2541b"
+    ]
+  },
+  {
+    "name": "road_01_brightness_fix",
+    "prompt": "Image 1 is immutable dirt style reference; Image 2 is approved road brightness reference; Image 3 is the EDIT TARGET. Change ONLY the global brightness of Image 3: reduce all its RGB intensities uniformly by about 7 percent, preserving exactly the texture layout, hue, contrast relationships, opacity and 1254x1254 canvas. Its measured average sRGB luminance is 0.292684; desired 0.272 (acceptable 0.267 to 0.279). Image 2 measured average is 0.276952. Keep a similar brightness to image 2. No new shapes, no vignette, no darkening of only the center, no separate border, no extra texture or sharpening. Full-canvas uniform lighting adjustment only, same coarse pixel road material. Output one 1254x1254 opaque PNG.",
+    "tool": "built-in image_gen",
+    "generatedFile": "exec-3684653f-ff87-4bb1-98d5-edecf108cd90.png",
+    "sha256": "e7ae5d59adf1180d92fbc4c4fa6eb8b2d8214deb71cfdf7636563b9751a3f1fd",
+    "mean_luminance": 0.2537548198298827,
+    "p95_luminance": 0.32987921568627454,
+    "accepted": false,
+    "referencePaths": [
+      "Assets/Art/Sprites/Environment/TerrainSources/terrain_dirt_source_00.png",
+      "Assets/Art/Sprites/Environment/TerrainSources/terrain_road_source_00.png",
+      "rejected/road-source-01-bright.png"
+    ],
+    "referenceHashes": [
+      "29f81593da1906ebbb85038ea286ce261b432557504dfbae40852b818e114a05",
+      "2073dc4f960ec87a0f8fcc1c11247f8443b60860b78f05ad9aa4f8be6fd2541b",
+      "9633271c580a14895c6ad78ba83530b41d927daf1de491d790cb6bf7e55a7b4b"
+    ]
+  },
+  {
+    "name": "road_01_match_baseline",
+    "prompt": "Edit this exact 1254x1254 opaque seamless dark fantasy gravel-road ground texture into a subtly different second variant. Preserve EXACT same overall exposure, gamma, color histogram, mean brightness and colors of reference. Reference mean luminance 0.277 sRGB; target 0.272 to 0.279. Do NOT brighten or darken. Change only location/arrangement of a few small gravel blobs, preserving their proportions. Preserve coarse pixel art scale. Flat top-down, full bleed, no objects, no frame, no text, no perspective. Single PNG 1254x1254.",
+    "tool": "built-in image_gen",
+    "generatedFile": "exec-b9684305-89d5-4a83-a61f-40da0d6fcca2.png",
+    "sha256": "9e9461a191ef8a3311adc99e5a6fedff7cf02a375861891eb66db526344f2c87",
+    "mean_luminance": 0.2807344006535,
+    "p95_luminance": 0.3371717647058824,
+    "accepted": false,
+    "referencePaths": [
+      "Assets/Art/Sprites/Environment/TerrainSources/terrain_road_source_00.png"
+    ],
+    "referenceHashes": [
+      "2073dc4f960ec87a0f8fcc1c11247f8443b60860b78f05ad9aa4f8be6fd2541b"
+    ]
+  },
+  {
+    "name": "road_01_final_exposure",
+    "prompt": "Image 1 is immutable style reference. EDIT IMAGE 2 ONLY, a 1254x1254 full-bleed opaque gravel ground texture. Preserve its exact texture arrangement. Make it only 2 percent darker uniformly in sRGB RGB values: multiply RGB by 0.98, no other adjustments. Current sRGB relative luminance mean 0.2807, desired 0.275. Do not add contrast, lights, shadows, objects, frame or text. Keep canvas exactly 1254x1254 and fully opaque. Preserve dark fantasy coarse pixel art gravel ground material, same warm grey-brown palette.",
+    "tool": "built-in image_gen",
+    "generatedFile": "exec-bae88baf-9436-4b04-96d4-6c3a46b36a79.png",
+    "sha256": "b7d572b0ed68720b8fee190ee2915bfbffa32af86c717ce0a58a4a460e344a01",
+    "mean_luminance": 0.233813748562501,
+    "p95_luminance": 0.2962682352941176,
+    "accepted": false,
+    "referencePaths": [
+      "Assets/Art/Sprites/Environment/TerrainSources/terrain_dirt_source_00.png",
+      "rejected/road-source-01-near.png"
+    ],
+    "referenceHashes": [
+      "29f81593da1906ebbb85038ea286ce261b432557504dfbae40852b818e114a05",
+      "9e9461a191ef8a3311adc99e5a6fedff7cf02a375861891eb66db526344f2c87"
+    ]
+  },
+  {
+    "name": "road_01_local_variation",
+    "prompt": "Create a second variant of this exact 1254 x 1254 texture. Retain almost the entire image: SAME colors, SAME brightness, SAME exposure, SAME lighting, SAME contrast. Only move some of the small gravel pixels near the center to different locations. Do not apply any color grading, do not make the texture darker or brighter. Copy the reference colors exactly. Flat opaque pixel-art top-down gravel road texture, seamless full bleed square, no border, no text. Deliver a single 1254 x 1254 PNG.",
+    "tool": "built-in image_gen",
+    "generatedFile": "exec-659049ac-758e-41ff-a78a-1689412e02e8.png",
+    "sha256": "de91be1f89db59d355815fd12e6caa912d6d7bf9365bec266eba2bb7438c57d3",
+    "mean_luminance": 0.28146070548613517,
+    "p95_luminance": 0.3366211764705882,
+    "accepted": false,
+    "referencePaths": [
+      "Assets/Art/Sprites/Environment/TerrainSources/terrain_road_source_00.png"
+    ],
+    "referenceHashes": [
+      "2073dc4f960ec87a0f8fcc1c11247f8443b60860b78f05ad9aa4f8be6fd2541b"
+    ]
+  },
+  {
+    "name": "road_01_subtle_dimming",
+    "prompt": "EDIT IMAGE 1. Make a gravel-road texture variant with a SMALL, SUBTLE reduction in brightness, about 3 percent darker than IMAGE 1. It must remain much brighter than IMAGE 2. Image 2 is only the immutable family STYLE reference for coarse pixels, NOT a brightness or color reference: do not copy image 2's darkness. Preserve image 1's warm gray-brown palette, coarse pixel blocks and overall arrangement, shifting a few small gravel clusters. Uniform top-down opaque full bleed ground, no objects or border. Single PNG exactly 1254x1254. Reference road mean sRGB luminance .277; aim .269-.274; never .25 or below. No extra shadows.",
+    "tool": "built-in image_gen",
+    "generatedFile": "exec-fccd275d-2a9a-46f2-9d10-3ed5e802c086.png",
+    "sha256": "c7b88c4418041e3c3eef89cc3378246290b68f9ca77a6bfc7a6557ab1f756408",
+    "mean_luminance": 0.2727373710151221,
+    "p95_luminance": 0.3338007843137255,
+    "accepted": true,
+    "referencePaths": [
+      "Assets/Art/Sprites/Environment/TerrainSources/terrain_road_source_00.png",
+      "Assets/Art/Sprites/Environment/TerrainSources/terrain_dirt_source_00.png"
+    ],
+    "referenceHashes": [
+      "2073dc4f960ec87a0f8fcc1c11247f8443b60860b78f05ad9aa4f8be6fd2541b",
+      "29f81593da1906ebbb85038ea286ce261b432557504dfbae40852b818e114a05"
+    ]
+  }
+]

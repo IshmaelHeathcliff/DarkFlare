@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ba9b836ee6159d4c8c1bd2c5e27d46d, type: 3}
+  m_Name: catalog
+  m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.TerrainTileCatalog
+  _terrainSetId: terrain_set:pilot_set
+  _ruleHash: e9d0a6812b357e8eb258683d2f802540228ac13ed3564ecd288f863002237706
+  _revision: 0364ce05b507980aaf3d215fea70f1e29ab154e198e38566542b97f2349299b3
+  _entries:
+  - _northWest: terrain:pilot_dirt
+    _northEast: terrain:pilot_dirt
+    _southEast: terrain:pilot_dirt
+    _southWest: terrain:pilot_dirt
+    _variant: 
+    _tile: {fileID: 11400000, guid: cb957305db0713447b71ac5cd94d6305, type: 2}
+    _textureHash: 980377ec228206b22e7f45b934c59f976161c4e123131de80711ca68db8beb34

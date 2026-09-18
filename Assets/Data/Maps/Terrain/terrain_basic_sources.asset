@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03d16b32cbd8b5b4c9af4b4e0536bed0, type: 3}
+  m_Name: terrain_basic_sources
+  m_EditorClassIdentifier: DarkFlare.Editor::DarkFlare.Editor.TerrainTextureSources
+  _terrainSet: {fileID: 11400000, guid: dd0eb97881ff3d049a1e11ec4a95bca5, type: 2}
+  _materials:
+  - _terrain: {fileID: 11400000, guid: 694566c086b8fc545b57efc9a3e84146, type: 2}
+    _source: {fileID: 2800000, guid: 8ec21afb5dd6a194dbc020c251646696, type: 3}
+  - _terrain: {fileID: 11400000, guid: fe975d4610860e04fbbeba70a9c94e48, type: 2}
+    _source: {fileID: 2800000, guid: 5b2d2a0273cf63b449780914bdf2ae34, type: 3}
+  - _terrain: {fileID: 11400000, guid: 966f68f2085e550438332a3c9352c729, type: 2}
+    _source: {fileID: 2800000, guid: 5cbbf212e02013a4eb31aa0f88aef273, type: 3}
+  - _terrain: {fileID: 11400000, guid: bf3a5db59acb1df469fbb24f5fb55347, type: 2}
+    _source: {fileID: 2800000, guid: 4a83aa29def642a469011d6889c04e50, type: 3}
+  _variants:
+  - _variantId: dirt_00
+    _materials:
+    - _terrain: {fileID: 11400000, guid: 694566c086b8fc545b57efc9a3e84146, type: 2}
+      _source: {fileID: 2800000, guid: 8ec21afb5dd6a194dbc020c251646696, type: 3}
+  - _variantId: dirt_01
+    _materials:
+    - _terrain: {fileID: 11400000, guid: 694566c086b8fc545b57efc9a3e84146, type: 2}
+      _source: {fileID: 2800000, guid: 48f8ab981ebd2e74b9e02aba73ef0ad3, type: 3}
+  - _variantId: grass_00
+    _materials:
+    - _terrain: {fileID: 11400000, guid: fe975d4610860e04fbbeba70a9c94e48, type: 2}
+      _source: {fileID: 2800000, guid: 5b2d2a0273cf63b449780914bdf2ae34, type: 3}
+  - _variantId: grass_01
+    _materials:
+    - _terrain: {fileID: 11400000, guid: fe975d4610860e04fbbeba70a9c94e48, type: 2}
+      _source: {fileID: 2800000, guid: 25b3a559fa6542545b759abe18544365, type: 3}
+  - _variantId: water_00
+    _materials:
+    - _terrain: {fileID: 11400000, guid: 966f68f2085e550438332a3c9352c729, type: 2}
+      _source: {fileID: 2800000, guid: 5cbbf212e02013a4eb31aa0f88aef273, type: 3}
+  - _variantId: water_01
+    _materials:
+    - _terrain: {fileID: 11400000, guid: 966f68f2085e550438332a3c9352c729, type: 2}
+      _source: {fileID: 2800000, guid: fa14fbb0b1b337145b11690a703e0a24, type: 3}
+  - _variantId: road_00
+    _materials:
+    - _terrain: {fileID: 11400000, guid: bf3a5db59acb1df469fbb24f5fb55347, type: 2}
+      _source: {fileID: 2800000, guid: 4a83aa29def642a469011d6889c04e50, type: 3}
+  - _variantId: road_01
+    _materials:
+    - _terrain: {fileID: 11400000, guid: bf3a5db59acb1df469fbb24f5fb55347, type: 2}
+      _source: {fileID: 2800000, guid: 862175d368e2ced4c83e9abe6113164f, type: 3}
+  _compiled: {fileID: 11400000, guid: 0c24a1f87201f65419c7e0769aca1ab2, type: 2}
+  _presentation: {fileID: 11400000, guid: 244d3a41410e0914db9c74c10c28fa1f, type: 2}

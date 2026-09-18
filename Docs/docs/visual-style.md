@@ -38,6 +38,8 @@ Alpha 0.3.0 的独立物品窗口已接入正式暗石 / 旧铁底板，精确�
 
 ## 世界 Sprite 规格
 
+下表为当前 Main 的运行时规格。Alpha 0.5 新地图的材质源与编译 Tile 分开定义，见[地表家族合同](./maps/terrain-art-contract.md)；C1 源图不直接替换当前 Main 地砖。
+
 | 类型 | 画布 | PPU | Pivot | Filter | 压缩 |
 | --- | --- | --- | --- | --- | --- |
 | 基础地表 Tile | 512×512 | 64 | Center | Point | None |

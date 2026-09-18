@@ -5,7 +5,7 @@ Alpha 0.5.0 B3 提供独立 Odin EditorWindow，消费[分区与增量解析](./
 ## 使用
 
 - **Key 画廊**：展示四材质的全部 256 Key，以及泥土 / 草地 / 水 / 道路各 A、B 两个诊断变体。各格独立，不能当作一张满足全局邻接的地图。标签上行为 NW / NE，下行为 SW / SE；D、G、W、R 的中文说明位于窗口上方。缩得太小时隐藏标签，放大后恢复。
-- **地图源**：关闭画廊模式，选择 `.dfmap`。窗口重新读取和校验真实源，包含导入失败时的 TextAsset；保留源路径与 GUID，移动源后跟随路径。地图尚无正式候选时明确显示诊断分区，检查信息显示“无候选”。
+- **地图源**：关闭画廊模式，选择 `.dfmap`。窗口重新读取和校验真实源，包含导入失败时的 TextAsset；保留源路径与 GUID，移动源后跟随路径。诊断模式使用诊断分区，未选变体时检查信息显示“基准材质”；正式模式需要显式选择源配置，见[正式纹理编译](./terrain-texture-compilation.md)。
 - **浏览与检查**：滚轮缩放，中键 / 右键拖动，适配全图；可叠加逻辑格、显示格和显示 chunk 边界。左键读取显示坐标、chunk、四角 ContentId 与 VariantId。
 - **更新和错误**：地图重导入（含定义依赖重导入）、移动或删除触发延迟合并刷新；也可手动重新加载。构建、取消或失败期间旧画面标记过期，格子检查禁用。成功后整体替换。修复源并重新导入后恢复。
 
@@ -17,7 +17,7 @@ Alpha 0.5.0 B3 提供独立 Odin EditorWindow，消费[分区与增量解析](./
 
 诊断规格为 64×64、RGBA32、Point、Clamp、PPU64、Center / FullRect、无 mipmap、全不透明、无碰撞。四种已知材质使用固定色，其余合法材质用稳定 ID 的色相；变体只改变内部点状亮度，至少外沿两像素完全不变。诊断 Variant 名只用于画廊示例，不写入布局 JSON；正式地图选择仍遵守 B1 的候选 / override 合同。
 
-每个 `MapTerrainPreviewFrame` 使用 Unity 的 [PreviewRenderUtility](https://github.com/Unity-Technologies/UnityCsReference/blob/master/Editor/Mono/Inspector/PreviewRenderUtility.cs) 管理独立 Preview Scene、Camera 和 RenderTexture；一个 Ground / Chunk 模式 Tilemap 使用明确的 URP 2D Sprite Unlit Material。临时资源均为 HideAndDontSave，不进入 core / Addressables。渲染使用允许 SRP 的预览路径，并成对结束 BeginPreview / EndPreview。
+每个 `MapTerrainPreviewFrame` 使用 Unity 的 [PreviewRenderUtility](https://github.com/Unity-Technologies/UnityCsReference/blob/master/Editor/Mono/Inspector/PreviewRenderUtility.cs) 管理独立 Preview Scene、Camera 和 RenderTexture；一个 Ground / Chunk 模式 Tilemap 使用明确的 URP 2D Sprite Unlit Material。预览自建资源均为 HideAndDontSave，不进入 core / Addressables；正式模式借用持久编译 Tile，关闭预览时不销毁这些资产。渲染使用允许 SRP 的预览路径，并成对结束 BeginPreview / EndPreview。
 
 `MapTerrainPreviewSession` 管理请求代次、CancellationTokenSource、当前帧和构建帧。源校验 / 定义快照在主线程完成，纯解析通过 UniTask 切到线程池，随后明确回主线程。Tile 创建 / 批量填充分段让出；每批最多 1024 格或 8 份新资源。新请求先取消旧请求并释放其未发布帧，迟到结果不能回写。
 
@@ -29,7 +29,7 @@ Alpha 0.5.0 B3 提供独立 Odin EditorWindow，消费[分区与增量解析](./
 
 2026-09-18：6 项资源 / 会话专项、1 项真实导入与窗口恢复专项通过；B4 收尾后项目完整 EditMode **650/650**、PlayMode **75/75** 通过，内容校验 0 项问题、配置文档覆盖通过。[技术样例](./terrain-samples.md)及 [1920×1080、原始像素、256×256 压力与取消记录](./acceptance/b4/README.md)已完成。没有新增生产地表、手绘工作台、对象排序、碰撞或导航，未构建 Player。
 
-长期回归包括 Tile 共享和最后租约释放、纯地表变体内部差异与不透明边、真实 Renderer bounds / Preview Scene 隔离、跨请求取消和关闭时无迟到发布、失败保留过期帧与恢复、零地表变更复用 Tile，以及 `.dfmap` 内容重导入 → 损坏 → 修复 → 关闭后的资源释放。导入通知使用地图 AssetPostprocessor；实际测试发现 `EditorApplication.projectChanged` 单独不能保证内容重导入刷新，已保留回归防止退化。
+长期回归包括 Tile 共享和最后租约释放、纯地表变体内部差异与不透明边、真实 Renderer bounds / Preview Scene 隔离、跨请求取消和关闭时无迟到发布、失败保留过期帧与恢复、零地表变更复用 Tile，以及 `.dfmap` 内容重导入 → 损坏 → 修复 → 关闭后的资源释放。导入通知使用 AssetPostprocessor，C2 扩展为地图 / PNG / .asset 的导入、删除和移动；实际测试发现 `EditorApplication.projectChanged` 单独不能保证内容重导入刷新，已保留回归防止退化。
 
 当前 Unity 6000.6.0f1 / URP 已实测可见窗口。临时 35×33 地图 origin=(-13.25,7.5)、cellSize=0.5，Renderer XY 中心=(-4.5,15.75)、尺寸=(18,17)，与显示外圈边界一致；1224 个显示格。通过窗口鼠标事件核对格子四角、缩放和平移。截图对应的小图单次比较约 1.07 ms、求解约 3.44 ms，仅作功能检查，不作为压力预算。
 

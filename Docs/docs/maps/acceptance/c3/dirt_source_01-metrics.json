@@ -1,0 +1,7 @@
+{
+  "name": "dirt_source_01",
+  "sha256": "c108796a2c8539fdff03f6ac9057329c1b70b640354645f1af99bf2115830e86",
+  "mean_luminance": 0.2105421427861403,
+  "p95_luminance": 0.261241568627451,
+  "min_alpha": 255
+}

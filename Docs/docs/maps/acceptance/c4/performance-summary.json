@@ -1,0 +1,29 @@
+[
+  {
+    "step": 0,
+    "buildMedianMs": 972.6802,
+    "buildMinMs": 796.9705,
+    "buildMaxMs": 985.2906,
+    "compareMedianMs": 0.7107,
+    "solveMedianMs": 206.31400000000002,
+    "rebuilt": 66049
+  },
+  {
+    "step": 1,
+    "buildMedianMs": 785.143,
+    "buildMinMs": 737.2337,
+    "buildMaxMs": 876.9679,
+    "compareMedianMs": 0.006200000000000001,
+    "solveMedianMs": 0.00030000000000000003,
+    "rebuilt": 0
+  },
+  {
+    "step": 2,
+    "buildMedianMs": 937.6964,
+    "buildMinMs": 846.9117,
+    "buildMaxMs": 966.0455000000001,
+    "compareMedianMs": 133.654,
+    "solveMedianMs": 1.2346000000000001,
+    "rebuilt": 4
+  }
+]

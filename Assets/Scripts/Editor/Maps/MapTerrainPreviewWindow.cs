@@ -16,6 +16,8 @@ namespace DarkFlare.Editor
         [SerializeField, HorizontalGroup("图层"), LabelText("逻辑网格")] bool _logicalGrid;
         [SerializeField, HorizontalGroup("图层"), LabelText("显示网格")] bool _displayGrid;
         [SerializeField, HorizontalGroup("图层"), LabelText("Chunk 边界")] bool _chunkGrid;
+        [SerializeField, LabelText("正式材质模式"), HideIf(nameof(_gallery)), OnValueChanged(nameof(ScheduleRefresh))] bool _formal;
+        [SerializeField, LabelText("正式材质源"), ShowIf(nameof(ShowFormalSource)), OnValueChanged(nameof(ScheduleRefresh))] TerrainTextureSources _formalSources;
         MapTerrainPreviewSession _session;
         Vector2 _center;
         float _halfHeight = 18;
@@ -38,6 +40,7 @@ namespace DarkFlare.Editor
         }
 
         public MapTerrainPreviewSession Session => _session;
+        bool ShowFormalSource => _formal && !_gallery;
 
         [ShowInInspector, ReadOnly, LabelText("源路径"), HideIf(nameof(_gallery))]
         string SourcePath => _sourcePath;
@@ -54,9 +57,19 @@ namespace DarkFlare.Editor
             window._sourcePath = path;
             window._sourceGuid = AssetDatabase.AssetPathToGUID(path);
             window._gallery = false;
+            window._formal = false;
             window._fit = true;
             window.ScheduleRefresh();
             window.Show();
+            return window;
+        }
+
+        public static MapTerrainPreviewWindow OpenFormal(string path, TerrainTextureSources sources)
+        {
+            var window = OpenSource(path);
+            window._formal = true;
+            window._formalSources = sources;
+            window.ScheduleRefresh();
             return window;
         }
 
@@ -124,7 +137,7 @@ namespace DarkFlare.Editor
         {
             MapTerrainPreviewSession session = _session;
             if (_gallery) { await session.RebuildAsync(); }
-            else { await session.RebuildAsync(CaptureSource); }
+            else { await session.RebuildAsync(CaptureSource, _formal ? CaptureTiles : null); }
             if (this != null && _session == session) { Repaint(); }
         }
 
@@ -140,6 +153,12 @@ namespace DarkFlare.Editor
             return (map, TerrainRuleSnapshot.Compile(set, definitions));
         }
 
+        TerrainTileCatalog CaptureTiles()
+        {
+            if (_formalSources == null) { throw new InvalidOperationException("请选择正式材质源配置"); }
+            return _formalSources.RequireCurrent();
+        }
+
         [HorizontalGroup("操作"), Button("取消构建")]
         void CancelBuild() { _session?.Cancel(); }
 
@@ -152,7 +171,7 @@ namespace DarkFlare.Editor
             EditorGUILayout.HelpBox(_session?.Status ?? "Play 模式期间暂停预览。", _session != null && _session.IsValid ? MessageType.Info : MessageType.Warning);
             if (_gallery) { EditorGUILayout.LabelField("角标签：上行 NW / NE，下行 SW / SE；D 泥土 · G 草地 · W 水 · R 道路；A / B 为诊断变体。", EditorStyles.miniLabel); }
             EditorGUILayout.LabelField(_inspection, EditorStyles.wordWrappedLabel, GUILayout.Height(80));
-            Rect rect = GUILayoutUtility.GetRect(100, Mathf.Max(280, position.height - 280), GUILayout.ExpandWidth(true));
+            Rect rect = GUILayoutUtility.GetRect(100, Mathf.Max(220, position.height - (_gallery ? 280 : _formal ? 340 : 300)), GUILayout.ExpandWidth(true));
             MapTerrainPreviewFrame frame = _session?.Current;
             if (frame == null) { return; }
             if (_lastFrame != frame)
@@ -199,7 +218,7 @@ namespace DarkFlare.Editor
                 Vector2 world = _center + new Vector2(input.mousePosition.x - rect.center.x, rect.center.y - input.mousePosition.y) * (2 * _halfHeight / rect.height);
                 if (frame.TryInspect(world, out Vector2Int cell, out TerrainWangKey key, out string variant))
                 {
-                    _inspection = $"显示格 {cell} / Chunk {DualGridCoordinates.GetDisplayChunk(cell.x, cell.y)}\nNW {key.NorthWest}   NE {key.NorthEast}\nSW {key.SouthWest}   SE {key.SouthEast}\nVariant：{variant ?? "无候选（诊断分区）"}";
+                    _inspection = $"显示格 {cell} / Chunk {DualGridCoordinates.GetDisplayChunk(cell.x, cell.y)}\nNW {key.NorthWest}   NE {key.NorthEast}\nSW {key.SouthWest}   SE {key.SouthEast}\nVariant：{variant ?? "基准材质"}";
                 }
                 input.Use();
                 Repaint();

@@ -1,6 +1,6 @@
 # Alpha 0.5：地图创建、地图数据与动态寻路
 
-状态：2026-09-18，0.5.0 的 A 数据与导入、B Wang 解析与诊断预览均已完成；B4 的[持久样例、视觉与压力验收](../maps/terrain-samples.md)已收尾，B 计划已归档。当前行为见[地图文档模块](../maps/README.md)。下一步为 C 正式地表家族合同与 Pilot，之后 D 几何；因此未交付整个 0.5.0。当前运行版本 `0.4.2-alpha`，core v5、Schema 3；版本号只在对应阶段完成验收后更新。
+状态：2026-09-18，0.5.0 的 A 数据与导入、B Wang 解析与诊断预览均已完成；[C 正式地表](archive/alpha-0.5.0-terrain-art-plan.md)已完成 C1 泥土源与 C2 正式纹理 / Wang 编译，C3 四材质双变体与资源发布已完成，C4 正式样例与压力验收也已完成，C 计划归档，下一步 D 同源碰撞与静态导航几何。当前行为见[地图文档模块](../maps/README.md)。D 几何未完，因此未交付整个 0.5.0。当前运行版本 `0.4.2-alpha`，core v5、Schema 3；版本号只在对应阶段完成验收后更新。
 
 ## 目标与已确认范围
 
@@ -27,6 +27,7 @@
 | [批量动态寻路与性能验收](./alpha-0.5/navigation.md) | 网格、Flow Field / A* 策略、空间索引、分离、Job 所有权和预算 |
 | [0.5.0 首阶段执行计划](./alpha-0.5.0-map-foundation-plan.md) | 可直接开工的数据 / 地表最小闭环与完成条件 |
 | [0.5.0 B：Wang 解析与预览（归档）](./archive/alpha-0.5.0-wang-preview-plan.md) | 已完成坐标 / Key、稳定变体、增量重建、独立诊断预览、技术样例及压力验收 |
+| [0.5.0 C：正式地表资产](archive/alpha-0.5.0-terrain-art-plan.md) | C1–C4 已完成四材质双变体、编译 / 预览、资源发布与压力验收，已归档 |
 
 ## 已核对的实现与差距
 
@@ -72,4 +73,4 @@
 
 优先扩展现有地表、排序、Scene Flow、Session / 存档、交易、战斗与输入测试。新地图 / 导航纯规则按模块建套件，不按版本复制套件。测试遵守[维护规范](../testing/test-maintenance.md)，使用隔离用户目录。
 
-当前最近历史结果仍为 EditMode 568/568、PlayMode 75/75；本次仅创建计划，未运行测试或构建。基线详情见[启动记录](./archive/alpha-0.5-startup.md)。完成各模块后编写 `Docs/docs/` 当前实现说明，再将对应执行计划归档，不能提前更新模块文档声称已实现。
+最近 C4 验证为 EditMode 662/662、PlayMode 76/76，正式样例与压力记录见 [C4 验收](../maps/acceptance/c4/README.md)；该轮未构建 Windows Player。起始基线见[启动记录](./archive/alpha-0.5-startup.md)。完成各模块后编写 `Docs/docs/` 当前实现说明，再将对应执行计划归档，不能提前更新模块文档声称已实现。

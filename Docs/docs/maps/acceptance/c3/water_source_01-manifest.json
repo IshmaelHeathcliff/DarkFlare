@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "family": "terrain-basic-v1",
+  "alpha_threshold": 8,
+  "canvas": {
+    "width": 1254,
+    "height": 1254
+  },
+  "alpha_required": false,
+  "assets": [
+    {
+      "name": "water_source_01",
+      "image": "../../../../../Assets/Art/Sprites/Environment/TerrainSources/terrain_water_source_01.png",
+      "visible_width": [
+        1254,
+        1254
+      ],
+      "visible_height": [
+        1254,
+        1254
+      ],
+      "alpha_coverage": [
+        1,
+        1
+      ],
+      "visual_center_x": [
+        626.5,
+        627.5
+      ],
+      "visual_center_y": [
+        626.5,
+        627.5
+      ],
+      "bottom_margin": [
+        0,
+        0
+      ]
+    }
+  ]
+}
