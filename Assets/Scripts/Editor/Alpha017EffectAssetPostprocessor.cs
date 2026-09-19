@@ -27,7 +27,6 @@ namespace DarkFlare.Editor
             ApplyContract((TextureImporter)assetImporter);
         }
 
-        [MenuItem("DarkFlare/Alpha 0.1.7/应用特效导入合同")]
         public static void ApplyToExistingAssets()
         {
             string[] guids = AssetDatabase.FindAssets("t:Texture2D", EffectRoots);

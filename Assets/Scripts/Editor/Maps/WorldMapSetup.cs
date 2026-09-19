@@ -19,7 +19,6 @@ namespace DarkFlare.Editor
         public const string Root = "Assets/Data/Maps/World";
         public const string ConfigurationPath = Root + "/world_maps.asset";
 
-        [MenuItem("DarkFlare/地图/安装城镇与野外")]
         public static void Ensure()
         {
             if (EditorApplication.isPlaying) { throw new InvalidOperationException("请退出 Play Mode"); }

@@ -295,7 +295,6 @@ namespace DarkFlare.Editor
 
         public static IReadOnlyList<Alpha017EffectFamilyContract> EffectFamilies => EffectFamiliesData;
 
-        [MenuItem("DarkFlare/Alpha 0.1.7/阶段 A/运行视觉迁移预检")]
         public static void RunMenuPreflight()
         {
             Alpha017VisualBaselineReport report = Capture(Alpha017MigrationPhase.Preflight);
@@ -310,7 +309,6 @@ namespace DarkFlare.Editor
             }
         }
 
-        [MenuItem("DarkFlare/Alpha 0.1.7/阶段 D/验证世界排序合同")]
         public static void RunMenuValidation()
         {
             Alpha017VisualBaselineReport report = Capture(Alpha017MigrationPhase.Validate);

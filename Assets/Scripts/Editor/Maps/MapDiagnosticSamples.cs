@@ -15,7 +15,6 @@ namespace DarkFlare.Editor
         public const string BoundaryPath = Root + "/preview_boundary.dfmap";
         static readonly string[] TerrainNames = { "dirt", "grass", "water", "road" };
 
-        [MenuItem("DarkFlare/地图/创建诊断样例（仅补缺失）")]
         public static void EnsureSamples()
         {
             EnsureFolder(Root);

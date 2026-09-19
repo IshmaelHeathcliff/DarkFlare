@@ -48,6 +48,8 @@ Application 音频配置与 Cue 使用 Application owner；Prefab 与 Sprite Loa
 
 ## Addressables 资产合同
 
+当前只读菜单为 `DarkFlare/调试/校验基础资源 Addressables 配置`，保留既有基础资源校验范围。旧 `Infrastructure` 下的两个 Apply 菜单已移除：Addressables Apply 会重设历史受管资源的分组、地址与标签；Player Error Localization Apply 会写回七项中英文错误文案。底层方法和校验测试仍保留，日常配置通过对应资产编辑器维护。
+
 Editor 治理器 `Alpha026AddressablesGovernance` 通过 Addressables Editor API 应用并验证以下 15 个自有条目；`Default Local Group` 保持为空。
 
 | 分组 | 数量 | Label | 地址前缀 |

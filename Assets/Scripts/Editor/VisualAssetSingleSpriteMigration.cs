@@ -12,12 +12,10 @@ namespace DarkFlare.Editor
 {
     public static class VisualAssetSingleSpriteMigration
     {
-        const string MenuRoot = "DarkFlare/美术资产迁移/";
         const string ManifestRelativePath = "tools/visual_slice/asset_pipeline_manifest.json";
         const int SupportedSchemaVersion = 1;
         const float FloatTolerance = 0.0001f;
 
-        [MenuItem(MenuRoot + "1. 仅校验", false, 100)]
         public static void ValidateOnly()
         {
             ExecuteSafely("美术资产迁移校验", () =>
@@ -37,7 +35,6 @@ namespace DarkFlare.Editor
             });
         }
 
-        [MenuItem(MenuRoot + "2. 应用导入与引用迁移", false, 101)]
         public static void ApplyMigration()
         {
             ExecuteSafely("应用美术资产迁移", () =>
@@ -87,7 +84,6 @@ namespace DarkFlare.Editor
             });
         }
 
-        [MenuItem(MenuRoot + "3. 校验并删除旧图集", false, 102)]
         public static void VerifyAndDeleteLegacySheets()
         {
             ExecuteSafely("校验并删除旧图集", () =>

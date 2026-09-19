@@ -10,7 +10,6 @@ namespace DarkFlare.Editor
         public const string TopologyPath = MapDiagnosticSamples.Root + "/terrain_topology.dfmap";
         public const string BoundaryPath = MapDiagnosticSamples.Root + "/terrain_boundary.dfmap";
 
-        [MenuItem("DarkFlare/地图/创建正式验收样例（仅补缺失）")]
         public static void EnsureSamples()
         {
             RequireSource();

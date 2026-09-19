@@ -16,7 +16,6 @@ namespace DarkFlare.Editor
         public const string SamplePath = Root + "/world_sorting.dfmap";
         const string PrefabRoot = "Assets/Prefabs/World/MapObjects";
 
-        [MenuItem("DarkFlare/地图/补齐对象表现样例")]
         public static void Ensure()
         {
             MapEditorSamples.Ensure();

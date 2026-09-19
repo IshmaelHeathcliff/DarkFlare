@@ -6,7 +6,7 @@ Alpha 0.5.0 B 的持久技术输入，配合[诊断预览](./terrain-preview.md)
 
 ## 入口与文件
 
-`DarkFlare/地图` 菜单提供“打开拓扑诊断样例”“打开边界诊断样例”和“生成并预览 256×256 压力地图”。“创建诊断样例（仅补缺失）”只补不存在的文件；已有样例、定义和 GUID 保留。占用目标路径的其他类型资产会报错。
+`DarkFlare/地图` 菜单提供“打开拓扑诊断样例”“打开边界诊断样例”和“生成并预览 256×256 压力地图”。这些入口自动补齐不存在的诊断样例与定义；已有文件和 GUID 保留。独立“创建诊断样例”菜单已移除，底层 `MapDiagnosticSamples.EnsureSamples()` 保留。占用目标路径的其他类型资产会报错。
 
 定义和两张源地图位于 `Assets/Data/Development/Maps/`。四个地表使用独立身份 `terrain:preview_dirt`、`preview_grass`、`preview_water`、`preview_road`，地表集为 `terrain_set:preview_set`；每种纯材质有 `_a` / `_b` 两个稳定变体。诊断定义未加入 core / Addressables；纹理、Sprite 和 Tile 仍只驻留预览会话。图形标记用于分辨变体，正式美术家族在 C 建立。
 
@@ -32,7 +32,7 @@ Alpha 0.5.0 B 的持久技术输入，配合[诊断预览](./terrain-preview.md)
 
 C4 的 `MapFormalSamples` 复用上述三种布局生成器，映射到 `terrain_set:basic`、正式 dirt / grass / water / road 和 `_00` / `_01` 变体。几何、seed、chunk 布局保持一致，诊断源与既有 GUID 不被覆盖。
 
-`DarkFlare/地图` 新增“创建正式验收样例（仅补缺失）”“打开正式拓扑样例”“打开正式边界样例”“生成并预览正式 256×256 压力地图”。前两张持久源为 `Assets/Data/Development/Maps/terrain_topology.dfmap` 和 `terrain_boundary.dfmap`，压力源为 `Temp/DarkFlare/terrain_stress.dfmap`。已有文件只读取，不自动重置。
+`DarkFlare/地图` 提供“打开正式拓扑样例”“打开正式边界样例”“生成并预览正式 256×256 压力地图”。前两张持久源为 `Assets/Data/Development/Maps/terrain_topology.dfmap` 和 `terrain_boundary.dfmap`，打开时自动补齐缺失文件；压力源为 `Temp/DarkFlare/terrain_stress.dfmap`。独立“创建正式验收样例”菜单已移除，底层 `MapFormalSamples.EnsureSamples()` 保留。已有持久源只读取，不自动重置。
 
 正式入口要求 `Assets/Data/Maps/Terrain/terrain_basic_sources.asset` 的编译修订当前有效，打开既有预览窗口的正式模式，不生成诊断贴图或静默补洞。变更正式源后须先按[纹理编译流程](./terrain-texture-compilation.md)更新，再打开样例。样例不是运行时地图，不写入 Addressables 或 core。
 

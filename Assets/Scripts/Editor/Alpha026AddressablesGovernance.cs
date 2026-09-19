@@ -43,7 +43,6 @@ namespace DarkFlare.Editor
         public const string SessionSpritesGroup = "DarkFlare-Session-Sprites";
         public const string AudioGroup = "DarkFlare-Audio";
 
-        const string MenuRoot = "DarkFlare/Infrastructure/";
 
         static readonly ManagedAddressableContract[] ManagedContracts =
         {
@@ -156,7 +155,6 @@ namespace DarkFlare.Editor
 
         public static IReadOnlyList<ManagedAddressableContract> Contracts => ManagedContracts;
 
-        [MenuItem(MenuRoot + "Apply alpha 0.2.6 Addressables Governance")]
         public static void Apply()
         {
             AddressableAssetSettings settings = RequireSettings();
@@ -241,7 +239,7 @@ namespace DarkFlare.Editor
             Debug.Log($"alpha 0.2.6 Addressables 治理完成：{ManagedContracts.Length} 个条目");
         }
 
-        [MenuItem(MenuRoot + "Validate alpha 0.2.6 Addressables Governance")]
+        [MenuItem("DarkFlare/调试/校验基础资源 Addressables 配置")]
         public static void ValidateFromMenu()
         {
             List<string> issues = Validate();

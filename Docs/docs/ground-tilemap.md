@@ -2,6 +2,10 @@
 
 ## 当前状态
 
+本页记录旧单场景地表实现。当前城镇 / 野外使用 `.dfmap`、Dual Grid 地表解析与 MapScope 运行时装配，见[双地图生命周期](./maps/world-map-lifecycle.md)和[正式地表资源](./maps/terrain-materials.md)。正式双地图安装已停用 Main 中的旧 `GroundGrid` 与 `WorldBounds`；下面的布局与验收仅代表历史状态。
+
+“重建双层 Tilemap”菜单已移除：它会替换旧 GroundGrid、重新生成激活的固定地表并保存 Main 场景，不适用于当前地形编辑。底层方法暂留，旧资产及依赖它们的回归未在本次菜单清理中删除。
+
 `Main.unity` 已用基础 / 细节双层 Tilemap 替换旧 `VisualSliceGround` 的 25 个独立 `SpriteRenderer`。视觉覆盖继续保持 40×40 世界单位，玩法边界仍由原 `WorldBounds` 提供，不新增碰撞、寻路或交互规则。
 
 ```text
@@ -54,7 +58,7 @@ GroundGrid                    Grid，位置 (-20, -20, 0)，Cell Size (8, 8, 0)
 
 ## 自动化入口
 
-- Unity 菜单：`DarkFlare/地表/重建双层 Tilemap`
+- 历史 Unity 菜单：`DarkFlare/地表/重建双层 Tilemap`（已移除）
 - Editor 工具：`Assets/Scripts/Editor/GroundTilemapSetup.cs`
 - 资产处理：`tools/ground_tiles/process_ground_tiles.py`
 - 资产审计：`tools/ground_tiles/audit_ground_tiles.py`

@@ -4,6 +4,8 @@
 
 ## 配置与样例
 
+独立“补齐对象表现样例”菜单已移除；打开世界排序样例时仍调用 `MapObjectPresentationSetup.Ensure()` 补齐资源。
+
 - 创建菜单：`DarkFlare/Maps/Object Presentation Catalog`；配置中心“按类型 / Map Object Presentation Catalog”可编辑现有目录。表现配置不分配新的 ContentId，不属于 `DarkFlare/Data/` 内容身份目录。
 - 正式样例目录：`Assets/Data/Maps/Presentation/map_object_presentations.asset`。外观以对象定义 + 变体 ID 精确匹配；空 ID 对应默认，未知 ID 拒绝，不能静默取默认。
 - 样例 Prefab：`Assets/Prefabs/World/MapObjects/`，登记于 `DarkFlare-Map-Objects` Addressables 组。复用既有独立 Sprite；没有新增图片、改变原图 PPU / pivot 或修改碰撞尺寸。

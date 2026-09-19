@@ -13,7 +13,6 @@ namespace DarkFlare.Editor
 {
     public static class GroundTilemapSetup
     {
-        const string MenuRoot = "DarkFlare/地表/";
         const string ScenePath = "Assets/Scenes/Main.unity";
         const string TileAssetRoot = "Assets/Art/Tiles/Environment/Ground";
         const string SpriteLitMaterialPath = "Packages/com.unity.render-pipelines.universal/Runtime/Materials/Sprite-Lit-Default.mat";
@@ -58,7 +57,6 @@ namespace DarkFlare.Editor
             new DetailPlacement(4, 4, 0, 0f, 0.38f),
         };
 
-        [MenuItem(MenuRoot + "重建双层 Tilemap", false, 100)]
         public static void RebuildGroundTilemaps()
         {
             if (EditorApplication.isPlayingOrWillChangePlaymode)

@@ -28,7 +28,6 @@ namespace DarkFlare.Editor
                 false),
         };
 
-        [MenuItem("DarkFlare/Alpha 0.1.7/构建候选特效动画")]
         public static void BuildClips()
         {
             EnsureFolder(ClipRoot);

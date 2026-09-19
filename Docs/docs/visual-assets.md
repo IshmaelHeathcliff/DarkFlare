@@ -1,5 +1,7 @@
 # 视觉资产清单
 
+历史 `DarkFlare/Alpha 0.1.7` 菜单（视觉迁移预检、世界排序验证、应用特效导入合同、构建候选动画）已移除。对应脚本方法及自动特效导入处理仍保留，迁移记录不作为当前菜单操作指南。
+
 ## Alpha 0.3.4 装备增量
 
 新增十三件装备独立图标与头部、手部、腿部、副手、项链、腰带六个空槽图标，正式装备池共二十件，固定 UI 图标共十八张。新图均为 96×96、Single / Full Rect、PPU 64、中心 Pivot、Point、无压缩 / Mipmap；装备最长可见边保持 72–80 px。十九张图片分别导入 Addressables，装备配置引用各自图标，空槽由 Theme.uss 绑定。完整 GUID、哈希及源图 / 成品审计见[资源审计](./assets/acceptance/alpha-0.3.4-equipment/art-audit.json)。下方旧批次数字仍为历史记录。
@@ -118,6 +120,8 @@
 - 12 个世界物件中的 ground cracked、ground dirt、stone path 和 ruined wall 当前未消费，仍按语义名保留。
 
 ## 迁移验收结果
+
+`DarkFlare/美术资产迁移` 下的“仅校验”“应用导入与引用迁移”“校验并删除旧图集”菜单已移除。它们依赖 `tools/visual_slice/asset_pipeline_manifest.json` 的历史图集白名单；其中八张旧图集均已删除，而迁移预检仍要求旧图集存在并匹配 GUID，因此不能作为当前资产的常规校验入口。`VisualAssetSingleSpriteMigration` 代码与清单保留用于历史追溯，本次只清理菜单注册。
 
 - `Assets/Art` 当前有 121 张 PNG、0 个 `Sprite Mode: Multiple`，`Assets/Art/SpriteSheets/` 已删除。
 - 80 个旧 sub-sprite 的 75 个消费者已全部重绑，5 个未消费语义资产仍保留。

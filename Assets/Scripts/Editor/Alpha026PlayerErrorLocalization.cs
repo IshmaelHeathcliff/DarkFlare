@@ -49,7 +49,6 @@ namespace DarkFlare.Editor
             .Select(entry => entry.Key)
             .ToArray();
 
-        [MenuItem(MenuPath)]
         public static void Apply()
         {
             StringTableCollection collection = LocalizationEditorSettings
