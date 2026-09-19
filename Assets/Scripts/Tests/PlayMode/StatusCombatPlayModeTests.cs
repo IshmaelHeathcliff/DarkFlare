@@ -111,7 +111,9 @@ namespace DarkFlare.Tests
             StatusTargetId original = statuses.GetTarget(actor);
             Assert.That(original.ActorKey, Is.EqualTo(monster.Instance.Id.Value));
             actor.transform.position = player.transform.position + Vector3.right * 5;
-            yield return new WaitForFixedUpdate();
+            float navigationDeadline = Time.realtimeSinceStartup + 2;
+            while (actor.GetComponent<Rigidbody2D>().linearVelocity.sqrMagnitude == 0 && Time.realtimeSinceStartup < navigationDeadline)
+            { yield return new WaitForFixedUpdate(); }
             Assert.That(actor.GetComponent<Rigidbody2D>().linearVelocity.sqrMagnitude, Is.GreaterThan(0));
             var source = new StatusSource(StatusSourceKind.Mechanism, "playmode");
             StatusDefinition stun = ApplicationHost.Current.ContentCatalog.GetAll<StatusDefinition>().Single(definition => definition.Id == "stun");

@@ -10,6 +10,8 @@ namespace DarkFlare
             this.RegisterUtility<IItemInstanceIdGenerator>(new UuidItemInstanceIdGenerator());
             this.RegisterUtility<IRunInstanceIdGenerator>(RunInstanceIdGenerator.Create());
             this.RegisterModel(new CombatModel());
+            this.RegisterModel(new NavigationModel());
+            this.RegisterSystem(new NavigationSystem());
             this.RegisterModel(new EquipmentModel());
             this.RegisterModel(new InventoryModel());
             this.RegisterModel(new EconomyModel());

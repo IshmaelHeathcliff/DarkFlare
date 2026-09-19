@@ -60,20 +60,19 @@
 - [地图编辑器与 AI 事务](./maps/map-editor.md)
 - [地图对象表现与分段遮挡](./maps/object-presentation.md)
 - [城镇、野外与地图生命周期](./maps/world-map-lifecycle.md)
+- [批量导航与怪物移动](./maps/navigation.md)
 - [世界渲染与稳定层级](./world-rendering.md)
 - [已完成计划归档](./plan/archive/README.md)
 
 ## 计划状态
 
-阶段 G 已完成并[归档](./plan/archive/alpha-0.5.3-world-maps-plan.md)。当前版本 `0.5.3-alpha`，下一阶段为 0.5.4 批量导航。
+2026-09-19：**Alpha 0.5 的 A–H 已完成**。当前版本 `0.5.4-alpha`、core v6、Schema 5、地图文档 V2。H 的 Grid / Flow Field / A* / Spatial Hash / Separation / Job / Burst 已接入正式怪物，支持导航意图冻结恢复和动态阻挡，见[模块说明](./maps/navigation.md)及 [H 验收](./maps/acceptance/h/README.md)。
 
-2026-09-18：**Alpha 0.5 的 A–G 已完成**。Main 已接入正式城镇 / 野外与离场冻结恢复，core v6、Schema 4、地图文档 V2。最终 EditMode **713/713**、PlayMode **83/83**，内容校验、235/235 配置字段覆盖及独立 Windows Player 验收通过，见 [G 验收](./maps/acceptance/g/README.md)。
+最终 EditMode **722/722**、PlayMode **85/85**；500 / 1000 单位 Player 三轮矩阵、普通 Player 复核、1000 单位 20 轮往返与 Windows 构建通过。[H 执行计划](./plan/archive/alpha-0.5.4-navigation-plan.md)已归档，下一阶段为 0.5.5 全范围综合交付。
 
-A 已提交 `2bf3843`，B1 / B2+B3 / B4 为 `0c866f7` / `dc33aaa` / `b1cdb06`，C1–C4 为 `9a3f7a9`，D 为 `e396485`。D 本轮 EditMode **676/676**、PlayMode **77/77** 通过，内容校验 0 项问题，见 [D 验收](./maps/acceptance/d/README.md)。未重建 Windows Player。
-
-Alpha 0.5 后续为 Grid / Flow Field / A* / Spatial Hash / Separation / Job / Burst；500 活动怪物、1000 压测目标未提前计为完成。Alpha 0.1–0.4 历史记录见[归档索引](./plan/archive/README.md)。
+G 已提交 `9e6f2f2`；A–G 的历史数字与证据见[计划归档](./plan/archive/README.md)。
 
 ## 说明
 
-当前项目已完成首版最小循环、初步体验优化及 Alpha 0.1–0.4 已归档计划，Alpha 0.5 的地图基础、编辑器、世界层级与双地图已完成，后续进入批量导航。已完成的执行计划统一保存在 `Docs/docs/plan/archive/`。
+当前项目已完成首版最小循环、初步体验优化及 Alpha 0.1–0.4 已归档计划，Alpha 0.5 的地图基础、编辑器、世界层级与双地图已完成，批量导航已完成，后续进入综合交付。已完成的执行计划统一保存在 `Docs/docs/plan/archive/`。
 后续新增系统、配置或流程时，应优先更新对应文档，避免 `Docs/docs/` 与实现脱节。游戏设计文档位于 `Docs/design/`，不属于 Agent 的常规维护范围。

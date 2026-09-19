@@ -1,0 +1,20 @@
+{
+  "status": "completed",
+  "duration": 6.39,
+  "summary": {
+    "total": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "results": [
+    {
+      "FullName": "DarkFlare.Tests.NavigationPlayModeTests.MixedStrategies_DetourDynamicWall_RespectControlAndInvalidateHandles",
+      "Status": "Passed",
+      "Duration": 6.3046331,
+      "Message": null,
+      "StackTrace": null
+    }
+  ]
+}

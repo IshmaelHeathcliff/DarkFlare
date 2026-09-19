@@ -24,6 +24,7 @@ namespace DarkFlare
         public int Width { get; }
         public int Height { get; }
         public double NodeSize => CellSize / Subdivisions;
+        internal ushort NodeCost(int index) { return _costs[index]; }
         public MapGeometryRect Bounds { get; }
         public IReadOnlyList<MapGeometryRect> Rectangles { get; }
         public IReadOnlyList<MapGeometryRegion> Regions { get; }

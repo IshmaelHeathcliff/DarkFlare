@@ -1,0 +1,222 @@
+{
+  "complete": true,
+  "error": null,
+  "unity": "6000.6.0f1",
+  "cpu": "AMD Ryzen 7 PRO 8845HS w/ Radeon 780M Graphics",
+  "cpuThreads": 16,
+  "gpu": "AMD Radeon 780M Graphics",
+  "resolution": "1920x1080",
+  "fixedDeltaTime": 0.0199999921,
+  "vsync": 0,
+  "targetFrameRate": -1,
+  "development": true,
+  "burst": true,
+  "backend": "Mono",
+  "randomSeed": 71023,
+  "physicsStepSampling": true,
+  "collectionSafetyChecks": false,
+  "product": "DarkFlare-Navigation-Audit",
+  "gcPositiveControl": 0,
+  "results": [
+    {
+      "round": 0,
+      "elapsedSeconds": 15.431016500000005,
+      "agents": 1000,
+      "nativeBytes": 51261536,
+      "peakBytes": 52420576,
+      "ActiveOwners": 6,
+      "ActiveLeases": 46,
+      "objects": 1001
+    },
+    {
+      "round": 1,
+      "elapsedSeconds": 23.128346699999994,
+      "agents": 1000,
+      "nativeBytes": 51261536,
+      "peakBytes": 52420576,
+      "ActiveOwners": 6,
+      "ActiveLeases": 46,
+      "objects": 1001
+    },
+    {
+      "round": 2,
+      "elapsedSeconds": 24.2053072,
+      "agents": 1000,
+      "nativeBytes": 51261536,
+      "peakBytes": 52420576,
+      "ActiveOwners": 6,
+      "ActiveLeases": 46,
+      "objects": 1001
+    },
+    {
+      "round": 3,
+      "elapsedSeconds": 27.395183099999997,
+      "agents": 1000,
+      "nativeBytes": 51261536,
+      "peakBytes": 52420576,
+      "ActiveOwners": 6,
+      "ActiveLeases": 46,
+      "objects": 1001
+    },
+    {
+      "round": 4,
+      "elapsedSeconds": 23.949174499999998,
+      "agents": 1000,
+      "nativeBytes": 51261536,
+      "peakBytes": 52420576,
+      "ActiveOwners": 6,
+      "ActiveLeases": 46,
+      "objects": 1001
+    },
+    {
+      "round": 5,
+      "elapsedSeconds": 23.6717462,
+      "agents": 1000,
+      "nativeBytes": 51261536,
+      "peakBytes": 52420576,
+      "ActiveOwners": 6,
+      "ActiveLeases": 46,
+      "objects": 1001
+    },
+    {
+      "round": 6,
+      "elapsedSeconds": 23.287893799999978,
+      "agents": 1000,
+      "nativeBytes": 51261536,
+      "peakBytes": 52420576,
+      "ActiveOwners": 6,
+      "ActiveLeases": 46,
+      "objects": 1001
+    },
+    {
+      "round": 7,
+      "elapsedSeconds": 23.702730699999989,
+      "agents": 1000,
+      "nativeBytes": 51261536,
+      "peakBytes": 52420576,
+      "ActiveOwners": 6,
+      "ActiveLeases": 46,
+      "objects": 1001
+    },
+    {
+      "round": 8,
+      "elapsedSeconds": 23.74383370000001,
+      "agents": 1000,
+      "nativeBytes": 51261536,
+      "peakBytes": 52420576,
+      "ActiveOwners": 6,
+      "ActiveLeases": 46,
+      "objects": 1001
+    },
+    {
+      "round": 9,
+      "elapsedSeconds": 27.046102200000007,
+      "agents": 1000,
+      "nativeBytes": 51261536,
+      "peakBytes": 52420576,
+      "ActiveOwners": 6,
+      "ActiveLeases": 46,
+      "objects": 1001
+    },
+    {
+      "round": 10,
+      "elapsedSeconds": 25.49173159999998,
+      "agents": 1000,
+      "nativeBytes": 51261536,
+      "peakBytes": 52420576,
+      "ActiveOwners": 6,
+      "ActiveLeases": 46,
+      "objects": 1001
+    },
+    {
+      "round": 11,
+      "elapsedSeconds": 24.94404000000003,
+      "agents": 1000,
+      "nativeBytes": 51261536,
+      "peakBytes": 52420576,
+      "ActiveOwners": 6,
+      "ActiveLeases": 46,
+      "objects": 1001
+    },
+    {
+      "round": 12,
+      "elapsedSeconds": 25.014280799999995,
+      "agents": 1000,
+      "nativeBytes": 51261536,
+      "peakBytes": 52420576,
+      "ActiveOwners": 6,
+      "ActiveLeases": 46,
+      "objects": 1001
+    },
+    {
+      "round": 13,
+      "elapsedSeconds": 26.305870900000002,
+      "agents": 1000,
+      "nativeBytes": 51261536,
+      "peakBytes": 52420576,
+      "ActiveOwners": 6,
+      "ActiveLeases": 46,
+      "objects": 1001
+    },
+    {
+      "round": 14,
+      "elapsedSeconds": 26.296486099999981,
+      "agents": 1000,
+      "nativeBytes": 51261536,
+      "peakBytes": 52420576,
+      "ActiveOwners": 6,
+      "ActiveLeases": 46,
+      "objects": 1001
+    },
+    {
+      "round": 15,
+      "elapsedSeconds": 25.19931710000003,
+      "agents": 1000,
+      "nativeBytes": 51261536,
+      "peakBytes": 52420576,
+      "ActiveOwners": 6,
+      "ActiveLeases": 46,
+      "objects": 1001
+    },
+    {
+      "round": 16,
+      "elapsedSeconds": 26.705478400000004,
+      "agents": 1000,
+      "nativeBytes": 51261536,
+      "peakBytes": 52420576,
+      "ActiveOwners": 6,
+      "ActiveLeases": 46,
+      "objects": 1001
+    },
+    {
+      "round": 17,
+      "elapsedSeconds": 25.987077999999997,
+      "agents": 1000,
+      "nativeBytes": 51261536,
+      "peakBytes": 52420576,
+      "ActiveOwners": 6,
+      "ActiveLeases": 46,
+      "objects": 1001
+    },
+    {
+      "round": 18,
+      "elapsedSeconds": 24.211778600000002,
+      "agents": 1000,
+      "nativeBytes": 51261536,
+      "peakBytes": 52420576,
+      "ActiveOwners": 6,
+      "ActiveLeases": 46,
+      "objects": 1001
+    },
+    {
+      "round": 19,
+      "elapsedSeconds": 23.717150500000002,
+      "agents": 1000,
+      "nativeBytes": 51261536,
+      "peakBytes": 52420576,
+      "ActiveOwners": 6,
+      "ActiveLeases": 46,
+      "objects": 1001
+    }
+  ]
+}

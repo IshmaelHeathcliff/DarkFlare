@@ -1,5 +1,7 @@
 # 已完成计划归档
 
+- [Alpha 0.5.4 批量导航与怪物移动](./alpha-0.5.4-navigation-plan.md)：2026-09-19 H1–H7 完成，`0.5.4-alpha`、core v6、Schema 5；EditMode 722/722、PlayMode 85/85，500 / 1000 单位三轮矩阵、普通 Player 及 20 轮大图往返通过。
+
 - [Alpha 0.5.3 城镇、野外与地图生命周期](./alpha-0.5.3-world-maps-plan.md)：2026-09-18 G1–G7 完成，版本 `0.5.3-alpha`、core v6、Schema 4；EditMode 713/713、PlayMode 83/83，独立 Windows Player 往返、冻结和重启恢复通过。
 
 - [Alpha 0.5.2 世界对象表现与稳定 Y 排序](./alpha-0.5.2-world-sorting-plan.md)：2026-09-18 F1–F5 完成，版本 `0.5.2-alpha`；EditMode 707/707、PlayMode 78/78，Windows Player 及性能验收通过。

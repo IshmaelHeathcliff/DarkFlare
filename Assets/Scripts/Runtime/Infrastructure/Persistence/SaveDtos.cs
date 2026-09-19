@@ -179,6 +179,8 @@ namespace DarkFlare
 
     public sealed class MonsterRunStateDto : IPersistenceDto
     {
+        public NavigationIntentDto Navigation { get; set; } = new();
+
         public string InstanceId { get; set; } = string.Empty;
 
         public string DefinitionContentId { get; set; } = string.Empty;

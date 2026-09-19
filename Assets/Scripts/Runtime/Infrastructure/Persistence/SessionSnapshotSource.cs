@@ -367,6 +367,7 @@ namespace DarkFlare
                 MonsterInstanceRandomSeeds seeds = instance.RandomSeeds;
                 result.Add(new MonsterRunStateDto
                 {
+                    Navigation = monster.CaptureNavigation(),
                     InstanceId = instance.Id.Value,
                     DefinitionContentId = RuntimeStateMapper.GetContentId(
                         monster.Definition,

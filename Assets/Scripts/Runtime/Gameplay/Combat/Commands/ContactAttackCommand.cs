@@ -16,10 +16,14 @@ namespace DarkFlare
             if (_monster == null || _monster.Definition == null || _monster.Instance == null
                 || _target == null || !_target.IsAlive || !_target.isActiveAndEnabled
                 || _target.Team == _monster.Actor.Team
-                || !this.SendQuery(new GetActorActionsQuery(_monster.Actor)).CanAttack
+                || !_monster.Actor.IsAlive || !_monster.Actor.IsConfigured || !_monster.Actor.isActiveAndEnabled
+                || (_monster.Actor.BlockedActions & StatusActionBlock.Attack) != 0
+                || !this.GetSystem<StatusSystem>().GetTarget(_monster.Actor).IsValid
                 || _monster.ContactDamageCooldownRemainingSeconds > 0
                 || Vector2.Distance(_monster.transform.position, _target.transform.position) > _monster.Definition.ContactDamageRadius
                 || _monster.Definition.ContactDamages.Count == 0) { return false; }
+            NavigationMap navigation = this.GetSystem<NavigationSystem>().Active;
+            if (navigation != null && !navigation.HasLineOfSight(_monster.transform.position, _target.transform.position)) { return false; }
             int seed = this.GetSystem<GameplayRandomSystem>().NextSeed(GameplayRandomChannel.MonsterAttack);
             AttackRandomRolls rolls = AttackRandomRolls.FromRootSeed(seed);
             AttackSnapshot attack = AttackSnapshotFactory.CreateImmediate(_monster.Actor, "monster_contact", string.Empty,

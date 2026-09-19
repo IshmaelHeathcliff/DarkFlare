@@ -1,0 +1,214 @@
+{
+  "complete": true,
+  "error": null,
+  "unity": "6000.6.0f1",
+  "cpu": "AMD Ryzen 7 PRO 8845HS w/ Radeon 780M Graphics",
+  "cpuThreads": 16,
+  "gpu": "AMD Radeon 780M Graphics",
+  "resolution": "1920x1080",
+  "fixedDeltaTime": 0.0199999921,
+  "vsync": 0,
+  "targetFrameRate": -1,
+  "development": true,
+  "burst": true,
+  "backend": "Mono",
+  "randomSeed": 71023,
+  "physicsStepSampling": true,
+  "collectionSafetyChecks": false,
+  "product": "DarkFlare-Navigation-Audit",
+  "gcPositiveControl": 1,
+  "results": [
+    {
+      "round": 0,
+      "count": 1000,
+      "mode": "full",
+      "seconds": 60.0,
+      "activeMinimum": 1000,
+      "frames": {
+        "count": 11120,
+        "p50": 4.2181974276900291,
+        "p95": 9.37969796359539,
+        "p99": 10.609595105051994,
+        "maximum": 13.591199181973934
+      },
+      "navigationMainMs": {
+        "count": 3000,
+        "p50": 1.9585,
+        "p95": 2.4675,
+        "p99": 3.5858,
+        "maximum": 4.1497
+      },
+      "steeringWaitMs": {
+        "count": 3000,
+        "p50": 0.2152,
+        "p95": 0.2977,
+        "p99": 0.4678,
+        "maximum": 1.75
+      },
+      "pathLatencyMs": {
+        "count": 1001,
+        "p50": 101.97580000000528,
+        "p95": 258.88160000000227,
+        "p99": 261.64389999999571,
+        "maximum": 263.300000000001
+      },
+      "collectMs": {
+        "count": 3000,
+        "p50": 0.002,
+        "p95": 0.1184,
+        "p99": 0.1292,
+        "maximum": 0.3931
+      },
+      "sampleMs": {
+        "count": 3000,
+        "p50": 1.5507,
+        "p95": 1.8425,
+        "p99": 3.0646,
+        "maximum": 3.826
+      },
+      "scheduleMs": {
+        "count": 3000,
+        "p50": 0.0327,
+        "p95": 0.0481,
+        "p99": 0.0592,
+        "maximum": 0.4742
+      },
+      "ticks": 3000,
+      "maximumCandidateVisits": 73625,
+      "saturatedAgentTicks": 726776,
+      "navigationAllocationEvents": 0,
+      "nativePeakBytes": 51261536,
+      "nativeLifetimePeakBytes": 51261536,
+      "flowCacheHits": 2712178,
+      "flowCacheMisses": 0
+    },
+    {
+      "round": 1,
+      "count": 1000,
+      "mode": "full",
+      "seconds": 60.0,
+      "activeMinimum": 1000,
+      "frames": {
+        "count": 10868,
+        "p50": 4.2987954802811146,
+        "p95": 9.73769836127758,
+        "p99": 11.175701394677162,
+        "maximum": 15.446300618350506
+      },
+      "navigationMainMs": {
+        "count": 3000,
+        "p50": 1.9384,
+        "p95": 2.4437,
+        "p99": 3.4915,
+        "maximum": 4.4673
+      },
+      "steeringWaitMs": {
+        "count": 3000,
+        "p50": 0.2153,
+        "p95": 0.2911,
+        "p99": 0.3538,
+        "maximum": 1.4652
+      },
+      "pathLatencyMs": {
+        "count": 998,
+        "p50": 102.8598000000045,
+        "p95": 257.7295000000106,
+        "p99": 262.20949999999732,
+        "maximum": 264.47550000000319
+      },
+      "collectMs": {
+        "count": 3000,
+        "p50": 0.002,
+        "p95": 0.1185,
+        "p99": 0.1294,
+        "maximum": 0.4334
+      },
+      "sampleMs": {
+        "count": 3000,
+        "p50": 1.5409,
+        "p95": 1.9093,
+        "p99": 3.0234,
+        "maximum": 3.669
+      },
+      "scheduleMs": {
+        "count": 3000,
+        "p50": 0.0307,
+        "p95": 0.0476,
+        "p99": 0.0548,
+        "maximum": 0.247
+      },
+      "ticks": 3000,
+      "maximumCandidateVisits": 73676,
+      "saturatedAgentTicks": 730871,
+      "navigationAllocationEvents": 0,
+      "nativePeakBytes": 51261536,
+      "nativeLifetimePeakBytes": 51261536,
+      "flowCacheHits": 2705486,
+      "flowCacheMisses": 0
+    },
+    {
+      "round": 2,
+      "count": 1000,
+      "mode": "full",
+      "seconds": 60.0,
+      "activeMinimum": 1000,
+      "frames": {
+        "count": 11120,
+        "p50": 4.24019992351532,
+        "p95": 9.33079607784748,
+        "p99": 10.594196617603302,
+        "maximum": 15.775198116898537
+      },
+      "navigationMainMs": {
+        "count": 3000,
+        "p50": 1.9223,
+        "p95": 2.3584,
+        "p99": 3.5244,
+        "maximum": 4.0336
+      },
+      "steeringWaitMs": {
+        "count": 3000,
+        "p50": 0.2137,
+        "p95": 0.2927,
+        "p99": 0.4244,
+        "maximum": 1.4488
+      },
+      "pathLatencyMs": {
+        "count": 1001,
+        "p50": 101.91729999999666,
+        "p95": 258.21070000000645,
+        "p99": 261.53419999999983,
+        "maximum": 263.74789999999848
+      },
+      "collectMs": {
+        "count": 3000,
+        "p50": 0.002,
+        "p95": 0.1174,
+        "p99": 0.1291,
+        "maximum": 0.4476
+      },
+      "sampleMs": {
+        "count": 3000,
+        "p50": 1.5315,
+        "p95": 1.8126,
+        "p99": 3.0079,
+        "maximum": 3.545
+      },
+      "scheduleMs": {
+        "count": 3000,
+        "p50": 0.0308,
+        "p95": 0.0474,
+        "p99": 0.0579,
+        "maximum": 0.2372
+      },
+      "ticks": 3000,
+      "maximumCandidateVisits": 73965,
+      "saturatedAgentTicks": 733286,
+      "navigationAllocationEvents": 0,
+      "nativePeakBytes": 51261536,
+      "nativeLifetimePeakBytes": 51261536,
+      "flowCacheHits": 2691053,
+      "flowCacheMisses": 0
+    }
+  ]
+}

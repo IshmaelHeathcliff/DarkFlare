@@ -40,7 +40,17 @@ namespace DarkFlare
                 { throw new InvalidOperationException("存档地图落点没有合法净空：" + id); }
             }
             if (player != null) { Check(player); }
-            foreach (MonsterRunStateDto monster in monsters) { Check(monster.Position); }
+            foreach (MonsterRunStateDto monster in monsters)
+            {
+                Check(monster.Position);
+                if (monster.Navigation.Target == NavigationTargetKind.Point)
+                {
+                    Vector3Dto target = monster.Navigation.Point;
+                    if (target.X < geometry.Bounds.MinX || target.X >= geometry.Bounds.MaxX
+                        || target.Y < geometry.Bounds.MinY || target.Y >= geometry.Bounds.MaxY)
+                    { throw new InvalidOperationException("导航固定点位于地图之外：" + id); }
+                }
+            }
             foreach (WorldDropStateDto drop in drops) { Check(drop.Position); }
         }
 

@@ -11,6 +11,59 @@ namespace DarkFlare.Tests
         readonly NewtonsoftSaveSerializer _serializer = new NewtonsoftSaveSerializer();
 
         [Test]
+        public void NavigationMigration_PreservesReleasedMapSaveAndAddsFrozenDefaults()
+        {
+            byte[] bytes = System.IO.File.ReadAllBytes("Assets/Scripts/Tests/Fixtures/Migration/save-v4-world-maps.json");
+            JObject historical = JObject.Parse(Encoding.UTF8.GetString(bytes));
+            SaveDeserializationResult result = _serializer.Deserialize(bytes);
+            Assert.IsTrue(result.Succeeded, Describe(result));
+            SaveSerializationResult serialized = _serializer.Serialize(result.Document);
+            Assert.IsTrue(serialized.Succeeded, Describe(serialized));
+            JObject current = JObject.Parse(Encoding.UTF8.GetString(serialized.Bytes));
+            foreach (JToken monster in current["payload"]["run"]["monsters"])
+            { Assert.AreEqual(0, (int)monster["navigation"]["target"]); ((JObject)monster).Remove("navigation"); }
+            Assert.IsTrue(JToken.DeepEquals(historical["payload"], current["payload"]), "Released state must not be rerolled or normalized by navigation migration");
+            JObject frozen = (JObject)historical.DeepClone();
+            frozen["payload"]["run"]["frozenMaps"][0]["monsters"] = frozen["payload"]["run"]["monsters"].DeepClone();
+            new NavigationSaveMigration().Apply(frozen);
+            foreach (JToken monster in frozen["payload"]["run"]["frozenMaps"][0]["monsters"])
+            { Assert.AreEqual(0, (int)monster["navigation"]["target"]); Assert.AreEqual(JTokenType.Null, monster["navigation"]["mode"].Type); }
+        }
+
+        [Test]
+        public void NavigationIntent_RoundTripsAndRejectsUnknownModeOrCrossMapTarget()
+        {
+            SaveDocumentDto source = SaveDataContractTests.CreateValidDocument();
+            MonsterRunStateDto monster = source.Payload.Run.Monsters[0];
+            monster.Navigation = new NavigationIntentDto { Mode = NavigationMode.AStar, Target = NavigationTargetKind.Point,
+                MapId = source.Payload.Run.ActiveMapId, Point = new Vector3Dto { X = 5, Y = 8 }, StopDistance = .2f };
+            SaveSerializationResult bytes = _serializer.Serialize(source);
+            Assert.IsTrue(bytes.Succeeded, Describe(bytes));
+            SaveDeserializationResult restored = _serializer.Deserialize(bytes.Bytes);
+            Assert.IsTrue(restored.Succeeded, Describe(restored));
+            Assert.AreEqual(NavigationMode.AStar, restored.Document.Payload.Run.Monsters[0].Navigation.Mode);
+            Assert.AreEqual(8, restored.Document.Payload.Run.Monsters[0].Navigation.Point.Y);
+            monster.Navigation.Mode = (NavigationMode)99;
+            Assert.IsFalse(_serializer.Serialize(source).Succeeded);
+            monster.Navigation.Mode = NavigationMode.FlowField;
+            monster.Navigation.MapId = "map:other";
+            Assert.IsFalse(_serializer.Serialize(source).Succeeded);
+            RunSaveData run = source.Payload.Run;
+            MonsterRunStateDto frozenTarget = MapStateData.Copy(monster);
+            frozenTarget.InstanceId = run.InstanceIds.RunId + ":monster:3";
+            frozenTarget.Navigation = new NavigationIntentDto();
+            run.InstanceIds.NextMonsterSequence = 4;
+            var frozenMap = new MapStateDto { MapId = "map:other", Random = MapStateData.Copy(run.Random) };
+            frozenMap.Monsters.Add(frozenTarget);
+            run.FrozenMaps.Add(frozenMap);
+            monster.Navigation = new NavigationIntentDto();
+            Assert.IsTrue(_serializer.Serialize(source).Succeeded, "目标引用负例必须基于合法双地图存档");
+            monster.Navigation = new NavigationIntentDto { Target = NavigationTargetKind.Actor,
+                MapId = run.ActiveMapId, ActorId = frozenTarget.InstanceId };
+            Assert.IsFalse(_serializer.Serialize(source).Succeeded, "伪装成当前 MapId 的冻结图目标也必须拒绝");
+        }
+
+        [Test]
         public void Deserialize_PreStatusHistoryAddsEmptyClockAndPreservesRuntimeData()
         {
             byte[] bytes = System.IO.File.ReadAllBytes("Assets/Scripts/Tests/Fixtures/Migration/save-v2-without-statuses.json");
@@ -25,6 +78,7 @@ namespace DarkFlare.Tests
             ((JObject)current["payload"]["run"]).Remove("statuses");
             foreach (string field in new[] { "activeMapId", "mapRevision", "mapRandom", "frozenMaps" })
             { ((JObject)current["payload"]["run"]).Remove(field); }
+            foreach (JToken monster in current["payload"]["run"]["monsters"]) { ((JObject)monster).Remove("navigation"); }
             Assert.AreEqual("map:wilderness", result.Document.Payload.Run.ActiveMapId);
             Assert.IsTrue(JToken.DeepEquals(JToken.FromObject(result.Document.Payload.Run.Random), JToken.FromObject(result.Document.Payload.Run.MapRandom)));
             Assert.IsTrue(JToken.DeepEquals(historical["payload"], current["payload"]), "迁移不能改变物品、资源、随机数和运行时数据");

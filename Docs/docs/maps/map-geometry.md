@@ -45,7 +45,7 @@ Capture 在主线程读取 / 校验 SO，复制地表属性、对象矩形与区
 
 结果区分 `Valid / InvalidInput / Outside / Blocked / RegionRejected / NoCandidate / BudgetExceeded`；取消抛 `OperationCanceledException`。FindPoint 只承诺落点合法，**不承诺与起点连通**；未来搜索必须继续判断连通性。未知刷怪区不回退到全图。
 
-移动成本为目标节点像素所属材质的 MovementCost × 直行 10 / 斜行 14；这是离散有向图成本，不是连续路径积分。未来 Flow Field 反向扩展必须使用对应的正向边成本；A* 共用同一邻接 / 成本 / 半径规则。两种算法、动态障碍和 Jobs 尚未在本模块实现。
+移动成本为目标节点像素所属材质的 MovementCost × 直行 10 / 斜行 14；这是离散有向图成本，不是连续路径积分。[批量导航](./navigation.md)的 Flow Field 反向扩展使用对应的正向边成本，A* 共用同一邻接 / 成本 / 半径规则。动态障碍及 Jobs 的容器归 NavigationMap，静态几何仍由本模块提供。
 
 Named 只标记位置；Safe 不生成墙。请求指定 Spawn 区时，整个圆足迹必须在所选区内，且不与任意 Safe 区相交，安全区排除不受 priority 压过；重叠 Spawn 保留各自身份及 spawnDefinitionId，调用者指定本次区域。本模块不触发怪物生成。
 
@@ -63,4 +63,4 @@ Session 在同一次构建中捕获显示和几何输入；完整帧连同碰撞
 
 ## 验证
 
-长期规则与生命周期覆盖位于 `MapGeometryTests`，实际移动与释放位于 `MapGeometryPlayModeTests`；复用现有预览、文档、导入及旧 Main 回归。[D 验收记录](./acceptance/d/README.md)保留尺度矩阵、物理对照、数据往返、取消和性能证据。运行时地图作用域、刷怪消费者和寻路留在后续阶段接入。
+长期规则与生命周期覆盖位于 `MapGeometryTests`，实际移动与释放位于 `MapGeometryPlayModeTests`；复用现有预览、文档、导入及旧 Main 回归。[D 验收记录](./acceptance/d/README.md)保留尺度矩阵、物理对照、数据往返、取消和性能证据。地图作用域与刷怪消费者已由 G 接入；动态寻路已由 [H](./navigation.md)接入，执行计划已[归档](../plan/archive/alpha-0.5.4-navigation-plan.md)。

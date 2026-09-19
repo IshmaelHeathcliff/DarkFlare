@@ -19,6 +19,13 @@
       "domain": "settings",
       "sourceSchemaVersion": 0,
       "expectedMigration": "settings_0_to_1_domains moves language into payload and fills audio, input, display and accessibility defaults"
+    },
+    {
+      "path": "save-v4-world-maps.json",
+      "domain": "save",
+      "sourceSchemaVersion": 4,
+      "sourceContentVersion": 6,
+      "expectedMigration": "Real 0.5.3-alpha G Player save (isolated WorldAudit-G, generation 102): add configuration-default navigation and player target without changing map states, identities, status, rolls or RNG."
     }
   ]
 }

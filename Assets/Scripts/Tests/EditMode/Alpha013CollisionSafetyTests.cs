@@ -61,18 +61,8 @@ namespace DarkFlare.Tests
         }
 
         [Test]
-        public void ContactDamage_RemainsDistanceDrivenAndIndependentlyTimed()
+        public void ContactConfiguration_PreservesCombatRangesAndIntervals()
         {
-            Assert.IsNotNull(GetInstanceMethod("TryDealContactDamage"));
-            Assert.IsNull(GetInstanceMethod("OnCollisionEnter2D"));
-            Assert.IsNull(GetInstanceMethod("OnCollisionStay2D"));
-            Assert.IsNull(GetInstanceMethod("OnTriggerEnter2D"));
-            Assert.IsNull(GetInstanceMethod("OnTriggerStay2D"));
-            FieldInfo cooldown = typeof(MonsterController).GetField(
-                "_lastContactDamageTime",
-                BindingFlags.Instance | BindingFlags.NonPublic);
-            Assert.IsNotNull(cooldown);
-            Assert.AreEqual(typeof(float), cooldown.FieldType);
             float[] expectedIntervals = { 0.75f, 0.55f, 1f };
 
             for (int i = 0; i < MonsterAssetPaths.Length; i++)
@@ -85,50 +75,6 @@ namespace DarkFlare.Tests
                 Assert.AreEqual(0.8f, definition.SeparationRadius, 0.001f);
                 Assert.AreEqual(0.65f, definition.SeparationWeight, 0.001f);
             }
-        }
-
-        [Test]
-        public void Steering_StopsInsideContactRangeAndKeepsSpeedBounded()
-        {
-            Assert.AreEqual(
-                Vector2.zero,
-                MonsterSteeringCalculator.GetPursuitDirection(new Vector2(0.6f, 0f), 0.6f));
-            Assert.AreEqual(
-                Vector2.right,
-                MonsterSteeringCalculator.GetPursuitDirection(new Vector2(0.61f, 0f), 0.6f));
-
-            Vector2 separation = MonsterSteeringCalculator.GetSeparationContribution(
-                Vector2.zero,
-                new Vector2(0.4f, 0f),
-                0.8f,
-                123);
-            Assert.AreEqual(new Vector2(-0.5f, 0f), separation);
-            Vector2 combined = MonsterSteeringCalculator.Combine(Vector2.right, separation, 0.65f);
-            Assert.LessOrEqual(combined.magnitude, 1f);
-        }
-
-        [Test]
-        public void Steering_UsesStableSeedDirectionForExactOverlap()
-        {
-            Vector2 first = MonsterSteeringCalculator.GetSeparationContribution(
-                Vector2.zero,
-                Vector2.zero,
-                0.8f,
-                24681357);
-            Vector2 replay = MonsterSteeringCalculator.GetSeparationContribution(
-                Vector2.zero,
-                Vector2.zero,
-                0.8f,
-                24681357);
-            Vector2 other = MonsterSteeringCalculator.GetSeparationContribution(
-                Vector2.zero,
-                Vector2.zero,
-                0.8f,
-                24681358);
-
-            Assert.AreEqual(first, replay);
-            Assert.AreEqual(1f, first.magnitude, 0.001f);
-            Assert.AreNotEqual(first, other);
         }
 
         [Test]
@@ -151,11 +97,6 @@ namespace DarkFlare.Tests
             Assert.IsTrue(issues.Exists(issue => issue.Contains("停止距离")));
             Assert.IsTrue(issues.Exists(issue => issue.Contains("软分离半径")));
             Assert.IsTrue(issues.Exists(issue => issue.Contains("软分离权重")));
-        }
-
-        static MethodInfo GetInstanceMethod(string name)
-        {
-            return typeof(MonsterController).GetMethod(name, BindingFlags.Instance | BindingFlags.NonPublic);
         }
 
         static void SetField(object target, string fieldName, object value)

@@ -1,6 +1,6 @@
 # 双地图与运行时作用域
 
-阶段 G 已完成，当前版本 `0.5.3-alpha`；验证结果与测量边界见 [G 验收](./acceptance/g/README.md)。
+阶段 G 完成于 `0.5.3-alpha`，原有冻结合同见 [G 验收](./acceptance/g/README.md)。当前 H 版本 `0.5.4-alpha` 已接入[地图导航所有权](./navigation.md)及 Schema 5 意图恢复，最新结果见 [H 验收](./acceptance/h/README.md)。
 
 ## 数据与入口
 
@@ -39,4 +39,4 @@ Schema 4 的 `Run` 保存活动 `ActiveMapId / MapRevision / MapRandom`，原 `M
 
 刷怪使用区域与圆足迹检查，Safe 始终排除；采样失败跳过并累计诊断计数。相机使用当前图 Bounds，复活使用当前图唯一 Respawn 入口。
 
-本模块尚不提供绕障追逐。Grid Navigation、Flow Field、A*、Spatial Hash、Separation、Job / Burst，以及 500 活动 / 1000 压力怪物的导航性能，属于后续阶段。1000 怪物存档容量验证不能替代导航性能验收。
+阶段 H 已接入[批量导航](./navigation.md)：`MapScope` 同时持有 Native 网格、搜索池、共享场和固定步驱动。停用时立即取消驱动并完成 Job，提交成功后释放，回退重新激活。Schema 5 增加怪物导航意图；只冻结目标 / 模式和停止规则，路径与缓存重建。1000 怪物存档容量验证仍不能替代独立导航性能验收，性能结论见 H 记录。

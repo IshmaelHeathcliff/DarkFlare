@@ -1,0 +1,86 @@
+{
+  "complete": true,
+  "error": null,
+  "unity": "6000.6.0f1",
+  "cpu": "AMD Ryzen 7 PRO 8845HS w/ Radeon 780M Graphics",
+  "cpuThreads": 16,
+  "gpu": "AMD Radeon 780M Graphics",
+  "resolution": "1920x1080",
+  "fixedDeltaTime": 0.0199999921,
+  "vsync": 0,
+  "targetFrameRate": -1,
+  "development": true,
+  "burst": true,
+  "backend": "Mono",
+  "randomSeed": 71023,
+  "physicsStepSampling": true,
+  "collectionSafetyChecks": false,
+  "product": "DarkFlare-Navigation-Audit",
+  "gcPositiveControl": 1,
+  "results": [
+    {
+      "round": 0,
+      "count": 1000,
+      "mode": "pure",
+      "seconds": 20.0,
+      "activeMinimum": 1000,
+      "frames": {
+        "count": 24580,
+        "p50": 0.60690194368362427,
+        "p95": 1.9727961625903845,
+        "p99": 4.95539978146553,
+        "maximum": 10.212499648332596
+      },
+      "navigationMainMs": {
+        "count": 1001,
+        "p50": 1.6326,
+        "p95": 2.9609,
+        "p99": 3.5119,
+        "maximum": 4.032
+      },
+      "steeringWaitMs": {
+        "count": 1001,
+        "p50": 0.1681,
+        "p95": 0.2157,
+        "p99": 0.4511,
+        "maximum": 0.6185
+      },
+      "pathLatencyMs": {
+        "count": 334,
+        "p50": 100.23939999999953,
+        "p95": 259.6279999999993,
+        "p99": 260.43479999999875,
+        "maximum": 260.63340000000323
+      },
+      "collectMs": {
+        "count": 1001,
+        "p50": 0.0023,
+        "p95": 0.1201,
+        "p99": 0.3058,
+        "maximum": 0.6633
+      },
+      "sampleMs": {
+        "count": 1001,
+        "p50": 1.3183,
+        "p95": 2.4887,
+        "p99": 3.0903,
+        "maximum": 3.7015
+      },
+      "scheduleMs": {
+        "count": 1001,
+        "p50": 0.0246,
+        "p95": 0.0452,
+        "p99": 0.0542,
+        "maximum": 0.2352
+      },
+      "ticks": 1001,
+      "maximumCandidateVisits": 6760,
+      "saturatedAgentTicks": 0,
+      "navigationAllocationEvents": 0,
+      "nativePeakBytes": 51261536,
+      "nativeLifetimePeakBytes": 51261536,
+      "flowCacheHits": 949827,
+      "flowCacheMisses": 0
+    }
+  ]
+}

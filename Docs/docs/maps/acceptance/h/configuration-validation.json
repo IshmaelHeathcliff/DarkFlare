@@ -1,0 +1,13 @@
+{
+  "validatedAt": "2026-09-19",
+  "passed": true,
+  "serializedFieldCount": 237,
+  "coveredFieldCount": 237,
+  "coverageIssues": 0,
+  "contentIssues": 0,
+  "debugWindowSafeWithoutSession": true,
+  "debugWindowStatus": "未运行",
+  "schema": 5,
+  "enterPlayModeOptionsEnabled": true,
+  "enterPlayModeOptions": 1
+}

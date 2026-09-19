@@ -63,3 +63,5 @@ MonoBehaviour:
   - {fileID: 11400000, guid: ab0f93e452bfa1e4689f420959b86184, type: 2}
   _minimumAffixCount: 0
   _maximumAffixCount: 2
+  _navigationMode: 1
+  _navigationProfile: 0

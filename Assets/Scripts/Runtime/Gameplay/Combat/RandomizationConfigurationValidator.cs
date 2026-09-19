@@ -40,7 +40,10 @@ namespace DarkFlare
                 issues.Add("接近停止距离必须位于 0 到碰撞伤害半径之间");
             }
 
-            if (definition.SeparationRadius <= 0f)
+            if (!System.Enum.IsDefined(typeof(NavigationMode), definition.NavigationMode)
+                || !System.Enum.IsDefined(typeof(NavigationProfile), definition.NavigationProfile))
+            { issues.Add("导航模式或通行配置非法"); }
+            if (definition.SeparationRadius <= 0f || definition.SeparationRadius > 4f)
             {
                 issues.Add("软分离半径必须大于 0");
             }

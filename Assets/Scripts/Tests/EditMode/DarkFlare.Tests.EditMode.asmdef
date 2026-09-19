@@ -3,6 +3,8 @@
     "rootNamespace": "DarkFlare.Tests",
     "references": [
         "DarkFlare.Runtime",
+        "Unity.Collections",
+        "Unity.Mathematics",
         "DarkFlare.Core",
         "DarkFlare.Editor",
         "UniTask",

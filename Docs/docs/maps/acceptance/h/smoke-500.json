@@ -1,0 +1,59 @@
+{
+  "complete": true,
+  "error": null,
+  "unity": "6000.6.0f1",
+  "cpu": "AMD Ryzen 7 PRO 8845HS w/ Radeon 780M Graphics",
+  "cpuThreads": 16,
+  "gpu": "AMD Radeon 780M Graphics",
+  "resolution": "1920x1080",
+  "fixedDeltaTime": 0.0199999921,
+  "vsync": 0,
+  "targetFrameRate": -1,
+  "development": true,
+  "burst": true,
+  "backend": "Mono",
+  "product": "DarkFlare-Navigation-Audit",
+  "gcPositiveControl": 1,
+  "results": [
+    {
+      "round": 0,
+      "count": 500,
+      "mode": "full",
+      "seconds": 8.0,
+      "activeMinimum": 500,
+      "frames": {
+        "count": 3044,
+        "p50": 2.136302413418889,
+        "p95": 5.8784014545381069,
+        "p99": 8.0893002450466156,
+        "maximum": 46.814300119876862
+      },
+      "navigationMainMs": {
+        "count": 400,
+        "p50": 1.2637,
+        "p95": 1.6493,
+        "p99": 2.7887,
+        "maximum": 3.1446
+      },
+      "steeringWaitMs": {
+        "count": 400,
+        "p50": 0.0995,
+        "p95": 0.1343,
+        "p99": 0.265,
+        "maximum": 0.9314
+      },
+      "pathLatencyMs": {
+        "count": 76,
+        "p50": 79.172299999999751,
+        "p95": 101.42190000000006,
+        "p99": 140.11660000000069,
+        "maximum": 140.11660000000069
+      },
+      "ticks": 400,
+      "maximumCandidateVisits": 23352,
+      "saturatedAgentTicks": 1876,
+      "navigationAllocationEvents": 0,
+      "nativePeakBytes": 50770016
+    }
+  ]
+}

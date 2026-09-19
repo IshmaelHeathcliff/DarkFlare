@@ -369,6 +369,30 @@ namespace DarkFlare
         }
     }
 
+    public sealed class NavigationSaveMigration : IJsonMigrationStep
+    {
+        public string Id => "save_4_to_5_navigation_intent";
+        public MigrationDataDomain Domain => MigrationDataDomain.Save;
+        public int FromVersion => 4;
+        public int ToVersion => 5;
+        public void Apply(JObject document)
+        {
+            if (document["payload"]?["run"] is not JObject run) { throw new InvalidOperationException("缺少 Run 数据"); }
+            Initialize(run["monsters"]);
+            if (run["frozenMaps"] is JArray maps)
+            { foreach (JToken map in maps) { Initialize(map["monsters"]); } }
+        }
+        static void Initialize(JToken monsters)
+        {
+            if (monsters is not JArray array) { throw new InvalidOperationException("缺少怪物集合"); }
+            foreach (JToken monster in array)
+            {
+                monster["navigation"] = new JObject { ["mode"] = null, ["target"] = 0, ["actorId"] = "", ["mapId"] = "",
+                    ["point"] = new JObject { ["x"] = 0, ["y"] = 0, ["z"] = 0 }, ["stopDistance"] = null };
+            }
+        }
+    }
+
     public sealed class WorldMapSaveMigration : IJsonMigrationStep
     {
         public string Id => "save_3_to_4_world_maps";

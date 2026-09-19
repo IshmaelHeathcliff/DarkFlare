@@ -93,6 +93,11 @@ namespace DarkFlare
                 || run.MapRevision < 0 || run.FrozenMaps == null || run.FrozenMaps.Count > 64)
             { Add(issues, SaveDataIssueCode.InvalidValue, "payload.run.maps", "地图身份、修订或容量非法"); return; }
             ids.Add(run.ActiveMapId);
+            var actorMaps = new Dictionary<string, string>(StringComparer.Ordinal);
+            IndexMapActors(run.Monsters, run.ActiveMapId, actorMaps);
+            foreach (MapStateDto map in run.FrozenMaps)
+            { if (map != null) { IndexMapActors(map.Monsters, map.MapId, actorMaps); } }
+            ValidateNavigation(run.Monsters, run.ActiveMapId, run.Player?.PlayerId, actorMaps, issues);
             if (run.MapRandom != null || run.MapRevision != 0)
             { ValidateRandom(run.MapRandom, "payload.run.mapRandom", issues); }
             if (run.Monsters?.Count > LocalSaveFormat.MaximumMapMonsters)
@@ -104,6 +109,7 @@ namespace DarkFlare
                     || !ids.Add(map.MapId) || map.Revision < 0 || map.Monsters == null || map.WorldDrops == null
                     || map.Monsters.Count > LocalSaveFormat.MaximumMapMonsters || map.Statuses?.Actors == null)
                 { Add(issues, SaveDataIssueCode.InvalidValue, "payload.run.maps", "冻结地图数据非法或重复"); continue; }
+                ValidateNavigation(map.Monsters, map.MapId, run.Player?.PlayerId, actorMaps, issues);
                 ValidateRandom(map.Random, "payload.run.maps.random", issues);
                 ValidateSpawner(map.Spawner, "payload.run.maps.spawner", issues);
                 if (map.Statuses.Time > (run.Statuses?.Time ?? 0)
@@ -632,6 +638,31 @@ namespace DarkFlare
                 {
                     Add(issues, SaveDataIssueCode.InconsistentState, $"{path}.respawnRemainingSeconds", "死亡玩家必须有复活倒计时");
                 }
+            }
+        }
+
+        static void IndexMapActors(IReadOnlyList<MonsterRunStateDto> monsters, string mapId, Dictionary<string, string> actorMaps)
+        {
+            if (monsters == null) { return; }
+            foreach (MonsterRunStateDto monster in monsters)
+            { if (!string.IsNullOrEmpty(monster?.InstanceId)) { actorMaps.TryAdd(monster.InstanceId, mapId); } }
+        }
+
+        static void ValidateNavigation(IReadOnlyList<MonsterRunStateDto> monsters, string mapId, string playerId,
+            IReadOnlyDictionary<string, string> actorMaps, List<SaveDataIssue> issues)
+        {
+            if (monsters == null) { return; }
+            foreach (MonsterRunStateDto monster in monsters)
+            {
+                if (monster == null) { continue; }
+                NavigationIntentDto intent = monster.Navigation;
+                if (intent == null || !intent.IsValid
+                    || (intent.Target == NavigationTargetKind.Actor || intent.Target == NavigationTargetKind.Point) && intent.MapId != mapId
+                    || intent.Target == NavigationTargetKind.Actor && intent.ActorId != "player:" + playerId
+                        && (!MonsterInstanceId.TryParse(intent.ActorId, out MonsterInstanceId target)
+                            || !MonsterInstanceId.TryParse(monster.InstanceId, out MonsterInstanceId owner) || target.RunId != owner.RunId
+                            || actorMaps.TryGetValue(intent.ActorId, out string targetMap) && targetMap != mapId))
+                { Add(issues, SaveDataIssueCode.InvalidValue, "payload.run.monsters.navigation", "导航模式或同图目标身份非法"); }
             }
         }
 

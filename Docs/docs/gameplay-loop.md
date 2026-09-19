@@ -128,7 +128,7 @@
 | 生命周期、启动与生成 | `ApplicationHost`、`GameArchitectureProvider`、`NewGameSessionInitializer`、`CombatPrototypeBootstrap`、`SpawnSystem`、`MonsterSpawner` | 拥有作用域与架构，执行可回滚的新游戏事务，预热资源并生成玩家 / 怪物 / 投射物 |
 | 战斗 | `CombatModel`、`CombatSystem`、`DamageCalculator`、`AttackSnapshotFactory` | Actor 注册、攻击快照、伤害结算与生死状态 |
 | 资源 | `CombatActor`、`CombatSystem`、`ResourceRegenerationSystem` | 当前生命 / 法力、资源变更事件、技能耗蓝与统一恢复节拍 |
-| 怪物移动与碰撞 | `MonsterController`、`MonsterSteeringCalculator`、`GameplayPhysicsLayers` | 接近停止、同阵营软分离、角色与世界的 Layer 碰撞合同 |
+| 怪物移动与碰撞 | `MonsterController`、`NavigationMap`、`GameplayPhysicsLayers` | [共享流场 / A*、批量分离](./maps/navigation.md)、接近停止和世界碰撞合同 |
 | 随机化 | `GameplayRandomSystem`、`MonsterInstanceRandomSeeds`、`MonsterAffixGenerator` | 根种子、独立通道、怪物实例生命 / 词条与可复现调试 |
 | 掉落与物品 | `LootSystem`、`LootTableDefinition`、`ItemGenerator` | 死亡掉落、物品实例生成和世界掉落物创建 |
 | 背包与装备 | `InventoryModel`、`InventoryGrid`、`EquipmentModel`、`EquipmentSystem` | 10×6 格子占用、四槽穿戴、原子替换 / 卸下和装备效果聚合 |

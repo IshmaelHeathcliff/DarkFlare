@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Cysharp.Threading.Tasks;
@@ -29,6 +28,24 @@ namespace DarkFlare
         [Min(0f)]
         float _deathDespawnDelay = 0.65f;
 
+        NavigationIntentDto _navigationIntent = new();
+        internal Rigidbody2D Body => _rigidbody;
+        internal NavigationIntentDto NavigationIntent => _navigationIntent;
+        internal int NavigationRevision { get; private set; }
+        public float NavigationRadius
+        {
+            get
+            {
+                Vector3 scale = transform.lossyScale;
+                return _collider.radius * Mathf.Max(Mathf.Abs(scale.x), Mathf.Abs(scale.y));
+            }
+        }
+        public NavigationIntentDto CaptureNavigation() { return _navigationIntent.Copy(); }
+        internal void RestoreNavigation(NavigationIntentDto intent)
+        {
+            if (intent == null || !intent.IsValid) { throw new System.ArgumentException("导航意图无效"); }
+            _navigationIntent = intent.Copy(); NavigationRevision++;
+        }
         public CombatActor Actor => _actor;
 
         public MonsterDefinition Definition => _definition;
@@ -55,6 +72,7 @@ namespace DarkFlare
             _sortParticipant?.ConfigureIdentity(
                 WorldSortCategory.Monster,
                 _instance.Id.Value);
+            this.SendCommand(new RegisterNavigationAgentCommand(this, true));
         }
 
         public void RestoreRuntime(
@@ -91,11 +109,13 @@ namespace DarkFlare
                 "enabled",
                 this.GetCancellationTokenOnDestroy());
             _despawnScheduled = false;
+            if (_instance != null) { this.SendCommand(new RegisterNavigationAgentCommand(this, true)); }
             this.RegisterEvent<ActorDiedEvent>(OnActorDied).UnRegisterWhenDisabled(this);
         }
 
         void OnDisable()
         {
+            if (_architecture != null) { this.SendCommand(new RegisterNavigationAgentCommand(this, false)); }
             _componentScope?.BeginStop();
             _componentScope = null;
             _despawnScheduled = false;
@@ -109,28 +129,6 @@ namespace DarkFlare
         void OnDestroy()
         {
             _sessionObjects?.Unregister(gameObject);
-        }
-
-        void FixedUpdate()
-        {
-            if (_actor == null || !_actor.IsAlive || _definition == null || _instance == null)
-            {
-                return;
-            }
-
-            CombatActor target = this.SendQuery(new GetClosestActorQuery(ActorTeam.Player, transform.position, 1000f));
-
-            if (target == null)
-            {
-                _rigidbody.linearVelocity = Vector2.zero;
-                return;
-            }
-
-            Vector2 offset = target.transform.position - transform.position;
-            Vector2 direction = GetMoveDirection(target, offset);
-            _rigidbody.linearVelocity = this.SendQuery(new GetActorActionsQuery(_actor)).CanMove
-                ? direction * GetMoveSpeed() : Vector2.zero;
-            TryDealContactDamage(target, offset.magnitude);
         }
 
         void OnValidate()
@@ -174,47 +172,6 @@ namespace DarkFlare
             }
         }
 
-        float GetMoveSpeed()
-        {
-            return _actor.Stats.GetValue(StatIds.MoveSpeed);
-        }
-
-        Vector2 GetMoveDirection(CombatActor target, Vector2 targetOffset)
-        {
-            Vector2 pursuit = MonsterSteeringCalculator.GetPursuitDirection(
-                targetOffset,
-                _definition.ContactStopDistance);
-            Vector2 separation = Vector2.zero;
-            IReadOnlyList<CombatActor> monsters = this.SendQuery(new GetActorsByTeamQuery(ActorTeam.Monster));
-            Vector2 selfPosition = transform.position;
-
-            for (int i = 0; i < monsters.Count; i++)
-            {
-                CombatActor neighbor = monsters[i];
-
-                if (neighbor == null || neighbor == _actor || !neighbor.IsAlive || neighbor == target)
-                {
-                    continue;
-                }
-
-                separation += MonsterSteeringCalculator.GetSeparationContribution(
-                    selfPosition,
-                    neighbor.transform.position,
-                    _definition.SeparationRadius,
-                    _instance.Seed);
-            }
-
-            return MonsterSteeringCalculator.Combine(
-                pursuit,
-                separation,
-                _definition.SeparationWeight);
-        }
-
-        void TryDealContactDamage(CombatActor target, float distance)
-        {
-            this.SendCommand(new ContactAttackCommand(this, target));
-        }
-
         internal void MarkContactAttack() { _lastContactDamageTime = Time.time; }
 
         void OnActorDied(ActorDiedEvent e)
@@ -229,6 +186,8 @@ namespace DarkFlare
                 return;
             }
 
+            this.SendCommand(new RegisterNavigationAgentCommand(this, false));
+            _rigidbody.linearVelocity = Vector2.zero;
             _despawnScheduled = true;
             _componentScope.Tasks.Run(
                 "death-despawn",

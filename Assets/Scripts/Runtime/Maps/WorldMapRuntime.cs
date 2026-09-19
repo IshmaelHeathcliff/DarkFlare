@@ -246,6 +246,7 @@ namespace DarkFlare
                 MonsterController controller = _architecture.GetSystem<SpawnSystem>().SpawnRestoredMonster(monster.Definition, monster.Instance,
                     Position(monster.State.Position), Resources(monster.State.Resources), monster.State.ContactDamageCooldownRemainingSeconds, true);
                 if (controller == null) { throw new InvalidOperationException("恢复怪物失败"); }
+                controller.RestoreNavigation(monster.State.Navigation);
                 controllers.Add(controller); Active.Spawner.RegisterRestoredMonster(controller);
             }
             StatusSaveDto shifted = MapStateData.AtTime(state.Statuses, time);

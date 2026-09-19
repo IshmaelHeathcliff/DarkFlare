@@ -1,0 +1,24 @@
+{
+  "scope": "Editor managed original all-pairs steering only; excludes component queries, physics, rendering and combat; not a Player acceptance result",
+  "cpu": "AMD Ryzen 7 PRO 8845HS w/ Radeon 780M Graphics",
+  "cores": 16,
+  "version": "6000.6.0f1",
+  "results": [
+    {
+      "count": 500,
+      "samples": 60,
+      "p50Ms": 14.448500000000001,
+      "p95Ms": 15.3701,
+      "p99Ms": 16.0498,
+      "visitsPerTick": 249500
+    },
+    {
+      "count": 1000,
+      "samples": 60,
+      "p50Ms": 57.7762,
+      "p95Ms": 59.1402,
+      "p99Ms": 62.2302,
+      "visitsPerTick": 999000
+    }
+  ]
+}

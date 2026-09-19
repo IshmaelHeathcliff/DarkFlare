@@ -24,6 +24,7 @@ namespace DarkFlare
         public GameObject Root { get; }
         public MapGeometrySnapshot Geometry { get; private set; }
         public MonsterSpawner Spawner { get; private set; }
+        public NavigationMap Navigation { get; private set; }
         public CancellationToken Token => _lifetime.Token;
 
         MapScope(CompiledMapDocument map, int generation, LifecycleScope parent, AddressableAssetService resources, Scene scene)
@@ -58,6 +59,9 @@ namespace DarkFlare
                 TerrainResolution resolution = await UniTask.RunOnThreadPool(() => TerrainResolver.Resolve(map, rules, cancellationToken: token), cancellationToken: token);
                 scope.Geometry = await UniTask.RunOnThreadPool(() => MapGeometryCompiler.Compile(input, token), cancellationToken: token);
                 token.ThrowIfCancellationRequested();
+                scope.Navigation = new NavigationMap(scope.Geometry, map.MapId.ToString(), generation, scope._lifetime, GameArchitectureProvider.RequireCurrent());
+                scope.Navigation.ObstacleParent = scope.Root.transform;
+                await scope.Navigation.PrepareAsync(token);
                 await scope.PopulateTerrainAsync(resolution, presentation.Tiles, token);
                 scope._projection = new MapGeometryProjection(scope.Geometry, scene);
                 scope._projection.Root.transform.SetParent(scope.Root.transform, true);
@@ -123,6 +127,7 @@ namespace DarkFlare
             _objects.Activate(sorting);
             _projection.Root.SetActive(true);
             Root.SetActive(true);
+            Navigation.Activate();
             // Manual Composite 在禁用祖先下无法生成，安装活动根后同步生成，仍不跨物理帧。
             _projection.Collider.GenerateGeometry();
             if (_projection.Collider.errorState != ColliderErrorState2D.None || _projection.Collider.pathCount == 0)
@@ -131,6 +136,7 @@ namespace DarkFlare
 
         public void Deactivate()
         {
+            Navigation?.Suspend();
             if (Spawner != null) { Spawner.StopSpawning(); }
             if (Root != null) { Root.SetActive(false); }
             _objects?.Deactivate();
@@ -146,6 +152,7 @@ namespace DarkFlare
         {
             Deactivate();
             await _lifetime.StopAsync();
+            Navigation?.Dispose();
             if (_objects != null) { await _objects.DisposeAsync(); }
             _projection?.Dispose();
             UnityEngine.Object.Destroy(Root);

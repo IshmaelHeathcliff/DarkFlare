@@ -165,6 +165,13 @@ namespace DarkFlare
         [LabelText("最多怪物词条")]
         int _maximumAffixCount;
 
+        [SerializeField, LabelText("寻路策略")]
+        NavigationMode _navigationMode;
+        [SerializeField, LabelText("通行半径配置")]
+        NavigationProfile _navigationProfile = NavigationProfile.Standard;
+        public NavigationMode NavigationMode => _navigationMode;
+        public NavigationProfile NavigationProfile => _navigationProfile;
+
         public string Id => _id;
 
         public string DisplayName => _displayName;

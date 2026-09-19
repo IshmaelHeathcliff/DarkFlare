@@ -1,5 +1,7 @@
 # 地图文档与导入
 
+地图运行时导航见[批量导航与怪物移动](./navigation.md)，切图与冻结见[双地图生命周期](./world-map-lifecycle.md)。
+
 Alpha 0.5.0 地图基础已完成，当前包含文档服务、SO 定义、严格校验、规范导出、只读导入、地表资源发布与[静态几何 / 通行查询](./map-geometry.md)。已增加[手绘 / AI 地图编辑器](./map-editor.md)，Main 已接入[城镇 / 野外及地图生命周期](./world-map-lifecycle.md)，动态寻路尚未实现。
 
 B 阶段已完成：[共享坐标、四角 Key 与稳定变体规则](./terrain-resolution.md)、[分区、边签名与增量解析](./terrain-partition.md)、[独立地表诊断预览](./terrain-preview.md)及[持久样例和压力记录](./terrain-samples.md)。地图校验与解析共用四角采样。C1 的[正式地表家族合同](./terrain-art-contract.md)和[泥土源 Pilot](./acceptance/c1/README.md)已完成；C2 的[确定性纹理编译与正式预览](./terrain-texture-compilation.md)已完成，真实泥土样例可从地图菜单打开；C3 的[四材质双变体与资源发布](./terrain-materials.md)已完成，[C4 正式样例与压力验收](./acceptance/c4/README.md)也已完成，C 已提交 `9a3f7a9`，[D 同源碰撞与静态导航几何](./map-geometry.md)也已完成：默认 4×4 子格、圆足迹 / 线段 / 落点查询、碰撞投影及预览。D 已提交 `e396485`。[地图编辑器 E1–E5](./map-editor.md)已完成，[世界对象表现与分段排序](./object-presentation.md)阶段 F 也已完成，正式双地图与作用域已接入并完成 [G 验收](./acceptance/g/README.md)。
@@ -67,3 +69,5 @@ SO 字段仍在“按类型”页编辑；地图没有独立 CreateAssetMenu，�
 长期测试：MapDocumentTests、MapDocumentImporterTests，以及内容 ID、配置文档覆盖和现有地图回归。新增测试覆盖数据完整性、导入稳定身份、缺引用 / ID 改名 / 冲突恢复、失败不覆盖旧源，以及不同区域设置的规范交换。导入器测试使用唯一临时目录，结束删除源、配置和 `.meta`，不向正式内容池写入测试资产。原配置发现测试修正“所有登记类型均可手动创建”的假设，明确验证导入地图不能另建布局资产；旧 GroundTilemapTests 保留。
 
 2026-09-18 G 收尾：版本 `0.5.3-alpha`、core v6、Schema 4、地图文档 V2。EditMode **713/713**、PlayMode **83/83**，正式双地图、冻结恢复、独立进程继续与 20 轮往返通过，见 [G 验收](./acceptance/g/README.md)。
+
+2026-09-19 H 收尾：`0.5.4-alpha`、core v6、Schema 5；EditMode **722/722**、PlayMode **85/85**。批量导航、动态阻挡、500 / 1000 单位 Player 矩阵与 20 轮大图往返通过，见 [H 验收](./acceptance/h/README.md)。

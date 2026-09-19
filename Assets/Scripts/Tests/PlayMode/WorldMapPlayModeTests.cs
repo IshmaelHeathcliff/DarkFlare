@@ -111,6 +111,11 @@ namespace DarkFlare.Tests
             maps.Active.Spawner.RegisterRestoredMonster(monster);
             CombatResourceSnapshot resources = monster.Actor.Resources;
             monster.RestoreRuntime(new CombatResourceSnapshot(resources.MaxHealth / 2, resources.MaxHealth, resources.CurrentMana, resources.MaxMana), 0.37f);
+            NavigationMap navigation = maps.Active.Navigation;
+            Assert.IsTrue(architecture.SendCommand(new SetNavigationIntentCommand(monster,
+                new NavigationIntentDto { Mode = NavigationMode.AStar, Target = NavigationTargetKind.Point, MapId = "map:wilderness",
+                    Point = new Vector3Dto { X = 15, Y = 10 }, StopDistance = .3f }, navigation.Handle(monster))));
+            long nativeBaseline = architecture.GetModel<NavigationModel>().NativeBytes;
             string id = monster.Instance.Id.Value;
             float health = monster.Actor.CurrentHealth;
             StatusSystem statuses = architecture.GetSystem<StatusSystem>();
@@ -137,6 +142,10 @@ namespace DarkFlare.Tests
                 MonsterController restored = UnityEngine.Object.FindObjectsByType<MonsterController>().Single();
                 Assert.AreEqual(id, restored.Instance.Id.Value);
                 Assert.AreEqual(health, restored.Actor.CurrentHealth);
+                Assert.AreEqual(NavigationMode.AStar, restored.CaptureNavigation().Mode);
+                Assert.AreEqual(15, restored.CaptureNavigation().Point.X);
+                Assert.AreEqual(nativeBaseline, architecture.GetModel<NavigationModel>().NativeBytes);
+                Assert.AreEqual(1, maps.Active.Navigation.AgentCount);
                 MapStateDto after = snapshots.CaptureMap(maps.Active);
                 Assert.AreEqual(dropId.Value, after.WorldDrops.Single().InstanceId);
                 Assert.AreEqual(item.Id.Value, after.WorldDrops.Single().ItemInstanceId);

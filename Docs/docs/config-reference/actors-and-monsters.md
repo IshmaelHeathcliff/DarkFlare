@@ -58,6 +58,8 @@
 | `_contactStopDistance` | `float` / `0.6` | `0..ContactDamageRadius` | 进入距离后关闭追逐分量，避免持续挤压玩家 |
 | `_separationRadius` | `float` / `0.8` | 必须大于 `0` | 只采样存活同阵营怪物，生成软分离方向 |
 | `_separationWeight` | `float` / `0.65` | `0–2` | 与追逐方向组合；最终仍受移动速度限制 |
+| `_navigationMode` | `NavigationMode` / `FlowField` | 仅 FlowField / AStar | 普通单位共享流场；铁壳尸傀正式使用 A*；运行时覆盖随导航意图存档 |
+| `_navigationProfile` | `NavigationProfile` / `Standard` | Compact 0.30 / Standard 0.36 / Large 0.50 / Huge 0.75 | 配置半径必须覆盖 Prefab 实际世界圆半径；不支持运行时放大后静默复用 |
 | `_tags` | `List<TagDefinition>` / 空 | 只允许 Actor Domain 的非派生自定义标签；正式怪物当前为空 | `CombatTagResolver` 会自动派生 `monster`，不得重复填写 |
 | `_contactDamages` | `List<DamageRollDefinition>` / 空 | 正式怪物必须非空且每项合法 | 接触攻击按攻击种子掷伤害；空列表没有代码级固定伤害回退 |
 | `_lootTable` | `LootTableDefinition` / `null` | 正式怪物必填 | 死亡掉落消费，掉落随机流由调用方提供 |

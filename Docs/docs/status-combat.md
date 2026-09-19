@@ -58,7 +58,7 @@ CombatSystem 的命中与周期共用资源、伤害和死亡提交。ActorDiedE
 
 `GetActorActionsQuery` 返回 CanMove / CanAttack / CanCast / CanUseItem 和阻止来源。无效、未配置、死亡、禁用及已解绑角色不开始新行为；既有无 Controller 的独立 CombatActor 保留配置后的兼容调用入口，其状态仍需显式身份绑定。
 
-玩家与怪物在 FixedUpdate 检查移动许可并清零受限速度。FireProjectileCommand 在随机数、生成和耗蓝前检查 CanCast，装备武器来源额外检查 CanAttack；失败返回 ActionBlocked。自动施放沿原延迟调度继续，没有补发队列。
+玩家在 FixedUpdate、怪物在地图唯一导航固定步检查移动许可并清零受限速度。怪物的 Flow Field / A* 共用同一状态门禁和速度提交；接触攻击在消耗 RNG、冷却和发出事件前检查同源障碍视线，见[批量导航](./maps/navigation.md)。FireProjectileCommand 在随机数、生成和耗蓝前检查 CanCast，装备武器来源额外检查 CanAttack；失败返回 ActionBlocked。自动施放沿原延迟调度继续，没有补发队列。
 
 ContactAttackCommand 统一检查目标、攻击许可、距离和冷却，然后取种子、记录冷却、通知攻击并发起伤害。Controller 不再自行消费随机数或先更新冷却。旧投射物和冻结周期不重新检查来源的行动或生命状态。CanUseItem 独立，Move / Attack / Cast 控制不会自动阻止后续净化物品。
 
