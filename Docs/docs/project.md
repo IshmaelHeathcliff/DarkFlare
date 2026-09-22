@@ -2,6 +2,8 @@
 
 ## 项目状态
 
+下一步：[0.6.1 普通怪物 M1–M6 执行计划](./plan/alpha-0.6.1-monster-behavior-plan.md)已就绪，尚未实施；先完成配置与语义合同 M1。0.6.0 实现提交为 `e20e62c`。
+
 Alpha 0.5 的 A–I 全部完成；当前交付 `0.6.0-alpha`，已增加通用行为基础。四地表地图、手绘 / AI 编辑、Y 排序、城镇交易打造、野外刷怪和 Flow Field / A* 批量寻路已形成完整链路，详见 [I 综合验收](./maps/acceptance/i/README.md)。总计划与配套方案已归档。
 
 2026-09-22：[Alpha 0.6 总计划](./plan/alpha-0.6-plan.md)的 **0.6.0 已完成**：HFSM 与行为树独立置于现有 Core，交付组合样例、Animator 桥接、Editor 实时图与开发 Player 面板。完整 EditMode 788/788、PlayMode 87/87，独立 Windows Player 及核心规模验证通过，见[行为模块及验收](./behavior/README.md)。下一阶段 0.6.1 接入普通怪物；守卫 Boss、有限总量 / 范围触发刷怪及手动重置继续按计划推进。
