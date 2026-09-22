@@ -1,0 +1,537 @@
+{
+  "unity": "6000.6.0f1",
+  "processor": "AMD Ryzen 7 PRO 8845HS w/ Radeon 780M Graphics",
+  "note": "Editor Mono; paired HFSM+BT; shared definitions; timed ticks exclude construction, diagnostics formatting and faults; memory is exact owned array payload capacity measured by runtime element sizes; excludes array/object headers, instance fields, handlers, context, shared definitions and weak ownership tables; unreliable global heap deltas are not reported",
+  "rows": [
+    {
+      "count": 500,
+      "diagnostic": false,
+      "round": 1,
+      "frames": 600,
+      "p50ms": 0.1279,
+      "p95ms": 0.1396,
+      "p99ms": 0.1823,
+      "gcAllocEvents": 0,
+      "totalTreeVisits": 840000
+    },
+    {
+      "count": 500,
+      "diagnostic": false,
+      "round": 2,
+      "frames": 600,
+      "p50ms": 0.1273,
+      "p95ms": 0.1367,
+      "p99ms": 0.1825,
+      "gcAllocEvents": 0,
+      "totalTreeVisits": 840000
+    },
+    {
+      "count": 500,
+      "diagnostic": false,
+      "round": 3,
+      "frames": 600,
+      "p50ms": 0.1264,
+      "p95ms": 0.1468,
+      "p99ms": 0.2079,
+      "gcAllocEvents": 0,
+      "totalTreeVisits": 840000
+    },
+    {
+      "count": 500,
+      "diagnostic": true,
+      "round": 1,
+      "frames": 600,
+      "p50ms": 0.1457,
+      "p95ms": 0.1727,
+      "p99ms": 0.2308,
+      "gcAllocEvents": 0,
+      "totalTreeVisits": 840000
+    },
+    {
+      "count": 500,
+      "diagnostic": true,
+      "round": 2,
+      "frames": 600,
+      "p50ms": 0.1452,
+      "p95ms": 0.1726,
+      "p99ms": 0.277,
+      "gcAllocEvents": 0,
+      "totalTreeVisits": 840000
+    },
+    {
+      "count": 500,
+      "diagnostic": true,
+      "round": 3,
+      "frames": 600,
+      "p50ms": 0.1457,
+      "p95ms": 0.1706,
+      "p99ms": 0.2638,
+      "gcAllocEvents": 0,
+      "totalTreeVisits": 840000
+    },
+    {
+      "count": 1000,
+      "diagnostic": false,
+      "round": 1,
+      "frames": 600,
+      "p50ms": 0.2562,
+      "p95ms": 0.2784,
+      "p99ms": 0.342,
+      "gcAllocEvents": 0,
+      "totalTreeVisits": 1680000
+    },
+    {
+      "count": 1000,
+      "diagnostic": false,
+      "round": 2,
+      "frames": 600,
+      "p50ms": 0.2557,
+      "p95ms": 0.2822,
+      "p99ms": 0.4121,
+      "gcAllocEvents": 0,
+      "totalTreeVisits": 1680000
+    },
+    {
+      "count": 1000,
+      "diagnostic": false,
+      "round": 3,
+      "frames": 600,
+      "p50ms": 0.2558,
+      "p95ms": 0.287,
+      "p99ms": 0.4267,
+      "gcAllocEvents": 0,
+      "totalTreeVisits": 1680000
+    },
+    {
+      "count": 1000,
+      "diagnostic": true,
+      "round": 1,
+      "frames": 600,
+      "p50ms": 0.2992,
+      "p95ms": 0.34,
+      "p99ms": 0.4584,
+      "gcAllocEvents": 0,
+      "totalTreeVisits": 1680000
+    },
+    {
+      "count": 1000,
+      "diagnostic": true,
+      "round": 2,
+      "frames": 600,
+      "p50ms": 0.2987,
+      "p95ms": 0.3438,
+      "p99ms": 0.6122,
+      "gcAllocEvents": 0,
+      "totalTreeVisits": 1680000
+    },
+    {
+      "count": 1000,
+      "diagnostic": true,
+      "round": 3,
+      "frames": 600,
+      "p50ms": 0.2989,
+      "p95ms": 0.3408,
+      "p99ms": 0.4344,
+      "gcAllocEvents": 0,
+      "totalTreeVisits": 1680000
+    }
+  ],
+  "memory": [
+    {
+      "count": 500,
+      "diagnostic": false,
+      "buffers": {
+        "hfsm": {
+          "arrayCount": 3,
+          "payloadBytesPerInstance": 40,
+          "fields": [
+            {
+              "name": "_active",
+              "length": 2,
+              "elementBytes": 4,
+              "payloadBytes": 8
+            },
+            {
+              "name": "_destination",
+              "length": 2,
+              "elementBytes": 4,
+              "payloadBytes": 8
+            },
+            {
+              "name": "_states",
+              "length": 3,
+              "elementBytes": 8,
+              "payloadBytes": 24
+            }
+          ]
+        },
+        "behaviorTree": {
+          "arrayCount": 7,
+          "payloadBytesPerInstance": 111,
+          "fields": [
+            {
+              "name": "_entered",
+              "length": 3,
+              "elementBytes": 1,
+              "payloadBytes": 3
+            },
+            {
+              "name": "_cursor",
+              "length": 3,
+              "elementBytes": 4,
+              "payloadBytes": 12
+            },
+            {
+              "name": "_deadline",
+              "length": 3,
+              "elementBytes": 8,
+              "payloadBytes": 24
+            },
+            {
+              "name": "_states",
+              "length": 3,
+              "elementBytes": 4,
+              "payloadBytes": 12
+            },
+            {
+              "name": "_visited",
+              "length": 3,
+              "elementBytes": 8,
+              "payloadBytes": 24
+            },
+            {
+              "name": "_cleanupOrder",
+              "length": 3,
+              "elementBytes": 4,
+              "payloadBytes": 12
+            },
+            {
+              "name": "_actions",
+              "length": 3,
+              "elementBytes": 8,
+              "payloadBytes": 24
+            }
+          ]
+        }
+      }
+    },
+    {
+      "count": 500,
+      "diagnostic": true,
+      "buffers": {
+        "hfsm": {
+          "arrayCount": 5,
+          "payloadBytesPerInstance": 1608,
+          "fields": [
+            {
+              "name": "_active",
+              "length": 2,
+              "elementBytes": 4,
+              "payloadBytes": 8
+            },
+            {
+              "name": "_destination",
+              "length": 2,
+              "elementBytes": 4,
+              "payloadBytes": 8
+            },
+            {
+              "name": "_states",
+              "length": 3,
+              "elementBytes": 8,
+              "payloadBytes": 24
+            },
+            {
+              "name": "_guards",
+              "length": 2,
+              "elementBytes": 16,
+              "payloadBytes": 32
+            },
+            {
+              "name": "_trace",
+              "length": 64,
+              "elementBytes": 24,
+              "payloadBytes": 1536
+            }
+          ]
+        },
+        "behaviorTree": {
+          "arrayCount": 12,
+          "payloadBytesPerInstance": 1189,
+          "fields": [
+            {
+              "name": "_entered",
+              "length": 3,
+              "elementBytes": 1,
+              "payloadBytes": 3
+            },
+            {
+              "name": "_cursor",
+              "length": 3,
+              "elementBytes": 4,
+              "payloadBytes": 12
+            },
+            {
+              "name": "_deadline",
+              "length": 3,
+              "elementBytes": 8,
+              "payloadBytes": 24
+            },
+            {
+              "name": "_states",
+              "length": 3,
+              "elementBytes": 4,
+              "payloadBytes": 12
+            },
+            {
+              "name": "_visited",
+              "length": 3,
+              "elementBytes": 8,
+              "payloadBytes": 24
+            },
+            {
+              "name": "_cleanupOrder",
+              "length": 3,
+              "elementBytes": 4,
+              "payloadBytes": 12
+            },
+            {
+              "name": "_actions",
+              "length": 3,
+              "elementBytes": 8,
+              "payloadBytes": 24
+            },
+            {
+              "name": "_guardTicks",
+              "length": 3,
+              "elementBytes": 8,
+              "payloadBytes": 24
+            },
+            {
+              "name": "_guardPassed",
+              "length": 3,
+              "elementBytes": 1,
+              "payloadBytes": 3
+            },
+            {
+              "name": "_entryGuardTicks",
+              "length": 3,
+              "elementBytes": 8,
+              "payloadBytes": 24
+            },
+            {
+              "name": "_entryGuardPassed",
+              "length": 3,
+              "elementBytes": 1,
+              "payloadBytes": 3
+            },
+            {
+              "name": "_trace",
+              "length": 64,
+              "elementBytes": 16,
+              "payloadBytes": 1024
+            }
+          ]
+        }
+      }
+    },
+    {
+      "count": 1000,
+      "diagnostic": false,
+      "buffers": {
+        "hfsm": {
+          "arrayCount": 3,
+          "payloadBytesPerInstance": 40,
+          "fields": [
+            {
+              "name": "_active",
+              "length": 2,
+              "elementBytes": 4,
+              "payloadBytes": 8
+            },
+            {
+              "name": "_destination",
+              "length": 2,
+              "elementBytes": 4,
+              "payloadBytes": 8
+            },
+            {
+              "name": "_states",
+              "length": 3,
+              "elementBytes": 8,
+              "payloadBytes": 24
+            }
+          ]
+        },
+        "behaviorTree": {
+          "arrayCount": 7,
+          "payloadBytesPerInstance": 111,
+          "fields": [
+            {
+              "name": "_entered",
+              "length": 3,
+              "elementBytes": 1,
+              "payloadBytes": 3
+            },
+            {
+              "name": "_cursor",
+              "length": 3,
+              "elementBytes": 4,
+              "payloadBytes": 12
+            },
+            {
+              "name": "_deadline",
+              "length": 3,
+              "elementBytes": 8,
+              "payloadBytes": 24
+            },
+            {
+              "name": "_states",
+              "length": 3,
+              "elementBytes": 4,
+              "payloadBytes": 12
+            },
+            {
+              "name": "_visited",
+              "length": 3,
+              "elementBytes": 8,
+              "payloadBytes": 24
+            },
+            {
+              "name": "_cleanupOrder",
+              "length": 3,
+              "elementBytes": 4,
+              "payloadBytes": 12
+            },
+            {
+              "name": "_actions",
+              "length": 3,
+              "elementBytes": 8,
+              "payloadBytes": 24
+            }
+          ]
+        }
+      }
+    },
+    {
+      "count": 1000,
+      "diagnostic": true,
+      "buffers": {
+        "hfsm": {
+          "arrayCount": 5,
+          "payloadBytesPerInstance": 1608,
+          "fields": [
+            {
+              "name": "_active",
+              "length": 2,
+              "elementBytes": 4,
+              "payloadBytes": 8
+            },
+            {
+              "name": "_destination",
+              "length": 2,
+              "elementBytes": 4,
+              "payloadBytes": 8
+            },
+            {
+              "name": "_states",
+              "length": 3,
+              "elementBytes": 8,
+              "payloadBytes": 24
+            },
+            {
+              "name": "_guards",
+              "length": 2,
+              "elementBytes": 16,
+              "payloadBytes": 32
+            },
+            {
+              "name": "_trace",
+              "length": 64,
+              "elementBytes": 24,
+              "payloadBytes": 1536
+            }
+          ]
+        },
+        "behaviorTree": {
+          "arrayCount": 12,
+          "payloadBytesPerInstance": 1189,
+          "fields": [
+            {
+              "name": "_entered",
+              "length": 3,
+              "elementBytes": 1,
+              "payloadBytes": 3
+            },
+            {
+              "name": "_cursor",
+              "length": 3,
+              "elementBytes": 4,
+              "payloadBytes": 12
+            },
+            {
+              "name": "_deadline",
+              "length": 3,
+              "elementBytes": 8,
+              "payloadBytes": 24
+            },
+            {
+              "name": "_states",
+              "length": 3,
+              "elementBytes": 4,
+              "payloadBytes": 12
+            },
+            {
+              "name": "_visited",
+              "length": 3,
+              "elementBytes": 8,
+              "payloadBytes": 24
+            },
+            {
+              "name": "_cleanupOrder",
+              "length": 3,
+              "elementBytes": 4,
+              "payloadBytes": 12
+            },
+            {
+              "name": "_actions",
+              "length": 3,
+              "elementBytes": 8,
+              "payloadBytes": 24
+            },
+            {
+              "name": "_guardTicks",
+              "length": 3,
+              "elementBytes": 8,
+              "payloadBytes": 24
+            },
+            {
+              "name": "_guardPassed",
+              "length": 3,
+              "elementBytes": 1,
+              "payloadBytes": 3
+            },
+            {
+              "name": "_entryGuardTicks",
+              "length": 3,
+              "elementBytes": 8,
+              "payloadBytes": 24
+            },
+            {
+              "name": "_entryGuardPassed",
+              "length": 3,
+              "elementBytes": 1,
+              "payloadBytes": 3
+            },
+            {
+              "name": "_trace",
+              "length": 64,
+              "elementBytes": 16,
+              "payloadBytes": 1024
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

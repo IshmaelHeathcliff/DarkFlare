@@ -1,0 +1,11 @@
+# 行为管理
+
+Alpha 0.6.0 已提供独立 HFSM、行为树、Runtime 组合与生命周期、Animator 语义桥接、Editor 实时图及 Development Player 观察面板。两个核心模块均位于现有 `DarkFlare.Core`，各自独立，不新建程序集。
+
+- [HFSM 使用与执行语义](hfsm.md)
+- [行为树使用与执行语义](behavior-tree.md)
+- [接入、样例、Animator 与调试](integration-debugging.md)
+- [0.6.0 验收与证据](acceptance/0.6.0/README.md)
+- [F1 HFSM 早期验收](acceptance/f1-hfsm.md)
+
+核心通过显式上下文和 Tick 驱动，不依赖 Unity 对象、QFramework 全局架构、角色类型或场景。玩法能力、调度、取消与表现由 Runtime 负责。正式怪物从 [0.6.1](../plan/alpha-0.6-plan.md) 开始接入，Boss、有限刷怪和手动重置仍按后续阶段实施。

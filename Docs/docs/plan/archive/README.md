@@ -1,5 +1,7 @@
 # 已完成计划归档
 
+- [Alpha 0.6.0 行为基础](alpha-0.6.0-behavior-foundation-plan.md)及配套核心 / 接入合同：2026-09-22 F1–F6 完成，版本 `0.6.0-alpha`；[模块与验收](../../behavior/README.md)，EditMode 788/788、PlayMode 87/87。
+
 - [Alpha 0.6 启动准备](./alpha-0.6-startup.md)：2026-09-22 完成基线梳理，已由[总计划草案](../alpha-0.6-plan.md)接管；仅启动准备完成，功能待实施。
 
 - [Alpha 0.5 综合交付](alpha-0.5.5-integration-plan.md)与[总计划及配套方案](alpha-0.5-plan.md)：2026-09-19 A–I 全部完成，交付 `0.5.5-alpha`；当前编辑链路、双地图 Player、历史存档、混合导航压力与生产构建通过，见 [I 验收](../../maps/acceptance/i/README.md)。

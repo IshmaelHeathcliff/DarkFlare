@@ -1,0 +1,21 @@
+.behavior-root { flex-grow: 1; padding: 18px; color: rgb(225, 234, 243); align-items: flex-end; }
+.debug-panel { width: 100%; flex-grow: 1; padding: 18px; background-color: rgba(12, 20, 31, 0.97); border-width: 1px; border-color: rgb(58, 77, 94); border-radius: 8px; }
+.title { font-size: 23px; -unity-font-style: bold; margin-bottom: 8px; }
+.hint { font-size: 12px; color: rgb(153, 172, 190); white-space: normal; margin-bottom: 12px; }
+.toolbar { flex-direction: row; flex-wrap: wrap; margin-bottom: 12px; }
+.behavior-root Button { background-color: rgb(30, 47, 62); color: rgb(233, 241, 245); border-width: 1px; border-color: rgb(68, 93, 113); border-radius: 4px; min-height: 34px; padding: 4px 12px; margin-right: 6px; margin-bottom: 6px; }
+.behavior-root Button:focus, .behavior-root Button:hover { border-color: rgb(112, 215, 175); background-color: rgb(38, 64, 72); }
+.actor-name { font-size: 19px; color: rgb(116, 223, 180); margin-bottom: 8px; }
+.state { font-size: 15px; margin-bottom: 6px; }
+.summary { font-size: 12px; white-space: normal; margin-bottom: 12px; color: rgb(174, 191, 209); }
+.body { flex-grow: 1; }
+.section-title { font-size: 15px; margin-top: 12px; margin-bottom: 6px; color: rgb(161, 184, 208); }
+.trace { font-size: 12px; white-space: normal; margin-bottom: 10px; }
+.hfsm-graph { height: 135px; }
+.tree-graph { height: 430px; }
+.behavior-graph { flex-grow: 1; }
+.closed { display: none; }
+.player-mode .debug-panel { width: 58%; max-height: 75%; }
+.player-mode .graphs { display: none; }
+.player-mode #pause, .player-mode #interrupt, .player-mode #attack { display: none; }
+.editor-mode #open, .editor-mode #close { display: none; }

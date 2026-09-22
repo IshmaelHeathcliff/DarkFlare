@@ -2019,6 +2019,66 @@ MonoBehaviour:
     m_Key: world.crafting
     m_Metadata:
       m_Items: []
+  - m_Id: 12208429589323776
+    m_Key: behavior.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12208429648044032
+    m_Key: behavior.hint
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12208429648044033
+    m_Key: behavior.previous
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12208429648044034
+    m_Key: behavior.next
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12208429652238336
+    m_Key: behavior.pause
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12208429652238337
+    m_Key: behavior.interrupt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12208429652238338
+    m_Key: behavior.attack
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12208429652238339
+    m_Key: behavior.open
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12208429652238340
+    m_Key: behavior.close
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12208429652238341
+    m_Key: behavior.hfsmTitle
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12208429652238342
+    m_Key: behavior.treeTitle
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12208429652238343
+    m_Key: behavior.traceTitle
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12208429652238344
+    m_Key: behavior.unavailable
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12208429652238345
+    m_Key: behavior.paused
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12208429652238346
+    m_Key: behavior.running
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

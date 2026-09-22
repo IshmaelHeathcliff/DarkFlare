@@ -1,6 +1,6 @@
 # Alpha 0.6：普通怪物与守卫 Boss
 
-状态：规划草案，待实施。上位[总计划](../alpha-0.6-plan.md)；依赖[行为基础](../alpha-0.6.0-behavior-foundation-plan.md)。本文定义开发合同，不修改人工游戏设计文档。
+状态：规划草案，待实施。上位[总计划](../alpha-0.6-plan.md)；依赖[行为基础](../archive/alpha-0.6.0-behavior-foundation-plan.md)。本文定义开发合同，不修改人工游戏设计文档。
 
 ## 普通怪物状态
 

@@ -1,0 +1,27 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+  <ui:Style src="BehaviorDebug.uss" />
+  <ui:VisualElement name="behaviorRoot" class="behavior-root" picking-mode="Ignore">
+    <ui:Button name="open" text="Open behavior observatory" />
+    <ui:VisualElement name="debugPanel" class="debug-panel">
+      <ui:Label name="title" class="title" />
+      <ui:Label name="hint" class="hint" />
+      <ui:VisualElement class="toolbar">
+        <ui:Button name="previous" /><ui:Button name="next" /><ui:Button name="pause" />
+        <ui:Button name="interrupt" /><ui:Button name="attack" /><ui:Button name="close" />
+      </ui:VisualElement>
+      <ui:Label name="actorName" class="actor-name" />
+      <ui:Label name="state" class="state" />
+      <ui:Label name="summary" class="summary" />
+      <ui:ScrollView class="body">
+        <ui:VisualElement class="graphs">
+          <ui:Label name="hfsmTitle" class="section-title" />
+          <ui:VisualElement name="hfsmGraph" class="hfsm-graph" />
+          <ui:Label name="treeTitle" class="section-title" />
+          <ui:VisualElement name="treeGraph" class="tree-graph" />
+        </ui:VisualElement>
+        <ui:Label name="traceTitle" class="section-title" />
+        <ui:Label name="guards" class="trace" /><ui:Label name="trace" class="trace" />
+      </ui:ScrollView>
+    </ui:VisualElement>
+  </ui:VisualElement>
+</ui:UXML>

@@ -2,13 +2,13 @@
 
 ## 项目状态
 
-Alpha 0.5 的 A–I 全部完成，当前交付 `0.5.5-alpha`。四地表地图、手绘 / AI 编辑、Y 排序、城镇交易打造、野外刷怪和 Flow Field / A* 批量寻路已形成完整链路，详见 [I 综合验收](./maps/acceptance/i/README.md)。总计划与配套方案已归档。
+Alpha 0.5 的 A–I 全部完成；当前交付 `0.6.0-alpha`，已增加通用行为基础。四地表地图、手绘 / AI 编辑、Y 排序、城镇交易打造、野外刷怪和 Flow Field / A* 批量寻路已形成完整链路，详见 [I 综合验收](./maps/acceptance/i/README.md)。总计划与配套方案已归档。
 
-2026-09-22：[Alpha 0.6 规划草案](./plan/alpha-0.6-plan.md)已明确行为框架、运行时调试 / Animator 桥接、普通怪物与守卫 Boss、固定总量及范围触发刷怪、手动重置。离场继续保留状态；本轮仅制定计划，尚未实施，当前交付保持 `0.5.5-alpha`。[启动基线](./plan/archive/alpha-0.6-startup.md)已归档。
+2026-09-22：[Alpha 0.6 总计划](./plan/alpha-0.6-plan.md)的 **0.6.0 已完成**：HFSM 与行为树独立置于现有 Core，交付组合样例、Animator 桥接、Editor 实时图与开发 Player 面板。完整 EditMode 788/788、PlayMode 87/87，独立 Windows Player 及核心规模验证通过，见[行为模块及验收](./behavior/README.md)。下一阶段 0.6.1 接入普通怪物；守卫 Boss、有限总量 / 范围触发刷怪及手动重置继续按计划推进。
 
 `DarkFlare` 已完成首版最小循环、初步体验优化、`alpha 0.1` 封板和 `alpha 0.2.0–0.2.7` 基础设施封板。当前可从常驻 `Bootstrap.unity` 的 FrontEnd 新建或继续游戏，additive 进入 `Main.unity` 完成战斗、掉落、十槽装备、交易和打造，暂停后保存并安全返回前台；FrontEnd 可二次确认删除自动档，共享设置页可恢复完整默认设置，中英语言、音量、按键、设备 Glyph 和降低动态效果即时收敛。
 
-alpha 版本内的阶段使用三段式名称：`alpha 0.1` 的首个阶段为 `alpha 0.1.0`，后续依次为 `alpha 0.1.1`、`alpha 0.1.2`；`alpha 0.2` 同样从 `alpha 0.2.0` 开始。当前版本为 `0.5.5-alpha`；完成记录见[alpha 0.2 综合验收记录](./infrastructure/alpha-0.2-acceptance.md)与[计划归档](./plan/archive/README.md)。
+alpha 版本内的阶段使用三段式名称：`alpha 0.1` 的首个阶段为 `alpha 0.1.0`，后续依次为 `alpha 0.1.1`、`alpha 0.1.2`；`alpha 0.2` 同样从 `alpha 0.2.0` 开始。当前版本为 `0.6.0-alpha`；完成记录见[alpha 0.2 综合验收记录](./infrastructure/alpha-0.2-acceptance.md)与[计划归档](./plan/archive/README.md)。
 
 2026-09-18：[Alpha 0.5 总计划](plan/archive/alpha-0.5-plan.md)已完成 [0.5.0 地图基础 A–D](plan/archive/alpha-0.5.0-map-foundation-plan.md)，包含数据 / 导入、Wang 解析与预览、正式四材质发布，以及[同源碰撞和静态通行](./maps/map-geometry.md)。D 已提交 `e396485`。[0.5.1 手工 / AI 地图编辑器](./maps/map-editor.md)的 E1–E5 也已完成并[归档](./plan/archive/alpha-0.5.1-map-editor-plan.md)，E 验证为 EditMode 697/697、PlayMode 77/77，见 [E 验收](./maps/acceptance/e/README.md)。[0.5.2 世界层级 F1–F5](./plan/archive/alpha-0.5.2-world-sorting-plan.md)已完成，EditMode 707/707、PlayMode 78/78；城镇 / 野外与生命周期 G 已完成；Flow Field / A* / Job / Burst 已由 H 完成。目标为 500 活动怪物、1000 压力测试，地图离场暂停并保留状态。Main 已成为通用双地图玩法容器。
 
@@ -18,7 +18,7 @@ alpha 版本内的阶段使用三段式名称：`alpha 0.1` 的首个阶段为 `
 - Alpha 0.4.2：[统一使用](./item-use-system.md)与[消耗品](./consumables.md)完成回血、回蓝、临时状态和驱散；core v5、Schema 3。2026-09-15 EditMode 563/563、PlayMode 74/74 及独立 Windows Player 验收通过，见[交付证据](./assets/acceptance/alpha-0.4-item-use-acceptance/README.md)。
 - 后续[随机商店](./trading-system.md)已完成每批 16 件、随机品质 / 词条、购买减单件、免费刷新与库存恢复，运行版本仍为 `0.4.2-alpha`。2026-09-16 EditMode 568/568、PlayMode 75/75 通过；该轮未重建 Windows Player，见[验收记录](./assets/acceptance/random-shop/README.md)。
 
-上述 A–H 数字为历史验收记录。当前版本 `0.5.5-alpha`，core v6、Schema 5、地图文档 V2；I 最终 EditMode 722/722、PlayMode 85/85，当前 Player 综合流程、500 / 1000 战斗压力、1000 单位 20 轮往返及正式 Windows 构建通过，见 [I 验收](./maps/acceptance/i/README.md)。大规模切图 / 保存的耗时与内存边界单独记录，不能用导航稳态预算代替。
+上述 A–H 数字为历史验收记录。当前版本 `0.6.0-alpha`，core v6、Schema 5、地图文档 V2；I 最终 EditMode 722/722、PlayMode 85/85，当前 Player 综合流程、500 / 1000 战斗压力、1000 单位 20 轮往返及正式 Windows 构建通过，见 [I 验收](./maps/acceptance/i/README.md)。大规模切图 / 保存的耗时与内存边界单独记录，不能用导航稳态预算代替。
 
 ## 游戏定位
 

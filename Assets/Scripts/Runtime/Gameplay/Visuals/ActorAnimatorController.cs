@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace DarkFlare
@@ -27,12 +28,18 @@ namespace DarkFlare
         [Min(0f)]
         float _movementThreshold = 0.05f;
 
+        [SerializeField, Tooltip("行为动画桥独占攻击与移动表现；受伤、死亡仍使用战斗事件")]
+        bool _behaviorDrivenAttack;
+        readonly List<IUnRegister> _registrations = new List<IUnRegister>();
+        SceneSessionBinding _binding;
+        public bool BehaviorDrivenAttack => _behaviorDrivenAttack;
+
         Rigidbody2D _rigidbody;
         CombatActor _actor;
 
         public IArchitecture GetArchitecture()
         {
-            return GameArchitectureProvider.RequireCurrent();
+            return _binding.RequireArchitecture();
         }
 
         void Awake()
@@ -43,15 +50,37 @@ namespace DarkFlare
 
         void OnEnable()
         {
-            this.RegisterEvent<ActorAttackedEvent>(OnActorAttacked).UnRegisterWhenGameObjectDestroyed(gameObject);
-            this.RegisterEvent<ActorDamagedEvent>(OnActorDamaged).UnRegisterWhenGameObjectDestroyed(gameObject);
-            this.RegisterEvent<ActorDiedEvent>(OnActorDied).UnRegisterWhenGameObjectDestroyed(gameObject);
-            this.RegisterEvent<ActorRevivedEvent>(OnActorRevived).UnRegisterWhenGameObjectDestroyed(gameObject);
+            _binding ??= new SceneSessionBinding(this, Bind, Unbind);
+            _binding.Enable();
         }
+
+        SceneSessionBindResult Bind(IArchitecture architecture)
+        {
+            _registrations.Add(this.RegisterEvent<ActorAttackedEvent>(OnActorAttacked));
+            _registrations.Add(this.RegisterEvent<ActorDamagedEvent>(OnActorDamaged));
+            _registrations.Add(this.RegisterEvent<ActorDiedEvent>(OnActorDied));
+            _registrations.Add(this.RegisterEvent<ActorRevivedEvent>(OnActorRevived));
+            return SceneSessionBindResult.Success;
+        }
+
+        void Unbind()
+        {
+            foreach (IUnRegister registration in _registrations) { registration.UnRegister(); }
+            _registrations.Clear();
+            if (_animator != null && _animator.isActiveAndEnabled)
+            {
+                _animator.ResetTrigger(AttackHash);
+                _animator.ResetTrigger(HitHash);
+                _animator.SetBool(MovingHash, false);
+            }
+        }
+
+        void OnDisable() { _binding?.Disable(); }
+        void OnDestroy() { _binding?.Dispose(); }
 
         void FixedUpdate()
         {
-            if (_animator == null || _rigidbody == null)
+            if (_animator == null || _rigidbody == null || _binding?.IsBound != true || _behaviorDrivenAttack)
             {
                 return;
             }
@@ -103,7 +132,7 @@ namespace DarkFlare
 
         void OnActorAttacked(ActorAttackedEvent e)
         {
-            if (e.Actor != _actor || _actor == null || !_actor.IsAlive)
+            if (_behaviorDrivenAttack || e.Actor != _actor || _actor == null || !_actor.IsAlive)
             {
                 return;
             }

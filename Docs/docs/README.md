@@ -61,12 +61,13 @@
 - [地图对象表现与分段遮挡](./maps/object-presentation.md)
 - [城镇、野外与地图生命周期](./maps/world-map-lifecycle.md)
 - [批量导航与怪物移动](./maps/navigation.md)
+- [行为管理与独立 HFSM](./behavior/README.md)
 - [世界渲染与稳定层级](./world-rendering.md)
 - [已完成计划归档](./plan/archive/README.md)
 
 ## 计划状态
 
-2026-09-22：[Alpha 0.6 总计划](./plan/alpha-0.6-plan.md)已形成草案，范围为轻量 HFSM / 行为树、运行时可视化与 Animator 桥接、普通怪物行为、守卫 Boss、有限刷怪及手动重置。离场保留状态，手动重置才刷新。[0.6.0 行为基础计划](./plan/alpha-0.6.0-behavior-foundation-plan.md)待实施；本轮只制定计划，当前交付仍为 `0.5.5-alpha`。启动记录已[归档](./plan/archive/alpha-0.6-startup.md)。
+2026-09-22：**Alpha 0.6.0 行为基础完成**，交付 `0.6.0-alpha`，core v6 / Schema 5 / 地图 V2 不变。[行为模块](./behavior/README.md)包含 Core 内独立 HFSM 与行为树、组合样例、Animator 桥接、Editor 实时图与开发 Player 面板；完整 EditMode **788/788**、PlayMode **87/87**，独立开发 / 普通 Windows Player 及核心规模采集通过，见[验收](./behavior/acceptance/0.6.0/README.md)。[阶段计划及合同](./plan/archive/alpha-0.6.0-behavior-foundation-plan.md)已归档，[总计划](./plan/alpha-0.6-plan.md)继续推进 0.6.1 普通怪物，后续为守卫 Boss、有限刷怪及手动重置。
 
 2026-09-19：**Alpha 0.5 的 A–I 全部完成**，交付 `0.5.5-alpha`、core v6、Schema 5、地图文档 V2。地图制作、世界排序、双地图玩法、保存冻结和混合批量导航的综合验收见 [I 验收](./maps/acceptance/i/README.md)。
 

@@ -1,0 +1,9 @@
+{
+  "passed": true,
+  "development": true,
+  "version": "0.6.0-alpha",
+  "dataPath": "C:/Users/darkf/AppData/LocalLow/DefaultCompany/DarkFlareBehaviorSample",
+  "devices": "InputSystem virtual Keyboard and Gamepad",
+  "locales": "zh-Hans,en,qps-ploc",
+  "restart": true
+}

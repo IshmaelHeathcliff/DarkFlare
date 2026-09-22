@@ -2080,6 +2080,66 @@ MonoBehaviour:
     m_Localized: Crafting station
     m_Metadata:
       m_Items: []
+  - m_Id: 12208429589323776
+    m_Localized: Behavior observatory
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12208429648044032
+    m_Localized: "Tab / Start: open \xB7 Esc / B: close\nArrows / D-pad: navigate \xB7 Enter / A: select"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12208429648044033
+    m_Localized: Previous
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12208429648044034
+    m_Localized: Next
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12208429652238336
+    m_Localized: Pause / resume
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12208429652238337
+    m_Localized: Interrupt
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12208429652238338
+    m_Localized: Attack sample
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12208429652238339
+    m_Localized: Open behavior observatory
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12208429652238340
+    m_Localized: Close
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12208429652238341
+    m_Localized: "HFSM \xB7 active path"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12208429652238342
+    m_Localized: "Behavior tree \xB7 live execution"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12208429652238343
+    m_Localized: Conditions & transitions (on demand)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12208429652238344
+    m_Localized: No live behavior instance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12208429652238345
+    m_Localized: Paused
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12208429652238346
+    m_Localized: Running
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:
