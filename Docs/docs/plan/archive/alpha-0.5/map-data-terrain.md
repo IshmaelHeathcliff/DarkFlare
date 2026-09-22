@@ -1,10 +1,10 @@
 # Alpha 0.5：地图数据与地表方案
 
-状态：部分实现。2026-09-18 已完成数据导入、Wang 解析及隔离诊断预览；C1 已交付[家族合同与泥土源 Pilot](../../maps/terrain-art-contract.md)，C2 已交付[正式材质编译与预览](../../maps/terrain-texture-compilation.md)。当前 V1 见[地图文档模块](../../maps/README.md)；C3 四材质双变体和[地表资源发布](../../maps/terrain-materials.md)已完成；[C4 正式验收](../../maps/acceptance/c4/README.md)已完成；运行时新地图渲染、静态几何和地图管理仍待实施。上级入口：[总计划](../alpha-0.5-plan.md)。
+状态：2026-09-19，Alpha 0.5 已完成；本文件作为初始方案归档。当前实现与限制以[地图模块](../../../maps/README.md)及 [I 综合验收](../../../maps/acceptance/i/README.md)为准，下文保留规划背景。上级入口：[总计划](../alpha-0.5-plan.md)。
 
 ## 权威数据与派生资产
 
-地图以 `Assets/Data/Maps/<name>.dfmap` 为唯一可编辑布局源，内容为 JSON、UTF-8 / LF，具有独立格式版本与稳定内容 ID。专用后缀用于 Unity 导入，普通 `.json` 用于交换；类型命名空间、数据 V1 与导入合同见[首轮细化归档](../archive/alpha-0.5.0-map-foundation-contract.md)。Unity ScriptedImporter 将其导入为只读 `MapDefinition` ScriptableObject；地表、Wang 规则、障碍、装饰、交互及区域类型仍使用 Odin 中文字段的 ScriptableObject 配置，通过 ContentId 引用。
+地图以 `Assets/Data/Maps/<name>.dfmap` 为唯一可编辑布局源，内容为 JSON、UTF-8 / LF，具有独立格式版本与稳定内容 ID。专用后缀用于 Unity 导入，普通 `.json` 用于交换；类型命名空间、数据 V1 与导入合同见[首轮细化归档](../alpha-0.5.0-map-foundation-contract.md)。Unity ScriptedImporter 将其导入为只读 `MapDefinition` ScriptableObject；地表、Wang 规则、障碍、装饰、交互及区域类型仍使用 Odin 中文字段的 ScriptableObject 配置，通过 ContentId 引用。
 
 编辑器修改内存文档并保存 JSON，不能同时维护一份可独立修改的布局 SO。JSON 不存 Unity Instance ID、GUID、Sprite 索引、场景层级路径或生成后的 Tile 编号。Importer 注册稳定子资产标识，重复导入保持 `.meta` / 子资产引用；内容目录和 Addressables 只引用导入产物与正式定义。
 
@@ -42,7 +42,7 @@ Corner Wang Key 固定按 `NW, NE, SE, SW` 编码；对单材质二元遮罩，�
 
 地图外虚拟样本由边界规则提供视觉材质，导航一律不可通行；显示边缘最多向外延伸半格，由不可玩边界与镜头覆盖合同控制，不把额外显示范围当可玩区。四边、四角及负坐标都必须有一致结果。
 
-D 阶段已以 `cellSize = 1` 冻结默认每逻辑格 4×4 个导航节点，圆形物理足迹默认余量 0.0125；也验证 cellSize=0.5。半径 0.36 的标准 1 单位直道在实测偏移中均可通行，0.75 临界窄路存在保守误拒绝，详见[静态几何](../../maps/map-geometry.md)。现有 8 单位地砖不作为新逻辑网格大小。
+D 阶段已以 `cellSize = 1` 冻结默认每逻辑格 4×4 个导航节点，圆形物理足迹默认余量 0.0125；也验证 cellSize=0.5。半径 0.36 的标准 1 单位直道在实测偏移中均可通行，0.75 临界窄路存在保守误拒绝，详见[静态几何](../../../maps/map-geometry.md)。现有 8 单位地砖不作为新逻辑网格大小。
 
 Dual Grid 的偏移和四角选择可参考[原理说明](https://www.boristhebrave.com/2023/05/31/quarter-tile-autotiling/)；本项目仍采用用户指定的 Dual Grid，不改用文中的 quarter-tile 替代方案。
 
@@ -70,7 +70,7 @@ Dual Grid 的偏移和四角选择可参考[原理说明](https://www.boristhebr
 - 手工指定变体使用稳定 VariantId；规则变更后不再兼容的 override 报告冲突，不默默重选。
 - 首批建议每种纯地表至少两个可观察变体，过渡内部也可扩展变体；所有可互换成员保留同一角 / 边签名。第一版先只改变内部，外边采样带固定，不增加边随机组合。
 - 运行时使用 Tilemap Chunk 批量渲染，不为每格创建 MonoBehaviour。资产可由 Unity SpriteAtlas 打包，但源文件仍一张 PNG 对应一个 Sprite，不制造生产 SpriteSheet 或手工切图流程。
-- 按 [unity-2d-sprite-workflow](../../../../.agents/skills/unity-2d-sprite-workflow/SKILL.md) 冻结参考、固定画布、PPU、Pivot、Point / 压缩 / Alpha、共享边宽度与相机尺度。当前阶段不假定旧 512×512 地砖可直接缩成新地表。
+- 按 [unity-2d-sprite-workflow](../../../../../.agents/skills/unity-2d-sprite-workflow/SKILL.md) 冻结参考、固定画布、PPU、Pivot、Point / 压缩 / Alpha、共享边宽度与相机尺度。当前阶段不假定旧 512×512 地砖可直接缩成新地表。
 - 0.5.0 中先测量现有角色与镜头尺度、批准一个地表 Pilot，再冻结正式像素尺寸并扩展材质。生成源图和编译输出逐个审计，保留接缝量化与可见截图；无需本轮生成美术。
 
 ## 碰撞与导航同源

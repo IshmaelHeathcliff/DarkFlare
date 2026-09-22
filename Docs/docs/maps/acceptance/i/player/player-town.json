@@ -1,0 +1,31 @@
+{
+  "succeeded": true,
+  "error": null,
+  "version": "0.5.4-alpha",
+  "platform": "WindowsPlayer",
+  "device": "AMD Ryzen 7 PRO 8845HS w/ Radeon 780M Graphics",
+  "graphics": "AMD Radeon 780M Graphics",
+  "records": [
+    {
+      "interaction": "Portal",
+      "player": "(0.0000, 4.0000, 0.0000)",
+      "body": "(0.0000, 4.0000)",
+      "target": "(0.0000, 5.0000, 0.0000)",
+      "focused": "Interaction exit",
+      "scale": 1.0,
+      "radius": 1.5,
+      "targetsEnabled": true,
+      "touching": true
+    },
+    {
+      "portalInput": "keyboard-e",
+      "map": "map:wilderness"
+    },
+    {
+      "continued": "town",
+      "map": "map:wilderness",
+      "monsters": 1,
+      "drops": 2
+    }
+  ]
+}

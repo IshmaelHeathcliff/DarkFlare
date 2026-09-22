@@ -1,0 +1,21 @@
+{
+  "complete": true,
+  "sceneViewStrokeAndKeyboardUndoRedo": true,
+  "sourceHash": "7f90a252b8b29ad54a28c174a983e6cb76366f8e77f50259a7cfa9191b5315eb",
+  "terrainPalette": [
+    "terrain:dirt",
+    "terrain:grass",
+    "terrain:water",
+    "terrain:road"
+  ],
+  "objects": 8,
+  "regions": 2,
+  "variant": "dirt_00",
+  "entries": 1,
+  "aiPreviewApplyConflictAndRollback": true,
+  "exportImportExact": true,
+  "waterBlockedRoadWalkable": true,
+  "objectPreview": "正式对象已同步：8",
+  "originalSceneUnchanged": true,
+  "temporaryAssetsRemoved": true
+}

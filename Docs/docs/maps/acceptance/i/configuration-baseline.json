@@ -1,0 +1,122 @@
+{
+  "CapturedAt": "2026-09-19T13:09:19.4526043+08:00",
+  "Unity": "6000.6.0f1",
+  "Version": "0.5.4-alpha",
+  "Product": "DarkFlare",
+  "Schema": 5,
+  "CatalogMaps": 2,
+  "ContentIssues": [],
+  "Coverage": {
+    "Passed": true,
+    "TypeCount": 31,
+    "SerializedFieldCount": 237,
+    "CoveredFieldCount": 237,
+    "Issues": 0
+  },
+  "BuildScenes": [
+    "Assets/Scenes/Bootstrap.unity",
+    "Assets/Scenes/Main.unity"
+  ],
+  "ActiveScene": "Assets/Scenes/Bootstrap.unity",
+  "SceneDirty": false,
+  "enterPlayModeOptionsEnabled": true,
+  "ReloadOptions": 1,
+  "Maps": [
+    {
+      "Path": "Assets/Data/Maps/World/town.dfmap",
+      "MapId": "map:town",
+      "FormatVersion": 2,
+      "Revision": 1,
+      "Width": 64,
+      "Height": 64,
+      "TerrainPalette": [
+        "terrain:dirt",
+        "terrain:grass",
+        "terrain:water",
+        "terrain:road"
+      ],
+      "Objects": 17,
+      "Regions": 1,
+      "Entries": [
+        {
+          "EntryId": "new_game",
+          "Kind": "NewGame"
+        },
+        {
+          "EntryId": "respawn",
+          "Kind": "Respawn"
+        },
+        {
+          "EntryId": "return",
+          "Kind": "Arrival"
+        }
+      ],
+      "Interactions": [
+        {
+          "ObjectId": "crafting",
+          "Kind": "Crafting",
+          "ContentId": "crafting:default",
+          "TargetMapId": null,
+          "TargetEntryId": null
+        },
+        {
+          "ObjectId": "exit",
+          "Kind": "Portal",
+          "ContentId": null,
+          "TargetMapId": "map:wilderness",
+          "TargetEntryId": "arrival"
+        },
+        {
+          "ObjectId": "merchant",
+          "Kind": "Trader",
+          "ContentId": "trader:basic_trader",
+          "TargetMapId": null,
+          "TargetEntryId": null
+        }
+      ],
+      "SourceHash": "dcee92de0a0fbb91432bc9b8a4a3c4d80ff6d9b95cbb1c2838e742aa82bfd7a5",
+      "SourceMatchesImported": true
+    },
+    {
+      "Path": "Assets/Data/Maps/World/wilderness.dfmap",
+      "MapId": "map:wilderness",
+      "FormatVersion": 2,
+      "Revision": 1,
+      "Width": 128,
+      "Height": 128,
+      "TerrainPalette": [
+        "terrain:dirt",
+        "terrain:grass",
+        "terrain:water",
+        "terrain:road"
+      ],
+      "Objects": 18,
+      "Regions": 2,
+      "Entries": [
+        {
+          "EntryId": "arrival",
+          "Kind": "Arrival"
+        },
+        {
+          "EntryId": "respawn",
+          "Kind": "Respawn"
+        },
+        {
+          "EntryId": "return",
+          "Kind": "Arrival"
+        }
+      ],
+      "Interactions": [
+        {
+          "ObjectId": "exit",
+          "Kind": "Portal",
+          "ContentId": null,
+          "TargetMapId": "map:town",
+          "TargetEntryId": "return"
+        }
+      ],
+      "SourceHash": "2d0339b663af92501d32a4219a2e9b093768504880ab389746ca711ac248bf6b",
+      "SourceMatchesImported": true
+    }
+  ]
+}

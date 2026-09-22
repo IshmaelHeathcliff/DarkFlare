@@ -1,0 +1,17 @@
+{
+  "succeeded": true,
+  "error": null,
+  "version": "0.5.4-alpha",
+  "platform": "WindowsPlayer",
+  "device": "AMD Ryzen 7 PRO 8845HS w/ Radeon 780M Graphics",
+  "graphics": "AMD Radeon 780M Graphics",
+  "records": [
+    {
+      "historicalSchema": 4,
+      "currentSchema": 5,
+      "sourceUnchanged": true,
+      "activeMap": "map:wilderness",
+      "restoredMonsters": 2
+    }
+  ]
+}

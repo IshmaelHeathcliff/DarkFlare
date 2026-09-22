@@ -2,7 +2,7 @@
 
 正式材质包配置位于 `Assets/Data/Maps/Terrain/`，地表集为 `terrain_set:basic`。泥土、草地、水、道路各有 `00` / `01` 两个纯地表变体；`00` 复用基准源，`01` 使用独立纹理。混合四角 Key 使用基准源。整套产物为 256 个基准 Key 加 8 个候选，共 264 个独立 PNG / Sprite / Tile。
 
-源图统一位于 `Assets/Art/Sprites/Environment/TerrainSources/`，遵守[家族合同](./terrain-art-contract.md)。水的逻辑定义不可步行，其余可步行、代价为 1；这些字段尚未驱动碰撞或寻路。正式包独立于现有 `Preset` / core v5，Main 场景资产继续使用旧地表。后续运行时地图接入时再统一登记地图内容目录与版本。
+源图统一位于 `Assets/Art/Sprites/Environment/TerrainSources/`，遵守[家族合同](./terrain-art-contract.md)。水的逻辑定义不可步行，其余可步行、代价为 1；这些字段通过[同源几何](./map-geometry.md)驱动碰撞和[导航网格](./navigation.md)。G 已将正式城镇 / 野外及其依赖登记到 core v6，Main 由地图作用域按当前 `.dfmap` 装配地表，资源生命周期见[双地图模块](./world-map-lifecycle.md)。
 
 ## 编辑、编译和发布
 

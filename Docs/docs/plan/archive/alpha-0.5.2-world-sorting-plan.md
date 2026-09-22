@@ -2,7 +2,7 @@
 
 状态：2026-09-18，F1–F5 已完成。版本 `0.5.2-alpha`；core v5、玩家 Schema 3、地图文档 V1 不变。最终 EditMode 707/707、PlayMode 78/78，内容 / 配置覆盖通过；Player 行为、画面、性能与测量边界见[阶段 F 验收](../../maps/acceptance/f/README.md)。
 
-上级：[Alpha 0.5 总计划](../alpha-0.5-plan.md)。配套：[世界排序与地图生命周期总体方案](../alpha-0.5/world-maps-lifecycle.md)、[当前世界渲染](../../world-rendering.md)、[地图编辑器](../../maps/map-editor.md)、[静态几何](../../maps/map-geometry.md)、[测试维护](../../testing/test-maintenance.md)。
+上级：[Alpha 0.5 总计划](alpha-0.5-plan.md)。配套：[世界排序与地图生命周期总体方案](alpha-0.5/world-maps-lifecycle.md)、[当前世界渲染](../../world-rendering.md)、[地图编辑器](../../maps/map-editor.md)、[静态几何](../../maps/map-geometry.md)、[测试维护](../../testing/test-maintenance.md)。
 
 ## 交付与边界
 

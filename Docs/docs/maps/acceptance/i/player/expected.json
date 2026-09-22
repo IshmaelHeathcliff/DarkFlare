@@ -1,0 +1,39 @@
+{
+  "monster": "02e8430e6d2c47d3ab26a7649ac1a017:monster:7",
+  "drop": "02e8430e6d2c47d3ab26a7649ac1a017:drop:2",
+  "bought": "fe3d6c4366954de4aaafbfa9d0dea64e",
+  "navigation": {
+    "Mode": 1,
+    "Target": 2,
+    "ActorId": "",
+    "MapId": "map:wilderness",
+    "Point": {
+      "X": 15.0,
+      "Y": 10.0,
+      "Z": 0.0
+    },
+    "StopDistance": 0.3
+  },
+  "merchant": {
+    "TraderContentId": "trader:basic_trader",
+    "OrderedItemInstanceIds": [
+      "5e7162c5eda5465d9b313331ee1b54ba",
+      "627bb35e9b6241dd8afe9536d7d5a592",
+      "e32be6a8d2c2460c9880da324f4c801d",
+      "232a7305782b47258d8a6d0fa4510e5b",
+      "8046275ffa9544d191a19d8fe4c72531",
+      "a1b22727a98b4f89826151979a08c9dd",
+      "4c1120d846ee4deebd1e667e63b54bf2",
+      "84c3b8052a2c419384c4fac2bf05c1d2",
+      "4119a94a736e4afa98f3db5dd1f92adb",
+      "4ceafc26860d425da366f3e5f27fb631",
+      "09e487109e134ba984a5494ade300db0",
+      "7927fad9b77c496c882a9e8aa01866f4",
+      "b4dd8d9737c34c7bbd2056b04c54b0b4",
+      "d8e79f2b6bf14c48b421a5a4e7955ca9",
+      "402caef8c08b41808976f1b989bd0210"
+    ],
+    "BuyMultiplier": 1.5,
+    "SellMultiplier": 0.4
+  }
+}

@@ -1,0 +1,91 @@
+{
+  "passed": true,
+  "rounds": [
+    {
+      "count": 500,
+      "round": 1,
+      "passed": true,
+      "checks": {
+        "population": true,
+        "frame": true,
+        "navigation": true,
+        "criticalPath": true,
+        "latency": true,
+        "gc": true,
+        "memory": true
+      }
+    },
+    {
+      "count": 500,
+      "round": 2,
+      "passed": true,
+      "checks": {
+        "population": true,
+        "frame": true,
+        "navigation": true,
+        "criticalPath": true,
+        "latency": true,
+        "gc": true,
+        "memory": true
+      }
+    },
+    {
+      "count": 500,
+      "round": 3,
+      "passed": true,
+      "checks": {
+        "population": true,
+        "frame": true,
+        "navigation": true,
+        "criticalPath": true,
+        "latency": true,
+        "gc": true,
+        "memory": true
+      }
+    },
+    {
+      "count": 1000,
+      "round": 1,
+      "passed": true,
+      "checks": {
+        "population": true,
+        "frame": true,
+        "navigation": true,
+        "criticalPath": true,
+        "latency": true,
+        "gc": true,
+        "memory": true
+      }
+    },
+    {
+      "count": 1000,
+      "round": 2,
+      "passed": true,
+      "checks": {
+        "population": true,
+        "frame": true,
+        "navigation": true,
+        "criticalPath": true,
+        "latency": true,
+        "gc": true,
+        "memory": true
+      }
+    },
+    {
+      "count": 1000,
+      "round": 3,
+      "passed": true,
+      "checks": {
+        "population": true,
+        "frame": true,
+        "navigation": true,
+        "criticalPath": true,
+        "latency": true,
+        "gc": true,
+        "memory": true
+      }
+    }
+  ],
+  "travelRounds": 20,
+  "savePhasesRecorded": 5
+}

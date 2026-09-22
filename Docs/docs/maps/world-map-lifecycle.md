@@ -1,6 +1,6 @@
 # 双地图与运行时作用域
 
-阶段 G 完成于 `0.5.3-alpha`，原有冻结合同见 [G 验收](./acceptance/g/README.md)。当前 H 版本 `0.5.4-alpha` 已接入[地图导航所有权](./navigation.md)及 Schema 5 意图恢复，最新结果见 [H 验收](./acceptance/h/README.md)。
+阶段 G 完成于 `0.5.3-alpha`，原有冻结合同见 [G 验收](./acceptance/g/README.md)。H 已接入[地图导航所有权](./navigation.md)及 Schema 5 意图恢复；当前 `0.5.5-alpha` 的 Player 跨进程继续、历史档迁移、30 秒离场冻结与 1000 单位切图见 [I 综合验收](./acceptance/i/README.md)。
 
 ## 数据与入口
 

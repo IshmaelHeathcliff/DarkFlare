@@ -1,0 +1,82 @@
+{
+  "succeeded": true,
+  "error": null,
+  "version": "0.5.4-alpha",
+  "platform": "WindowsPlayer",
+  "device": "AMD Ryzen 7 PRO 8845HS w/ Radeon 780M Graphics",
+  "graphics": "AMD Radeon 780M Graphics",
+  "records": [
+    {
+      "sorting": "tree_0",
+      "side": 1,
+      "playerY": -23.8000011,
+      "propY": -24.0,
+      "playerOrder": 14,
+      "propOrder": 15
+    },
+    {
+      "sorting": "tree_0",
+      "side": -1,
+      "playerY": -24.4,
+      "propY": -24.0,
+      "playerOrder": 17,
+      "propOrder": 14
+    },
+    {
+      "sorting": "tent",
+      "side": 1,
+      "playerY": 6.20000029,
+      "propY": 6.0,
+      "playerOrder": 0,
+      "propOrder": 2
+    },
+    {
+      "sorting": "tent",
+      "side": -1,
+      "playerY": 5.6,
+      "propY": 6.0,
+      "playerOrder": 2,
+      "propOrder": 1
+    },
+    {
+      "barrierParts": [
+        {
+          "StableSortId": "map:14:map:wilderness9:barrier_07:stone_0",
+          "anchorY": -20.0,
+          "order": 21
+        },
+        {
+          "StableSortId": "map:14:map:wilderness9:barrier_07:stone_1",
+          "anchorY": -20.0,
+          "order": 22
+        },
+        {
+          "StableSortId": "map:14:map:wilderness9:barrier_07:stone_2",
+          "anchorY": -20.0,
+          "order": 23
+        },
+        {
+          "StableSortId": "map:14:map:wilderness9:barrier_07:stone_3",
+          "anchorY": -20.0,
+          "order": 24
+        }
+      ]
+    },
+    {
+      "sorting": "barrier_0",
+      "side": 1,
+      "playerY": -19.8000011,
+      "propY": -20.0,
+      "playerOrder": 20,
+      "propOrder": 21
+    },
+    {
+      "sorting": "barrier_0",
+      "side": -1,
+      "playerY": -20.4,
+      "propY": -20.0,
+      "playerOrder": 24,
+      "propOrder": 20
+    }
+  ]
+}

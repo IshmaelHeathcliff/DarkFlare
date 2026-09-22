@@ -1,6 +1,6 @@
 # Alpha 0.5：地图编辑器与 AI 编辑
 
-状态：2026-09-18，[0.5.1 执行计划 E1–E5](../archive/alpha-0.5.1-map-editor-plan.md)已完成并归档。当前工具、协议与限制以[地图编辑器模块](../../maps/map-editor.md)为准；下文保留总体规划背景。入口：[总计划](../alpha-0.5-plan.md)，数据规则见[地图数据](./map-data-terrain.md)。
+状态：2026-09-19，Alpha 0.5 已完成；本文件作为初始方案归档。当前实现与限制以[地图模块](../../../maps/README.md)及 [I 综合验收](../../../maps/acceptance/i/README.md)为准，下文保留规划背景。上级入口：[总计划](../alpha-0.5-plan.md)。
 
 ## 工具选择
 
@@ -50,7 +50,7 @@ Tiled 的 Terrain Brush / Corner Wang 概念可用于规则核对，但首期不
 
 操作集首期包含 PaintCells、FillRect、PaintLine、FillRegion、SetVariant、UpsertObject、RemoveObject、UpsertRegion、RemoveRegion、SetMapMetadata。算法只接受显式输入；自然语言如何转成操作由调用方 AI 完成。
 
-批量请求示例；Patch V1 已独立冻结，不修改地图 V1，正式字段与预算见[模块及 Schema](../../maps/map-editor.md#ai--cli-接口)：
+批量请求示例；Patch V1 已独立冻结，不修改地图 V1，正式字段与预算见[模块及 Schema](../../../maps/map-editor.md#ai--cli-接口)：
 
 ```json
 {

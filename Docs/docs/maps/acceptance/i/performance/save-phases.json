@@ -1,0 +1,51 @@
+{
+  "count": 1000,
+  "documentBytes": 2846814,
+  "phases": [
+    {
+      "phase": "freeze-capture",
+      "elapsedMs": 500.3035999999952,
+      "managedBeforeBytes": 674516992,
+      "managedAfterBytes": 741781504,
+      "observedManagedPeakBytes": 741781504,
+      "mainThreadAllocatedBytes": 0,
+      "peakSamplingIntervalMs": 1
+    },
+    {
+      "phase": "serialize",
+      "elapsedMs": 1400.752099999977,
+      "managedBeforeBytes": 741781504,
+      "managedAfterBytes": 832196608,
+      "observedManagedPeakBytes": 849879040,
+      "mainThreadAllocatedBytes": 0,
+      "peakSamplingIntervalMs": 1
+    },
+    {
+      "phase": "deserialize-migrate-validate",
+      "elapsedMs": 1166.2615999999844,
+      "managedBeforeBytes": 832196608,
+      "managedAfterBytes": 987529216,
+      "observedManagedPeakBytes": 987529216,
+      "mainThreadAllocatedBytes": 0,
+      "peakSamplingIntervalMs": 1
+    },
+    {
+      "phase": "save-durable",
+      "elapsedMs": 11115.231299999834,
+      "managedBeforeBytes": 987533312,
+      "managedAfterBytes": 661553152,
+      "observedManagedPeakBytes": 1267998720,
+      "mainThreadAllocatedBytes": 0,
+      "peakSamplingIntervalMs": 1
+    },
+    {
+      "phase": "continue-restore",
+      "elapsedMs": 7691.051000000016,
+      "managedBeforeBytes": 425111552,
+      "managedAfterBytes": 317169664,
+      "observedManagedPeakBytes": 924676096,
+      "mainThreadAllocatedBytes": 0,
+      "peakSamplingIntervalMs": 1
+    }
+  ]
+}

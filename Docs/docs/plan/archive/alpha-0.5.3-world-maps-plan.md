@@ -2,7 +2,7 @@
 
 状态：2026-09-18，G1–G7 已完成。版本 `0.5.3-alpha`、core v6、Save Schema 4、地图文档 V2。最终 EditMode 713/713、PlayMode 83/83，独立 Windows Player、两图重启恢复、30 秒冻结与 20 轮往返通过。当前模块见[地图生命周期](../../maps/world-map-lifecycle.md)，证据及测量限制见 [G 验收](../../maps/acceptance/g/README.md)。下文保留原计划，完成差异见末尾记录。
 
-本计划细化[总计划](../alpha-0.5-plan.md)与[双地图生命周期方案](../alpha-0.5/world-maps-lifecycle.md)。用户已确认 500 活动怪物、1000 压力测试，以及离场保留状态并暂停模拟。
+本计划细化[总计划](alpha-0.5-plan.md)与[双地图生命周期方案](alpha-0.5/world-maps-lifecycle.md)。用户已确认 500 活动怪物、1000 压力测试，以及离场保留状态并暂停模拟。
 
 ## 交付与边界
 

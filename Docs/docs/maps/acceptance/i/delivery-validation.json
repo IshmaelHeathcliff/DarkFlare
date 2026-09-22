@@ -1,0 +1,26 @@
+{
+  "passed": true,
+  "capturedAt": "2026-09-19T18:24:48.722602+08:00",
+  "sourceHead": "65429e0c12538e552aa492678d53c1b5d7de6aef",
+  "product": "DarkFlare",
+  "version": "0.5.5-alpha",
+  "productionRuntimeSha256": "9e93000494cb5cc127d93ec601dcc1b27dee5b305c2c6f4db25e154861ecea4d",
+  "productionRuntimeHasAuditEntrypoints": false,
+  "productionSourceChanges": [],
+  "temporaryCollectors": [],
+  "temporaryMapRemoved": true,
+  "testRunnerScenesRemoved": true,
+  "archivedPlans": 6,
+  "brokenMarkdownLinks": [],
+  "editorPostBuild": {
+    "scene": "Assets/Scenes/Bootstrap.unity",
+    "sceneDirty": false,
+    "playing": false,
+    "reloadOptions": 1
+  },
+  "formalMapSourceSha256": {
+    "town.dfmap": "dcee92de0a0fbb91432bc9b8a4a3c4d80ff6d9b95cbb1c2838e742aa82bfd7a5",
+    "wilderness.dfmap": "2d0339b663af92501d32a4219a2e9b093768504880ab389746ca711ac248bf6b"
+  },
+  "exportedMapSha256": "7f90a252b8b29ad54a28c174a983e6cb76366f8e77f50259a7cfa9191b5315eb"
+}

@@ -2,7 +2,7 @@
 
 状态：2026-09-18，D1–D4 已完成并归档。前置 C 提交 `9a3f7a9`。本轮 EditMode 676/676、PlayMode 77/77，内容校验 0 项问题；0.5.0 地图基础收尾，运行版本 `0.5.0-alpha`，core v5 / Schema 3 不变。当前实现见[地图几何](../../maps/map-geometry.md)，证据见[D 验收](../../maps/acceptance/d/README.md)。
 
-上级：[地图基础阶段](alpha-0.5.0-map-foundation-plan.md)；依赖：[分区合同](../../maps/terrain-partition.md)、[地图数据](../../maps/README.md)、[导航总方案](../alpha-0.5/navigation.md)。
+上级：[地图基础阶段](alpha-0.5.0-map-foundation-plan.md)；依赖：[分区合同](../../maps/terrain-partition.md)、[地图数据](../../maps/README.md)、[导航总方案](alpha-0.5/navigation.md)。
 
 ## 目标与范围
 

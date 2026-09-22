@@ -1,0 +1,24 @@
+{
+  "CapturedAt": "2026-09-19T18:21:30.191527+08:00",
+  "Unity": "6000.6.0f1",
+  "Version": "0.5.5-alpha",
+  "Product": "DarkFlare",
+  "ActiveScene": "Assets/Scenes/Bootstrap.unity",
+  "Schema": 5,
+  "ReloadOptions": 1,
+  "SceneDirty": false,
+  "IsPlaying": false,
+  "enterPlayModeOptionsEnabled": true,
+  "ContentIssues": [],
+  "BuildScenes": [
+    "Assets/Scenes/Bootstrap.unity",
+    "Assets/Scenes/Main.unity"
+  ],
+  "Coverage": {
+    "Passed": true,
+    "TypeCount": 31,
+    "SerializedFieldCount": 237,
+    "CoveredFieldCount": 237,
+    "Issues": 0
+  }
+}

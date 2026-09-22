@@ -2,7 +2,7 @@
 
 地图运行时导航见[批量导航与怪物移动](./navigation.md)，切图与冻结见[双地图生命周期](./world-map-lifecycle.md)。
 
-Alpha 0.5.0 地图基础已完成，当前包含文档服务、SO 定义、严格校验、规范导出、只读导入、地表资源发布与[静态几何 / 通行查询](./map-geometry.md)。已增加[手绘 / AI 地图编辑器](./map-editor.md)，Main 已接入[城镇 / 野外及地图生命周期](./world-map-lifecycle.md)，动态寻路尚未实现。
+Alpha 0.5.0 地图基础已完成，当前包含文档服务、SO 定义、严格校验、规范导出、只读导入、地表资源发布与[静态几何 / 通行查询](./map-geometry.md)。已增加[手绘 / AI 地图编辑器](./map-editor.md)，Main 已接入[城镇 / 野外及地图生命周期](./world-map-lifecycle.md)，正式怪物使用[批量导航](./navigation.md)绕障。`0.5.5-alpha` 的 [I 综合交付](./acceptance/i/README.md)已完成：当前地图制作、双地图 Player、历史存档和组合压力通过，执行计划已归档。
 
 B 阶段已完成：[共享坐标、四角 Key 与稳定变体规则](./terrain-resolution.md)、[分区、边签名与增量解析](./terrain-partition.md)、[独立地表诊断预览](./terrain-preview.md)及[持久样例和压力记录](./terrain-samples.md)。地图校验与解析共用四角采样。C1 的[正式地表家族合同](./terrain-art-contract.md)和[泥土源 Pilot](./acceptance/c1/README.md)已完成；C2 的[确定性纹理编译与正式预览](./terrain-texture-compilation.md)已完成，真实泥土样例可从地图菜单打开；C3 的[四材质双变体与资源发布](./terrain-materials.md)已完成，[C4 正式样例与压力验收](./acceptance/c4/README.md)也已完成，C 已提交 `9a3f7a9`，[D 同源碰撞与静态导航几何](./map-geometry.md)也已完成：默认 4×4 子格、圆足迹 / 线段 / 落点查询、碰撞投影及预览。D 已提交 `e396485`。[地图编辑器 E1–E5](./map-editor.md)已完成，[世界对象表现与分段排序](./object-presentation.md)阶段 F 也已完成，正式双地图与作用域已接入并完成 [G 验收](./acceptance/g/README.md)。
 

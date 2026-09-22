@@ -1,0 +1,6 @@
+{
+  "complete": false,
+  "sceneViewStrokeAndKeyboardUndoRedo": true,
+  "error": "DarkFlare.Editor.MapEditException: $.variantOverrides[0]: 变体四角与地表不兼容\r\n  at DarkFlare.Editor.MapEditService.Preview (DarkFlare.CompiledMapDocument current, Newtonsoft.Json.Linq.JObject request, DarkFlare.IMapDefinitionLookup definitions, System.Threading.CancellationToken token) [0x00c2f] in C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Editor\\Maps\\MapEditService.cs:234 \r\n  at DarkFlare.Editor.MapEditSession.Preview (Newtonsoft.Json.Linq.JObject patch) [0x00006] in C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Editor\\Maps\\MapEditSession.cs:100 \r\n  at DarkFlare.Editor.MapEditSession.Apply (Newtonsoft.Json.Linq.JObject request) [0x000bc] in C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Editor\\Maps\\MapEditSession.cs:117 \r\n  at IntegrationEditorAudit+<Work>d__12.MoveNext () [0x0051a] in C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Editor\\IntegrationEditorAudit.cs:110 \r\n  at IntegrationEditorAudit.Step () [0x00017] in C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Editor\\IntegrationEditorAudit.cs:40 ",
+  "temporaryAssetsRemoved": true
+}

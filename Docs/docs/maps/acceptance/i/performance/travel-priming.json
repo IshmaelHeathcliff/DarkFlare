@@ -1,0 +1,8 @@
+{
+  "coldBaseline": 51261536,
+  "warmBaseline": 51261536,
+  "townNative": 1159040,
+  "difference": 0,
+  "agents": 1000,
+  "primingRoundTrip": true
+}

@@ -66,13 +66,13 @@
 
 ## 计划状态
 
-2026-09-19：**Alpha 0.5 的 A–H 已完成**。当前版本 `0.5.4-alpha`、core v6、Schema 5、地图文档 V2。H 的 Grid / Flow Field / A* / Spatial Hash / Separation / Job / Burst 已接入正式怪物，支持导航意图冻结恢复和动态阻挡，见[模块说明](./maps/navigation.md)及 [H 验收](./maps/acceptance/h/README.md)。
+2026-09-19：**Alpha 0.5 的 A–I 全部完成**，交付 `0.5.5-alpha`、core v6、Schema 5、地图文档 V2。地图制作、世界排序、双地图玩法、保存冻结和混合批量导航的综合验收见 [I 验收](./maps/acceptance/i/README.md)。
 
-最终 EditMode **722/722**、PlayMode **85/85**；500 / 1000 单位 Player 三轮矩阵、普通 Player 复核、1000 单位 20 轮往返与 Windows 构建通过。[H 执行计划](./plan/archive/alpha-0.5.4-navigation-plan.md)已归档，下一阶段为 0.5.5 全范围综合交付。
+最终 EditMode **722/722**、PlayMode **85/85**；当前 Windows Player 的交易 / 打造 / 绕障 / 冻结 / 跨进程继续、Schema 4 迁移、500 / 1000 单位三轮战斗压力及 1000 单位 20 轮切图通过。生产构建 `Builds/Alpha055/DarkFlare.exe` 已移除临时采集入口。历史 A–H 数据仍保留各自阶段含义。
 
-G 已提交 `9e6f2f2`；A–G 的历史数字与证据见[计划归档](./plan/archive/README.md)。
+[总计划](plan/archive/alpha-0.5-plan.md)、[I 执行计划](plan/archive/alpha-0.5.5-integration-plan.md)及配套方案已归档；当前实现入口以模块文档为准。
 
 ## 说明
 
-当前项目已完成首版最小循环、初步体验优化及 Alpha 0.1–0.4 已归档计划，Alpha 0.5 的地图基础、编辑器、世界层级与双地图已完成，批量导航已完成，后续进入综合交付。已完成的执行计划统一保存在 `Docs/docs/plan/archive/`。
+当前项目已完成首版最小循环、初步体验优化及 Alpha 0.1–0.4 已归档计划，Alpha 0.5 的地图基础、编辑器、世界层级、双地图、批量导航与综合交付均已完成。已完成的执行计划统一保存在 `Docs/docs/plan/archive/`。
 后续新增系统、配置或流程时，应优先更新对应文档，避免 `Docs/docs/` 与实现脱节。游戏设计文档位于 `Docs/design/`，不属于 Agent 的常规维护范围。

@@ -1,0 +1,30 @@
+{
+  "status": "completed",
+  "buildId": "build_4968544d8a6a",
+  "result": "Succeeded",
+  "platform": "StandaloneWindows64",
+  "outputPath": "C:/Users/darkf/Home/Projects/DarkFlare/Builds/IntegrationAudit/DarkFlare.exe",
+  "totalSizeBytes": 289584631,
+  "buildTimeMs": 51469,
+  "buildStartedAt": "2026-09-19T09:45:06.7749Z",
+  "buildEndedAt": "2026-09-19T09:45:58.2439379Z",
+  "totalWarnings": 4,
+  "totalErrors": 0,
+  "errors": [],
+  "warnings": [
+    {
+      "message": "Pipeline: No RuntimePipelineConfig asset found (Project Settings > Pipeline > Runtime). Pipeline will be disabled in Player builds."
+    },
+    {
+      "message": "warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.",
+      "file": "Assets\\Scripts\\Runtime\\Navigation\\WorldMapPlayerAudit.cs"
+    },
+    {
+      "message": "warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.",
+      "file": "Assets\\Scripts\\Runtime\\Navigation\\WorldMapPlayerAudit.cs"
+    },
+    {
+      "message": "Shader warning in 'TextMeshPro/Mobile/Distance Field': #pragma enable_d3d11_debug_symbols has been deprecated, instead please use #pragma enable_debug_symbols at line 84"
+    }
+  ]
+}

@@ -2,7 +2,7 @@
 
 状态：2026-09-18，B1–B4 已完成并归档。B1 提交 `0c866f7`，B2/B3 提交 `dc33aaa`；B4 交付持久拓扑 / 边界样例、可生成压力源、1920×1080 与原始像素证据。当前行为见[诊断预览模块](../../maps/terrain-preview.md)与[样例模块](../../maps/terrain-samples.md)，实际性能、取消和回归结果见 [B4 验收](../../maps/acceptance/b4/README.md)。项目 EditMode 650/650、PlayMode 75/75、内容和文档覆盖通过。下一步为 C 正式地表家族合同与 Pilot；0.5.0 尚未整体交付。
 
-入口：[0.5.0 阶段计划](alpha-0.5.0-map-foundation-plan.md)；现状：[地图文档模块](../../maps/README.md)；后续总体规则：[地图数据与地表](../alpha-0.5/map-data-terrain.md)。
+入口：[0.5.0 阶段计划](alpha-0.5.0-map-foundation-plan.md)；现状：[地图文档模块](../../maps/README.md)；后续总体规则：[地图数据与地表](alpha-0.5/map-data-terrain.md)。
 
 ## 交付范围
 

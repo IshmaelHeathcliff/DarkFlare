@@ -1,0 +1,19 @@
+{
+  "status": "completed",
+  "buildId": "build_95d811226d6b",
+  "result": "Succeeded",
+  "platform": "StandaloneWindows64",
+  "outputPath": "C:/Users/darkf/Home/Projects/DarkFlare/Builds/IntegrationAudit/DarkFlare.exe",
+  "totalSizeBytes": 289584667,
+  "buildTimeMs": 22985,
+  "buildStartedAt": "2026-09-19T09:50:43.8378568Z",
+  "buildEndedAt": "2026-09-19T09:51:06.8230758Z",
+  "totalWarnings": 1,
+  "totalErrors": 0,
+  "errors": [],
+  "warnings": [
+    {
+      "message": "Pipeline: No RuntimePipelineConfig asset found (Project Settings > Pipeline > Runtime). Pipeline will be disabled in Player builds."
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "capturedAt": "2026-09-19T05:12:03.423775+00:00",
+  "commit": "65429e0c12538e552aa492678d53c1b5d7de6aef",
+  "runtimeChangedInI1": false,
+  "navigationPackages": {
+    "com.unity.burst": "2.0.0",
+    "com.unity.collections": "6.6.0",
+    "com.unity.mathematics": "1.4.0"
+  },
+  "configurationEvidence": "configuration-baseline.json",
+  "scope": "I1 baseline only; no new Player or PlayMode evidence"
+}

@@ -2,13 +2,13 @@
 
 ## Sorting Layer 与接地点
 
-Alpha 0.5.2 的世界对象与实体特效共用 Y 排序；地图配置、分段资源和装配入口见[地图对象表现](./maps/object-presentation.md)。Main 保留既有玩法，正式双地图接入属于 0.5.3。
+Alpha 0.5.2 的世界对象与实体特效共用 Y 排序；地图配置、分段资源和装配入口见[地图对象表现](./maps/object-presentation.md)。Main 已由 0.5.3 接入正式城镇 / 野外，地图作用域统一管理对象表现与排序登记。
 
 从后到前固定为：
 
 | Layer | 用途 | 内部 Order |
 | --- | --- | --- |
-| `Ground` | 地表和明确贴地的表现 | 旧 Base `0`、Detail `10` |
+| `Ground` | 地表和明确贴地的表现 | 地图作用域创建的地表 Tilemap 为 `0`；贴地表现按配置排列 |
 | `WorldObject` | 物件、交互物、掉落、怪物、玩家、投射物及实体特效 | 各独立 `SortingGroup` 由系统分配唯一 Order |
 | `WorldEffect` | 保留的兼容层 | 普通飞行、命中、受击表现已迁出 |
 | `WorldInfo` | 伤害、治疗及战斗语义文字 | Combat Text `0`，可读性例外 |

@@ -1,0 +1,21 @@
+{
+  "complete": false,
+  "error": "System.InvalidOperationException: travel growth: native 51261536/43921488, agents 1000\r\n  at DarkFlare.NavigationPlayerAudit.TravelAsync (System.Threading.CancellationToken token) [0x00419] in C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Runtime\\Navigation\\NavigationPlayerAudit.cs:316 \r\n  at Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask`1[TStateMachine].GetResult (System.Int16 token) [0x00000] in .\\Library\\PackageCache\\com.cysharp.unitask@dc216dc4183d\\Runtime\\CompilerServices\\StateMachineRunner.cs:218 \r\n  at DarkFlare.NavigationPlayerAudit.RunAsync () [0x007e3] in C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Runtime\\Navigation\\NavigationPlayerAudit.cs:214 ",
+  "unity": "6000.6.0f1",
+  "cpu": "AMD Ryzen 7 PRO 8845HS w/ Radeon 780M Graphics",
+  "cpuThreads": 16,
+  "gpu": "AMD Radeon 780M Graphics",
+  "resolution": "1920x1080",
+  "fixedDeltaTime": 0.0199999921,
+  "vsync": 0,
+  "targetFrameRate": -1,
+  "development": true,
+  "burst": true,
+  "backend": "Mono",
+  "randomSeed": 71023,
+  "physicsStepSampling": true,
+  "collectionSafetyChecks": false,
+  "product": "DarkFlare-IntegrationAudit-I",
+  "gcPositiveControl": 0,
+  "results": []
+}

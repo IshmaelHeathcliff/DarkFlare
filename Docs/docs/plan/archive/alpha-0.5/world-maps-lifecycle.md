@@ -1,6 +1,6 @@
 # Alpha 0.5：世界排序、双地图与保存恢复
 
-状态：世界层级 F 与双地图生命周期 G 已完成。当前合同见[世界渲染](../../world-rendering.md)、[对象表现](../../maps/object-presentation.md)和[地图生命周期](../../maps/world-map-lifecycle.md)，证据见 [G 验收](../../maps/acceptance/g/README.md)。下文保留初始方案，执行计划已[归档](../archive/alpha-0.5.3-world-maps-plan.md)；导航仍由 0.5.4 实施。
+状态：2026-09-19，Alpha 0.5 已完成；本文件作为初始方案归档。当前实现与限制以[地图模块](../../../maps/README.md)及 [I 综合验收](../../../maps/acceptance/i/README.md)为准，下文保留规划背景。上级入口：[总计划](../alpha-0.5-plan.md)。
 
 ## 世界层级与 Y 排序
 
@@ -18,7 +18,7 @@
 
 静态对象身份为 `MapId/ObjectId/PartId`，动态对象使用真实 Actor / Item / WorldDrop 身份。同一地图卸载和再次加载不能产生重复注册； staging 内容未提交前不能进入活动排序。
 
-排序系统性能与导航一起计入总帧预算。F 已完成比较与写入缓存优化、500 / 1000 动态单位测量及无分配验证，保留全表稳定排序，见 [F 验收](../../maps/acceptance/f/README.md)。0.5.3 复用该实现验证真实地图往返；0.5.4 再与导航合并测量，不能将排序专项视为整体怪物性能已达标。
+排序系统性能与导航一起计入总帧预算。F 已完成比较与写入缓存优化、500 / 1000 动态单位测量及无分配验证，保留全表稳定排序，见 [F 验收](../../../maps/acceptance/f/README.md)。0.5.3 复用该实现验证真实地图往返；0.5.4 再与导航合并测量，不能将排序专项视为整体怪物性能已达标。
 
 Global Light 2D 的目标层、Sprite-Lit 材质、Shader 和所有生产 Prefab 同步校验。树后 / 树前、建筑两端、同 Y 交叉、掉落经过角色、投射物经过树干都要有可见验收；排序不得通过修改 Transform Z 或物理层修补。
 

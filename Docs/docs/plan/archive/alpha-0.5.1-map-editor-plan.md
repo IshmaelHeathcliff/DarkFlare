@@ -2,7 +2,7 @@
 
 状态：2026-09-18，E1–E5 已完成。当前版本 `0.5.1-alpha`，core v5、Schema 3 不变；最终 EditMode 697/697、PlayMode 77/77。当前能力见[地图编辑器](../../maps/map-editor.md)，证据见 [E 验收](../../maps/acceptance/e/README.md)。下文保留执行时的规划与验收目标，差异见完成记录。
 
-上级：[Alpha 0.5 总计划](../alpha-0.5-plan.md)。配套：[编辑器总体方案](../alpha-0.5/map-editor.md)、[当前文档服务](../../maps/README.md)、[静态几何](../../maps/map-geometry.md)、[测试维护规范](../../testing/test-maintenance.md)。
+上级：[Alpha 0.5 总计划](alpha-0.5-plan.md)。配套：[编辑器总体方案](alpha-0.5/map-editor.md)、[当前文档服务](../../maps/README.md)、[静态几何](../../maps/map-geometry.md)、[测试维护规范](../../testing/test-maintenance.md)。
 
 ## 交付与边界
 

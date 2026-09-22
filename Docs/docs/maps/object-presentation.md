@@ -1,6 +1,8 @@
 # 地图对象表现与分段遮挡
 
-本模块消费 V1 地图文档的 ObjectId、DefinitionId、Position、Rotation 和 AppearanceVariant，不修改逻辑地表、footprint、区域或交互绑定。地图工作台和运行时共用表现目录、Prefab 校验及装配器；正式双地图与领域交互装配仍属于 0.5.3。
+当前 `0.5.5-alpha` 的正式 Player 已检查树木、帐篷及四段长障碍与角色的前后遮挡，见[当前截图与排序数据](./acceptance/i/workflow.md)。
+
+本模块消费地图文档 V2（兼容 V1 导入）的 ObjectId、DefinitionId、Position、Rotation 和 AppearanceVariant，不修改逻辑地表、footprint、区域或交互绑定。地图工作台和运行时共用表现目录、Prefab 校验及装配器；正式双地图与领域交互已由 0.5.3 接入，见[双地图生命周期](./world-map-lifecycle.md)。
 
 ## 配置与样例
 

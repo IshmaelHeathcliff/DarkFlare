@@ -1,5 +1,7 @@
 # 已完成计划归档
 
+- [Alpha 0.5 综合交付](alpha-0.5.5-integration-plan.md)与[总计划及配套方案](alpha-0.5-plan.md)：2026-09-19 A–I 全部完成，交付 `0.5.5-alpha`；当前编辑链路、双地图 Player、历史存档、混合导航压力与生产构建通过，见 [I 验收](../../maps/acceptance/i/README.md)。
+
 - [Alpha 0.5.4 批量导航与怪物移动](./alpha-0.5.4-navigation-plan.md)：2026-09-19 H1–H7 完成，`0.5.4-alpha`、core v6、Schema 5；EditMode 722/722、PlayMode 85/85，500 / 1000 单位三轮矩阵、普通 Player 及 20 轮大图往返通过。
 
 - [Alpha 0.5.3 城镇、野外与地图生命周期](./alpha-0.5.3-world-maps-plan.md)：2026-09-18 G1–G7 完成，版本 `0.5.3-alpha`、core v6、Schema 4；EditMode 713/713、PlayMode 83/83，独立 Windows Player 往返、冻结和重启恢复通过。
@@ -17,7 +19,7 @@
 
 - [Alpha 0.5.0 数据与导入合同](./alpha-0.5.0-map-foundation-contract.md)：2026-09-18 完成切片 A，`.dfmap`、规范校验 / 导出、只读导入与配置中心入口；EditMode 603/603。0.5.0 的 Wang 预览、正式地表和几何仍待完成。
 
-- [Alpha 0.5 启动准备](./alpha-0.5-startup.md)：2026-09-17 完成基线梳理，目标已由[正式总计划](../alpha-0.5-plan.md)接管；归档仅指启动准备完成，功能待实施。
+- [Alpha 0.5 启动准备](./alpha-0.5-startup.md)：2026-09-17 完成基线梳理，目标已由[正式总计划](alpha-0.5-plan.md)接管；归档仅指启动准备完成，功能待实施。
 
 - [随机商店与主动刷新](./alpha-0.4-random-shop-plan.md)：2026-09-16 完成，每批随机商品、品质词条、免费刷新、库存恢复；EditMode 568/568、PlayMode 75/75。
 

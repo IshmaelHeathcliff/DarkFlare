@@ -1,0 +1,9 @@
+{
+  "succeeded": false,
+  "error": "System.InvalidOperationException: continued navigation intent\r\n  at DarkFlare.WorldMapPlayerAudit.Run (System.Threading.CancellationToken token) [0x00603] in C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Runtime\\Navigation\\WorldMapPlayerAudit.cs:88 \r\n  at Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask`1[TStateMachine].GetResult (System.Int16 token) [0x00000] in .\\Library\\PackageCache\\com.cysharp.unitask@dc216dc4183d\\Runtime\\CompilerServices\\StateMachineRunner.cs:218 \r\n  at Cysharp.Threading.Tasks.UniTaskExtensions.ForgetCoreWithCatch (Cysharp.Threading.Tasks.UniTask task, System.Action`1[T] exceptionHandler, System.Boolean handleExceptionOnMainThread) [0x00028] in .\\Library\\PackageCache\\com.cysharp.unitask@dc216dc4183d\\Runtime\\UniTaskExtensions.cs:601 ",
+  "version": "0.5.4-alpha",
+  "platform": "WindowsPlayer",
+  "device": "AMD Ryzen 7 PRO 8845HS w/ Radeon 780M Graphics",
+  "graphics": "AMD Radeon 780M Graphics",
+  "records": []
+}
