@@ -11,7 +11,7 @@
 
 玩家可在场景内持续战斗和获取物品，通过 Tab / 手柄 Start 打开随身背包，也可接近商人或打造台后使用 E / 手柄北键进入对应功能。菜单打开时暂停玩法模拟，关闭后恢复战斗与 Gameplay 输入。
 
-当前成果用于验证战斗、物品、经济与构筑之间的闭环，已接入城镇与野外双地图；离场地图冻结，返回后恢复，详见[地图生命周期](./maps/world-map-lifecycle.md)。`alpha 0.2.0–0.2.7` 已为该循环补上唯一应用宿主、Session 作用域、新游戏 / Restore 事务、`auto` 本地存档与删除、统一退出、用户设置与完整默认恢复、中英运行时本地化、完整 Scene Flow、Application Shell、应用级输入、音频、降低动态、平台挂起恢复，以及结构化日志、玩家错误映射和统一 Addressables Resource Service。装备已扩展为武器、护甲、左戒指和右戒指四槽，正式内容池包含七件装备、25 个物品词条、10 个怪物词条和三种怪物；地图、商人、打造台、三种怪物、七件装备与运行时 UI 已完成首版视觉接入。
+当前成果用于验证战斗、物品、经济与构筑之间的闭环，已接入城镇与野外双地图；离场地图冻结，返回后恢复，详见[地图生命周期](./maps/world-map-lifecycle.md)。`alpha 0.2.0–0.2.7` 已为该循环补上唯一应用宿主、Session 作用域、新游戏 / Restore 事务、`auto` 本地存档与删除、统一退出、用户设置与完整默认恢复、中英运行时本地化、完整 Scene Flow、Application Shell、应用级输入、音频、降低动态、平台挂起恢复，以及结构化日志、玩家错误映射和统一 Addressables Resource Service。当前装备为十槽二十件，正式内容另包含四种消耗品、25 个物品词条、10 个怪物词条和三种怪物；地图、商人、打造台、怪物、装备与运行时 UI 已完成视觉接入。当前版本为 `0.5.5-alpha`，综合交付见 [I 验收](./maps/acceptance/i/README.md)。下方早期阶段章节保留历史实施过程，当前合同以对应模块文档为准。
 
 ## 阶段 0 视觉切片（历史）
 
@@ -32,12 +32,12 @@
 1. `ApplicationBootstrap` 在 `BeforeSceneLoad` 创建唯一 `ApplicationHost`。Bootstrap 场景的 Shell 安装内容目录、配置 Scene Flow，并在无 Session 的状态下进入 FrontEnd。
 2. 玩家选择 NewGame 或 Continue；Continue 先在 Profile Scope 完成 `auto` 文件、Schema、Payload 与 ContentId 预检。预检失败留在 FrontEnd，不加载 Main。
 3. `SceneFlowService` additive 加载并激活 `Main.unity`，只在目标 Scene 中取得 `CombatPrototypeBootstrap` 组装的 `GameplaySceneConfiguration`，再选择 NewGame 或 Restore initializer。
-4. 初始化事务先验证配置，保持刷怪器关闭并配置随机根种子，再并行预热玩家、怪物、投射物、掉落物 Addressable Prefab 和七件装备图标。Prefab 的同一 GUID 并发请求共享单飞任务；图标在单次预热请求内按 GUID 去重，加载器保存并精确释放实际句柄。
-5. 事务通过 `SpawnSystem` 生成或恢复玩家，初始化背包 / 装备 / 商人 / 打造 / 随机状态，绑定摄像机并把运行时对象登记到 `SessionObjectRegistry`；最后提交并启用 `MonsterSpawner`。Session 进入 Running 后，宿主为精确 architecture generation 绑定 `SessionSnapshotSource` 和只负责保存的 `SessionSaveFacade`。
+4. 初始化事务先验证配置，保持刷怪器关闭并配置随机根种子，再并行预热玩家、怪物、投射物、掉落物 Addressable Prefab 和配置收集的物品图标。Prefab 的同一 GUID 并发请求共享单飞任务；图标在单次预热请求内按 GUID 去重，加载器保存并精确释放实际句柄。
+5. 事务通过 `SpawnSystem` 生成或恢复玩家，初始化背包 / 装备 / 商人 / 打造 / 随机状态，绑定摄像机并把运行时对象登记到 `SessionObjectRegistry`；最后提交并按活动地图配置启用刷怪；城镇不启动刷怪。Session 进入 Running 后，宿主为精确 architecture generation 绑定 `SessionSnapshotSource` 和只负责保存的 `SessionSaveFacade`。
 6. 玩家和怪物统一注册到 `CombatModel`，攻击通过 Command 进入 `CombatSystem` 和 `DamageCalculator`；投射物生成或怪物接触攻击成功后发送 `ActorAttackedEvent`，伤害、死亡与复活沿用 `ActorDamagedEvent`、`ActorDiedEvent`、`ActorRevivedEvent` 驱动 Animator。生命 / 法力变化另由统一资源事件驱动 HUD 与调试。
 7. 怪物死亡后，`LootSystem` 先执行表级掉落概率，成功后才按条目权重生成 `ItemInstance` 并实例化世界掉落物。
 8. 玩家触碰掉落物时，`PickupLootCommand` 尝试把物品放入 10×6 背包；背包无空间时保留世界掉落物。
-9. 玩家可在背包内选择物品和目标槽并发送 `EquipItemCommand`，也可通过 `UnequipItemCommand` 卸下。`EquipmentSystem` 原子提交背包与四槽状态，并从完整 Loadout 重建角色装备效果。
+9. 玩家可在背包内选择物品和目标槽并发送 `EquipItemCommand`，也可通过 `UnequipItemCommand` 卸下。`EquipmentSystem` 原子提交背包与十槽状态，并从完整 Loadout 重建角色装备效果。
 10. 玩家接近商人或打造台后，可在对应菜单上下文中买卖、打造和装备；关闭菜单后继续战斗，验证金币、物品、词条和伤害变化。
 
 初始化被取消或失败时，事务会停止刷怪、解除场景绑定、撤销本次初始状态并释放已经登记的对象与资源，未提交的玩家和初始发放不会残留；Scene Flow 随后卸载残留 Main 并回到 FrontEnd。继续游戏使用 `RestoreGameSessionInitializer`，不会再次发放初始武器、金币或商人库存。游戏内返回 FrontEnd 必须先保存 `auto`，再按 Component / Scene / Session 顺序收敛任务、销毁架构、激活 Bootstrap 并卸载 Main；保存失败时保留当前 Session 并提供重试 / 取消。
@@ -188,11 +188,11 @@ Prefab 通过 Addressables 预热和实例化，首版不使用 `Resources` 或�
 
 ## 当前边界
 
-- 当前有常驻 Bootstrap 与单一 Main 玩法场景；完整 Scene Flow 已落地，但仍没有多地图、安全区 / 撤离、Profile 选择、手动槽位管理或云同步。
+- 当前有常驻 Bootstrap 与单一 Main 玩法容器；Main 内已支持城镇 / 野外往返、离场冻结及恢复，刷怪会排除 Safe 区域；尚无完整撤离玩法、Profile 选择、手动槽位管理或云同步。
 - 背包已实现矩形格子占用、物品与装备栏之间的拖拽整理；已支持物品堆叠，当前仍没有物品旋转和重量。
-- 装备已实现武器、护甲和双戒指槽，以及替换和卸下；首批七件装备和 25 个物品词条已接入，但尚无耐久、套装、纸娃娃和词条等级段。
+- 装备已实现十槽，以及替换和卸下；二十件装备和 25 个物品词条已接入，但尚无耐久、套装、纸娃娃和词条等级段。
 - 交易只维护单个共享商人库存；卖出物品不进入商人库存，也没有回购。
 - 打造消耗背包金币和锻造矿石，尚无配方、锁定词缀或批量操作。
-- 首版视觉已覆盖地图、玩家、三种怪物、投射物、掉落、七件装备、商人、打造台、HUD 与三个菜单；`PrototypeSquare` 仅保留为调试回退，不再表达主要可玩对象。当前仅有首个 UI Confirm Cue，仍不包含战斗音效、音乐、纸娃娃或镜头震动。
+- 首版视觉已覆盖地图、玩家、三种怪物、投射物、掉落、二十件装备、商人、打造台、HUD 与三个菜单；`PrototypeSquare` 仅保留为调试回退，不再表达主要可玩对象。当前仅有首个 UI Confirm Cue，仍不包含战斗音效、音乐、纸娃娃或镜头震动。
 
 输入和 UI 结构见 [输入与运行时 UI](./input-ui-system.md)，存档与 Restore 见[本地存档与 Session 恢复](./infrastructure/local-save.md)，装备事务见 [装备系统](./equipment-system.md)，打造事务规则见 [打造系统](./crafting-system.md)，伤害与词条规则见 [伤害系统与词条系统设计](./damage-affix-system.md)。

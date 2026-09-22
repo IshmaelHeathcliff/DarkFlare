@@ -4,6 +4,8 @@
 
 Alpha 0.5 的 A–I 全部完成，当前交付 `0.5.5-alpha`。四地表地图、手绘 / AI 编辑、Y 排序、城镇交易打造、野外刷怪和 Flow Field / A* 批量寻路已形成完整链路，详见 [I 综合验收](./maps/acceptance/i/README.md)。总计划与配套方案已归档。
 
+2026-09-22：已完成 [Alpha 0.6 启动基线梳理](./plan/alpha-0.6-startup.md)，版本目标与首阶段范围待确定，当前交付版本保持 `0.5.5-alpha`。
+
 `DarkFlare` 已完成首版最小循环、初步体验优化、`alpha 0.1` 封板和 `alpha 0.2.0–0.2.7` 基础设施封板。当前可从常驻 `Bootstrap.unity` 的 FrontEnd 新建或继续游戏，additive 进入 `Main.unity` 完成战斗、掉落、十槽装备、交易和打造，暂停后保存并安全返回前台；FrontEnd 可二次确认删除自动档，共享设置页可恢复完整默认设置，中英语言、音量、按键、设备 Glyph 和降低动态效果即时收敛。
 
 alpha 版本内的阶段使用三段式名称：`alpha 0.1` 的首个阶段为 `alpha 0.1.0`，后续依次为 `alpha 0.1.1`、`alpha 0.1.2`；`alpha 0.2` 同样从 `alpha 0.2.0` 开始。当前版本为 `0.5.5-alpha`；完成记录见[alpha 0.2 综合验收记录](./infrastructure/alpha-0.2-acceptance.md)与[计划归档](./plan/archive/README.md)。
@@ -91,7 +93,7 @@ Alpha 0.3 前置[测试审计](./testing/test-suite-audit.md)已完成；新增�
 
 ## 当前资源与配置
 
-- `Assets/Data/Preset` 已有玩家、技能、怪物、刷怪、掉落、物品、词条、商人和打造配置；唯一正式内容目录 `core` v5 收录全部正式配置，其中二十件独立装备覆盖十槽，四种药水接入统一使用。
+- `Assets/Data/Preset` 已有玩家、技能、怪物、刷怪、掉落、物品、词条、商人和打造配置；唯一正式内容目录 `core` v6 收录全部正式配置，其中二十件独立装备覆盖十槽，四种药水接入统一使用。
 - 玩家、怪物、投射物和掉落物 Prefab 位于 `Assets/Prefabs`，通过 Addressables 加载。
 - Prefab、Sprite、Audio 与 Application 配置统一通过 Resource Service 按稳定键单航班加载；Application / Session owner 持有 Asset Lease，并在关闭后回到资源基线。
 - `Assets/UI` 已有 `GameRoot`、`Hud`、`Inventory`、`Shop`、`Crafting` 的 UXML / USS。
@@ -107,7 +109,7 @@ Alpha 0.3 前置[测试审计](./testing/test-suite-audit.md)已完成；新增�
 
 首版已经完成“战斗 → 拾取 → 装备 / 交易 / 打造 → 再战斗”的人手循环，但仍是用于验证系统闭环的功能原型：
 
-- 当前场景流只覆盖常驻 Bootstrap 与单一 Main 玩法场景；尚无多地图、关卡选择、Profile 选择或 Addressables Scene。
+- 当前场景流使用常驻 Bootstrap 与单一 Main 玩法容器；Main 内已支持城镇 / 野外地图切换、离场冻结和恢复，尚无关卡选择、Profile 选择或 Addressables Scene。
 - 当前已有 `auto` 槽位、确定性 JSON、Payload SHA-256、两代有效文件保留、损坏回退、单写者协调、Restore Session、二次确认删除和退出前有界 Flush；尚无手动槽位管理、Profile 选择或云同步。
 - Settings V1 已有语言、音频、输入与 Reduce Motion 真实消费者；Text Scale、High Contrast、Screen Shake 和 Display Mode 仍为数据预留，不在玩家 UI 中开放。
 - 背包已支持拖拽换位、单目标原子交换和键鼠 / 手柄拿起放置，已支持物品堆叠与材料消耗，尚无旋转和重量；装备已实现十槽及精确拖入 / 拖回，每槽至少两件正式基底，但没有耐久、套装、完整纸娃娃或唯一装备特效。

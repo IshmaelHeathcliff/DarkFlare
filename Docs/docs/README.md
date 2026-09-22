@@ -66,6 +66,8 @@
 
 ## 计划状态
 
+2026-09-22：已完成 [Alpha 0.6 启动准备](./plan/alpha-0.6-startup.md)的基线梳理；目标与首阶段范围待确定，当前交付版本保持 `0.5.5-alpha`。
+
 2026-09-19：**Alpha 0.5 的 A–I 全部完成**，交付 `0.5.5-alpha`、core v6、Schema 5、地图文档 V2。地图制作、世界排序、双地图玩法、保存冻结和混合批量导航的综合验收见 [I 验收](./maps/acceptance/i/README.md)。
 
 最终 EditMode **722/722**、PlayMode **85/85**；当前 Windows Player 的交易 / 打造 / 绕障 / 冻结 / 跨进程继续、Schema 4 迁移、500 / 1000 单位三轮战斗压力及 1000 单位 20 轮切图通过。生产构建 `Builds/Alpha055/DarkFlare.exe` 已移除临时采集入口。历史 A–H 数据仍保留各自阶段含义。
