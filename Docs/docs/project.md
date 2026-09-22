@@ -4,7 +4,7 @@
 
 Alpha 0.5 的 A–I 全部完成，当前交付 `0.5.5-alpha`。四地表地图、手绘 / AI 编辑、Y 排序、城镇交易打造、野外刷怪和 Flow Field / A* 批量寻路已形成完整链路，详见 [I 综合验收](./maps/acceptance/i/README.md)。总计划与配套方案已归档。
 
-2026-09-22：已完成 [Alpha 0.6 启动基线梳理](./plan/alpha-0.6-startup.md)，版本目标与首阶段范围待确定，当前交付版本保持 `0.5.5-alpha`。
+2026-09-22：[Alpha 0.6 规划草案](./plan/alpha-0.6-plan.md)已明确行为框架、运行时调试 / Animator 桥接、普通怪物与守卫 Boss、固定总量及范围触发刷怪、手动重置。离场继续保留状态；本轮仅制定计划，尚未实施，当前交付保持 `0.5.5-alpha`。[启动基线](./plan/archive/alpha-0.6-startup.md)已归档。
 
 `DarkFlare` 已完成首版最小循环、初步体验优化、`alpha 0.1` 封板和 `alpha 0.2.0–0.2.7` 基础设施封板。当前可从常驻 `Bootstrap.unity` 的 FrontEnd 新建或继续游戏，additive 进入 `Main.unity` 完成战斗、掉落、十槽装备、交易和打造，暂停后保存并安全返回前台；FrontEnd 可二次确认删除自动档，共享设置页可恢复完整默认设置，中英语言、音量、按键、设备 Glyph 和降低动态效果即时收敛。
 

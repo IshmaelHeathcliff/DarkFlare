@@ -1,6 +1,6 @@
 # Alpha 0.6 启动准备
 
-状态：2026-09-22，基线梳理完成，版本目标与首阶段范围待确定；本记录不是功能实施计划。
+状态：2026-09-22，启动基线梳理已完成并归档。用户已明确行为框架、怪物 / Boss、有限刷怪及手动重置目标，由 [Alpha 0.6 总计划](../alpha-0.6-plan.md)接管；本记录保留目标确定前的历史状态，不代表功能已实施。
 
 ## 当前基线
 
@@ -8,36 +8,36 @@
 - 已读取项目入口、概览、玩法循环、地图生命周期、装备与内容模块、Alpha 0.5 总计划及 I 综合验收，并核对相关配置和代码。
 - Unity `6000.6.0f1`，运行版本 `0.5.5-alpha`，正式目录 core v6，存档 Schema 5，地图交换格式 V2。
 - 版本依据：`ProjectSettings/ProjectSettings.asset`、`ProjectSettings/ProjectVersion.txt`、`Assets/Data/Preset/Content/正式内容目录.asset`、`VersionContracts.cs` 与 `MapDocument.cs`。
-- Alpha 0.5 的 A–I 全部完成，总计划及配套方案已[归档](archive/alpha-0.5-plan.md)。本次未读取 `Docs/design/`，未运行 Unity 测试或重新构建；以下验收数字均为历史交付证据。
+- Alpha 0.5 的 A–I 全部完成，总计划及配套方案已[归档](alpha-0.5-plan.md)。本次未读取 `Docs/design/`，未运行 Unity 测试或重新构建；以下验收数字均为历史交付证据。
 
 ## 已交付能力
 
 | 范围 | 当前成果 | 维护入口 |
 | --- | --- | --- |
-| 基础设施 | 前台、新建 / 继续、Session 隔离、本地存档、设置、本地化、输入与资源生命周期 | [项目概览](../project.md) |
-| 物品与构筑 | 十槽二十件装备、独立窗口与统一拖放、属性与 HUD、堆叠材料、随机商店、材料打造 | [装备](../equipment-system.md)、[物品](../item-system.md)、[交易](../trading-system.md) |
-| 状态与使用 | 七异常、抗性、叠层与时间、状态保存与显示，四种消耗品与统一使用事务 | [状态](../status-system.md)、[消耗品](../consumables.md) |
-| 地图制作 | 四地表、Dual Grid / Wang、五类数据、手绘 / AI 原子编辑、撤销及导入导出 | [地图](../maps/README.md)、[编辑器](../maps/map-editor.md) |
-| 世界与导航 | 稳定 Y 排序、分段遮挡、城镇 / 野外往返、离场冻结、Flow Field / A*、Job / Burst | [生命周期](../maps/world-map-lifecycle.md)、[导航](../maps/navigation.md) |
+| 基础设施 | 前台、新建 / 继续、Session 隔离、本地存档、设置、本地化、输入与资源生命周期 | [项目概览](../../project.md) |
+| 物品与构筑 | 十槽二十件装备、独立窗口与统一拖放、属性与 HUD、堆叠材料、随机商店、材料打造 | [装备](../../equipment-system.md)、[物品](../../item-system.md)、[交易](../../trading-system.md) |
+| 状态与使用 | 七异常、抗性、叠层与时间、状态保存与显示，四种消耗品与统一使用事务 | [状态](../../status-system.md)、[消耗品](../../consumables.md) |
+| 地图制作 | 四地表、Dual Grid / Wang、五类数据、手绘 / AI 原子编辑、撤销及导入导出 | [地图](../../maps/README.md)、[编辑器](../../maps/map-editor.md) |
+| 世界与导航 | 稳定 Y 排序、分段遮挡、城镇 / 野外往返、离场冻结、Flow Field / A*、Job / Burst | [生命周期](../../maps/world-map-lifecycle.md)、[导航](../../maps/navigation.md) |
 
 以上作为下一阶段依赖，不重新列为待开发功能。
 
 ## 验收与已知限制
 
-- 2026-09-19 [I 综合验收](../maps/acceptance/i/README.md)：EditMode 722/722、PlayMode 85/85，零失败与跳过；配置校验零问题。当前 HEAD 于 2026-09-22 提交归档。
+- 2026-09-19 [I 综合验收](../../maps/acceptance/i/README.md)：EditMode 722/722、PlayMode 85/85，零失败与跳过；配置校验零问题。当前 HEAD 于 2026-09-22 提交归档。
 - 独立 Player 已覆盖交易 / 打造、绕障与战斗掉落、30 秒离场冻结、跨进程继续、Schema 4 迁移及 1000 单位 20 轮往返。
-- [压力记录](../maps/acceptance/i/performance.md)：500 单位总帧 P95 7.05–8.53 ms；1000 单位 15.01–17.23 ms。零分配结论仅适用于探针覆盖的稳态导航 Tick。
+- [压力记录](../../maps/acceptance/i/performance.md)：500 单位总帧 P95 7.05–8.53 ms；1000 单位 15.01–17.23 ms。零分配结论仅适用于探针覆盖的稳态导航 Tick。
 - 1000 单位保存端到端约 11.12 秒、继续恢复约 7.69 秒；完整往返约 22.87–24.71 秒，包含双向切图、自动保存及等待。保存托管堆观察峰值约 1209 MiB，为整个 Player 定时观察值，不是精确模块峰值。这些是现有边界，不自动纳入 Alpha 0.6。
 - 生产构建记录成功，`Builds/Alpha055/DarkFlare.exe` 当前存在；历史输入验收采用 Input System 注入，不等同于实体手柄全按钮人工验收。构建记录仍有可选 Pipeline 配置缺省与 TMP Shader pragma 弃用两项警告。
 - 当前仍是功能原型；Profile / 手动槽位 / 云同步、背包旋转与重量、多商人独立库存 / 回购、打造配方与批量等尚未交付。具体边界以各模块实现为准。
 
-## Alpha 0.6 规划入口
+## Alpha 0.6 规划入口（启动时记录）
 
-目前开发文档没有既定 Alpha 0.6 功能清单。需明确本版主要玩家流程、必须交付与暂缓范围、首个可独立体验阶段及其成功标准，再建立 `alpha-0.6-plan.md`，按 `alpha 0.6.0` 起拆分。
+启动梳理时开发文档没有既定 Alpha 0.6 功能清单。需明确本版主要玩家流程、必须交付与暂缓范围、首个可独立体验阶段及其成功标准，再建立 `alpha-0.6-plan.md`，按 `alpha 0.6.0` 起拆分。
 
 1. 阅读目标涉及的模块、核对代码与配置，确定依赖和实际差距。
 2. 阶段计划明确正常 / 失败路径、键鼠与手柄可达性、本地化、资源取消及存档兼容影响。
-3. 复用长期行为回归，遵守[测试维护规范](../testing/test-maintenance.md)；按改动补充必要测试并使用隔离玩家数据。
+3. 复用长期行为回归，遵守[测试维护规范](../../testing/test-maintenance.md)；按改动补充必要测试并使用隔离玩家数据。
 4. 完成相关回归与当前 Player 验收后，更新模块文档、归档阶段计划，再更新实际交付版本。内容版本与 Schema 独立评估。
 5. 正式总计划接管后归档本启动记录。
 
