@@ -63,11 +63,11 @@ namespace DarkFlare
             }
             Active = await PrepareAsync(mapId, token);
             _activeBoss = restored?.Boss?.Copy() ?? FreshBoss(Active.Map);
-            if (restored == null && Active.Spawner.SpawnDefinition != null)
+            if (restored == null && (Active.Spawner.SpawnDefinition != null || Active.Spawner.HasBatches))
             {
                 MonsterDefinition boss = BossDefinition(Active.Map);
                 await _architecture.GetSystem<SpawnSystem>().PreloadAsync(null, null,
-                    (Active.Spawner.SpawnDefinition?.AllMonsters ?? Array.Empty<MonsterDefinition>())
+                    Active.Spawner.AllMonsters
                         .Concat(boss != null ? new[] { boss } : Array.Empty<MonsterDefinition>()), token);
             }
             if (restored != null)
@@ -150,6 +150,14 @@ namespace DarkFlare
             SpawnBoss(Active, _activeBoss);
         }
 
+        public void SpawnFreshMonsters()
+        {
+            if (Active == null || !Active.Spawner.HasBatches) { return; }
+            int seed = _architecture.GetSystem<GameplayRandomSystem>().CaptureMapState().RootSeed;
+            Active.Spawner.RestoreState(Active.Spawner.CreateFreshState(seed));
+            Active.Spawner.BeginSpawning();
+        }
+
         public async UniTask ChangeAsync(string mapId, string entryId, CancellationToken token)
         {
             if (Active == null || IsTransitioning) { throw new InvalidOperationException("地图当前不可切换"); }
@@ -186,7 +194,7 @@ namespace DarkFlare
                     MonsterDefinition bossDefinition = BossDefinition(candidate.Map);
                     await _architecture.GetSystem<SpawnSystem>().PreloadAsync(null, null,
                         monsters.Select(monster => monster.Definition)
-                            .Concat(candidate.Spawner.SpawnDefinition?.AllMonsters ?? Array.Empty<MonsterDefinition>())
+                            .Concat(candidate.Spawner.AllMonsters)
                             .Concat(bossDefinition != null ? new[] { bossDefinition } : Array.Empty<MonsterDefinition>()).Distinct(), token);
                     token.ThrowIfCancellationRequested();
                     ValidatePositions(candidate, Vector(position), targetState.Monsters, targetState.WorldDrops);
@@ -283,6 +291,7 @@ namespace DarkFlare
 
         void ImportMap(MapStateDto state, IReadOnlyList<PreparedMonsterRestore> monsters, IReadOnlyDictionary<string, ItemInstance> items, double time)
         {
+            Active.Spawner.RestoreState(state.Spawner);
             var controllers = new List<MonsterController>();
             foreach (PreparedMonsterRestore monster in monsters)
             {
@@ -308,18 +317,23 @@ namespace DarkFlare
                 if (_architecture.GetSystem<LootSystem>().SpawnRestoredPickup(WorldDropId.Parse(drop.InstanceId), items[drop.ItemInstanceId], Position(drop.Position)) == null)
                 { throw new InvalidOperationException("恢复掉落失败"); }
             }
-            if (state.Spawner.IsRunning && Active.Spawner.SpawnDefinition != null)
+            if ((state.Spawner.IsRunning || state.Spawner.Mode == FiniteSpawnMode.Finite && Active.Spawner.HasBatches)
+                && Active.Spawner.SpawnDefinition != null)
             { Active.Spawner.BeginSpawning(state.Spawner.NextSpawnRemainingSeconds); }
         }
 
         MapStateDto FreshState(MapScope scope)
         {
+            GameplayRandomStateDto random = SessionSnapshotSource.MapRandom(
+                _architecture.GetSystem<GameplayRandomSystem>().CreateMapState(scope.Map.MapId));
+            MonsterSpawnerStateDto spawning = scope.Spawner.CreateFreshState(random.RootSeed);
+            spawning.SpawnContentId = scope.Spawner.SpawnDefinition != null ? "spawn:" + scope.Spawner.SpawnDefinition.Id : "";
+            spawning.IsRunning = scope.Spawner.HasBatches;
             return new MapStateDto
             {
                 MapId = scope.Map.MapId, Revision = scope.Map.Revision,
-                Random = SessionSnapshotSource.MapRandom(_architecture.GetSystem<GameplayRandomSystem>().CreateMapState(scope.Map.MapId)),
-                Spawner = new MonsterSpawnerStateDto { IsRunning = scope.Spawner.SpawnDefinition != null,
-                    SpawnContentId = scope.Spawner.SpawnDefinition != null ? "spawn:" + scope.Spawner.SpawnDefinition.Id : "" },
+                Random = random,
+                Spawner = spawning,
                 Statuses = new StatusSaveDto { Time = _architecture.GetSystem<StatusSystem>().Store.Time }
                 , Boss = FreshBoss(scope.Map)
             };

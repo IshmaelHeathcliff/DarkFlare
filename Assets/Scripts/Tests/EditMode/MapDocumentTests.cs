@@ -25,8 +25,9 @@ namespace DarkFlare.Tests
             raw["formatVersion"] = 1;
             raw.Remove("entries");
             MapDocument upgraded = MapDocumentJson.Read(raw.ToString());
-            Assert.AreEqual(3, upgraded.FormatVersion);
+            Assert.AreEqual(4, upgraded.FormatVersion);
             Assert.IsEmpty(upgraded.Entries);
+            Assert.IsEmpty(upgraded.SpawnBatches);
             upgraded.Entries = new[] { new MapEntryRecord { EntryId = "arrival", Position = new MapPoint { X = 2, Y = 3 } } };
             MapDocument restored = Compile(upgraded).CreateEditableCopy();
             Assert.AreEqual("arrival", restored.Entries[0].EntryId);
@@ -150,7 +151,7 @@ namespace DarkFlare.Tests
             MapDocument document = _definitions.Document();
             switch (mutation)
             {
-                case "version": document.FormatVersion = 4; break;
+                case "version": document.FormatVersion = 5; break;
                 case "revision": document.Revision = -1; break;
                 case "namespace": document.MapId = "item:test_map"; break;
                 case "missing": document.TerrainSetId = "terrain_set:missing"; break;

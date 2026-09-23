@@ -52,6 +52,33 @@ namespace DarkFlare.Tests
         }
 
         [Test]
+        public void SpawnBatchPatch_PreviewsUndoRedoAndRemovesAtomically()
+        {
+            ContentCatalog catalog = ContentCatalog.Build(AssetDatabase.LoadAssetAtPath<ContentCatalogDefinition>(
+                "Assets/Data/Preset/Content/正式内容目录.asset")).Catalog;
+            WorldMapCatalog maps = WorldMapCatalog.FromContent(catalog);
+            CompiledMapDocument map = maps.Get("map:wilderness");
+            _session.Dispose();
+            File.WriteAllText(_path, map.CanonicalJson);
+            _session = new MapEditSession(map, _path, () => maps.Definitions);
+            JObject record = JObject.Parse(MapDocumentJson.Write(map.CreateEditableCopy()))["spawnBatches"]
+                .Children<JObject>().Single(batch => (string)batch["batchId"] == "initial");
+            record["count"] = 19;
+            JObject patch = MapEditService.Patch(_session.Current,
+                new JObject { ["type"] = "UpsertSpawnBatch", ["record"] = record });
+            Assert.AreEqual(19, _session.Preview(patch).CreateEditableCopy().SpawnBatches.Single(batch => batch.BatchId == "initial").Count);
+            Assert.AreEqual(20, _session.Current.CreateEditableCopy().SpawnBatches.Single(batch => batch.BatchId == "initial").Count);
+            _session.Apply(patch);
+            Undo.PerformUndo();
+            Assert.AreEqual(20, _session.Current.CreateEditableCopy().SpawnBatches.Single(batch => batch.BatchId == "initial").Count);
+            Undo.PerformRedo();
+            Assert.AreEqual(19, _session.Current.CreateEditableCopy().SpawnBatches.Single(batch => batch.BatchId == "initial").Count);
+            _session.Apply(MapEditService.Patch(_session.Current,
+                new JObject { ["type"] = "RemoveSpawnBatch", ["id"] = "initial" }));
+            Assert.AreEqual(10, _session.Current.CreateEditableCopy().SpawnBatches.Length);
+        }
+
+        [Test]
         public void EntryPatch_PreviewUndoRedoAndRemoveShareTheAtomicDocument()
         {
             var operation = new JObject { ["type"] = "UpsertEntry", ["record"] = new JObject

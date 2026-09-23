@@ -6,7 +6,7 @@
       "type": "integer",
       "minimum": -2147483648,
       "maximum": 2147483647,
-      "const": 3
+      "const": 4
     },
     "mapId": {
       "type": "string",
@@ -392,6 +392,63 @@
         ],
         "additionalProperties": false
       }
+    },
+    "spawnBatches": {
+      "type": "array",
+      "maxItems": 256,
+      "items": {
+        "type": "object",
+        "properties": {
+          "batchId": {
+            "type": "string",
+            "maxLength": 256
+          },
+          "regionId": {
+            "type": "string",
+            "maxLength": 256
+          },
+          "count": {
+            "type": "integer",
+            "minimum": -2147483648,
+            "maximum": 2147483647
+          },
+          "activation": {
+            "type": "string",
+            "enum": [
+              "OnEnter",
+              "PlayerRange"
+            ]
+          },
+          "triggerCenter": {
+            "type": "object",
+            "properties": {
+              "x": {
+                "type": "number"
+              },
+              "y": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "x",
+              "y"
+            ],
+            "additionalProperties": false
+          },
+          "triggerRadius": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "batchId",
+          "regionId",
+          "count",
+          "activation",
+          "triggerCenter",
+          "triggerRadius"
+        ],
+        "additionalProperties": false
+      }
     }
   },
   "required": [
@@ -411,8 +468,9 @@
     "objects",
     "regions",
     "entries",
-    "bossSpawns"
+    "bossSpawns",
+    "spawnBatches"
   ],
   "additionalProperties": false,
-  "description": "DarkFlare 地图 V3 结构合同；V1/V2 读取时纯数据升级。须继续运行 MapDocumentCompiler 校验内容引用、坐标、地表与几何语义。"
+  "description": "DarkFlare 地图 V4 结构合同；V1–V3 读取时纯数据升级。须继续运行 MapDocumentCompiler 校验内容引用、坐标、地表与几何语义。"
 }

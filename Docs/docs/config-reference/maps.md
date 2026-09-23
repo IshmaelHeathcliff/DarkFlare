@@ -61,7 +61,7 @@ Editor 发布校验源修订、输出内容、地址唯一性、标签与运行�
 
 ## MapRegionDefinition
 
-创建菜单 `Map Region Definition`；命名空间 `map_region`。源区域可为矩形或简单多边形。当前消费者包含语义校验器和[静态几何查询](../maps/map-geometry.md)：Safe 排除刷怪足迹，不阻挡行走；Spawn 落点必须完整位于指定区域。运行中的刷怪接入后续地图阶段。
+创建菜单 `Map Region Definition`；命名空间 `map_region`。源区域可为矩形或简单多边形。当前消费者包含语义校验器、[静态几何查询](../maps/map-geometry.md)和有限刷怪器：Safe 排除刷怪足迹，不阻挡行走；Spawn 落点必须完整位于指定区域。V4 地图的 `spawnBatches` 引用区域 ID；MonsterSpawnDefinition 保留加权怪物池，不存储名额或触发坐标。
 
 | 字段 | 类型 / 默认 | 合同 |
 | --- | --- | --- |

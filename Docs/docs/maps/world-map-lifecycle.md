@@ -6,13 +6,15 @@
 
 初始安装完成后，`DarkFlare/地图/安装城镇与野外` 菜单已移除；日常修改通过地图工作台与配置中心完成。`WorldMapSetup.Ensure()` 保留为显式脚本安装入口，调用仍会更新正式配置并保存 Main 场景。
 
-正式源位于 `Assets/Data/Maps/World/`：城镇 64×64、野外 128×128，格宽 1。两图复用四地表发布资源及对象表现目录，当前 core 内容版本为 8。新游戏由 `WorldMapConfiguration` 的默认地图与入口决定。
+正式源位于 `Assets/Data/Maps/World/`：城镇 64×64、野外 128×128，格宽 1。两图复用四地表发布资源及对象表现目录，当前 core 内容版本为 10。新游戏由 `WorldMapConfiguration` 的默认地图与入口决定。
 
 地图交换格式 V2 增加 `entries`：稳定 `entryId`、用途 `Arrival / NewGame / Respawn`、局部世界坐标。每图最多 256 个入口，正式图必须有唯一复活入口。`Portal` 对象交互保存目标 `targetMapId / targetEntryId`，`contentId` 为空；商人和打造绑定相反。整套地图编译后交叉检查目标引用。V1 读取时只在内存补空入口和空出口字段，保存输出 V2，不在读取时改写原文件。
 
 地图工作台的入口页、SceneView 的 P 工具及 `UpsertEntry / RemoveEntry` AI Patch 共用原子编辑事务、Undo / Redo 和规范 JSON。地图源仍是唯一布局，不在 SO 另存入口坐标。
 
 0.6.2 的地图交换格式 V3 另加 `bossSpawns`：稳定点位 ID、`monster:` 内容 ID、局部世界坐标和单位朝向；首版每图 0 或 1 个。正式野外图 r4 放置 `guardian`，城镇无 Boss 点。V1 / V2 输入只在内存升为 V3 并补空点位，规范导出 V3；[结构 Schema](map-document.schema.json)也以 V3 为准。工作台 Boss 页、SceneView 标记及 `UpsertBossSpawn / RemoveBossSpawn` Patch 共用地图事务与 Undo / Redo。编译器检查引用、范围及朝向，候选图资源预热后按 Boss Prefab 的实际圆足迹检查净空。Boss 点不是玩家入口，不受传送目标 API 选择。
+
+0.6.3 的 V4 新增 `spawnBatches`，野外 r9 配置 `initial` 入图 20 名额与分散的 10 个玩家范围触发点，每点 8 名额；Boss 仍独立。范围批次各自关联附近的 Spawn 区域及怪物池；V1–V3 输入在内存升为无批次 V4。[结构 Schema](map-document.schema.json)已升 V4。工作台批次页、SceneView 触发圆与中心标签、`UpsertSpawnBatch / RemoveSpawnBatch` Patch 使用同一事务与撤销。新图预定怪物类型与种子，初始批次在切图提交前生成，范围批次在玩家进入或高速穿过范围后按帧预算生成；离场、回图和保存继续均保留名额。
 
 ## 所有权与切图
 
@@ -37,7 +39,9 @@
 
 0.6.2 的 Schema 7 增加每图 Boss 名额与怪物动作 DTO。活动图和冻结图都存 `Ready / Alive / Defeated / LegacyAbsent`；已击杀 Boss 不因回图刷新。Schema 6 历史档的已访问图标记 `LegacyAbsent`。野外 r1→r4 仅对已登记且去掉 Boss 点后语义与旧图完全相同的布局迁移，其它修订仍严格拒绝。详见[守卫 Boss 模块](../behavior/boss.md)。
 
-Schema 4 的 `Run` 保存活动 `ActiveMapId / MapRevision / MapRandom`，原 `Monsters / WorldDrops / Spawner / Statuses` 表示当前图；`FrozenMaps` 只保存非活动图。物品仍在 `Payload.Items` 唯一总表，内存冻结态的 `Items` 子集不重复写盘。当前只支持一个共享商人库存，仍由 Session 的 `Run.Merchant` 保存；城镇和野外切换不补货。每图 Spawn 区域当前须使用同一刷怪定义；商人和打造绑定须与 Session 共享服务一致，不静默忽略不同内容 ID。
+0.6.3 的 Schema 8 在活动图和冻结图保存计划种子、批次激活、Pending / Alive / Defeated 名额与存活实例 ID。Schema 7→8 将所有已访问图标记 `LegacyPreserved`，保留原有怪物并停止旧补满；未访问的新图采用有限计划。野外 r1 / r4→r9 只接受已知旧图的规范语义哈希，r7→r9 保留旧 12 名额状态并扩出新名额；未知修订拒绝。名额容量包含尚未生成的 Pending；手动重置留待 0.6.4。
+
+Schema 4 的 `Run` 保存活动 `ActiveMapId / MapRevision / MapRandom`，原 `Monsters / WorldDrops / Spawner / Statuses` 表示当前图；`FrozenMaps` 只保存非活动图。物品仍在 `Payload.Items` 唯一总表，内存冻结态的 `Items` 子集不重复写盘。当前只支持一个共享商人库存，仍由 Session 的 `Run.Merchant` 保存；城镇和野外切换不补货。普通刷怪批次按所引用的 Spawn 区域解析各自怪物池；商人和打造绑定须与 Session 共享服务一致，不静默忽略不同内容 ID。
 
 随机通道 `SpawnPosition / MonsterInstance / MonsterAttack / Loot` 随地图保存；`PlayerAttack / Crafting` 属于 Session。新地图根种子以固定算法从运行种子与 MapId 派生。Schema 3→4 将历史单图映射到野外，复制原随机根及序号，不更改下一次随机结果；core 5→6 为追加内容。野外中央保留旧 Main 范围；纯数据预检拒绝阻挡内部、未知图、修订不匹配和全图重复身份；资源预热后按实际 Prefab 圆形足迹与物理接触容差进一步校验恢复位置，不移动或丢弃存档对象。
 
@@ -45,6 +49,6 @@ Schema 4 的 `Run` 保存活动 `ActiveMapId / MapRevision / MapRandom`，原 `M
 
 ## 几何与后续边界
 
-刷怪使用区域与圆足迹检查，Safe 始终排除；采样失败跳过并累计诊断计数。相机使用当前图 Bounds，复活使用当前图唯一 Respawn 入口。
+刷怪使用区域与圆足迹检查，Safe 始终排除；有限名额位置暂时无合法落点时保留 Pending，按帧重试并累计诊断计数；入图批次失败使候选切图回滚。相机使用当前图 Bounds，复活使用当前图唯一 Respawn 入口。
 
 阶段 H 已接入[批量导航](./navigation.md)：`MapScope` 同时持有 Native 网格、搜索池、共享场和固定步驱动。停用时立即取消驱动并完成 Job，提交成功后释放，回退重新激活。Schema 5 增加怪物导航意图；只冻结目标 / 模式和停止规则，路径与缓存重建。1000 怪物存档容量验证仍不能替代独立导航性能验收，性能结论见 H 记录。

@@ -276,8 +276,9 @@ namespace DarkFlare.Tests
                     Spawner = new MonsterSpawnerStateDto
                     {
                         SpawnContentId = "spawn:main",
-                        IsRunning = true,
-                        NextSpawnRemainingSeconds = 0.75f,
+                        Mode = FiniteSpawnMode.LegacyPreserved,
+                        IsRunning = false,
+                        NextSpawnRemainingSeconds = 0f,
                     },
                 },
             };

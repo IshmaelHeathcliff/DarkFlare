@@ -70,7 +70,11 @@ namespace DarkFlare
             token.ThrowIfCancellationRequested();
             ValidatePreloadedAssets(architecture, monsterDefinitions, itemIcons);
             if (_configuration.WorldMaps != null)
-            { await architecture.GetUtility<WorldMapRuntime>().InitializeAsync(context, _configuration, _prepared.Document.Payload.Run, token); }
+            {
+                WorldMapRuntime maps = architecture.GetUtility<WorldMapRuntime>();
+                await maps.InitializeAsync(context, _configuration, _prepared.Document.Payload.Run, token);
+                await architecture.GetSystem<SpawnSystem>().PreloadAsync(null, null, maps.Active.Spawner.AllMonsters, token);
+            }
             CommitPreparedState(architecture, context.ContentCatalog, token);
         }
 
@@ -197,6 +201,7 @@ namespace DarkFlare
             MonsterSpawnerStateDto spawnerState = _prepared.Document.Payload.Run.Spawner;
             MonsterSpawner spawner = architecture.GetUtility<WorldMapRuntime>().Active?.Spawner ?? _configuration.MonsterSpawner;
             spawner.PrepareForInitialization(_prepared.SpawnDefinition);
+            if (architecture.GetUtility<WorldMapRuntime>().IsConfigured) { spawner.RestoreState(spawnerState); }
 
             for (int i = 0; i < restoredMonsters.Count; i++)
             {

@@ -2,7 +2,7 @@
 
 当前 `0.5.5-alpha` 已通过从空白图开始的实际 SceneView 手绘、AI 原子编辑、导入导出与正式预览联验，保留[样图与操作证据](./acceptance/i/workflow.md)。
 
-地图编辑器模块。入口：`DarkFlare/地图/地图编辑器`，或配置中心“地图文档”→“打开地图绘制工作台”。阶段 G 扩展入口及跨图出口；0.6.2 增加[V3 Boss 点位](./README.md)，运行时装配见[双地图生命周期](./world-map-lifecycle.md)。
+地图编辑器模块。入口：`DarkFlare/地图/地图编辑器`，或配置中心“地图文档”→“打开地图绘制工作台”。阶段 G 扩展入口及跨图出口；0.6.2 增加 Boss 点位，0.6.3 增加[V4 刷怪批次](./README.md)，运行时装配见[双地图生命周期](./world-map-lifecycle.md)。
 
 ## 手工操作
 
@@ -22,6 +22,8 @@
 入口页维护 EntryId、Arrival / NewGame / Respawn 用途和局部世界坐标，SceneView P 工具放置入口。Portal 对象填写目标 MapId 与 EntryId；Trader / Crafting 仍绑定内容 ID。AI 的 `UpsertEntry` 使用完整 `record`，`RemoveEntry` 使用 `id`，与手工操作共享校验、Undo 和修订。正式资源位于 `Assets/Data/Maps/World/`，编辑样例保持独立。
 
 Boss 点位页维护稳定 ID、Boss 怪物定义、局部世界位置及单位朝向。SceneView 显示点位圆圈和朝向线，选择后可移动并提交。`UpsertBossSpawn` 使用完整 `record`，`RemoveBossSpawn` 使用 `id`；它们与手工编辑共享地图事务、预览、Undo / Redo 和修订。Boss 点不能作为玩家入口或普通刷怪区域。
+
+刷怪批次页维护稳定批次 ID、关联 Spawn 区域、固定数量和入图／玩家范围激活方式；范围批次在 SceneView 显示触发圆、中心实心标记、批次 ID 和数量。`UpsertSpawnBatch` 使用完整 `record`，`RemoveSpawnBatch` 使用 `id`，与其他地图编辑共用预览、原子应用、Undo / Redo。批次只定义名额和激活，怪物权重仍由所关联区域的 `MonsterSpawnDefinition` 提供。
 
 ## 事务、撤销与恢复
 

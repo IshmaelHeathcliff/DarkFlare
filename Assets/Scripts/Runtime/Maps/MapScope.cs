@@ -83,7 +83,7 @@ namespace DarkFlare
                 var spawnRoot = new GameObject("Map spawner");
                 spawnRoot.transform.SetParent(scope.Root.transform, false);
                 scope.Spawner = spawnRoot.AddComponent<MonsterSpawner>();
-                scope.Spawner.ConfigureMap(scope.Geometry, definitions);
+                scope.Spawner.ConfigureMap(map, scope.Geometry, definitions);
                 return scope;
             }
             catch { await scope.DisposeAsync(); throw; }

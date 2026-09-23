@@ -369,6 +369,37 @@ namespace DarkFlare
         }
     }
 
+    public sealed class FiniteSpawnSaveMigration : IJsonMigrationStep
+    {
+        public string Id => "save_7_to_8_finite_spawns";
+        public MigrationDataDomain Domain => MigrationDataDomain.Save;
+        public int FromVersion => 7;
+        public int ToVersion => 8;
+        public void Apply(JObject document)
+        {
+            if (document["payload"]?["run"] is not JObject run) { throw new InvalidOperationException("缺少 Run 数据"); }
+            MarkLegacy(run);
+            if (run["frozenMaps"] is JArray maps)
+            {
+                foreach (JToken map in maps)
+                {
+                    if (map is not JObject frozen) { throw new InvalidOperationException("冻结地图非法"); }
+                    MarkLegacy(frozen);
+                }
+            }
+        }
+        static void MarkLegacy(JObject map)
+        {
+            if (map["spawner"] is not JObject spawner) { throw new InvalidOperationException("缺少刷怪器状态"); }
+            spawner["mode"] = (int)FiniteSpawnMode.LegacyPreserved;
+            spawner["planSeed"] = 0;
+            spawner["batches"] = new JArray();
+            spawner["slots"] = new JArray();
+            spawner["isRunning"] = false;
+            spawner["nextSpawnRemainingSeconds"] = 0;
+        }
+    }
+
     public sealed class BossEncounterSaveMigration : IJsonMigrationStep
     {
         public string Id => "save_6_to_7_boss_encounter";

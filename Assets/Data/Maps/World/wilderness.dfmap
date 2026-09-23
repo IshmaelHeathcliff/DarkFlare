@@ -16523,7 +16523,7 @@
       }
     }
   ],
-  "formatVersion": 3,
+  "formatVersion": 4,
   "height": 128,
   "mapId": "map:wilderness",
   "objects": [
@@ -16757,6 +16757,176 @@
       "definitionId": "map_region:editor_spawn",
       "points": [
         {
+          "x": 54.0,
+          "y": 78.0
+        },
+        {
+          "x": 74.0,
+          "y": 98.0
+        }
+      ],
+      "priority": 0,
+      "regionId": "spawn_center_north",
+      "shape": "Rectangle",
+      "spawnDefinitionId": "spawn:main"
+    },
+    {
+      "definitionId": "map_region:editor_spawn",
+      "points": [
+        {
+          "x": 58.0,
+          "y": 34.0
+        },
+        {
+          "x": 78.0,
+          "y": 54.0
+        }
+      ],
+      "priority": 0,
+      "regionId": "spawn_center_south",
+      "shape": "Rectangle",
+      "spawnDefinitionId": "spawn:main"
+    },
+    {
+      "definitionId": "map_region:editor_spawn",
+      "points": [
+        {
+          "x": 98.0,
+          "y": 46.0
+        },
+        {
+          "x": 118.0,
+          "y": 66.0
+        }
+      ],
+      "priority": 0,
+      "regionId": "spawn_east",
+      "shape": "Rectangle",
+      "spawnDefinitionId": "spawn:main"
+    },
+    {
+      "definitionId": "map_region:editor_spawn",
+      "points": [
+        {
+          "x": 90.0,
+          "y": 86.0
+        },
+        {
+          "x": 110.0,
+          "y": 106.0
+        }
+      ],
+      "priority": 0,
+      "regionId": "spawn_east_patrol",
+      "shape": "Rectangle",
+      "spawnDefinitionId": "spawn:main"
+    },
+    {
+      "definitionId": "map_region:editor_spawn",
+      "points": [
+        {
+          "x": 46.0,
+          "y": 98.0
+        },
+        {
+          "x": 66.0,
+          "y": 118.0
+        }
+      ],
+      "priority": 0,
+      "regionId": "spawn_north",
+      "shape": "Rectangle",
+      "spawnDefinitionId": "spawn:main"
+    },
+    {
+      "definitionId": "map_region:editor_spawn",
+      "points": [
+        {
+          "x": 14.0,
+          "y": 86.0
+        },
+        {
+          "x": 34.0,
+          "y": 106.0
+        }
+      ],
+      "priority": 0,
+      "regionId": "spawn_northwest",
+      "shape": "Rectangle",
+      "spawnDefinitionId": "spawn:main"
+    },
+    {
+      "definitionId": "map_region:editor_spawn",
+      "points": [
+        {
+          "x": 42.0,
+          "y": 10.0
+        },
+        {
+          "x": 62.0,
+          "y": 30.0
+        }
+      ],
+      "priority": 0,
+      "regionId": "spawn_south",
+      "shape": "Rectangle",
+      "spawnDefinitionId": "spawn:main"
+    },
+    {
+      "definitionId": "map_region:editor_spawn",
+      "points": [
+        {
+          "x": 94.0,
+          "y": 14.0
+        },
+        {
+          "x": 114.0,
+          "y": 34.0
+        }
+      ],
+      "priority": 0,
+      "regionId": "spawn_southeast",
+      "shape": "Rectangle",
+      "spawnDefinitionId": "spawn:main"
+    },
+    {
+      "definitionId": "map_region:editor_spawn",
+      "points": [
+        {
+          "x": 10.0,
+          "y": 22.0
+        },
+        {
+          "x": 30.0,
+          "y": 42.0
+        }
+      ],
+      "priority": 0,
+      "regionId": "spawn_southwest",
+      "shape": "Rectangle",
+      "spawnDefinitionId": "spawn:main"
+    },
+    {
+      "definitionId": "map_region:editor_spawn",
+      "points": [
+        {
+          "x": 10.0,
+          "y": 54.0
+        },
+        {
+          "x": 30.0,
+          "y": 74.0
+        }
+      ],
+      "priority": 0,
+      "regionId": "spawn_west",
+      "shape": "Rectangle",
+      "spawnDefinitionId": "spawn:main"
+    },
+    {
+      "definitionId": "map_region:editor_spawn",
+      "points": [
+        {
           "x": 2.0,
           "y": 2.0
         },
@@ -16771,8 +16941,131 @@
       "spawnDefinitionId": "spawn:main"
     }
   ],
-  "revision": 4,
+  "revision": 9,
   "seed": 1805,
+  "spawnBatches": [
+    {
+      "activation": "PlayerRange",
+      "batchId": "center_north",
+      "count": 8,
+      "regionId": "spawn_center_north",
+      "triggerCenter": {
+        "x": 64.0,
+        "y": 88.0
+      },
+      "triggerRadius": 8.0
+    },
+    {
+      "activation": "PlayerRange",
+      "batchId": "center_south",
+      "count": 8,
+      "regionId": "spawn_center_south",
+      "triggerCenter": {
+        "x": 68.0,
+        "y": 44.0
+      },
+      "triggerRadius": 8.0
+    },
+    {
+      "activation": "PlayerRange",
+      "batchId": "east",
+      "count": 8,
+      "regionId": "spawn_east",
+      "triggerCenter": {
+        "x": 108.0,
+        "y": 56.0
+      },
+      "triggerRadius": 8.0
+    },
+    {
+      "activation": "PlayerRange",
+      "batchId": "east_patrol",
+      "count": 8,
+      "regionId": "spawn_east_patrol",
+      "triggerCenter": {
+        "x": 100.0,
+        "y": 96.0
+      },
+      "triggerRadius": 8.0
+    },
+    {
+      "activation": "OnEnter",
+      "batchId": "initial",
+      "count": 20,
+      "regionId": "wild_spawn",
+      "triggerCenter": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "triggerRadius": 0.0
+    },
+    {
+      "activation": "PlayerRange",
+      "batchId": "north",
+      "count": 8,
+      "regionId": "spawn_north",
+      "triggerCenter": {
+        "x": 56.0,
+        "y": 108.0
+      },
+      "triggerRadius": 8.0
+    },
+    {
+      "activation": "PlayerRange",
+      "batchId": "northwest",
+      "count": 8,
+      "regionId": "spawn_northwest",
+      "triggerCenter": {
+        "x": 24.0,
+        "y": 96.0
+      },
+      "triggerRadius": 8.0
+    },
+    {
+      "activation": "PlayerRange",
+      "batchId": "south",
+      "count": 8,
+      "regionId": "spawn_south",
+      "triggerCenter": {
+        "x": 52.0,
+        "y": 20.0
+      },
+      "triggerRadius": 8.0
+    },
+    {
+      "activation": "PlayerRange",
+      "batchId": "southeast",
+      "count": 8,
+      "regionId": "spawn_southeast",
+      "triggerCenter": {
+        "x": 104.0,
+        "y": 24.0
+      },
+      "triggerRadius": 8.0
+    },
+    {
+      "activation": "PlayerRange",
+      "batchId": "southwest",
+      "count": 8,
+      "regionId": "spawn_southwest",
+      "triggerCenter": {
+        "x": 20.0,
+        "y": 32.0
+      },
+      "triggerRadius": 8.0
+    },
+    {
+      "activation": "PlayerRange",
+      "batchId": "west",
+      "count": 8,
+      "regionId": "spawn_west",
+      "triggerCenter": {
+        "x": 20.0,
+        "y": 64.0
+      },
+      "triggerRadius": 8.0
+    }
+  ],
   "terrainPalette": [
     "terrain:dirt",
     "terrain:grass",

@@ -50,8 +50,13 @@ namespace DarkFlare.Tests
             RunSnapshot first = null;
             yield return CaptureMainRun(snapshot => first = snapshot);
 
+            SessionSaveFacade facade = ApplicationHost.Current.SessionSaveFacade;
+            float saveDeadline = Time.realtimeSinceStartup + 10f;
+            yield return null;
+            while (facade.IsBusy && Time.realtimeSinceStartup < saveDeadline) { yield return null; }
+            Assert.IsFalse(facade.IsBusy, "切图自动存档应先完成");
             SaveOperationResult saveProbe = null;
-            yield return ApplicationHost.Current.SessionSaveFacade.SaveAutoAsync()
+            yield return facade.SaveAutoAsync()
                 .ToCoroutine(result => saveProbe = result);
             Assert.IsNotNull(saveProbe);
             Assert.IsTrue(
@@ -65,7 +70,7 @@ namespace DarkFlare.Tests
 
             Assert.IsNotNull(first);
             Assert.IsNotNull(second);
-            CollectionAssert.AreEqual(first.Monsters, second.Monsters, "怪物实例生命序列未能按固定种子复现");
+            CollectionAssert.AreEquivalent(first.Monsters, second.Monsters, "固定名额的怪物类型、种子和生命必须复现");
             CollectionAssert.AreEquivalent(
                 new[] { "wasteland_wraith", "razor_hound", "iron_husk" },
                 first.MonsterIds,
@@ -140,7 +145,17 @@ namespace DarkFlare.Tests
             player.enabled = false;
 
             List<MonsterRecord> monsters = new List<MonsterRecord>(MonsterSampleCount);
-            HashSet<int> capturedSeeds = new HashSet<int>();
+            MonsterSpawnerStateDto plan = GameArchitectureProvider.RequireCurrent()
+                .GetUtility<WorldMapRuntime>().Active.Spawner.CaptureState();
+            HashSet<string> targetIds = new HashSet<string>();
+            foreach (SpawnSlotStateDto slot in plan.Slots)
+            {
+                if (slot.BatchId != "initial" || slot.Status != SpawnSlotStatus.Alive) { continue; }
+                targetIds.Add(slot.InstanceId);
+                if (targetIds.Count == MonsterSampleCount) { break; }
+            }
+            Assert.AreEqual(MonsterSampleCount, targetIds.Count, "入图批次应提供稳定的采样名额");
+            HashSet<string> capturedIds = new HashSet<string>();
             timeout = Time.realtimeSinceStartup + RunTimeoutSeconds;
 
             while (monsters.Count < MonsterSampleCount && Time.realtimeSinceStartup < timeout)
@@ -159,7 +174,8 @@ namespace DarkFlare.Tests
                     MonsterController monster = current[i];
 
                     if (monster.Instance == null || monster.Definition.BossBehavior != null
-                        || !capturedSeeds.Add(monster.Instance.Seed))
+                        || !targetIds.Contains(monster.Instance.Id.Value)
+                        || !capturedIds.Add(monster.Instance.Id.Value))
                     {
                         continue;
                     }

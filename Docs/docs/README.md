@@ -62,12 +62,13 @@
 - [城镇、野外与地图生命周期](./maps/world-map-lifecycle.md)
 - [批量导航与怪物移动](./maps/navigation.md)
 - [行为管理与独立 HFSM](./behavior/README.md)
+- [有限刷怪与地图名额](./behavior/finite-spawning.md)
 - [世界渲染与稳定层级](./world-rendering.md)
 - [已完成计划归档](./plan/archive/README.md)
 
 ## 计划状态
 
-2026-09-23：**Alpha 0.6.2 守卫 Boss 实现完成，独立 Player 验收待解锁**。地图 V3、core v8、Schema 7、正式 Boss 内容与 `0.6.2-alpha` Windows 候选构建已接入；EditMode 812/812、PlayMode 95 通过 / 2 包内跳过 / 0 失败。Windows 企业签名策略阻止候选 EXE 启动，实际 Player 流程和 300 / 600 性能矩阵尚未验收，因此本阶段未封板，见[证据与剩余门槛](./behavior/acceptance/0.6.2/README.md)及[执行计划](./plan/alpha-0.6.2-guardian-boss-plan.md)。
+2026-09-23：**Alpha 0.6.3 有限刷怪完成**，当前交付 `0.6.3-alpha` / 地图 V4 / core v10 / Schema 8。正式野外图为 20 个入图名额、10 个分散触发点各 8 个名额及独立 Boss；旧已访问图保留进度。扩容后完整 EditMode 818/818、PlayMode 97 通过 / 2 包内跳过 / 0 失败；Windows Player 与 300 / 600 实测未执行。见[模块](./behavior/finite-spawning.md)、[验收](./behavior/acceptance/0.6.3/README.md)及[已归档计划](./plan/archive/alpha-0.6.3-finite-spawning-plan.md)。下一阶段为 0.6.4 手动重置。
 
 2026-09-23：**Alpha 0.6.1 普通怪物完成**，交付 `0.6.1-alpha` / core v7 / Schema 6 / 地图 V2。[模块](./behavior/monsters.md)覆盖休眠、闲逛、感知追逐、攻击与冻结恢复；最终 EditMode 808/808、PlayMode 92/92，Windows Player 和 500 / 1000 单位实测通过，覆盖 300 / 600 新目标，见[证据](./behavior/acceptance/0.6.1/README.md)。[M1–M6 计划](./plan/archive/alpha-0.6.1-monster-behavior-plan.md)已归档。
 

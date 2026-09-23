@@ -13,11 +13,11 @@ B 阶段已完成：[共享坐标、四角 Key 与稳定变体规则](./terrain-
 - `MapDefinition.Id` 是本地 ID，完整身份为 `map:<id>`。地表、地表集、对象、区域分别使用 `terrain`、`terrain_set`、`map_object`、`map_region`。
 - 定义资产按[地图配置参考](../config-reference/maps.md)创建。正式双地图及其依赖进入 core v6 内容目录。
 
-## V3 交换合同
+## V4 交换合同
 
 [最小样例](./sample.dfmap)使用四种地表，须先建立对应定义。[JSON Schema](./map-document.schema.json)由 `MapDocumentJson.CreateSchema()` 从 DTO 生成，与读取器共享属性、枚举和集合上限；它检查结构，引用、坐标、拓扑和几何必须继续运行 `MapDocumentCompiler.Compile`。
 
-字段全部必填，允许空值的字段仍须显式写 `null`。枚举采用精确名称字符串，不接受数字或大小写转换；拒绝未知字段、重复属性、缺字段、类型强制转换、非有限数值和尾部第二份文档。当前输出 formatVersion=3，V1 / V2 读取时在内存补齐入口、空出口字段及空 Boss 点位，不修改源文件；revision 非负，seed 为 Int32。[最小样例](./sample.dfmap)仍作为 V1 升级输入保留。
+字段全部必填，允许空值的字段仍须显式写 `null`。枚举采用精确名称字符串，不接受数字或大小写转换；拒绝未知字段、重复属性、缺字段、类型强制转换、非有限数值和尾部第二份文档。当前输出 formatVersion=4，V1–V3 读取时只在内存补齐入口、Boss 点位和空刷怪批次，不修改源文件；revision 非负，seed 为 Int32。[最小样例](./sample.dfmap)仍作为 V1 升级输入保留。
 
 | 数据 | 规则 |
 | --- | --- |
@@ -31,6 +31,7 @@ B 阶段已完成：[共享坐标、四角 Key 与稳定变体规则](./terrain-
 | interaction | Trader / Crafting 的 contentId 指向对应定义，目标字段为 null；Portal 的 contentId 为 null，targetMapId / targetEntryId 必填；不接受任意参数包 |
 | entries | 最多 256 个唯一 entryId，kind 为 Arrival / NewGame / Respawn，position 为局部世界坐标；正式地图入口 / 出口跨图校验见生命周期模块 |
 | bossSpawns | 每图 0 或 1 个独立 Boss 点位；稳定 spawnId、`monster:` 定义 ID、局部世界 position、单位 facing；正式野外图使用此字段，候选资源预热后检查实际圆足迹 |
+| spawnBatches | 最多 256 个稳定 batchId；引用 Spawn 区域的 regionId、正整数 count、OnEnter / PlayerRange 激活方式；后者使用局部世界 triggerCenter 与正 triggerRadius。普通名额与 Boss 合计每图不超过 1024，池内不可包含 Boss |
 | regions | 唯一 regionId、definitionId、Int32 priority、Rectangle/Polygon、points、可空 spawnDefinitionId；坐标为逻辑格，可含小数 |
 | Rectangle | points 为左下和右上两个点，面积为正 |
 | Polygon | 3..64 点，顺时针或逆时针均可；不重复首点；不允许自交、自接触、相邻共线或零面积 |
@@ -44,7 +45,7 @@ B 阶段已完成：[共享坐标、四角 Key 与稳定变体规则](./terrain-
 
 `MapDocumentJson.Read` → `MapDocumentCompiler.Compile(dto, lookup)` → `CompiledMapDocument`。核心服务不调用 AssetDatabase；调用方显式提供 `IMapDefinitionLookup`。MapDocumentException 提供字段路径和原因，首个错误即停止，无半成品网格对外发布。
 
-快照拥有独立网格、规范 JSON 和 SHA256，`GetTerrain` / `GetTerrainId` 提供只读地表查询，头字段与覆盖查询可直接读取，`CreateEditableCopy` 返回脱离快照的 DTO。规范导出按名称排序属性，按坐标排序块 / 覆盖，按稳定 ID 排序对象 / 区域；palette 和多边形顶点保留语义次序。SHA256 表示规范源内容，不是定义版本或导航缓存键；候选规则版本另见地表规则模块。
+快照拥有独立网格、规范 JSON 和 SHA256，`GetTerrain` / `GetTerrainId` 提供只读地表查询，头字段与覆盖查询可直接读取，`CreateEditableCopy` 返回脱离快照的 DTO。规范导出按名称排序属性，按坐标排序块 / 覆盖，按稳定 ID 排序对象 / 区域 / 刷怪批次；palette 和多边形顶点保留语义次序。SHA256 表示规范源内容，不是定义版本或导航缓存键；候选规则版本另见地表规则模块。
 
 Editor 定义索引只查询地表 / 对象 / 区域及交互、刷怪、Boss 怪物定义，不读取地图或 ContentCatalog，避免包含地图的目录形成导入环。索引读取过身份的定义登记源依赖，成功解析的定义额外登记产物依赖；因此缺引用导入仍能观察已有 SO 的 ID 恢复。新增 / 删除定义通过索引 Hash 失效，在导入回调外注册并受控刷新；当前改动任一索引定义可能重导入多张地图，尚未实现按 ID 分片索引。遵循 [Unity 依赖 API](https://docs.unity3d.com/6000.0/Documentation/ScriptReference/AssetImporters.AssetImportContext.DependsOnCustomDependency.html)。
 

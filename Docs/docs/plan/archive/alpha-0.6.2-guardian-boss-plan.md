@@ -1,6 +1,6 @@
 # Alpha 0.6.2：守卫 Boss 执行计划
 
-状态：2026-09-23，**B1–B4 已实现，B5–B6 的独立 Player 验收受系统签名策略阻断，计划保持进行中**。地图 V3、core v8、Schema 7、守卫 Boss 运行时与正式内容已接入；`0.6.2-alpha` 候选构建成功，完整自动回归通过，但不把它记作已封板交付。上位[总计划](alpha-0.6-plan.md)、[行为合同](alpha-0.6/monster-and-boss.md)、[有限刷怪与重置合同](alpha-0.6/spawning-and-reset.md)；当前实现见[Boss 模块](../behavior/boss.md)、[地图生命周期](../maps/world-map-lifecycle.md)，[验收进度](../behavior/acceptance/0.6.2/README.md)。
+状态：2026-09-23，**按用户调整的验收门槛结束并归档**。B1–B4 已实现，B5–B6 中可自动验证的内容与两种 Windows 构建完成；用户跳过本阶段 Windows 构建验收，独立 Player、跨进程继续及 300 / 600 性能矩阵未执行，不能视作通过。地图 V3、core v8、Schema 7、正式守卫 Boss 和 `0.6.2-alpha` 已接入。上位[总计划](../alpha-0.6-plan.md)、[行为合同](../alpha-0.6/monster-and-boss.md)、[有限刷怪与重置合同](../alpha-0.6/spawning-and-reset.md)；当前实现见[Boss 模块](../../behavior/boss.md)、[地图生命周期](../../maps/world-map-lifecycle.md)，[验收记录](../../behavior/acceptance/0.6.2/README.md)。
 
 ## 目标和完成定义
 
@@ -59,10 +59,10 @@ Schema 6→7 迁移同时处理活动图与全部冻结图：旧档中已访问�
 - **性能**：沿用同一 Windows 基线，10 秒预热、60 秒采样、三轮，诊断关闭 / 开启分别记录。300 常规单位总帧 P95 ≤16.7ms、600 压力单位 ≤33.3ms；导航子预算分别 ≤2 / 3ms。两档都包含活动怪群与 Boss，不以休眠怪代替；分开记录行为、感知、导航、战斗、表现和分配。
 - **生命周期**：至少 20 轮 Boss 遭遇中的切图 / 恢复，检查行为注册、旧回调、Addressables、任务和原生导航容量收敛；手动重置尚未实现，不计入本阶段循环。完整回归和正式构建通过后清理一次性验收工具，证据放在 `Docs/docs/behavior/acceptance/0.6.2/`。
 
-遵守[测试维护规范](../testing/test-maintenance.md)。完成 B6 后将验收证据归档，并把本计划移入 `Docs/docs/plan/archive/`。
+遵守[测试维护规范](../../testing/test-maintenance.md)。本计划归档后的现行行为与验证状态以模块文档及阶段验收记录为准。
 
 ## 2026-09-23 执行记录
 
-B1–B4 已接入并完成针对性及完整自动测试。完整 EditMode 812/812，完整 PlayMode 95 通过、2 项包内跳过、0 失败；正式场景中的挥击、冲锋、强化、击杀及带 Boss 的 20 轮切图均通过。开发和非 Development Windows 构建成功，证据见[验收进度](../behavior/acceptance/0.6.2/README.md)。
+B1–B4 已接入并完成针对性及完整自动测试。完整 EditMode 812/812，完整 PlayMode 95 通过、2 项包内跳过、0 失败；正式场景中的挥击、冲锋、强化、击杀及带 Boss 的 20 轮切图均通过。开发和非 Development Windows 构建成功，证据见[验收记录](../../behavior/acceptance/0.6.2/README.md)。
 
-本机 Enterprise signing level 策略在创建进程时拒绝启动未签名开发构建（Code Integrity 3077）。B5 的实际 Player 操作、跨进程继续与 B6 的 300 / 600 性能矩阵和正式 Player 启动不能据此宣称通过。获得签名或允许运行的构建后继续这些门槛；在此之前本计划不归档。
+本机 Enterprise signing level 策略在创建进程时拒绝启动未签名开发构建（Code Integrity 3077）。B5 的实际 Player 操作、跨进程继续与 B6 的 300 / 600 性能矩阵和正式 Player 启动不能据此宣称通过。用户于 2026-09-23 明确跳过本阶段 Windows 构建验收，因此按调整后的门槛结束并归档；上述未执行项保留为豁免记录，后续如恢复要求再单独验收。

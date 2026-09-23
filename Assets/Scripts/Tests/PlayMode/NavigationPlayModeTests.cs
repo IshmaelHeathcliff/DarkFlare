@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Linq;
 using Cysharp.Threading.Tasks;
 using NUnit.Framework;
 using UnityEngine;
@@ -26,7 +27,10 @@ namespace DarkFlare.Tests
             IArchitecture architecture = host.CurrentSession.Architecture;
             MapScope scope = architecture.GetUtility<WorldMapRuntime>().Active;
             scope.Spawner.StopSpawning();
-            foreach (MonsterController existing in Object.FindObjectsByType<MonsterController>()) { Object.Destroy(existing.gameObject); }
+            var monsters = Object.FindObjectsByType<MonsterController>()
+                .Where(value => value.Definition.BossBehavior == null).Take(2).ToArray();
+            foreach (MonsterController existing in Object.FindObjectsByType<MonsterController>())
+            { if (!monsters.Contains(existing)) { Object.Destroy(existing.gameObject); } }
             yield return null;
             NavigationMap navigation = scope.Navigation;
             NavigationStampTicket first = architecture.SendCommand(new ChangeNavigationStampCommand(scope.Generation, "wall-a", new MapGeometryRect(11, 8, 12, 12)));
@@ -35,10 +39,10 @@ namespace DarkFlare.Tests
             yield return WaitTicket(first);
             Assert.AreEqual(NavigationStampStatus.Applied, first.Status);
             while (!navigation.IsReady) { yield return null; }
-            var monsters = new MonsterController[2];
             for (int i = 0; i < monsters.Length; i++)
             {
-                monsters[i] = architecture.GetSystem<SpawnSystem>().SpawnMonster(scope.Spawner.SpawnDefinition, 100 + i, new Vector3(9, 9 + i * 2));
+                monsters[i].transform.position = new Vector3(9, 9 + i * 2);
+                monsters[i].Body.position = monsters[i].transform.position;
                 Assert.IsNotNull(monsters[i]);
                 Assert.IsTrue(architecture.SendCommand(new SetNavigationIntentCommand(monsters[i],
                     new NavigationIntentDto
@@ -114,13 +118,17 @@ namespace DarkFlare.Tests
             IArchitecture architecture = host.CurrentSession.Architecture;
             MapScope scope = architecture.GetUtility<WorldMapRuntime>().Active;
             scope.Spawner.StopSpawning();
-            foreach (MonsterController existing in Object.FindObjectsByType<MonsterController>()) { Object.Destroy(existing.gameObject); }
+            MonsterController monster = Object.FindObjectsByType<MonsterController>()
+                .First(value => value.Definition.BossBehavior == null);
+            foreach (MonsterController existing in Object.FindObjectsByType<MonsterController>())
+            { if (existing != monster) { Object.Destroy(existing.gameObject); } }
             yield return null;
             PlayerController player = Object.FindAnyObjectByType<PlayerController>();
             player.enabled = false;
             Rigidbody2D target = player.GetComponent<Rigidbody2D>();
             target.position = new Vector2(15, 10);
-            MonsterController monster = architecture.GetSystem<SpawnSystem>().SpawnMonster(scope.Spawner.SpawnDefinition, 55, new Vector3(9, 10));
+            monster.transform.position = new Vector3(9, 10);
+            monster.Body.position = monster.transform.position;
             monster.Body.simulated = false;
             Assert.IsTrue(architecture.SendCommand(new SetNavigationIntentCommand(monster,
                 new NavigationIntentDto { Mode = NavigationMode.FlowField }, scope.Navigation.Handle(monster), takeBehaviorControl: true)));

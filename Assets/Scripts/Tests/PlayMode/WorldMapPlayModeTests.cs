@@ -99,6 +99,89 @@ namespace DarkFlare.Tests
         }
 
         [UnityTest]
+        public IEnumerator FiniteBatches_TriggerOnceAfterPauseAndFastCrossing()
+        {
+            yield return _fixture.EnterMain();
+            ApplicationHost host = ApplicationHost.Current;
+            WorldMapRuntime maps = host.CurrentSession.Architecture.GetUtility<WorldMapRuntime>();
+            yield return Change(host, "map:wilderness", "arrival");
+            MonsterSpawner spawner = maps.Active.Spawner;
+            Assert.AreEqual(100, spawner.PlannedCount);
+            Assert.AreEqual(80, spawner.PendingCount);
+            Assert.AreEqual(20, spawner.AliveCount);
+            Assert.AreEqual(21, UnityEngine.Object.FindObjectsByType<MonsterController>().Length, "Boss 独立于普通名额");
+            yield return null;
+            using GamePauseLease pause = host.GameTime.AcquirePause("finite-batch-test");
+            PlayerController player = UnityEngine.Object.FindAnyObjectByType<PlayerController>();
+            Vector3 destination = new Vector3(36, 32);
+            player.transform.position = destination;
+            Rigidbody2D body = player.GetComponent<Rigidbody2D>();
+            body.position = destination;
+            Physics2D.SyncTransforms();
+            yield return null;
+            Assert.AreEqual(80, spawner.PendingCount, "暂停时不能激活范围批次");
+            pause.Dispose();
+            for (int i = 0; i < 60 && spawner.PendingCount > 72; i++) { yield return null; }
+            Assert.AreEqual(72, spawner.PendingCount, spawner.LastSpawnFailure);
+            Assert.AreEqual(28, spawner.AliveCount + spawner.DefeatedCount);
+            for (int i = 0; i < 10; i++) { yield return null; }
+            Assert.AreEqual(100, spawner.PlannedCount, "重复进入范围不能追加名额");
+            Assert.AreEqual(72, spawner.PendingCount);
+            MonsterController victim = UnityEngine.Object.FindObjectsByType<MonsterController>()
+                .First(monster => monster.Definition.BossBehavior == null && monster.Actor.IsAlive);
+            int defeatedBefore = spawner.DefeatedCount;
+            float fatalDamage = victim.Actor.MaxHealth + 100f;
+            Assert.IsTrue(victim.Actor.ReceiveDamage(new DamageResult(true, false,
+                new Dictionary<DamageType, float> { [DamageType.Physical] = fatalDamage },
+                new Dictionary<DamageType, float> { [DamageType.Physical] = fatalDamage })));
+            yield return null;
+            Assert.AreEqual(defeatedBefore + 1, spawner.DefeatedCount);
+            Assert.AreEqual(72, spawner.PendingCount, "击杀后不能补怪");
+            Assert.AreEqual(100, spawner.PlannedCount);
+            MonsterSpawnerStateDto before = spawner.CaptureState();
+            yield return Change(host, "map:town", "return");
+            yield return Change(host, "map:wilderness", "arrival");
+            MonsterSpawnerStateDto restored = maps.Active.Spawner.CaptureState();
+            CollectionAssert.AreEqual(before.Slots.Select(slot => (slot.SlotId, slot.Status, slot.InstanceId)),
+                restored.Slots.Select(slot => (slot.SlotId, slot.Status, slot.InstanceId)),
+                "切图后必须恢复同一批次的名额和怪物身份");
+            Assert.IsTrue(restored.Batches.Single(batch => batch.BatchId == "east_patrol").IsActivated);
+        }
+
+        [UnityTest]
+        public IEnumerator AllRangeBatches_ActivateAndSpawnTheirReservedMonsters()
+        {
+            yield return _fixture.EnterMain();
+            ApplicationHost host = ApplicationHost.Current;
+            WorldMapRuntime maps = host.CurrentSession.Architecture.GetUtility<WorldMapRuntime>();
+            yield return Change(host, "map:wilderness", "arrival");
+            CompiledMapDocument map = maps.Active.Map;
+            MonsterSpawner spawner = maps.Active.Spawner;
+            MapSpawnBatchRecord[] triggers = map.CreateEditableCopy().SpawnBatches
+                .Where(batch => batch.Activation == MapSpawnActivation.PlayerRange).ToArray();
+            Assert.GreaterOrEqual(triggers.Length, 10);
+            PlayerController player = UnityEngine.Object.FindAnyObjectByType<PlayerController>();
+            Rigidbody2D body = player.GetComponent<Rigidbody2D>();
+            foreach (MapSpawnBatchRecord batch in triggers)
+            {
+                Vector2 center = new Vector2((float)(map.OriginX + batch.TriggerCenter.X),
+                    (float)(map.OriginY + batch.TriggerCenter.Y));
+                player.transform.position = center;
+                body.position = center;
+                Physics2D.SyncTransforms();
+                yield return null;
+                Assert.IsTrue(spawner.CaptureState().Batches.Single(state => state.BatchId == batch.BatchId).IsActivated,
+                    "触发点未激活：" + batch.BatchId);
+            }
+            player.transform.position = Vector2.zero;
+            body.position = Vector2.zero;
+            Physics2D.SyncTransforms();
+            for (int i = 0; i < 120 && spawner.PendingCount > 0; i++) { yield return null; }
+            Assert.AreEqual(0, spawner.PendingCount, spawner.LastSpawnFailure);
+            Assert.AreEqual(100, spawner.AliveCount + spawner.DefeatedCount);
+        }
+
+        [UnityTest]
         public IEnumerator FrozenMap_RoundTripsMonstersDropsRandomAndReleasesOwners()
         {
             yield return _fixture.EnterMain();
@@ -110,9 +193,9 @@ namespace DarkFlare.Tests
             MonsterController boss = UnityEngine.Object.FindObjectsByType<MonsterController>()
                 .Single(value => value.Definition.BossBehavior != null);
             string bossId = boss.Instance.Id.Value;
-            MonsterController monster = architecture.GetSystem<SpawnSystem>().SpawnMonster(maps.Active.Spawner.SpawnDefinition, 349, new Vector3(10, 10));
-            Assert.IsNotNull(monster);
-            maps.Active.Spawner.RegisterRestoredMonster(monster);
+            MonsterController monster = UnityEngine.Object.FindObjectsByType<MonsterController>()
+                .First(value => value.Definition.BossBehavior == null);
+            int expectedMonsterCount = UnityEngine.Object.FindObjectsByType<MonsterController>().Length;
             CombatResourceSnapshot resources = monster.Actor.Resources;
             monster.RestoreRuntime(new CombatResourceSnapshot(resources.MaxHealth / 2, resources.MaxHealth, resources.CurrentMana, resources.MaxMana), 0.37f);
             NavigationMap navigation = maps.Active.Navigation;
@@ -155,10 +238,10 @@ namespace DarkFlare.Tests
                 Assert.AreEqual(before.Monsters.Single(value => value.InstanceId == id).Behavior.Anchor.X, restored.CaptureBehavior().Anchor.X);
                 Assert.AreEqual(before.Monsters.Single(value => value.InstanceId == id).Behavior.RandomSequence, restored.CaptureBehavior().RandomSequence);
                 Assert.AreEqual(.37f, restored.ContactDamageCooldownRemainingSeconds, .001f);
-                Assert.AreEqual(2, maps.Active.Behavior.Count);
-                Assert.AreEqual(2, architecture.GetModel<BehaviorModel>().Count);
+                Assert.AreEqual(expectedMonsterCount, maps.Active.Behavior.Count);
+                Assert.AreEqual(expectedMonsterCount, architecture.GetModel<BehaviorModel>().Count);
                 Assert.AreEqual(nativeBaseline, architecture.GetModel<NavigationModel>().NativeBytes);
-                Assert.AreEqual(2, maps.Active.Navigation.AgentCount);
+                Assert.AreEqual(expectedMonsterCount, maps.Active.Navigation.AgentCount);
                 MapStateDto after = snapshots.CaptureMap(maps.Active);
                 Assert.AreEqual(dropId.Value, after.WorldDrops.Single().InstanceId);
                 Assert.AreEqual(item.Id.Value, after.WorldDrops.Single().ItemInstanceId);

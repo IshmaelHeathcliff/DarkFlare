@@ -20,7 +20,7 @@ namespace DarkFlare.Editor
                 MapEditSession session = MapEditSessions.Open(path);
                 CompiledMapDocument map = session.Current;
                 var header = JObject.Parse(map.CanonicalJson);
-                header.Remove("chunks"); header.Remove("objects"); header.Remove("regions"); header.Remove("variantOverrides"); header.Remove("entries"); header.Remove("bossSpawns");
+                header.Remove("chunks"); header.Remove("objects"); header.Remove("regions"); header.Remove("variantOverrides"); header.Remove("entries"); header.Remove("bossSpawns"); header.Remove("spawnBatches");
                 header["hash"] = map.SourceHash; header["dirty"] = session.IsDirty; header["sourcePath"] = session.SourcePath;
                 header["notice"] = session.Notice;
                 return header;
@@ -48,6 +48,7 @@ namespace DarkFlare.Editor
                     ["variantOverrides"] = new JArray(dto["variantOverrides"].Skip(offset).Take(count)),
                     ["entries"] = new JArray(dto["entries"].Skip(offset).Take(count)), ["entriesTotal"] = dto["entries"].Count(),
                     ["bossSpawns"] = new JArray(dto["bossSpawns"].Skip(offset).Take(count)), ["bossSpawnsTotal"] = dto["bossSpawns"].Count(),
+                    ["spawnBatches"] = new JArray(dto["spawnBatches"].Skip(offset).Take(count)), ["spawnBatchesTotal"] = dto["spawnBatches"].Count(),
                     ["nextOffset"] = offset + count, ["objectsTotal"] = dto["objects"].Count(), ["regionsTotal"] = dto["regions"].Count(), ["overridesTotal"] = dto["variantOverrides"].Count()
                 };
             });
@@ -108,7 +109,8 @@ namespace DarkFlare.Editor
                 ["code"] = "Ok", ["revision"] = after.Revision, ["hash"] = after.SourceHash, ["changedCells"] = cells,
                 ["affectedDisplay"] = cells == 0 ? null : new JObject { ["minX"] = minX - 1, ["minY"] = minY - 1, ["maxX"] = maxX, ["maxY"] = maxY },
                 ["objects"] = Changes("objects", "objectId"), ["regions"] = Changes("regions", "regionId"), ["overrides"] = Changes("variantOverrides", null),
-                ["entries"] = Changes("entries", "entryId"), ["bossSpawns"] = Changes("bossSpawns", "spawnId")
+                ["entries"] = Changes("entries", "entryId"), ["bossSpawns"] = Changes("bossSpawns", "spawnId"),
+                ["spawnBatches"] = Changes("spawnBatches", "batchId")
             };
         }
 

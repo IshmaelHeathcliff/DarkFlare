@@ -29,11 +29,19 @@ namespace DarkFlare.Tests
             Assert.IsTrue(result.Succeeded, result.Exception?.ToString());
             _architecture = _host.CurrentSession.Architecture; _map = _architecture.GetUtility<WorldMapRuntime>().Active;
             _map.Spawner.StopSpawning();
-            foreach (MonsterController existing in Object.FindObjectsByType<MonsterController>()) { Object.Destroy(existing.gameObject); }
+            _monster = Object.FindObjectsByType<MonsterController>()
+                .First(value => value.Definition.BossBehavior == null);
+            foreach (MonsterController existing in Object.FindObjectsByType<MonsterController>())
+            { if (existing != _monster) { Object.Destroy(existing.gameObject); } }
             yield return null;
             _player = Object.FindAnyObjectByType<PlayerController>(); _player.enabled = false;
             PositionPlayer(new Vector2(-10, -10));
-            _monster = _architecture.GetSystem<SpawnSystem>().SpawnMonster(_map.Spawner.SpawnDefinition, 349, new Vector3(9, 10));
+            _monster.transform.position = new Vector3(9, 10);
+            _monster.Body.position = new Vector2(9, 10);
+            Physics2D.SyncTransforms();
+            MonsterBehaviorStateDto behavior = _monster.CaptureBehavior();
+            behavior.Anchor = new Vector3Dto { X = 9, Y = 10 };
+            _monster.RestoreBehavior(behavior);
             Assert.IsNotNull(_monster.BehaviorRuntime);
         }
 

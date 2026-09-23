@@ -226,6 +226,35 @@ namespace DarkFlare
         public bool IsRunning { get; set; }
 
         public float NextSpawnRemainingSeconds { get; set; }
+
+        public FiniteSpawnMode Mode { get; set; }
+
+        public int PlanSeed { get; set; }
+
+        public List<SpawnBatchStateDto> Batches { get; set; } = new();
+
+        public List<SpawnSlotStateDto> Slots { get; set; } = new();
+    }
+
+    public enum FiniteSpawnMode { None, Finite, LegacyPreserved }
+
+    public enum SpawnSlotStatus { Pending, Alive, Defeated }
+
+    public sealed class SpawnBatchStateDto : IPersistenceDto
+    {
+        public string BatchId { get; set; } = string.Empty;
+        public bool IsActivated { get; set; }
+    }
+
+    public sealed class SpawnSlotStateDto : IPersistenceDto
+    {
+        public string SlotId { get; set; } = string.Empty;
+        public string BatchId { get; set; } = string.Empty;
+        public string MonsterDefinitionId { get; set; } = string.Empty;
+        public int MonsterSeed { get; set; }
+        public int PositionSeed { get; set; }
+        public SpawnSlotStatus Status { get; set; }
+        public string InstanceId { get; set; } = string.Empty;
     }
 
     public sealed class RunSaveData : IPersistenceDto

@@ -14,7 +14,7 @@ namespace DarkFlare
             // 脱离调用者的可变数据，同时校验程序创建 DTO 的字段、容量及数值类型。
             string canonical = Write(source);
             MapDocument document = Read(canonical);
-            Require(document.FormatVersion == 3, "$.formatVersion", "需要升级后的格式版本 3");
+            Require(document.FormatVersion == 4, "$.formatVersion", "需要升级后的格式版本 4");
             Require(document.Revision >= 0, "$.revision", "修订不能为负数");
             TypedId(document.MapId, ContentNamespaces.Map, "$.mapId");
             Require(document.Width > 0 && document.Width <= MapDocumentLimits.MaxSide, "$.width", "尺寸必须为 1..1024");
@@ -77,6 +77,7 @@ namespace DarkFlare
             }
             ValidateObjects(document, definitions);
             ValidateRegions(document, definitions);
+            ValidateSpawnBatches(document, definitions);
             var entryIds = new HashSet<string>(StringComparer.Ordinal);
             foreach (MapEntryRecord entry in document.Entries)
             {
@@ -216,6 +217,41 @@ namespace DarkFlare
                     Require(region.Points[0].X < region.Points[1].X && region.Points[0].Y < region.Points[1].Y, path + ".points", "矩形必须有正面积");
                 }
                 else { ValidatePolygon(region.Points, path + ".points"); }
+            }
+        }
+
+        static void ValidateSpawnBatches(MapDocument document, IMapDefinitionLookup definitions)
+        {
+            var ids = new HashSet<string>(StringComparer.Ordinal);
+            int total = document.BossSpawns.Length;
+            for (int i = 0; i < document.SpawnBatches.Length; i++)
+            {
+                MapSpawnBatchRecord batch = document.SpawnBatches[i];
+                string path = $"$.spawnBatches[{i}]";
+                Require(ContentId.IsValidSegment(batch.BatchId) && ids.Add(batch.BatchId), path + ".batchId", "批次 ID 非法或重复");
+                MapRegionRecord region = document.Regions.SingleOrDefault(value => value.RegionId == batch.RegionId);
+                Require(region != null && region.SpawnDefinitionId != null, path + ".regionId", "批次必须引用刷怪区域");
+                MonsterSpawnDefinition pool = Resolve<MonsterSpawnDefinition>(definitions, region.SpawnDefinitionId,
+                    ContentNamespaces.Spawn, path + ".regionId");
+                Require(pool.Rules.Any(rule => rule != null && rule.Monster != null && rule.Weight > 0
+                    && rule.Monster.BossBehavior == null), path + ".regionId", "刷怪池没有有效普通怪物");
+                Require(pool.Rules.All(rule => rule == null || rule.Monster == null || rule.Weight <= 0
+                    || rule.Monster.BossBehavior == null), path + ".regionId", "普通刷怪批次不能包含 Boss");
+                Require(batch.Count > 0 && batch.Count <= 1024, path + ".count", "批次数量必须为 1..1024");
+                total += batch.Count;
+                Require(total <= 1024, path + ".count", "地图怪物名额超过 1024");
+                Require(Enum.IsDefined(typeof(MapSpawnActivation), batch.Activation), path + ".activation", "刷怪激活方式非法");
+                if (batch.Activation == MapSpawnActivation.OnEnter)
+                {
+                    Require(batch.TriggerRadius == 0, path + ".triggerRadius", "入图批次的触发半径必须为零");
+                }
+                else
+                {
+                    InBounds(batch.TriggerCenter, document.Width * document.CellSize,
+                        document.Height * document.CellSize, path + ".triggerCenter");
+                    Require(batch.TriggerRadius > 0 && batch.TriggerRadius <= 1024,
+                        path + ".triggerRadius", "触发半径必须在 (0,1024] 内");
+                }
             }
         }
 

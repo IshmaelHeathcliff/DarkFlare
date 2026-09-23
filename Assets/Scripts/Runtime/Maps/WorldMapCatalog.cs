@@ -7,7 +7,9 @@ namespace DarkFlare
 {
     public sealed class WorldMapCatalog
     {
-        const string LegacyWildernessWithoutBossHash = "3d72c63d076834151324f47dcf9ca27e627864ca64dd5b527b4d11fb6c511a1e";
+        const string WildernessRevision4WithoutBatchesHash = "755d062a4677c29ab4e14c455387a19b725819c02a8c2894aacf7e9c85e0926c";
+        const string WildernessRevision1WithoutBossOrBatchesHash = "818a95fb62d51a31e626bf0e0433ec5b0df9d74aa2434c2f6b8c49d585f42e8c";
+        const string WildernessRevision7Hash = "d96663c6299ba37effbcfa140f8d033862449dbff8df49fb8dfbdc02a08f4bf9";
         readonly Dictionary<string, CompiledMapDocument> _maps = new(StringComparer.Ordinal);
         public IMapDefinitionLookup Definitions { get; }
         public IReadOnlyDictionary<string, CompiledMapDocument> Maps => _maps;
@@ -17,25 +19,71 @@ namespace DarkFlare
             return new WorldMapCatalog(content.GetAll<MapDefinition>(), new CatalogLookup(content));
         }
 
-        public void UpgradeKnownBossRevision(RunSaveData run)
+        public void UpgradeKnownWildernessRevision(RunSaveData run)
         {
-            Upgrade(run.ActiveMapId, value => run.MapRevision = value, run.MapRevision);
+            Upgrade(run.ActiveMapId, value => run.MapRevision = value, run.MapRevision, run.Spawner);
             foreach (MapStateDto frozen in run.FrozenMaps)
-            { Upgrade(frozen.MapId, value => frozen.Revision = value, frozen.Revision); }
+            { Upgrade(frozen.MapId, value => frozen.Revision = value, frozen.Revision, frozen.Spawner); }
         }
 
-        void Upgrade(string id, Action<int> set, int oldRevision)
+        void Upgrade(string id, Action<int> set, int oldRevision, MonsterSpawnerStateDto spawner)
         {
-            if (id != "map:wilderness" || oldRevision != 1) { return; }
+            if (id != "map:wilderness" || oldRevision is not (1 or 4 or 7)) { return; }
             CompiledMapDocument current = Get(id);
-            if (current.Revision != 4) { return; }
+            if (current.Revision != 9) { return; }
             MapDocument source = current.CreateEditableCopy();
-            if (source.BossSpawns.Length != 1) { return; }
-            source.BossSpawns = Array.Empty<MapBossSpawnRecord>(); source.Revision = 1;
+            if (source.BossSpawns.Length != 1 || source.SpawnBatches.Length != 11) { return; }
+            source.Regions = source.Regions.Where(region => region.RegionId is "entry_safe" or "wild_spawn").ToArray();
+            source.SpawnBatches = oldRevision == 7 ? new[]
+            {
+                new MapSpawnBatchRecord { BatchId = "east_patrol", RegionId = "wild_spawn", Count = 6,
+                    Activation = MapSpawnActivation.PlayerRange, TriggerCenter = new MapPoint { X = 100, Y = 96 }, TriggerRadius = 12 },
+                new MapSpawnBatchRecord { BatchId = "initial", RegionId = "wild_spawn", Count = 6,
+                    Activation = MapSpawnActivation.OnEnter }
+            } : Array.Empty<MapSpawnBatchRecord>();
+            if (oldRevision == 1) { source.BossSpawns = Array.Empty<MapBossSpawnRecord>(); }
+            source.Revision = oldRevision;
             CompiledMapDocument legacy = MapDocumentCompiler.Compile(source, Definitions);
-            if (legacy.SourceHash != LegacyWildernessWithoutBossHash)
-            { throw new InvalidOperationException("野外地图旧版语义与 Boss 点位迁移基线不符"); }
+            string expected = oldRevision == 1 ? WildernessRevision1WithoutBossOrBatchesHash
+                : oldRevision == 4 ? WildernessRevision4WithoutBatchesHash : WildernessRevision7Hash;
+            if (legacy.SourceHash != expected)
+            { throw new InvalidOperationException("野外地图旧版语义与有限刷怪迁移基线不符"); }
+            if (oldRevision == 7 && spawner.Mode == FiniteSpawnMode.Finite)
+            { UpgradeFinitePlan(legacy, current, spawner); }
             set(current.Revision);
+        }
+
+        void UpgradeFinitePlan(CompiledMapDocument legacy, CompiledMapDocument current, MonsterSpawnerStateDto spawner)
+        {
+            MonsterSpawnerStateDto oldPlan = FiniteSpawnPlan.Create(legacy, Definitions, spawner.PlanSeed);
+            if (spawner.Batches.Count != oldPlan.Batches.Count || spawner.Slots.Count != oldPlan.Slots.Count)
+            { throw new InvalidOperationException("旧版刷怪计划数量不匹配"); }
+            Dictionary<string, SpawnBatchStateDto> oldBatches = spawner.Batches.ToDictionary(batch => batch.BatchId, StringComparer.Ordinal);
+            Dictionary<string, SpawnSlotStateDto> oldSlots = spawner.Slots.ToDictionary(slot => slot.SlotId, StringComparer.Ordinal);
+            foreach (SpawnBatchStateDto batch in oldPlan.Batches)
+            {
+                if (!oldBatches.ContainsKey(batch.BatchId)) { throw new InvalidOperationException("旧版刷怪批次不匹配"); }
+            }
+            foreach (SpawnSlotStateDto slot in oldPlan.Slots)
+            {
+                if (!oldSlots.TryGetValue(slot.SlotId, out SpawnSlotStateDto saved)
+                    || saved.BatchId != slot.BatchId || saved.MonsterDefinitionId != slot.MonsterDefinitionId
+                    || saved.MonsterSeed != slot.MonsterSeed || saved.PositionSeed != slot.PositionSeed)
+                { throw new InvalidOperationException("旧版刷怪名额与原计划不匹配：" + slot.SlotId); }
+            }
+            MonsterSpawnerStateDto expanded = FiniteSpawnPlan.Create(current, Definitions, spawner.PlanSeed);
+            foreach (SpawnBatchStateDto batch in expanded.Batches)
+            {
+                if (oldBatches.TryGetValue(batch.BatchId, out SpawnBatchStateDto saved))
+                { batch.IsActivated = saved.IsActivated; }
+            }
+            for (int i = 0; i < expanded.Slots.Count; i++)
+            {
+                if (oldSlots.TryGetValue(expanded.Slots[i].SlotId, out SpawnSlotStateDto saved))
+                { expanded.Slots[i] = saved; }
+            }
+            spawner.Batches = expanded.Batches;
+            spawner.Slots = expanded.Slots;
         }
 
         public void ValidateSave(RunSaveData run)
@@ -65,6 +113,30 @@ namespace DarkFlare
             string spawn = document.Regions.Select(region => region.SpawnDefinitionId).FirstOrDefault(value => value != null);
             if (!string.Equals(spawn ?? "", spawner.SpawnContentId ?? "", StringComparison.Ordinal))
             { throw new InvalidOperationException("地图生成定义不匹配：" + id); }
+            if (document.SpawnBatches.Length > 0 && spawner.Mode == FiniteSpawnMode.None)
+            { throw new InvalidOperationException("有限刷怪地图缺少名额模式：" + id); }
+            if (spawner.Mode == FiniteSpawnMode.Finite)
+            {
+                if (spawner.Batches.Count != document.SpawnBatches.Length
+                    || spawner.Slots.Count != document.SpawnBatches.Sum(batch => batch.Count))
+                { throw new InvalidOperationException("刷怪计划数量与地图批次不匹配：" + id); }
+                foreach (MapSpawnBatchRecord batch in document.SpawnBatches)
+                {
+                    SpawnBatchStateDto state = spawner.Batches.SingleOrDefault(value => value.BatchId == batch.BatchId);
+                    if (state == null || batch.Activation == MapSpawnActivation.OnEnter && !state.IsActivated)
+                    { throw new InvalidOperationException("刷怪批次状态与地图不匹配：" + batch.BatchId); }
+                    MapRegionRecord region = document.Regions.Single(value => value.RegionId == batch.RegionId);
+                    MonsterSpawnDefinition pool = Definitions.Resolve<MonsterSpawnDefinition>(ContentId.Parse(region.SpawnDefinitionId));
+                    HashSet<string> allowed = pool.AllMonsters.Select(value => "monster:" + value.Id).ToHashSet(StringComparer.Ordinal);
+                    for (int index = 0; index < batch.Count; index++)
+                    {
+                        string slotId = batch.BatchId + "_" + index;
+                        SpawnSlotStateDto slot = spawner.Slots.SingleOrDefault(value => value.SlotId == slotId);
+                        if (slot == null || slot.BatchId != batch.BatchId || !allowed.Contains(slot.MonsterDefinitionId))
+                        { throw new InvalidOperationException("刷怪名额与区域怪物池不匹配：" + slotId); }
+                    }
+                }
+            }
             MapGeometrySnapshot geometry = MapGeometryCompiler.Compile(MapGeometryInput.Capture(map, Definitions, new MapGeometrySettings()));
             void Check(Vector3Dto point)
             {

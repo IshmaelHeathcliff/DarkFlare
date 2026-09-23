@@ -96,6 +96,7 @@ namespace DarkFlare
             var actorMaps = new Dictionary<string, string>(StringComparer.Ordinal);
             IndexMapActors(run.Monsters, run.ActiveMapId, actorMaps);
             ValidateBoss(run.Boss, run.Monsters, "payload.run.boss", issues);
+            ValidateSpawner(run.Spawner, "payload.run.spawner", issues, run.Monsters);
             foreach (MapStateDto map in run.FrozenMaps)
             { if (map != null) { IndexMapActors(map.Monsters, map.MapId, actorMaps); } }
             ValidateNavigation(run.Monsters, run.ActiveMapId, run.Player?.PlayerId, actorMaps, issues);
@@ -113,7 +114,7 @@ namespace DarkFlare
                 ValidateNavigation(map.Monsters, map.MapId, run.Player?.PlayerId, actorMaps, issues);
                 ValidateBoss(map.Boss, map.Monsters, "payload.run.maps.boss", issues);
                 ValidateRandom(map.Random, "payload.run.maps.random", issues);
-                ValidateSpawner(map.Spawner, "payload.run.maps.spawner", issues);
+                ValidateSpawner(map.Spawner, "payload.run.maps.spawner", issues, map.Monsters);
                 if (map.Statuses.Time > (run.Statuses?.Time ?? 0)
                     || map.Statuses.Actors.Any(actor => actor?.ActorKey?.StartsWith("player:", StringComparison.Ordinal) == true))
                 { Add(issues, SaveDataIssueCode.InvalidValue, "payload.run.maps.statuses", "冻结地图不能包含玩家状态或未来时钟"); }
@@ -126,6 +127,19 @@ namespace DarkFlare
             }
             if (layers > StatusSaveValidation.MaximumLayers)
             { Add(issues, SaveDataIssueCode.LimitExceeded, "payload.run.maps.statuses", "全图状态层超限"); }
+            int reserved = ReservationCount(run.Spawner, run.Monsters?.Count ?? 0, run.Boss);
+            foreach (MapStateDto map in run.FrozenMaps)
+            {
+                if (map != null) { reserved += ReservationCount(map.Spawner, map.Monsters?.Count ?? 0, map.Boss); }
+            }
+            if (reserved > LocalSaveFormat.MaximumMonsters)
+            { Add(issues, SaveDataIssueCode.LimitExceeded, "payload.run.spawner", "全档怪物名额超过容量"); }
+        }
+
+        static int ReservationCount(MonsterSpawnerStateDto spawner, int monsters, BossEncounterStateDto boss)
+        {
+            if (spawner?.Mode != FiniteSpawnMode.Finite) { return monsters; }
+            return (spawner.Slots?.Count ?? 0) + (boss?.Status == BossEncounterStatus.None ? 0 : 1);
         }
 
         static void ValidateHeader(
@@ -493,7 +507,6 @@ namespace DarkFlare
                 $"{path}.worldDrops",
                 issues);
             ValidateMerchant(run.Merchant, items, ownership, $"{path}.merchant", issues);
-            ValidateSpawner(run.Spawner, $"{path}.spawner", issues);
 
             if (run.InstanceIds != null)
             {
@@ -861,7 +874,8 @@ namespace DarkFlare
         static void ValidateSpawner(
             MonsterSpawnerStateDto spawner,
             string path,
-            List<SaveDataIssue> issues)
+            List<SaveDataIssue> issues,
+            IReadOnlyList<MonsterRunStateDto> monsters)
         {
             if (spawner == null)
             {
@@ -872,6 +886,44 @@ namespace DarkFlare
             if (!string.IsNullOrEmpty(spawner.SpawnContentId) || spawner.IsRunning)
             { ValidateContentId(spawner.SpawnContentId, ContentNamespaces.Spawn, $"{path}.spawnContentId", issues); }
             ValidateNonNegativeFinite(spawner.NextSpawnRemainingSeconds, $"{path}.nextSpawnRemainingSeconds", issues);
+            if (!Enum.IsDefined(typeof(FiniteSpawnMode), spawner.Mode) || spawner.Batches == null || spawner.Slots == null)
+            { Add(issues, SaveDataIssueCode.InvalidValue, path, "刷怪名额模式或集合非法"); return; }
+            if (spawner.Mode != FiniteSpawnMode.Finite)
+            {
+                if (spawner.Batches.Count != 0 || spawner.Slots.Count != 0
+                    || spawner.Mode == FiniteSpawnMode.LegacyPreserved && spawner.IsRunning)
+                { Add(issues, SaveDataIssueCode.InconsistentState, path, "旧图不能含有限名额或运行补怪循环"); }
+                return;
+            }
+            if (spawner.Batches.Count > MapDocumentLimits.MaxSpawnBatches
+                || spawner.Slots.Count > LocalSaveFormat.MaximumMapMonsters)
+            { Add(issues, SaveDataIssueCode.LimitExceeded, path, "刷怪批次或名额超限"); return; }
+            var batchIds = new HashSet<string>(StringComparer.Ordinal);
+            foreach (SpawnBatchStateDto batch in spawner.Batches)
+            {
+                if (batch == null || !ContentId.IsValidSegment(batch.BatchId) || !batchIds.Add(batch.BatchId))
+                { Add(issues, SaveDataIssueCode.InvalidValue, path + ".batches", "批次 ID 非法或重复"); }
+            }
+            var slotIds = new HashSet<string>(StringComparer.Ordinal);
+            var instanceIds = new HashSet<string>(StringComparer.Ordinal);
+            foreach (SpawnSlotStateDto slot in spawner.Slots)
+            {
+                if (slot == null || string.IsNullOrEmpty(slot.SlotId) || !slotIds.Add(slot.SlotId)
+                    || !batchIds.Contains(slot.BatchId) || !Enum.IsDefined(typeof(SpawnSlotStatus), slot.Status))
+                { Add(issues, SaveDataIssueCode.InvalidValue, path + ".slots", "名额身份或状态非法"); continue; }
+                ValidateContentId(slot.MonsterDefinitionId, ContentNamespaces.Monster, path + ".slots.monsterDefinitionId", issues);
+                if (slot.Status == SpawnSlotStatus.Alive)
+                {
+                    if (!MonsterInstanceId.TryParse(slot.InstanceId, out _) || !instanceIds.Add(slot.InstanceId)
+                        || monsters?.Count(monster => monster?.InstanceId == slot.InstanceId) != 1)
+                    { Add(issues, SaveDataIssueCode.InconsistentState, path + ".slots.instanceId", "存活名额与怪物记录不一致"); }
+                }
+                else if (!string.IsNullOrEmpty(slot.InstanceId))
+                { Add(issues, SaveDataIssueCode.InconsistentState, path + ".slots.instanceId", "未生成或已消耗名额不能持有实例 ID"); }
+            }
+            if (monsters != null && spawner.Slots.Count(slot => slot?.Status == SpawnSlotStatus.Alive)
+                != monsters.Count(monster => monster != null && monster.Boss == null))
+            { Add(issues, SaveDataIssueCode.InconsistentState, path + ".slots", "普通怪物与存活名额数量不一致"); }
         }
 
         static void ValidateMonsterSeeds(

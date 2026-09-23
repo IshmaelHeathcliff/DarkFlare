@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Cysharp.Threading.Tasks;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace DarkFlare
@@ -10,15 +11,36 @@ namespace DarkFlare
         const int MaxSpawnPositionAttempts = 8;
         MapGeometrySnapshot _mapGeometry;
         MapGeometryRegion[] _spawnRegions;
+        CompiledMapDocument _map;
+        IMapDefinitionLookup _definitions;
+        MapSpawnBatchRecord[] _batches = System.Array.Empty<MapSpawnBatchRecord>();
+        MonsterSpawnerStateDto _finiteState;
+        Vector2 _lastPlayerPosition;
+        bool _hasPlayerPosition;
+        [ShowInInspector, ReadOnly, LabelText("失败尝试次数")]
         public int RejectedSpawnAttempts { get; private set; }
+        [ShowInInspector, ReadOnly, LabelText("最近刷怪失败")]
+        public string LastSpawnFailure { get; private set; } = string.Empty;
+        [ShowInInspector, ReadOnly, LabelText("普通怪物名额总数")]
+        public int PlannedCount => _finiteState?.Slots.Count ?? 0;
+        [ShowInInspector, ReadOnly, LabelText("待生成名额")]
+        public int PendingCount => _finiteState?.Slots.Count(slot => slot.Status == SpawnSlotStatus.Pending) ?? 0;
+        [ShowInInspector, ReadOnly, LabelText("存活名额")]
+        public int AliveCount => _finiteState?.Slots.Count(slot => slot.Status == SpawnSlotStatus.Alive) ?? 0;
+        [ShowInInspector, ReadOnly, LabelText("已击败名额")]
+        public int DefeatedCount => _finiteState?.Slots.Count(slot => slot.Status == SpawnSlotStatus.Defeated) ?? 0;
+        [ShowInInspector, ReadOnly, LabelText("已激活批次")]
+        public string ActivatedBatches => _finiteState == null ? string.Empty
+            : string.Join(", ", _finiteState.Batches.Where(batch => batch.IsActivated).Select(batch => batch.BatchId));
 
-        public void ConfigureMap(MapGeometrySnapshot geometry, IMapDefinitionLookup definitions)
+        public void ConfigureMap(CompiledMapDocument map, MapGeometrySnapshot geometry, IMapDefinitionLookup definitions)
         {
             StopSpawning();
+            _map = map;
             _mapGeometry = geometry;
+            _definitions = definitions;
             _spawnRegions = geometry.Regions.Where(region => region.Kind == MapRegionKind.Spawn).ToArray();
-            if (_spawnRegions.Select(region => region.SpawnDefinitionId).Distinct().Count() > 1)
-            { throw new System.InvalidOperationException("同图首期刷怪区域必须使用相同生成定义"); }
+            _batches = map.CreateEditableCopy().SpawnBatches;
             _spawnDefinition = _spawnRegions.Length == 0 ? null : definitions.Resolve<MonsterSpawnDefinition>(ContentId.Parse(_spawnRegions[0].SpawnDefinitionId));
         }
 
@@ -36,6 +58,7 @@ namespace DarkFlare
         float _spawnBoundsPadding = 0.5f;
 
         readonly List<MonsterController> _aliveMonsters = new List<MonsterController>();
+        readonly HashSet<string> _aliveIds = new HashSet<string>(System.StringComparer.Ordinal);
         LifecycleScope _spawnScope;
         IArchitecture _architecture;
         bool _isSpawning;
@@ -45,6 +68,45 @@ namespace DarkFlare
         public Collider2D WorldBounds => _worldBounds;
 
         public MonsterSpawnDefinition SpawnDefinition => _spawnDefinition;
+
+        public bool HasBatches => _batches.Length > 0;
+
+        public IEnumerable<MonsterDefinition> AllMonsters => _mapGeometry == null
+            ? _spawnDefinition?.AllMonsters ?? System.Array.Empty<MonsterDefinition>()
+            : _spawnRegions.SelectMany(region => _definitions.Resolve<MonsterSpawnDefinition>(
+                ContentId.Parse(region.SpawnDefinitionId)).AllMonsters).Distinct();
+
+        public MonsterSpawnerStateDto CreateFreshState(int seed)
+        {
+            return _map == null ? new MonsterSpawnerStateDto() : FiniteSpawnPlan.Create(_map, _definitions, seed);
+        }
+
+        public void RestoreState(MonsterSpawnerStateDto state)
+        {
+            StopSpawning();
+            _finiteState = state == null ? null : MapStateData.Copy(state);
+            _hasPlayerPosition = false;
+            LastSpawnFailure = string.Empty;
+        }
+
+        public MonsterSpawnerStateDto CaptureState()
+        {
+            if (_mapGeometry == null || _finiteState == null)
+            {
+                return new MonsterSpawnerStateDto
+                {
+                    SpawnContentId = _spawnDefinition != null ? "spawn:" + _spawnDefinition.Id : string.Empty,
+                    IsRunning = _isSpawning,
+                    NextSpawnRemainingSeconds = NextSpawnRemainingSeconds
+                };
+            }
+            RefreshFiniteStatus();
+            MonsterSpawnerStateDto state = MapStateData.Copy(_finiteState);
+            state.SpawnContentId = _spawnDefinition != null ? "spawn:" + _spawnDefinition.Id : string.Empty;
+            state.IsRunning = _isSpawning;
+            state.NextSpawnRemainingSeconds = 0f;
+            return state;
+        }
 
         public bool IsSpawning => _isSpawning;
 
@@ -66,6 +128,7 @@ namespace DarkFlare
         {
             StopSpawning();
             _spawnDefinition = spawnDefinition;
+            _finiteState = null;
             _aliveMonsters.Clear();
 
             if (gameObject.activeSelf)
@@ -86,7 +149,20 @@ namespace DarkFlare
                 return;
             }
 
-            if (_spawnDefinition == null)
+            if (_mapGeometry != null && _finiteState?.Mode == FiniteSpawnMode.LegacyPreserved) { return; }
+            if (_mapGeometry != null && _finiteState?.Mode == FiniteSpawnMode.Finite)
+            {
+                if (!isActiveAndEnabled) { throw new System.InvalidOperationException("地图刷怪器未启用"); }
+                _architecture = GameArchitectureProvider.RequireCurrent();
+                SpawnPendingActivated(int.MaxValue, true, onlyInitial: true);
+                _spawnScope = ComponentLifecycle.CreateScope(this, "finite-spawn", this.GetCancellationTokenOnDestroy());
+                _isSpawning = true;
+                uint finiteVersion = ++_spawnVersion;
+                _spawnScope.Tasks.Run("finite-spawn", token => FiniteLoopAsync(finiteVersion, token),
+                    failurePolicy: LifecycleTaskFailurePolicy.ReportAndStopScope);
+                return;
+            }
+            if (_mapGeometry != null || _spawnDefinition == null)
             {
                 throw new System.InvalidOperationException("MonsterSpawner 缺少生成定义");
             }
@@ -137,6 +213,133 @@ namespace DarkFlare
         void OnDisable()
         {
             StopSpawning();
+        }
+
+        async UniTask FiniteLoopAsync(uint version, System.Threading.CancellationToken token)
+        {
+            try
+            {
+                while (!token.IsCancellationRequested)
+                {
+                    await UniTask.Yield(PlayerLoopTiming.Update, token);
+                    if (GameTimeService.Shared.IsPaused) { continue; }
+                    RefreshFiniteStatus();
+                    Transform target = GetTarget();
+                    if (target != null)
+                    {
+                        Vector2 current = target.position;
+                        Vector2 previous = _hasPlayerPosition ? _lastPlayerPosition : current;
+                        for (int i = 0; i < _batches.Length; i++)
+                        {
+                            MapSpawnBatchRecord batch = _batches[i];
+                            if (batch.Activation != MapSpawnActivation.PlayerRange) { continue; }
+                            SpawnBatchStateDto state = _finiteState.Batches.First(item => item.BatchId == batch.BatchId);
+                            Vector2 center = new Vector2((float)(_map.OriginX + batch.TriggerCenter.X),
+                                (float)(_map.OriginY + batch.TriggerCenter.Y));
+                            if (!state.IsActivated && SegmentDistanceSquared(previous, current, center)
+                                <= batch.TriggerRadius * batch.TriggerRadius)
+                            { state.IsActivated = true; }
+                        }
+                        _lastPlayerPosition = current;
+                        _hasPlayerPosition = true;
+                    }
+                    SpawnPendingActivated(4, false);
+                }
+            }
+            catch (System.OperationCanceledException) when (token.IsCancellationRequested) { throw; }
+            catch
+            {
+                if (ApplicationHost.TryGetCurrent(out ApplicationHost host))
+                { host.RequestCurrentSessionStop("finite-spawner-failure"); }
+                throw;
+            }
+            finally
+            {
+                if (version == _spawnVersion) { _isSpawning = false; _spawnScope = null; }
+            }
+        }
+
+        void SpawnPendingActivated(int budget, bool failFast, bool onlyInitial = false)
+        {
+            foreach (SpawnSlotStateDto slot in _finiteState.Slots)
+            {
+                if (budget == 0) { break; }
+                if (slot.Status != SpawnSlotStatus.Pending) { continue; }
+                MapSpawnBatchRecord batch = _batches.First(item => item.BatchId == slot.BatchId);
+                if (onlyInitial && batch.Activation != MapSpawnActivation.OnEnter) { continue; }
+                if (!_finiteState.Batches.First(item => item.BatchId == slot.BatchId).IsActivated) { continue; }
+                budget--;
+                MonsterDefinition definition = _definitions.Resolve<MonsterDefinition>(ContentId.Parse(slot.MonsterDefinitionId));
+                if (!TryGetPlannedPosition(batch, slot, definition, out Vector3 position))
+                {
+                    RejectedSpawnAttempts++;
+                    LastSpawnFailure = "批次 " + batch.BatchId + " 无合法落点";
+                    if (failFast) { throw new System.InvalidOperationException(LastSpawnFailure); }
+                    continue;
+                }
+                MonsterController monster = _architecture.GetSystem<SpawnSystem>().SpawnPlannedMonster(definition, slot.MonsterSeed, position);
+                if (monster == null)
+                {
+                    LastSpawnFailure = "批次 " + batch.BatchId + " 生成对象失败";
+                    if (failFast) { throw new System.InvalidOperationException(LastSpawnFailure); }
+                    continue;
+                }
+                slot.InstanceId = monster.Instance.Id.Value;
+                slot.Status = SpawnSlotStatus.Alive;
+                _aliveMonsters.Add(monster);
+            }
+        }
+
+        bool TryGetPlannedPosition(MapSpawnBatchRecord batch, SpawnSlotStateDto slot,
+            MonsterDefinition definition, out Vector3 position)
+        {
+            MapGeometryRegion region = _spawnRegions.First(item => item.Id == batch.RegionId);
+            GameObject prefab = _architecture.GetUtility<PrefabAssetLoader>().GetPrefab(definition.Prefab);
+            if (prefab == null || !prefab.TryGetComponent(out CircleCollider2D collider))
+            { throw new System.InvalidOperationException("刷怪 Prefab 缺少圆形碰撞：" + definition.Id); }
+            Vector3 scale = collider.transform.lossyScale;
+            double radius = collider.radius * System.Math.Max(System.Math.Abs(scale.x), System.Math.Abs(scale.y));
+            double minX = region.Points.Min(point => point.X), maxX = region.Points.Max(point => point.X);
+            double minY = region.Points.Min(point => point.Y), maxY = region.Points.Max(point => point.Y);
+            var random = new System.Random(slot.PositionSeed);
+            for (int attempt = 0; attempt < 256; attempt++)
+            {
+                var point = new MapGeometryPoint(minX + random.NextDouble() * (maxX - minX),
+                    minY + random.NextDouble() * (maxY - minY));
+                if (_mapGeometry.CheckPoint(point, new MapGroundProfile(radius), region.Id) != MapGeometryResult.Valid) { continue; }
+                bool occupied = _aliveMonsters.Any(monster => monster != null && monster.Actor != null && monster.Actor.IsAlive
+                    && Vector2.Distance(monster.transform.position, new Vector2((float)point.X, (float)point.Y)) < radius * 2);
+                Transform target = GetTarget();
+                if (occupied || target != null && Vector2.Distance(target.position,
+                    new Vector2((float)point.X, (float)point.Y)) < radius + .5f) { continue; }
+                position = new Vector3((float)point.X, (float)point.Y, 0f);
+                return true;
+            }
+            position = default;
+            return false;
+        }
+
+        void RefreshFiniteStatus()
+        {
+            if (_finiteState?.Mode != FiniteSpawnMode.Finite) { return; }
+            CleanupAliveList();
+            _aliveIds.Clear();
+            foreach (MonsterController monster in _aliveMonsters) { _aliveIds.Add(monster.Instance.Id.Value); }
+            foreach (SpawnSlotStateDto slot in _finiteState.Slots)
+            {
+                if (slot.Status != SpawnSlotStatus.Alive) { continue; }
+                if (_aliveIds.Contains(slot.InstanceId)) { continue; }
+                slot.Status = SpawnSlotStatus.Defeated;
+                slot.InstanceId = string.Empty;
+            }
+        }
+
+        static double SegmentDistanceSquared(Vector2 a, Vector2 b, Vector2 point)
+        {
+            Vector2 delta = b - a;
+            float denominator = delta.sqrMagnitude;
+            float t = denominator > 0 ? Mathf.Clamp01(Vector2.Dot(point - a, delta) / denominator) : 0f;
+            return ((Vector2)(a + delta * t - point)).sqrMagnitude;
         }
 
         async UniTask SpawnLoopAsync(

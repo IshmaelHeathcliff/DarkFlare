@@ -486,18 +486,15 @@ namespace DarkFlare
         MonsterSpawnerStateDto MapSpawner(List<DtoMapIssue> issues)
         {
             MonsterSpawner current = _session.Architecture.GetUtility<WorldMapRuntime>().Active?.Spawner ?? _spawner;
-            if (current.SpawnDefinition == null) { return new MonsterSpawnerStateDto(); }
+            if (current.SpawnDefinition == null && !current.HasBatches) { return new MonsterSpawnerStateDto(); }
             string contentId = RuntimeStateMapper.GetContentId(
                 current.SpawnDefinition,
                 _catalog,
                 "payload.run.spawner.spawnContentId",
                 issues);
-            return new MonsterSpawnerStateDto
-            {
-                SpawnContentId = contentId,
-                IsRunning = current.IsSpawning,
-                NextSpawnRemainingSeconds = current.NextSpawnRemainingSeconds,
-            };
+            MonsterSpawnerStateDto state = current.CaptureState();
+            state.SpawnContentId = contentId;
+            return state;
         }
 
         static RunInstanceIdStateDto MapInstanceIds(RunInstanceIdState state)

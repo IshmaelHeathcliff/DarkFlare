@@ -157,6 +157,21 @@ namespace DarkFlare
             return controller;
         }
 
+        public MonsterController SpawnPlannedMonster(MonsterDefinition definition, int seed, Vector3 position)
+        {
+            if (definition == null || definition.BossBehavior != null)
+            { throw new System.ArgumentException("有限刷怪名额必须引用普通怪物", nameof(definition)); }
+            MonsterController controller = InstantiateMonster(definition, position);
+            if (controller == null) { return null; }
+            System.Random random = new System.Random(seed);
+            MonsterInstanceData instance = definition.CreateInstanceData(
+                this.GetUtility<IRunInstanceIdGenerator>().NextMonsterId(), random.Next(int.MinValue, int.MaxValue));
+            CombatResourceSnapshot previous = controller.Actor.Resources;
+            controller.Configure(definition, instance);
+            this.GetSystem<CombatSystem>().PublishResourceChanges(controller.Actor, previous, ActorResourceChangeReason.Configure);
+            return controller;
+        }
+
         public MonsterController SpawnRestoredMonster(
             MonsterDefinition definition,
             MonsterInstanceData instanceData,

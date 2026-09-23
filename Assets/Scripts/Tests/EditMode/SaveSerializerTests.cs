@@ -28,7 +28,7 @@ namespace DarkFlare.Tests
                 ((JObject)monster).Remove("behavior");
             }
             Assert.AreEqual((int)BossEncounterStatus.LegacyAbsent, (int)current["payload"]["run"]["boss"]["status"]);
-            StripBossMigrationFields(current);
+            StripLaterMigrationFields(current, historical);
             Assert.IsTrue(JToken.DeepEquals(historical["payload"], current["payload"]), "行为迁移不得改变导航、资源、冷却、身份或随机流");
             JObject frozen = (JObject)historical.DeepClone();
             frozen["payload"]["run"]["frozenMaps"][0]["monsters"] = frozen["payload"]["run"]["monsters"].DeepClone();
@@ -68,7 +68,7 @@ namespace DarkFlare.Tests
             JObject current = JObject.Parse(Encoding.UTF8.GetString(serialized.Bytes));
             foreach (JToken monster in current["payload"]["run"]["monsters"])
             { Assert.AreEqual(0, (int)monster["navigation"]["target"]); ((JObject)monster).Remove("navigation"); ((JObject)monster).Remove("behavior"); }
-            StripBossMigrationFields(current);
+            StripLaterMigrationFields(current, historical);
             Assert.IsTrue(JToken.DeepEquals(historical["payload"], current["payload"]), "Released state must not be rerolled or normalized by navigation migration");
             JObject frozen = (JObject)historical.DeepClone();
             frozen["payload"]["run"]["frozenMaps"][0]["monsters"] = frozen["payload"]["run"]["monsters"].DeepClone();
@@ -126,24 +126,38 @@ namespace DarkFlare.Tests
             foreach (string field in new[] { "activeMapId", "mapRevision", "mapRandom", "frozenMaps" })
             { ((JObject)current["payload"]["run"]).Remove(field); }
             foreach (JToken monster in current["payload"]["run"]["monsters"]) { ((JObject)monster).Remove("navigation"); ((JObject)monster).Remove("behavior"); }
-            StripBossMigrationFields(current);
+            StripLaterMigrationFields(current, historical);
 
             Assert.AreEqual("map:wilderness", result.Document.Payload.Run.ActiveMapId);
             Assert.IsTrue(JToken.DeepEquals(JToken.FromObject(result.Document.Payload.Run.Random), JToken.FromObject(result.Document.Payload.Run.MapRandom)));
             Assert.IsTrue(JToken.DeepEquals(historical["payload"], current["payload"]), "迁移不能改变物品、资源、随机数和运行时数据");
         }
 
-        static void StripBossMigrationFields(JObject document)
+        static void StripLaterMigrationFields(JObject document, JObject historical)
         {
             var run = (JObject)document["payload"]["run"];
+            var oldRun = (JObject)historical["payload"]["run"];
             run.Remove("boss");
+            StripFiniteSpawnFields((JObject)run["spawner"], (JObject)oldRun["spawner"]);
             foreach (JToken monster in run["monsters"]) { ((JObject)monster).Remove("boss"); }
             if (run["frozenMaps"] is not JArray maps) { return; }
-            foreach (JToken map in maps)
+            for (int i = 0; i < maps.Count; i++)
             {
+                JToken map = maps[i];
                 ((JObject)map).Remove("boss");
+                StripFiniteSpawnFields((JObject)map["spawner"], (JObject)oldRun["frozenMaps"][i]["spawner"]);
                 foreach (JToken monster in map["monsters"]) { ((JObject)monster).Remove("boss"); }
             }
+        }
+
+        static void StripFiniteSpawnFields(JObject spawner, JObject historical)
+        {
+            spawner.Remove("mode");
+            spawner.Remove("planSeed");
+            spawner.Remove("batches");
+            spawner.Remove("slots");
+            spawner["isRunning"] = historical["isRunning"].DeepClone();
+            spawner["nextSpawnRemainingSeconds"] = historical["nextSpawnRemainingSeconds"].DeepClone();
         }
 
         [Test]

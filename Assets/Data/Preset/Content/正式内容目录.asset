@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: "\u6B63\u5F0F\u5185\u5BB9\u76EE\u5F55"
   m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.ContentCatalogDefinition
   _catalogId: core
-  _contentVersion: 8
+  _contentVersion: 10
   _entries:
   - {fileID: 11400000, guid: 93afea4ea3abde14e878a32be8ea63d3, type: 2}
   - {fileID: 11400000, guid: 76df86fd5dacdf743ae0227968259c13, type: 2}

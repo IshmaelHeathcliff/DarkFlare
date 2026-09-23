@@ -7,7 +7,7 @@ namespace DarkFlare
     [JsonObject(MemberSerialization.OptIn)]
     public sealed class MapDocument
     {
-        [JsonProperty("formatVersion", Required = Required.Always)] public int FormatVersion { get; set; } = 3;
+        [JsonProperty("formatVersion", Required = Required.Always)] public int FormatVersion { get; set; } = 4;
         [JsonProperty("mapId", Required = Required.Always)] public string MapId { get; set; }
         [JsonProperty("revision", Required = Required.Always)] public int Revision { get; set; }
         [JsonProperty("seed", Required = Required.Always)] public int Seed { get; set; }
@@ -24,6 +24,7 @@ namespace DarkFlare
         [JsonProperty("regions", Required = Required.Always)] public MapRegionRecord[] Regions { get; set; } = Array.Empty<MapRegionRecord>();
         [JsonProperty("entries", Required = Required.Always)] public MapEntryRecord[] Entries { get; set; } = Array.Empty<MapEntryRecord>();
         [JsonProperty("bossSpawns", Required = Required.Always)] public MapBossSpawnRecord[] BossSpawns { get; set; } = Array.Empty<MapBossSpawnRecord>();
+        [JsonProperty("spawnBatches", Required = Required.Always)] public MapSpawnBatchRecord[] SpawnBatches { get; set; } = Array.Empty<MapSpawnBatchRecord>();
     }
 
     [JsonObject(MemberSerialization.OptIn)]
@@ -80,6 +81,25 @@ namespace DarkFlare
         [JsonProperty("monsterDefinitionId", Required = Required.Always)] public string MonsterDefinitionId { get; set; }
         [JsonProperty("position", Required = Required.Always)] public MapPoint Position { get; set; } = new MapPoint();
         [JsonProperty("facing", Required = Required.Always)] public MapPoint Facing { get; set; } = new MapPoint { X = 1 };
+    }
+
+    public enum MapSpawnActivation
+    {
+        [Sirenix.OdinInspector.LabelText("入图生成")]
+        OnEnter,
+        [Sirenix.OdinInspector.LabelText("玩家进入范围")]
+        PlayerRange
+    }
+
+    [JsonObject(MemberSerialization.OptIn)]
+    public sealed class MapSpawnBatchRecord
+    {
+        [JsonProperty("batchId", Required = Required.Always)] public string BatchId { get; set; }
+        [JsonProperty("regionId", Required = Required.Always)] public string RegionId { get; set; }
+        [JsonProperty("count", Required = Required.Always)] public int Count { get; set; }
+        [JsonProperty("activation", Required = Required.Always)] public MapSpawnActivation Activation { get; set; }
+        [JsonProperty("triggerCenter", Required = Required.Always)] public MapPoint TriggerCenter { get; set; } = new MapPoint();
+        [JsonProperty("triggerRadius", Required = Required.Always)] public double TriggerRadius { get; set; }
     }
 
     [JsonObject(MemberSerialization.OptIn)]
