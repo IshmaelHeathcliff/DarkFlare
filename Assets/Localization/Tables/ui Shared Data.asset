@@ -2083,6 +2083,38 @@ MonoBehaviour:
     m_Key: behavior.gameHint
     m_Metadata:
       m_Items: []
+  - m_Id: 12621335304855552
+    m_Key: world.reset.choice_title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12621335371964416
+    m_Key: world.reset.choice_message
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12621335371964417
+    m_Key: world.reset.enter
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12621335371964418
+    m_Key: world.reset.reset_and_enter
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12621335371964419
+    m_Key: world.reset.confirm_title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12621335371964420
+    m_Key: world.reset.confirm_message
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12621335371964421
+    m_Key: world.reset.success
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12621335371964422
+    m_Key: flow.error.map_reset_save_failed
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

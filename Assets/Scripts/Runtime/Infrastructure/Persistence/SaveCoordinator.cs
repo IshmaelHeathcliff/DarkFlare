@@ -143,6 +143,33 @@ namespace DarkFlare
 
     public sealed class SaveCoordinator
     {
+        public sealed class ExclusiveSaveLease : IDisposable
+        {
+            readonly SaveCoordinator _owner;
+            bool _disposed;
+            bool _committed;
+
+            internal ExclusiveSaveLease(SaveCoordinator owner)
+            {
+                _owner = owner;
+            }
+
+            public UniTask<SaveOperationResult> CommitAsync(SavePayloadDto payload, CancellationToken token)
+            {
+                if (_disposed || _committed) { throw new InvalidOperationException("排他保存已结束"); }
+                _committed = true;
+                return _owner.CommitExclusiveAsync(payload, token);
+            }
+
+            public void Dispose()
+            {
+                if (_disposed) { return; }
+                _disposed = true;
+                _owner._loadInProgress = false;
+                _owner._loadCompletion?.TrySetResult(true);
+            }
+        }
+
         public static readonly SaveSlotId AutoSlot = new SaveSlotId("auto");
 
         readonly LifecycleScope _profileScope;
@@ -161,6 +188,7 @@ namespace DarkFlare
         bool _loadInProgress;
         long _dirtyRevision;
         long _persistedRevision;
+        internal Func<SavePayloadDto, SaveOperationResult> ExclusiveSaveOverride { get; set; }
 
         public SaveCoordinator(
             LifecycleScope profileScope,
@@ -183,6 +211,62 @@ namespace DarkFlare
         public long DirtyRevision => _dirtyRevision;
 
         public int BoundArchitectureGeneration => _snapshotSource?.ArchitectureGeneration ?? 0;
+
+        public bool TryBeginExclusiveSave(GameSessionHost session, out ExclusiveSaveLease lease)
+        {
+            lease = null;
+            if (!_accepting || IsBusy || _pendingSaves.Count != 0
+                || !ReferenceEquals(_boundSession, session)
+                || _snapshotSource == null || !_snapshotSource.IsAvailable)
+            { return false; }
+            _loadInProgress = true;
+            _loadCompletion = new UniTaskCompletionSource<bool>();
+            lease = new ExclusiveSaveLease(this);
+            return true;
+        }
+
+        async UniTask<SaveOperationResult> CommitExclusiveAsync(SavePayloadDto payload, CancellationToken token)
+        {
+            token.ThrowIfCancellationRequested();
+            if (payload == null || _snapshotSource == null || !_snapshotSource.IsAvailable)
+            { return SaveOperationResult.Failure(SaveOperation.Save, AutoSlot, SaveErrorCode.SnapshotUnavailable); }
+            if (ExclusiveSaveOverride != null) { return ExclusiveSaveOverride(payload); }
+            long capturedRevision = _dirtyRevision;
+            SaveOperationResult result;
+            LocalSaveLoadResult previous;
+            LocalSaveLoadResult latest = null;
+            await UniTask.SwitchToThreadPool();
+            try
+            {
+                previous = _storage.LoadLatest(AutoSlot, CancellationToken.None);
+                result = CommitSnapshot(AutoSlot, payload, _catalog.CatalogId, _catalog.ContentVersion, CancellationToken.None);
+                if (!result.Succeeded) { latest = _storage.LoadLatest(AutoSlot, CancellationToken.None); }
+            }
+            finally { await UniTask.SwitchToMainThread(); }
+
+            if (!result.Succeeded)
+            {
+                long priorSequence = previous.Succeeded ? previous.Document.Header.CommitSequence : 0;
+                if (latest?.Succeeded == true && latest.Document.Header.CommitSequence > priorSequence)
+                {
+                    RunSaveData run = latest.Document.Payload.Run;
+                    if (run.ActiveMapId == payload.Run.ActiveMapId && run.ActiveMapEpoch == payload.Run.ActiveMapEpoch)
+                    { result = SaveOperationResult.Success(SaveOperation.Save, AutoSlot, latest.Document.Header.CommitSequence); }
+                    else { throw new MapTransitionFatalException(new InvalidOperationException("重置存档提交内容不一致")); }
+                }
+                else
+                {
+                    bool unchanged = previous.Succeeded && latest?.Succeeded == true
+                        && latest.Document.Header.CommitSequence == priorSequence;
+                    bool stillAbsent = previous.Code == LocalSaveStorageCode.SlotNotFound
+                        && latest?.Code == LocalSaveStorageCode.SlotNotFound;
+                    if (!unchanged && !stillAbsent)
+                    { throw new MapTransitionFatalException(new InvalidOperationException("无法判定重置存档是否提交")); }
+                }
+            }
+            if (result.Succeeded) { _persistedRevision = Math.Max(_persistedRevision, capturedRevision); }
+            return result;
+        }
 
         public void BindSession(GameSessionHost session, ISessionSnapshotSource snapshotSource)
         {

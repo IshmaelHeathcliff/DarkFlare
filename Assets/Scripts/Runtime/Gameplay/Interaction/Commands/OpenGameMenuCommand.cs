@@ -23,6 +23,11 @@ namespace DarkFlare
                 if (maps.Active == null || maps.IsTransitioning || maps.Active.Generation != _target.MapGeneration) { return false; }
                 string mapId = _target.MapBinding.TargetMapId, entryId = _target.MapBinding.TargetEntryId;
                 host.Input.WaitForInteractRelease();
+                if (maps.CanReset(mapId) && host.ApplicationShell != null)
+                {
+                    host.ApplicationShell.ShowMapPortalChoice(mapId, entryId);
+                    return true;
+                }
                 host.CurrentSession.SessionScope.Tasks.Run("map-exit", async token =>
                 {
                     await host.SceneFlow.RequestAsync(SceneFlowRequest.ChangeMap(mapId, entryId), token);

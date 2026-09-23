@@ -137,6 +137,7 @@ namespace DarkFlare.Tests
         {
             var run = (JObject)document["payload"]["run"];
             var oldRun = (JObject)historical["payload"]["run"];
+            run.Remove("activeMapEpoch");
             run.Remove("boss");
             StripFiniteSpawnFields((JObject)run["spawner"], (JObject)oldRun["spawner"]);
             foreach (JToken monster in run["monsters"]) { ((JObject)monster).Remove("boss"); }
@@ -145,6 +146,7 @@ namespace DarkFlare.Tests
             {
                 JToken map = maps[i];
                 ((JObject)map).Remove("boss");
+                ((JObject)map).Remove("instanceEpoch");
                 StripFiniteSpawnFields((JObject)map["spawner"], (JObject)oldRun["frozenMaps"][i]["spawner"]);
                 foreach (JToken monster in map["monsters"]) { ((JObject)monster).Remove("boss"); }
             }

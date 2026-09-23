@@ -191,6 +191,35 @@ namespace DarkFlare.Tests
         }
 
         [Test]
+        public void MapInstanceEpoch_MigratesOldMapsAndDerivesStableNewPlans()
+        {
+            JObject legacy = JObject.Parse("{\"payload\":{\"run\":{\"frozenMaps\":[{\"mapId\":\"map:wilderness\"}]}}}");
+            new MapInstanceEpochSaveMigration().Apply(legacy);
+            Assert.AreEqual(0, (int)legacy["payload"]["run"]["activeMapEpoch"]);
+            Assert.AreEqual(0, (int)legacy["payload"]["run"]["frozenMaps"][0]["instanceEpoch"]);
+
+            var random = new GameplayRandomSystem();
+            random.Configure(true, 49123);
+            Assert.AreEqual(random.CreateMapState("map:wilderness").RootSeed,
+                random.CreateMapState("map:wilderness", 0).RootSeed);
+            int first = random.CreateMapState("map:wilderness", 1).RootSeed;
+            Assert.AreEqual(first, random.CreateMapState("map:wilderness", 1).RootSeed);
+            Assert.AreNotEqual(first, random.CreateMapState("map:wilderness", 2).RootSeed);
+            Assert.Throws<ArgumentOutOfRangeException>(() => random.CreateMapState("map:wilderness", -1));
+
+            SaveDocumentDto document = SaveDataContractTests.CreateValidDocument();
+            document.Payload.Run.ActiveMapEpoch = 3;
+            var serializer = new NewtonsoftSaveSerializer();
+            SaveSerializationResult saved = serializer.Serialize(document);
+            Assert.IsTrue(saved.Succeeded);
+            SaveDeserializationResult restored = serializer.Deserialize(saved.Bytes);
+            Assert.IsTrue(restored.Succeeded);
+            Assert.AreEqual(3, restored.Document.Payload.Run.ActiveMapEpoch);
+            document.Payload.Run.ActiveMapEpoch = -1;
+            Assert.IsFalse(serializer.Serialize(document).Succeeded);
+        }
+
+        [Test]
         public void FrozenMaps_ValidateGlobalIdentityAndRoundTripThousandMonsters()
         {
             SaveDocumentDto document = SaveDataContractTests.CreateValidDocument();

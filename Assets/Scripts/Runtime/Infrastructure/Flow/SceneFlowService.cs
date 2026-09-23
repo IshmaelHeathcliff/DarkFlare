@@ -69,6 +69,11 @@ namespace DarkFlare
         UniTask ChangeMapAsync(string mapId, string entryId, CancellationToken token);
     }
 
+    public interface IResetMapFlowApplication
+    {
+        UniTask ResetAndChangeMapAsync(string mapId, string entryId, CancellationToken token);
+    }
+
     public sealed class SceneFlowService : IDisposable
     {
         sealed class DirectProgress<T> : IProgress<T>
@@ -373,11 +378,18 @@ namespace DarkFlare
         {
             if (_application is not IMapFlowApplication maps)
             { return CreateFailure(queued.Request, SceneFlowErrorCode.ConfigurationInvalid, fromState, SceneFlowPhase.Preparing); }
+            if (queued.Request.ResetMap && _application is not IResetMapFlowApplication)
+            { return CreateFailure(queued.Request, SceneFlowErrorCode.ConfigurationInvalid, fromState, SceneFlowPhase.Preparing); }
             SetState(GameFlowState.Loading);
             Report(SceneFlowPhase.LoadingScene, SceneId.Main, null, true);
             try
             {
-                await maps.ChangeMapAsync(queued.Request.MapId, queued.Request.EntryId, token);
+                if (queued.Request.ResetMap)
+                {
+                    IResetMapFlowApplication resetMaps = (IResetMapFlowApplication)_application;
+                    await resetMaps.ResetAndChangeMapAsync(queued.Request.MapId, queued.Request.EntryId, token);
+                }
+                else { await maps.ChangeMapAsync(queued.Request.MapId, queued.Request.EntryId, token); }
                 SetState(fromState);
                 Report(SceneFlowPhase.Completed, SceneId.Main, 1, false);
                 return SceneFlowResult.Success(queued.Request.Operation, fromState, fromState, SceneId.Main);
@@ -386,6 +398,12 @@ namespace DarkFlare
             {
                 SetState(GameFlowState.FatalError);
                 return CreateFailure(queued.Request, SceneFlowErrorCode.FatalCleanupFailed, fromState, SceneFlowPhase.Recovering, SceneFlowRecoveryAction.Quit, error);
+            }
+            catch (MapResetSaveException error)
+            {
+                SetState(fromState);
+                return CreateFailure(queued.Request, SceneFlowErrorCode.MapResetSaveFailed, fromState, SceneFlowPhase.PreparingSave,
+                    SceneFlowRecoveryAction.Retry | SceneFlowRecoveryAction.CancelTransition, error);
             }
             catch (Exception error)
             {

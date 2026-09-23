@@ -33,6 +33,7 @@ namespace DarkFlare
         SceneFlowRequest? _retryRequest;
         SceneFlowRequest? _lastRequest;
         Action _modalPrimaryAction;
+        Action _modalSecondaryAction;
         IDisposable _uiContextLease;
         ApplicationInputService _inputService;
         GamePauseLease _pauseLease;
@@ -97,7 +98,7 @@ namespace DarkFlare
             _settingsController.Bind();
             _busyCancel.clicked += OnBusyCancel;
             _modalRetry.clicked += OnModalPrimary;
-            _modalCancel.clicked += HideModal;
+            _modalCancel.clicked += OnModalSecondary;
             _fatalQuit.clicked += _host.RequestQuit;
             _host.SceneFlow.StateChanged += OnStateChanged;
             _host.SceneFlow.ProgressChanged += OnProgressChanged;
@@ -230,6 +231,7 @@ namespace DarkFlare
 
             _retryRequest = null;
             _modalPrimaryAction = confirm;
+            _modalSecondaryAction = null;
             _focusBeforeModal = _root?.panel?.focusController?.focusedElement as VisualElement;
             _modalTitle.text = Resolve(title, title.EntryKey);
             _modalMessage.text = Resolve(message, message.EntryKey);
@@ -239,6 +241,25 @@ namespace DarkFlare
             _modalCancel.text = Resolve(
                 LocalizedMessage.Ui("flow.modal.cancel"),
                 "Cancel");
+            _modalRetry.style.display = DisplayStyle.Flex;
+            SetVisible(_modalLayer, true);
+            _modalRetry.Focus();
+        }
+
+        public void ShowMapPortalChoice(string mapId, string entryId)
+        {
+            if (!_bound || _host.SceneFlow.IsBusy) { return; }
+            _retryRequest = null;
+            _modalPrimaryAction = () => RunRequest(SceneFlowRequest.ChangeMap(mapId, entryId));
+            _modalSecondaryAction = () => ShowConfirmation(
+                LocalizedMessage.Ui("world.reset.confirm_title"),
+                LocalizedMessage.Ui("world.reset.confirm_message"),
+                () => RunRequest(SceneFlowRequest.ResetAndChangeMap(mapId, entryId)));
+            _focusBeforeModal = _root?.panel?.focusController?.focusedElement as VisualElement;
+            _modalTitle.text = Resolve(LocalizedMessage.Ui("world.reset.choice_title"), "Map Portal");
+            _modalMessage.text = Resolve(LocalizedMessage.Ui("world.reset.choice_message"), "Enter the map or reset it first?");
+            _modalRetry.text = Resolve(LocalizedMessage.Ui("world.reset.enter"), "Enter");
+            _modalCancel.text = Resolve(LocalizedMessage.Ui("world.reset.reset_and_enter"), "Reset and Enter");
             _modalRetry.style.display = DisplayStyle.Flex;
             SetVisible(_modalLayer, true);
             _modalRetry.Focus();
@@ -270,6 +291,7 @@ namespace DarkFlare
             if (!_bound || _restoreAfterReload != null) { return; }
             bool settingsOpen = IsSettingsOpen;
             Action modalAction = _modalPrimaryAction;
+            Action secondaryAction = _modalSecondaryAction;
             SceneFlowRequest? retryRequest = _retryRequest;
             VisualElement[] layers = { _busyLayer, _modalLayer, _toastLayer, _fatalLayer,
                 _busyProgress, _busyCancel, _modalRetry };
@@ -290,6 +312,7 @@ namespace DarkFlare
                 Bind();
                 if (settingsOpen) { OpenSettings(); }
                 _modalPrimaryAction = modalAction;
+                _modalSecondaryAction = secondaryAction;
                 _retryRequest = retryRequest;
                 for (int i = 0; i < layerNames.Length; i++)
                 {
@@ -348,7 +371,7 @@ namespace DarkFlare
             }
             _busyCancel.clicked -= OnBusyCancel;
             _modalRetry.clicked -= OnModalPrimary;
-            _modalCancel.clicked -= HideModal;
+            _modalCancel.clicked -= OnModalSecondary;
             _fatalQuit.clicked -= _host.RequestQuit;
             _frontEndController?.Dispose();
             _frontEndController = null;
@@ -447,6 +470,11 @@ namespace DarkFlare
                 {
                     ShowToast(LocalizedMessage.Ui("flow.toast.returned_front_end"));
                 }
+                else if (result.Operation == SceneFlowOperation.ChangeMap
+                    && _host.SceneFlow.ActiveRequest?.ResetMap == true)
+                {
+                    ShowToast(LocalizedMessage.Ui("world.reset.success"));
+                }
 
                 return;
             }
@@ -527,6 +555,14 @@ namespace DarkFlare
             }
         }
 
+        void OnModalSecondary()
+        {
+            Action action = _modalSecondaryAction;
+            HideModal();
+            action?.Invoke();
+            RefreshInputOwnership();
+        }
+
         void HideBusy()
         {
             SetVisible(_busyLayer, false);
@@ -537,6 +573,7 @@ namespace DarkFlare
             SetVisible(_modalLayer, false);
             _retryRequest = null;
             _modalPrimaryAction = null;
+            _modalSecondaryAction = null;
             VisualElement focus = _focusBeforeModal;
             _focusBeforeModal = null;
 

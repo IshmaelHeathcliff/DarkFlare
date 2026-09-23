@@ -19,6 +19,23 @@ namespace DarkFlare
         public MapTransitionFatalException(Exception error) : base("地图事务无法安全恢复", error) { }
     }
 
+    public sealed class MapResetSaveException : Exception
+    {
+        public MapResetSaveException(SaveOperationResult result)
+            : base("重置存档未提交：" + result.ErrorCode, result.Exception) { }
+    }
+
+    public enum MapResetPhase
+    {
+        None,
+        Preparing,
+        Saving,
+        Persisted,
+        Completed,
+        RolledBack,
+        Fatal,
+    }
+
     // Session 所有者。冻结数据不持有 Unity 对象；所有异步入口由调用者任务组拥有。
     public sealed class WorldMapRuntime : IUtility
     {
@@ -31,7 +48,11 @@ namespace DarkFlare
         ApplicationHost _host;
         SessionSnapshotSource _snapshots;
         int _generation;
+        int _activeEpoch;
         public MapScope Active { get; private set; }
+        public int ActiveMapEpoch => _activeEpoch;
+        public string LastResetMapId { get; private set; }
+        public MapResetPhase LastResetPhase { get; private set; }
         public bool IsTransitioning { get; private set; }
         public bool IsConfigured => _catalog != null;
         public int FrozenCount => _frozen.Count;
@@ -53,6 +74,7 @@ namespace DarkFlare
                 { throw new InvalidOperationException("地图交互与 Session 共享服务配置不匹配：" + obj.ObjectId); }
             }
             string mapId = restored?.ActiveMapId ?? "map:" + configuration.WorldMaps.StartingMap.Id;
+            _activeEpoch = restored?.ActiveMapEpoch ?? 0;
             if (restored != null)
             {
                 foreach (MapStateDto frozen in restored.FrozenMaps)
@@ -127,6 +149,7 @@ namespace DarkFlare
             if (Active == null) { return; }
             payload.Run.ActiveMapId = Active.Map.MapId;
             payload.Run.MapRevision = Active.Map.Revision;
+            payload.Run.ActiveMapEpoch = _activeEpoch;
             foreach (MapStateDto state in _frozen.Values.OrderBy(state => state.MapId, StringComparer.Ordinal))
             {
                 MapStateDto copy = MapStateData.CopyState(state);
@@ -160,6 +183,24 @@ namespace DarkFlare
 
         public async UniTask ChangeAsync(string mapId, string entryId, CancellationToken token)
         {
+            await ChangeCoreAsync(mapId, entryId, null, token);
+        }
+
+        public bool CanReset(string mapId)
+        {
+            if (Active == null || IsTransitioning || mapId == Active.Map.MapId || string.IsNullOrEmpty(mapId)) { return false; }
+            MapDocument map = _catalog.Get(mapId).CreateEditableCopy();
+            return map.SpawnBatches.Length > 0 || map.BossSpawns.Length > 0;
+        }
+
+        public UniTask ResetAndChangeAsync(string mapId, string entryId, SaveCoordinator.ExclusiveSaveLease save, CancellationToken token)
+        {
+            if (save == null || !CanReset(mapId)) { throw new InvalidOperationException("目标地图不可重置"); }
+            return ChangeCoreAsync(mapId, entryId, save, token);
+        }
+
+        async UniTask ChangeCoreAsync(string mapId, string entryId, SaveCoordinator.ExclusiveSaveLease save, CancellationToken token)
+        {
             if (Active == null || IsTransitioning) { throw new InvalidOperationException("地图当前不可切换"); }
             Vector3 position = _catalog.EntryPosition(mapId, entryId);
             if (mapId == Active.Map.MapId) { return; }
@@ -167,7 +208,11 @@ namespace DarkFlare
             while (statuses.IsClockHeld) { await UniTask.Yield(PlayerLoopTiming.LastUpdate, token); }
             token.ThrowIfCancellationRequested();
             IsTransitioning = true;
+            if (save != null) { LastResetMapId = mapId; LastResetPhase = MapResetPhase.Preparing; }
             MapScope source = Active, candidate = null;
+            int sourceEpoch = _activeEpoch;
+            bool hadTarget = _frozen.TryGetValue(mapId, out MapStateDto previousTarget);
+            bool stagedFrozen = false;
             bool committed = false;
             try
             {
@@ -179,7 +224,9 @@ namespace DarkFlare
                     if (issues.Count != 0) { throw new InvalidOperationException("无法冻结状态"); }
                     candidate = await PrepareAsync(mapId, token);
                     FaultInjection?.Invoke("prepared");
-                    MapStateDto targetState = _frozen.TryGetValue(mapId, out MapStateDto frozen) ? MapStateData.CopyState(frozen) : FreshState(candidate);
+                    int targetEpoch = save == null ? 0 : checked((hadTarget ? previousTarget.InstanceEpoch : 0) + 1);
+                    MapStateDto targetState = save != null ? FreshState(candidate, targetEpoch)
+                        : hadTarget ? MapStateData.CopyState(previousTarget) : FreshState(candidate, 0);
                     if (targetState.Revision != 0 && targetState.Revision != candidate.Map.Revision)
                     { throw new InvalidOperationException("冻结地图修订不匹配"); }
                     List<PreparedMonsterRestore> monsters = SaveRestorePreparer.RestoreMonsters(targetState.Monsters, _context.ContentCatalog, issues);
@@ -209,6 +256,7 @@ namespace DarkFlare
                         foreach (GameObject obj in sourceObjects) { if (obj != null) { obj.SetActive(false); } }
                         FaultInjection?.Invoke("source-detached");
                         Active = candidate; registry.MapOwner = candidate;
+                        _activeEpoch = targetState.InstanceEpoch;
                         _architecture.GetSystem<GameplayRandomSystem>().RestoreMapState(random);
                         candidate.Activate(_architecture.GetUtility<WorldSortingSystem>());
                         ImportMap(targetState, monsters, items, sourceStatuses.Time);
@@ -218,15 +266,43 @@ namespace DarkFlare
                         _configuration.CameraFollowTarget.SetMapBounds(candidate.Geometry.Bounds);
                         FaultInjection?.Invoke("before-commit");
                         _frozen.Remove(mapId); _frozen[source.Map.MapId] = sourceState;
+                        stagedFrozen = true;
+                        if (save != null)
+                        {
+                            FaultInjection?.Invoke("before-save");
+                            SessionSnapshotResult snapshot = _snapshots.CaptureStagedMap();
+                            if (!snapshot.Succeeded)
+                            { throw new InvalidOperationException("重置快照无效：" + string.Join("; ", snapshot.Issues.Select(issue => issue.Message))); }
+                            LastResetPhase = MapResetPhase.Saving;
+                            SaveOperationResult saved;
+                            try { saved = await save.CommitAsync(snapshot.Payload, token); }
+                            catch (OperationCanceledException) when (token.IsCancellationRequested) { throw; }
+                            catch (MapTransitionFatalException) { throw; }
+                            catch (Exception error) { throw new MapTransitionFatalException(error); }
+                            if (!saved.Succeeded) { throw new MapResetSaveException(saved); }
+                            LastResetPhase = MapResetPhase.Persisted;
+                        }
                         committed = true;
+                    }
+                    catch (MapTransitionFatalException)
+                    {
+                        committed = true;
+                        if (save != null) { LastResetPhase = MapResetPhase.Fatal; }
+                        throw;
                     }
                     catch (Exception failure)
                     {
                         try
                         {
+                            if (stagedFrozen)
+                            {
+                                _frozen.Remove(source.Map.MapId);
+                                if (hadTarget) { _frozen[mapId] = previousTarget; }
+                            }
                             candidate.Deactivate();
                             foreach (GameObject obj in registry.CaptureOwner(candidate)) { if (obj != null) { obj.SetActive(false); } }
                             Active = source; registry.MapOwner = source;
+                            _activeEpoch = sourceEpoch;
                             _activeBoss = sourceState.Boss.Copy();
                             source.Activate(_architecture.GetUtility<WorldSortingSystem>());
                             foreach (GameObject obj in sourceObjects)
@@ -257,7 +333,12 @@ namespace DarkFlare
                             _architecture.GetSystem<GameplayRandomSystem>().RestoreMapState(SaveRestorePreparer.RestoreRandomState(sourceState.Random, new List<DtoMapIssue>()));
                             if (sourceState.Spawner.IsRunning) { source.Spawner.BeginSpawning(sourceState.Spawner.NextSpawnRemainingSeconds); }
                         }
-                        catch (Exception rollback) { throw new MapTransitionFatalException(new AggregateException(failure, rollback)); }
+                        catch (Exception rollback)
+                        {
+                            if (save != null) { LastResetPhase = MapResetPhase.Fatal; }
+                            throw new MapTransitionFatalException(new AggregateException(failure, rollback));
+                        }
+                        if (save != null) { LastResetPhase = MapResetPhase.RolledBack; }
                         throw;
                     }
                     // 提交之后清理不可取消，不能在此返回“取消且未切图”。
@@ -267,7 +348,11 @@ namespace DarkFlare
                         await source.DisposeAsync();
                         FaultInjection?.Invoke("source-released");
                     }
-                    catch (Exception error) { throw new MapTransitionFatalException(error); }
+                    catch (Exception error)
+                    {
+                        if (save != null) { LastResetPhase = MapResetPhase.Fatal; }
+                        throw new MapTransitionFatalException(error);
+                    }
                 }
             }
             finally
@@ -281,11 +366,21 @@ namespace DarkFlare
                             await _architecture.GetUtility<SessionObjectRegistry>().ReleaseOwnerAsync(candidate);
                             await candidate.DisposeAsync();
                         }
-                        catch (Exception error) { throw new MapTransitionFatalException(error); }
+                        catch (Exception error)
+                        {
+                            if (save != null) { LastResetPhase = MapResetPhase.Fatal; }
+                            throw new MapTransitionFatalException(error);
+                        }
                     }
                 }
-                finally { IsTransitioning = false; }
+                finally
+                {
+                    if (save != null && !committed && LastResetPhase != MapResetPhase.Fatal)
+                    { LastResetPhase = MapResetPhase.RolledBack; }
+                    IsTransitioning = false;
+                }
             }
+            if (save != null) { LastResetPhase = MapResetPhase.Completed; }
             _architecture.SendEvent(new WorldMapChangedEvent(Active.Map.MapId, Active.Generation));
         }
 
@@ -322,16 +417,16 @@ namespace DarkFlare
             { Active.Spawner.BeginSpawning(state.Spawner.NextSpawnRemainingSeconds); }
         }
 
-        MapStateDto FreshState(MapScope scope)
+        MapStateDto FreshState(MapScope scope, int instanceEpoch)
         {
             GameplayRandomStateDto random = SessionSnapshotSource.MapRandom(
-                _architecture.GetSystem<GameplayRandomSystem>().CreateMapState(scope.Map.MapId));
+                _architecture.GetSystem<GameplayRandomSystem>().CreateMapState(scope.Map.MapId, instanceEpoch));
             MonsterSpawnerStateDto spawning = scope.Spawner.CreateFreshState(random.RootSeed);
             spawning.SpawnContentId = scope.Spawner.SpawnDefinition != null ? "spawn:" + scope.Spawner.SpawnDefinition.Id : "";
             spawning.IsRunning = scope.Spawner.HasBatches;
             return new MapStateDto
             {
-                MapId = scope.Map.MapId, Revision = scope.Map.Revision,
+                MapId = scope.Map.MapId, Revision = scope.Map.Revision, InstanceEpoch = instanceEpoch,
                 Random = random,
                 Spawner = spawning,
                 Statuses = new StatusSaveDto { Time = _architecture.GetSystem<StatusSystem>().Store.Time }

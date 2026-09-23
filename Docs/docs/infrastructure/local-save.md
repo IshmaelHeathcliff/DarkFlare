@@ -35,6 +35,8 @@ Schema 7 在活动图与冻结图各加入 Boss 名额，并在 Boss 怪物记�
 
 Schema 8 为有限刷怪保存计划种子、批次激活、怪物预选类型与种子、Pending / Alive / Defeated 名额和存活实例映射。Schema 7→8 把旧已访问图标记 `LegacyPreserved` 并停止补满，不推测历史击杀；首次访问新图建立有限计划。野外已知 r1 / r4 按语义哈希升为 r9，r7 的有限计划扩容时保留已有 12 名额及进度，其他旧修订拒绝。core 8→9→10 升级内容目录，保留旧怪物、Boss、掉落与随机流。
 
+Schema 9 为活动图新增 `ActiveMapEpoch`、冻结图新增 `InstanceEpoch`。8→9 迁移将已访问图代次置 0，不改变怪物、Boss、掉落或随机通道。只有明确手动重置才开启下一代次：候选图与源图组成一份完整快照，在保存协调器排他门禁下提交。落盘前失败恢复旧状态；落盘后清理失败按 Fatal 处理。详见[手动重置模块](../behavior/map-reset.md)。
+
 保存捕获等待切图稳定，再取得状态时钟；切图等待既有状态捕获完成。写盘只使用已冻结 DTO，允许与后续模拟并行。返回前台先等既有保存结束，再提交退出检查点。FrontEnd 摘要预检与 Continue 共用协调器，继续请求等待摘要预检结束。完整冻结和所有权合同见[双地图模块](../maps/world-map-lifecycle.md)。
 
 ## 消耗品保存与兼容
@@ -47,13 +49,13 @@ V1 文件格式固定为：
 
 - `formatId = "darkflare-save"`
 - `formatVersion = 1`
-- `saveSchemaVersion = 8`
+- `saveSchemaVersion = 9`
 - 最大文档 16 MiB，最大 JSON 深度 64
 - 最大物品 8192、每图怪物名额及存活对象 1024 / 全档 2048、世界掉落 4096
 - Header 包含游戏版本、内容目录 ID / 版本、槽位、提交序号、UTC 创建 / 更新时间、Payload SHA-256 和显示摘要
 - Payload 分为 `ProfileSaveData` 与 `RunSaveData`，所有引用使用稳定 ContentId 或强类型实例 ID
 
-Serializer 使用项目已有 `Unity.Newtonsoft.Json`。写出前先把 Payload 转为按属性名 Ordinal 排序的规范 JSON，并把 Single 数值归一为 double 表示，再计算小写 SHA-256；这避免同一浮点值在 Single / Double 文本往返后产生伪校验失败。Header 不参与校验值。读取顺序为格式 / 槽位 / 提交序号检查、Payload 校验、Schema 兼容与逐级迁移、强类型验证。当前登记了历史 `0 → 1 → 2 → 3 → 4 → 5 → 6 → 7` 迁移，依次补充旧结构、物品数量、空状态图、双地图身份、默认导航意图、怪物行为及 Boss 名额；未来 Schema 会被安全拒绝。
+Serializer 使用项目已有 `Unity.Newtonsoft.Json`。写出前先把 Payload 转为按属性名 Ordinal 排序的规范 JSON，并把 Single 数值归一为 double 表示，再计算小写 SHA-256；这避免同一浮点值在 Single / Double 文本往返后产生伪校验失败。Header 不参与校验值。读取顺序为格式 / 槽位 / 提交序号检查、Payload 校验、Schema 兼容与逐级迁移、强类型验证。当前登记了历史 `0 → 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 → 9` 迁移，依次补充旧结构、物品数量、空状态图、双地图身份、默认导航意图、怪物行为、Boss 名额、有限刷怪和地图代次；未来 Schema 会被安全拒绝。
 
 Schema 5 → 6 为当前及冻结地图怪物初始化行为版本 1：旧位置作为锚点、默认朝右、安全休眠态和原实例根种子，不推进任何既有 RNG。原攻击冷却保留。新快照保存前摇 / 后摇剩余时间及结算标记，恢复后摇不会重复命中；未知版本、非法阶段、非有限数和跨图目标在预检拒绝。core 6 → 7 仅更新追加配置的目录版本。真实历史输入为 `Assets/Scripts/Tests/Fixtures/Migration/save-v5-navigation.json`，来源及完整链见同目录 manifest。
 

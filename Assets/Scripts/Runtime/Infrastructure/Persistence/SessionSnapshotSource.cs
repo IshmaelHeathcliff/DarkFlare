@@ -87,6 +87,16 @@ namespace DarkFlare
 
         public SessionSnapshotResult Capture()
         {
+            return CaptureCore(false);
+        }
+
+        internal SessionSnapshotResult CaptureStagedMap()
+        {
+            return CaptureCore(true);
+        }
+
+        SessionSnapshotResult CaptureCore(bool allowTransition)
+        {
             List<DtoMapIssue> issues = new List<DtoMapIssue>();
 
             if (!IsAvailable)
@@ -97,16 +107,19 @@ namespace DarkFlare
 
             IArchitecture architecture = _session.Architecture;
             WorldMapRuntime maps = architecture.GetUtility<WorldMapRuntime>();
-            if (maps.IsTransitioning)
+            if (maps.IsTransitioning && !allowTransition)
             { Add(issues, DtoMapIssueCode.InvalidValue, "payload.run.maps", "切图尚未到达保存边界"); return Failure(issues); }
             if (!architecture.GetSystem<StatusSystem>().Store.IsQuiescent)
             {
                 Add(issues, DtoMapIssueCode.InvalidValue, "payload.run.statuses", "状态尚未到达保存边界");
                 return Failure(issues);
             }
-            IReadOnlyList<GameObject> objects = architecture
-                .GetUtility<SessionObjectRegistry>()
-                .CaptureObjects();
+            SessionObjectRegistry registry = architecture.GetUtility<SessionObjectRegistry>();
+            IReadOnlyList<GameObject> objects = allowTransition
+                ? registry.CaptureOwner(maps.Active)
+                    .Concat(registry.CaptureObjects().Where(obj => obj.GetComponent<PlayerController>() != null))
+                    .Distinct().ToList()
+                : registry.CaptureObjects();
             List<PlayerController> players = CaptureComponents<PlayerController>(objects);
             List<MonsterController> monsters = CaptureComponents<MonsterController>(objects)
                 .Where(monster => monster.Actor != null && monster.Actor.IsAlive)
@@ -196,7 +209,7 @@ namespace DarkFlare
             statuses.Actors.RemoveAll(actor => !ids.Contains(actor.ActorKey));
             var result = new MapStateDto
             {
-                MapId = scope.Map.MapId, Revision = scope.Map.Revision, Monsters = MapMonsters(monsters, issues),
+                MapId = scope.Map.MapId, Revision = scope.Map.Revision, InstanceEpoch = architecture.GetUtility<WorldMapRuntime>().ActiveMapEpoch, Monsters = MapMonsters(monsters, issues),
                 Boss = architecture.GetUtility<WorldMapRuntime>().CaptureBoss(monsters),
                 WorldDrops = MapWorldDrops(drops), Items = MapItems(drops.Select(drop => drop.Item).ToList(), issues),
                 Spawner = MapSpawner(issues), Statuses = statuses,

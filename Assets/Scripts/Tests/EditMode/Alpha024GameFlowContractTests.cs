@@ -266,6 +266,7 @@ namespace DarkFlare.Tests
                     nameof(SceneFlowErrorCode.EntryDuplicate),
                     nameof(SceneFlowErrorCode.SavePrepareFailed),
                     nameof(SceneFlowErrorCode.SaveBeforeExitFailed),
+                    nameof(SceneFlowErrorCode.MapResetSaveFailed),
                     nameof(SceneFlowErrorCode.SessionStartFailed),
                     nameof(SceneFlowErrorCode.SessionStopFailed),
                     nameof(SceneFlowErrorCode.UnloadFailed),

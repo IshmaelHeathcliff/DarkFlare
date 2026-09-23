@@ -21,6 +21,7 @@ namespace DarkFlare.Tests
             if (ApplicationHost.TryGetCurrent(out ApplicationHost host) && host.CurrentSession != null)
             {
                 host.CurrentSession.Architecture.GetUtility<WorldMapRuntime>().FaultInjection = null;
+                host.SaveCoordinator.ExclusiveSaveOverride = null;
                 if (host.SceneFlow.State == GameFlowState.FatalError)
                 {
                     LifecycleResult stopped = default;
@@ -146,6 +147,180 @@ namespace DarkFlare.Tests
                 restored.Slots.Select(slot => (slot.SlotId, slot.Status, slot.InstanceId)),
                 "切图后必须恢复同一批次的名额和怪物身份");
             Assert.IsTrue(restored.Batches.Single(batch => batch.BatchId == "east_patrol").IsActivated);
+        }
+
+        [UnityTest]
+        public IEnumerator ManualReset_ReplacesOnlyTargetInstanceAndPersistsAcrossContinue()
+        {
+            yield return _fixture.EnterMain();
+            ApplicationHost host = ApplicationHost.Current;
+            WorldMapRuntime maps = host.CurrentSession.Architecture.GetUtility<WorldMapRuntime>();
+            using GamePauseLease pause = host.GameTime.AcquirePause("map-reset-test");
+            yield return Change(host, "map:wilderness", "arrival");
+            MonsterController boss = UnityEngine.Object.FindObjectsByType<MonsterController>()
+                .Single(monster => monster.Definition.BossBehavior != null);
+            string oldBossId = boss.Instance.Id.Value;
+            MonsterController victim = UnityEngine.Object.FindObjectsByType<MonsterController>()
+                .First(monster => monster.Definition.BossBehavior == null);
+            float fatal = victim.Actor.MaxHealth + 100f;
+            var damage = new Dictionary<DamageType, float> { [DamageType.Physical] = fatal };
+            Assert.IsTrue(victim.Actor.ReceiveDamage(new DamageResult(true, false, damage, damage)));
+            yield return null;
+            Assert.AreEqual(1, maps.Active.Spawner.DefeatedCount);
+            ItemBaseDefinition material = host.ContentCatalog.GetAll<ItemBaseDefinition>().First(item => item.Id == "forging_ore");
+            ItemInstance dropItem = material.CreateInstance(host.CurrentSession.Architecture.GetUtility<IItemInstanceIdGenerator>().Next(),
+                1, 53, ItemRarity.Normal);
+            WorldDropId dropId = host.CurrentSession.Architecture.GetUtility<IRunInstanceIdGenerator>().NextWorldDropId();
+            Assert.IsNotNull(host.CurrentSession.Architecture.GetSystem<LootSystem>()
+                .SpawnRestoredPickup(dropId, dropItem, new Vector3(-10, -10)));
+            yield return Change(host, "map:town", "return");
+            for (int i = 0; i < 120 && host.SaveCoordinator.IsBusy; i++) { yield return null; }
+            Assert.IsFalse(host.SaveCoordinator.IsBusy);
+            var snapshots = new SessionSnapshotSource(host.CurrentSession, host.ContentCatalog, maps.Active.Spawner);
+            SessionSnapshotResult before = snapshots.Capture();
+            Assert.IsTrue(before.Succeeded, string.Join("; ", before.Issues.Select(issue => issue.Message)));
+            MapStateDto oldMap = before.Payload.Run.FrozenMaps.Single(map => map.MapId == "map:wilderness");
+            Assert.AreEqual(0, oldMap.InstanceEpoch);
+            Assert.AreEqual(1, oldMap.Spawner.Slots.Count(slot => slot.Status == SpawnSlotStatus.Defeated));
+            Assert.AreEqual(dropId.Value, oldMap.WorldDrops.Single().InstanceId);
+
+            SceneFlowResult reset = null;
+            yield return host.SceneFlow.RequestAsync(SceneFlowRequest.ResetAndChangeMap("map:wilderness", "arrival"))
+                .ToCoroutine(value => reset = value);
+            Assert.IsTrue(reset.Succeeded, reset.Exception?.ToString());
+            Assert.AreEqual(1, maps.ActiveMapEpoch);
+            Assert.AreEqual("map:wilderness", maps.LastResetMapId);
+            Assert.AreEqual(MapResetPhase.Completed, maps.LastResetPhase);
+            Assert.AreEqual(100, maps.Active.Spawner.PlannedCount);
+            Assert.AreEqual(20, maps.Active.Spawner.AliveCount);
+            Assert.AreEqual(80, maps.Active.Spawner.PendingCount);
+            Assert.AreEqual(0, maps.Active.Spawner.DefeatedCount);
+            Assert.AreNotEqual(oldBossId, UnityEngine.Object.FindObjectsByType<MonsterController>()
+                .Single(monster => monster.Definition.BossBehavior != null).Instance.Id.Value);
+            Assert.IsFalse(UnityEngine.Object.FindObjectsByType<LootPickupController>().Any(drop => drop.Id == dropId));
+            SessionSnapshotResult after = snapshots.Capture();
+            Assert.IsTrue(after.Succeeded, string.Join("; ", after.Issues.Select(issue => issue.Message)));
+            Assert.IsFalse(after.Payload.Items.Any(item => item.InstanceId == dropItem.Id.Value));
+            Assert.AreEqual(before.Payload.Profile.Gold, after.Payload.Profile.Gold);
+            CollectionAssert.AreEqual(before.Payload.Profile.Inventory.Placements.Select(item => item.ItemInstanceId),
+                after.Payload.Profile.Inventory.Placements.Select(item => item.ItemInstanceId));
+            CollectionAssert.AreEqual(before.Payload.Profile.Equipment.SelectMany(loadout => loadout.Entries)
+                    .Select(item => item.ItemInstanceId),
+                after.Payload.Profile.Equipment.SelectMany(loadout => loadout.Entries)
+                    .Select(item => item.ItemInstanceId));
+            Assert.AreEqual(0, after.Payload.Run.FrozenMaps.Single(map => map.MapId == "map:town").InstanceEpoch);
+
+            pause.Dispose();
+            yield return _fixture.EnterFrontEnd();
+            yield return _fixture.EnterMain(GameStartIntent.Continue);
+            maps = ApplicationHost.Current.CurrentSession.Architecture.GetUtility<WorldMapRuntime>();
+            Assert.AreEqual("map:wilderness", maps.Active.Map.MapId);
+            Assert.AreEqual(1, maps.ActiveMapEpoch);
+            Assert.AreEqual(0, maps.Active.Spawner.DefeatedCount);
+            Assert.AreEqual(100, maps.Active.Spawner.PlannedCount);
+            Assert.IsFalse(UnityEngine.Object.FindObjectsByType<LootPickupController>().Any(drop => drop.Id == dropId));
+        }
+
+        [UnityTest]
+        public IEnumerator ManualReset_PreparationAndSaveFailuresKeepOldMap()
+        {
+            yield return _fixture.EnterMain();
+            ApplicationHost host = ApplicationHost.Current;
+            WorldMapRuntime maps = host.CurrentSession.Architecture.GetUtility<WorldMapRuntime>();
+            yield return Change(host, "map:wilderness", "arrival");
+            yield return Change(host, "map:town", "return");
+            for (int i = 0; i < 120 && host.SaveCoordinator.IsBusy; i++) { yield return null; }
+            Assert.IsFalse(host.SaveCoordinator.IsBusy);
+            var snapshots = new SessionSnapshotSource(host.CurrentSession, host.ContentCatalog, maps.Active.Spawner);
+            MapStateDto previous = snapshots.Capture().Payload.Run.FrozenMaps.Single(map => map.MapId == "map:wilderness");
+            foreach (bool saveFailure in new[] { false, true })
+            {
+                if (saveFailure)
+                {
+                    maps.FaultInjection = null;
+                    host.SaveCoordinator.ExclusiveSaveOverride = _ => SaveOperationResult.Failure(
+                        SaveOperation.Save, SaveCoordinator.AutoSlot, SaveErrorCode.CommitFailed);
+                }
+                else { maps.FaultInjection = phase => { if (phase == "before-save") { throw new InvalidOperationException("reset-test"); } }; }
+                SceneFlowResult failed = null;
+                yield return host.SceneFlow.RequestAsync(SceneFlowRequest.ResetAndChangeMap("map:wilderness", "arrival"))
+                    .ToCoroutine(value => failed = value);
+                Assert.IsFalse(failed.Succeeded);
+                if (saveFailure) { Assert.AreEqual(SceneFlowErrorCode.MapResetSaveFailed, failed.ErrorCode); }
+                Assert.AreEqual("map:town", maps.Active.Map.MapId);
+                Assert.AreEqual(0, maps.ActiveMapEpoch);
+                Assert.IsFalse(maps.IsTransitioning);
+                Assert.AreEqual(MapResetPhase.RolledBack, maps.LastResetPhase);
+                MapStateDto retained = snapshots.Capture().Payload.Run.FrozenMaps.Single(map => map.MapId == "map:wilderness");
+                Assert.AreEqual(previous.InstanceEpoch, retained.InstanceEpoch);
+                CollectionAssert.AreEqual(previous.Spawner.Slots.Select(slot => (slot.SlotId, slot.Status, slot.InstanceId)),
+                    retained.Spawner.Slots.Select(slot => (slot.SlotId, slot.Status, slot.InstanceId)));
+                DismissFailure();
+            }
+        }
+
+        [UnityTest]
+        public IEnumerator MapPortalChoice_OffersResetConfirmationAndCancelKeepsMap()
+        {
+            yield return _fixture.EnterMain();
+            ApplicationHost host = ApplicationHost.Current;
+            WorldMapRuntime maps = host.CurrentSession.Architecture.GetUtility<WorldMapRuntime>();
+            WorldInteractionTarget portal = UnityEngine.Object.FindObjectsByType<WorldInteractionTarget>()
+                .Single(target => target.MapBinding?.Kind == MapInteractionKind.Portal);
+            Assert.IsTrue(maps.CanReset(portal.MapBinding.TargetMapId));
+            Assert.IsTrue(host.CurrentSession.Architecture.SendCommand(new OpenGameMenuCommand(portal)));
+            VisualElement root = UnityEngine.Object.FindAnyObjectByType<ApplicationShellBootstrap>()
+                .GetComponent<RuntimePanelView>().Root;
+            Button enter = root.Q<Button>("application-modal-retry");
+            Button reset = root.Q<Button>("application-modal-cancel");
+            Assert.IsTrue(host.ApplicationShell.BlocksGameplay);
+            Assert.IsFalse(string.IsNullOrWhiteSpace(enter.text));
+            Assert.IsFalse(string.IsNullOrWhiteSpace(reset.text));
+            Assert.AreSame(enter, root.panel.focusController.focusedElement);
+            using (NavigationSubmitEvent submit = NavigationSubmitEvent.GetPooled())
+            {
+                submit.target = reset;
+                reset.SendEvent(submit);
+            }
+            Assert.IsTrue(host.ApplicationShell.BlocksGameplay, "重置应进入二次确认");
+            Assert.AreSame(enter, root.panel.focusController.focusedElement);
+            DismissFailure();
+            Assert.AreEqual("map:town", maps.Active.Map.MapId);
+            Assert.AreEqual(0, maps.ActiveMapEpoch);
+            Assert.IsFalse(host.ApplicationShell.BlocksGameplay);
+        }
+
+        [UnityTest]
+        public IEnumerator ManualReset_TwentyCyclesReleaseMapOwners()
+        {
+            yield return _fixture.EnterMain();
+            ApplicationHost host = ApplicationHost.Current;
+            IArchitecture architecture = host.CurrentSession.Architecture;
+            WorldMapRuntime maps = architecture.GetUtility<WorldMapRuntime>();
+            SessionObjectRegistry registry = architecture.GetUtility<SessionObjectRegistry>();
+            int townObjects = registry.Count;
+            using GamePauseLease pause = host.GameTime.AcquirePause("map-reset-cycles");
+            long nativeBytes = -1;
+            for (int i = 1; i <= 20; i++)
+            {
+                for (int frame = 0; frame < 120 && host.SaveCoordinator.IsBusy; frame++) { yield return null; }
+                Assert.IsFalse(host.SaveCoordinator.IsBusy);
+                SceneFlowResult result = null;
+                yield return host.SceneFlow.RequestAsync(SceneFlowRequest.ResetAndChangeMap("map:wilderness", "arrival"))
+                    .ToCoroutine(value => result = value);
+                Assert.IsTrue(result.Succeeded, $"cycle {i}: {result.Exception}");
+                Assert.AreEqual(i, maps.ActiveMapEpoch);
+                Assert.AreEqual(100, maps.Active.Spawner.PlannedCount);
+                Assert.AreEqual(20, maps.Active.Spawner.AliveCount);
+                Assert.AreEqual(21, UnityEngine.Object.FindObjectsByType<MonsterController>().Length);
+                long currentNative = architecture.GetModel<NavigationModel>().NativeBytes;
+                if (nativeBytes < 0) { nativeBytes = currentNative; }
+                else { Assert.AreEqual(nativeBytes, currentNative, "导航容量不应逐轮增加"); }
+                MapScope old = maps.Active;
+                yield return Change(host, "map:town", "return");
+                Assert.IsEmpty(registry.CaptureOwner(old));
+                Assert.AreEqual(townObjects, registry.Count, "旧图对象不能逐轮残留");
+            }
         }
 
         [UnityTest]

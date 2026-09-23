@@ -176,9 +176,24 @@ namespace DarkFlare
 
         public GameplayRandomState CreateMapState(string mapId)
         {
+            return CreateMapState(mapId, 0);
+        }
+
+        public GameplayRandomState CreateMapState(string mapId, int instanceEpoch)
+        {
             EnsureConfigured();
+            if (instanceEpoch < 0) { throw new ArgumentOutOfRangeException(nameof(instanceEpoch)); }
             uint seed = unchecked((uint)_rootSeed ^ 2166136261u);
             foreach (char value in mapId) { seed = unchecked((seed ^ value) * 16777619u); }
+            if (instanceEpoch != 0)
+            {
+                uint epoch = (uint)instanceEpoch;
+                for (int i = 0; i < 4; i++)
+                {
+                    seed = unchecked((seed ^ (epoch & 255u)) * 16777619u);
+                    epoch >>= 8;
+                }
+            }
             var channels = new List<KeyValuePair<GameplayRandomChannel, int>>();
             foreach (GameplayRandomChannel channel in Enum.GetValues(typeof(GameplayRandomChannel)))
             { channels.Add(new KeyValuePair<GameplayRandomChannel, int>(channel, 0)); }

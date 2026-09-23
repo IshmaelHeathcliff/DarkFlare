@@ -90,7 +90,7 @@ namespace DarkFlare
             if (run == null) { return; }
             var ids = new HashSet<string>(StringComparer.Ordinal);
             if (!ContentId.TryParse(run.ActiveMapId, out ContentId active) || active.Namespace != ContentNamespaces.Map
-                || run.MapRevision < 0 || run.FrozenMaps == null || run.FrozenMaps.Count > 64)
+                || run.MapRevision < 0 || run.ActiveMapEpoch < 0 || run.FrozenMaps == null || run.FrozenMaps.Count > 64)
             { Add(issues, SaveDataIssueCode.InvalidValue, "payload.run.maps", "地图身份、修订或容量非法"); return; }
             ids.Add(run.ActiveMapId);
             var actorMaps = new Dictionary<string, string>(StringComparer.Ordinal);
@@ -108,7 +108,7 @@ namespace DarkFlare
             foreach (MapStateDto map in run.FrozenMaps)
             {
                 if (map == null || !ContentId.TryParse(map.MapId, out ContentId id) || id.Namespace != ContentNamespaces.Map
-                    || !ids.Add(map.MapId) || map.Revision < 0 || map.Monsters == null || map.WorldDrops == null
+                    || !ids.Add(map.MapId) || map.Revision < 0 || map.InstanceEpoch < 0 || map.Monsters == null || map.WorldDrops == null
                     || map.Monsters.Count > LocalSaveFormat.MaximumMapMonsters || map.Statuses?.Actors == null)
                 { Add(issues, SaveDataIssueCode.InvalidValue, "payload.run.maps", "冻结地图数据非法或重复"); continue; }
                 ValidateNavigation(map.Monsters, map.MapId, run.Player?.PlayerId, actorMaps, issues);

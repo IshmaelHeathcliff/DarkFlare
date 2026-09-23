@@ -261,6 +261,7 @@ namespace DarkFlare
     {
         public string ActiveMapId { get; set; } = "map:wilderness";
         public int MapRevision { get; set; }
+        public int ActiveMapEpoch { get; set; }
         public List<MapStateDto> FrozenMaps { get; set; } = new();
         public GameplayRandomStateDto MapRandom { get; set; }
         public StatusSaveDto Statuses { get; set; } = new StatusSaveDto();

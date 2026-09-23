@@ -63,10 +63,13 @@
 - [批量导航与怪物移动](./maps/navigation.md)
 - [行为管理与独立 HFSM](./behavior/README.md)
 - [有限刷怪与地图名额](./behavior/finite-spawning.md)
+- [刷怪地图手动重置](./behavior/map-reset.md)
 - [世界渲染与稳定层级](./world-rendering.md)
 - [已完成计划归档](./plan/archive/README.md)
 
 ## 计划状态
+
+2026-09-23：**Alpha 0.6.4 手动重置完成**，当前版本 `0.6.4-alpha` / 地图 V4 / core v10 / Schema 9。玩家可在刷怪地图传送门选择普通进入或二次确认后重置并进入；正常离场继续保留原进度。见[模块](./behavior/map-reset.md)、[验收](./behavior/acceptance/0.6.4/README.md)和[归档计划](./plan/archive/alpha-0.6.4-manual-map-reset-plan.md)。下一阶段为 0.6.5 综合交付。
 
 2026-09-23：**Alpha 0.6.3 有限刷怪完成**，当前交付 `0.6.3-alpha` / 地图 V4 / core v10 / Schema 8。正式野外图为 20 个入图名额、10 个分散触发点各 8 个名额及独立 Boss；旧已访问图保留进度。扩容后完整 EditMode 818/818、PlayMode 97 通过 / 2 包内跳过 / 0 失败；Windows Player 与 300 / 600 实测未执行。见[模块](./behavior/finite-spawning.md)、[验收](./behavior/acceptance/0.6.3/README.md)及[已归档计划](./plan/archive/alpha-0.6.3-finite-spawning-plan.md)。下一阶段为 0.6.4 手动重置。
 

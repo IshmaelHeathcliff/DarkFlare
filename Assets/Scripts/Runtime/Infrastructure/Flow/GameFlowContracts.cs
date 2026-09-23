@@ -58,6 +58,7 @@ namespace DarkFlare
         EntryDuplicate,
         SavePrepareFailed,
         SaveBeforeExitFailed,
+        MapResetSaveFailed,
         SessionStartFailed,
         SessionStopFailed,
         UnloadFailed,
@@ -199,13 +200,15 @@ namespace DarkFlare
             GameStartIntent startIntent,
             SceneId targetScene,
             string mapId = null,
-            string entryId = null)
+            string entryId = null,
+            bool resetMap = false)
         {
             Operation = operation;
             StartIntent = startIntent;
             TargetScene = targetScene;
             MapId = mapId;
             EntryId = entryId;
+            ResetMap = resetMap;
         }
 
         public SceneFlowOperation Operation { get; }
@@ -215,6 +218,7 @@ namespace DarkFlare
         public SceneId TargetScene { get; }
         public string MapId { get; }
         public string EntryId { get; }
+        public bool ResetMap { get; }
 
         public bool IsValid
         {
@@ -243,6 +247,13 @@ namespace DarkFlare
         {
             var request = new SceneFlowRequest(SceneFlowOperation.ChangeMap, GameStartIntent.None, SceneId.Main, mapId, entryId);
             if (!request.IsValid) { throw new ArgumentException("地图请求身份无效"); }
+            return request;
+        }
+
+        public static SceneFlowRequest ResetAndChangeMap(string mapId, string entryId)
+        {
+            var request = new SceneFlowRequest(SceneFlowOperation.ChangeMap, GameStartIntent.None, SceneId.Main, mapId, entryId, true);
+            if (!request.IsValid) { throw new ArgumentException("地图重置请求身份无效"); }
             return request;
         }
 

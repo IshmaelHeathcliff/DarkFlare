@@ -10,6 +10,7 @@ namespace DarkFlare
     {
         public string MapId { get; set; }
         public int Revision { get; set; }
+        public int InstanceEpoch { get; set; }
         public List<MonsterRunStateDto> Monsters { get; set; } = new();
         public List<WorldDropStateDto> WorldDrops { get; set; } = new();
         public MonsterSpawnerStateDto Spawner { get; set; } = new();

@@ -2144,6 +2144,38 @@ MonoBehaviour:
     m_Localized: "F8 / R3: open \xB7 Esc / B: close\nArrows / D-pad: navigate \xB7 Enter / A: select"
     m_Metadata:
       m_Items: []
+  - m_Id: 12621335304855552
+    m_Localized: Map Portal
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12621335371964416
+    m_Localized: Enter the map, or reset it first?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12621335371964417
+    m_Localized: Enter
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12621335371964418
+    m_Localized: Reset and Enter
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12621335371964419
+    m_Localized: Reset Map?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12621335371964420
+    m_Localized: Monsters, the boss and trigger progress will reset. Unclaimed drops will be removed. Continue?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12621335371964421
+    m_Localized: Map reset
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12621335371964422
+    m_Localized: The reset was not saved. The previous map state was kept. Please retry.
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:

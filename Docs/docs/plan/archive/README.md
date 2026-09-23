@@ -1,5 +1,7 @@
 # 已完成计划归档
 
+- [Alpha 0.6.4 手动重置](alpha-0.6.4-manual-map-reset-plan.md)：2026-09-23 R1–R6 完成，版本 `0.6.4-alpha` / 地图 V4 / core v10 / Schema 9；[验收](../../behavior/acceptance/0.6.4/README.md)记录事务、迁移、传送门和生命周期回归。Windows Player 与 300／600 实测未执行。
+
 - [Alpha 0.6.3 有限刷怪](alpha-0.6.3-finite-spawning-plan.md)：2026-09-23 S1–S6 完成，随后将正式野外图扩为 20 个入图名额、10 处各 8 个触发名额；当前为 `0.6.3-alpha` / 地图 V4 / core v10 / Schema 8。[验收](../../behavior/acceptance/0.6.3/README.md)记录扩容后 EditMode 818/818、PlayMode 97 通过／2 包内跳过。Windows Player 与 300／600 实测未执行。
 
 - [Alpha 0.6.2 守卫 Boss](alpha-0.6.2-guardian-boss-plan.md)：2026-09-23 按用户调整的门槛结束，版本 `0.6.2-alpha`；[验收记录](../../behavior/acceptance/0.6.2/README.md)保留 EditMode 812/812、PlayMode 95 通过／2 包内跳过及两种 Windows 构建成功，并明确标注 Player、跨进程及 300／600 性能矩阵为未执行的豁免项。

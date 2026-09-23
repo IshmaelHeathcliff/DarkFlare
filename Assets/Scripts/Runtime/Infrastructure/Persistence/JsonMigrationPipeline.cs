@@ -369,6 +369,26 @@ namespace DarkFlare
         }
     }
 
+    public sealed class MapInstanceEpochSaveMigration : IJsonMigrationStep
+    {
+        public string Id => "save_8_to_9_map_instance_epoch";
+        public MigrationDataDomain Domain => MigrationDataDomain.Save;
+        public int FromVersion => 8;
+        public int ToVersion => 9;
+
+        public void Apply(JObject document)
+        {
+            if (document["payload"]?["run"] is not JObject run) { throw new InvalidOperationException("缺少 Run 数据"); }
+            run["activeMapEpoch"] = 0;
+            if (run["frozenMaps"] is not JArray maps) { throw new InvalidOperationException("缺少冻结地图集合"); }
+            foreach (JToken map in maps)
+            {
+                if (map is not JObject frozen) { throw new InvalidOperationException("冻结地图非法"); }
+                frozen["instanceEpoch"] = 0;
+            }
+        }
+    }
+
     public sealed class FiniteSpawnSaveMigration : IJsonMigrationStep
     {
         public string Id => "save_7_to_8_finite_spawns";

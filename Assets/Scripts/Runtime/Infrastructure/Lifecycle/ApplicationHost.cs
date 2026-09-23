@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 namespace DarkFlare
 {
     [DisallowMultipleComponent]
-    public sealed class ApplicationHost : MonoBehaviour, ISceneFlowApplication, IMapFlowApplication
+    public sealed class ApplicationHost : MonoBehaviour, ISceneFlowApplication, IMapFlowApplication, IResetMapFlowApplication
     {
         const string DefaultProfileId = "local-default";
         const string StopTimeoutOperationName = "stop-timeout";
@@ -279,6 +279,22 @@ namespace DarkFlare
                     _applicationShellController?.ShowToast(PlayerErrorCatalog.From(result).Message);
                 }
             });
+        }
+
+        public async UniTask ResetAndChangeMapAsync(string mapId, string entryId, CancellationToken token)
+        {
+            GameSessionHost session = _session;
+            if (session == null || session.State != GameSessionState.Running || !session.IsCurrentArchitectureLease)
+            { throw new InvalidOperationException("Session 当前不可重置地图"); }
+            WorldMapRuntime maps = session.Architecture.GetUtility<WorldMapRuntime>();
+            if (!maps.CanReset(mapId)) { throw new InvalidOperationException("目标地图不可重置"); }
+            if (!_saveCoordinator.TryBeginExclusiveSave(session, out SaveCoordinator.ExclusiveSaveLease save))
+            { throw new InvalidOperationException("存档正忙，请稍后重试地图重置"); }
+            using (save)
+            using (GameTime.AcquirePause("map-reset"))
+            {
+                await maps.ResetAndChangeAsync(mapId, entryId, save, token);
+            }
         }
 
         public IGameSessionInitializer CreateSessionInitializer(
