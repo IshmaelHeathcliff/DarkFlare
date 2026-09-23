@@ -175,6 +175,29 @@ namespace DarkFlare
     }
 
     [BurstCompile]
+    internal static class NavigationQueries
+    {
+        internal static int LegalNode(in NavigationGridView grid, in float2 point)
+        {
+            int root = grid.Index(point);
+            if (root < 0 || grid.Edges[root] != 0) { return root; }
+            return FindLegalNode(grid, point);
+        }
+
+        [BurstCompile(CompileSynchronously = true)]
+        internal static int FindLegalNode(in NavigationGridView grid, in float2 point)
+        {
+            return grid.LegalNode(point);
+        }
+
+        [BurstCompile(CompileSynchronously = true)]
+        internal static int Segment(in NavigationGridView grid, in float2 from, in float2 to, double radius)
+        {
+            return grid.Segment(from, to, radius) ? 1 : 0;
+        }
+    }
+
+    [BurstCompile]
     internal struct NavigationGridJob : IJobParallelFor
     {
         internal NavigationGeometryView Geometry;

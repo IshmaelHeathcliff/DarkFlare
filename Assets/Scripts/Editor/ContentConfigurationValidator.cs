@@ -875,6 +875,13 @@ namespace DarkFlare.Editor
             {
                 MonsterDefinition monster = monsters[i];
 
+                if (monster.Behavior == null) { AddError(issues, monster, "正式怪物必须配置行为"); }
+                else
+                {
+                    try { monster.Behavior.Validate(); }
+                    catch (ArgumentException error) { AddError(issues, monster, error.Message); }
+                }
+
                 if (string.IsNullOrWhiteSpace(monster.DisplayName))
                 {
                     AddError(issues, monster, "怪物中文名不能为空");

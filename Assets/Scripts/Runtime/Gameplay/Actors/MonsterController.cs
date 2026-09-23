@@ -23,12 +23,43 @@ namespace DarkFlare
         LifecycleScope _componentScope;
         bool _despawnScheduled;
         float _lastContactDamageTime = -999f;
+        MonsterBehaviorStateDto _behaviorState;
+        float _frozenCooldown;
+        internal bool NavigationOverride { get; set; }
+        public MonsterBehaviorRuntime BehaviorRuntime { get; internal set; }
+        public BehaviorHandle BehaviorHandle => BehaviorRuntime?.Handle ?? default;
+
+        public MonsterBehaviorStateDto CaptureBehavior()
+        {
+            if (BehaviorRuntime != null) { return BehaviorRuntime.CaptureState(); }
+            return (_behaviorState ??= MonsterBehaviorStateDto.Create(new Vector3Dto
+                { X = transform.position.x, Y = transform.position.y, Z = transform.position.z }, _instance.RandomSeeds.RootSeed)).Copy();
+        }
+        internal void RestoreBehavior(MonsterBehaviorStateDto state)
+        {
+            if (state == null || !state.IsValid) { throw new System.ArgumentException("怪物行为状态非法"); }
+            _behaviorState = state.Copy();
+            BehaviorRuntime?.Restore(state, ContactDamageCooldownRemainingSeconds);
+        }
+        internal void BindBehavior(MonsterBehaviorRuntime runtime)
+        {
+            BehaviorRuntime = runtime;
+            GetComponent<ActorAnimatorController>()?.SetBehaviorDriven(true);
+            GetComponent<BehaviorAnimatorBridge>()?.Bind(GetArchitecture(), runtime.Handle);
+        }
+        internal void UnbindBehavior()
+        {
+            if (BehaviorRuntime == null) { return; }
+            _behaviorState = BehaviorRuntime.CaptureState(); _frozenCooldown = BehaviorRuntime.CooldownRemaining;
+            GetComponent<BehaviorAnimatorBridge>()?.Unbind(); BehaviorRuntime = null;
+        }
 
         [SerializeField]
         [Min(0f)]
         float _deathDespawnDelay = 0.65f;
 
         NavigationIntentDto _navigationIntent = new();
+        Transform _navigationTransform;
         internal Rigidbody2D Body => _rigidbody;
         internal NavigationIntentDto NavigationIntent => _navigationIntent;
         internal int NavigationRevision { get; private set; }
@@ -36,7 +67,8 @@ namespace DarkFlare
         {
             get
             {
-                Vector3 scale = transform.lossyScale;
+                _navigationTransform ??= transform;
+                Vector3 scale = _navigationTransform.lossyScale;
                 return _collider.radius * Mathf.Max(Mathf.Abs(scale.x), Mathf.Abs(scale.y));
             }
         }
@@ -52,7 +84,8 @@ namespace DarkFlare
 
         public MonsterInstanceData Instance => _instance;
 
-        public float ContactDamageCooldownRemainingSeconds => _definition != null
+        public float ContactDamageCooldownRemainingSeconds => BehaviorRuntime != null ? BehaviorRuntime.CooldownRemaining :
+            _definition != null && _definition.Behavior != null ? _frozenCooldown : _definition != null
             ? Mathf.Max(
                 0f,
                 _lastContactDamageTime + _definition.ContactDamageInterval - Time.time)
@@ -65,8 +98,10 @@ namespace DarkFlare
 
         public void Configure(MonsterDefinition definition, MonsterInstanceData instance)
         {
+            if (_instance != null) { this.SendCommand(new RegisterNavigationAgentCommand(this, false)); }
             _definition = definition;
             _instance = instance;
+            _behaviorState = null; _frozenCooldown = 0; NavigationOverride = false;
             ApplyDefinition();
             this.SendCommand(new BindActorStatusesCommand(_actor));
             _sortParticipant?.ConfigureIdentity(
@@ -86,6 +121,8 @@ namespace DarkFlare
             }
 
             _actor.RestoreResources(resources, true);
+            _frozenCooldown = contactDamageCooldownRemainingSeconds;
+            BehaviorRuntime?.RestoreCooldown(contactDamageCooldownRemainingSeconds);
             _lastContactDamageTime = Time.time
                 + contactDamageCooldownRemainingSeconds
                 - _definition.ContactDamageInterval;
@@ -119,6 +156,7 @@ namespace DarkFlare
             _componentScope?.BeginStop();
             _componentScope = null;
             _despawnScheduled = false;
+            NavigationOverride = false;
 
             if (_rigidbody != null)
             {

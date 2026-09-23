@@ -33,6 +33,7 @@ namespace DarkFlare
         readonly List<IUnRegister> _registrations = new List<IUnRegister>();
         SceneSessionBinding _binding;
         public bool BehaviorDrivenAttack => _behaviorDrivenAttack;
+        internal void SetBehaviorDriven(bool enabled) { _behaviorDrivenAttack = enabled; }
 
         Rigidbody2D _rigidbody;
         CombatActor _actor;
@@ -80,14 +81,14 @@ namespace DarkFlare
 
         void FixedUpdate()
         {
-            if (_animator == null || _rigidbody == null || _binding?.IsBound != true || _behaviorDrivenAttack)
+            if (_animator == null || _rigidbody == null || _binding?.IsBound != true)
             {
                 return;
             }
 
             Vector2 velocity = _actor != null && _actor.IsAlive ? _rigidbody.linearVelocity : Vector2.zero;
             bool isMoving = velocity.sqrMagnitude > _movementThreshold * _movementThreshold;
-            _animator.SetBool(MovingHash, isMoving);
+            if (!_behaviorDrivenAttack) { _animator.SetBool(MovingHash, isMoving); }
 
             if (_renderer != null && Mathf.Abs(velocity.x) > _movementThreshold)
             {

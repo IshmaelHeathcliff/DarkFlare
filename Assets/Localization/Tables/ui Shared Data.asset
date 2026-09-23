@@ -2079,6 +2079,10 @@ MonoBehaviour:
     m_Key: behavior.running
     m_Metadata:
       m_Items: []
+  - m_Id: 12235330810798080
+    m_Key: behavior.gameHint
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

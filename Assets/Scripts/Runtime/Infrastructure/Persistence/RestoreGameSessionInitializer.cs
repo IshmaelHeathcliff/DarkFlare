@@ -175,6 +175,7 @@ namespace DarkFlare
                 monster.RestoreNavigation(_prepared.Monsters[i].State.Navigation);
                 CombatResourceSnapshot before = monster.Actor.Resources;
                 monster.RestoreRuntime(ToResources(_prepared.Monsters[i].State.Resources), _prepared.Monsters[i].State.ContactDamageCooldownRemainingSeconds);
+                monster.RestoreBehavior(_prepared.Monsters[i].State.Behavior);
                 architecture.GetSystem<CombatSystem>().PublishResourceChanges(monster.Actor, before, ActorResourceChangeReason.Configure);
             }
 

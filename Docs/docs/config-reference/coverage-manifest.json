@@ -2,6 +2,11 @@
   "schemaVersion": 1,
   "entries": [
     {
+      "type": "DarkFlare.MonsterBehaviorDefinition",
+      "document": "Docs/docs/config-reference/actors-and-monsters.md",
+      "anchor": "monsterbehaviordefinition"
+    },
+    {
       "type": "DarkFlare.MapObjectPresentationCatalog",
       "document": "Docs/docs/config-reference/maps.md",
       "anchor": "mapobjectpresentationcatalog"

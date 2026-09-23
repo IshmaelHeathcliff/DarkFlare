@@ -9,6 +9,7 @@ namespace DarkFlare
         {
             internal BehaviorHandle Handle { get; }
             internal IBehaviorRuntime Runtime { get; }
+            internal EasyEvent<BehaviorPresentationEvent> Presentation { get; } = new();
             internal bool Revoked { get; set; }
             internal Entry(BehaviorHandle handle, IBehaviorRuntime runtime) { Handle = handle; Runtime = runtime; }
         }
@@ -20,6 +21,7 @@ namespace DarkFlare
     public sealed class BehaviorSystem : AbstractSystem
     {
         BehaviorModel _model;
+        readonly Dictionary<BehaviorHandle, BehaviorModel.Entry> _registrations = new();
         long _nextRegistration;
         bool _ticking;
         bool _flushing;
@@ -37,6 +39,7 @@ namespace DarkFlare
             var handle = new BehaviorHandle(GameArchitectureProvider.Generation, scope, checked(++_nextRegistration));
             var registration = new BehaviorModel.Entry(handle, runtime);
             _model.Entries.Add(registration);
+            _registrations.Add(handle, registration);
             try { runtime.Start(handle, Publish); }
             catch { registration.Revoked = true; runtime.Revoke(); if (!_ticking) { Flush(); } throw; }
             return handle;
@@ -99,11 +102,14 @@ namespace DarkFlare
                     if (index < 0) { break; }
                     BehaviorModel.Entry entry = _model.Entries[index];
                     _model.Entries.RemoveAt(index);
+                    _registrations.Remove(entry.Handle);
                     try
                     {
                         entry.Runtime.Stop();
                         BehaviorPresentationEvent last = entry.Runtime.Presentation;
-                        this.SendEvent(new BehaviorPresentationEvent(entry.Handle, last.ActionInstanceId, BehaviorSemantic.Stopped, last.Position, false));
+                        var stopped = new BehaviorPresentationEvent(entry.Handle, last.ActionInstanceId, BehaviorSemantic.Stopped, last.Position, false);
+                        this.SendEvent(stopped);
+                        entry.Presentation.Trigger(stopped);
                     }
                     catch (Exception error) { ApplicationLog.Exception(LogEventIds.InfrastructureLifecycle, error); }
                 }
@@ -113,16 +119,21 @@ namespace DarkFlare
 
         void Publish(BehaviorPresentationEvent signal)
         {
-            if (Find(signal.Handle) != null) { this.SendEvent(signal); }
+            BehaviorModel.Entry entry = Find(signal.Handle);
+            if (entry == null) { return; }
+            this.SendEvent(signal);
+            if (!entry.Revoked) { entry.Presentation.Trigger(signal); }
         }
 
         BehaviorModel.Entry Find(BehaviorHandle handle)
         {
-            foreach (BehaviorModel.Entry entry in _model.Entries)
-            {
-                if (!entry.Revoked && entry.Handle.Equals(handle)) { return entry; }
-            }
-            return null;
+            return _registrations.TryGetValue(handle, out BehaviorModel.Entry entry) && !entry.Revoked ? entry : null;
+        }
+
+        // Controller 仅订阅自己的表现事件；避免 N 个动作广播到 N 个动画桥。
+        public IUnRegister RegisterPresentation(BehaviorHandle handle, Action<BehaviorPresentationEvent> callback)
+        {
+            return Find(handle)?.Presentation.Register(callback);
         }
 
         public void Control(BehaviorHandle handle, BehaviorControl control) { Find(handle)?.Runtime.Control(control); }

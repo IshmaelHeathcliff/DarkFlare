@@ -28,6 +28,34 @@ namespace DarkFlare.Tests
         void Tick(float dt = .1f) { _architecture.GetSystem<BehaviorSystem>().Tick(_scope, dt); }
 
         [Test]
+        public void PresentationSubscriptions_AreInstanceScoped_AndStopBeforeReplacement()
+        {
+            BehaviorSystem system = _architecture.GetSystem<BehaviorSystem>();
+            BehaviorHandle first = Register(_template.Create("first", Vector2.zero));
+            BehaviorHandle second = Register(_template.Create("second", Vector2.one));
+            int firstCalls = 0;
+            int secondCalls = 0;
+            BehaviorSemantic last = BehaviorSemantic.Idle;
+            IUnRegister a = system.RegisterPresentation(first, signal => { firstCalls++; last = signal.Semantic; });
+            IUnRegister b = system.RegisterPresentation(second, _ => secondCalls++);
+            system.Control(first, BehaviorControl.TogglePause);
+            Assert.That(firstCalls, Is.EqualTo(1));
+            Assert.That(secondCalls, Is.Zero);
+            system.Unregister(first);
+            Assert.That(last, Is.EqualTo(BehaviorSemantic.Stopped));
+            Assert.That(firstCalls, Is.EqualTo(2));
+            Assert.That(system.RegisterPresentation(first, _ => firstCalls++), Is.Null);
+            BehaviorHandle replacement = Register(_template.Create("replacement", Vector2.zero));
+            system.Control(replacement, BehaviorControl.TogglePause);
+            system.Control(first, BehaviorControl.TogglePause);
+            Assert.That(firstCalls, Is.EqualTo(2));
+            b.UnRegister();
+            system.Control(second, BehaviorControl.TogglePause);
+            Assert.That(secondCalls, Is.Zero);
+            a.UnRegister();
+        }
+
+        [Test]
         public void SharedTemplate_PatrolInstancesAreIndependent_AndPauseFreezesClock()
         {
             PatrolBehaviorRuntime first = _template.Create("a", Vector2.zero);

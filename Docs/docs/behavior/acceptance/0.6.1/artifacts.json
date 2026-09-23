@@ -1,0 +1,21 @@
+{
+  "version": "0.6.1-alpha",
+  "productionDevelopment": false,
+  "runtimePipelineEnabled": false,
+  "temporaryProbePresent": false,
+  "temporaryReleaseCheckPresent": false,
+  "files": [
+    {
+      "path": "Builds/Alpha061/DarkFlare.exe",
+      "sha256": "A4C71B1BFC3E42D02F2F129FE04ADEF3EBF2343A662884E4B99598E9DFC90E7D"
+    },
+    {
+      "path": "Builds/Alpha061/DarkFlare_Data/Managed/DarkFlare.Runtime.dll",
+      "sha256": "798DB93D5CEDC8E94C09E81563B7DD4BFF7C4365D29CCD83EE28C68F1DEF08F0"
+    },
+    {
+      "path": "Builds/Alpha061Audit/DarkFlare_Data/Managed/DarkFlare.Runtime.dll",
+      "sha256": "579E49E61347D431B77E53127DC55A369DF4CE67AA0F4F9E26EDF2D845A3945D"
+    }
+  ]
+}

@@ -121,7 +121,8 @@ namespace DarkFlare.Editor
             return createMenu != null
                 && !string.IsNullOrWhiteSpace(createMenu.menuName)
                 && (createMenu.menuName.StartsWith(ConfigMenuPrefix, StringComparison.Ordinal)
-                    || type == typeof(MapObjectPresentationCatalog) || type == typeof(WorldMapConfiguration));
+                    || type == typeof(MapObjectPresentationCatalog) || type == typeof(WorldMapConfiguration)
+                    || type == typeof(MonsterBehaviorDefinition));
         }
 
         static bool IsUnitySerializedField(FieldInfo field)

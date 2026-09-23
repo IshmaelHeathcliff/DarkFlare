@@ -6,7 +6,7 @@
 
 初始安装完成后，`DarkFlare/地图/安装城镇与野外` 菜单已移除；日常修改通过地图工作台与配置中心完成。`WorldMapSetup.Ensure()` 保留为显式脚本安装入口，调用仍会更新正式配置并保存 Main 场景。
 
-正式源位于 `Assets/Data/Maps/World/`：城镇 64×64、野外 128×128，格宽 1。两图复用四地表发布资源及对象表现目录，core 内容版本为 6。新游戏由 `WorldMapConfiguration` 的默认地图与入口决定。
+正式源位于 `Assets/Data/Maps/World/`：城镇 64×64、野外 128×128，格宽 1。两图复用四地表发布资源及对象表现目录，当前 core 内容版本为 7。新游戏由 `WorldMapConfiguration` 的默认地图与入口决定。
 
 地图交换格式 V2 增加 `entries`：稳定 `entryId`、用途 `Arrival / NewGame / Respawn`、局部世界坐标。每图最多 256 个入口，正式图必须有唯一复活入口。`Portal` 对象交互保存目标 `targetMapId / targetEntryId`，`contentId` 为空；商人和打造绑定相反。整套地图编译后交叉检查目标引用。V1 读取时只在内存补空入口和空出口字段，保存输出 V2，不在读取时改写原文件。
 
@@ -30,6 +30,8 @@
 ## 冻结与存档
 
 离场状态是纯 DTO，不保留隐藏的模拟对象。怪物生命 / 魔力、位置、词条掷值、攻击冷却，掉落与物品身份，刷怪倒计时和地图随机流均保存。恢复时一起平移状态的应用、过期及下跳时间，保留层 ID、顺序和周期序号；玩家状态继续使用活动 Session 时钟。
+
+0.6.1 的 Schema 6 还冻结行为锚点、感知记忆、闲逛序列及攻击阶段。`MapScope.Behavior` 持有行为注册和唯一地图模拟任务；停用源图时先注销行为，再停止导航。候选不 Tick，失败回退恢复资源、行为阶段与 RNG，成功回图使用新的句柄恢复剩余计时，不补发离场攻击。后续手动重置尚未接入，当前离开再进入保持原状态。
 
 Schema 4 的 `Run` 保存活动 `ActiveMapId / MapRevision / MapRandom`，原 `Monsters / WorldDrops / Spawner / Statuses` 表示当前图；`FrozenMaps` 只保存非活动图。物品仍在 `Payload.Items` 唯一总表，内存冻结态的 `Items` 子集不重复写盘。当前只支持一个共享商人库存，仍由 Session 的 `Run.Merchant` 保存；城镇和野外切换不补货。每图 Spawn 区域当前须使用同一刷怪定义；商人和打造绑定须与 Session 共享服务一致，不静默忽略不同内容 ID。
 

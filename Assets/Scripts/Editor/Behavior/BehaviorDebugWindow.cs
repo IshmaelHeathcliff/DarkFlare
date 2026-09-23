@@ -25,10 +25,12 @@ namespace DarkFlare.Editor
         protected override void OnEnable()
         {
             base.OnEnable(); Selection.selectionChanged += Selected; EditorApplication.playModeStateChanged += PlayChanged;
+            SceneView.duringSceneGui += DrawPerception;
         }
         protected override void OnDisable()
         {
             Selection.selectionChanged -= Selected; EditorApplication.playModeStateChanged -= PlayChanged;
+            SceneView.duringSceneGui -= DrawPerception;
             _refresh?.Pause(); _selection.Dispose(); _view?.Dispose(); _view = null; base.OnDisable();
         }
         void PlayChanged(PlayModeStateChange state) { _selection.Dispose(); _view?.Show(null); }
@@ -36,12 +38,36 @@ namespace DarkFlare.Editor
         {
             BehaviorSampleActor actor = Selection.activeGameObject != null ? Selection.activeGameObject.GetComponent<BehaviorSampleActor>() : null;
             if (actor != null && actor.Handle.IsValid && GameArchitectureProvider.TryGetCurrent(out IArchitecture owner)) { _selection.Select(owner, actor.Handle); }
+            MonsterController monster = Selection.activeGameObject != null ? Selection.activeGameObject.GetComponent<MonsterController>() : null;
+            if (monster != null && monster.BehaviorHandle.IsValid) { _selection.Select(monster.GetArchitecture(), monster.BehaviorHandle); }
         }
         void Cycle(int direction)
         {
             if (GameArchitectureProvider.TryGetCurrent(out IArchitecture owner)) { _selection.Cycle(owner, direction); }
         }
         void Control(BehaviorControl control) { _selection.Control(control); }
+        void DrawPerception(SceneView scene)
+        {
+            MonsterController monster = Selection.activeGameObject != null ? Selection.activeGameObject.GetComponent<MonsterController>() : null;
+            if (monster == null || monster.BehaviorRuntime == null) { return; }
+            MonsterBehaviorDefinition config = monster.Definition.Behavior;
+            MonsterBehaviorRuntime runtime = monster.BehaviorRuntime;
+            Vector3 position = monster.transform.position;
+            Color previous = Handles.color;
+            Handles.color = Color.gray; Handles.DrawWireDisc(position, Vector3.forward, config.DeactivationDistance);
+            Handles.color = Color.cyan; Handles.DrawWireDisc(position, Vector3.forward, config.ActivationDistance);
+            Handles.color = Color.yellow; Handles.DrawWireDisc(runtime.Anchor, Vector3.forward, config.WanderRadius);
+            Vector3 start = Quaternion.AngleAxis(-config.SightAngle * .5f, Vector3.forward) * runtime.Facing;
+            Vector3 end = Quaternion.AngleAxis(config.SightAngle * .5f, Vector3.forward) * runtime.Facing;
+            Handles.color = runtime.IsVisible ? Color.green : Color.red;
+            Handles.DrawWireArc(position, Vector3.forward, start, config.SightAngle, config.SightDistance);
+            Handles.DrawLine(position, position + start * config.SightDistance);
+            Handles.DrawLine(position, position + end * config.SightDistance);
+            MonsterBehaviorStateDto state = runtime.CaptureState();
+            if (state.MemoryRemaining > 0) { Handles.DrawDottedLine(position, new Vector3(state.LastSeen.X, state.LastSeen.Y), 4); }
+            Handles.Label(position + Vector3.up, $"{runtime.Mode} / {runtime.AttackPhase} · 可见 {runtime.IsVisible}");
+            Handles.color = previous;
+        }
         void Refresh()
         {
             if (!EditorApplication.isPlaying || !GameArchitectureProvider.HasCurrent) { _selection.Dispose(); _view?.Show(null); return; }

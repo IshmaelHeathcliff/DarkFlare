@@ -29,6 +29,11 @@ namespace DarkFlare
         [LabelText("怪物预制体")]
         AssetReferenceGameObject _prefab;
 
+        [SerializeField, LabelText("行为配置"), InlineEditor]
+        MonsterBehaviorDefinition _behavior;
+
+        public MonsterBehaviorDefinition Behavior => _behavior;
+
         [SerializeField]
         [MinValue(1)]
         [HideIf(nameof(HasCharacterDefinition))]

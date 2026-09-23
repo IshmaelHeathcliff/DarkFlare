@@ -1,5 +1,7 @@
 # 已完成计划归档
 
+- [Alpha 0.6.1 普通怪物](alpha-0.6.1-monster-behavior-plan.md)：2026-09-23 M1–M6 完成，版本 `0.6.1-alpha`；[模块与验收](../../behavior/acceptance/0.6.1/README.md)，EditMode 808/808、PlayMode 92/92、实际 Windows Player 及 500 / 1000 实测通过，覆盖 300 / 600 新目标。
+
 - [Alpha 0.6.0 行为基础](alpha-0.6.0-behavior-foundation-plan.md)及配套核心 / 接入合同：2026-09-22 F1–F6 完成，版本 `0.6.0-alpha`；[模块与验收](../../behavior/README.md)，EditMode 788/788、PlayMode 87/87。
 
 - [Alpha 0.6 启动准备](./alpha-0.6-startup.md)：2026-09-22 完成基线梳理，已由[总计划草案](../alpha-0.6-plan.md)接管；仅启动准备完成，功能待实施。

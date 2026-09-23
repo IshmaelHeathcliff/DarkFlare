@@ -1,5 +1,6 @@
 using System;
 using Sirenix.OdinInspector;
+using Unity.Profiling;
 using UnityEngine;
 
 namespace DarkFlare
@@ -16,6 +17,7 @@ namespace DarkFlare
     // 仅负责表现，既不访问执行器，也不决定动作完成或伤害。
     public sealed class BehaviorAnimatorPresenter
     {
+        static readonly ProfilerMarker PresentationMarker = new("DarkFlare.Behavior.Presentation");
         readonly Animator _animator;
         readonly string _moving;
         readonly string _attack;
@@ -47,11 +49,12 @@ namespace DarkFlare
         public void Apply(BehaviorPresentationEvent signal)
         {
             if (!signal.Handle.Equals(_handle) || signal.ActionInstanceId < _latestAction || !IsAvailable) { return; }
+            using ProfilerMarker.AutoScope sample = PresentationMarker.Auto();
             _latestAction = signal.ActionInstanceId;
             Validate();
             _animator.speed = signal.Paused ? 0 : 1;
             if (_hasMoving) { _animator.SetBool(_movingHash, signal.Semantic == BehaviorSemantic.Move); }
-            if (signal.Semantic != BehaviorSemantic.Attack)
+            if (signal.Semantic != BehaviorSemantic.Attack && signal.Semantic != BehaviorSemantic.AttackWindup)
             {
                 if (_hasAttack) { _animator.ResetTrigger(_attackHash); }
                 return;

@@ -2,6 +2,13 @@
   "schemaVersion": 1,
   "fixtures": [
     {
+      "path": "save-v5-navigation.json",
+      "domain": "save",
+      "sourceSchemaVersion": 5,
+      "sourceContentVersion": 6,
+      "expectedMigration": "Exported by the unchanged Schema 5 serializer before the behavior migration, using the released G Player save as input. Add safe behavior state to active and frozen monsters without changing navigation, resources, cooldowns, identity or RNG."
+    },
+    {
       "path": "save-v1-core-v1-four-slots.json",
       "domain": "save",
       "sourceSchemaVersion": 1,

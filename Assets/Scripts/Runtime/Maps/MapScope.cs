@@ -25,6 +25,7 @@ namespace DarkFlare
         public MapGeometrySnapshot Geometry { get; private set; }
         public MonsterSpawner Spawner { get; private set; }
         public NavigationMap Navigation { get; private set; }
+        public MonsterBehaviorMap Behavior { get; private set; }
         public CancellationToken Token => _lifetime.Token;
 
         MapScope(CompiledMapDocument map, int generation, LifecycleScope parent, AddressableAssetService resources, Scene scene)
@@ -62,6 +63,7 @@ namespace DarkFlare
                 scope.Navigation = new NavigationMap(scope.Geometry, map.MapId.ToString(), generation, scope._lifetime, GameArchitectureProvider.RequireCurrent());
                 scope.Navigation.ObstacleParent = scope.Root.transform;
                 await scope.Navigation.PrepareAsync(token);
+                scope.Behavior = new MonsterBehaviorMap(scope.Navigation, scope._lifetime, GameArchitectureProvider.RequireCurrent());
                 await scope.PopulateTerrainAsync(resolution, presentation.Tiles, token);
                 scope._projection = new MapGeometryProjection(scope.Geometry, scene);
                 scope._projection.Root.transform.SetParent(scope.Root.transform, true);
@@ -126,8 +128,9 @@ namespace DarkFlare
             Token.ThrowIfCancellationRequested();
             _objects.Activate(sorting);
             _projection.Root.SetActive(true);
+            Navigation.Activate(externallyDriven: true);
+            Behavior.Activate();
             Root.SetActive(true);
-            Navigation.Activate();
             // Manual Composite 在禁用祖先下无法生成，安装活动根后同步生成，仍不跨物理帧。
             _projection.Collider.GenerateGeometry();
             if (_projection.Collider.errorState != ColliderErrorState2D.None || _projection.Collider.pathCount == 0)
@@ -136,6 +139,7 @@ namespace DarkFlare
 
         public void Deactivate()
         {
+            Behavior?.Suspend();
             Navigation?.Suspend();
             if (Spawner != null) { Spawner.StopSpawning(); }
             if (Root != null) { Root.SetActive(false); }

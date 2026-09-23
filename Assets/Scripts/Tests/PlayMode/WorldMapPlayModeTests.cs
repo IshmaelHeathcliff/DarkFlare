@@ -114,7 +114,7 @@ namespace DarkFlare.Tests
             NavigationMap navigation = maps.Active.Navigation;
             Assert.IsTrue(architecture.SendCommand(new SetNavigationIntentCommand(monster,
                 new NavigationIntentDto { Mode = NavigationMode.AStar, Target = NavigationTargetKind.Point, MapId = "map:wilderness",
-                    Point = new Vector3Dto { X = 15, Y = 10 }, StopDistance = .3f }, navigation.Handle(monster))));
+                    Point = new Vector3Dto { X = 15, Y = 10 }, StopDistance = .3f }, navigation.Handle(monster), takeBehaviorControl: true)));
             long nativeBaseline = architecture.GetModel<NavigationModel>().NativeBytes;
             string id = monster.Instance.Id.Value;
             float health = monster.Actor.CurrentHealth;
@@ -142,8 +142,12 @@ namespace DarkFlare.Tests
                 MonsterController restored = UnityEngine.Object.FindObjectsByType<MonsterController>().Single();
                 Assert.AreEqual(id, restored.Instance.Id.Value);
                 Assert.AreEqual(health, restored.Actor.CurrentHealth);
-                Assert.AreEqual(NavigationMode.AStar, restored.CaptureNavigation().Mode);
-                Assert.AreEqual(15, restored.CaptureNavigation().Point.X);
+                Assert.AreEqual(NavigationTargetKind.None, restored.CaptureNavigation().Target, "恢复行为是导航意图的权威来源，调试接管不跨图延续");
+                Assert.AreEqual(before.Monsters.Single().Behavior.Anchor.X, restored.CaptureBehavior().Anchor.X);
+                Assert.AreEqual(before.Monsters.Single().Behavior.RandomSequence, restored.CaptureBehavior().RandomSequence);
+                Assert.AreEqual(.37f, restored.ContactDamageCooldownRemainingSeconds, .001f);
+                Assert.AreEqual(1, maps.Active.Behavior.Count);
+                Assert.AreEqual(1, architecture.GetModel<BehaviorModel>().Count);
                 Assert.AreEqual(nativeBaseline, architecture.GetModel<NavigationModel>().NativeBytes);
                 Assert.AreEqual(1, maps.Active.Navigation.AgentCount);
                 MapStateDto after = snapshots.CaptureMap(maps.Active);

@@ -1,0 +1,23 @@
+{
+  "status": "completed",
+  "buildId": "build_49a42a27d016",
+  "result": "Succeeded",
+  "platform": "StandaloneWindows64",
+  "outputPath": "C:/Users/darkf/Home/Projects/DarkFlare/Builds/Alpha061Audit/DarkFlare.exe",
+  "totalSizeBytes": 289706774,
+  "buildTimeMs": 38084,
+  "buildStartedAt": "2026-09-22T10:02:27.9345006Z",
+  "buildEndedAt": "2026-09-22T10:03:06.0190366Z",
+  "totalWarnings": 2,
+  "totalErrors": 0,
+  "errors": [],
+  "warnings": [
+    {
+      "message": "warning UAC0009: DEVELOPMENT_BUILD preprocessor directive has been deprecated. Please use one of the managed code variant directives (such as DEBUG, UNITY_ENABLE_CHECKS or UNITY_INCLUDE_INSTRUMENTATION) if different code paths are desired for different managed code variants. Checking for development build is possible at runtime using Debug.isDebugBuild. See the Conditional Compilation manual page for more details.",
+      "file": "Assets\\Scripts\\Runtime\\Behavior\\MonsterAcceptanceProbe.cs"
+    },
+    {
+      "message": "Shader warning in 'TextMeshPro/Mobile/Distance Field': #pragma enable_d3d11_debug_symbols has been deprecated, instead please use #pragma enable_debug_symbols at line 84"
+    }
+  ]
+}

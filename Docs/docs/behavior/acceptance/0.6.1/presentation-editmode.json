@@ -1,0 +1,111 @@
+{
+  "status": "completed",
+  "duration": 0.42,
+  "summary": {
+    "total": 14,
+    "passed": 14,
+    "failed": 0,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "results": [
+    {
+      "FullName": "DarkFlare.Tests.MonsterBehaviorTests.ActivationHysteresis_WallOcclusion_AndLostSightMemory",
+      "Status": "Passed",
+      "Duration": 0.0890592,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.MonsterBehaviorTests.Attack_WindupOnce_CancelConsumesCooldown_AndMissDoesNotHit",
+      "Status": "Passed",
+      "Duration": 0.0044769,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.MonsterBehaviorTests.CaptureRestore_WindupAndRecovery_DoNotDuplicateHitOrResetCooldown",
+      "Status": "Passed",
+      "Duration": 0.0015917,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.MonsterBehaviorTests.Configuration_RejectsInvalidRelationshipsAndNumbers(\"_activationDistance\",float.NaN)",
+      "Status": "Passed",
+      "Duration": 0.0024551,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.MonsterBehaviorTests.Configuration_RejectsInvalidRelationshipsAndNumbers(\"_deactivationDistance\",10.0f)",
+      "Status": "Passed",
+      "Duration": 0.0006334,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.MonsterBehaviorTests.Configuration_RejectsInvalidRelationshipsAndNumbers(\"_sightDistance\",30.0f)",
+      "Status": "Passed",
+      "Duration": 0.0005908,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.MonsterBehaviorTests.Configuration_RejectsInvalidRelationshipsAndNumbers(\"_perceptionInterval\",0.5f)",
+      "Status": "Passed",
+      "Duration": 0.0005976,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.MonsterBehaviorTests.Configuration_RejectsInvalidRelationshipsAndNumbers(\"_windupSeconds\",0.0f)",
+      "Status": "Passed",
+      "Duration": 0.0006362,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.MonsterBehaviorTests.Configuration_RejectsInvalidRelationshipsAndNumbers(\"_waitMaximum\",0.1f)",
+      "Status": "Passed",
+      "Duration": 0.0005833,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.MonsterBehaviorTests.MoveAndAttackPermissions_AreIndependent_AndDeathRevokes",
+      "Status": "Passed",
+      "Duration": 0.0009164,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.MonsterBehaviorTests.PauseAndUnregister_FreezeProgress_AndRejectLateMarkers",
+      "Status": "Passed",
+      "Duration": 0.0012268,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.MonsterBehaviorTests.StateValidation_RejectsUnknownVersionsAndInconsistentHitPhase_AndCopyIsDetached",
+      "Status": "Passed",
+      "Duration": 0.000729,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.MonsterBehaviorTests.ViewCone_DoesNotDiscoverPlayerBehindActor",
+      "Status": "Passed",
+      "Duration": 0.0007058,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.MonsterBehaviorTests.WanderSampling_IsBounded_AndIndependentOfDiagnostics",
+      "Status": "Passed",
+      "Duration": 0.003933,
+      "Message": null,
+      "StackTrace": null
+    }
+  ]
+}

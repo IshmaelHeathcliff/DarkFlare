@@ -43,13 +43,15 @@ V1 文件格式固定为：
 
 - `formatId = "darkflare-save"`
 - `formatVersion = 1`
-- `saveSchemaVersion = 5`
+- `saveSchemaVersion = 6`
 - 最大文档 16 MiB，最大 JSON 深度 64
 - 最大物品 8192、每图存活怪物 1024 / 全档 2048、世界掉落 4096
 - Header 包含游戏版本、内容目录 ID / 版本、槽位、提交序号、UTC 创建 / 更新时间、Payload SHA-256 和显示摘要
 - Payload 分为 `ProfileSaveData` 与 `RunSaveData`，所有引用使用稳定 ContentId 或强类型实例 ID
 
-Serializer 使用项目已有 `Unity.Newtonsoft.Json`。写出前先把 Payload 转为按属性名 Ordinal 排序的规范 JSON，并把 Single 数值归一为 double 表示，再计算小写 SHA-256；这避免同一浮点值在 Single / Double 文本往返后产生伪校验失败。Header 不参与校验值。读取顺序为格式 / 槽位 / 提交序号检查、Payload 校验、Schema 兼容与逐级迁移、强类型验证。当前登记了历史 `0 → 1 → 2 → 3 → 4 → 5` 迁移，依次补充旧结构、物品数量、空状态图、双地图身份和默认导航意图；未来 Schema 会被安全拒绝。
+Serializer 使用项目已有 `Unity.Newtonsoft.Json`。写出前先把 Payload 转为按属性名 Ordinal 排序的规范 JSON，并把 Single 数值归一为 double 表示，再计算小写 SHA-256；这避免同一浮点值在 Single / Double 文本往返后产生伪校验失败。Header 不参与校验值。读取顺序为格式 / 槽位 / 提交序号检查、Payload 校验、Schema 兼容与逐级迁移、强类型验证。当前登记了历史 `0 → 1 → 2 → 3 → 4 → 5 → 6` 迁移，依次补充旧结构、物品数量、空状态图、双地图身份、默认导航意图及怪物行为；未来 Schema 会被安全拒绝。
+
+Schema 5 → 6 为当前及冻结地图怪物初始化行为版本 1：旧位置作为锚点、默认朝右、安全休眠态和原实例根种子，不推进任何既有 RNG。原攻击冷却保留。新快照保存前摇 / 后摇剩余时间及结算标记，恢复后摇不会重复命中；未知版本、非法阶段、非有限数和跨图目标在预检拒绝。core 6 → 7 仅更新追加配置的目录版本。真实历史输入为 `Assets/Scripts/Tests/Fixtures/Migration/save-v5-navigation.json`，来源及完整链见同目录 manifest。
 
 禁止把 `UnityEngine.Object`、Asset GUID、Addressables 地址、资源路径、场景对象引用、显示文本或本地化 Key 写入存档身份。
 

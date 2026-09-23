@@ -15,6 +15,7 @@ namespace DarkFlare
         DefinitionTypeUnregistered,
         ContentIdInvalid,
         ContentIdDuplicate,
+        ConfigurationInvalid,
     }
 
     public sealed class ContentCatalogIssue
@@ -201,6 +202,21 @@ namespace DarkFlare
                     continue;
                 }
 
+                if (definition.CatalogId == "core" && definition.ContentVersion >= 7 && entry is MonsterDefinition monster)
+                {
+                    try
+                    {
+                        if (monster.Behavior == null) { throw new ArgumentException("缺少行为配置"); }
+                        monster.Behavior.Validate();
+                        if (!float.IsFinite(monster.ContactDamageRadius) || !float.IsFinite(monster.ContactStopDistance)
+                            || !float.IsFinite(monster.ContactDamageInterval) || monster.ContactDamageInterval < .05f
+                            || monster.ContactDamageRadius < .05f || monster.ContactStopDistance < 0
+                            || monster.ContactStopDistance > monster.ContactDamageRadius)
+                        { throw new ArgumentException("攻击距离、停车距离或冷却非法"); }
+                    }
+                    catch (ArgumentException error)
+                    { issues.Add(new ContentCatalogIssue(ContentCatalogIssueCode.ConfigurationInvalid, contentId + ": " + error.Message, entry)); }
+                }
                 entries.Add(contentId, entry);
                 idsByEntry.Add(entry, contentId);
 

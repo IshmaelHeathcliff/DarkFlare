@@ -1,0 +1,39 @@
+{
+  "id": "5925cd4513f8471da6b59649adfdba1d:monster:1",
+  "behavior": {
+    "Version": 1,
+    "Mode": 3,
+    "Anchor": {
+      "X": 9.0,
+      "Y": 10.0,
+      "Z": 0.0
+    },
+    "Facing": {
+      "X": 1.0,
+      "Y": 0.0,
+      "Z": 0.0
+    },
+    "LastSeen": {
+      "X": 8.801067,
+      "Y": 10.5183907,
+      "Z": 0.0
+    },
+    "MemoryRemaining": 1.92000008,
+    "WanderGoal": {
+      "X": 7.959553,
+      "Y": 10.8469181,
+      "Z": 0.0
+    },
+    "HasWanderGoal": true,
+    "WaitRemaining": 0.0,
+    "RandomSeed": 473354569,
+    "RandomSequence": 19,
+    "ActionId": 37,
+    "AttackPhase": 1,
+    "PhaseRemaining": 0.19,
+    "HitResolved": false,
+    "TargetId": "player:local_player"
+  },
+  "cooldown": 0.41,
+  "rng": 4
+}

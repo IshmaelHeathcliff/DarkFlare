@@ -67,6 +67,7 @@ namespace DarkFlare.Tests
             Assert.IsFalse(topLevelTypes.Contains(typeof(MapDefinition)), "地图只能从源导入，不能创建第二份可编辑布局");
             Assert.Contains(typeof(MapObjectPresentationCatalog), topLevelTypes.ToArray(), "无 ContentId 的表现目录仍应可配置");
             Assert.Contains(typeof(WorldMapConfiguration), topLevelTypes.ToArray(), "地图启动配置不需要独立内容身份");
+            Assert.Contains(typeof(MonsterBehaviorDefinition), topLevelTypes.ToArray(), "行为配置作为怪物依赖管理，不创建独立内容身份");
             Assert.IsNull(typeof(MapDefinition).GetCustomAttribute<CreateAssetMenuAttribute>());
             CollectionAssert.IsSubsetOf(
                 RequiredNestedTypes,
@@ -82,7 +83,7 @@ namespace DarkFlare.Tests
             {
                 CreateAssetMenuAttribute menu = topLevelTypes[i].GetCustomAttribute<CreateAssetMenuAttribute>();
                 Assert.IsNotNull(menu, topLevelTypes[i].FullName);
-                if (topLevelTypes[i] != typeof(MapObjectPresentationCatalog) && topLevelTypes[i] != typeof(WorldMapConfiguration))
+                if (typeof(IContentDefinition).IsAssignableFrom(topLevelTypes[i]))
                 {
                     StringAssert.StartsWith(ConfigurationTypeDiscovery.ConfigMenuPrefix, menu.menuName);
                 }

@@ -156,11 +156,12 @@ namespace DarkFlare
             while (!IsReady) { await UniTask.Yield(PlayerLoopTiming.Update, token); }
             foreach (NavigationGrid grid in _grids) { grid.Complete(); }
         }
-        public void Activate()
+        public void Activate(bool externallyDriven = false)
         {
             if (_disposed || !IsReady) { throw new InvalidOperationException("导航地图尚未就绪"); }
             if (_active) { return; }
             _active = true; _system.Active = this;
+            if (externallyDriven) { return; }
             _driver = _lifetime.CreateChild("navigation");
             _driver.Tasks.Run("fixed-step", RunAsync, failurePolicy: LifecycleTaskFailurePolicy.ReportAndStopScope);
         }
@@ -187,12 +188,28 @@ namespace DarkFlare
         {
             foreach (Agent agent in _agents) { if (agent.Monster != null) { agent.Monster.Body.linearVelocity = Vector2.zero; } }
         }
+        internal void ClearVelocities() { StopVelocities(); }
+        internal bool PrepareStep()
+        {
+            ApplyStamps();
+            if (!IsReady) { StopVelocities(); return false; }
+            foreach (NavigationGrid grid in _grids) { grid.Complete(); }
+            return true;
+        }
+        internal bool CanStand(MonsterController monster, Vector2 point)
+        {
+            if (_disposed || !IsReady) { return false; }
+            NavigationGridView grid = _grids[(int)monster.Definition.NavigationProfile].View;
+            var position = new float2(point.x, point.y);
+            return grid.Geometry.Segment(position, position, monster.NavigationRadius) && grid.LegalNode(position) >= 0;
+        }
         internal void Register(MonsterController monster)
         {
             if (monster == null || monster.Instance == null || monster.Definition == null || _lookup.ContainsKey(monster)) { return; }
             if (_agents.Count >= Capacity) { monster.Body.linearVelocity = Vector2.zero; return; }
             var agent = new Agent { Monster = monster, Registered = true,
                 Handle = new NavigationAgentHandle(GameArchitectureProvider.Generation, Generation, ++_serial) };
+            if (monster.Definition.Behavior != null) { EnsurePath(agent); }
             _lookup.Add(monster, agent); _agents.Add(agent); RefreshIntent(agent);
         }
         internal void Unregister(MonsterController monster)
@@ -238,14 +255,16 @@ namespace DarkFlare
             agent.Profile = (int)agent.Monster.Definition.NavigationProfile;
             agent.Mode = agent.Intent.Mode ?? agent.Monster.Definition.NavigationMode;
             agent.Target = null; agent.Goal = -1; agent.Status = NavigationStatus.Pending; agent.LastAccepted = -100; agent.ChangedAt = -1;
-            if (agent.Mode == NavigationMode.FlowField && agent.Path.IsCreated)
-            { agent.Path.Dispose(); agent.Path = default; agent.Memory.Dispose(); agent.Memory = null; }
-            if (agent.Mode == NavigationMode.AStar && !agent.Path.IsCreated)
-            {
-                agent.Memory = new NavigationMemory(4096 * 4);
-                try { agent.Path = new NativeArray<int>(4096, Allocator.Persistent); }
-                catch { agent.Memory.Dispose(); throw; }
-            }
+            // 已按全部 Agent 的路径上限预留容量；切换模式只清空路线，不反复分配缓冲。
+            // 缓冲仍由 Agent.Dispose 在注销 / 地图释放时归还。
+            if (agent.Mode == NavigationMode.AStar) { EnsurePath(agent); }
+        }
+        static void EnsurePath(Agent agent)
+        {
+            if (agent.Path.IsCreated) { return; }
+            agent.Memory = new NavigationMemory(4096 * 4);
+            try { agent.Path = new NativeArray<int>(4096, Allocator.Persistent); }
+            catch { agent.Memory.Dispose(); agent.Memory = null; throw; }
         }
         bool CanMove(Agent agent)
         {
@@ -327,7 +346,9 @@ namespace DarkFlare
                 {
                     Agent agent = _agents[i];
                     if (agent.Request != agent.Monster.NavigationRevision) { RefreshIntent(agent); }
-                    float speed = agent.Monster.Actor.Stats.GetValue(StatIds.MoveSpeed);
+                    // 无导航目标的样本只提供邻居位置；转向 Job 会直接提交零速度。
+                    bool hasMovementIntent = agent.Intent.Target != NavigationTargetKind.None;
+                    float speed = hasMovementIntent ? agent.Monster.Actor.Stats.GetValue(StatIds.MoveSpeed) : 0;
                     Vector2 position = agent.Monster.Body.position;
                     var currentPosition = new float2(position.x, position.y);
                     float expectedStep = speed * deltaTime * 3;
@@ -335,7 +356,7 @@ namespace DarkFlare
                         expectedStep * expectedStep))
                     { ReleaseRoute(agent); agent.Goal = -1; agent.LastAccepted = -100; agent.Status = NavigationStatus.Pending; }
                     agent.PreviousPosition = currentPosition; agent.HasPosition = true;
-                    var sample = new NavigationSample { Position = new float2(position.x, position.y), Radius = agent.Monster.NavigationRadius,
+                    var sample = new NavigationSample { Position = new float2(position.x, position.y), Radius = hasMovementIntent ? agent.Monster.NavigationRadius : 0,
                         Identity = (ulong)agent.Monster.Instance.Id.Sequence, Speed = speed,
                         SeparationRadius = math.clamp(agent.Monster.Definition.SeparationRadius, .01f, 4f),
                         SeparationWeight = agent.Monster.Definition.SeparationWeight };
@@ -347,7 +368,7 @@ namespace DarkFlare
                         NavigationGridView grid = _grids[agent.Profile].View;
                         if (agent.PositionRevision != Revision || math.any(currentPosition != agent.CachedPosition))
                         {
-                            agent.CurrentNode = grid.LegalNode(sample.Position);
+                            agent.CurrentNode = NavigationQueries.LegalNode(grid, sample.Position);
                             agent.AttachOffset = agent.CurrentNode >= 0 ? grid.Position(agent.CurrentNode) - sample.Position : float2.zero;
                             agent.CachedPosition = currentPosition;
                             agent.PositionRevision = Revision;
@@ -358,7 +379,7 @@ namespace DarkFlare
                         if (agent.Intent.Target == NavigationTargetKind.Player) { goal = _playerGoals[agent.Profile]; }
                         else if (agent.GoalRevision != Revision || math.any(agent.PreviousGoalPosition != agent.GoalPosition))
                         {
-                            goal = grid.LegalNode(agent.GoalPosition);
+                            goal = NavigationQueries.LegalNode(grid, agent.GoalPosition);
                             agent.PreviousGoalPosition = agent.GoalPosition; agent.GoalRevision = Revision;
                         }
                         if (goal != agent.Goal) { if (agent.ChangedAt < 0) { agent.ChangedAt = now; } agent.Goal = goal; }
@@ -377,17 +398,13 @@ namespace DarkFlare
                                     field.Used = now;
                                 }
                             }
-                            sample.CanMove = CanMove(agent);
                             sample.Desired = Direction(agent, sample.Position, attach, now);
-                            sample.CanMove &= agent.Status == NavigationStatus.Moving || agent.Status == NavigationStatus.Arrived;
+                            sample.CanMove = (agent.Status == NavigationStatus.Moving || agent.Status == NavigationStatus.Arrived) && CanMove(agent);
                         }
                     }
                     _samples[i] = sample;
                 }
                 _model.AgentSampleMilliseconds = Elapsed(phase);
-                phase = Stopwatch.GetTimestamp();
-                ScheduleSearches(now);
-                _model.SearchScheduleMilliseconds = Elapsed(phase);
                 int count = _agents.Count;
                 if (count > 0)
                 {
@@ -406,26 +423,21 @@ namespace DarkFlare
                         _model.CandidateVisits += _visits[i]; if (_visits[i] >= 96) { _model.SaturatedAgents++; }
                     }
                 }
+                // 转向是本步必须完成的工作；搜索结果最早下步使用，避免先投递搜索占用转向工作线程。
+                phase = Stopwatch.GetTimestamp();
+                ScheduleSearches(now);
+                _model.SearchScheduleMilliseconds = Elapsed(phase);
                 _model.AgentCount = count; _model.GridRevision = Revision; _model.TickSequence++;
             }
             _model.MainThreadMilliseconds = Elapsed(started);
             EndAllocationMeasurement();
-            // Combat retains its own Commands and accounting, outside the navigation allocation marker.
-            for (int i = 0; i < _agents.Count; i++)
-            {
-                Agent agent = _agents[i]; MonsterController monster = agent.Monster;
-                if (agent.Target != null && (monster.Actor.BlockedActions & StatusActionBlock.Attack) == 0
-                    && monster.Definition.ContactDamages.Count > 0 && monster.ContactDamageCooldownRemainingSeconds <= 0
-                    && ((Vector2)agent.Target.transform.position - monster.Body.position).sqrMagnitude <= monster.Definition.ContactDamageRadius * monster.Definition.ContactDamageRadius)
-                { _architecture.SendCommand(new ContactAttackCommand(monster, agent.Target)); }
-            }
         }
         float2 Direction(Agent agent, float2 position, int current, double now)
         {
             NavigationGridView grid = _grids[agent.Profile].View;
             float2 offset = agent.GoalPosition - position;
             float stop = agent.Intent.StopDistance ?? agent.Monster.Definition.ContactStopDistance;
-            if (math.lengthsq(offset) <= math.max(stop * stop, .5625f) && grid.Segment(position, agent.GoalPosition, grid.Radius))
+            if (math.lengthsq(offset) <= math.max(stop * stop, .5625f) && NavigationQueries.Segment(grid, position, agent.GoalPosition, grid.Radius) != 0)
             {
                 if (math.lengthsq(offset) <= stop * stop) { agent.Status = NavigationStatus.Arrived; return float2.zero; }
                 agent.Status = NavigationStatus.Moving; return offset;

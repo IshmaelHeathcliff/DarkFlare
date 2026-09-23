@@ -368,6 +368,7 @@ namespace DarkFlare
                 result.Add(new MonsterRunStateDto
                 {
                     Navigation = monster.CaptureNavigation(),
+                    Behavior = monster.CaptureBehavior(),
                     InstanceId = instance.Id.Value,
                     DefinitionContentId = RuntimeStateMapper.GetContentId(
                         monster.Definition,

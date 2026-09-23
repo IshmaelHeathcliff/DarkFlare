@@ -1,0 +1,69 @@
+{
+  "status": "completed",
+  "duration": 3.53,
+  "summary": {
+    "total": 8,
+    "passed": 8,
+    "failed": 0,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "results": [
+    {
+      "FullName": "DarkFlare.Tests.MapObjectPresentationTests.ActivationCapacityFailureLeavesCandidateAndExistingRegistrationsUntouched",
+      "Status": "Passed",
+      "Duration": 0.1855779,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.MapObjectPresentationTests.CatalogResolvesExplicitVariantWithoutChangingTheDefinitionFootprint",
+      "Status": "Passed",
+      "Duration": 0.0069457,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.MapObjectPresentationTests.InvalidVisualPrefabRejectsPhysicsNestedGroupsAndDuplicatePartIdentity",
+      "Status": "Passed",
+      "Duration": 0.0014239,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.MapObjectPresentationTests.LateLoadCancellationReleasesLeaseAndUnknownAppearanceDoesNotFallback",
+      "Status": "Passed",
+      "Duration": 0.0583648,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.MapObjectPresentationTests.ObjectPatchUndoAndRedoSynchronizeVisualsWithoutRebuildingTerrain",
+      "Status": "Passed",
+      "Duration": 2.9999392,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.MapObjectPresentationTests.PartialLoadFailureReleasesAllAcquiredLeasesAndCandidateObjects",
+      "Status": "Passed",
+      "Duration": 0.0633281,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.MapObjectPresentationTests.PreparedCandidateCannotActivateAfterOwnerCancellation",
+      "Status": "Passed",
+      "Duration": 0.0620971,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.MapObjectPresentationTests.PrepareDoesNotRegisterAndRepeatedActivationReleaseConverges",
+      "Status": "Passed",
+      "Duration": 0.1224469,
+      "Message": null,
+      "StackTrace": null
+    }
+  ]
+}

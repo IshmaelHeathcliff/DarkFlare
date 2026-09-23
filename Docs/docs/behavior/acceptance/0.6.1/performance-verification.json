@@ -1,0 +1,15 @@
+{
+  "status": "passed",
+  "measurementCounts": [
+    500,
+    1000
+  ],
+  "acceptanceCounts": [
+    300,
+    600
+  ],
+  "rounds": 12,
+  "phases": 60,
+  "criteria": "500/1000更高负载：每相位总帧P95分别<=16.7/33.3ms，导航P95分别<=2/3ms；活动数、前摇、标记、探针、原生容量、搜索池同时检查",
+  "issues": []
+}

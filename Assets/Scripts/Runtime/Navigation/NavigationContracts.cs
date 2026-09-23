@@ -67,9 +67,21 @@ namespace DarkFlare
         readonly MonsterController _monster;
         readonly NavigationIntentDto _intent;
         readonly NavigationAgentHandle _expected;
-        public SetNavigationIntentCommand(MonsterController monster, NavigationIntentDto intent, NavigationAgentHandle expected)
-        { _monster = monster; _intent = intent; _expected = expected; }
-        protected override bool OnExecute() { return this.GetSystem<NavigationSystem>().SetIntent(_monster, _intent, _expected); }
+        readonly bool _takeBehaviorControl;
+        public SetNavigationIntentCommand(MonsterController monster, NavigationIntentDto intent, NavigationAgentHandle expected, bool takeBehaviorControl = false)
+        { _monster = monster; _intent = intent; _expected = expected; _takeBehaviorControl = takeBehaviorControl; }
+        protected override bool OnExecute() { return this.GetSystem<NavigationSystem>().SetIntent(_monster, _intent, _expected, _takeBehaviorControl); }
+    }
+    public sealed class ReleaseMonsterNavigationOverrideCommand : AbstractCommand
+    {
+        readonly MonsterController _monster;
+        public ReleaseMonsterNavigationOverrideCommand(MonsterController monster) { _monster = monster; }
+        protected override void OnExecute()
+        {
+            if (_monster == null) { return; }
+            _monster.NavigationOverride = false;
+            this.GetSystem<NavigationSystem>().ActiveBehavior?.Register(_monster);
+        }
     }
     public sealed class RegisterNavigationAgentCommand : AbstractCommand
     {
@@ -96,15 +108,21 @@ namespace DarkFlare
     public sealed class NavigationSystem : AbstractSystem
     {
         public NavigationMap Active { get; internal set; }
+        public MonsterBehaviorMap ActiveBehavior { get; internal set; }
         protected override void OnInit() { }
-        internal void Register(MonsterController monster) { Active?.Register(monster); }
-        internal void Unregister(MonsterController monster) { Active?.Unregister(monster); }
-        internal bool SetIntent(MonsterController monster, NavigationIntentDto intent, NavigationAgentHandle expected)
+        internal void Register(MonsterController monster) { Active?.Register(monster); ActiveBehavior?.Register(monster); }
+        internal void Unregister(MonsterController monster) { ActiveBehavior?.Unregister(monster); Active?.Unregister(monster); }
+        internal bool SetIntent(MonsterController monster, NavigationIntentDto intent, NavigationAgentHandle expected, bool takeBehaviorControl = false)
         {
             if (Active == null || !Active.Matches(monster, expected) || !Active.ValidateIntent(monster, intent)) { return false; }
+            if (monster.BehaviorRuntime != null)
+            {
+                if (!takeBehaviorControl) { return false; }
+                ActiveBehavior?.Unregister(monster); monster.NavigationOverride = true;
+            }
             monster.RestoreNavigation(intent);
             this.SendEvent(new NavigationIntentChangedEvent(expected)); return true;
         }
-        protected override void OnDeinit() { Active?.Suspend(); Active = null; }
+        protected override void OnDeinit() { ActiveBehavior?.Suspend(); ActiveBehavior = null; Active?.Suspend(); Active = null; }
     }
 }

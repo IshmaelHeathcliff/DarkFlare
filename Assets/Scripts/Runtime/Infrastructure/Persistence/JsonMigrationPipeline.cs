@@ -369,6 +369,33 @@ namespace DarkFlare
         }
     }
 
+    public sealed class MonsterBehaviorSaveMigration : IJsonMigrationStep
+    {
+        public string Id => "save_5_to_6_monster_behavior";
+        public MigrationDataDomain Domain => MigrationDataDomain.Save;
+        public int FromVersion => 5;
+        public int ToVersion => 6;
+        public void Apply(JObject document)
+        {
+            if (document["payload"]?["run"] is not JObject run) { throw new InvalidOperationException("缺少 Run 数据"); }
+            Initialize(run["monsters"]);
+            if (run["frozenMaps"] is JArray maps)
+            { foreach (JToken map in maps) { Initialize(map["monsters"]); } }
+        }
+        static void Initialize(JToken monsters)
+        {
+            if (monsters is not JArray array) { throw new InvalidOperationException("缺少怪物集合"); }
+            var serializer = Newtonsoft.Json.JsonSerializer.Create(new Newtonsoft.Json.JsonSerializerSettings
+                { ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver() });
+            foreach (JToken monster in array)
+            {
+                if (monster["position"] is not JObject position) { throw new InvalidOperationException("缺少怪物位置"); }
+                var state = MonsterBehaviorStateDto.Create(position.ToObject<Vector3Dto>(), monster["randomSeeds"]?["rootSeed"]?.Value<int>() ?? 0);
+                monster["behavior"] = JObject.FromObject(state, serializer);
+            }
+        }
+    }
+
     public sealed class NavigationSaveMigration : IJsonMigrationStep
     {
         public string Id => "save_4_to_5_navigation_intent";

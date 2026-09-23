@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.Localization;
 using UnityEngine.Localization.Settings;
 using UnityEngine.UIElements;
@@ -18,10 +19,13 @@ namespace DarkFlare
         IDisposable _inputLease;
         ApplicationInputService _input;
         GameInput _gameInput;
+        SceneSessionBinding _binding;
+        IArchitecture _architecture;
+        InputAction _toggle;
         Focusable _previousFocus;
         public bool IsOpen { get; private set; }
         public BehaviorHandle SelectedHandle => _selection.Handle;
-        public IArchitecture GetArchitecture() { return _host.GetArchitecture(); }
+        public IArchitecture GetArchitecture() { return _host != null ? _host.GetArchitecture() : _architecture; }
         void OnValidate()
         {
             if (_panel == null) { _panel = GetComponent<RuntimePanelView>(); }
@@ -37,28 +41,45 @@ namespace DarkFlare
             }
             OnValidate();
             _panel.Reloaded += Bind; _panel.Reloading += Unbind;
-            _host.Ready += Bind; _host.Closing += Unbind;
-            Bind();
+            if (_host != null) { _host.Ready += Bind; _host.Closing += Unbind; Bind(); }
+            else
+            {
+                _binding ??= new SceneSessionBinding(this, BindSession, UnbindSession);
+                _binding.Enable();
+            }
         }
         void OnDisable()
         {
             if (_panel != null) { _panel.Reloaded -= Bind; _panel.Reloading -= Unbind; }
             if (_host != null) { _host.Ready -= Bind; _host.Closing -= Unbind; }
             Unbind();
+            _binding?.Disable();
         }
+        void OnDestroy() { _binding?.Dispose(); }
+        SceneSessionBindResult BindSession(IArchitecture architecture)
+        {
+            _architecture = architecture; Bind(); return SceneSessionBindResult.Success;
+        }
+        void UnbindSession() { Unbind(); _architecture = null; }
         void Bind()
         {
             Unbind();
-            if (!isActiveAndEnabled || _panel.Root == null || !_host.IsReady) { return; }
+            if (!isActiveAndEnabled || _panel.Root == null || (_host != null ? !_host.IsReady : _architecture == null)) { return; }
             _root = _panel.Root;
             _root.AddToClassList("player-mode");
             _view = new BehaviorDebugView(_root);
             _view.Cycle += Cycle;
             _root.Q<Button>("open").clicked += Toggle;
             _root.Q<Button>("close").clicked += Toggle;
-            _input = _host.Input;
+            _input = _host != null ? _host.Input : ApplicationHost.Current.Input;
             _gameInput = GetArchitecture().GetUtility<GameInput>();
-            _gameInput.ToggleInventoryRequested += Toggle;
+            if (_host != null) { _gameInput.ToggleInventoryRequested += Toggle; }
+            else
+            {
+                _toggle = new InputAction("BehaviorDiagnostics", InputActionType.Button);
+                _toggle.AddBinding("<Keyboard>/f8"); _toggle.AddBinding("<Gamepad>/rightStickPress");
+                _toggle.performed += ToggleAction; _toggle.Enable();
+            }
             _input.CancelRequested += Cancel;
             LocalizationSettings.SelectedLocaleChanged += LocaleChanged;
             _refresh = _root.schedule.Execute(Refresh).Every(100);
@@ -76,6 +97,7 @@ namespace DarkFlare
             _selection.Cycle(GetArchitecture(), 1);
             Refresh(); _root.Q<Button>("next").Focus();
         }
+        void ToggleAction(InputAction.CallbackContext context) { Toggle(); }
         void Close()
         {
             IsOpen = false; _selection.Dispose(); _inputLease?.Dispose(); _inputLease = null;
@@ -88,6 +110,7 @@ namespace DarkFlare
         void Refresh()
         {
             _view?.Localize();
+            if (_host == null && _root != null) { _root.Q<Label>("hint").text = BehaviorDebugView.Text("gameHint"); }
             if (!IsOpen) { return; }
             BehaviorDebugSnapshot snapshot = _selection.Capture();
             if (snapshot == null) { _selection.Cycle(GetArchitecture(), 1); snapshot = _selection.Capture(); }
@@ -98,6 +121,7 @@ namespace DarkFlare
         {
             Close(); _refresh?.Pause(); _refresh = null;
             if (_gameInput != null) { _gameInput.ToggleInventoryRequested -= Toggle; }
+            if (_toggle != null) { _toggle.performed -= ToggleAction; _toggle.Disable(); _toggle.Dispose(); _toggle = null; }
             if (_input != null) { _input.CancelRequested -= Cancel; }
             LocalizationSettings.SelectedLocaleChanged -= LocaleChanged;
             if (_root != null)

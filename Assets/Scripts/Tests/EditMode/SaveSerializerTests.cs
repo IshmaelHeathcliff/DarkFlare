@@ -11,6 +11,50 @@ namespace DarkFlare.Tests
         readonly NewtonsoftSaveSerializer _serializer = new NewtonsoftSaveSerializer();
 
         [Test]
+        public void BehaviorMigration_PreservesReleasedNavigationState_AndInitializesFrozenActors()
+        {
+            byte[] bytes = System.IO.File.ReadAllBytes("Assets/Scripts/Tests/Fixtures/Migration/save-v5-navigation.json");
+            JObject historical = JObject.Parse(Encoding.UTF8.GetString(bytes));
+            SaveDeserializationResult restored = _serializer.Deserialize(bytes);
+            Assert.IsTrue(restored.Succeeded, Describe(restored));
+            SaveSerializationResult serialized = _serializer.Serialize(restored.Document);
+            Assert.IsTrue(serialized.Succeeded, Describe(serialized));
+            JObject current = JObject.Parse(Encoding.UTF8.GetString(serialized.Bytes));
+            foreach (JToken monster in current["payload"]["run"]["monsters"])
+            {
+                Assert.IsTrue(JToken.DeepEquals(monster["position"], monster["behavior"]["anchor"]));
+                Assert.AreEqual(0, (int)monster["behavior"]["attackPhase"]);
+                Assert.AreEqual(0, (long)monster["behavior"]["randomSequence"]);
+                ((JObject)monster).Remove("behavior");
+            }
+            Assert.IsTrue(JToken.DeepEquals(historical["payload"], current["payload"]), "行为迁移不得改变导航、资源、冷却、身份或随机流");
+            JObject frozen = (JObject)historical.DeepClone();
+            frozen["payload"]["run"]["frozenMaps"][0]["monsters"] = frozen["payload"]["run"]["monsters"].DeepClone();
+            new MonsterBehaviorSaveMigration().Apply(frozen);
+            foreach (JToken monster in frozen["payload"]["run"]["frozenMaps"][0]["monsters"])
+            { Assert.IsTrue(JToken.DeepEquals(monster["position"], monster["behavior"]["anchor"])); }
+        }
+
+        [Test]
+        public void BehaviorState_RoundTripsActionAndRejectsUnknownVersionOrForeignTarget()
+        {
+            SaveDocumentDto document = SaveDataContractTests.CreateValidDocument();
+            MonsterBehaviorStateDto state = document.Payload.Run.Monsters[0].Behavior;
+            state.Mode = MonsterBehaviorMode.Attacking; state.AttackPhase = MonsterAttackPhase.Recovery;
+            state.ActionId = 12; state.HitResolved = true; state.PhaseRemaining = .21f;
+            state.RandomSequence = 77; state.TargetId = "player:" + document.Payload.Profile.PlayerId;
+            SaveSerializationResult serialized = _serializer.Serialize(document);
+            Assert.IsTrue(serialized.Succeeded, Describe(serialized));
+            SaveDeserializationResult restored = _serializer.Deserialize(serialized.Bytes);
+            Assert.IsTrue(restored.Succeeded, Describe(restored));
+            Assert.IsTrue(restored.Document.Payload.Run.Monsters[0].Behavior.HitResolved);
+            Assert.AreEqual(77, restored.Document.Payload.Run.Monsters[0].Behavior.RandomSequence);
+            state.Version = 99; Assert.IsFalse(_serializer.Serialize(document).Succeeded);
+            state.Version = 1; state.TargetId = "player:foreign"; Assert.IsFalse(_serializer.Serialize(document).Succeeded);
+            state.TargetId = null; Assert.IsFalse(_serializer.Serialize(document).Succeeded);
+        }
+
+        [Test]
         public void NavigationMigration_PreservesReleasedMapSaveAndAddsFrozenDefaults()
         {
             byte[] bytes = System.IO.File.ReadAllBytes("Assets/Scripts/Tests/Fixtures/Migration/save-v4-world-maps.json");
@@ -21,7 +65,7 @@ namespace DarkFlare.Tests
             Assert.IsTrue(serialized.Succeeded, Describe(serialized));
             JObject current = JObject.Parse(Encoding.UTF8.GetString(serialized.Bytes));
             foreach (JToken monster in current["payload"]["run"]["monsters"])
-            { Assert.AreEqual(0, (int)monster["navigation"]["target"]); ((JObject)monster).Remove("navigation"); }
+            { Assert.AreEqual(0, (int)monster["navigation"]["target"]); ((JObject)monster).Remove("navigation"); ((JObject)monster).Remove("behavior"); }
             Assert.IsTrue(JToken.DeepEquals(historical["payload"], current["payload"]), "Released state must not be rerolled or normalized by navigation migration");
             JObject frozen = (JObject)historical.DeepClone();
             frozen["payload"]["run"]["frozenMaps"][0]["monsters"] = frozen["payload"]["run"]["monsters"].DeepClone();
@@ -78,7 +122,8 @@ namespace DarkFlare.Tests
             ((JObject)current["payload"]["run"]).Remove("statuses");
             foreach (string field in new[] { "activeMapId", "mapRevision", "mapRandom", "frozenMaps" })
             { ((JObject)current["payload"]["run"]).Remove(field); }
-            foreach (JToken monster in current["payload"]["run"]["monsters"]) { ((JObject)monster).Remove("navigation"); }
+            foreach (JToken monster in current["payload"]["run"]["monsters"]) { ((JObject)monster).Remove("navigation"); ((JObject)monster).Remove("behavior"); }
+
             Assert.AreEqual("map:wilderness", result.Document.Payload.Run.ActiveMapId);
             Assert.IsTrue(JToken.DeepEquals(JToken.FromObject(result.Document.Payload.Run.Random), JToken.FromObject(result.Document.Payload.Run.MapRandom)));
             Assert.IsTrue(JToken.DeepEquals(historical["payload"], current["payload"]), "迁移不能改变物品、资源、随机数和运行时数据");

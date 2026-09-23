@@ -20,10 +20,11 @@ MonoBehaviour:
   _character: {fileID: 0}
   _prefab:
     m_AssetGUID: 67b8ae84734f42f4792a4190aad88049
-    m_SubObjectName:
-    m_SubObjectType:
-    m_SubObjectGUID:
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
     m_EditorAssetChanged: 0
+  _behavior: {fileID: 11400000, guid: 63649497041f8a8429b6d717ad7c9490, type: 2}
   _maxHealth: 52
   _mana: 0
   _healthRegeneration: 0

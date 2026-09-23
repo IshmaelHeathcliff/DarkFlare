@@ -34,7 +34,7 @@ namespace DarkFlare
                 throw new System.InvalidOperationException("行为动画桥要求显式启用行为驱动攻击表现");
             }
             _presenter.Bind(_handle);
-            _subscription = this.RegisterEvent<BehaviorPresentationEvent>(Apply);
+            _subscription = this.GetSystem<BehaviorSystem>().RegisterPresentation(_handle, Apply);
             BehaviorDebugSnapshot snapshot = this.SendQuery(new GetBehaviorSnapshotQuery(_handle));
             if (snapshot != null) { Apply(snapshot.Presentation); }
         }

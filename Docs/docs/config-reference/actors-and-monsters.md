@@ -38,6 +38,7 @@
 | `_localizedName` | `LocalizedContentReference` / 空引用 | 正式资产必填；固定使用 `monsters/monster.<id>.name` | 世界 UI 在显示边界解析；实例与随机仍使用稳定 `_id` |
 | `_character` | `CharacterDefinition` / `null` | 可空；非空时下面的基础角色数值均由引用资产提供 | `CreateStats` 优先消费引用；切换所有权必须迁移旧内联值，不能混合生效 |
 | `_prefab` | `AssetReferenceGameObject` / `null` | 正式怪物必填且 GUID 有效、彼此独立 | `SpawnSystem` 加载；Prefab 必须满足角色层级与碰撞合同 |
+| `_behavior` | `MonsterBehaviorDefinition` / `null` | 正式怪物必填且通过配置验证 | 依赖资产，不另设 ContentId；运行态由 MonsterBehaviorRuntime 实例持有 |
 | `_maxHealth` | `float` / `24` | 无 `_character` 时至少 `1` | 内联基础生命；有引用时隐藏且不生效 |
 | `_mana` | `float` / `0` | 无 `_character` 时不得小于 `0` | 内联最大法力；旧资产缺字段按零解释 |
 | `_healthRegeneration` | `float` / `0` | 无 `_character` 时不得小于 `0` | 内联每秒生命恢复 |
@@ -66,6 +67,26 @@
 | `_affixPool` | `List<MonsterAffixDefinition>` / 空 | 正式怪物必须有足够合法候选；无空引用、重复引用 | 怪物实例生成按权重无放回选择 |
 | `_minimumAffixCount` | `int` / `0` | 非负且不大于最大值 | 实例生成先在闭区间内掷数量；移除词条不涉及此字段 |
 | `_maximumAffixCount` | `int` / `0` | 不小于最小值，且不超过可用互斥组数 | 正式初版上限为 `2`；非法池不会静默 Clamp |
+
+## MonsterBehaviorDefinition
+
+创建入口：`DarkFlare/行为/普通怪物配置`。由怪物定义引用，可共享不可变配置，实例状态和随机序列不保存在资产上。属于配置中心显式登记的依赖配置，不单独进入内容身份目录。
+
+| 字段 | 类型 / CLR 默认 | 必填、范围与稳定性 | 所有权、消费者、迁移 |
+| --- | --- | --- | --- |
+| `_activationDistance` | `float` / `14` | 有限且大于零，单位米 | 怪物相对玩家的唤醒距离 |
+| `_deactivationDistance` | `float` / `16` | 有限且大于激活距离，单位米 | 退出迟滞，防止边界反复切换 |
+| `_sightDistance` | `float` / `9` | 大于零且不大于激活距离，单位米 | 同时检查朝向和地图遮挡 |
+| `_sightAngle` | `float` / `180` | 大于零且不大于 360，单位度 | 完整视锥角，不依赖相机 |
+| `_perceptionInterval` | `float` / `0.1` | 有限，0.02–0.25 秒 | 感知刷新间隔；命中与许可撤销不依赖此缓存 |
+| `_memorySeconds` | `float` / `2` | 有限且非负，单位秒 | 丢失视野后只追逐最后可见位置，离场冻结 |
+| `_wanderRadius` | `float` / `2` | 有限且大于零，单位米 | 出生锚点周围的候选范围，单次最多四次采样 |
+| `_waitMinimum` | `float` / `0.7` | 有限且大于零，单位秒 | 使用行为独立随机序列选择等待时长 |
+| `_waitMaximum` | `float` / `1.8` | 不小于等待下限，单位秒 | 不可达时等待后重试，不挤占无限搜索请求 |
+| `_windupSeconds` | `float` / `0.3` | 有限且大于零，单位秒 | 动作接纳后开始前摇，取消仍消耗冷却 |
+| `_recoverySeconds` | `float` / `0.3` | 有限且大于零，单位秒 | 命中或挥空后的恢复窗口；恢复存档不重复命中 |
+
+攻击半径、间隔与伤害仍由 MonsterDefinition 提供。Schema 6 保存行为语义、剩余时间和已结算标记，动画不决定伤害或计时。
 
 ## MonsterAffixDefinition
 

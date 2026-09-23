@@ -62,6 +62,8 @@ namespace DarkFlare.Tests
 
         [TestCase(3)]
         [TestCase(4)]
+        [TestCase(5)]
+        [TestCase(6)]
         public void Prepare_AdditiveContentPreservesLegacyValuesStockAndSourceDocument(int version)
         {
             SaveDocumentDto document = SaveRestorePreparer.Prepare(SaveDataContractTests.CreateValidDocument(), _catalog).Value.Document;

@@ -179,6 +179,9 @@ namespace DarkFlare
 
     public sealed class MonsterRunStateDto : IPersistenceDto
     {
+        [Newtonsoft.Json.JsonProperty(Required = Newtonsoft.Json.Required.Always)]
+        public MonsterBehaviorStateDto Behavior { get; set; } = new();
+
         public NavigationIntentDto Navigation { get; set; } = new();
 
         public string InstanceId { get; set; } = string.Empty;

@@ -33,7 +33,9 @@ namespace DarkFlare.Editor
         [Button("停止导航"), EnableIf(nameof(HasSession))]
         void Stop() { Set(new NavigationIntentDto { Target = NavigationTargetKind.None }); }
         void Set(NavigationIntentDto intent)
-        { if (Map != null && _monster != null) { this.SendCommand(new SetNavigationIntentCommand(_monster, intent, Map.Handle(_monster))); } }
+        { if (Map != null && _monster != null) { this.SendCommand(new SetNavigationIntentCommand(_monster, intent, Map.Handle(_monster), takeBehaviorControl: true)); } }
+        [Button("归还怪物行为控制"), EnableIf(nameof(HasSession))]
+        void ReleaseBehavior() { this.SendCommand(new ReleaseMonsterNavigationOverrideCommand(_monster)); }
         [Button("添加临时阻挡"), EnableIf(nameof(HasSession))]
         void AddStamp()
         {

@@ -48,7 +48,7 @@ namespace DarkFlare.Tests
                         MapId = "map:wilderness",
                         Point = new Vector3Dto { X = 15, Y = 10 },
                         StopDistance = .3f
-                    }, navigation.Handle(monsters[i]))));
+                    }, navigation.Handle(monsters[i]), takeBehaviorControl: true)));
             }
             float deadline = Time.realtimeSinceStartup + 12;
             while (Time.realtimeSinceStartup < deadline && (monsters[0].transform.position.x < 13 || monsters[1].transform.position.x < 13))
@@ -123,7 +123,7 @@ namespace DarkFlare.Tests
             MonsterController monster = architecture.GetSystem<SpawnSystem>().SpawnMonster(scope.Spawner.SpawnDefinition, 55, new Vector3(9, 10));
             monster.Body.simulated = false;
             Assert.IsTrue(architecture.SendCommand(new SetNavigationIntentCommand(monster,
-                new NavigationIntentDto { Mode = NavigationMode.FlowField }, scope.Navigation.Handle(monster))));
+                new NavigationIntentDto { Mode = NavigationMode.FlowField }, scope.Navigation.Handle(monster), takeBehaviorControl: true)));
             float deadline = Time.realtimeSinceStartup + 5;
             while (scope.Navigation.Status(monster) != NavigationStatus.Moving && Time.realtimeSinceStartup < deadline) { yield return null; }
             Assert.AreEqual(NavigationStatus.Moving, scope.Navigation.Status(monster));
@@ -140,6 +140,24 @@ namespace DarkFlare.Tests
                 yield return new WaitForFixedUpdate();
             }
             Assert.Greater(metrics.ResultSequence, published, "目标持续跨格移动不能饿死已接纳搜索");
+            Assert.IsTrue(architecture.SendCommand(new SetNavigationIntentCommand(monster,
+                new NavigationIntentDto { Mode = NavigationMode.AStar, Target = NavigationTargetKind.None }, scope.Navigation.Handle(monster))));
+            yield return new WaitForFixedUpdate();
+            yield return new WaitForFixedUpdate();
+            long retained = NavigationMemory.Bytes;
+            for (int i = 0; i < 8; i++)
+            {
+                NavigationMode mode = i % 2 == 0 ? NavigationMode.FlowField : NavigationMode.AStar;
+                Assert.IsTrue(architecture.SendCommand(new SetNavigationIntentCommand(monster,
+                    new NavigationIntentDto { Mode = mode, Target = NavigationTargetKind.None }, scope.Navigation.Handle(monster))));
+                yield return new WaitForFixedUpdate();
+                yield return new WaitForFixedUpdate();
+                Assert.AreEqual(retained, NavigationMemory.Bytes, "模式切换保留有界路径缓冲，不反复释放和申请");
+                Assert.AreEqual(Vector2.zero, monster.Body.linearVelocity, "旧路线不能在等待态复用");
+            }
+            Object.Destroy(monster.gameObject);
+            yield return null;
+            Assert.Less(NavigationMemory.Bytes, retained, "注销归还实例路径缓冲");
         }
         static IEnumerator WaitTicket(NavigationStampTicket ticket)
         {

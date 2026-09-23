@@ -656,6 +656,8 @@ namespace DarkFlare
             {
                 if (monster == null) { continue; }
                 NavigationIntentDto intent = monster.Navigation;
+                if (monster.Behavior != null && !string.IsNullOrEmpty(monster.Behavior.TargetId) && monster.Behavior.TargetId != "player:" + playerId)
+                { Add(issues, SaveDataIssueCode.InvalidValue, "payload.run.monsters.behavior.targetId", "行为目标必须是本次 Run 的玩家"); }
                 if (intent == null || !intent.IsValid
                     || (intent.Target == NavigationTargetKind.Actor || intent.Target == NavigationTargetKind.Point) && intent.MapId != mapId
                     || intent.Target == NavigationTargetKind.Actor && intent.ActorId != "player:" + playerId
@@ -725,6 +727,8 @@ namespace DarkFlare
                 ValidateModifiers(monster.Modifiers, $"{monsterPath}.modifiers", issues);
                 ValidateVector(monster.Position, $"{monsterPath}.position", issues);
                 ValidateResources(monster.Resources, $"{monsterPath}.resources", issues);
+                if (monster.Behavior == null || !monster.Behavior.IsValid || monster.Behavior.Mode == MonsterBehaviorMode.Dead)
+                { Add(issues, SaveDataIssueCode.InvalidValue, $"{monsterPath}.behavior", "行为版本、状态或动作阶段非法"); }
                 ValidateNonNegativeFinite(
                     monster.ContactDamageCooldownRemainingSeconds,
                     $"{monsterPath}.contactDamageCooldownRemainingSeconds",

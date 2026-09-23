@@ -172,7 +172,8 @@ namespace DarkFlare.Tests
                 MapEditSession session = MapEditSessions.Create(path, map);
                 recovery = Path.Combine(MapEditSessions.RecoveryRoot, MapEditService.Hash(session.SourceGuid) + ".json");
                 window.LoadSource(path); window.Show(); window.EnterStage();
-                for (int i = 0; i < 240 && (window.Preview?.IsValid != true || window.ObjectPreview == null); i++) { yield return null; }
+                double deadline = EditorApplication.timeSinceStartup + 5;
+                while (EditorApplication.timeSinceStartup < deadline && (window.Preview?.IsValid != true || window.ObjectPreview == null)) { yield return null; }
                 Assert.IsNotNull(window.ObjectPreview, window.ObjectPreviewStatus); Assert.IsTrue(window.Preview.IsValid);
                 MapTerrainPreviewFrame terrain = window.Preview.Current;
                 JObject record = (JObject)JObject.Parse(session.Current.CanonicalJson)["objects"][0];
@@ -181,12 +182,15 @@ namespace DarkFlare.Tests
                 record["position"]["x"] = old.x + 1;
                 var patch = MapEditService.Patch(session.Current, new JObject { ["type"] = "UpsertObject", ["record"] = record });
                 Assert.AreEqual("Ok", (string)JObject.Parse(MapEditApi.ApplyPatch(path, patch.ToString()))["code"]);
-                for (int i = 0; i < 240 && Mathf.Abs(window.ObjectPreview.Objects[id].position.x - old.x - 1) > .001f; i++) { yield return null; }
+                deadline = EditorApplication.timeSinceStartup + 5;
+                while (EditorApplication.timeSinceStartup < deadline && Mathf.Abs(window.ObjectPreview.Objects[id].position.x - old.x - 1) > .001f) { yield return null; }
                 Assert.AreSame(terrain, window.Preview.Current);
                 Assert.AreEqual(old.x + 1, window.ObjectPreview.Objects[id].position.x, .001f);
-                Undo.PerformUndo(); for (int i = 0; i < 240 && Mathf.Abs(window.ObjectPreview.Objects[id].position.x - old.x) > .001f; i++) { yield return null; }
+                Undo.PerformUndo(); deadline = EditorApplication.timeSinceStartup + 5;
+                while (EditorApplication.timeSinceStartup < deadline && Mathf.Abs(window.ObjectPreview.Objects[id].position.x - old.x) > .001f) { yield return null; }
                 Assert.AreEqual(old.x, window.ObjectPreview.Objects[id].position.x, .001f);
-                Undo.PerformRedo(); for (int i = 0; i < 240 && Mathf.Abs(window.ObjectPreview.Objects[id].position.x - old.x - 1) > .001f; i++) { yield return null; }
+                Undo.PerformRedo(); deadline = EditorApplication.timeSinceStartup + 5;
+                while (EditorApplication.timeSinceStartup < deadline && Mathf.Abs(window.ObjectPreview.Objects[id].position.x - old.x - 1) > .001f) { yield return null; }
                 Assert.AreEqual(old.x + 1, window.ObjectPreview.Objects[id].position.x, .001f);
                 Assert.AreSame(terrain, window.Preview.Current);
             }

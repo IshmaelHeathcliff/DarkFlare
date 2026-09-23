@@ -39,7 +39,7 @@ namespace DarkFlare
             _owner = owner;
             PatrolBehaviorRuntime runtime = _host.Template.Create(name, _origin);
             Handle = this.SendCommand(new RegisterBehaviorCommand(_host.ScopeId, runtime));
-            _subscription = this.RegisterEvent<BehaviorPresentationEvent>(OnPresentation);
+            _subscription = this.GetSystem<BehaviorSystem>().RegisterPresentation(Handle, OnPresentation);
             _bridge?.Bind(owner, Handle);
             return SceneSessionBindResult.Success;
         }

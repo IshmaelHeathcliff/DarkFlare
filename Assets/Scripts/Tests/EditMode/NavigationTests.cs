@@ -44,6 +44,23 @@ namespace DarkFlare.Tests
                 }
         }
         [Test]
+        public void DirectQueries_PreserveManagedGeometryAtWallsAndBoundaries()
+        {
+            using var grid = new NavigationGrid(Geometry(), .36);
+            grid.Complete();
+            NavigationGridView view = grid.View;
+            float2[] points = { new(-.01f, 2), new(.36f, .36f), new(.3601f, .3601f), new(2, 2), new(1.59f, 2), new(1.6f, 2), new(3.5f, 2), new(4.01f, 2) };
+            foreach (float2 from in points)
+            {
+                Assert.AreEqual(view.LegalNode(from), NavigationQueries.LegalNode(view, from));
+                foreach (float2 to in points)
+                {
+                    Assert.AreEqual(view.Segment(from, to, view.Radius), NavigationQueries.Segment(view, from, to, view.Radius) != 0);
+                }
+            }
+        }
+
+        [Test]
         public void FlowAndAStar_AgreeOnDirectedWeightedCostAndPreservePendingFrontier()
         {
             using var grid = new NavigationGrid(Geometry(), .1);

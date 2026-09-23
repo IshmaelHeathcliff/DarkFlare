@@ -13,6 +13,10 @@ namespace DarkFlare
 
         protected override bool OnExecute()
         {
+            if (_monster != null && _monster.Definition != null && _monster.Definition.Behavior != null)
+            {
+                return _target != null && _target.Team == ActorTeam.Player && _monster.BehaviorRuntime?.RequestAttack(_target.CombatIdentity) == true;
+            }
             if (_monster == null || _monster.Definition == null || _monster.Instance == null
                 || _target == null || !_target.IsAlive || !_target.isActiveAndEnabled
                 || _target.Team == _monster.Actor.Team

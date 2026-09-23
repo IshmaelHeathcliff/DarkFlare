@@ -1,0 +1,10 @@
+{
+  "passed": true,
+  "input": "InputSystem injected Keyboard/Gamepad",
+  "locales": [
+    "zh-Hans",
+    "en",
+    "qps-ploc"
+  ],
+  "readonlyPlayer": true
+}

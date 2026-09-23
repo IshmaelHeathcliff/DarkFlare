@@ -2140,6 +2140,10 @@ MonoBehaviour:
     m_Localized: Running
     m_Metadata:
       m_Items: []
+  - m_Id: 12235330810798080
+    m_Localized: "F8 / R3: open \xB7 Esc / B: close\nArrows / D-pad: navigate \xB7 Enter / A: select"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:

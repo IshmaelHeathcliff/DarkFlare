@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "version": "0.6.1-alpha",
+  "schema": {
+    "Value": 6
+  },
+  "sleep": true,
+  "occludedWander": true,
+  "chase": true,
+  "windupCancel": true,
+  "singleHit": true,
+  "travelRounds": 20,
+  "path": "C:/Users/darkf/AppData/LocalLow/DefaultCompany/DarkFlareMonsterAudit"
+}

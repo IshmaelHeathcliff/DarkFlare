@@ -196,7 +196,11 @@ namespace DarkFlare
                                 if (obj != null && obj.TryGetComponent(out MonsterController monster))
                                 {
                                     MonsterRunStateDto dto = sourceState.Monsters.FirstOrDefault(value => value.InstanceId == monster.Instance.Id.Value);
-                                    if (dto != null) { monster.RestoreRuntime(Resources(dto.Resources), dto.ContactDamageCooldownRemainingSeconds); }
+                                    if (dto != null)
+                                    {
+                                        monster.RestoreRuntime(Resources(dto.Resources), dto.ContactDamageCooldownRemainingSeconds);
+                                        monster.RestoreBehavior(dto.Behavior);
+                                    }
                                 }
                             }
                             player.transform.position = oldPosition;
@@ -252,7 +256,10 @@ namespace DarkFlare
             StatusSaveDto shifted = MapStateData.AtTime(state.Statuses, time);
             _architecture.GetSystem<StatusSystem>().Store.ImportSave(shifted, _context.ContentCatalog, new List<DtoMapIssue>());
             for (int i = 0; i < controllers.Count; i++)
-            { controllers[i].RestoreRuntime(Resources(monsters[i].State.Resources), monsters[i].State.ContactDamageCooldownRemainingSeconds); }
+            {
+                controllers[i].RestoreRuntime(Resources(monsters[i].State.Resources), monsters[i].State.ContactDamageCooldownRemainingSeconds);
+                controllers[i].RestoreBehavior(monsters[i].State.Behavior);
+            }
             foreach (WorldDropStateDto drop in state.WorldDrops)
             {
                 if (_architecture.GetSystem<LootSystem>().SpawnRestoredPickup(WorldDropId.Parse(drop.InstanceId), items[drop.ItemInstanceId], Position(drop.Position)) == null)

@@ -5,7 +5,9 @@ Alpha 0.6.0 已提供独立 HFSM、行为树、Runtime 组合与生命周期、A
 - [HFSM 使用与执行语义](hfsm.md)
 - [行为树使用与执行语义](behavior-tree.md)
 - [接入、样例、Animator 与调试](integration-debugging.md)
+- [普通怪物行为、感知与冻结恢复](monsters.md)
+- [0.6.1 验收与证据](acceptance/0.6.1/README.md)
 - [0.6.0 验收与证据](acceptance/0.6.0/README.md)
 - [F1 HFSM 早期验收](acceptance/f1-hfsm.md)
 
-核心通过显式上下文和 Tick 驱动，不依赖 Unity 对象、QFramework 全局架构、角色类型或场景。玩法能力、调度、取消与表现由 Runtime 负责。正式怪物从 [0.6.1](../plan/alpha-0.6-plan.md) 开始接入，Boss、有限刷怪和手动重置仍按后续阶段实施。
+核心通过显式上下文和 Tick 驱动，不依赖 Unity 对象、QFramework 全局架构、角色类型或场景。玩法能力、调度、取消与表现由 Runtime 负责。正式普通怪物已接入四种基础行为与 Schema 6；Boss、有限刷怪和手动重置仍按[后续阶段](../plan/alpha-0.6-plan.md)实施。

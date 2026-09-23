@@ -1,0 +1,15 @@
+{
+  "status": "completed",
+  "buildId": "build_42d07eac820c",
+  "result": "Succeeded",
+  "platform": "StandaloneWindows64",
+  "outputPath": "C:/Users/darkf/Home/Projects/DarkFlare/Builds/Alpha061Audit/DarkFlare.exe",
+  "totalSizeBytes": 289705547,
+  "buildTimeMs": 30424,
+  "buildStartedAt": "2026-09-22T11:47:10.9415331Z",
+  "buildEndedAt": "2026-09-22T11:47:41.3664457Z",
+  "totalWarnings": 0,
+  "totalErrors": 0,
+  "errors": [],
+  "warnings": []
+}
