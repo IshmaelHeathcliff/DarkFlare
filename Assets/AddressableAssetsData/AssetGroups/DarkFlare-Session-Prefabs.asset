@@ -43,6 +43,11 @@ MonoBehaviour:
     - df.prefab
     - df.session
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: aadcf3062b2eb4c469ae53feb3e7af0f
+    m_Address: monster_guardian
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f4600000000000000000000000000002
     m_Address: gameplay/prefabs/monsters/swift
     m_ReadOnly: 0

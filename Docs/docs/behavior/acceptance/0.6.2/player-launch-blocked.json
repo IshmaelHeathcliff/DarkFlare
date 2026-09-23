@@ -1,0 +1,10 @@
+{
+  "attempt": "Start-Process -WindowStyle Hidden",
+  "result": "blocked by Windows application control policy",
+  "executable": "C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Builds\\Alpha062Audit\\DarkFlare.exe",
+  "sha256": "718444f6a718fa668da96eb0a58445b009673310e6129152a63dbf7a92b8de00",
+  "eventId": 3077,
+  "eventTime": "2026-09-23T14:00:51.7486642+08:00",
+  "policyId": "0283ac0f-fff1-49ae-ada1-8a933130cad6",
+  "reason": "Enterprise signing level required"
+}

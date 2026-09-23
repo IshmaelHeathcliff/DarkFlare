@@ -95,6 +95,7 @@ namespace DarkFlare
             ids.Add(run.ActiveMapId);
             var actorMaps = new Dictionary<string, string>(StringComparer.Ordinal);
             IndexMapActors(run.Monsters, run.ActiveMapId, actorMaps);
+            ValidateBoss(run.Boss, run.Monsters, "payload.run.boss", issues);
             foreach (MapStateDto map in run.FrozenMaps)
             { if (map != null) { IndexMapActors(map.Monsters, map.MapId, actorMaps); } }
             ValidateNavigation(run.Monsters, run.ActiveMapId, run.Player?.PlayerId, actorMaps, issues);
@@ -110,6 +111,7 @@ namespace DarkFlare
                     || map.Monsters.Count > LocalSaveFormat.MaximumMapMonsters || map.Statuses?.Actors == null)
                 { Add(issues, SaveDataIssueCode.InvalidValue, "payload.run.maps", "冻结地图数据非法或重复"); continue; }
                 ValidateNavigation(map.Monsters, map.MapId, run.Player?.PlayerId, actorMaps, issues);
+                ValidateBoss(map.Boss, map.Monsters, "payload.run.maps.boss", issues);
                 ValidateRandom(map.Random, "payload.run.maps.random", issues);
                 ValidateSpawner(map.Spawner, "payload.run.maps.spawner", issues);
                 if (map.Statuses.Time > (run.Statuses?.Time ?? 0)
@@ -648,6 +650,22 @@ namespace DarkFlare
             { if (!string.IsNullOrEmpty(monster?.InstanceId)) { actorMaps.TryAdd(monster.InstanceId, mapId); } }
         }
 
+        static void ValidateBoss(BossEncounterStateDto boss, IReadOnlyList<MonsterRunStateDto> monsters,
+            string path, List<SaveDataIssue> issues)
+        {
+            if (boss == null || !boss.IsValid)
+            { Add(issues, SaveDataIssueCode.InvalidValue, path, "Boss 名额状态非法"); return; }
+            int count = monsters?.Count(monster => monster?.Boss != null) ?? 0;
+            if (boss.Status == BossEncounterStatus.Alive)
+            {
+                if (count != 1 || !monsters.Any(monster => monster.Boss != null && monster.InstanceId == boss.InstanceId
+                    && monster.DefinitionContentId == boss.MonsterDefinitionId))
+                { Add(issues, SaveDataIssueCode.InconsistentState, path, "活跃 Boss 名额与怪物实例不一致"); }
+            }
+            else if (count != 0)
+            { Add(issues, SaveDataIssueCode.InconsistentState, path, "非活跃 Boss 名额包含 Boss 怪物"); }
+        }
+
         static void ValidateNavigation(IReadOnlyList<MonsterRunStateDto> monsters, string mapId, string playerId,
             IReadOnlyDictionary<string, string> actorMaps, List<SaveDataIssue> issues)
         {
@@ -658,6 +676,8 @@ namespace DarkFlare
                 NavigationIntentDto intent = monster.Navigation;
                 if (monster.Behavior != null && !string.IsNullOrEmpty(monster.Behavior.TargetId) && monster.Behavior.TargetId != "player:" + playerId)
                 { Add(issues, SaveDataIssueCode.InvalidValue, "payload.run.monsters.behavior.targetId", "行为目标必须是本次 Run 的玩家"); }
+                if (monster.Boss != null && !string.IsNullOrEmpty(monster.Boss.TargetId) && monster.Boss.TargetId != "player:" + playerId)
+                { Add(issues, SaveDataIssueCode.InvalidValue, "payload.run.monsters.boss.targetId", "Boss 行为目标必须是本次 Run 的玩家"); }
                 if (intent == null || !intent.IsValid
                     || (intent.Target == NavigationTargetKind.Actor || intent.Target == NavigationTargetKind.Point) && intent.MapId != mapId
                     || intent.Target == NavigationTargetKind.Actor && intent.ActorId != "player:" + playerId
@@ -729,6 +749,8 @@ namespace DarkFlare
                 ValidateResources(monster.Resources, $"{monsterPath}.resources", issues);
                 if (monster.Behavior == null || !monster.Behavior.IsValid || monster.Behavior.Mode == MonsterBehaviorMode.Dead)
                 { Add(issues, SaveDataIssueCode.InvalidValue, $"{monsterPath}.behavior", "行为版本、状态或动作阶段非法"); }
+                if (monster.Boss != null && !monster.Boss.IsValid)
+                { Add(issues, SaveDataIssueCode.InvalidValue, $"{monsterPath}.boss", "Boss 动作状态非法"); }
                 ValidateNonNegativeFinite(
                     monster.ContactDamageCooldownRemainingSeconds,
                     $"{monsterPath}.contactDamageCooldownRemainingSeconds",

@@ -7,6 +7,7 @@ namespace DarkFlare
 {
     public sealed class WorldMapCatalog
     {
+        const string LegacyWildernessWithoutBossHash = "3d72c63d076834151324f47dcf9ca27e627864ca64dd5b527b4d11fb6c511a1e";
         readonly Dictionary<string, CompiledMapDocument> _maps = new(StringComparer.Ordinal);
         public IMapDefinitionLookup Definitions { get; }
         public IReadOnlyDictionary<string, CompiledMapDocument> Maps => _maps;
@@ -16,19 +17,51 @@ namespace DarkFlare
             return new WorldMapCatalog(content.GetAll<MapDefinition>(), new CatalogLookup(content));
         }
 
+        public void UpgradeKnownBossRevision(RunSaveData run)
+        {
+            Upgrade(run.ActiveMapId, value => run.MapRevision = value, run.MapRevision);
+            foreach (MapStateDto frozen in run.FrozenMaps)
+            { Upgrade(frozen.MapId, value => frozen.Revision = value, frozen.Revision); }
+        }
+
+        void Upgrade(string id, Action<int> set, int oldRevision)
+        {
+            if (id != "map:wilderness" || oldRevision != 1) { return; }
+            CompiledMapDocument current = Get(id);
+            if (current.Revision != 4) { return; }
+            MapDocument source = current.CreateEditableCopy();
+            if (source.BossSpawns.Length != 1) { return; }
+            source.BossSpawns = Array.Empty<MapBossSpawnRecord>(); source.Revision = 1;
+            CompiledMapDocument legacy = MapDocumentCompiler.Compile(source, Definitions);
+            if (legacy.SourceHash != LegacyWildernessWithoutBossHash)
+            { throw new InvalidOperationException("野外地图旧版语义与 Boss 点位迁移基线不符"); }
+            set(current.Revision);
+        }
+
         public void ValidateSave(RunSaveData run)
         {
-            ValidateState(run.ActiveMapId, run.MapRevision, run.Player.Position, run.Monsters, run.WorldDrops, run.Spawner);
+            ValidateState(run.ActiveMapId, run.MapRevision, run.Player.Position, run.Monsters, run.WorldDrops, run.Spawner, run.Boss);
             foreach (MapStateDto map in run.FrozenMaps)
-            { ValidateState(map.MapId, map.Revision, null, map.Monsters, map.WorldDrops, map.Spawner); }
+            { ValidateState(map.MapId, map.Revision, null, map.Monsters, map.WorldDrops, map.Spawner, map.Boss); }
         }
 
         void ValidateState(string id, int revision, Vector3Dto player, IEnumerable<MonsterRunStateDto> monsters,
-            IEnumerable<WorldDropStateDto> drops, MonsterSpawnerStateDto spawner)
+            IEnumerable<WorldDropStateDto> drops, MonsterSpawnerStateDto spawner, BossEncounterStateDto boss)
         {
             CompiledMapDocument map = Get(id);
             if (revision != 0 && revision != map.Revision) { throw new InvalidOperationException("地图修订不匹配：" + id); }
             MapDocument document = map.CreateEditableCopy();
+            if (boss == null || !boss.IsValid) { throw new InvalidOperationException("Boss 名额非法：" + id); }
+            MapBossSpawnRecord point = document.BossSpawns.SingleOrDefault();
+            if (point == null)
+            {
+                if (boss.Status is not (BossEncounterStatus.None or BossEncounterStatus.LegacyAbsent))
+                { throw new InvalidOperationException("无 Boss 地图包含 Boss 名额：" + id); }
+            }
+            else if (boss.Status != BossEncounterStatus.LegacyAbsent
+                && (boss.Status == BossEncounterStatus.None || boss.SpawnId != point.SpawnId
+                    || boss.MonsterDefinitionId != point.MonsterDefinitionId))
+            { throw new InvalidOperationException("Boss 点位与存档不匹配：" + id); }
             string spawn = document.Regions.Select(region => region.SpawnDefinitionId).FirstOrDefault(value => value != null);
             if (!string.Equals(spawn ?? "", spawner.SpawnContentId ?? "", StringComparison.Ordinal))
             { throw new InvalidOperationException("地图生成定义不匹配：" + id); }

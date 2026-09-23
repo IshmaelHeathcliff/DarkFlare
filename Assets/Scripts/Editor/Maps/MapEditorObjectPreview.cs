@@ -22,7 +22,6 @@ namespace DarkFlare.Editor
 
         void TerrainMaterialsChanged()
         {
-            _terrainPreviewKey = null;
             SchedulePreview();
         }
 
@@ -72,8 +71,12 @@ namespace DarkFlare.Editor
         string TerrainPreviewKey()
         {
             MapDocument map = _session.Current.CreateEditableCopy();
-            map.Objects = Array.Empty<MapObjectRecord>(); map.Regions = Array.Empty<MapRegionRecord>(); map.Revision = 0;
-            return MapDocumentJson.Write(map);
+            map.Objects = Array.Empty<MapObjectRecord>(); map.Regions = Array.Empty<MapRegionRecord>();
+            map.Entries = Array.Empty<MapEntryRecord>(); map.BossSpawns = Array.Empty<MapBossSpawnRecord>(); map.Revision = 0;
+            string setPath = AssetDatabase.GetAssetPath(_set);
+            string materialsPath = AssetDatabase.GetAssetPath(_materials);
+            return MapDocumentJson.Write(map) + "|" + (string.IsNullOrEmpty(setPath) ? "" : AssetDatabase.GetAssetDependencyHash(setPath).ToString())
+                + "|" + (string.IsNullOrEmpty(materialsPath) ? "" : AssetDatabase.GetAssetDependencyHash(materialsPath).ToString());
         }
     }
 }

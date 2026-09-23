@@ -403,10 +403,11 @@ namespace DarkFlare.Editor
             SchedulePreview(); Repaint();
         }
 
-        void DefinitionsChanged() { _terrainPreviewKey = null; _lookup = MapEditorDefinitionIndex.Capture(); _objectCatalog = MapEditorDefinitionIndex.LoadDefinitions().OfType<MapObjectDefinition>().ToArray(); _geometry = null; _geometryStatus = "定义已改变，请重新诊断"; CancelStroke(); SchedulePreview(); }
+        void DefinitionsChanged() { _lookup = MapEditorDefinitionIndex.Capture(); _objectCatalog = MapEditorDefinitionIndex.LoadDefinitions().OfType<MapObjectDefinition>().ToArray(); _geometry = null; _geometryStatus = "定义已改变，请重新诊断"; CancelStroke(); SchedulePreview(); }
         void SchedulePreview()
         {
-            if (_session == null || TerrainPreviewKey() != _terrainPreviewKey) { _preview?.Cancel(); }
+            string key = _session == null ? null : TerrainPreviewKey();
+            if (_session == null || key != _terrainPreviewKey) { _preview?.Cancel(); }
             EditorApplication.delayCall -= Rebuild; EditorApplication.delayCall += Rebuild;
         }
         void Rebuild()
@@ -418,18 +419,19 @@ namespace DarkFlare.Editor
         {
             RebuildObjectsAsync().Forget();
             string terrainKey = TerrainPreviewKey();
-            if (_preview != null && _preview.IsValid && _terrainPreviewKey == terrainKey) { return; }
+            if (_preview != null && (_preview.IsValid || _preview.IsBuilding) && _terrainPreviewKey == terrainKey) { return; }
             _preview ??= new MapTerrainPreviewSession();
             MapTerrainPreviewSession preview = _preview;
+            _terrainPreviewKey = terrainKey;
             await preview.RebuildAsync(() =>
             {
                 IMapDefinitionLookup definitions = MapEditorDefinitionIndex.Capture();
                 CompiledMapDocument map = MapDocumentCompiler.Compile(_session.Current.CreateEditableCopy(), definitions);
                 return (map, TerrainRuleSnapshot.Compile(definitions.Resolve<TerrainSetDefinition>(map.TerrainSetId), definitions));
             }, _materials != null && _materials.TerrainSet != null && "terrain_set:" + _materials.TerrainSet.Id == _session.Current.TerrainSetId.ToString() ? () => _materials.RequireCurrent() : null);
-            if (this == null || _preview != preview || _stage == null || !preview.IsValid) { return; }
+            if (this == null || _preview != preview || _stage == null || _terrainPreviewKey != terrainKey) { return; }
+            if (!preview.IsValid) { if (_terrainPreviewKey == terrainKey) { _terrainPreviewKey = null; } return; }
             preview.Current.MoveToScene(_stage.scene);
-            _terrainPreviewKey = terrainKey;
             if (_fit && SceneView.lastActiveSceneView != null) { SceneView.lastActiveSceneView.Frame(preview.Current.Bounds, true); _fit = false; }
             SceneView.RepaintAll(); Repaint();
         }

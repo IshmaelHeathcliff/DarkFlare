@@ -1,0 +1,26 @@
+{
+  "files": [
+    {
+      "path": "C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Builds\\Alpha062\\DarkFlare.exe",
+      "bytes": 667136,
+      "sha256": "a4c71b1bfc3e42d02f2f129fe04adef3ebf2343a662884e4b99598e9dfc90e7d"
+    },
+    {
+      "path": "C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Builds\\Alpha062\\DarkFlare_Data\\Managed\\DarkFlare.Core.dll",
+      "bytes": 57344,
+      "sha256": "48718a9f9781f1a0aad5d14bd94c51721382f0dc15a8bc9e94743fdefec882eb"
+    },
+    {
+      "path": "C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Builds\\Alpha062\\DarkFlare_Data\\Managed\\DarkFlare.Runtime.dll",
+      "bytes": 1375232,
+      "sha256": "a6cd2b679e8b3c0290e1797807deff276cbe45f61d2094571011c2c344f2c814"
+    },
+    {
+      "path": "C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Builds\\Alpha062\\DarkFlare_Data\\StreamingAssets\\aa\\catalog.bin",
+      "bytes": 29955,
+      "sha256": "cca92da693bd9209b045f88106e0b08dcb6b00edaff6e068e85df8bde21b5195"
+    }
+  ],
+  "releasePipelineRuntimeAbsent": true,
+  "version": "0.6.2-alpha"
+}

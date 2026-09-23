@@ -161,6 +161,7 @@ namespace DarkFlare
                     MapRandom = MapRandom(architecture.GetSystem<GameplayRandomSystem>().CaptureMapState()),
                     Player = MapPlayer(player, issues),
                     Monsters = MapMonsters(monsters, issues),
+                    Boss = maps.CaptureBoss(monsters),
                     WorldDrops = MapWorldDrops(worldDrops),
                     Merchant = merchant,
                     Spawner = MapSpawner(issues),
@@ -196,6 +197,7 @@ namespace DarkFlare
             var result = new MapStateDto
             {
                 MapId = scope.Map.MapId, Revision = scope.Map.Revision, Monsters = MapMonsters(monsters, issues),
+                Boss = architecture.GetUtility<WorldMapRuntime>().CaptureBoss(monsters),
                 WorldDrops = MapWorldDrops(drops), Items = MapItems(drops.Select(drop => drop.Item).ToList(), issues),
                 Spawner = MapSpawner(issues), Statuses = statuses,
                 Random = MapRandom(architecture.GetSystem<GameplayRandomSystem>().CaptureMapState())
@@ -369,6 +371,7 @@ namespace DarkFlare
                 {
                     Navigation = monster.CaptureNavigation(),
                     Behavior = monster.CaptureBehavior(),
+                    Boss = monster.CaptureBoss(),
                     InstanceId = instance.Id.Value,
                     DefinitionContentId = RuntimeStateMapper.GetContentId(
                         monster.Definition,

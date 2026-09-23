@@ -13,6 +13,7 @@ namespace DarkFlare
         public List<MonsterRunStateDto> Monsters { get; set; } = new();
         public List<WorldDropStateDto> WorldDrops { get; set; } = new();
         public MonsterSpawnerStateDto Spawner { get; set; } = new();
+        public BossEncounterStateDto Boss { get; set; } = new();
         public GameplayRandomStateDto Random { get; set; } = new();
         public StatusSaveDto Statuses { get; set; } = new();
         // 内存冻结图的物品子集；磁盘仍使用 Payload.Items 唯一总表。

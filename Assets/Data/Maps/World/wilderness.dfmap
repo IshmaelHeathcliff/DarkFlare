@@ -1,4 +1,18 @@
 {
+  "bossSpawns": [
+    {
+      "facing": {
+        "x": -1.0,
+        "y": 0.0
+      },
+      "monsterDefinitionId": "monster:guardian",
+      "position": {
+        "x": 84.0,
+        "y": 76.0
+      },
+      "spawnId": "guardian"
+    }
+  ],
   "cellSize": 1.0,
   "chunks": [
     {
@@ -16509,7 +16523,7 @@
       }
     }
   ],
-  "formatVersion": 2,
+  "formatVersion": 3,
   "height": 128,
   "mapId": "map:wilderness",
   "objects": [
@@ -16757,7 +16771,7 @@
       "spawnDefinitionId": "spawn:main"
     }
   ],
-  "revision": 1,
+  "revision": 4,
   "seed": 1805,
   "terrainPalette": [
     "terrain:dirt",

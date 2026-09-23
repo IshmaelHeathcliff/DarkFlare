@@ -32,7 +32,11 @@ namespace DarkFlare
         [SerializeField, LabelText("行为配置"), InlineEditor]
         MonsterBehaviorDefinition _behavior;
 
+        [SerializeField, LabelText("Boss 行为配置"), InlineEditor]
+        BossBehaviorDefinition _bossBehavior;
+
         public MonsterBehaviorDefinition Behavior => _behavior;
+        public BossBehaviorDefinition BossBehavior => _bossBehavior;
 
         [SerializeField]
         [MinValue(1)]

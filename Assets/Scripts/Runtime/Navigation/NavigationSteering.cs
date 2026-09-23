@@ -17,6 +17,7 @@ namespace DarkFlare
         internal float SeparationWeight;
         internal ulong Identity;
         internal bool CanMove;
+        internal bool LockedCharge;
     }
     internal struct NavigationNeighbor : IComparable<NavigationNeighbor>
     {
@@ -61,6 +62,14 @@ namespace DarkFlare
             NavigationSample self = Samples[index];
             if (!self.CanMove) { Velocities[index] = float2.zero; Visits[index] = 0; return; }
             float2 desired = math.normalizesafe(self.Desired);
+            if (self.LockedCharge)
+            {
+                float2 chargeVelocity = desired * self.Speed;
+                double chargeRadius = self.Radius + MapGroundProfile.PhysicsMargin;
+                Velocities[index] = math.all(math.isfinite(chargeVelocity))
+                    && Geometry.Segment(self.Position, self.Position + chargeVelocity * DeltaTime, chargeRadius) ? chargeVelocity : float2.zero;
+                Visits[index] = 0; return;
+            }
             int2 cell = (int2)math.floor(self.Position);
             int rings = (int)math.ceil(self.SeparationRadius);
             float2 separation = float2.zero;

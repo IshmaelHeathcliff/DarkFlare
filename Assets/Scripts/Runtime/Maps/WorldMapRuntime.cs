@@ -23,6 +23,7 @@ namespace DarkFlare
     public sealed class WorldMapRuntime : IUtility
     {
         readonly Dictionary<string, MapStateDto> _frozen = new(StringComparer.Ordinal);
+        BossEncounterStateDto _activeBoss = new();
         IArchitecture _architecture;
         SessionInitializationContext _context;
         GameplaySceneConfiguration _configuration;
@@ -61,8 +62,14 @@ namespace DarkFlare
                 }
             }
             Active = await PrepareAsync(mapId, token);
+            _activeBoss = restored?.Boss?.Copy() ?? FreshBoss(Active.Map);
             if (restored == null && Active.Spawner.SpawnDefinition != null)
-            { await _architecture.GetSystem<SpawnSystem>().PreloadAsync(null, null, Active.Spawner.SpawnDefinition, token); }
+            {
+                MonsterDefinition boss = BossDefinition(Active.Map);
+                await _architecture.GetSystem<SpawnSystem>().PreloadAsync(null, null,
+                    (Active.Spawner.SpawnDefinition?.AllMonsters ?? Array.Empty<MonsterDefinition>())
+                        .Concat(boss != null ? new[] { boss } : Array.Empty<MonsterDefinition>()), token);
+            }
             if (restored != null)
             {
                 ValidatePositions(Active, restored.Player.Position, restored.Monsters, restored.WorldDrops);
@@ -93,6 +100,18 @@ namespace DarkFlare
             {
                 foreach (MapEntryRecord entry in candidate.Map.CreateEditableCopy().Entries)
                 { RequirePoint(candidate, _catalog.EntryPosition(mapId, entry.EntryId), 0.4); }
+                MapBossSpawnRecord boss = candidate.Map.CreateEditableCopy().BossSpawns.SingleOrDefault();
+                if (boss != null)
+                {
+                    MonsterDefinition definition = _catalog.Definitions.Resolve<MonsterDefinition>(ContentId.Parse(boss.MonsterDefinitionId));
+                    await _architecture.GetSystem<SpawnSystem>().PreloadAsync(null, null, new[] { definition }, token);
+                    GameObject prefab = _architecture.GetUtility<PrefabAssetLoader>().GetPrefab(definition.Prefab);
+                    if (prefab == null || !prefab.TryGetComponent(out CircleCollider2D collider))
+                    { throw new InvalidOperationException("Boss 点位缺少圆形碰撞 Prefab：" + boss.SpawnId); }
+                    Vector3 scale = collider.transform.lossyScale;
+                    double radius = collider.radius * Math.Max(Math.Abs(scale.x), Math.Abs(scale.y));
+                    RequirePoint(candidate, BossPosition(candidate.Map, boss), radius);
+                }
                 return candidate;
             }
             catch { await candidate.DisposeAsync(); throw; }
@@ -114,6 +133,21 @@ namespace DarkFlare
                 payload.Run.FrozenMaps.Add(copy);
                 payload.Items.AddRange(copy.Items);
             }
+        }
+
+        public BossEncounterStateDto CaptureBoss(IReadOnlyList<MonsterController> monsters)
+        {
+            if (_activeBoss.Status == BossEncounterStatus.Alive
+                && !monsters.Any(monster => monster != null && monster.Actor.IsAlive
+                    && monster.Instance.Id.Value == _activeBoss.InstanceId))
+            { _activeBoss.Status = BossEncounterStatus.Defeated; }
+            return _activeBoss.Copy();
+        }
+
+        public void SpawnFreshBoss()
+        {
+            if (Active == null || _activeBoss.Status != BossEncounterStatus.Ready) { return; }
+            SpawnBoss(Active, _activeBoss);
         }
 
         public async UniTask ChangeAsync(string mapId, string entryId, CancellationToken token)
@@ -149,8 +183,11 @@ namespace DarkFlare
                     }
                     GameplayRandomState random = SaveRestorePreparer.RestoreRandomState(targetState.Random, issues);
                     if (issues.Count != 0) { throw new InvalidOperationException(string.Join("; ", issues.Select(issue => issue.Message))); }
+                    MonsterDefinition bossDefinition = BossDefinition(candidate.Map);
                     await _architecture.GetSystem<SpawnSystem>().PreloadAsync(null, null,
-                        monsters.Select(monster => monster.Definition).Concat(candidate.Spawner.SpawnDefinition?.AllMonsters ?? Array.Empty<MonsterDefinition>()).Distinct(), token);
+                        monsters.Select(monster => monster.Definition)
+                            .Concat(candidate.Spawner.SpawnDefinition?.AllMonsters ?? Array.Empty<MonsterDefinition>())
+                            .Concat(bossDefinition != null ? new[] { bossDefinition } : Array.Empty<MonsterDefinition>()).Distinct(), token);
                     token.ThrowIfCancellationRequested();
                     ValidatePositions(candidate, Vector(position), targetState.Monsters, targetState.WorldDrops);
                     SessionObjectRegistry registry = _architecture.GetUtility<SessionObjectRegistry>();
@@ -182,6 +219,7 @@ namespace DarkFlare
                             candidate.Deactivate();
                             foreach (GameObject obj in registry.CaptureOwner(candidate)) { if (obj != null) { obj.SetActive(false); } }
                             Active = source; registry.MapOwner = source;
+                            _activeBoss = sourceState.Boss.Copy();
                             source.Activate(_architecture.GetUtility<WorldSortingSystem>());
                             foreach (GameObject obj in sourceObjects)
                             {
@@ -200,6 +238,7 @@ namespace DarkFlare
                                     {
                                         monster.RestoreRuntime(Resources(dto.Resources), dto.ContactDamageCooldownRemainingSeconds);
                                         monster.RestoreBehavior(dto.Behavior);
+                                        if (dto.Boss != null) { monster.RestoreBoss(dto.Boss); }
                                     }
                                 }
                             }
@@ -251,7 +290,8 @@ namespace DarkFlare
                     Position(monster.State.Position), Resources(monster.State.Resources), monster.State.ContactDamageCooldownRemainingSeconds, true);
                 if (controller == null) { throw new InvalidOperationException("恢复怪物失败"); }
                 controller.RestoreNavigation(monster.State.Navigation);
-                controllers.Add(controller); Active.Spawner.RegisterRestoredMonster(controller);
+                controllers.Add(controller);
+                if (monster.Definition.BossBehavior == null) { Active.Spawner.RegisterRestoredMonster(controller); }
             }
             StatusSaveDto shifted = MapStateData.AtTime(state.Statuses, time);
             _architecture.GetSystem<StatusSystem>().Store.ImportSave(shifted, _context.ContentCatalog, new List<DtoMapIssue>());
@@ -259,7 +299,10 @@ namespace DarkFlare
             {
                 controllers[i].RestoreRuntime(Resources(monsters[i].State.Resources), monsters[i].State.ContactDamageCooldownRemainingSeconds);
                 controllers[i].RestoreBehavior(monsters[i].State.Behavior);
+                if (monsters[i].State.Boss != null) { controllers[i].RestoreBoss(monsters[i].State.Boss); }
             }
+            _activeBoss = state.Boss.Copy();
+            if (_activeBoss.Status == BossEncounterStatus.Ready) { SpawnBoss(Active, _activeBoss); }
             foreach (WorldDropStateDto drop in state.WorldDrops)
             {
                 if (_architecture.GetSystem<LootSystem>().SpawnRestoredPickup(WorldDropId.Parse(drop.InstanceId), items[drop.ItemInstanceId], Position(drop.Position)) == null)
@@ -278,7 +321,42 @@ namespace DarkFlare
                 Spawner = new MonsterSpawnerStateDto { IsRunning = scope.Spawner.SpawnDefinition != null,
                     SpawnContentId = scope.Spawner.SpawnDefinition != null ? "spawn:" + scope.Spawner.SpawnDefinition.Id : "" },
                 Statuses = new StatusSaveDto { Time = _architecture.GetSystem<StatusSystem>().Store.Time }
+                , Boss = FreshBoss(scope.Map)
             };
+        }
+
+        BossEncounterStateDto FreshBoss(CompiledMapDocument map)
+        {
+            MapBossSpawnRecord point = map.CreateEditableCopy().BossSpawns.SingleOrDefault();
+            return point == null ? new BossEncounterStateDto() : new BossEncounterStateDto
+            {
+                Status = BossEncounterStatus.Ready, SpawnId = point.SpawnId,
+                MonsterDefinitionId = point.MonsterDefinitionId
+            };
+        }
+
+        MonsterDefinition BossDefinition(CompiledMapDocument map)
+        {
+            MapBossSpawnRecord point = map.CreateEditableCopy().BossSpawns.SingleOrDefault();
+            return point == null ? null : _catalog.Definitions.Resolve<MonsterDefinition>(ContentId.Parse(point.MonsterDefinitionId));
+        }
+
+        void SpawnBoss(MapScope scope, BossEncounterStateDto state)
+        {
+            MapBossSpawnRecord point = scope.Map.CreateEditableCopy().BossSpawns.Single(item => item.SpawnId == state.SpawnId);
+            MonsterDefinition definition = BossDefinition(scope.Map);
+            int seed = _architecture.GetSystem<GameplayRandomSystem>().NextSeed(GameplayRandomChannel.MonsterInstance);
+            MonsterController boss = _architecture.GetSystem<SpawnSystem>().SpawnFixedMonster(definition, seed, BossPosition(scope.Map, point));
+            if (boss == null) { throw new InvalidOperationException("Boss 生成失败：" + point.SpawnId); }
+            BossBehaviorStateDto behavior = boss.CaptureBoss();
+            behavior.Facing.X = (float)point.Facing.X; behavior.Facing.Y = (float)point.Facing.Y;
+            boss.RestoreBoss(behavior);
+            state.Status = BossEncounterStatus.Alive; state.InstanceId = boss.Instance.Id.Value;
+        }
+
+        static Vector3 BossPosition(CompiledMapDocument map, MapBossSpawnRecord point)
+        {
+            return new Vector3((float)(map.OriginX + point.Position.X), (float)(map.OriginY + point.Position.Y));
         }
 
         public async UniTask DisposeAsync()

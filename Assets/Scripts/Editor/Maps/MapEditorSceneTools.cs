@@ -139,7 +139,8 @@ namespace DarkFlare.Editor
 
         void SelectAt(Vector2 world, bool additive)
         {
-            if (!additive) { _selection.Clear(); _selectedRegion = null; _selectedEntry = null; }
+            if (!additive) { _selection.Clear(); _selectedRegion = null; _selectedEntry = null; _selectedBossSpawn = null; }
+            if (SelectBossSpawn(world)) { return; }
             if (SelectEntry(world)) { return; }
             if (_showObjects && !_lockObjects)
             {
@@ -195,6 +196,7 @@ namespace DarkFlare.Editor
         {
             if (_viewDocument == null) { return; }
             DrawEntries();
+            DrawBossSpawns();
             Handles.color = new Color(1, 1, 1, 0.15f);
             if (_showGrid)
             {

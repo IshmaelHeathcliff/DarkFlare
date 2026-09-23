@@ -40,6 +40,7 @@ namespace DarkFlare.Editor
             ["UpsertObject"] = new[] { "record" }, ["RemoveObject"] = new[] { "id" },
             ["UpsertRegion"] = new[] { "record" }, ["RemoveRegion"] = new[] { "id" },
             ["UpsertEntry"] = new[] { "record" }, ["RemoveEntry"] = new[] { "id" },
+            ["UpsertBossSpawn"] = new[] { "record" }, ["RemoveBossSpawn"] = new[] { "id" },
             ["SetMapMetadata"] = new[] { "values" }
         };
 
@@ -209,6 +210,11 @@ namespace DarkFlare.Editor
                             document.Entries = document.Entries.Where(item => item.EntryId != entry.EntryId).Append(entry).ToArray();
                             break;
                         case "RemoveEntry": document.Entries = document.Entries.Where(item => item.EntryId != Text(op, "id")).ToArray(); break;
+                        case "UpsertBossSpawn":
+                            MapBossSpawnRecord boss = ReadRecord<MapBossSpawnRecord>(document, "bossSpawns", op["record"]);
+                            document.BossSpawns = document.BossSpawns.Where(item => item.SpawnId != boss.SpawnId).Append(boss).ToArray();
+                            break;
+                        case "RemoveBossSpawn": document.BossSpawns = document.BossSpawns.Where(item => item.SpawnId != Text(op, "id")).ToArray(); break;
                         case "SetMapMetadata":
                             if (op["values"] is not JObject values) { throw Invalid(op.Path, "values 必须是对象"); }
                             string[] allowed = { "seed", "origin", "cellSize", "width", "height" };
@@ -247,7 +253,8 @@ namespace DarkFlare.Editor
             JObject raw = JObject.Parse(MapDocumentJson.Write(header));
             raw[field] = new JArray(record.DeepClone());
             MapDocument parsed = MapDocumentJson.Read(raw.ToString());
-            return (T)(field == "objects" ? (object)parsed.Objects[0] : field == "entries" ? parsed.Entries[0] : parsed.Regions[0]);
+            return (T)(field == "objects" ? (object)parsed.Objects[0] : field == "entries" ? parsed.Entries[0]
+                : field == "bossSpawns" ? parsed.BossSpawns[0] : parsed.Regions[0]);
         }
 
         public static IEnumerable<(int X, int Y)> Line(int x, int y, int endX, int endY)
@@ -313,7 +320,7 @@ namespace DarkFlare.Editor
                 foreach (string field in entry.Value)
                 {
                     if (field == "cells") { fields[field] = new JObject { ["type"] = "array", ["maxItems"] = MaxVisits, ["items"] = Point() }; }
-                    else if (field == "record") { fields[field] = documentSchema["properties"][entry.Key == "UpsertObject" ? "objects" : entry.Key == "UpsertEntry" ? "entries" : "regions"]["items"].DeepClone(); }
+                    else if (field == "record") { fields[field] = documentSchema["properties"][entry.Key == "UpsertObject" ? "objects" : entry.Key == "UpsertEntry" ? "entries" : entry.Key == "UpsertBossSpawn" ? "bossSpawns" : "regions"]["items"].DeepClone(); }
                     else if (field == "values")
                     {
                         var properties = new JObject();

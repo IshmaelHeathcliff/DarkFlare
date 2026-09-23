@@ -101,6 +101,7 @@ namespace DarkFlare
             else
             {
                 architecture.GetSystem<GameplayRandomSystem>().RestoreMapState(architecture.GetSystem<GameplayRandomSystem>().CreateMapState(maps.Active.Map.MapId));
+                maps.SpawnFreshBoss();
                 if (maps.Active.Spawner.SpawnDefinition != null) { maps.Active.Spawner.BeginSpawning(); }
             }
             ApplicationLog.Info(LogEventIds.GameplayBootstrap, "[NewGameSessionInitializer] 新游戏 Session 初始化完成");

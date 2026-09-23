@@ -35,4 +35,4 @@ Development Player：默认关闭的摘要面板，正式 Main 用 F8 / 手柄 R
 
 窗口和面板每 100ms 按需 Query 一致快照，图布局按拓扑缓存，读取不重新执行 Guard。选择变更、窗口关闭或 Session 失效释放诊断租约，不持有旧架构 / Actor。快照格式化和 UI 更新有分配，与 Core 稳态 Tick 单独计量。
 
-0.6.0 的隔离样例与纯核心性能记录见[历史验收](acceptance/0.6.0/README.md)。0.6.1 正式怪物的感知、动作和持久化见[模块文档](monsters.md)；Boss 阶段和刷怪批次随对应后续阶段接入。
+0.6.0 的隔离样例与纯核心性能记录见[历史验收](acceptance/0.6.0/README.md)。0.6.1 正式怪物的感知、动作和持久化见[模块文档](monsters.md)；0.6.2 守卫 Boss 使用相同调试句柄和 Animator 语义桥，见[Boss 模块](boss.md)。普通怪物固定刷怪批次随 0.6.3 接入。

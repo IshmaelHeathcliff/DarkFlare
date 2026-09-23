@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Cysharp.Threading.Tasks;
@@ -106,6 +107,9 @@ namespace DarkFlare.Tests
             WorldMapRuntime maps = architecture.GetUtility<WorldMapRuntime>();
             using GamePauseLease pause = host.GameTime.AcquirePause("map-regression");
             yield return Change(host, "map:wilderness", "arrival");
+            MonsterController boss = UnityEngine.Object.FindObjectsByType<MonsterController>()
+                .Single(value => value.Definition.BossBehavior != null);
+            string bossId = boss.Instance.Id.Value;
             MonsterController monster = architecture.GetSystem<SpawnSystem>().SpawnMonster(maps.Active.Spawner.SpawnDefinition, 349, new Vector3(10, 10));
             Assert.IsNotNull(monster);
             maps.Active.Spawner.RegisterRestoredMonster(monster);
@@ -137,24 +141,29 @@ namespace DarkFlare.Tests
                 Assert.IsEmpty(UnityEngine.Object.FindObjectsByType<MonsterController>());
                 SessionSnapshotResult town = snapshots.Capture();
                 Assert.IsTrue(town.Succeeded, string.Join("; ", town.Issues.Select(issue => issue.Message)));
-                Assert.AreEqual(id, town.Payload.Run.FrozenMaps.Single(map => map.MapId == "map:wilderness").Monsters.Single().InstanceId);
+                MapStateDto frozen = town.Payload.Run.FrozenMaps.Single(map => map.MapId == "map:wilderness");
+                Assert.AreEqual(id, frozen.Monsters.Single(value => value.InstanceId == id).InstanceId);
+                Assert.AreEqual(bossId, frozen.Boss.InstanceId);
                 yield return Change(host, "map:wilderness", "arrival");
-                MonsterController restored = UnityEngine.Object.FindObjectsByType<MonsterController>().Single();
+                MonsterController restored = UnityEngine.Object.FindObjectsByType<MonsterController>()
+                    .Single(value => value.Instance.Id.Value == id);
+                Assert.AreEqual(bossId, UnityEngine.Object.FindObjectsByType<MonsterController>()
+                    .Single(value => value.Definition.BossBehavior != null).Instance.Id.Value);
                 Assert.AreEqual(id, restored.Instance.Id.Value);
                 Assert.AreEqual(health, restored.Actor.CurrentHealth);
                 Assert.AreEqual(NavigationTargetKind.None, restored.CaptureNavigation().Target, "恢复行为是导航意图的权威来源，调试接管不跨图延续");
-                Assert.AreEqual(before.Monsters.Single().Behavior.Anchor.X, restored.CaptureBehavior().Anchor.X);
-                Assert.AreEqual(before.Monsters.Single().Behavior.RandomSequence, restored.CaptureBehavior().RandomSequence);
+                Assert.AreEqual(before.Monsters.Single(value => value.InstanceId == id).Behavior.Anchor.X, restored.CaptureBehavior().Anchor.X);
+                Assert.AreEqual(before.Monsters.Single(value => value.InstanceId == id).Behavior.RandomSequence, restored.CaptureBehavior().RandomSequence);
                 Assert.AreEqual(.37f, restored.ContactDamageCooldownRemainingSeconds, .001f);
-                Assert.AreEqual(1, maps.Active.Behavior.Count);
-                Assert.AreEqual(1, architecture.GetModel<BehaviorModel>().Count);
+                Assert.AreEqual(2, maps.Active.Behavior.Count);
+                Assert.AreEqual(2, architecture.GetModel<BehaviorModel>().Count);
                 Assert.AreEqual(nativeBaseline, architecture.GetModel<NavigationModel>().NativeBytes);
-                Assert.AreEqual(1, maps.Active.Navigation.AgentCount);
+                Assert.AreEqual(2, maps.Active.Navigation.AgentCount);
                 MapStateDto after = snapshots.CaptureMap(maps.Active);
                 Assert.AreEqual(dropId.Value, after.WorldDrops.Single().InstanceId);
                 Assert.AreEqual(item.Id.Value, after.WorldDrops.Single().ItemInstanceId);
-                StatusLayerDto layer = after.Statuses.Actors.Single().Layers.Single();
-                StatusLayerDto original = before.Statuses.Actors.Single().Layers.Single();
+                StatusLayerDto layer = after.Statuses.Actors.Single(value => value.ActorKey == id).Layers.Single();
+                StatusLayerDto original = before.Statuses.Actors.Single(value => value.ActorKey == id).Layers.Single();
                 Assert.AreEqual(original.ExpiresAt - before.Statuses.Time, layer.ExpiresAt - after.Statuses.Time);
                 Assert.AreEqual(original.NextTickAt - before.Statuses.Time, layer.NextTickAt - after.Statuses.Time);
                 Assert.AreEqual(original.TickOrdinal, layer.TickOrdinal);
@@ -175,6 +184,86 @@ namespace DarkFlare.Tests
             yield return Change(host, "map:wilderness", "arrival");
             Assert.AreEqual(1, UnityEngine.Object.FindObjectsByType<MonsterController>().Count(value => value.Instance.Id.Value == id));
             Assert.AreEqual(1, UnityEngine.Object.FindObjectsByType<LootPickupController>().Count(value => value.Id == dropId));
+        }
+
+        [UnityTest]
+        public IEnumerator GuardianBoss_FightsAndPersists()
+        {
+            yield return _fixture.EnterMain();
+            ApplicationHost host = ApplicationHost.Current;
+            yield return Change(host, "map:wilderness", "arrival");
+            IArchitecture architecture = host.CurrentSession.Architecture;
+            WorldMapRuntime maps = architecture.GetUtility<WorldMapRuntime>();
+            maps.Active.Spawner.StopSpawning();
+            MonsterController boss = UnityEngine.Object.FindObjectsByType<MonsterController>()
+                .Single(value => value.Definition.BossBehavior != null);
+            Assert.IsNotNull(boss.BossRuntime);
+            Assert.AreEqual(new Vector2(20, 12), boss.Body.position);
+            PlayerController player = UnityEngine.Object.FindAnyObjectByType<PlayerController>();
+            player.enabled = false;
+            Rigidbody2D playerBody = player.GetComponent<Rigidbody2D>();
+            void MovePlayer(Vector2 point)
+            {
+                player.transform.position = point; playerBody.position = point; playerBody.linearVelocity = Vector2.zero;
+                Physics2D.SyncTransforms();
+            }
+            MovePlayer(new Vector2(19, 12));
+            int attacks = architecture.GetSystem<GameplayRandomSystem>().CaptureState()
+                .NextSequences[GameplayRandomChannel.MonsterAttack];
+            float deadline = Time.realtimeSinceStartup + 4;
+            while (boss.BossRuntime.Action != BossActionPhase.SwipeWarning && Time.realtimeSinceStartup < deadline) { yield return null; }
+            Assert.AreEqual(BossActionPhase.SwipeWarning, boss.BossRuntime.Action);
+            LineRenderer warning = boss.GetComponentInChildren<LineRenderer>();
+            yield return null;
+            Assert.IsNotNull(warning);
+            Assert.Greater(warning.positionCount, 0);
+            deadline = Time.realtimeSinceStartup + 4;
+            while (boss.BossRuntime.Action != BossActionPhase.SwipeRecovery && Time.realtimeSinceStartup < deadline) { yield return null; }
+            Assert.AreEqual(BossActionPhase.SwipeRecovery, boss.BossRuntime.Action);
+            Assert.AreEqual(attacks + 1, architecture.GetSystem<GameplayRandomSystem>().CaptureState()
+                .NextSequences[GameplayRandomChannel.MonsterAttack]);
+
+            MovePlayer(new Vector2(17, 12));
+            deadline = Time.realtimeSinceStartup + 5;
+            while (boss.BossRuntime.Action != BossActionPhase.ChargeWarning && Time.realtimeSinceStartup < deadline) { yield return null; }
+            Assert.AreEqual(BossActionPhase.ChargeWarning, boss.BossRuntime.Action);
+            var snapshots = new SessionSnapshotSource(host.CurrentSession, host.ContentCatalog, maps.Active.Spawner);
+            MapStateDto savedWarning = snapshots.CaptureMap(maps.Active);
+            Assert.AreEqual(BossEncounterStatus.Alive, savedWarning.Boss.Status);
+            Assert.AreEqual(BossActionPhase.ChargeWarning, savedWarning.Monsters.Single(value => value.Boss != null).Boss.Action);
+            float health = player.Actor.CurrentHealth;
+            MovePlayer(new Vector2(17, 15));
+            deadline = Time.realtimeSinceStartup + 5;
+            while (boss.BossRuntime.Action != BossActionPhase.ChargeRecovery && Time.realtimeSinceStartup < deadline) { yield return null; }
+            Assert.AreEqual(BossActionPhase.ChargeRecovery, boss.BossRuntime.Action);
+            Assert.GreaterOrEqual(player.Actor.CurrentHealth, health, "躲开锁向轨迹后不能被冲锋命中");
+            Assert.AreEqual(attacks + 1, architecture.GetSystem<GameplayRandomSystem>().CaptureState()
+                .NextSequences[GameplayRandomChannel.MonsterAttack], "冲锋挥空不应掷伤害随机数");
+
+            CombatResourceSnapshot resources = boss.Actor.Resources;
+            boss.Actor.RestoreResources(new CombatResourceSnapshot(resources.MaxHealth * .4f, resources.MaxHealth,
+                resources.CurrentMana, resources.MaxMana), true);
+            deadline = Time.realtimeSinceStartup + 5;
+            while (!boss.CaptureBoss().Empowered && Time.realtimeSinceStartup < deadline) { yield return null; }
+            Assert.IsTrue(boss.CaptureBoss().Empowered);
+            long phaseAction = boss.CaptureBoss().ActionId;
+            yield return new WaitForSeconds(.3f);
+            Assert.IsTrue(boss.CaptureBoss().Empowered);
+            Assert.GreaterOrEqual(boss.CaptureBoss().ActionId, phaseAction);
+
+            string bossId = boss.Instance.Id.Value;
+            float fatal = boss.Actor.CurrentHealth + 10;
+            var damage = new Dictionary<DamageType, float> { [DamageType.Physical] = fatal };
+            Assert.IsTrue(boss.Actor.ReceiveDamage(new DamageResult(true, false, damage, damage)));
+            yield return new WaitForSeconds(.8f);
+            Assert.AreEqual(BossEncounterStatus.Defeated, snapshots.CaptureMap(maps.Active).Boss.Status);
+            yield return Change(host, "map:town", "return");
+            yield return Change(host, "map:wilderness", "arrival");
+            Assert.IsFalse(UnityEngine.Object.FindObjectsByType<MonsterController>()
+                .Any(value => value.Definition.BossBehavior != null));
+            Assert.AreEqual(BossEncounterStatus.Defeated, snapshots.CaptureMap(maps.Active).Boss.Status);
+            Assert.AreEqual(bossId, snapshots.CaptureMap(maps.Active).Boss.InstanceId);
+            player.enabled = true;
         }
 
         [UnityTest]

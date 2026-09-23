@@ -195,6 +195,7 @@ namespace DarkFlare.Tests
                 },
                 Run = new RunSaveData
                 {
+                    Boss = new BossEncounterStateDto { Status = BossEncounterStatus.LegacyAbsent },
                     InstanceIds = new RunInstanceIdStateDto
                     {
                         RunId = RunValue,

@@ -62,7 +62,11 @@ namespace DarkFlare
             {
                 IReadOnlyList<CombatActor> players = _combat.GetActorsByTeam(ActorTeam.Player);
                 _player = players.Count > 0 ? players[0] : null;
-                for (int i = 0; i < _monsters.Count; i++) { _monsters[i].BehaviorRuntime?.InvalidatePerception(_navigation.Revision); }
+                for (int i = 0; i < _monsters.Count; i++)
+                {
+                    _monsters[i].BehaviorRuntime?.InvalidatePerception(_navigation.Revision);
+                    _monsters[i].BossRuntime?.InvalidatePerception(_navigation.Revision);
+                }
                 _behaviors.Tick(_scope, deltaTime);
             }
             _navigation.Tick(deltaTime);
@@ -72,14 +76,18 @@ namespace DarkFlare
         {
             if (!_active || monster.NavigationOverride || monster.Definition.Behavior == null || _monsters.Contains(monster) || !monster.Actor.IsAlive) { return; }
             var world = new World(this, monster);
+            _monsters.Add(monster);
+            if (monster.Definition.BossBehavior != null)
+            {
+                var boss = new BossBehaviorRuntime(monster.Definition.BossBehavior, monster.Definition.Behavior,
+                    world, monster.Instance.Id.Value, monster.CaptureBoss());
+                try { _behaviors.Register(_scope, boss); monster.BindBoss(boss); }
+                catch { _monsters.Remove(monster); _behaviors.Unregister(boss.Handle); throw; }
+                return;
+            }
             var runtime = new MonsterBehaviorRuntime(monster.Definition.Behavior, world, monster.Instance.Id.Value,
                 monster.CaptureBehavior(), monster.ContactDamageCooldownRemainingSeconds);
-            _monsters.Add(monster);
-            try
-            {
-                _behaviors.Register(_scope, runtime);
-                monster.BindBehavior(runtime);
-            }
+            try { _behaviors.Register(_scope, runtime); monster.BindBehavior(runtime); }
             catch { _monsters.Remove(monster); _behaviors.Unregister(runtime.Handle); throw; }
         }
 
@@ -87,8 +95,10 @@ namespace DarkFlare
         {
             if (!_monsters.Remove(monster)) { return; }
             MonsterBehaviorRuntime runtime = monster.BehaviorRuntime;
+            BossBehaviorRuntime boss = monster.BossRuntime;
             monster.UnbindBehavior();
             if (runtime != null) { _behaviors.Unregister(runtime.Handle); }
+            if (boss != null) { _behaviors.Unregister(boss.Handle); }
         }
 
         public void Suspend()
@@ -100,7 +110,7 @@ namespace DarkFlare
             if (system.ActiveBehavior == this) { system.ActiveBehavior = null; }
         }
 
-        sealed class World : IMonsterBehaviorWorld
+        sealed class World : IMonsterBehaviorWorld, IBossBehaviorWorld
         {
             readonly MonsterBehaviorMap _map;
             readonly MonsterController _monster;
@@ -108,6 +118,7 @@ namespace DarkFlare
             public Vector2 Position => _monster.Body.position;
             public Vector2 Velocity => _monster.Body.linearVelocity;
             public bool IsAlive => _monster.Actor.IsAlive && _monster.isActiveAndEnabled;
+            public float HealthFraction => _monster.Actor.MaxHealth > 0 ? _monster.Actor.CurrentHealth / _monster.Actor.MaxHealth : 0;
             public StatusActionBlock BlockedActions => _monster.Actor.BlockedActions;
             public bool TargetAvailable => _map._player != null && _map._player.IsAlive && _map._player.isActiveAndEnabled;
             public Vector2 TargetPosition => TargetAvailable ? (Vector2)_map._player.transform.position : Vector2.zero;
@@ -123,10 +134,19 @@ namespace DarkFlare
                     && TargetAvailable && targetId == TargetId
                     && MonsterAttackRules.CanHit(_map._architecture, _monster, _map._player);
             }
+            public bool CanBossAct(string targetId)
+            {
+                return _map._active && !GameTimeService.Shared.IsPaused && !_map._architecture.GetSystem<StatusSystem>().IsClockHeld
+                    && TargetAvailable && targetId == TargetId && IsAlive
+                    && (_monster.Actor.BlockedActions & StatusActionBlock.Attack) == 0
+                    && _map._architecture.GetSystem<StatusSystem>().GetTarget(_monster.Actor).IsValid;
+            }
             public void Move(NavigationTargetKind kind, Vector2 target)
             {
                 if (!_map._active || !IsAlive) { return; }
-                float stop = kind == NavigationTargetKind.Player ? _monster.Definition.ContactStopDistance : .15f;
+                float stop = kind == NavigationTargetKind.Player && _monster.Definition.BossBehavior != null
+                    ? _monster.Definition.BossBehavior.SwipeRadius * .75f
+                    : kind == NavigationTargetKind.Player ? _monster.Definition.ContactStopDistance : .15f;
                 NavigationMode? mode = kind == NavigationTargetKind.Point ? NavigationMode.AStar : null;
                 NavigationIntentDto current = _monster.NavigationIntent;
                 if (current.Target == kind && current.Mode == mode && current.StopDistance == stop
@@ -143,6 +163,28 @@ namespace DarkFlare
             {
                 if (!CanAttack(targetId) || _monster.BehaviorRuntime?.IsAuthorized != true) { return; }
                 _map._architecture.SendCommand(new ResolveMonsterHitCommand(_monster, _map._player, _monster.BehaviorRuntime.Handle, actionId));
+            }
+            public bool TryHit(BossAttackKind kind, string targetId, long actionId, Vector2 from, Vector2 to, Vector2 facing)
+            {
+                if (!CanBossAct(targetId) || _monster.BossRuntime?.IsAuthorized != true) { return false; }
+                BossBehaviorDefinition config = _monster.Definition.BossBehavior;
+                Vector2 point = TargetPosition;
+                bool contact;
+                if (kind == BossAttackKind.Swipe)
+                {
+                    Vector2 offset = point - from;
+                    contact = offset.sqrMagnitude <= config.SwipeRadius * config.SwipeRadius
+                        && (offset.sqrMagnitude < .0001f || Vector2.Dot(facing, offset.normalized) >= config.SwipeCosine);
+                }
+                else
+                {
+                    Vector2 segment = to - from;
+                    float ratio = segment.sqrMagnitude > .0001f ? Mathf.Clamp01(Vector2.Dot(point - from, segment) / segment.sqrMagnitude) : 0;
+                    contact = Vector2.Distance(point, from + segment * ratio) <= config.ChargeHitRadius;
+                }
+                if (!contact || !HasLineOfSight(point)) { return false; }
+                return _map._architecture.SendCommand(new ResolveBossHitCommand(_monster, _map._player,
+                    _monster.BossRuntime.Handle, actionId, kind, from, to, facing));
             }
         }
     }

@@ -1,0 +1,19 @@
+{
+  "status": "completed",
+  "buildId": "build_5fc68523f4ac",
+  "result": "Succeeded",
+  "platform": "StandaloneWindows64",
+  "outputPath": "C:/Users/darkf/Home/Projects/DarkFlare/Builds/Alpha062Audit/DarkFlare.exe",
+  "totalSizeBytes": 289748017,
+  "buildTimeMs": 44780,
+  "buildStartedAt": "2026-09-23T05:59:40.9416987Z",
+  "buildEndedAt": "2026-09-23T06:00:25.7223931Z",
+  "totalWarnings": 1,
+  "totalErrors": 0,
+  "errors": [],
+  "warnings": [
+    {
+      "message": "Shader warning in 'TextMeshPro/Mobile/Distance Field': #pragma enable_d3d11_debug_symbols has been deprecated, instead please use #pragma enable_debug_symbols at line 84"
+    }
+  ]
+}

@@ -14,7 +14,7 @@ namespace DarkFlare
             // 脱离调用者的可变数据，同时校验程序创建 DTO 的字段、容量及数值类型。
             string canonical = Write(source);
             MapDocument document = Read(canonical);
-            Require(document.FormatVersion == 2, "$.formatVersion", "需要升级后的格式版本 2");
+            Require(document.FormatVersion == 3, "$.formatVersion", "需要升级后的格式版本 3");
             Require(document.Revision >= 0, "$.revision", "修订不能为负数");
             TypedId(document.MapId, ContentNamespaces.Map, "$.mapId");
             Require(document.Width > 0 && document.Width <= MapDocumentLimits.MaxSide, "$.width", "尺寸必须为 1..1024");
@@ -82,6 +82,17 @@ namespace DarkFlare
             {
                 Require(ContentId.IsValidSegment(entry.EntryId) && entryIds.Add(entry.EntryId), "$.entries", "入口 ID 非法或重复");
                 Require(entry.Position.X >= 0 && entry.Position.Y >= 0 && entry.Position.X < document.Width * document.CellSize && entry.Position.Y < document.Height * document.CellSize, "$.entries", "入口必须在地图内");
+            }
+            foreach (MapBossSpawnRecord boss in document.BossSpawns)
+            {
+                Require(ContentId.IsValidSegment(boss.SpawnId), "$.bossSpawns.spawnId", "Boss 点位 ID 非法");
+                MonsterDefinition definition = Resolve<MonsterDefinition>(definitions, boss.MonsterDefinitionId,
+                    ContentNamespaces.Monster, "$.bossSpawns.monsterDefinitionId");
+                ValidateReference(definition, definitions, "$.bossSpawns.monsterDefinitionId");
+                Require(definition.BossBehavior != null, "$.bossSpawns.monsterDefinitionId", "点位引用的怪物缺少 Boss 行为配置");
+                InBounds(boss.Position, document.Width * document.CellSize, document.Height * document.CellSize, "$.bossSpawns.position");
+                double facing = boss.Facing.X * boss.Facing.X + boss.Facing.Y * boss.Facing.Y;
+                Require(facing > 0.99 && facing < 1.01, "$.bossSpawns.facing", "Boss 朝向需要单位向量");
             }
             return compiled;
         }

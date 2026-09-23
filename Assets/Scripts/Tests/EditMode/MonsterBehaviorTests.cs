@@ -37,6 +37,32 @@ namespace DarkFlare.Tests
             public void Hit(string targetId, long actionId) { Hits++; }
         }
 
+        sealed class BossWorld : IBossBehaviorWorld
+        {
+            public Vector2 Position { get; set; }
+            public Vector2 Velocity { get; set; }
+            public bool IsAlive { get; set; } = true;
+            public float HealthFraction { get; set; } = 1;
+            public StatusActionBlock BlockedActions { get; set; }
+            public bool TargetAvailable { get; set; } = true;
+            public Vector2 TargetPosition { get; set; } = new(3, 0);
+            public string TargetId => "player:test";
+            public bool Visible { get; set; } = true;
+            public bool AcceptHit { get; set; } = true;
+            public int Hits { get; set; }
+            public NavigationTargetKind Intent { get; set; }
+            public bool HasLineOfSight(Vector2 target) { return Visible; }
+            public bool CanBossAct(string targetId) { return IsAlive && TargetAvailable && targetId == TargetId; }
+            public void Move(NavigationTargetKind kind, Vector2 target) { Intent = kind; }
+            public void StopMoving() { Intent = NavigationTargetKind.None; }
+            public bool TryHit(BossAttackKind kind, string targetId, long actionId, Vector2 from, Vector2 to, Vector2 facing)
+            {
+                if (!AcceptHit) { return false; }
+                Hits++;
+                return true;
+            }
+        }
+
         MonsterBehaviorDefinition _config;
         GameArchitectureTestFixture _fixture;
         IArchitecture _architecture;
@@ -167,6 +193,69 @@ namespace DarkFlare.Tests
             state.Version = 1; state.AttackPhase = MonsterAttackPhase.Recovery; Assert.That(state.IsValid, Is.False);
             state.AttackPhase = MonsterAttackPhase.None; state.Facing.X = float.PositiveInfinity; Assert.That(state.IsValid, Is.False);
             Assert.That(_runtime.CaptureState().IsValid, Is.True);
+        }
+
+        [Test]
+        public void Boss_ChargeLocksDirection_AndRestoreDoesNotRepeatResolvedHit()
+        {
+            BossBehaviorDefinition config = ScriptableObject.CreateInstance<BossBehaviorDefinition>();
+            try
+            {
+                var world = new BossWorld();
+                var boss = new BossBehaviorRuntime(config, _config, world, "guardian", new BossBehaviorStateDto());
+                _architecture.SendCommand(new RegisterBehaviorCommand(_scope, boss));
+                Tick();
+                Assert.That(boss.Action, Is.EqualTo(BossActionPhase.ChargeWarning));
+                Vector2 locked = boss.ChargeDirection;
+                world.TargetPosition = new Vector2(2, 2);
+                Tick(8);
+                Assert.That(boss.Action, Is.EqualTo(BossActionPhase.ChargeTravel));
+                Assert.That(boss.ChargeDirection, Is.EqualTo(locked));
+                world.AcceptHit = false;
+                boss.OnSteered(Vector2.zero, new Vector2(7, 0), .1f);
+                Assert.That(boss.CaptureState().HitResolved, Is.False);
+                world.AcceptHit = true;
+                boss.OnSteered(new Vector2(.7f, 0), new Vector2(7, 0), .1f);
+                Assert.That(world.Hits, Is.EqualTo(1));
+                BossBehaviorStateDto saved = boss.CaptureState();
+                Assert.That(saved.IsValid, Is.True);
+                var restoredWorld = new BossWorld { Position = new Vector2(1.4f, 0) };
+                var restored = new BossBehaviorRuntime(config, _config, restoredWorld, "guardian", saved);
+                _architecture.SendCommand(new RegisterBehaviorCommand(_scope, restored));
+                restored.OnSteered(restoredWorld.Position, new Vector2(7, 0), .1f);
+                Assert.That(restoredWorld.Hits, Is.Zero);
+                Assert.That(restored.CaptureState().ChargeRemaining, Is.LessThan(saved.ChargeRemaining));
+            }
+            finally { UnityEngine.Object.DestroyImmediate(config); }
+        }
+
+        [Test]
+        public void Boss_SwipeAndPhaseTransition_ResolveOnceAndInterruptOnDeath()
+        {
+            BossBehaviorDefinition config = ScriptableObject.CreateInstance<BossBehaviorDefinition>();
+            try
+            {
+                var world = new BossWorld { TargetPosition = new Vector2(1, 0) };
+                var boss = new BossBehaviorRuntime(config, _config, world, "guardian", new BossBehaviorStateDto());
+                _architecture.SendCommand(new RegisterBehaviorCommand(_scope, boss));
+                Tick(5);
+                Assert.That(boss.Action, Is.EqualTo(BossActionPhase.SwipeRecovery));
+                Assert.That(world.Hits, Is.EqualTo(1));
+                BossBehaviorStateDto saved = boss.CaptureState();
+                Assert.That(saved.IsValid, Is.True);
+                var restoredWorld = new BossWorld { TargetPosition = world.TargetPosition, HealthFraction = .4f };
+                var restored = new BossBehaviorRuntime(config, _config, restoredWorld, "guardian", saved);
+                _architecture.SendCommand(new RegisterBehaviorCommand(_scope, restored));
+                Tick(7);
+                Assert.That(restoredWorld.Hits, Is.Zero);
+                Assert.That(restored.Action, Is.EqualTo(BossActionPhase.PhaseTransition));
+                Tick(8);
+                Assert.That(restored.CaptureState().Empowered, Is.True);
+                restoredWorld.IsAlive = false;
+                Tick();
+                Assert.That(restored.Action, Is.EqualTo(BossActionPhase.None));
+            }
+            finally { UnityEngine.Object.DestroyImmediate(config); }
         }
     }
 }

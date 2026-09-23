@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using DarkFlare;
 using NUnit.Framework;
 using UnityEditor;
@@ -49,7 +50,8 @@ namespace DarkFlare.Tests
         public void OfficialMonsters_ExposeCompleteZeroToTwoAffixPools()
         {
             List<MonsterAffixDefinition> affixes = LoadAssets<MonsterAffixDefinition>(MonsterAffixRoot);
-            List<MonsterDefinition> monsters = LoadAssets<MonsterDefinition>(MonsterRoot);
+            List<MonsterDefinition> monsters = LoadAssets<MonsterDefinition>(MonsterRoot)
+                .Where(monster => monster.BossBehavior == null).ToList();
 
             Assert.AreEqual(3, monsters.Count);
 

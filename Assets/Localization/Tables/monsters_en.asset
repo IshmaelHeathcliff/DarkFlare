@@ -46,6 +46,10 @@ MonoBehaviour:
     m_Localized: Camp Forge
     m_Metadata:
       m_Items: []
+  - m_Id: 12530000791068672
+    m_Localized: Guardian
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

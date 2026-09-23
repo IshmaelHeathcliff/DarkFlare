@@ -67,7 +67,9 @@
 
 ## 计划状态
 
-2026-09-23：**Alpha 0.6.1 普通怪物完成**，交付 `0.6.1-alpha` / core v7 / Schema 6 / 地图 V2。[模块](./behavior/monsters.md)覆盖休眠、闲逛、感知追逐、攻击与冻结恢复；最终 EditMode 808/808、PlayMode 92/92，Windows Player 和 500 / 1000 单位实测通过，覆盖 300 / 600 新目标，见[证据](./behavior/acceptance/0.6.1/README.md)。[M1–M6 计划](./plan/archive/alpha-0.6.1-monster-behavior-plan.md)归档，下一阶段守卫 Boss。
+2026-09-23：**Alpha 0.6.2 守卫 Boss 实现完成，独立 Player 验收待解锁**。地图 V3、core v8、Schema 7、正式 Boss 内容与 `0.6.2-alpha` Windows 候选构建已接入；EditMode 812/812、PlayMode 95 通过 / 2 包内跳过 / 0 失败。Windows 企业签名策略阻止候选 EXE 启动，实际 Player 流程和 300 / 600 性能矩阵尚未验收，因此本阶段未封板，见[证据与剩余门槛](./behavior/acceptance/0.6.2/README.md)及[执行计划](./plan/alpha-0.6.2-guardian-boss-plan.md)。
+
+2026-09-23：**Alpha 0.6.1 普通怪物完成**，交付 `0.6.1-alpha` / core v7 / Schema 6 / 地图 V2。[模块](./behavior/monsters.md)覆盖休眠、闲逛、感知追逐、攻击与冻结恢复；最终 EditMode 808/808、PlayMode 92/92，Windows Player 和 500 / 1000 单位实测通过，覆盖 300 / 600 新目标，见[证据](./behavior/acceptance/0.6.1/README.md)。[M1–M6 计划](./plan/archive/alpha-0.6.1-monster-behavior-plan.md)已归档。
 
 2026-09-22：**Alpha 0.6.0 行为基础完成**，交付 `0.6.0-alpha`，core v6 / Schema 5 / 地图 V2 不变。[行为模块](./behavior/README.md)包含 Core 内独立 HFSM 与行为树、组合样例、Animator 桥接、Editor 实时图与开发 Player 面板；完整 EditMode **788/788**、PlayMode **87/87**，独立开发 / 普通 Windows Player 及核心规模采集通过，见[验收](./behavior/acceptance/0.6.0/README.md)。[阶段计划及合同](./plan/archive/alpha-0.6.0-behavior-foundation-plan.md)已归档，[总计划](./plan/alpha-0.6-plan.md)继续推进守卫 Boss、有限刷怪及手动重置。
 

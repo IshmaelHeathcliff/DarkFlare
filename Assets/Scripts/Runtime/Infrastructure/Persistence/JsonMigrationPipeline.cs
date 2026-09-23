@@ -369,6 +369,39 @@ namespace DarkFlare
         }
     }
 
+    public sealed class BossEncounterSaveMigration : IJsonMigrationStep
+    {
+        public string Id => "save_6_to_7_boss_encounter";
+        public MigrationDataDomain Domain => MigrationDataDomain.Save;
+        public int FromVersion => 6;
+        public int ToVersion => 7;
+        public void Apply(JObject document)
+        {
+            if (document["payload"]?["run"] is not JObject run) { throw new InvalidOperationException("缺少 Run 数据"); }
+            AddLegacy(run);
+            if (run["monsters"] is JArray active)
+            { foreach (JToken monster in active) { monster["boss"] = JValue.CreateNull(); } }
+            if (run["frozenMaps"] is JArray maps)
+            {
+                foreach (JToken map in maps)
+                {
+                    if (map is not JObject frozen) { throw new InvalidOperationException("冻结地图非法"); }
+                    AddLegacy(frozen);
+                    if (frozen["monsters"] is not JArray monsters) { throw new InvalidOperationException("缺少冻结怪物集合"); }
+                    foreach (JToken monster in monsters) { monster["boss"] = JValue.CreateNull(); }
+                }
+            }
+        }
+        static void AddLegacy(JObject map)
+        {
+            map["boss"] = new JObject
+            {
+                ["status"] = (int)BossEncounterStatus.LegacyAbsent,
+                ["spawnId"] = "", ["monsterDefinitionId"] = "", ["instanceId"] = ""
+            };
+        }
+    }
+
     public sealed class MonsterBehaviorSaveMigration : IJsonMigrationStep
     {
         public string Id => "save_5_to_6_monster_behavior";

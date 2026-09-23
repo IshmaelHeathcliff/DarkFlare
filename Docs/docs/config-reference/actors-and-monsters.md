@@ -39,6 +39,7 @@
 | `_character` | `CharacterDefinition` / `null` | 可空；非空时下面的基础角色数值均由引用资产提供 | `CreateStats` 优先消费引用；切换所有权必须迁移旧内联值，不能混合生效 |
 | `_prefab` | `AssetReferenceGameObject` / `null` | 正式怪物必填且 GUID 有效、彼此独立 | `SpawnSystem` 加载；Prefab 必须满足角色层级与碰撞合同 |
 | `_behavior` | `MonsterBehaviorDefinition` / `null` | 正式怪物必填且通过配置验证 | 依赖资产，不另设 ContentId；运行态由 MonsterBehaviorRuntime 实例持有 |
+| `_bossBehavior` | `BossBehaviorDefinition` / `null` | 普通怪物为空；Boss 必填且通过配置验证 | Boss 使用独立 HFSM / 行为树运行态，不进入普通加权刷怪池 |
 | `_maxHealth` | `float` / `24` | 无 `_character` 时至少 `1` | 内联基础生命；有引用时隐藏且不生效 |
 | `_mana` | `float` / `0` | 无 `_character` 时不得小于 `0` | 内联最大法力；旧资产缺字段按零解释 |
 | `_healthRegeneration` | `float` / `0` | 无 `_character` 时不得小于 `0` | 内联每秒生命恢复 |
@@ -66,7 +67,7 @@
 | `_lootTable` | `LootTableDefinition` / `null` | 正式怪物必填 | 死亡掉落消费，掉落随机流由调用方提供 |
 | `_affixPool` | `List<MonsterAffixDefinition>` / 空 | 正式怪物必须有足够合法候选；无空引用、重复引用 | 怪物实例生成按权重无放回选择 |
 | `_minimumAffixCount` | `int` / `0` | 非负且不大于最大值 | 实例生成先在闭区间内掷数量；移除词条不涉及此字段 |
-| `_maximumAffixCount` | `int` / `0` | 不小于最小值，且不超过可用互斥组数 | 正式初版上限为 `2`；非法池不会静默 Clamp |
+| `_maximumAffixCount` | `int` / `0` | 不小于最小值，且不超过可用互斥组数 | 普通怪物上限为 `2`，守卫 Boss 为 `0`；非法池不会静默 Clamp |
 
 ## MonsterBehaviorDefinition
 
@@ -87,6 +88,28 @@
 | `_recoverySeconds` | `float` / `0.3` | 有限且大于零，单位秒 | 命中或挥空后的恢复窗口；恢复存档不重复命中 |
 
 攻击半径、间隔与伤害仍由 MonsterDefinition 提供。Schema 6 保存行为语义、剩余时间和已结算标记，动画不决定伤害或计时。
+
+## BossBehaviorDefinition
+
+创建入口：`DarkFlare/行为/守卫 Boss 配置`。由 Boss 怪物定义引用，放在 Runtime 配置层；Core HFSM 与行为树不依赖它。守卫者独立于普通加权刷怪池，默认不掷词条。
+
+| 字段 | 类型 / 默认 | 约束 | 消费者 |
+| --- | --- | --- | --- |
+| `_phaseThreshold` | `float` / `0.5` | `0–1` 内 | 生命低于阈值时一次性进入强化转换 |
+| `_phaseSeconds` | `float` / `0.8` | 大于 `0` | 转换可见时长 |
+| `_empoweredCooldownScale` | `float` / `0.75` | `0–1` 内 | 强化后技能冷却倍率 |
+| `_swipeRadius` | `float` / `1.5` | 大于 `0` | 挥击与扇区预警半径 |
+| `_swipeAngle` | `float` / `120` | `(0,360]` | 挥击与扇区预警角度 |
+| `_swipeWarningSeconds` | `float` / `0.4` | 大于 `0` | 挥击预警 |
+| `_swipeRecoverySeconds` | `float` / `0.5` | 大于 `0` | 挥击后摇 |
+| `_swipeCooldownSeconds` | `float` / `1.6` | 大于 `0` | 挥击冷却 |
+| `_chargeMinimumDistance` | `float` / `2` | 小于最大冲锋距离 | 冲锋启动下限 |
+| `_chargeDistance` | `float` / `5` | 大于启动距离 | 锁向最大冲锋距离与预警长度 |
+| `_chargeSpeed` | `float` / `7` | 大于 `0` | 导航锁向移动速度 |
+| `_chargeHitRadius` | `float` / `0.9` | 大于 `0` | 冲锋扫掠命中与预警宽度 |
+| `_chargeWarningSeconds` | `float` / `0.8` | 大于 `0` | 冲锋预警 |
+| `_chargeRecoverySeconds` | `float` / `0.8` | 大于 `0` | 冲锋后摇 |
+| `_chargeCooldownSeconds` | `float` / `5` | 大于 `0` | 冲锋冷却 |
 
 ## MonsterAffixDefinition
 

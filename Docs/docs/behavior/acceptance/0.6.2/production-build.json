@@ -1,0 +1,22 @@
+{
+  "status": "completed",
+  "buildId": "build_e72ab68fbcf6",
+  "result": "Succeeded",
+  "platform": "StandaloneWindows64",
+  "outputPath": "C:/Users/darkf/Home/Projects/DarkFlare/Builds/Alpha062/DarkFlare.exe",
+  "totalSizeBytes": 206775422,
+  "buildTimeMs": 23289,
+  "buildStartedAt": "2026-09-23T06:02:20.5111192Z",
+  "buildEndedAt": "2026-09-23T06:02:43.8005019Z",
+  "totalWarnings": 2,
+  "totalErrors": 0,
+  "errors": [],
+  "warnings": [
+    {
+      "message": "Pipeline: RuntimePipelineConfig found, but enableInBuilds = false. Pipeline will be disabled in Player builds."
+    },
+    {
+      "message": "Shader warning in 'TextMeshPro/Mobile/Distance Field': #pragma enable_d3d11_debug_symbols has been deprecated, instead please use #pragma enable_debug_symbols at line 84"
+    }
+  ]
+}

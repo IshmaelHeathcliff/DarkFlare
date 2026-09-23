@@ -22,6 +22,7 @@ namespace DarkFlare
         public const int MaxObjects = 16384;
         public const int MaxRegions = 1024;
         public const int MaxEntries = 256;
+        public const int MaxBossSpawns = 1;
         public const int MaxPolygonPoints = 64;
         public const int MaxStringLength = 256;
         public const double MaxWorldCoordinate = 1000000;
@@ -100,6 +101,7 @@ namespace DarkFlare
             SortArray(root, "objects", item => (string)item["objectId"]);
             SortArray(root, "regions", item => (string)item["regionId"]);
             SortArray(root, "entries", item => (string)item["entryId"]);
+            SortArray(root, "bossSpawns", item => (string)item["spawnId"]);
             using var output = new StringWriter(CultureInfo.InvariantCulture) { NewLine = "\n" };
             using var writer = new JsonTextWriter(output) { Formatting = Formatting.Indented, Indentation = 2 };
             OrderProperties(root).WriteTo(writer);
@@ -122,20 +124,23 @@ namespace DarkFlare
         {
             JObject schema = DescribeType(typeof(MapDocument), "$", false);
             schema.AddFirst(new JProperty("$schema", "https://json-schema.org/draft/2020-12/schema"));
-            schema.Add("description", "DarkFlare 地图 V2 结构合同；V1 读取时纯数据升级。须继续运行 MapDocumentCompiler 校验内容引用、坐标、地表与几何语义。");
-            schema["properties"]["formatVersion"]["const"] = 2;
+            schema.Add("description", "DarkFlare 地图 V3 结构合同；V1/V2 读取时纯数据升级。须继续运行 MapDocumentCompiler 校验内容引用、坐标、地表与几何语义。");
+            schema["properties"]["formatVersion"]["const"] = 3;
             return schema.ToString(Formatting.Indented).Replace("\r\n", "\n") + "\n";
         }
 
         static void Upgrade(JToken token)
         {
             Require(token is JObject && token["formatVersion"]?.Type == JTokenType.Integer, "$.formatVersion", "需要地图格式版本");
-            Require(token["formatVersion"].ToString() is "1" or "2", "$.formatVersion", "仅支持格式版本 1 / 2");
-            if ((int)token["formatVersion"] != 1) { return; }
-            token["formatVersion"] = 2;
-            token["entries"] ??= new JArray();
-            if (token["objects"] is JArray objects)
+            Require(token["formatVersion"].ToString() is "1" or "2" or "3", "$.formatVersion", "仅支持格式版本 1 / 2 / 3");
+            int version = (int)token["formatVersion"];
+            if (version == 3) { return; }
+            token["formatVersion"] = 3;
+            token["bossSpawns"] = new JArray();
+            if (version == 1)
             {
+                token["entries"] ??= new JArray();
+                if (token["objects"] is not JArray objects) { return; }
                 foreach (JToken item in objects)
                 {
                     if (item["interaction"] is JObject interaction)
@@ -250,6 +255,7 @@ namespace DarkFlare
             if (path.EndsWith(".objects", StringComparison.Ordinal)) { return MapDocumentLimits.MaxObjects; }
             if (path.EndsWith(".regions", StringComparison.Ordinal)) { return MapDocumentLimits.MaxRegions; }
             if (path.EndsWith(".entries", StringComparison.Ordinal)) { return MapDocumentLimits.MaxEntries; }
+            if (path.EndsWith(".bossSpawns", StringComparison.Ordinal)) { return MapDocumentLimits.MaxBossSpawns; }
             if (path.EndsWith(".points", StringComparison.Ordinal)) { return MapDocumentLimits.MaxPolygonPoints; }
             return (MapDocumentLimits.MaxSide + 1) * (MapDocumentLimits.MaxSide + 1);
         }

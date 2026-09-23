@@ -176,6 +176,7 @@ namespace DarkFlare
                 CombatResourceSnapshot before = monster.Actor.Resources;
                 monster.RestoreRuntime(ToResources(_prepared.Monsters[i].State.Resources), _prepared.Monsters[i].State.ContactDamageCooldownRemainingSeconds);
                 monster.RestoreBehavior(_prepared.Monsters[i].State.Behavior);
+                if (_prepared.Monsters[i].State.Boss != null) { monster.RestoreBoss(_prepared.Monsters[i].State.Boss); }
                 architecture.GetSystem<CombatSystem>().PublishResourceChanges(monster.Actor, before, ActorResourceChangeReason.Configure);
             }
 
@@ -199,7 +200,7 @@ namespace DarkFlare
 
             for (int i = 0; i < restoredMonsters.Count; i++)
             {
-                spawner.RegisterRestoredMonster(restoredMonsters[i]);
+                if (restoredMonsters[i].Definition.BossBehavior == null) { spawner.RegisterRestoredMonster(restoredMonsters[i]); }
             }
 
             _previousCameraTarget = _configuration.CameraFollowTarget.Target;

@@ -2,7 +2,7 @@
 
 当前 `0.5.5-alpha` 已通过从空白图开始的实际 SceneView 手绘、AI 原子编辑、导入导出与正式预览联验，保留[样图与操作证据](./acceptance/i/workflow.md)。
 
-地图编辑器模块。入口：`DarkFlare/地图/地图编辑器`，或配置中心“地图文档”→“打开地图绘制工作台”。阶段 G 扩展为 [V2 文档](./README.md)，支持入口及跨图出口；运行时装配见[双地图生命周期](./world-map-lifecycle.md)。
+地图编辑器模块。入口：`DarkFlare/地图/地图编辑器`，或配置中心“地图文档”→“打开地图绘制工作台”。阶段 G 扩展入口及跨图出口；0.6.2 增加[V3 Boss 点位](./README.md)，运行时装配见[双地图生命周期](./world-map-lifecycle.md)。
 
 ## 手工操作
 
@@ -20,6 +20,8 @@
 ## 地图入口与出口
 
 入口页维护 EntryId、Arrival / NewGame / Respawn 用途和局部世界坐标，SceneView P 工具放置入口。Portal 对象填写目标 MapId 与 EntryId；Trader / Crafting 仍绑定内容 ID。AI 的 `UpsertEntry` 使用完整 `record`，`RemoveEntry` 使用 `id`，与手工操作共享校验、Undo 和修订。正式资源位于 `Assets/Data/Maps/World/`，编辑样例保持独立。
+
+Boss 点位页维护稳定 ID、Boss 怪物定义、局部世界位置及单位朝向。SceneView 显示点位圆圈和朝向线，选择后可移动并提交。`UpsertBossSpawn` 使用完整 `record`，`RemoveBossSpawn` 使用 `id`；它们与手工编辑共享地图事务、预览、Undo / Redo 和修订。Boss 点不能作为玩家入口或普通刷怪区域。
 
 ## 事务、撤销与恢复
 
@@ -71,7 +73,7 @@ Patch ≤1 MiB、≤256 操作、≤262144 次格子 / 候选访问。洪水填�
 }
 ```
 
-支持 PaintCells、FillRect、PaintLine、FillRegion、SetVariant、UpsertObject / RemoveObject、UpsertRegion / RemoveRegion、UpsertEntry / RemoveEntry、SetMapMetadata。Upsert 使用完整 `record`；对象 position 为局部世界单位，rotation 是角度，区域顶点为逻辑格单位。未知字段 / 类型 / 版本拒绝，不执行任意脚本或按名称近似匹配内容。
+支持 PaintCells、FillRect、PaintLine、FillRegion、SetVariant、UpsertObject / RemoveObject、UpsertRegion / RemoveRegion、UpsertEntry / RemoveEntry、UpsertBossSpawn / RemoveBossSpawn、SetMapMetadata。Upsert 使用完整 `record`；对象和 Boss position 为局部世界单位，rotation 是角度，区域顶点为逻辑格单位。未知字段 / 类型 / 版本拒绝，不执行任意脚本或按名称近似匹配内容。
 
 同一会话保留最近 256 份 operationId + 规范 payload 回执；相同请求返回原回执及当前版本，不再次执行，Undo 不清除回执。ID 对应不同 payload 报 Conflict；淘汰 / 重启后依靠 revision + hash 拒绝旧请求，不承诺永久去重。分页结果带版本，跨页期间变化应重新读取。
 

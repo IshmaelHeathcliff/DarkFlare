@@ -10,6 +10,24 @@ namespace DarkFlare.Tests
     public sealed class WorldMapStateTests
     {
         [Test]
+        public void KnownWildernessBossAddition_UpgradesOnlyHistoricalRevision()
+        {
+            ContentCatalog catalog = ContentCatalog.Build(AssetDatabase.LoadAssetAtPath<ContentCatalogDefinition>(
+                "Assets/Data/Preset/Content/正式内容目录.asset")).Catalog;
+            WorldMapCatalog maps = WorldMapCatalog.FromContent(catalog);
+            var run = new RunSaveData { ActiveMapId = "map:wilderness", MapRevision = 1,
+                Boss = new BossEncounterStateDto { Status = BossEncounterStatus.LegacyAbsent } };
+            run.FrozenMaps.Add(new MapStateDto { MapId = "map:wilderness", Revision = 1,
+                Boss = new BossEncounterStateDto { Status = BossEncounterStatus.LegacyAbsent } });
+            maps.UpgradeKnownBossRevision(run);
+            Assert.AreEqual(maps.Get("map:wilderness").Revision, run.MapRevision);
+            Assert.AreEqual(run.MapRevision, run.FrozenMaps[0].Revision);
+            run.MapRevision = 2;
+            maps.UpgradeKnownBossRevision(run);
+            Assert.AreEqual(2, run.MapRevision, "未知修订不能被宽松迁移");
+        }
+
+        [Test]
         public void FrozenClock_PreservesRemainingTimeAndTickPhaseWithoutMutatingSource()
         {
             var source = new StatusSaveDto { Time = 10, Actors = new List<StatusActorDto>
@@ -68,7 +86,7 @@ namespace DarkFlare.Tests
             template.Resources = new CombatResourceStateDto { CurrentHealth = instance.MaxHealth / 2, MaxHealth = instance.MaxHealth,
                 MaxMana = instance.EffectiveStats.GetValue(StatIds.Mana), IsAlive = true };
             Assert.IsEmpty(issues);
-            var map = new MapStateDto { MapId = "map:wilderness", Random = MapStateData.Copy(run.Random),
+            var map = new MapStateDto { MapId = "map:wilderness", Boss = run.Boss.Copy(), Random = MapStateData.Copy(run.Random),
                 Spawner = MapStateData.Copy(run.Spawner), WorldDrops = run.WorldDrops };
             for (int i = 1; i <= 1000; i++)
             {

@@ -160,6 +160,7 @@ namespace DarkFlare.Editor
             "wasteland_wraith",
             "razor_hound",
             "iron_husk",
+            "guardian",
         };
 
         static readonly string[] ExpectedMonsterAffixIds =
@@ -908,17 +909,22 @@ namespace DarkFlare.Editor
                     AddError(issues, monster, baseIssues[issueIndex]);
                 }
 
-                if (monster.MinimumAffixCount != 0 || monster.MaximumAffixCount != 2)
+                if (monster.BossBehavior != null)
                 {
-                    AddError(issues, monster, "正式怪物的词条数量范围必须为 0–2");
+                    try { monster.BossBehavior.Validate(); }
+                    catch (ArgumentException error) { AddError(issues, monster, error.Message); }
                 }
 
-                ValidateCoverage(
-                    monster,
-                    new HashSet<MonsterAffixDefinition>(monster.AffixPool),
-                    monsterAffixes,
-                    "怪物词条池缺少词条",
-                    issues);
+                if (monster.MinimumAffixCount != 0 || monster.MaximumAffixCount != (monster.BossBehavior == null ? 2 : 0))
+                {
+                    AddError(issues, monster, "正式怪物词条数量范围与普通 / Boss 类型不匹配");
+                }
+
+                if (monster.BossBehavior == null)
+                {
+                    ValidateCoverage(monster, new HashSet<MonsterAffixDefinition>(monster.AffixPool),
+                        monsterAffixes, "怪物词条池缺少词条", issues);
+                }
 
                 string guid = monster.Prefab != null ? monster.Prefab.AssetGUID : string.Empty;
 
@@ -991,13 +997,20 @@ namespace DarkFlare.Editor
                         continue;
                     }
 
+                    if (rule.Monster.BossBehavior != null)
+                    {
+                        AddError(issues, definition, $"Boss 不能进入普通刷怪池：{rule.Monster.Id}");
+                        continue;
+                    }
+
                     if (!covered.Add(rule.Monster))
                     {
                         AddError(issues, definition, $"刷怪规则重复引用：{rule.Monster.Id}");
                     }
                 }
 
-                ValidateCoverage(definition, covered, monsters, "刷怪池缺少怪物", issues);
+                ValidateCoverage(definition, covered, monsters.Where(monster => monster.BossBehavior == null).ToArray(),
+                    "刷怪池缺少怪物", issues);
             }
         }
 

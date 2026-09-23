@@ -6,7 +6,7 @@
       "type": "integer",
       "minimum": -2147483648,
       "maximum": 2147483647,
-      "const": 2
+      "const": 3
     },
     "mapId": {
       "type": "string",
@@ -336,6 +336,62 @@
         ],
         "additionalProperties": false
       }
+    },
+    "bossSpawns": {
+      "type": "array",
+      "maxItems": 1,
+      "items": {
+        "type": "object",
+        "properties": {
+          "spawnId": {
+            "type": "string",
+            "maxLength": 256
+          },
+          "monsterDefinitionId": {
+            "type": "string",
+            "maxLength": 256
+          },
+          "position": {
+            "type": "object",
+            "properties": {
+              "x": {
+                "type": "number"
+              },
+              "y": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "x",
+              "y"
+            ],
+            "additionalProperties": false
+          },
+          "facing": {
+            "type": "object",
+            "properties": {
+              "x": {
+                "type": "number"
+              },
+              "y": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "x",
+              "y"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "spawnId",
+          "monsterDefinitionId",
+          "position",
+          "facing"
+        ],
+        "additionalProperties": false
+      }
     }
   },
   "required": [
@@ -354,8 +410,9 @@
     "variantOverrides",
     "objects",
     "regions",
-    "entries"
+    "entries",
+    "bossSpawns"
   ],
   "additionalProperties": false,
-  "description": "DarkFlare 地图 V2 结构合同；V1 读取时纯数据升级。须继续运行 MapDocumentCompiler 校验内容引用、坐标、地表与几何语义。"
+  "description": "DarkFlare 地图 V3 结构合同；V1/V2 读取时纯数据升级。须继续运行 MapDocumentCompiler 校验内容引用、坐标、地表与几何语义。"
 }

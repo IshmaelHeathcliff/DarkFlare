@@ -102,6 +102,12 @@ namespace DarkFlare
                 return null;
             }
 
+            if (definition.BossBehavior != null)
+            {
+                ApplicationLog.Error(LogEventIds.GameplayCombat, $"[SpawnSystem] Boss 不允许进入普通刷怪池: {definition.Id}");
+                return null;
+            }
+
             GameObject prefab = this.GetUtility<PrefabAssetLoader>().GetPrefab(definition.Prefab);
 
             if (prefab == null)
@@ -134,6 +140,20 @@ namespace DarkFlare
             ApplicationLog.Info(LogEventIds.GameplayCombat,
                 $"[SpawnSystem] 生成怪物 {definition.Id}，生成种子 {seed}，实例根种子 {instanceSeed}，"
                 + $"词条 {DescribeAffixes(instanceData)}，最终属性 {DescribeMonsterStats(instanceData.EffectiveStats)}");
+            return controller;
+        }
+
+        public MonsterController SpawnFixedMonster(MonsterDefinition definition, int seed, Vector3 position)
+        {
+            if (definition?.BossBehavior == null) { throw new System.ArgumentException("定点 Boss 缺少行为定义", nameof(definition)); }
+            MonsterController controller = InstantiateMonster(definition, position);
+            if (controller == null) { return null; }
+            System.Random random = new System.Random(seed);
+            MonsterInstanceData instance = definition.CreateInstanceData(
+                this.GetUtility<IRunInstanceIdGenerator>().NextMonsterId(), random.Next(int.MinValue, int.MaxValue));
+            CombatResourceSnapshot previous = controller.Actor.Resources;
+            controller.Configure(definition, instance);
+            this.GetSystem<CombatSystem>().PublishResourceChanges(controller.Actor, previous, ActorResourceChangeReason.Configure);
             return controller;
         }
 

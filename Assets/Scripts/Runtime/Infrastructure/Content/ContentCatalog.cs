@@ -208,6 +208,7 @@ namespace DarkFlare
                     {
                         if (monster.Behavior == null) { throw new ArgumentException("缺少行为配置"); }
                         monster.Behavior.Validate();
+                        monster.BossBehavior?.Validate();
                         if (!float.IsFinite(monster.ContactDamageRadius) || !float.IsFinite(monster.ContactStopDistance)
                             || !float.IsFinite(monster.ContactDamageInterval) || monster.ContactDamageInterval < .05f
                             || monster.ContactDamageRadius < .05f || monster.ContactStopDistance < 0

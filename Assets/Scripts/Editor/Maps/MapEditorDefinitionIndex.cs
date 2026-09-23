@@ -19,7 +19,8 @@ namespace DarkFlare.Editor
         static readonly Type[] DefinitionTypes =
         {
             typeof(TerrainDefinition), typeof(TerrainSetDefinition), typeof(MapObjectDefinition),
-            typeof(MapRegionDefinition), typeof(TraderDefinition), typeof(CraftingDefinition), typeof(MonsterSpawnDefinition)
+            typeof(MapRegionDefinition), typeof(TraderDefinition), typeof(CraftingDefinition), typeof(MonsterSpawnDefinition),
+            typeof(MonsterDefinition)
         };
 
         static MapEditorDefinitionIndex()

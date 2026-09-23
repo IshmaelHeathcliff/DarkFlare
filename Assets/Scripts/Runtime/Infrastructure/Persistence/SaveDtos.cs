@@ -179,6 +179,7 @@ namespace DarkFlare
 
     public sealed class MonsterRunStateDto : IPersistenceDto
     {
+        public BossBehaviorStateDto Boss { get; set; }
         [Newtonsoft.Json.JsonProperty(Required = Newtonsoft.Json.Required.Always)]
         public MonsterBehaviorStateDto Behavior { get; set; } = new();
 
@@ -248,5 +249,6 @@ namespace DarkFlare
         public MerchantInventoryDto Merchant { get; set; } = new MerchantInventoryDto();
 
         public MonsterSpawnerStateDto Spawner { get; set; } = new MonsterSpawnerStateDto();
+        public BossEncounterStateDto Boss { get; set; } = new BossEncounterStateDto();
     }
 }

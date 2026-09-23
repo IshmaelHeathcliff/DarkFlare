@@ -347,8 +347,11 @@ namespace DarkFlare
                     Agent agent = _agents[i];
                     if (agent.Request != agent.Monster.NavigationRevision) { RefreshIntent(agent); }
                     // 无导航目标的样本只提供邻居位置；转向 Job 会直接提交零速度。
-                    bool hasMovementIntent = agent.Intent.Target != NavigationTargetKind.None;
-                    float speed = hasMovementIntent ? agent.Monster.Actor.Stats.GetValue(StatIds.MoveSpeed) : 0;
+                    BossBehaviorRuntime boss = agent.Monster.BossRuntime;
+                    bool charge = boss?.ChargeRequested == true;
+                    bool hasMovementIntent = charge || agent.Intent.Target != NavigationTargetKind.None;
+                    float speed = charge ? math.min(boss.ChargeSpeed, boss.ChargeRemaining / math.max(.0001f, deltaTime))
+                        : hasMovementIntent ? agent.Monster.Actor.Stats.GetValue(StatIds.MoveSpeed) : 0;
                     Vector2 position = agent.Monster.Body.position;
                     var currentPosition = new float2(position.x, position.y);
                     float expectedStep = speed * deltaTime * 3;
@@ -359,9 +362,15 @@ namespace DarkFlare
                     var sample = new NavigationSample { Position = new float2(position.x, position.y), Radius = hasMovementIntent ? agent.Monster.NavigationRadius : 0,
                         Identity = (ulong)agent.Monster.Instance.Id.Sequence, Speed = speed,
                         SeparationRadius = math.clamp(agent.Monster.Definition.SeparationRadius, .01f, 4f),
-                        SeparationWeight = agent.Monster.Definition.SeparationWeight };
+                        SeparationWeight = agent.Monster.Definition.SeparationWeight, LockedCharge = charge };
                     if (agent.Profile < 0 || agent.Profile >= Radii.Length || sample.Radius > Radii[agent.Profile] + .0001)
                     { agent.Status = NavigationStatus.BudgetExceeded; }
+                    else if (charge)
+                    {
+                        Vector2 direction = boss.ChargeDirection;
+                        sample.Desired = new float2(direction.x, direction.y);
+                        sample.CanMove = CanMove(agent); agent.Status = NavigationStatus.Moving;
+                    }
                     else if (!ResolveGoal(agent)) { ReleaseRoute(agent); agent.Status = NavigationStatus.TargetUnavailable; }
                     else
                     {
@@ -420,6 +429,8 @@ namespace DarkFlare
                     {
                         Agent agent = _agents[i]; float2 velocity = _velocities[i];
                         agent.Monster.Body.linearVelocity = new Vector2(velocity.x, velocity.y);
+                        agent.Monster.BossRuntime?.OnSteered(agent.Monster.Body.position,
+                            new Vector2(velocity.x, velocity.y), deltaTime);
                         _model.CandidateVisits += _visits[i]; if (_visits[i] >= 96) { _model.SaturatedAgents++; }
                     }
                 }

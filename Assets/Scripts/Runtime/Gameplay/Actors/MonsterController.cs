@@ -24,10 +24,24 @@ namespace DarkFlare
         bool _despawnScheduled;
         float _lastContactDamageTime = -999f;
         MonsterBehaviorStateDto _behaviorState;
+        BossBehaviorStateDto _bossState;
         float _frozenCooldown;
         internal bool NavigationOverride { get; set; }
         public MonsterBehaviorRuntime BehaviorRuntime { get; internal set; }
-        public BehaviorHandle BehaviorHandle => BehaviorRuntime?.Handle ?? default;
+        public BossBehaviorRuntime BossRuntime { get; internal set; }
+        public BehaviorHandle BehaviorHandle => BossRuntime?.Handle ?? BehaviorRuntime?.Handle ?? default;
+
+        public BossBehaviorStateDto CaptureBoss()
+        {
+            if (_definition?.BossBehavior == null) { return null; }
+            return BossRuntime?.CaptureState() ?? (_bossState ??= new BossBehaviorStateDto()).Copy();
+        }
+
+        internal void RestoreBoss(BossBehaviorStateDto state)
+        {
+            if (_definition?.BossBehavior == null || state == null || !state.IsValid) { throw new System.ArgumentException("Boss 行为状态非法"); }
+            _bossState = state.Copy(); BossRuntime?.Restore(state);
+        }
 
         public MonsterBehaviorStateDto CaptureBehavior()
         {
@@ -47,11 +61,24 @@ namespace DarkFlare
             GetComponent<ActorAnimatorController>()?.SetBehaviorDriven(true);
             GetComponent<BehaviorAnimatorBridge>()?.Bind(GetArchitecture(), runtime.Handle);
         }
+        internal void BindBoss(BossBehaviorRuntime runtime)
+        {
+            BossRuntime = runtime;
+            GetComponent<ActorAnimatorController>()?.SetBehaviorDriven(true);
+            GetComponent<BehaviorAnimatorBridge>()?.Bind(GetArchitecture(), runtime.Handle);
+        }
         internal void UnbindBehavior()
         {
-            if (BehaviorRuntime == null) { return; }
-            _behaviorState = BehaviorRuntime.CaptureState(); _frozenCooldown = BehaviorRuntime.CooldownRemaining;
-            GetComponent<BehaviorAnimatorBridge>()?.Unbind(); BehaviorRuntime = null;
+            if (BehaviorRuntime != null)
+            {
+                _behaviorState = BehaviorRuntime.CaptureState(); _frozenCooldown = BehaviorRuntime.CooldownRemaining;
+                GetComponent<BehaviorAnimatorBridge>()?.Unbind(); BehaviorRuntime = null;
+            }
+            if (BossRuntime != null)
+            {
+                _bossState = BossRuntime.CaptureState();
+                GetComponent<BehaviorAnimatorBridge>()?.Unbind(); BossRuntime = null;
+            }
         }
 
         [SerializeField]
@@ -101,7 +128,7 @@ namespace DarkFlare
             if (_instance != null) { this.SendCommand(new RegisterNavigationAgentCommand(this, false)); }
             _definition = definition;
             _instance = instance;
-            _behaviorState = null; _frozenCooldown = 0; NavigationOverride = false;
+            _behaviorState = null; _bossState = null; _frozenCooldown = 0; NavigationOverride = false;
             ApplyDefinition();
             this.SendCommand(new BindActorStatusesCommand(_actor));
             _sortParticipant?.ConfigureIdentity(

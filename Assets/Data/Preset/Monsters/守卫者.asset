@@ -1,0 +1,69 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4eb121f8dc76a8f4695a759b90dc6ce7, type: 3}
+  m_Name: "\u5B88\u536B\u8005"
+  m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.MonsterDefinition
+  _id: guardian
+  _displayName: "\u5B88\u536B\u8005"
+  _localizedName:
+    _tableName: monsters
+    _entryKey: monster.guardian.name
+  _character: {fileID: 0}
+  _prefab:
+    m_AssetGUID: aadcf3062b2eb4c469ae53feb3e7af0f
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  _behavior: {fileID: 11400000, guid: 63649497041f8a8429b6d717ad7c9490, type: 2}
+  _bossBehavior: {fileID: 11400000, guid: e98413cab5805a741a14c1103ffb8655, type: 2}
+  _maxHealth: 260
+  _mana: 0
+  _healthRegeneration: 0
+  _manaRegeneration: 0
+  _moveSpeed: 1.9
+  _accuracy: 80
+  _evasion: 5
+  _criticalChance: 3
+  _criticalDamage: 50
+  _armor: 55
+  _fireResistance: 0
+  _coldResistance: 0
+  _lightningResistance: 0
+  _chaosResistance: 0
+  _healthMultiplierRange: {x: 0.85, y: 1.15}
+  _contactDamageInterval: 1
+  _contactDamageRadius: 0.75
+  _contactStopDistance: 0.6
+  _separationRadius: 0.8
+  _separationWeight: 0.65
+  _tags: []
+  _contactDamages:
+  - _damageType: 0
+    _amountRange: {x: 10, y: 14}
+    _tags: []
+  _lootTable: {fileID: 11400000, guid: f4400000000000000000000000000003, type: 2}
+  _affixPool:
+  - {fileID: 11400000, guid: 2d9fc044649c00d4199f21b512631355, type: 2}
+  - {fileID: 11400000, guid: 5b6e0b47283faa2418205f5ba233936d, type: 2}
+  - {fileID: 11400000, guid: 571b89198e664c34587e7951867599f7, type: 2}
+  - {fileID: 11400000, guid: 3d1e5c0cfa383f347a65c8235cbac9ed, type: 2}
+  - {fileID: 11400000, guid: a0c4783a0050541498df007f2cb700c1, type: 2}
+  - {fileID: 11400000, guid: f39f3dac59918a94e9941384f4d2c89b, type: 2}
+  - {fileID: 11400000, guid: b3c150c95ba9b844abdc1d8bd44b05c0, type: 2}
+  - {fileID: 11400000, guid: 72a30cb2c69f1e648b4452651aeeb759, type: 2}
+  - {fileID: 11400000, guid: 02f61be227fdf3b4c92b96f04190964e, type: 2}
+  - {fileID: 11400000, guid: ab0f93e452bfa1e4689f420959b86184, type: 2}
+  _minimumAffixCount: 0
+  _maximumAffixCount: 0
+  _navigationMode: 1
+  _navigationProfile: 0

@@ -158,7 +158,8 @@ namespace DarkFlare.Tests
                 {
                     MonsterController monster = current[i];
 
-                    if (monster.Instance == null || !capturedSeeds.Add(monster.Instance.Seed))
+                    if (monster.Instance == null || monster.Definition.BossBehavior != null
+                        || !capturedSeeds.Add(monster.Instance.Seed))
                     {
                         continue;
                     }

@@ -7,7 +7,7 @@ namespace DarkFlare
     [JsonObject(MemberSerialization.OptIn)]
     public sealed class MapDocument
     {
-        [JsonProperty("formatVersion", Required = Required.Always)] public int FormatVersion { get; set; } = 2;
+        [JsonProperty("formatVersion", Required = Required.Always)] public int FormatVersion { get; set; } = 3;
         [JsonProperty("mapId", Required = Required.Always)] public string MapId { get; set; }
         [JsonProperty("revision", Required = Required.Always)] public int Revision { get; set; }
         [JsonProperty("seed", Required = Required.Always)] public int Seed { get; set; }
@@ -23,6 +23,7 @@ namespace DarkFlare
         [JsonProperty("objects", Required = Required.Always)] public MapObjectRecord[] Objects { get; set; } = Array.Empty<MapObjectRecord>();
         [JsonProperty("regions", Required = Required.Always)] public MapRegionRecord[] Regions { get; set; } = Array.Empty<MapRegionRecord>();
         [JsonProperty("entries", Required = Required.Always)] public MapEntryRecord[] Entries { get; set; } = Array.Empty<MapEntryRecord>();
+        [JsonProperty("bossSpawns", Required = Required.Always)] public MapBossSpawnRecord[] BossSpawns { get; set; } = Array.Empty<MapBossSpawnRecord>();
     }
 
     [JsonObject(MemberSerialization.OptIn)]
@@ -70,6 +71,15 @@ namespace DarkFlare
         [JsonProperty("entryId", Required = Required.Always)] public string EntryId { get; set; }
         [JsonProperty("kind", Required = Required.Always)] public MapEntryKind Kind { get; set; }
         [JsonProperty("position", Required = Required.Always)] public MapPoint Position { get; set; } = new MapPoint();
+    }
+
+    [JsonObject(MemberSerialization.OptIn)]
+    public sealed class MapBossSpawnRecord
+    {
+        [JsonProperty("spawnId", Required = Required.Always)] public string SpawnId { get; set; }
+        [JsonProperty("monsterDefinitionId", Required = Required.Always)] public string MonsterDefinitionId { get; set; }
+        [JsonProperty("position", Required = Required.Always)] public MapPoint Position { get; set; } = new MapPoint();
+        [JsonProperty("facing", Required = Required.Always)] public MapPoint Facing { get; set; } = new MapPoint { X = 1 };
     }
 
     [JsonObject(MemberSerialization.OptIn)]
