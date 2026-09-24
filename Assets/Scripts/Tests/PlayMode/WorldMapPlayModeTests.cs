@@ -255,6 +255,16 @@ namespace DarkFlare.Tests
                 Assert.AreEqual(previous.InstanceEpoch, retained.InstanceEpoch);
                 CollectionAssert.AreEqual(previous.Spawner.Slots.Select(slot => (slot.SlotId, slot.Status, slot.InstanceId)),
                     retained.Spawner.Slots.Select(slot => (slot.SlotId, slot.Status, slot.InstanceId)));
+                PrepareContinueResult persisted = null;
+                yield return host.SaveCoordinator.PrepareContinueAsync(SaveCoordinator.AutoSlot)
+                    .ToCoroutine(value => persisted = value);
+                Assert.IsTrue(persisted.Succeeded, persisted.OperationResult.Exception?.ToString());
+                Assert.AreEqual("map:town", persisted.PreparedRestore.Document.Payload.Run.ActiveMapId);
+                MapStateDto savedMap = persisted.PreparedRestore.Document.Payload.Run.FrozenMaps
+                    .Single(map => map.MapId == "map:wilderness");
+                Assert.AreEqual(previous.InstanceEpoch, savedMap.InstanceEpoch);
+                CollectionAssert.AreEqual(previous.Spawner.Slots.Select(slot => (slot.SlotId, slot.Status, slot.InstanceId)),
+                    savedMap.Spawner.Slots.Select(slot => (slot.SlotId, slot.Status, slot.InstanceId)));
                 DismissFailure();
             }
         }
@@ -288,6 +298,58 @@ namespace DarkFlare.Tests
             Assert.AreEqual("map:town", maps.Active.Map.MapId);
             Assert.AreEqual(0, maps.ActiveMapEpoch);
             Assert.IsFalse(host.ApplicationShell.BlocksGameplay);
+
+            Assert.IsTrue(host.CurrentSession.Architecture.SendCommand(new OpenGameMenuCommand(portal)));
+            using (NavigationSubmitEvent chooseReset = NavigationSubmitEvent.GetPooled())
+            {
+                chooseReset.target = reset;
+                reset.SendEvent(chooseReset);
+            }
+            using (NavigationSubmitEvent confirm = NavigationSubmitEvent.GetPooled())
+            {
+                confirm.target = enter;
+                enter.SendEvent(confirm);
+            }
+            float timeout = Time.realtimeSinceStartup + 15f;
+            while (maps.Active.Map.MapId == "map:town" && Time.realtimeSinceStartup < timeout) { yield return null; }
+            while (host.SceneFlow.IsBusy && Time.realtimeSinceStartup < timeout) { yield return null; }
+            Assert.AreEqual("map:wilderness", maps.Active.Map.MapId, "传送门确认按钮应实际发起重置切图");
+            Assert.AreEqual(1, maps.ActiveMapEpoch);
+            Assert.AreEqual(MapResetPhase.Completed, maps.LastResetPhase);
+            Assert.AreEqual(20, maps.Active.Spawner.AliveCount);
+            Assert.IsFalse(host.ApplicationShell.BlocksGameplay);
+        }
+
+        [UnityTest]
+        public IEnumerator ManualReset_PostCommitCleanupFailureKeepsDurableNewEpoch()
+        {
+            yield return _fixture.EnterMain();
+            ApplicationHost host = ApplicationHost.Current;
+            WorldMapRuntime maps = host.CurrentSession.Architecture.GetUtility<WorldMapRuntime>();
+            yield return Change(host, "map:wilderness", "arrival");
+            yield return Change(host, "map:town", "return");
+            while (host.SaveCoordinator.IsBusy) { yield return null; }
+            maps.FaultInjection = phase =>
+            {
+                if (phase == "source-released") { throw new InvalidOperationException("reset-post-commit-test"); }
+            };
+            SceneFlowResult failed = null;
+            yield return host.SceneFlow.RequestAsync(SceneFlowRequest.ResetAndChangeMap("map:wilderness", "arrival"))
+                .ToCoroutine(value => failed = value);
+            Assert.AreEqual(SceneFlowErrorCode.FatalCleanupFailed, failed.ErrorCode);
+            Assert.AreEqual(GameFlowState.FatalError, host.SceneFlow.State);
+            Assert.AreEqual(MapResetPhase.Fatal, maps.LastResetPhase);
+            Assert.AreEqual(1, maps.ActiveMapEpoch);
+
+            PrepareContinueResult saved = null;
+            yield return host.SaveCoordinator.PrepareContinueAsync(SaveCoordinator.AutoSlot)
+                .ToCoroutine(value => saved = value);
+            Assert.IsTrue(saved.Succeeded, saved.OperationResult.Exception?.ToString());
+            Assert.AreEqual("map:wilderness", saved.PreparedRestore.Document.Payload.Run.ActiveMapId);
+            Assert.AreEqual(1, saved.PreparedRestore.Document.Payload.Run.ActiveMapEpoch);
+            Assert.AreEqual(100, saved.PreparedRestore.Document.Payload.Run.Spawner.Slots.Count);
+            Assert.AreEqual(20, saved.PreparedRestore.Document.Payload.Run.Spawner.Slots.Count(
+                slot => slot.Status == SpawnSlotStatus.Alive));
         }
 
         [UnityTest]
@@ -301,6 +363,7 @@ namespace DarkFlare.Tests
             int townObjects = registry.Count;
             using GamePauseLease pause = host.GameTime.AcquirePause("map-reset-cycles");
             long nativeBytes = -1;
+            ResourceDiagnosticsSnapshot releasedBaseline = default;
             for (int i = 1; i <= 20; i++)
             {
                 for (int frame = 0; frame < 120 && host.SaveCoordinator.IsBusy; frame++) { yield return null; }
@@ -320,6 +383,21 @@ namespace DarkFlare.Tests
                 yield return Change(host, "map:town", "return");
                 Assert.IsEmpty(registry.CaptureOwner(old));
                 Assert.AreEqual(townObjects, registry.Count, "旧图对象不能逐轮残留");
+                ResourceDiagnosticsSnapshot released = host.ResourceDiagnostics;
+                Assert.AreEqual(0, released.InFlightLoads, $"cycle {i}: 旧图加载不能继续运行");
+                if (i == 1)
+                {
+                    releasedBaseline = released;
+                }
+                else
+                {
+                    Assert.AreEqual(releasedBaseline.ActiveOwners, released.ActiveOwners,
+                        $"cycle {i}: Addressables owner 不应逐轮增加");
+                    Assert.AreEqual(releasedBaseline.ActiveEntries, released.ActiveEntries,
+                        $"cycle {i}: Addressables entry 不应逐轮增加");
+                    Assert.AreEqual(releasedBaseline.ActiveLeases, released.ActiveLeases,
+                        $"cycle {i}: Addressables lease 不应逐轮增加");
+                }
             }
         }
 
@@ -457,6 +535,11 @@ namespace DarkFlare.Tests
                 .Single(value => value.Definition.BossBehavior != null);
             Assert.IsNotNull(boss.BossRuntime);
             Assert.AreEqual(new Vector2(20, 12), boss.Body.position);
+            int bossAttacks = 0;
+            IUnRegister attackObserver = architecture.RegisterEvent<ActorAttackedEvent>(attack =>
+            {
+                if (attack.Actor == boss.Actor) { bossAttacks++; }
+            });
             PlayerController player = UnityEngine.Object.FindAnyObjectByType<PlayerController>();
             player.enabled = false;
             Rigidbody2D playerBody = player.GetComponent<Rigidbody2D>();
@@ -466,8 +549,6 @@ namespace DarkFlare.Tests
                 Physics2D.SyncTransforms();
             }
             MovePlayer(new Vector2(19, 12));
-            int attacks = architecture.GetSystem<GameplayRandomSystem>().CaptureState()
-                .NextSequences[GameplayRandomChannel.MonsterAttack];
             float deadline = Time.realtimeSinceStartup + 4;
             while (boss.BossRuntime.Action != BossActionPhase.SwipeWarning && Time.realtimeSinceStartup < deadline) { yield return null; }
             Assert.AreEqual(BossActionPhase.SwipeWarning, boss.BossRuntime.Action);
@@ -478,8 +559,7 @@ namespace DarkFlare.Tests
             deadline = Time.realtimeSinceStartup + 4;
             while (boss.BossRuntime.Action != BossActionPhase.SwipeRecovery && Time.realtimeSinceStartup < deadline) { yield return null; }
             Assert.AreEqual(BossActionPhase.SwipeRecovery, boss.BossRuntime.Action);
-            Assert.AreEqual(attacks + 1, architecture.GetSystem<GameplayRandomSystem>().CaptureState()
-                .NextSequences[GameplayRandomChannel.MonsterAttack]);
+            Assert.AreEqual(1, bossAttacks, "近战命中只能由 Boss 发起一次");
 
             MovePlayer(new Vector2(17, 12));
             deadline = Time.realtimeSinceStartup + 5;
@@ -495,8 +575,9 @@ namespace DarkFlare.Tests
             while (boss.BossRuntime.Action != BossActionPhase.ChargeRecovery && Time.realtimeSinceStartup < deadline) { yield return null; }
             Assert.AreEqual(BossActionPhase.ChargeRecovery, boss.BossRuntime.Action);
             Assert.GreaterOrEqual(player.Actor.CurrentHealth, health, "躲开锁向轨迹后不能被冲锋命中");
-            Assert.AreEqual(attacks + 1, architecture.GetSystem<GameplayRandomSystem>().CaptureState()
-                .NextSequences[GameplayRandomChannel.MonsterAttack], "冲锋挥空不应掷伤害随机数");
+            Assert.IsFalse(boss.CaptureBoss().HitResolved, "冲锋挥空不能消耗 Boss 的命中许可");
+            Assert.AreEqual(1, bossAttacks, "冲锋挥空不能发出 Boss 攻击事件");
+            attackObserver.UnRegister();
 
             CombatResourceSnapshot resources = boss.Actor.Resources;
             boss.Actor.RestoreResources(new CombatResourceSnapshot(resources.MaxHealth * .4f, resources.MaxHealth,

@@ -69,13 +69,15 @@
 
 ## 计划状态
 
-2026-09-23：**Alpha 0.6.4 手动重置完成**，当前版本 `0.6.4-alpha` / 地图 V4 / core v10 / Schema 9。玩家可在刷怪地图传送门选择普通进入或二次确认后重置并进入；正常离场继续保留原进度。见[模块](./behavior/map-reset.md)、[验收](./behavior/acceptance/0.6.4/README.md)和[归档计划](./plan/archive/alpha-0.6.4-manual-map-reset-plan.md)。下一阶段为 0.6.5 综合交付。
+2026-09-24：**Alpha 0.6.5 综合交付按调整门槛完成**，当前版本 `0.6.5-alpha` / core v10 / Schema 9 / 地图 V4。正式玩法、存档故障及 20 轮生命周期的 Editor 回归通过：EditMode 819/819，PlayMode 102 通过／2 包内跳过／0 失败。按用户要求，只有明确指定 Player 验收时才构建 Player；本阶段 Player、真实设备、跨进程及当前版本 300／600 性能矩阵未执行，见[验收记录](./behavior/acceptance/0.6.5/README.md)及[归档计划](./plan/archive/alpha-0.6.5-integration-plan.md)。
+
+2026-09-23：**Alpha 0.6.4 手动重置完成**，该阶段版本 `0.6.4-alpha` / 地图 V4 / core v10 / Schema 9。玩家可在刷怪地图传送门选择普通进入或二次确认后重置并进入；正常离场继续保留原进度。见[模块](./behavior/map-reset.md)、[验收](./behavior/acceptance/0.6.4/README.md)和[归档计划](./plan/archive/alpha-0.6.4-manual-map-reset-plan.md)。
 
 2026-09-23：**Alpha 0.6.3 有限刷怪完成**，当前交付 `0.6.3-alpha` / 地图 V4 / core v10 / Schema 8。正式野外图为 20 个入图名额、10 个分散触发点各 8 个名额及独立 Boss；旧已访问图保留进度。扩容后完整 EditMode 818/818、PlayMode 97 通过 / 2 包内跳过 / 0 失败；Windows Player 与 300 / 600 实测未执行。见[模块](./behavior/finite-spawning.md)、[验收](./behavior/acceptance/0.6.3/README.md)及[已归档计划](./plan/archive/alpha-0.6.3-finite-spawning-plan.md)。下一阶段为 0.6.4 手动重置。
 
-2026-09-23：**Alpha 0.6.1 普通怪物完成**，交付 `0.6.1-alpha` / core v7 / Schema 6 / 地图 V2。[模块](./behavior/monsters.md)覆盖休眠、闲逛、感知追逐、攻击与冻结恢复；最终 EditMode 808/808、PlayMode 92/92，Windows Player 和 500 / 1000 单位实测通过，覆盖 300 / 600 新目标，见[证据](./behavior/acceptance/0.6.1/README.md)。[M1–M6 计划](./plan/archive/alpha-0.6.1-monster-behavior-plan.md)已归档。
+2026-09-23：**Alpha 0.6.1 普通怪物完成**，交付 `0.6.1-alpha` / core v7 / Schema 6 / 地图 V2。[模块](./behavior/monsters.md)覆盖休眠、闲逛、感知追逐、攻击与冻结恢复；最终 EditMode 808/808、PlayMode 92/92，Windows Player 和 500 / 1000 单位实测通过。历史规模超过后续 300 / 600 目标，但不替代当前版本实测，见[证据](./behavior/acceptance/0.6.1/README.md)。[M1–M6 计划](./plan/archive/alpha-0.6.1-monster-behavior-plan.md)已归档。
 
-2026-09-22：**Alpha 0.6.0 行为基础完成**，交付 `0.6.0-alpha`，core v6 / Schema 5 / 地图 V2 不变。[行为模块](./behavior/README.md)包含 Core 内独立 HFSM 与行为树、组合样例、Animator 桥接、Editor 实时图与开发 Player 面板；完整 EditMode **788/788**、PlayMode **87/87**，独立开发 / 普通 Windows Player 及核心规模采集通过，见[验收](./behavior/acceptance/0.6.0/README.md)。[阶段计划及合同](./plan/archive/alpha-0.6.0-behavior-foundation-plan.md)已归档，[总计划](./plan/alpha-0.6-plan.md)继续推进守卫 Boss、有限刷怪及手动重置。
+2026-09-22：**Alpha 0.6.0 行为基础完成**，交付 `0.6.0-alpha`，core v6 / Schema 5 / 地图 V2 不变。[行为模块](./behavior/README.md)包含 Core 内独立 HFSM 与行为树、组合样例、Animator 桥接、Editor 实时图与开发 Player 面板；完整 EditMode **788/788**、PlayMode **87/87**，独立开发 / 普通 Windows Player 及核心规模采集通过，见[验收](./behavior/acceptance/0.6.0/README.md)。[阶段计划及合同](./plan/archive/alpha-0.6.0-behavior-foundation-plan.md)与[总计划](./plan/archive/alpha-0.6-plan.md)均已归档。
 
 2026-09-19：**Alpha 0.5 的 A–I 全部完成**，交付 `0.5.5-alpha`、core v6、Schema 5、地图文档 V2。地图制作、世界排序、双地图玩法、保存冻结和混合批量导航的综合验收见 [I 验收](./maps/acceptance/i/README.md)。
 

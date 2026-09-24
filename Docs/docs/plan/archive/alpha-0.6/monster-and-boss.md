@@ -1,8 +1,8 @@
 # Alpha 0.6：普通怪物与守卫 Boss
 
-状态：普通怪物与守卫 Boss 均已交付；[0.6.2 执行计划](../archive/alpha-0.6.2-guardian-boss-plan.md)按用户豁免 Windows 构建验收后归档，独立 Player 与性能矩阵未执行。上位[总计划](../alpha-0.6-plan.md)；依赖[行为基础](../archive/alpha-0.6.0-behavior-foundation-plan.md)。本文保留开发依据，当前实现见[Boss 模块](../../behavior/boss.md)，验证状态以[阶段记录](../../behavior/acceptance/0.6.2/README.md)为准；不修改人工游戏设计文档。
+状态：普通怪物与守卫 Boss 均已交付；[0.6.2 执行计划](../alpha-0.6.2-guardian-boss-plan.md)按用户豁免 Windows 构建验收后归档，独立 Player 与性能矩阵未执行。上位[总计划](../alpha-0.6-plan.md)；依赖[行为基础](../alpha-0.6.0-behavior-foundation-plan.md)。本文保留开发依据，当前实现见[Boss 模块](../../../behavior/boss.md)，验证状态以[阶段记录](../../../behavior/acceptance/0.6.2/README.md)为准；不修改人工游戏设计文档。
 
-2026-09-23：普通怪物 [0.6.1 执行计划](../archive/alpha-0.6.1-monster-behavior-plan.md)完成并归档，现状见[模块文档](../../behavior/monsters.md)。下文保留规划依据；Boss 已实现挥击、锁向冲锋、一次强化及地图冻结恢复，独立 Player 验收由用户豁免。
+2026-09-23：普通怪物 [0.6.1 执行计划](../alpha-0.6.1-monster-behavior-plan.md)完成并归档，现状见[模块文档](../../../behavior/monsters.md)。下文保留规划依据；Boss 已实现挥击、锁向冲锋、一次强化及地图冻结恢复，独立 Player 验收由用户豁免。
 
 ## 普通怪物状态
 

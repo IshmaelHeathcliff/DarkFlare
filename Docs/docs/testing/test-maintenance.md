@@ -23,6 +23,7 @@
 - 断言配置数量时先判断是否本身就是产品合同；能通过非空、完整登记、合法引用、每部位覆盖等表达时，不再重复一份内容清单。
 - 测试须使用隔离的数据根，完整恢复场景、分辨率、输入设备、时间、Locale、临时文件及资源。结束后恢复项目基线 Reload Scene Only：`EnterPlayModeOptionsEnabled = true`、`EnterPlayModeOptions = DisableDomainReload`（数值 `1`）；专项矩阵可以临时切换，见[兼容检查](../infrastructure/domain-reload-compatibility.md)。
 - 第三方包 / 供应商测试由上游维护，不删除包缓存来降低数量。常规项目回归限定两个 `DarkFlare.Tests.*` 程序集；修改相关包集成时再运行针对性上游测试，既有 Ignore 与项目失败分别报告。
+- 默认验收不构建 Player；只有用户针对当前任务明确指定需要 Player 验收时才发起构建。Editor 测试和历史 Player 结果不能记作当前 Player 通过；未执行的设备、跨进程及 Player 性能项目应明确标注。
 
 ## 收尾检查
 

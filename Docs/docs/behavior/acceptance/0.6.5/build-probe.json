@@ -1,0 +1,20 @@
+{
+  "observedAtUtc": "2026-09-23T12:57:00Z",
+  "sourceCommit": "060b3bd",
+  "sourceVersion": "0.6.4-alpha",
+  "unityVersion": "6000.6.0f1",
+  "platform": "StandaloneWindows64",
+  "buildId": "build_963a23f308f3",
+  "buildOptions": ["Development"],
+  "scenes": ["Assets/Scenes/Bootstrap.unity", "Assets/Scenes/Main.unity"],
+  "outputPath": "Builds/Alpha065Audit/DarkFlare.exe",
+  "result": "blocked_before_player_output",
+  "buildReportResult": "Unknown",
+  "buildReportPlatform": "NoTarget",
+  "exeCreated": false,
+  "blockedAssembly": "Unity Editor/Data/Tools/BuildPipeline/NiceIO.dll",
+  "assemblySignatureStatus": "NotSigned",
+  "codeIntegrityEventIds": [3033, 3077],
+  "diagnosis": "Windows Code Integrity Enterprise signing policy blocked Unity DotNetSdk/dotnet.exe from loading NiceIO.dll during Addressables PrepareForBuild. Player build could not reach compilation or output.",
+  "oldPlayerProbe": "Builds/Alpha062Audit/DarkFlare.exe started and remained running until deliberately stopped; this verifies only that old executable launch is currently possible, not that current source builds or runs."
+}

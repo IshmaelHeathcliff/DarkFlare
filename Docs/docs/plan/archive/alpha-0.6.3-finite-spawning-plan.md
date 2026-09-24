@@ -1,6 +1,6 @@
 # Alpha 0.6.3：普通怪物有限刷怪执行计划
 
-状态：2026-09-23，**S1–S6 已完成并归档**。上位[Alpha 0.6 总计划](../alpha-0.6-plan.md)与[刷怪／重置合同](../alpha-0.6/spawning-and-reset.md)；现行实现见[有限刷怪模块](../../behavior/finite-spawning.md)、[地图生命周期](../../maps/world-map-lifecycle.md)和[本地存档](../../infrastructure/local-save.md)。启动基线为 `0.6.2-alpha`、地图 V3、core v8、Schema 7；S1–S6 初次交付为 `0.6.3-alpha`、V4、core v9、Schema 8，后续配额调整升至 core v10、地图 r9。阶段结果见[验收记录](../../behavior/acceptance/0.6.3/README.md)。
+状态：2026-09-23，**S1–S6 已完成并归档**。上位[Alpha 0.6 总计划](alpha-0.6-plan.md)与[刷怪／重置合同](alpha-0.6/spawning-and-reset.md)；现行实现见[有限刷怪模块](../../behavior/finite-spawning.md)、[地图生命周期](../../maps/world-map-lifecycle.md)和[本地存档](../../infrastructure/local-save.md)。启动基线为 `0.6.2-alpha`、地图 V3、core v8、Schema 7；S1–S6 初次交付为 `0.6.3-alpha`、V4、core v9、Schema 8，后续配额调整升至 core v10、地图 r9。阶段结果见[验收记录](../../behavior/acceptance/0.6.3/README.md)。
 
 ## 目标与边界
 

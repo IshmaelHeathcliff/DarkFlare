@@ -1,6 +1,6 @@
 # Alpha 0.6.4：刷怪地图手动重置执行计划
 
-状态：2026-09-23，**R1–R6 已完成并归档**。交付 `0.6.4-alpha`、地图 V4、core v10、Schema 9；正式野外图每实例有 100 个普通怪物名额（入图 20 个、10 个分散触发点各 8 个），守卫 Boss 独立。上位[总计划](../alpha-0.6-plan.md)、[刷怪与重置合同](../alpha-0.6/spawning-and-reset.md)、[手动重置模块](../../behavior/map-reset.md)。
+状态：2026-09-23，**R1–R6 已完成并归档**。交付 `0.6.4-alpha`、地图 V4、core v10、Schema 9；正式野外图每实例有 100 个普通怪物名额（入图 20 个、10 个分散触发点各 8 个），守卫 Boss 独立。上位[总计划](alpha-0.6-plan.md)、[刷怪与重置合同](alpha-0.6/spawning-and-reset.md)、[手动重置模块](../../behavior/map-reset.md)。
 
 ## 目标与边界
 

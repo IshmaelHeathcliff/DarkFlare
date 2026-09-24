@@ -1,5 +1,7 @@
 # 已完成计划归档
 
+- [Alpha 0.6 综合交付](alpha-0.6.5-integration-plan.md)与[总计划及配套合同](alpha-0.6-plan.md)：2026-09-24 按用户调整的门槛完成，交付 `0.6.5-alpha` / core v10 / Schema 9 / 地图 V4。EditMode 819/819、PlayMode 102 通过／2 包内跳过；[验收](../../behavior/acceptance/0.6.5/README.md)明确 Player、跨进程和当前版本 300／600 性能矩阵未执行。今后仅在用户明确指定 Player 验收时构建。
+
 - [Alpha 0.6.4 手动重置](alpha-0.6.4-manual-map-reset-plan.md)：2026-09-23 R1–R6 完成，版本 `0.6.4-alpha` / 地图 V4 / core v10 / Schema 9；[验收](../../behavior/acceptance/0.6.4/README.md)记录事务、迁移、传送门和生命周期回归。Windows Player 与 300／600 实测未执行。
 
 - [Alpha 0.6.3 有限刷怪](alpha-0.6.3-finite-spawning-plan.md)：2026-09-23 S1–S6 完成，随后将正式野外图扩为 20 个入图名额、10 处各 8 个触发名额；当前为 `0.6.3-alpha` / 地图 V4 / core v10 / Schema 8。[验收](../../behavior/acceptance/0.6.3/README.md)记录扩容后 EditMode 818/818、PlayMode 97 通过／2 包内跳过。Windows Player 与 300／600 实测未执行。
@@ -10,7 +12,7 @@
 
 - [Alpha 0.6.0 行为基础](alpha-0.6.0-behavior-foundation-plan.md)及配套核心 / 接入合同：2026-09-22 F1–F6 完成，版本 `0.6.0-alpha`；[模块与验收](../../behavior/README.md)，EditMode 788/788、PlayMode 87/87。
 
-- [Alpha 0.6 启动准备](./alpha-0.6-startup.md)：2026-09-22 完成基线梳理，已由[总计划草案](../alpha-0.6-plan.md)接管；仅启动准备完成，功能待实施。
+- [Alpha 0.6 启动准备](./alpha-0.6-startup.md)：2026-09-22 完成基线梳理，后由[总计划](alpha-0.6-plan.md)接管；此条只记录启动准备的历史阶段。
 
 - [Alpha 0.5 综合交付](alpha-0.5.5-integration-plan.md)与[总计划及配套方案](alpha-0.5-plan.md)：2026-09-19 A–I 全部完成，交付 `0.5.5-alpha`；当前编辑链路、双地图 Player、历史存档、混合导航压力与生产构建通过，见 [I 验收](../../maps/acceptance/i/README.md)。
 

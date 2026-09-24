@@ -1,6 +1,6 @@
 # Alpha 0.6.2：守卫 Boss 执行计划
 
-状态：2026-09-23，**按用户调整的验收门槛结束并归档**。B1–B4 已实现，B5–B6 中可自动验证的内容与两种 Windows 构建完成；用户跳过本阶段 Windows 构建验收，独立 Player、跨进程继续及 300 / 600 性能矩阵未执行，不能视作通过。地图 V3、core v8、Schema 7、正式守卫 Boss 和 `0.6.2-alpha` 已接入。上位[总计划](../alpha-0.6-plan.md)、[行为合同](../alpha-0.6/monster-and-boss.md)、[有限刷怪与重置合同](../alpha-0.6/spawning-and-reset.md)；当前实现见[Boss 模块](../../behavior/boss.md)、[地图生命周期](../../maps/world-map-lifecycle.md)，[验收记录](../../behavior/acceptance/0.6.2/README.md)。
+状态：2026-09-23，**按用户调整的验收门槛结束并归档**。B1–B4 已实现，B5–B6 中可自动验证的内容与两种 Windows 构建完成；用户跳过本阶段 Windows 构建验收，独立 Player、跨进程继续及 300 / 600 性能矩阵未执行，不能视作通过。地图 V3、core v8、Schema 7、正式守卫 Boss 和 `0.6.2-alpha` 已接入。上位[总计划](alpha-0.6-plan.md)、[行为合同](alpha-0.6/monster-and-boss.md)、[有限刷怪与重置合同](alpha-0.6/spawning-and-reset.md)；当前实现见[Boss 模块](../../behavior/boss.md)、[地图生命周期](../../maps/world-map-lifecycle.md)，[验收记录](../../behavior/acceptance/0.6.2/README.md)。
 
 ## 目标和完成定义
 
