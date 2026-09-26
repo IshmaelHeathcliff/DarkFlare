@@ -77,6 +77,14 @@ Point / Look 在 Context 切换后会回放当前指针位置；相同控件的�
 
 提交前检查 `ProjectSettings/EditorSettings.asset` 的实际值和 Git diff，避免纳入测试遗留配置。新增静态状态必须明确其重置或保留合同，事件订阅与输入资产必须按生命周期释放；游戏内直接停止的 Abandoned 隔离边界见兼容检查报告。历史验收中恢复为 `0` 的记录保持原意，不再作为当前基线。
 
+PlayMode 的 `InputTestFixtureGuard` 在同次测试运行内共享模拟输入运行时，单项清理移除模拟设备；整次运行结束先销毁 ApplicationHost，再显式恢复原输入运行时与项目 Actions 引用并清空夹具引用。退出 Play Mode 的提前回调覆盖中止路径。
+
+切换期间同时停用 `InputSystemUIInputModule` 与 Unity 原生 `InputForUI.EventProvider`，在当前运行时消化已排队的初始状态检查，再通过 `InputActionMap.Dispose()` 释放两个运行时共享的项目资产绑定缓存；随后恢复原启用状态，让 Actions 绑定当前设备，防止失效鼠标监听和旧设备缓冲残留。原生接收器没有公开 API，隔离逻辑仅在测试程序集内通过反射调用；Editor API 不匹配时明确失败。
+
+Input System 包内 Reset 会清空被保存的 manager.actions，Guard 在原生接收器重新启用前补回原资产引用，避免下一轮沿用旧设备绑定。原设备与项目 UI Action 的连续切换恢复由 `Alpha025InputOwnershipPlayModeTests` 覆盖。
+
+模拟运行时自身执行 `beforeUpdate`；包内夹具只替换原生 `onUpdate`，因此 Guard 同时隔离原生 `beforeUpdate`，避免真实设备的初始检查在模拟缓冲上运行。正式恢复交还包内 `TearDown` 的 `InstallRuntime` 流程，恢复原生回调与设备；此适配同样只存在于测试程序集。
+
 ## UI 组成
 
 `Assets/UI/GameRoot.uxml` 组合 HUD、共享菜单遮罩和三个功能模板：

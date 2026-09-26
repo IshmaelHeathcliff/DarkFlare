@@ -288,7 +288,7 @@ namespace DarkFlare
         {
             if ((_world.BlockedActions & StatusActionBlock.Move) != 0) { _world.StopMoving(); return NodeStatus.Running; }
             _world.Move(_visible ? NavigationTargetKind.Player : NavigationTargetKind.Point, Point(_state.LastSeen));
-            SetSemantic(_world.NavigationStatus == NavigationStatus.Moving ? BehaviorSemantic.Move : BehaviorSemantic.Idle); return NodeStatus.Running;
+            SetMovementSemantic(_world.NavigationStatus); return NodeStatus.Running;
         }
 
         NodeStatus Wander(float dt)
@@ -305,7 +305,7 @@ namespace DarkFlare
                 else
                 {
                     _world.Move(NavigationTargetKind.Point, Point(_state.WanderGoal));
-                    SetSemantic(status == NavigationStatus.Moving ? BehaviorSemantic.Move : BehaviorSemantic.Idle); return NodeStatus.Running;
+                    SetMovementSemantic(status); return NodeStatus.Running;
                 }
             }
             SetSemantic(BehaviorSemantic.Idle); _world.StopMoving();
@@ -328,6 +328,14 @@ namespace DarkFlare
             }
             if (!_state.HasWanderGoal) { _state.WaitRemaining = RandomWait(); }
             return NodeStatus.Running;
+        }
+
+        void SetMovementSemantic(NavigationStatus status)
+        {
+            // 重算路径不结束已开始的移动表现；实际到达、失败或行动切换仍立即停止。
+            bool moving = status == NavigationStatus.Moving
+                || _semantic == BehaviorSemantic.Move && status is NavigationStatus.Pending or NavigationStatus.Busy;
+            SetSemantic(moving ? BehaviorSemantic.Move : BehaviorSemantic.Idle);
         }
 
         float RandomWait() { return Mathf.Lerp(_config.WaitMinimum, _config.WaitMaximum, NextRandom()); }

@@ -93,6 +93,36 @@ namespace DarkFlare.Tests
         }
 
         [UnityTest]
+        public IEnumerator MovingPlayer_ChaseAnimationKeepsPlaybackProgress_AndSleepStopsMovement()
+        {
+            PositionPlayer(new Vector2(15, 10));
+            Animator animator = _monster.GetComponent<Animator>();
+            float deadline = Time.realtimeSinceStartup + 5;
+            while ((!animator.GetCurrentAnimatorStateInfo(0).IsName("Move") || animator.IsInTransition(0))
+                && Time.realtimeSinceStartup < deadline) { yield return null; }
+            Assert.IsTrue(animator.GetCurrentAnimatorStateInfo(0).IsName("Move"), "正式怪物未进入移动动画");
+            Vector2 initial = _monster.Body.position;
+            float progress = animator.GetCurrentAnimatorStateInfo(0).normalizedTime;
+            for (int i = 0; i < 100; i++)
+            {
+                PositionPlayer(_monster.Body.position + new Vector2(5, Mathf.Sin(i * .1f) * .25f));
+                yield return new WaitForFixedUpdate();
+                AnimatorStateInfo current = animator.GetCurrentAnimatorStateInfo(0);
+                Assert.AreEqual(MonsterBehaviorMode.Chasing, _monster.BehaviorRuntime.Mode);
+                Assert.IsTrue(animator.GetBool("Moving"), "玩家移动导致追逐表现错误切回待机");
+                Assert.IsTrue(current.IsName("Move"), "持续追逐必须保留移动动画");
+                Assert.GreaterOrEqual(current.normalizedTime, progress, "追逐中的移动动画从头重播");
+                progress = current.normalizedTime;
+            }
+            Assert.Greater(Vector2.Distance(initial, _monster.Body.position), .5f, "验证期间怪物必须实际移动");
+            PositionPlayer(new Vector2(-10, -10));
+            yield return new WaitForSeconds(.3f);
+            Assert.AreEqual(MonsterBehaviorMode.Sleeping, _monster.BehaviorRuntime.Mode);
+            Assert.IsFalse(animator.GetBool("Moving"));
+            Assert.IsTrue(animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"));
+        }
+
+        [UnityTest]
         public IEnumerator WindupCancellation_DoesNotConsumeDamageRng_AndRecoveryDoesNotRepeatHit()
         {
             _monster.Body.simulated = false;

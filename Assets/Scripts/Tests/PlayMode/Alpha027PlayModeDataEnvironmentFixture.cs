@@ -36,7 +36,8 @@ namespace DarkFlare.Tests
                 Object.DestroyImmediate(host.gameObject);
             }
 
-            Alpha027PlayModeDataEnvironment.ReleaseAndDelete();
+            try { InputTestFixtureGuard.ReleaseRuntime(); }
+            finally { Alpha027PlayModeDataEnvironment.ReleaseAndDelete(); }
         }
     }
 }

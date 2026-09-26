@@ -3,6 +3,7 @@ using System.Reflection;
 using Cysharp.Threading.Tasks;
 using NUnit.Framework;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.UI;
 using UnityEngine.TestTools;
 using UnityEngine.UIElements;
@@ -35,6 +36,64 @@ namespace DarkFlare.Tests
             }
 
             yield return null;
+        }
+
+        [UnityTest]
+        public IEnumerator InputFixtureRuntime_RestoresOriginalMouseAndProjectAction()
+        {
+            ApplicationHost host = ApplicationHost.Current;
+            yield return host.ShutdownAsync().ToCoroutine();
+            Object.DestroyImmediate(host.gameObject);
+            InputTestFixtureGuard.ReleaseRuntime();
+            Mouse originalMouse = Mouse.current;
+            bool createdMouse = originalMouse == null;
+            if (createdMouse) { originalMouse = InputSystem.AddDevice<Mouse>(); }
+            Vector2 originalPosition = originalMouse.position.ReadValue();
+            InputAction point = InputSystem.actions.FindAction("UI/Point", true);
+            InputActionAsset originalActions = InputSystem.actions;
+            bool pointEnabled = point.enabled;
+            var fixture = new InputTestFixture();
+            try
+            {
+                for (int cycle = 0; cycle < 2; cycle++)
+                {
+                    yield return InputTestFixtureGuard.Setup(fixture);
+                    Assert.That(InputSystem.devices, Has.No.Member(originalMouse), "原设备不能被模拟输入运行时接管");
+                    Mouse simulatedMouse = InputSystem.AddDevice<Mouse>();
+                    point.Enable();
+                    Assert.That(point.controls, Has.Member(simulatedMouse.position), "项目 UI Action 不能保留原运行时的设备绑定");
+                    fixture.Set(simulatedMouse.position, new Vector2(30, 40));
+                    yield return null;
+                    Assert.AreEqual(new Vector2(30, 40), point.ReadValue<Vector2>(),
+                        $"项目 UI Action 必须重新绑定模拟设备；cycle={cycle}, enabled={point.enabled}, phase={point.phase}, raw={simulatedMouse.position.ReadValue()}");
+                    InputTestFixtureGuard.TearDown(fixture);
+                    InputTestFixtureGuard.ReleaseRuntime();
+                    Assert.AreSame(originalActions, InputSystem.actions, "测试结束必须恢复项目输入资产引用");
+                    Assert.That(InputSystem.devices, Has.Member(originalMouse), "测试结束必须恢复原输入设备");
+                    Assert.IsFalse(simulatedMouse.added);
+
+                    point.Enable();
+                    InputSystem.QueueDeltaStateEvent(originalMouse.position, new Vector2(123, 45));
+                    InputSystem.Update();
+                    Assert.AreEqual(new Vector2(123, 45), point.ReadValue<Vector2>(), "恢复后项目 UI Action 必须可接收鼠标事件");
+                    InputTestFixtureGuard.ReleaseRuntime();
+                    Assert.That(InputSystem.devices, Has.Member(originalMouse), "重复释放不能再次切换运行时");
+                }
+            }
+            finally
+            {
+                InputTestFixtureGuard.ReleaseRuntime();
+                if (originalMouse.added)
+                {
+                    InputSystem.QueueDeltaStateEvent(originalMouse.position, originalPosition);
+                    InputSystem.Update();
+                    if (createdMouse) { InputSystem.RemoveDevice(originalMouse); }
+                }
+                if (!pointEnabled) { point.Disable(); }
+                new GameObject("[ApplicationHost]").AddComponent<ApplicationHost>();
+            }
+            yield return null;
+            yield return _fixture.EnterFrontEnd();
         }
 
         [UnityTest]

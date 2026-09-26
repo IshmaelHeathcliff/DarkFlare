@@ -124,6 +124,63 @@ namespace DarkFlare.Tests
             Assert.That(_runtime.IsVisible, Is.False);
         }
 
+        [TestCase(MonsterBehaviorMode.Chasing)]
+        [TestCase(MonsterBehaviorMode.Wandering)]
+        public void MovementAnimation_RepathKeepsStartedMovement_AndRealStopsReturnIdle(MonsterBehaviorMode mode)
+        {
+            _world.TargetPosition = new Vector2(mode == MonsterBehaviorMode.Chasing ? 6 : 13, 0);
+            if (mode == MonsterBehaviorMode.Wandering)
+            {
+                MonsterBehaviorStateDto state = _runtime.CaptureState();
+                state.HasWanderGoal = true; state.WanderGoal.X = 1;
+                _runtime.Restore(state, 0);
+            }
+            _world.NavigationStatus = NavigationStatus.Pending;
+            Tick();
+            Assert.That(_runtime.Mode, Is.EqualTo(mode));
+            Assert.That(_runtime.Presentation.Semantic, Is.EqualTo(BehaviorSemantic.Idle), "初次等待路径时尚未开始移动");
+            _world.NavigationStatus = NavigationStatus.Moving;
+            Tick();
+            Assert.That(_runtime.Presentation.Semantic, Is.EqualTo(BehaviorSemantic.Move));
+
+            int changes = 0;
+            IUnRegister subscription = _architecture.GetSystem<BehaviorSystem>().RegisterPresentation(_runtime.Handle, _ => changes++);
+            try
+            {
+                foreach (NavigationStatus status in new[] { NavigationStatus.Pending, NavigationStatus.Busy, NavigationStatus.Moving,
+                    NavigationStatus.Pending, NavigationStatus.Moving })
+                {
+                    _world.TargetPosition += Vector2.right * .05f;
+                    _world.NavigationStatus = status; Tick();
+                    Assert.That(_runtime.Presentation.Semantic, Is.EqualTo(BehaviorSemantic.Move), $"重算路径 {status} 不能重启移动动画");
+                }
+                Assert.That(changes, Is.Zero, "连续移动不能产生额外的待机 / 移动切换");
+            }
+            finally { subscription.UnRegister(); }
+
+            _world.NavigationStatus = NavigationStatus.Arrived; Tick();
+            Assert.That(_runtime.Presentation.Semantic, Is.EqualTo(BehaviorSemantic.Idle));
+            _world.NavigationStatus = NavigationStatus.Moving; Tick();
+            _world.BlockedActions = StatusActionBlock.Move; Tick();
+            Assert.That(_world.Intent, Is.EqualTo(NavigationTargetKind.None));
+            Assert.That(_runtime.Presentation.Semantic, Is.EqualTo(BehaviorSemantic.Idle));
+        }
+
+        [TestCase(NavigationStatus.Unreachable)]
+        [TestCase(NavigationStatus.TargetUnavailable)]
+        [TestCase(NavigationStatus.Cancelled)]
+        [TestCase(NavigationStatus.Stale)]
+        [TestCase(NavigationStatus.BudgetExceeded)]
+        public void ChaseAnimation_TerminalNavigationStopsMovement(NavigationStatus status)
+        {
+            _world.TargetPosition = new Vector2(6, 0); Tick();
+            Assert.That(_runtime.Presentation.Semantic, Is.EqualTo(BehaviorSemantic.Move));
+            _world.NavigationStatus = status; Tick();
+            Assert.That(_runtime.Presentation.Semantic, Is.EqualTo(BehaviorSemantic.Idle));
+            _world.NavigationStatus = NavigationStatus.Pending; Tick();
+            Assert.That(_runtime.Presentation.Semantic, Is.EqualTo(BehaviorSemantic.Idle));
+        }
+
         [Test]
         public void Attack_WindupOnce_CancelConsumesCooldown_AndMissDoesNotHit()
         {

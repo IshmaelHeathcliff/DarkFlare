@@ -36,6 +36,8 @@ Move 禁止只停止导航，允许原地攻击；Attack 禁止立即取消动�
 
 正式 Prefab 挂接 `BehaviorAnimatorBridge`，绑定时旧 `ActorAnimatorController` 让出移动 / 攻击参数，仍处理受击、死亡、复活和左右翻转。桥接在前摇开始触发攻击动画，以动作 ID 去重。Animator、动画事件、播放速度和资源是否可用均不决定伤害或动作完成。
 
+追逐与闲逛已经开始移动后，重算路径的 `Pending` / `Busy` 保留 Move 语义，避免玩家移动引发 Idle / Move 反复切换、重播移动动画。首次等待路径仍为 Idle；到达、路径失败、禁止移动、休眠和攻击正常结束移动表现。导航继续独立决定安全速度，动画不改变寻路或战斗结果。
+
 表现订阅通过 `BehaviorSystem.RegisterPresentation(handle, callback)` 按实例分发，复用 QFramework `EasyEvent`；句柄采用字典索引。全局事件仍可供少量观察者使用，动画桥和样例对象不全体订阅，避免大量同时攻击时出现平方级回调。注销先撤销身份并移除索引，再发停止事件；旧订阅不能收到替代实例的事件。
 
 ## 保存与地图生命周期
