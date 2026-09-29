@@ -1,6 +1,6 @@
 # 双地图与运行时作用域
 
-阶段 G 完成于 `0.5.3-alpha`，原有冻结合同见 [G 验收](./acceptance/g/README.md)。H 已接入[地图导航所有权](./navigation.md)及 Schema 5 意图恢复；当前 `0.5.5-alpha` 的 Player 跨进程继续、历史档迁移、30 秒离场冻结与 1000 单位切图见 [I 综合验收](./acceptance/i/README.md)。
+阶段 G 完成于 `0.5.3-alpha`，原有冻结合同见 [G 验收](./acceptance/g/README.md)。H 已接入[地图导航所有权](./navigation.md)及 Schema 5 意图恢复；历史 `0.5.5-alpha` 的 Player 跨进程继续、历史档迁移、30 秒离场冻结与 1000 单位切图见 [I 综合验收](./acceptance/i/README.md)。当前为 `0.7.0-alpha.2` / core v10 / Schema 9 / 地图 V4，已接入行为、Boss、有限刷怪与手动重置；[0.6.5 Editor 综合验收](../behavior/acceptance/0.6.5/README.md)已完成，本次版本接入与完整回归见[0.7.0 验收](../plan/archive/alpha-0.7.0-semver-plan.md)，当前版本 Player 未验收。
 
 ## 数据与入口
 

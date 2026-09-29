@@ -11,7 +11,9 @@
 
 玩家可在场景内持续战斗和获取物品，通过 Tab / 手柄 Start 打开随身背包，也可接近商人或打造台后使用 E / 手柄北键进入对应功能。菜单打开时暂停玩法模拟，关闭后恢复战斗与 Gameplay 输入。
 
-当前成果用于验证战斗、物品、经济与构筑之间的闭环，已接入城镇与野外双地图；离场地图冻结，返回后恢复，详见[地图生命周期](./maps/world-map-lifecycle.md)。`alpha 0.2.0–0.2.7` 已为该循环补上唯一应用宿主、Session 作用域、新游戏 / Restore 事务、`auto` 本地存档与删除、统一退出、用户设置与完整默认恢复、中英运行时本地化、完整 Scene Flow、Application Shell、应用级输入、音频、降低动态、平台挂起恢复，以及结构化日志、玩家错误映射和统一 Addressables Resource Service。当前装备为十槽二十件，正式内容另包含四种消耗品、25 个物品词条、10 个怪物词条和三种怪物；地图、商人、打造台、怪物、装备与运行时 UI 已完成视觉接入。当前版本为 `0.5.5-alpha`，综合交付见 [I 验收](./maps/acceptance/i/README.md)。下方早期阶段章节保留历史实施过程，当前合同以对应模块文档为准。
+当前成果用于验证战斗、物品、经济与构筑之间的闭环，已接入城镇与野外双地图；离场地图冻结，返回后恢复，详见[地图生命周期](./maps/world-map-lifecycle.md)。`alpha 0.2.0–0.2.7` 已为该循环补上唯一应用宿主、Session 作用域、新游戏 / Restore 事务、`auto` 本地存档与删除、统一退出、用户设置与完整默认恢复、中英运行时本地化、完整 Scene Flow、Application Shell、应用级输入、音频、降低动态、平台挂起恢复，以及结构化日志、玩家错误映射和统一 Addressables Resource Service。当前装备为十槽二十件，正式内容另包含四种消耗品、25 个物品词条、10 个怪物词条、三种普通怪物与独立守卫 Boss；地图、商人、打造台、怪物、装备与运行时 UI 已完成视觉接入。当前版本为 `0.7.0-alpha.2`；玩法 Editor 综合交付见 [0.6.5 验收](./behavior/acceptance/0.6.5/README.md)，本次 SemVer 接入与完整 Editor 回归见[0.7.0 验收](./plan/archive/alpha-0.7.0-semver-plan.md)，当前版本 Player 未验收。下方早期阶段章节保留历史实施过程，当前合同以对应模块文档为准。
+
+Alpha 0.6 已接入[普通怪物行为](./behavior/monsters.md)、[守卫 Boss](./behavior/boss.md)、[有限刷怪](./behavior/finite-spawning.md)与[手动重置](./behavior/map-reset.md)。野外固定 100 个普通怪物名额（入图 20、10 处各 8），Boss 独立；击杀不补怪，普通进出与继续游戏保留进度，只有传送门显式重置才刷新并清除目标图旧掉落。
 
 ## 阶段 0 视觉切片（历史）
 
@@ -131,7 +133,7 @@
 | 怪物移动与碰撞 | `MonsterController`、`NavigationMap`、`GameplayPhysicsLayers` | [共享流场 / A*、批量分离](./maps/navigation.md)、接近停止和世界碰撞合同 |
 | 随机化 | `GameplayRandomSystem`、`MonsterInstanceRandomSeeds`、`MonsterAffixGenerator` | 根种子、独立通道、怪物实例生命 / 词条与可复现调试 |
 | 掉落与物品 | `LootSystem`、`LootTableDefinition`、`ItemGenerator` | 死亡掉落、物品实例生成和世界掉落物创建 |
-| 背包与装备 | `InventoryModel`、`InventoryGrid`、`EquipmentModel`、`EquipmentSystem` | 10×6 格子占用、四槽穿戴、原子替换 / 卸下和装备效果聚合 |
+| 背包与装备 | `InventoryModel`、`InventoryGrid`、`EquipmentModel`、`EquipmentSystem` | 10×6 格子占用、十槽穿戴、原子替换 / 卸下和装备效果聚合 |
 | 交易 | `EconomyModel`、`TradingSystem`、`ItemValueCalculator` | 单商人库存、买卖价格与事务提交 |
 | 打造 | `CraftingSystem`、`CraftingOperations` | 四种词条操作、金币成本、失败回滚与完成事件 |
 | 输入与 UI | `GameInput`、`GameMenuController`、各面板 Controller | 键鼠 / 手柄输入、HUD、背包、商店和打造交互 |

@@ -19,6 +19,11 @@ namespace DarkFlare
 
         public static GameVersion Current => new GameVersion(Application.version);
 
+        public bool TryGetSemanticVersion(out SemanticVersion version)
+        {
+            return SemanticVersion.TryParse(Value, out version);
+        }
+
         public bool Equals(GameVersion other) => string.Equals(Value, other.Value, StringComparison.Ordinal);
 
         public override bool Equals(object obj) => obj is GameVersion other && Equals(other);

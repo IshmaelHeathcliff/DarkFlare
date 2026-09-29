@@ -186,6 +186,26 @@ namespace DarkFlare.Tests
             Assert.AreEqual(source.Payload.Profile.Gold, restored.Document.Payload.Profile.Gold);
         }
 
+        [TestCase("1.2.3-alpha.10+build.001")]
+        [TestCase("999.0.0-beta")]
+        [TestCase("legacy-build")]
+        public void GameVersion_RoundTripsOriginalHeaderWithoutControllingDataCompatibility(string value)
+        {
+            SaveDocumentDto source = SaveDataContractTests.CreateValidDocument();
+            source.Header.GameVersion = value;
+
+            SaveSerializationResult serialized = _serializer.Serialize(source);
+            Assert.IsTrue(serialized.Succeeded, Describe(serialized));
+            SaveDeserializationResult restored = _serializer.Deserialize(serialized.Bytes);
+            Assert.IsTrue(restored.Succeeded, Describe(restored));
+            Assert.AreEqual(value, restored.Document.Header.GameVersion);
+            Assert.AreEqual(source.Header.SaveSchemaVersion, restored.Document.Header.SaveSchemaVersion);
+            Assert.AreEqual(source.Header.ContentVersion, restored.Document.Header.ContentVersion);
+            Assert.IsTrue(JToken.DeepEquals(
+                JToken.FromObject(source.Payload),
+                JToken.FromObject(restored.Document.Payload)));
+        }
+
         [Test]
         public void Deserialize_CanonicalizesPropertyOrderBeforeChecksumVerification()
         {

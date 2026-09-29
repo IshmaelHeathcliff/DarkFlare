@@ -3,6 +3,7 @@
 ## 当前文档
 
 - [项目概览](./project.md)
+- [版本管理与 SemVer 迭代规则](./version-management.md)
 - [架构图索引](./architecture/README.md)
 - [Unity 高层架构图与代码依据](./architecture/unity-overview/README.md)
 - [装备、词条与伤害作用流程](./architecture/equipment-affix-damage/README.md)
@@ -69,6 +70,8 @@
 
 ## 计划状态
 
+2026-09-29：**Alpha 0.7.0 两阶段完成**，运行版本 `0.7.0-alpha.2` / core v10 / Schema 9 / 1 / 地图 V4。不可变 SemVer 对象、`GameVersion` 解析桥接与历史字符串兼容已完成，核心定向 52/52、接入与存档定向 32/32、完整 EditMode 882/882、PlayMode 102/102，0 失败 / 跳过。见[执行与验收归档](./plan/archive/alpha-0.7.0-semver-plan.md)及[版本管理与 API](./version-management.md)；[0.7 总计划](./plan/alpha-0.7-plan.md)继续维护，后续 `0.7.1-alpha` 范围待明确。本版 Player、真实设备、跨进程及性能矩阵未执行。
+
 2026-09-24：**Alpha 0.6.5 综合交付按调整门槛完成**，当前版本 `0.6.5-alpha` / core v10 / Schema 9 / 地图 V4。正式玩法、存档故障及 20 轮生命周期的 Editor 回归通过：EditMode 819/819，PlayMode 102 通过／2 包内跳过／0 失败。按用户要求，只有明确指定 Player 验收时才构建 Player；本阶段 Player、真实设备、跨进程及当前版本 300／600 性能矩阵未执行，见[验收记录](./behavior/acceptance/0.6.5/README.md)及[归档计划](./plan/archive/alpha-0.6.5-integration-plan.md)。
 
 2026-09-23：**Alpha 0.6.4 手动重置完成**，该阶段版本 `0.6.4-alpha` / 地图 V4 / core v10 / Schema 9。玩家可在刷怪地图传送门选择普通进入或二次确认后重置并进入；正常离场继续保留原进度。见[模块](./behavior/map-reset.md)、[验收](./behavior/acceptance/0.6.4/README.md)和[归档计划](./plan/archive/alpha-0.6.4-manual-map-reset-plan.md)。
@@ -87,5 +90,5 @@
 
 ## 说明
 
-当前项目已完成首版最小循环、初步体验优化及 Alpha 0.1–0.4 已归档计划，Alpha 0.5 的地图基础、编辑器、世界层级、双地图、批量导航与综合交付均已完成。已完成的执行计划统一保存在 `Docs/docs/plan/archive/`。
+当前项目已完成首版最小循环、初步体验优化及 Alpha 0.1–0.4 已归档计划，Alpha 0.5 的地图基础、编辑器、世界层级、双地图、批量导航与综合交付，以及 Alpha 0.6 的行为、Boss、有限刷怪、手动重置与 Editor 综合交付均已完成。Alpha 0.7 的首个小版本已完成 SemVer 对象与应用接入，运行版本为 `0.7.0-alpha.2`，后续小版本范围待明确。已完成的执行计划统一保存在 `Docs/docs/plan/archive/`。
 后续新增系统、配置或流程时，应优先更新对应文档，避免 `Docs/docs/` 与实现脱节。游戏设计文档位于 `Docs/design/`，不属于 Agent 的常规维护范围。

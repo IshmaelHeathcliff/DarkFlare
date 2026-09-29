@@ -65,6 +65,40 @@ namespace DarkFlare.Tests
         }
 
         [Test]
+        public void GameVersion_ParsesExplicitlyWithoutChangingStringIdentityOrSource()
+        {
+            GameVersion earlier = new GameVersion("1.2.3-alpha.2+build.001");
+            GameVersion later = new GameVersion("1.2.3-alpha.10");
+            GameVersion otherBuild = new GameVersion("1.2.3-alpha.2+build.002");
+
+            Assert.IsTrue(earlier.TryGetSemanticVersion(out SemanticVersion earlierVersion));
+            Assert.IsTrue(later.TryGetSemanticVersion(out SemanticVersion laterVersion));
+            Assert.IsTrue(otherBuild.TryGetSemanticVersion(out SemanticVersion otherBuildVersion));
+            Assert.IsTrue(earlierVersion < laterVersion);
+            Assert.AreEqual(0, earlierVersion.CompareTo(otherBuildVersion));
+            Assert.AreNotEqual(earlier, otherBuild);
+            Assert.AreEqual(new GameVersion(earlier.Value), earlier);
+            Assert.AreEqual(earlier.Value, earlierVersion.ToString());
+            Assert.AreEqual(UnityEngine.Application.version, GameVersion.Current.Value);
+            Assert.IsTrue(GameVersion.Current.TryGetSemanticVersion(out SemanticVersion current));
+            Assert.AreEqual(UnityEngine.Application.version, current.ToString());
+        }
+
+        [Test]
+        public void GameVersion_OpaqueHistoricalStringsRemainUsableWhenParsingFails()
+        {
+            GameVersion historical = new GameVersion("legacy-build");
+
+            Assert.IsFalse(historical.TryGetSemanticVersion(out SemanticVersion parsed));
+            Assert.IsNull(parsed);
+            Assert.AreEqual("legacy-build", historical.Value);
+            Assert.AreEqual(historical.Value, historical.ToString());
+            Assert.AreEqual(new GameVersion("legacy-build"), historical);
+            Assert.IsFalse(default(GameVersion).TryGetSemanticVersion(out parsed));
+            Assert.IsNull(parsed);
+        }
+
+        [Test]
         public void HistoricalMigration_DeepCopiesNormalizesContentIdAndIsDeterministic()
         {
             JsonMigrationRegistry registry = BuildRegistry(

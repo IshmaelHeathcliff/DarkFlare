@@ -81,9 +81,11 @@ DarkFlare/
     Runtime/                          # 程序集 DarkFlare.Runtime
       DarkFlare.Runtime.asmdef
       GameArchitecture.cs
-      Core/                           # 程序集 DarkFlare.Core（仅 QFramework）
+      Core/                           # 程序集 DarkFlare.Core（基础架构、行为与版本规则）
         DarkFlare.Core.asmdef
         QFramework.cs
+        Versioning/
+          SemanticVersion.cs
       Infrastructure/
         Accessibility/
           AccessibilityContracts.cs
