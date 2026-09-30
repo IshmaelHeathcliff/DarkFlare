@@ -2,7 +2,7 @@
 
 Alpha 0.6.2 在正式野外地图加入守卫者。怪物定义 `monster:guardian` 引用独立 `BossBehaviorDefinition`、Prefab 与中英文名称。Boss 不进入普通加权刷怪池；其稳定点位由地图 V3 的 `bossSpawns` 持有，当前每图最多一个。
 
-当前代码与自动回归已完成；用户跳过本阶段 Windows 构建验收，独立 Player、跨进程及性能矩阵未执行，交付状态见[0.6.2 验收记录](acceptance/0.6.2/README.md)。
+当前代码与自动回归已完成；用户跳过本阶段 Windows 构建验收，独立 Player、跨进程及性能矩阵未执行，交付状态见[0.6.2 验收记录](../plan/archive/0.6.2/acceptance/behavior/README.md)。
 
 ## 行为与结算
 

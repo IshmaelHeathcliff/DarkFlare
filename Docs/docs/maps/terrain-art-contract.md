@@ -1,12 +1,12 @@
 # 地表材质家族合同
 
-家族 `terrain-basic-v1`，2026-09-18 C1 合同修订 2，在第二次生成前冻结。第一次要求 1024×1024，但内置生成器实际输出 1254×1254，画布审计拒绝；依据已验证的工具能力，整个家族统一采用原生 1254，不对单张图做补救缩放。范围是泥土、草地、水、道路的独立材质源；C1 生产 `terrain_dirt_source_00.png` Pilot，C3 扩展四材质双变体。实现顺序见 [C 计划](../plan/archive/alpha-0.5.0-terrain-art-plan.md)。
+家族 `terrain-basic-v1`，2026-09-18 C1 合同修订 2，在第二次生成前冻结。第一次要求 1024×1024，但内置生成器实际输出 1254×1254，画布审计拒绝；依据已验证的工具能力，整个家族统一采用原生 1254，不对单张图做补救缩放。范围是泥土、草地、水、道路的独立材质源；C1 生产 `terrain_dirt_source_00.png` Pilot，C3 扩展四材质双变体。实现顺序见 [C 计划](../plan/archive/0.5.0/plans/alpha-0.5.0-terrain-art-plan.md)。
 
 ## 参考与尺度
 
 风格参考为已交付 `Assets/Art/Sprites/Environment/GroundTiles/Base/ground_base_stone_00.png`：暗色奇幻、冷暗背景、受控高光。只继承光照 / 饱和度 / 画面层级；泥土源必须去除石板结构，不把旧 8 单位地砖缩成 1 单位。
 
-角色 / 镜头只读测量见 [scale.json](./acceptance/c1/scale.json)：半径分别为玩家 0.32、普通 / 重装 0.30、迅捷 0.36；Main 正交 size=5，在 1080 高下为 108 屏幕像素 / 世界单位。逻辑 / 显示格采用 1 单位，编译输出 64 px / 单位，与现有角色 PPU64 接近；屏幕采样非整数的问题沿用当前镜头合同，C1 不引入 Pixel Perfect Camera。
+角色 / 镜头只读测量见 [scale.json](../plan/archive/0.5.0/acceptance/maps/c1/scale.json)：半径分别为玩家 0.32、普通 / 重装 0.30、迅捷 0.36；Main 正交 size=5，在 1080 高下为 108 屏幕像素 / 世界单位。逻辑 / 显示格采用 1 单位，编译输出 64 px / 单位，与现有角色 PPU64 接近；屏幕采样非整数的问题沿用当前镜头合同，C1 不引入 Pixel Perfect Camera。
 
 0.75 / 1 / 1.5 / 2 单位直通道对最大半径的单侧剩余净空为 0.015 / 0.14 / 0.39 / 0.64。0.75 太接近擦边，不作为首期主通道目标；本轮用 1、1.5、2 单位对照。导航子格与拐角扫掠留待 D，不仅凭这些数值宣称可达。
 
@@ -41,4 +41,4 @@
 
 ## C1 完成记录
 
-泥土 Pilot 的材质与尺度已通过审核，见 [C1 验收](./acceptance/c1/README.md)。生成源以 `terrain_dirt_source_00.png` 固定保存，后续成员使用它作不可变参考；禁止静默覆盖。原始边差非零；C2 已生成并审计独立 64×64 Tile，对边 RGBA 差为 0，见[纹理编译模块](./terrain-texture-compilation.md)与 [C2 验收](./acceptance/c2/README.md)。运行时新地图绑定留待后续阶段。
+泥土 Pilot 的材质与尺度已通过审核，见 [C1 验收](../plan/archive/0.5.0/acceptance/maps/c1/README.md)。生成源以 `terrain_dirt_source_00.png` 固定保存，后续成员使用它作不可变参考；禁止静默覆盖。原始边差非零；C2 已生成并审计独立 64×64 Tile，对边 RGBA 差为 0，见[纹理编译模块](./terrain-texture-compilation.md)与 [C2 验收](../plan/archive/0.5.0/acceptance/maps/c2/README.md)。运行时新地图绑定留待后续阶段。

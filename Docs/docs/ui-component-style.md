@@ -24,7 +24,7 @@
 | 当前属性摘要 | 背包三主属性紧凑排列；标题栏图标打开独立详情，穿脱行与摘要完整可见 |
 | 独立属性 | 440 px 窗口复用正式底板；五组折叠、行内解释换行、深色滚动条，标题 / 关闭与其他窗口对齐 |
 
-精确生成约束与量化结果见[资产合同](./assets/acceptance/alpha-0.3.0-visual-pilot/asset-contract.md)及[单图 manifest](./assets/acceptance/alpha-0.3.0-visual-pilot/panel-manifest.json)。源图较大不代表边框使用同样粗的屏幕尺寸；UI Slice Scale 与 PPU 分别记录，不能互相替代。
+精确生成约束与量化结果见[资产合同](plan/archive/0.3.0/acceptance/visual-pilot/asset-contract.md)及[单图 manifest](plan/archive/0.3.0/acceptance/visual-pilot/panel-manifest.json)。源图较大不代表边框使用同样粗的屏幕尺寸；UI Slice Scale 与 PPU 分别记录，不能互相替代。
 
 ## 状态语义
 
@@ -44,12 +44,12 @@
 
 普通按钮 Default 为低明度旧铁，Hover 提亮，Focus 金色，Pressed 加深；Disabled 保持文字可读。边框固定 1 px，按下不缩放。物品 Hover / Focus 不生成额外金色边框，Selected 由共享会话决定；投放有效 / 无效颜色在 Focus / Hover 时仍优先。Toast 长文本换行，位于 HUD 上方。Toggle、Slider、滚动条与下拉使用同色系且保留原生输入行为。
 
-新增 `ui_control_base.png` 与 `ui_slot_base.png` 均为 1254×1254 原生完整画布，Border 32、Slice Scale 0.125、PPU 100；保护区为 4 屏幕像素。按钮验证 24×24 至 434×52，装备槽验证 60×60 / 100×152。固定形状的状态使用 tint / border，不生成重复位图。详见[合同与当次验收](./assets/acceptance/alpha-0.3.3-ui-style/README.md)。
+新增 `ui_control_base.png` 与 `ui_slot_base.png` 均为 1254×1254 原生完整画布，Border 32、Slice Scale 0.125、PPU 100；保护区为 4 屏幕像素。按钮验证 24×24 至 434×52，装备槽验证 60×60 / 100×152。固定形状的状态使用 tint / border，不生成重复位图。详见[合同与当次验收](plan/archive/0.3.3/acceptance/ui-style/README.md)。
 
 ## 后续布局参考
 
-独立属性详情已接入真实 Query、来源、条件与五组展开，见[属性模块](./attribute-details.md)及 [0.3.1 验收](./assets/acceptance/alpha-0.3.1-attributes/README.md)。复用正式底板、关闭与背包属性入口图标。
+独立属性详情已接入真实 Query、来源、条件与五组展开，见[属性模块](./attribute-details.md)及 [0.3.1 验收](plan/archive/0.3.1/acceptance/attributes/README.md)。复用正式底板、关闭与背包属性入口图标。
 
-正式 HUD 使用横向资源容器：左右 300×136，中间 840×136，间距 12，底部间距 12。资源底板 `ui_hud_resource_base.png` 使用 1254×1254 原生画布、96 Border、0.125 Slice Scale；另验 360×136 扩展尺寸。生命红、法力蓝，主数字 16，原因 / 技能参数与入口 14，资源标题 17。冷却条 4 px，入口行 44 px；键盘 Keycap 随文本宽度伸展，手柄采用共享 Glyph。三语言优先保留分区宽度和换行，不压缩物品网格。见[HUD 模块](./hud-system.md)与[验收](./assets/acceptance/alpha-0.3.2-hud/README.md)。
+正式 HUD 使用横向资源容器：左右 300×136，中间 840×136，间距 12，底部间距 12。资源底板 `ui_hud_resource_base.png` 使用 1254×1254 原生画布、96 Border、0.125 Slice Scale；另验 360×136 扩展尺寸。生命红、法力蓝，主数字 16，原因 / 技能参数与入口 14，资源标题 17。冷却条 4 px，入口行 44 px；键盘 Keycap 随文本宽度伸展，手柄采用共享 Glyph。三语言优先保留分区宽度和换行，不压缩物品网格。见[HUD 模块](./hud-system.md)与[验收](plan/archive/0.3.2/acceptance/hud/README.md)。
 
-十槽已接入真实装备控件，并在 UI 修正中改为按物品格尺寸排列：头手腿 100×100、主武器 / 身体 / 副手 100×152、项链 48×100、腰带 100×48、双戒指各 48×48。空槽语义图案通过原生 `grayscale(1)` 滤镜去色并弱化，已装备物品保持原色。均复用公共底板；物品详情移除图标，商店 / 打造与背包统一 560 px。此前的资源合同与历史证据见[十槽装备验收目录](./assets/acceptance/alpha-0.3.4-equipment/)，当前布局见[物品工作台](./item-ui-workbench.md)。临时采集对象不进入生产场景。
+十槽已接入真实装备控件，并在 UI 修正中改为按物品格尺寸排列：头手腿 100×100、主武器 / 身体 / 副手 100×152、项链 48×100、腰带 100×48、双戒指各 48×48。空槽语义图案通过原生 `grayscale(1)` 滤镜去色并弱化，已装备物品保持原色。均复用公共底板；物品详情移除图标，商店 / 打造与背包统一 560 px。此前的资源合同与历史证据见[十槽装备验收目录](plan/archive/0.3.4/acceptance/equipment)，当前布局见[物品工作台](./item-ui-workbench.md)。临时采集对象不进入生产场景。

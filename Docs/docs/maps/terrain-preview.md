@@ -29,7 +29,7 @@ D 阶段新增可选的“构建碰撞与通行”及半径 / 线段检查，菜
 
 ## 验证与边界
 
-2026-09-18：6 项资源 / 会话专项、1 项真实导入与窗口恢复专项通过；B4 收尾后项目完整 EditMode **650/650**、PlayMode **75/75** 通过，内容校验 0 项问题、配置文档覆盖通过。[技术样例](./terrain-samples.md)及 [1920×1080、原始像素、256×256 压力与取消记录](./acceptance/b4/README.md)已完成。没有新增生产地表、手绘工作台、对象排序、碰撞或导航，未构建 Player。
+2026-09-18：6 项资源 / 会话专项、1 项真实导入与窗口恢复专项通过；B4 收尾后项目完整 EditMode **650/650**、PlayMode **75/75** 通过，内容校验 0 项问题、配置文档覆盖通过。[技术样例](./terrain-samples.md)及 [1920×1080、原始像素、256×256 压力与取消记录](../plan/archive/0.5.0/acceptance/maps/b4/README.md)已完成。没有新增生产地表、手绘工作台、对象排序、碰撞或导航，未构建 Player。
 
 长期回归包括 Tile 共享和最后租约释放、纯地表变体内部差异与不透明边、真实 Renderer bounds / Preview Scene 隔离、跨请求取消和关闭时无迟到发布、失败保留过期帧与恢复、零地表变更复用 Tile，以及 `.dfmap` 内容重导入 → 损坏 → 修复 → 关闭后的资源释放。导入通知使用 AssetPostprocessor，C2 扩展为地图 / PNG / .asset 的导入、删除和移动；实际测试发现 `EditorApplication.projectChanged` 单独不能保证内容重导入刷新，已保留回归防止退化。
 
@@ -37,7 +37,7 @@ D 阶段新增可选的“构建碰撞与通行”及半径 / 线段检查，菜
 
 窗口打开期间经历脚本重载后恢复画廊。PlayMode 全回归期间额外读取 Editor 状态：进入 Play 后预览 Session=null、自有诊断对象=0、Preview Scene=0；返回 Edit 后 Session 有效、画廊自动恢复。此处检查的是会话生命周期，不是大地图压力取消响应。
 
-- [Key 画廊窗口截图](./acceptance/b3-window.png)
-- [真实地图源窗口截图](./acceptance/b3-map-window.png)
+- [Key 画廊窗口截图](../plan/archive/0.5.0/acceptance/maps/b3-window.png)
+- [真实地图源窗口截图](../plan/archive/0.5.0/acceptance/maps/b3-map-window.png)
 
 以上 B3 截图中的地图为一次性技术输入；其源和定义已清理。B4 新增的持久样例位于 `Assets/Data/Development/Maps/`，可从地图菜单直接打开；压力源在 Temp 中生成，窗口同时显示源路径。

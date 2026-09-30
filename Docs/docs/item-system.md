@@ -39,4 +39,4 @@ Save Schema 2 保存 `ItemInstanceDto.Quantity`，历史 Schema 1 经迁移为�
 
 ## 后续计划
 
-[统一物品使用与消耗品](plan/archive/alpha-0.4-usable-items-plan.md)的状态前置和[统一使用核心与复合事务](./plan/archive/alpha-0.4-item-use-core-plan.md)均已完成：可主动使用性独立于现有可消耗性，统一处理回血、回蓝、临时状态及异常驱散。四类效果与一致提交已实现，见[模块说明](./item-use-system.md)。正式消耗品内容与背包交互已完成接入，详见[消耗品模块](./consumables.md)。
+[统一物品使用与消耗品](plan/archive/0.4.2/plans/alpha-0.4-usable-items-plan.md)的状态前置和[统一使用核心与复合事务](plan/archive/0.4.2/plans/alpha-0.4-item-use-core-plan.md)均已完成：可主动使用性独立于现有可消耗性，统一处理回血、回蓝、临时状态及异常驱散。四类效果与一致提交已实现，见[模块说明](./item-use-system.md)。正式消耗品内容与背包交互已完成接入，详见[消耗品模块](./consumables.md)。

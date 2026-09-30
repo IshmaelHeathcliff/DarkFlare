@@ -1,6 +1,6 @@
 # 状态系统
 
-2026-09-14：全部五个阶段已完成，运行版本 `0.4.1-alpha`、core v4、Schema 3。EditMode 540/540、PlayMode 73/73，独立 Windows Player 综合验收通过，见[验收记录](./assets/acceptance/alpha-0.4-status-acceptance/README.md)与[已归档总计划](./plan/archive/alpha-0.4-status-system-plan.md)。下一步为统一物品使用与消耗品。
+2026-09-14：全部五个阶段已完成，运行版本 `0.4.1-alpha`、core v4、Schema 3。EditMode 540/540、PlayMode 73/73，独立 Windows Player 综合验收通过，见[验收记录](plan/archive/0.4.1/acceptance/status-acceptance/README.md)与[已归档总计划](plan/archive/0.4.1/plans/alpha-0.4-status-system-plan.md)。下一步为统一物品使用与消耗品。
 
 ## 当前职责
 

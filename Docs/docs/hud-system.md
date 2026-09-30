@@ -2,7 +2,7 @@
 
 HUD 右上角状态条与菜单“状态”入口已接入：按定义显示图标、持有层数与下次到期时间，支持玩家 / 怪物选择、焦点浮窗及手柄滚动 / 返回。显示 / 可隐藏 / 从不显示三档由状态定义配置，可隐藏默认显示，共用开关只过滤界面。保持 Gameplay 与 UI 导航隔离，资源和刷新任务归属 Session，详见[状态生命周期与查看](./status-lifecycle-ui.md)。
 
-0.3.3 的入口按钮、交互提示和中区分隔接入公共 `Components.uss`，复用已验证的资源底板与 Glyph；按下不缩放，Toast 位于资源仪表上方并支持长文本换行。资源、冷却和输入所有权仍遵循下列合同，见[统一组件验收](./assets/acceptance/alpha-0.3.3-ui-style/README.md)。
+0.3.3 的入口按钮、交互提示和中区分隔接入公共 `Components.uss`，复用已验证的资源底板与 Glyph；按下不缩放，Toast 位于资源仪表上方并支持长文本换行。资源、冷却和输入所有权仍遵循下列合同，见[统一组件验收](plan/archive/0.3.3/acceptance/ui-style/README.md)。
 
 ## 布局与内容
 
@@ -12,7 +12,7 @@ Unity 6.6 下技能详情保留至少 44px 高度以容纳伪本地化的两行�
 
 生命和法力显示当前 / 上限及即时比例；中区显示当前自动攻击名称、耗蓝、间隔、剩余间隔、冷却条和金币。就绪只代表资源与冷却条件满足，不保证有攻击目标。世界交互提示位于仪表上方。
 
-正式底板为 `ui_hud_resource_base.png`，生命和法力共享中性材质。填充、文字与状态由 UI Toolkit 绘制；不以拉伸图片模拟资源比例。规格与证据见[HUD 资产合同](./assets/acceptance/alpha-0.3.2-hud/asset-contract.md)。
+正式底板为 `ui_hud_resource_base.png`，生命和法力共享中性材质。填充、文字与状态由 UI Toolkit 绘制；不以拉伸图片模拟资源比例。规格与证据见[HUD 资产合同](plan/archive/0.3.2/acceptance/hud/asset-contract.md)。
 
 ## 数据与生命周期
 
@@ -30,4 +30,4 @@ Unity 6.6 下技能详情保留至少 44px 高度以容纳伪本地化的两行�
 
 ## 回归维护
 
-长期覆盖合并到 `GameplayUiFoundationTests`、`ApplicationInputServiceTests`、`Alpha014ResourceSystemPlayModeTests` 和 `Phase1UxPlayModeTests`：查询边界、挂起禁用、原子耗蓝与恢复提示、真实鼠标入口 / 手柄返回、低生命与降低动态、禁用再绑定。截图采集和临时角色只用于当次验收，完成后删除脚本，证据归档到[验收目录](./assets/acceptance/alpha-0.3.2-hud/README.md)。
+长期覆盖合并到 `GameplayUiFoundationTests`、`ApplicationInputServiceTests`、`Alpha014ResourceSystemPlayModeTests` 和 `Phase1UxPlayModeTests`：查询边界、挂起禁用、原子耗蓝与恢复提示、真实鼠标入口 / 手柄返回、低生命与降低动态、禁用再绑定。截图采集和临时角色只用于当次验收，完成后删除脚本，证据归档到[验收目录](plan/archive/0.3.2/acceptance/hud/README.md)。

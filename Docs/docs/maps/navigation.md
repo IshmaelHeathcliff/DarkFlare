@@ -1,6 +1,6 @@
 # 批量导航与怪物移动
 
-阶段 H 已完成（`0.5.4-alpha`）；实现使用统一网格、共享 Flow Field、受限 A* 池、Spatial Hash 与 Separation。H 的完整矩阵保留为[阶段基线](./acceptance/h/README.md)；`0.5.5-alpha` 的当前组合压力与大规模切图 / 保存见 [I 验收](./acceptance/i/performance.md)，短测不能替代正式矩阵。
+阶段 H 已完成（`0.5.4-alpha`）；实现使用统一网格、共享 Flow Field、受限 A* 池、Spatial Hash 与 Separation。H 的完整矩阵保留为[阶段基线](../plan/archive/0.5.4/acceptance/maps/h/README.md)；`0.5.5-alpha` 的当前组合压力与大规模切图 / 保存见 [I 验收](../plan/archive/0.5.5/acceptance/maps/i/performance.md)，短测不能替代正式矩阵。
 
 ## 数据与计算
 

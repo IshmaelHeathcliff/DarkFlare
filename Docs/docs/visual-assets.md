@@ -4,34 +4,34 @@
 
 ## Alpha 0.3.4 装备增量
 
-新增十三件装备独立图标与头部、手部、腿部、副手、项链、腰带六个空槽图标，正式装备池共二十件，固定 UI 图标共十八张。新图均为 96×96、Single / Full Rect、PPU 64、中心 Pivot、Point、无压缩 / Mipmap；装备最长可见边保持 72–80 px。十九张图片分别导入 Addressables，装备配置引用各自图标，空槽由 Theme.uss 绑定。完整 GUID、哈希及源图 / 成品审计见[资源审计](./assets/acceptance/alpha-0.3.4-equipment/art-audit.json)。下方旧批次数字仍为历史记录。
+新增十三件装备独立图标与头部、手部、腿部、副手、项链、腰带六个空槽图标，正式装备池共二十件，固定 UI 图标共十八张。新图均为 96×96、Single / Full Rect、PPU 64、中心 Pivot、Point、无压缩 / Mipmap；装备最长可见边保持 72–80 px。十九张图片分别导入 Addressables，装备配置引用各自图标，空槽由 Theme.uss 绑定。完整 GUID、哈希及源图 / 成品审计见[资源审计](plan/archive/0.3.4/acceptance/equipment/art-audit.json)。下方旧批次数字仍为历史记录。
 
 ## Alpha 0.3.3 组件增量
 
 新增 `ui_control_base.png` 与 `ui_slot_base.png`：1254×1254 完整原图、Sprite Single / Full Rect、PPU 100、中心 Pivot、Point、无压缩 / Mipmap，Border 32、Slice Scale 0.125。`Components.uss` 为 Main / Shell 共用按钮与物品槽皮肤入口；外框、详情和提示复用现有两张大底板。每张新图均有真实消费者，固定形状状态由 tint / border 表达。
 
-详见[资产合同与验收](./assets/acceptance/alpha-0.3.3-ui-style/README.md)及[生成记录](./assets/acceptance/alpha-0.3.3-ui-style/generation-record.md)。本增量不改变下方历史迁移计数。
+详见[资产合同与验收](plan/archive/0.3.3/acceptance/ui-style/README.md)及[生成记录](plan/archive/0.3.3/acceptance/ui-style/generation-record.md)。本增量不改变下方历史迁移计数。
 
 ## Alpha 0.3.2 HUD 增量
 
 新增 `Assets/Art/Sprites/UI/Frames/ui_hud_resource_base.png`，供生命 / 法力仪表共用。原生 1254×1254、Sprite Single、Full Rect、PPU 100、中心 Pivot、Point、无压缩 / Mipmap，Border 96、Slice Scale 0.125。由 `Hud.uss` 引用并通过原 GameRoot 依赖加载，不新增资源句柄；输入 Glyph 复用已有 8 张图片，样式抽到 `InputGlyphs.uss` 供 HUD 与 Shell 共用。
 
-正式资源底板见[资产合同](./assets/acceptance/alpha-0.3.2-hud/asset-contract.md)及[审计与运行验收](./assets/acceptance/alpha-0.3.2-hud/README.md)。下方数量是 alpha 0.1.7 历史批次，alpha 0.3 底板增量单独记录。
+正式资源底板见[资产合同](plan/archive/0.3.2/acceptance/hud/asset-contract.md)及[审计与运行验收](plan/archive/0.3.2/acceptance/hud/README.md)。下方数量是 alpha 0.1.7 历史批次，alpha 0.3 底板增量单独记录。
 
 ## Alpha 0.3.0 窗口底板增量
 
 新增 `Assets/Art/Sprites/UI/Frames/ui_item_window_base.png`，供背包、商店和打造共用：1254×1254 原生画布，Sprite Single、Full Rect、PPU 100、中心 Pivot、Point、None、Mipmap Off；四边 Border 96，USS Slice Scale 0.125。由 `Theme.uss` 引用，经 `GameRoot.uxml` 的依赖链加载，无独立 Addressables 句柄或新命中节点。
 
-[组件规范](./ui-component-style.md)、[生成提示](./assets/acceptance/alpha-0.3.0-visual-pilot/generation-prompt.md)、[合同与验收](./assets/acceptance/alpha-0.3.0-visual-pilot/README.md)。旧四个 UI Frame 保留为历史独立资产；当前 GameRoot 的依赖扫描不再引用旧面板 / 槽位 Frame，下文关于旧绑定的记录仅代表 alpha 0.1 迁移时状态，不据此删除可能被其他工具使用的资源。
+[组件规范](./ui-component-style.md)、[生成提示](plan/archive/0.3.0/acceptance/visual-pilot/generation-prompt.md)、[合同与验收](plan/archive/0.3.0/acceptance/visual-pilot/README.md)。旧四个 UI Frame 保留为历史独立资产；当前 GameRoot 的依赖扫描不再引用旧面板 / 槽位 Frame，下文关于旧绑定的记录仅代表 alpha 0.1 迁移时状态，不据此删除可能被其他工具使用的资源。
 
 ## 当前状态
 
 - 状态：alpha 单图迁移、双层地表 Tile、掉落稀有度环与 alpha 0.1.7 多帧战斗特效已完成；该批次共 121 个独立 PNG，旧 SpriteSheet 与旧静态投射物已清理。
 - 生产规范：[美术资产生成规范](./visual-asset-generation.md)
 - 视觉规范：[视觉规范](./visual-style.md)
-- 已归档计划：[alpha 0.1 美术资产单图迁移计划](./plan/archive/alpha-0.1-art-asset-migration-plan.md)
+- 已归档计划：[alpha 0.1 美术资产单图迁移计划](plan/archive/0.1/plans/alpha-0.1-art-asset-migration-plan.md)
 - 地表模块：[双层地表 Tilemap](./ground-tilemap.md)
-- 初版返工历史：[阶段 5 美术资产规范收缩与返工](./plan/archive/initial-experience-optimization/phase-5-visual-asset-correction-plan.md)
+- 初版返工历史：[阶段 5 美术资产规范收缩与返工](plan/archive/prototype/plans/initial-experience-optimization/phase-5-visual-asset-correction-plan.md)
 
 项目自有运行时栅格资产统一为“一张 PNG、一个主 Sprite”。生产资产使用 `Sprite Mode: Single`，不再维护 SpriteSheet、人工 Rect、人工 Pivot 或 sub-sprite fileID。
 

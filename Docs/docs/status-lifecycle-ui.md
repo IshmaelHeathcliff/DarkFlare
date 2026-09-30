@@ -36,7 +36,7 @@ DTO 保存冻结规则、每层效果、抵抗前后记录、来源归属、层�
 
 显示档位取自 StatusDefinition：显示不受隐藏开关影响；可隐藏默认显示，可用 HUD / 状态窗口共用的开关隐藏；从不显示不进入这两个界面。开关在当前界面绑定期间保留，界面重建或进入新 Session 时恢复默认，不写入战斗存档。过滤不改变实际层数、属性、计时、驱散或存档；调试核心快照仍可读取全部状态。隐藏最后一个可见状态时显示“当前没有可显示的状态”。
 
-HUD 隐藏开关仅在玩家拥有可隐藏状态时出现；状态窗口始终提供开关。三档规则、输入交互与右上角布局见[补充验收](./assets/acceptance/status-visibility-hud/README.md)。
+HUD 隐藏开关仅在玩家拥有可隐藏状态时出现；状态窗口始终提供开关。三档规则、输入交互与右上角布局见[补充验收](plan/archive/0.4.1/acceptance/status-visibility-hud/README.md)。
 
 每定义一个图标，显示持有层数和下一层到期秒数；来源维持 / 无限显示 ∞，详情说明具体生命周期。详情逐层列出实际生效 / 被压制、来源、抵抗后属性与伤害、行动门禁和剩余时间。异常动态值取快照，不使用配置中的固定描述冒充结果。
 
@@ -44,7 +44,7 @@ HUD 隐藏开关仅在玩家拥有可隐藏状态时出现；状态窗口始终�
 
 自定义方向导航通过 `FocusController.IgnoreEvent` 配合 `StopPropagation` 阻止同次事件再次执行默认焦点移动；详情滚动保持当前焦点，兼容 Unity 6.6 事件接口。
 
-八个正式图标每图一个 96×96 PNG，Sprite Single、PPU64，来自统一暗色像素家族。通过 `DarkFlare-Session-Sprites` Addressables 组和 Session `SpriteAssetLoader` 预热；视图子作用域取消刷新，Session 结束统一释放资源。缺图保留可读名称；倒计时每 100ms 刷新，复用图标节点，不推进玩法时间。资产合同与可见验收见[阶段 4 证据](./assets/acceptance/alpha-0.4-status-lifecycle-ui/README.md)。
+八个正式图标每图一个 96×96 PNG，Sprite Single、PPU64，来自统一暗色像素家族。通过 `DarkFlare-Session-Sprites` Addressables 组和 Session `SpriteAssetLoader` 预热；视图子作用域取消刷新，Session 结束统一释放资源。缺图保留可读名称；倒计时每 100ms 刷新，复用图标节点，不推进玩法时间。资产合同与可见验收见[阶段 4 证据](plan/archive/0.4.1/acceptance/status-lifecycle-ui/README.md)。
 
 ## 地图离场冻结
 

@@ -59,4 +59,4 @@ Enter、Tick、Guard 或 Exit 抛异常时，返回 `HfsmResult` 的 Faulted 及
 
 复制只在执行边界可用，缓冲不足会抛参数异常，不向外暴露内部可变数组。构建、创建、Reset、首次启用诊断、租约和异常可以分配；预热后的正常 Tick、状态切换和缓冲复制不分配。此 API 是后续可视化的数据基础，当前没有 Editor 图窗口或 Player 面板。
 
-长期回归位于 `Assets/Scripts/Tests/EditMode/HfsmTests.cs`，结果与测量边界见[F1 验收](acceptance/f1-hfsm.md)。
+长期回归位于 `Assets/Scripts/Tests/EditMode/HfsmTests.cs`，结果与测量边界见[F1 验收](../plan/archive/0.6.0/acceptance/behavior/f1-hfsm.md)。

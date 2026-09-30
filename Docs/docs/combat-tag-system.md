@@ -73,7 +73,7 @@ EditMode 回归覆盖当前物品—词条候选矩阵、作用域隔离、旧�
 
 - [标签配置参考](./config-reference/combat-tags.md)
 - [伤害系统与词条系统](./damage-affix-system.md)
-- [归档：战斗标签系统改进计划](./plan/archive/combat-tag-system-improvement-plan.md)
+- [归档：战斗标签系统改进计划](plan/archive/0.1.1/plans/combat-tag-system-improvement-plan.md)
 
 ## 状态标签
 

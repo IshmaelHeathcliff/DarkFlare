@@ -138,4 +138,4 @@ core v6 追加正式城镇、野外及地图依赖。Schema 3→4 把历史单 M
 - 专项：`ContentIdentityTests` 16/16、`InstanceIdentityAndDtoTests` 7/7、`MigrationPipelineTests` 7/7、`InfrastructurePolicyTests` 22/22。
 - 冷启动验证目录 `core` v1、90 个条目，并覆盖等价目录重复安装与不同版本拒绝。
 
-实现过程、审计基线和偏差记录见[归档执行计划](../plan/archive/alpha-0.2.1-content-identity-migration-plan.md)。
+实现过程、审计基线和偏差记录见[归档执行计划](../plan/archive/0.2.1/plans/alpha-0.2.1-content-identity-migration-plan.md)。

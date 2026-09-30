@@ -18,4 +18,4 @@ Alpha 0.6.4 在城镇通往刷怪地图的传送门提供“进入”和“重�
 
 传送门选项复用 Application Shell Modal，默认焦点为“进入”；“重置并进入”打开二次确认，取消不修改地图。Busy、失败与成功反馈由 Scene Flow 和 Shell 管理，键盘、手柄导航提交及鼠标共用按钮。文本使用 Unity Localization 的 `ui` 表；伪本地化沿用现有运行时模式。运行时可通过 `WorldMapRuntime.ActiveMapEpoch`、`LastResetMapId`、`LastResetPhase`（准备、保存、已落盘、完成、已回退或 Fatal）、刷怪器的计划 / 批次 / 名额计数和存档提交序号定位重置进度。
 
-长期回归放在现有 `WorldMapStateTests`、`SaveSerializerTests` 和 `WorldMapPlayModeTests`，覆盖代次迁移、确定性随机、成功重置、失败回退、继续游戏、传送门确认及重复重置生命周期。阶段实际执行结果见[0.6.4 验收](acceptance/0.6.4/README.md)。
+长期回归放在现有 `WorldMapStateTests`、`SaveSerializerTests` 和 `WorldMapPlayModeTests`，覆盖代次迁移、确定性随机、成功重置、失败回退、继续游戏、传送门确认及重复重置生命周期。阶段实际执行结果见[0.6.4 验收](../plan/archive/0.6.4/acceptance/behavior/README.md)。

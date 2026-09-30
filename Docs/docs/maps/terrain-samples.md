@@ -1,6 +1,6 @@
 # 地表诊断样例
 
-D 阶段另有 **DarkFlare/地图/打开同源几何样例**，源为 `Assets/Data/Development/Maps/terrain_geometry.dfmap`，复用正式四材质拓扑并加入 U 形障碍、Spawn / Safe 区域；可查看原始阻挡、通行节点与足迹 / 线段查询。实现与限制见[地图几何](./map-geometry.md)，[D 验收](./acceptance/d/README.md)包含物理和导出重导入证据。
+D 阶段另有 **DarkFlare/地图/打开同源几何样例**，源为 `Assets/Data/Development/Maps/terrain_geometry.dfmap`，复用正式四材质拓扑并加入 U 形障碍、Spawn / Safe 区域；可查看原始阻挡、通行节点与足迹 / 线段查询。实现与限制见[地图几何](./map-geometry.md)，[D 验收](../plan/archive/0.5.0/acceptance/maps/d/README.md)包含物理和导出重导入证据。
 
 Alpha 0.5.0 B 的持久技术输入，配合[诊断预览](./terrain-preview.md)使用。样例仅含地表和变体，不是最终城镇 / 野外，也没有碰撞、交互或刷怪对象。
 
@@ -36,10 +36,10 @@ C4 的 `MapFormalSamples` 复用上述三种布局生成器，映射到 `terrain
 
 正式入口要求 `Assets/Data/Maps/Terrain/terrain_basic_sources.asset` 的编译修订当前有效，打开既有预览窗口的正式模式，不生成诊断贴图或静默补洞。变更正式源后须先按[纹理编译流程](./terrain-texture-compilation.md)更新，再打开样例。样例不是运行时地图，不写入 Addressables 或 core。
 
-正式 Key 画廊、接点 / 跨块渲染像素和大图验收记录见 [C4 验收](./acceptance/c4/README.md)。角色与真实 Main 镜头的尺度证据沿用同一编译修订的 [C3 采集](./acceptance/c3/materials-main-1920.png)。
+正式 Key 画廊、接点 / 跨块渲染像素和大图验收记录见 [C4 验收](../plan/archive/0.5.0/acceptance/maps/c4/README.md)。角色与真实 Main 镜头的尺度证据沿用同一编译修订的 [C3 采集](../plan/archive/0.5.0/acceptance/maps/c3/materials-main-1920.png)。
 
 ## 验证
 
-2026-09-18 完成全图、原始像素、取消和三轮压力采集，详见 [B4 验收记录](./acceptance/b4/README.md)。原始像素的 279168 对相邻边像素全部一致，无透明孔洞。重复生成保持已有文件字节不变；诊断资产无直接或隐式 Addressables 条目。项目完整 EditMode 650/650、PlayMode 75/75、内容校验 0 问题、配置文档覆盖通过。
+2026-09-18 完成全图、原始像素、取消和三轮压力采集，详见 [B4 验收记录](../plan/archive/0.5.0/acceptance/maps/b4/README.md)。原始像素的 279168 对相邻边像素全部一致，无透明孔洞。重复生成保持已有文件字节不变；诊断资产无直接或隐式 Addressables 条目。项目完整 EditMode 650/650、PlayMode 75/75、内容校验 0 问题、配置文档覆盖通过。
 
 一次性采集与扫描脚本完成后清理；保留可复用样例生成菜单与已有地图 / 地表 / 预览长期行为回归，不增加核对固定样例数量或历史截图的运行测试。

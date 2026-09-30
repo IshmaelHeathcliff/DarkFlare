@@ -1,6 +1,6 @@
 # 地图编辑器与 AI 编辑
 
-当前 `0.5.5-alpha` 已通过从空白图开始的实际 SceneView 手绘、AI 原子编辑、导入导出与正式预览联验，保留[样图与操作证据](./acceptance/i/workflow.md)。
+当前 `0.5.5-alpha` 已通过从空白图开始的实际 SceneView 手绘、AI 原子编辑、导入导出与正式预览联验，保留[样图与操作证据](../plan/archive/0.5.5/acceptance/maps/i/workflow.md)。
 
 地图编辑器模块。入口：`DarkFlare/地图/地图编辑器`，或配置中心“地图文档”→“打开地图绘制工作台”。阶段 G 扩展入口及跨图出口；0.6.2 增加 Boss 点位，0.6.3 增加[V4 刷怪批次](./README.md)，运行时装配见[双地图生命周期](./world-map-lifecycle.md)。
 
@@ -83,4 +83,4 @@ Patch ≤1 MiB、≤256 操作、≤262144 次格子 / 候选访问。洪水填�
 
 `DarkFlare/地图/编辑样例` 可打开城镇 / 野外草稿。源位于 `Assets/Data/Maps/EditorSamples/`，生成器只补缺失资产，不覆盖用户修改。两图包含四地表、障碍 / 装饰、交互绑定或刷怪 / 安全区域；它们是编辑布局，不是 0.5.3 的可玩双地图。
 
-协议快照、可复现 Patch、性能和回归证据见 [E 验收](./acceptance/e/README.md)。不把编辑器的测试结果计为 500 活动怪物 / 1000 压测或 Windows Player 的导航验收。
+协议快照、可复现 Patch、性能和回归证据见 [E 验收](../plan/archive/0.5.1/acceptance/maps/e/README.md)。不把编辑器的测试结果计为 500 活动怪物 / 1000 压测或 Windows Player 的导航验收。

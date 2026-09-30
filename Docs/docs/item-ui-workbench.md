@@ -59,6 +59,6 @@ Settings / Modal / Busy 接管时，玩法窗口、详情和拖动图标一起�
 
 UI 通过只读 Query 获取快照，通过 `MoveInventoryItemCommand`、`EquipItemFromGridCommand`、`UnequipItemToGridCommand`、`MoveEquippedItemCommand`、`BuyItemCommand`、`SellItemCommand` 、`DiscardItemCommand` 与 `CraftItemCommand` 提交意图。原子交换、失败回滚、费用和随机规则仍由原有领域模块负责。
 
-长期回归复用 `Phase0ExperiencePlayModeTests`、`Phase1UxPlayModeTests`、`EquipmentPhase2PlayModeTests` 和 Shell / 生命周期用例；几何邻居由 `SpatialNavigationTests` 保护，输入所有权由 `ApplicationInputServiceTests` 保护。布局覆盖 1920×1080 × 中文 / 英文 / Pseudo Locale。临时截图与迁移工具不进入长期测试。[独立窗口证据](./assets/acceptance/alpha-0.3.0-windows/README.md)与[统一物品操作验收](./assets/acceptance/alpha-0.3.0-actions/README.md)分别归档。
+长期回归复用 `Phase0ExperiencePlayModeTests`、`Phase1UxPlayModeTests`、`EquipmentPhase2PlayModeTests` 和 Shell / 生命周期用例；几何邻居由 `SpatialNavigationTests` 保护，输入所有权由 `ApplicationInputServiceTests` 保护。布局覆盖 1920×1080 × 中文 / 英文 / Pseudo Locale。临时截图与迁移工具不进入长期测试。[独立窗口证据](plan/archive/0.3.0/acceptance/windows/README.md)与[统一物品操作验收](plan/archive/0.3.0/acceptance/actions/README.md)分别归档。
 
-指定格购买在发布事件前完成背包、库存和金币提交，失败不自动换格。穿戴入口统一要求旧装备回填来源区域；卸下快捷操作自动寻找合法空位，拖动卸下使用指定格。世界丢弃与拾取的唯一归属规则见[随机化与掉落](./randomization-system.md)。代表视觉组件及布局收尾见[0.3.0 验收证据](./assets/acceptance/alpha-0.3.0-visual-pilot/README.md)。
+指定格购买在发布事件前完成背包、库存和金币提交，失败不自动换格。穿戴入口统一要求旧装备回填来源区域；卸下快捷操作自动寻找合法空位，拖动卸下使用指定格。世界丢弃与拾取的唯一归属规则见[随机化与掉落](./randomization-system.md)。代表视觉组件及布局收尾见[0.3.0 验收证据](plan/archive/0.3.0/acceptance/visual-pilot/README.md)。

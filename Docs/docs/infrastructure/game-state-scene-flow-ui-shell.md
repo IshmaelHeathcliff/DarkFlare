@@ -2,7 +2,7 @@
 
 > 状态：`alpha 0.2.4` 已完成；`alpha 0.2.7` 已补齐删除 / 重置；`alpha 0.3.3` 统一视觉组件；最近更新：2026-09-09
 >
-> 参考：[归档计划](../plan/archive/alpha-0.2.4-game-state-scene-flow-ui-shell-plan.md) · [长期运行时契约](./alpha-0.2-runtime-contract.md) · [应用生命周期与会话作用域](./application-lifecycle.md)
+> 参考：[归档计划](../plan/archive/0.2.4/plans/alpha-0.2.4-game-state-scene-flow-ui-shell-plan.md) · [长期运行时契约](./alpha-0.2-runtime-contract.md) · [应用生命周期与会话作用域](./application-lifecycle.md)
 
 ## 模块目标
 

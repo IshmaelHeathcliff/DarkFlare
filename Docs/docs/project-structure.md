@@ -11,7 +11,6 @@ DarkFlare/
     docs/
       infrastructure/
         accessibility-platform-lifecycle.md
-        alpha-0.2-acceptance.md
         alpha-0.2-runtime-contract.md
         application-lifecycle.md
         application-audio.md
@@ -19,6 +18,15 @@ DarkFlare/
         local-save.md
         user-settings-localization.md
       hud-system.md
+      plan/
+        alpha-0.7-plan.md
+        alpha-0.7.1-startup.md
+        archive/
+          README.md
+          <版本号>/
+            README.md
+            plans/
+            acceptance/
   Packages/
   ProjectSettings/
   tools/
@@ -398,7 +406,7 @@ Addressables 的配置目录，包含资源组、模板和构建器配置。后�
 
 `UI`、`Utilities` 目前主要是占位，为后续模块扩展预留。
 
-**首版玩法循环和 `alpha 0.2.0–0.2.7` 基础设施已完成**：当前已覆盖 UIToolkit HUD / 背包装备 / 商店 / 打造 / 场景交互，以及唯一应用宿主、Session 重建、稳定身份、内容目录、DTO / 迁移、`auto` 本地存档 / Restore / 删除、Settings V1 / 完整默认恢复、中英运行时本地化、Bootstrap / Main Scene Flow、Game Time、Application Shell、应用级输入 / 重绑定 / Glyph、Audio、Reduce Motion、Platform Lifecycle、结构化日志、玩家错误和 Addressables Resource Service。运行流程见 [`gameplay-loop.md`](gameplay-loop.md)，长期规则见[alpha 0.2 长期运行时契约](infrastructure/alpha-0.2-runtime-contract.md)，最终证据见[alpha 0.2 综合验收记录](infrastructure/alpha-0.2-acceptance.md)，完成过程保存在 [`plan/archive/`](plan/archive/README.md)。
+**首版玩法循环和 `alpha 0.2.0–0.2.7` 基础设施已完成**：当前已覆盖 UIToolkit HUD / 背包装备 / 商店 / 打造 / 场景交互，以及唯一应用宿主、Session 重建、稳定身份、内容目录、DTO / 迁移、`auto` 本地存档 / Restore / 删除、Settings V1 / 完整默认恢复、中英运行时本地化、Bootstrap / Main Scene Flow、Game Time、Application Shell、应用级输入 / 重绑定 / Glyph、Audio、Reduce Motion、Platform Lifecycle、结构化日志、玩家错误和 Addressables Resource Service。运行流程见 [`gameplay-loop.md`](gameplay-loop.md)，长期规则见[alpha 0.2 长期运行时契约](infrastructure/alpha-0.2-runtime-contract.md)，最终证据见[alpha 0.2 综合验收记录](plan/archive/0.2.7/acceptance/alpha-0.2-acceptance.md)，完成过程保存在 [`plan/archive/`](plan/archive/README.md)。
 
 ### `Assets/Settings`
 
@@ -430,6 +438,8 @@ TextMesh Pro 默认资源与字体目录。当前 `QiushuiShotai SDF` 回退到 
 #### `Docs/docs`
 
 Agent 管理的项目文档目录，包含结构说明、开发约定、模块文档、执行计划、归档与验收资源。
+
+模块文档按职责维护；活动计划放在 `plan/`，完成的计划与验收材料统一收纳到 `plan/archive/<版本号>/`。每个版本用 `plans/` 保存执行过程、`acceptance/` 保存验收文档和原始材料，并由 `README.md` 提供入口。版本目录按所属交付系列命名，如 `0.7.0/`；里程碑记录使用 `0.7/`，未编号的早期原型使用 `prototype/`。详见[归档索引](plan/archive/README.md)。
 
 ### `Packages`
 

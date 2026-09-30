@@ -47,4 +47,4 @@ HUD 共用 `GetAttributeRuntimeQuery` 的资源 / 技能状态，运行快照提
 
 来源顺序与主属性派生扩展 `Alpha015PrimaryAttributeTests`；查询无副作用、有效值、来源与状态扩展 `GameplayUiFoundationTests`。独立开关、设置往返、手柄跨窗、换装、三语言滚动排版和预览恢复扩展 `Phase1UxPlayModeTests`。原背包完整列表测试改为验证紧凑摘要与独立详情可达性，不再锁定旧列表数量和像素高度。
 
-当次截图、六词条展开与全量结果见 [0.3.1 验收](./assets/acceptance/alpha-0.3.1-attributes/README.md)。临时采集脚本完成后删除，不成为长期测试。
+当次截图、六词条展开与全量结果见 [0.3.1 验收](plan/archive/0.3.1/acceptance/attributes/README.md)。临时采集脚本完成后删除，不成为长期测试。

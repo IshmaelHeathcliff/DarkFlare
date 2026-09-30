@@ -2,31 +2,33 @@
 
 ## 项目状态
 
-2026-09-29：**Alpha 0.7.0 两阶段完成**，当前运行版本 `0.7.0-alpha.2` / core v10 / 存档 Schema 9 / 设置 Schema 1 / 地图 V4。新增不可变 Core `SemanticVersion` 及 `GameVersion` 显式解析入口，保留历史版本字符串与独立数据兼容域。核心定向 52/52、接入与存档定向 32/32、完整 EditMode 882/882、PlayMode 102/102，均为 0 失败 / 跳过；详见[0.7.0 执行与验收](./plan/archive/alpha-0.7.0-semver-plan.md)及[版本管理与 API](./version-management.md)。验收时源码身份为 `751225c` 加本次未提交改动，运行版本已更新；本版 Player、真实设备、跨进程及性能矩阵未执行。[0.7 总计划](./plan/alpha-0.7-plan.md)继续维护，下一小版本为范围待明确的 `0.7.1-alpha`。
+2026-09-30：**0.7.1 启动基线已核对，功能范围待明确**。当前分支与交付提交为 `main` / `e2b97d2`，源码运行版本仍为 `0.7.0-alpha.2`，core v10 / Schema 9 / 1 / 地图 V4 不变。0.7.0 验收记录中的 6 个文件哈希全部匹配当前文件；本次未重跑 Unity 测试或构建 Player，保留已有字体资产改动。见[0.7.1 启动准备](./plan/alpha-0.7.1-startup.md)与[0.7 总计划](./plan/alpha-0.7-plan.md)。
 
-2026-09-24：**Alpha 0.6.5 综合交付按调整门槛完成**，当前版本 `0.6.5-alpha` / 地图 V4 / core v10 / Schema 9。正式地图保留 20 个入图名额、10 处各 8 个范围名额及独立 Boss；普通进出与继续游戏保留原进度，显式重置才刷新。EditMode 819/819、PlayMode 102 通过／2 包内跳过／0 失败。仅在用户明确指定 Player 验收时构建 Player；本轮 Player、真实设备、跨进程及当前版本 300 / 600 性能矩阵未执行，见[0.6.5 验收](./behavior/acceptance/0.6.5/README.md)和[归档计划](./plan/archive/alpha-0.6.5-integration-plan.md)。
+2026-09-29：**Alpha 0.7.0 两阶段完成**，当前运行版本 `0.7.0-alpha.2` / core v10 / 存档 Schema 9 / 设置 Schema 1 / 地图 V4。新增不可变 Core `SemanticVersion` 及 `GameVersion` 显式解析入口，保留历史版本字符串与独立数据兼容域。核心定向 52/52、接入与存档定向 32/32、完整 EditMode 882/882、PlayMode 102/102，均为 0 失败 / 跳过；详见[0.7.0 执行与验收](plan/archive/0.7.0/plans/alpha-0.7.0-semver-plan.md)及[版本管理与 API](./version-management.md)。验收时源码身份为 `751225c` 加本次未提交改动，运行版本已更新；本版 Player、真实设备、跨进程及性能矩阵未执行。[0.7 总计划](./plan/alpha-0.7-plan.md)继续维护，下一小版本为范围待明确的 `0.7.1-alpha`。
 
-Alpha 0.6.3 有限刷怪为地图 V4、core v10、Schema 8，野外固定 100 个普通怪物名额，按 20 个入图、10 个分散触发点各 8 个分批生成，Boss 独立。历史验收见[0.6.3 记录](./behavior/acceptance/0.6.3/README.md)。
+2026-09-24：**Alpha 0.6.5 综合交付按调整门槛完成**，当前版本 `0.6.5-alpha` / 地图 V4 / core v10 / Schema 9。正式地图保留 20 个入图名额、10 处各 8 个范围名额及独立 Boss；普通进出与继续游戏保留原进度，显式重置才刷新。EditMode 819/819、PlayMode 102 通过／2 包内跳过／0 失败。仅在用户明确指定 Player 验收时构建 Player；本轮 Player、真实设备、跨进程及当前版本 300 / 600 性能矩阵未执行，见[0.6.5 验收](plan/archive/0.6.5/acceptance/behavior/README.md)和[归档计划](plan/archive/0.6.5/plans/alpha-0.6.5-integration-plan.md)。
 
-0.6.1 普通怪物已交付并[归档](./plan/archive/alpha-0.6.1-monster-behavior-plan.md)：该阶段完整 EditMode 808/808、PlayMode 92/92，Windows Player、跨进程恢复及 500 / 1000 普通怪物性能矩阵通过，见[历史验收](./behavior/acceptance/0.6.1/README.md)。
+Alpha 0.6.3 有限刷怪为地图 V4、core v10、Schema 8，野外固定 100 个普通怪物名额，按 20 个入图、10 个分散触发点各 8 个分批生成，Boss 独立。历史验收见[0.6.3 记录](plan/archive/0.6.3/acceptance/behavior/README.md)。
 
-Alpha 0.5 的 A–I 全部完成；当前交付版本为 `0.7.0-alpha.2`，本阶段 Windows Player 验收未执行。四地表地图、手绘 / AI 编辑、Y 排序、城镇交易打造、野外刷怪和 Flow Field / A* 批量寻路已形成完整链路，详见 [I 综合验收](./maps/acceptance/i/README.md)。
+0.6.1 普通怪物已交付并[归档](plan/archive/0.6.1/plans/alpha-0.6.1-monster-behavior-plan.md)：该阶段完整 EditMode 808/808、PlayMode 92/92，Windows Player、跨进程恢复及 500 / 1000 普通怪物性能矩阵通过，见[历史验收](plan/archive/0.6.1/acceptance/behavior/README.md)。
 
-2026-09-22：[Alpha 0.6 总计划](./plan/archive/alpha-0.6-plan.md)的 **0.6.0 已完成**：HFSM 与行为树独立置于现有 Core，交付组合样例、Animator 桥接、Editor 实时图与开发 Player 面板。完整 EditMode 788/788、PlayMode 87/87，独立 Windows Player 及核心规模验证通过，见[行为模块及验收](./behavior/README.md)。后续怪物、Boss、有限刷怪、手动重置及综合交付也已按各阶段门槛完成。
+Alpha 0.5 的 A–I 全部完成；当前交付版本为 `0.7.0-alpha.2`，本阶段 Windows Player 验收未执行。四地表地图、手绘 / AI 编辑、Y 排序、城镇交易打造、野外刷怪和 Flow Field / A* 批量寻路已形成完整链路，详见 [I 综合验收](plan/archive/0.5.5/acceptance/maps/i/README.md)。
+
+2026-09-22：[Alpha 0.6 总计划](plan/archive/0.6/plans/alpha-0.6-plan.md)的 **0.6.0 已完成**：HFSM 与行为树独立置于现有 Core，交付组合样例、Animator 桥接、Editor 实时图与开发 Player 面板。完整 EditMode 788/788、PlayMode 87/87，独立 Windows Player 及核心规模验证通过，见[行为模块及验收](./behavior/README.md)。后续怪物、Boss、有限刷怪、手动重置及综合交付也已按各阶段门槛完成。
 
 `DarkFlare` 已完成首版最小循环、初步体验优化、`alpha 0.1` 封板和 `alpha 0.2.0–0.2.7` 基础设施封板。当前可从常驻 `Bootstrap.unity` 的 FrontEnd 新建或继续游戏，additive 进入 `Main.unity` 完成战斗、掉落、十槽装备、交易和打造，暂停后保存并安全返回前台；FrontEnd 可二次确认删除自动档，共享设置页可恢复完整默认设置，中英语言、音量、按键、设备 Glyph 和降低动态效果即时收敛。
 
-从 0.7 起按[SemVer 版本管理](./version-management.md)推进：小版本为 `0.7.0-alpha`、`0.7.1-alpha`，小版本内阶段为 `0.7.0-alpha.1`、`0.7.0-alpha.2`，阶段序号随小版本重置。0.7 系列预计持续处于 alpha；下一里程碑或明确进入 beta 时进入 0.8。0.1–0.6 的三段式历史阶段名称和归档保留原意。当前源码版本为 `0.7.0-alpha.2`，当前版本未完成 Player 验收；完成记录见[alpha 0.2 综合验收记录](./infrastructure/alpha-0.2-acceptance.md)与[计划归档](./plan/archive/README.md)。
+从 0.7 起按[SemVer 版本管理](./version-management.md)推进：小版本为 `0.7.0-alpha`、`0.7.1-alpha`，小版本内阶段为 `0.7.0-alpha.1`、`0.7.0-alpha.2`，阶段序号随小版本重置。0.7 系列预计持续处于 alpha；下一里程碑或明确进入 beta 时进入 0.8。0.1–0.6 的三段式历史阶段名称和归档保留原意。当前源码版本为 `0.7.0-alpha.2`，当前版本未完成 Player 验收；完成记录见[alpha 0.2 综合验收记录](plan/archive/0.2.7/acceptance/alpha-0.2-acceptance.md)与[计划归档](./plan/archive/README.md)。
 
-2026-09-18：[Alpha 0.5 总计划](plan/archive/alpha-0.5-plan.md)已完成 [0.5.0 地图基础 A–D](plan/archive/alpha-0.5.0-map-foundation-plan.md)，包含数据 / 导入、Wang 解析与预览、正式四材质发布，以及[同源碰撞和静态通行](./maps/map-geometry.md)。D 已提交 `e396485`。[0.5.1 手工 / AI 地图编辑器](./maps/map-editor.md)的 E1–E5 也已完成并[归档](./plan/archive/alpha-0.5.1-map-editor-plan.md)，E 验证为 EditMode 697/697、PlayMode 77/77，见 [E 验收](./maps/acceptance/e/README.md)。[0.5.2 世界层级 F1–F5](./plan/archive/alpha-0.5.2-world-sorting-plan.md)已完成，EditMode 707/707、PlayMode 78/78；城镇 / 野外与生命周期 G 已完成；Flow Field / A* / Job / Burst 已由 H 完成。目标为 500 活动怪物、1000 压力测试，地图离场暂停并保留状态。Main 已成为通用双地图玩法容器。
+2026-09-18：[Alpha 0.5 总计划](plan/archive/0.5/plans/alpha-0.5-plan.md)已完成 [0.5.0 地图基础 A–D](plan/archive/0.5.0/plans/alpha-0.5.0-map-foundation-plan.md)，包含数据 / 导入、Wang 解析与预览、正式四材质发布，以及[同源碰撞和静态通行](./maps/map-geometry.md)。D 已提交 `e396485`。[0.5.1 手工 / AI 地图编辑器](./maps/map-editor.md)的 E1–E5 也已完成并[归档](plan/archive/0.5.1/plans/alpha-0.5.1-map-editor-plan.md)，E 验证为 EditMode 697/697、PlayMode 77/77，见 [E 验收](plan/archive/0.5.1/acceptance/maps/e/README.md)。[0.5.2 世界层级 F1–F5](plan/archive/0.5.2/plans/alpha-0.5.2-world-sorting-plan.md)已完成，EditMode 707/707、PlayMode 78/78；城镇 / 野外与生命周期 G 已完成；Flow Field / A* / Job / Burst 已由 H 完成。目标为 500 活动怪物、1000 压力测试，地图离场暂停并保留状态。Main 已成为通用双地图玩法容器。
 
 - Alpha 0.3：独立物品窗口、统一拖放、实时属性、暗黑像素 HUD、共享皮肤与十槽二十件装备已完成，后续补充物品窗口布局与交互修正。
 - Alpha 0.4.0：[统一物品系统](./item-system.md)完成金币与材料入栏、堆叠 / 消耗、材料打造与旧档迁移。
 - Alpha 0.4.1：[状态系统](./status-system.md)完成叠层、角色效果、七异常、抗性、时间 / 存档和显示；另已补充分档显示与右上角 HUD。
-- Alpha 0.4.2：[统一使用](./item-use-system.md)与[消耗品](./consumables.md)完成回血、回蓝、临时状态和驱散；core v5、Schema 3。2026-09-15 EditMode 563/563、PlayMode 74/74 及独立 Windows Player 验收通过，见[交付证据](./assets/acceptance/alpha-0.4-item-use-acceptance/README.md)。
-- 后续[随机商店](./trading-system.md)已完成每批 16 件、随机品质 / 词条、购买减单件、免费刷新与库存恢复，运行版本仍为 `0.4.2-alpha`。2026-09-16 EditMode 568/568、PlayMode 75/75 通过；该轮未重建 Windows Player，见[验收记录](./assets/acceptance/random-shop/README.md)。
+- Alpha 0.4.2：[统一使用](./item-use-system.md)与[消耗品](./consumables.md)完成回血、回蓝、临时状态和驱散；core v5、Schema 3。2026-09-15 EditMode 563/563、PlayMode 74/74 及独立 Windows Player 验收通过，见[交付证据](plan/archive/0.4.2/acceptance/item-use-acceptance/README.md)。
+- 后续[随机商店](./trading-system.md)已完成每批 16 件、随机品质 / 词条、购买减单件、免费刷新与库存恢复，运行版本仍为 `0.4.2-alpha`。2026-09-16 EditMode 568/568、PlayMode 75/75 通过；该轮未重建 Windows Player，见[验收记录](plan/archive/0.4.2/acceptance/random-shop/README.md)。
 
-上述 A–I 数字为历史验收记录；I 的大规模切图 / 保存数据见 [I 验收](./maps/acceptance/i/README.md)。当前版本 `0.7.0-alpha.2`、core v10、Schema 9 / 1、地图 V4；本轮 SemVer 交付的 EditMode 882/882、PlayMode 102/102 和未执行项见[0.7.0 验收](./plan/archive/alpha-0.7.0-semver-plan.md)。玩法综合回归保留 [0.6.5 记录](./behavior/acceptance/0.6.5/README.md)，上一正式 Player 数据见 [0.6.1 验收](./behavior/acceptance/0.6.1/README.md)。大规模切图 / 保存的耗时与内存边界单独记录，不能用行为或导航稳态预算代替。
+上述 A–I 数字为历史验收记录；I 的大规模切图 / 保存数据见 [I 验收](plan/archive/0.5.5/acceptance/maps/i/README.md)。当前版本 `0.7.0-alpha.2`、core v10、Schema 9 / 1、地图 V4；本轮 SemVer 交付的 EditMode 882/882、PlayMode 102/102 和未执行项见[0.7.0 验收](plan/archive/0.7.0/plans/alpha-0.7.0-semver-plan.md)。玩法综合回归保留 [0.6.5 记录](plan/archive/0.6.5/acceptance/behavior/README.md)，上一正式 Player 数据见 [0.6.1 验收](plan/archive/0.6.1/acceptance/behavior/README.md)。大规模切图 / 保存的耗时与内存边界单独记录，不能用行为或导航稳态预算代替。
 
 ## 游戏定位
 
@@ -74,7 +76,7 @@ Alpha 0.5 的 A–I 全部完成；当前交付版本为 `0.7.0-alpha.2`，本�
 - `Assets/Scripts/Tests/EditMode/`：`DarkFlare.Tests.EditMode`，2026-09-07 测试审计后 `424/424` 通过；原封板 `443/443` 为历史记录。
 - `Assets/Scripts/Tests/PlayMode/`：`DarkFlare.Tests.PlayMode`，2026-09-07 测试审计后 `56/56` 通过、0 失败 / 跳过。此前含包测试的 60 项运行结果保留在 alpha 0.2 综合验收记录，本轮限定项目自有程序集。
 
-Alpha 0.3 前置[测试审计](./testing/test-suite-audit.md)已完成；新增与受影响测试须遵循[测试维护规范](./testing/test-maintenance.md)，临时验证完成后清理。
+Alpha 0.3 前置[测试审计](plan/archive/0.3/acceptance/testing/test-suite-audit.md)已完成；新增与受影响测试须遵循[测试维护规范](./testing/test-maintenance.md)，临时验证完成后清理。
 
 生命周期的职责、状态、事务和禁止事项见[应用生命周期与会话作用域](./infrastructure/application-lifecycle.md)；内容、实例身份、DTO 与迁移规则见[稳定身份、内容目录与迁移框架](./infrastructure/content-identity-migration.md)；文件格式、代际存储、保存和 Restore 流程见[本地存档与 Session 恢复](./infrastructure/local-save.md)；设置存储、语言切换、内容名称和字体合同见[用户设置与本地化](./infrastructure/user-settings-localization.md)；Bootstrap / Main 拓扑、状态、场景事务、Time Service 和 Shell 见[游戏状态、场景流与应用 UI 外壳](./infrastructure/game-state-scene-flow-ui-shell.md)；音频见 [Application Audio](./infrastructure/application-audio.md)；日志、玩家错误和资源所有权见[日志、错误处理与 Addressables 资源治理](./infrastructure/logging-error-addressables-governance.md)；降低动态效果与平台挂起见[可访问性与平台生命周期](./infrastructure/accessibility-platform-lifecycle.md)。
 

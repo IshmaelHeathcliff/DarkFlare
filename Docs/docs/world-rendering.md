@@ -59,4 +59,4 @@ Profiler 标记为 `DarkFlare.WorldSorting.Tick`。系统暴露 ParticipantCount
 
 ContentConfigurationValidator 同时检查既有 Main / Prefab 排序合同和地图表现目录。长期测试覆盖同 Y / 跨量化边界、原子批量登记、旧凭据、容量、池复用 / 取消 / 宿主关闭、纯表现结构、装配失败释放和编辑器 Undo / Redo。
 
-阶段 F 的真实 Player 画面、基线对照、完整回归与测量边界见[验收记录](./maps/acceptance/f/README.md)。500 / 1000 的本阶段预算只针对排序；完整怪物导航和战斗帧预算由 0.5.4 验收。
+阶段 F 的真实 Player 画面、基线对照、完整回归与测量边界见[验收记录](plan/archive/0.5.2/acceptance/maps/f/README.md)。500 / 1000 的本阶段预算只针对排序；完整怪物导航和战斗帧预算由 0.5.4 验收。

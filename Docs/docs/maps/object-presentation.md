@@ -1,6 +1,6 @@
 # 地图对象表现与分段遮挡
 
-当前 `0.5.5-alpha` 的正式 Player 已检查树木、帐篷及四段长障碍与角色的前后遮挡，见[当前截图与排序数据](./acceptance/i/workflow.md)。
+当前 `0.5.5-alpha` 的正式 Player 已检查树木、帐篷及四段长障碍与角色的前后遮挡，见[当前截图与排序数据](../plan/archive/0.5.5/acceptance/maps/i/workflow.md)。
 
 本模块消费地图文档 V2（兼容 V1 导入）的 ObjectId、DefinitionId、Position、Rotation 和 AppearanceVariant，不修改逻辑地表、footprint、区域或交互绑定。地图工作台和运行时共用表现目录、Prefab 校验及装配器；正式双地图与领域交互已由 0.5.3 接入，见[双地图生命周期](./world-map-lifecycle.md)。
 
@@ -60,4 +60,4 @@ catch
 
 ## 验证
 
-长期测试覆盖准备不注册、重复激活 / 释放、容量失败、取消后激活拒绝、部分加载失败、资源回收、坏 Prefab、默认 / 显式变体，以及工作台 AI 修改、Undo / Redo 与地表帧复用。阶段性能和独立 Player 的可视证据归档在 `maps/acceptance/f/`，不以读取历史验收文件代替当前测试。
+长期测试覆盖准备不注册、重复激活 / 释放、容量失败、取消后激活拒绝、部分加载失败、资源回收、坏 Prefab、默认 / 显式变体，以及工作台 AI 修改、Undo / Redo 与地表帧复用。阶段性能和独立 Player 的可视证据归档在[0.5.2 验收](../plan/archive/0.5.2/acceptance/maps/f/README.md)，不以读取历史验收文件代替当前测试。

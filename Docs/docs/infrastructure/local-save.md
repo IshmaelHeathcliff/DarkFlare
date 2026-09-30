@@ -1,6 +1,6 @@
 # 本地存档与 Session 恢复
 
-Alpha 0.5.5 已联验 Schema 5 导航意图、城镇 / 野外跨进程继续与真实 Schema 4 夹具恢复，原输入保持不变；1000 单位的快照 / 序列化 / 持久保存 / 继续恢复耗时和托管内存观察峰值见 [I 保存测量](../maps/acceptance/i/performance.md)。
+Alpha 0.5.5 已联验 Schema 5 导航意图、城镇 / 野外跨进程继续与真实 Schema 4 夹具恢复，原输入保持不变；1000 单位的快照 / 序列化 / 持久保存 / 继续恢复耗时和托管内存观察峰值见 [I 保存测量](../plan/archive/0.5.5/acceptance/maps/i/performance.md)。
 
 > 状态：已实现本地存档闭环；`alpha 0.4.0` 增加数量及金币物品迁移
 > 最近更新：2026-09-23
@@ -41,7 +41,7 @@ Schema 9 为活动图新增 `ActiveMapEpoch`、冻结图新增 `InstanceEpoch`�
 
 ## 消耗品保存与兼容
 
-统一使用事务只保存已提交的物品余量、角色资源和状态快照，不持久化半完成请求，也不会在读取时重放即时回血 / 回蓝。来源物品用尽后，其临时状态仍独立保存恢复。core v4 → v5 是追加内容迁移，保持 Schema 3，旧商人库存原样恢复，不补发新增药水。独立 Player 的退出重启与真实历史文件验收见[alpha 0.4.2 综合验收](../assets/acceptance/alpha-0.4-item-use-acceptance/README.md)。
+统一使用事务只保存已提交的物品余量、角色资源和状态快照，不持久化半完成请求，也不会在读取时重放即时回血 / 回蓝。来源物品用尽后，其临时状态仍独立保存恢复。core v4 → v5 是追加内容迁移，保持 Schema 3，旧商人库存原样恢复，不补发新增药水。独立 Player 的退出重启与真实历史文件验收见[alpha 0.4.2 综合验收](../plan/archive/0.4.2/acceptance/item-use-acceptance/README.md)。
 
 ## 文件格式与 Schema
 

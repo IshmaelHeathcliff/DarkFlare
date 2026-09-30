@@ -27,8 +27,8 @@
 
 ## 视觉与验证
 
-四个独立透明药水图标和一个坚韧图标均为 96×96、Sprite Single、64 PPU、Point、无压缩、中心 Pivot，已登记到 Session Sprite Addressables 分组。四药水有效图形宽 60、高 76–77 像素，视觉中心相差不足 0.1 像素；生成、导出和验收记录见[资产合同](./assets/acceptance/alpha-0.4-consumables-ui/asset-contract.md)。
+四个独立透明药水图标和一个坚韧图标均为 96×96、Sprite Single、64 PPU、Point、无压缩、中心 Pivot，已登记到 Session Sprite Addressables 分组。四药水有效图形宽 60、高 76–77 像素，视觉中心相差不足 0.1 像素；生成、导出和验收记录见[资产合同](plan/archive/0.4.2/acceptance/consumables-ui/asset-contract.md)。
 
-持续回归复用 `Phase1UxPlayModeTests` 的真实设备事件、`SaveCaptureRestorePlayModeTests` 的真实 Session 保存恢复和 `SaveRestorePreparerTests` 的历史内容兼容，不保留截图采集代码。实际测试、截图与范围说明见[阶段 2 验收](./assets/acceptance/alpha-0.4-consumables-ui/README.md)。
+持续回归复用 `Phase1UxPlayModeTests` 的真实设备事件、`SaveCaptureRestorePlayModeTests` 的真实 Session 保存恢复和 `SaveRestorePreparerTests` 的历史内容兼容，不保留截图采集代码。实际测试、截图与范围说明见[阶段 2 验收](plan/archive/0.4.2/acceptance/consumables-ui/README.md)。
 
-2026-09-15：独立 Windows Player 的使用、自然到期、输入、显示、跨进程恢复及历史存档验收完成；以 `0.4.2-alpha` 交付。全量回归 563/563、74/74 通过，见[综合验收](./assets/acceptance/alpha-0.4-item-use-acceptance/README.md)。
+2026-09-15：独立 Windows Player 的使用、自然到期、输入、显示、跨进程恢复及历史存档验收完成；以 `0.4.2-alpha` 交付。全量回归 563/563、74/74 通过，见[综合验收](plan/archive/0.4.2/acceptance/item-use-acceptance/README.md)。

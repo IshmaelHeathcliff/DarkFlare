@@ -79,7 +79,7 @@
 | 锁链腰带 | `chain_belt` | `strength` Flat `4–8` | 27 | 2×1 |
 | 红玉戒指 | `ruby_ring` | `fire_resistance` Flat `12–20` | 30 | 1×1 |
 
-非戒指部位各两件，双戒指共享四件基底。新配置和槽位、类型、属性范围的逐件清单见[装备内容清单](./assets/acceptance/alpha-0.3.4-equipment/content-manifest.json)。
+非戒指部位各两件，双戒指共享四件基底。新配置和槽位、类型、属性范围的逐件清单见[装备内容清单](plan/archive/0.3.4/acceptance/equipment/content-manifest.json)。
 
 商人从二十件装备与四种药水中按权重抽取每批 16 件商品；装备随机品质和合法词条，药水每件数量 1。提供免费主动刷新，买一件减一件，关闭商店不补货。旧档恢复原库存，不补发新商品；装备可从正式掉落继续获取，药水不加入怪物掉落池。打造配置引用正式物品词条；普通商品不会伪装成没有词条的魔法物品。
 

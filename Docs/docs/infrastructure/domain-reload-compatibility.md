@@ -12,7 +12,7 @@
 | 关闭 Domain Reload | 连续 3 次通过 | 连续 2 次通过 |
 | 同时关闭 Domain / Scene Reload | 连续 3 次通过 | 连续 2 次通过 |
 
-共 12 次完成的循环，逐次退出观察见[矩阵证据](../assets/acceptance/unity-6.6-domain-reload/matrix.json)。临时采集器等待 Editor 真正退出后才采纳结果，排除 stop 请求已返回但仍处于 Play 的中间观察。
+共 12 次完成的循环，逐次退出观察见[矩阵证据](../plan/archive/0.3.4/acceptance/unity-6.6-domain-reload/matrix.json)。临时采集器等待 Editor 真正退出后才采纳结果，排除 stop 请求已返回但仍处于 Play 的中间观察。
 
 每次游戏启动检查唯一宿主、唯一 EventSystem、InputReady 与暂停订阅各一次、隔离存档根、Session generation 递增；旧输入资产已销毁、旧租约失效。失焦会正常触发平台暂停，因此在检查菜单暂停前显式模拟焦点恢复。正常返回前台后，保留同一 Application 输入资产并清空 Session；退出后输入、事件、任务和 Addressables 租约均释放。每个完成循环的 Console Warning / Error 均为 0。
 

@@ -34,4 +34,4 @@ Controller 先发送 `CreateItemUseRequestCommand(actor, item)` 获取一次操�
 
 `ItemUseTests` 长期保护精确消费、组合顺序、无变化、拒绝 / 放弃、外部版本变化、状态抵抗、行动许可、所有权、重入与通知异常。`SaveCaptureRestorePlayModeTests` 复用真实 Session 保存恢复链路，覆盖资源不重复恢复、数量保留、物品来源状态及旧请求拒绝。
 
-当次结果与覆盖说明见[阶段 1 验收](./assets/acceptance/alpha-0.4-item-use-core/README.md)。正式药水配置、图标、本地化、商人获得途径及键鼠 / 手柄背包交互已接入；整体 Player 验收已完成，见[综合验收与交付](./assets/acceptance/alpha-0.4-item-use-acceptance/README.md)。
+当次结果与覆盖说明见[阶段 1 验收](plan/archive/0.4.2/acceptance/item-use-core/README.md)。正式药水配置、图标、本地化、商人获得途径及键鼠 / 手柄背包交互已接入；整体 Player 验收已完成，见[综合验收与交付](plan/archive/0.4.2/acceptance/item-use-acceptance/README.md)。

@@ -1,146 +1,65 @@
-# 已完成计划归档
+# 已完成版本的计划与验收归档
 
-- [Alpha 0.7.0 SemVer 对象与接入](alpha-0.7.0-semver-plan.md)：2026-09-29 两阶段完成，运行版本 `0.7.0-alpha.2`；核心定向 52/52、接入与存档定向 32/32、完整 EditMode 882/882、PlayMode 102/102，0 失败 / 跳过。历史字符串和独立数据版本域保持兼容；本版 Player、真实设备、跨进程和性能矩阵未执行。
+已完成的计划、验收文档及其截图、日志、测试结果统一放在 `Docs/docs/plan/archive/<版本号>/`。版本目录按所属交付系列组织，阶段号及当时实际运行版本以记录正文为准。里程碑总计划使用 `0.x/`，小版本使用 `0.x.y/`；无版本号的早期原型放在 `prototype/`。
 
-- [Alpha 0.7 启动准备](alpha-0.7-startup.md)：2026-09-26 完成基线核对与版本规则确定，首个事项由[0.7 总计划](../alpha-0.7-plan.md)接管；启动源码为 `0.6.5-alpha`，启动时 SemVer 对象尚未实施。
+```text
+archive/
+  README.md
+  <版本号>/
+    README.md
+    plans/
+    acceptance/
+```
 
-- [Alpha 0.6 综合交付](alpha-0.6.5-integration-plan.md)与[总计划及配套合同](alpha-0.6-plan.md)：2026-09-24 按用户调整的门槛完成，交付 `0.6.5-alpha` / core v10 / Schema 9 / 地图 V4。EditMode 819/819、PlayMode 102 通过／2 包内跳过；[验收](../../behavior/acceptance/0.6.5/README.md)明确 Player、跨进程和当前版本 300／600 性能矩阵未执行。今后仅在用户明确指定 Player 验收时构建。
+仍在推进的 [Alpha 0.7 总计划](../alpha-0.7-plan.md)与 [0.7.1 启动准备](../alpha-0.7.1-startup.md)保留在 `plan/`。完成后将执行计划与对应验收材料一起归档，并同步模块文档和引用。
 
-- [Alpha 0.6.4 手动重置](alpha-0.6.4-manual-map-reset-plan.md)：2026-09-23 R1–R6 完成，版本 `0.6.4-alpha` / 地图 V4 / core v10 / Schema 9；[验收](../../behavior/acceptance/0.6.4/README.md)记录事务、迁移、传送门和生命周期回归。Windows Player 与 300／600 实测未执行。
+归档材料保留历史目标、验证数据和未执行项，不作为当前模块功能合同；当前实现入口见[开发文档索引](../../README.md)。原始 JSON、XML、日志和图片保持文件内容不变，其中记录的历史输出路径不追溯改写。
 
-- [Alpha 0.6.3 有限刷怪](alpha-0.6.3-finite-spawning-plan.md)：2026-09-23 S1–S6 完成，随后将正式野外图扩为 20 个入图名额、10 处各 8 个触发名额；当前为 `0.6.3-alpha` / 地图 V4 / core v10 / Schema 8。[验收](../../behavior/acceptance/0.6.3/README.md)记录扩容后 EditMode 818/818、PlayMode 97 通过／2 包内跳过。Windows Player 与 300／600 实测未执行。
+## 版本索引
 
-- [Alpha 0.6.2 守卫 Boss](alpha-0.6.2-guardian-boss-plan.md)：2026-09-23 按用户调整的门槛结束，版本 `0.6.2-alpha`；[验收记录](../../behavior/acceptance/0.6.2/README.md)保留 EditMode 812/812、PlayMode 95 通过／2 包内跳过及两种 Windows 构建成功，并明确标注 Player、跨进程及 300／600 性能矩阵为未执行的豁免项。
-
-- [Alpha 0.6.1 普通怪物](alpha-0.6.1-monster-behavior-plan.md)：2026-09-23 M1–M6 完成，版本 `0.6.1-alpha`；[模块与验收](../../behavior/acceptance/0.6.1/README.md)，EditMode 808/808、PlayMode 92/92、实际 Windows Player 及 500 / 1000 实测通过，覆盖 300 / 600 新目标。
-
-- [Alpha 0.6.0 行为基础](alpha-0.6.0-behavior-foundation-plan.md)及配套核心 / 接入合同：2026-09-22 F1–F6 完成，版本 `0.6.0-alpha`；[模块与验收](../../behavior/README.md)，EditMode 788/788、PlayMode 87/87。
-
-- [Alpha 0.6 启动准备](./alpha-0.6-startup.md)：2026-09-22 完成基线梳理，后由[总计划](alpha-0.6-plan.md)接管；此条只记录启动准备的历史阶段。
-
-- [Alpha 0.5 综合交付](alpha-0.5.5-integration-plan.md)与[总计划及配套方案](alpha-0.5-plan.md)：2026-09-19 A–I 全部完成，交付 `0.5.5-alpha`；当前编辑链路、双地图 Player、历史存档、混合导航压力与生产构建通过，见 [I 验收](../../maps/acceptance/i/README.md)。
-
-- [Alpha 0.5.4 批量导航与怪物移动](./alpha-0.5.4-navigation-plan.md)：2026-09-19 H1–H7 完成，`0.5.4-alpha`、core v6、Schema 5；EditMode 722/722、PlayMode 85/85，500 / 1000 单位三轮矩阵、普通 Player 及 20 轮大图往返通过。
-
-- [Alpha 0.5.3 城镇、野外与地图生命周期](./alpha-0.5.3-world-maps-plan.md)：2026-09-18 G1–G7 完成，版本 `0.5.3-alpha`、core v6、Schema 4；EditMode 713/713、PlayMode 83/83，独立 Windows Player 往返、冻结和重启恢复通过。
-
-- [Alpha 0.5.2 世界对象表现与稳定 Y 排序](./alpha-0.5.2-world-sorting-plan.md)：2026-09-18 F1–F5 完成，版本 `0.5.2-alpha`；EditMode 707/707、PlayMode 78/78，Windows Player 及性能验收通过。
-
-- [Alpha 0.5.1 地图编辑器与 AI 事务](./alpha-0.5.1-map-editor-plan.md)：2026-09-18 E1–E5 完成，版本 `0.5.1-alpha`；EditMode 697/697、PlayMode 77/77，下一阶段世界层级。
-
-- [Alpha 0.5.0 地图数据与地表基础](./alpha-0.5.0-map-foundation-plan.md)：2026-09-18 完成 A–D，数据 / 地表 / 碰撞 / 静态通行完整闭环；版本 `0.5.0-alpha`，下一阶段地图编辑器。
-- [Alpha 0.5.0 同源碰撞与静态导航几何](./alpha-0.5.0-map-geometry-plan.md)：2026-09-18 完成 D1–D4，EditMode 676/676、PlayMode 77/77；窄路保守拒绝与极端地图容量边界见验收。
-
-- [Alpha 0.5.0 正式地表资产](./alpha-0.5.0-terrain-art-plan.md)：2026-09-18 完成 C1–C4，四材质双变体、完整 Wang 编译、资源发布、正式样例与压力验收；EditMode 662/662、PlayMode 76/76。下一步 D 同源几何。
-
-- [Alpha 0.5.0 Wang 解析与预览](./alpha-0.5.0-wang-preview-plan.md)：2026-09-18 完成切片 B，确定性四角规则、分区与增量解析、隔离预览、持久样例及 256×256 压力验收；项目 EditMode 650/650、PlayMode 75/75。下一步为 C 正式地表家族合同与 Pilot。
-
-- [Alpha 0.5.0 数据与导入合同](./alpha-0.5.0-map-foundation-contract.md)：2026-09-18 完成切片 A，`.dfmap`、规范校验 / 导出、只读导入与配置中心入口；EditMode 603/603。0.5.0 的 Wang 预览、正式地表和几何仍待完成。
-
-- [Alpha 0.5 启动准备](./alpha-0.5-startup.md)：2026-09-17 完成基线梳理，目标已由[正式总计划](alpha-0.5-plan.md)接管；归档仅指启动准备完成，功能待实施。
-
-- [随机商店与主动刷新](./alpha-0.4-random-shop-plan.md)：2026-09-16 完成，每批随机商品、品质词条、免费刷新、库存恢复；EditMode 568/568、PlayMode 75/75。
-
-- [消耗品阶段 2：正式内容与背包使用交互](./alpha-0.4-consumables-ui-plan.md)：四类药水、统一 Use、商人库存、图标与本地化，2026-09-15 完成。
-
-- [消耗品阶段 1：统一使用核心与复合事务](./alpha-0.4-item-use-core-plan.md)：2026-09-15 完成，EditMode 562/562、PlayMode 73/73；正式内容与背包 UI 由后续阶段接入。
-
-- [alpha 0.4 状态系统总计划](./alpha-0.4-status-system-plan.md)及[阶段 5 综合验收](./alpha-0.4-status-acceptance-plan.md)：2026-09-14 完成，交付 `0.4.1-alpha`；EditMode 540/540、PlayMode 73/73，独立 Windows Player 验收通过。
-
-本目录保存已经完成的执行计划与阶段性设计记录。归档文档保留当时的目标、执行顺序、验收标准和验证数据，不再作为当前模块说明维护。
-
-- [状态显示分档与右上角 HUD](./status-visibility-hud-plan.md)：2026-09-14 完成；EditMode 540/540、PlayMode 73 项长期回归及 1 项临时截图检查通过。
-
-- [状态阶段 4：自动计时、存档与图标 UI](./alpha-0.4-status-lifecycle-ui-plan.md)：2026-09-14 完成；EditMode 534/534、PlayMode 72/72 通过。
-
-- [状态阶段 3：七异常、抗性与来源](./alpha-0.4-status-ailments-plan.md)：2026-09-13 完成；EditMode 527/527、本地化专项 20/20、PlayMode 68/68 通过。
-
-- [物品窗口 UI 修正](./item-workspace-ui-refinement.md)：尺寸、灰阶、按住对比、工作台联动与统一关闭，2026-09-12 完成。
-- [PanelRenderer 迁移](./panel-renderer-migration.md)：正式场景替换、视觉树重载与启停生命周期、完整回归与实机检查，2026-09-12 完成。
-
-当前实现与边界请优先阅读：
-
-- [首版玩法循环](../../gameplay-loop.md)
-- [输入与运行时 UI](../../input-ui-system.md)
-- [物品 UI 工作台](../../item-ui-workbench.md)
-- [装备系统](../../equipment-system.md)
-- [随机化与掉落规则](../../randomization-system.md)
-- [首批内容池](../../content-system.md)
-- [打造系统](../../crafting-system.md)
-- [应用生命周期与会话作用域](../../infrastructure/application-lifecycle.md)
-- [稳定身份、内容目录与迁移框架](../../infrastructure/content-identity-migration.md)
-- [本地存档与 Session 恢复](../../infrastructure/local-save.md)
-- [用户设置与本地化](../../infrastructure/user-settings-localization.md)
-- [游戏状态、场景流与应用 UI 外壳](../../infrastructure/game-state-scene-flow-ui-shell.md)
-- [Application Audio](../../infrastructure/application-audio.md)
-- [日志、错误处理与 Addressables 资源治理](../../infrastructure/logging-error-addressables-governance.md)
-- [可访问性与平台生命周期](../../infrastructure/accessibility-platform-lifecycle.md)
-- [alpha 0.2 长期运行时契约](../../infrastructure/alpha-0.2-runtime-contract.md)
-- [alpha 0.2 综合验收记录](../../infrastructure/alpha-0.2-acceptance.md)
-
-## 归档清单
-
-- [alpha 0.4 状态核心与通用接口](./alpha-0.4-status-core-plan.md)：2026-09-13 完成，EditMode 486/486、PlayMode 67/67；状态总计划仍在进行，见[状态系统](../../status-system.md)。
-
-- [alpha 0.4 统一物品系统](./alpha-0.4-item-system-plan.md)：2026-09-12 完成，EditMode 442/442、PlayMode 67/67；见[物品系统](../../item-system.md)。
-
-- [alpha 0.3.2 暗黑像素 HUD 与战斗状态](./alpha-0.3.2-dark-pixel-hud-plan.md)：已完成，见[HUD 验收](../../assets/acceptance/alpha-0.3.2-hud/README.md)。
-
-| 计划 | 完成阶段 | 当前总结 |
-| --- | --- | --- |
-| [独立属性详情与实时解释](./alpha-0.3.1-realtime-attributes-plan.md) | alpha 0.3.1 | [属性详情](../../attribute-details.md)、[阶段验收](../../assets/acceptance/alpha-0.3.1-attributes/README.md) |
-| [独立窗口与交互拆分](./alpha-0.3.0-independent-ui-windows-plan.md) | alpha 0.3.0 | [物品工作台](../../item-ui-workbench.md)、[阶段验收](../../assets/acceptance/alpha-0.3.0-visual-pilot/README.md) |
-| [代表视觉组件与布局收尾](./alpha-0.3.0-visual-pilot-plan.md) | alpha 0.3.0 | [组件规范](../../ui-component-style.md) |
-| [统一物品交互合同](./alpha-0.3-item-interaction-contract.md) | alpha 0.3.0；后续持续复验 | [物品工作台](../../item-ui-workbench.md) |
-| [独立窗口可用闭环](./alpha-0.3.0-window-workspace-plan.md) | alpha 0.3.0 窗口切片 | [物品工作台](../../item-ui-workbench.md)、[验收证据](../../assets/acceptance/alpha-0.3.0-windows/README.md) |
-| [最小循环设计](./minimum-loop-design.md) | 首版循环 1–8 | [首版玩法循环](../../gameplay-loop.md) |
-| [输入系统与 UI 设计](./input-ui-design.md) | 8a–8f | [输入与运行时 UI](../../input-ui-system.md) |
-| [打造交互执行计划](./crafting-ui-plan.md) | 8e | [打造系统](../../crafting-system.md) |
-| [8f 场景入口与循环收尾执行计划](./scene-loop-integration-plan.md) | 8f | [首版玩法循环](../../gameplay-loop.md)、[输入与运行时 UI](../../input-ui-system.md) |
-| [阶段 0：视觉垂直切片执行计划](./phase-0-visual-slice-plan.md) | 初版体验优化阶段 0 | [视觉规范](../../visual-style.md)、[视觉资产清单](../../visual-assets.md) |
-| [阶段 0.5：视觉体验修正执行计划](./phase-0.5-visual-experience-fix-plan.md) | 初版体验优化阶段 0.5 | [视觉规范](../../visual-style.md)、[视觉资产清单](../../visual-assets.md)、[首版玩法循环](../../gameplay-loop.md) |
-| [阶段 1：UX 快速改进执行计划](./phase-1-ux-quick-improvement-plan.md) | 初版体验优化阶段 1 | [输入与运行时 UI](../../input-ui-system.md) |
-| [阶段 2：装备槽与伤害来源执行计划](./phase-2-equipment-slots-damage-source-plan.md) | 初版体验优化阶段 2 | [装备系统](../../equipment-system.md)、[伤害系统与词条系统设计](../../damage-affix-system.md) |
-| [阶段 3：随机化与掉落规则执行计划](./phase-3-randomization-loot-plan.md) | 初版体验优化阶段 3 | [随机化与掉落规则](../../randomization-system.md)、[首版玩法循环](../../gameplay-loop.md) |
-| [阶段 4：标签、词条与内容池填充](./phase-4-content-pool-plan.md) | 初版体验优化阶段 4 | [首批内容池](../../content-system.md)、[伤害系统与词条系统设计](../../damage-affix-system.md) |
-| [阶段 5：批量视觉接入与表现反馈](./phase-5-batch-visual-integration-plan.md) | 初版体验优化阶段 5 | [视觉规范](../../visual-style.md)、[视觉资产清单](../../visual-assets.md)、[输入与运行时 UI](../../input-ui-system.md)、[首版玩法循环](../../gameplay-loop.md) |
-| [初版体验优化总计划](./initial-experience-optimization/README.md) | 初版体验优化阶段 0–6 | [首版玩法循环](../../gameplay-loop.md)、[输入与运行时 UI](../../input-ui-system.md)、[装备系统](../../equipment-system.md)、[视觉规范](../../visual-style.md) |
-| [阶段 5：美术资产规范收缩与返工](./initial-experience-optimization/phase-5-visual-asset-correction-plan.md) | 初版体验优化阶段 5 返工 | [视觉规范](../../visual-style.md)、[视觉资产清单](../../visual-assets.md) |
-| [阶段 6：整体验收与初版优化收尾](./initial-experience-optimization/phase-6-integrated-acceptance-plan.md) | 初版体验优化阶段 6 | [首版玩法循环](../../gameplay-loop.md)、[输入与运行时 UI](../../input-ui-system.md)、[视觉资产清单](../../visual-assets.md) |
-| [alpha 0.1 美术资产单图迁移计划](./alpha-0.1-art-asset-migration-plan.md) | alpha 0.1 规划前置准备 | [美术资产生成规范](../../visual-asset-generation.md)、[视觉资产清单](../../visual-assets.md)、[视觉规范](../../visual-style.md) |
-| [alpha 0.1.0 物品 UI 工作台重构计划](./alpha-0.1.0-item-ui-workbench-plan.md) | alpha 0.1.0 | [物品 UI 工作台](../../item-ui-workbench.md)、[输入与运行时 UI](../../input-ui-system.md)、[装备系统](../../equipment-system.md)、[打造系统](../../crafting-system.md) |
-| [alpha 0.1.0 地表双网格 Tilemap 计划](./alpha-0.1.0-ground-double-tilemap-plan.md) | alpha 0.1.0 | [双层地表 Tilemap](../../ground-tilemap.md)、[视觉资产清单](../../visual-assets.md)、[视觉规范](../../visual-style.md) |
-| [战斗标签系统改进计划](./combat-tag-system-improvement-plan.md) | alpha 0.1.1 | [战斗标签系统](../../combat-tag-system.md)、[标签配置参考](../../config-reference/combat-tags.md)、[伤害系统与词条系统设计](../../damage-affix-system.md) |
-| [alpha 0.1.2 伤害判定与武器伤害源执行计划](./alpha-0.1.2-damage-resolution-plan.md) | alpha 0.1.2 | [伤害系统与词条系统设计](../../damage-affix-system.md)、[属性系统](../../stat-system.md)、[装备系统](../../equipment-system.md)、[战斗内容配置参考](../../config-reference/combat-content.md) |
-| [alpha 0.1.3 碰撞与怪群安全执行计划](./alpha-0.1.3-collision-safety-plan.md) | alpha 0.1.3 | [首版玩法循环](../../gameplay-loop.md)、[战斗内容配置参考](../../config-reference/combat-content.md)、[首批内容池](../../content-system.md) |
-| [alpha 0.1.4 法力、耗蓝与恢复执行计划](./alpha-0.1.4-resource-system-plan.md) | alpha 0.1.4 | [属性系统](../../stat-system.md)、[首版玩法循环](../../gameplay-loop.md)、[输入与运行时 UI](../../input-ui-system.md)、[战斗内容配置参考](../../config-reference/combat-content.md) |
-| [alpha 0.1.5 全属性与怪物词条执行计划](./alpha-0.1.5-affix-monster-plan.md) | alpha 0.1.5 | [属性系统](../../stat-system.md)、[伤害系统与词条系统设计](../../damage-affix-system.md)、[随机化与掉落规则](../../randomization-system.md)、[首批内容池](../../content-system.md) |
-| [alpha 0.1.6 基础随机打造执行计划](./alpha-0.1.6-random-crafting-plan.md) | alpha 0.1.6 | [打造系统](../../crafting-system.md)、[随机化与掉落规则](../../randomization-system.md)、[战斗内容配置参考](../../config-reference/combat-content.md) |
-| [alpha 0.1.7 多帧特效、稳定世界层级与综合验收执行计划](./alpha-0.1.7-effects-sorting-acceptance-plan.md) | alpha 0.1.7 | [视觉资产清单](../../visual-assets.md)、[世界渲染与稳定层级](../../world-rendering.md)、[配置参考索引](../../config-reference/README.md) |
-| [alpha 0.1 开发计划](./alpha-0.1-plan.md) | alpha 0.1.0–0.1.7 | [首版玩法循环](../../gameplay-loop.md)、[伤害系统与词条系统设计](../../damage-affix-system.md)、[打造系统](../../crafting-system.md)、[世界渲染与稳定层级](../../world-rendering.md) |
-| [alpha 0.2.0 应用宿主、作用域与规范验证执行计划](./alpha-0.2.0-application-lifecycle-plan.md) | alpha 0.2.0 | [应用生命周期与会话作用域](../../infrastructure/application-lifecycle.md) |
-| [alpha 0.2.1 稳定身份、内容目录与迁移框架执行计划](./alpha-0.2.1-content-identity-migration-plan.md) | alpha 0.2.1 | [稳定身份、内容目录与迁移框架](../../infrastructure/content-identity-migration.md) |
-| [alpha 0.2.2 本地存档闭环执行计划](./alpha-0.2.2-local-save-plan.md) | alpha 0.2.2 | [本地存档与 Session 恢复](../../infrastructure/local-save.md) |
-| [alpha 0.2.3 用户设置与本地化执行计划](./alpha-0.2.3-settings-localization-plan.md) | alpha 0.2.3 | [用户设置与本地化](../../infrastructure/user-settings-localization.md) |
-| [alpha 0.2.4 游戏状态、场景流与 UI 外壳执行计划](./alpha-0.2.4-game-state-scene-flow-ui-shell-plan.md) | alpha 0.2.4 | [游戏状态、场景流与应用 UI 外壳](../../infrastructure/game-state-scene-flow-ui-shell.md) |
-| [alpha 0.2.5 输入、音频、可访问性与平台生命周期执行计划](./alpha-0.2.5-input-audio-accessibility-platform-lifecycle-plan.md) | alpha 0.2.5 | [输入与运行时 UI](../../input-ui-system.md)、[Application Audio](../../infrastructure/application-audio.md)、[可访问性与平台生命周期](../../infrastructure/accessibility-platform-lifecycle.md) |
-| [alpha 0.2.5 切片 1 Application Input Service 执行计划](./alpha-0.2.5-slice-1-application-input-plan.md) | alpha 0.2.5 切片 1 | [输入与运行时 UI](../../input-ui-system.md)、[应用生命周期与会话作用域](../../infrastructure/application-lifecycle.md) |
-| [alpha 0.2.5 切片 2–6 收尾执行计划](./alpha-0.2.5-slices-2-6-completion-plan.md) | alpha 0.2.5 切片 2–6 | [输入与运行时 UI](../../input-ui-system.md)、[Application Audio](../../infrastructure/application-audio.md)、[可访问性与平台生命周期](../../infrastructure/accessibility-platform-lifecycle.md) |
-| [alpha 0.2.6 日志、错误处理与 Addressables 资源治理执行计划](./alpha-0.2.6-logging-error-addressables-plan.md) | alpha 0.2.6 | [日志、错误处理与 Addressables 资源治理](../../infrastructure/logging-error-addressables-governance.md) |
-| [alpha 0.2.7 综合验收与封板执行计划](./alpha-0.2.7-integrated-acceptance-release-sealing-plan.md) | alpha 0.2.7 | [alpha 0.2 综合验收记录](../../infrastructure/alpha-0.2-acceptance.md) |
-| [alpha 0.2 基础设施开发计划](./alpha-0.2-plan.md) | alpha 0.2.0–0.2.7 | [alpha 0.2 长期运行时契约](../../infrastructure/alpha-0.2-runtime-contract.md)、[综合验收记录](../../infrastructure/alpha-0.2-acceptance.md) |
-| [alpha 0.3 启动准备](./alpha-0.3-startup.md) | alpha 0.3 规划前置准备 | [alpha 0.3 UI 迭代计划](alpha-0.3-plan.md)；归档仅表示资料梳理完成，不表示版本功能已实现 |
-| [测试审计与精简](./test-suite-maintenance-plan.md) | alpha 0.3 测试维护前置 | [测试维护规范](../../testing/test-maintenance.md)、[审计报告](../../testing/test-suite-audit.md) |
-| [alpha 0.3.0 统一物品操作与事务](./alpha-0.3.0-unified-item-actions-plan.md) | alpha 0.3.0 操作切片 | [物品 UI 工作台](../../item-ui-workbench.md)、[验收记录](../../assets/acceptance/alpha-0.3.0-actions/README.md) |
-
-最近归档日期：2026-09-13。
-
-- [alpha 0.3.3 统一 UI 视觉组件](./alpha-0.3.3-unified-ui-visual-plan.md)：已完成，见[组件验收](../../assets/acceptance/alpha-0.3.3-ui-style/README.md)。
-
-- [alpha 0.3.4 十槽装备与内容补齐](./alpha-0.3.4-equipment-completion-plan.md)：2026-09-11 完成，见[验收记录](../../assets/acceptance/alpha-0.3.4-equipment/README.md)。
-- [alpha 0.3 UI 与装备总计划](./alpha-0.3-plan.md)：0.3.0–0.3.4 全部完成并归档。
-
-- [状态阶段 2：角色战斗接入](./alpha-0.4-status-combat-plan.md)：2026-09-13 完成，EditMode 507/507、PlayMode 68/68 通过，见[模块说明](../../status-combat.md)。
-
-- [统一物品使用与消耗品总计划](./alpha-0.4-usable-items-plan.md)：三个阶段完成，交付 `0.4.2-alpha`。
-- [消耗品综合验收与交付](./alpha-0.4-item-use-acceptance-plan.md)：独立 Player、旧档与跨进程恢复、正式构建验收。
+| 版本系列 | 计划与验收入口 |
+| --- | --- |
+| 0.7.0 | [归档目录](0.7.0/README.md) |
+| 0.7 | [归档目录](0.7/README.md) |
+| 0.6.5 | [归档目录](0.6.5/README.md) |
+| 0.6.4 | [归档目录](0.6.4/README.md) |
+| 0.6.3 | [归档目录](0.6.3/README.md) |
+| 0.6.2 | [归档目录](0.6.2/README.md) |
+| 0.6.1 | [归档目录](0.6.1/README.md) |
+| 0.6.0 | [归档目录](0.6.0/README.md) |
+| 0.6 | [归档目录](0.6/README.md) |
+| 0.5.5 | [归档目录](0.5.5/README.md) |
+| 0.5.4 | [归档目录](0.5.4/README.md) |
+| 0.5.3 | [归档目录](0.5.3/README.md) |
+| 0.5.2 | [归档目录](0.5.2/README.md) |
+| 0.5.1 | [归档目录](0.5.1/README.md) |
+| 0.5.0 | [归档目录](0.5.0/README.md) |
+| 0.5 | [归档目录](0.5/README.md) |
+| 0.4.2 | [归档目录](0.4.2/README.md) |
+| 0.4.1 | [归档目录](0.4.1/README.md) |
+| 0.4.0 | [归档目录](0.4.0/README.md) |
+| 0.3.4 | [归档目录](0.3.4/README.md) |
+| 0.3.3 | [归档目录](0.3.3/README.md) |
+| 0.3.2 | [归档目录](0.3.2/README.md) |
+| 0.3.1 | [归档目录](0.3.1/README.md) |
+| 0.3.0 | [归档目录](0.3.0/README.md) |
+| 0.3 | [归档目录](0.3/README.md) |
+| 0.2.7 | [归档目录](0.2.7/README.md) |
+| 0.2.6 | [归档目录](0.2.6/README.md) |
+| 0.2.5 | [归档目录](0.2.5/README.md) |
+| 0.2.4 | [归档目录](0.2.4/README.md) |
+| 0.2.3 | [归档目录](0.2.3/README.md) |
+| 0.2.2 | [归档目录](0.2.2/README.md) |
+| 0.2.1 | [归档目录](0.2.1/README.md) |
+| 0.2.0 | [归档目录](0.2.0/README.md) |
+| 0.2 | [归档目录](0.2/README.md) |
+| 0.1.7 | [归档目录](0.1.7/README.md) |
+| 0.1.6 | [归档目录](0.1.6/README.md) |
+| 0.1.5 | [归档目录](0.1.5/README.md) |
+| 0.1.4 | [归档目录](0.1.4/README.md) |
+| 0.1.3 | [归档目录](0.1.3/README.md) |
+| 0.1.2 | [归档目录](0.1.2/README.md) |
+| 0.1.1 | [归档目录](0.1.1/README.md) |
+| 0.1.0 | [归档目录](0.1.0/README.md) |
+| 0.1 | [归档目录](0.1/README.md) |
+| 早期原型（未编号） | [归档目录](prototype/README.md) |

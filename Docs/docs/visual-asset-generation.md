@@ -7,7 +7,7 @@
 - 适用对象：新生成或重新生成的角色帧、怪物帧、NPC 帧、装备图标、固定 UI 图标、UI 状态、九宫格面板、投射物、特效和世界物件
 - 对应 Skill：[Unity 2D 单图生产流程](../../.agents/skills/unity-2d-sprite-workflow/SKILL.md)、[Game UI Kit](../../.agents/skills/artifact-template-game-ui-kit/SKILL.md)
 
-初版阶段接入的 SpriteSheet 已按 [alpha 0.1 美术资产单图迁移计划](./plan/archive/alpha-0.1-art-asset-migration-plan.md)完成退役。项目自有运行时栅格资产不再保留 `Sprite Mode: Multiple`、人工 Sprite Editor Rect 或 sub-sprite fileID 依赖。
+初版阶段接入的 SpriteSheet 已按 [alpha 0.1 美术资产单图迁移计划](plan/archive/0.1/plans/alpha-0.1-art-asset-migration-plan.md)完成退役。项目自有运行时栅格资产不再保留 `Sprite Mode: Multiple`、人工 Sprite Editor Rect 或 sub-sprite fileID 依赖。
 
 ## 目标
 

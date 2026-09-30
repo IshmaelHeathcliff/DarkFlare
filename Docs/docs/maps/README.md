@@ -2,9 +2,9 @@
 
 地图运行时导航见[批量导航与怪物移动](./navigation.md)，切图与冻结见[双地图生命周期](./world-map-lifecycle.md)。
 
-Alpha 0.5.0 地图基础已完成，当前包含文档服务、SO 定义、严格校验、规范导出、只读导入、地表资源发布与[静态几何 / 通行查询](./map-geometry.md)。已增加[手绘 / AI 地图编辑器](./map-editor.md)，Main 已接入[城镇 / 野外及地图生命周期](./world-map-lifecycle.md)，正式怪物使用[批量导航](./navigation.md)绕障。`0.5.5-alpha` 的 [I 综合交付](./acceptance/i/README.md)已完成：当前地图制作、双地图 Player、历史存档和组合压力通过，执行计划已归档。
+Alpha 0.5.0 地图基础已完成，当前包含文档服务、SO 定义、严格校验、规范导出、只读导入、地表资源发布与[静态几何 / 通行查询](./map-geometry.md)。已增加[手绘 / AI 地图编辑器](./map-editor.md)，Main 已接入[城镇 / 野外及地图生命周期](./world-map-lifecycle.md)，正式怪物使用[批量导航](./navigation.md)绕障。`0.5.5-alpha` 的 [I 综合交付](../plan/archive/0.5.5/acceptance/maps/i/README.md)已完成：当前地图制作、双地图 Player、历史存档和组合压力通过，执行计划已归档。
 
-B 阶段已完成：[共享坐标、四角 Key 与稳定变体规则](./terrain-resolution.md)、[分区、边签名与增量解析](./terrain-partition.md)、[独立地表诊断预览](./terrain-preview.md)及[持久样例和压力记录](./terrain-samples.md)。地图校验与解析共用四角采样。C1 的[正式地表家族合同](./terrain-art-contract.md)和[泥土源 Pilot](./acceptance/c1/README.md)已完成；C2 的[确定性纹理编译与正式预览](./terrain-texture-compilation.md)已完成，真实泥土样例可从地图菜单打开；C3 的[四材质双变体与资源发布](./terrain-materials.md)已完成，[C4 正式样例与压力验收](./acceptance/c4/README.md)也已完成，C 已提交 `9a3f7a9`，[D 同源碰撞与静态导航几何](./map-geometry.md)也已完成：默认 4×4 子格、圆足迹 / 线段 / 落点查询、碰撞投影及预览。D 已提交 `e396485`。[地图编辑器 E1–E5](./map-editor.md)已完成，[世界对象表现与分段排序](./object-presentation.md)阶段 F 也已完成，正式双地图与作用域已接入并完成 [G 验收](./acceptance/g/README.md)。
+B 阶段已完成：[共享坐标、四角 Key 与稳定变体规则](./terrain-resolution.md)、[分区、边签名与增量解析](./terrain-partition.md)、[独立地表诊断预览](./terrain-preview.md)及[持久样例和压力记录](./terrain-samples.md)。地图校验与解析共用四角采样。C1 的[正式地表家族合同](./terrain-art-contract.md)和[泥土源 Pilot](../plan/archive/0.5.0/acceptance/maps/c1/README.md)已完成；C2 的[确定性纹理编译与正式预览](./terrain-texture-compilation.md)已完成，真实泥土样例可从地图菜单打开；C3 的[四材质双变体与资源发布](./terrain-materials.md)已完成，[C4 正式样例与压力验收](../plan/archive/0.5.0/acceptance/maps/c4/README.md)也已完成，C 已提交 `9a3f7a9`，[D 同源碰撞与静态导航几何](./map-geometry.md)也已完成：默认 4×4 子格、圆足迹 / 线段 / 落点查询、碰撞投影及预览。D 已提交 `e396485`。[地图编辑器 E1–E5](./map-editor.md)已完成，[世界对象表现与分段排序](./object-presentation.md)阶段 F 也已完成，正式双地图与作用域已接入并完成 [G 验收](../plan/archive/0.5.3/acceptance/maps/g/README.md)。
 
 ## 唯一源与内容身份
 
@@ -59,17 +59,17 @@ SO 字段仍在“按类型”页编辑；地图没有独立 CreateAssetMenu，�
 
 ## 验证
 
-2026-09-18 F 收尾：EditMode **707/707**、PlayMode **78/78**，内容与配置覆盖通过，版本 `0.5.2-alpha`。对象表现、独立 Windows Player 与性能边界见 [F 验收](./acceptance/f/README.md)。
+2026-09-18 F 收尾：EditMode **707/707**、PlayMode **78/78**，内容与配置覆盖通过，版本 `0.5.2-alpha`。对象表现、独立 Windows Player 与性能边界见 [F 验收](../plan/archive/0.5.2/acceptance/maps/f/README.md)。
 
 
-2026-09-18 E 收尾：EditMode **697/697**、PlayMode **77/77**，内容校验 0 项问题。当前版本 `0.5.1-alpha`；地图编辑器、输入与性能见 [E 验收](./acceptance/e/README.md)。以下保留 A–D 历史验证记录。
+2026-09-18 E 收尾：EditMode **697/697**、PlayMode **77/77**，内容校验 0 项问题。当前版本 `0.5.1-alpha`；地图编辑器、输入与性能见 [E 验收](../plan/archive/0.5.1/acceptance/maps/e/README.md)。以下保留 A–D 历史验证记录。
 
-2026-09-18 D 收尾：EditMode **676/676**、PlayMode **77/77**，内容校验 0 项问题。物理余量、离散窄路误拒绝、几何容量及未构建 Player 的边界见 [D 验收](./acceptance/d/README.md)。下段为 B 阶段历史记录。
+2026-09-18 D 收尾：EditMode **676/676**、PlayMode **77/77**，内容校验 0 项问题。物理余量、离散窄路误拒绝、几何容量及未构建 Player 的边界见 [D 验收](../plan/archive/0.5.0/acceptance/maps/d/README.md)。下段为 B 阶段历史记录。
 
-2026-09-18：B4 完成后项目完整 EditMode **650/650**、PlayMode **75/75** 通过；A 的 35 项地图回归及 40 项地表规则回归、B3 的 7 项[预览与导入刷新回归](./terrain-preview.md#验证与边界)保留。内容校验 0 项问题，配置文档字段覆盖通过。1920×1080、原始像素与 256×256 压力记录见 [B4 验收](./acceptance/b4/README.md)，其中单独记录工具附带运行的包测试。本轮未构建 Player。
+2026-09-18：B4 完成后项目完整 EditMode **650/650**、PlayMode **75/75** 通过；A 的 35 项地图回归及 40 项地表规则回归、B3 的 7 项[预览与导入刷新回归](./terrain-preview.md#验证与边界)保留。内容校验 0 项问题，配置文档字段覆盖通过。1920×1080、原始像素与 256×256 压力记录见 [B4 验收](../plan/archive/0.5.0/acceptance/maps/b4/README.md)，其中单独记录工具附带运行的包测试。本轮未构建 Player。
 
 长期测试：MapDocumentTests、MapDocumentImporterTests，以及内容 ID、配置文档覆盖和现有地图回归。新增测试覆盖数据完整性、导入稳定身份、缺引用 / ID 改名 / 冲突恢复、失败不覆盖旧源，以及不同区域设置的规范交换。导入器测试使用唯一临时目录，结束删除源、配置和 `.meta`，不向正式内容池写入测试资产。原配置发现测试修正“所有登记类型均可手动创建”的假设，明确验证导入地图不能另建布局资产；旧 GroundTilemapTests 保留。
 
-2026-09-18 G 收尾：版本 `0.5.3-alpha`、core v6、Schema 4、地图文档 V2。EditMode **713/713**、PlayMode **83/83**，正式双地图、冻结恢复、独立进程继续与 20 轮往返通过，见 [G 验收](./acceptance/g/README.md)。
+2026-09-18 G 收尾：版本 `0.5.3-alpha`、core v6、Schema 4、地图文档 V2。EditMode **713/713**、PlayMode **83/83**，正式双地图、冻结恢复、独立进程继续与 20 轮往返通过，见 [G 验收](../plan/archive/0.5.3/acceptance/maps/g/README.md)。
 
-2026-09-19 H 收尾：`0.5.4-alpha`、core v6、Schema 5；EditMode **722/722**、PlayMode **85/85**。批量导航、动态阻挡、500 / 1000 单位 Player 矩阵与 20 轮大图往返通过，见 [H 验收](./acceptance/h/README.md)。
+2026-09-19 H 收尾：`0.5.4-alpha`、core v6、Schema 5；EditMode **722/722**、PlayMode **85/85**。批量导航、动态阻挡、500 / 1000 单位 Player 矩阵与 20 轮大图往返通过，见 [H 验收](../plan/archive/0.5.4/acceptance/maps/h/README.md)。

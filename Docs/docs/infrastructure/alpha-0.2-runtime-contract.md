@@ -4,8 +4,8 @@
 > 建立日期：2026-08-17
 > 最近更新：2026-08-26
 > 适用范围：后续新增运行时代码、迁移、测试和基础设施扩展
-> 归档计划：[alpha 0.2 基础设施开发计划](../plan/archive/alpha-0.2-plan.md)
-> 验收记录：[alpha 0.2 综合验收记录](./alpha-0.2-acceptance.md)
+> 归档计划：[alpha 0.2 基础设施开发计划](../plan/archive/0.2/plans/alpha-0.2-plan.md)
+> 验收记录：[alpha 0.2 综合验收记录](../plan/archive/0.2.7/acceptance/alpha-0.2-acceptance.md)
 > 已落地模块：[应用生命周期与会话作用域](./application-lifecycle.md)、[稳定身份、内容目录与迁移框架](./content-identity-migration.md)、[本地存档与 Session 恢复](./local-save.md)、[用户设置与本地化](./user-settings-localization.md)、[游戏状态、场景流与应用 UI 外壳](./game-state-scene-flow-ui-shell.md)、[输入与运行时 UI](../input-ui-system.md)、[Application Audio](./application-audio.md)、[可访问性与平台生命周期](./accessibility-platform-lifecycle.md)、[日志、错误处理与 Addressables 资源治理](./logging-error-addressables-governance.md)
 
 ## 使用方式

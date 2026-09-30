@@ -26,7 +26,7 @@ Capture 在主线程读取 / 校验 SO，复制地表属性、对象矩形与区
 | 物理投影 | 最多 32,768 个矩形，另加四条边界 |
 | 单次线段查询 | 默认最多 65,536 次桶 / 条目访问，可显式提供预算 |
 
-前三项可由 `MapGeometrySettings` 限定。超限抛 `MapGeometryCapacityException`，查询预算耗尽返回 `BudgetExceeded`，不截断地图、不发布部分结果。源文档合法不等于满足指定派生预算；逐格随机四材质的 256² 压力源超过矩形上限，连续区域 256² 样例已通过，详见[验收](./acceptance/d/README.md)。
+前三项可由 `MapGeometrySettings` 限定。超限抛 `MapGeometryCapacityException`，查询预算耗尽返回 `BudgetExceeded`，不截断地图、不发布部分结果。源文档合法不等于满足指定派生预算；逐格随机四材质的 256² 压力源超过矩形上限，连续区域 256² 样例已通过，详见[验收](../plan/archive/0.5.0/acceptance/maps/d/README.md)。
 
 ## 足迹与查询
 
@@ -63,4 +63,4 @@ Session 在同一次构建中捕获显示和几何输入；完整帧连同碰撞
 
 ## 验证
 
-长期规则与生命周期覆盖位于 `MapGeometryTests`，实际移动与释放位于 `MapGeometryPlayModeTests`；复用现有预览、文档、导入及旧 Main 回归。[D 验收记录](./acceptance/d/README.md)保留尺度矩阵、物理对照、数据往返、取消和性能证据。地图作用域与刷怪消费者已由 G 接入；动态寻路已由 [H](./navigation.md)接入，执行计划已[归档](../plan/archive/alpha-0.5.4-navigation-plan.md)。
+长期规则与生命周期覆盖位于 `MapGeometryTests`，实际移动与释放位于 `MapGeometryPlayModeTests`；复用现有预览、文档、导入及旧 Main 回归。[D 验收记录](../plan/archive/0.5.0/acceptance/maps/d/README.md)保留尺度矩阵、物理对照、数据往返、取消和性能证据。地图作用域与刷怪消费者已由 G 接入；动态寻路已由 [H](./navigation.md)接入，执行计划已[归档](../plan/archive/0.5.4/plans/alpha-0.5.4-navigation-plan.md)。

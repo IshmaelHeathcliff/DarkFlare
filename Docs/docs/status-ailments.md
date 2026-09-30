@@ -1,6 +1,6 @@
 # 异常、抗性与状态来源
 
-2026-09-13：阶段 3 已完成；EditMode 全量 527/527、随后本地化专项 20/20、PlayMode 68/68 通过，见[验收记录](./assets/acceptance/alpha-0.4-status-ailments/README.md)。
+2026-09-13：阶段 3 已完成；EditMode 全量 527/527、随后本地化专项 20/20、PlayMode 68/68 通过，见[验收记录](plan/archive/0.4.1/acceptance/status-ailments/README.md)。
 
 本模块在[状态核心](./status-system.md)与[角色战斗](./status-combat.md)上提供七异常、对应抗性及来源接点。已接入[自动 Session 时间、状态保存恢复与图标](./status-lifecycle-ui.md)；调试显式推进受暂停及提交门禁约束。正式技能默认不附加异常，可主动选择样例验证。
 

@@ -65,6 +65,6 @@ Editor 专用 ScriptableObject，无内容 ID，不是运行时内容定义。In
 
 ## 验证与边界
 
-[C2 验收](./acceptance/c2/README.md)包括全部 256 Key 与变体的兼容边 RGBA 一致、整数面积预期、内部保留、输入拒绝、真实资产编译 / 摘要失效、写 Tile 后取消与异常回退、损坏修订拒绝、正式帧原子切换及资源释放。新增 9 项长期回归；一次性截图脚本和 PlayMode 采集测试在采集后清理。
+[C2 验收](../plan/archive/0.5.0/acceptance/maps/c2/README.md)包括全部 256 Key 与变体的兼容边 RGBA 一致、整数面积预期、内部保留、输入拒绝、真实资产编译 / 摘要失效、写 Tile 后取消与异常回退、损坏修订拒绝、正式帧原子切换及资源释放。新增 9 项长期回归；一次性截图脚本和 PlayMode 采集测试在采集后清理。
 
-泥土 Pilot 保留为编译链路基线。四材质技术样例与发布证据见 [C3 验收](./acceptance/c3/README.md)；多材质接点、跨块、大图与构建中取消验收见 [C4 记录](./acceptance/c4/README.md)。
+泥土 Pilot 保留为编译链路基线。四材质技术样例与发布证据见 [C3 验收](../plan/archive/0.5.0/acceptance/maps/c3/README.md)；多材质接点、跨块、大图与构建中取消验收见 [C4 记录](../plan/archive/0.5.0/acceptance/maps/c4/README.md)。
