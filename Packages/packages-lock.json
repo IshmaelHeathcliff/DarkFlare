@@ -15,7 +15,7 @@
         "com.unity.nuget.newtonsoft-json": "3.0.2",
         "com.unity.test-framework": "1.1.31"
       },
-      "hash": "30d22075093d1d35dfb0091c1c7550e9ad948577"
+      "hash": "aa5fc638d623f56178d50329d9ad8c541a57fe66"
     },
     "com.cysharp.unitask": {
       "version": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
@@ -32,7 +32,7 @@
       "url": "https://registry.npmjs.org"
     },
     "com.unity.2d.animation": {
-      "version": "16.0.0",
+      "version": "16.0.1",
       "depth": 1,
       "source": "registry",
       "dependencies": {
@@ -81,7 +81,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.2d.psdimporter": {
-      "version": "15.0.0",
+      "version": "15.0.1",
       "depth": 1,
       "source": "registry",
       "dependencies": {
@@ -118,7 +118,7 @@
       }
     },
     "com.unity.2d.tilemap.extras": {
-      "version": "9.0.0",
+      "version": "9.0.1",
       "depth": 1,
       "source": "registry",
       "dependencies": {
@@ -129,7 +129,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.2d.tooling": {
-      "version": "4.0.0",
+      "version": "4.0.1",
       "depth": 1,
       "source": "registry",
       "dependencies": {
@@ -197,15 +197,15 @@
       "depth": 0,
       "source": "builtin",
       "dependencies": {
-        "com.unity.2d.animation": "16.0.0",
+        "com.unity.2d.animation": "16.0.1",
         "com.unity.2d.pixel-perfect": "6.0.0",
-        "com.unity.2d.psdimporter": "15.0.0",
+        "com.unity.2d.psdimporter": "15.0.1",
         "com.unity.2d.sprite": "1.0.0",
         "com.unity.2d.spriteshape": "16.0.0",
         "com.unity.2d.tilemap": "1.0.0",
-        "com.unity.2d.tilemap.extras": "9.0.0",
+        "com.unity.2d.tilemap.extras": "9.0.1",
         "com.unity.2d.aseprite": "6.0.0",
-        "com.unity.2d.tooling": "4.0.0"
+        "com.unity.2d.tooling": "4.0.1"
       }
     },
     "com.unity.graph-authoring": {
@@ -231,7 +231,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.inputsystem": {
-      "version": "1.20.0",
+      "version": "1.20.1",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -350,7 +350,7 @@
       "source": "builtin",
       "dependencies": {
         "com.unity.render-pipelines.core": "17.6.0",
-        "com.unity.searcher": "4.9.3",
+        "com.unity.searcher": "4.9.5",
         "com.unity.graph-authoring": "1.0.0"
       }
     },
