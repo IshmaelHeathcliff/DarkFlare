@@ -2,6 +2,8 @@
 
 ## 项目状态
 
+2026-10-06：**0.7.1 技能面板、技能重构与能量成长规划完成，待实施**。几何与六键手动施法已确认；新增三档 2×1 能量瓶、专栏积蓄、中心充能、属性分配与柴薪 / 天赋独立点亮，余量跨瓶累计且每 1 天赋点同时获得 1 属性点。五阶段按几何、道具 / 积蓄 / 存档、成长与点亮、技能与效果、正式界面 / 综合验收推进，见[执行计划](./plan/alpha-0.7.1-skill-board-plan.md)和[成长合同](./plan/alpha-0.7.1/energy-progression.md)。当前 `main` / `bd01a4c`、Unity `6000.6.4f1`；运行版本 `0.7.0-alpha.2`、core v10 / Schema 9 / 1 / 地图 V4 保持不变。本轮只完成规划，未重跑 Unity 测试。
+
 2026-09-30：**0.7.1 启动基线已核对，功能范围待明确**。当前分支与交付提交为 `main` / `e2b97d2`，源码运行版本仍为 `0.7.0-alpha.2`，core v10 / Schema 9 / 1 / 地图 V4 不变。0.7.0 验收记录中的 6 个文件哈希全部匹配当前文件；本次未重跑 Unity 测试或构建 Player，保留已有字体资产改动。见[0.7.1 启动准备](./plan/alpha-0.7.1-startup.md)与[0.7 总计划](./plan/alpha-0.7-plan.md)。
 
 2026-09-29：**Alpha 0.7.0 两阶段完成**，当前运行版本 `0.7.0-alpha.2` / core v10 / 存档 Schema 9 / 设置 Schema 1 / 地图 V4。新增不可变 Core `SemanticVersion` 及 `GameVersion` 显式解析入口，保留历史版本字符串与独立数据兼容域。核心定向 52/52、接入与存档定向 32/32、完整 EditMode 882/882、PlayMode 102/102，均为 0 失败 / 跳过；详见[0.7.0 执行与验收](plan/archive/0.7.0/plans/alpha-0.7.0-semver-plan.md)及[版本管理与 API](./version-management.md)。验收时源码身份为 `751225c` 加本次未提交改动，运行版本已更新；本版 Player、真实设备、跨进程及性能矩阵未执行。[0.7 总计划](./plan/alpha-0.7-plan.md)继续维护，下一小版本为范围待明确的 `0.7.1-alpha`。
@@ -36,7 +38,7 @@ Alpha 0.5 的 A–I 全部完成；当前交付版本为 `0.7.0-alpha.2`，本�
 
 ## 当前技术栈
 
-- Unity `6000.6.0f1`，URP `17.6.0`；[升级兼容记录](./infrastructure/unity-6.6-upgrade.md)
+- Unity `6000.6.4f1`，URP `17.6.0`；[6.6 系列首次升级记录](./infrastructure/unity-6.6-upgrade.md)，当前补丁与包升级提交为 `bd01a4c`，该补丁的测试尚未在本轮重跑。
 - QFramework 分层与项目内 `QFramework.cs`
 - UniTask 异步
 - Addressables 资源加载
@@ -125,6 +127,7 @@ Alpha 0.3 前置[测试审计](plan/archive/0.3/acceptance/testing/test-suite-au
 - Settings V1 已有语言、音频、输入与 Reduce Motion 真实消费者；Text Scale、High Contrast、Screen Shake 和 Display Mode 仍为数据预留，不在玩家 UI 中开放。
 - 背包已支持拖拽换位、单目标原子交换和键鼠 / 手柄拿起放置，已支持物品堆叠与材料消耗，尚无旋转和重量；装备已实现十槽及精确拖入 / 拖回，每槽至少两件正式基底，但没有耐久、套装、完整纸娃娃或唯一装备特效。
 - 交易没有回购或多商人独立库存；打造已消耗锻造矿石，尚无配方和批量操作。
+- 尚无六边形技能面板、柴薪 / 火焰 / 余烬、能量瓶或永久加点；当前玩家仍自动施放单个默认投射物技能。[0.7.1 计划](./plan/alpha-0.7.1-skill-board-plan.md)将接入物品化技能、六键手动施法、能量充能成长和点亮效果，规划内容尚不代表现有功能。
 - 战斗内容密度、场景规模和 UI 功能深度仍属于原型基线；现有首批视觉不视为最终美术质量。
 
 完整流程与模块边界见 [`gameplay-loop.md`](./gameplay-loop.md)，生命周期见[应用生命周期与会话作用域](./infrastructure/application-lifecycle.md)，稳定身份和迁移见[稳定身份、内容目录与迁移框架](./infrastructure/content-identity-migration.md)，本地持久化见[本地存档与 Session 恢复](./infrastructure/local-save.md)，设置与语言见[用户设置与本地化](./infrastructure/user-settings-localization.md)，输入、菜单和场景交互结构见 [`input-ui-system.md`](./input-ui-system.md)。

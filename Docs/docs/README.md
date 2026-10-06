@@ -69,11 +69,16 @@
 
 - [Alpha 0.7 活动总计划](./plan/alpha-0.7-plan.md)
 - [0.7.1 启动准备](./plan/alpha-0.7.1-startup.md)
+- [0.7.1 技能面板与技能重构执行计划](./plan/alpha-0.7.1-skill-board-plan.md)
+- [0.7.1 六键手动施法、输入与存档合同](./plan/alpha-0.7.1/manual-skills.md)
+- [0.7.1 能量瓶、充能兑换与天赋成长合同](./plan/alpha-0.7.1/energy-progression.md)
 - [已完成版本的计划与验收归档](./plan/archive/README.md)
 
 完成的执行计划与验收文档、截图、日志和结果统一按版本收纳到 `plan/archive/<版本号>/`，各版本提供 `plans/`、`acceptance/` 与 `README.md` 入口。模块文档继续保留在对应职责目录。
 
 ## 计划状态
+
+2026-10-06：**0.7.1 技能面板、技能重构与能量成长规划完成，待实施**。几何与六键手动施法已确认；新增三档 2×1 能量瓶、专栏积蓄、中心整瓶充能、余量跨瓶累计、1:1 属性 / 天赋点产出及柴薪 / 普通天赋独立点亮，见[执行计划](./plan/alpha-0.7.1-skill-board-plan.md)、[几何合同](./plan/alpha-0.7.1/geometry.md)、[六键合同](./plan/alpha-0.7.1/manual-skills.md)、[成长合同](./plan/alpha-0.7.1/energy-progression.md)与[验收清单](./plan/alpha-0.7.1/acceptance.md)。计划拆为五阶段，当前 `main` / `bd01a4c`、Unity `6000.6.4f1`，运行版本仍为 `0.7.0-alpha.2`；尚未开始实现，也未重跑 Unity 测试。
 
 2026-09-30：**0.7.1 启动基线已核对**，`main` / `e2b97d2`，当前运行版本保持 `0.7.0-alpha.2`。已有能力、验收身份、6 个文件哈希匹配、工作区字体改动及未执行项已记录在[启动准备](./plan/alpha-0.7.1-startup.md)，[0.7 总计划](./plan/alpha-0.7-plan.md)已同步。功能范围与阶段验收标准待明确，本次未重跑 Unity 测试或构建 Player。
 
