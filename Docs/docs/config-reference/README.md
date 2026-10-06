@@ -24,6 +24,7 @@
 | 角色与怪物 | `CharacterDefinition`、`MonsterDefinition`、`MonsterBehaviorDefinition`、`MonsterAffixDefinition`、`MonsterSpawnDefinition`、`MonsterSpawnRule` | 77 | [完整](./actors-and-monsters.md) | [玩法循环](../gameplay-loop.md)、[首批内容池](../content-system.md) |
 | 物品与掉落 | `ItemBaseDefinition`、`DamageRollDefinition`、`LootTableDefinition`、`LootTableEntry` | 27 | [完整](./items-and-loot.md) | [装备系统](../equipment-system.md)、[随机化与掉落](../randomization-system.md) |
 | 技能 | `ProjectileSkillDefinition` | 13 | [完整](./skills.md) | [伤害与词缀](../damage-affix-system.md) |
+| 技能面板生成 | `FirewoodGenerationDefinition` | 2 | [完整](./skill-board.md) | [几何与生成](../skill-board/geometry.md) |
 | 交易与打造 | `TraderDefinition`、`TraderStockEntry`、`CraftingDefinition` | 21 | [完整](./trade-and-crafting.md) | [打造系统](../crafting-system.md)、[首批内容池](../content-system.md) |
 | 本地化内容引用 | `LocalizedContentReference` | 2 | [完整](../infrastructure/user-settings-localization.md#localizedcontentreference) | [用户设置与本地化](../infrastructure/user-settings-localization.md) |
 

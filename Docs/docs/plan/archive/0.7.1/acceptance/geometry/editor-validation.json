@@ -1,0 +1,28 @@
+{
+  "recordedAtUtc": "2026-10-06T13:08:18.098106Z",
+  "unityVersion": "6000.6.4f1",
+  "bundleVersion": "0.7.1-alpha.1",
+  "currentGameVersion": "0.7.1-alpha.1",
+  "semanticVersion": "0.7.1-alpha.1",
+  "contentValidationIssues": 0,
+  "generationTemplates": 3,
+  "discoverable": true,
+  "previewLifecycle": "Three reopen/close cycles, six rotations per cycle, overflow with auto-connect disabled and invalid counts all passed",
+  "playerBuilt": false,
+  "runtimeInputUnchanged": true,
+  "compilation": {
+    "status": "completed",
+    "failed": false,
+    "errors": [],
+    "compilationFailed": false
+  },
+  "editor": {
+    "status": "ready",
+    "compiling": false,
+    "domainReloadInProgress": false,
+    "playMode": "stopped",
+    "lastHeartbeat": "2026-10-06T13:10:15.0437258Z",
+    "projectPath": "C:\\Users\\darkf\\Home\\Projects\\DarkFlare",
+    "unityVersion": "6000.6.4f1"
+  }
+}

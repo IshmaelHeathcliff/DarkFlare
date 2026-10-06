@@ -1,0 +1,145 @@
+{
+  "recordedAtUtc": "2026-10-06T13:08:41.214777+00:00",
+  "baselineCommit": "8ee25b1191b79b5e42b84f874480a36f4ed20d0e",
+  "workingTree": "uncommitted stage-one implementation",
+  "gameVersion": "0.7.1-alpha.1",
+  "unityVersion": "6000.6.4f1",
+  "files": [
+    {
+      "path": "Assets/Data/Preset/SkillBoard.meta",
+      "sha256": "224878962554c0ada301b4d87c959af07c9f4b0895c19ceeec0f27a502eb8349"
+    },
+    {
+      "path": "Assets/Data/Preset/SkillBoard/LargeFirewoodGeneration.asset",
+      "sha256": "3cd03a8aa6770be0ee8a3c1f8d11c29a994c5b7d3f158e1dfd9925305a5dc910"
+    },
+    {
+      "path": "Assets/Data/Preset/SkillBoard/LargeFirewoodGeneration.asset.meta",
+      "sha256": "6c5c6a19e752603b2e059a05972fec96efa728e57f2488ebb6975e5a97889363"
+    },
+    {
+      "path": "Assets/Data/Preset/SkillBoard/MediumFirewoodGeneration.asset",
+      "sha256": "d2a669b46aeb47c1334e70e08559456ecc2a2723015fcb3050fd48e97ee5aee9"
+    },
+    {
+      "path": "Assets/Data/Preset/SkillBoard/MediumFirewoodGeneration.asset.meta",
+      "sha256": "32c1191696e2633c0de149d25a21faf1dcb9d9fc0608301a04b105eb6eafc601"
+    },
+    {
+      "path": "Assets/Data/Preset/SkillBoard/SmallFirewoodGeneration.asset",
+      "sha256": "97629e802178b37c8b48c56a6b9bb4fa076bb358dc0b487a18b3594eec40ee69"
+    },
+    {
+      "path": "Assets/Data/Preset/SkillBoard/SmallFirewoodGeneration.asset.meta",
+      "sha256": "3e4dd7b7a4456d0a5bd518d32861b1e6db89a9c35577dcdb303406230b39e268"
+    },
+    {
+      "path": "Assets/Scripts/Editor/ConfigurationTypeDiscovery.cs",
+      "sha256": "7d8193467169f5187d9d3a4c1120b2c1609d8caf3ec676a2b637e9300c873d9d"
+    },
+    {
+      "path": "Assets/Scripts/Editor/ContentConfigurationValidator.cs",
+      "sha256": "f080aaecb1512586e990b2f73278a09715430cd199932b84eaa524ae38277f34"
+    },
+    {
+      "path": "Assets/Scripts/Editor/SkillBoard.meta",
+      "sha256": "be8a5b904c1f61f82d66cac9e46e653c9ff7b19d43a7c01634730a3924423402"
+    },
+    {
+      "path": "Assets/Scripts/Editor/SkillBoard/SkillBoardPreviewWindow.cs",
+      "sha256": "c1d9f052a5711ec0fb1a8e9a1001a9ab4859e06298fb46fc0b591343c1d8789e"
+    },
+    {
+      "path": "Assets/Scripts/Editor/SkillBoard/SkillBoardPreviewWindow.cs.meta",
+      "sha256": "f30ce9adbd8984e0f6715f14fbf63232c82368729002f192cafc6aa4d23e892d"
+    },
+    {
+      "path": "Assets/Scripts/Runtime/Data/SkillBoard.meta",
+      "sha256": "1617d05c34199eb30f85fbaadb02ca561fbb554926cf5f0e1d28ff8631d5369a"
+    },
+    {
+      "path": "Assets/Scripts/Runtime/Data/SkillBoard/FirewoodGenerationDefinition.cs",
+      "sha256": "a6ddf68e07e4df68147493c4331d0eaa94c0b394f53a5a0745802d355fa52be6"
+    },
+    {
+      "path": "Assets/Scripts/Runtime/Data/SkillBoard/FirewoodGenerationDefinition.cs.meta",
+      "sha256": "acc40bacd11308cb3687e6aa37e9ac7ca66e8d69198e48d9f76deaed0f5c9f21"
+    },
+    {
+      "path": "Assets/Scripts/Runtime/Gameplay/SkillBoard.meta",
+      "sha256": "d6651b09df55dbe23a2ba7c54823e08d227ea8acf0f22dc9ceeb9aed58f49953"
+    },
+    {
+      "path": "Assets/Scripts/Runtime/Gameplay/SkillBoard/FirewoodGenerator.cs",
+      "sha256": "bb6760bf0ef8dd4aa7e53ebcaefbe48c182a9085d6845dc6c25d5ba91e4aac4e"
+    },
+    {
+      "path": "Assets/Scripts/Runtime/Gameplay/SkillBoard/FirewoodGenerator.cs.meta",
+      "sha256": "f2f77acf746975b6e98a75521f0e7dc468653161871416cacf38ea1cd5f642f0"
+    },
+    {
+      "path": "Assets/Scripts/Runtime/Gameplay/SkillBoard/FirewoodLayout.cs",
+      "sha256": "a8046ea64486c1a66b28c0197e4af8691e2631fc7bc03d3faeb65509121be6e4"
+    },
+    {
+      "path": "Assets/Scripts/Runtime/Gameplay/SkillBoard/FirewoodLayout.cs.meta",
+      "sha256": "19d4d13b2c506ef14a55d0043505881ae6f21e0d896574a6bd6a87432479366b"
+    },
+    {
+      "path": "Assets/Scripts/Runtime/Gameplay/SkillBoard/HexCoordinate.cs",
+      "sha256": "293eecbaa4c4d92c63e3a43cc729f90d4b2a1ead99867c7adb22f0d870933d7e"
+    },
+    {
+      "path": "Assets/Scripts/Runtime/Gameplay/SkillBoard/HexCoordinate.cs.meta",
+      "sha256": "ff84214b677d925c5c130055a3284c31ea6ee25151d41a9592c83b9d69ce56ac"
+    },
+    {
+      "path": "Assets/Scripts/Runtime/Gameplay/SkillBoard/SkillBoardGeometry.cs",
+      "sha256": "65d91f9e2d2291cf65277346910f10557b6ad449fe2abdebf4c5ccbba4827814"
+    },
+    {
+      "path": "Assets/Scripts/Runtime/Gameplay/SkillBoard/SkillBoardGeometry.cs.meta",
+      "sha256": "e3fd6afecddcf70ff48fcc04e4b1f157991467aa1185108ba593f3a7a067746c"
+    },
+    {
+      "path": "Assets/Scripts/Runtime/Gameplay/SkillBoard/SkillBoardPlacement.cs",
+      "sha256": "d50d4d4db67deef8afc1690eda022a6e57aa9f6e17f725f0aa87abef6670ff59"
+    },
+    {
+      "path": "Assets/Scripts/Runtime/Gameplay/SkillBoard/SkillBoardPlacement.cs.meta",
+      "sha256": "4bf0696e29941e80623cf4052967a305667002f664e4df63133d5bf974587c0e"
+    },
+    {
+      "path": "Assets/Scripts/Tests/EditMode/SkillBoardGeometryTests.cs",
+      "sha256": "c1839c758f8eb87b37fdad9735ea762037d3e170bdf88139afbfc3f733fb2f58"
+    },
+    {
+      "path": "Assets/Scripts/Tests/EditMode/SkillBoardGeometryTests.cs.meta",
+      "sha256": "6db3b596d7405a60a8e819b05782dc12174f4a5e5ed427b7fe4fe20689dbc630"
+    },
+    {
+      "path": "Assets/UI/SkillBoard.meta",
+      "sha256": "56ffced3b8a533cf77a3da3fb3475cb5c21c51123d01477951c012e651040fbf"
+    },
+    {
+      "path": "Assets/UI/SkillBoard/SkillBoardPreview.uss",
+      "sha256": "3d0ff65d0ad2d01ce0b2f053dcdb3cc4bed45ab37cf927d9177b1a25ffa28aaa"
+    },
+    {
+      "path": "Assets/UI/SkillBoard/SkillBoardPreview.uss.meta",
+      "sha256": "2dec8ace86f48281fd4e49ec9a32dbb6aeab14a1f2b4c58b219b13ba8f5023a9"
+    },
+    {
+      "path": "Assets/UI/SkillBoard/SkillBoardPreview.uxml",
+      "sha256": "eee526f64adbb91e0b809979ebe231925e5c1574595928bda98a0b4a5bf236ef"
+    },
+    {
+      "path": "Assets/UI/SkillBoard/SkillBoardPreview.uxml.meta",
+      "sha256": "3fa0ccd0b1b1bef01a3864a7662c27da41d64baa928956f6edf45654997eb3f7"
+    },
+    {
+      "path": "ProjectSettings/ProjectSettings.asset",
+      "sha256": "3bd8bff1007e9fa0d95d401d018fd8e7df3083019f7b5d6207fc9d3f0611a1c3"
+    }
+  ]
+}

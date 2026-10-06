@@ -1,0 +1,188 @@
+{
+  "status": "completed",
+  "duration": 0.68,
+  "summary": {
+    "total": 25,
+    "passed": 25,
+    "failed": 0,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "results": [
+    {
+      "FullName": "DarkFlare.Tests.SkillBoardGeometryTests.ClosedNetwork_AcceptsSixPiecesWithoutChoosingAParentTree",
+      "Status": "Passed",
+      "Duration": 0.0485446,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SkillBoardGeometryTests.Configuration_GeneratesIndependentSnapshotsAndReportsInvalidTemplates",
+      "Status": "Passed",
+      "Duration": 0.0290229,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SkillBoardGeometryTests.Coordinates_PreserveDistanceUnderRotationAndTranslation",
+      "Status": "Passed",
+      "Duration": 0.0016395,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SkillBoardGeometryTests.Coordinates_RejectOverflowInsteadOfWrappingIntoLegalSpace",
+      "Status": "Passed",
+      "Duration": 0.0030223,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SkillBoardGeometryTests.DirectConnection_MergesIntoCracksAndDisconnectCannotLeaveOverlap",
+      "Status": "Passed",
+      "Duration": 0.0093922,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SkillBoardGeometryTests.FixedShapes_ReserveEmptyCellsAndExposeSixIndependentRoots",
+      "Status": "Passed",
+      "Duration": 0.0009554,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SkillBoardGeometryTests.GenerationAndPlacement_AreDeterministicAndDoNotAdvanceGameplayRandom",
+      "Status": "Passed",
+      "Duration": 0.0121782,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SkillBoardGeometryTests.Generator_CoversEveryLegalCountCombinationWithoutClamping",
+      "Status": "Passed",
+      "Duration": 0.1929171,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SkillBoardGeometryTests.Generator_RejectsIllegalRequests(Large,9,5,1)",
+      "Status": "Passed",
+      "Duration": 0.0009519,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SkillBoardGeometryTests.Generator_RejectsIllegalRequests(Large,15,6,1)",
+      "Status": "Passed",
+      "Duration": 8.15E-05,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SkillBoardGeometryTests.Generator_RejectsIllegalRequests(Medium,4,3,0)",
+      "Status": "Passed",
+      "Duration": 4.77E-05,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SkillBoardGeometryTests.Generator_RejectsIllegalRequests(Small,3,3,0)",
+      "Status": "Passed",
+      "Duration": 0.0001041,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SkillBoardGeometryTests.Generator_RejectsIllegalRequests(Small,-1,2,0)",
+      "Status": "Passed",
+      "Duration": 6.04E-05,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SkillBoardGeometryTests.Generator_UsesExplicitSmallTemplatesAndRejectsInwardDirections",
+      "Status": "Passed",
+      "Duration": 0.0007591,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SkillBoardGeometryTests.Graph_CrossesEmptyRingCellsWithoutCreatingNodes",
+      "Status": "Passed",
+      "Duration": 0.0017217,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SkillBoardGeometryTests.Layout_CopiesCallerArraysAndRetainsIdentityAcrossSixPoses",
+      "Status": "Passed",
+      "Duration": 0.0031465,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SkillBoardGeometryTests.LayoutValidation_RejectsIdentityPortAndGraphCorruption",
+      "Status": "Passed",
+      "Duration": 0.0050038,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SkillBoardGeometryTests.OldSharedMiddleCell_AndUnpairedSingleDirection_AreRejected",
+      "Status": "Passed",
+      "Duration": 0.0024067,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SkillBoardGeometryTests.Placement_ReservesCenterBlankBodiesAndUnconnectedExtensions",
+      "Status": "Passed",
+      "Duration": 0.0028865,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SkillBoardGeometryTests.PlacementFailures_DoNotMutateInputsAndReportOverflowOrIdentity",
+      "Status": "Passed",
+      "Duration": 0.0010863,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SkillBoardGeometryTests.SmallToSmall_CanConnectWhileSameLargerSizesCannot",
+      "Status": "Passed",
+      "Duration": 0.0016086,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SkillBoardGeometryTests.Symmetry_AgreesWithIndependentCornerEnumeration",
+      "Status": "Passed",
+      "Duration": 0.0065315,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SkillBoardGeometryTests.Symmetry_PrefersOppositeAndAlternatingCorners(2,1,2,4)",
+      "Status": "Passed",
+      "Duration": 0.0026657,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SkillBoardGeometryTests.Symmetry_PrefersOppositeAndAlternatingCorners(3,2,3,4)",
+      "Status": "Passed",
+      "Duration": 0.0061349,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SkillBoardGeometryTests.Symmetry_PrefersOppositeAndAlternatingCorners(4,1,2,2)",
+      "Status": "Passed",
+      "Duration": 0.0027574,
+      "Message": null,
+      "StackTrace": null
+    }
+  ]
+}

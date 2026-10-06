@@ -1,0 +1,47 @@
+.preview-root {
+  flex-grow: 1;
+  padding: 10px;
+}
+.heading {
+  -unity-font-style: bold;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+.workspace {
+  flex-grow: 1;
+  flex-direction: row;
+  min-height: 0;
+}
+.parameters {
+  width: 300px;
+  flex-shrink: 0;
+  margin-right: 12px;
+}
+.output {
+  flex-grow: 1;
+  min-width: 0;
+}
+.summary, .legend, .inspection {
+  white-space: normal;
+  flex-shrink: 0;
+  margin-bottom: 8px;
+}
+.diagram {
+  flex-grow: 1;
+  min-height: 180px;
+  background-color: #202020;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+.inspection {
+  min-height: 58px;
+  max-height: 160px;
+}
+.cell-label {
+  position: absolute;
+  width: 48px;
+  height: 18px;
+  color: #f0eee7;
+  -unity-text-align: middle-center;
+  font-size: 11px;
+}

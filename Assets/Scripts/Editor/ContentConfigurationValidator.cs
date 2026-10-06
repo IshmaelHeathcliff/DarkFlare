@@ -201,6 +201,10 @@ namespace DarkFlare.Editor
             {
                 foreach (string issue in status.ValidateConfiguration()) { AddError(issues, status, issue); }
             }
+            foreach (FirewoodGenerationDefinition firewood in LoadAssets<FirewoodGenerationDefinition>($"{PresetRoot}/SkillBoard"))
+            {
+                foreach (SkillBoardIssue issue in firewood.Generate(0).Issues) { AddError(issues, firewood, issue.ToString()); }
+            }
             ValidateOfficialCatalog(issues);
             ValidateExpectedIds(tags, ExpectedTagIds, tag => tag.Id, "标签", false, issues);
             ValidateExpectedIds(stats, StatIds.All, stat => stat.Id, "属性", true, issues);

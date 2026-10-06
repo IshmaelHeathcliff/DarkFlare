@@ -18,9 +18,12 @@ DarkFlare/
         local-save.md
         user-settings-localization.md
       hud-system.md
+      skill-board/
+        geometry.md
       plan/
         alpha-0.7-plan.md
-        alpha-0.7.1-startup.md
+        alpha-0.7.1-skill-board-plan.md
+        alpha-0.7.1/
         archive/
           README.md
           <版本号>/
@@ -371,6 +374,7 @@ Addressables 的配置目录，包含资源组、模板和构建器配置。后�
 - `Gameplay/Trading`：`ItemValueCalculator.cs`（纯逻辑价值/买卖价计算）、`EconomyModel.cs`（商人库存 + 买卖倍率）、`TradingSystem.cs`（买卖/价格/商人 seeding）
 - `Gameplay/Crafting`：`CraftingOperations.cs`（六类随机打造与原子提交）、`CraftingModels.cs`（操作 / 范围 / 结构化结果）、`CraftingRandomSeeds.cs`（独立子种子）、`CraftingSystem.cs`（背包、金币和随机根种子，无 Model）
 - `Gameplay/Actors`：`CombatActor.cs`、`PlayerController.cs`、`MonsterController.cs`、`ActorTeam.cs`
+- `Gameplay/SkillBoard`：六边形坐标、三尺寸主体、不可变节点图、确定性生成及完整占位 / 双向裂缝预检；`Data/SkillBoard/FirewoodGenerationDefinition.cs` 为独立生成模板，`Editor/SkillBoard/SkillBoardPreviewWindow.cs` 与 `Assets/UI/SkillBoard/` 提供 Odin / UI Toolkit 调试预览
 - `Gameplay/Skills`：`ProjectileController.cs`
 - `Gameplay/Spawning`：`MonsterSpawner.cs`
 - `Gameplay/Loot`：`LootPickupController.cs`

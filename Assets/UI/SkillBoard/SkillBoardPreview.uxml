@@ -1,0 +1,15 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+  <ui:Style src="SkillBoardPreview.uss" />
+  <ui:VisualElement class="preview-root">
+    <ui:Label text="柴薪几何 · 主体、节点、端口与显式连线" class="heading" />
+    <ui:VisualElement class="workspace">
+      <ui:ScrollView name="parameters" class="parameters" />
+      <ui:VisualElement class="output">
+        <ui:Label name="summary" class="summary" />
+        <ui:VisualElement name="diagram" class="diagram" />
+        <ui:Label text="金 / 青：固定主体（含空格）　紫：未连接外伸格　绿：已连接裂缝　红：冲突" class="legend" />
+        <ui:Label name="inspection" class="inspection" />
+      </ui:VisualElement>
+    </ui:VisualElement>
+  </ui:VisualElement>
+</ui:UXML>

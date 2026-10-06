@@ -34,6 +34,7 @@
 - [属性定义与调用关系](./stat-system.md)
 - [独立属性详情](./attribute-details.md)
 - [战斗 HUD](./hud-system.md)
+- [技能面板几何与柴薪生成](./skill-board/geometry.md)
 - [随机化与掉落规则](./randomization-system.md)
 - [首批内容池](./content-system.md)
 - [商店与随机库存](./trading-system.md)
@@ -68,8 +69,9 @@
 ## 计划与验收
 
 - [Alpha 0.7 活动总计划](./plan/alpha-0.7-plan.md)
-- [0.7.1 启动准备](./plan/alpha-0.7.1-startup.md)
+- [0.7.1 启动准备](plan/archive/0.7.1/plans/alpha-0.7.1-startup.md)
 - [0.7.1 技能面板与技能重构执行计划](./plan/alpha-0.7.1-skill-board-plan.md)
+- [0.7.1-alpha.1 已归档实施计划](plan/archive/0.7.1/plans/phase-1-execution.md)
 - [0.7.1 六键手动施法、输入与存档合同](./plan/alpha-0.7.1/manual-skills.md)
 - [0.7.1 能量瓶、充能兑换与天赋成长合同](./plan/alpha-0.7.1/energy-progression.md)
 - [已完成版本的计划与验收归档](./plan/archive/README.md)
@@ -78,9 +80,9 @@
 
 ## 计划状态
 
-2026-10-06：**0.7.1 技能面板、技能重构与能量成长规划完成，待实施**。几何与六键手动施法已确认；新增三档 2×1 能量瓶、专栏积蓄、中心整瓶充能、余量跨瓶累计、1:1 属性 / 天赋点产出及柴薪 / 普通天赋独立点亮，见[执行计划](./plan/alpha-0.7.1-skill-board-plan.md)、[几何合同](./plan/alpha-0.7.1/geometry.md)、[六键合同](./plan/alpha-0.7.1/manual-skills.md)、[成长合同](./plan/alpha-0.7.1/energy-progression.md)与[验收清单](./plan/alpha-0.7.1/acceptance.md)。计划拆为五阶段，当前 `main` / `bd01a4c`、Unity `6000.6.4f1`，运行版本仍为 `0.7.0-alpha.2`；尚未开始实现，也未重跑 Unity 测试。
+2026-10-06：**0.7.1-alpha.1 几何与生成阶段已完成**。交付中心 7 格与六根、三尺寸固定主体、确定性节点图生成、完整占位和双向裂缝连接预检，以及 Odin / UI Toolkit 调试预览。Unity `6000.6.4f1` 当前回归 EditMode 907/907、PlayMode 102/102，均无失败 / 跳过；运行版本为 `0.7.1-alpha.1`，core v10 / Schema 9 / 1 / 地图 V4 不变。见[模块](./skill-board/geometry.md)与[阶段验收](./plan/archive/0.7.1/acceptance/geometry/README.md)。完成的启动准备和阶段一计划已归档；[总执行计划](./plan/alpha-0.7.1-skill-board-plan.md)及后四阶段继续活动，能量瓶、成长、六键施法和正式棋盘尚未交付。
 
-2026-09-30：**0.7.1 启动基线已核对**，`main` / `e2b97d2`，当前运行版本保持 `0.7.0-alpha.2`。已有能力、验收身份、6 个文件哈希匹配、工作区字体改动及未执行项已记录在[启动准备](./plan/alpha-0.7.1-startup.md)，[0.7 总计划](./plan/alpha-0.7-plan.md)已同步。功能范围与阶段验收标准待明确，本次未重跑 Unity 测试或构建 Player。
+2026-09-30：**0.7.1 启动基线已核对**，`main` / `e2b97d2`，当前运行版本保持 `0.7.0-alpha.2`。已有能力、验收身份、6 个文件哈希匹配、工作区字体改动及未执行项已记录在[启动准备](plan/archive/0.7.1/plans/alpha-0.7.1-startup.md)，[0.7 总计划](./plan/alpha-0.7-plan.md)已同步。功能范围与阶段验收标准待明确，本次未重跑 Unity 测试或构建 Player。
 
 2026-09-29：**Alpha 0.7.0 两阶段完成**，运行版本 `0.7.0-alpha.2` / core v10 / Schema 9 / 1 / 地图 V4。不可变 SemVer 对象、`GameVersion` 解析桥接与历史字符串兼容已完成，核心定向 52/52、接入与存档定向 32/32、完整 EditMode 882/882、PlayMode 102/102，0 失败 / 跳过。见[执行与验收归档](plan/archive/0.7.0/plans/alpha-0.7.0-semver-plan.md)及[版本管理与 API](./version-management.md)；[0.7 总计划](./plan/alpha-0.7-plan.md)继续维护，后续 `0.7.1-alpha` 范围待明确。本版 Player、真实设备、跨进程及性能矩阵未执行。
 
@@ -102,5 +104,5 @@
 
 ## 说明
 
-当前项目已完成首版最小循环、初步体验优化及 Alpha 0.1–0.4 已归档计划，Alpha 0.5 的地图基础、编辑器、世界层级、双地图、批量导航与综合交付，以及 Alpha 0.6 的行为、Boss、有限刷怪、手动重置与 Editor 综合交付均已完成。Alpha 0.7 的首个小版本已完成 SemVer 对象与应用接入，运行版本为 `0.7.0-alpha.2`，后续小版本范围待明确。已完成的执行计划统一保存在 `Docs/docs/plan/archive/`。
+当前项目已完成首版最小循环、初步体验优化及 Alpha 0.1–0.4 已归档计划，Alpha 0.5 的地图基础、编辑器、世界层级、双地图、批量导航与综合交付，以及 Alpha 0.6 的行为、Boss、有限刷怪、手动重置与 Editor 综合交付均已完成。Alpha 0.7 的首个小版本已完成 SemVer 对象与应用接入，运行版本为 `0.7.1-alpha.1`，技能面板几何基础已完成，后续道具、成长与六键技能阶段继续推进。已完成的执行计划统一保存在 `Docs/docs/plan/archive/`。
 后续新增系统、配置或流程时，应优先更新对应文档，避免 `Docs/docs/` 与实现脱节。游戏设计文档位于 `Docs/design/`，不属于 Agent 的常规维护范围。

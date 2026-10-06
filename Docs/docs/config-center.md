@@ -17,7 +17,7 @@ DarkFlare/配置中心
 - 继承 `ScriptableObject`
 - 非抽象类型
 - 标记了 `CreateAssetMenu`
-- `menuName` 以 `DarkFlare/Data/` 开头
+- `menuName` 以 `DarkFlare/Data/` 开头，或属于显式登记的非内容配置：`MapObjectPresentationCatalog`、`WorldMapConfiguration`、`MonsterBehaviorDefinition`、`FirewoodGenerationDefinition`
 
 这样可以避免第三方插件、TextMesh Pro 示例资产或 Unity 内置 ScriptableObject 混入配置中心。
 

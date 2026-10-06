@@ -2,6 +2,11 @@
   "schemaVersion": 1,
   "entries": [
     {
+      "type": "DarkFlare.FirewoodGenerationDefinition",
+      "document": "Docs/docs/config-reference/skill-board.md",
+      "anchor": "firewoodgenerationdefinition"
+    },
+    {
       "type": "DarkFlare.MonsterBehaviorDefinition",
       "document": "Docs/docs/config-reference/actors-and-monsters.md",
       "anchor": "monsterbehaviordefinition"
