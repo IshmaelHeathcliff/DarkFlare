@@ -715,6 +715,7 @@ namespace DarkFlare.Editor
                 ValidateItemIcon(item, iconGuids, settings, issues);
 
                 List<string> baseIssues = EquipmentConfigurationValidator.Validate(item);
+                baseIssues.AddRange(SkillBoardItemConfiguration.Validate(item));
 
                 for (int issueIndex = 0; issueIndex < baseIssues.Count; issueIndex++)
                 {

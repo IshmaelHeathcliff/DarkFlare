@@ -19,6 +19,12 @@ namespace DarkFlare
                 issues.Add("生命倍率必须大于 0");
             }
 
+            if (definition.BaseEnergy < 1 || definition.EnergyPerAffix < 1 || definition.EnergyPerAffixRarity < 1
+                || !System.Enum.IsDefined(typeof(MonsterRarity), definition.Rarity))
+            {
+                issues.Add("击杀能量基础值、词条加成或怪物稀有度非法");
+            }
+
             if (definition.HealthMultiplierRange.x > definition.HealthMultiplierRange.y)
             {
                 issues.Add("生命倍率范围上下限倒置");

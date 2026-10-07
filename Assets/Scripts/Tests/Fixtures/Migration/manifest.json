@@ -2,6 +2,13 @@
   "schemaVersion": 1,
   "fixtures": [
     {
+      "path": "save-v9-migrated-player.json",
+      "domain": "save",
+      "sourceSchemaVersion": 9,
+      "sourceContentVersion": 6,
+      "expectedMigration": "Released Schema 5 Player fixture save-v5-navigation.json exported through unchanged 5-to-9 migrations (not a native Schema 9 capture). The 9-to-10 migration adds an empty owned board and null item extensions, preserving old skill/cooldown, rolls, resources, map state and RNG."
+    },
+    {
       "path": "save-v5-navigation.json",
       "domain": "save",
       "sourceSchemaVersion": 5,

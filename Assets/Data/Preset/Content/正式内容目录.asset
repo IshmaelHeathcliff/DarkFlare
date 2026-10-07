@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: "\u6B63\u5F0F\u5185\u5BB9\u76EE\u5F55"
   m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.ContentCatalogDefinition
   _catalogId: core
-  _contentVersion: 10
+  _contentVersion: 11
   _entries:
   - {fileID: 11400000, guid: 93afea4ea3abde14e878a32be8ea63d3, type: 2}
   - {fileID: 11400000, guid: 76df86fd5dacdf743ae0227968259c13, type: 2}
@@ -171,3 +171,11 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 492d0089d427ec3479c28defbf93453d, type: 2}
   - {fileID: 11400000, guid: a0b0cd4d2de6a6642a0fa974aef694f6, type: 2}
   - {fileID: 11400000, guid: d442dffbb58d8e94bbbeead3f96bf9bc, type: 2}
+  - {fileID: 11400000, guid: e24dd14bd03d2f847a6c6013bbbd3b2f, type: 2}
+  - {fileID: 11400000, guid: ec7412cff5e13dd47a1f648657e04633, type: 2}
+  - {fileID: 11400000, guid: f0c372e90e5507a4d87743dc744af524, type: 2}
+  - {fileID: 11400000, guid: 13ed68e0252bac949a311728db606bef, type: 2}
+  - {fileID: 11400000, guid: 0c093fb16af02674da0e6d3f8d2d7567, type: 2}
+  - {fileID: 11400000, guid: 9cf119dc533e2104d9f8e4a439d67f6c, type: 2}
+  - {fileID: 11400000, guid: 8dd303f8e3ece4a4a95f532dcd02743a, type: 2}
+  - {fileID: 11400000, guid: 585fe89c8ae97fc418bdda3f93af438f, type: 2}

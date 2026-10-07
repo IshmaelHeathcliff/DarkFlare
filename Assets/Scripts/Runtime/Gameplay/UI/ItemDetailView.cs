@@ -87,6 +87,10 @@ namespace DarkFlare
                 ItemBaseDefinition definition = detail.Item.BaseDefinition;
                 _baseLabel.text += "\n" + Localize("ui", "item.detail.quantity", detail.Item.Quantity, definition.MaxStackSize)
                     + "\n" + Localize("ui", definition.IsConsumable ? "item.detail.consumable" : "item.detail.not_consumable");
+                if (detail.BottleCapacity > 0)
+                {
+                    _baseLabel.text += "\n" + Localize("ui", "item.detail.energy", detail.BottleEnergy, detail.BottleCapacity);
+                }
             }
             BindModifiers(
                 _implicitList,

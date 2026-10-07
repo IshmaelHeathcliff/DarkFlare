@@ -1,0 +1,249 @@
+{
+  "manifest": "C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Docs\\docs\\plan\\archive\\0.7.1\\acceptance\\items-energy\\icon-manifest.json",
+  "family": "skill-board-items",
+  "canvas": [
+    128,
+    128
+  ],
+  "errors": [],
+  "assets": [
+    {
+      "name": "firewood_large",
+      "image": "C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Art\\Sprites\\Items\\SkillBoard\\firewood_large.png",
+      "canvas": [
+        128,
+        128
+      ],
+      "visible_bbox": [
+        21,
+        15,
+        107,
+        113
+      ],
+      "visible_width": 86,
+      "visible_height": 98,
+      "margins": {
+        "left": 21,
+        "top": 15,
+        "right": 21,
+        "bottom": 15
+      },
+      "alpha_coverage": 0.390869140625,
+      "visual_center": [
+        64.0,
+        64.0
+      ],
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "name": "firewood_medium",
+      "image": "C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Art\\Sprites\\Items\\SkillBoard\\firewood_medium.png",
+      "canvas": [
+        128,
+        128
+      ],
+      "visible_bbox": [
+        21,
+        15,
+        107,
+        113
+      ],
+      "visible_width": 86,
+      "visible_height": 98,
+      "margins": {
+        "left": 21,
+        "top": 15,
+        "right": 21,
+        "bottom": 15
+      },
+      "alpha_coverage": 0.390869140625,
+      "visual_center": [
+        64.0,
+        64.0
+      ],
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "name": "firewood_small",
+      "image": "C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Art\\Sprites\\Items\\SkillBoard\\firewood_small.png",
+      "canvas": [
+        128,
+        128
+      ],
+      "visible_bbox": [
+        21,
+        15,
+        107,
+        113
+      ],
+      "visible_width": 86,
+      "visible_height": 98,
+      "margins": {
+        "left": 21,
+        "top": 15,
+        "right": 21,
+        "bottom": 15
+      },
+      "alpha_coverage": 0.390869140625,
+      "visual_center": [
+        64.0,
+        64.0
+      ],
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "name": "flame_projectile",
+      "image": "C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Art\\Sprites\\Items\\SkillBoard\\flame_projectile.png",
+      "canvas": [
+        128,
+        128
+      ],
+      "visible_bbox": [
+        22,
+        20,
+        106,
+        108
+      ],
+      "visible_width": 84,
+      "visible_height": 88,
+      "margins": {
+        "left": 22,
+        "top": 20,
+        "right": 22,
+        "bottom": 20
+      },
+      "alpha_coverage": 0.2821044921875,
+      "visual_center": [
+        64.0,
+        64.0
+      ],
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "name": "ember_power",
+      "image": "C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Art\\Sprites\\Items\\SkillBoard\\ember_power.png",
+      "canvas": [
+        128,
+        128
+      ],
+      "visible_bbox": [
+        24,
+        21,
+        104,
+        107
+      ],
+      "visible_width": 80,
+      "visible_height": 86,
+      "margins": {
+        "left": 24,
+        "top": 21,
+        "right": 24,
+        "bottom": 21
+      },
+      "alpha_coverage": 0.330322265625,
+      "visual_center": [
+        64.0,
+        64.0
+      ],
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "name": "energy_bottle_small",
+      "image": "C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Art\\Sprites\\Items\\SkillBoard\\energy_bottle_small.png",
+      "canvas": [
+        128,
+        128
+      ],
+      "visible_bbox": [
+        28,
+        21,
+        100,
+        107
+      ],
+      "visible_width": 72,
+      "visible_height": 86,
+      "margins": {
+        "left": 28,
+        "top": 21,
+        "right": 28,
+        "bottom": 21
+      },
+      "alpha_coverage": 0.333984375,
+      "visual_center": [
+        64.0,
+        68.47368421052632
+      ],
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "name": "energy_bottle_medium",
+      "image": "C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Art\\Sprites\\Items\\SkillBoard\\energy_bottle_medium.png",
+      "canvas": [
+        128,
+        128
+      ],
+      "visible_bbox": [
+        28,
+        21,
+        100,
+        107
+      ],
+      "visible_width": 72,
+      "visible_height": 86,
+      "margins": {
+        "left": 28,
+        "top": 21,
+        "right": 28,
+        "bottom": 21
+      },
+      "alpha_coverage": 0.333984375,
+      "visual_center": [
+        64.0,
+        68.47368421052632
+      ],
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "name": "energy_bottle_large",
+      "image": "C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Art\\Sprites\\Items\\SkillBoard\\energy_bottle_large.png",
+      "canvas": [
+        128,
+        128
+      ],
+      "visible_bbox": [
+        28,
+        21,
+        100,
+        107
+      ],
+      "visible_width": 72,
+      "visible_height": 86,
+      "margins": {
+        "left": 28,
+        "top": 21,
+        "right": 28,
+        "bottom": 21
+      },
+      "alpha_coverage": 0.333984375,
+      "visual_center": [
+        64.0,
+        68.47368421052632
+      ],
+      "errors": [],
+      "warnings": []
+    }
+  ],
+  "summary": {
+    "assets": 8,
+    "errors": 0,
+    "warnings": 0,
+    "passed": true
+  }
+}

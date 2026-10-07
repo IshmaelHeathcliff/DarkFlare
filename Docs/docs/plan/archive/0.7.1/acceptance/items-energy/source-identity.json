@@ -1,0 +1,746 @@
+{
+  "date": "2026-10-07",
+  "branch": "main",
+  "baseCommit": "9b822592409bbc92d844a3d7fe8912c71c20d759",
+  "workingTree": "uncommitted phase-two changes",
+  "gameVersion": "0.7.1-alpha.2",
+  "unityVersion": "6000.6.4f1",
+  "content": {
+    "id": "core",
+    "version": 11
+  },
+  "saveSchema": 10,
+  "settingsSchema": 1,
+  "mapFormat": 4,
+  "editMode": {
+    "total": 931,
+    "passed": 931,
+    "failed": 0,
+    "skipped": 0
+  },
+  "projectPlayMode": {
+    "total": 102,
+    "passed": 102,
+    "failed": 0,
+    "skipped": 0
+  },
+  "scope": "Affected source, tests, assets, settings and direct skill-board / assembly / package dependencies; documentation is outside this hash list.",
+  "files": [
+    {
+      "path": "Assets/AddressableAssetsData/AssetGroups/DarkFlare-Session-Sprites.asset",
+      "sha256": "e77b70bcd83ad9ed13fe5b6aab953cb2c597739a11ba0637aaa08e5d68f5b054",
+      "bytes": 11214
+    },
+    {
+      "path": "Assets/Art/Sprites/Items/SkillBoard.meta",
+      "sha256": "5e63d175a2c5ca56b6053a5e0d019c3b37344c595597f2fd1b0501511073c946",
+      "bytes": 169
+    },
+    {
+      "path": "Assets/Art/Sprites/Items/SkillBoard/ember_power.png",
+      "sha256": "b88b816d0da58b97b6c6350ff584675c20c51263ec9cc8a00f0f4b1ef835f68a",
+      "bytes": 1677
+    },
+    {
+      "path": "Assets/Art/Sprites/Items/SkillBoard/ember_power.png.meta",
+      "sha256": "18d0cad4a1fe88f172a9c59d8d72cff9f47ad21781ecad5714d4a59e4e6f0b68",
+      "bytes": 3348
+    },
+    {
+      "path": "Assets/Art/Sprites/Items/SkillBoard/energy_bottle_large.png",
+      "sha256": "0b24be5a2e702459fe74684ce1f3d7c216dc9ea9f97fb107cdabcc18586f075b",
+      "bytes": 845
+    },
+    {
+      "path": "Assets/Art/Sprites/Items/SkillBoard/energy_bottle_large.png.meta",
+      "sha256": "676042fd382e86aa906ef1f74c5ddf5a68276b8259d43153cc0593223d1951dd",
+      "bytes": 3375
+    },
+    {
+      "path": "Assets/Art/Sprites/Items/SkillBoard/energy_bottle_medium.png",
+      "sha256": "710f65199fb8fce1c4e30659a833f2f57784ea0143c1ba88919d892f1c6a0390",
+      "bytes": 834
+    },
+    {
+      "path": "Assets/Art/Sprites/Items/SkillBoard/energy_bottle_medium.png.meta",
+      "sha256": "ca54ef7cdbc17f8b685634abfbb7f8cb94ed9edb1e5294024814213b66586e1e",
+      "bytes": 3375
+    },
+    {
+      "path": "Assets/Art/Sprites/Items/SkillBoard/energy_bottle_small.png",
+      "sha256": "835cbabb5612439c264d330dd2f5eb5d107bebc18187d6a13784cfb9d1deab00",
+      "bytes": 818
+    },
+    {
+      "path": "Assets/Art/Sprites/Items/SkillBoard/energy_bottle_small.png.meta",
+      "sha256": "fed42b3c7f8a0e1cf4b3a693b38575571789e16d8299a692d5b7339ede524b56",
+      "bytes": 3369
+    },
+    {
+      "path": "Assets/Art/Sprites/Items/SkillBoard/firewood_large.png",
+      "sha256": "e7bd2acec5823711c047dfcaadc5f50d4e49dc052343394631f7993133334faa",
+      "bytes": 2563
+    },
+    {
+      "path": "Assets/Art/Sprites/Items/SkillBoard/firewood_large.png.meta",
+      "sha256": "a5871bff17083962a1f99e2e320a4d70a07473ae0fcf894a8c004820df6bb309",
+      "bytes": 3361
+    },
+    {
+      "path": "Assets/Art/Sprites/Items/SkillBoard/firewood_medium.png",
+      "sha256": "955d8c485b27e75733e0738be4c3172860f4fdcde2283fa1aba58b7bbb7edda1",
+      "bytes": 2065
+    },
+    {
+      "path": "Assets/Art/Sprites/Items/SkillBoard/firewood_medium.png.meta",
+      "sha256": "9d3766c5816a2d4f466ea0cf78862e0eb7ecb77f9e6add3ed25a9ec50dfb9708",
+      "bytes": 3361
+    },
+    {
+      "path": "Assets/Art/Sprites/Items/SkillBoard/firewood_small.png",
+      "sha256": "588ecaf4248bbfa3e7f851dfd24a2773d968edc2852c41b703bd13e68d287490",
+      "bytes": 1615
+    },
+    {
+      "path": "Assets/Art/Sprites/Items/SkillBoard/firewood_small.png.meta",
+      "sha256": "f3a11a1e1e393e89084e51257ff3316e885a4f6d0b6aa9131072123ee5cfcf46",
+      "bytes": 3361
+    },
+    {
+      "path": "Assets/Art/Sprites/Items/SkillBoard/flame_projectile.png",
+      "sha256": "ad775344ba77e2d943f5902c6388150dd4bc2112babc678cc60fc9e6fb4e13e1",
+      "bytes": 1220
+    },
+    {
+      "path": "Assets/Art/Sprites/Items/SkillBoard/flame_projectile.png.meta",
+      "sha256": "154324bc1a713fc2883c631734479dc90189ec127145b2544b66b8384c0a3ac9",
+      "bytes": 3363
+    },
+    {
+      "path": "Assets/Data/Preset/Content/正式内容目录.asset",
+      "sha256": "12fc026efb2bb1044165b5d5f7cdb60324ae76fc728b61af44aeb4c50dc39e6d",
+      "bytes": 12363
+    },
+    {
+      "path": "Assets/Data/Preset/Items/SkillBoard.meta",
+      "sha256": "03a30dccbb4bb51b0bbab6816113d078a8768a79bb62983e7b1448b011561e89",
+      "bytes": 169
+    },
+    {
+      "path": "Assets/Data/Preset/Items/SkillBoard/ember_power.asset",
+      "sha256": "722c4c83cd105de258626eb17a75e8df963e8cbd50ddd3019d58c4e2b20092bc",
+      "bytes": 1521
+    },
+    {
+      "path": "Assets/Data/Preset/Items/SkillBoard/ember_power.asset.meta",
+      "sha256": "f3e8a61e54023d97f9a7e00063289be2755c161bf45652fc6d9ef1d795872eaa",
+      "bytes": 186
+    },
+    {
+      "path": "Assets/Data/Preset/Items/SkillBoard/energy_bottle_large.asset",
+      "sha256": "d0cfb48b05d6cdb662f4d15650b29a6caa2af815b26e76502abeb0f42bfc44f2",
+      "bytes": 1215
+    },
+    {
+      "path": "Assets/Data/Preset/Items/SkillBoard/energy_bottle_large.asset.meta",
+      "sha256": "a0eaf4b939812067f8566d2b6091335d75b182ac31be27c88b72938ac9c0a15f",
+      "bytes": 186
+    },
+    {
+      "path": "Assets/Data/Preset/Items/SkillBoard/energy_bottle_medium.asset",
+      "sha256": "60d1106efdf10ca60177fe56a73f27846a6db891cb4c8d8fa31c6ba78fd5aa1e",
+      "bytes": 1218
+    },
+    {
+      "path": "Assets/Data/Preset/Items/SkillBoard/energy_bottle_medium.asset.meta",
+      "sha256": "01c55afc4b508c5ef3bb4425176b281c334167c31af82bc3147149f3e60867ec",
+      "bytes": 186
+    },
+    {
+      "path": "Assets/Data/Preset/Items/SkillBoard/energy_bottle_small.asset",
+      "sha256": "a2d135691ab9a60b71cbf667eaed7828dfe0f7c187206888af32011353e58a70",
+      "bytes": 1215
+    },
+    {
+      "path": "Assets/Data/Preset/Items/SkillBoard/energy_bottle_small.asset.meta",
+      "sha256": "75fd28308ed7aac808dac82adf7d4276e579decbe53ea98e703344bb157337d9",
+      "bytes": 186
+    },
+    {
+      "path": "Assets/Data/Preset/Items/SkillBoard/firewood_large.asset",
+      "sha256": "53ba37b130c81e925e7cb5f6d643579373af1a996bb7f20f331ddf815f70e50f",
+      "bytes": 1962
+    },
+    {
+      "path": "Assets/Data/Preset/Items/SkillBoard/firewood_large.asset.meta",
+      "sha256": "644613aad58bb7a4a4d502a9aea3f96b37ffba62bf354d25b2a550b361115243",
+      "bytes": 186
+    },
+    {
+      "path": "Assets/Data/Preset/Items/SkillBoard/firewood_medium.asset",
+      "sha256": "35e2b0f8fa47c40833f7ca37a8c73c606cf489d71b79ecd605af10cf8226a5f5",
+      "bytes": 1965
+    },
+    {
+      "path": "Assets/Data/Preset/Items/SkillBoard/firewood_medium.asset.meta",
+      "sha256": "5f046fe849bccaaf04db12c4f2cc9e65ab5d2b8cf2131f0dd24e38519559e0ab",
+      "bytes": 186
+    },
+    {
+      "path": "Assets/Data/Preset/Items/SkillBoard/firewood_small.asset",
+      "sha256": "4864d5c4b26c1d7e18683862290694564c9c44e3f50e947e35255754943786b6",
+      "bytes": 1961
+    },
+    {
+      "path": "Assets/Data/Preset/Items/SkillBoard/firewood_small.asset.meta",
+      "sha256": "5e28427d3ec186c3c35eb3449c9b51f6cb0bfaeee6109c35ad77ffe8a812d913",
+      "bytes": 186
+    },
+    {
+      "path": "Assets/Data/Preset/Items/SkillBoard/flame_projectile.asset",
+      "sha256": "d6193851ff6a42546d00daf9bb215b4ec066d1eaaec179c216563d7320a175a9",
+      "bytes": 1590
+    },
+    {
+      "path": "Assets/Data/Preset/Items/SkillBoard/flame_projectile.asset.meta",
+      "sha256": "f72f9f09178fd011ecbd73870838f1d5160f983f7129e434a2765aa77aa22cf3",
+      "bytes": 186
+    },
+    {
+      "path": "Assets/Data/Preset/Loot/基础怪物掉落表.asset",
+      "sha256": "a4094104f362b1b875b82466c09d302a9755d454bb6159e8033a3e6e99444e5d",
+      "bytes": 8366
+    },
+    {
+      "path": "Assets/Data/Preset/Loot/迅捷怪物掉落表.asset",
+      "sha256": "f33c4ce1c3e5697375b1f8a8d67d17a45110940b6b16b1e94c311a839bfb3b08",
+      "bytes": 8363
+    },
+    {
+      "path": "Assets/Data/Preset/Loot/重装怪物掉落表.asset",
+      "sha256": "f6410db20154eafa9f581217b044702f77353ba9de4aed4fd9f8b0ac7b53e1f8",
+      "bytes": 8361
+    },
+    {
+      "path": "Assets/Data/Preset/MonsterAffixes/01燃烧的.asset",
+      "sha256": "92883941012e5b65d9d8b74f65ec73f5d7d6a1a8f83b9cda96039d7166ac7d65",
+      "bytes": 1024
+    },
+    {
+      "path": "Assets/Data/Preset/MonsterAffixes/02霜寒的.asset",
+      "sha256": "2e4a753879642b082a1539a6125c0738c3c52c25418ece6cee4b3189929bb5d7",
+      "bytes": 1024
+    },
+    {
+      "path": "Assets/Data/Preset/MonsterAffixes/03风暴的.asset",
+      "sha256": "5c638638f72ee5028f9b55f3a88e4551ba9ceba8c1bf6c1dadb67962d436a4aa",
+      "bytes": 1023
+    },
+    {
+      "path": "Assets/Data/Preset/MonsterAffixes/04抗火的.asset",
+      "sha256": "42fe8ca345e32527ef16bf1d6bcaf4c451a85a30566f6790a0fde664ebe1bbd7",
+      "bytes": 1076
+    },
+    {
+      "path": "Assets/Data/Preset/MonsterAffixes/05抗冰的.asset",
+      "sha256": "8823b195ac89e75e98db92926a1fce7c0a035cb1d78548ef9257b773dcf7b30d",
+      "bytes": 1077
+    },
+    {
+      "path": "Assets/Data/Preset/MonsterAffixes/06抗电的.asset",
+      "sha256": "f14cf9226bfded00c8fd5c494b46600647856bf48bfa49a27639c977fd09006f",
+      "bytes": 1087
+    },
+    {
+      "path": "Assets/Data/Preset/MonsterAffixes/07强韧的.asset",
+      "sha256": "43604db6a49dff076ae408c66aa6cbe280bcaecd532ac8f2258ba0c7fb5d1492",
+      "bytes": 1060
+    },
+    {
+      "path": "Assets/Data/Preset/MonsterAffixes/08装甲的.asset",
+      "sha256": "ffe7326a7e3785bd0e6744834e92ee54f5686f50b777b5398e695c707c3f053b",
+      "bytes": 1060
+    },
+    {
+      "path": "Assets/Data/Preset/MonsterAffixes/09敏捷的.asset",
+      "sha256": "743c1def7b58652a827fb59b5c8df3faa39d859e7e5e420d87fb78e361d3e0d0",
+      "bytes": 1062
+    },
+    {
+      "path": "Assets/Data/Preset/MonsterAffixes/10迅捷的.asset",
+      "sha256": "fd4c62d72f96a79c0e27e38071dade9dcf4eadf7e37bb47a39df72fef8fda31d",
+      "bytes": 1053
+    },
+    {
+      "path": "Assets/Data/Preset/Monsters/基础怪物.asset",
+      "sha256": "feb4209fd3a52124ff264bd304caaa5103303bec7ac03b7cc538140fddd97d04",
+      "bytes": 2443
+    },
+    {
+      "path": "Assets/Data/Preset/Monsters/守卫者.asset",
+      "sha256": "17ed91c03a736a96e9afb520f34d2f819a16d3772dcd9f068c0f9bd154597a73",
+      "bytes": 2473
+    },
+    {
+      "path": "Assets/Data/Preset/Monsters/裂爪猎犬.asset",
+      "sha256": "634850fa36f51a72a8919ead90de26272833ba2f426bc95b48f4e6825ee764ab",
+      "bytes": 2435
+    },
+    {
+      "path": "Assets/Data/Preset/Monsters/铁壳尸傀.asset",
+      "sha256": "e59d8643a48be172b555e00aac3bdc54bdafee292b041a779f3beac38450d190",
+      "bytes": 2429
+    },
+    {
+      "path": "Assets/Data/Preset/Traders/基础商人.asset",
+      "sha256": "c916301087df831dfeef2e157eac3d7459b393afb24a6f3462e37ee850921b30",
+      "bytes": 7634
+    },
+    {
+      "path": "Assets/Localization/Tables/items Shared Data.asset",
+      "sha256": "2c7ffb93de7b566b38f8fd81ecd1d7b901b576cb9a5399af9347f555fb223063",
+      "bytes": 5447
+    },
+    {
+      "path": "Assets/Localization/Tables/items_en.asset",
+      "sha256": "56c567a9c145e91c760c3fdbbdec900429328869c3b776d8c377c9c2c5e78e16",
+      "bytes": 5040
+    },
+    {
+      "path": "Assets/Localization/Tables/items_zh-Hans.asset",
+      "sha256": "139584031d83f2a1d9c7711b88b2e1c76c42e4211609656c402938cc67d44eba",
+      "bytes": 5498
+    },
+    {
+      "path": "Assets/Localization/Tables/ui Shared Data.asset",
+      "sha256": "332616269592f5e7cfdd5a8d3fb73de1f6d19cfc3e483a2f608e69181f56c7b4",
+      "bytes": 51098
+    },
+    {
+      "path": "Assets/Localization/Tables/ui_en.asset",
+      "sha256": "1f2bf4c7095036fe3e945615a48544a968093c3a2d16ab266e778e07210c79d9",
+      "bytes": 57583
+    },
+    {
+      "path": "Assets/Localization/Tables/ui_zh-Hans.asset",
+      "sha256": "bdf7e31f2d768b0748a19c8f22bfa379df868f846228923b6936ee9459ddf389",
+      "bytes": 67822
+    },
+    {
+      "path": "Assets/Scripts/Editor/ContentConfigurationValidator.cs",
+      "sha256": "424fdb2e7b1c7607806759175a944d584cced4a085fb840c17e0fe41cfb8e42c",
+      "bytes": 57306
+    },
+    {
+      "path": "Assets/Scripts/Editor/DarkFlare.Editor.asmdef",
+      "sha256": "d403d52772b28772b52996dcc93417b37d1aaf708e74930db16910a229b9d56b",
+      "bytes": 629
+    },
+    {
+      "path": "Assets/Scripts/Editor/SkillBoard/SkillBoardPreviewWindow.cs",
+      "sha256": "c1d9f052a5711ec0fb1a8e9a1001a9ab4859e06298fb46fc0b591343c1d8789e",
+      "bytes": 17961
+    },
+    {
+      "path": "Assets/Scripts/Editor/SkillBoard/SkillBoardPreviewWindow.cs.meta",
+      "sha256": "f30ce9adbd8984e0f6715f14fbf63232c82368729002f192cafc6aa4d23e892d",
+      "bytes": 59
+    },
+    {
+      "path": "Assets/Scripts/Editor/SkillBoard/SkillBoardRuntimeWindow.cs",
+      "sha256": "df14c276c1f05c8446a4e10ba6e4a877b1097a685dc627d666c6ef6239ac7cb4",
+      "bytes": 9720
+    },
+    {
+      "path": "Assets/Scripts/Editor/SkillBoard/SkillBoardRuntimeWindow.cs.meta",
+      "sha256": "23b7efb5adf01e7b6ebb6e7ed7f2bd394ae12744538e1c5a25d1458f2187dcb0",
+      "bytes": 60
+    },
+    {
+      "path": "Assets/Scripts/Runtime/Core/DarkFlare.Core.asmdef",
+      "sha256": "46f962673679fed02a466cf47c0795f6b0a447d67d2dcf4edea23268357010c3",
+      "bytes": 357
+    },
+    {
+      "path": "Assets/Scripts/Runtime/DarkFlare.Runtime.asmdef",
+      "sha256": "b7e87a311797b562681c93031cabf7a339b81050ac2d4a81a2dc7f0abadd565a",
+      "bytes": 650
+    },
+    {
+      "path": "Assets/Scripts/Runtime/Data/Items/ItemBaseDefinition.cs",
+      "sha256": "ac1cac8378d822a99aa5917bd58692d313d47510a6a2a1072cd585555a2fb427",
+      "bytes": 8709
+    },
+    {
+      "path": "Assets/Scripts/Runtime/Data/Monsters/MonsterAffixConfigurationValidator.cs",
+      "sha256": "999f9d1ec64753dd75d500931a0c78576d3591b5276051bc4da52a2afb7ecd5f",
+      "bytes": 5519
+    },
+    {
+      "path": "Assets/Scripts/Runtime/Data/Monsters/MonsterAffixDefinition.cs",
+      "sha256": "6c970563ceaa8d31aefb1214352403d3394270b458cf25446a74fc347d7e3254",
+      "bytes": 2631
+    },
+    {
+      "path": "Assets/Scripts/Runtime/Data/Monsters/MonsterDefinition.cs",
+      "sha256": "0b0e2c865a2f82e6bf8e224a505bf65c046dae46ef1e587cd69e1984a9b4b9ab",
+      "bytes": 12706
+    },
+    {
+      "path": "Assets/Scripts/Runtime/Data/SkillBoard/FirewoodGenerationDefinition.cs",
+      "sha256": "a6ddf68e07e4df68147493c4331d0eaa94c0b394f53a5a0745802d355fa52be6",
+      "bytes": 2667
+    },
+    {
+      "path": "Assets/Scripts/Runtime/Data/SkillBoard/FirewoodGenerationDefinition.cs.meta",
+      "sha256": "acc40bacd11308cb3687e6aa37e9ac7ca66e8d69198e48d9f76deaed0f5c9f21",
+      "bytes": 59
+    },
+    {
+      "path": "Assets/Scripts/Runtime/Data/SkillBoard/SkillBoardItemConfiguration.cs",
+      "sha256": "bea99bcd2d7a8c0ca0d119ff65ced99fe24a90856787a8a39795872d8ecaf972",
+      "bytes": 5782
+    },
+    {
+      "path": "Assets/Scripts/Runtime/Data/SkillBoard/SkillBoardItemConfiguration.cs.meta",
+      "sha256": "18f4436ac2b4183ea36d88c27d7d3de79b7881d8f786494a5d7cd860a9126572",
+      "bytes": 60
+    },
+    {
+      "path": "Assets/Scripts/Runtime/GameArchitecture.cs",
+      "sha256": "fa68e0b1a9748714f9c0d9f71f9f5190298e7ac16ca033f644fb2638b85b8b96",
+      "bytes": 3102
+    },
+    {
+      "path": "Assets/Scripts/Runtime/Gameplay/Combat/RandomizationConfigurationValidator.cs",
+      "sha256": "33114ff9defc2580b6f6cd14d42ba29d0129dc922790a17534efb275542bb597",
+      "bytes": 10059
+    },
+    {
+      "path": "Assets/Scripts/Runtime/Gameplay/Inventory/InventoryModel.cs",
+      "sha256": "c1dfdbce5fe5ed56cc6a981c65bda7cb51b231f95e2d3d2ac48e95c0e47fb37f",
+      "bytes": 14590
+    },
+    {
+      "path": "Assets/Scripts/Runtime/Gameplay/Items/ItemInstance.cs",
+      "sha256": "b1742d295230838cc2c65de61eb58a8138190905a5ab36fcd2c7c2c7f553f23f",
+      "bytes": 10088
+    },
+    {
+      "path": "Assets/Scripts/Runtime/Gameplay/SkillBoard/EnergyBottleSystem.cs",
+      "sha256": "f6d739e8fa32d066c0b8085cdcb276091a52fcabf8104b0e74297e8686ce35ee",
+      "bytes": 4651
+    },
+    {
+      "path": "Assets/Scripts/Runtime/Gameplay/SkillBoard/EnergyBottleSystem.cs.meta",
+      "sha256": "2b6c99dbb99da6a5b1224da8d768de9acfd9255747a79b212a73d8894a1707c7",
+      "bytes": 60
+    },
+    {
+      "path": "Assets/Scripts/Runtime/Gameplay/SkillBoard/FirewoodGenerator.cs",
+      "sha256": "bb6760bf0ef8dd4aa7e53ebcaefbe48c182a9085d6845dc6c25d5ba91e4aac4e",
+      "bytes": 15322
+    },
+    {
+      "path": "Assets/Scripts/Runtime/Gameplay/SkillBoard/FirewoodGenerator.cs.meta",
+      "sha256": "f2f77acf746975b6e98a75521f0e7dc468653161871416cacf38ea1cd5f642f0",
+      "bytes": 59
+    },
+    {
+      "path": "Assets/Scripts/Runtime/Gameplay/SkillBoard/FirewoodLayout.cs",
+      "sha256": "a8046ea64486c1a66b28c0197e4af8691e2631fc7bc03d3faeb65509121be6e4",
+      "bytes": 9265
+    },
+    {
+      "path": "Assets/Scripts/Runtime/Gameplay/SkillBoard/FirewoodLayout.cs.meta",
+      "sha256": "19d4d13b2c506ef14a55d0043505881ae6f21e0d896574a6bd6a87432479366b",
+      "bytes": 59
+    },
+    {
+      "path": "Assets/Scripts/Runtime/Gameplay/SkillBoard/HexCoordinate.cs",
+      "sha256": "293eecbaa4c4d92c63e3a43cc729f90d4b2a1ead99867c7adb22f0d870933d7e",
+      "bytes": 2211
+    },
+    {
+      "path": "Assets/Scripts/Runtime/Gameplay/SkillBoard/HexCoordinate.cs.meta",
+      "sha256": "ff84214b677d925c5c130055a3284c31ea6ee25151d41a9592c83b9d69ce56ac",
+      "bytes": 59
+    },
+    {
+      "path": "Assets/Scripts/Runtime/Gameplay/SkillBoard/SkillBoardGeometry.cs",
+      "sha256": "65d91f9e2d2291cf65277346910f10557b6ad449fe2abdebf4c5ccbba4827814",
+      "bytes": 4947
+    },
+    {
+      "path": "Assets/Scripts/Runtime/Gameplay/SkillBoard/SkillBoardGeometry.cs.meta",
+      "sha256": "e3fd6afecddcf70ff48fcc04e4b1f157991467aa1185108ba593f3a7a067746c",
+      "bytes": 59
+    },
+    {
+      "path": "Assets/Scripts/Runtime/Gameplay/SkillBoard/SkillBoardItemState.cs",
+      "sha256": "044fcc69be900c3b510a2f52296e0b07f011060e9d86e038c745c27204ee4d4d",
+      "bytes": 3278
+    },
+    {
+      "path": "Assets/Scripts/Runtime/Gameplay/SkillBoard/SkillBoardItemState.cs.meta",
+      "sha256": "7fa95f476cb57c73bece9201b56e4280d287a4581b1d87c3373b2eb1f66c3977",
+      "bytes": 60
+    },
+    {
+      "path": "Assets/Scripts/Runtime/Gameplay/SkillBoard/SkillBoardPlacement.cs",
+      "sha256": "d50d4d4db67deef8afc1690eda022a6e57aa9f6e17f725f0aa87abef6670ff59",
+      "bytes": 10387
+    },
+    {
+      "path": "Assets/Scripts/Runtime/Gameplay/SkillBoard/SkillBoardPlacement.cs.meta",
+      "sha256": "4bf0696e29941e80623cf4052967a305667002f664e4df63133d5bf974587c0e",
+      "bytes": 59
+    },
+    {
+      "path": "Assets/Scripts/Runtime/Gameplay/SkillBoard/SkillBoardPlayerIdentity.cs",
+      "sha256": "f7201133461655348ff80b51358bf5dfff32b3253b1098af39f1dcea974bdb00",
+      "bytes": 407
+    },
+    {
+      "path": "Assets/Scripts/Runtime/Gameplay/SkillBoard/SkillBoardPlayerIdentity.cs.meta",
+      "sha256": "ceba4317929f51b3a72e73749aed7eb1d4b62989679e0609b8f07849f7263127",
+      "bytes": 60
+    },
+    {
+      "path": "Assets/Scripts/Runtime/Gameplay/SkillBoard/SkillBoardRootConnectivity.cs",
+      "sha256": "9a398aedf724ff8f8c3da6732bb532dad1f51899d615fcd110d26d8babc04741",
+      "bytes": 1486
+    },
+    {
+      "path": "Assets/Scripts/Runtime/Gameplay/SkillBoard/SkillBoardRootConnectivity.cs.meta",
+      "sha256": "3330f6482cb312b01e617d71148123df9a67dc289e621a7ff94c7a3389cd2620",
+      "bytes": 60
+    },
+    {
+      "path": "Assets/Scripts/Runtime/Gameplay/SkillBoard/SkillBoardState.cs",
+      "sha256": "64d8cb666cfe1a5f4765a5aa259a2f846c805f68f6e3167a839d07847eaeb748",
+      "bytes": 5664
+    },
+    {
+      "path": "Assets/Scripts/Runtime/Gameplay/SkillBoard/SkillBoardState.cs.meta",
+      "sha256": "8ee7ba375c3ce941d41546183ef2d11b22231dc5852748b716ff6e613c2d7a05",
+      "bytes": 60
+    },
+    {
+      "path": "Assets/Scripts/Runtime/Gameplay/SkillBoard/SkillBoardSystem.cs",
+      "sha256": "fa903cd8a3563406df3360bbbd7dd9626638559ea2df66eae00feb707261e3ef",
+      "bytes": 12345
+    },
+    {
+      "path": "Assets/Scripts/Runtime/Gameplay/SkillBoard/SkillBoardSystem.cs.meta",
+      "sha256": "2608eef894cbedb3d875dadad2864ffac900957ded1aebb15394ed2bfe54f4e9",
+      "bytes": 60
+    },
+    {
+      "path": "Assets/Scripts/Runtime/Gameplay/UI/ItemDetailFormatter.cs",
+      "sha256": "bbc687d16a918f21d9b1f46fdd9c0a844fb46eac5be0512faf37500e4c6fb84f",
+      "bytes": 8002
+    },
+    {
+      "path": "Assets/Scripts/Runtime/Gameplay/UI/ItemDetailSnapshot.cs",
+      "sha256": "f97e53cc68970b6bfef44c78a174ab6bde51159da11e574adb89e079169fcd98",
+      "bytes": 4668
+    },
+    {
+      "path": "Assets/Scripts/Runtime/Gameplay/UI/ItemDetailView.cs",
+      "sha256": "01aa112606da8a5e2dc01bc074937e0bf78bd1826d86ccbfccbb31d3262dea14",
+      "bytes": 11348
+    },
+    {
+      "path": "Assets/Scripts/Runtime/Infrastructure/Content/ContentCatalog.cs",
+      "sha256": "0c4c0af2f928db48f1bf970911ab723ceba41fc90dc8c8523e9f370978ef4422",
+      "bytes": 12781
+    },
+    {
+      "path": "Assets/Scripts/Runtime/Infrastructure/Persistence/IdentityDtos.cs",
+      "sha256": "fad4b7e426f0655cbf81f697ffca2ae93d18bf9bc417fd19d1e7dbad38e25c95",
+      "bytes": 4238
+    },
+    {
+      "path": "Assets/Scripts/Runtime/Infrastructure/Persistence/JsonMigrationPipeline.cs",
+      "sha256": "aa30676a126fe5669d3144453477ece12fb74d927f5411d16b027ec629d6f41b",
+      "bytes": 22688
+    },
+    {
+      "path": "Assets/Scripts/Runtime/Infrastructure/Persistence/RestoreGameSessionInitializer.cs",
+      "sha256": "7c883d2f13d1545d2d21161c05deeeeaba0fc383a919d64a38245433c6b63669",
+      "bytes": 14950
+    },
+    {
+      "path": "Assets/Scripts/Runtime/Infrastructure/Persistence/RuntimeStateMapper.cs",
+      "sha256": "b7a3b3e036e135946f7d7277fef04a5f87f83b3cf6825447f2da3094a37f1d56",
+      "bytes": 35107
+    },
+    {
+      "path": "Assets/Scripts/Runtime/Infrastructure/Persistence/SaveCoordinator.cs",
+      "sha256": "321a9d8798079b9af1c08a0c51c7a20d82b8682ac77f918d67df1df1b08adf51",
+      "bytes": 37975
+    },
+    {
+      "path": "Assets/Scripts/Runtime/Infrastructure/Persistence/SaveDataValidator.cs",
+      "sha256": "8909aa03c64ad94bfa14f862877ff804c6e30ed70733ad40528bd7da0521de8a",
+      "bytes": 55748
+    },
+    {
+      "path": "Assets/Scripts/Runtime/Infrastructure/Persistence/SaveDtos.cs",
+      "sha256": "0b97df1e1243847fa5e4d28559b3816cc5ae1f1d2cf497956a752cba9da0f3b3",
+      "bytes": 9198
+    },
+    {
+      "path": "Assets/Scripts/Runtime/Infrastructure/Persistence/SaveRestorePreparer.cs",
+      "sha256": "0cdb57464af224ad749b3b212e611f4682eb4c63e82d2615194a032e5e3cc3a4",
+      "bytes": 28088
+    },
+    {
+      "path": "Assets/Scripts/Runtime/Infrastructure/Persistence/SaveSerializer.cs",
+      "sha256": "4e9012fc05bc0b2645a9aef85c7ddc68f1fe8d18066ae5922b182e116bb7d532",
+      "bytes": 19856
+    },
+    {
+      "path": "Assets/Scripts/Runtime/Infrastructure/Persistence/SessionSnapshotSource.cs",
+      "sha256": "ce40f5ed4c7e1cbbf520c79c30b27e152662c4a9c77f61b2c4e0e0493cd1b47f",
+      "bytes": 23250
+    },
+    {
+      "path": "Assets/Scripts/Runtime/Infrastructure/Persistence/SkillBoardDtos.cs",
+      "sha256": "02dd9e098b82284300b89bd0bb61aaebea228c6d6141a74fa34186dbd34fbadf",
+      "bytes": 3016
+    },
+    {
+      "path": "Assets/Scripts/Runtime/Infrastructure/Persistence/SkillBoardDtos.cs.meta",
+      "sha256": "5339012c662fe1eac0e3de7d91f693184d1ce407be595ae742b635488d597fdc",
+      "bytes": 60
+    },
+    {
+      "path": "Assets/Scripts/Runtime/Infrastructure/Persistence/SkillBoardSaveValidation.cs",
+      "sha256": "743b582feb232ea42293abd337ead3d36dc8263f0d5183161a2a51dc01fe5836",
+      "bytes": 8020
+    },
+    {
+      "path": "Assets/Scripts/Runtime/Infrastructure/Persistence/SkillBoardSaveValidation.cs.meta",
+      "sha256": "02d78b6b7af2c6590b11cdabb528ace5a9fc72a565c26997a9c169616deacbcc",
+      "bytes": 60
+    },
+    {
+      "path": "Assets/Scripts/Runtime/Infrastructure/Persistence/SkillBoardStateMapper.cs",
+      "sha256": "c7279c09184a12c7614081712d29adeab7706d49a3402e4d676a9131ab88dc62",
+      "bytes": 9021
+    },
+    {
+      "path": "Assets/Scripts/Runtime/Infrastructure/Persistence/SkillBoardStateMapper.cs.meta",
+      "sha256": "fd3decb08950144d3adee31f5dd1495370adfc355e5974f6b34fe35a530b999e",
+      "bytes": 60
+    },
+    {
+      "path": "Assets/Scripts/Runtime/Infrastructure/Persistence/VersionContracts.cs",
+      "sha256": "3c12142b866c17cd12b10838393e6d5bd9d35f5833b66670ccf04c012d7c24fe",
+      "bytes": 5028
+    },
+    {
+      "path": "Assets/Scripts/Tests/EditMode/DarkFlare.Tests.EditMode.asmdef",
+      "sha256": "d08246f7ec99dc648a9ec32798ca2fc4da636c016fe8aecdb39ace19857b0141",
+      "bytes": 1073
+    },
+    {
+      "path": "Assets/Scripts/Tests/EditMode/EnergyBottleTests.cs",
+      "sha256": "f7031c19814f25e70dff61a9d4f17adec9dcd9574a096879fd77270ca6dcf2aa",
+      "bytes": 10704
+    },
+    {
+      "path": "Assets/Scripts/Tests/EditMode/EnergyBottleTests.cs.meta",
+      "sha256": "110757c155cbeb478c30becec7866ca4358a8edabe85c1b7a4442c458ca0949e",
+      "bytes": 60
+    },
+    {
+      "path": "Assets/Scripts/Tests/EditMode/InstanceIdentityAndDtoTests.cs",
+      "sha256": "6ad9cf26e09ef0e7ceacefd90b845a9d24b0b64ca1ab4b98d8bc44a5f2ed05b4",
+      "bytes": 18471
+    },
+    {
+      "path": "Assets/Scripts/Tests/EditMode/Phase4ContentTests.cs",
+      "sha256": "955e4b6fa0102c9d99cf3886b589eacc3bc39a726ab9cd22a936ac31d0a5d3cd",
+      "bytes": 13207
+    },
+    {
+      "path": "Assets/Scripts/Tests/EditMode/SaveRestorePreparerTests.cs",
+      "sha256": "a723010d279aaec8806aaa9209d841c145942606d74406e0d0b4f94d391a1e58",
+      "bytes": 16064
+    },
+    {
+      "path": "Assets/Scripts/Tests/EditMode/SaveSerializerTests.cs",
+      "sha256": "01f2be5108b3d3e439c915020529da7406ce2994a87621b4aa06de4251fa1caa",
+      "bytes": 19197
+    },
+    {
+      "path": "Assets/Scripts/Tests/EditMode/SkillBoardGeometryTests.cs",
+      "sha256": "c1839c758f8eb87b37fdad9735ea762037d3e170bdf88139afbfc3f733fb2f58",
+      "bytes": 22843
+    },
+    {
+      "path": "Assets/Scripts/Tests/EditMode/SkillBoardTransactionsTests.cs",
+      "sha256": "b637a42404696f55f863632e48fa690e816481be1029d673ec89f119476dbd2f",
+      "bytes": 21271
+    },
+    {
+      "path": "Assets/Scripts/Tests/EditMode/SkillBoardTransactionsTests.cs.meta",
+      "sha256": "bb503f295d9204e8262ae331bb7ae6acae38525f717445453b6c3c60ac10094c",
+      "bytes": 60
+    },
+    {
+      "path": "Assets/Scripts/Tests/Fixtures/Migration/manifest.json",
+      "sha256": "41ba11be31537576c5243579e84cfb90181401745f5b5d0633ecd2e2c9ec1d7a",
+      "bytes": 2102
+    },
+    {
+      "path": "Assets/Scripts/Tests/Fixtures/Migration/save-v9-migrated-player.json",
+      "sha256": "08177ab584b1c18b003ce6d93f26e730fa4be1cdb608eb46013d1fcd43f48eb1",
+      "bytes": 25769
+    },
+    {
+      "path": "Assets/Scripts/Tests/Fixtures/Migration/save-v9-migrated-player.json.meta",
+      "sha256": "6d7305be03ecadc1ce35e4403b90d44e837ee4a4d0ef5ca24a2edafaf7cae978",
+      "bytes": 155
+    },
+    {
+      "path": "Assets/Scripts/Tests/PlayMode/DarkFlare.Tests.PlayMode.asmdef",
+      "sha256": "e0791ce3ae874bdc9c874194924ab2dac23f5ad62a05cb0711955dfbfb915cf7",
+      "bytes": 691
+    },
+    {
+      "path": "Assets/Scripts/Tests/PlayMode/SaveCaptureRestorePlayModeTests.cs",
+      "sha256": "ab7605cbf12d1b7ed2cb8c92be7c866989434fa03bf0fd1151a1bed684d76a72",
+      "bytes": 36700
+    },
+    {
+      "path": "Assets/Scripts/Tests/PlayMode/WorldMapPlayModeTests.cs",
+      "sha256": "12bf55afaf6f21354a5a57a0a8e66da4851be7376fa004b2326848265b18b453",
+      "bytes": 45875
+    },
+    {
+      "path": "Packages/manifest.json",
+      "sha256": "5a87cf6ded6a8eaa1f710a9b9af4955715e9a2333a18b5f100db75999d98b642",
+      "bytes": 2939
+    },
+    {
+      "path": "Packages/packages-lock.json",
+      "sha256": "122e505f1de20d1769c0963604dae837036e1545698512d376ae651b2284f931",
+      "bytes": 19472
+    },
+    {
+      "path": "ProjectSettings/ProjectSettings.asset",
+      "sha256": "c36322baf2bf07190ced9cb5d851291561d455697036511cd0de32bf1d813295",
+      "bytes": 21032
+    },
+    {
+      "path": "ProjectSettings/ProjectVersion.txt",
+      "sha256": "338824f489d7ef647583e723283307ae92b3bb241d2fe874ac759dbf2f091701",
+      "bytes": 83
+    }
+  ],
+  "formatNormalization": "Before commit, removed trailing spaces from newly generated Unity asset / meta YAML. Serialized values and behavioral source are unchanged."
+}

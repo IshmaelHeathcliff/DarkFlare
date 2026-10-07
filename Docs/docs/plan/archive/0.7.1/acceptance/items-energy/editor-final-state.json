@@ -1,0 +1,15 @@
+{
+  "output": null,
+  "diagnostics": [],
+  "success": true,
+  "result": {
+    "Version": "0.7.1-alpha.2",
+    "Unity": "6000.6.4f1",
+    "SaveSchema": 10,
+    "Catalog": "core",
+    "ContentVersion": 11,
+    "NavigationBytes": 0,
+    "Scene": "Assets/Scenes/Bootstrap.unity",
+    "SceneDirty": false
+  }
+}

@@ -219,6 +219,11 @@ namespace DarkFlare
                     { issues.Add(new ContentCatalogIssue(ContentCatalogIssueCode.ConfigurationInvalid, contentId + ": " + error.Message, entry)); }
                 }
                 entries.Add(contentId, entry);
+                if (entry is ItemBaseDefinition boardItem && boardItem.IsSkillBoardItem)
+                {
+                    foreach (string issue in SkillBoardItemConfiguration.Validate(boardItem))
+                    { issues.Add(new ContentCatalogIssue(ContentCatalogIssueCode.ConfigurationInvalid, contentId + ": " + issue, entry)); }
+                }
                 idsByEntry.Add(entry, contentId);
 
                 if (!mutableByType.TryGetValue(entryType, out List<ScriptableObject> typedEntries))

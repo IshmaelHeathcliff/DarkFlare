@@ -15,7 +15,11 @@ namespace DarkFlare
         Currency,
         Consumable,
         TradeGood,
-        QuestItem
+        QuestItem,
+        [LabelText("柴薪")] Firewood,
+        [LabelText("火焰")] Flame,
+        [LabelText("余烬")] Ember,
+        [LabelText("能量瓶")] EnergyBottle
     }
 
     public enum ItemCategory
@@ -25,7 +29,9 @@ namespace DarkFlare
         [LabelText("装备")] Equipment,
         [LabelText("消耗品")] Consumable,
         [LabelText("交易物（预留）")] TradeGood,
-        [LabelText("任务道具（预留）")] QuestItem
+        [LabelText("任务道具（预留）")] QuestItem,
+        [LabelText("天赋棋盘")] SkillBoard,
+        [LabelText("能量瓶")] EnergyBottle
     }
 
     public enum ItemRarity
@@ -149,6 +155,12 @@ namespace DarkFlare
         ItemUseDefinition _useDefinition;
         public ItemUseDefinition UseDefinition => _useDefinition;
 
+        [SerializeField, LabelText("棋盘 / 能量瓶配置"), ShowIf(nameof(IsSkillBoardItem))]
+        SkillBoardItemConfiguration _skillBoard = new SkillBoardItemConfiguration();
+        public SkillBoardItemConfiguration SkillBoard => _skillBoard;
+        public bool IsSkillBoardItem => _itemType >= ItemType.Firewood && _itemType <= ItemType.EnergyBottle;
+        public bool CanHaveAffixes => IsEquipment || _itemType == ItemType.Flame || _itemType == ItemType.Ember;
+
         public string Id => _id;
 
         public string DisplayName => _displayName;
@@ -159,7 +171,7 @@ namespace DarkFlare
 
         public bool IsEquipment => _itemType == ItemType.Weapon || _itemType == ItemType.Armor || _itemType == ItemType.Accessory;
 
-        public bool IsStackable => _stackable && !IsEquipment;
+        public bool IsStackable => _stackable && !IsEquipment && !IsSkillBoardItem;
 
         public bool IsConsumable => _consumable;
 
@@ -171,6 +183,8 @@ namespace DarkFlare
             ItemType.Material => ItemCategory.Material,
             ItemType.Consumable => ItemCategory.Consumable,
             ItemType.TradeGood => ItemCategory.TradeGood,
+            ItemType.Firewood or ItemType.Flame or ItemType.Ember => ItemCategory.SkillBoard,
+            ItemType.EnergyBottle => ItemCategory.EnergyBottle,
             _ => ItemCategory.QuestItem
         };
 
@@ -223,12 +237,18 @@ namespace DarkFlare
                 implicitModifiers.Add(_implicitModifiers[i].CreateInstance(random));
             }
 
-            return new ItemInstance(id, this, rarity, itemLevel, seed, implicitModifiers);
+            var item = new ItemInstance(id, this, rarity, itemLevel, seed, implicitModifiers);
+            if (IsSkillBoardItem)
+            {
+                item.InitializeSkillBoardState(_skillBoard.CreateState(_itemType, seed));
+            }
+            return item;
         }
 
         void OnValidate()
         {
             List<string> issues = EquipmentConfigurationValidator.Validate(this);
+            issues.AddRange(SkillBoardItemConfiguration.Validate(this));
 
             for (int i = 0; i < issues.Count; i++)
             {

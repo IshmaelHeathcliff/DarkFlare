@@ -182,6 +182,38 @@ MonoBehaviour:
     m_Localized: Cleansing Elixir
     m_Metadata:
       m_Items: []
+  - m_Id: 17545695232778240
+    m_Localized: firewood large
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17545696415571968
+    m_Localized: firewood medium
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17545697287987200
+    m_Localized: firewood small
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17545698235899904
+    m_Localized: flame projectile
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17545699108315136
+    m_Localized: ember power
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17545699972341760
+    m_Localized: energy bottle small
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17545700823785472
+    m_Localized: energy bottle medium
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17545701725560832
+    m_Localized: energy bottle large
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

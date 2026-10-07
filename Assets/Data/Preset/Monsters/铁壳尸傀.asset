@@ -12,6 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4eb121f8dc76a8f4695a759b90dc6ce7, type: 3}
   m_Name: "\u94C1\u58F3\u5C38\u5080"
   m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.MonsterDefinition
+  _baseEnergy: 10
+  _rarity: 0
+  _energyPerAffix: 5
+  _energyPerAffixRarity: 5
   _id: iron_husk
   _displayName: "\u94C1\u58F3\u5C38\u5080"
   _localizedName:
@@ -25,6 +29,7 @@ MonoBehaviour:
     m_SubObjectGUID: 
     m_EditorAssetChanged: 0
   _behavior: {fileID: 11400000, guid: 63649497041f8a8429b6d717ad7c9490, type: 2}
+  _bossBehavior: {fileID: 0}
   _maxHealth: 96
   _mana: 0
   _healthRegeneration: 0

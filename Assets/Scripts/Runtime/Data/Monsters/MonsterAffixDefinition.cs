@@ -8,6 +8,10 @@ namespace DarkFlare
     [CreateAssetMenu(menuName = "DarkFlare/Data/Monsters/Monster Affix Definition", fileName = "MonsterAffixDefinition")]
     public class MonsterAffixDefinition : ScriptableObject, IContentDefinition
     {
+        [SerializeField, LabelText("词条稀有度（独立于抽取权重）")]
+        MonsterRarity _rarity;
+        public MonsterRarity Rarity => _rarity;
+
         [SerializeField]
         [LabelText("稳定ID")]
         string _id = string.Empty;

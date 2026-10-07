@@ -49,7 +49,7 @@ namespace DarkFlare
         }
     }
 
-    public static class SaveDataValidator
+    public static partial class SaveDataValidator
     {
         public static SaveDataValidationResult ValidateDocument(SaveDocumentDto document)
         {
@@ -325,6 +325,7 @@ namespace DarkFlare
                 ValidateModifiers(item.ImplicitModifiers, $"{itemPath}.implicitModifiers", issues);
                 ValidateAffixes(item.Prefixes, ContentNamespaces.Affix, $"{itemPath}.prefixes", issues);
                 ValidateAffixes(item.Suffixes, ContentNamespaces.Affix, $"{itemPath}.suffixes", issues);
+                ValidateSkillBoardItem(item.SkillBoard, $"{itemPath}.skillBoard", issues);
             }
 
             return items;
@@ -364,6 +365,7 @@ namespace DarkFlare
 
             ValidateInventory(profile.Inventory, items, ownership, $"{path}.inventory", issues);
             ValidateEquipment(profile.Equipment, profile.PlayerId, items, ownership, $"{path}.equipment", issues);
+            ValidateSkillBoard(profile.SkillBoard, profile.PlayerId, items, ownership, $"{path}.skillBoard", issues);
         }
 
         static void ValidateInventory(

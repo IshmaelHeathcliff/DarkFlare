@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de56d17a7ac2ea64db43d68bd7da6bc8, type: 3}
+  m_Name: ember_power
+  m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.ItemBaseDefinition
+  _id: ember_power
+  _displayName: "\u589E\u5E45\u4F59\u70EC"
+  _localizedName:
+    _tableName: items
+    _entryKey: item.ember_power.name
+  _itemType: 10
+  _stackable: 0
+  _maxStackSize: 999
+  _consumable: 0
+  _icon:
+    m_AssetGUID: 9b60919ec63d2fa41bc72c6410874ccc
+    m_SubObjectName:
+    m_SubObjectType:
+    m_SubObjectGUID:
+    m_EditorAssetChanged: 0
+  _allowedEquipmentSlots: 0
+  _defaultRarity: 0
+  _baseValue: 100
+  _gridSize: {x: 1, y: 1}
+  _weight: 0
+  _tags: []
+  _baseDamages: []
+  _implicitModifiers:
+  - _stat: {fileID: 11400000, guid: 82e204183d947d249b17fb3c9ade3530, type: 2}
+    _operation: 1
+    _scope: 2
+    _valueRange: {x: 5, y: 12}
+    _fromDamageType: 0
+    _toDamageType: 1
+    _condition:
+      _scopeMask: 0
+      _requiredAll: []
+      _requiredAny: []
+      _blockedAny: []
+    _requiredTags: []
+    _blockedTags: []
+  _providedStatus: {fileID: 0}
+  _useDefinition: {fileID: 0}
+  _skillBoard:
+    _firewood: {fileID: 0}
+    _talentModifiers: []
+    _talentRadius: 0
+    _flameSkill: {fileID: 0}
+    _emberRadius: 3
+    _energyCapacity: 1000

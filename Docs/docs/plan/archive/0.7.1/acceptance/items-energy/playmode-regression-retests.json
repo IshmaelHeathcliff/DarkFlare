@@ -1,0 +1,69 @@
+{
+  "navigation": {
+    "status": "completed",
+    "duration": 12.41,
+    "summary": {
+      "total": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0,
+      "inconclusive": 0
+    },
+    "results": [
+      {
+        "FullName": "DarkFlare.Tests.NavigationPlayModeTests.MixedStrategies_DetourDynamicWall_RespectControlAndInvalidateHandles",
+        "Status": "Passed",
+        "Duration": 7.3042277,
+        "Message": null,
+        "StackTrace": null
+      },
+      {
+        "FullName": "DarkFlare.Tests.NavigationPlayModeTests.MovingPlayer_KeepsFreshCompletedGuidance_AndPublishesWhileMoving",
+        "Status": "Passed",
+        "Duration": 5.0227011,
+        "Message": null,
+        "StackTrace": null
+      }
+    ]
+  },
+  "guardian": {
+    "status": "completed",
+    "duration": 10.76,
+    "summary": {
+      "total": 1,
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "inconclusive": 0
+    },
+    "results": [
+      {
+        "FullName": "DarkFlare.Tests.WorldMapPlayModeTests.GuardianBoss_FightsAndPersists",
+        "Status": "Passed",
+        "Duration": 10.6758189,
+        "Message": null,
+        "StackTrace": null
+      }
+    ]
+  },
+  "resetTwentyCycles": {
+    "status": "completed",
+    "duration": 49.19,
+    "summary": {
+      "total": 1,
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "inconclusive": 0
+    },
+    "results": [
+      {
+        "FullName": "DarkFlare.Tests.WorldMapPlayModeTests.ManualReset_TwentyCyclesReleaseMapOwners",
+        "Status": "Passed",
+        "Duration": 49.1535397,
+        "Message": null,
+        "StackTrace": null
+      }
+    ]
+  }
+}

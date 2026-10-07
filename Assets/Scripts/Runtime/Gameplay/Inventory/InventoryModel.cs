@@ -12,6 +12,11 @@ namespace DarkFlare
 
         public InventoryGrid Grid { get; private set; }
 
+        internal void ReplaceGridWithoutEvents(InventoryGrid grid)
+        {
+            Grid = grid ?? throw new ArgumentNullException(nameof(grid));
+        }
+
         ItemBaseDefinition _goldDefinition;
 
         public int Gold => CountItems(_goldDefinition);

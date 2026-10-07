@@ -1,0 +1,62 @@
+{
+  "status": "completed",
+  "duration": 0.49,
+  "summary": {
+    "total": 7,
+    "passed": 7,
+    "failed": 0,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "results": [
+    {
+      "FullName": "DarkFlare.Tests.EnergyBottleTests.Attribution_RejectsAliveUnregisteredAndForeignRunActors",
+      "Status": "Passed",
+      "Duration": 0.1499669,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.EnergyBottleTests.Attribution_RejectsMissingForeignOrNonPlayerSourceAndDoesNotAllowChangedReplay",
+      "Status": "Passed",
+      "Duration": 0.0022736,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.EnergyBottleTests.DuplicateDeath_CollectsOnceAndDoesNotConsumeGameplayRandomness",
+      "Status": "Passed",
+      "Duration": 0.0104596,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.EnergyBottleTests.EmptySlot_DiscardsEnergyAndEquippingLaterDoesNotReplayDeath",
+      "Status": "Passed",
+      "Duration": 0.0031584,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.EnergyBottleTests.FullCapacity_DiscardsOverflowAndRequiresManualSwapBeforeNewKills",
+      "Status": "Passed",
+      "Duration": 0.0026723,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.EnergyBottleTests.NewSession_DoesNotCarryBottleOrSettlementAcrossPlayers",
+      "Status": "Passed",
+      "Duration": 0.002318,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.EnergyBottleTests.Reward_GrowsWithAffixCountBothRaritiesAndRejectsInvalidOrOverflowingConfiguration",
+      "Status": "Passed",
+      "Duration": 0.0023711,
+      "Message": null,
+      "StackTrace": null
+    }
+  ]
+}

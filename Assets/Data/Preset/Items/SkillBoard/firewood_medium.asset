@@ -1,0 +1,72 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de56d17a7ac2ea64db43d68bd7da6bc8, type: 3}
+  m_Name: firewood_medium
+  m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.ItemBaseDefinition
+  _id: firewood_medium
+  _displayName: "\u4E2D\u67F4\u85AA"
+  _localizedName:
+    _tableName: items
+    _entryKey: item.firewood_medium.name
+  _itemType: 8
+  _stackable: 0
+  _maxStackSize: 999
+  _consumable: 0
+  _icon:
+    m_AssetGUID: 8dd6eb8a588337b4699634bc49f8a275
+    m_SubObjectName:
+    m_SubObjectType:
+    m_SubObjectGUID:
+    m_EditorAssetChanged: 0
+  _allowedEquipmentSlots: 0
+  _defaultRarity: 0
+  _baseValue: 100
+  _gridSize: {x: 1, y: 1}
+  _weight: 0
+  _tags: []
+  _baseDamages: []
+  _implicitModifiers: []
+  _providedStatus: {fileID: 0}
+  _useDefinition: {fileID: 0}
+  _skillBoard:
+    _firewood: {fileID: 11400000, guid: 95e73748987011a4eaff1915ca2ccd5e, type: 2}
+    _talentModifiers:
+    - _stat: {fileID: 11400000, guid: 82e204183d947d249b17fb3c9ade3530, type: 2}
+      _operation: 1
+      _scope: 2
+      _valueRange: {x: 1, y: 4}
+      _fromDamageType: 0
+      _toDamageType: 1
+      _condition:
+        _scopeMask: 0
+        _requiredAll: []
+        _requiredAny: []
+        _blockedAny: []
+      _requiredTags: []
+      _blockedTags: []
+    - _stat: {fileID: 11400000, guid: 159bd0223382bfd4abc27d1667165ef8, type: 2}
+      _operation: 1
+      _scope: 2
+      _valueRange: {x: 1, y: 3}
+      _fromDamageType: 0
+      _toDamageType: 1
+      _condition:
+        _scopeMask: 0
+        _requiredAll: []
+        _requiredAny: []
+        _blockedAny: []
+      _requiredTags: []
+      _blockedTags: []
+    _talentRadius: 3
+    _flameSkill: {fileID: 0}
+    _emberRadius: 3
+    _energyCapacity: 1000

@@ -60,7 +60,7 @@ namespace DarkFlare
 
     public readonly struct SaveSchemaVersion : IEquatable<SaveSchemaVersion>, IComparable<SaveSchemaVersion>
     {
-        public static SaveSchemaVersion Current => new SaveSchemaVersion(9);
+        public static SaveSchemaVersion Current => new SaveSchemaVersion(10);
 
         public int Value { get; }
 

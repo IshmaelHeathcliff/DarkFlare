@@ -25,6 +25,10 @@ namespace DarkFlare
                 ItemType.Consumable => "item.type.consumable",
                 ItemType.TradeGood => "item.type.trade_good",
                 ItemType.QuestItem => "item.type.quest_item",
+                ItemType.Firewood => "item.type.firewood",
+                ItemType.Flame => "item.type.flame",
+                ItemType.Ember => "item.type.ember",
+                ItemType.EnergyBottle => "item.type.energy_bottle",
                 _ => "item.type.unknown",
             };
             return Localize(entryKey);

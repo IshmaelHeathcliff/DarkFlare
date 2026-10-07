@@ -1,0 +1,60 @@
+{
+  "diagnostics": [],
+  "compileMs": 123,
+  "executeMs": 1684,
+  "assemblyName": "PipelineRunScript_CheckSkillBoardRuntimeIcons_13ef3fa7bf3b44dfaecbc906dabe004a",
+  "success": true,
+  "result": {
+    "DataRoot": "C:/Users/darkf/AppData/Local/Temp/DefaultCompany/DarkFlare\\DarkFlare\\PlayModeTests\\2a6a17cf901d490eb4acc45994d9dbd5\\Saves",
+    "Session": "Running",
+    "LoadedIcons": [
+      {
+        "Id": "firewood_large",
+        "IconGuid": "846bd88c705c966449b34bce0ac4bd6e",
+        "Name": "firewood_large"
+      },
+      {
+        "Id": "firewood_medium",
+        "IconGuid": "8dd6eb8a588337b4699634bc49f8a275",
+        "Name": "firewood_medium"
+      },
+      {
+        "Id": "firewood_small",
+        "IconGuid": "3834a73285e209741b795e1ac2b7aba1",
+        "Name": "firewood_small"
+      },
+      {
+        "Id": "flame_projectile",
+        "IconGuid": "a3ed89418bec4ff48a5e66531b0988df",
+        "Name": "flame_projectile"
+      },
+      {
+        "Id": "ember_power",
+        "IconGuid": "9b60919ec63d2fa41bc72c6410874ccc",
+        "Name": "ember_power"
+      },
+      {
+        "Id": "energy_bottle_small",
+        "IconGuid": "6d432d0ef87da5f40acfa3e248c11874",
+        "Name": "energy_bottle_small"
+      },
+      {
+        "Id": "energy_bottle_medium",
+        "IconGuid": "5e0fa862a6527ca4c8279e333ff42ff5",
+        "Name": "energy_bottle_medium"
+      },
+      {
+        "Id": "energy_bottle_large",
+        "IconGuid": "d944fb0545e029d409623c3affcbc83e",
+        "Name": "energy_bottle_large"
+      }
+    ],
+    "InventoryVisible": true,
+    "BottleEnergy": 333,
+    "Capacity": 1000,
+    "Screen": [
+      1920,
+      1080
+    ]
+  }
+}

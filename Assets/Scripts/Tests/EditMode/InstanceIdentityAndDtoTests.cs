@@ -76,6 +76,49 @@ namespace DarkFlare.Tests
         }
 
         [Test]
+        public void LootAndShopFactories_CreateValidBoardVariantsWithStableTradeIdentity()
+        {
+            var found = new HashSet<ItemType>();
+            var ids = new DeterministicItemInstanceIdGenerator(741);
+            foreach (LootTableDefinition table in _catalog.GetAll<LootTableDefinition>())
+            {
+                var roles = new HashSet<ItemType>();
+                foreach (LootTableEntry entry in table.Entries.Where(e => e.Item.IsSkillBoardItem && e.Weight > 0))
+                {
+                    LootTableDefinition isolated = UnityEngine.Object.Instantiate(table);
+                    try
+                    {
+                        // 单独执行正式条目，避免低权重道具的随机漏抽影响工厂行为回归。
+                        typeof(LootTableDefinition).GetField("_entries", BindingFlags.Instance | BindingFlags.NonPublic)
+                            .SetValue(isolated, new List<LootTableEntry> { entry });
+                        typeof(LootTableDefinition).GetField("_dropChance", BindingFlags.Instance | BindingFlags.NonPublic)
+                            .SetValue(isolated, 1f);
+                        ItemInstance item = isolated.GenerateLoot(new System.Random(735), ids.Next(), 1);
+                        Assert.That(item, Is.Not.Null);
+                        roles.Add(item.BaseDefinition.ItemType);
+                        Assert.That(item.SkillBoardState.IsValidFor(item.BaseDefinition), Is.True);
+                        DtoMapResult<ItemInstance> restored = RuntimeStateMapper.FromDto(RuntimeStateMapper.ToDto(item, _catalog).Value, _catalog);
+                        Assert.That(restored.Succeeded, Is.True);
+                        Assert.That(restored.Value.Id, Is.EqualTo(item.Id));
+                    }
+                    finally { UnityEngine.Object.DestroyImmediate(isolated); }
+                }
+                CollectionAssert.AreEquivalent(new[] { ItemType.Firewood, ItemType.Flame, ItemType.Ember, ItemType.EnergyBottle }, roles);
+            }
+            TraderDefinition trader = _catalog.GetAll<TraderDefinition>().First();
+            for (int seed = 0; seed < 40; seed++)
+            {
+                foreach (ItemInstance item in trader.CreateStock(new System.Random(seed), ids))
+                {
+                    if (!item.BaseDefinition.IsSkillBoardItem) { continue; }
+                    found.Add(item.BaseDefinition.ItemType);
+                    Assert.That(item.SkillBoardState.IsValidFor(item.BaseDefinition), Is.True);
+                }
+            }
+            CollectionAssert.AreEquivalent(new[] { ItemType.Firewood, ItemType.Flame, ItemType.Ember, ItemType.EnergyBottle }, found);
+        }
+
+        [Test]
         public void PersistenceDtoRule_RejectsNestedUnityReference()
         {
             List<string> violations = new List<string>();

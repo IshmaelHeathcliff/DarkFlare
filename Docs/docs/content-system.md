@@ -2,9 +2,9 @@
 
 ## 当前范围
 
-当前正式内容包含标签、物品与怪物词条、20 件装备、4 种消耗品和 3 种怪物，按用途接入刷怪、掉落、商店与打造。消耗品见[正式消耗品与使用交互](./consumables.md)。二十件装备和三种怪物均使用独立正式视觉；带怪物词条的实例会在世界中显示最多两行短名称。
+当前正式内容包含标签、物品与怪物词条、20 件装备、4 种消耗品、8 件棋盘 / 能量瓶道具、3 种普通怪物和守卫 Boss。新道具见[棋盘模块](skill-board/items-installation.md)，消耗品见[正式消耗品](consumables.md)。道具图标独立，怪物词条在世界中显示最多两行短名称。
 
-稳定本地 ID 均使用小写 `snake_case`，持久化时由类型命名空间组成 `<namespace>:<local_id>` 的 `ContentId`；唯一正式目录 `core` v6 收录正式配置。目录、缺失策略和扩展规则见[稳定身份、内容目录与迁移框架](./infrastructure/content-identity-migration.md)。运行时随机规则继续沿用独立通道：怪物生命倍率 `0.85–1.15`、初始大剑伤害 `20–40`，掉落概率由各怪物掉落表独立配置。空手武器技能没有伤害回退。
+稳定本地 ID 均使用小写 `snake_case`，持久化时由类型命名空间组成 `<namespace>:<local_id>` 的 `ContentId`；唯一正式目录 `core` v11 收录正式配置。目录、缺失策略和扩展规则见[稳定身份、内容目录与迁移框架](./infrastructure/content-identity-migration.md)。运行时随机规则继续沿用独立通道：怪物生命倍率 `0.85–1.15`、初始大剑伤害 `20–40`，掉落概率由各怪物掉落表独立配置。空手武器技能没有伤害回退。
 
 正式内容身份与显示文本彼此独立。二十件装备、23 项属性、25 个物品词条、10 个怪物词条、三种怪物、玩家、商人、15 个标签和两个世界交互目标均持有 `LocalizedContentReference`；运行时 UI 从 `items`、`stats`、`affixes`、`monsters` 表解析名称，旧 `_displayName` 只保留给 Inspector 作者识别和日志兼容。具体 Key、回退和迁移合同见[用户设置与本地化](./infrastructure/user-settings-localization.md)。
 

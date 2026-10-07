@@ -141,6 +141,39 @@ namespace DarkFlare.Tests
                     oldResources.MaxMana),
                 true);
             GameplayRandomSystem oldRandom = oldArchitecture.GetSystem<GameplayRandomSystem>();
+            // 棋盘与专栏共用正式 Command、统一 Items 和 Session Restore。
+            ItemBaseDefinition woodDefinition = host.ContentCatalog.GetAll<ItemBaseDefinition>().Single(d => d.Id == "firewood_large");
+            ItemBaseDefinition flameDefinition = host.ContentCatalog.GetAll<ItemBaseDefinition>().Single(d => d.Id == "flame_projectile");
+            ItemBaseDefinition bottleDefinition = host.ContentCatalog.GetAll<ItemBaseDefinition>().Single(d => d.Id == "energy_bottle_small");
+            ItemInstance boardWood = woodDefinition.CreateInstance(oldArchitecture.GetUtility<IItemInstanceIdGenerator>().Next(), 1, 86, ItemRarity.Normal);
+            ItemInstance boardFlame = flameDefinition.CreateInstance(oldArchitecture.GetUtility<IItemInstanceIdGenerator>().Next(), 1, 86, ItemRarity.Normal);
+            ItemInstance boardBottle = bottleDefinition.CreateInstance(oldArchitecture.GetUtility<IItemInstanceIdGenerator>().Next(), 1, 86, ItemRarity.Normal);
+            Assert.That(oldInventory.TryAddItem(boardWood), Is.True);
+            Assert.That(oldInventory.TryAddItem(boardFlame), Is.True);
+            Assert.That(oldInventory.TryAddItem(boardBottle), Is.True);
+            foreach (SkillBoardRequest request in new[]
+            {
+                new SkillBoardRequest(SkillBoardOperation.Install, boardWood, new HexCoordinate(16, 0), 2),
+                new SkillBoardRequest(SkillBoardOperation.Embed, boardFlame, slot: new FirewoodPortReference(boardWood.InstanceId, SkillBoardGeometry.CenterNodeId)),
+                new SkillBoardRequest(SkillBoardOperation.EquipBottle, boardBottle)
+            })
+            {
+                SkillBoardPreview preview = oldArchitecture.SendQuery(new PreviewSkillBoardQuery(oldPlayer.Id.Value, request));
+                Assert.That(preview.Success, Is.True, preview.Error);
+                Assert.That(oldArchitecture.SendCommand(new CommitSkillBoardCommand(preview)), Is.True);
+            }
+            // 使用当前地图的实际怪物与周期伤害来源，走 CombatSystem 的唯一死亡转移。
+            MonsterController energyMonster = UnityEngine.Object.FindObjectsByType<MonsterController>()
+                .FirstOrDefault(m => m.Actor.IsAlive);
+            Assert.That(energyMonster, Is.Not.Null, "野外运行样例需要存活怪物");
+            int expectedKillEnergy = MonsterEnergyReward.Calculate(energyMonster.Definition, energyMonster.Instance);
+            oldArchitecture.GetSystem<CombatSystem>().ApplyPeriodicDamage(
+                new DamageSourceSnapshot(oldPlayer.Actor.ActorId, ActorTeam.Player), energyMonster.Actor,
+                new[] { new DamagePacket(DamageType.Physical, energyMonster.Actor.MaxHealth * 1000, TagSet.Empty) });
+            Assert.That(energyMonster.Actor.IsAlive, Is.False);
+            Assert.That(boardBottle.SkillBoardState.Energy, Is.EqualTo(Math.Min(expectedKillEnergy, bottleDefinition.SkillBoard.EnergyCapacity)));
+            SkillBoardSaveDto boardBefore = RuntimeStateMapper.ToDto(oldPlayer.Id.Value,
+                oldArchitecture.GetModel<SkillBoardModel>().State);
             oldRandom.NextSeed(GameplayRandomChannel.Crafting);
             oldRandom.NextSeed(GameplayRandomChannel.Crafting);
             SessionSnapshotSource source = new SessionSnapshotSource(
@@ -250,6 +283,16 @@ namespace DarkFlare.Tests
             Assert.IsTrue(callbackResult.IsSuccess, callbackResult.Exception?.ToString());
             Assert.Greater(host.CurrentSession.ArchitectureGeneration, oldGeneration);
             IArchitecture restoredArchitecture = host.CurrentSession.Architecture;
+            SkillBoardState restoredBoard = restoredArchitecture.SendQuery(new GetSkillBoardQuery());
+            SkillBoardSaveDto boardAfter = RuntimeStateMapper.ToDto(boardBefore.ActorInstanceId, restoredBoard);
+            CollectionAssert.AreEqual(boardBefore.Firewoods.Select(w => (w.ItemInstanceId, w.Q, w.R, w.Rotation)),
+                boardAfter.Firewoods.Select(w => (w.ItemInstanceId, w.Q, w.R, w.Rotation)));
+            CollectionAssert.AreEqual(boardBefore.Embeddings.Select(e => (e.FirewoodInstanceId, e.NodeId, e.ItemInstanceId)),
+                boardAfter.Embeddings.Select(e => (e.FirewoodInstanceId, e.NodeId, e.ItemInstanceId)));
+            Assert.That(restoredBoard.EnergyBottle.InstanceId, Is.EqualTo(boardBottle.InstanceId));
+            Assert.That(restoredBoard.EnergyBottle.SkillBoardState.Energy, Is.EqualTo(
+                captured.Payload.Items.Single(i => i.InstanceId == boardBottle.InstanceId).SkillBoard.Energy));
+            Assert.That(restoredArchitecture.GetModel<InventoryModel>().Grid.Placements.Keys.Any(i => i.Id == boardWood.Id || i.Id == boardFlame.Id || i.Id == boardBottle.Id), Is.False);
             PrefabAssetLoader prefabLoader = restoredArchitecture.GetUtility<PrefabAssetLoader>();
 
             foreach (MonsterDefinition monster in prepared.Value.SpawnDefinition.AllMonsters)
@@ -338,6 +381,22 @@ namespace DarkFlare.Tests
             Assert.IsTrue(restoredInventory.Grid.Placements.ContainsKey(restoredItem));
             Assert.AreEqual(1, notifications);
             registration.UnRegister();
+            // 棋盘是角色资产，实际切图也必须保留所有权与固定变体。
+            foreach (string map in new[] { "map:town", "map:wilderness" })
+            {
+                SceneFlowResult travel = null;
+                yield return host.SceneFlow.RequestAsync(SceneFlowRequest.ChangeMap(map, map == "map:town" ? "return" : "arrival"))
+                    .ToCoroutine(result => travel = result);
+                Assert.That(travel.Succeeded, Is.True, travel.Exception?.ToString());
+                yield return WaitForRunningSession();
+                SkillBoardState travelled = host.CurrentSession.Architecture.SendQuery(new GetSkillBoardQuery());
+                Assert.That(travelled.Firewoods.Single().Item.InstanceId, Is.EqualTo(boardWood.InstanceId));
+                Assert.That(travelled.Firewoods.Single().Placement.Rotation, Is.EqualTo(2));
+                Assert.That(travelled.Embeddings.Single().Item.InstanceId, Is.EqualTo(boardFlame.InstanceId));
+                Assert.That(travelled.EnergyBottle.InstanceId, Is.EqualTo(boardBottle.InstanceId));
+                Assert.That(travelled.EnergyBottle.SkillBoardState.Energy, Is.GreaterThanOrEqualTo(
+                    captured.Payload.Items.Single(i => i.InstanceId == boardBottle.InstanceId).SkillBoard.Energy));
+            }
         }
 
         [UnityTest]

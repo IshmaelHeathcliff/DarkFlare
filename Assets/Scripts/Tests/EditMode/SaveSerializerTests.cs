@@ -135,6 +135,19 @@ namespace DarkFlare.Tests
 
         static void StripLaterMigrationFields(JObject document, JObject historical)
         {
+            JObject profile = (JObject)document["payload"]["profile"];
+            if (historical["payload"]["profile"]["skillBoard"] == null)
+            {
+                JToken board = profile["skillBoard"];
+                Assert.That(board["actorInstanceId"].Value<string>(), Is.EqualTo(profile["playerId"].Value<string>()));
+                Assert.That((JArray)board["firewoods"], Is.Empty);
+                Assert.That((JArray)board["embeddings"], Is.Empty);
+                Assert.That((JArray)board["connections"], Is.Empty);
+                Assert.That(board["energyBottleInstanceId"].Value<string>(), Is.Empty);
+                profile.Remove("skillBoard");
+                foreach (JObject item in document["payload"]["items"])
+                { Assert.That(item["skillBoard"].Type, Is.EqualTo(JTokenType.Null)); item.Remove("skillBoard"); }
+            }
             var run = (JObject)document["payload"]["run"];
             var oldRun = (JObject)historical["payload"]["run"];
             run.Remove("activeMapEpoch");

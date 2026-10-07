@@ -169,7 +169,7 @@ namespace DarkFlare.Tests
             for (int i = 0; i < lootTables.Count; i++)
             {
                 CollectionAssert.AreEquivalent(items.Where(item => item.IsEquipment
-                    || item.ItemType == ItemType.Currency || item.ItemType == ItemType.Material), lootTables[i].Entries.Select(entry => entry.Item));
+                    || item.ItemType == ItemType.Currency || item.ItemType == ItemType.Material || item.IsSkillBoardItem), lootTables[i].Entries.Select(entry => entry.Item));
                 CollectionAssert.AreEquivalent(LoadAssets<AffixDefinition>($"{PresetRoot}/Affixes"), lootTables[i].AffixPool);
             }
 
@@ -179,7 +179,7 @@ namespace DarkFlare.Tests
                 $"{PresetRoot}/Crafting/基础打造配置.asset");
             Assert.IsNotNull(trader);
             Assert.IsNotNull(crafting);
-            CollectionAssert.AreEquivalent(items.Where(item => item.IsEquipment || item.UseDefinition != null), trader.Stock.Select(entry => entry.Item));
+            CollectionAssert.AreEquivalent(items.Where(item => item.IsEquipment || item.UseDefinition != null || item.IsSkillBoardItem), trader.Stock.Select(entry => entry.Item));
             CollectionAssert.AreEquivalent(LoadAssets<AffixDefinition>($"{PresetRoot}/Affixes"), crafting.AffixPool);
         }
 

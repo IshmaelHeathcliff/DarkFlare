@@ -369,6 +369,31 @@ namespace DarkFlare
         }
     }
 
+    public sealed class SkillBoardSaveMigration : IJsonMigrationStep
+    {
+        public string Id => "save_9_to_10_skill_board";
+        public MigrationDataDomain Domain => MigrationDataDomain.Save;
+        public int FromVersion => 9;
+        public int ToVersion => 10;
+        public void Apply(JObject document)
+        {
+            if (document["payload"]?["profile"] is not JObject profile
+                || document["payload"]?["items"] is not JArray items) { throw new InvalidOperationException("缺少角色或物品表"); }
+            profile["skillBoard"] = new JObject
+            {
+                ["actorInstanceId"] = profile["playerId"]?.DeepClone(),
+                ["firewoods"] = new JArray(), ["embeddings"] = new JArray(), ["connections"] = new JArray(),
+                ["energyBottleInstanceId"] = ""
+            };
+            foreach (JToken item in items)
+            {
+                if (item is not JObject value) { throw new InvalidOperationException("非法旧档物品"); }
+                value["skillBoard"] = JValue.CreateNull();
+            }
+            // 原技能和剩余冷却保持；阶段四才执行手动技能迁移。
+        }
+    }
+
     public sealed class MapInstanceEpochSaveMigration : IJsonMigrationStep
     {
         public string Id => "save_8_to_9_map_instance_epoch";

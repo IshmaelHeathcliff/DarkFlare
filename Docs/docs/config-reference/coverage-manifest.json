@@ -2,6 +2,11 @@
   "schemaVersion": 1,
   "entries": [
     {
+      "type": "DarkFlare.SkillBoardItemConfiguration",
+      "document": "Docs/docs/config-reference/skill-board.md",
+      "anchor": "skillboarditemconfiguration"
+    },
+    {
       "type": "DarkFlare.FirewoodGenerationDefinition",
       "document": "Docs/docs/config-reference/skill-board.md",
       "anchor": "firewoodgenerationdefinition"

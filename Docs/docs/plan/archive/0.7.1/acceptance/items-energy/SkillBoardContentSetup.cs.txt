@@ -1,0 +1,267 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using DarkFlare;
+using UnityEditor;
+using UnityEditor.AddressableAssets;
+using UnityEditor.Localization;
+using UnityEngine;
+using UnityEngine.Localization;
+using UnityEngine.Localization.Tables;
+
+public static class SkillBoardContentSetup
+{
+    static readonly string[] Ids = { "firewood_large", "firewood_medium", "firewood_small", "flame_projectile",
+        "ember_power", "energy_bottle_small", "energy_bottle_medium", "energy_bottle_large" };
+    static readonly string[] Names = { "大柴薪", "中柴薪", "小柴薪", "投射火焰", "增幅余烬", "小能量瓶", "中能量瓶", "大能量瓶" };
+    const string Icons = "Assets/Art/Sprites/Items/SkillBoard";
+    const string Data = "Assets/Data/Preset/Items/SkillBoard";
+
+    public static string DrawIcon(int index)
+    {
+        Directory.CreateDirectory(Icons);
+        var image = new Texture2D(128, 128, TextureFormat.RGBA32, false);
+        Color gold = new Color(.72f, .49f, .22f, 1);
+        Color dark = new Color(.15f, .12f, .1f, 1);
+        Color glow = new Color(1, .4f, .12f, 1);
+        for (int y = 0; y < 128; y++)
+        {
+            for (int x = 0; x < 128; x++)
+            {
+                float dx = x - 63.5f;
+                float dy = y - 63.5f;
+                Color color = Color.clear;
+                if (index < 3)
+                {
+                    float hex = Mathf.Max(Mathf.Abs(dx), .5f * Mathf.Abs(dx) + .8660254f * Mathf.Abs(dy));
+                    if (hex < 43) { color = dark; }
+                    if (hex >= 39 && hex < 43) { color = gold; }
+                    float radius = Mathf.Sqrt(dx * dx + dy * dy);
+                    if (radius < 11) { color = new Color(.4f, .18f, .1f, 1); }
+                    int rings = 3 - index;
+                    for (int r = 0; r < rings; r++)
+                    {
+                        float ringRadius = 18 + 9 * r;
+                        if (Mathf.Abs(radius - ringRadius) < 1.5f) { color = gold; }
+                        for (int p = 0; p < 6; p++)
+                        {
+                            float angle = p * Mathf.PI / 3;
+                            if (Vector2.Distance(new Vector2(dx, dy), new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * ringRadius) < 4)
+                            { color = glow; }
+                        }
+                    }
+                }
+                else if (index == 3)
+                {
+                    float height = (dy + 44) / 88;
+                    float width = 35 * Mathf.Sin(Mathf.Clamp01(height) * Mathf.PI) + 4;
+                    if (dy >= -44 && dy < 44 && Mathf.Abs(dx - 8 * Mathf.Sin(height * Mathf.PI * 2)) < width)
+                    { color = glow; }
+                    if (dy >= -35 && dy < 17 && Mathf.Abs(dx) < 13 * Mathf.Sin((dy + 35) / 52 * Mathf.PI))
+                    { color = new Color(1, .78f, .25f, 1); }
+                }
+                else if (index == 4)
+                {
+                    float radius = dx * dx / (40 * 40) + dy * dy / (43 * 43);
+                    if (radius < 1) { color = dark; }
+                    if (radius >= .83f && radius < 1) { color = gold; }
+                    if (radius < .83f && (Mathf.Abs(dx + dy * .45f) < 2 || Mathf.Abs(dy - dx * .4f) < 2)) { color = glow; }
+                }
+                else
+                {
+                    bool body = Mathf.Abs(dx) < 36 && dy >= -43 && dy <= 25;
+                    bool neck = Mathf.Abs(dx) < 16 && dy > 25 && dy <= 43;
+                    if (body || neck)
+                    {
+                        color = new Color(.13f, .23f, .25f, 1);
+                        if (Mathf.Abs(dx) >= 32 && body || Mathf.Abs(dx) >= 12 && neck || dy <= -39 || dy >= 39)
+                        { color = gold; }
+                        if (Mathf.Abs(dx) < 28 && dy < 17 && dy > -35) { color = new Color(.12f, .55f, .61f, 1); }
+                        for (int r = 0; r < index - 4; r++)
+                        { if (Mathf.Abs(dy + 25 - r * 14) < 2 && body) { color = gold; } }
+                    }
+                }
+                image.SetPixel(x, y, color);
+            }
+        }
+        image.Apply();
+        string path = Icons + "/" + Ids[index] + ".png";
+        File.WriteAllBytes(path, image.EncodeToPNG());
+        UnityEngine.Object.DestroyImmediate(image);
+        return path;
+    }
+
+    public static string Install()
+    {
+        Directory.CreateDirectory(Data);
+        var settings = AddressableAssetSettingsDefaultObject.Settings;
+        ItemBaseDefinition source = AssetDatabase.LoadAssetAtPath<ItemBaseDefinition>("Assets/Data/Preset/Items/Consumables/生命药水.asset");
+        var group = settings.FindAssetEntry(source.Icon.AssetGUID).parentGroup;
+        var additions = new List<ScriptableObject>();
+        var collection = LocalizationEditorSettings.GetStringTableCollection("items");
+        for (int i = 0; i < Ids.Length; i++)
+        {
+            string iconPath = Icons + "/" + Ids[i] + ".png";
+            AssetDatabase.ImportAsset(iconPath, ImportAssetOptions.ForceSynchronousImport);
+            var importer = (TextureImporter)AssetImporter.GetAtPath(iconPath);
+            importer.textureType = TextureImporterType.Sprite;
+            importer.spriteImportMode = SpriteImportMode.Single;
+            importer.spritePixelsPerUnit = 128f / 1.5f;
+            importer.filterMode = FilterMode.Point;
+            importer.textureCompression = TextureImporterCompression.Uncompressed;
+            importer.mipmapEnabled = false;
+            importer.alphaIsTransparency = true;
+            importer.sRGBTexture = true;
+            var textureSettings = new TextureImporterSettings();
+            importer.ReadTextureSettings(textureSettings);
+            textureSettings.spriteMeshType = SpriteMeshType.FullRect;
+            textureSettings.spriteAlignment = (int)SpriteAlignment.Center;
+            textureSettings.spritePivot = new Vector2(.5f, .5f);
+            importer.SetTextureSettings(textureSettings);
+            importer.SaveAndReimport();
+            settings.CreateOrMoveEntry(AssetDatabase.AssetPathToGUID(iconPath), group).address = iconPath;
+            string path = Data + "/" + Ids[i] + ".asset";
+            ItemBaseDefinition item = AssetDatabase.LoadAssetAtPath<ItemBaseDefinition>(path) ?? ScriptableObject.CreateInstance<ItemBaseDefinition>();
+            Set(item, "_id", Ids[i]); Set(item, "_displayName", Names[i]);
+            Set(item, "_itemType", i < 3 ? ItemType.Firewood : i == 3 ? ItemType.Flame : i == 4 ? ItemType.Ember : ItemType.EnergyBottle);
+            Set(item, "_gridSize", i >= 5 ? new Vector2Int(2, 1) : Vector2Int.one);
+            Set(item, "_baseValue", i >= 5 ? 100 << (i - 5) : i < 3 ? 200 >> i : 100);
+            Set(item, "_icon", new UnityEngine.AddressableAssets.AssetReferenceSprite(AssetDatabase.AssetPathToGUID(iconPath)));
+            Set(item, "_localizedName", new LocalizedContentReference("items", "item." + Ids[i] + ".name"));
+            SkillBoardItemConfiguration config = item.SkillBoard;
+            if (i < 3)
+            {
+                string size = i == 0 ? "Large" : i == 1 ? "Medium" : "Small";
+                Set(config, "_firewood", AssetDatabase.LoadAssetAtPath<FirewoodGenerationDefinition>("Assets/Data/Preset/SkillBoard/" + size + "FirewoodGeneration.asset"));
+                Set(config, "_talentModifiers", new List<StatModifierDefinition> { Modifier("05伤害", 1, 4), Modifier("06暴击率", 1, 3) });
+                Set(config, "_talentRadius", i == 0 ? 0 : 3);
+            }
+            if (i == 3)
+            {
+                Set(config, "_flameSkill", AssetDatabase.LoadAssetAtPath<ProjectileSkillDefinition>("Assets/Data/Preset/Skills/基础投射物技能.asset"));
+                Set(item, "_implicitModifiers", new List<StatModifierDefinition> { Modifier("05伤害", 1, 5) });
+            }
+            if (i == 4) { Set(item, "_implicitModifiers", new List<StatModifierDefinition> { Modifier("05伤害", 5, 12) }); }
+            if (i >= 5) { Set(config, "_energyCapacity", 1000 << (i - 5)); }
+            if (string.IsNullOrEmpty(AssetDatabase.GetAssetPath(item))) { AssetDatabase.CreateAsset(item, path); }
+            EditorUtility.SetDirty(item);
+            List<string> validation = SkillBoardItemConfiguration.Validate(item);
+            if (validation.Count > 0) { throw new Exception(string.Join(";", validation)); }
+            additions.Add(item);
+            long key = (collection.SharedData.GetEntry("item." + Ids[i] + ".name") ?? collection.SharedData.AddKey("item." + Ids[i] + ".name")).Id;
+            foreach (string locale in new[] { "zh-Hans", "en" })
+            {
+                var table = (StringTable)collection.GetTable(new LocaleIdentifier(locale));
+                var entry = table.GetEntry(key) ?? table.AddEntry(key, locale == "en" ? Ids[i].Replace('_', ' ') : Names[i]);
+                entry.Value = locale == "en" ? Ids[i].Replace('_', ' ') : Names[i];
+                EditorUtility.SetDirty(table);
+            }
+        }
+        EditorUtility.SetDirty(collection.SharedData);
+        var catalog = AssetDatabase.LoadAssetAtPath<ContentCatalogDefinition>("Assets/Data/Preset/Content/正式内容目录.asset");
+        var catalogObject = new SerializedObject(catalog);
+        SerializedProperty entries = catalogObject.FindProperty("_entries");
+        foreach (ScriptableObject item in additions) { AppendReference(entries, item); }
+        catalogObject.FindProperty("_contentVersion").intValue = 11;
+        catalogObject.ApplyModifiedPropertiesWithoutUndo();
+        foreach (string guid in AssetDatabase.FindAssets("t:LootTableDefinition", new[] { "Assets/Data/Preset/Loot" }))
+        {
+            var table = AssetDatabase.LoadAssetAtPath<LootTableDefinition>(AssetDatabase.GUIDToAssetPath(guid));
+            var serialized = new SerializedObject(table);
+            SerializedProperty pool = serialized.FindProperty("_entries");
+            foreach (ItemBaseDefinition item in additions)
+            {
+                if (table.Entries.Any(e => e.Item == item)) { continue; }
+                int index = pool.arraySize++;
+                SerializedProperty entry = pool.GetArrayElementAtIndex(index);
+                entry.FindPropertyRelative("_item").objectReferenceValue = item;
+                entry.FindPropertyRelative("_weight").intValue = 12;
+                entry.FindPropertyRelative("_rarity").intValue = 0;
+                entry.FindPropertyRelative("_prefixCount").intValue = 0;
+                entry.FindPropertyRelative("_suffixCount").intValue = 0;
+                entry.FindPropertyRelative("_quantityRange").vector2IntValue = Vector2Int.one;
+            }
+            serialized.ApplyModifiedPropertiesWithoutUndo();
+        }
+        var trader = AssetDatabase.LoadAssetAtPath<TraderDefinition>("Assets/Data/Preset/Traders/基础商人.asset");
+        var traderObject = new SerializedObject(trader);
+        SerializedProperty stock = traderObject.FindProperty("_stock");
+        foreach (ItemBaseDefinition item in additions)
+        {
+            if (trader.Stock.Any(e => e.Item == item)) { continue; }
+            int index = stock.arraySize++;
+            SerializedProperty entry = stock.GetArrayElementAtIndex(index);
+            entry.FindPropertyRelative("_item").objectReferenceValue = item;
+            entry.FindPropertyRelative("_rarity").intValue = 0;
+            entry.FindPropertyRelative("_itemLevel").intValue = 1;
+            entry.FindPropertyRelative("_count").intValue = 1;
+            entry.FindPropertyRelative("_weight").intValue = 100;
+        }
+        traderObject.ApplyModifiedPropertiesWithoutUndo();
+        foreach (string guid in AssetDatabase.FindAssets("t:MonsterDefinition", new[] { "Assets/Data/Preset" }))
+        {
+            var monster = AssetDatabase.LoadAssetAtPath<MonsterDefinition>(AssetDatabase.GUIDToAssetPath(guid));
+            Set(monster, "_baseEnergy", monster.BossBehavior == null ? 10 : 100);
+            Set(monster, "_rarity", monster.BossBehavior == null ? MonsterRarity.Normal : MonsterRarity.Unique);
+            EditorUtility.SetDirty(monster);
+        }
+        EditorUtility.SetDirty(settings);
+        AssetDatabase.SaveAssets();
+        return "8 item definitions, independent icons, localized names, core v11, loot pools and shop candidates installed";
+    }
+    public static string LocalizeTypes()
+    {
+        var collection = LocalizationEditorSettings.GetStringTableCollection("ui");
+        string[,] text =
+        {
+            { "item.type.firewood", "柴薪", "Firewood" }, { "item.type.flame", "火焰", "Flame" },
+            { "item.type.ember", "余烬", "Ember" }, { "item.type.energy_bottle", "能量瓶", "Energy bottle" },
+            { "item.detail.energy", "储存能量：{0} / {1}", "Stored energy: {0} / {1}" }
+        };
+        for (int i = 0; i < text.GetLength(0); i++)
+        {
+            long key = (collection.SharedData.GetEntry(text[i, 0]) ?? collection.SharedData.AddKey(text[i, 0])).Id;
+            foreach (string locale in new[] { "zh-Hans", "en" })
+            {
+                var table = (StringTable)collection.GetTable(new LocaleIdentifier(locale));
+                var entry = table.GetEntry(key) ?? table.AddEntry(key, "");
+                entry.Value = text[i, locale == "en" ? 2 : 1];
+                EditorUtility.SetDirty(table);
+            }
+        }
+        EditorUtility.SetDirty(collection.SharedData);
+        var summary = new List<string>();
+        foreach (string guid in AssetDatabase.FindAssets("t:MonsterAffixDefinition", new[] { "Assets/Data/Preset" }))
+        {
+            var affix = AssetDatabase.LoadAssetAtPath<MonsterAffixDefinition>(AssetDatabase.GUIDToAssetPath(guid));
+            MonsterRarity rarity = affix.Id == "monster_storm_touched" || affix.Id == "monster_armored"
+                ? MonsterRarity.Rare : MonsterRarity.Magic;
+            Set(affix, "_rarity", rarity); EditorUtility.SetDirty(affix);
+            summary.Add(affix.Id + ": " + rarity);
+        }
+        AssetDatabase.SaveAssets();
+        return string.Join("; ", summary);
+    }
+
+    static StatModifierDefinition Modifier(string statFile, int minimum, int maximum)
+    {
+        var modifier = new StatModifierDefinition();
+        Set(modifier, "_stat", AssetDatabase.LoadAssetAtPath<StatDefinition>("Assets/Data/Preset/Stats/" + statFile + ".asset"));
+        Set(modifier, "_operation", ModifierOperation.Increase);
+        Set(modifier, "_scope", ModifierScope.Skill);
+        Set(modifier, "_valueRange", new Vector2(minimum, maximum));
+        return modifier;
+    }
+    static void Set(object target, string name, object value)
+    {
+        target.GetType().GetField(name, BindingFlags.Instance | BindingFlags.NonPublic).SetValue(target, value);
+    }
+    static void AppendReference(SerializedProperty entries, ScriptableObject asset)
+    {
+        for (int i = 0; i < entries.arraySize; i++) { if (entries.GetArrayElementAtIndex(i).objectReferenceValue == asset) { return; } }
+        int index = entries.arraySize++;
+        entries.GetArrayElementAtIndex(index).objectReferenceValue = asset;
+    }
+}

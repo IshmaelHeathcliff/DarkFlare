@@ -20,6 +20,9 @@ DarkFlare/
       hud-system.md
       skill-board/
         geometry.md
+        items-installation.md
+        energy-bottles.md
+        item-icons.md
       plan/
         alpha-0.7-plan.md
         alpha-0.7.1-skill-board-plan.md
@@ -60,7 +63,7 @@ DarkFlare/
       NPCs/Merchant/
       Effects/
       Environment/{GroundTiles,VisualSlice,WorldProps}/
-      Items/Equipment/
+      Items/{Equipment,SkillBoard}/
       UI/{Frames,Icons,Phase5}/
     Tiles/
       Environment/Ground/
@@ -172,6 +175,7 @@ DarkFlare/
         Items/
         Loot/
         Monsters/
+        SkillBoard/
         Skills/
         Stats/
         Tags/
@@ -192,6 +196,7 @@ DarkFlare/
         Inventory/
         Items/
         Loot/
+        SkillBoard/
         Skills/
         Spawning/
         Trading/
@@ -203,6 +208,8 @@ DarkFlare/
       ConfigCenterWindow.cs
       GroundTilemapSetup.cs
       PseudoLocalizationUtility.cs
+      SkillBoard/
+        SkillBoardRuntimeWindow.cs
       VisualAssetSingleSpriteMigration.cs
     Tests/
       EditMode/                       # 程序集 DarkFlare.Tests.EditMode
@@ -361,6 +368,7 @@ Addressables 的配置目录，包含资源组、模板和构建器配置。后�
 - `Data/Actors/CharacterDefinition.cs`
 - `Data/Affixes/AffixDefinition.cs`
 - `Data/Items/ItemBaseDefinition.cs`
+- `Data/SkillBoard/SkillBoardItemConfiguration.cs`：棋盘道具组合配置、固定变体和容量校验
 - `Data/Loot/LootTableDefinition.cs`
 - `Data/Skills/ProjectileSkillDefinition.cs`
 - `Data/Monsters/MonsterDefinition.cs`
@@ -384,6 +392,7 @@ Addressables 的配置目录，包含资源组、模板和构建器配置。后�
 - `Gameplay/Events/GameplayEvents.cs`：金币、背包、装备、打造、交易、交互焦点、菜单请求、暂停和 Actor 注册 / 注销领域事件
 - `Gameplay/UI/GetAttributeDetailsQuery.cs`、`AttributePanelController.cs`：独立属性只读解释 / 动态状态、分组来源、本地化与有作用域的刷新；详见[属性详情](./attribute-details.md)
 - `Gameplay/Combat/StatExplanation.cs`、`PlayerSkillState.cs`：共享消费者边界、正式解析 trace 与 Session 技能状态 Adapter
+- `Gameplay/SkillBoard/`：几何 / 生成、实际道具变体、棋盘状态与原子安装 / 取回、能量瓶专栏及击杀收集；`Editor/SkillBoard/` 提供正式 Query / Command 的开发验证入口
 - `Gameplay/UI/GetHudSnapshotQuery.cs`、`HudController.cs`：生命、金币和最终有效属性的只读 HUD 快照与事件驱动控制器
 - `Gameplay/UI/GetInventorySnapshotQuery.cs`、`InventoryPanelController.cs`：只读背包快照、共享 10×6 格子、四槽装备、拖拽与拿起 / 放置控制器
 - `Gameplay/UI/ItemTooltipView.cs`、`ItemDragQueries.cs`、`MerchantGridLayout.cs`：唯一物品浮窗、拖拽目标只读查询和商人确定性虚拟格子排布

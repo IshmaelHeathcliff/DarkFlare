@@ -2176,6 +2176,26 @@ MonoBehaviour:
     m_Localized: The reset was not saved. The previous map state was kept. Please retry.
     m_Metadata:
       m_Items: []
+  - m_Id: 17549214597767168
+    m_Localized: Firewood
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17549214669070336
+    m_Localized: Flame
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17549214669070337
+    m_Localized: Ember
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17549214669070338
+    m_Localized: Energy bottle
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17549214669070339
+    m_Localized: 'Stored energy: {0} / {1}'
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:

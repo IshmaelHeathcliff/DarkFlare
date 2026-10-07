@@ -1,0 +1,11 @@
+{
+  "context": "Isolated Editor Session; actual Odin button handlers use production Query and Command",
+  "playerId": "local_player",
+  "installed": { "firewoods": 1, "flames": 1, "energyBottle": 1 },
+  "bottleEnergy": 333,
+  "capacity": 1000,
+  "rejectedRemoval": "请先逐件取出火焰和余烬",
+  "screenshot": "debug-window.png",
+  "cleanup": "Window closed, actor destroyed, preview scene closed, architecture scope stopped, input disposed",
+  "scope": "Development entry only; not the final player skill-board UI or a controller-device check"
+}

@@ -40,6 +40,7 @@ namespace DarkFlare
 
     public sealed class ItemInstanceDto : IPersistenceDto
     {
+        public SkillBoardItemDto SkillBoard { get; set; }
         public int Quantity { get; set; } = 1;
 
         public string InstanceId { get; set; } = string.Empty;
@@ -127,6 +128,7 @@ namespace DarkFlare
 
     public sealed class RuntimeStateDto : IPersistenceDto
     {
+        public SkillBoardSaveDto SkillBoard { get; set; } = new SkillBoardSaveDto();
         public List<ItemInstanceDto> Items { get; set; } = new List<ItemInstanceDto>();
 
         public InventoryLayoutDto Inventory { get; set; } = new InventoryLayoutDto();

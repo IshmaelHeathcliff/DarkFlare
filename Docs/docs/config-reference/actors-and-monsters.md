@@ -68,6 +68,10 @@
 | `_affixPool` | `List<MonsterAffixDefinition>` / 空 | 正式怪物必须有足够合法候选；无空引用、重复引用 | 怪物实例生成按权重无放回选择 |
 | `_minimumAffixCount` | `int` / `0` | 非负且不大于最大值 | 实例生成先在闭区间内掷数量；移除词条不涉及此字段 |
 | `_maximumAffixCount` | `int` / `0` | 不小于最小值，且不超过可用互斥组数 | 普通怪物上限为 `2`，守卫 Boss 为 `0`；非法池不会静默 Clamp |
+| `_baseEnergy` | `int` / `10` | 大于 0；普通样例 10，Boss 100 | EnergyBottleSystem 在有效玩家击杀后计算收益；不影响掉落随机 |
+| `_rarity` | `MonsterRarity` / `Normal` | Normal / Magic / Rare / Unique（0–3） | 整体稀有度为固定定义；基础收益乘以 1＋等级，与生成权重无关 |
+| `_energyPerAffix` | `int` / `5` | 大于 0 | 每条实际怪物词条增加此值；首轮平衡暂定 |
+| `_energyPerAffixRarity` | `int` / `5` | 大于 0 | 实际词条稀有度等级总和乘此值；整数运算检查溢出 |
 
 ## MonsterBehaviorDefinition
 
@@ -122,6 +126,7 @@
 | `_localizedName` | `LocalizedContentReference` / 空引用 | 正式资产必填；固定使用 `affixes/monster_affix.<id>.name` | `MonsterAffixVisual` 监听语言切换并重新解析 |
 | `_groupId` | `string` / 空 | 必填；小写 `snake_case` | 单个怪物实例同组最多一项，生成器互斥过滤消费 |
 | `_weight` | `int` / `100` | 必须大于 `0` | 合法候选内加权随机；为相对权重 |
+| `_rarity` | `MonsterRarity` / `Magic` | Normal / Magic / Rare / Unique（0–3） | 词条独立稀有度，仅影响能量收益；不从 Weight 反推；正式 storm_touched / armored 为 Rare，其余 Magic |
 | `_displayColor` | `Color` / 白色 | Alpha 必须大于 `0`，保证可辨认 | 世界词条标签消费；不影响战斗数值 |
 | `_modifiers` | `List<StatModifierDefinition>` / 空 | 至少一项；只允许怪物管线可消费组合 | `MonsterAffixGenerator` 掷值，`EffectiveStats` 与元素附伤消费 |
 

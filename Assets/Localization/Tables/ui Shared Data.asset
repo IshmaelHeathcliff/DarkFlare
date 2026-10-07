@@ -2115,6 +2115,26 @@ MonoBehaviour:
     m_Key: flow.error.map_reset_save_failed
     m_Metadata:
       m_Items: []
+  - m_Id: 17549214597767168
+    m_Key: item.type.firewood
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17549214669070336
+    m_Key: item.type.flame
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17549214669070337
+    m_Key: item.type.ember
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17549214669070338
+    m_Key: item.type.energy_bottle
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17549214669070339
+    m_Key: item.detail.energy
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

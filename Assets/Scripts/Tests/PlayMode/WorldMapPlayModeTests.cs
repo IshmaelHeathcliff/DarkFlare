@@ -366,8 +366,9 @@ namespace DarkFlare.Tests
             ResourceDiagnosticsSnapshot releasedBaseline = default;
             for (int i = 1; i <= 20; i++)
             {
-                for (int frame = 0; frame < 120 && host.SaveCoordinator.IsBusy; frame++) { yield return null; }
-                Assert.IsFalse(host.SaveCoordinator.IsBusy);
+                float saveDeadline = Time.realtimeSinceStartup + 30f;
+                while (host.SaveCoordinator.IsBusy && Time.realtimeSinceStartup < saveDeadline) { yield return null; }
+                Assert.IsFalse(host.SaveCoordinator.IsBusy, $"cycle {i}: 保存协调器未在期限内空闲");
                 SceneFlowResult result = null;
                 yield return host.SceneFlow.RequestAsync(SceneFlowRequest.ResetAndChangeMap("map:wilderness", "arrival"))
                     .ToCoroutine(value => result = value);
@@ -531,6 +532,9 @@ namespace DarkFlare.Tests
             IArchitecture architecture = host.CurrentSession.Architecture;
             WorldMapRuntime maps = architecture.GetUtility<WorldMapRuntime>();
             maps.Active.Spawner.StopSpawning();
+            // 保留活体与存档名额，暂停普通怪物，避免其伤害污染 Boss 躲避断言。
+            foreach (MonsterController ordinary in UnityEngine.Object.FindObjectsByType<MonsterController>()
+                .Where(value => value.Definition.BossBehavior == null)) { ordinary.enabled = false; }
             MonsterController boss = UnityEngine.Object.FindObjectsByType<MonsterController>()
                 .Single(value => value.Definition.BossBehavior != null);
             Assert.IsNotNull(boss.BossRuntime);

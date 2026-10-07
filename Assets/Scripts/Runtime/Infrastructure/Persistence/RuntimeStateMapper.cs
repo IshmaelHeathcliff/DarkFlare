@@ -77,6 +77,7 @@ namespace DarkFlare
         public IReadOnlyList<ItemInstance> MerchantStock { get; }
 
         public IReadOnlyList<ActorIdentityDto> Actors { get; }
+        public SkillBoardState SkillBoard { get; }
 
         internal DetachedRuntimeState(
             IReadOnlyDictionary<ItemInstanceId, ItemInstance> items,
@@ -84,7 +85,8 @@ namespace DarkFlare
             IReadOnlyList<DetachedEquipmentLoadout> equipment,
             TraderDefinition trader,
             IReadOnlyList<ItemInstance> merchantStock,
-            IReadOnlyList<ActorIdentityDto> actors)
+            IReadOnlyList<ActorIdentityDto> actors,
+            SkillBoardState skillBoard)
         {
             Items = items;
             Inventory = inventory;
@@ -92,10 +94,11 @@ namespace DarkFlare
             Trader = trader;
             MerchantStock = merchantStock;
             Actors = actors;
+            SkillBoard = skillBoard;
         }
     }
 
-    public static class RuntimeStateMapper
+    public static partial class RuntimeStateMapper
     {
         public static DtoMapResult<ItemInstanceDto> ToDto(ItemInstance item, ContentCatalog catalog)
         {
@@ -129,6 +132,7 @@ namespace DarkFlare
                 Quality = item.Quality,
                 Quantity = item.Quantity,
                 Durability = item.Durability,
+                SkillBoard = MapSkillBoardItem(item, catalog, issues),
                 ImplicitModifiers = MapModifiersToDto(item.ImplicitModifiers, catalog, "item.implicitModifiers", issues),
                 Prefixes = MapAffixesToDto(item.Prefixes, catalog, "item.prefixes", issues),
                 Suffixes = MapAffixesToDto(item.Suffixes, catalog, "item.suffixes", issues),
@@ -294,6 +298,9 @@ namespace DarkFlare
                 ownedItems,
                 issues);
 
+            SkillBoardState skillBoard = RestoreSkillBoard(dto.SkillBoard, items,
+                new HashSet<string>(actors.Where(a => a.Kind == ActorIdentityKind.Player).Select(a => a.InstanceId)), ownedItems, issues);
+
             if (issues.Count > 0)
             {
                 return Failed<DetachedRuntimeState>(issues);
@@ -305,7 +312,8 @@ namespace DarkFlare
                 equipment.AsReadOnly(),
                 trader,
                 merchantStock.AsReadOnly(),
-                actors.AsReadOnly());
+                actors.AsReadOnly(),
+                skillBoard);
             return Success(state);
         }
 
@@ -389,6 +397,7 @@ namespace DarkFlare
                 Durability = dto.Durability,
             };
             item.TrySetQuantity(dto.Quantity);
+            RestoreSkillBoardItem(item, dto.SkillBoard, catalog, path + ".skillBoard", issues);
             RestoreAffixes(item, dto.Prefixes, catalog, $"{path}.prefixes", issues);
             RestoreAffixes(item, dto.Suffixes, catalog, $"{path}.suffixes", issues);
             return item;

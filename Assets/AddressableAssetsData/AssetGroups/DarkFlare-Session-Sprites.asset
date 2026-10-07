@@ -85,6 +85,11 @@ MonoBehaviour:
     - df.session
     - df.sprite
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3834a73285e209741b795e1ac2b7aba1
+    m_Address: Assets/Art/Sprites/Items/SkillBoard/firewood_small.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 45e71ffbb0e2c6a49ade049895c37eab
     m_Address: ui/icons/equipment-slots/ui-icon-hands
     m_ReadOnly: 0
@@ -106,6 +111,16 @@ MonoBehaviour:
     - df.session
     - df.sprite
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5e0fa862a6527ca4c8279e333ff42ff5
+    m_Address: Assets/Art/Sprites/Items/SkillBoard/energy_bottle_medium.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6d432d0ef87da5f40acfa3e248c11874
+    m_Address: Assets/Art/Sprites/Items/SkillBoard/energy_bottle_small.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 7ea0a2ad891e6cd4891051d02b338cf0
     m_Address: ui/icons/items/leather-armor
     m_ReadOnly: 0
@@ -119,6 +134,11 @@ MonoBehaviour:
     m_SerializedLabels:
     - df.session
     - df.sprite
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 846bd88c705c966449b34bce0ac4bd6e
+    m_Address: Assets/Art/Sprites/Items/SkillBoard/firewood_large.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 84a274ee131612d49950b7c7abcce919
     m_Address: gameplay/sprites/items/cleansing_potion
@@ -134,6 +154,11 @@ MonoBehaviour:
     - df.session
     - df.sprite
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8dd6eb8a588337b4699634bc49f8a275
+    m_Address: Assets/Art/Sprites/Items/SkillBoard/firewood_medium.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8f112e6ebb039bf499e46e941051893e
     m_Address: ui/icons/items/leather-belt
     m_ReadOnly: 0
@@ -147,6 +172,11 @@ MonoBehaviour:
     m_SerializedLabels:
     - df.session
     - df.sprite
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9b60919ec63d2fa41bc72c6410874ccc
+    m_Address: Assets/Art/Sprites/Items/SkillBoard/ember_power.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9d17e7178383e4e40876ff746046ee68
     m_Address: gameplay/sprites/statuses/fortitude
@@ -168,6 +198,11 @@ MonoBehaviour:
     m_SerializedLabels:
     - df.session
     - df.sprite
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a3ed89418bec4ff48a5e66531b0988df
+    m_Address: Assets/Art/Sprites/Items/SkillBoard/flame_projectile.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a79ac64f5b2207c4dad1ea9dbd87f9ec
     m_Address: ui/icons/items/ruby-ring
@@ -259,6 +294,11 @@ MonoBehaviour:
     m_SerializedLabels:
     - df.session
     - df.sprite
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d944fb0545e029d409623c3affcbc83e
+    m_Address: Assets/Art/Sprites/Items/SkillBoard/energy_bottle_large.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: dada93ae602fc6b4fac4c23ee7b69a84
     m_Address: ui/icons/items/silver-pendant

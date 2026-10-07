@@ -104,6 +104,8 @@ namespace DarkFlare
         public int BaseValue { get; }
 
         public int CalculatedValue { get; }
+        public int BottleEnergy { get; }
+        public int BottleCapacity { get; }
 
         public IReadOnlyList<DamageDetailSnapshot> Damages { get; }
 
@@ -144,6 +146,13 @@ namespace DarkFlare
             Weight = weight;
             BaseValue = baseValue;
             CalculatedValue = calculatedValue;
+            BottleEnergy = 0;
+            BottleCapacity = 0;
+            if (item?.BaseDefinition?.ItemType == ItemType.EnergyBottle)
+            {
+                BottleEnergy = item.SkillBoardState?.Energy ?? 0;
+                BottleCapacity = item.BaseDefinition.SkillBoard.EnergyCapacity;
+            }
             Damages = damages;
             ImplicitModifiers = implicitModifiers;
             Prefixes = prefixes;

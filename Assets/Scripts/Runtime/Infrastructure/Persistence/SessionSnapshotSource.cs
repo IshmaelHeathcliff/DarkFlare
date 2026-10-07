@@ -140,12 +140,18 @@ namespace DarkFlare
             InventoryModel inventory = architecture.GetModel<InventoryModel>();
             EquipmentModel equipment = architecture.GetModel<EquipmentModel>();
             EconomyModel economy = architecture.GetModel<EconomyModel>();
+            SkillBoardModel board = architecture.GetModel<SkillBoardModel>();
+            if (board.PlayerId.Length > 0 && board.PlayerId != player.Id.Value)
+            {
+                Add(issues, DtoMapIssueCode.OwnershipConflict, "payload.profile.skillBoard", "棋盘属于其他玩家");
+            }
             EquipmentLoadout playerLoadout = equipment.GetLoadout(player.Actor)
                 ?? new EquipmentLoadout();
             List<ItemInstance> items = CollectItems(
                 inventory,
                 playerLoadout,
                 economy,
+                board.State,
                 worldDrops,
                 issues);
             List<ItemInstanceDto> itemDtos = MapItems(items, issues);
@@ -157,6 +163,7 @@ namespace DarkFlare
                 {
                     ProfileId = "local_default",
                     PlayerId = player.Id.Value,
+                    SkillBoard = RuntimeStateMapper.ToDto(player.Id.Value, board.State),
                     Gold = inventory.Gold,
                     Inventory = RuntimeStateMapper.ToDto(inventory.Grid),
                     Equipment = new List<EquipmentLoadoutDto>
@@ -241,10 +248,16 @@ namespace DarkFlare
             InventoryModel inventory,
             EquipmentLoadout equipment,
             EconomyModel economy,
+            SkillBoardState board,
             IReadOnlyList<LootPickupController> worldDrops,
             List<DtoMapIssue> issues)
         {
             Dictionary<ItemInstanceId, ItemInstance> byId = new Dictionary<ItemInstanceId, ItemInstance>();
+
+            foreach (ItemInstance item in board.Items)
+            {
+                AddItem(item, "payload.profile.skillBoard", byId, issues);
+            }
 
             foreach (ItemInstance item in inventory.Grid.Placements.Keys)
             {

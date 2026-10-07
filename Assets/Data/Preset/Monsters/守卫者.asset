@@ -12,6 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4eb121f8dc76a8f4695a759b90dc6ce7, type: 3}
   m_Name: "\u5B88\u536B\u8005"
   m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.MonsterDefinition
+  _baseEnergy: 100
+  _rarity: 3
+  _energyPerAffix: 5
+  _energyPerAffixRarity: 5
   _id: guardian
   _displayName: "\u5B88\u536B\u8005"
   _localizedName:

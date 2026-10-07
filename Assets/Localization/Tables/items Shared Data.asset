@@ -179,6 +179,38 @@ MonoBehaviour:
     m_Key: item.cleansing_potion.name
     m_Metadata:
       m_Items: []
+  - m_Id: 17545695232778240
+    m_Key: item.firewood_large.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17545696415571968
+    m_Key: item.firewood_medium.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17545697287987200
+    m_Key: item.firewood_small.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17545698235899904
+    m_Key: item.flame_projectile.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17545699108315136
+    m_Key: item.ember_power.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17545699972341760
+    m_Key: item.energy_bottle_small.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17545700823785472
+    m_Key: item.energy_bottle_medium.name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17545701725560832
+    m_Key: item.energy_bottle_large.name
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

@@ -60,6 +60,39 @@ namespace DarkFlare.Tests
                 result.Value.Monsters[0].Instance.EffectiveStats.GetValue(StatIds.MaxHealth));
         }
 
+        [Test]
+        public void Prepare_HistoricalPlayerAddsEmptyBoardWithoutChangingItemsSkillOrRandom()
+        {
+            string raw = MigrationFixtureUtility.ReadUtf8("save-v9-migrated-player.json");
+            JObject original = JObject.Parse(raw);
+            SaveDeserializationResult migrated = new NewtonsoftSaveSerializer().Deserialize(System.Text.Encoding.UTF8.GetBytes(raw));
+            Assert.That(migrated.Succeeded, Is.True, migrated.Code + ": " + string.Join(";", migrated.ValidationIssues.Select(x => x.Message)));
+            Assert.That(migrated.WasMigrated, Is.True);
+            ProfileSaveData profile = migrated.Document.Payload.Profile;
+            Assert.That(profile.SkillBoard.ActorInstanceId, Is.EqualTo(profile.PlayerId));
+            Assert.That(profile.SkillBoard.Firewoods, Is.Empty);
+            Assert.That(profile.SkillBoard.Embeddings, Is.Empty);
+            Assert.That(profile.SkillBoard.EnergyBottleInstanceId, Is.Null.Or.Empty);
+            Assert.That(migrated.Document.Payload.Items.All(x => x.SkillBoard == null), Is.True);
+            SavePayloadDto historical = original["payload"].ToObject<SavePayloadDto>();
+            JObject expected = JObject.FromObject(historical);
+            JObject actual = JObject.FromObject(migrated.Document.Payload);
+            ((JObject)expected["Profile"]).Remove("SkillBoard");
+            ((JObject)actual["Profile"]).Remove("SkillBoard");
+            Assert.That(JToken.DeepEquals(expected, actual), Is.True,
+                "新棋盘之外的全部历史物品、技能冷却、资源及随机状态必须保持");
+            PreparedRestoreResult prepared = SaveRestorePreparer.Prepare(migrated.Document, _catalog);
+            Assert.That(prepared.Succeeded, Is.True, Describe(prepared));
+            Assert.That(prepared.Value.RuntimeState.SkillBoard.Items, Is.Empty);
+            Assert.That(prepared.Value.PlayerSkill.Id, Is.EqualTo(migrated.Document.Payload.Run.Player.SkillContentId.Split(':')[1]));
+            SaveSerializationResult saved = new NewtonsoftSaveSerializer().Serialize(prepared.Value.Document);
+            Assert.That(saved.Succeeded, Is.True);
+            SaveDeserializationResult replay = new NewtonsoftSaveSerializer().Deserialize(saved.Bytes);
+            Assert.That(replay.Succeeded, Is.True);
+            Assert.That(replay.WasMigrated, Is.False);
+            Assert.That(JToken.DeepEquals(JToken.FromObject(prepared.Value.Document.Payload), JToken.FromObject(replay.Document.Payload)), Is.True);
+        }
+
         [TestCase(3)]
         [TestCase(4)]
         [TestCase(5)]

@@ -1,12 +1,12 @@
 # Alpha 0.7 执行计划
 
-状态：2026-10-06，**0.7.0 已完成，0.7.1 阶段一几何与生成已完成，后四阶段待实施**。当前运行版本 `0.7.1-alpha.1`；日常 API 见[版本管理](../version-management.md)，当前交付见[几何模块](../skill-board/geometry.md)与[当次验收](archive/0.7.1/acceptance/geometry/README.md)。0.7 里程碑继续保持 alpha，后续入口为[技能面板总计划](alpha-0.7.1-skill-board-plan.md)。
+状态：2026-10-07，**0.7.0 已完成，0.7.1 阶段一、二已完成，阶段三至五待实施**。当前运行版本 `0.7.1-alpha.2`；日常 API 见[版本管理](../version-management.md)，当前交付见[安装模块](../skill-board/items-installation.md)、[能量瓶模块](../skill-board/energy-bottles.md)与[当次验收](archive/0.7.1/acceptance/items-energy/README.md)。0.7 里程碑继续保持 alpha，下一步按[技能面板总计划](alpha-0.7.1-skill-board-plan.md)明确阶段三细则。
 
 ## 基线与顺序
 
 - 0.7 启动基线：`751225c`、`0.6.5-alpha`，见[启动记录](archive/0.7/plans/alpha-0.7-startup.md)。
-- 当前交付：`0.7.1-alpha.1`；core v10、存档 Schema 9、设置 Schema 1、地图格式 V4 保持不变。
-- 0.7.1 首次准备基线为 `main` / `e2b97d2`；2026-10-06 规划基线已更新为 `main` / `bd01a4c`、Unity `6000.6.4f1`。0.7.0 结果保留升级前历史含义，当前环境已通过 EditMode 907/907、PlayMode 102/102，见[启动核对与更新](archive/0.7.1/plans/alpha-0.7.1-startup.md)。
+- 当前交付：`0.7.1-alpha.2`；core v11、存档 Schema 10、设置 Schema 1、地图格式 V4。
+- 0.7.1 首次准备基线为 `main` / `e2b97d2`，阶段一规划基线为 `bd01a4c`；阶段二实施基线为 `main` / `9b82259`、Unity `6000.6.4f1`。0.7.0 结果保留升级前历史含义，当前环境已通过 EditMode 907/907、PlayMode 102/102，见[启动核对与更新](archive/0.7.1/plans/alpha-0.7.1-startup.md)。
 - 后续按 `0.7.1-alpha`、`0.7.2-alpha` 推进；阶段使用各自的 `alpha.1`、`alpha.2` 等完整版本。
 - 下一里程碑仍处于 alpha 时进入 `0.8.0-alpha`，明确进入 beta 时进入 `0.8.0-beta`。
 - 阶段号只在实现与相关验证完成后推进；小版本收尾保留最终阶段号，不退回无阶段号的 `alpha`。
@@ -17,7 +17,7 @@
 | --- | --- | --- |
 | `0.7.0-alpha.1` | 不可变纯 C# SemVer 对象，严格解析、数值及先行优先级、构建身份、文化独立性和长数字回归 | 完成，52/52 定向 EditMode |
 | `0.7.0-alpha.2` | `GameVersion` 显式解析桥接，历史原始字符串与独立数据版本域兼容 | 完成，32/32 定向回归；收尾 EditMode 882/882、PlayMode 102/102 |
-| `0.7.1-alpha` | 六边形技能面板、柴薪 / 火焰 / 余烬；能量瓶、充能兑换、属性与天赋点亮；技能重构和六键施法、交易、存档与键鼠 / 手柄闭环 | 阶段一完成，后四阶段待实施；[执行与验收入口](alpha-0.7.1-skill-board-plan.md) |
+| `0.7.1-alpha` | 六边形技能面板、柴薪 / 火焰 / 余烬；能量瓶、充能兑换、属性与天赋点亮；技能重构和六键施法、交易、存档与键鼠 / 手柄闭环 | 阶段一、二完成；阶段三至五待实施；[执行与验收入口](alpha-0.7.1-skill-board-plan.md) |
 
 0.7.0 未构建 Player，也未执行真实设备、跨进程或当前版本性能矩阵；Editor 结果不能替代这些验收。具体测试范围、源码身份与兼容结论已归档。
 

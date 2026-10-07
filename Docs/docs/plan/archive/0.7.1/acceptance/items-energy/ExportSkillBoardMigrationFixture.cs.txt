@@ -1,0 +1,38 @@
+using System;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+using DarkFlare;
+
+public static class ExportSkillBoardMigrationFixture
+{
+    public static object Export()
+    {
+        const string root = "Assets/Scripts/Tests/Fixtures/Migration/";
+        MethodInfo migrate = typeof(JsonMigrationPipeline).GetMethod("Migrate");
+        MethodInfo parse = typeof(NewtonsoftSaveSerializer).GetMethod("ParseRoot", BindingFlags.Static | BindingFlags.NonPublic);
+        object source = parse.Invoke(null, new object[] { File.ReadAllBytes(root + "save-v5-navigation.json") });
+        JsonMigrationRegistryBuildResult registry = JsonMigrationRegistry.Build(MigrationDataDomain.Save, 9,
+            new IJsonMigrationStep[] { new LegacySaveV0ToV1Migration(), new ItemQuantitySaveMigration(),
+                new StatusSaveMigration(), new WorldMapSaveMigration(), new NavigationSaveMigration(),
+                new MonsterBehaviorSaveMigration(), new BossEncounterSaveMigration(), new FiniteSpawnSaveMigration(),
+                new MapInstanceEpochSaveMigration() });
+        JsonMigrationResult migration = (JsonMigrationResult)migrate.Invoke(
+            new JsonMigrationPipeline(registry.Registry, "header.saveSchemaVersion"), new object[] { source, 5 });
+        if (!migration.Succeeded) { throw new InvalidOperationException(migration.Exception?.ToString()); }
+        var result = migration.Document;
+        MethodInfo hash = typeof(NewtonsoftSaveSerializer).GetMethod("ComputePayloadSha256", BindingFlags.Static | BindingFlags.NonPublic);
+        result["header"]["payloadSha256"] = (string)hash.Invoke(null, new object[] { result["payload"] });
+        string path = root + "save-v9-migrated-player.json";
+        MethodInfo canonical = typeof(NewtonsoftSaveSerializer).GetMethod("CanonicalizeObject", BindingFlags.Static | BindingFlags.NonPublic);
+        MethodInfo write = typeof(NewtonsoftSaveSerializer).GetMethod("WriteCanonicalUtf8", BindingFlags.Static | BindingFlags.NonPublic);
+        byte[] bytes = (byte[])write.Invoke(null, new[] { canonical.Invoke(null, new object[] { result }) });
+        File.WriteAllBytes(path, bytes);
+        SaveDeserializationResult check = new NewtonsoftSaveSerializer().Deserialize(File.ReadAllBytes(path));
+        if (!check.Succeeded) { throw new InvalidOperationException(check.Code + ": " + string.Join(";", check.ValidationIssues.Select(x=>x.Message))); }
+        SaveSerializationResult migratedSave = new NewtonsoftSaveSerializer().Serialize(check.Document);
+        File.WriteAllBytes("Temp/migrated-v10.json", migratedSave.Bytes);
+        return new { Path = path, Provenance = "Released Schema 5 Player fixture through unchanged 5→9 migration steps", migration.CompletedStepIds, check.WasMigrated };
+    }
+}

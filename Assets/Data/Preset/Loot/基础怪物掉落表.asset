@@ -147,6 +147,54 @@ MonoBehaviour:
     _prefixCount: 0
     _suffixCount: 0
     _quantityRange: {x: 1, y: 3}
+  - _item: {fileID: 11400000, guid: e24dd14bd03d2f847a6c6013bbbd3b2f, type: 2}
+    _weight: 12
+    _rarity: 0
+    _prefixCount: 0
+    _suffixCount: 0
+    _quantityRange: {x: 1, y: 1}
+  - _item: {fileID: 11400000, guid: ec7412cff5e13dd47a1f648657e04633, type: 2}
+    _weight: 12
+    _rarity: 0
+    _prefixCount: 0
+    _suffixCount: 0
+    _quantityRange: {x: 1, y: 1}
+  - _item: {fileID: 11400000, guid: f0c372e90e5507a4d87743dc744af524, type: 2}
+    _weight: 12
+    _rarity: 0
+    _prefixCount: 0
+    _suffixCount: 0
+    _quantityRange: {x: 1, y: 1}
+  - _item: {fileID: 11400000, guid: 13ed68e0252bac949a311728db606bef, type: 2}
+    _weight: 12
+    _rarity: 0
+    _prefixCount: 0
+    _suffixCount: 0
+    _quantityRange: {x: 1, y: 1}
+  - _item: {fileID: 11400000, guid: 0c093fb16af02674da0e6d3f8d2d7567, type: 2}
+    _weight: 12
+    _rarity: 0
+    _prefixCount: 0
+    _suffixCount: 0
+    _quantityRange: {x: 1, y: 1}
+  - _item: {fileID: 11400000, guid: 9cf119dc533e2104d9f8e4a439d67f6c, type: 2}
+    _weight: 12
+    _rarity: 0
+    _prefixCount: 0
+    _suffixCount: 0
+    _quantityRange: {x: 1, y: 1}
+  - _item: {fileID: 11400000, guid: 8dd303f8e3ece4a4a95f532dcd02743a, type: 2}
+    _weight: 12
+    _rarity: 0
+    _prefixCount: 0
+    _suffixCount: 0
+    _quantityRange: {x: 1, y: 1}
+  - _item: {fileID: 11400000, guid: 585fe89c8ae97fc418bdda3f93af438f, type: 2}
+    _weight: 12
+    _rarity: 0
+    _prefixCount: 0
+    _suffixCount: 0
+    _quantityRange: {x: 1, y: 1}
   _affixPool:
   - {fileID: 11400000, guid: de8f44ef4c5945044bd186a92f9deb34, type: 2}
   - {fileID: 11400000, guid: f4200000000000000000000000000002, type: 2}

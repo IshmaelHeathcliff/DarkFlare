@@ -78,6 +78,7 @@ namespace DarkFlare
 
     public sealed class ProfileSaveData : IPersistenceDto
     {
+        public SkillBoardSaveDto SkillBoard { get; set; } = new SkillBoardSaveDto();
         public string ProfileId { get; set; } = string.Empty;
 
         public string PlayerId { get; set; } = string.Empty;

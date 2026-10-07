@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9c13ea94f47ee94bb2bfc8d8750a0b1, type: 3}
   m_Name: "08\u88C5\u7532\u7684"
   m_EditorClassIdentifier: DarkFlare.Runtime::DarkFlare.MonsterAffixDefinition
+  _rarity: 2
   _id: monster_armored
   _displayName: "\u88C5\u7532"
   _localizedName:

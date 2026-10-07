@@ -9,6 +9,19 @@ namespace DarkFlare
     [CreateAssetMenu(menuName = "DarkFlare/Data/Monsters/Monster Definition", fileName = "MonsterDefinition")]
     public class MonsterDefinition : ScriptableObject, IContentDefinition
     {
+        [SerializeField, MinValue(1), LabelText("基础击杀能量（暂定）")]
+        int _baseEnergy = 10;
+        [SerializeField, LabelText("怪物稀有度")]
+        MonsterRarity _rarity;
+        [SerializeField, MinValue(1), LabelText("每条词条能量加成（暂定）")]
+        int _energyPerAffix = 5;
+        [SerializeField, MinValue(1), LabelText("每级词条稀有度能量加成（暂定）")]
+        int _energyPerAffixRarity = 5;
+        public int BaseEnergy => _baseEnergy;
+        public MonsterRarity Rarity => _rarity;
+        public int EnergyPerAffix => _energyPerAffix;
+        public int EnergyPerAffixRarity => _energyPerAffixRarity;
+
         [SerializeField]
         [LabelText("稳定ID")]
         string _id = string.Empty;

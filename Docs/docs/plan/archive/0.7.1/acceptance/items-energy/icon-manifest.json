@@ -1,0 +1,212 @@
+{
+  "schema_version": 1,
+  "canvas": {
+    "width": 128,
+    "height": 128
+  },
+  "assets": [
+    {
+      "image": "../../../../../../../Assets/Art/Sprites/Items/SkillBoard/firewood_large.png",
+      "alpha_coverage": [
+        0.08,
+        0.65
+      ],
+      "visible_width": [
+        72,
+        100
+      ],
+      "name": "firewood_large",
+      "visual_center_y": [
+        52,
+        82
+      ],
+      "edge_clearance": 12,
+      "visual_center_x": [
+        54,
+        74
+      ],
+      "visible_height": [
+        72,
+        100
+      ]
+    },
+    {
+      "name": "firewood_medium",
+      "image": "../../../../../../../Assets/Art/Sprites/Items/SkillBoard/firewood_medium.png",
+      "visible_width": [
+        72,
+        100
+      ],
+      "visible_height": [
+        72,
+        100
+      ],
+      "alpha_coverage": [
+        0.08,
+        0.65
+      ],
+      "visual_center_x": [
+        54,
+        74
+      ],
+      "visual_center_y": [
+        52,
+        82
+      ],
+      "edge_clearance": 12
+    },
+    {
+      "name": "firewood_small",
+      "image": "../../../../../../../Assets/Art/Sprites/Items/SkillBoard/firewood_small.png",
+      "visible_width": [
+        72,
+        100
+      ],
+      "visible_height": [
+        72,
+        100
+      ],
+      "alpha_coverage": [
+        0.08,
+        0.65
+      ],
+      "visual_center_x": [
+        54,
+        74
+      ],
+      "visual_center_y": [
+        52,
+        82
+      ],
+      "edge_clearance": 12
+    },
+    {
+      "name": "flame_projectile",
+      "image": "../../../../../../../Assets/Art/Sprites/Items/SkillBoard/flame_projectile.png",
+      "visible_width": [
+        72,
+        100
+      ],
+      "visible_height": [
+        72,
+        100
+      ],
+      "alpha_coverage": [
+        0.08,
+        0.65
+      ],
+      "visual_center_x": [
+        54,
+        74
+      ],
+      "visual_center_y": [
+        52,
+        82
+      ],
+      "edge_clearance": 12
+    },
+    {
+      "name": "ember_power",
+      "image": "../../../../../../../Assets/Art/Sprites/Items/SkillBoard/ember_power.png",
+      "visible_width": [
+        72,
+        100
+      ],
+      "visible_height": [
+        72,
+        100
+      ],
+      "alpha_coverage": [
+        0.08,
+        0.65
+      ],
+      "visual_center_x": [
+        54,
+        74
+      ],
+      "visual_center_y": [
+        52,
+        82
+      ],
+      "edge_clearance": 12
+    },
+    {
+      "name": "energy_bottle_small",
+      "image": "../../../../../../../Assets/Art/Sprites/Items/SkillBoard/energy_bottle_small.png",
+      "visible_width": [
+        72,
+        100
+      ],
+      "visible_height": [
+        72,
+        100
+      ],
+      "alpha_coverage": [
+        0.08,
+        0.65
+      ],
+      "visual_center_x": [
+        54,
+        74
+      ],
+      "visual_center_y": [
+        52,
+        82
+      ],
+      "edge_clearance": 12
+    },
+    {
+      "name": "energy_bottle_medium",
+      "image": "../../../../../../../Assets/Art/Sprites/Items/SkillBoard/energy_bottle_medium.png",
+      "visible_width": [
+        72,
+        100
+      ],
+      "visible_height": [
+        72,
+        100
+      ],
+      "alpha_coverage": [
+        0.08,
+        0.65
+      ],
+      "visual_center_x": [
+        54,
+        74
+      ],
+      "visual_center_y": [
+        52,
+        82
+      ],
+      "edge_clearance": 12
+    },
+    {
+      "name": "energy_bottle_large",
+      "image": "../../../../../../../Assets/Art/Sprites/Items/SkillBoard/energy_bottle_large.png",
+      "visible_width": [
+        72,
+        100
+      ],
+      "visible_height": [
+        72,
+        100
+      ],
+      "alpha_coverage": [
+        0.08,
+        0.65
+      ],
+      "visual_center_x": [
+        54,
+        74
+      ],
+      "visual_center_y": [
+        52,
+        82
+      ],
+      "edge_clearance": 12
+    }
+  ],
+  "alpha_required": true,
+  "family": "skill-board-items",
+  "alpha_threshold": 8
+}

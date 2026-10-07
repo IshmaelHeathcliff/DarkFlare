@@ -28,6 +28,32 @@ namespace DarkFlare
 
         public int Quantity { get; private set; } = 1;
 
+        public SkillBoardItemState SkillBoardState { get; private set; }
+
+        internal void InitializeSkillBoardState(SkillBoardItemState state)
+        {
+            if (SkillBoardState != null || state == null || !state.IsValidFor(BaseDefinition))
+            {
+                throw new System.ArgumentException("棋盘道具实例状态与定义不匹配");
+            }
+            SkillBoardState = state;
+        }
+
+        internal int CollectEnergy(int reward)
+        {
+            if (reward <= 0 || SkillBoardState == null || BaseDefinition.ItemType != ItemType.EnergyBottle)
+            {
+                return 0;
+            }
+            int collected = System.Math.Min(reward, BaseDefinition.SkillBoard.EnergyCapacity - SkillBoardState.Energy);
+            if (collected > 0)
+            {
+                SkillBoardState.AddEnergy(collected);
+                Revision++;
+            }
+            return collected;
+        }
+
         public bool CanStackWith(ItemInstance other)
         {
             return other != null && other != this && BaseDefinition != null
@@ -102,7 +128,7 @@ namespace DarkFlare
 
         public bool TryAddAffix(AffixInstance affix)
         {
-            if (affix == null || affix.Definition == null || BaseDefinition == null || !BaseDefinition.IsEquipment)
+            if (affix == null || affix.Definition == null || BaseDefinition == null || !BaseDefinition.CanHaveAffixes)
             {
                 return false;
             }

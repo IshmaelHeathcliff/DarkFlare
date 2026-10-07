@@ -33,6 +33,7 @@ namespace DarkFlare
             {
                 issues.Add("生成权重必须大于 0");
             }
+            if (!System.Enum.IsDefined(typeof(MonsterRarity), definition.Rarity)) { issues.Add("词条稀有度非法"); }
 
             if (definition.Modifiers == null || definition.Modifiers.Count == 0)
             {
