@@ -1,12 +1,12 @@
 # Alpha 0.7 执行计划
 
-状态：2026-10-15，**0.7.0 完成，0.7.1 阶段一至三完成，阶段四、五待实施**。当前运行版本 `0.7.1-alpha.3`；新交付见[成长模块](../skill-board/growth.md)与[当次验收](archive/0.7.1/acceptance/growth/README.md)。0.7 里程碑保持 alpha，下一阶段按[六键技能合同](alpha-0.7.1/manual-skills.md)准备手动施法与效果。
+状态：2026-10-15，**0.7.0 完成，0.7.1 阶段一至三完成并提交，阶段四已规划，阶段五待实施**。当前运行版本 `0.7.1-alpha.3`；新交付见[成长模块](../skill-board/growth.md)与[当次验收](archive/0.7.1/acceptance/growth/README.md)。0.7 里程碑保持 alpha，下一阶段按[阶段四计划](alpha-0.7.1/phase-4-execution.md)准备武器普通技能、六键手动施法与路径范围效果。
 
 ## 基线与顺序
 
 - 0.7 启动基线：`751225c`、`0.6.5-alpha`，见[启动记录](archive/0.7/plans/alpha-0.7-startup.md)。
 - 当前交付：`0.7.1-alpha.3`；core v12、存档 Schema 11、设置 Schema 1、地图格式 V4。
-- 阶段三验收身份：`main` / `1d7fd34` 加未提交改动，项目 EditMode 949/949、PlayMode 102/102；源码哈希与证据见成长归档。
+- 阶段三提交：`main` / `f896cc8`；验收时身份为 `1d7fd34` 加阶段三改动，项目 EditMode 949/949、PlayMode 102/102，源码哈希与证据见成长归档。
 - 0.7.1 首次准备基线为 `main` / `e2b97d2`，阶段一规划基线为 `bd01a4c`；阶段二实施基线为 `main` / `9b82259`、Unity `6000.6.4f1`。0.7.0 结果保留升级前历史含义，当前环境已通过 EditMode 907/907、PlayMode 102/102，见[启动核对与更新](archive/0.7.1/plans/alpha-0.7.1-startup.md)。
 - 后续按 `0.7.1-alpha`、`0.7.2-alpha` 推进；阶段使用各自的 `alpha.1`、`alpha.2` 等完整版本。
 - 下一里程碑仍处于 alpha 时进入 `0.8.0-alpha`，明确进入 beta 时进入 `0.8.0-beta`。

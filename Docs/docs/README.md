@@ -78,6 +78,7 @@
 - [0.7.1-alpha.1 已归档实施计划](plan/archive/0.7.1/plans/phase-1-execution.md)
 - [0.7.1-alpha.2 道具、安装事务与能量瓶实施计划](plan/archive/0.7.1/plans/phase-2-execution.md)
 - [0.7.1-alpha.3 中心充能、属性分配与天赋点亮实施计划](plan/archive/0.7.1/plans/phase-3-execution.md)
+- [0.7.1-alpha.4 武器普通技能、六键施法与路径范围实施计划](plan/alpha-0.7.1/phase-4-execution.md)
 - [0.7.1 六键手动施法、输入与存档合同](./plan/alpha-0.7.1/manual-skills.md)
 - [0.7.1 能量瓶、充能兑换与天赋成长合同](./plan/alpha-0.7.1/energy-progression.md)
 - [已完成版本的计划与验收归档](./plan/archive/README.md)
@@ -85,6 +86,8 @@
 完成的执行计划与验收文档、截图、日志和结果统一按版本收纳到 `plan/archive/<版本号>/`，各版本提供 `plans/`、`acceptance/` 与 `README.md` 入口。模块文档继续保留在对应职责目录。
 
 ## 计划状态
+
+2026-10-15：**阶段三已提交 `f896cc8`，阶段四计划与核心规则已整理**。下一步交付独立武器普攻、六火焰槽、实例单槽、已点亮网络每边 1 步的最短路径范围，以及指针 / 右摇杆瞄准，见[阶段四计划](plan/alpha-0.7.1/phase-4-execution.md)。两轮澄清均已记录；本轮没有实现阶段四或推进运行版本。
 
 2026-10-15：**阶段三已完成，当前 0.7.1-alpha.3**。core v12 / Schema 11 / 1 / 地图 V4；项目 EditMode 949/949、PlayMode 102/102，均无失败 / 跳过。中心充能、跨瓶余额、三属性分配、路径点亮和拆卸退款已交付，见[成长模块](./skill-board/growth.md)及[当次验收](./plan/archive/0.7.1/acceptance/growth/README.md)。阶段四六键技能和阶段五正式棋盘继续活动。
 
