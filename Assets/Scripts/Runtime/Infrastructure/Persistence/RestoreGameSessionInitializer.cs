@@ -124,6 +124,7 @@ namespace DarkFlare
                 _prepared.RuntimeState.Inventory,
                 profile.Gold);
             architecture.GetModel<SkillBoardModel>().RestoreState(profile.PlayerId, _prepared.RuntimeState.SkillBoard);
+            architecture.GetSystem<PlayerGrowthSystem>().Restore(profile.PlayerId, _prepared.RuntimeState.Growth, player.Actor);
             if (!playerState.Resources.IsAlive)
             {
                 player.Actor.RestoreResources(new CombatResourceSnapshot(0, player.Actor.MaxHealth, 0, player.Actor.MaxMana), false);

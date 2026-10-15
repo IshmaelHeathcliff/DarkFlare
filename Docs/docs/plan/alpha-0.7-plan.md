@@ -1,11 +1,12 @@
 # Alpha 0.7 执行计划
 
-状态：2026-10-07，**0.7.0 已完成，0.7.1 阶段一、二已完成，阶段三至五待实施**。当前运行版本 `0.7.1-alpha.2`；日常 API 见[版本管理](../version-management.md)，当前交付见[安装模块](../skill-board/items-installation.md)、[能量瓶模块](../skill-board/energy-bottles.md)与[当次验收](archive/0.7.1/acceptance/items-energy/README.md)。0.7 里程碑继续保持 alpha，下一步按[技能面板总计划](alpha-0.7.1-skill-board-plan.md)明确阶段三细则。
+状态：2026-10-15，**0.7.0 完成，0.7.1 阶段一至三完成，阶段四、五待实施**。当前运行版本 `0.7.1-alpha.3`；新交付见[成长模块](../skill-board/growth.md)与[当次验收](archive/0.7.1/acceptance/growth/README.md)。0.7 里程碑保持 alpha，下一阶段按[六键技能合同](alpha-0.7.1/manual-skills.md)准备手动施法与效果。
 
 ## 基线与顺序
 
 - 0.7 启动基线：`751225c`、`0.6.5-alpha`，见[启动记录](archive/0.7/plans/alpha-0.7-startup.md)。
-- 当前交付：`0.7.1-alpha.2`；core v11、存档 Schema 10、设置 Schema 1、地图格式 V4。
+- 当前交付：`0.7.1-alpha.3`；core v12、存档 Schema 11、设置 Schema 1、地图格式 V4。
+- 阶段三验收身份：`main` / `1d7fd34` 加未提交改动，项目 EditMode 949/949、PlayMode 102/102；源码哈希与证据见成长归档。
 - 0.7.1 首次准备基线为 `main` / `e2b97d2`，阶段一规划基线为 `bd01a4c`；阶段二实施基线为 `main` / `9b82259`、Unity `6000.6.4f1`。0.7.0 结果保留升级前历史含义，当前环境已通过 EditMode 907/907、PlayMode 102/102，见[启动核对与更新](archive/0.7.1/plans/alpha-0.7.1-startup.md)。
 - 后续按 `0.7.1-alpha`、`0.7.2-alpha` 推进；阶段使用各自的 `alpha.1`、`alpha.2` 等完整版本。
 - 下一里程碑仍处于 alpha 时进入 `0.8.0-alpha`，明确进入 beta 时进入 `0.8.0-beta`。
@@ -17,7 +18,7 @@
 | --- | --- | --- |
 | `0.7.0-alpha.1` | 不可变纯 C# SemVer 对象，严格解析、数值及先行优先级、构建身份、文化独立性和长数字回归 | 完成，52/52 定向 EditMode |
 | `0.7.0-alpha.2` | `GameVersion` 显式解析桥接，历史原始字符串与独立数据版本域兼容 | 完成，32/32 定向回归；收尾 EditMode 882/882、PlayMode 102/102 |
-| `0.7.1-alpha` | 六边形技能面板、柴薪 / 火焰 / 余烬；能量瓶、充能兑换、属性与天赋点亮；技能重构和六键施法、交易、存档与键鼠 / 手柄闭环 | 阶段一、二完成；阶段三至五待实施；[执行与验收入口](alpha-0.7.1-skill-board-plan.md) |
+| `0.7.1-alpha` | 六边形技能面板、柴薪 / 火焰 / 余烬；能量瓶、充能兑换、属性与天赋点亮；技能重构和六键施法、交易、存档与键鼠 / 手柄闭环 | 阶段一至三完成；阶段四、五待实施；[执行与验收入口](alpha-0.7.1-skill-board-plan.md) |
 
 0.7.0 未构建 Player，也未执行真实设备、跨进程或当前版本性能矩阵；Editor 结果不能替代这些验收。具体测试范围、源码身份与兼容结论已归档。
 

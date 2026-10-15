@@ -32,7 +32,7 @@ flowchart LR
 
 1. `CharacterDefinition.CreateStats` 和 `MonsterDefinition.CreateStats` 使用 `StatIds` 创建角色基础 `StatBlock`。
 2. 物品基底和词条通过 `StatModifierDefinition` 引用 `StatDefinition`；生成实例时只把 `StatDefinition.Id` 复制到 `ModifierInstance.StatId`。
-3. 换装后，`EquipmentEffectResolver` 更新 `equipment` 来源；怪物实例词条更新 `monster` 来源；状态参与者更新 `status` 来源。`CombatActor.SetModifierSource` 按稳定来源排序汇总，并通过 `CombatStatResolver` 从基础属性重建。旧 SetModifiers 仅管理兼容来源。规则见[状态战斗接入](./status-combat.md)。
+3. [永久属性分配](./skill-board/growth.md)通过 player_growth 独立 GlobalActor / Flat 来源重建，力量 / 敏捷 / 智力仍沿相同派生管线，保存分配账目而非重复保存派生加值。换装后，`EquipmentEffectResolver` 更新 `equipment` 来源；怪物实例词条更新 `monster` 来源；状态参与者更新 `status` 来源。`CombatActor.SetModifierSource` 按稳定来源排序汇总，并通过 `CombatStatResolver` 从基础属性重建。旧 SetModifiers 仅管理兼容来源。规则见[状态战斗接入](./status-combat.md)。
 4. 非伤害类 `GlobalActor` 修改器先由 `StatAggregator` 处理 `Flat`、`Increase`、`More` 和 `Override`，再由 `PrimaryAttributeResolver` 按聚合后的力量、敏捷和智力派生最终属性。伤害类属性仍由 `DamageCalculator` 单独处理，避免在聚合层和伤害管线重复应用。
 5. `CombatActor` 保存当前生命与当前法力；`CombatSystem` 统一提交伤害、治疗、法力消耗和恢复，`ResourceRegenerationSystem` 按有效恢复属性推进被动恢复。
 6. 攻击发起时，`AttackSnapshotFactory` 冻结攻击者属性、修改器和具名随机子流；命中时 `HitResolutionCalculator` 读取目标闪避，再由 `DamageCalculator` 计算类型伤害、暴击、护甲和抗性。

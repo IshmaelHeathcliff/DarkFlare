@@ -12,6 +12,7 @@
 | `_displayName` | `string` / 空 | 正式资产必填 | Inspector/UI 显示，不参与计算 |
 | `_localizedName` | `LocalizedContentReference` / 空引用 | 正式资产必填；固定使用 `monsters/actor.<id>.name` | 玩家可见角色名按当前语言解析；旧显示名仅供作者与日志识别 |
 | `_prefab` | `AssetReferenceGameObject` / `null` | 可实例化的正式角色必填且 GUID 有效 | `SpawnSystem` 异步加载并释放；禁止改用 Resources |
+| `_growth` | `PlayerGrowthConfiguration` / `null` | 正式玩家引用正成本成长配置；无引用的适配对象使用合同默认值 | 永久分配与递增兑换，参数随 Profile.Growth 保存；恢复拒绝不兼容成本合同 |
 | `_maxHealth` | `float` / `100` | 至少 `1` | `CreateStats` 写入最大生命，`CombatActor` 初始化资源 |
 | `_mana` | `float` / `0` | 不得小于 `0` | 写入最大法力；旧资产默认零，正式资产应显式保存 |
 | `_healthRegeneration` | `float` / `0` | 不得小于 `0`；单位为每秒固定值 | `ResourceRegenerationSystem` 消费 |

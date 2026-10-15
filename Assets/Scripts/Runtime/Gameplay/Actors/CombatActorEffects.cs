@@ -9,6 +9,7 @@ namespace DarkFlare
         readonly SortedDictionary<string, ModifierInstance[]> _modifierSources = new SortedDictionary<string, ModifierInstance[]>(StringComparer.Ordinal);
         TagSet _staticTags = TagSet.Empty;
         TagSet _statusTags = TagSet.Empty;
+        internal TagSet StatusTags => _statusTags;
         public StatusActionBlock BlockedActions { get; internal set; }
 
         public void SetModifierSource(string source, IEnumerable<ModifierInstance> modifiers)

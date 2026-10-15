@@ -79,6 +79,8 @@ namespace DarkFlare
     public sealed class ProfileSaveData : IPersistenceDto
     {
         public SkillBoardSaveDto SkillBoard { get; set; } = new SkillBoardSaveDto();
+        [Newtonsoft.Json.JsonProperty(Required = Newtonsoft.Json.Required.Always)]
+        public PlayerGrowthDto Growth { get; set; } = new PlayerGrowthDto();
         public string ProfileId { get; set; } = string.Empty;
 
         public string PlayerId { get; set; } = string.Empty;

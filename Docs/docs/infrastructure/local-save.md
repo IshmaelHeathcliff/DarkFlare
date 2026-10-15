@@ -3,7 +3,7 @@
 Alpha 0.5.5 已联验 Schema 5 导航意图、城镇 / 野外跨进程继续与真实 Schema 4 夹具恢复，原输入保持不变；1000 单位的快照 / 序列化 / 持久保存 / 继续恢复耗时和托管内存观察峰值见 [I 保存测量](../plan/archive/0.5.5/acceptance/maps/i/performance.md)。
 
 > 状态：已实现本地存档闭环；`alpha 0.4.0` 增加数量及金币物品迁移
-> 最近更新：2026-10-07；core v11 / Save Schema 10 接入棋盘与能量瓶
+> 最近更新：2026-10-15；core v12 / Save Schema 11 接入永久成长
 
 ## 模块目标
 
@@ -41,6 +41,8 @@ Schema 10 将[棋盘道具](../skill-board/items-installation.md)实际变体放
 
 长期夹具 `save-v9-migrated-player.json` 从已发布真实 Schema 5 玩家档 `save-v5-navigation.json` 经原有 5→9 迁移导出，不是 Schema 9 原生捕获。其校验值使用原规范 JSON / SHA-256 算法重新计算，来源见迁移 manifest；测试验证 9→10 与完整恢复 / 再保存往返。
 
+Schema 11 保存 Profile.Growth 的成本合同、余额、累计与可用点数、三属性分配及激活实花点数。10→11 添加空成长，不改旧棋盘 / 瓶能量 / 技能冷却；core 11→12 接入角色引用的非独立成长配置。恢复先建立成长来源、装备与状态的属性，再恢复绝对资源，防止按旧上限裁掉生命 / 法力；临时中心选择不入档。
+
 保存捕获等待切图稳定，再取得状态时钟；切图等待既有状态捕获完成。写盘只使用已冻结 DTO，允许与后续模拟并行。返回前台先等既有保存结束，再提交退出检查点。FrontEnd 摘要预检与 Continue 共用协调器，继续请求等待摘要预检结束。完整冻结和所有权合同见[双地图模块](../maps/world-map-lifecycle.md)。
 
 ## 消耗品保存与兼容
@@ -53,13 +55,13 @@ V1 文件格式固定为：
 
 - `formatId = "darkflare-save"`
 - `formatVersion = 1`
-- `saveSchemaVersion = 10`
+- `saveSchemaVersion = 11`
 - 最大文档 16 MiB，最大 JSON 深度 64
 - 最大物品 8192、每图怪物名额及存活对象 1024 / 全档 2048、世界掉落 4096
 - Header 包含游戏版本、内容目录 ID / 版本、槽位、提交序号、UTC 创建 / 更新时间、Payload SHA-256 和显示摘要
 - Payload 分为 `ProfileSaveData` 与 `RunSaveData`，所有引用使用稳定 ContentId 或强类型实例 ID
 
-Serializer 使用项目已有 `Unity.Newtonsoft.Json`。写出前先把 Payload 转为按属性名 Ordinal 排序的规范 JSON，并把 Single 数值归一为 double 表示，再计算小写 SHA-256；这避免同一浮点值在 Single / Double 文本往返后产生伪校验失败。Header 不参与校验值。读取顺序为格式 / 槽位 / 提交序号检查、Payload 校验、Schema 兼容与逐级迁移、强类型验证。当前登记了历史 `0 → 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 → 9 → 10` 迁移，依次补充旧结构、物品数量、空状态图、双地图身份、默认导航意图、怪物行为、Boss 名额、有限刷怪、地图代次和空棋盘 / 专栏；未来 Schema 会被安全拒绝。
+Serializer 使用项目已有 `Unity.Newtonsoft.Json`。写出前先把 Payload 转为按属性名 Ordinal 排序的规范 JSON，并把 Single 数值归一为 double 表示，再计算小写 SHA-256；这避免同一浮点值在 Single / Double 文本往返后产生伪校验失败。Header 不参与校验值。读取顺序为格式 / 槽位 / 提交序号检查、Payload 校验、Schema 兼容与逐级迁移、强类型验证。当前登记了历史 `0 → 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 → 9 → 10 → 11` 迁移，依次补充旧结构、物品数量、空状态图、双地图身份、默认导航意图、怪物行为、Boss 名额、有限刷怪、地图代次和空棋盘 / 专栏；未来 Schema 会被安全拒绝。
 
 Schema 5 → 6 为当前及冻结地图怪物初始化行为版本 1：旧位置作为锚点、默认朝右、安全休眠态和原实例根种子，不推进任何既有 RNG。原攻击冷却保留。新快照保存前摇 / 后摇剩余时间及结算标记，恢复后摇不会重复命中；未知版本、非法阶段、非有限数和跨图目标在预检拒绝。core 6 → 7 仅更新追加配置的目录版本。真实历史输入为 `Assets/Scripts/Tests/Fixtures/Migration/save-v5-navigation.json`，来源及完整链见同目录 manifest。
 

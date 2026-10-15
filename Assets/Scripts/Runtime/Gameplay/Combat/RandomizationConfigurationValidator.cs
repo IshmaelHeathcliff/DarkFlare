@@ -125,6 +125,10 @@ namespace DarkFlare
                 return issues;
             }
 
+            if (definition.Growth != null && !definition.Growth.Rules.IsValid)
+            {
+                issues.Add("永久成长配置必须使用正成本、正增量和正点数");
+            }
             ValidateCombatStats(
                 definition.Accuracy,
                 definition.Evasion,

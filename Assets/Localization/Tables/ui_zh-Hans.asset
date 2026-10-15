@@ -2190,13 +2190,17 @@ MonoBehaviour:
     m_Localized: "\u50A8\u5B58\u80FD\u91CF\uFF1A{0} / {1}"
     m_Metadata:
       m_Items: []
+  - m_Id: 20608754092335104
+    m_Localized: "\u6C38\u4E45\u5C5E\u6027\u5206\u914D"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:
     - rid: 6738608143192817844
       type: {class: SmartFormatTag, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
       data:
-        m_Entries: 
+        m_Entries:
         m_SharedEntries:
         - id: 18975395143680
         - id: 18975453863938

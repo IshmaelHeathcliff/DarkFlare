@@ -172,6 +172,33 @@ namespace DarkFlare.Tests
                 new[] { new DamagePacket(DamageType.Physical, energyMonster.Actor.MaxHealth * 1000, TagSet.Empty) });
             Assert.That(energyMonster.Actor.IsAlive, Is.False);
             Assert.That(boardBottle.SkillBoardState.Energy, Is.EqualTo(Math.Min(expectedKillEnergy, bottleDefinition.SkillBoard.EnergyCapacity)));
+            ItemInstance growthBottle = bottleDefinition.CreateInstance(oldArchitecture.GetUtility<IItemInstanceIdGenerator>().Next(), 1, 87, ItemRarity.Normal);
+            growthBottle.CollectEnergy(1000);
+            Assert.That(oldInventory.TryAddItem(growthBottle), Is.True);
+            SkillBoardPreview charge = oldArchitecture.SendQuery(new PreviewSkillBoardQuery(oldPlayer.Id.Value,
+                new SkillBoardRequest(SkillBoardOperation.ConsumeBottle, growthBottle)));
+            Assert.That(charge.Success, Is.True, charge.Error);
+            Assert.That(oldArchitecture.SendCommand(new CommitSkillBoardCommand(charge)), Is.True);
+            string firstTalent = boardWood.SkillBoardState.Layout.Edges.Where(e => e.First == "center" || e.Second == "center")
+                .Select(e => e.First == "center" ? e.Second : e.First).First();
+            CombatResourceSnapshot beforeGrowthResources = oldPlayer.Actor.Resources;
+            foreach (PreviewPlayerGrowthQuery query in new[]
+            {
+                new PreviewPlayerGrowthQuery(oldPlayer.Id.Value, woodId: boardWood.InstanceId),
+                new PreviewPlayerGrowthQuery(oldPlayer.Id.Value, woodId: boardWood.InstanceId, nodeId: firstTalent),
+                new PreviewPlayerGrowthQuery(oldPlayer.Id.Value, StatIds.Strength, 2),
+                new PreviewPlayerGrowthQuery(oldPlayer.Id.Value, StatIds.Intelligence, 1)
+            })
+            {
+                PlayerGrowthPreview preview = oldArchitecture.SendQuery(query);
+                Assert.That(preview.Success, Is.True, preview.Error);
+                Assert.That(oldArchitecture.SendCommand(new CommitPlayerGrowthCommand(preview)), Is.True);
+            }
+            expectedHealth *= oldPlayer.Actor.MaxHealth / beforeGrowthResources.MaxHealth;
+            Assert.That(oldPlayer.Actor.CurrentHealth, Is.EqualTo(expectedHealth).Within(.001f));
+            PlayerGrowthDto growthBefore = RuntimeStateMapper.ToDto(oldPlayer.Id.Value, oldArchitecture.GetModel<PlayerGrowthModel>().State);
+            Assert.That(growthBefore.Energy, Is.EqualTo(25));
+            Assert.That(growthBefore.Activations.Count, Is.EqualTo(2));
             SkillBoardSaveDto boardBefore = RuntimeStateMapper.ToDto(oldPlayer.Id.Value,
                 oldArchitecture.GetModel<SkillBoardModel>().State);
             oldRandom.NextSeed(GameplayRandomChannel.Crafting);
@@ -284,6 +311,8 @@ namespace DarkFlare.Tests
             Assert.Greater(host.CurrentSession.ArchitectureGeneration, oldGeneration);
             IArchitecture restoredArchitecture = host.CurrentSession.Architecture;
             SkillBoardState restoredBoard = restoredArchitecture.SendQuery(new GetSkillBoardQuery());
+            PlayerGrowthState restoredGrowth = restoredArchitecture.SendQuery(new GetPlayerGrowthQuery());
+            AssertGrowthEquals(growthBefore, restoredGrowth);
             SkillBoardSaveDto boardAfter = RuntimeStateMapper.ToDto(boardBefore.ActorInstanceId, restoredBoard);
             CollectionAssert.AreEqual(boardBefore.Firewoods.Select(w => (w.ItemInstanceId, w.Q, w.R, w.Rotation)),
                 boardAfter.Firewoods.Select(w => (w.ItemInstanceId, w.Q, w.R, w.Rotation)));
@@ -390,6 +419,8 @@ namespace DarkFlare.Tests
                 Assert.That(travel.Succeeded, Is.True, travel.Exception?.ToString());
                 yield return WaitForRunningSession();
                 SkillBoardState travelled = host.CurrentSession.Architecture.SendQuery(new GetSkillBoardQuery());
+                PlayerGrowthState travelledGrowth = host.CurrentSession.Architecture.SendQuery(new GetPlayerGrowthQuery());
+                AssertGrowthEquals(growthBefore, travelledGrowth);
                 Assert.That(travelled.Firewoods.Single().Item.InstanceId, Is.EqualTo(boardWood.InstanceId));
                 Assert.That(travelled.Firewoods.Single().Placement.Rotation, Is.EqualTo(2));
                 Assert.That(travelled.Embeddings.Single().Item.InstanceId, Is.EqualTo(boardFlame.InstanceId));
@@ -474,6 +505,18 @@ namespace DarkFlare.Tests
             returnFrontEnd.Focus();
             yield return null;
             Assert.AreSame(returnFrontEnd, root.focusController.focusedElement);
+        }
+
+        static void AssertGrowthEquals(PlayerGrowthDto expected, PlayerGrowthState actual)
+        {
+            Assert.That((actual.Energy, actual.EarnedPoints, actual.TalentPoints, actual.AttributePoints,
+                actual.Strength, actual.Dexterity, actual.Intelligence),
+                Is.EqualTo((expected.Energy, expected.EarnedPoints, expected.TalentPoints, expected.AttributePoints,
+                    expected.Strength, expected.Dexterity, expected.Intelligence)));
+            Assert.That(actual.Rules, Is.EqualTo(new GrowthRules(expected.FirstCost, expected.CostIncrement,
+                expected.FirewoodCost, expected.TalentCost, expected.AttributeValue)));
+            CollectionAssert.AreEqual(expected.Activations.Select(a => (a.FirewoodId, a.NodeId, a.Cost)),
+                actual.Activations.Select(a => (a.FirewoodId, a.NodeId, a.Cost)));
         }
 
         static SaveDocumentDto CreateDocument(SavePayloadDto payload, ContentCatalog catalog)

@@ -225,6 +225,11 @@ namespace DarkFlare
                     { issues.Add(new ContentCatalogIssue(ContentCatalogIssueCode.ConfigurationInvalid, contentId + ": " + issue, entry)); }
                 }
                 idsByEntry.Add(entry, contentId);
+                if (entry is CharacterDefinition character && character.Growth != null && !character.Growth.Rules.IsValid)
+                {
+                    issues.Add(new ContentCatalogIssue(ContentCatalogIssueCode.ConfigurationInvalid,
+                        contentId + "：永久成长配置非法", entry));
+                }
 
                 if (!mutableByType.TryGetValue(entryType, out List<ScriptableObject> typedEntries))
                 {

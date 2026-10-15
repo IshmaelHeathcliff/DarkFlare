@@ -133,9 +133,41 @@ namespace DarkFlare.Tests
             Assert.IsTrue(JToken.DeepEquals(historical["payload"], current["payload"]), "迁移不能改变物品、资源、随机数和运行时数据");
         }
 
+        [Test]
+        public void GrowthMigration_PreservesEntireSchemaTenPayloadAndOnlyAddsEmptyOwnedGrowth()
+        {
+            JObject legacy = JObject.Parse(MigrationFixtureUtility.ReadUtf8("save-v9-migrated-player.json"));
+            // 来源是真实发布档经历史迁移导出的 Schema 9；在内存中经原 9→10 链构造源合同。
+            new SkillBoardSaveMigration().Apply(legacy);
+            JToken before = legacy["payload"].DeepClone();
+            new PlayerGrowthSaveMigration().Apply(legacy);
+            PlayerGrowthDto dto = legacy["payload"]["profile"]["growth"].ToObject<PlayerGrowthDto>();
+            PlayerGrowthState state = RuntimeStateMapper.ReadPlayerGrowth(dto, out string error);
+            Assert.That(error, Is.Null);
+            Assert.That(state.EarnedPoints, Is.Zero);
+            Assert.That(state.Energy, Is.Zero);
+            Assert.That(state.Rules, Is.EqualTo(GrowthRules.Default));
+            Assert.That(dto.ActorInstanceId, Is.EqualTo(legacy["payload"]["profile"]["playerId"].Value<string>()));
+            ((JObject)legacy["payload"]["profile"]).Remove("growth");
+            Assert.That(JToken.DeepEquals(before, legacy["payload"]), Is.True,
+                "成长迁移不得改写原棋盘、瓶、技能冷却、资源、历史实例或随机状态");
+        }
+
         static void StripLaterMigrationFields(JObject document, JObject historical)
         {
             JObject profile = (JObject)document["payload"]["profile"];
+            if (historical["payload"]["profile"]["growth"] == null)
+            {
+                PlayerGrowthDto growth = profile["growth"].ToObject<PlayerGrowthDto>();
+                PlayerGrowthState state = RuntimeStateMapper.ReadPlayerGrowth(growth, out string error);
+                Assert.That(error, Is.Null);
+                Assert.That(growth.ActorInstanceId, Is.EqualTo(profile["playerId"].Value<string>()));
+                Assert.That(state.EarnedPoints, Is.Zero);
+                Assert.That(state.Energy, Is.Zero);
+                Assert.That(state.Activations, Is.Empty);
+                Assert.That(state.Rules, Is.EqualTo(GrowthRules.Default));
+                profile.Remove("growth");
+            }
             if (historical["payload"]["profile"]["skillBoard"] == null)
             {
                 JToken board = profile["skillBoard"];

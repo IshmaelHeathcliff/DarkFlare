@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace DarkFlare
 {
-    public enum SkillBoardOperation { Install, Move, Remove, Embed, Extract, EquipBottle, UnequipBottle }
+    public enum SkillBoardOperation { Install, Move, Remove, Embed, Extract, EquipBottle, UnequipBottle, ConsumeBottle }
 
     public sealed class SkillBoardRequest
     {
@@ -31,38 +31,46 @@ namespace DarkFlare
     {
         public bool Success => Error == null;
         public string Error { get; }
+        public PlayerGrowthState GrowthResult => GrowthAfter;
         internal SkillBoardSystem Owner { get; }
         internal string ActorId { get; }
         internal SkillBoardState Before { get; }
         internal SkillBoardState After { get; }
         internal InventoryGrid SourceGrid { get; }
+        internal long SourceGridRevision { get; }
         internal InventoryGrid FinalGrid { get; }
         internal IReadOnlyDictionary<ItemInstance, RectInt> Placements { get; }
         internal IReadOnlyDictionary<ItemInstance, int> Revisions { get; }
         internal IReadOnlyDictionary<ItemInstance, (int Quality, float Durability)> MutableValues { get; }
         internal ItemInstance Incoming { get; }
         internal ItemInstance Outgoing { get; }
+        internal PlayerGrowthState GrowthBefore { get; }
+        internal PlayerGrowthState GrowthAfter { get; }
         internal bool Consumed { get; set; }
 
         internal SkillBoardPreview(string error) { Error = error; }
         internal SkillBoardPreview(SkillBoardSystem owner, string actorId, SkillBoardState before, SkillBoardState after,
-            InventoryGrid source, InventoryGrid final, ItemInstance incoming, ItemInstance outgoing)
+            InventoryGrid source, InventoryGrid final, ItemInstance incoming, ItemInstance outgoing,
+            PlayerGrowthState growthBefore, PlayerGrowthState growthAfter)
         {
             Owner = owner;
             ActorId = actorId;
             Before = before;
             After = after;
             SourceGrid = source;
+            SourceGridRevision = source.Revision;
             FinalGrid = final;
             Incoming = incoming;
             Outgoing = outgoing;
+            GrowthBefore = growthBefore;
+            GrowthAfter = growthAfter;
             Placements = new Dictionary<ItemInstance, RectInt>(source.Placements);
             Revisions = before.Items.Concat(source.Placements.Keys).Distinct().ToDictionary(i => i, i => i.Revision);
             MutableValues = Revisions.Keys.ToDictionary(i => i, i => (i.Quality, i.Durability));
         }
     }
 
-    public sealed class SkillBoardSystem : AbstractSystem
+    public sealed partial class SkillBoardSystem : AbstractSystem
     {
         bool _disposed;
         IUnRegister _actorRemoved;
@@ -76,7 +84,7 @@ namespace DarkFlare
         }
         protected override void OnDeinit() { _disposed = true; _actorRemoved?.UnRegister(); }
 
-        bool IsCurrentPlayer(string actorId)
+        internal bool IsCurrentPlayer(string actorId)
         {
             if (_disposed) { return false; }
             if (ApplicationHost.TryGetCurrent(out ApplicationHost host) && host.CurrentSession != null
@@ -93,6 +101,15 @@ namespace DarkFlare
             SkillBoardModel model = this.GetModel<SkillBoardModel>();
             if (model.PlayerId.Length > 0 && model.PlayerId != actorId) { return new SkillBoardPreview("棋盘属于其他玩家"); }
             SkillBoardState before = model.State;
+            PlayerGrowthModel growth = this.GetModel<PlayerGrowthModel>();
+            if (growth.PlayerId.Length > 0 && growth.PlayerId != actorId
+                || !this.GetSystem<PlayerGrowthSystem>().RulesAreCurrent(growth.State))
+            {
+                return new SkillBoardPreview("成长玩家或成本配置无效");
+            }
+            string growthError = PlayerGrowthGraph.Validate(growth.State, before);
+            if (growthError != null) { return new SkillBoardPreview(growthError); }
+            PlayerGrowthState growthAfter = growth.State;
             var woods = before.Firewoods.ToList();
             var embeddings = before.Embeddings.ToList();
             IReadOnlyList<FirewoodConnection> connections = request.Operation == SkillBoardOperation.Install || request.Operation == SkillBoardOperation.Move
@@ -149,10 +166,24 @@ namespace DarkFlare
                     outgoing = bottle;
                     bottle = null;
                     break;
+                case SkillBoardOperation.ConsumeBottle:
+                    if (item?.BaseDefinition.ItemType != ItemType.EnergyBottle || item.SkillBoardState == null)
+                    {
+                        return new SkillBoardPreview("中心充能需要能量瓶");
+                    }
+                    try { growthAfter = growth.State.Charge(item.SkillBoardState.Energy); }
+                    catch (ArgumentException failure) { return new SkillBoardPreview(failure.Message); }
+                    catch (OverflowException) { return new SkillBoardPreview("充能数值超出范围"); }
+                    if (ReferenceEquals(bottle, item)) { bottle = null; }
+                    else { incoming = item; }
+                    break;
                 default: return new SkillBoardPreview("未知棋盘操作");
             }
             var after = new SkillBoardState(woods, connections, embeddings, bottle);
             string error = after.Validate();
+            if (error != null) { return new SkillBoardPreview(error); }
+            growthAfter = growthAfter.ReturnFirewoods(new HashSet<string>(after.Firewoods.Select(w => w.Item.InstanceId)));
+            error = PlayerGrowthGraph.Validate(growthAfter, after);
             if (error != null) { return new SkillBoardPreview(error); }
             InventoryGrid grid = this.GetModel<InventoryModel>().Grid;
             if (incoming != null && (!grid.Placements.ContainsKey(incoming)
@@ -169,7 +200,7 @@ namespace DarkFlare
                 bool added = incoming != null ? final.TryAddAt(outgoing, grid.Placements[incoming].position) : final.TryAdd(outgoing);
                 if (!added) { return new SkillBoardPreview("背包没有足够空间取回道具"); }
             }
-            return new SkillBoardPreview(this, actorId, before, after, grid, final, incoming, outgoing);
+            return new SkillBoardPreview(this, actorId, before, after, grid, final, incoming, outgoing, growth.State, growthAfter);
         }
 
         public bool Commit(SkillBoardPreview preview, out string error)
@@ -177,9 +208,13 @@ namespace DarkFlare
             error = "预览已失效，请重新预检";
             SkillBoardModel model = this.GetModel<SkillBoardModel>();
             InventoryModel inventory = this.GetModel<InventoryModel>();
+            PlayerGrowthModel growth = this.GetModel<PlayerGrowthModel>();
             if (preview == null || !preview.Success || preview.Owner != this || preview.Consumed
                 || !IsCurrentPlayer(preview.ActorId) || !ReferenceEquals(model.State, preview.Before)
+                || !ReferenceEquals(growth.State, preview.GrowthBefore)
+                || !this.GetSystem<PlayerGrowthSystem>().RulesAreCurrent(preview.GrowthBefore)
                 || !ReferenceEquals(inventory.Grid, preview.SourceGrid)
+                || inventory.Grid.Revision != preview.SourceGridRevision
                 || inventory.Grid.Placements.Count != preview.Placements.Count
                 || preview.Placements.Any(p => !inventory.Grid.Placements.TryGetValue(p.Key, out RectInt rect) || rect != p.Value)
                 || preview.Revisions.Any(p => p.Key.Revision != p.Value)
@@ -187,10 +222,25 @@ namespace DarkFlare
             preview.Consumed = true;
             inventory.ReplaceGridWithoutEvents(preview.FinalGrid);
             model.Replace(preview.ActorId, preview.After);
+            growth.PlayerId = preview.ActorId;
+            growth.State = preview.GrowthAfter;
             // 所有权已一次性提交，事件接收者只会观察到一致最终态。
-            if (preview.Incoming != null) { inventory.NotifyItemChanged(preview.Incoming, InventoryChangeType.Removed); }
-            if (preview.Outgoing != null) { inventory.NotifyItemChanged(preview.Outgoing, InventoryChangeType.Added); }
-            this.SendEvent(new SkillBoardChangedEvent(model.PlayerId, model.Revision));
+            try
+            {
+                if (preview.Incoming != null) { inventory.NotifyItemChanged(preview.Incoming, InventoryChangeType.Removed); }
+                if (preview.Outgoing != null) { inventory.NotifyItemChanged(preview.Outgoing, InventoryChangeType.Added); }
+            }
+            finally
+            {
+                try { this.SendEvent(new SkillBoardChangedEvent(model.PlayerId, model.Revision)); }
+                finally
+                {
+                    if (!ReferenceEquals(preview.GrowthBefore, preview.GrowthAfter))
+                    {
+                        this.SendEvent(new PlayerGrowthChangedEvent(model.PlayerId));
+                    }
+                }
+            }
             error = null;
             return true;
         }

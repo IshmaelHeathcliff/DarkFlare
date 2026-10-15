@@ -369,6 +369,30 @@ namespace DarkFlare
         }
     }
 
+    public sealed class PlayerGrowthSaveMigration : IJsonMigrationStep
+    {
+        public string Id => "save_10_to_11_player_growth";
+        public MigrationDataDomain Domain => MigrationDataDomain.Save;
+        public int FromVersion => 10;
+        public int ToVersion => 11;
+        public void Apply(JObject document)
+        {
+            if (document["payload"]?["profile"] is not JObject profile)
+            {
+                throw new InvalidOperationException("缺少成长所属角色");
+            }
+            profile["growth"] = new JObject
+            {
+                ["actorInstanceId"] = profile["playerId"]?.DeepClone(),
+                ["contractVersion"] = 1, ["firstCost"] = 100, ["costIncrement"] = 25,
+                ["firewoodCost"] = 1, ["talentCost"] = 1, ["attributeValue"] = 1,
+                ["energy"] = 0, ["earnedPoints"] = 0, ["talentPoints"] = 0, ["attributePoints"] = 0,
+                ["strength"] = 0, ["dexterity"] = 0, ["intelligence"] = 0,
+                ["activations"] = new JArray()
+            };
+        }
+    }
+
     public sealed class SkillBoardSaveMigration : IJsonMigrationStep
     {
         public string Id => "save_9_to_10_skill_board";

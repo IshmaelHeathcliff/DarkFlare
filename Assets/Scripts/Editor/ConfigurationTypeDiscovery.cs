@@ -122,7 +122,8 @@ namespace DarkFlare.Editor
                 && !string.IsNullOrWhiteSpace(createMenu.menuName)
                 && (createMenu.menuName.StartsWith(ConfigMenuPrefix, StringComparison.Ordinal)
                     || type == typeof(MapObjectPresentationCatalog) || type == typeof(WorldMapConfiguration)
-                    || type == typeof(MonsterBehaviorDefinition) || type == typeof(FirewoodGenerationDefinition));
+                    || type == typeof(MonsterBehaviorDefinition) || type == typeof(FirewoodGenerationDefinition)
+                    || type == typeof(PlayerGrowthConfiguration));
         }
 
         static bool IsUnitySerializedField(FieldInfo field)

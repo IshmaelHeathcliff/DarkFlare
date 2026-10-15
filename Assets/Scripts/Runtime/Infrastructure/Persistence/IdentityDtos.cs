@@ -129,6 +129,7 @@ namespace DarkFlare
     public sealed class RuntimeStateDto : IPersistenceDto
     {
         public SkillBoardSaveDto SkillBoard { get; set; } = new SkillBoardSaveDto();
+        public PlayerGrowthDto Growth { get; set; } = new PlayerGrowthDto();
         public List<ItemInstanceDto> Items { get; set; } = new List<ItemInstanceDto>();
 
         public InventoryLayoutDto Inventory { get; set; } = new InventoryLayoutDto();

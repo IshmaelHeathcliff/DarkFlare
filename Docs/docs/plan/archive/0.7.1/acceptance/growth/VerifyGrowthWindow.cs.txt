@@ -1,0 +1,161 @@
+using System;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Threading.Tasks;
+using DarkFlare;
+using DarkFlare.Editor;
+using UnityEditor;
+using UnityEditor.SceneManagement;
+using UnityEngine;
+
+public static class VerifyGrowthWindow
+{
+    static readonly BindingFlags Flags = BindingFlags.Instance | BindingFlags.NonPublic;
+    public static async Task<object> Run()
+    {
+        if (EditorApplication.isPlaying)
+        {
+            throw new InvalidOperationException("需要停止且没有运行 Session 的 Editor");
+        }
+        CleanStoppedSession();
+        string folder = "Docs/docs/plan/archive/0.7.1/acceptance/growth";
+        Directory.CreateDirectory(folder);
+        LifecycleScope scope = LifecycleScope.CreateRoot("growth-editor-verification");
+        var input = new ApplicationInputService();
+        var scene = EditorSceneManager.NewPreviewScene();
+        GameObject actorObject = null;
+        SkillBoardRuntimeWindow window = null;
+        try
+        {
+            IArchitecture architecture = GameArchitectureProvider.StartSession(scope, input);
+            actorObject = new GameObject("Growth verification") { hideFlags = HideFlags.HideAndDontSave };
+            UnityEngine.SceneManagement.SceneManager.MoveGameObjectToScene(actorObject, scene);
+            CombatActor actor = actorObject.AddComponent<CombatActor>();
+            var stats = new StatBlock();
+            stats.SetValue(StatIds.Mana, 200);
+            actor.Configure("growth_verification", ActorTeam.Player, 100, stats, TagSet.Empty);
+            architecture.GetSystem<CombatSystem>().RegisterActor(actor);
+            ContentCatalog catalog = ContentCatalog.Build(AssetDatabase.LoadAssetAtPath<ContentCatalogDefinition>(
+                "Assets/Data/Preset/Content/正式内容目录.asset")).Catalog;
+            window = EditorWindow.GetWindow<SkillBoardRuntimeWindow>();
+            window.position = new Rect(60, 60, 1280, 920);
+            window.Show();
+            window.Focus();
+            window.CreateGUI();
+            ItemBaseDefinition woodDefinition = catalog.GetAll<ItemBaseDefinition>().Single(d => d.Id == "firewood_large");
+            Set(window, "_definition", woodDefinition);
+            Call(window, "Grant");
+            string woodId = (string)Get(window, "_itemId");
+            Call(window, "Preview");
+            Call(window, "Commit");
+            Set(window, "_definition", catalog.GetAll<ItemBaseDefinition>().Single(d => d.Id == "energy_bottle_small"));
+            Call(window, "Grant");
+            string bottleId = (string)Get(window, "_itemId");
+            ItemInstance bottle = architecture.GetModel<InventoryModel>().Grid.Placements.Keys.Single(i => i.InstanceId == bottleId);
+            typeof(ItemInstance).GetMethod("CollectEnergy", Flags).Invoke(bottle, new object[] { 1000 });
+            Call(window, "SelectCenterBottle");
+            Call(window, "PreviewCharge");
+            string preview = (string)Get(window, "_result");
+            if (architecture.GetModel<PlayerGrowthModel>().State.EarnedPoints != 0
+                || !architecture.GetModel<InventoryModel>().Grid.Placements.ContainsKey(bottle))
+            {
+                throw new InvalidOperationException("预览提前消费了资产");
+            }
+            await Task.Delay(250);
+            Capture(window, folder + "/center-preview.png");
+            Call(window, "CancelGrowth");
+            if (!architecture.GetModel<InventoryModel>().Grid.Placements.ContainsKey(bottle))
+            {
+                throw new InvalidOperationException("取消提前消费了资产");
+            }
+            Call(window, "SelectCenterBottle");
+            Call(window, "PreviewCharge");
+            Call(window, "CommitCharge");
+            Set(window, "_attributeCount", 2);
+            Call(window, "PreviewAttribute");
+            Call(window, "CommitGrowth");
+            Set(window, "_woodId", woodId);
+            Call(window, "PreviewFirewoodActivation");
+            Call(window, "CommitGrowth");
+            InstalledFirewood wood = architecture.GetModel<SkillBoardModel>().State.Firewoods.Single();
+            string talent = wood.Placement.Layout.Edges.Where(e => e.First == "center" || e.Second == "center")
+                .Select(e => e.First == "center" ? e.Second : e.First).First();
+            Set(window, "_nodeId", talent);
+            Call(window, "PreviewTalentActivation");
+            Call(window, "CommitGrowth");
+            PlayerGrowthState state = architecture.GetModel<PlayerGrowthModel>().State;
+            if (state.EarnedPoints != 6 || state.Energy != 25 || state.TalentPoints != 4
+                || state.AttributePoints != 4 || state.Strength != 2 || state.Activations.Count != 2 || actor.MaxHealth != 104)
+            {
+                throw new InvalidOperationException("实际成长按钮未产生预期最终状态：" + Get(window, "_result"));
+            }
+            await Task.Delay(250);
+            Capture(window, folder + "/growth-result.png");
+            return new
+            {
+                Context = "Isolated Editor preview scene and Session, actual Odin button handlers use production Query/Command",
+                Player = "growth_verification",
+                EnergyInput = 1000,
+                EnergyFixture = "Injected into one formal empty bottle solely for UI verification; real death collection is separately covered by PlayMode",
+                Preview = preview,
+                State = RuntimeStateMapper.ToDto("growth_verification", state),
+                ActualHealth = actor.MaxHealth,
+                CancelRetainedBottle = true,
+                BottleConsumed = !architecture.GetModel<InventoryModel>().Grid.Placements.ContainsKey(bottle),
+                Cleanup = "Window closed, preview actor destroyed, preview scene closed, Session stopped and input disposed in finally",
+                Scope = "Development entry only; not the final player board or controller-device acceptance"
+            };
+        }
+        finally
+        {
+            if (window != null) { window.Close(); }
+            if (actorObject != null) { UnityEngine.Object.DestroyImmediate(actorObject); }
+            EditorSceneManager.ClosePreviewScene(scene);
+            scope.BeginStop();
+            await scope.StopAsync();
+            GameArchitectureProvider.StopSession(scope);
+            input.Dispose();
+        }
+    }
+    public static bool CleanStoppedSession()
+    {
+        if (!GameArchitectureProvider.HasCurrent) { return true; }
+        if (EditorApplication.isPlaying || ApplicationHost.TryGetCurrent(out _)
+            || !GameArchitectureProvider.TryGetOwnerScope(out LifecycleScope owner)
+            || owner.State != LifecycleScopeState.Stopped)
+        {
+            throw new InvalidOperationException("不能清理仍活动的 Session");
+        }
+        GameArchitectureProvider.StopSession(owner);
+        return !GameArchitectureProvider.HasCurrent;
+    }
+
+    static void Set(object target, string field, object value)
+    {
+        target.GetType().GetField(field, Flags).SetValue(target, value);
+    }
+    static object Get(object target, string field)
+    {
+        return target.GetType().GetField(field, Flags).GetValue(target);
+    }
+    static void Call(object target, string method)
+    {
+        target.GetType().GetMethod(method, Flags).Invoke(target, null);
+    }
+    static void Capture(EditorWindow window, string path)
+    {
+        window.Repaint();
+        Rect rect = window.position;
+        int width = Mathf.RoundToInt(rect.width);
+        int height = Mathf.RoundToInt(rect.height);
+        var image = new Texture2D(width, height, TextureFormat.RGB24, false);
+        try
+        {
+            image.SetPixels(UnityEditorInternal.InternalEditorUtility.ReadScreenPixel(rect.position, width, height));
+            image.Apply();
+            File.WriteAllBytes(path, image.EncodeToPNG());
+        }
+        finally { UnityEngine.Object.DestroyImmediate(image); }
+    }
+}

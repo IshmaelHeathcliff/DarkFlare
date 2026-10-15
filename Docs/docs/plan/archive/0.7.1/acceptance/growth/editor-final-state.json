@@ -1,0 +1,17 @@
+{
+  "diagnostics": [],
+  "compileMs": 1862,
+  "executeMs": 524,
+  "assemblyName": "PipelineRunScript_GrowthContentSetup_8cf4c3b184584212af34186d5ee63517",
+  "success": true,
+  "result": {
+    "Version": "0.7.1-alpha.3",
+    "Unity": "6000.6.4f1",
+    "Core": 12,
+    "SaveSchema": 11,
+    "CurrentArchitecture": false,
+    "NavigationBytes": 0,
+    "Scene": "Assets/Scenes/Bootstrap.unity",
+    "SceneDirty": false
+  }
+}

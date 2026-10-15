@@ -167,6 +167,11 @@
       "anchor": "worldmapconfiguration"
     },
     {
+      "type": "DarkFlare.PlayerGrowthConfiguration",
+      "document": "Docs/docs/config-reference/skill-board.md",
+      "anchor": "playergrowthconfiguration"
+    },
+    {
       "type": "DarkFlare.CraftingDefinition",
       "document": "Docs/docs/config-reference/trade-and-crafting.md",
       "anchor": "craftingdefinition"

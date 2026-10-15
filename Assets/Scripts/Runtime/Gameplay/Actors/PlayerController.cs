@@ -102,6 +102,7 @@ namespace DarkFlare
             _defaultSkill = skill;
             _spawnPosition = transform.position;
             _actor.ConfigureFromCharacter(_definition, ActorTeam.Player);
+            this.SendCommand(new ConfigurePlayerGrowthCommand(_actor, _definition.Growth));
             this.SendCommand(new BindActorStatusesCommand(_actor));
             _sortParticipant?.ConfigureIdentity(WorldSortCategory.Player, _actor.ActorId);
 

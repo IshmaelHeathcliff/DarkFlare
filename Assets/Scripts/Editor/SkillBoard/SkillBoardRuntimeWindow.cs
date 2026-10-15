@@ -24,10 +24,15 @@ namespace DarkFlare.Editor
         [SerializeField, TextArea(2, 8), LabelText("显式连接：每行 柴薪A 节点A 柴薪B 节点B")] string _links = string.Empty;
         [ShowInInspector, ReadOnly, MultiLineProperty(5), LabelText("结果")] string _result = "请在有效游戏 Session 中使用";
         [ShowInInspector, ReadOnly, MultiLineProperty(8), LabelText("相接候选（尚未提交）")] string _candidates = string.Empty;
+        [SerializeField, LabelText("分配属性稳定 ID")] string _attributeId = StatIds.Strength;
+        [SerializeField, MinValue(1), LabelText("本次属性分配点数")] int _attributeCount = 1;
 
         PropertyTree _tree;
         Label _snapshot;
         SkillBoardPreview _preview;
+        EnergyBottleSelection _centerSelection;
+        SkillBoardPreview _chargePreview;
+        PlayerGrowthPreview _growthPreview;
         IVisualElementScheduledItem _refresh;
 
         [MenuItem("DarkFlare/Debug/柴薪安装与能量瓶")]
@@ -46,7 +51,103 @@ namespace DarkFlare.Editor
             _refresh?.Pause(); _refresh = rootVisualElement.schedule.Execute(Refresh).Every(500);
             Refresh();
         }
-        void OnDisable() { _refresh?.Pause(); _tree?.Dispose(); _tree = null; _preview = null; }
+        void OnDisable()
+        {
+            _refresh?.Pause();
+            _tree?.Dispose();
+            _tree = null;
+            _preview = null;
+            _centerSelection = null;
+            _chargePreview = null;
+            _growthPreview = null;
+        }
+
+        [Button("选择当前 ID 的能量瓶放入中心（不移动资产）")]
+        void SelectCenterBottle()
+        {
+            if (!TryPlayer(out string player)) { return; }
+            SkillBoardState board = this.SendQuery(new GetSkillBoardQuery());
+            ItemInstance item = this.SendQuery(new BoardDebugItemsQuery()).Concat(board.Items)
+                .FirstOrDefault(i => i.InstanceId == _itemId);
+            _centerSelection = this.SendQuery(new SelectEnergyBottleQuery(player, item));
+            _chargePreview = null;
+            _result = _centerSelection == null ? "选择失败：需要本玩家背包或专栏中的能量瓶" : "中心仅持有短暂引用；取消 / 关闭不消耗";
+            Refresh();
+        }
+
+        [Button("预览中心充能（不消费）")]
+        void PreviewCharge()
+        {
+            if (!TryPlayer(out _)) { return; }
+            _chargePreview = this.SendQuery(new PreviewEnergyChargeQuery(_centerSelection));
+            if (!_chargePreview.Success) { _result = _chargePreview.Error; return; }
+            PlayerGrowthState before = this.SendQuery(new GetPlayerGrowthQuery());
+            PlayerGrowthState after = _chargePreview.GrowthResult;
+            _result = $"充入 {_centerSelection.Item.SkillBoardState.Energy} 能量 · 同时新增 {after.EarnedPoints - before.EarnedPoints} 天赋点 / 属性点\n剩余 {after.Energy} · 下一点成本 {after.Rules.NextCost(after.EarnedPoints)}";
+        }
+
+        [Button("确认中心充能并消费整瓶")]
+        void CommitCharge()
+        {
+            if (!TryPlayer(out _)) { return; }
+            var command = new CommitSkillBoardCommand(_chargePreview);
+            bool success = this.SendCommand(command);
+            _result = success ? "充能成功，整瓶已消费" : command.Error;
+            _chargePreview = null;
+            if (success) { _centerSelection = null; }
+            Refresh();
+        }
+
+        [Button("取消中心选择与成长预览")]
+        void CancelGrowth()
+        {
+            _centerSelection = null;
+            _chargePreview = null;
+            _growthPreview = null;
+            _result = "已取消，资产和点数未变更";
+            Refresh();
+        }
+
+        [Button("预览属性分配")]
+        void PreviewAttribute()
+        {
+            if (!TryPlayer(out string player)) { return; }
+            _growthPreview = this.SendQuery(new PreviewPlayerGrowthQuery(player, _attributeId, _attributeCount));
+            DescribeGrowthPreview();
+        }
+
+        [Button("预览点亮当前柴薪 ID")]
+        void PreviewFirewoodActivation()
+        {
+            if (!TryPlayer(out string player)) { return; }
+            _growthPreview = this.SendQuery(new PreviewPlayerGrowthQuery(player, woodId: _woodId));
+            DescribeGrowthPreview();
+        }
+
+        [Button("预览点亮当前柴薪 / 普通天赋节点")]
+        void PreviewTalentActivation()
+        {
+            if (!TryPlayer(out string player)) { return; }
+            _growthPreview = this.SendQuery(new PreviewPlayerGrowthQuery(player, woodId: _woodId, nodeId: _nodeId));
+            DescribeGrowthPreview();
+        }
+
+        void DescribeGrowthPreview()
+        {
+            _result = _growthPreview.Success
+                ? $"预检通过 · 天赋点剩余 {_growthPreview.Result.TalentPoints} · 属性点剩余 {_growthPreview.Result.AttributePoints}"
+                : _growthPreview.Error;
+        }
+
+        [Button("提交当前属性 / 点亮预览")]
+        void CommitGrowth()
+        {
+            if (!TryPlayer(out _)) { return; }
+            var command = new CommitPlayerGrowthCommand(_growthPreview);
+            _result = this.SendCommand(command) ? "成长提交成功" : command.Error;
+            _growthPreview = null;
+            Refresh();
+        }
 
         [Button("生成到背包（调试供给）")]
         void Grant()
@@ -119,13 +220,29 @@ namespace DarkFlare.Editor
         void Refresh()
         {
             if (_snapshot == null) { return; }
-            if (!TryPlayer(out string player)) { _snapshot.text = "当前没有有效玩家。启动游戏后可操作。"; return; }
+            if (!TryPlayer(out string player))
+            {
+                _snapshot.text = "当前没有有效玩家。启动游戏后可操作。";
+                _centerSelection = null;
+                _chargePreview = null;
+                _growthPreview = null;
+                return;
+            }
             SkillBoardState state = this.SendQuery(new GetSkillBoardQuery());
+            PlayerGrowthState growth = this.SendQuery(new GetPlayerGrowthQuery());
+            if (_centerSelection != null && !this.SendQuery(new IsEnergyBottleSelectionCurrentQuery(_centerSelection)))
+            {
+                _centerSelection = null;
+                _chargePreview = null;
+            }
             var lines = new List<string> { "玩家 " + player, "能量瓶专栏：" + Describe(state.EnergyBottle), "", "棋盘" };
+            lines.Insert(2, $"中心选择：{Describe(_centerSelection?.Item)}\n角色余量 {growth.Energy} · 累计 {growth.EarnedPoints} · 下一点成本 {growth.Rules.NextCost(growth.EarnedPoints)}\n可用天赋点 {growth.TalentPoints} · 属性点 {growth.AttributePoints}\n分配：力量 {growth.Strength} / 敏捷 {growth.Dexterity} / 智力 {growth.Intelligence}");
             foreach (InstalledFirewood wood in state.Firewoods)
             {
                 lines.Add($"{Describe(wood.Item)}\n锚点 {wood.Placement.Anchor} · 旋转 {wood.Placement.Rotation}");
-                lines.Add("节点 " + string.Join(", ", wood.Placement.Layout.Nodes.Select(n => n.Id + ":" + n.Kind)));
+                lines.Add($"柴薪点亮 / 中心火焰资格：{growth.IsActive(wood.Item.InstanceId)}");
+                lines.Add("节点 " + string.Join(", ", wood.Placement.Layout.Nodes.Select(n => n.Id + ":" + n.Kind
+                    + (growth.IsActive(wood.Item.InstanceId, n.Id) ? "（已点亮）" : ""))));
             }
             lines.Add("连接 " + string.Join("\n", state.Connections.Select(c => c.First + " ↔ " + c.Second)));
             lines.Add("嵌入 " + string.Join("\n", state.Embeddings.Select(e => e.Slot + " = " + Describe(e.Item))));

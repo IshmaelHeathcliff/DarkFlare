@@ -2135,6 +2135,10 @@ MonoBehaviour:
     m_Key: item.detail.energy
     m_Metadata:
       m_Items: []
+  - m_Id: 20608754092335104
+    m_Key: attributes.source.growth
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

@@ -2,7 +2,7 @@ using System;
 
 namespace DarkFlare
 {
-    public enum ModifierOriginKind { Legacy, Equipment, Monster, Status }
+    public enum ModifierOriginKind { Legacy, Equipment, Monster, Status, Growth }
 
     public readonly struct ModifierOrigin
     {

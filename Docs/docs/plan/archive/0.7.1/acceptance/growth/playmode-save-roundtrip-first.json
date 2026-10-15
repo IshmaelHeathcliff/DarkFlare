@@ -1,0 +1,20 @@
+{
+  "status": "completed",
+  "duration": 6.31,
+  "summary": {
+    "total": 1,
+    "passed": 0,
+    "failed": 1,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "results": [
+    {
+      "FullName": "DarkFlare.Tests.SaveCaptureRestorePlayModeTests.MainSession_CapturePrepareRestorePreservesStateWithoutNewGameGrant",
+      "Status": "Failed",
+      "Duration": 6.2495871,
+      "Message": "  Expected: 157.41851806640625d +/- 0.0010000000474974513d\r\n  But was:  161.10415649414063d\r\n",
+      "StackTrace": "at DarkFlare.Tests.SaveCaptureRestorePlayModeTests+<MainSession_CapturePrepareRestorePreservesStateWithoutNewGameGrant>d__6.MoveNext () [0x017ba] in C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Tests\\PlayMode\\SaveCaptureRestorePlayModeTests.cs:346\r\nat UnityEngine.TestTools.TestEnumerator+<Execute>d__8.MoveNext () [0x0003a] in .\\Library\\PackageCache\\com.unity.test-framework@80f691d4262b\\UnityEngine.TestRunner\\NUnitExtensions\\Attributes\\TestEnumerator.cs:52\r\n"
+    }
+  ]
+}

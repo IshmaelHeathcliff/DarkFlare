@@ -1,0 +1,47 @@
+{
+  "diagnostics": [],
+  "compileMs": 184,
+  "executeMs": 817,
+  "assemblyName": "PipelineRunScript_VerifyGrowthWindow_3e87e5a8f3a64087aef9ae950a7c776b",
+  "success": true,
+  "result": {
+    "Context": "Isolated Editor preview scene and Session, actual Odin button handlers use production Query/Command",
+    "Player": "growth_verification",
+    "EnergyInput": 1000,
+    "EnergyFixture": "Injected into one formal empty bottle solely for UI verification; real death collection is separately covered by PlayMode",
+    "Preview": "充入 1000 能量 · 同时新增 6 天赋点 / 属性点\n剩余 25 · 下一点成本 250",
+    "State": {
+      "ActorInstanceId": "growth_verification",
+      "ContractVersion": 1,
+      "FirstCost": 100,
+      "CostIncrement": 25,
+      "FirewoodCost": 1,
+      "TalentCost": 1,
+      "AttributeValue": 1,
+      "Energy": 25,
+      "EarnedPoints": 6,
+      "TalentPoints": 4,
+      "AttributePoints": 4,
+      "Strength": 2,
+      "Dexterity": 0,
+      "Intelligence": 0,
+      "Activations": [
+        {
+          "FirewoodId": "6beb15e3b7134395ac79d50ed7475158",
+          "NodeId": "",
+          "Cost": 1
+        },
+        {
+          "FirewoodId": "6beb15e3b7134395ac79d50ed7475158",
+          "NodeId": "inner_1",
+          "Cost": 1
+        }
+      ]
+    },
+    "ActualHealth": 104,
+    "CancelRetainedBottle": true,
+    "BottleConsumed": true,
+    "Cleanup": "Window closed, preview actor destroyed, preview scene closed, Session stopped and input disposed in finally",
+    "Scope": "Development entry only; not the final player board or controller-device acceptance"
+  }
+}

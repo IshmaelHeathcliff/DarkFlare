@@ -78,6 +78,7 @@ namespace DarkFlare
 
         public IReadOnlyList<ActorIdentityDto> Actors { get; }
         public SkillBoardState SkillBoard { get; }
+        public PlayerGrowthState Growth { get; }
 
         internal DetachedRuntimeState(
             IReadOnlyDictionary<ItemInstanceId, ItemInstance> items,
@@ -86,7 +87,8 @@ namespace DarkFlare
             TraderDefinition trader,
             IReadOnlyList<ItemInstance> merchantStock,
             IReadOnlyList<ActorIdentityDto> actors,
-            SkillBoardState skillBoard)
+            SkillBoardState skillBoard,
+            PlayerGrowthState growth)
         {
             Items = items;
             Inventory = inventory;
@@ -95,6 +97,7 @@ namespace DarkFlare
             MerchantStock = merchantStock;
             Actors = actors;
             SkillBoard = skillBoard;
+            Growth = growth;
         }
     }
 
@@ -300,6 +303,21 @@ namespace DarkFlare
 
             SkillBoardState skillBoard = RestoreSkillBoard(dto.SkillBoard, items,
                 new HashSet<string>(actors.Where(a => a.Kind == ActorIdentityKind.Player).Select(a => a.InstanceId)), ownedItems, issues);
+            PlayerGrowthState growth = ReadPlayerGrowth(dto.Growth, out string growthError);
+            if (growthError != null) { Add(issues, DtoMapIssueCode.InvalidValue, "growth", growthError); }
+            if (growth != null)
+            {
+                string playerId = actors.FirstOrDefault(a => a.Kind == ActorIdentityKind.Player)?.InstanceId ?? string.Empty;
+                if (!GrowthOwnerMatches(dto.Growth, growth, playerId))
+                {
+                    Add(issues, DtoMapIssueCode.OwnershipConflict, "growth.player", "成长属于其他玩家");
+                }
+                if (issues.Count == 0)
+                {
+                    growthError = PlayerGrowthGraph.Validate(growth, skillBoard);
+                    if (growthError != null) { Add(issues, DtoMapIssueCode.InvalidValue, "growth", growthError); }
+                }
+            }
 
             if (issues.Count > 0)
             {
@@ -313,7 +331,8 @@ namespace DarkFlare
                 trader,
                 merchantStock.AsReadOnly(),
                 actors.AsReadOnly(),
-                skillBoard);
+                skillBoard,
+                growth);
             return Success(state);
         }
 

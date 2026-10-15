@@ -17,6 +17,7 @@ namespace DarkFlare
             this.RegisterModel(new EquipmentModel());
             this.RegisterModel(new InventoryModel());
             this.RegisterModel(new SkillBoardModel());
+            this.RegisterModel(new PlayerGrowthModel());
             this.RegisterModel(new EconomyModel());
             this.RegisterModel(new StatusModel());
             this.RegisterSystem(new StatusSystem());
@@ -24,6 +25,7 @@ namespace DarkFlare
             this.RegisterSystem(new EquipmentSystem());
             this.RegisterSystem(new CombatSystem());
             this.RegisterSystem(new SkillBoardSystem());
+            this.RegisterSystem(new PlayerGrowthSystem());
             this.RegisterSystem(new EnergyBottleSystem());
             this.RegisterSystem(new ItemUseSystem());
             this.RegisterSystem(new ResourceRegenerationSystem());

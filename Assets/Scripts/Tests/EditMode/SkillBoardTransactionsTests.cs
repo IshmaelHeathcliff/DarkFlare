@@ -165,12 +165,26 @@ namespace DarkFlare.Tests
             Assert.That(System.Preview(Player, install).Success, Is.False);
             Commit(new SkillBoardRequest(SkillBoardOperation.Extract, slot: slot));
             Commit(install);
+            ItemInstance creditBottle = Create("energy_bottle_small");
+            creditBottle.CollectEnergy(1000);
+            Inventory.TryAddItem(creditBottle);
+            Commit(new SkillBoardRequest(SkillBoardOperation.ConsumeBottle, creditBottle));
+            PlayerGrowthSystem growth = _architecture.GetSystem<PlayerGrowthSystem>();
+            Assert.That(growth.Preview(Player, null, 1, medium.InstanceId, "").Success, Is.False,
+                "未点亮根柴薪前，下游几何连接不能代替激活路径");
+            foreach (ItemInstance activate in new[] { root, medium })
+            {
+                PlayerGrowthPreview preview = growth.Preview(Player, null, 1, activate.InstanceId, "");
+                Assert.That(preview.Success, Is.True, preview.Error);
+                Assert.That(growth.Commit(preview, out _), Is.True);
+            }
             Assert.That(System.Preview(Player, new SkillBoardRequest(SkillBoardOperation.Embed, ember, slot: slot)).Success, Is.False);
             Assert.That(System.Preview(Player, new SkillBoardRequest(SkillBoardOperation.Remove, root)).Success, Is.False);
             ItemInstance flame = Create("flame_projectile"); Inventory.TryAddItem(flame);
             Assert.That(System.Preview(Player, new SkillBoardRequest(SkillBoardOperation.Embed, flame,
                 slot: new FirewoodPortReference(medium.InstanceId, SkillBoardGeometry.CenterNodeId))).Success, Is.False);
             Commit(new SkillBoardRequest(SkillBoardOperation.Remove, medium));
+            Assert.That(_architecture.GetModel<PlayerGrowthModel>().State.TalentPoints, Is.EqualTo(5));
             Assert.That(Board.State.Connections, Is.Empty);
             Commit(new SkillBoardRequest(SkillBoardOperation.Remove, root));
         }

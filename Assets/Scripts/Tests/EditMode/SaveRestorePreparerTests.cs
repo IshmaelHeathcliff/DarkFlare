@@ -74,7 +74,10 @@ namespace DarkFlare.Tests
             Assert.That(profile.SkillBoard.Embeddings, Is.Empty);
             Assert.That(profile.SkillBoard.EnergyBottleInstanceId, Is.Null.Or.Empty);
             Assert.That(migrated.Document.Payload.Items.All(x => x.SkillBoard == null), Is.True);
-            SavePayloadDto historical = original["payload"].ToObject<SavePayloadDto>();
+            JObject historicalPayload = (JObject)original["payload"].DeepClone();
+            historicalPayload["profile"]["growth"] = JObject.FromObject(
+                RuntimeStateMapper.ToDto(profile.PlayerId, new PlayerGrowthState()));
+            SavePayloadDto historical = historicalPayload.ToObject<SavePayloadDto>();
             JObject expected = JObject.FromObject(historical);
             JObject actual = JObject.FromObject(migrated.Document.Payload);
             ((JObject)expected["Profile"]).Remove("SkillBoard");
@@ -84,6 +87,9 @@ namespace DarkFlare.Tests
             PreparedRestoreResult prepared = SaveRestorePreparer.Prepare(migrated.Document, _catalog);
             Assert.That(prepared.Succeeded, Is.True, Describe(prepared));
             Assert.That(prepared.Value.RuntimeState.SkillBoard.Items, Is.Empty);
+            Assert.That(prepared.Value.RuntimeState.Growth.EarnedPoints, Is.Zero);
+            Assert.That(prepared.Value.RuntimeState.Growth.Energy, Is.Zero);
+            Assert.That(prepared.Value.RuntimeState.Growth.Rules, Is.EqualTo(GrowthRules.Default));
             Assert.That(prepared.Value.PlayerSkill.Id, Is.EqualTo(migrated.Document.Payload.Run.Player.SkillContentId.Split(':')[1]));
             SaveSerializationResult saved = new NewtonsoftSaveSerializer().Serialize(prepared.Value.Document);
             Assert.That(saved.Succeeded, Is.True);
@@ -91,6 +97,42 @@ namespace DarkFlare.Tests
             Assert.That(replay.Succeeded, Is.True);
             Assert.That(replay.WasMigrated, Is.False);
             Assert.That(JToken.DeepEquals(JToken.FromObject(prepared.Value.Document.Payload), JToken.FromObject(replay.Document.Payload)), Is.True);
+        }
+
+        [Test]
+        public void Prepare_GrowthValidatesOwnershipLedgerAndActiveNodesBeforeRestore()
+        {
+            SaveDocumentDto document = SaveRestorePreparer.Prepare(SaveDataContractTests.CreateValidDocument(), _catalog).Value.Document;
+            ItemBaseDefinition definition = _catalog.Resolve<ItemBaseDefinition>(ContentId.Parse("item:firewood_large")).Value;
+            ItemInstance wood = definition.CreateInstance(new UuidItemInstanceIdGenerator().Next(), 1, 43, ItemRarity.Normal);
+            var board = new SkillBoardState(new[] { new InstalledFirewood(wood, new HexCoordinate(16, 0), 0) });
+            string talent = wood.SkillBoardState.Layout.Edges.Where(e => e.First == "center" || e.Second == "center")
+                .Select(e => e.First == "center" ? e.Second : e.First).First();
+            PlayerGrowthState state = new PlayerGrowthState().Charge(1000)
+                .Activate(wood.InstanceId, "").Activate(wood.InstanceId, talent).Allocate(StatIds.Strength, 2);
+            document.Payload.Profile.SkillBoard = RuntimeStateMapper.ToDto(document.Payload.Profile.PlayerId, board);
+            document.Payload.Profile.Growth = RuntimeStateMapper.ToDto(document.Payload.Profile.PlayerId, state);
+            document.Payload.Items.Add(RuntimeStateMapper.ToDto(wood, _catalog).Value);
+            document.Header.Summary.ItemCount = document.Payload.Items.Count;
+            PreparedRestoreResult prepared = SaveRestorePreparer.Prepare(document, _catalog);
+            Assert.That(prepared.Succeeded, Is.True, Describe(prepared));
+            Assert.That(prepared.Value.RuntimeState.Growth.Strength, Is.EqualTo(2));
+            var serializer = new NewtonsoftSaveSerializer();
+            SaveSerializationResult saved = serializer.Serialize(prepared.Value.Document);
+            Assert.That(saved.Succeeded, Is.True);
+            SaveDeserializationResult roundtrip = serializer.Deserialize(saved.Bytes);
+            Assert.That(roundtrip.Succeeded, Is.True);
+            Assert.That(JToken.DeepEquals(JObject.FromObject(prepared.Value.Document.Payload),
+                JObject.FromObject(roundtrip.Document.Payload)), Is.True);
+            document.Payload.Profile.Growth.Activations[0].FirewoodId = Guid.NewGuid().ToString("N");
+            Assert.That(SaveRestorePreparer.Prepare(document, _catalog).Succeeded, Is.False);
+            document.Payload.Profile.Growth = RuntimeStateMapper.ToDto("other_player", state);
+            Assert.That(SaveRestorePreparer.Prepare(document, _catalog).Succeeded, Is.False);
+            document.Payload.Profile.Growth = RuntimeStateMapper.ToDto(document.Payload.Profile.PlayerId, state);
+            document.Payload.Profile.Growth.AttributePoints++;
+            Assert.That(SaveRestorePreparer.Prepare(document, _catalog).Succeeded, Is.False);
+            document.Payload.Profile.Growth = null;
+            Assert.That(serializer.Serialize(document).Succeeded, Is.False);
         }
 
         [TestCase(3)]

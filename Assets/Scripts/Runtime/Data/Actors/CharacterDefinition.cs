@@ -24,6 +24,11 @@ namespace DarkFlare
         [LabelText("角色 Prefab")]
         AssetReferenceGameObject _prefab;
 
+        [SerializeField, LabelText("永久成长配置")]
+        PlayerGrowthConfiguration _growth;
+
+        public PlayerGrowthConfiguration Growth => _growth;
+
         [SerializeField]
         [MinValue(1)]
         [LabelText("最大生命")]

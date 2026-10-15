@@ -37,6 +37,7 @@
 - [技能面板几何与柴薪生成](./skill-board/geometry.md)
 - [棋盘道具与安装事务](./skill-board/items-installation.md)
 - [能量瓶装备与击杀收集](./skill-board/energy-bottles.md)
+- [中心充能、属性分配与点亮](./skill-board/growth.md)
 - [棋盘道具图标与导入合同](./skill-board/item-icons.md)
 - [随机化与掉落规则](./randomization-system.md)
 - [首批内容池](./content-system.md)
@@ -76,6 +77,7 @@
 - [0.7.1 技能面板与技能重构执行计划](./plan/alpha-0.7.1-skill-board-plan.md)
 - [0.7.1-alpha.1 已归档实施计划](plan/archive/0.7.1/plans/phase-1-execution.md)
 - [0.7.1-alpha.2 道具、安装事务与能量瓶实施计划](plan/archive/0.7.1/plans/phase-2-execution.md)
+- [0.7.1-alpha.3 中心充能、属性分配与天赋点亮实施计划](plan/archive/0.7.1/plans/phase-3-execution.md)
 - [0.7.1 六键手动施法、输入与存档合同](./plan/alpha-0.7.1/manual-skills.md)
 - [0.7.1 能量瓶、充能兑换与天赋成长合同](./plan/alpha-0.7.1/energy-progression.md)
 - [已完成版本的计划与验收归档](./plan/archive/README.md)
@@ -83,6 +85,10 @@
 完成的执行计划与验收文档、截图、日志和结果统一按版本收纳到 `plan/archive/<版本号>/`，各版本提供 `plans/`、`acceptance/` 与 `README.md` 入口。模块文档继续保留在对应职责目录。
 
 ## 计划状态
+
+2026-10-15：**阶段三已完成，当前 0.7.1-alpha.3**。core v12 / Schema 11 / 1 / 地图 V4；项目 EditMode 949/949、PlayMode 102/102，均无失败 / 跳过。中心充能、跨瓶余额、三属性分配、路径点亮和拆卸退款已交付，见[成长模块](./skill-board/growth.md)及[当次验收](./plan/archive/0.7.1/acceptance/growth/README.md)。阶段四六键技能和阶段五正式棋盘继续活动。
+
+2026-10-07：**阶段二已提交 `1d7fd34`，阶段三计划已整理**。下一步交付中心整瓶充能、跨瓶余额、递增兑换、三属性分配、柴薪 / Talent 独立点亮及保存。首轮数值、路径资格和取回点数政策待用户确认，见[阶段三计划](plan/archive/0.7.1/plans/phase-3-execution.md)。本轮只提交和规划，运行版本保持 alpha.2，未重跑已通过的基线测试。
 
 2026-10-07：**阶段二完成，运行版本 `0.7.1-alpha.2`**。已交付固定实例变体、安装 / 取回事务、三档瓶与专栏、四因素击杀收益、保存 / 恢复以及正式掉落 / 商店渠道。core v11、Schema 10 / 1、地图 V4；完整 EditMode 931/931、项目 PlayMode 102/102，均无失败 / 跳过。见[阶段二验收](./plan/archive/0.7.1/acceptance/items-energy/README.md)、[安装模块](./skill-board/items-installation.md)与[能量瓶模块](./skill-board/energy-bottles.md)。计划与证据已按 `archive/0.7.1/` 归档，成长、六键技能和正式玩家界面继续由[活动总计划](./plan/alpha-0.7.1-skill-board-plan.md)推进。
 
@@ -110,5 +116,5 @@
 
 ## 说明
 
-当前项目已完成首版最小循环、初步体验优化及 Alpha 0.1–0.4 已归档计划，Alpha 0.5 的地图基础、编辑器、世界层级、双地图、批量导航与综合交付，以及 Alpha 0.6 的行为、Boss、有限刷怪、手动重置与 Editor 综合交付均已完成。Alpha 0.7 已完成 SemVer、棋盘几何以及道具 / 安装 / 能量瓶阶段，当前运行版本为 `0.7.1-alpha.2`；成长、六键技能和正式棋盘阶段继续推进。已完成的执行计划统一保存在 `Docs/docs/plan/archive/`。
+当前项目已完成首版最小循环、初步体验优化及 Alpha 0.1–0.4 已归档计划，Alpha 0.5 的地图基础、编辑器、世界层级、双地图、批量导航与综合交付，以及 Alpha 0.6 的行为、Boss、有限刷怪、手动重置与 Editor 综合交付均已完成。Alpha 0.7 已完成 SemVer、棋盘几何、道具 / 能量瓶与成长阶段，当前运行版本为 `0.7.1-alpha.3`；六键技能和正式棋盘继续推进。已完成的执行计划统一保存在 `Docs/docs/plan/archive/`。
 后续新增系统、配置或流程时，应优先更新对应文档，避免 `Docs/docs/` 与实现脱节。游戏设计文档位于 `Docs/design/`，不属于 Agent 的常规维护范围。

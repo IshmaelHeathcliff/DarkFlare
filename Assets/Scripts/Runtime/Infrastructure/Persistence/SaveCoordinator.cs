@@ -806,6 +806,7 @@ namespace DarkFlare
             _dirtyRegistrations.Add(architecture.RegisterEvent<EquipmentChangedEvent>(_ => MarkDirty()));
             _dirtyRegistrations.Add(architecture.RegisterEvent<SkillBoardChangedEvent>(_ => MarkDirty()));
             _dirtyRegistrations.Add(architecture.RegisterEvent<EnergyCollectedEvent>(_ => MarkDirty()));
+            _dirtyRegistrations.Add(architecture.RegisterEvent<PlayerGrowthChangedEvent>(_ => MarkDirty()));
             _dirtyRegistrations.Add(architecture.RegisterEvent<TradeCompletedEvent>(_ => MarkDirty()));
             _dirtyRegistrations.Add(architecture.RegisterEvent<MerchantStockRefreshedEvent>(_ => MarkDirty()));
             _dirtyRegistrations.Add(architecture.RegisterEvent<ItemCraftedEvent>(_ => MarkDirty()));

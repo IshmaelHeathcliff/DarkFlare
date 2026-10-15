@@ -366,6 +366,7 @@ namespace DarkFlare
             ValidateInventory(profile.Inventory, items, ownership, $"{path}.inventory", issues);
             ValidateEquipment(profile.Equipment, profile.PlayerId, items, ownership, $"{path}.equipment", issues);
             ValidateSkillBoard(profile.SkillBoard, profile.PlayerId, items, ownership, $"{path}.skillBoard", issues);
+            ValidateGrowth(profile, items, $"{path}.growth", issues);
         }
 
         static void ValidateInventory(

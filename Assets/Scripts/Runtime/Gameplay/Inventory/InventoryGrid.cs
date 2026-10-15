@@ -11,6 +11,7 @@ namespace DarkFlare
         public int Width { get; }
 
         public int Height { get; }
+        public long Revision { get; private set; }
 
         public IReadOnlyDictionary<ItemInstance, RectInt> Placements => _placements;
 
@@ -313,6 +314,7 @@ namespace DarkFlare
 
         void Vacate(ItemInstance item, RectInt rect)
         {
+            Revision++;
             for (int y = rect.yMin; y < rect.yMax; y++)
             {
                 for (int x = rect.xMin; x < rect.xMax; x++)
@@ -329,6 +331,7 @@ namespace DarkFlare
 
         void Occupy(ItemInstance item, RectInt rect)
         {
+            Revision++;
             for (int y = rect.yMin; y < rect.yMax; y++)
             {
                 for (int x = rect.xMin; x < rect.xMax; x++)

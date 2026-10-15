@@ -1,0 +1,111 @@
+{
+  "status": "completed",
+  "duration": 2.5,
+  "summary": {
+    "total": 14,
+    "passed": 14,
+    "failed": 0,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "results": [
+    {
+      "FullName": "DarkFlare.Tests.SkillBoardTransactionsTests.BottleCollection_InvalidatesPendingUnequipPreview",
+      "Status": "Passed",
+      "Duration": 0.0481058,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SkillBoardTransactionsTests.BottleSwap_UsesExactSourceCellsEvenWhenInventoryIsFull",
+      "Status": "Passed",
+      "Duration": 0.0057769,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SkillBoardTransactionsTests.BuyingAndSelling_RetainsVariantInstanceAndStoredEnergy",
+      "Status": "Passed",
+      "Duration": 0.0705386,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SkillBoardTransactionsTests.CompleteSaveGraph_RestoresBoardAndBottleAndRejectsDuplicateOwnerBeforeCommit",
+      "Status": "Passed",
+      "Duration": 1.9822176,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SkillBoardTransactionsTests.Creation_AllRolesHaveUniqueNonStackingPayloadAndCorrectInventoryShape",
+      "Status": "Passed",
+      "Duration": 0.0104709,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SkillBoardTransactionsTests.DirectConnection_RejectsEmberUntilManuallyExtractedAndRejectsBridgeRemoval",
+      "Status": "Passed",
+      "Duration": 0.0167609,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SkillBoardTransactionsTests.EmbeddedItems_RequireManualExtractionBeforeWoodRemoval",
+      "Status": "Passed",
+      "Duration": 0.0037448,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SkillBoardTransactionsTests.FilledInventory_RejectsExtractionAndRemovalWithoutEventsOrTopologyChanges",
+      "Status": "Passed",
+      "Duration": 0.0042402,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SkillBoardTransactionsTests.InstallAndLastRemoval_TransferTheSameInstanceOnce",
+      "Status": "Passed",
+      "Duration": 0.0032617,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SkillBoardTransactionsTests.InvalidPlacementOrRoot_DoesNotTakeItemFromInventory",
+      "Status": "Passed",
+      "Duration": 0.0038903,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SkillBoardTransactionsTests.ItemMapper_PreservesActualLayoutsEffectsFlameAndPartialEnergyAndRejectsCorruption",
+      "Status": "Passed",
+      "Duration": 0.0089018,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SkillBoardTransactionsTests.RootReachability_AllowsLoopsAndAnotherRootButRejectsDisconnectedRemainder",
+      "Status": "Passed",
+      "Duration": 0.0044324,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SkillBoardTransactionsTests.StalePreview_RejectsChangedVariantAndOtherSession",
+      "Status": "Passed",
+      "Duration": 0.0038201,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SkillBoardTransactionsTests.StalePreview_RejectsMovedSourceAndPreservesExternalMove",
+      "Status": "Passed",
+      "Duration": 0.0028754,
+      "Message": null,
+      "StackTrace": null
+    }
+  ]
+}

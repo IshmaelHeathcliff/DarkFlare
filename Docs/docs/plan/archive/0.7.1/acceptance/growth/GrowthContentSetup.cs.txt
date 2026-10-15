@@ -1,0 +1,74 @@
+using System.Linq;
+using DarkFlare;
+using UnityEditor;
+using UnityEditor.Localization;
+using UnityEngine;
+
+public static class GrowthContentSetup
+{
+    public static object Complete()
+    {
+        if (EditorApplication.isPlaying) { throw new System.InvalidOperationException("请等待测试退出 PlayMode"); }
+        if (GameArchitectureProvider.HasCurrent)
+        {
+            if (ApplicationHost.TryGetCurrent(out _) || !GameArchitectureProvider.TryGetOwnerScope(out LifecycleScope owner)
+                || owner.State != LifecycleScopeState.Stopped)
+            {
+                throw new System.InvalidOperationException("当前仍有活动 Session");
+            }
+            GameArchitectureProvider.StopSession(owner);
+        }
+        var font = AssetDatabase.LoadAssetAtPath<UnityEngine.Object>("Assets/Settings/UI/Fonts/GameCjkFont.asset");
+        EditorUtility.ClearDirty(font);
+        PlayerSettings.bundleVersion = "0.7.1-alpha.3";
+        AssetDatabase.SaveAssets();
+        var memoryType = typeof(GameArchitecture).Assembly.GetType("DarkFlare.NavigationMemory");
+        var catalog = AssetDatabase.LoadAssetAtPath<ContentCatalogDefinition>("Assets/Data/Preset/Content/正式内容目录.asset");
+        return new
+        {
+            Version = PlayerSettings.bundleVersion,
+            Unity = Application.unityVersion,
+            Core = catalog.ContentVersion,
+            SaveSchema = SaveSchemaVersion.Current.Value,
+            CurrentArchitecture = GameArchitectureProvider.HasCurrent,
+            NavigationBytes = memoryType.GetProperty("Bytes", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic).GetValue(null),
+            Scene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().path,
+            SceneDirty = UnityEngine.SceneManagement.SceneManager.GetActiveScene().isDirty
+        };
+    }
+
+    public static object Apply()
+    {
+        const string configPath = "Assets/Data/Preset/SkillBoard/PlayerGrowth.asset";
+        PlayerGrowthConfiguration config = AssetDatabase.LoadAssetAtPath<PlayerGrowthConfiguration>(configPath);
+        if (config == null)
+        {
+            config = ScriptableObject.CreateInstance<PlayerGrowthConfiguration>();
+            AssetDatabase.CreateAsset(config, configPath);
+        }
+        var player = AssetDatabase.LoadAssetAtPath<CharacterDefinition>("Assets/Data/Preset/Actors/玩家.asset");
+        var playerData = new SerializedObject(player);
+        playerData.FindProperty("_growth").objectReferenceValue = config;
+        playerData.ApplyModifiedPropertiesWithoutUndo();
+        EditorUtility.SetDirty(player);
+        var catalog = AssetDatabase.LoadAssetAtPath<ContentCatalogDefinition>("Assets/Data/Preset/Content/正式内容目录.asset");
+        var catalogData = new SerializedObject(catalog);
+        catalogData.FindProperty("_contentVersion").intValue = 12;
+        catalogData.ApplyModifiedPropertiesWithoutUndo();
+        EditorUtility.SetDirty(catalog);
+        var collection = LocalizationEditorSettings.GetStringTableCollection("ui");
+        long key = (collection.SharedData.GetEntry("attributes.source.growth")
+            ?? collection.SharedData.AddKey("attributes.source.growth")).Id;
+        foreach (var table in collection.StringTables)
+        {
+            string locale = table.LocaleIdentifier.Code;
+            var entry = table.GetEntry(key) ?? table.AddEntry(key, "");
+            entry.Value = locale == "zh-Hans" ? "永久属性分配" : "Permanent attribute allocation";
+            EditorUtility.SetDirty(table);
+        }
+        EditorUtility.SetDirty(collection.SharedData);
+        AssetDatabase.SaveAssets();
+        return new { Config = configPath, RulesValid = config.Rules.IsValid, Core = catalog.ContentVersion,
+            SaveSchema = SaveSchemaVersion.Current.Value, SceneDirty = UnityEngine.SceneManagement.SceneManager.GetActiveScene().isDirty };
+    }
+}

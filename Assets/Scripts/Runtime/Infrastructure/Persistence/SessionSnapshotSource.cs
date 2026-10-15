@@ -141,6 +141,12 @@ namespace DarkFlare
             EquipmentModel equipment = architecture.GetModel<EquipmentModel>();
             EconomyModel economy = architecture.GetModel<EconomyModel>();
             SkillBoardModel board = architecture.GetModel<SkillBoardModel>();
+            PlayerGrowthModel growth = architecture.GetModel<PlayerGrowthModel>();
+            string growthError = PlayerGrowthGraph.Validate(growth.State, board.State);
+            if (growthError != null || growth.PlayerId.Length > 0 && growth.PlayerId != player.Id.Value)
+            {
+                Add(issues, DtoMapIssueCode.InvalidValue, "payload.profile.growth", growthError ?? "成长属于其他玩家");
+            }
             if (board.PlayerId.Length > 0 && board.PlayerId != player.Id.Value)
             {
                 Add(issues, DtoMapIssueCode.OwnershipConflict, "payload.profile.skillBoard", "棋盘属于其他玩家");
@@ -164,6 +170,7 @@ namespace DarkFlare
                     ProfileId = "local_default",
                     PlayerId = player.Id.Value,
                     SkillBoard = RuntimeStateMapper.ToDto(player.Id.Value, board.State),
+                    Growth = RuntimeStateMapper.ToDto(player.Id.Value, growth.State),
                     Gold = inventory.Gold,
                     Inventory = RuntimeStateMapper.ToDto(inventory.Grid),
                     Equipment = new List<EquipmentLoadoutDto>

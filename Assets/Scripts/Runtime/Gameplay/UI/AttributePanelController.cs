@@ -243,6 +243,7 @@ namespace DarkFlare
         {
             if (origin.Kind == ModifierOriginKind.Status) { return L("source.status", origin.StatusId, origin.StackCount); }
             if (origin.Kind == ModifierOriginKind.Monster) { return L("source.monster"); }
+            if (origin.Kind == ModifierOriginKind.Growth) { return L("source.growth"); }
             if (string.IsNullOrEmpty(origin.ItemId)) { return L("source.actor"); }
             string slot = EquipmentSlots.GetKey(origin.Slot);
             return _localization.GetString("ui", "equipment.slot." + slot) + " · " + Message(origin.ItemName) + " · " + Message(origin.AffixName);

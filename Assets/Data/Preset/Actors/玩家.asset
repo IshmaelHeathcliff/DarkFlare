@@ -23,6 +23,7 @@ MonoBehaviour:
     m_SubObjectType:
     m_SubObjectGUID:
     m_EditorAssetChanged: 0
+  _growth: {fileID: 11400000, guid: b7d6bdacbb52e0a4cacb996ed678304b, type: 2}
   _maxHealth: 100
   _mana: 200
   _healthRegeneration: 1

@@ -2196,13 +2196,17 @@ MonoBehaviour:
     m_Localized: 'Stored energy: {0} / {1}'
     m_Metadata:
       m_Items: []
+  - m_Id: 20608754092335104
+    m_Localized: Permanent attribute allocation
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:
     - rid: 6738608143192817845
       type: {class: SmartFormatTag, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
       data:
-        m_Entries: 
+        m_Entries:
         m_SharedEntries:
         - id: 18975395143680
         - id: 18975453863938

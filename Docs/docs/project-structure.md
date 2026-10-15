@@ -22,6 +22,7 @@ DarkFlare/
         geometry.md
         items-installation.md
         energy-bottles.md
+        growth.md
         item-icons.md
       plan/
         alpha-0.7-plan.md

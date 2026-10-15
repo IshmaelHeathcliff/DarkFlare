@@ -1,0 +1,132 @@
+{
+  "status": "completed",
+  "duration": 0.7,
+  "summary": {
+    "total": 17,
+    "passed": 17,
+    "failed": 0,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "results": [
+    {
+      "FullName": "DarkFlare.Tests.PlayerGrowthTests.Allocation_RebuildsOneSourceAndPreservesResourcesAndActorConfiguration",
+      "Status": "Passed",
+      "Duration": 0.220587,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.PlayerGrowthTests.CenterSelection_TracksOriginalOwnerAndInvalidatesMovedSourceWithoutConsuming",
+      "Status": "Passed",
+      "Duration": 0.0109215,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.PlayerGrowthTests.ChargingBackpackAndEquippedBottle_PublishesOnlyConsistentFinalState",
+      "Status": "Passed",
+      "Duration": 0.0039612,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.PlayerGrowthTests.Conversion_UsesIncreasingThresholdsAndPreservesRemainder(99,0,99)",
+      "Status": "Passed",
+      "Duration": 0.0024737,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.PlayerGrowthTests.Conversion_UsesIncreasingThresholdsAndPreservesRemainder(100,1,0)",
+      "Status": "Passed",
+      "Duration": 0.001916,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.PlayerGrowthTests.Conversion_UsesIncreasingThresholdsAndPreservesRemainder(224,1,124)",
+      "Status": "Passed",
+      "Duration": 0.0019324,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.PlayerGrowthTests.Conversion_UsesIncreasingThresholdsAndPreservesRemainder(225,2,0)",
+      "Status": "Passed",
+      "Duration": 0.0020389,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.PlayerGrowthTests.Conversion_UsesIncreasingThresholdsAndPreservesRemainder(1000,6,25)",
+      "Status": "Passed",
+      "Duration": 0.0019462,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.PlayerGrowthTests.DtoRoundTripAndCorruption_RejectLostBalancesUnknownContractsAndDuplicateActivation",
+      "Status": "Passed",
+      "Duration": 0.0160554,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.PlayerGrowthTests.EmptyBottleAndStaleCharge_RetainBottleAndExternalEnergy",
+      "Status": "Passed",
+      "Duration": 0.0028477,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.PlayerGrowthTests.FailedReturnAndThrowingObserver_CannotLoseOrDuplicateSpentPoints",
+      "Status": "Passed",
+      "Duration": 0.0617323,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.PlayerGrowthTests.GrowthAndBoardPreviews_RejectChangedPointsOwnershipAndResources",
+      "Status": "Passed",
+      "Duration": 0.0039885,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.PlayerGrowthTests.LargeIntegerCurveAndInvalidInputs_AreBoundedAndRejectBrokenLedgers",
+      "Status": "Passed",
+      "Duration": 0.0022476,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.PlayerGrowthTests.OldSystemAfterSessionEnds_CannotCommitCapturedGrowth",
+      "Status": "Passed",
+      "Duration": 0.0022357,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.PlayerGrowthTests.PureActivationGraph_UsesExplicitEdgesAndActiveRootsThroughCycles",
+      "Status": "Passed",
+      "Duration": 0.0036161,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.PlayerGrowthTests.SplitBottlesAndSpentPoints_DoNotChangeConversionSequence",
+      "Status": "Passed",
+      "Duration": 0.0015066,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.PlayerGrowthTests.TalentPathAndReturn_RequireSeparatePointsAndRefundOnlyCurrentWood",
+      "Status": "Passed",
+      "Duration": 0.0086221,
+      "Message": null,
+      "StackTrace": null
+    }
+  ]
+}

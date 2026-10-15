@@ -39,3 +39,16 @@
 | `_energyCapacity` | `int` / `1000` | 能量瓶大于 0；三档 1000 / 2000 / 4000 | EnergyBottleSystem 限容收集；恢复拒绝负值和越容量；改容量须兼容已有能量 |
 
 新角色必须不可堆叠、无战斗装备槽 / 主动使用 / 维持状态。柴薪、火焰、余烬背包 1×1，能量瓶 2×1。火焰与余烬允许合法显式词条，普通掉落与货池当前使用已掷隐式变体；柴薪和瓶子不允许显式词条。配置中心与 ContentCatalog.Build 共同拒绝非法组合。
+## PlayerGrowthConfiguration
+
+正式资产为 `Assets/Data/Preset/SkillBoard/PlayerGrowth.asset`，由玩家 CharacterDefinition 的 `_growth` 引用，沿已有角色内容身份加载。
+
+| 字段 | 用途 / 首轮值 |
+| --- | --- |
+| `_firstCost` | 第一个天赋点能量，100，必须为正。 |
+| `_costIncrement` | 每点递增能量，25，必须为正。 |
+| `_firewoodCost` | 点亮柴薪实花点数，1。 |
+| `_talentCost` | 点亮普通天赋实花点数，1。 |
+| `_attributeValue` | 每属性点增加的对应主属性，1。 |
+
+Rules 为只读值快照，成本合同版本为 1；当前参数与合同随成长保存，恢复拒绝不兼容配置。兑换、守恒与失败边界见[成长模块](../skill-board/growth.md)。

@@ -1,6 +1,6 @@
 # 棋盘道具与安装事务
 
-阶段二交付正式道具、安装、拆卸、交易和保存。几何规则见[几何模块](geometry.md)，能量见[能量瓶](energy-bottles.md)，配置见[配置参考](../config-reference/skill-board.md)。点亮、天赋效果、六槽技能和正式玩家棋盘仍按[总计划](../plan/alpha-0.7.1-skill-board-plan.md)推进。
+阶段二交付正式道具、安装、拆卸、交易和保存。几何规则见[几何模块](geometry.md)，能量见[能量瓶](energy-bottles.md)，配置见[配置参考](../config-reference/skill-board.md)。阶段三已接入[充能与点亮](growth.md)，天赋效果、六槽技能和正式玩家棋盘仍按[总计划](../plan/alpha-0.7.1-skill-board-plan.md)推进。
 
 ## 实例与配置
 
@@ -26,7 +26,7 @@
 
 棋盘所有权使用 PlayerController.Id，战斗来源校验使用 CombatActor.ActorId / CombatIdentity；两者不能混作同一身份。所有实际物品仅在统一 Items 表序列化一次，Profile.SkillBoard 保存坐标、旋转、连接、嵌入与专栏引用。Mapper、Validator 和 Restore Preparer 同时拒绝重复所有者、未知内容、角色 / 插槽错误、断根、碰撞、损坏布局与坐标溢出。
 
-core v11 / Save Schema 10 接入追加内容兼容与 9→10 迁移。旧档初始化空棋盘 / 专栏、新物品扩展为空，保留原技能和冷却，不赠送物品。恢复只读实际结果，切图保留角色资产；见[本地保存](../infrastructure/local-save.md)。
+阶段二 core v11 / Save Schema 10 接入追加内容兼容与 9→10 迁移；当前 core v12 / Save Schema 11 另保存 Profile.Growth，点亮 / 取回与成长同一次提交。旧档初始化空棋盘 / 专栏、新物品扩展为空，保留原技能和冷却，不赠送物品。恢复只读实际结果，切图保留角色资产；见[本地保存](../infrastructure/local-save.md)。
 
 ## 开发验证入口
 
