@@ -1,6 +1,6 @@
 # 0.7.1-alpha.3 中心充能、属性与点亮验收
 
-2026-10-15：**阶段三通过并归档**。当前版本 0.7.1-alpha.3，Unity 6000.6.4f1，core v12、Save / Settings Schema 11 / 1、地图 V4。源码为 main / 1d7fd34 加本轮未提交改动，见[源码与配置身份](source-identity.json)。[实施计划](../../plans/phase-3-execution.md)归档于同一版本系列；[活动总计划](../../../../alpha-0.7.1-skill-board-plan.md)继续推进阶段四、五。
+2026-10-15：**阶段三通过并归档**。当前版本 0.7.1-alpha.3，Unity 6000.6.4f1，core v12、Save / Settings Schema 11 / 1、地图 V4。源码为 main / 1d7fd34 加本轮未提交改动，见[源码与配置身份](source-identity.json)。[实施计划](../../plans/phase-3-execution.md)归档于同一版本系列；[活动总计划](../../plans/alpha-0.7.1-skill-board-plan.md)继续推进阶段四、五。
 
 ## 交付结果
 

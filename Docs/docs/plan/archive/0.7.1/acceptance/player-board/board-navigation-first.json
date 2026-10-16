@@ -1,0 +1,34 @@
+{
+  "status": "completed",
+  "duration": 7.44,
+  "summary": {
+    "total": 3,
+    "passed": 2,
+    "failed": 1,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "results": [
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.Board_CancelDeviceRemovalAndStaleBottleCannotCommitPendingRequests",
+      "Status": "Passed",
+      "Duration": 2.3584219,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.Board_LocalesKeepCanvasInventoryAndConfirmationReachable",
+      "Status": "Passed",
+      "Duration": 2.0373285,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.Board_PlayerTransactionsUseSharedCarryConfirmationAndSixSlots",
+      "Status": "Failed",
+      "Duration": 2.9617079,
+      "Message": "  Expected: 1\r\n  But was:  0\r\n",
+      "StackTrace": "at DarkFlare.Tests.Phase1UxPlayModeTests+<Board_PlayerTransactionsUseSharedCarryConfirmationAndSixSlots>d__0.MoveNext () [0x007b7] in C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Tests\\PlayMode\\Phase1UxPlayModeTests.SkillBoard.cs:79\r\nat UnityEngine.TestTools.TestEnumerator+<Execute>d__8.MoveNext () [0x0003a] in .\\Library\\PackageCache\\com.unity.test-framework@80f691d4262b\\UnityEngine.TestRunner\\NUnitExtensions\\Attributes\\TestEnumerator.cs:52\r\n"
+    }
+  ]
+}

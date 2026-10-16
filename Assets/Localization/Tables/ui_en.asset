@@ -2260,6 +2260,324 @@ MonoBehaviour:
     m_Localized: Flame skill 6
     m_Metadata:
       m_Items: []
+  - m_Id: 20873743541723136
+    m_Localized: Talent board
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743621414912
+    m_Localized: Center
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743621414913
+    m_Localized: Fit network
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743621414914
+    m_Localized: Zoom in
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743621414915
+    m_Localized: Zoom out
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743621414916
+    m_Localized: Root {0}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743621414917
+    m_Localized: Node and item
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743621414918
+    m_Localized: Place selected bag item
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743621414919
+    m_Localized: Move this firewood
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743621414920
+    m_Localized: Preview activation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743621414921
+    m_Localized: Extract embedded item
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743621414922
+    m_Localized: Disconnect and return this item
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743621414923
+    m_Localized: Confirm
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743621414924
+    m_Localized: Charge and consume bottle
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743621414925
+    m_Localized: Cancel preview
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743621414926
+    m_Localized: Equip selected bottle
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743621414927
+    m_Localized: Unequip bottle
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743621414928
+    m_Localized: Select bottle for charging
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743621414929
+    m_Localized: Only the equipped bottle collects energy. Overflow is discarded; replace a full bottle manually.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609216
+    m_Localized: 'Energy bottle: empty'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609217
+    m_Localized: 'Equipped: {0}
+
+      Energy {1} / {2}{3}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609218
+    m_Localized: " \xB7 Full"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609219
+    m_Localized: "Talent points {0} \xB7 Attribute points {1}\nEnergy pool {2} \xB7 Next point {3}"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609220
+    m_Localized: "{0}: allocated {1} \xB7 current {2}"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609221
+    m_Localized: Allocate 1 {0}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609222
+    m_Localized: "Cell {0} \xB7 {1}"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609223
+    m_Localized: Empty cell
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609224
+    m_Localized: Reserved center cell; firewood cannot occupy it
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609225
+    m_Localized: Select a node or a bag item to inspect.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609226
+    m_Localized: "Wheel: zoom \xB7 Middle drag: pan \xB7 Window cycle keys rotate held firewood\nGamepad: navigate cells, submit for details, cancel to return. Root buttons jump across the board."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609227
+    m_Localized: Ready to commit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609228
+    m_Localized: Operation completed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609229
+    m_Localized: 'Preview: {0}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609230
+    m_Localized: Consume {0} bottled energy for {1} talent and attribute points; remainder {2}, next point {3}.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609231
+    m_Localized: Spend {0} talent points; {1} remaining.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609232
+    m_Localized: Spend 1 attribute point; {0} remaining.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609233
+    m_Localized: "Disconnect this item\u2019s {0} links and refund {1} spent talent points."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609234
+    m_Localized: "{0} \xB7 {1}\nFirewood: {2}\n{3}"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609235
+    m_Localized: Talent
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609236
+    m_Localized: Crack
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609237
+    m_Localized: Flame socket
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609238
+    m_Localized: Empty body cell (occupied)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609239
+    m_Localized: Active
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609240
+    m_Localized: Inactive
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609241
+    m_Localized: Global effect
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609242
+    m_Localized: Within {0} active-link steps
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609243
+    m_Localized: 'Affected flames: {0}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609244
+    m_Localized: '{0} ({1} steps)'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609245
+    m_Localized: No eligible target
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609246
+    m_Localized: "{0} crack {1} \u2194 {2} crack {3}"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609247
+    m_Localized: Connection candidates (commit selected links together)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609248
+    m_Localized: "{0} \xB7 {1}\n{2}"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609249
+    m_Localized: Clear
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609250
+    m_Localized: Empty flame slot
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609251
+    m_Localized: 'Weapon skill: {0}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609252
+    m_Localized: None
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609253
+    m_Localized: Rotation {0} / 6
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609254
+    m_Localized: 'Rotate: {0} / {1}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609255
+    m_Localized: Bottle
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609256
+    m_Localized: STR
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609257
+    m_Localized: DEX
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609258
+    m_Localized: INT
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609259
+    m_Localized: Ready to commit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609260
+    m_Localized: Player or session unavailable
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609261
+    m_Localized: Item source changed; select it again
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609262
+    m_Localized: This socket does not accept this item
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609263
+    m_Localized: Placement, footprint or port pairing is invalid
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609264
+    m_Localized: The rooted or active path is invalid
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609265
+    m_Localized: The socket is occupied
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609266
+    m_Localized: Connected cracks cannot hold embers
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609267
+    m_Localized: Extract flames and embers first
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609268
+    m_Localized: Not enough inventory space
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609269
+    m_Localized: An empty bottle cannot charge
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609270
+    m_Localized: Not enough available points
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609271
+    m_Localized: This node is already active
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609272
+    m_Localized: Preview expired; preview again
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609273
+    m_Localized: Value or coordinate overflow
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609274
+    m_Localized: Place on board
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20878933363777536
+    m_Localized: 'Rotate: {0} / {1}; select connections, then confirm placement'
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:

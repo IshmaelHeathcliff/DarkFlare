@@ -1,5 +1,7 @@
 # 输入与运行时 UI
 
+玩家[天赋棋盘](skill-board/player-board.md)复用同一 GameMenu、Input Action Asset 和共享拖放会话。棋盘内逻辑游标、六根跳转、旋转和连接选择支持键鼠与手柄；挂起、面板重载和 Session 结束清理全部待提交状态。
+
 状态条与菜单“状态”入口已接入：按定义显示图标、持有层数与下次到期时间，支持玩家 / 怪物选择、焦点浮窗及手柄滚动 / 返回。保持 Gameplay 与 UI 导航隔离，资源和刷新任务归属 Session，详见[状态生命周期与查看](./status-lifecycle-ui.md)。
 
 ## 模块职责

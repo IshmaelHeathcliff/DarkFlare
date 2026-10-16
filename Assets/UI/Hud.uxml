@@ -83,6 +83,7 @@
               <l:LocalizedString property="text" table="ui" entry="attributes.title" />
             </Bindings>
           </ui:Button>
+          <ui:Button name="game-hud-board" class="hud-entry"><Bindings><l:LocalizedString property="text" table="ui" entry="board.title" /></Bindings></ui:Button>
           <ui:Button name="game-hud-pause" class="hud-entry">
             <ui:Label picking-mode="Ignore">
               <Bindings>

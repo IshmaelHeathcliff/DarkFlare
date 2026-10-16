@@ -1,0 +1,132 @@
+{
+  "status": "completed",
+  "duration": 33.83,
+  "summary": {
+    "total": 17,
+    "passed": 16,
+    "failed": 1,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "results": [
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.Attributes_IndependentWindowsRefreshAndNavigateWithoutTakingItemOwnership",
+      "Status": "Passed",
+      "Duration": 3.8694558,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.Board_CancelDeviceRemovalAndStaleBottleCannotCommitPendingRequests",
+      "Status": "Passed",
+      "Duration": 1.2377613,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.Board_LocalesKeepCanvasInventoryAndConfirmationReachable",
+      "Status": "Failed",
+      "Duration": 1.6459365,
+      "Message": "  qps-ploc 1920×1080 item-operation-actions: 换行文本被纵向裁切；元素 (x:1564.00, y:892.00, width:144.00, height:42.00)，容器 (x:44.00, y:890.00, width:1832.00, height:46.00)\r\n  Expected: less than or equal to 34.0f\r\n  But was:  41.0f\r\n",
+      "StackTrace": "at DarkFlare.Tests.Phase1UxPlayModeTests.AssertVisibleTextFits (UnityEngine.UIElements.VisualElement root, System.String localeMode, UnityEngine.Vector2Int resolution) [0x0015a] in C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Tests\\PlayMode\\Phase1UxPlayModeTests.cs:1926\r\nat DarkFlare.Tests.Phase1UxPlayModeTests+<Board_LocalesKeepCanvasInventoryAndConfirmationReachable>d__2.MoveNext () [0x0072e] in C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Tests\\PlayMode\\Phase1UxPlayModeTests.SkillBoard.cs:253\r\nat UnityEngine.TestTools.TestEnumerator+<Execute>d__8.MoveNext () [0x0003a] in .\\Library\\PackageCache\\com.unity.test-framework@80f691d4262b\\UnityEngine.TestRunner\\NUnitExtensions\\Attributes\\TestEnumerator.cs:52\r\n"
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.Board_PlayerTransactionsUseSharedCarryConfirmationAndSixSlots",
+      "Status": "Passed",
+      "Duration": 7.0671077,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.Consumables_BuyMergeUseAndRestoreFocusThroughKeyboardAndGamepad",
+      "Status": "Passed",
+      "Duration": 1.3500497,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.Crafting_OnlyUsesItemsPlacedInTheInputSlot",
+      "Status": "Passed",
+      "Duration": 1.3016933,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.GamepadNavigation_MovesHeldGridItemsAndCrossesCraftingBoundary",
+      "Status": "Passed",
+      "Duration": 1.2647297,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.Hud_CurrentResourcesMotionAndEntriesRespectInputOwnership",
+      "Status": "Passed",
+      "Duration": 1.5727907,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.IndependentWindows_TradeAndCraftWithoutInventoryAndRevokeInvalidTargets",
+      "Status": "Passed",
+      "Duration": 1.3841465,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.ItemActions_EquipmentMenuDiscardAndDeviceLossKeepOwnership",
+      "Status": "Passed",
+      "Duration": 1.3809076,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.ItemActions_TradeByPointerAndGamepadAndReturnCraftingToExactCell",
+      "Status": "Passed",
+      "Duration": 1.9443867,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.ManualSkills_RequireInputKeepFlamesSeparateAndDoNotCastThroughHud",
+      "Status": "Passed",
+      "Duration": 2.5909381,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.PanelReload_RebindsGameplayAndPreservesRendererDisabledContent",
+      "Status": "Passed",
+      "Duration": 1.2556702,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.Shop_RefreshSupportsKeyboardAndGamepadAndReopeningPreservesStock",
+      "Status": "Passed",
+      "Duration": 1.245754,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.ShopPurchase_UsesGridAndRestoresNeighborFocusFeedbackAndTooltip",
+      "Status": "Passed",
+      "Duration": 1.8411645,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.StatusDetails_GamepadScrollBackAndDispelKeepFocusReachable",
+      "Status": "Passed",
+      "Duration": 1.403997,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.StatusVisibility_FiltersHudAndMenuWithoutRemovingGameplayLayers",
+      "Status": "Passed",
+      "Duration": 1.3792472,
+      "Message": null,
+      "StackTrace": null
+    }
+  ]
+}

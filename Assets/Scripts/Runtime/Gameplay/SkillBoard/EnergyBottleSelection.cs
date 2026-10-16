@@ -53,7 +53,7 @@ namespace DarkFlare
         {
             return IsSelectionCurrent(selection) ? Preview(selection.PlayerId,
                 new SkillBoardRequest(SkillBoardOperation.ConsumeBottle, selection.Item))
-                : new SkillBoardPreview("中心选择已失效，请重新选择瓶子");
+                : new SkillBoardPreview("中心选择已失效，请重新选择瓶子", SkillBoardFailure.Stale);
         }
     }
 

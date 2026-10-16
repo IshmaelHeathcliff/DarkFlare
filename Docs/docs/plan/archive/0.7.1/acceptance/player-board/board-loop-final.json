@@ -1,0 +1,20 @@
+{
+  "status": "completed",
+  "duration": 8.19,
+  "summary": {
+    "total": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "results": [
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.Board_PlayerTransactionsUseSharedCarryConfirmationAndSixSlots",
+      "Status": "Passed",
+      "Duration": 8.0969872,
+      "Message": null,
+      "StackTrace": null
+    }
+  ]
+}

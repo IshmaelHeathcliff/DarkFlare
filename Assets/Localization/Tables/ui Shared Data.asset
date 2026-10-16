@@ -2199,6 +2199,322 @@ MonoBehaviour:
     m_Key: settings.input.action.player_skill6
     m_Metadata:
       m_Items: []
+  - m_Id: 20873743541723136
+    m_Key: board.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743621414912
+    m_Key: board.center
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743621414913
+    m_Key: board.fit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743621414914
+    m_Key: board.zoom_in
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743621414915
+    m_Key: board.zoom_out
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743621414916
+    m_Key: board.root
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743621414917
+    m_Key: board.details
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743621414918
+    m_Key: board.take
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743621414919
+    m_Key: board.move
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743621414920
+    m_Key: board.activate
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743621414921
+    m_Key: board.extract
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743621414922
+    m_Key: board.remove
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743621414923
+    m_Key: board.confirm
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743621414924
+    m_Key: board.consume
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743621414925
+    m_Key: board.cancel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743621414926
+    m_Key: board.equip
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743621414927
+    m_Key: board.unequip
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743621414928
+    m_Key: board.choose_bottle
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743621414929
+    m_Key: board.bottle_help
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609216
+    m_Key: board.bottle_empty
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609217
+    m_Key: board.bottle
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609218
+    m_Key: board.full
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609219
+    m_Key: board.growth
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609220
+    m_Key: board.attribute
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609221
+    m_Key: board.allocate
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609222
+    m_Key: board.cursor
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609223
+    m_Key: board.empty
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609224
+    m_Key: board.reserved
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609225
+    m_Key: board.no_selection
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609226
+    m_Key: board.help
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609227
+    m_Key: board.ready
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609228
+    m_Key: board.success
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609229
+    m_Key: board.preview
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609230
+    m_Key: board.charge
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609231
+    m_Key: board.activation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609232
+    m_Key: board.allocation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609233
+    m_Key: board.removal
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609234
+    m_Key: board.node
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609235
+    m_Key: board.talent
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609236
+    m_Key: board.crack
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609237
+    m_Key: board.flame
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609238
+    m_Key: board.blank
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609239
+    m_Key: board.lit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609240
+    m_Key: board.unlit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609241
+    m_Key: board.global
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609242
+    m_Key: board.range
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609243
+    m_Key: board.targets
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609244
+    m_Key: board.target
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609245
+    m_Key: board.no_targets
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609246
+    m_Key: board.link
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609247
+    m_Key: board.links
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609248
+    m_Key: board.slot
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609249
+    m_Key: board.clear
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609250
+    m_Key: board.unbound
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609251
+    m_Key: board.normal
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609252
+    m_Key: board.none
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609253
+    m_Key: board.rotated
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609254
+    m_Key: board.binding
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609255
+    m_Key: board.center_short
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609256
+    m_Key: board.strength_short
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609257
+    m_Key: board.dexterity_short
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609258
+    m_Key: board.intelligence_short
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609259
+    m_Key: board.error.None
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609260
+    m_Key: board.error.InvalidOwner
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609261
+    m_Key: board.error.InvalidSource
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609262
+    m_Key: board.error.InvalidType
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609263
+    m_Key: board.error.InvalidPlacement
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609264
+    m_Key: board.error.InvalidPath
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609265
+    m_Key: board.error.OccupiedSlot
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609266
+    m_Key: board.error.LinkedCrack
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609267
+    m_Key: board.error.ExtractFirst
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609268
+    m_Key: board.error.NoSpace
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609269
+    m_Key: board.error.EmptyBottle
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609270
+    m_Key: board.error.InsufficientPoints
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609271
+    m_Key: board.error.AlreadyActive
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609272
+    m_Key: board.error.Stale
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609273
+    m_Key: board.error.Overflow
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20873743625609274
+    m_Key: item.action.board_place
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20878933363777536
+    m_Key: board.rotate_bindings
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

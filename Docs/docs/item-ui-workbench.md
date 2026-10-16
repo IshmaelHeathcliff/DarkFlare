@@ -1,5 +1,7 @@
 # 物品 UI 工作台
 
+[玩家棋盘](skill-board/player-board.md)与背包并排，进入时保存已有窗口组合，退出时恢复有效组合。棋盘来源 / 投放目标扩展原 ItemInteractionSession 与 ItemActionRouter；候选连接、中心瓶确认和单件拆卸继续走正式预检事务。
+
 ## 模块职责
 
 `GameMenuController` 在同一个 PanelRenderer 中管理独立背包、商店、打造和属性窗口。`OpenWindows` 表示打开集合，`CurrentPage` 表示活动窗口；暂停页面和 Application Shell 的阻挡分别处理。背包可以与商店或打造同时显示，并打开独立属性，关闭一个窗口不关闭另一个。

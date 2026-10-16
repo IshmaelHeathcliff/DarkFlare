@@ -1,6 +1,6 @@
 # 武器普通技能与六火焰槽
 
-0.7.1-alpha.4 已接入手动技能、冷却、棋盘效果及保存。正式玩家棋盘和分配界面留待阶段五；当前可用 Odin 开发窗口分配火焰。范围与来源规则见[棋盘效果](effects.md)，当次验证见[阶段四验收](../plan/archive/0.7.1/acceptance/manual-skills/README.md)。
+0.7.1-alpha.4 已接入手动技能、冷却、棋盘效果及保存。阶段五已交付[玩家棋盘与分配界面](player-board.md)，Odin 开发窗口继续用于调试。范围与来源规则见[棋盘效果](effects.md)，当次验证见[阶段四验收](../plan/archive/0.7.1/acceptance/manual-skills/README.md)。
 
 ## 来源与分配
 

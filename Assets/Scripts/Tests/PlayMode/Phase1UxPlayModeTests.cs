@@ -13,7 +13,7 @@ using UnityEngine.UIElements;
 
 namespace DarkFlare.Tests
 {
-    public class Phase1UxPlayModeTests
+    public partial class Phase1UxPlayModeTests
     {
         readonly List<Object> _objects = new List<Object>();
         readonly InputTestFixture _inputFixture = new InputTestFixture();

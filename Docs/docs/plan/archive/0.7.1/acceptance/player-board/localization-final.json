@@ -1,0 +1,153 @@
+{
+  "status": "completed",
+  "duration": 0.57,
+  "summary": {
+    "total": 20,
+    "passed": 20,
+    "failed": 0,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "results": [
+    {
+      "FullName": "DarkFlare.Tests.Alpha025ProductionAssetTests.Localization_ContainsSettingsEntriesInBothProductionLocales",
+      "Status": "Passed",
+      "Duration": 0.0172993,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Alpha026AddressablesGovernanceTests.PlayerErrors_HaveProductionAndPseudoLocalizationContracts",
+      "Status": "Passed",
+      "Duration": 0.0070022,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.LocalizationAssetContractTests.ApplicationShell_ContainsFocusableFrontEndLanguageSelector",
+      "Status": "Passed",
+      "Duration": 0.0404871,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.LocalizationAssetContractTests.Assets_ContainFrozenLocalesPseudoLocaleAndResponsibilityTables",
+      "Status": "Passed",
+      "Duration": 0.0027388,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.LocalizationAssetContractTests.Runtime_LoadsRealTablesAndPersistsExplicitLanguageInTemporarySettings",
+      "Status": "Passed",
+      "Duration": 0.1077304,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.LocalizationPolicyTests.ContentTables_ExactlyMatchFormalAssetsAndHaveCompleteTranslations",
+      "Status": "Passed",
+      "Duration": 0.1763622,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.LocalizationPolicyTests.FontChain_CoversChineseEnglishAndPseudoLocalizationCharacters",
+      "Status": "Passed",
+      "Duration": 0.0169701,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.LocalizationPolicyTests.MigratedRuntimeText_HasNoPlayerFacingChineseLiteralsOrHardcodedBindings",
+      "Status": "Passed",
+      "Duration": 0.0106208,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.LocalizationPolicyTests.StatsTable_ExactlyMatchesSupportedStatsAndHasCompleteTranslations",
+      "Status": "Passed",
+      "Duration": 0.0011944,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.LocalizationPolicyTests.UiTable_AllBoundKeysAndTranslationsExistWithoutOrphans",
+      "Status": "Passed",
+      "Duration": 0.0158475,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.LocalizationPolicyTests.Uxml_PlayerTextIsBoundOrRegisteredDynamicAndHasNoLiteralFallback",
+      "Status": "Passed",
+      "Duration": 0.0106099,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.LocalizationServiceTests.AutomaticLocale_UsesSystemLanguageInsteadOfCurrentSelection(Chinese,\"zh-Hans\")",
+      "Status": "Passed",
+      "Duration": 0.0008167,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.LocalizationServiceTests.AutomaticLocale_UsesSystemLanguageInsteadOfCurrentSelection(ChineseSimplified,\"zh-Hans\")",
+      "Status": "Passed",
+      "Duration": 0.0001086,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.LocalizationServiceTests.AutomaticLocale_UsesSystemLanguageInsteadOfCurrentSelection(ChineseTraditional,\"zh-Hans\")",
+      "Status": "Passed",
+      "Duration": 0.0000916,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.LocalizationServiceTests.AutomaticLocale_UsesSystemLanguageInsteadOfCurrentSelection(English,\"en\")",
+      "Status": "Passed",
+      "Duration": 0.0000874,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.LocalizationServiceTests.AutomaticLocale_UsesSystemLanguageInsteadOfCurrentSelection(Japanese,\"en\")",
+      "Status": "Passed",
+      "Duration": 0.0000895,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.LocalizationServiceTests.Initialize_ExplicitPreferenceOverridesAutomaticLocaleAndPreloadsTables",
+      "Status": "Passed",
+      "Duration": 0.0172253,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.LocalizationServiceTests.MissingCurrentTranslation_FallsBackToSimplifiedChineseThenPlaceholder",
+      "Status": "Passed",
+      "Duration": 0.0126219,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.LocalizationServiceTests.PreloadedString_SynchronousLookupUsesSameFallbackContract",
+      "Status": "Passed",
+      "Duration": 0.0450298,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.LocalizationServiceTests.RapidSwitch_LatestRequestWinsAndOnlyFinalPreferenceRemains",
+      "Status": "Passed",
+      "Duration": 0.0180874,
+      "Message": null,
+      "StackTrace": null
+    }
+  ]
+}

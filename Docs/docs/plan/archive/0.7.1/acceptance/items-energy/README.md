@@ -1,6 +1,6 @@
 # 0.7.1-alpha.2 道具、安装事务与能量瓶验收
 
-2026-10-07：**阶段二通过并归档**。当前运行版本 `0.7.1-alpha.2`，Unity `6000.6.4f1`，core v11，Save / Settings Schema 10 / 1，地图 V4。源码身份为 `main` / `9b82259` 加本轮未提交改动，详见[源码与配置 SHA-256](source-identity.json)。[实施计划](../../plans/phase-2-execution.md)已归档，中心充能、点亮、六键手动技能和正式玩家棋盘由[活动总计划](../../../../alpha-0.7.1-skill-board-plan.md)继续推进。
+2026-10-07：**阶段二通过并归档**。当前运行版本 `0.7.1-alpha.2`，Unity `6000.6.4f1`，core v11，Save / Settings Schema 10 / 1，地图 V4。源码身份为 `main` / `9b82259` 加本轮未提交改动，详见[源码与配置 SHA-256](source-identity.json)。[实施计划](../../plans/phase-2-execution.md)已归档，中心充能、点亮、六键手动技能和正式玩家棋盘由[活动总计划](../../plans/alpha-0.7.1-skill-board-plan.md)继续推进。
 
 ## 实际交付
 

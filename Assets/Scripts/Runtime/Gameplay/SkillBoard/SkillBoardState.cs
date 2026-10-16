@@ -47,6 +47,12 @@ namespace DarkFlare
 
         public string Validate()
         {
+            return Validate(out _);
+        }
+
+        public string Validate(out SkillBoardFailure failure)
+        {
+            failure = SkillBoardFailure.InvalidPlacement;
             if (Firewoods.Any(w => w == null) || Embeddings.Any(e => e == null)) { return "棋盘记录为空"; }
             var ids = new HashSet<ItemInstanceId>();
             foreach (ItemInstance item in Items)
@@ -67,22 +73,22 @@ namespace DarkFlare
             foreach (SkillBoardEmbedding embed in Embeddings)
             {
                 InstalledFirewood wood = Firewoods.FirstOrDefault(w => w.Placement.Id == embed.Slot.PlacementId);
-                if (wood == null || !slots.Add(embed.Slot)) { return "嵌入插槽不存在或重复"; }
+                if (wood == null || !slots.Add(embed.Slot)) { failure = SkillBoardFailure.OccupiedSlot; return "嵌入插槽不存在或重复"; }
                 if (embed.Slot.NodeId == SkillBoardGeometry.CenterNodeId)
                 {
                     if (wood.Placement.Layout.Size != FirewoodSize.Large || embed.Item.BaseDefinition.ItemType != ItemType.Flame)
                     {
-                        return "只有大柴薪中心可以安装火焰";
+                        failure = SkillBoardFailure.InvalidType; return "只有大柴薪中心可以安装火焰";
                     }
                 }
                 else if (!wood.Placement.Layout.Nodes.Any(n => n.Id == embed.Slot.NodeId && n.Kind == FirewoodNodeKind.Crack)
                     || embed.Item.BaseDefinition.ItemType != ItemType.Ember || ports.Contains(embed.Slot))
                 {
-                    return "余烬只能安装在未连接的裂缝";
+                    failure = ports.Contains(embed.Slot) ? SkillBoardFailure.LinkedCrack : SkillBoardFailure.InvalidType; return "余烬只能安装在未连接的裂缝";
                 }
             }
-            return SkillBoardRootConnectivity.IsRooted(placements, Connections) ? null
-                : "存在未连接初始空洞的柴薪；拆卸需要保证剩余网络仍连根";
+            failure = SkillBoardRootConnectivity.IsRooted(placements, Connections) ? SkillBoardFailure.None : SkillBoardFailure.InvalidPath;
+            return failure == SkillBoardFailure.None ? null : "存在未连接初始空洞的柴薪；拆卸需要保证剩余网络仍连根";
         }
     }
 

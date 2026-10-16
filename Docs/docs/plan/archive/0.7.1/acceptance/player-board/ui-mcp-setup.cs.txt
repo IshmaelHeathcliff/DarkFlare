@@ -1,0 +1,63 @@
+using System;
+using System.IO;
+using System.Linq;
+using System.Text;
+using UnityEditor;
+using UnityEditor.Localization;
+using UnityEngine;
+
+public static class Phase5UiSetup
+{
+    static string Binding(string key) { return "<Bindings><l:LocalizedString property=\"text\" table=\"ui\" entry=\"board." + key + "\" /></Bindings>"; }
+    public static object Apply()
+    {
+        if (EditorApplication.isPlaying) { throw new InvalidOperationException("请退出 PlayMode"); }
+        Directory.CreateDirectory("Assets/UI/SkillBoard");
+        File.WriteAllText("Assets/UI/SkillBoard/PlayerBoard.uss", File.ReadAllText("Temp/phase5_board.uss"), new UTF8Encoding(false));
+        File.WriteAllText("Assets/UI/SkillBoard/PlayerBoard.uxml", File.ReadAllText("Temp/phase5_board.uxml"), new UTF8Encoding(false));
+        string path = "Assets/UI/GameRoot.uxml";
+        string root = File.ReadAllText(path);
+        if (!root.Contains("name=\"board-window\""))
+        {
+            root = root.Replace("  <ui:VisualElement name=\"game-ui-root\"", "  <ui:Style src=\"project://database/Assets/UI/SkillBoard/PlayerBoard.uss\" />\n  <ui:Template name=\"PlayerBoard\" src=\"project://database/Assets/UI/SkillBoard/PlayerBoard.uxml\" />\n  <ui:VisualElement name=\"game-ui-root\"");
+            root = root.Replace("          <ui:Button name=\"game-menu-pause\"", "          <ui:Button name=\"game-menu-board-tab\" class=\"game-menu-tab\">" + Binding("title") + "</ui:Button>\n          <ui:Button name=\"game-menu-pause\"");
+            string window = "          <ui:VisualElement name=\"board-window\" class=\"item-window board-window\"><ui:VisualElement class=\"item-window-header\"><ui:Label class=\"item-window-title\" picking-mode=\"Ignore\">" + Binding("title") + "</ui:Label><ui:Button name=\"board-window-close\" class=\"item-window-close\"><Bindings><l:LocalizedString property=\"tooltip\" table=\"ui\" entry=\"window.close\" /></Bindings><ui:VisualElement class=\"ui-icon ui-icon--close item-window-close-icon\" picking-mode=\"Ignore\" /></ui:Button></ui:VisualElement><ui:Instance template=\"PlayerBoard\" class=\"board-template\" /></ui:VisualElement>\n";
+            root = root.Replace("          <ui:VisualElement name=\"inventory-window\"", window + "          <ui:VisualElement name=\"inventory-window\"");
+            File.WriteAllText(path, root, new UTF8Encoding(false));
+        }
+        path = "Assets/UI/Hud.uxml";
+        root = File.ReadAllText(path);
+        if (!root.Contains("name=\"game-hud-board\""))
+        {
+            root = root.Replace("          <ui:Button name=\"game-hud-pause\"", "          <ui:Button name=\"game-hud-board\" class=\"hud-entry\">" + Binding("title") + "</ui:Button>\n          <ui:Button name=\"game-hud-pause\"");
+            File.WriteAllText(path, root, new UTF8Encoding(false));
+        }
+        var collection = LocalizationEditorSettings.GetStringTableCollection("ui");
+        string[] text = File.ReadAllLines("Temp/phase5_text.tsv");
+        foreach (string line in text)
+        {
+            string[] entry = line.Split('\t');
+            collection.SharedData.GetId(entry[0], true);
+            foreach (var table in collection.StringTables)
+            {
+                int language = table.LocaleIdentifier.Code == "zh-Hans" ? 1 : 2;
+                table.AddEntry(entry[0], Encoding.UTF8.GetString(Convert.FromBase64String(entry[language])));
+                EditorUtility.SetDirty(table);
+            }
+        }
+        collection.SharedData.GetId("item.action.board_place", true);
+        foreach (var table in collection.StringTables)
+        {
+            table.AddEntry("item.action.board_place", table.LocaleIdentifier.Code == "zh-Hans" ? "放入棋盘" : "Place on board");
+            EditorUtility.SetDirty(table);
+        }
+        EditorUtility.SetDirty(collection.SharedData);
+        foreach (UnityEngine.Object font in AssetDatabase.LoadAllAssetsAtPath("Assets/Settings/UI/Fonts/GameCjkFont.asset")) { EditorUtility.ClearDirty(font); }
+        AssetDatabase.SaveAssets();
+        AssetDatabase.ImportAsset("Assets/UI/SkillBoard/PlayerBoard.uss", ImportAssetOptions.ForceSynchronousImport);
+        AssetDatabase.ImportAsset("Assets/UI/SkillBoard/PlayerBoard.uxml", ImportAssetOptions.ForceSynchronousImport);
+        AssetDatabase.ImportAsset("Assets/UI/GameRoot.uxml", ImportAssetOptions.ForceSynchronousImport);
+        AssetDatabase.ImportAsset("Assets/UI/Hud.uxml", ImportAssetOptions.ForceSynchronousImport);
+        return new { entries = text.Length, sceneChanged = false };
+    }
+}

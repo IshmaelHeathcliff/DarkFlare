@@ -162,6 +162,7 @@ namespace DarkFlare.Tests
             foreach (FirewoodNode node in basis.Nodes.Where(n => n.Kind == FirewoodNodeKind.Talent)) { growth = growth.Activate(wood.InstanceId, node.Id); }
             SkillBoardEffectProjection projection = SkillBoardEffects.Resolve(board, growth);
             Assert.That(projection.Flames[flame.InstanceId].Any(m => m.Value == 123), Is.EqualTo(expected));
+            Assert.That(projection.FlameSteps[flame.InstanceId][new FirewoodPortReference(wood.InstanceId, source.Id)], Is.EqualTo(3));
             Assert.That(projection.Global, Is.Empty);
         }
 
@@ -215,6 +216,8 @@ namespace DarkFlare.Tests
             SkillBoardEffectProjection projected = SkillBoardEffects.Resolve(board, growth);
             Assert.That(projected.Flames[flame.InstanceId].Single(m => m.Origin.Kind == ModifierOriginKind.Ember).Origin.StatusId, Is.EqualTo(ember.InstanceId));
             Assert.That(projected.Flames[otherFlame.InstanceId].Any(m => m.Origin.Kind == ModifierOriginKind.Ember), Is.False);
+            Assert.That(projected.FlameSteps[flame.InstanceId][new FirewoodPortReference(wood.InstanceId, crack.Id)], Is.EqualTo(2));
+            Assert.That(projected.FlameSteps[otherFlame.InstanceId].ContainsKey(new FirewoodPortReference(wood.InstanceId, crack.Id)), Is.False);
             Assert.That(projected.Global, Is.Empty);
         }
 

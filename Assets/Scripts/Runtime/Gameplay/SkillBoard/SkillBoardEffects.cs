@@ -8,12 +8,15 @@ namespace DarkFlare
     {
         public IReadOnlyList<ModifierInstance> Global { get; }
         public IReadOnlyDictionary<string, IReadOnlyList<ModifierInstance>> Flames { get; }
+        public IReadOnlyDictionary<string, IReadOnlyDictionary<FirewoodPortReference, int>> FlameSteps { get; }
 
         internal SkillBoardEffectProjection(List<ModifierInstance> global,
-            Dictionary<string, IReadOnlyList<ModifierInstance>> flames)
+            Dictionary<string, IReadOnlyList<ModifierInstance>> flames,
+            Dictionary<string, IReadOnlyDictionary<FirewoodPortReference, int>> steps)
         {
             Global = global.AsReadOnly();
             Flames = new System.Collections.ObjectModel.ReadOnlyDictionary<string, IReadOnlyList<ModifierInstance>>(flames);
+            FlameSteps = new System.Collections.ObjectModel.ReadOnlyDictionary<string, IReadOnlyDictionary<FirewoodPortReference, int>>(steps);
         }
     }
 
@@ -65,12 +68,14 @@ namespace DarkFlare
                 }
             }
             var flames = new Dictionary<string, IReadOnlyList<ModifierInstance>>(StringComparer.Ordinal);
+            var steps = new Dictionary<string, IReadOnlyDictionary<FirewoodPortReference, int>>(StringComparer.Ordinal);
             foreach (SkillBoardEmbedding flame in board.Embeddings)
             {
                 if (flame.Item.BaseDefinition.ItemType != ItemType.Flame || !growth.IsActive(flame.Slot.PlacementId)) { continue; }
                 var modifiers = new List<ModifierInstance>(WithOrigin(flame.Item.CollectModifiers(), ModifierOriginKind.Flame, flame.Item.InstanceId,
                     flame.Item.BaseDefinition.LocalizedName.Message));
                 Dictionary<FirewoodPortReference, int> distances = Distances(flame.Slot);
+                steps.Add(flame.Item.InstanceId, new System.Collections.ObjectModel.ReadOnlyDictionary<FirewoodPortReference, int>(distances));
                 foreach (var source in sources)
                 {
                     if (distances.TryGetValue(source.Node, out int distance) && distance <= source.Radius)
@@ -80,7 +85,7 @@ namespace DarkFlare
                 }
                 flames.Add(flame.Item.InstanceId, modifiers.AsReadOnly());
             }
-            return new SkillBoardEffectProjection(global, flames);
+            return new SkillBoardEffectProjection(global, flames, steps);
 
             void AddNode(FirewoodPortReference node) { graph.TryAdd(node, new HashSet<FirewoodPortReference>()); }
             void Connect(FirewoodPortReference first, FirewoodPortReference second)

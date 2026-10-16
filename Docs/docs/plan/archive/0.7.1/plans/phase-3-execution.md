@@ -2,7 +2,7 @@
 
 状态：2026-10-15，**阶段三完成并归档**。实现基线 main / 1d7fd34 加本轮未提交改动，当前 0.7.1-alpha.3、Unity 6000.6.4f1、core v12、Save / Settings Schema 11 / 1、地图 V4。最终项目 EditMode 949/949、PlayMode 102/102，均无失败 / 跳过；见[当次验收](../acceptance/growth/README.md)。以下保留执行合同与历史顺序。
 
-入口：[五阶段总计划](../../../alpha-0.7.1-skill-board-plan.md) · [成长合同](../../../alpha-0.7.1/energy-progression.md) · [安装模块](../../../../skill-board/items-installation.md) · [能量瓶模块](../../../../skill-board/energy-bottles.md) · [属性管线](../../../../stat-system.md) · [阶段验收](../../../alpha-0.7.1/acceptance.md#三中心充能属性分配与点亮) · [阶段二证据](../acceptance/items-energy/README.md)。
+入口：[五阶段总计划](alpha-0.7.1-skill-board-plan.md) · [成长合同](energy-progression-contract.md) · [安装模块](../../../../skill-board/items-installation.md) · [能量瓶模块](../../../../skill-board/energy-bottles.md) · [属性管线](../../../../stat-system.md) · [阶段验收](../acceptance/checklist.md#三中心充能属性分配与点亮) · [阶段二证据](../acceptance/items-energy/README.md)。
 
 ## 交付与成功标准
 

@@ -46,6 +46,6 @@
 
 Validator / Mapper / Restore Preparer 共同验证非负与守恒、成本合同、所有权、节点角色、重复记录和激活网络。恢复先建立成长来源、装备 / 状态属性，再恢复绝对资源；不会再次消费、兑换或退款。
 
-运行有效 Session 后打开 `DarkFlare/Debug/柴薪安装与能量瓶`：输入瓶实例 ID，选择 → 预览 → 确认；查看余量、累计点数和下一成本；输入属性 ID 与数量进行分配，使用柴薪 ID / 节点 ID 分别点亮。取消 / 关闭清除临时选择和预览。此开发入口复用正式 Query / Command，正式玩家棋盘与手柄操作按后续计划交付。
+运行有效 Session 后打开 `DarkFlare/Debug/柴薪安装与能量瓶`：输入瓶实例 ID，选择 → 预览 → 确认；查看余量、累计点数和下一成本；输入属性 ID 与数量进行分配，使用柴薪 ID / 节点 ID 分别点亮。取消 / 关闭清除临时选择和预览。此开发入口复用正式 Query / Command；正式充能、加点与手柄操作见[玩家棋盘](player-board.md)。
 
 长期覆盖为 PlayerGrowthTests，以及扩展的 SkillBoardTransactionsTests、SaveSerializerTests、SaveRestorePreparerTests 与 SaveCaptureRestorePlayModeTests。实施和当次验收入口见[阶段三计划](../plan/archive/0.7.1/plans/phase-3-execution.md)。

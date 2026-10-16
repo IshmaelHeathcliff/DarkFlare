@@ -1,0 +1,34 @@
+{
+  "status": "completed",
+  "duration": 11.27,
+  "summary": {
+    "total": 3,
+    "passed": 3,
+    "failed": 0,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "results": [
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.Board_CancelDeviceRemovalAndStaleBottleCannotCommitPendingRequests",
+      "Status": "Passed",
+      "Duration": 2.4680485,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.Board_LocalesKeepCanvasInventoryAndConfirmationReachable",
+      "Status": "Passed",
+      "Duration": 2.0561563,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.Board_PlayerTransactionsUseSharedCarryConfirmationAndSixSlots",
+      "Status": "Passed",
+      "Duration": 6.6498492,
+      "Message": null,
+      "StackTrace": null
+    }
+  ]
+}

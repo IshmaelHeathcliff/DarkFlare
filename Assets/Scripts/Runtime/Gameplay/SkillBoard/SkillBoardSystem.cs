@@ -31,6 +31,8 @@ namespace DarkFlare
     {
         public bool Success => Error == null;
         public string Error { get; }
+        public SkillBoardFailure Failure { get; }
+        public SkillBoardState Result => After;
         public PlayerGrowthState GrowthResult => GrowthAfter;
         internal SkillBoardSystem Owner { get; }
         internal string ActorId { get; }
@@ -50,7 +52,12 @@ namespace DarkFlare
         internal CombatActor Actor { get; set; }
         internal CombatActor.ActorEffectPreparation Effects { get; set; }
 
-        internal SkillBoardPreview(string error) { Error = error; }
+        internal SkillBoardPreview(string error, SkillBoardFailure failure = SkillBoardFailure.InvalidPlacement, SkillBoardState candidate = null)
+        {
+            Error = error;
+            Failure = failure;
+            After = candidate;
+        }
         internal SkillBoardPreview(SkillBoardSystem owner, string actorId, SkillBoardState before, SkillBoardState after,
             InventoryGrid source, InventoryGrid final, ItemInstance incoming, ItemInstance outgoing,
             PlayerGrowthState growthBefore, PlayerGrowthState growthAfter)
@@ -99,15 +106,15 @@ namespace DarkFlare
 
         public SkillBoardPreview Preview(string actorId, SkillBoardRequest request)
         {
-            if (!IsCurrentPlayer(actorId) || request == null) { return new SkillBoardPreview("当前玩家身份无效"); }
+            if (!IsCurrentPlayer(actorId) || request == null) { return new SkillBoardPreview("当前玩家身份无效", SkillBoardFailure.InvalidOwner); }
             SkillBoardModel model = this.GetModel<SkillBoardModel>();
-            if (model.PlayerId.Length > 0 && model.PlayerId != actorId) { return new SkillBoardPreview("棋盘属于其他玩家"); }
+            if (model.PlayerId.Length > 0 && model.PlayerId != actorId) { return new SkillBoardPreview("棋盘属于其他玩家", SkillBoardFailure.InvalidOwner); }
             SkillBoardState before = model.State;
             PlayerGrowthModel growth = this.GetModel<PlayerGrowthModel>();
             if (growth.PlayerId.Length > 0 && growth.PlayerId != actorId
                 || !this.GetSystem<PlayerGrowthSystem>().RulesAreCurrent(growth.State))
             {
-                return new SkillBoardPreview("成长玩家或成本配置无效");
+                return new SkillBoardPreview("成长玩家或成本配置无效", SkillBoardFailure.InvalidOwner);
             }
             string growthError = PlayerGrowthGraph.Validate(growth.State, before);
             if (growthError != null) { return new SkillBoardPreview(growthError); }
@@ -125,20 +132,20 @@ namespace DarkFlare
             {
                 case SkillBoardOperation.Install:
                     if (item?.BaseDefinition?.ItemType != ItemType.Firewood || item.SkillBoardState?.Layout == null)
-                    { return new SkillBoardPreview("安装需要柴薪"); }
+                    { return new SkillBoardPreview("安装需要柴薪", SkillBoardFailure.InvalidType); }
                     if (request.Rotation < 0 || request.Rotation > 5) { return new SkillBoardPreview("旋转必须为 0–5"); }
                     woods.Add(new InstalledFirewood(item, request.Anchor, request.Rotation));
                     incoming = item;
                     break;
                 case SkillBoardOperation.Move:
-                    if (wood == null || request.Rotation < 0 || request.Rotation > 5) { return new SkillBoardPreview("柴薪或旋转无效"); }
+                    if (wood == null || request.Rotation < 0 || request.Rotation > 5) { return new SkillBoardPreview("柴薪或旋转无效", SkillBoardFailure.InvalidSource); }
                     woods.Remove(wood);
                     woods.Add(new InstalledFirewood(item, request.Anchor, request.Rotation));
                     break;
                 case SkillBoardOperation.Remove:
-                    if (wood == null) { return new SkillBoardPreview("柴薪不在棋盘上"); }
+                    if (wood == null) { return new SkillBoardPreview("柴薪不在棋盘上", SkillBoardFailure.InvalidSource); }
                     if (embeddings.Any(e => e.Slot.PlacementId == item.InstanceId))
-                    { return new SkillBoardPreview("请先逐件取出火焰和余烬"); }
+                    { return new SkillBoardPreview("请先逐件取出火焰和余烬", SkillBoardFailure.ExtractFirst); }
                     woods.Remove(wood);
                     // 单件拆卸同时移除它的连接，其余连接保持。
                     connections = before.Connections.Where(c => c.First.PlacementId != item.InstanceId
@@ -147,60 +154,61 @@ namespace DarkFlare
                     break;
                 case SkillBoardOperation.Embed:
                     if (item?.BaseDefinition?.ItemType != ItemType.Flame && item?.BaseDefinition?.ItemType != ItemType.Ember)
-                    { return new SkillBoardPreview("只能嵌入火焰或余烬"); }
+                    { return new SkillBoardPreview("只能嵌入火焰或余烬", SkillBoardFailure.InvalidType); }
                     embeddings.Add(new SkillBoardEmbedding(request.Slot, item));
                     incoming = item;
                     break;
                 case SkillBoardOperation.Extract:
                     SkillBoardEmbedding embedding = embeddings.FirstOrDefault(e => e.Slot.Equals(request.Slot));
-                    if (embedding == null) { return new SkillBoardPreview("插槽为空"); }
+                    if (embedding == null) { return new SkillBoardPreview("插槽为空", SkillBoardFailure.InvalidSource); }
                     embeddings.Remove(embedding);
                     outgoing = embedding.Item;
                     break;
                 case SkillBoardOperation.EquipBottle:
-                    if (item?.BaseDefinition?.ItemType != ItemType.EnergyBottle) { return new SkillBoardPreview("专栏只接受能量瓶"); }
+                    if (item?.BaseDefinition?.ItemType != ItemType.EnergyBottle) { return new SkillBoardPreview("专栏只接受能量瓶", SkillBoardFailure.InvalidType); }
                     incoming = item;
                     outgoing = bottle;
                     bottle = item;
                     break;
                 case SkillBoardOperation.UnequipBottle:
-                    if (bottle == null) { return new SkillBoardPreview("专栏为空"); }
+                    if (bottle == null) { return new SkillBoardPreview("专栏为空", SkillBoardFailure.InvalidSource); }
                     outgoing = bottle;
                     bottle = null;
                     break;
                 case SkillBoardOperation.ConsumeBottle:
                     if (item?.BaseDefinition.ItemType != ItemType.EnergyBottle || item.SkillBoardState == null)
                     {
-                        return new SkillBoardPreview("中心充能需要能量瓶");
+                        return new SkillBoardPreview("中心充能需要能量瓶", SkillBoardFailure.InvalidType);
                     }
+                    if (item.SkillBoardState.Energy == 0) { return new SkillBoardPreview("空能量瓶不能充能", SkillBoardFailure.EmptyBottle); }
                     try { growthAfter = growth.State.Charge(item.SkillBoardState.Energy); }
                     catch (ArgumentException failure) { return new SkillBoardPreview(failure.Message); }
-                    catch (OverflowException) { return new SkillBoardPreview("充能数值超出范围"); }
+                    catch (OverflowException) { return new SkillBoardPreview("充能数值超出范围", SkillBoardFailure.Overflow); }
                     if (ReferenceEquals(bottle, item)) { bottle = null; }
                     else { incoming = item; }
                     break;
                 default: return new SkillBoardPreview("未知棋盘操作");
             }
             var after = new SkillBoardState(woods, connections, embeddings, bottle);
-            string error = after.Validate();
-            if (error != null) { return new SkillBoardPreview(error); }
+            string error = after.Validate(out SkillBoardFailure errorCode);
+            if (error != null) { return new SkillBoardPreview(error, errorCode, after); }
             growthAfter = growthAfter.ReturnFirewoods(new HashSet<string>(after.Firewoods.Select(w => w.Item.InstanceId)));
             error = PlayerGrowthGraph.Validate(growthAfter, after);
-            if (error != null) { return new SkillBoardPreview(error); }
+            if (error != null) { return new SkillBoardPreview(error, SkillBoardFailure.InvalidPath, after); }
             InventoryGrid grid = this.GetModel<InventoryModel>().Grid;
             if (incoming != null && (!grid.Placements.ContainsKey(incoming)
-                || before.Items.Any(i => i.Id == incoming.Id))) { return new SkillBoardPreview("源道具不属于背包"); }
+                || before.Items.Any(i => i.Id == incoming.Id))) { return new SkillBoardPreview("源道具不属于背包", SkillBoardFailure.InvalidSource); }
             var final = new InventoryGrid(grid.Width, grid.Height);
             foreach (KeyValuePair<ItemInstance, RectInt> pair in grid.Placements)
             {
                 if (ReferenceEquals(pair.Key, incoming)) { continue; }
                 if (after.Items.Any(i => i.Id == pair.Key.Id) || !final.TryAddAt(pair.Key, pair.Value.position))
-                { return new SkillBoardPreview("背包所有权或位置不合法"); }
+                { return new SkillBoardPreview("背包所有权或位置不合法", SkillBoardFailure.InvalidSource); }
             }
             if (outgoing != null)
             {
                 bool added = incoming != null ? final.TryAddAt(outgoing, grid.Placements[incoming].position) : final.TryAdd(outgoing);
-                if (!added) { return new SkillBoardPreview("背包没有足够空间取回道具"); }
+                if (!added) { return new SkillBoardPreview("背包没有足够空间取回道具", SkillBoardFailure.NoSpace); }
             }
             CombatActor actor = GetAttributeDetailsQuery.FindPlayer(this.GetModel<CombatModel>());
             try

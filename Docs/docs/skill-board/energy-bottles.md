@@ -24,4 +24,4 @@
 
 瓶能量随 ItemInstanceDto.SkillBoard.Energy 保存，Profile.SkillBoard.EnergyBottleInstanceId 指定唯一装备所有者。Restore 拒绝负值、越容量和错误角色；不会填瓶、补领或更换实例。
 
-本阶段可通过开发窗口装备 / 卸下和查看积蓄。阶段三已实现中心整瓶消费、跨瓶余额、1 天赋点＋1 属性点兑换、递增成本与点亮，见[成长模块](growth.md)和[合同](../plan/alpha-0.7.1/energy-progression.md)。长期 `EnergyBottleTests` 保护四个收益因素、归属、去重、容量舍弃、手动换瓶和 Session 隔离；真实死亡、保存继续和切图由现有 PlayMode 保存套件覆盖。
+本阶段可通过开发窗口装备 / 卸下和查看积蓄。阶段三已实现中心整瓶消费、跨瓶余额、1 天赋点＋1 属性点兑换、递增成本与点亮，见[成长模块](growth.md)和[合同](../plan/archive/0.7.1/plans/energy-progression-contract.md)。长期 `EnergyBottleTests` 保护四个收益因素、归属、去重、容量舍弃、手动换瓶和 Session 隔离；真实死亡、保存继续和切图由现有 PlayMode 保存套件覆盖。

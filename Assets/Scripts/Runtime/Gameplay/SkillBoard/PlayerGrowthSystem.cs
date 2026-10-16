@@ -8,6 +8,7 @@ namespace DarkFlare
     {
         public bool Success => Error == null;
         public string Error { get; }
+        public SkillBoardFailure Failure { get; }
         public PlayerGrowthState Result { get; }
         internal PlayerGrowthSystem Owner { get; }
         internal string PlayerId { get; }
@@ -17,9 +18,10 @@ namespace DarkFlare
         internal CombatActor Actor { get; }
         internal bool Consumed { get; set; }
 
-        internal PlayerGrowthPreview(string error)
+        internal PlayerGrowthPreview(string error, SkillBoardFailure failure = SkillBoardFailure.InvalidPath)
         {
             Error = error;
+            Failure = failure;
         }
         internal PlayerGrowthPreview(PlayerGrowthSystem owner, string player, PlayerGrowthState before,
             PlayerGrowthState result, SkillBoardState board, CombatActor actor, CombatActor.ActorEffectPreparation effects)
@@ -104,8 +106,13 @@ namespace DarkFlare
             if (_disposed || !this.GetSystem<SkillBoardSystem>().IsCurrentPlayer(playerId)
                 || model.PlayerId.Length > 0 && model.PlayerId != playerId || !RulesAreCurrent(model.State))
             {
-                return new PlayerGrowthPreview("成长玩家、Session 或成本配置无效");
+                return new PlayerGrowthPreview("成长玩家、Session 或成本配置无效", SkillBoardFailure.InvalidOwner);
             }
+            if (statId != null && (count <= 0 || model.State.AttributePoints < count)
+                || statId == null && model.State.TalentPoints < (string.IsNullOrEmpty(nodeId) ? model.State.Rules.FirewoodCost : model.State.Rules.TalentCost))
+            { return new PlayerGrowthPreview("可用点数不足", SkillBoardFailure.InsufficientPoints); }
+            if (statId == null && model.State.IsActive(woodId, nodeId))
+            { return new PlayerGrowthPreview("已经点亮", SkillBoardFailure.AlreadyActive); }
             SkillBoardState board = this.GetModel<SkillBoardModel>().State;
             CombatActor actor = GetAttributeDetailsQuery.FindPlayer(this.GetModel<CombatModel>());
             try
@@ -118,7 +125,7 @@ namespace DarkFlare
                 return new PlayerGrowthPreview(this, playerId, model.State, result, board, actor, effects);
             }
             catch (ArgumentException error) { return new PlayerGrowthPreview(error.Message); }
-            catch (OverflowException) { return new PlayerGrowthPreview("成长数值超出范围"); }
+            catch (OverflowException) { return new PlayerGrowthPreview("成长数值超出范围", SkillBoardFailure.Overflow); }
         }
 
         public bool Commit(PlayerGrowthPreview preview, out string error)

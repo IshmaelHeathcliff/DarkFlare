@@ -1,6 +1,6 @@
 # 棋盘道具与安装事务
 
-阶段二交付正式道具、安装、拆卸、交易和保存。几何规则见[几何模块](geometry.md)，能量见[能量瓶](energy-bottles.md)，配置见[配置参考](../config-reference/skill-board.md)。阶段三已接入[充能与点亮](growth.md)，阶段四已交付[效果投影](effects.md)和[手动六槽技能](manual-skills.md)，正式玩家棋盘继续按[总计划](../plan/alpha-0.7.1-skill-board-plan.md)推进。
+阶段二交付正式道具、安装、拆卸、交易和保存。几何规则见[几何模块](geometry.md)，能量见[能量瓶](energy-bottles.md)，配置见[配置参考](../config-reference/skill-board.md)。阶段三已接入[充能与点亮](growth.md)，阶段四已交付[效果投影](effects.md)和[手动六槽技能](manual-skills.md)，正式玩家操作见[玩家棋盘](player-board.md)。
 
 ## 实例与配置
 
@@ -34,4 +34,4 @@
 
 运行有效游戏 Session 后打开 `DarkFlare/Debug/柴薪安装与能量瓶`。选择基底 / 种子生成到背包；填写实例 ID、操作、锚点和 0–5 旋转，先预检再提交。火焰中心节点填写 `center`，余烬填写右侧列出的 Crack 节点 ID。连接可列出候选，再明确采用并重新预检；取消预览不改资产。
 
-右侧显示玩家、实例 ID、锚点、节点、配对、嵌入、Revision 和能量。此入口复用正式 Command，不代表正式玩家界面交付。长期回归复用实例 / 保存套件，独立 `SkillBoardTransactionsTests` 保护安装、失败回退、所有权和网络规则。
+右侧显示玩家、实例 ID、锚点、节点、配对、嵌入、Revision 和能量。此开发入口复用正式 Command；阶段五的正式操作入口见玩家棋盘。长期回归复用实例 / 保存套件，独立 `SkillBoardTransactionsTests` 保护安装、失败回退、所有权和网络规则。

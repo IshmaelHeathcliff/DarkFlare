@@ -1,0 +1,132 @@
+{
+  "status": "completed",
+  "duration": 32.81,
+  "summary": {
+    "total": 17,
+    "passed": 14,
+    "failed": 3,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "results": [
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.Attributes_IndependentWindowsRefreshAndNavigateWithoutTakingItemOwnership",
+      "Status": "Failed",
+      "Duration": 3.6456921,
+      "Message": "  qps-ploc 1920×1080 game-menu-board-tab: 单行文本被横向裁切\r\n  Expected: less than or equal to 138.0f\r\n  But was:  212.0f\r\n",
+      "StackTrace": "at DarkFlare.Tests.Phase1UxPlayModeTests.AssertVisibleTextFits (UnityEngine.UIElements.VisualElement root, System.String localeMode, UnityEngine.Vector2Int resolution) [0x001a1] in C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Tests\\PlayMode\\Phase1UxPlayModeTests.cs:1933\r\nat DarkFlare.Tests.Phase1UxPlayModeTests+<Attributes_IndependentWindowsRefreshAndNavigateWithoutTakingItemOwnership>d__17.MoveNext () [0x00ab3] in C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Tests\\PlayMode\\Phase1UxPlayModeTests.cs:644\r\nat UnityEngine.TestTools.TestEnumerator+<Execute>d__8.MoveNext () [0x0003a] in .\\Library\\PackageCache\\com.unity.test-framework@80f691d4262b\\UnityEngine.TestRunner\\NUnitExtensions\\Attributes\\TestEnumerator.cs:52\r\n"
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.Board_CancelDeviceRemovalAndStaleBottleCannotCommitPendingRequests",
+      "Status": "Passed",
+      "Duration": 1.2499388,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.Board_LocalesKeepCanvasInventoryAndConfirmationReachable",
+      "Status": "Failed",
+      "Duration": 1.2721922,
+      "Message": "  zh-Hans 1920×1080 Label '瓶': 换行文本被纵向裁切；元素 (x:67.00, y:268.00, width:NaN, height:NaN)，容器 (x:67.00, y:268.00, width:908.00, height:320.00)\r\n  Expected: less than or equal to NaN\r\n  But was:  21.0f\r\n",
+      "StackTrace": "at DarkFlare.Tests.Phase1UxPlayModeTests.AssertVisibleTextFits (UnityEngine.UIElements.VisualElement root, System.String localeMode, UnityEngine.Vector2Int resolution) [0x0015a] in C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Tests\\PlayMode\\Phase1UxPlayModeTests.cs:1926\r\nat DarkFlare.Tests.Phase1UxPlayModeTests+<Board_LocalesKeepCanvasInventoryAndConfirmationReachable>d__2.MoveNext () [0x006ea] in C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Tests\\PlayMode\\Phase1UxPlayModeTests.SkillBoard.cs:253\r\nat UnityEngine.TestTools.TestEnumerator+<Execute>d__8.MoveNext () [0x0003a] in .\\Library\\PackageCache\\com.unity.test-framework@80f691d4262b\\UnityEngine.TestRunner\\NUnitExtensions\\Attributes\\TestEnumerator.cs:52\r\n"
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.Board_PlayerTransactionsUseSharedCarryConfirmationAndSixSlots",
+      "Status": "Passed",
+      "Duration": 6.8597435,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.Consumables_BuyMergeUseAndRestoreFocusThroughKeyboardAndGamepad",
+      "Status": "Passed",
+      "Duration": 1.3782246,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.Crafting_OnlyUsesItemsPlacedInTheInputSlot",
+      "Status": "Passed",
+      "Duration": 1.3604007,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.GamepadNavigation_MovesHeldGridItemsAndCrossesCraftingBoundary",
+      "Status": "Passed",
+      "Duration": 1.2437206,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.Hud_CurrentResourcesMotionAndEntriesRespectInputOwnership",
+      "Status": "Passed",
+      "Duration": 1.476753,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.IndependentWindows_TradeAndCraftWithoutInventoryAndRevokeInvalidTargets",
+      "Status": "Passed",
+      "Duration": 1.2771465,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.ItemActions_EquipmentMenuDiscardAndDeviceLossKeepOwnership",
+      "Status": "Passed",
+      "Duration": 1.3690136,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.ItemActions_TradeByPointerAndGamepadAndReturnCraftingToExactCell",
+      "Status": "Passed",
+      "Duration": 1.9379114,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.ManualSkills_RequireInputKeepFlamesSeparateAndDoNotCastThroughHud",
+      "Status": "Passed",
+      "Duration": 2.6332556,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.PanelReload_RebindsGameplayAndPreservesRendererDisabledContent",
+      "Status": "Passed",
+      "Duration": 1.2791377,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.Shop_RefreshSupportsKeyboardAndGamepadAndReopeningPreservesStock",
+      "Status": "Passed",
+      "Duration": 1.2510977,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.ShopPurchase_UsesGridAndRestoresNeighborFocusFeedbackAndTooltip",
+      "Status": "Failed",
+      "Duration": 1.7215907,
+      "Message": "  qps-ploc 1920×1080 game-menu-board-tab: 单行文本被横向裁切\r\n  Expected: less than or equal to 138.0f\r\n  But was:  212.0f\r\n",
+      "StackTrace": "at DarkFlare.Tests.Phase1UxPlayModeTests.AssertVisibleTextFits (UnityEngine.UIElements.VisualElement root, System.String localeMode, UnityEngine.Vector2Int resolution) [0x001a1] in C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Tests\\PlayMode\\Phase1UxPlayModeTests.cs:1933\r\nat DarkFlare.Tests.Phase1UxPlayModeTests+<ShopPurchase_UsesGridAndRestoresNeighborFocusFeedbackAndTooltip>d__22.MoveNext () [0x01111] in C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Tests\\PlayMode\\Phase1UxPlayModeTests.cs:1313\r\nat UnityEngine.TestTools.TestEnumerator+<Execute>d__8.MoveNext () [0x0003a] in .\\Library\\PackageCache\\com.unity.test-framework@80f691d4262b\\UnityEngine.TestRunner\\NUnitExtensions\\Attributes\\TestEnumerator.cs:52\r\n"
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.StatusDetails_GamepadScrollBackAndDispelKeepFocusReachable",
+      "Status": "Passed",
+      "Duration": 1.4098139,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.StatusVisibility_FiltersHudAndMenuWithoutRemovingGameplayLayers",
+      "Status": "Passed",
+      "Duration": 1.3513913,
+      "Message": null,
+      "StackTrace": null
+    }
+  ]
+}

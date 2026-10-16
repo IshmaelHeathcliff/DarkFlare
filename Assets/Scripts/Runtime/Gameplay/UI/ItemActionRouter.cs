@@ -4,8 +4,8 @@ using UnityEngine.UIElements;
 
 namespace DarkFlare
 {
-    public enum ItemSourceKind { Inventory, Equipment, Merchant, Crafting }
-    public enum ItemActionKind { None, Move, Equip, Unequip, Buy, Sell, Place, Return, Discard, Use }
+    public enum ItemSourceKind { Inventory, Equipment, Merchant, Crafting, Board }
+    public enum ItemActionKind { None, Move, Equip, Unequip, Buy, Sell, Place, Return, Discard, Use, BoardPlace, EquipBottle }
 
     public readonly struct ItemActionSource
     {
@@ -70,8 +70,10 @@ namespace DarkFlare
         public bool IsCurrent(ItemActionSource source)
         {
             if (_scope?.CanAcceptWork != true || source.Item == null || !_menu.IsWindowVisible(source.Window)
-                || source.Element != null && !GameMenuController.IsNavigable(source.Element)) { return false; }
+                || source.Kind != ItemSourceKind.Board && source.Element != null && !GameMenuController.IsNavigable(source.Element)) { return false; }
             InventorySnapshot snapshot = Inventory;
+            if (source.Kind == ItemSourceKind.Board)
+            { return snapshot.HasPlayer && snapshot.Player.IsAlive && _menu.Board?.IsItemCurrent(source.Item) == true; }
             if (!snapshot.HasPlayer || !snapshot.Player.IsAlive) { return false; }
             if (source.Kind == ItemSourceKind.Equipment)
             {
@@ -106,6 +108,9 @@ namespace DarkFlare
             if (source.Kind == ItemSourceKind.Merchant) { return new ItemActionTarget(ItemActionKind.Buy); }
             if (source.Kind == ItemSourceKind.Equipment) { return new ItemActionTarget(ItemActionKind.Unequip); }
             if (source.Kind == ItemSourceKind.Crafting) { return new ItemActionTarget(ItemActionKind.Return); }
+            if (_menu.IsWindowVisible(GameMenuPage.SkillBoard) && source.Item.BaseDefinition.IsSkillBoardItem)
+            { return new ItemActionTarget(source.Item.BaseDefinition.ItemType == ItemType.EnergyBottle ? ItemActionKind.EquipBottle : ItemActionKind.BoardPlace,
+                source.Item.BaseDefinition.ItemType == ItemType.EnergyBottle ? _menu.GetComponent<RuntimePanelView>().Root.Q("board-bottle-drop") : _menu.Board.Canvas); }
             if (_menu.IsWindowVisible(GameMenuPage.Shop)) { return new ItemActionTarget(ItemActionKind.Sell); }
             if (_menu.IsWindowVisible(GameMenuPage.Crafting)) { return new ItemActionTarget(ItemActionKind.Place); }
             if (source.Item.BaseDefinition.UseDefinition != null) { return new ItemActionTarget(ItemActionKind.Use); }
@@ -126,6 +131,16 @@ namespace DarkFlare
             bool carried = source.Kind == ItemSourceKind.Inventory;
             switch (target.Kind)
             {
+                case ItemActionKind.BoardPlace:
+                    if ((carried || source.Kind == ItemSourceKind.Board) && _menu.IsWindowVisible(GameMenuPage.SkillBoard)) { return _menu.Board.ValidateDrop(source.Item); }
+                    break;
+                case ItemActionKind.EquipBottle:
+                    if (carried && _menu.IsWindowVisible(GameMenuPage.SkillBoard))
+                    {
+                        SkillBoardPreview bottle = this.SendQuery(new PreviewSkillBoardQuery(SkillBoardPlayerIdentity.GetProfileId(inventory.Player), new SkillBoardRequest(SkillBoardOperation.EquipBottle, source.Item)));
+                        return bottle.Success ? null : "board.error." + bottle.Failure;
+                    }
+                    break;
                 case ItemActionKind.Use:
                     if (!carried || source.Item.BaseDefinition.UseDefinition == null) { break; }
                     return ItemUseFeedback.GetKey(PreviewUse(source.Item), source.Item.BaseDefinition.UseDefinition);
@@ -176,6 +191,10 @@ namespace DarkFlare
             CombatActor player = Inventory.Player;
             switch (target.Kind)
             {
+                case ItemActionKind.BoardPlace: return _menu.Board.CommitDrop(source.Item);
+                case ItemActionKind.EquipBottle:
+                    SkillBoardPreview bottle = this.SendQuery(new PreviewSkillBoardQuery(SkillBoardPlayerIdentity.GetProfileId(player), new SkillBoardRequest(SkillBoardOperation.EquipBottle, source.Item)));
+                    return bottle.Success && this.SendCommand(new CommitSkillBoardCommand(bottle));
                 case ItemActionKind.Use:
                     ItemUseRequest request = _useRequest;
                     ClearUsePreview();

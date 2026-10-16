@@ -1,0 +1,32 @@
+.board-window { width: 1240px; }
+.board-template, .board-content { flex-grow: 1; min-height: 0; }
+.board-toolbar, .board-actions, .board-workspace, .board-skill-slots { flex-direction: row; }
+.board-toolbar { flex-wrap: wrap; flex-shrink: 0; }
+.board-toolbar .board-button { min-width: 62px; flex-grow: 1; }
+.board-text { white-space: normal; font-size: 14px; color: rgb(220,207,180); margin-bottom: 5px; flex-shrink: 0; }
+.board-title { white-space: normal; font-size: 18px; color: rgb(241,212,158); margin-bottom: 8px; flex-shrink: 0; }
+.board-button { min-height: 32px; height: auto; white-space: normal; font-size: 14px; margin: 2px; padding: 5px 8px; flex-shrink: 0; color: rgb(230,213,180); background-color: rgb(26,28,32); border-width: 1px; border-color: rgb(99,81,52); }
+.board-button:focus { border-color: rgb(238,192,100); }
+.board-button:disabled { color: rgb(128,125,116); }
+.board-workspace { flex-grow: 1; min-height: 0; }
+.board-view-column { flex-grow: 1; min-width: 0; min-height: 0; }
+.board-viewport { flex-grow: 1; min-height: 200px; border-width: 1px; border-color: rgb(91,76,53); overflow: hidden; }
+.board-canvas { flex-grow: 1; min-height: 0; overflow: hidden; }
+.board-canvas:focus { border-width: 1px; border-color: rgb(220,173,80); }
+.board-details-scroll { width: 292px; min-width: 0; flex-shrink: 0; margin-left: 10px; }
+.board-details-scroll .unity-scroll-view__content-container { padding-right: 6px; }
+.board-cell-label { position: absolute; width: 72px; height: 22px; font-size: 10px; -unity-text-align: middle-center; color: rgb(255,237,187); }
+.board-help { white-space: normal; font-size: 12px; color: rgb(180,174,159); margin-top: 5px; margin-bottom: 5px; flex-shrink: 0; }
+.board-skill-slots { flex-wrap: wrap; flex-shrink: 0; }
+.board-skill-slot { flex-grow: 1; flex-basis: 30%; min-width: 0; }
+.board-skill-slot .board-button { min-width: 0; font-size: 12px; padding: 3px; }
+.board-actions { flex-shrink: 0; }
+.board-actions .board-button { flex-grow: 1; }
+.board-bottle-slot { min-height: 70px; border-color: rgb(85,139,164); }
+.board-link { white-space: normal; min-height: 28px; margin-bottom: 6px; }
+.game-menu-panel--board .item-tooltip { display: none; }
+
+
+.board-selected-icon { width: 48px; height: 48px; -unity-background-scale-mode: scale-to-fit; flex-shrink: 0; }
+
+#game-menu-board-tab { width: auto; max-width: none; min-width: 92px; flex-shrink: 0; white-space: nowrap; }

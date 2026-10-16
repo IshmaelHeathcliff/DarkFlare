@@ -7,7 +7,8 @@ namespace DarkFlare
         Inventory,
         Shop,
         Crafting,
-        Attributes
+        Attributes,
+        SkillBoard
     }
 
     [Flags]
@@ -17,7 +18,8 @@ namespace DarkFlare
         Inventory = 1 << 0,
         Shop = 1 << 1,
         Crafting = 1 << 2,
-        Attributes = 1 << 3
+        Attributes = 1 << 3,
+        SkillBoard = 1 << 4
     }
 
     public static class GameMenuAccessExtensions
@@ -34,6 +36,7 @@ namespace DarkFlare
                 return GameMenuAccess.Crafting;
             }
 
+            if (page == GameMenuPage.SkillBoard) { return GameMenuAccess.SkillBoard; }
             if (page == GameMenuPage.Attributes) { return GameMenuAccess.Attributes; }
             return page == GameMenuPage.Inventory ? GameMenuAccess.Inventory : GameMenuAccess.None;
         }

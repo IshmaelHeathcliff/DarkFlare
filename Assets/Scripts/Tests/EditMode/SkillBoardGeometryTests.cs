@@ -10,6 +10,27 @@ namespace DarkFlare.Tests
     public sealed class SkillBoardGeometryTests
     {
         [Test]
+        public void Projection_RoundTripsCellsAndNavigationUsesSixScreenDirections()
+        {
+            for (int q = -40; q <= 40; q += 5)
+            {
+                for (int r = -40; r <= 40; r += 5)
+                {
+                    var cell = new HexCoordinate(q, r);
+                    Assert.That(SkillBoardProjection.Unproject(SkillBoardProjection.Project(cell)), Is.EqualTo(cell));
+                }
+            }
+            var origin = new HexCoordinate(-17, 23);
+            foreach (HexCoordinate delta in SkillBoardGeometry.NeighborDirections)
+            {
+                Vector2 screen = SkillBoardProjection.Project(delta);
+                Assert.That(SkillBoardProjection.Step(origin, new Vector2(screen.x, -screen.y)), Is.EqualTo(origin.Add(delta)));
+            }
+            Assert.That(SkillBoardProjection.Step(origin, Vector2.zero), Is.EqualTo(origin));
+            Assert.Throws<OverflowException>(() => SkillBoardProjection.Unproject(new Vector2(float.MaxValue, 0)));
+        }
+
+        [Test]
         public void Coordinates_PreserveDistanceUnderRotationAndTranslation()
         {
             HexCoordinate first = new HexCoordinate(-7, 11);

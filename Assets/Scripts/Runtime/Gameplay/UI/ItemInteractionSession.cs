@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
@@ -89,9 +90,9 @@ namespace DarkFlare
             _discard = _root.Q<Button>("item-discard-zone");
             _buyZone = _root.Q<Button>("shop-buy-zone");
             _sellZone = _root.Q<Button>("shop-sell-zone");
-            foreach (GameMenuPage page in new[] { GameMenuPage.Inventory, GameMenuPage.Shop, GameMenuPage.Crafting })
+            foreach (GameMenuPage page in new[] { GameMenuPage.Inventory, GameMenuPage.Shop, GameMenuPage.Crafting, GameMenuPage.SkillBoard })
             {
-                VisualElement window = _root.Q(page.ToString().ToLowerInvariant() + "-window");
+                VisualElement window = _root.Q(page == GameMenuPage.SkillBoard ? "board-window" : page.ToString().ToLowerInvariant() + "-window");
                 _windows.Add(page, window);
                 window.RegisterCallback<GeometryChangedEvent>(OnWindowGeometryChanged);
             }
@@ -216,6 +217,7 @@ namespace DarkFlare
                 _feedbackItem = null;
             }
             _workspace.Activate(source.Window);
+            if (source.Kind == ItemSourceKind.Inventory && _menu.Board?.IsVisible == true) { _workspace.SelectInventoryItem(source.Item); }
             Refresh();
         }
 
@@ -356,6 +358,24 @@ namespace DarkFlare
             }
         }
 
+        public void PickForBoard(ItemInstance item, Button source, Vector2? pointer = null, int pointerId = -1)
+        {
+            if (_disposed || !_menu.IsWindowVisible(GameMenuPage.SkillBoard) || item == null) { return; }
+            Cancel();
+            bool mounted = _menu.GetArchitecture().SendQuery(new GetSkillBoardQuery()).Firewoods.Any(w => w.Item == item);
+            _source = new ItemActionSource(item, mounted ? ItemSourceKind.Board : ItemSourceKind.Inventory,
+                mounted ? GameMenuPage.SkillBoard : GameMenuPage.Inventory, source);
+            if (!_router.IsCurrent(_source)) { _source = default; return; }
+            _workspace.BeginDrag(Cancel, Navigate);
+            _keyboard = !pointer.HasValue; _pointerId = pointerId; IsDragging = true;
+            _device = pointer.HasValue ? Pointer.current : _applicationInput.ItemMoveDevice;
+            if (pointer.HasValue) { _overlay.CapturePointer(pointerId); }
+            CreateGhost();
+            SetTarget(new ItemActionTarget(ItemActionKind.BoardPlace, _menu.Board.Canvas));
+            MoveGhost(pointer ?? _menu.Board.Canvas.worldBound.center);
+            if (_keyboard) { _menu.Board.Canvas.Focus(); }
+        }
+
         void OnTakeOrPlace()
         {
             if (_disposed || !_menu.IsOpen || _menu.IsPauseOpen || IsMenuOpen) { return; }
@@ -368,6 +388,7 @@ namespace DarkFlare
                 Commit(held, target);
                 return;
             }
+            if (_menu.Board?.TakeCanvas() == true) { return; }
             if (IsPointerPending || !TrySource(_root.focusController.focusedElement as VisualElement, out ItemActionSource source)) { return; }
             _workspace.BeginDrag(Cancel, Navigate);
             _source = source;
@@ -410,6 +431,8 @@ namespace DarkFlare
             Add("crafting-input-slot", ItemActionKind.Place);
             Add("crafting-slot-remove", ItemActionKind.Return);
             Add("item-discard-zone", ItemActionKind.Discard);
+            Add("board-canvas", ItemActionKind.BoardPlace);
+            Add("board-bottle-drop", ItemActionKind.EquipBottle);
             return targets;
             void Add(string name, ItemActionKind kind)
             {
@@ -422,7 +445,11 @@ namespace DarkFlare
         {
             foreach (ItemActionTarget target in Targets())
             {
-                if (target.Element.worldBound.Contains(position)) { SetTarget(target); return; }
+                if (target.Element.worldBound.Contains(position))
+                {
+                    if (target.Kind == ItemActionKind.BoardPlace) { _menu.Board.PointDrop(_source.Item, position); }
+                    SetTarget(target); return;
+                }
             }
             ScrollView inventoryScroll = _grid.GetFirstAncestorOfType<ScrollView>();
             if (_menu.IsWindowVisible(GameMenuPage.Inventory) && _grid.worldBound.Contains(position)
@@ -439,6 +466,7 @@ namespace DarkFlare
         public void Navigate(Vector2 direction)
         {
             if (!IsDragging || !_keyboard || direction.sqrMagnitude < 0.25f) { return; }
+            if (_target.Kind == ItemActionKind.BoardPlace) { _menu.Board.Canvas.Navigate(direction); SetTarget(_target); MoveGhost(_menu.Board.Canvas.LocalToWorld(_menu.Board.Canvas.CellPosition(_menu.Board.Canvas.Cursor))); return; }
             Vector2Int delta = Mathf.Abs(direction.x) >= Mathf.Abs(direction.y)
                 ? new Vector2Int(direction.x > 0 ? 1 : -1, 0) : new Vector2Int(0, direction.y > 0 ? -1 : 1);
             InventorySnapshot inventory = _router.Inventory;
@@ -488,6 +516,8 @@ namespace DarkFlare
                 case ItemActionKind.Equip:
                     return (_source.Kind == ItemSourceKind.Inventory || _source.Kind == ItemSourceKind.Equipment)
                         && _source.Item.BaseDefinition.CanEquipTo(target.Slot);
+                case ItemActionKind.BoardPlace: return (_source.Kind == ItemSourceKind.Inventory || _source.Kind == ItemSourceKind.Board) && _source.Item.BaseDefinition.IsSkillBoardItem;
+                case ItemActionKind.EquipBottle: return _source.Kind == ItemSourceKind.Inventory && _source.Item.BaseDefinition.ItemType == ItemType.EnergyBottle;
                 case ItemActionKind.Buy: return _source.Kind == ItemSourceKind.Merchant;
                 case ItemActionKind.Return: return _source.Kind == ItemSourceKind.Crafting;
                 default: return _source.Kind == ItemSourceKind.Inventory;
@@ -580,6 +610,7 @@ namespace DarkFlare
             bool active = IsDragging || IsPointerPending;
             if (!active) { return false; }
             Finish();
+            _menu.Board?.CancelDrop();
             _feedback = "item.action.cancelled";
             _feedbackItem = null;
             Refresh();
@@ -631,7 +662,15 @@ namespace DarkFlare
             }
             _feedback = success ? "item.action.completed" : reason ?? "item.action.stale";
             _feedbackItem = source.Item;
+            _menu.Board?.FinishDrop();
             CloseMenu(false);
+            if (target.Kind == ItemActionKind.BoardPlace || target.Kind == ItemActionKind.EquipBottle)
+            {
+                _workspace.Activate(GameMenuPage.SkillBoard);
+                if (_menu.Board.IsReviewingLinks) { _feedback = "board.links"; }
+                else if (_menu.Board.Preview?.Success == true) { _root.Q<Button>("board-confirm").Focus(); } else { _menu.Board.Canvas.Focus(); }
+                Refresh(); return;
+            }
             _workspace.SuppressPreview();
             int generation = ++_generation;
             GameMenuPage owner = target.Element != null && IsUnder(target.Element, "inventory-window")
@@ -738,7 +777,7 @@ namespace DarkFlare
 
         string Describe(ItemActionSource source, ItemActionTarget target)
         {
-            string text = Text("item.action." + target.Kind.ToString().ToLowerInvariant());
+            string text = Text(target.Kind == ItemActionKind.BoardPlace ? "item.action.board_place" : target.Kind == ItemActionKind.EquipBottle ? "board.equip" : "item.action." + target.Kind.ToString().ToLowerInvariant());
             if (target.Kind == ItemActionKind.Buy || target.Kind == ItemActionKind.Sell)
             {
                 text += " · " + _router.Price(source.Item, target.Kind == ItemActionKind.Buy);

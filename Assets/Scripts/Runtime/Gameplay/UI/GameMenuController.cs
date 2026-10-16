@@ -102,6 +102,7 @@ namespace DarkFlare
         public void OpenPage(GameMenuPage page)
         {
             if (!IsPageAvailable(page) || _gameInput == null) { return; }
+            PrepareBoardWindow(page);
             _statusOpen = false;
             OpenWindows |= page.ToAccess();
             if (page == GameMenuPage.Shop || page == GameMenuPage.Crafting)
@@ -117,11 +118,13 @@ namespace DarkFlare
 
         public bool IsWindowVisible(GameMenuPage page)
         {
-            return IsOpen && !_pauseOpen && !_statusOpen && OpenWindows.Contains(page) && IsPageAvailable(page);
+            return IsOpen && !_pauseOpen && !_statusOpen && OpenWindows.Contains(page) && IsPageAvailable(page)
+                && (!OpenWindows.Contains(GameMenuPage.SkillBoard) || page == GameMenuPage.SkillBoard || page == GameMenuPage.Inventory);
         }
 
         public void ClosePage(GameMenuPage page)
         {
+            if (CloseBoardWindow(page)) { return; }
             if (!OpenWindows.Contains(page)) { return; }
             Workspace.Suspend();
             OpenWindows &= ~page.ToAccess();
@@ -131,7 +134,8 @@ namespace DarkFlare
             {
                 CurrentPage = OpenWindows.Contains(GameMenuPage.Inventory) ? GameMenuPage.Inventory
                     : OpenWindows.Contains(GameMenuPage.Shop) ? GameMenuPage.Shop
-                    : OpenWindows.Contains(GameMenuPage.Crafting) ? GameMenuPage.Crafting : GameMenuPage.Attributes;
+                    : OpenWindows.Contains(GameMenuPage.Crafting) ? GameMenuPage.Crafting
+                    : OpenWindows.Contains(GameMenuPage.SkillBoard) ? GameMenuPage.SkillBoard : GameMenuPage.Attributes;
             }
             ApplyPage();
             FocusWindow(CurrentPage);
@@ -158,6 +162,7 @@ namespace DarkFlare
             _shopTemplate?.EnableInClassList("item-window--active", page == GameMenuPage.Shop);
             _craftingTemplate?.EnableInClassList("item-window--active", page == GameMenuPage.Crafting);
             _attributesTemplate?.EnableInClassList("item-window--active", page == GameMenuPage.Attributes);
+            _boardTemplate?.EnableInClassList("item-window--active", page == GameMenuPage.SkillBoard);
         }
 
         void FocusWindow(GameMenuPage page)
@@ -171,7 +176,8 @@ namespace DarkFlare
             }
             bool focused = page == GameMenuPage.Inventory ? _inventoryPanel.FocusDefault()
                 : page == GameMenuPage.Shop ? _shopPanel.FocusDefault()
-                : page == GameMenuPage.Crafting ? _craftingPanel.FocusDefault() : _attributes.FocusDefault();
+                : page == GameMenuPage.Crafting ? _craftingPanel.FocusDefault()
+                : page == GameMenuPage.SkillBoard ? _board.FocusDefault() : _attributes.FocusDefault();
             if (!focused)
             {
                 (page == GameMenuPage.Inventory ? _inventoryClose : page == GameMenuPage.Shop ? _shopClose : page == GameMenuPage.Crafting ? _craftingClose : _attributesClose)?.Focus();
@@ -192,6 +198,7 @@ namespace DarkFlare
             if (_pauseOpen) { TogglePause(); return true; }
             if (Workspace.Interactions?.CloseMenu(true) == true) { return true; }
             if (Workspace.CancelDrag()) { return true; }
+            if (_board?.Cancel() == true) { return true; }
             VisualElement focused = _panel.panel?.focusController.focusedElement as VisualElement;
             Foldout source = focused?.GetFirstAncestorOfType<Foldout>();
             if (source != null && source.ClassListContains("item-source-section") && source.value)
@@ -206,17 +213,18 @@ namespace DarkFlare
 
         void OnCycleWindow(int step)
         {
+            if (_board?.Rotate(step) == true) { return; }
             if (!IsOpen || _pauseOpen || _statusOpen || Workspace.IsDragging || Workspace.Interactions?.IsMenuOpen == true) { return; }
-            for (int i = 1; i <= 4; i++)
+            for (int i = 1; i <= Enum.GetValues(typeof(GameMenuPage)).Length; i++)
             {
-                GameMenuPage page = (GameMenuPage)(((int)CurrentPage + step * i + 8) % 4);
+                GameMenuPage page = (GameMenuPage)(((int)CurrentPage + step * i + Enum.GetValues(typeof(GameMenuPage)).Length * 2) % Enum.GetValues(typeof(GameMenuPage)).Length);
                 if (IsWindowVisible(page)) { FocusWindow(page); return; }
             }
         }
 
         public bool IsPageAvailable(GameMenuPage page)
         {
-            return page == GameMenuPage.Inventory || page == GameMenuPage.Attributes || AvailablePages.Contains(page)
+            return page == GameMenuPage.Inventory || page == GameMenuPage.Attributes || page == GameMenuPage.SkillBoard || AvailablePages.Contains(page)
                 && _interactionTarget != null && _interactionTarget.CanInteract
                 && _interactionPlayer != null && _interactionPlayer.isActiveAndEnabled && _interactionPlayer.IsAlive
                 && ApplicationHost.TryGetCurrent(out ApplicationHost host)
@@ -300,6 +308,7 @@ namespace DarkFlare
             _localizationService = ResolveLocalizationService();
             _attributes = new AttributePanelController(architecture, _attributesTemplate, _localizationService,
                 ApplicationHost.Current.CurrentSession.SceneScope);
+            BindBoard(architecture);
             BindStatuses(architecture);
             _saveOperationBusy = false;
             SetSaveStatus(_saveFacade != null
@@ -339,6 +348,7 @@ namespace DarkFlare
 
         void UnbindSession()
         {
+            UnbindBoard();
             UnbindStatuses();
             _attributes?.Dispose();
             _attributes = null;
@@ -544,6 +554,7 @@ namespace DarkFlare
                 return false;
             }
 
+            BindBoardTree(root);
             _attributesTab.clicked += OnAttributesOpen;
             _attributesEntry.clicked += OnAttributesOpen;
             _hudAttributes.clicked += OnAttributesOpen;
@@ -623,6 +634,7 @@ namespace DarkFlare
                 Workspace.Suspend();
                 _craftingPanel?.CloseWindow();
                 OpenWindows = GameMenuAccess.None;
+                _beforeBoardWindows = GameMenuAccess.None;
                 _pauseOpen = false;
                 _statusOpen = false;
                 AvailablePages = GameMenuAccess.Inventory;
@@ -653,6 +665,7 @@ namespace DarkFlare
             _windows.style.display = IsOpen && !_pauseOpen && !_statusOpen ? DisplayStyle.Flex : DisplayStyle.None;
             _pausePanel.style.display = IsOpen && _pauseOpen && !_statusOpen ? DisplayStyle.Flex : DisplayStyle.None;
             _statuses?.SetVisible(IsOpen && _statusOpen, hudEntries);
+            ApplyBoardWindow(hudEntries);
             bool inventory = IsWindowVisible(GameMenuPage.Inventory);
             bool shop = IsWindowVisible(GameMenuPage.Shop);
             bool crafting = IsWindowVisible(GameMenuPage.Crafting);
@@ -711,13 +724,14 @@ namespace DarkFlare
             if (Workspace.Interactions?.NavigateMenu(direction) == true) { return; }
             Workspace.AllowPreview();
             if (Workspace.IsDragging) { Workspace.NavigateDrag(direction); return; }
+            if (_board?.Navigate(direction) == true) { return; }
             VisualElement current = _panel.panel?.focusController.focusedElement as VisualElement;
             if (current == null) { FocusWindow(CurrentPage); return; }
             var candidates = new List<VisualElement>();
             var rectangles = new List<Rect>();
             foreach (VisualElement button in _panel.Query<VisualElement>().ToList())
             {
-                if (button is not Button && button is not Toggle) { continue; }
+                if (button is not Button && button is not Toggle && button is not SkillBoardViewport) { continue; }
                 if (button == current || !button.focusable || !IsNavigable(button)) { continue; }
                 if (GetWindow(button) != GetWindow(current) && !IsInScrollViewport(button)) { continue; }
                 candidates.Add(button);
@@ -740,7 +754,8 @@ namespace DarkFlare
                 GameMenuPage? page = ancestor == _inventoryTemplate ? GameMenuPage.Inventory
                     : ancestor == _shopTemplate ? GameMenuPage.Shop
                     : ancestor == _craftingTemplate ? GameMenuPage.Crafting
-                    : ancestor == _attributesTemplate ? GameMenuPage.Attributes : null;
+                    : ancestor == _attributesTemplate ? GameMenuPage.Attributes
+                    : ancestor == _boardTemplate ? GameMenuPage.SkillBoard : null;
                 if (!page.HasValue) { continue; }
                 _windowFocus[page.Value] = element;
                 Workspace.Activate(page.Value);

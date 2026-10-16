@@ -2,7 +2,7 @@
 
 状态：2026-10-07，**阶段二完成并归档**。实现基线为 `main` / `9b82259` 加本轮未提交改动，当前运行版本 `0.7.1-alpha.2`、Unity `6000.6.4f1`、core v11、Save / Settings Schema 10 / 1、地图 V4。最终 EditMode 931/931、项目 PlayMode 102/102，0 失败 / 跳过；详见[当次验收与源码身份](../acceptance/items-energy/README.md)。以下保留实施合同与历史范围，阶段三至五尚未交付。
 
-入口：[五阶段总计划](../../../alpha-0.7.1-skill-board-plan.md) · [几何模块](../../../../skill-board/geometry.md) · [成长合同](../../../alpha-0.7.1/energy-progression.md) · [六键技能合同](../../../alpha-0.7.1/manual-skills.md) · [阶段验收](../../../alpha-0.7.1/acceptance.md#二物品能量瓶安装与持久化) · [阶段一证据](../acceptance/geometry/README.md)。
+入口：[五阶段总计划](alpha-0.7.1-skill-board-plan.md) · [几何模块](../../../../skill-board/geometry.md) · [成长合同](energy-progression-contract.md) · [六键技能合同](manual-skills-contract.md) · [阶段验收](../acceptance/checklist.md#二物品能量瓶安装与持久化) · [阶段一证据](../acceptance/geometry/README.md)。
 
 ## 本阶段结果与边界
 
@@ -14,7 +14,7 @@
 
 ## 已确认的安装与道具规则
 
-已确认的尺寸、节点数量、完整占位、双向直接连接和中心保留区直接复用[几何合同](../../../alpha-0.7.1/geometry.md)。2026-10-06 至 2026-10-07 用户补充确认如下，替代先前对应建议：
+已确认的尺寸、节点数量、完整占位、双向直接连接和中心保留区直接复用[几何合同](geometry-contract.md)。2026-10-06 至 2026-10-07 用户补充确认如下，替代先前对应建议：
 
 | 对象 | 规则 |
 | --- | --- |

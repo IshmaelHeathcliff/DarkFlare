@@ -20,6 +20,8 @@
   <ui:Template name="ItemDetail" src="project://database/Assets/UI/ItemDetail.uxml" />
   <ui:Style src="project://database/Assets/UI/Components.uss" />
   <ui:Style src="project://database/Assets/UI/Statuses.uss" />
+  <ui:Style src="project://database/Assets/UI/SkillBoard/PlayerBoard.uss" />
+  <ui:Template name="PlayerBoard" src="project://database/Assets/UI/SkillBoard/PlayerBoard.uxml" />
   <ui:VisualElement name="game-ui-root" class="game-ui-root" picking-mode="Ignore">
     <ui:VisualElement name="status-hud" class="status-hud" picking-mode="Ignore"><ui:Button name="status-hud-visibility-toggle" class="status-visibility-toggle" /><ui:VisualElement name="status-hud-icons" class="status-icons" picking-mode="Ignore" /></ui:VisualElement>
     <ui:Instance template="Hud" class="hud-template" picking-mode="Ignore" />
@@ -47,6 +49,7 @@
             </Bindings>
           </ui:Button>
           <ui:Button name="game-menu-statuses" class="game-menu-tab"><Bindings><l:LocalizedString property="text" table="ui" entry="status.title" /></Bindings></ui:Button>
+          <ui:Button name="game-menu-board-tab" class="game-menu-tab"><Bindings><l:LocalizedString property="text" table="ui" entry="board.title" /></Bindings></ui:Button>
           <ui:Button name="game-menu-pause" class="game-menu-tab">
             <Bindings>
               <l:LocalizedString property="text" table="ui" entry="window.pause" />
@@ -59,6 +62,7 @@
           </ui:Button>
         </ui:VisualElement>
         <ui:VisualElement name="game-menu-content" class="game-menu-content" picking-mode="Ignore">
+          <ui:VisualElement name="board-window" class="item-window board-window"><ui:VisualElement class="item-window-header"><ui:Label class="item-window-title" picking-mode="Ignore"><Bindings><l:LocalizedString property="text" table="ui" entry="board.title" /></Bindings></ui:Label><ui:Button name="board-window-close" class="item-window-close"><Bindings><l:LocalizedString property="tooltip" table="ui" entry="window.close" /></Bindings><ui:VisualElement class="ui-icon ui-icon--close item-window-close-icon" picking-mode="Ignore" /></ui:Button></ui:VisualElement><ui:Instance template="PlayerBoard" class="board-template" /></ui:VisualElement>
           <ui:VisualElement name="inventory-window" class="item-window inventory-window">
             <ui:VisualElement class="item-window-header">
               <ui:Label name="" class="item-window-title" picking-mode="Ignore">
