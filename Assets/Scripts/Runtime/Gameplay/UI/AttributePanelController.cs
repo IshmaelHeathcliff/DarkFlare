@@ -41,6 +41,8 @@ namespace DarkFlare
             _localization = localization;
             _formatter = new ItemDetailFormatter((table, key, args) => _localization.GetString(table, key, args));
             _registrations.Add(this.RegisterEvent<EquipmentChangedEvent>(_ => Invalidate()));
+            _registrations.Add(this.RegisterEvent<SkillBoardChangedEvent>(_ => Invalidate()));
+            _registrations.Add(this.RegisterEvent<PlayerGrowthChangedEvent>(_ => Invalidate()));
             _registrations.Add(this.RegisterEvent<ActorRegisteredEvent>(_ => Invalidate()));
             _registrations.Add(this.RegisterEvent<ActorUnregisteredEvent>(_ => Invalidate()));
             _registrations.Add(this.RegisterEvent<ActorResourceChangedEvent>(e =>
@@ -149,6 +151,12 @@ namespace DarkFlare
                 AddLabel(attack, () => _formatter.FormatDamage(damage.DamageType, damage.Minimum, damage.Maximum));
             }
             AddLabel(attack, () => L("attack.conditions"));
+            foreach (FlameSkillDetail flame in _details.Flames)
+            {
+                Foldout flameGroup = Fold(attack, "flame-" + flame.InstanceId,
+                    () => L("skill." + flame.SkillId) + " · " + flame.InstanceId.Substring(0, Math.Min(8, flame.InstanceId.Length)), false);
+                foreach (ModifierInstance modifier in flame.Modifiers) { AddLabel(flameGroup, () => FormatModifier(modifier)); }
+            }
             Foldout defense = Group("defense");
             AddLabel(defense, () => L("defense.conditions"));
             foreach (AttributeDetail attribute in _details.Attributes)
@@ -244,6 +252,9 @@ namespace DarkFlare
             if (origin.Kind == ModifierOriginKind.Status) { return L("source.status", origin.StatusId, origin.StackCount); }
             if (origin.Kind == ModifierOriginKind.Monster) { return L("source.monster"); }
             if (origin.Kind == ModifierOriginKind.Growth) { return L("source.growth"); }
+            if (origin.Kind == ModifierOriginKind.Talent) { return L("source.talent", Message(origin.ItemName)); }
+            if (origin.Kind == ModifierOriginKind.Flame) { return L("source.flame", Message(origin.ItemName)); }
+            if (origin.Kind == ModifierOriginKind.Ember) { return L("source.ember", Message(origin.ItemName)); }
             if (string.IsNullOrEmpty(origin.ItemId)) { return L("source.actor"); }
             string slot = EquipmentSlots.GetKey(origin.Slot);
             return _localization.GetString("ui", "equipment.slot." + slot) + " · " + Message(origin.ItemName) + " · " + Message(origin.AffixName);

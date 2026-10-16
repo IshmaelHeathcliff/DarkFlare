@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Linq;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using DarkFlare;
@@ -61,6 +62,114 @@ namespace DarkFlare.Tests
             _service.SetSessionMenuActive(false);
             PressAndRelease(keyboard.tabKey);
             Assert.AreEqual(2, inventory);
+        }
+
+        [Test]
+        public void SevenSkillActions_AreDistinctAndGameplayOnlyForKeyboardAndGamepad()
+        {
+            Keyboard keyboard = InputSystem.AddDevice<Keyboard>();
+            Gamepad gamepad = InputSystem.AddDevice<Gamepad>();
+            int[] counts = new int[7];
+            _service.SkillRequested += request => counts[request.Slot + 1]++;
+            _service.SwitchContext(InputContext.Gameplay);
+            foreach (var key in new[] { keyboard.digit1Key, keyboard.digit2Key, keyboard.digit3Key,
+                keyboard.digit4Key, keyboard.digit5Key, keyboard.digit6Key }) { PressAndRelease(key); }
+            PressAndRelease(gamepad.buttonWest);
+            CollectionAssert.AreEqual(new[] { 1, 1, 1, 1, 1, 1, 1 }, counts);
+            foreach (var button in new[] { gamepad.buttonEast, gamepad.buttonSouth, gamepad.leftShoulder,
+                gamepad.rightShoulder, gamepad.leftTrigger, gamepad.rightTrigger }) { PressAndRelease(button); }
+            CollectionAssert.AreEqual(new[] { 1, 2, 2, 2, 2, 2, 2 }, counts);
+            _service.SwitchContext(InputContext.UI);
+            PressAndRelease(keyboard.digit1Key); PressAndRelease(gamepad.buttonWest);
+            CollectionAssert.AreEqual(new[] { 1, 2, 2, 2, 2, 2, 2 }, counts);
+        }
+
+        [Test]
+        public void HeldSkillAcrossUiOrSuspension_RequiresReleaseAndNewPress()
+        {
+            Keyboard keyboard = InputSystem.AddDevice<Keyboard>();
+            int casts = 0;
+            _service.SkillRequested += _ => casts++;
+            _service.SwitchContext(InputContext.Gameplay);
+            Press(keyboard.digit1Key);
+            Assert.That(casts, Is.EqualTo(1));
+            _service.SwitchContext(InputContext.UI);
+            _service.SwitchContext(InputContext.Gameplay);
+            InputSystem.Update();
+            Assert.That(casts, Is.EqualTo(1));
+            Release(keyboard.digit1Key);
+            PressAndRelease(keyboard.digit1Key);
+            Assert.That(casts, Is.EqualTo(2));
+            using (_service.AcquireSuspension(InputSuspensionReason.FocusLost)) { Press(keyboard.digit2Key); }
+            InputSystem.Update();
+            Assert.That(casts, Is.EqualTo(2));
+            Release(keyboard.digit2Key); PressAndRelease(keyboard.digit2Key);
+            Assert.That(casts, Is.EqualTo(3));
+        }
+
+        [Test]
+        public void SkillBindings_AcceptMouseButtonsAndRejectConflictsWithNormalAttack()
+        {
+            InputSystem.AddDevice<Mouse>();
+            var target = new InputBindingTarget(RebindableInputAction.PlayerSkill1, InputBindingPart.Primary, InputDeviceFamily.KeyboardMouse);
+            InputRebindResult conflict = _service.ApplyBindingOverrideAsync(target, "<Mouse>/leftButton").GetAwaiter().GetResult();
+            Assert.That(conflict.Code, Is.EqualTo(InputRebindResultCode.Conflict));
+            InputRebindResult applied = _service.ApplyBindingOverrideAsync(target, "<Mouse>/rightButton").GetAwaiter().GetResult();
+            Assert.That(applied.Code, Is.EqualTo(InputRebindResultCode.Success));
+            Assert.That(_service.GetBindingControlPath(target), Is.EqualTo("<Mouse>/rightButton"));
+        }
+
+        [Test]
+        public void GamepadAim_PreservesLastDirectionAndNewSessionResetsIt()
+        {
+            Gamepad pad = InputSystem.AddDevice<Gamepad>();
+            PlayerSkillInput last = default;
+            _service.SkillRequested += request => last = request;
+            _service.SwitchContext(InputContext.Gameplay);
+            Set(pad.rightStick, Vector2.up);
+            Set(pad.rightStick, Vector2.zero);
+            PressAndRelease(pad.buttonWest);
+            Assert.That(Vector2.Distance(last.Look, Vector2.up), Is.LessThan(0.001f));
+            Assert.That(last.Family, Is.EqualTo(InputDeviceFamily.Gamepad));
+            _service.ResetAim();
+            PressAndRelease(pad.buttonWest);
+            Assert.That(last.Look, Is.EqualTo(Vector2.right));
+        }
+
+        [UnityTest]
+        public IEnumerator ExistingBindingOverrides_KeepTheirKeysAndNewSkillDefaultsAvoidCollision()
+        {
+            return VerifyLegacyBindingsAsync().ToCoroutine();
+        }
+
+        async UniTask VerifyLegacyBindingsAsync()
+        {
+            Keyboard keyboard = InputSystem.AddDevice<Keyboard>();
+            InputAction interact = _service.ActionAsset.FindAction("Player/Interact", true);
+            int index = interact.bindings.ToList().FindIndex(b => b.path == "<Keyboard>/e");
+            interact.ApplyBindingOverride(index, "<Keyboard>/1");
+            string historical = _service.ActionAsset.SaveBindingOverridesAsJson();
+            _service.Dispose();
+            var settings = new SettingsService(new InMemorySettingsStorage());
+            Assert.That(settings.Initialize().Succeeded, Is.True);
+            SettingsOperationResult updated = await settings.UpdateAsync(settings.Current.WithInput(historical, InputGlyphPreference.Auto));
+            Assert.That(updated.Succeeded, Is.True);
+            _service = new ApplicationInputService(settings);
+            var skill = new InputBindingTarget(RebindableInputAction.PlayerSkill1, InputBindingPart.Primary, InputDeviceFamily.KeyboardMouse);
+            var old = new InputBindingTarget(RebindableInputAction.PlayerInteract, InputBindingPart.Primary, InputDeviceFamily.KeyboardMouse);
+            Assert.That(_service.GetBindingControlPath(old), Is.EqualTo("<Keyboard>/1"));
+            Assert.That(_service.GetBindingControlPath(skill), Is.EqualTo("<Keyboard>/f1"));
+            int skillRequests = 0; int interactions = 0;
+            _service.SkillRequested += _ => skillRequests++;
+            _service.InteractPerformed += () => interactions++;
+            _service.SwitchContext(InputContext.Gameplay);
+            InputSystem.QueueStateEvent(keyboard, new KeyboardState(Key.Digit1)); InputSystem.Update();
+            InputSystem.QueueStateEvent(keyboard, new KeyboardState()); InputSystem.Update();
+            Assert.That(interactions, Is.EqualTo(1)); Assert.That(skillRequests, Is.Zero);
+            InputSystem.QueueStateEvent(keyboard, new KeyboardState(Key.F1)); InputSystem.Update();
+            InputSystem.QueueStateEvent(keyboard, new KeyboardState()); InputSystem.Update();
+            Assert.That(skillRequests, Is.EqualTo(1));
+            Assert.That(settings.Current.BindingOverridesJson, Is.EqualTo(historical), "不在读入设置时覆盖历史偏好");
         }
 
         [Test]

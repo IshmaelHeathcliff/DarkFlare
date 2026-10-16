@@ -1,0 +1,31 @@
+{
+  "diagnostics": [],
+  "compileMs": 85,
+  "executeMs": 1866,
+  "assemblyName": "PipelineRunScript_ManualSkillsContentSetup_43c324bbcd4a43a5b7ffeb38bd228664",
+  "success": true,
+  "result": {
+    "version": "0.7.1-alpha.4",
+    "unity": "6000.6.4f1",
+    "playMode": false,
+    "reloadEnabled": true,
+    "reloadOptions": "DisableDomainReload",
+    "catalogValid": true,
+    "catalogIssues": [],
+    "contentIssues": [],
+    "weapons": [
+      {
+        "weapon": "great_sword",
+        "skill": "great_sword_normal",
+        "mana": 1,
+        "cooldown": 0.6
+      },
+      {
+        "weapon": "war_axe",
+        "skill": "war_axe_normal",
+        "mana": 2,
+        "cooldown": 0.85
+      }
+    ]
+  }
+}

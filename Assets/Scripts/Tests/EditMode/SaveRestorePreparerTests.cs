@@ -31,7 +31,7 @@ namespace DarkFlare.Tests
 
             Assert.IsTrue(result.Succeeded, Describe(result));
             Assert.AreEqual("player", result.Value.PlayerDefinition.Id);
-            Assert.AreEqual("basic_projectile", result.Value.PlayerSkill.Id);
+            Assert.That(result.Value.PlayerSkill, Is.SameAs(result.Value.PlayerEquipment.Get(EquipmentSlot.Weapon).BaseDefinition.NormalSkill));
             Assert.AreEqual("main", result.Value.SpawnDefinition.Id);
             ItemInstance[] coins = result.Value.RuntimeState.Inventory.Placements.Keys.Where(item => item.BaseDefinition.ItemType == ItemType.Currency).ToArray();
             Assert.AreEqual(document.Payload.Items.Count + coins.Length, result.Value.RuntimeState.Items.Count);
@@ -77,6 +77,7 @@ namespace DarkFlare.Tests
             JObject historicalPayload = (JObject)original["payload"].DeepClone();
             historicalPayload["profile"]["growth"] = JObject.FromObject(
                 RuntimeStateMapper.ToDto(profile.PlayerId, new PlayerGrowthState()));
+            new ManualSkillsSaveMigration().Apply(new JObject { ["payload"] = historicalPayload });
             SavePayloadDto historical = historicalPayload.ToObject<SavePayloadDto>();
             JObject expected = JObject.FromObject(historical);
             JObject actual = JObject.FromObject(migrated.Document.Payload);
@@ -90,7 +91,7 @@ namespace DarkFlare.Tests
             Assert.That(prepared.Value.RuntimeState.Growth.EarnedPoints, Is.Zero);
             Assert.That(prepared.Value.RuntimeState.Growth.Energy, Is.Zero);
             Assert.That(prepared.Value.RuntimeState.Growth.Rules, Is.EqualTo(GrowthRules.Default));
-            Assert.That(prepared.Value.PlayerSkill.Id, Is.EqualTo(migrated.Document.Payload.Run.Player.SkillContentId.Split(':')[1]));
+            Assert.That(prepared.Value.PlayerSkill, Is.SameAs(prepared.Value.PlayerEquipment.Get(EquipmentSlot.Weapon).BaseDefinition.NormalSkill));
             SaveSerializationResult saved = new NewtonsoftSaveSerializer().Serialize(prepared.Value.Document);
             Assert.That(saved.Succeeded, Is.True);
             SaveDeserializationResult replay = new NewtonsoftSaveSerializer().Deserialize(saved.Bytes);

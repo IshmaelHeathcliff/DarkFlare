@@ -1,0 +1,69 @@
+{
+  "status": "completed",
+  "duration": 0.34,
+  "summary": {
+    "total": 8,
+    "passed": 7,
+    "failed": 1,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "results": [
+    {
+      "FullName": "DarkFlare.Tests.PlayerSkillsTests.AttackSnapshot_KeepsLocalCriticalStatsAndFlameIdentityIsolatedFromWeaponAndOtherFlames",
+      "Status": "Passed",
+      "Duration": 0.1357375,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.PlayerSkillsTests.FailedCast_DoesNotSpendManaOrBeginCooldownAndRejectsInvalidAim",
+      "Status": "Failed",
+      "Duration": 0.0853148,
+      "Message": "Unhandled log message: '[Error] [resource.prefab.message] [PrefabAssetLoader] 未预热的 Addressable 引用: 3b6e21dfbc7f54e4f9e0312efd6c6af5'. Use UnityEngine.TestTools.LogAssert.Expect",
+      "StackTrace": "DarkFlare.UnityConsoleLogSink:Write (DarkFlare.ApplicationLogEntry) (at Assets/Scripts/Runtime/Infrastructure/Diagnostics/ApplicationLogging.cs:297)\r\nDarkFlare.ApplicationLogger:WriteToSinks (DarkFlare.ApplicationLogEntry) (at Assets/Scripts/Runtime/Infrastructure/Diagnostics/ApplicationLogging.cs:442)\r\nDarkFlare.ApplicationLogger:Write (DarkFlare.ApplicationLogLevel,DarkFlare.LogEventId,string,System.Exception,UnityEngine.Object,DarkFlare.ApplicationLogContext) (at Assets/Scripts/Runtime/Infrastructure/Diagnostics/ApplicationLogging.cs:386)\r\nDarkFlare.ApplicationLog:Write (DarkFlare.ApplicationLogLevel,DarkFlare.LogEventId,object,System.Exception,UnityEngine.Object,DarkFlare.ApplicationLogContext) (at Assets/Scripts/Runtime/Infrastructure/Diagnostics/ApplicationLogging.cs:639)\r\nDarkFlare.ApplicationLog:Error (DarkFlare.LogEventId,object,UnityEngine.Object,DarkFlare.ApplicationLogContext) (at Assets/Scripts/Runtime/Infrastructure/Diagnostics/ApplicationLogging.cs:597)\r\nDarkFlare.PrefabAssetLoader:GetPrefab (UnityEngine.AddressableAssets.AssetReferenceGameObject) (at Assets/Scripts/Runtime/Gameplay/Combat/PrefabAssetLoader.cs:192)\r\nDarkFlare.SpawnSystem:SpawnProjectile (DarkFlare.ProjectileSkillDefinition,UnityEngine.Vector3,UnityEngine.Vector2,DarkFlare.AttackSnapshot) (at Assets/Scripts/Runtime/Gameplay/Combat/SpawnSystem.cs:315)\r\nDarkFlare.FireProjectileCommand:OnExecute () (at Assets/Scripts/Runtime/Gameplay/Combat/Commands/FireProjectileCommand.cs:112)\r\nAbstractCommand`1<DarkFlare.SkillCastResult>:ICommand<TResult>.Execute () (at Assets/Scripts/Runtime/Core/QFramework.cs:495)\r\nArchitecture`1<DarkFlare.GameArchitecture>:ExecuteCommand<DarkFlare.SkillCastResult> (ICommand`1<DarkFlare.SkillCastResult>) (at Assets/Scripts/Runtime/Core/QFramework.cs:336)\r\nArchitecture`1<DarkFlare.GameArchitecture>:SendCommand<DarkFlare.SkillCastResult> (ICommand`1<DarkFlare.SkillCastResult>) (at Assets/Scripts/Runtime/Core/QFramework.cs:329)\r\nDarkFlare.FireProjectileCommand:Perform (IArchitecture,DarkFlare.CombatActor,DarkFlare.ProjectileSkillDefinition,UnityEngine.Vector3,UnityEngine.Vector2,System.Collections.Generic.IReadOnlyList`1<DarkFlare.ModifierInstance>,string,System.Action) (at Assets/Scripts/Runtime/Gameplay/Combat/Commands/FireProjectileCommand.cs:50)\r\nDarkFlare.PlayerSkillStateRegistry:Cast (DarkFlare.CombatActor,int,string,UnityEngine.Vector3,UnityEngine.Vector2) (at Assets/Scripts/Runtime/Gameplay/Combat/PlayerSkillState.cs:141)\r\nDarkFlare.Tests.PlayerSkillsTests:FailedCast_DoesNotSpendManaOrBeginCooldownAndRejectsInvalidAim () (at Assets/Scripts/Tests/EditMode/PlayerSkillsTests.cs:100)\r\nSystem.Reflection.MethodBase:Invoke (object,object[])\r\nNUnit.Framework.Internal.Reflect:InvokeMethod (System.Reflection.MethodInfo,object,object[])\r\nNUnit.Framework.Internal.MethodWrapper:Invoke (object,object[])\r\nNUnit.Framework.Internal.Commands.TestMethodCommand:RunNonAsyncTestMethod (NUnit.Framework.Internal.ITestExecutionContext)\r\nNUnit.Framework.Internal.Commands.TestMethodCommand:RunTestMethod (NUnit.Framework.Internal.ITestExecutionContext)\r\nNUnit.Framework.Internal.Commands.TestMethodCommand:Execute (NUnit.Framework.Internal.ITestExecutionContext)\r\nUnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\r\n\r\n"
+    },
+    {
+      "FullName": "DarkFlare.Tests.PlayerSkillsTests.FlameAssignment_MovesUniqueReferenceAndExtractionClearsOnlyAfterCommit",
+      "Status": "Passed",
+      "Duration": 0.0137134,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.PlayerSkillsTests.OldSessionSkillSystem_CannotMutateNewSession",
+      "Status": "Passed",
+      "Duration": 0.006018,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.PlayerSkillsTests.Range_UsesShortestLitEdgeCountAndCountsLongEdgesOnce(2,False)",
+      "Status": "Passed",
+      "Duration": 0.0279873,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.PlayerSkillsTests.Range_UsesShortestLitEdgeCountAndCountsLongEdgesOnce(3,True)",
+      "Status": "Passed",
+      "Duration": 0.0024673,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.PlayerSkillsTests.Restore_RejectsDuplicateOrInactiveFlamesAndInvalidCooldownWithoutMutation",
+      "Status": "Passed",
+      "Duration": 0.0029258,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.PlayerSkillsTests.WeaponSkill_RequiresEquipmentAndKeepsCooldownWhenWeaponChanges",
+      "Status": "Passed",
+      "Duration": 0.0020107,
+      "Message": null,
+      "StackTrace": null
+    }
+  ]
+}

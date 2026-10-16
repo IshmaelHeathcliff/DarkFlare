@@ -1,0 +1,174 @@
+{
+  "status": "completed",
+  "duration": 0.36,
+  "summary": {
+    "total": 23,
+    "passed": 22,
+    "failed": 1,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "results": [
+    {
+      "FullName": "DarkFlare.Tests.ApplicationInputServiceTests.AcquireSuspension_RejectsNoneAndCombinedReasons",
+      "Status": "Passed",
+      "Duration": 0.0475378,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.ApplicationInputServiceTests.ApplyBindingOverride_PersistsAndConflictLeavesStableState",
+      "Status": "Passed",
+      "Duration": 0.0507152,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.ApplicationInputServiceTests.ArchitectureProvider_RejectsMissingInputOwner",
+      "Status": "Passed",
+      "Duration": 0.0071735,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.ApplicationInputServiceTests.Cancel_StopsAfterFirstOwnerConsumesInput",
+      "Status": "Passed",
+      "Duration": 0.0237644,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.ApplicationInputServiceTests.Constructor_EnablesUiContextOnly",
+      "Status": "Passed",
+      "Duration": 0.0039449,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.ApplicationInputServiceTests.DeviceActivity_ChangesAutoGlyphFamilyAndExplicitPreferenceOverridesDisplay",
+      "Status": "Passed",
+      "Duration": 0.0336007,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.ApplicationInputServiceTests.Dispose_DisablesActionsAndLeavesOldLeaseSafe",
+      "Status": "Passed",
+      "Duration": 0.0061119,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.ApplicationInputServiceTests.ExistingBindingOverrides_KeepTheirKeysAndNewSkillDefaultsAvoidCollision",
+      "Status": "Failed",
+      "Duration": 0.0183303,
+      "Message": "System.NotSupportedException : InputTestFixture.Set does not support edit mode (editor assembly) [UnityTest].",
+      "StackTrace": "  at UnityEngine.InputSystem.InputTestFixture.Set[TValue] (UnityEngine.InputSystem.InputControl`1[TValue] control, TValue state, System.Double time, System.Double timeOffset, System.Boolean queueEventOnly) [0x000d0] in .\\Library\\PackageCache\\com.unity.inputsystem@2436e68c60c4\\Tests\\TestFixture\\InputTestFixture.cs:614 \r\n  at UnityEngine.InputSystem.InputTestFixture.Press (UnityEngine.InputSystem.Controls.ButtonControl button, System.Double time, System.Double timeOffset, System.Boolean queueEventOnly) [0x00000] in .\\Library\\PackageCache\\com.unity.inputsystem@2436e68c60c4\\Tests\\TestFixture\\InputTestFixture.cs:484 \r\n  at UnityEngine.InputSystem.InputTestFixture.PressAndRelease (UnityEngine.InputSystem.Controls.ButtonControl button, System.Double time, System.Double timeOffset, System.Boolean queueEventOnly) [0x00000] in .\\Library\\PackageCache\\com.unity.inputsystem@2436e68c60c4\\Tests\\TestFixture\\InputTestFixture.cs:496 \r\n  at DarkFlare.Tests.ApplicationInputServiceTests.VerifyLegacyBindingsAsync () [0x00226] in C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Tests\\EditMode\\ApplicationInputServiceTests.cs:166 \r\n  at Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask`1[TStateMachine].GetResult (System.Int16 token) [0x00000] in .\\Library\\PackageCache\\com.cysharp.unitask@dc216dc4183d\\Runtime\\CompilerServices\\StateMachineRunner.cs:218 \r\n  at Cysharp.Threading.Tasks.UniTaskExtensions+ToCoroutineEnumerator.RunTask (Cysharp.Threading.Tasks.UniTask task) [0x00020] in .\\Library\\PackageCache\\com.cysharp.unitask@dc216dc4183d\\Runtime\\UniTaskExtensions.cs:807 \r\n  at Cysharp.Threading.Tasks.UniTaskExtensions+ToCoroutineEnumerator.MoveNext () [0x0002b] in .\\Library\\PackageCache\\com.cysharp.unitask@dc216dc4183d\\Runtime\\UniTaskExtensions.cs:838 \r\n  at UnityEngine.TestTools.TestEnumerator+<Execute>d__8.MoveNext () [0x0003a] in .\\Library\\PackageCache\\com.unity.test-framework@80f691d4262b\\UnityEngine.TestRunner\\NUnitExtensions\\Attributes\\TestEnumerator.cs:52 "
+    },
+    {
+      "FullName": "DarkFlare.Tests.ApplicationInputServiceTests.GamepadAim_PreservesLastDirectionAndNewSessionResetsIt",
+      "Status": "Passed",
+      "Duration": 0.0069145,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.ApplicationInputServiceTests.GlyphResolver_KnownAndUnknownControlsNeverExposeRawPath",
+      "Status": "Passed",
+      "Duration": 0.0031671,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.ApplicationInputServiceTests.HeldSkillAcrossUiOrSuspension_RequiresReleaseAndNewPress",
+      "Status": "Passed",
+      "Duration": 0.0054566,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.ApplicationInputServiceTests.InteractiveRebind_DeviceRemovalRollsBackWithoutOverride",
+      "Status": "Passed",
+      "Duration": 0.0185731,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.ApplicationInputServiceTests.InteractiveRebind_EscapeCancelsAndRestoresUiContext",
+      "Status": "Passed",
+      "Duration": 0.01057,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.ApplicationInputServiceTests.InteractiveRebind_TimeoutRollsBackAndReleasesSuspension",
+      "Status": "Passed",
+      "Duration": 0.0289451,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.ApplicationInputServiceTests.SessionWindowActions_WorkInUiAndYieldToUpperOwners",
+      "Status": "Passed",
+      "Duration": 0.0047013,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.ApplicationInputServiceTests.SettingsCommitFailure_RollsBackRuntimeOverride",
+      "Status": "Passed",
+      "Duration": 0.0123977,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.ApplicationInputServiceTests.SettingsSnapshot_WithDomainValuesPreservesOtherDomains",
+      "Status": "Passed",
+      "Duration": 0.0040502,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.ApplicationInputServiceTests.SevenSkillActions_AreDistinctAndGameplayOnlyForKeyboardAndGamepad",
+      "Status": "Passed",
+      "Duration": 0.0072848,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.ApplicationInputServiceTests.SkillBindings_AcceptMouseButtonsAndRejectConflictsWithNormalAttack",
+      "Status": "Passed",
+      "Duration": 0.0042284,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.ApplicationInputServiceTests.SuspensionLease_ReleaseIsIdempotent",
+      "Status": "Passed",
+      "Duration": 0.0029546,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.ApplicationInputServiceTests.Suspensions_ReferenceCountAndOverlapBeforeRestoringContext",
+      "Status": "Passed",
+      "Duration": 0.0024483,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.ApplicationInputServiceTests.SwitchContext_ChangesMapsAndPublishesOnce",
+      "Status": "Passed",
+      "Duration": 0.005744,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.ApplicationInputServiceTests.UiContextOwners_PreserveLatestRequestAndRespectSuspension",
+      "Status": "Passed",
+      "Duration": 0.0033422,
+      "Message": null,
+      "StackTrace": null
+    }
+  ]
+}

@@ -80,7 +80,7 @@ namespace DarkFlare
             if (string.IsNullOrEmpty(model.PlayerId)) { model.State = new PlayerGrowthState(rules); }
             if (!model.State.Rules.Equals(rules)) { throw new ArgumentException("成长成本合同已改变，需要迁移"); }
             model.PlayerId = playerId;
-            actor.SetModifierSource(AttributeSource, model.State.CreateModifiers());
+            SkillBoardEffects.Prepare(actor, this.GetModel<SkillBoardModel>().State, model.State).Apply();
         }
 
         public void Restore(string playerId, PlayerGrowthState state, CombatActor actor)
@@ -91,8 +91,7 @@ namespace DarkFlare
             {
                 throw new ArgumentException(error ?? "成长配置或玩家身份不匹配");
             }
-            var replacements = new Dictionary<string, IEnumerable<ModifierInstance>> { [AttributeSource] = state.CreateModifiers() };
-            CombatActor.ActorEffectPreparation effects = actor.PrepareEffects(replacements, actor.StatusTags, actor.BlockedActions);
+            CombatActor.ActorEffectPreparation effects = SkillBoardEffects.Prepare(actor, this.GetModel<SkillBoardModel>().State, state);
             effects.Apply();
             PlayerGrowthModel model = this.GetModel<PlayerGrowthModel>();
             model.PlayerId = playerId;
@@ -115,12 +114,7 @@ namespace DarkFlare
                     : model.State.Activate(woodId, nodeId);
                 string error = PlayerGrowthGraph.Validate(result, board);
                 if (error != null) { return new PlayerGrowthPreview(error); }
-                CombatActor.ActorEffectPreparation effects = null;
-                if (statId != null)
-                {
-                    var replacements = new Dictionary<string, IEnumerable<ModifierInstance>> { [AttributeSource] = result.CreateModifiers() };
-                    effects = actor.PrepareEffects(replacements, actor.StatusTags, actor.BlockedActions);
-                }
+                CombatActor.ActorEffectPreparation effects = SkillBoardEffects.Prepare(actor, board, result);
                 return new PlayerGrowthPreview(this, playerId, model.State, result, board, actor, effects);
             }
             catch (ArgumentException error) { return new PlayerGrowthPreview(error.Message); }

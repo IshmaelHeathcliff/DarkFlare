@@ -1,0 +1,20 @@
+{
+  "status": "completed",
+  "duration": 2.46,
+  "summary": {
+    "total": 1,
+    "passed": 0,
+    "failed": 1,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "results": [
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.CaptureManualSkillsEvidence_Temporary",
+      "Status": "Failed",
+      "Duration": 2.3640645,
+      "Message": "  zh-Hans hud-flame-state-0 耗蓝 8 · 玩法已暂停 2.4 s\r\n  Expected: less than or equal to 29.0f\r\n  But was:  35.0f\r\n",
+      "StackTrace": "at DarkFlare.Tests.Phase1UxPlayModeTests+<CaptureManualSkillsEvidence_Temporary>d__49.MoveNext () [0x005c1] in C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Tests\\PlayMode\\Phase1UxPlayModeTests.cs:2148\r\nat UnityEngine.TestTools.TestEnumerator+<Execute>d__8.MoveNext () [0x0003a] in .\\Library\\PackageCache\\com.unity.test-framework@80f691d4262b\\UnityEngine.TestRunner\\NUnitExtensions\\Attributes\\TestEnumerator.cs:52\r\n"
+    }
+  ]
+}

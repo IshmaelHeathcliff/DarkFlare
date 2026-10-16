@@ -26,6 +26,25 @@ namespace DarkFlare
         public ProjectileSkillDefinition FlameSkill { get; }
         public int EmberRadius { get; }
         public int Energy { get; private set; }
+        double _cooldownEnd;
+        float? _preparedCooldown;
+        public float CooldownRemainingSeconds => _preparedCooldown ?? (float)Math.Max(0, _cooldownEnd - UnityEngine.Time.timeAsDouble);
+
+        internal void FreezePreparedCooldown() { _preparedCooldown = CooldownRemainingSeconds; }
+        internal void StartPreparedCooldown()
+        {
+            if (_preparedCooldown.HasValue) { RestoreCooldown(_preparedCooldown.Value); }
+        }
+
+        internal void RestoreCooldown(float remaining)
+        {
+            if (float.IsNaN(remaining) || float.IsInfinity(remaining) || remaining < 0 || remaining > 0 && FlameSkill == null)
+            {
+                throw new ArgumentException("火焰冷却非法");
+            }
+            _cooldownEnd = UnityEngine.Time.timeAsDouble + remaining;
+            _preparedCooldown = null;
+        }
 
         public SkillBoardItemState(FirewoodLayout layout = null, IEnumerable<SkillBoardTalentState> talents = null,
             ProjectileSkillDefinition flameSkill = null, int emberRadius = 0, int energy = 0)

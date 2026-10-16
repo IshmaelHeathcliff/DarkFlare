@@ -1,0 +1,40 @@
+{
+  "editMode": {
+    "total": 969,
+    "passed": 969,
+    "failed": 0,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "editSeconds": 236.06,
+  "playMode": {
+    "total": 103,
+    "passed": 103,
+    "failed": 0,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "playSeconds": 296.56,
+  "groups": {
+    "input": {
+      "total": 23,
+      "passed": 23,
+      "failed": 0
+    },
+    "growth": {
+      "total": 17,
+      "passed": 17,
+      "failed": 0
+    },
+    "savePreparer": {
+      "total": 11,
+      "passed": 11,
+      "failed": 0
+    },
+    "saveRoundTrip": {
+      "total": 4,
+      "passed": 4,
+      "failed": 0
+    }
+  }
+}

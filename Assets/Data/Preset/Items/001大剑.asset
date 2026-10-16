@@ -18,6 +18,7 @@ MonoBehaviour:
     _tableName: items
     _entryKey: item.great_sword.name
   _itemType: 0
+  _normalSkill: {fileID: 11400000, guid: 4ba92b0cbe79217409b49bbf5fc3ed2e, type: 2}
   _icon:
     m_AssetGUID: 1a1e12f2b0381f54c829d3ef4165a2de
     m_SubObjectName:

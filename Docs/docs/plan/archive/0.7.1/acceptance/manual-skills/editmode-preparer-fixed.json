@@ -1,0 +1,90 @@
+{
+  "status": "completed",
+  "duration": 9.38,
+  "summary": {
+    "total": 11,
+    "passed": 11,
+    "failed": 0,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "results": [
+    {
+      "FullName": "DarkFlare.Tests.SaveRestorePreparerTests.Prepare_AdditiveContentPreservesLegacyValuesStockAndSourceDocument(3)",
+      "Status": "Passed",
+      "Duration": 1.1815871,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SaveRestorePreparerTests.Prepare_AdditiveContentPreservesLegacyValuesStockAndSourceDocument(4)",
+      "Status": "Passed",
+      "Duration": 0.9390714,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SaveRestorePreparerTests.Prepare_AdditiveContentPreservesLegacyValuesStockAndSourceDocument(5)",
+      "Status": "Passed",
+      "Duration": 1.0071641,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SaveRestorePreparerTests.Prepare_AdditiveContentPreservesLegacyValuesStockAndSourceDocument(6)",
+      "Status": "Passed",
+      "Duration": 1.0297952,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SaveRestorePreparerTests.Prepare_GrowthValidatesOwnershipLedgerAndActiveNodesBeforeRestore",
+      "Status": "Passed",
+      "Duration": 1.0970518,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SaveRestorePreparerTests.Prepare_HistoricalPlayerAddsEmptyBoardWithoutChangingItemsSkillOrRandom",
+      "Status": "Passed",
+      "Duration": 1.0482696,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SaveRestorePreparerTests.Prepare_MigratesGoldIntoFullLegacyInventoryWithoutMovingExistingItems",
+      "Status": "Passed",
+      "Duration": 0.4616638,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SaveRestorePreparerTests.Prepare_RejectsCatalogMismatchAndDerivedMonsterStateMismatchBeforeCommit",
+      "Status": "Passed",
+      "Duration": 0.4596006,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SaveRestorePreparerTests.Prepare_ResolvesClosedGraphAndPreservesExactContinuationState",
+      "Status": "Passed",
+      "Duration": 0.4596938,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SaveRestorePreparerTests.Prepare_RoundTripsAllEquipmentSlotsAndRejectsDuplicateOwnership",
+      "Status": "Passed",
+      "Duration": 1.1280585,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SaveRestorePreparerTests.Prepare_UpgradesOnlyKnownContentWithoutMutatingSourceOrRerollingItems",
+      "Status": "Passed",
+      "Duration": 0.5605771,
+      "Message": null,
+      "StackTrace": null
+    }
+  ]
+}

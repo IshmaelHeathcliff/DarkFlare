@@ -53,6 +53,7 @@ namespace DarkFlare
             ApplicationLog.Info(LogEventIds.GameplayBootstrap, "[NewGameSessionInitializer] 开始预热资源");
             List<AssetReferenceSprite> itemIcons = _configuration.CollectItemIcons();
             await UniTask.WhenAll(
+                architecture.GetSystem<SpawnSystem>().PreloadSkillsAsync(context.ContentCatalog, token),
                 architecture.GetSystem<SpawnSystem>().PreloadAsync(
                     _configuration.PlayerCharacter,
                     _configuration.PlayerSkill,

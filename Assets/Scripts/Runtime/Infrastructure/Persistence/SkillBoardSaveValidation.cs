@@ -11,6 +11,9 @@ namespace DarkFlare
             if (dto == null) { return; }
             if (dto.Energy < 0 || dto.EmberRadius < 0)
             { Add(issues, SaveDataIssueCode.InvalidValue, path, "能量或范围不能为负"); }
+            if (!PlayerSkillStateRegistry.FiniteNonnegative(dto.CooldownRemainingSeconds)
+                || string.IsNullOrEmpty(dto.FlameSkillContentId) && dto.CooldownRemainingSeconds != 0)
+            { Add(issues, SaveDataIssueCode.InvalidValue, path, "火焰冷却非法"); }
             if (!string.IsNullOrEmpty(dto.FlameSkillContentId))
             { ValidateContentId(dto.FlameSkillContentId, ContentNamespaces.Skill, path + ".flameSkill", issues); }
             FirewoodLayout layout = ReadSavedLayout(dto.Layout, path + ".layout", issues);

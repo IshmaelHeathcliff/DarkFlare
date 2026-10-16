@@ -1,0 +1,111 @@
+{
+  "status": "completed",
+  "duration": 0.5,
+  "summary": {
+    "total": 14,
+    "passed": 14,
+    "failed": 0,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "results": [
+    {
+      "FullName": "DarkFlare.Tests.SaveSerializerTests.BehaviorMigration_PreservesReleasedNavigationState_AndInitializesFrozenActors",
+      "Status": "Passed",
+      "Duration": 0.3047703,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SaveSerializerTests.BehaviorState_RoundTripsActionAndRejectsUnknownVersionOrForeignTarget",
+      "Status": "Passed",
+      "Duration": 0.010022,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SaveSerializerTests.Deserialize_CanonicalizesPropertyOrderBeforeChecksumVerification",
+      "Status": "Passed",
+      "Duration": 0.0034462,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SaveSerializerTests.Deserialize_PreStatusHistoryAddsEmptyClockAndPreservesRuntimeData",
+      "Status": "Passed",
+      "Duration": 0.0044382,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SaveSerializerTests.Deserialize_RejectsTamperingFutureSchemaDuplicatePropertiesAndDeepJson",
+      "Status": "Passed",
+      "Duration": 0.0052052,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SaveSerializerTests.GameVersion_RoundTripsOriginalHeaderWithoutControllingDataCompatibility(\"1.2.3-alpha.10+build.001\")",
+      "Status": "Passed",
+      "Duration": 0.0035729,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SaveSerializerTests.GameVersion_RoundTripsOriginalHeaderWithoutControllingDataCompatibility(\"999.0.0-beta\")",
+      "Status": "Passed",
+      "Duration": 0.0028077,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SaveSerializerTests.GameVersion_RoundTripsOriginalHeaderWithoutControllingDataCompatibility(\"legacy-build\")",
+      "Status": "Passed",
+      "Duration": 0.0023238,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SaveSerializerTests.GrowthMigration_PreservesEntireSchemaTenPayloadAndOnlyAddsEmptyOwnedGrowth",
+      "Status": "Passed",
+      "Duration": 0.0038043,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SaveSerializerTests.NavigationIntent_RoundTripsAndRejectsUnknownModeOrCrossMapTarget",
+      "Status": "Passed",
+      "Duration": 0.0095811,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SaveSerializerTests.NavigationMigration_PreservesReleasedMapSaveAndAddsFrozenDefaults",
+      "Status": "Passed",
+      "Duration": 0.0168253,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SaveSerializerTests.Serialize_IsDeterministicComputesChecksumAndDoesNotMutateInput",
+      "Status": "Passed",
+      "Duration": 0.0154838,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SaveSerializerTests.Serialize_NormalizesSinglePrecisionNumbersBeforeChecksum",
+      "Status": "Passed",
+      "Duration": 0.0108018,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SaveSerializerTests.Serialize_RejectsNonFiniteValuesAndOversizedInputIsRejectedBeforeParsing",
+      "Status": "Passed",
+      "Duration": 0.0609821,
+      "Message": null,
+      "StackTrace": null
+    }
+  ]
+}

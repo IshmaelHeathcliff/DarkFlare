@@ -58,6 +58,7 @@ namespace DarkFlare
                 .ToArray();
             List<AssetReferenceSprite> itemIcons = CollectItemIcons();
             await UniTask.WhenAll(
+                architecture.GetSystem<SpawnSystem>().PreloadSkillsAsync(context.ContentCatalog, token),
                 architecture.GetSystem<SpawnSystem>().PreloadAsync(
                     _prepared.PlayerDefinition,
                     _prepared.PlayerSkill,
@@ -125,6 +126,10 @@ namespace DarkFlare
                 profile.Gold);
             architecture.GetModel<SkillBoardModel>().RestoreState(profile.PlayerId, _prepared.RuntimeState.SkillBoard);
             architecture.GetSystem<PlayerGrowthSystem>().Restore(profile.PlayerId, _prepared.RuntimeState.Growth, player.Actor);
+            foreach (ItemInstance item in _prepared.RuntimeState.Items.Values) { item.SkillBoardState?.StartPreparedCooldown(); }
+            architecture.GetSystem<PlayerSkillStateRegistry>().Restore(
+                _prepared.Document.Payload.Run.Player.Skills.FlameSlots,
+                _prepared.Document.Payload.Run.Player.Skills.NormalCooldownRemainingSeconds);
             if (!playerState.Resources.IsAlive)
             {
                 player.Actor.RestoreResources(new CombatResourceSnapshot(0, player.Actor.MaxHealth, 0, player.Actor.MaxMana), false);
@@ -173,7 +178,7 @@ namespace DarkFlare
             }
             CombatResourceSnapshot previousPlayerResources = player.Actor.Resources;
             player.RestoreRuntime(ToResources(playerState.Resources), playerState.Resources.IsAlive,
-                playerState.RespawnRemainingSeconds, playerState.AutoCastCooldownRemainingSeconds);
+                playerState.RespawnRemainingSeconds, playerState.Skills.NormalCooldownRemainingSeconds);
             architecture.GetSystem<CombatSystem>().PublishResourceChanges(player.Actor, previousPlayerResources, ActorResourceChangeReason.Configure);
             for (int i = 0; i < restoredMonsters.Count; i++)
             {
@@ -271,7 +276,7 @@ namespace DarkFlare
                 "玩家 Prefab");
             RequirePrefabComponent<ProjectileController>(
                 prefabLoader,
-                _prepared.PlayerSkill.Prefab,
+                _prepared.PlayerSkill != null ? _prepared.PlayerSkill.Prefab : _configuration.PlayerSkill.Prefab,
                 "投射物 Prefab");
             RequirePrefabComponent<LootPickupController>(
                 prefabLoader,

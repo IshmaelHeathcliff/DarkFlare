@@ -1,0 +1,97 @@
+{
+  "status": "completed",
+  "duration": 0.29,
+  "summary": {
+    "total": 12,
+    "passed": 12,
+    "failed": 0,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "results": [
+    {
+      "FullName": "DarkFlare.Tests.PlayerSkillsTests.AttackSnapshot_KeepsLocalCriticalStatsAndFlameIdentityIsolatedFromWeaponAndOtherFlames",
+      "Status": "Passed",
+      "Duration": 0.1064543,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.PlayerSkillsTests.EmberRange_RequiresLitPathAndKeepsDisconnectedFlamesIsolatedAfterRotation(0)",
+      "Status": "Passed",
+      "Duration": 0.0635477,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.PlayerSkillsTests.EmberRange_RequiresLitPathAndKeepsDisconnectedFlamesIsolatedAfterRotation(3)",
+      "Status": "Passed",
+      "Duration": 0.0264583,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.PlayerSkillsTests.FailedCast_DoesNotSpendManaOrBeginCooldownAndRejectsInvalidAim",
+      "Status": "Passed",
+      "Duration": 0.0381212,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.PlayerSkillsTests.FlameAssignment_MovesUniqueReferenceAndExtractionClearsOnlyAfterCommit",
+      "Status": "Passed",
+      "Duration": 0.0058807,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.PlayerSkillsTests.FormalWeapons_ProvideRegisteredSkillsWithValidDamageSources",
+      "Status": "Passed",
+      "Duration": 0.0041445,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.PlayerSkillsTests.GlobalTalent_RebuildsOnceAcrossGrowthRestoreAndEquipmentChanges",
+      "Status": "Passed",
+      "Duration": 0.0089902,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.PlayerSkillsTests.OldSessionSkillSystem_CannotMutateNewSession",
+      "Status": "Passed",
+      "Duration": 0.0027264,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.PlayerSkillsTests.Range_UsesShortestLitEdgeCountAndCountsLongEdgesOnce(2,False)",
+      "Status": "Passed",
+      "Duration": 0.0074807,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.PlayerSkillsTests.Range_UsesShortestLitEdgeCountAndCountsLongEdgesOnce(3,True)",
+      "Status": "Passed",
+      "Duration": 0.0024656,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.PlayerSkillsTests.Restore_RejectsDuplicateOrInactiveFlamesAndInvalidCooldownWithoutMutation",
+      "Status": "Passed",
+      "Duration": 0.0032421,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.PlayerSkillsTests.WeaponSkill_RequiresEquipmentAndKeepsCooldownWhenWeaponChanges",
+      "Status": "Passed",
+      "Duration": 0.0027702,
+      "Message": null,
+      "StackTrace": null
+    }
+  ]
+}

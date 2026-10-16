@@ -2,18 +2,20 @@
 
 本文件封板当前投射物技能配置。正式示例位于 `Assets/Data/Preset/Skills`；创建入口为 `DarkFlare/Data/Skills/Projectile Skill Definition`。
 
+0.7.1-alpha.4 起，普通技能从武器 `_normalSkill` 取得，六个火焰槽引用实际火焰实例，不再默认自动释放。当前大剑 / 战斧的独立技能仍复用投射物 Prefab，参数及输入见[手动技能模块](../skill-board/manual-skills.md)。
+
 ## ProjectileSkillDefinition
 
-用途：声明自动释放投射物的身份、Addressable Prefab、释放节奏、法力消耗、运动参数和伤害所有权。
+用途：声明按键触发投射物的身份、Addressable Prefab、释放节奏、法力消耗、运动参数和伤害所有权。
 
 | 字段 | 类型 / CLR 默认 | 必填、范围与稳定性 | 所有权、消费者、迁移 |
 | --- | --- | --- | --- |
 | `_id` | `string` / 空 | 正式资产必填；唯一小写 `snake_case`，发布后稳定 | 技能选择、攻击上下文、调试与潜在存档消费；改名须迁移 |
 | `_displayName` | `string` / 空 | 正式资产必填；中文名称 | UI、Inspector 与调试消费 |
 | `_projectilePrefab` | `AssetReferenceGameObject` / `null` | 正式技能必填且 GUID 有效 | 技能系统异步实例化并释放；Prefab 必须包含当前投射物控制器与碰撞合同 |
-| `_cooldown` | `float` / `0.6` | 至少 `0.05` 秒 | 玩家自动攻击节奏；不是命中后冷却 |
-| `_manaCost` | `float` / `0` | 不得小于 `0` | 释放前校验法力，投射物成功生成后才提交消耗；失败不取攻击种子 |
-| `_targetRange` | `float` / `10` | 至少 `0.1` 世界单位 | 目标查询与释放条件消费 |
+| `_cooldown` | `float` / `0.6` | 至少 `0.05` 秒 | 成功施法后启动的玩法时间冷却，查询 / 换槽不重置 |
+| `_manaCost` | `float` / `0` | 不得小于 `0` | 释放前校验法力，投射物成功生成后才提交消耗；攻击种子保持既有消费边界 |
+| `_targetRange` | `float` / `10` | 至少 `0.1` 世界单位 | 保留的目标范围配置；当前手动瞄准施法不以自动寻敌范围阻止发射 |
 | `_projectileSpeed` | `float` / `12` | 至少 `0.1` | `ProjectileController` 位移消费 |
 | `_projectileRadius` | `float` / `0.16` | 至少 `0.05` | 投射物命中空间查询消费；不由贴图尺寸隐式推导 |
 | `_projectileLifetime` | `float` / `2` | 至少 `0.1` 秒 | 未命中时的自动回收/销毁消费 |

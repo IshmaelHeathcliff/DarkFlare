@@ -13,6 +13,13 @@ namespace DarkFlare
         {
         }
 
+        public async UniTask PreloadSkillsAsync(ContentCatalog catalog, CancellationToken token)
+        {
+            var references = new List<AssetReferenceGameObject>();
+            foreach (ProjectileSkillDefinition skill in catalog.GetAll<ProjectileSkillDefinition>()) { references.Add(skill.Prefab); }
+            await this.GetUtility<PrefabAssetLoader>().PreloadAsync(references, token);
+        }
+
         public async UniTask PreloadAsync(
             CharacterDefinition player,
             ProjectileSkillDefinition playerSkill,

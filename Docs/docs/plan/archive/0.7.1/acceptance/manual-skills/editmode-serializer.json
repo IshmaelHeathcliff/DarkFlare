@@ -1,0 +1,111 @@
+{
+  "status": "completed",
+  "duration": 0.33,
+  "summary": {
+    "total": 14,
+    "passed": 2,
+    "failed": 12,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "results": [
+    {
+      "FullName": "DarkFlare.Tests.SaveSerializerTests.BehaviorMigration_PreservesReleasedNavigationState_AndInitializesFrozenActors",
+      "Status": "Failed",
+      "Duration": 0.250182,
+      "Message": "  六槽集合或普通技能冷却非法\r\n  Expected: True\r\n  But was:  False\r\n",
+      "StackTrace": "at DarkFlare.Tests.SaveSerializerTests.BehaviorMigration_PreservesReleasedNavigationState_AndInitializesFrozenActors () [0x0003d] in C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Tests\\EditMode\\SaveSerializerTests.cs:19\r\n"
+    },
+    {
+      "FullName": "DarkFlare.Tests.SaveSerializerTests.BehaviorState_RoundTripsActionAndRejectsUnknownVersionOrForeignTarget",
+      "Status": "Failed",
+      "Duration": 0.0166732,
+      "Message": "  六槽集合或普通技能冷却非法\r\n  Expected: True\r\n  But was:  False\r\n",
+      "StackTrace": "at DarkFlare.Tests.SaveSerializerTests.BehaviorState_RoundTripsActionAndRejectsUnknownVersionOrForeignTarget () [0x00080] in C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Tests\\EditMode\\SaveSerializerTests.cs:49\r\n"
+    },
+    {
+      "FullName": "DarkFlare.Tests.SaveSerializerTests.Deserialize_CanonicalizesPropertyOrderBeforeChecksumVerification",
+      "Status": "Failed",
+      "Duration": 0.0032458,
+      "Message": "  六槽集合或普通技能冷却非法\r\n  Expected: True\r\n  But was:  False\r\n",
+      "StackTrace": "at DarkFlare.Tests.SaveSerializerTests.Deserialize_CanonicalizesPropertyOrderBeforeChecksumVerification () [0x00011] in C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Tests\\EditMode\\SaveSerializerTests.cs:269\r\n"
+    },
+    {
+      "FullName": "DarkFlare.Tests.SaveSerializerTests.Deserialize_PreStatusHistoryAddsEmptyClockAndPreservesRuntimeData",
+      "Status": "Failed",
+      "Duration": 0.0026642,
+      "Message": "  六槽集合或普通技能冷却非法\r\n  Expected: True\r\n  But was:  False\r\n",
+      "StackTrace": "at DarkFlare.Tests.SaveSerializerTests.Deserialize_PreStatusHistoryAddsEmptyClockAndPreservesRuntimeData () [0x0003d] in C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Tests\\EditMode\\SaveSerializerTests.cs:119\r\n"
+    },
+    {
+      "FullName": "DarkFlare.Tests.SaveSerializerTests.Deserialize_RejectsTamperingFutureSchemaDuplicatePropertiesAndDeepJson",
+      "Status": "Failed",
+      "Duration": 0.0015163,
+      "Message": "  六槽集合或普通技能冷却非法\r\n  Expected: True\r\n  But was:  False\r\n",
+      "StackTrace": "at DarkFlare.Tests.SaveSerializerTests.Deserialize_RejectsTamperingFutureSchemaDuplicatePropertiesAndDeepJson () [0x00011] in C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Tests\\EditMode\\SaveSerializerTests.cs:308\r\n"
+    },
+    {
+      "FullName": "DarkFlare.Tests.SaveSerializerTests.GameVersion_RoundTripsOriginalHeaderWithoutControllingDataCompatibility(\"1.2.3-alpha.10+build.001\")",
+      "Status": "Failed",
+      "Duration": 0.0022653,
+      "Message": "  六槽集合或普通技能冷却非法\r\n  Expected: True\r\n  But was:  False\r\n",
+      "StackTrace": "at DarkFlare.Tests.SaveSerializerTests.GameVersion_RoundTripsOriginalHeaderWithoutControllingDataCompatibility (System.String value) [0x0001f] in C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Tests\\EditMode\\SaveSerializerTests.cs:253\r\n"
+    },
+    {
+      "FullName": "DarkFlare.Tests.SaveSerializerTests.GameVersion_RoundTripsOriginalHeaderWithoutControllingDataCompatibility(\"999.0.0-beta\")",
+      "Status": "Failed",
+      "Duration": 0.0012998,
+      "Message": "  六槽集合或普通技能冷却非法\r\n  Expected: True\r\n  But was:  False\r\n",
+      "StackTrace": "at DarkFlare.Tests.SaveSerializerTests.GameVersion_RoundTripsOriginalHeaderWithoutControllingDataCompatibility (System.String value) [0x0001f] in C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Tests\\EditMode\\SaveSerializerTests.cs:253\r\n"
+    },
+    {
+      "FullName": "DarkFlare.Tests.SaveSerializerTests.GameVersion_RoundTripsOriginalHeaderWithoutControllingDataCompatibility(\"legacy-build\")",
+      "Status": "Failed",
+      "Duration": 0.0012614,
+      "Message": "  六槽集合或普通技能冷却非法\r\n  Expected: True\r\n  But was:  False\r\n",
+      "StackTrace": "at DarkFlare.Tests.SaveSerializerTests.GameVersion_RoundTripsOriginalHeaderWithoutControllingDataCompatibility (System.String value) [0x0001f] in C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Tests\\EditMode\\SaveSerializerTests.cs:253\r\n"
+    },
+    {
+      "FullName": "DarkFlare.Tests.SaveSerializerTests.GrowthMigration_PreservesEntireSchemaTenPayloadAndOnlyAddsEmptyOwnedGrowth",
+      "Status": "Passed",
+      "Duration": 0.0057571,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SaveSerializerTests.NavigationIntent_RoundTripsAndRejectsUnknownModeOrCrossMapTarget",
+      "Status": "Failed",
+      "Duration": 0.0026053,
+      "Message": "  六槽集合或普通技能冷却非法\r\n  Expected: True\r\n  But was:  False\r\n",
+      "StackTrace": "at DarkFlare.Tests.SaveSerializerTests.NavigationIntent_RoundTripsAndRejectsUnknownModeOrCrossMapTarget () [0x0008e] in C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Tests\\EditMode\\SaveSerializerTests.cs:88\r\n"
+    },
+    {
+      "FullName": "DarkFlare.Tests.SaveSerializerTests.NavigationMigration_PreservesReleasedMapSaveAndAddsFrozenDefaults",
+      "Status": "Failed",
+      "Duration": 0.0078945,
+      "Message": "  六槽集合或普通技能冷却非法\r\n  Expected: True\r\n  But was:  False\r\n",
+      "StackTrace": "at DarkFlare.Tests.SaveSerializerTests.NavigationMigration_PreservesReleasedMapSaveAndAddsFrozenDefaults () [0x0003d] in C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Tests\\EditMode\\SaveSerializerTests.cs:65\r\n"
+    },
+    {
+      "FullName": "DarkFlare.Tests.SaveSerializerTests.Serialize_IsDeterministicComputesChecksumAndDoesNotMutateInput",
+      "Status": "Failed",
+      "Duration": 0.0025132,
+      "Message": "  六槽集合或普通技能冷却非法\r\n  Expected: True\r\n  But was:  False\r\n",
+      "StackTrace": "at DarkFlare.Tests.SaveSerializerTests.Serialize_IsDeterministicComputesChecksumAndDoesNotMutateInput () [0x0002b] in C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Tests\\EditMode\\SaveSerializerTests.cs:229\r\n"
+    },
+    {
+      "FullName": "DarkFlare.Tests.SaveSerializerTests.Serialize_NormalizesSinglePrecisionNumbersBeforeChecksum",
+      "Status": "Failed",
+      "Duration": 0.0013497,
+      "Message": "  六槽集合或普通技能冷却非法\r\n  Expected: True\r\n  But was:  False\r\n",
+      "StackTrace": "at DarkFlare.Tests.SaveSerializerTests.Serialize_NormalizesSinglePrecisionNumbersBeforeChecksum () [0x00037] in C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Tests\\EditMode\\SaveSerializerTests.cs:294\r\n"
+    },
+    {
+      "FullName": "DarkFlare.Tests.SaveSerializerTests.Serialize_RejectsNonFiniteValuesAndOversizedInputIsRejectedBeforeParsing",
+      "Status": "Passed",
+      "Duration": 0.0028832,
+      "Message": null,
+      "StackTrace": null
+    }
+  ]
+}

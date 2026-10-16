@@ -1,0 +1,55 @@
+{
+  "status": "completed",
+  "duration": 85.59,
+  "summary": {
+    "total": 6,
+    "passed": 6,
+    "failed": 0,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "results": [
+    {
+      "FullName": "DarkFlare.Tests.MapDocumentImporterTests.DefinitionChange_AutomaticallyInvalidatesAndRecoversMap",
+      "Status": "Passed",
+      "Duration": 18.9141843,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.MapDocumentImporterTests.FailedImport_InvalidatesOldMapAndBlocksBuildValidation",
+      "Status": "Passed",
+      "Duration": 12.5820174,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.MapDocumentImporterTests.InvalidExchange_DoesNotOverwriteExistingSourceOrArtifact",
+      "Status": "Passed",
+      "Duration": 9.2388708,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.MapDocumentImporterTests.MissingReference_AddRenameConflictAndDeletionRefreshIndex",
+      "Status": "Passed",
+      "Duration": 24.0780993,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.MapDocumentImporterTests.PreviewWindow_ReimportInvalidatesAndRecoversWithoutKeepingResourcesAfterClose",
+      "Status": "Passed",
+      "Duration": 10.7528374,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.MapDocumentImporterTests.Reimport_PreservesGuidAndLocalIdWithOneReadOnlyMapArtifact",
+      "Status": "Passed",
+      "Duration": 9.716347,
+      "Message": null,
+      "StackTrace": null
+    }
+  ]
+}

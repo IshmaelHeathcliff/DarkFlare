@@ -369,15 +369,14 @@ namespace DarkFlare
                     _catalog,
                     "payload.run.player.definitionContentId",
                     issues),
-                SkillContentId = RuntimeStateMapper.GetContentId(
-                    player.DefaultSkill,
-                    _catalog,
-                    "payload.run.player.skillContentId",
-                    issues),
+                Skills = new PlayerSkillsDto
+                {
+                    FlameSlots = player.GetArchitecture().GetModel<PlayerSkillsModel>().Slots.ToList(),
+                    NormalCooldownRemainingSeconds = player.NormalSkillCooldownRemainingSeconds
+                },
                 Position = MapVector(player.transform.position),
                 Resources = MapResources(resources, player.Actor.IsAlive),
                 RespawnRemainingSeconds = player.RespawnRemainingSeconds,
-                AutoCastCooldownRemainingSeconds = player.AutoCastCooldownRemainingSeconds,
             };
         }
 

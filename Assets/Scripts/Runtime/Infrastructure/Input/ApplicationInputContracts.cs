@@ -42,6 +42,13 @@ namespace DarkFlare
         UiPreviousWindow,
         UiNextWindow,
         UiCompare,
+        PlayerAttack,
+        PlayerSkill1,
+        PlayerSkill2,
+        PlayerSkill3,
+        PlayerSkill4,
+        PlayerSkill5,
+        PlayerSkill6,
     }
 
     public enum InputBindingPart
@@ -299,6 +306,13 @@ namespace DarkFlare
                 RebindableInputAction.UiPreviousWindow,
                 RebindableInputAction.UiNextWindow,
                 RebindableInputAction.UiCompare,
+                RebindableInputAction.PlayerAttack,
+                RebindableInputAction.PlayerSkill1,
+                RebindableInputAction.PlayerSkill2,
+                RebindableInputAction.PlayerSkill3,
+                RebindableInputAction.PlayerSkill4,
+                RebindableInputAction.PlayerSkill5,
+                RebindableInputAction.PlayerSkill6,
             });
 
         public static IReadOnlyList<RebindableInputAction> Actions => ActionsValue;
@@ -307,6 +321,13 @@ namespace DarkFlare
         {
             switch (action)
             {
+                case RebindableInputAction.PlayerAttack:
+                case RebindableInputAction.PlayerSkill1:
+                case RebindableInputAction.PlayerSkill2:
+                case RebindableInputAction.PlayerSkill3:
+                case RebindableInputAction.PlayerSkill4:
+                case RebindableInputAction.PlayerSkill5:
+                case RebindableInputAction.PlayerSkill6:
                 case RebindableInputAction.PlayerMove:
                 case RebindableInputAction.PlayerInteract:
                 case RebindableInputAction.PlayerToggleMenu:
@@ -330,6 +351,13 @@ namespace DarkFlare
         {
             switch (action)
             {
+                case RebindableInputAction.PlayerAttack: return "Attack";
+                case RebindableInputAction.PlayerSkill1: return "Skill1";
+                case RebindableInputAction.PlayerSkill2: return "Skill2";
+                case RebindableInputAction.PlayerSkill3: return "Skill3";
+                case RebindableInputAction.PlayerSkill4: return "Skill4";
+                case RebindableInputAction.PlayerSkill5: return "Skill5";
+                case RebindableInputAction.PlayerSkill6: return "Skill6";
                 case RebindableInputAction.PlayerMove:
                     return "Move";
                 case RebindableInputAction.PlayerInteract:

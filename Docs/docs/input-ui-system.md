@@ -27,7 +27,7 @@ Bootstrap 和 Main 均使用原生 `PanelRenderer`，通过 `RuntimePanelView` �
 
 `Assets/Settings/InputSystem_Actions.inputactions` 是唯一输入源，并生成 `InputSystem_Actions.cs`。运行时只由 Application 级 `ApplicationInputService` 创建并持有一个 `InputSystem_Actions` 实例；Session 级 `GameInput` 作为 `IUtility` Adapter 注册到 `GameArchitecture`，只转发既有玩法 API，不创建或销毁 Action Asset。
 
-- `Player` Action Map：移动、瞄准、攻击预留、世界交互、背包开关与暂停。
+- `Player` Action Map：移动、瞄准、独立普攻、六火焰技能、世界交互、背包开关与暂停。
 - `UI` Action Map：导航、提交、取消、物品拿起 / 放置、暂停、窗口循环和指针操作。
 - Gameplay 额外启用 UI Point / Click，支持 HUD 鼠标入口；Navigate / Submit 保持关闭，不占用移动方向。`IsUiEnabled` 以 Navigate 是否启用判断，表示完整 UI 导航可用性。挂起时包括 Point / Click 在内的动作全部禁用。
 - 玩法物品窗口打开时，单独启用原 `Player.ToggleMenu`，不启用移动、战斗或交互；保留原 Action / Binding ID 和有效 overrides。Shell 所有权、挂起或 Session 结束后禁用窗口专用动作。Gameplay 可用性以移动 Action 是否启用判断，不能再以整个 Player Map 是否存在一个启用动作判断。
@@ -52,11 +52,19 @@ Cancel 先由 Application Shell 处理 Fatal、Busy、Modal、Settings，再交�
 
 Point / Look 在 Context 切换后会回放当前指针位置；相同控件的未变化位置不视为新设备活动，避免手柄返回时 Glyph 误切键盘。真实位置变化与按钮输入仍更新活动设备族。
 
+普通技能与六火焰技能均使用 Button 单次按下，来源 / 冷却由 Session 技能系统复核。请求保存真实输入设备和瞄准快照；上下文、重绑定、挂起、死亡和设备断开递增世代使旧请求失效。按住跨切换必须释放再按；HUD 左键操作会消费同次普攻。详见[手动技能模块](skill-board/manual-skills.md)。
+
+旧设置保留已有覆盖；新增技能的未覆盖默认键若与旧覆盖冲突，只在运行时改用空闲 F1–F12，手柄依次尝试摇杆按下 / 十字键。后续正常设置提交会保存实际覆盖，读入时不回写历史设置。没有 Sprite 的鼠标按键使用可读文本，不显示空 Glyph。
+
 当前默认绑定（新增暂停与窗口循环均可重绑定）：
 
 | 操作 | 键鼠 | 手柄 |
 | --- | --- | --- |
 | 移动 | WASD | 左摇杆 |
+| 武器普通技能 | 鼠标左键 | 西键 |
+| 火焰槽 1 / 2 | 1 / 2 | 东键 / 南键 |
+| 火焰槽 3 / 4 | 3 / 4 | 左 / 右肩键 |
+| 火焰槽 5 / 6 | 5 / 6 | 左 / 右扳机 |
 | 世界交互 | E | 北键 |
 | 切换随身背包（Gameplay / 物品 UI） | Tab | Start |
 | Gameplay 打开暂停 | Escape | Select |

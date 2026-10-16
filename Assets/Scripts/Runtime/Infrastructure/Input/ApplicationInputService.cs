@@ -80,6 +80,39 @@ namespace DarkFlare
         bool _contextRefreshPending;
         bool _closed;
         bool _waitForInteractRelease;
+        readonly HashSet<InputAction> _blockedSkills = new HashSet<InputAction>();
+        int _pointerConsumedFrame = -1;
+        Vector2 _lastGamepadAim = Vector2.right;
+        public int GameplayEpoch { get; private set; }
+        public bool IsGameplayPointerConsumed => _pointerConsumedFrame == Time.frameCount;
+        public event Action<PlayerSkillInput> SkillRequested;
+        public void ConsumeGameplayPointer() { _pointerConsumedFrame = Time.frameCount; }
+        public void ResetAim() { _lastGamepadAim = Vector2.right; }
+        public void InvalidateSkills()
+        {
+            GameplayEpoch++;
+            foreach (InputAction action in _actions.Player.Get().actions)
+            {
+                if (IsSkillAction(action) && IsHeld(action)) { _blockedSkills.Add(action); }
+            }
+        }
+
+        static bool IsSkillAction(InputAction action)
+        {
+            return action.actionMap.name == "Player" && (action.name == "Attack"
+                || action.name.StartsWith("Skill", StringComparison.Ordinal));
+        }
+
+        static bool IsHeld(InputAction action)
+        {
+            foreach (InputControl control in action.controls)
+            {
+                if (control is UnityEngine.InputSystem.Controls.ButtonControl button && button.isPressed) { return true; }
+            }
+            return false;
+        }
+
+        void CheckSkillRelease() { _blockedSkills.RemoveWhere(action => !IsHeld(action)); }
 
         public void WaitForInteractRelease()
         {
@@ -118,6 +151,7 @@ namespace DarkFlare
             _actions.UI.Get().actionTriggered += OnActionTriggered;
             _buttonActivitySubscription = InputSystem.onAnyButtonPress.Call(OnAnyButtonPress);
             InputSystem.onDeviceChange += OnDeviceChange;
+            InputSystem.onAfterUpdate += CheckSkillRelease;
             _glyphPreference = _settings?.Current.GlyphPreference
                 ?? InputGlyphPreference.Auto;
             InitialBindingLoadResult = LoadInitialBindingOverrides();
@@ -346,7 +380,7 @@ namespace DarkFlare
                 return string.Empty;
             }
 
-            return action.GetBindingDisplayString(index);
+            return action.GetBindingDisplayString(index, InputBinding.DisplayStringOptions.DontIncludeInteractions);
         }
 
         public InputGlyphToken GetGlyphToken(
@@ -589,13 +623,18 @@ namespace DarkFlare
             _rebindDeviceRemoved = false;
             _rebindSuspension = AcquireSuspension(InputSuspensionReason.Rebinding);
             _rebindOperation = action.PerformInteractiveRebinding(bindingIndex)
-                .WithControlsHavingToMatchPath(GetDeviceLayout(target.DeviceFamily))
+                .WithControlsHavingToMatchPath(target.DeviceFamily == InputDeviceFamily.Gamepad ? "<Gamepad>" : "<InputDevice>")
                 .WithControlsExcluding("<Mouse>/position")
                 .WithControlsExcluding("<Mouse>/delta")
                 .WithControlsExcluding("<Mouse>/scroll")
                 .WithCancelingThrough("<Keyboard>/escape")
                 .WithTimeout(timeoutSeconds)
                 .OnApplyBinding((operation, path) => capturedPath = path)
+                .OnPotentialMatch(operation =>
+                {
+                    if (GetDeviceFamily(operation.selectedControl.device) == target.DeviceFamily) { operation.Complete(); }
+                    else { operation.RemoveCandidate(operation.selectedControl); }
+                })
                 .OnCancel(operation => completion.TrySetResult(
                     CreateInteractiveCancellationResult(target, operation)))
                 .OnComplete(operation => CompleteInteractiveRebindAsync(
@@ -604,7 +643,7 @@ namespace DarkFlare
                     capturedPath,
                     cancellationToken).Forget());
 
-            if (target.DeviceFamily == InputDeviceFamily.Gamepad)
+            if (target.DeviceFamily == InputDeviceFamily.Gamepad && target.Action < RebindableInputAction.PlayerAttack)
             {
                 _rebindOperation.WithCancelingThrough("<Gamepad>/buttonEast");
             }
@@ -720,6 +759,7 @@ namespace DarkFlare
             try
             {
                 _actions.asset.LoadBindingOverridesFromJson(overrides);
+                RepairNewSkillDefaults();
                 return HasRequiredBindings()
                     ? InputRebindResult.Success(target, string.Empty)
                     : ResetInvalidInitialOverrides(target);
@@ -744,11 +784,47 @@ namespace DarkFlare
 
         void RestoreOverrides(string overrides)
         {
+            InvalidateSkills();
             _actions.asset.RemoveAllBindingOverrides();
 
             if (!string.IsNullOrWhiteSpace(overrides))
             {
                 _actions.asset.LoadBindingOverridesFromJson(overrides);
+            }
+            RepairNewSkillDefaults();
+        }
+
+        void RepairNewSkillDefaults()
+        {
+            foreach (InputDeviceFamily family in new[] { InputDeviceFamily.KeyboardMouse, InputDeviceFamily.Gamepad })
+            {
+                foreach (RebindableInputAction id in new[] { RebindableInputAction.PlayerAttack, RebindableInputAction.PlayerSkill1,
+                    RebindableInputAction.PlayerSkill2, RebindableInputAction.PlayerSkill3, RebindableInputAction.PlayerSkill4,
+                    RebindableInputAction.PlayerSkill5, RebindableInputAction.PlayerSkill6 })
+                {
+                    var target = new InputBindingTarget(id, InputBindingPart.Primary, family);
+                    if (!TryResolveBinding(target, out InputAction action, out int index) || action.bindings[index].hasOverrides
+                        || FindConflict(target, action.bindings[index].effectivePath) == null) { continue; }
+                    foreach (string path in SkillFallbacks(family))
+                    {
+                        if (FindConflict(target, path) != null) { continue; }
+                        action.ApplyBindingOverride(index, path);
+                        break;
+                    }
+                }
+            }
+        }
+
+        static IEnumerable<string> SkillFallbacks(InputDeviceFamily family)
+        {
+            if (family == InputDeviceFamily.KeyboardMouse)
+            {
+                for (int i = 1; i <= 12; i++) { yield return "<Keyboard>/f" + i; }
+            }
+            else
+            {
+                foreach (string control in new[] { "rightStickPress", "leftStickPress", "dpad/up", "dpad/down", "dpad/left", "dpad/right" })
+                { yield return "<Gamepad>/" + control; }
             }
         }
 
@@ -929,6 +1005,13 @@ namespace DarkFlare
             {
                 RebindableInputAction.PlayerToggleMenu,
                 RebindableInputAction.UiCancel,
+                RebindableInputAction.PlayerAttack,
+                RebindableInputAction.PlayerSkill1,
+                RebindableInputAction.PlayerSkill2,
+                RebindableInputAction.PlayerSkill3,
+                RebindableInputAction.PlayerSkill4,
+                RebindableInputAction.PlayerSkill5,
+                RebindableInputAction.PlayerSkill6,
             };
 
             for (int familyIndex = 0; familyIndex < families.Length; familyIndex++)
@@ -968,6 +1051,15 @@ namespace DarkFlare
 
         void OnActionTriggered(InputAction.CallbackContext context)
         {
+            if (context.performed && context.action == _actions.Player.Look && context.ReadValue<Vector2>().sqrMagnitude > 0.01f)
+            { _lastGamepadAim = context.ReadValue<Vector2>().normalized; }
+            if (IsSkillAction(context.action) && context.performed && IsGameplayEnabled
+                && !_blockedSkills.Contains(context.action))
+            {
+                int slot = context.action.name == "Attack" ? -1 : int.Parse(context.action.name.Substring(5)) - 1;
+                SkillRequested?.Invoke(new PlayerSkillInput(slot, GameplayEpoch, GetDeviceFamily(context.control.device),
+                    _actions.UI.Point.ReadValue<Vector2>(), _lastGamepadAim, context.control.device is Mouse));
+            }
             if (context.phase != InputActionPhase.Performed || context.control == null)
             {
                 return;
@@ -1004,6 +1096,7 @@ namespace DarkFlare
             {
                 return;
             }
+            GameplayEpoch++;
 
             InputDeviceFamily family = GetDeviceFamily(device);
 
@@ -1136,7 +1229,7 @@ namespace DarkFlare
                 case InputDeviceFamily.KeyboardMouse:
                     return controlPath.StartsWith(
                         "<Keyboard>/",
-                        StringComparison.OrdinalIgnoreCase);
+                        StringComparison.OrdinalIgnoreCase) || IsMouseButtonPath(controlPath);
                 case InputDeviceFamily.Gamepad:
                     return controlPath.StartsWith(
                         "<Gamepad>/",
@@ -1144,6 +1237,14 @@ namespace DarkFlare
                 default:
                     return false;
             }
+        }
+
+        static bool IsMouseButtonPath(string path)
+        {
+            if (!path.StartsWith("<Mouse>/", StringComparison.OrdinalIgnoreCase)) { return false; }
+            string control = path.Substring(8);
+            return control == "leftButton" || control == "rightButton" || control == "middleButton"
+                || control == "forwardButton" || control == "backButton";
         }
 
         static bool IsDeviceFamilyAvailable(InputDeviceFamily family)
@@ -1184,13 +1285,6 @@ namespace DarkFlare
             }
         }
 
-        static string GetDeviceLayout(InputDeviceFamily family)
-        {
-            return family == InputDeviceFamily.Gamepad
-                ? "<Gamepad>"
-                : "<Keyboard>";
-        }
-
         public void Dispose()
         {
             if (_closed)
@@ -1219,6 +1313,9 @@ namespace DarkFlare
             _actions.UI.Get().actionTriggered -= OnActionTriggered;
             _buttonActivitySubscription.Dispose();
             InputSystem.onDeviceChange -= OnDeviceChange;
+            InputSystem.onAfterUpdate -= CheckSkillRelease;
+            _blockedSkills.Clear();
+            SkillRequested = null;
 
             if (_settings != null)
             {
@@ -1285,6 +1382,7 @@ namespace DarkFlare
 
         void ApplyState()
         {
+            InvalidateSkills();
             _actions.Disable();
 
             if (_closed || IsSuspended)

@@ -169,7 +169,8 @@ namespace DarkFlare
 
         public string DefinitionContentId { get; set; } = string.Empty;
 
-        public string SkillContentId { get; set; } = string.Empty;
+        [Newtonsoft.Json.JsonProperty(Required = Newtonsoft.Json.Required.Always)]
+        public PlayerSkillsDto Skills { get; set; } = new PlayerSkillsDto();
 
         public Vector3Dto Position { get; set; } = new Vector3Dto();
 
@@ -177,7 +178,6 @@ namespace DarkFlare
 
         public float RespawnRemainingSeconds { get; set; }
 
-        public float AutoCastCooldownRemainingSeconds { get; set; }
     }
 
     public sealed class MonsterRunStateDto : IPersistenceDto

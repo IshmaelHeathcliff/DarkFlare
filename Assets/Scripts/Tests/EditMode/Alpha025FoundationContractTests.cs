@@ -42,7 +42,7 @@ namespace DarkFlare.Tests
                     $"{mapName}/{actionName} 缺少 Gamepad 绑定");
             }
 
-            Assert.IsFalse(RebindableInputCatalog.Actions.Any(
+            Assert.IsTrue(RebindableInputCatalog.Actions.Any(
                 action => RebindableInputCatalog.GetActionName(action) == "Attack"));
             Assert.IsFalse(RebindableInputCatalog.Actions.Any(
                 action => RebindableInputCatalog.GetActionName(action) == "Look"));

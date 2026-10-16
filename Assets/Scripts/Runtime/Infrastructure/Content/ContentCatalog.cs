@@ -240,6 +240,15 @@ namespace DarkFlare
                 typedEntries.Add(entry);
             }
 
+            foreach (ScriptableObject entry in entries.Values)
+            {
+                if (entry is ItemBaseDefinition item && item.NormalSkill != null
+                    && (item.ItemType != ItemType.Weapon || !idsByEntry.ContainsKey(item.NormalSkill)))
+                {
+                    issues.Add(new ContentCatalogIssue(ContentCatalogIssueCode.ConfigurationInvalid,
+                        "武器普通技能未登记或物品类型错误：" + item.Id, item));
+                }
+            }
             if (issues.Count > 0)
             {
                 return Failed(issues);

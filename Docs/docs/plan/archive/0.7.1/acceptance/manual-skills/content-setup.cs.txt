@@ -1,0 +1,162 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using DarkFlare;
+using UnityEditor;
+using UnityEditor.Localization;
+using UnityEngine;
+
+public static class ManualSkillsContentSetup
+{
+    public static object Inspect()
+    {
+        var definition = AssetDatabase.LoadAssetAtPath<ContentCatalogDefinition>("Assets/Data/Preset/Content/正式内容目录.asset");
+        ContentCatalogBuildResult built = ContentCatalog.Build(definition);
+        return new
+        {
+            version = PlayerSettings.bundleVersion,
+            unity = Application.unityVersion,
+            playMode = EditorApplication.isPlaying,
+            reloadEnabled = EditorSettings.enterPlayModeOptionsEnabled,
+            reloadOptions = EditorSettings.enterPlayModeOptions.ToString(),
+            catalogValid = built.Succeeded,
+            catalogIssues = built.Issues.Select(i => i.Message).ToArray(),
+            contentIssues = DarkFlare.Editor.ContentConfigurationValidator.Scan().Select(i => new { severity = i.Severity.ToString(), path = i.AssetPath, message = i.Message }).ToArray(),
+            weapons = built.Catalog.GetAll<ItemBaseDefinition>().Where(i => i.ItemType == ItemType.Weapon)
+                .Select(i => new { weapon = i.Id, skill = i.NormalSkill?.Id, mana = i.NormalSkill?.ManaCost, cooldown = i.NormalSkill?.Cooldown }).ToArray()
+        };
+    }
+
+    public static object Seal()
+    {
+        if (EditorApplication.isPlaying) { throw new InvalidOperationException("请退出 PlayMode"); }
+        PlayerSettings.bundleVersion = "0.7.1-alpha.4";
+        EditorSettings.enterPlayModeOptionsEnabled = true;
+        EditorSettings.enterPlayModeOptions = EnterPlayModeOptions.DisableDomainReload;
+        foreach (string path in new[] { "Assets/Settings/UI/Fonts/GameCjkFont.asset", "Assets/Prefabs/Combat/Player.prefab", "Assets/Prefabs/Combat/Projectile_Default.prefab" })
+        {
+            foreach (UnityEngine.Object asset in AssetDatabase.LoadAllAssetsAtPath(path)) { EditorUtility.ClearDirty(asset); }
+        }
+        AssetDatabase.SaveAssets();
+        return new { version = PlayerSettings.bundleVersion, options = EditorSettings.enterPlayModeOptions.ToString(), playing = EditorApplication.isPlaying };
+    }
+
+    public static object Apply()
+    {
+        if (EditorApplication.isPlaying) { throw new InvalidOperationException("请退出 PlayMode"); }
+        var catalog = AssetDatabase.LoadAssetAtPath<ContentCatalogDefinition>("Assets/Data/Preset/Content/正式内容目录.asset");
+        var catalogData = new SerializedObject(catalog);
+        var entries = catalogData.FindProperty("_entries");
+        var labels = new Dictionary<string, (string Zh, string En)>
+        {
+            ["settings.input.action.player_attack"] = ("普通攻击", "Normal attack"),
+            ["hud.skill.empty"] = ("空火焰槽", "Empty flame slot"),
+            ["hud.normal"] = ("普通技能", "Weapon skill"),
+            ["hud.flame.details"] = ("耗蓝 {0} · {1}", "Mana {0} · {1}"),
+            ["attributes.source.talent"] = ("天赋：{0}", "Talent: {0}"),
+            ["attributes.source.flame"] = ("火焰：{0}", "Flame: {0}"),
+            ["attributes.source.ember"] = ("余烬：{0}", "Ember: {0}")
+        };
+        var mapping = new List<string>();
+        var source = AssetDatabase.LoadAssetAtPath<ProjectileSkillDefinition>("Assets/Data/Preset/Skills/基础投射物技能.asset");
+        foreach (ItemBaseDefinition weapon in catalog.Entries.OfType<ItemBaseDefinition>().Where(i => i.ItemType == ItemType.Weapon))
+        {
+            string id = weapon.Id + "_normal";
+            string path = "Assets/Data/Preset/Skills/" + id + ".asset";
+            var skill = AssetDatabase.LoadAssetAtPath<ProjectileSkillDefinition>(path);
+            if (skill == null) { skill = UnityEngine.Object.Instantiate(source); AssetDatabase.CreateAsset(skill, path); }
+            var data = new SerializedObject(skill);
+            data.FindProperty("_id").stringValue = id;
+            data.FindProperty("_displayName").stringValue = weapon.DisplayName + "普通攻击";
+            bool heavy = weapon.Id.Contains("axe");
+            data.FindProperty("_cooldown").floatValue = heavy ? 0.85f : 0.6f;
+            data.FindProperty("_manaCost").floatValue = heavy ? 2 : 1;
+            data.FindProperty("_projectileSpeed").floatValue = heavy ? 9 : 12;
+            data.FindProperty("_projectileRadius").floatValue = heavy ? 0.24f : 0.16f;
+            data.ApplyModifiedPropertiesWithoutUndo();
+            var item = new SerializedObject(weapon);
+            item.FindProperty("_normalSkill").objectReferenceValue = skill;
+            item.ApplyModifiedPropertiesWithoutUndo();
+            bool registered = catalog.Entries.Contains(skill);
+            if (!registered) { entries.InsertArrayElementAtIndex(entries.arraySize); entries.GetArrayElementAtIndex(entries.arraySize - 1).objectReferenceValue = skill; }
+            labels["attributes.skill." + id] = (weapon.DisplayName + "普通攻击", heavy ? "Axe throw" : "Sword strike");
+            mapping.Add(weapon.Id + " -> " + id);
+            EditorUtility.SetDirty(weapon);
+            EditorUtility.SetDirty(skill);
+        }
+        for (int i = 1; i <= 6; i++) { labels["settings.input.action.player_skill" + i] = ("火焰技能 " + i, "Flame skill " + i); }
+        catalogData.FindProperty("_contentVersion").intValue = 13;
+        catalogData.ApplyModifiedPropertiesWithoutUndo();
+        EditorUtility.SetDirty(catalog);
+        var collection = LocalizationEditorSettings.GetStringTableCollection("ui");
+        foreach (var pair in labels)
+        {
+            long key = (collection.SharedData.GetEntry(pair.Key) ?? collection.SharedData.AddKey(pair.Key)).Id;
+            foreach (var table in collection.StringTables)
+            {
+                var entry = table.GetEntry(key) ?? table.AddEntry(key, "");
+                entry.Value = table.LocaleIdentifier.Code == "zh-Hans" ? pair.Value.Zh : pair.Value.En;
+                EditorUtility.SetDirty(table);
+            }
+        }
+        EditorUtility.SetDirty(collection.SharedData);
+        AssetDatabase.SaveAssets();
+        return new { Weapons = mapping, Core = catalog.ContentVersion, Save = SaveSchemaVersion.Current.Value };
+    }
+
+    public static object BuildHud()
+    {
+        string path = "Assets/UI/Hud.uxml";
+        string source = File.ReadAllText(path);
+        if (!source.Contains("hud-flames"))
+        {
+            var builder = new StringBuilder("    <ui:VisualElement name=\"hud-flames\" class=\"hud-flames\" picking-mode=\"Ignore\">\n");
+            for (int i = 0; i < 6; i++)
+            {
+                builder.Append($"      <ui:VisualElement name=\"hud-flame-{i}\" class=\"hud-flame\" picking-mode=\"Ignore\">\n");
+                builder.Append($"        <ui:Label name=\"hud-flame-binding-{i}\" class=\"hud-flame-binding input-binding-token\" picking-mode=\"Ignore\" />\n");
+                builder.Append($"        <ui:VisualElement name=\"hud-flame-icon-{i}\" class=\"hud-flame-icon\" picking-mode=\"Ignore\" />\n");
+                builder.Append($"        <ui:Label name=\"hud-flame-name-{i}\" class=\"hud-flame-name\" picking-mode=\"Ignore\" />\n");
+                builder.Append($"        <ui:Label name=\"hud-flame-state-{i}\" class=\"hud-flame-state\" picking-mode=\"Ignore\" />\n");
+                builder.Append($"        <ui:ProgressBar name=\"hud-flame-cooldown-{i}\" class=\"hud-flame-cooldown\" low-value=\"0\" high-value=\"1\" picking-mode=\"Ignore\" />\n");
+                builder.Append("      </ui:VisualElement>\n");
+            }
+            builder.Append("    </ui:VisualElement>\n");
+            source = source.Replace("    <ui:VisualElement name=\"hud-combat-row\"", builder + "    <ui:VisualElement name=\"hud-combat-row\"");
+            source = source.Replace("          <ui:Label name=\"hud-skill-name\"", "          <ui:Label name=\"hud-attack-binding\" class=\"hud-binding input-binding-token\" picking-mode=\"Ignore\" />\n          <ui:Label name=\"hud-skill-name\"");
+            File.WriteAllText(path, source.Replace("\r\n", "\n"), new UTF8Encoding(false));
+            string style = File.ReadAllText("Assets/UI/Hud.uss");
+            style += "\n.hud-flames { flex-direction: row; margin-bottom: 8px; }\n.hud-flame { width: 156px; height: 108px; margin: 0 4px; padding: 4px 8px; background-color: rgba(12,16,21,0.96); border-width: 1px; border-color: rgb(83,73,57); }\n.hud-flame-binding { position: absolute; right: 6px; top: 5px; font-size: 14px; }\n.hud-flame-icon { width: 28px; height: 28px; -unity-background-scale-mode: scale-to-fit; }\n.hud-flame-name { font-size: 14px; white-space: normal; height: 36px; }\n.hud-flame-state { font-size: 12px; white-space: normal; height: 28px; color: rgb(189,188,179); }\n.hud-flame-cooldown { height: 3px; min-height: 3px; }\n.hud-flame-cooldown .unity-progress-bar__title { display: none; }\n.hud-flame--unavailable { border-color: rgb(60,60,60); }\n";
+            File.WriteAllText("Assets/UI/Hud.uss", style.Replace("\r\n", "\n"), new UTF8Encoding(false));
+            AssetDatabase.ImportAsset(path);
+            AssetDatabase.ImportAsset("Assets/UI/Hud.uss");
+        }
+        return new { Uxml = path, FlameSlots = 6 };
+    }
+
+    public static object FixHud()
+    {
+        const string path = "Assets/UI/Hud.uss";
+        string style = File.ReadAllText(path).Replace("width: 156px; height: 108px;", "width: 176px; min-height: 140px;")
+            .Replace("width: 176px; height: 140px;", "width: 176px; min-height: 140px;")
+            .Replace("height: 36px; }", "min-height: 40px; flex-shrink: 0; }")
+            .Replace("height: 40px; }", "min-height: 40px; flex-shrink: 0; }")
+            .Replace("height: 28px; color: rgb(189,188,179);", "min-height: 54px; flex-shrink: 0; color: rgb(189,188,179);")
+            .Replace("height: 54px; color: rgb(189,188,179);", "min-height: 54px; flex-shrink: 0; color: rgb(189,188,179);");
+        style = style.Replace(".hud-flame-cooldown { height: 3px; min-height: 3px; }",
+            ".hud-flame-cooldown, .hud-flame-cooldown .unity-progress-bar__container, .hud-flame-cooldown .unity-progress-bar__background, .hud-flame-cooldown .unity-progress-bar__progress { min-height: 0; height: 3px; padding: 0; margin: 0; border-width: 0; flex-shrink: 0; }");
+        if (!style.Contains(".hud-flame-cooldown .unity-progress-bar__background { background-color"))
+        {
+            style += ".hud-flame-cooldown .unity-progress-bar__background { background-color: rgb(25,29,35); }\n.hud-flame-cooldown .unity-progress-bar__progress { background-color: rgb(163,133,81); }\n";
+        }
+        style = style.Replace("align-items: stretch; height: 136px;", "align-items: stretch; min-height: 136px;")
+            .Replace("justify-content: space-between; height: 26px;", "justify-content: space-between; min-height: 26px;")
+            .Replace("justify-content: center; height: 44px;", "justify-content: center; min-height: 44px;");
+        if (!style.Contains(".hud-flames--hidden")) { style += ".hud-flames--hidden { display: none; }\n"; }
+        File.WriteAllText(path, style, new UTF8Encoding(false));
+        AssetDatabase.ImportAsset(path);
+        return new { Updated = path };
+    }
+}

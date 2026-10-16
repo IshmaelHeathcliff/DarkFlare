@@ -47,6 +47,8 @@ namespace DarkFlare
         internal PlayerGrowthState GrowthBefore { get; }
         internal PlayerGrowthState GrowthAfter { get; }
         internal bool Consumed { get; set; }
+        internal CombatActor Actor { get; set; }
+        internal CombatActor.ActorEffectPreparation Effects { get; set; }
 
         internal SkillBoardPreview(string error) { Error = error; }
         internal SkillBoardPreview(SkillBoardSystem owner, string actorId, SkillBoardState before, SkillBoardState after,
@@ -200,7 +202,13 @@ namespace DarkFlare
                 bool added = incoming != null ? final.TryAddAt(outgoing, grid.Placements[incoming].position) : final.TryAdd(outgoing);
                 if (!added) { return new SkillBoardPreview("背包没有足够空间取回道具"); }
             }
-            return new SkillBoardPreview(this, actorId, before, after, grid, final, incoming, outgoing, growth.State, growthAfter);
+            CombatActor actor = GetAttributeDetailsQuery.FindPlayer(this.GetModel<CombatModel>());
+            try
+            {
+                return new SkillBoardPreview(this, actorId, before, after, grid, final, incoming, outgoing, growth.State, growthAfter)
+                { Actor = actor, Effects = SkillBoardEffects.Prepare(actor, after, growthAfter) };
+            }
+            catch (ArgumentException failure) { return new SkillBoardPreview(failure.Message); }
         }
 
         public bool Commit(SkillBoardPreview preview, out string error)
@@ -218,15 +226,19 @@ namespace DarkFlare
                 || inventory.Grid.Placements.Count != preview.Placements.Count
                 || preview.Placements.Any(p => !inventory.Grid.Placements.TryGetValue(p.Key, out RectInt rect) || rect != p.Value)
                 || preview.Revisions.Any(p => p.Key.Revision != p.Value)
-                || preview.MutableValues.Any(p => p.Key.Quality != p.Value.Quality || p.Key.Durability != p.Value.Durability)) { return false; }
+                || preview.MutableValues.Any(p => p.Key.Quality != p.Value.Quality || p.Key.Durability != p.Value.Durability)
+                || !preview.Effects.IsCurrent) { return false; }
             preview.Consumed = true;
+            preview.Effects.Apply();
             inventory.ReplaceGridWithoutEvents(preview.FinalGrid);
             model.Replace(preview.ActorId, preview.After);
             growth.PlayerId = preview.ActorId;
             growth.State = preview.GrowthAfter;
+            this.GetSystem<PlayerSkillStateRegistry>().Reconcile(preview.After, preview.GrowthAfter);
             // 所有权已一次性提交，事件接收者只会观察到一致最终态。
             try
             {
+                this.GetSystem<CombatSystem>().PublishResourceChanges(preview.Actor, preview.Effects.Before, ActorResourceChangeReason.Configure);
                 if (preview.Incoming != null) { inventory.NotifyItemChanged(preview.Incoming, InventoryChangeType.Removed); }
                 if (preview.Outgoing != null) { inventory.NotifyItemChanged(preview.Outgoing, InventoryChangeType.Added); }
             }

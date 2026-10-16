@@ -3,6 +3,14 @@ using System.Collections.Generic;
 
 namespace DarkFlare
 {
+    public sealed class FlameSkillDetail
+    {
+        public string InstanceId { get; }
+        public string SkillId { get; }
+        public IReadOnlyList<ModifierInstance> Modifiers { get; }
+        public FlameSkillDetail(string id, string skill, IReadOnlyList<ModifierInstance> modifiers)
+        { InstanceId = id; SkillId = skill; Modifiers = modifiers; }
+    }
     public readonly struct AttributeDetail
     {
         public string Id { get; }
@@ -33,8 +41,10 @@ namespace DarkFlare
         public string SkillId { get; }
         public float Interval { get; }
         public float ManaCost { get; }
+        public IReadOnlyList<FlameSkillDetail> Flames { get; }
 
-        public AttributeDetailsSnapshot(CombatActor actor, EquipmentModel equipment, PlayerSkillState skillState)
+        public AttributeDetailsSnapshot(CombatActor actor, EquipmentModel equipment, PlayerSkillState skillState,
+            SkillBoardState board = null, PlayerGrowthState growth = null)
         {
             HasPlayer = actor != null;
             ActorTags = actor != null ? actor.Tags : TagSet.Empty;
@@ -44,7 +54,18 @@ namespace DarkFlare
             Attributes = attributes.AsReadOnly();
             Modifiers = modifiers.AsReadOnly();
             BaseDamages = damages.AsReadOnly();
+            var flames = new List<FlameSkillDetail>();
+            Flames = flames.AsReadOnly();
             if (actor == null) { return; }
+            if (board != null && growth != null)
+            {
+                SkillBoardEffectProjection projection = SkillBoardEffects.Resolve(board, growth);
+                foreach (SkillBoardEmbedding embedding in board.Embeddings)
+                {
+                    if (projection.Flames.TryGetValue(embedding.Item.InstanceId, out IReadOnlyList<ModifierInstance> effects))
+                    { flames.Add(new FlameSkillDetail(embedding.Item.InstanceId, embedding.Item.SkillBoardState.FlameSkill.Id, effects)); }
+                }
+            }
             StatsRevision = actor.StatsRevision;
             StatBlock baseStats = actor.CaptureBaseStats();
             var steps = new List<StatCalculationStep>();
@@ -102,7 +123,7 @@ namespace DarkFlare
         public string ResourceState { get; }
         public string SkillState { get; }
 
-        public AttributeRuntimeSnapshot(CombatActor actor, EquipmentModel equipment, PlayerSkillState skill, bool paused)
+        public AttributeRuntimeSnapshot(CombatActor actor, EquipmentModel equipment, PlayerSkillState skill, bool paused, bool inputEnabled = true)
         {
             HasPlayer = actor != null;
             Health = actor != null ? actor.CurrentHealth : 0f;
@@ -117,11 +138,13 @@ namespace DarkFlare
             Interval = skill.Skill != null ? skill.Skill.Cooldown : 0f;
             ManaCost = skill.Skill != null ? skill.Skill.ManaCost : 0f;
             ResourceState = actor == null ? "waiting" : !actor.isActiveAndEnabled ? "inactive" : !actor.IsAlive ? "dead"
-                : paused ? "paused" : Health >= MaxHealth && Mana >= MaxMana ? "full" : "recovering";
+                : paused ? "paused" : !inputEnabled ? "inactive" : Health >= MaxHealth && Mana >= MaxMana ? "full" : "recovering";
             SkillState = actor == null ? "waiting" : !actor.isActiveAndEnabled ? "inactive" : !actor.IsAlive ? "dead"
                 : !AttackSnapshotFactory.CanCreateProjectile(actor, skill.Skill, equipment) ? "no_source"
+                : (actor.BlockedActions & StatusActionBlock.Cast) != 0
+                    || skill.Skill.DamageSource == ProjectileDamageSource.EquippedWeapon && (actor.BlockedActions & StatusActionBlock.Attack) != 0 ? "inactive"
                 : !actor.CanSpendMana(skill.Skill.ManaCost) ? "no_mana" : paused ? "paused"
-                : skill.RemainingSeconds > 0f ? "cooldown" : "ready";
+                : !inputEnabled ? "inactive" : skill.RemainingSeconds > 0f ? "cooldown" : "ready";
         }
     }
 
@@ -131,7 +154,8 @@ namespace DarkFlare
         {
             CombatActor actor = FindPlayer(this.GetModel<CombatModel>());
             PlayerSkillState skill = this.GetSystem<PlayerSkillStateRegistry>()?.Capture(actor) ?? default;
-            return new AttributeDetailsSnapshot(actor, this.GetModel<EquipmentModel>(), skill);
+            return new AttributeDetailsSnapshot(actor, this.GetModel<EquipmentModel>(), skill,
+                this.GetModel<SkillBoardModel>().State, this.GetModel<PlayerGrowthModel>().State);
         }
 
         internal static CombatActor FindPlayer(CombatModel model)
@@ -151,7 +175,7 @@ namespace DarkFlare
             CombatActor actor = GetAttributeDetailsQuery.FindPlayer(this.GetModel<CombatModel>());
             return new AttributeRuntimeSnapshot(actor, this.GetModel<EquipmentModel>(),
                 this.GetSystem<PlayerSkillStateRegistry>()?.Capture(actor) ?? default,
-                this.GetSystem<GameplayPauseSystem>().IsPaused);
+                this.GetSystem<GameplayPauseSystem>().IsPaused, this.GetSystem<PlayerSkillStateRegistry>().IsInputEnabled);
         }
     }
 }

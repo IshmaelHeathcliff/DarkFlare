@@ -17,9 +17,9 @@ HUD 共用 `GetAttributeRuntimeQuery` 的资源 / 技能状态，运行快照提
 | `CombatStatResolver.Build` 可选 trace | 与实际聚合共用 Flat / Override 顺序、Increase 合计、逐项 More 和主属性派生；UI 不复制公式 |
 | `GetAttributeDetailsQuery` | 只读属性、步骤、修改器和配置基础伤害范围；不暴露装备实例、可写 Model 或原始列表 |
 | `GetAttributeRuntimeQuery` | 轻量读取生命、法力、恢复能力、剩余间隔、资源 / 技能状态与属性修订号 |
-| `PlayerSkillStateRegistry` | Session System 登记 PlayerController 的技能状态读取器；OnEnable 注册、OnDisable 注销、Session 销毁清空；仅读取现有冷却时钟 |
+| `PlayerSkillStateRegistry` | Session System 从实际武器 / 火焰读取技能来源与冷却；Controller 不再登记单技能权威，仅读取玩法时钟 |
 
-资源、基础与移动、攻击、防御、修改器五组可折叠；单项可展开基础值、计算步骤、聚合值、生效值及来源。修改器按属性 ID 与 Scope 分组，显示操作、必需 / 任一 / 排除标签和标签作用域。ModifierOrigin 区分装备、怪物词条、状态、永久成长和兼容角色来源；成长显示本地化“永久属性分配”，修改器取自真实分配记录。状态展示定义 ID 与有效层数，Increase / More 计算步骤保留来源；条件解释读取同一角色标签，见[状态战斗接入](./status-combat.md)。
+资源、基础与移动、攻击、防御、修改器五组可折叠；单项可展开基础值、计算步骤、聚合值、生效值及来源。修改器按属性 ID 与 Scope 分组，显示操作、必需 / 任一 / 排除标签和标签作用域。ModifierOrigin 区分装备、怪物词条、状态、永久成长、天赋、火焰、余烬和兼容角色来源；成长显示本地化“永久属性分配”，修改器取自真实分配记录。状态展示定义 ID 与有效层数，Increase / More 计算步骤保留来源；条件解释读取同一角色标签，见[状态战斗接入](./status-combat.md)。
 
 `CombatStatValues` 与正式消费者共享暴击率 0–100%、抗性 -100–75% 和暴击倍率边界。额外暴伤 50% 对应最终 1.5 倍。法力恢复复用正式恢复 System 的计算；移动、主属性和额外暴伤不统一强制非负。生命 / 法力上限读取 Actor 的有效上限。
 
@@ -27,10 +27,12 @@ HUD 共用 `GetAttributeRuntimeQuery` 的资源 / 技能状态，运行快照提
 
 打开窗口会暂停玩法：恢复能力仍显示正常每秒数值，另标注暂停，冷却不随现实时间推进。无玩家、无有效伤害来源、法力不足、死亡、禁用、资源已满均有状态说明。Query 不发起攻击、不推进任何具名随机通道、不改变装备或资源。
 
+火焰详情从 `SkillBoardEffects` 的同一实例投影读取，不把局部词条算入角色全局数值；来源显示本地化物品名称，稳定实例 / 节点身份保留在解释数据。实际攻击还会冻结局部暴击等属性，见[棋盘效果](skill-board/effects.md)。
+
 ## 刷新与生命周期
 
 - 打开时立即获取详情；装备、Actor 注册 / 注销使静态解释失效。资源、死亡和复活事件更新动态区。
-- 可见时每 200 ms 使用不受 TimeScale 影响的 UniTask 更新动态值；检测 StatsRevision 变化才重建解释。当前没有技能配置切换功能，技能间隔 / 来源配置在打开时读取，剩余间隔由动态 Query 读取。
+- 可见时每 200 ms 使用不受 TimeScale 影响的 UniTask 更新动态值；检测 StatsRevision 变化才重建解释。装备、棋盘、成长和技能变更事件使解释失效；每枚可用火焰独立显示局部来源，剩余冷却由动态 Query 读取。
 - 刷新任务归属 Scene scope 的 `attribute-window` 子作用域；隐藏、解绑和 Session 结束取消，任务失败走既有生命周期报告。
 - Locale 改变只重新解析文本，保留折叠、滚动和焦点；静态重建按稳定控件名称恢复有效焦点和阅读位置。
 - 文本使用 `ui`、`stats`、`items`、`affixes` 等现有 Localization 表。技能名称使用 `ui:attributes.skill.{技能ID}`；新增正式技能时补齐对应条目。

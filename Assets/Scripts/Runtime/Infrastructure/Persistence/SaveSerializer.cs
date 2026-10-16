@@ -340,7 +340,7 @@ namespace DarkFlare
             JsonMigrationRegistryBuildResult result = JsonMigrationRegistry.Build(
                 MigrationDataDomain.Save,
                 SaveSchemaVersion.Current.Value,
-                new IJsonMigrationStep[] { new LegacySaveV0ToV1Migration(), new ItemQuantitySaveMigration(), new StatusSaveMigration(), new WorldMapSaveMigration(), new NavigationSaveMigration(), new MonsterBehaviorSaveMigration(), new BossEncounterSaveMigration(), new FiniteSpawnSaveMigration(), new MapInstanceEpochSaveMigration(), new SkillBoardSaveMigration(), new PlayerGrowthSaveMigration() });
+                new IJsonMigrationStep[] { new LegacySaveV0ToV1Migration(), new ItemQuantitySaveMigration(), new StatusSaveMigration(), new WorldMapSaveMigration(), new NavigationSaveMigration(), new MonsterBehaviorSaveMigration(), new BossEncounterSaveMigration(), new FiniteSpawnSaveMigration(), new MapInstanceEpochSaveMigration(), new SkillBoardSaveMigration(), new PlayerGrowthSaveMigration(), new ManualSkillsSaveMigration() });
 
             if (!result.Succeeded)
             {

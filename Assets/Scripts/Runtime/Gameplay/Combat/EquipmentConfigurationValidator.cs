@@ -20,6 +20,11 @@ namespace DarkFlare
             }
 
             ValidateSlots(definition, issues);
+            if (definition.NormalSkill != null)
+            {
+                if (definition.ItemType != ItemType.Weapon) { issues.Add("只有武器可以提供普通技能"); }
+                issues.AddRange(RandomizationConfigurationValidator.Validate(definition.NormalSkill));
+            }
             if (definition.UseDefinition != null) { issues.AddRange(definition.UseDefinition.ValidateConfiguration(definition)); }
             if (definition.ProvidedStatus != null)
             {

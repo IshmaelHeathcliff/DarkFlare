@@ -1,0 +1,88 @@
+        [UnityTest]
+        public IEnumerator CaptureManualSkillsEvidence_Temporary()
+        {
+            int width = Screen.width; int height = Screen.height;
+            yield return _fixture.EnterMain();
+            ApplicationHost host = ApplicationHost.Current;
+            IArchitecture architecture = host.CurrentSession.Architecture;
+            PlayerController player = Object.FindAnyObjectByType<PlayerController>();
+            foreach (MonsterController monster in Object.FindObjectsByType<MonsterController>()) { monster.enabled = false; }
+            Object.FindAnyObjectByType<MonsterSpawner>().enabled = false;
+            HudController hud = Object.FindAnyObjectByType<HudController>();
+            VisualElement root = hud.GetComponent<RuntimePanelView>().Root;
+            PlayerGrowthSystem growth = architecture.GetSystem<PlayerGrowthSystem>();
+            growth.Restore(player.Id.Value, new PlayerGrowthState().Charge(10000), player.Actor);
+            var report = new List<string> { "locale,width,height,label,height,measured,text" };
+            try
+            {
+                SetGameViewResolution(new Vector2Int(1920, 1080));
+                yield return null; yield return null;
+                for (int i = 0; i < 3; i++)
+                {
+                    ItemInstance wood = Create("firewood_large", 42 + i); ItemInstance flame = Create("flame_projectile", 42 + i);
+                    Assert.That(architecture.GetModel<InventoryModel>().TryAddItem(wood), Is.True);
+                    Assert.That(architecture.GetModel<InventoryModel>().TryAddItem(flame), Is.True);
+                    Commit(new SkillBoardRequest(SkillBoardOperation.Install, wood, SkillBoardGeometry.Roots[i]));
+                    Commit(new SkillBoardRequest(SkillBoardOperation.Embed, flame, slot: new FirewoodPortReference(wood.InstanceId, "center")));
+                    Assert.That(growth.Commit(growth.Preview(player.Id.Value, null, 1, wood.InstanceId, ""), out _), Is.True);
+                    Assert.That(architecture.SendCommand(new AssignPlayerSkillCommand(player.Id.Value, i == 2 ? 5 : i, flame.InstanceId)), Is.True);
+                    if (i == 0) { flame.SkillBoardState.RestoreCooldown(2.4f); }
+                }
+                architecture.GetSystem<GameplayPauseSystem>().SetPaused(true);
+                foreach (string locale in new[] { "zh-Hans", "en", "qps-ploc" })
+                {
+                    yield return ChangeLanguage(host.Localization, locale == "zh-Hans" ? UserLanguagePreference.SimplifiedChinese : UserLanguagePreference.English);
+                    yield return null; yield return null;
+                    hud.RefreshHud();
+                    if (locale == "qps-ploc") { ApplyPseudoLocalization(root); }
+                    yield return null;
+                    if (locale == "qps-ploc") { ApplyPseudoLocalization(root); }
+                    yield return null;
+                    var checks = new List<object>();
+                    for (int i = 0; i < 6; i++)
+                    {
+                        VisualElement card = root.Q("hud-flame-" + i);
+                        Assert.That(card.worldBound.xMin, Is.GreaterThanOrEqualTo(0));
+                        Assert.That(card.worldBound.xMax, Is.LessThanOrEqualTo(root.worldBound.xMax));
+                        foreach (string prefix in new[] { "hud-flame-name-", "hud-flame-state-" })
+                        {
+                            Label label = root.Q<Label>(prefix + i);
+                            Vector2 measure = label.MeasureTextSize(label.text, label.contentRect.width, VisualElement.MeasureMode.Exactly, 0, VisualElement.MeasureMode.Undefined);
+                            Assert.That(measure.y, Is.LessThanOrEqualTo(label.contentRect.height + 1), locale + " " + label.name + " " + label.text);
+                            string quote = ((char)34).ToString(); report.Add(string.Join(",", locale, Screen.width, Screen.height, label.name, label.contentRect.height, measure.y, quote + label.text.Replace(quote, quote + quote) + quote));
+                        }
+                    }
+                    foreach (string name in new[] { "hud-skill-name", "hud-skill-details", "skill-status-label", "hud-mana-state", "hud-health-state" })
+                    {
+                        Label label = root.Q<Label>(name);
+                        if (string.IsNullOrEmpty(label.text)) { continue; }
+                        Vector2 measured = label.MeasureTextSize(label.text, label.contentRect.width, VisualElement.MeasureMode.Exactly, 0, VisualElement.MeasureMode.Undefined);
+                        Assert.That(measured.y, Is.LessThanOrEqualTo(label.contentRect.height + 1), locale + " " + name);
+                        Assert.That(label.worldBound.yMax, Is.LessThanOrEqualTo(root.worldBound.yMax + 1), name);
+                    }
+                    string output = "Docs/docs/plan/archive/0.7.1/acceptance/manual-skills/hud-" + locale + ".png";
+                    ScreenCapture.CaptureScreenshot(output);
+                    yield return new WaitForEndOfFrame(); yield return null; yield return null;
+                    Assert.That(System.IO.File.Exists(output), Is.True, output);
+
+                }
+                System.IO.File.WriteAllText("Docs/docs/plan/archive/0.7.1/acceptance/manual-skills/hud-qa.csv",
+                    string.Join("\n", report) + "\n");
+            }
+            finally
+            {
+                architecture.GetSystem<GameplayPauseSystem>().SetPaused(false);
+                SetGameViewResolution(new Vector2Int(width, height));
+            }
+            ItemInstance Create(string id, int seed)
+            {
+                return host.ContentCatalog.GetAll<ItemBaseDefinition>().Single(d => d.Id == id)
+                    .CreateInstance(architecture.GetUtility<IItemInstanceIdGenerator>().Next(), 1, seed, ItemRarity.Normal);
+            }
+            void Commit(SkillBoardRequest request)
+            {
+                SkillBoardPreview preview = architecture.SendQuery(new PreviewSkillBoardQuery(player.Id.Value, request));
+                Assert.That(preview.Success, Is.True, preview.Error);
+                Assert.That(architecture.SendCommand(new CommitSkillBoardCommand(preview)), Is.True);
+            }
+        }

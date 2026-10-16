@@ -501,6 +501,7 @@ namespace DarkFlare
             RunId runId = ValidateRunInstanceState(run.InstanceIds, $"{path}.instanceIds", issues);
             ValidateRandom(run.Random, $"{path}.random", issues);
             ValidatePlayer(run.Player, profile, $"{path}.player", issues);
+            ValidatePlayerSkills(run.Player?.Skills, profile, items, path + ".player.skills", issues);
             long maximumMonsterSequence = ValidateMonsters(run.Monsters, runId, $"{path}.monsters", issues);
             long maximumDropSequence = ValidateWorldDrops(
                 run.WorldDrops,
@@ -639,11 +640,9 @@ namespace DarkFlare
             }
 
             ValidateContentId(player.DefinitionContentId, ContentNamespaces.Actor, $"{path}.definitionContentId", issues);
-            ValidateContentId(player.SkillContentId, ContentNamespaces.Skill, $"{path}.skillContentId", issues);
             ValidateVector(player.Position, $"{path}.position", issues);
             ValidateResources(player.Resources, $"{path}.resources", issues);
             ValidateNonNegativeFinite(player.RespawnRemainingSeconds, $"{path}.respawnRemainingSeconds", issues);
-            ValidateNonNegativeFinite(player.AutoCastCooldownRemainingSeconds, $"{path}.autoCastCooldownRemainingSeconds", issues);
 
             if (player.Resources != null)
             {

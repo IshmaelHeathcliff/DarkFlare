@@ -144,6 +144,11 @@ namespace DarkFlare
         [LabelText("基础伤害")]
         List<DamageRollDefinition> _baseDamages = new List<DamageRollDefinition>();
 
+        [SerializeField, LabelText("武器普通技能"), ShowIf(nameof(IsWeapon))]
+        ProjectileSkillDefinition _normalSkill;
+        bool IsWeapon => _itemType == ItemType.Weapon;
+        public ProjectileSkillDefinition NormalSkill => _normalSkill;
+
         [SerializeField]
         [LabelText("隐式修改器")]
         List<StatModifierDefinition> _implicitModifiers = new List<StatModifierDefinition>();

@@ -52,6 +52,109 @@ namespace DarkFlare.Tests
         }
 
         [UnityTest]
+        public IEnumerator ManualSkills_RequireInputKeepFlamesSeparateAndDoNotCastThroughHud()
+        {
+            yield return _fixture.EnterMain();
+            ApplicationHost host = ApplicationHost.Current;
+            IArchitecture architecture = host.CurrentSession.Architecture;
+            PlayerController player = Object.FindAnyObjectByType<PlayerController>();
+            foreach (MonsterController monster in Object.FindObjectsByType<MonsterController>()) { monster.enabled = false; }
+            Object.FindAnyObjectByType<MonsterSpawner>().enabled = false;
+            HudController hud = Object.FindAnyObjectByType<HudController>();
+            VisualElement root = hud.GetComponent<RuntimePanelView>().Root;
+            Mouse mouse = InputSystem.AddDevice<Mouse>();
+            Keyboard keyboard = InputSystem.AddDevice<Keyboard>();
+            Gamepad pad = InputSystem.AddDevice<Gamepad>();
+            var attacks = new List<AttackSnapshot>();
+            IUnRegister registration = architecture.RegisterEvent<PlayerSkillCastEvent>(e => { if (e.Actor == player.Actor) { attacks.Add(e.Attack); } });
+            try
+            {
+                yield return new WaitForSeconds(.75f);
+                Assert.That(attacks, Is.Empty, "进图、遇敌和等待都不自动施放");
+                _inputFixture.Set(mouse.position, (Vector2)Camera.main.WorldToScreenPoint(player.transform.position + Vector3.up * 5));
+                _inputFixture.PressAndRelease(mouse.leftButton);
+                yield return null; yield return null;
+                Assert.That(attacks.Count, Is.EqualTo(1));
+                Assert.That(attacks[0].FlameInstanceId, Is.Empty);
+                Assert.That(attacks[0].SkillId, Is.EqualTo(player.DefaultSkill.Id));
+                PlayerGrowthSystem growth = architecture.GetSystem<PlayerGrowthSystem>();
+                growth.Restore(player.Id.Value, new PlayerGrowthState().Charge(10000), player.Actor);
+                ItemInstance first = Install(0, 0);
+                ItemInstance last = Install(5, 5);
+                _inputFixture.PressAndRelease(keyboard.digit1Key);
+                yield return null; yield return null;
+                Assert.That(attacks.Count, Is.EqualTo(2));
+                Assert.That(attacks[1].FlameInstanceId, Is.EqualTo(first.InstanceId));
+                _inputFixture.PressAndRelease(keyboard.digit1Key);
+                _inputFixture.PressAndRelease(keyboard.digit2Key);
+                yield return null; yield return null;
+                Assert.That(attacks.Count, Is.EqualTo(2), "冷却及空槽不能回退到普通技能");
+                _inputFixture.PressAndRelease(keyboard.digit6Key);
+                yield return null; yield return null;
+                Assert.That(attacks.Count, Is.EqualTo(3));
+                Assert.That(attacks[2].FlameInstanceId, Is.EqualTo(last.InstanceId));
+                Assert.That(attacks[1].SkillId, Is.EqualTo(attacks[2].SkillId));
+                yield return new WaitForSeconds(.75f);
+                Assert.That(attacks.Count, Is.EqualTo(3), "冷却结束不能补发");
+                _inputFixture.Set(pad.rightStick, Vector2.up);
+                _inputFixture.Set(pad.rightStick, Vector2.zero);
+                _inputFixture.PressAndRelease(pad.rightTrigger);
+                yield return null; yield return null;
+                Assert.That(attacks.Count, Is.EqualTo(4));
+                Assert.That(attacks[3].FlameInstanceId, Is.EqualTo(last.InstanceId));
+                for (int i = 0; i < 6; i++)
+                {
+                    VisualElement card = root.Q("hud-flame-" + i);
+                    VisualElement background = card.Q(className: "unity-progress-bar__background");
+                    Assert.That(background.worldBound.height, Is.GreaterThan(0));
+                    Assert.That(background.worldBound.yMax, Is.LessThanOrEqualTo(card.worldBound.yMax));
+                }
+                _inputFixture.Set(mouse.position, PanelToScreen(root, root.Q<Button>("game-hud-inventory").worldBound.center));
+                yield return null;
+                _inputFixture.Press(mouse.leftButton);
+                yield return null;
+                _inputFixture.Release(mouse.leftButton);
+                yield return null; yield return null;
+                Assert.That(attacks.Count, Is.EqualTo(4), "点击 HUD 不能穿透普攻");
+                Assert.That(Object.FindAnyObjectByType<GameMenuController>().IsOpen, Is.True);
+                Label attackBinding = root.Q<Label>("hud-attack-binding");
+                Assert.That(!string.IsNullOrWhiteSpace(attackBinding.text)
+                    || attackBinding.resolvedStyle.backgroundImage.sprite != null
+                    || attackBinding.resolvedStyle.backgroundImage.texture != null, Is.True, "普通技能绑定提示必须可见");
+                for (int i = 0; i < 6; i++)
+                {
+                    Assert.That(root.Q("hud-flame-" + i), Is.Not.Null);
+                    Assert.That(root.Q<Label>("hud-flame-name-" + i).text, Is.Not.Empty);
+                }
+            }
+            finally { registration.UnRegister(); }
+
+            ItemInstance Install(int rootIndex, int slot)
+            {
+                InventoryModel inventory = architecture.GetModel<InventoryModel>();
+                ItemInstance wood = Create("firewood_large"); ItemInstance flame = Create("flame_projectile");
+                Assert.That(inventory.TryAddItem(wood), Is.True); Assert.That(inventory.TryAddItem(flame), Is.True);
+                Commit(new SkillBoardRequest(SkillBoardOperation.Install, wood, SkillBoardGeometry.Roots[rootIndex]));
+                Commit(new SkillBoardRequest(SkillBoardOperation.Embed, flame, slot: new FirewoodPortReference(wood.InstanceId, "center")));
+                PlayerGrowthSystem growth = architecture.GetSystem<PlayerGrowthSystem>();
+                Assert.That(growth.Commit(growth.Preview(player.Id.Value, null, 1, wood.InstanceId, ""), out _), Is.True);
+                Assert.That(architecture.SendCommand(new AssignPlayerSkillCommand(player.Id.Value, slot, flame.InstanceId)), Is.True);
+                return flame;
+            }
+            ItemInstance Create(string id)
+            {
+                return host.ContentCatalog.GetAll<ItemBaseDefinition>().Single(d => d.Id == id)
+                    .CreateInstance(architecture.GetUtility<IItemInstanceIdGenerator>().Next(), 1, 42, ItemRarity.Normal);
+            }
+            void Commit(SkillBoardRequest request)
+            {
+                SkillBoardPreview preview = architecture.SendQuery(new PreviewSkillBoardQuery(player.Id.Value, request));
+                Assert.That(preview.Success, Is.True, preview.Error);
+                Assert.That(architecture.SendCommand(new CommitSkillBoardCommand(preview)), Is.True);
+            }
+        }
+
+        [UnityTest]
         public IEnumerator Shop_RefreshSupportsKeyboardAndGamepadAndReopeningPreservesStock()
         {
             yield return _fixture.EnterMain();

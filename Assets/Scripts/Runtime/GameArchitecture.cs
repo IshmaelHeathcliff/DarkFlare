@@ -18,6 +18,7 @@ namespace DarkFlare
             this.RegisterModel(new InventoryModel());
             this.RegisterModel(new SkillBoardModel());
             this.RegisterModel(new PlayerGrowthModel());
+            this.RegisterModel(new PlayerSkillsModel());
             this.RegisterModel(new EconomyModel());
             this.RegisterModel(new StatusModel());
             this.RegisterSystem(new StatusSystem());

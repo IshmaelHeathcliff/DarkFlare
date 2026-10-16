@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace DarkFlare
 {
@@ -37,7 +38,9 @@ namespace DarkFlare
             CombatActor attacker,
             ProjectileSkillDefinition skill,
             EquipmentModel equipment,
-            int randomSeed)
+            int randomSeed,
+            IEnumerable<ModifierInstance> localModifiers = null,
+            string flameInstanceId = null)
         {
             if (!CanCreateProjectile(attacker, skill, equipment))
             {
@@ -49,6 +52,7 @@ namespace DarkFlare
             List<DamagePacket> baseDamages;
             TagSet sourceItemTags = TagSet.Empty;
             List<ModifierInstance> modifiers = new List<ModifierInstance>(attacker.Modifiers);
+            if (localModifiers != null) { modifiers.AddRange(localModifiers); }
 
             if (skill.DamageSource == ProjectileDamageSource.EquippedWeapon)
             {
@@ -73,6 +77,13 @@ namespace DarkFlare
                 sourceItemTags: sourceItemTags,
                 legacyTags: skill.RuntimeTags.Union(sourceItemTags));
 
+            // 每次攻击从基础值重建，范围内的暴击等属性不回写角色全局属性。
+            IEnumerable<ModifierInstance> attackStatModifiers = modifiers.Where(m => !CombatStatResolver.IsDamageStat(m.StatId)
+                && (m.Scope == ModifierScope.GlobalActor || m.Scope == ModifierScope.Skill || m.Scope == ModifierScope.LocalItem)
+                && m.Matches(tagContext)).Select(m => new ModifierInstance(m.StatId, m.Operation, ModifierScope.GlobalActor,
+                    m.Value, m.FromDamageType, m.ToDamageType, TagQuery.Empty).WithOrigin(m.Origin));
+            StatBlock attackStats = CombatStatResolver.Build(attacker.CaptureBaseStats(), attackStatModifiers, contextTags: attacker.Tags);
+
             return new AttackSnapshot(
                 attacker.CombatIdentity,
                 attacker.Team,
@@ -81,13 +92,13 @@ namespace DarkFlare
                 randomSeed,
                 baseDamages,
                 tagContext,
-                attacker.Stats,
+                attackStats,
                 modifiers,
                 skill.OnHitStatus != null ? StatusApplication.Capture(skill.OnHitStatus,
-                    new StatusSource(StatusSourceKind.Skill, skill.Id), attacker.Stats, modifiers,
+                    new StatusSource(StatusSourceKind.Skill, string.IsNullOrEmpty(flameInstanceId) ? skill.Id : flameInstanceId + ":" + skill.Id), attackStats, modifiers,
                     new DamageSourceSnapshot(attacker.CombatIdentity, attacker.Team, skill.Id,
                         sourceWeapon != null ? sourceWeapon.InstanceId : string.Empty, tagContext),
-                    unchecked(randomSeed ^ 0x37A24913)) : null);
+                    unchecked(randomSeed ^ 0x37A24913)) : null, flameInstanceId);
         }
 
         static bool IsValidWeapon(ItemInstance weapon)

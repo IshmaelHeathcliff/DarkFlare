@@ -16,6 +16,7 @@ namespace DarkFlare
         public string SkillId { get; }
 
         public string SourceItemId { get; }
+        public string FlameInstanceId { get; }
 
         public int RandomSeed => RandomRolls.RootSeed;
 
@@ -70,9 +71,11 @@ namespace DarkFlare
             CombatTagContext tagContext,
             StatBlock attackerStats,
             IEnumerable<ModifierInstance> attackerModifiers,
-            StatusApplication onHitStatus = null)
+            StatusApplication onHitStatus = null,
+            string flameInstanceId = null)
         {
             OnHitStatus = onHitStatus;
+            FlameInstanceId = flameInstanceId ?? string.Empty;
             AttackerId = string.IsNullOrWhiteSpace(attackerId) ? "environment" : attackerId;
             AttackerTeam = attackerTeam;
             SkillId = skillId ?? string.Empty;

@@ -48,15 +48,7 @@ namespace DarkFlare
             if (deviceFamily == InputDeviceFamily.KeyboardMouse
                 && normalizedPath.StartsWith("<Mouse>/", StringComparison.OrdinalIgnoreCase))
             {
-                string mouseControl = GetControlName(normalizedPath);
-                string glyphId = string.Equals(mouseControl, "leftButton", StringComparison.OrdinalIgnoreCase)
-                    ? "mouse.left_button"
-                    : string.Equals(mouseControl, "rightButton", StringComparison.OrdinalIgnoreCase)
-                        ? "mouse.right_button"
-                        : string.Equals(mouseControl, "middleButton", StringComparison.OrdinalIgnoreCase)
-                            ? "mouse.middle_button"
-                            : string.Empty;
-                return new InputGlyphToken(deviceFamily, normalizedPath, glyphId, fallback);
+                return new InputGlyphToken(deviceFamily, normalizedPath, string.Empty, fallback);
             }
 
             if (deviceFamily == InputDeviceFamily.Gamepad

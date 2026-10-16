@@ -2,7 +2,7 @@ using System;
 
 namespace DarkFlare
 {
-    public enum ModifierOriginKind { Legacy, Equipment, Monster, Status, Growth }
+    public enum ModifierOriginKind { Legacy, Equipment, Monster, Status, Growth, Talent, Flame, Ember }
 
     public readonly struct ModifierOrigin
     {
@@ -25,10 +25,11 @@ namespace DarkFlare
             AffixName = affixName;
         }
 
-        public ModifierOrigin(ModifierOriginKind kind, string statusId = null, long layerId = 0, int stackCount = 1)
+        public ModifierOrigin(ModifierOriginKind kind, string statusId = null, long layerId = 0, int stackCount = 1,
+            LocalizedMessage sourceName = default)
         {
             Kind = kind; StatusId = statusId; LayerId = layerId; StackCount = stackCount;
-            ItemId = null; Slot = default; ItemName = default; AffixName = default;
+            ItemId = null; Slot = default; ItemName = sourceName; AffixName = default;
         }
     }
 

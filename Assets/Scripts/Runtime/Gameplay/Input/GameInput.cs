@@ -4,6 +4,18 @@ using UnityEngine.InputSystem;
 
 namespace DarkFlare
 {
+    public readonly struct PlayerSkillInput
+    {
+        public int Slot { get; }
+        public int Epoch { get; }
+        public InputDeviceFamily Family { get; }
+        public Vector2 Pointer { get; }
+        public Vector2 Look { get; }
+        public bool PointerButton { get; }
+        public PlayerSkillInput(int slot, int epoch, InputDeviceFamily family, Vector2 pointer, Vector2 look, bool pointerButton)
+        { Slot = slot; Epoch = epoch; Family = family; Pointer = pointer; Look = look; PointerButton = pointerButton; }
+    }
+
     public enum GameInputMode
     {
         Gameplay,
@@ -27,7 +39,9 @@ namespace DarkFlare
                 throw new ObjectDisposedException(nameof(inputService));
             }
 
+            _inputService.ResetAim();
             _inputService.InteractPerformed += OnInteract;
+            _inputService.SkillRequested += OnSkill;
             _inputService.ToggleMenuPerformed += OnToggleMenu;
             _inputService.PausePerformed += OnPause;
             _inputService.CycleWindowPerformed += OnCycleWindow;
@@ -45,6 +59,28 @@ namespace DarkFlare
         public event Action PauseRequested;
         public event Action<int> CycleWindowRequested;
         public event Action InteractPerformed;
+        public event Action<PlayerSkillInput> SkillRequested;
+        public event Func<Vector2, bool> GameplayPointerBlocked;
+
+        public bool IsCurrent(PlayerSkillInput request)
+        {
+            return !_disposed && IsGameplayEnabled && request.Epoch == _inputService.GameplayEpoch
+                && (!request.PointerButton || !_inputService.IsGameplayPointerConsumed && !IsPointerBlocked(request.Pointer));
+        }
+
+        bool IsPointerBlocked(Vector2 pointer)
+        {
+            if (GameplayPointerBlocked == null) { return false; }
+            foreach (Delegate callback in GameplayPointerBlocked.GetInvocationList())
+            {
+                if (((Func<Vector2, bool>)callback)(pointer)) { return true; }
+            }
+            return false;
+        }
+
+        public void ConsumeGameplayPointer() { _inputService.ConsumeGameplayPointer(); }
+        public void InvalidateSkills() { _inputService.InvalidateSkills(); }
+        void OnSkill(PlayerSkillInput request) { if (!_disposed) { SkillRequested?.Invoke(request); } }
 
         public event Action RearrangePerformed;
 
@@ -89,6 +125,7 @@ namespace DarkFlare
             }
 
             _inputService.InteractPerformed -= OnInteract;
+            _inputService.SkillRequested -= OnSkill;
             _inputService.ToggleMenuPerformed -= OnToggleMenu;
             _inputService.PausePerformed -= OnPause;
             _inputService.CycleWindowPerformed -= OnCycleWindow;
@@ -110,6 +147,8 @@ namespace DarkFlare
             PauseRequested = null;
             CycleWindowRequested = null;
             InteractPerformed = null;
+            SkillRequested = null;
+            GameplayPointerBlocked = null;
             RearrangePerformed = null;
             NavigatePerformed = null;
             CancelRequested = null;

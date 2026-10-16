@@ -1,11 +1,11 @@
 .game-ui-root { flex-grow: 1; }
 .hud-root { position: absolute; left: 0; right: 0; bottom: 12px; align-items: center; color: rgb(230,214,184); }
-.hud-combat-row { flex-direction: row; align-items: stretch; height: 136px; }
+.hud-combat-row { flex-direction: row; align-items: stretch; min-height: 136px; }
 .hud-resource { width: 300px; padding: 16px 24px; background-color: rgb(18,22,27); border-width: 2px; border-color: rgb(112,93,63); }
 .hud-center { width: 840px; padding: 5px 14px; margin: 0 12px; background-color: rgba(12,16,21,0.96); border-width: 1px; border-color: rgb(83,73,57); }
 .hud-caption { font-size: 17px; color: rgb(220,204,175); margin-bottom: 8px; }
 .hud-resource-state { font-size: 14px; white-space: normal; margin-top: 5px; color: rgb(188,184,173); }
-.hud-skill-heading { flex-direction: row; justify-content: space-between; height: 26px; flex-shrink: 0; }
+.hud-skill-heading { flex-direction: row; justify-content: space-between; min-height: 26px; flex-shrink: 0; }
 #hud-skill-name { font-size: 16px; white-space: normal; flex-shrink: 1; }
 #gold-label { font-size: 15px; color: rgb(224,185,104); margin-left: 12px; }
 .hud-skill-readout { flex-direction: row; min-height: 44px; justify-content: space-between; }
@@ -20,7 +20,7 @@
 #skill-cooldown .unity-progress-bar__background { background-color: rgb(25,29,35); }
 #skill-cooldown .unity-progress-bar__progress { background-color: rgb(163,133,81); }
 #skill-cooldown .unity-progress-bar__title { display: none; }
-.hud-entries { flex-direction: row; justify-content: center; height: 44px; flex-shrink: 0; }
+.hud-entries { flex-direction: row; justify-content: center; min-height: 44px; flex-shrink: 0; }
 .hud-entry { flex-direction: row; justify-content: center; align-items: center; width: 32%; white-space: normal; font-size: 14px; margin: 0 3px; padding: 3px 6px; color: rgb(226,210,182); background-color: rgb(26,29,34); border-width: 1px; border-color: rgb(89,77,58); }
 .hud-entry Label { white-space: normal; flex-shrink: 1; font-size: 14px; }
 .hud-entry:hover { background-color: rgb(47,43,34); }
@@ -44,3 +44,16 @@
 .hud-resource { background-image: url("project://database/Assets/Art/Sprites/UI/Frames/ui_hud_resource_base.png?fileID=21300000&guid=883832f8f53d9924a9e3c37a7c47c670&type=3"); -unity-slice-left: 96; -unity-slice-right: 96; -unity-slice-top: 96; -unity-slice-bottom: 96; -unity-slice-scale: 0.125px; border-color: transparent; }
 
 .hud-root .hud-binding--text { padding: 0 5px; border-width: 1px; border-color: rgb(137,113,72); background-color: rgb(17,20,25); }
+
+.hud-flames { flex-direction: row; margin-bottom: 8px; }
+.hud-flame { width: 176px; min-height: 140px; margin: 0 4px; padding: 4px 8px; background-color: rgba(12,16,21,0.96); border-width: 1px; border-color: rgb(83,73,57); }
+.hud-flame-binding { position: absolute; right: 6px; top: 5px; font-size: 14px; }
+.hud-flame-icon { width: 28px; height: 28px; -unity-background-scale-mode: scale-to-fit; }
+.hud-flame-name { font-size: 14px; white-space: normal; min-height: 40px; flex-shrink: 0; }
+.hud-flame-state { font-size: 12px; white-space: normal; min-height: 54px; flex-shrink: 0; color: rgb(189,188,179); }
+.hud-flame-cooldown, .hud-flame-cooldown .unity-progress-bar__container, .hud-flame-cooldown .unity-progress-bar__background, .hud-flame-cooldown .unity-progress-bar__progress { min-height: 0; height: 3px; padding: 0; margin: 0; border-width: 0; flex-shrink: 0; }
+.hud-flame-cooldown .unity-progress-bar__title { display: none; }
+.hud-flame--unavailable { border-color: rgb(60,60,60); }
+.hud-flames--hidden { display: none; }
+.hud-flame-cooldown .unity-progress-bar__background { background-color: rgb(25,29,35); }
+.hud-flame-cooldown .unity-progress-bar__progress { background-color: rgb(163,133,81); }

@@ -1,0 +1,20 @@
+{
+  "status": "completed",
+  "duration": 3.15,
+  "summary": {
+    "total": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "results": [
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.ManualSkills_RequireInputKeepFlamesSeparateAndDoNotCastThroughHud",
+      "Status": "Passed",
+      "Duration": 3.1052618,
+      "Message": null,
+      "StackTrace": null
+    }
+  ]
+}

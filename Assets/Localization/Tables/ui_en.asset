@@ -2200,6 +2200,66 @@ MonoBehaviour:
     m_Localized: Permanent attribute allocation
     m_Metadata:
       m_Items: []
+  - m_Id: 20631013762785280
+    m_Localized: Normal attack
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20631013817311232
+    m_Localized: Empty flame slot
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20631013817311233
+    m_Localized: Weapon skill
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20631013817311234
+    m_Localized: "Mana {0} \xB7 {1}"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20631013817311235
+    m_Localized: 'Talent: {0}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20631013817311236
+    m_Localized: 'Flame: {0}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20631013817311237
+    m_Localized: 'Ember: {0}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20631013817311238
+    m_Localized: Sword strike
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20631013817311239
+    m_Localized: Axe throw
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20631013817311240
+    m_Localized: Flame skill 1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20631013817311241
+    m_Localized: Flame skill 2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20631013817311242
+    m_Localized: Flame skill 3
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20631013817311243
+    m_Localized: Flame skill 4
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20631013817311244
+    m_Localized: Flame skill 5
+    m_Metadata:
+      m_Items: []
+  - m_Id: 20631013817311245
+    m_Localized: Flame skill 6
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:

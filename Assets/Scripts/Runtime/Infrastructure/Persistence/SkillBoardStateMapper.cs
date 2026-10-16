@@ -20,6 +20,7 @@ namespace DarkFlare
             {
                 EmberRadius = state.EmberRadius,
                 Energy = state.Energy,
+                CooldownRemainingSeconds = state.CooldownRemainingSeconds,
                 FlameSkillContentId = state.FlameSkill == null ? string.Empty
                     : GetContentId(state.FlameSkill, catalog, "item.skillBoard.flameSkill", issues)
             };
@@ -73,6 +74,10 @@ namespace DarkFlare
             var talents = dto.Talents.Select(t => new SkillBoardTalentState(t.NodeId, t.Radius,
                 RestoreModifiers(t.Modifiers, catalog, path + ".talents", issues))).ToArray();
             var state = new SkillBoardItemState(layout, talents, skill, dto.EmberRadius, dto.Energy);
+            if (!PlayerSkillStateRegistry.FiniteNonnegative(dto.CooldownRemainingSeconds)
+                || skill == null && dto.CooldownRemainingSeconds != 0)
+            { Add(issues, DtoMapIssueCode.InvalidValue, path, "火焰冷却非法"); return; }
+            state.RestoreCooldown(dto.CooldownRemainingSeconds);
             if (!state.IsValidFor(item.BaseDefinition))
             { Add(issues, DtoMapIssueCode.InvalidValue, path, "实际布局、角色、技能、范围或瓶内能量非法"); return; }
             item.InitializeSkillBoardState(state);

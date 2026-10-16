@@ -37,6 +37,8 @@ namespace DarkFlare
         public string FlameSkillContentId { get; set; } = string.Empty;
         public int EmberRadius { get; set; }
         public int Energy { get; set; }
+        [Newtonsoft.Json.JsonProperty(Required = Newtonsoft.Json.Required.Always)]
+        public float CooldownRemainingSeconds { get; set; }
     }
     public sealed class InstalledFirewoodDto : IPersistenceDto
     {

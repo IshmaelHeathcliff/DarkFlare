@@ -207,7 +207,6 @@ namespace DarkFlare.Tests
                     {
                         PlayerId = PlayerId.LocalPlayer.Value,
                         DefinitionContentId = "actor:player",
-                        SkillContentId = "skill:basic_projectile",
                         Position = new Vector3Dto { X = 1f, Y = 2f, Z = 0f },
                         Resources = new CombatResourceStateDto
                         {

@@ -1,5 +1,5 @@
 using System.Collections;
-using System.Reflection;
+using System.Linq;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -11,10 +11,6 @@ namespace DarkFlare.Tests
     public sealed class Alpha014ResourceSystemPlayModeTests
     {
         const float SetupTimeoutSeconds = 20f;
-
-        static readonly FieldInfo PlayerSkillField = typeof(CombatPrototypeBootstrap).GetField(
-            "_playerSkill",
-            BindingFlags.Instance | BindingFlags.NonPublic);
 
         readonly GameArchitectureTestFixture _fixture = new GameArchitectureTestFixture();
 
@@ -44,105 +40,80 @@ namespace DarkFlare.Tests
         public IEnumerator MainScene_CastsAtomicallyRegeneratesAndUpdatesManaHud()
         {
             yield return _fixture.EnterMain();
-            PlayerController player = null;
-            MonsterSpawner spawner = null;
-            CombatPrototypeBootstrap bootstrap = null;
-            HudController hud = null;
-            float timeout = Time.realtimeSinceStartup + SetupTimeoutSeconds;
-
-            while ((player == null
-                    || spawner == null
-                    || bootstrap == null
-                    || hud == null
-                    || !spawner.gameObject.activeInHierarchy)
-                   && Time.realtimeSinceStartup < timeout)
-            {
-                player = Object.FindAnyObjectByType<PlayerController>();
-                spawner = Object.FindAnyObjectByType<MonsterSpawner>();
-                bootstrap = Object.FindAnyObjectByType<CombatPrototypeBootstrap>();
-                hud = Object.FindAnyObjectByType<HudController>();
-                yield return null;
-            }
-
-            Assert.IsNotNull(player, "Main 场景未生成玩家");
-            Assert.IsNotNull(spawner, "Main 场景未启用刷怪器");
-            Assert.IsNotNull(bootstrap, "Main 场景缺少启动器");
-            Assert.IsNotNull(hud, "Main 场景缺少 HUD");
-            Assert.IsNotNull(PlayerSkillField, "未找到玩家技能字段");
-            ProjectileSkillDefinition skill = PlayerSkillField.GetValue(bootstrap) as ProjectileSkillDefinition;
-            Assert.IsNotNull(skill);
-            Assert.AreEqual(8f, skill.ManaCost, 0.001f);
-
-            IArchitecture architecture = GameArchitectureProvider.RequireCurrent();
+            PlayerController player = Object.FindAnyObjectByType<PlayerController>();
+            HudController hud = Object.FindAnyObjectByType<HudController>();
+            ApplicationHost host = ApplicationHost.Current;
+            IArchitecture architecture = host.CurrentSession.Architecture;
             CombatActor actor = player.Actor;
             CombatSystem combat = architecture.GetSystem<CombatSystem>();
             ResourceRegenerationSystem regeneration = architecture.GetSystem<ResourceRegenerationSystem>();
             GameplayPauseSystem pause = architecture.GetSystem<GameplayPauseSystem>();
-            player.enabled = false;
-            architecture.GetSystem<PlayerSkillStateRegistry>().Register(actor, () => new PlayerSkillState(skill, 0f));
-            spawner.enabled = false;
+            InventoryModel inventory = architecture.GetModel<InventoryModel>();
+            ItemInstance wood = Create("firewood_large");
+            ItemInstance flame = Create("flame_projectile");
+            Assert.IsTrue(inventory.TryAddItem(wood)); Assert.IsTrue(inventory.TryAddItem(flame));
+            Board(new SkillBoardRequest(SkillBoardOperation.Install, wood, SkillBoardGeometry.Roots[0]));
+            Board(new SkillBoardRequest(SkillBoardOperation.Embed, flame, slot: new FirewoodPortReference(wood.InstanceId, "center")));
+            PlayerGrowthSystem growth = architecture.GetSystem<PlayerGrowthSystem>();
+            growth.Restore(player.Id.Value, new PlayerGrowthState().Charge(1000), actor);
+            Assert.That(growth.Commit(growth.Preview(player.Id.Value, null, 1, wood.InstanceId, ""), out _), Is.True);
+            Assert.That(architecture.SendCommand(new AssignPlayerSkillCommand(player.Id.Value, 0, flame.InstanceId)), Is.True);
+            ProjectileSkillDefinition skill = flame.SkillBoardState.FlameSkill;
+            Assert.Greater(skill.ManaCost, 0);
+            float fullMana = actor.CurrentMana;
             pause.SetPaused(true);
-            Assert.AreEqual(200f, actor.CurrentMana, 0.001f);
-
-            SkillCastResult firstCast = architecture.SendCommand(new FireProjectileCommand(
-                actor,
-                skill,
-                actor.transform.position,
-                Vector2.right));
-
-            Assert.IsTrue(firstCast.IsSuccess);
-            Assert.IsNotNull(firstCast.Projectile);
-            Assert.AreEqual(192f, actor.CurrentMana, 0.001f);
-            Assert.AreEqual(192f, hud.LastSnapshot.CurrentMana, 0.001f);
-            Object.Destroy(firstCast.Projectile.gameObject);
-            RuntimePanelView document = hud.GetComponent<RuntimePanelView>();
-            ProgressBar manaBar = document.Root.Q<ProgressBar>("mana-bar");
-            Label skillStatus = document.Root.Q<Label>("skill-status-label");
-            Assert.IsNotNull(manaBar);
-            Assert.IsNotNull(skillStatus);
-            Assert.AreEqual("192 / 200", manaBar.title);
-
-            Assert.IsTrue(combat.TrySpendMana(actor, 191f));
-            SkillCastResult rejectedCast = architecture.SendCommand(new FireProjectileCommand(
-                actor,
-                skill,
-                actor.transform.position,
-                Vector2.right));
-            Assert.AreEqual(SkillCastStatus.InsufficientMana, rejectedCast.Status);
-            Assert.AreEqual(1f, actor.CurrentMana, 0.001f);
-            Assert.AreEqual(DisplayStyle.Flex, skillStatus.style.display.value);
-            Assert.IsTrue(ApplicationHost.TryGetCurrent(out ApplicationHost host));
-            Assert.AreEqual(
-                host.Localization.GetString(
-                    "ui",
-                    "attributes.state.no_mana"),
-                skillStatus.text);
-
-            regeneration.AdvanceRegeneration(2f);
-            Assert.AreEqual(1f, actor.CurrentMana, 0.001f, "暂停期间不应恢复法力");
+            Assert.That(Cast().Status, Is.EqualTo(SkillCastStatus.ActionBlocked));
+            Assert.That(actor.CurrentMana, Is.EqualTo(fullMana));
             pause.SetPaused(false);
-            regeneration.AdvanceRegeneration(0.7f);
-            Assert.AreEqual(8f, actor.CurrentMana, 0.001f);
-            Assert.AreEqual("ready", hud.RuntimeSnapshot.SkillState, "恢复至可施放时应立即清除不足状态，无需先攻击");
-
-            SkillCastResult recoveredCast = architecture.SendCommand(new FireProjectileCommand(
-                actor,
-                skill,
-                actor.transform.position,
-                Vector2.right));
-            Assert.IsTrue(recoveredCast.IsSuccess);
-            Assert.AreEqual(0f, actor.CurrentMana, 0.001f);
-            Assert.AreEqual("no_mana", hud.RuntimeSnapshot.SkillState, "成功施放后按当前资源显示状态");
-            Object.Destroy(recoveredCast.Projectile.gameObject);
-
-            actor.ReceiveDamage(CreateDamageResult(10f));
-            float damagedHealth = actor.CurrentHealth;
+            SkillCastResult first = Cast();
+            Assert.That(first.IsSuccess, Is.True);
+            Assert.That(actor.CurrentMana, Is.EqualTo(fullMana - skill.ManaCost).Within(.001f));
+            Assert.That(hud.LastSnapshot.CurrentMana, Is.EqualTo(actor.CurrentMana));
+            Object.Destroy(first.Projectile.gameObject);
+            pause.SetPaused(true);
+            float remaining = flame.SkillBoardState.CooldownRemainingSeconds;
+            yield return new WaitForSecondsRealtime(.2f);
+            Assert.That(flame.SkillBoardState.CooldownRemainingSeconds, Is.EqualTo(remaining).Within(.001f));
+            float pausedMana = actor.CurrentMana;
             regeneration.AdvanceRegeneration(2f);
-            Assert.AreEqual(damagedHealth + 2f, actor.CurrentHealth, 0.001f);
-
+            Assert.That(actor.CurrentMana, Is.EqualTo(pausedMana));
+            pause.SetPaused(false);
+            yield return new WaitForSeconds(skill.Cooldown + .1f);
+            Assert.IsTrue(combat.TrySpendMana(actor, actor.CurrentMana - 1));
+            SkillCastResult insufficient = Cast();
+            Assert.That(insufficient.Status, Is.EqualTo(SkillCastStatus.InsufficientMana));
+            Assert.That(actor.CurrentMana, Is.EqualTo(1).Within(.001f));
+            Assert.That(architecture.SendQuery(new GetPlayerSkillRuntimeQuery(0)).SkillState, Is.EqualTo("no_mana"));
+            Label slotState = hud.GetComponent<RuntimePanelView>().Root.Q<Label>("hud-flame-state-0");
+            StringAssert.Contains(host.Localization.GetString("ui", "attributes.state.no_mana"), slotState.text);
+            regeneration.AdvanceRegeneration((skill.ManaCost - 1) / (actor.MaxMana * .05f));
+            Assert.That(architecture.SendQuery(new GetPlayerSkillRuntimeQuery(0)).SkillState, Is.EqualTo("ready"));
+            SkillCastResult recovered = Cast();
+            Assert.That(recovered.IsSuccess, Is.True);
+            Assert.That(actor.CurrentMana, Is.EqualTo(0).Within(.001f));
+            Object.Destroy(recovered.Projectile.gameObject);
+            actor.ReceiveDamage(CreateDamageResult(10));
+            float damaged = actor.CurrentHealth;
+            regeneration.AdvanceRegeneration(2f);
+            Assert.That(actor.CurrentHealth, Is.EqualTo(damaged + 2).Within(.001f));
             combat.Revive(actor, actor.transform.position);
-            Assert.AreEqual(actor.MaxHealth, actor.CurrentHealth, 0.001f);
-            Assert.AreEqual(actor.MaxMana, actor.CurrentMana, 0.001f);
+            Assert.That(actor.CurrentMana, Is.EqualTo(actor.MaxMana));
+
+            ItemInstance Create(string id)
+            {
+                return host.ContentCatalog.GetAll<ItemBaseDefinition>().Single(d => d.Id == id)
+                    .CreateInstance(architecture.GetUtility<IItemInstanceIdGenerator>().Next(), 1, 42, ItemRarity.Normal);
+            }
+            void Board(SkillBoardRequest request)
+            {
+                SkillBoardPreview preview = architecture.SendQuery(new PreviewSkillBoardQuery(player.Id.Value, request));
+                Assert.That(preview.Success, Is.True, preview.Error);
+                Assert.That(architecture.SendCommand(new CommitSkillBoardCommand(preview)), Is.True);
+            }
+            SkillCastResult Cast()
+            {
+                return architecture.SendCommand(new CastPlayerSkillCommand(actor, 0, flame.InstanceId, actor.transform.position, Vector2.right));
+            }
         }
 
         static DamageResult CreateDamageResult(float amount)

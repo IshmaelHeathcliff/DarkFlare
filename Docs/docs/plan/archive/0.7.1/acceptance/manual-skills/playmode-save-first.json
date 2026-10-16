@@ -1,0 +1,41 @@
+{
+  "status": "completed",
+  "duration": 13.43,
+  "summary": {
+    "total": 4,
+    "passed": 4,
+    "failed": 0,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "results": [
+    {
+      "FullName": "DarkFlare.Tests.SaveCaptureRestorePlayModeTests.DeadPlayer_RestoresWithoutStatusProjectionAndRebindsOnRevive",
+      "Status": "Passed",
+      "Duration": 4.2533929,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SaveCaptureRestorePlayModeTests.GameMenu_SaveActionsArePresentFocusableAndReflectSlotProbe",
+      "Status": "Passed",
+      "Duration": 1.0237055,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SaveCaptureRestorePlayModeTests.MainSession_CapturePrepareRestorePreservesStateWithoutNewGameGrant",
+      "Status": "Passed",
+      "Duration": 7.0129922,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SaveCaptureRestorePlayModeTests.SessionFacade_SaveIsSessionScopedAndCrossSessionMethodsAreRemoved",
+      "Status": "Passed",
+      "Duration": 1.1022538,
+      "Message": null,
+      "StackTrace": null
+    }
+  ]
+}

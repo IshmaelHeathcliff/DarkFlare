@@ -153,8 +153,63 @@ namespace DarkFlare.Tests
                 "成长迁移不得改写原棋盘、瓶、技能冷却、资源、历史实例或随机状态");
         }
 
+        [Test]
+        public void ManualSkillMigration_TransfersRemainingTimeAndKeepsExistingGrowthAndItems()
+        {
+            JObject legacy = JObject.Parse(MigrationFixtureUtility.ReadUtf8("save-v9-migrated-player.json"));
+            new SkillBoardSaveMigration().Apply(legacy);
+            new PlayerGrowthSaveMigration().Apply(legacy);
+            JToken before = legacy["payload"].DeepClone();
+            JObject player = (JObject)legacy["payload"]["run"]["player"];
+            float oldRemaining = player["autoCastCooldownRemainingSeconds"].Value<float>();
+            new ManualSkillsSaveMigration().Apply(legacy);
+            Assert.That(player["skills"]["normalCooldownRemainingSeconds"].Value<float>(), Is.EqualTo(oldRemaining));
+            Assert.That(player["skills"]["flameSlots"].Count(), Is.EqualTo(6));
+            Assert.That(player["skills"]["flameSlots"].Values<string>().All(string.IsNullOrEmpty), Is.True);
+            player.Remove("skills");
+            player["skillContentId"] = before["run"]["player"]["skillContentId"].DeepClone();
+            player["autoCastCooldownRemainingSeconds"] = before["run"]["player"]["autoCastCooldownRemainingSeconds"].DeepClone();
+            Assert.That(JToken.DeepEquals(before, legacy["payload"]), Is.True);
+        }
+
+        [Test]
+        public void CurrentSkillState_RejectsMissingFieldsAndInvalidCooldownWithoutLegacyFallback()
+        {
+            SaveDocumentDto document = SaveDataContractTests.CreateValidDocument();
+            document.Payload.Run.Player.Skills.NormalCooldownRemainingSeconds = float.NaN;
+            Assert.That(_serializer.Serialize(document).Succeeded, Is.False);
+            document.Payload.Run.Player.Skills.NormalCooldownRemainingSeconds = 1.25f;
+            SaveSerializationResult saved = _serializer.Serialize(document);
+            Assert.That(saved.Succeeded, Is.True, Describe(saved));
+            SaveDeserializationResult restored = _serializer.Deserialize(saved.Bytes);
+            Assert.That(restored.Document.Payload.Run.Player.Skills.FlameSlots.Count, Is.EqualTo(6));
+            Assert.That(restored.Document.Payload.Run.Player.Skills.NormalCooldownRemainingSeconds, Is.EqualTo(1.25f));
+            document.Payload.Run.Player.Skills = null;
+            Assert.That(_serializer.Serialize(document).Succeeded, Is.False);
+        }
+
+        [Test]
+        public void ManualSkillMigration_RejectsUnknownLegacyAbilityBeforeChangingPayload()
+        {
+            JObject legacy = JObject.Parse(MigrationFixtureUtility.ReadUtf8("save-v9-migrated-player.json"));
+            legacy["payload"]["run"]["player"]["skillContentId"] = "skill:unknown_ability";
+            JToken before = legacy.DeepClone();
+            StringAssert.Contains("迁移映射", Assert.Throws<System.ArgumentException>(() => new ManualSkillsSaveMigration().Apply(legacy)).Message);
+            Assert.That(JToken.DeepEquals(before, legacy), Is.True);
+        }
+
         static void StripLaterMigrationFields(JObject document, JObject historical)
         {
+            JObject player = (JObject)document["payload"]["run"]["player"];
+            JToken oldPlayer = historical["payload"]["run"]["player"];
+            if (oldPlayer["skills"] == null)
+            {
+                Assert.That(player["skills"]["normalCooldownRemainingSeconds"].Value<float>(), Is.EqualTo(oldPlayer["autoCastCooldownRemainingSeconds"].Value<float>()));
+                Assert.That(player["skills"]["flameSlots"].Values<string>().All(string.IsNullOrEmpty), Is.True);
+                player.Remove("skills");
+                player["skillContentId"] = oldPlayer["skillContentId"].DeepClone();
+                player["autoCastCooldownRemainingSeconds"] = oldPlayer["autoCastCooldownRemainingSeconds"].DeepClone();
+            }
             JObject profile = (JObject)document["payload"]["profile"];
             if (historical["payload"]["profile"]["growth"] == null)
             {

@@ -196,6 +196,9 @@ namespace DarkFlare.Tests
             }
             expectedHealth *= oldPlayer.Actor.MaxHealth / beforeGrowthResources.MaxHealth;
             Assert.That(oldPlayer.Actor.CurrentHealth, Is.EqualTo(expectedHealth).Within(.001f));
+            Assert.That(oldArchitecture.SendCommand(new AssignPlayerSkillCommand(oldPlayer.Id.Value, 4, boardFlame.InstanceId)), Is.True);
+            boardFlame.SkillBoardState.RestoreCooldown(17.5f);
+            oldArchitecture.SendCommand(new RestoreNormalSkillCooldownCommand(13.5f));
             PlayerGrowthDto growthBefore = RuntimeStateMapper.ToDto(oldPlayer.Id.Value, oldArchitecture.GetModel<PlayerGrowthModel>().State);
             Assert.That(growthBefore.Energy, Is.EqualTo(25));
             Assert.That(growthBefore.Activations.Count, Is.EqualTo(2));
@@ -313,6 +316,9 @@ namespace DarkFlare.Tests
             SkillBoardState restoredBoard = restoredArchitecture.SendQuery(new GetSkillBoardQuery());
             PlayerGrowthState restoredGrowth = restoredArchitecture.SendQuery(new GetPlayerGrowthQuery());
             AssertGrowthEquals(growthBefore, restoredGrowth);
+            Assert.That(restoredArchitecture.GetModel<PlayerSkillsModel>().Slots[4], Is.EqualTo(boardFlame.InstanceId));
+            Assert.That(restoredBoard.Embeddings.Single().Item.SkillBoardState.CooldownRemainingSeconds, Is.EqualTo(17.5f).Within(.3f));
+            Assert.That(restoredArchitecture.GetModel<PlayerSkillsModel>().NormalCooldownRemaining, Is.EqualTo(13.5f).Within(.3f));
             SkillBoardSaveDto boardAfter = RuntimeStateMapper.ToDto(boardBefore.ActorInstanceId, restoredBoard);
             CollectionAssert.AreEqual(boardBefore.Firewoods.Select(w => (w.ItemInstanceId, w.Q, w.R, w.Rotation)),
                 boardAfter.Firewoods.Select(w => (w.ItemInstanceId, w.Q, w.R, w.Rotation)));

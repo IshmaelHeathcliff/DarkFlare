@@ -1,0 +1,31 @@
+{
+  "date": "2026-10-15",
+  "temporaryCaptureRemoved": true,
+  "removedTaskHelpers": [
+    "Temp/phase4_edit.py",
+    "Temp/phase4_save_edit.py",
+    "Temp/phase4_play_edit.py",
+    "Temp/phase4_capture_edit.py",
+    "Temp/ManualSkillsContentSetup.cs",
+    "Temp/CaptureManualSkillsEvidence.cs.txt",
+    "Temp/phase4_docs_finish.py",
+    "Temp/phase4-final-edit-cli.json"
+  ],
+  "sourceHashFiles": 123,
+  "sourceHashMismatches": [],
+  "markdownBrokenLinks": [],
+  "restoredAssets": [
+    {
+      "path": "Assets/Settings/UI/Fonts/GameCjkFont.asset",
+      "matchesBase": true
+    },
+    {
+      "path": "Assets/Prefabs/Combat/Player.prefab",
+      "matchesBase": true
+    },
+    {
+      "path": "Assets/Prefabs/Combat/Projectile_Default.prefab",
+      "matchesBase": true
+    }
+  ]
+}

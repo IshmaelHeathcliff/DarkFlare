@@ -1,0 +1,69 @@
+{
+  "status": "completed",
+  "duration": 0.33,
+  "summary": {
+    "total": 8,
+    "passed": 8,
+    "failed": 0,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "results": [
+    {
+      "FullName": "DarkFlare.Tests.PlayerSkillsTests.AttackSnapshot_KeepsLocalCriticalStatsAndFlameIdentityIsolatedFromWeaponAndOtherFlames",
+      "Status": "Passed",
+      "Duration": 0.1262587,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.PlayerSkillsTests.FailedCast_DoesNotSpendManaOrBeginCooldownAndRejectsInvalidAim",
+      "Status": "Passed",
+      "Duration": 0.0758792,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.PlayerSkillsTests.FlameAssignment_MovesUniqueReferenceAndExtractionClearsOnlyAfterCommit",
+      "Status": "Passed",
+      "Duration": 0.013615,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.PlayerSkillsTests.OldSessionSkillSystem_CannotMutateNewSession",
+      "Status": "Passed",
+      "Duration": 0.0047554,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.PlayerSkillsTests.Range_UsesShortestLitEdgeCountAndCountsLongEdgesOnce(2,False)",
+      "Status": "Passed",
+      "Duration": 0.0257776,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.PlayerSkillsTests.Range_UsesShortestLitEdgeCountAndCountsLongEdgesOnce(3,True)",
+      "Status": "Passed",
+      "Duration": 0.0191178,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.PlayerSkillsTests.Restore_RejectsDuplicateOrInactiveFlamesAndInvalidCooldownWithoutMutation",
+      "Status": "Passed",
+      "Duration": 0.0031875,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.PlayerSkillsTests.WeaponSkill_RequiresEquipmentAndKeepsCooldownWhenWeaponChanges",
+      "Status": "Passed",
+      "Duration": 0.0021389,
+      "Message": null,
+      "StackTrace": null
+    }
+  ]
+}

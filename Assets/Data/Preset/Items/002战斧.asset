@@ -18,6 +18,7 @@ MonoBehaviour:
     _tableName: items
     _entryKey: item.war_axe.name
   _itemType: 0
+  _normalSkill: {fileID: 11400000, guid: 86819497e51a1e44aa662449fe8ad53f, type: 2}
   _icon:
     m_AssetGUID: 9b427dc6b96c7bc4ba30998360436d86
     m_SubObjectName:

@@ -24,6 +24,7 @@
 | `_weight` | `float` / `0` | 不得小于 `0` | 当前作为物品元数据与详情展示；不参与掉落权重 |
 | `_tags` | `List<TagDefinition>` / 空 | 仅允许非派生 ItemSpawn 标签；正式物品当前为空 | `CombatTagResolver` 从类型/槽位派生 weapon/armor/ring 等事实 |
 | `_baseDamages` | `List<DamageRollDefinition>` / 空 | Weapon 必须非空；非武器必须为空 | `AttackSnapshotFactory` 仅从装备武器建立基础伤害；无固定伤害回退 |
+| `_normalSkill` | `ProjectileSkillDefinition` / 空 | 正式武器配置各自普通技能；非武器必须为空 | 装备后提供独立普攻，无需火焰 / 点亮；随换装更新，冷却不因换装重置。技能进入正式目录并参与资源预热。 |
 | `_implicitModifiers` | `List<StatModifierDefinition>` / 空 | 可空；每项必须有合法当前消费者 | `CreateInstance` 使用传入种子生成固定实例隐式值；装备结算和详情消费 |
 | `_providedStatus` | `StatusDefinition` / 空 | 可选，非异常 SourceOwned 状态 | 装备实例维持来源；穿脱、换槽、恢复与重绑统一协调；失败回退背包与槽位 |
 | `_skillBoard` | `SkillBoardItemConfiguration` / 新实例 | 柴薪、火焰、余烬与能量瓶必须合法；普通物品不消费 | 组合配置在创建时生成一次实际变体，恢复读实际结果；见[棋盘配置](skill-board.md#skillboarditemconfiguration) |

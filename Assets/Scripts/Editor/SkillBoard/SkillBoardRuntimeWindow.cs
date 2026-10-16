@@ -26,6 +26,23 @@ namespace DarkFlare.Editor
         [ShowInInspector, ReadOnly, MultiLineProperty(8), LabelText("相接候选（尚未提交）")] string _candidates = string.Empty;
         [SerializeField, LabelText("分配属性稳定 ID")] string _attributeId = StatIds.Strength;
         [SerializeField, MinValue(1), LabelText("本次属性分配点数")] int _attributeCount = 1;
+        [SerializeField, Range(1, 6), LabelText("火焰技能槽（1–6）")] int _skillSlot = 1;
+
+        [Button("分配道具 ID 对应火焰到技能槽")]
+        void AssignFlame()
+        {
+            if (!TryPlayer(out string player)) { return; }
+            _result = this.SendCommand(new AssignPlayerSkillCommand(player, _skillSlot - 1, _itemId)) ? "火焰技能分配成功" : "火焰未安装点亮或来源已失效";
+            Refresh();
+        }
+
+        [Button("清空技能槽")]
+        void ClearFlame()
+        {
+            if (!TryPlayer(out string player)) { return; }
+            _result = this.SendCommand(new AssignPlayerSkillCommand(player, _skillSlot - 1, string.Empty)) ? "技能槽已清空" : "玩家或技能槽无效";
+            Refresh();
+        }
 
         PropertyTree _tree;
         Label _snapshot;
@@ -247,6 +264,16 @@ namespace DarkFlare.Editor
             lines.Add("连接 " + string.Join("\n", state.Connections.Select(c => c.First + " ↔ " + c.Second)));
             lines.Add("嵌入 " + string.Join("\n", state.Embeddings.Select(e => e.Slot + " = " + Describe(e.Item))));
             lines.Add("\n背包（棋盘道具）");
+            IReadOnlyList<PlayerSkillState> skills = this.SendQuery(new GetPlayerSkillsQuery());
+            SkillBoardEffectProjection effects = SkillBoardEffects.Resolve(state, growth);
+            lines.Add("技能槽（同一火焰只占一个槽）");
+            for (int i = 0; i < skills.Count; i++)
+            {
+                PlayerSkillState skill = skills[i];
+                lines.Add($"{i + 1}：{skill.SourceId} · {skill.Skill?.Id ?? "空"} · 冷却 {skill.RemainingSeconds:0.00}");
+                if (skill.SourceId != null && effects.Flames.TryGetValue(skill.SourceId, out IReadOnlyList<ModifierInstance> modifiers))
+                { lines.Add(string.Join(", ", modifiers.Select(m => m.Origin.Kind + ":" + m.Origin.StatusId + " " + m.StatId + "=" + m.Value))); }
+            }
             lines.AddRange(this.SendQuery(new BoardDebugItemsQuery()).Select(Describe));
             _snapshot.text = string.Join("\n", lines);
         }

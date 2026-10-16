@@ -1,0 +1,20 @@
+{
+  "status": "completed",
+  "duration": 3.43,
+  "summary": {
+    "total": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "results": [
+    {
+      "FullName": "DarkFlare.Tests.Alpha014ResourceSystemPlayModeTests.MainScene_CastsAtomicallyRegeneratesAndUpdatesManaHud",
+      "Status": "Passed",
+      "Duration": 3.3297409,
+      "Message": null,
+      "StackTrace": null
+    }
+  ]
+}

@@ -22,17 +22,14 @@ namespace DarkFlare
         CombatActor _actor;
         WorldSortParticipant _sortParticipant;
         CharacterDefinition _definition;
-        ProjectileSkillDefinition _defaultSkill;
         GameInput _gameInput;
         IArchitecture _architecture;
         SessionObjectRegistry _sessionObjects;
         LifecycleScope _componentScope;
-        bool _autoCastRunning;
         bool _respawnScheduled;
         uint _enableVersion;
         Vector2 _lastAimDirection = Vector2.right;
         Vector3 _spawnPosition;
-        float _nextAutoCastTime;
         float _respawnTime;
 
         public CombatActor Actor => _actor;
@@ -41,11 +38,9 @@ namespace DarkFlare
 
         public CharacterDefinition Definition => _definition;
 
-        public ProjectileSkillDefinition DefaultSkill => _defaultSkill;
+        public ProjectileSkillDefinition DefaultSkill => this.SendQuery(new GetPlayerNormalSkillQuery(_actor)).Skill;
 
-        public float AutoCastCooldownRemainingSeconds => _autoCastRunning
-            ? Mathf.Max(0f, _nextAutoCastTime - Time.time)
-            : 0f;
+        public float NormalSkillCooldownRemainingSeconds => this.SendQuery(new GetPlayerNormalSkillQuery(_actor)).RemainingSeconds;
 
         public float RespawnRemainingSeconds => _respawnScheduled
             ? Mathf.Max(0f, _respawnTime - Time.time)
@@ -58,23 +53,24 @@ namespace DarkFlare
 
         public void Configure(CharacterDefinition definition, ProjectileSkillDefinition skill)
         {
-            ConfigureCore(definition, skill, true);
+            ConfigureCore(definition);
         }
 
         public void ConfigureForRestore(
             CharacterDefinition definition,
             ProjectileSkillDefinition skill)
         {
-            ConfigureCore(definition, skill, false);
+            ConfigureCore(definition);
         }
 
         public void RestoreRuntime(
             CombatResourceSnapshot resources,
             bool isAlive,
             float respawnRemainingSeconds,
-            float autoCastCooldownRemainingSeconds)
+            float normalCooldownRemainingSeconds)
         {
-            if (respawnRemainingSeconds < 0f || autoCastCooldownRemainingSeconds < 0f)
+            if (!PlayerSkillStateRegistry.FiniteNonnegative(respawnRemainingSeconds)
+                || !PlayerSkillStateRegistry.FiniteNonnegative(normalCooldownRemainingSeconds))
             {
                 throw new System.ArgumentOutOfRangeException(nameof(respawnRemainingSeconds));
             }
@@ -85,7 +81,7 @@ namespace DarkFlare
             }
 
             _actor.RestoreResources(resources, isAlive);
-            TryStartAutoCast(autoCastCooldownRemainingSeconds);
+            this.SendCommand(new RestoreNormalSkillCooldownCommand(normalCooldownRemainingSeconds));
 
             if (!isAlive)
             {
@@ -93,23 +89,14 @@ namespace DarkFlare
             }
         }
 
-        void ConfigureCore(
-            CharacterDefinition definition,
-            ProjectileSkillDefinition skill,
-            bool startRuntime)
+        void ConfigureCore(CharacterDefinition definition)
         {
             _definition = definition;
-            _defaultSkill = skill;
             _spawnPosition = transform.position;
             _actor.ConfigureFromCharacter(_definition, ActorTeam.Player);
             this.SendCommand(new ConfigurePlayerGrowthCommand(_actor, _definition.Growth));
             this.SendCommand(new BindActorStatusesCommand(_actor));
             _sortParticipant?.ConfigureIdentity(WorldSortCategory.Player, _actor.ActorId);
-
-            if (startRuntime)
-            {
-                TryStartAutoCast();
-            }
         }
 
         void Awake()
@@ -122,26 +109,22 @@ namespace DarkFlare
 
         void OnEnable()
         {
-            this.GetSystem<PlayerSkillStateRegistry>()?.Register(_actor,
-                () => new PlayerSkillState(_defaultSkill, AutoCastCooldownRemainingSeconds));
             _enableVersion++;
             _componentScope = ComponentLifecycle.CreateScope(
                 this,
                 "enabled",
                 this.GetCancellationTokenOnDestroy());
             this.RegisterEvent<ActorDiedEvent>(OnActorDied).UnRegisterWhenDisabled(this);
-            TryStartAutoCast();
+            if (_gameInput != null) { _gameInput.SkillRequested += OnSkillRequested; }
         }
 
         void OnDisable()
         {
-            _architecture?.GetSystem<PlayerSkillStateRegistry>()?.Unregister(_actor);
+            if (_gameInput != null) { _gameInput.SkillRequested -= OnSkillRequested; }
             _enableVersion++;
             _componentScope?.BeginStop();
             _componentScope = null;
-            _autoCastRunning = false;
             _respawnScheduled = false;
-            _nextAutoCastTime = 0f;
             _respawnTime = 0f;
 
             if (_rigidbody != null)
@@ -172,11 +155,6 @@ namespace DarkFlare
             if (movement.sqrMagnitude > 1f)
             {
                 movement.Normalize();
-            }
-
-            if (movement.sqrMagnitude > 0.001f)
-            {
-                _lastAimDirection = movement.normalized;
             }
 
             _rigidbody.linearVelocity = movement * GetMoveSpeed();
@@ -216,79 +194,30 @@ namespace DarkFlare
             return _actor.Stats.GetValue(StatIds.MoveSpeed);
         }
 
-        void TryStartAutoCast(float initialDelaySeconds = -1f)
+        void OnSkillRequested(PlayerSkillInput request)
         {
-            if (_autoCastRunning
-                || _defaultSkill == null
-                || !isActiveAndEnabled
-                || _componentScope == null
-                || _componentScope.State != LifecycleScopeState.Active)
+            if (_componentScope == null || _actor == null || !_actor.IsAlive) { return; }
+            PlayerSkillState source = request.Slot < 0 ? this.SendQuery(new GetPlayerNormalSkillQuery(_actor))
+                : this.SendQuery(new GetPlayerSkillsQuery())[request.Slot];
+            if (source.Skill == null) { return; }
+            Vector2 direction = request.Look;
+            if (request.Family == InputDeviceFamily.KeyboardMouse && Camera.main != null)
             {
-                return;
+                Camera camera = Camera.main;
+                Vector3 point = camera.ScreenToWorldPoint(new Vector3(request.Pointer.x, request.Pointer.y,
+                    transform.position.z - camera.transform.position.z));
+                direction = point - transform.position;
             }
-
-            _autoCastRunning = true;
-            uint version = _enableVersion;
-            _componentScope.Tasks.Run(
-                "auto-cast",
-                async token =>
-                {
-                    try
-                    {
-                        await AutoCastLoopAsync(initialDelaySeconds, token);
-                    }
-                    finally
-                    {
-                        if (version == _enableVersion)
-                        {
-                            _autoCastRunning = false;
-                            _nextAutoCastTime = 0f;
-                        }
-                    }
-                },
-                failurePolicy: LifecycleTaskFailurePolicy.ReportAndStopScope);
-        }
-
-        async UniTask AutoCastLoopAsync(float initialDelaySeconds, CancellationToken token)
-        {
-            float delaySeconds = initialDelaySeconds >= 0f
-                ? initialDelaySeconds
-                : _defaultSkill.Cooldown;
-
-            while (!token.IsCancellationRequested)
-            {
-                _nextAutoCastTime = Time.time + delaySeconds;
-                await UniTask.Delay(
-                    System.TimeSpan.FromSeconds(delaySeconds),
-                    cancellationToken: token);
-                token.ThrowIfCancellationRequested();
-                TryFireProjectile();
-                delaySeconds = _defaultSkill.Cooldown;
-            }
-        }
-
-        void TryFireProjectile()
-        {
-            if (_actor == null || !_actor.IsAlive)
-            {
-                return;
-            }
-
-            CombatActor target = this.SendQuery(new GetClosestActorQuery(ActorTeam.Monster, transform.position, _defaultSkill.TargetRange));
-            Vector2 direction = _lastAimDirection;
-
-            if (target != null)
-            {
-                direction = (target.transform.position - transform.position).normalized;
-            }
-
-            if (direction.sqrMagnitude <= 0.001f)
-            {
-                direction = Vector2.right;
-            }
-
+            if (direction.sqrMagnitude > 0.01f) { _lastAimDirection = direction.normalized; }
+            direction = _lastAimDirection;
             Vector3 origin = _firePoint != null ? _firePoint.position : transform.position + (Vector3)direction * 0.55f;
-            this.SendCommand(new FireProjectileCommand(_actor, _defaultSkill, origin, direction));
+            uint version = _enableVersion;
+            _componentScope.Tasks.Run("manual-cast", async token =>
+            {
+                await UniTask.Yield(PlayerLoopTiming.LastPostLateUpdate, token);
+                if (version != _enableVersion || !isActiveAndEnabled || !_gameInput.IsCurrent(request)) { return; }
+                this.SendCommand(new CastPlayerSkillCommand(_actor, request.Slot, source.SourceId, origin, direction));
+            }, failurePolicy: LifecycleTaskFailurePolicy.ReportAndStopScope);
         }
 
         void OnActorDied(ActorDiedEvent e)
@@ -303,6 +232,8 @@ namespace DarkFlare
                 return;
             }
 
+            _enableVersion++;
+            _gameInput?.InvalidateSkills();
             StartRespawn(_respawnDelay);
         }
 

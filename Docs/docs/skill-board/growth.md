@@ -1,6 +1,6 @@
 # 中心充能、属性分配与点亮
 
-中心与成长通过 `PlayerGrowthModel / PlayerGrowthSystem` 接入当前 Session；瓶子归属仍由[安装事务](items-installation.md)管理。当前阶段保留单技能运行，天赋 / 余烬效果与六键技能由后续阶段消费激活资格。
+中心与成长通过 `PlayerGrowthModel / PlayerGrowthSystem` 接入当前 Session；瓶子归属仍由[安装事务](items-installation.md)管理。当前[手动技能](manual-skills.md)消费柴薪激活资格；全局 / 局部天赋和余烬按[效果投影](effects.md)进入实际战斗。
 
 ## 兑换与点数
 
@@ -42,7 +42,7 @@
 
 ## 保存、恢复与验证入口
 
-core v12 / Save Schema 11 将 Growth 放在 Profile，瓶子和柴薪仍只在统一 Items 表保存一次。临时选择不入档。10→11 初始化空成长、已确认的首轮成本与当前玩家身份；保留旧棋盘、能量瓶、技能 / 冷却、资源和随机状态，不赠送点数或重放充能。
+阶段三 core v12 / Save Schema 11 将 Growth 放在 Profile，瓶子和柴薪仍只在统一 Items 表保存一次。临时选择不入档。10→11 初始化空成长、已确认的首轮成本与当前玩家身份；保留旧棋盘、能量瓶、技能 / 冷却、资源和随机状态，不赠送点数或重放充能。
 
 Validator / Mapper / Restore Preparer 共同验证非负与守恒、成本合同、所有权、节点角色、重复记录和激活网络。恢复先建立成长来源、装备 / 状态属性，再恢复绝对资源；不会再次消费、兑换或退款。
 

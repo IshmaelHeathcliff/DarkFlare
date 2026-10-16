@@ -1,0 +1,90 @@
+{
+  "status": "completed",
+  "duration": 2.26,
+  "summary": {
+    "total": 11,
+    "passed": 0,
+    "failed": 11,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "results": [
+    {
+      "FullName": "DarkFlare.Tests.SaveRestorePreparerTests.Prepare_AdditiveContentPreservesLegacyValuesStockAndSourceDocument(3)",
+      "Status": "Failed",
+      "Duration": 0.2938694,
+      "Message": "System.NullReferenceException : Object reference not set to an instance of an object",
+      "StackTrace": "  at DarkFlare.Tests.SaveRestorePreparerTests.Prepare_AdditiveContentPreservesLegacyValuesStockAndSourceDocument (System.Int32 version) [0x00000] in C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Tests\\EditMode\\SaveRestorePreparerTests.cs:145 \r\n  at (wrapper managed-to-native) System.Reflection.RuntimeMethodInfo.InternalInvoke(System.Reflection.RuntimeMethodInfo,object,object[],System.Exception&)\r\n  at System.Reflection.RuntimeMethodInfo.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x0006a] in <c5ae8a4eeb824526b5df2932bc2395e0>:0 "
+    },
+    {
+      "FullName": "DarkFlare.Tests.SaveRestorePreparerTests.Prepare_AdditiveContentPreservesLegacyValuesStockAndSourceDocument(4)",
+      "Status": "Failed",
+      "Duration": 0.2764465,
+      "Message": "System.NullReferenceException : Object reference not set to an instance of an object",
+      "StackTrace": "  at DarkFlare.Tests.SaveRestorePreparerTests.Prepare_AdditiveContentPreservesLegacyValuesStockAndSourceDocument (System.Int32 version) [0x00000] in C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Tests\\EditMode\\SaveRestorePreparerTests.cs:145 \r\n  at (wrapper managed-to-native) System.Reflection.RuntimeMethodInfo.InternalInvoke(System.Reflection.RuntimeMethodInfo,object,object[],System.Exception&)\r\n  at System.Reflection.RuntimeMethodInfo.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x0006a] in <c5ae8a4eeb824526b5df2932bc2395e0>:0 "
+    },
+    {
+      "FullName": "DarkFlare.Tests.SaveRestorePreparerTests.Prepare_AdditiveContentPreservesLegacyValuesStockAndSourceDocument(5)",
+      "Status": "Failed",
+      "Duration": 0.2376468,
+      "Message": "System.NullReferenceException : Object reference not set to an instance of an object",
+      "StackTrace": "  at DarkFlare.Tests.SaveRestorePreparerTests.Prepare_AdditiveContentPreservesLegacyValuesStockAndSourceDocument (System.Int32 version) [0x00000] in C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Tests\\EditMode\\SaveRestorePreparerTests.cs:145 \r\n  at (wrapper managed-to-native) System.Reflection.RuntimeMethodInfo.InternalInvoke(System.Reflection.RuntimeMethodInfo,object,object[],System.Exception&)\r\n  at System.Reflection.RuntimeMethodInfo.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x0006a] in <c5ae8a4eeb824526b5df2932bc2395e0>:0 "
+    },
+    {
+      "FullName": "DarkFlare.Tests.SaveRestorePreparerTests.Prepare_AdditiveContentPreservesLegacyValuesStockAndSourceDocument(6)",
+      "Status": "Failed",
+      "Duration": 0.2116779,
+      "Message": "System.NullReferenceException : Object reference not set to an instance of an object",
+      "StackTrace": "  at DarkFlare.Tests.SaveRestorePreparerTests.Prepare_AdditiveContentPreservesLegacyValuesStockAndSourceDocument (System.Int32 version) [0x00000] in C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Tests\\EditMode\\SaveRestorePreparerTests.cs:145 \r\n  at (wrapper managed-to-native) System.Reflection.RuntimeMethodInfo.InternalInvoke(System.Reflection.RuntimeMethodInfo,object,object[],System.Exception&)\r\n  at System.Reflection.RuntimeMethodInfo.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x0006a] in <c5ae8a4eeb824526b5df2932bc2395e0>:0 "
+    },
+    {
+      "FullName": "DarkFlare.Tests.SaveRestorePreparerTests.Prepare_GrowthValidatesOwnershipLedgerAndActiveNodesBeforeRestore",
+      "Status": "Failed",
+      "Duration": 0.2048494,
+      "Message": "System.NullReferenceException : Object reference not set to an instance of an object",
+      "StackTrace": "  at DarkFlare.Tests.SaveRestorePreparerTests.Prepare_GrowthValidatesOwnershipLedgerAndActiveNodesBeforeRestore () [0x00000] in C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Tests\\EditMode\\SaveRestorePreparerTests.cs:106 \r\n  at (wrapper managed-to-native) System.Reflection.RuntimeMethodInfo.InternalInvoke(System.Reflection.RuntimeMethodInfo,object,object[],System.Exception&)\r\n  at System.Reflection.RuntimeMethodInfo.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x0006a] in <c5ae8a4eeb824526b5df2932bc2395e0>:0 "
+    },
+    {
+      "FullName": "DarkFlare.Tests.SaveRestorePreparerTests.Prepare_HistoricalPlayerAddsEmptyBoardWithoutChangingItemsSkillOrRandom",
+      "Status": "Failed",
+      "Duration": 0.072622,
+      "Message": "  ValidationFailed: 六槽集合或普通技能冷却非法\r\n  Expected: True\r\n  But was:  False\r\n",
+      "StackTrace": "at DarkFlare.Tests.SaveRestorePreparerTests.Prepare_HistoricalPlayerAddsEmptyBoardWithoutChangingItemsSkillOrRandom () [0x0003c] in C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Tests\\EditMode\\SaveRestorePreparerTests.cs:69\r\n"
+    },
+    {
+      "FullName": "DarkFlare.Tests.SaveRestorePreparerTests.Prepare_MigratesGoldIntoFullLegacyInventoryWithoutMovingExistingItems",
+      "Status": "Failed",
+      "Duration": 0.2078187,
+      "Message": "  InvalidValue payload.run.player.skills: 六槽集合或普通技能冷却非法\r\n  Expected: True\r\n  But was:  False\r\n",
+      "StackTrace": "at DarkFlare.Tests.SaveRestorePreparerTests.Prepare_MigratesGoldIntoFullLegacyInventoryWithoutMovingExistingItems () [0x0006b] in C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Tests\\EditMode\\SaveRestorePreparerTests.cs:165\r\n"
+    },
+    {
+      "FullName": "DarkFlare.Tests.SaveRestorePreparerTests.Prepare_RejectsCatalogMismatchAndDerivedMonsterStateMismatchBeforeCommit",
+      "Status": "Failed",
+      "Duration": 0.2059524,
+      "Message": "  Expected: True\r\n  But was:  False\r\n",
+      "StackTrace": "at DarkFlare.Tests.SaveRestorePreparerTests.Prepare_RejectsCatalogMismatchAndDerivedMonsterStateMismatchBeforeCommit () [0x000b7] in C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Tests\\EditMode\\SaveRestorePreparerTests.cs:256\r\n"
+    },
+    {
+      "FullName": "DarkFlare.Tests.SaveRestorePreparerTests.Prepare_ResolvesClosedGraphAndPreservesExactContinuationState",
+      "Status": "Failed",
+      "Duration": 0.2794827,
+      "Message": "  InvalidValue payload.run.player.skills: 六槽集合或普通技能冷却非法\r\n  Expected: True\r\n  But was:  False\r\n",
+      "StackTrace": "at DarkFlare.Tests.SaveRestorePreparerTests.Prepare_ResolvesClosedGraphAndPreservesExactContinuationState () [0x00012] in C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Tests\\EditMode\\SaveRestorePreparerTests.cs:32\r\n"
+    },
+    {
+      "FullName": "DarkFlare.Tests.SaveRestorePreparerTests.Prepare_RoundTripsAllEquipmentSlotsAndRejectsDuplicateOwnership",
+      "Status": "Failed",
+      "Duration": 0.2031931,
+      "Message": "System.NullReferenceException : Object reference not set to an instance of an object",
+      "StackTrace": "  at DarkFlare.Tests.SaveRestorePreparerTests.Prepare_RoundTripsAllEquipmentSlotsAndRejectsDuplicateOwnership () [0x00006] in C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Tests\\EditMode\\SaveRestorePreparerTests.cs:265 \r\n  at (wrapper managed-to-native) System.Reflection.RuntimeMethodInfo.InternalInvoke(System.Reflection.RuntimeMethodInfo,object,object[],System.Exception&)\r\n  at System.Reflection.RuntimeMethodInfo.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x0006a] in <c5ae8a4eeb824526b5df2932bc2395e0>:0 "
+    },
+    {
+      "FullName": "DarkFlare.Tests.SaveRestorePreparerTests.Prepare_UpgradesOnlyKnownContentWithoutMutatingSourceOrRerollingItems",
+      "Status": "Failed",
+      "Duration": 0.0574659,
+      "Message": "  Expected: True\r\n  But was:  False\r\n",
+      "StackTrace": "at DarkFlare.Tests.SaveRestorePreparerTests.Prepare_UpgradesOnlyKnownContentWithoutMutatingSourceOrRerollingItems () [0x0006a] in C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Tests\\EditMode\\SaveRestorePreparerTests.cs:199\r\n"
+    }
+  ]
+}
