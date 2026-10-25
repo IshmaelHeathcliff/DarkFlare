@@ -1,12 +1,12 @@
 # 双地图与运行时作用域
 
-阶段 G 完成于 `0.5.3-alpha`，原有冻结合同见 [G 验收](../plan/archive/0.5.3/acceptance/maps/g/README.md)。H 已接入[地图导航所有权](./navigation.md)及 Schema 5 意图恢复；历史 `0.5.5-alpha` 的 Player 跨进程继续、历史档迁移、30 秒离场冻结与 1000 单位切图见 [I 综合验收](../plan/archive/0.5.5/acceptance/maps/i/README.md)。当前为 `0.7.0-alpha.2` / core v10 / Schema 9 / 地图 V4，已接入行为、Boss、有限刷怪与手动重置；[0.6.5 Editor 综合验收](../plan/archive/0.6.5/acceptance/behavior/README.md)已完成，本次版本接入与完整回归见[0.7.0 验收](../plan/archive/0.7.0/plans/alpha-0.7.0-semver-plan.md)，当前版本 Player 未验收。
+阶段 G 完成于 `0.5.3-alpha`，原有冻结合同见 [G 验收](../plan/archive/0.5.3/acceptance/maps/g/README.md)。H 已接入[地图导航所有权](./navigation.md)及 Schema 5 意图恢复；历史 `0.5.5-alpha` 的 Player 跨进程继续、历史档迁移、30 秒离场冻结与 1000 单位切图见 [I 综合验收](../plan/archive/0.5.5/acceptance/maps/i/README.md)。2026-10-25 核对当前运行 `0.7.1-alpha.5` / core v13 / Save Schema 12 / 地图 V4，地图仍为城镇 r1 / 野外 r9；[0.7.2 地图缩小与 300 名额](../plan/alpha-0.7.2/combat-map-optimization.md)尚待实施。历史[0.6.5 Editor 综合验收](../plan/archive/0.6.5/acceptance/behavior/README.md)及[0.7.0 验收](../plan/archive/0.7.0/plans/alpha-0.7.0-semver-plan.md)保留各自版本含义，当前版本 Player 未验收。
 
 ## 数据与入口
 
 初始安装完成后，`DarkFlare/地图/安装城镇与野外` 菜单已移除；日常修改通过地图工作台与配置中心完成。`WorldMapSetup.Ensure()` 保留为显式脚本安装入口，调用仍会更新正式配置并保存 Main 场景。
 
-正式源位于 `Assets/Data/Maps/World/`：城镇 64×64、野外 128×128，格宽 1。两图复用四地表发布资源及对象表现目录，当前 core 内容版本为 10。新游戏由 `WorldMapConfiguration` 的默认地图与入口决定。
+正式源位于 `Assets/Data/Maps/World/`：城镇 64×64、野外 128×128，格宽 1。两图复用四地表发布资源及对象表现目录，当前 core 内容版本为 13。新游戏由 `WorldMapConfiguration` 的默认地图与入口决定。
 
 地图交换格式 V2 增加 `entries`：稳定 `entryId`、用途 `Arrival / NewGame / Respawn`、局部世界坐标。每图最多 256 个入口，正式图必须有唯一复活入口。`Portal` 对象交互保存目标 `targetMapId / targetEntryId`，`contentId` 为空；商人和打造绑定相反。整套地图编译后交叉检查目标引用。V1 读取时只在内存补空入口和空出口字段，保存输出 V2，不在读取时改写原文件。
 

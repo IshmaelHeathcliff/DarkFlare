@@ -41,7 +41,9 @@
 
 ## 当前状态与版本来源
 
-2026-09-29，当前运行版本为 `0.7.0-alpha.2`。首个小版本的 Core 对象与应用接入均完成：核心定向 52/52、版本域及存档定向 32/32、完整 EditMode 882/882、PlayMode 102/102，均为 0 失败 / 跳过。见[0.7.0 执行与验收](plan/archive/0.7.0/plans/alpha-0.7.0-semver-plan.md)；[0.7 总计划](./plan/alpha-0.7-plan.md)继续维护，后续 `0.7.1-alpha` 范围待明确。本版 Player、真实设备、跨进程及性能矩阵未执行。
+2026-10-25，当前运行版本为 `0.7.1-alpha.5`；[0.7.2-alpha 体验优化](plan/alpha-0.7.2-optimization-plan.md)进入规划，尚未实施，不因计划建立而修改 `bundleVersion`。当前 core v13、Save / Settings Schema 12 / 1、地图 V4；[0.7 总计划](./plan/alpha-0.7-plan.md)继续活动。
+
+2026-09-29 的 `0.7.0-alpha.2` 历史验收为核心定向 52/52、版本域及存档定向 32/32、完整 EditMode 882/882、PlayMode 102/102，均为 0 失败 / 跳过。见[0.7.0 执行与验收](plan/archive/0.7.0/plans/alpha-0.7.0-semver-plan.md)；该版 Player、真实设备、跨进程及性能矩阵未执行。
 
 运行版本的唯一配置来源是 `ProjectSettings/ProjectSettings.asset` 的 `bundleVersion`：
 
@@ -86,9 +88,9 @@ bool currentParsed = GameVersion.Current.TryGetSemanticVersion(out SemanticVersi
 
 | 版本域 | 当前基线 | 更新条件 |
 | --- | --- | --- |
-| GameVersion | `0.7.0-alpha.2` | 已验证的应用基线、小版本或阶段交付 |
-| ContentVersion | core v10 | 正式内容目录的语义变化；评估内容迁移 |
-| SaveSchemaVersion | 9 | 存档 DTO 结构与迁移合同变化 |
+| GameVersion | `0.7.1-alpha.5` | 已验证的应用基线、小版本或阶段交付 |
+| ContentVersion | core v13 | 正式内容目录的语义变化；评估内容迁移 |
+| SaveSchemaVersion | 12 | 存档 DTO 结构与迁移合同变化 |
 | SettingsSchemaVersion | 1 | 用户设置结构与迁移合同变化 |
 | 地图 FormatVersion | V4 | 地图交换格式变化 |
 | 地图 Revision | 城镇 r1、野外 r9 | 单张地图内容修订；评估旧档映射 |
