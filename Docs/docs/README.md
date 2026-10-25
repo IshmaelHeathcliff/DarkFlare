@@ -8,7 +8,7 @@
 - [Unity 高层架构图与代码依据](./architecture/unity-overview/README.md)
 - [装备、词条与伤害作用流程](./architecture/equipment-affix-damage/README.md)
 - [Unity 6.6 升级兼容](./infrastructure/unity-6.6-upgrade.md)
-- [Domain Reload 兼容检查](./infrastructure/domain-reload-compatibility.md)
+- [Domain Reload 兼容与手动刷新](./infrastructure/domain-reload-compatibility.md)
 - [测试维护规范](./testing/test-maintenance.md)
 - [目录结构](./project-structure.md)
 - [应用生命周期与会话作用域](./infrastructure/application-lifecycle.md)

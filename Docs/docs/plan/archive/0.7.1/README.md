@@ -18,6 +18,8 @@
 - [能量成长确认合同](plans/energy-progression-contract.md)
 - [完整验收清单](acceptance/checklist.md)
 - [阶段五报告、测试、截图与源码身份](acceptance/player-board/README.md)
+- [Editor 手动脚本域刷新补充计划](plans/editor-manual-domain-reload-plan.md)
+- [Editor 手动脚本域刷新验收](acceptance/editor-manual-domain-reload.md)
 - [玩家棋盘模块](../../../skill-board/player-board.md)
 - [当前手动技能模块](../../../skill-board/manual-skills.md)
 - [当前棋盘效果模块](../../../skill-board/effects.md)

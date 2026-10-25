@@ -1,0 +1,160 @@
+{
+  "date": "2026-10-17",
+  "branch": "main",
+  "baseCommit": "d74aeb1",
+  "unityVersion": "6000.6.6f1",
+  "gameVersion": "0.7.1-alpha.5",
+  "menu": "DarkFlare/工具/手动刷新脚本域",
+  "source": {
+    "path": "Assets/Scripts/Editor/ScriptDomainReloadMenu.cs",
+    "sha256": "31a4f1331f658fdb53be39d98faa356eb4e04b9fa8dfbcc46b5127c9f4f0de99"
+  },
+  "compilation": {
+    "success": true,
+    "command": "command recompile_status",
+    "data": {
+      "command": "recompile_status",
+      "parameters": {},
+      "result": {
+        "status": "completed",
+        "failed": false,
+        "errors": [],
+        "compilationFailed": false
+      },
+      "target": {
+        "host": "127.0.0.1",
+        "port": 7800,
+        "projectPath": "C:\\Users\\darkf\\Home\\Projects\\DarkFlare"
+      }
+    },
+    "errors": [],
+    "warnings": []
+  },
+  "playModeGuard": {
+    "success": true,
+    "command": "command run_script",
+    "data": {
+      "command": "run_script",
+      "parameters": {
+        "file": "Temp/ManualDomainReloadVerification.cs",
+        "entry": "ManualDomainReloadVerification.CheckPlayModeGuard"
+      },
+      "result": {
+        "diagnostics": [],
+        "compileMs": 204,
+        "executeMs": 1,
+        "assemblyName": "PipelineRunScript_ManualDomainReloadVerification_cfeabe88187b45cf827d57d5dd9bea04",
+        "success": true,
+        "result": {
+          "playing": true,
+          "allowed": false,
+          "reloadEvents": 0
+        }
+      },
+      "target": {
+        "host": "127.0.0.1",
+        "port": 7800,
+        "projectPath": "C:\\Users\\darkf\\Home\\Projects\\DarkFlare"
+      }
+    },
+    "errors": [],
+    "warnings": []
+  },
+  "before": {
+    "success": true,
+    "command": "command run_script",
+    "data": {
+      "command": "run_script",
+      "parameters": {
+        "file": "Temp/ManualDomainReloadVerification.cs",
+        "entry": "ManualDomainReloadVerification.Capture"
+      },
+      "result": {
+        "diagnostics": [],
+        "compileMs": 93,
+        "executeMs": 1,
+        "assemblyName": "PipelineRunScript_ManualDomainReloadVerification_1a06ad65076f47b983450e08fe5207a6",
+        "success": true,
+        "result": {
+          "playing": false,
+          "compiling": false,
+          "allowed": true,
+          "reloadEvents": 0,
+          "optionsEnabled": true,
+          "options": 1
+        }
+      },
+      "target": {
+        "host": "127.0.0.1",
+        "port": 7800,
+        "projectPath": "C:\\Users\\darkf\\Home\\Projects\\DarkFlare"
+      }
+    },
+    "errors": [],
+    "warnings": []
+  },
+  "invocation": {
+    "success": true,
+    "command": "command menu",
+    "data": {
+      "command": "menu",
+      "parameters": {
+        "path": "DarkFlare/工具/手动刷新脚本域"
+      },
+      "result": {
+        "success": true,
+        "path": "DarkFlare/工具/手动刷新脚本域",
+        "items": null,
+        "message": "Executed menu item 'DarkFlare/工具/手动刷新脚本域'"
+      },
+      "target": {
+        "host": "127.0.0.1",
+        "port": 7800,
+        "projectPath": "C:\\Users\\darkf\\Home\\Projects\\DarkFlare"
+      }
+    },
+    "errors": [],
+    "warnings": []
+  },
+  "after": {
+    "success": true,
+    "command": "command run_script",
+    "data": {
+      "command": "run_script",
+      "parameters": {
+        "file": "Temp/ManualDomainReloadVerification.cs",
+        "entry": "ManualDomainReloadVerification.Finish"
+      },
+      "result": {
+        "diagnostics": [],
+        "compileMs": 1427,
+        "executeMs": 1,
+        "assemblyName": "PipelineRunScript_ManualDomainReloadVerification_bf38bef309ac4ea88509599dc2b5ffff",
+        "success": true,
+        "result": {
+          "playing": false,
+          "compiling": false,
+          "allowed": true,
+          "reloadEvents": 1,
+          "optionsEnabled": true,
+          "options": 1
+        }
+      },
+      "target": {
+        "host": "127.0.0.1",
+        "port": 7800,
+        "projectPath": "C:\\Users\\darkf\\Home\\Projects\\DarkFlare"
+      }
+    },
+    "errors": [],
+    "warnings": []
+  },
+  "visualCheck": "Opened DarkFlare / Tools in the live Unity Editor and clicked the visible menu item; observed managed callback initialization.",
+  "temporaryProbeRemoved": true,
+  "temporarySessionStateErased": true,
+  "notRun": [
+    "Full EditMode and PlayMode suites",
+    "Player build",
+    "Separate UI capture during compile, import and Play Mode transition"
+  ]
+}

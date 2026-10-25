@@ -2,6 +2,14 @@
 
 2026-09-11–12，Unity `6000.6.0f1`，游戏版本 `0.3.4-alpha`。范围为 Editor Play Mode 生命周期；升级 API 与字体修复见[Unity 6.6 升级记录](./unity-6.6-upgrade.md)。
 
+## 手动刷新脚本域
+
+2026-10-17，Unity `6000.6.6f1` 增加菜单 **DarkFlare → 工具 → 手动刷新脚本域**。关闭自动 Domain Reload 后，需要重置脚本静态状态时，可停止 Play Mode 后执行此项，无需改动 Reload Scene Only 设置。
+
+入口使用 Unity 原生 [EditorUtility.RequestScriptReload](https://docs.unity3d.com/6000.0/Documentation/ScriptReference/EditorUtility.RequestScriptReload.html)，异步重载已编译的脚本程序集。此 API 不负责重新编译尚未编译的代码；有脚本改动时先完成 Unity 编译。菜单在运行、进入 / 退出 Play Mode、编译或资源导入时禁用，执行方法也会重新校验这些条件。
+
+实现位于 `Assets/Scripts/Editor/ScriptDomainReloadMenu.cs`，不会进入 Player。已验证菜单显示、实际重载事件、运行时拒绝与设置保持，详见[当次验收](../plan/archive/0.7.1/acceptance/editor-manual-domain-reload.md)。以下为历史生命周期检查，保留当时的环境和结果。
+
 ## 检查方式
 
 读取生命周期、静态状态与订阅代码后，通过 Unity MCP 切换实际 Enter Play Mode 选项，使用隔离的测试数据根执行游戏流程。没有以手工调用静态重置替代进入 Play Mode；临时探针仅观察正式重置与关闭结果，并在清理阶段恢复默认设置。
