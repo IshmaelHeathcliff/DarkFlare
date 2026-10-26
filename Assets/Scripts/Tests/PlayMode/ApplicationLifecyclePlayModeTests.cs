@@ -33,7 +33,7 @@ namespace DarkFlare.Tests
         }
 
         [UnityTest]
-        public IEnumerator RepeatedPlayInitialization_ReplacesIsolatedPathsWithoutRetainingOldInstallation()
+        public IEnumerator RepeatedTestInitialization_ReplacesIsolatedPathsAndSkipsOrdinaryPlay()
         {
             if (ApplicationHost.TryGetCurrent(out ApplicationHost host))
             {
@@ -61,9 +61,18 @@ namespace DarkFlare.Tests
                     Assert.AreEqual(Alpha027PlayModeDataEnvironment.SettingsRootPath,
                         ApplicationDataPathProviderFactory.CreateSettingsPathProvider().RootPath);
                 }
+#if UNITY_EDITOR
+                new PlayModeDataRunSetup().Cleanup();
+                install.Invoke(null, null);
+                Assert.IsNull(Alpha027PlayModeDataEnvironment.RootPath, "普通 Play 初始化不得创建临时目录");
+                Assert.IsInstanceOf<PersistentSavePathProvider>(ApplicationDataPathProviderFactory.CreateSavePathProvider());
+                Assert.IsInstanceOf<PersistentSettingsPathProvider>(ApplicationDataPathProviderFactory.CreateSettingsPathProvider());
+                Assert.Throws<InvalidOperationException>(() => Alpha027PlayModeDataEnvironment.ReinstallForTestRun());
+#endif
             }
             finally
             {
+                new PlayModeDataRunSetup().Setup();
                 Alpha027PlayModeDataEnvironment.ReinstallForTestRun();
                 GameObject hostObject = new GameObject("[ApplicationHost]");
                 hostObject.AddComponent<ApplicationHost>();

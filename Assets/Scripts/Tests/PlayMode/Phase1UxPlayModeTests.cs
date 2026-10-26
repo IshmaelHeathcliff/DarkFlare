@@ -7,6 +7,7 @@ using DarkFlare;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
 using UnityEngine.UIElements;
@@ -102,6 +103,17 @@ namespace DarkFlare.Tests
                 yield return null; yield return null;
                 Assert.That(attacks.Count, Is.EqualTo(4));
                 Assert.That(attacks[3].FlameInstanceId, Is.EqualTo(last.InstanceId));
+                yield return new WaitForSeconds(.75f);
+                int beforeHeld = attacks.Count;
+                // 两键位于同一状态字节，排队两个独立位事件会互相覆盖；一次提交真实的按键组合。
+                InputSystem.QueueStateEvent(keyboard, new KeyboardState(Key.Digit1, Key.Digit6));
+                yield return WaitForSkillCasts(() => System.Math.Min(
+                    attacks.Skip(beforeHeld).Count(a => a.FlameInstanceId == first.InstanceId),
+                    attacks.Skip(beforeHeld).Count(a => a.FlameInstanceId == last.InstanceId)), 2);
+                InputSystem.QueueStateEvent(keyboard, new KeyboardState());
+                Assert.That(attacks.Skip(beforeHeld).Count(a => a.FlameInstanceId == first.InstanceId), Is.GreaterThanOrEqualTo(2));
+                Assert.That(attacks.Skip(beforeHeld).Count(a => a.FlameInstanceId == last.InstanceId), Is.GreaterThanOrEqualTo(2));
+                int beforeHud = attacks.Count;
                 for (int i = 0; i < 6; i++)
                 {
                     VisualElement card = root.Q("hud-flame-" + i);
@@ -112,10 +124,10 @@ namespace DarkFlare.Tests
                 _inputFixture.Set(mouse.position, PanelToScreen(root, root.Q<Button>("game-hud-inventory").worldBound.center));
                 yield return null;
                 _inputFixture.Press(mouse.leftButton);
-                yield return null;
+                yield return new WaitForSecondsRealtime(.75f);
                 _inputFixture.Release(mouse.leftButton);
                 yield return null; yield return null;
-                Assert.That(attacks.Count, Is.EqualTo(4), "点击 HUD 不能穿透普攻");
+                Assert.That(attacks.Count, Is.EqualTo(beforeHud), "点击 HUD 不能首发或建立后续连放");
                 Assert.That(Object.FindAnyObjectByType<GameMenuController>().IsOpen, Is.True);
                 Label attackBinding = root.Q<Label>("hud-attack-binding");
                 Assert.That(!string.IsNullOrWhiteSpace(attackBinding.text)

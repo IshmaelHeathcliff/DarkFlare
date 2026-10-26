@@ -8,7 +8,7 @@ using UnityEngine.UIElements;
 
 namespace DarkFlare.Tests
 {
-    public sealed class Alpha014ResourceSystemPlayModeTests
+    public sealed partial class Alpha014ResourceSystemPlayModeTests
     {
         const float SetupTimeoutSeconds = 20f;
 

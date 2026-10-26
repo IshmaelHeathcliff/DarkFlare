@@ -12,8 +12,9 @@ namespace DarkFlare
         public Vector2 Pointer { get; }
         public Vector2 Look { get; }
         public bool PointerButton { get; }
-        public PlayerSkillInput(int slot, int epoch, InputDeviceFamily family, Vector2 pointer, Vector2 look, bool pointerButton)
-        { Slot = slot; Epoch = epoch; Family = family; Pointer = pointer; Look = look; PointerButton = pointerButton; }
+        public int PressId { get; }
+        public PlayerSkillInput(int slot, int epoch, InputDeviceFamily family, Vector2 pointer, Vector2 look, bool pointerButton, int pressId = 0)
+        { Slot = slot; Epoch = epoch; Family = family; Pointer = pointer; Look = look; PointerButton = pointerButton; PressId = pressId; }
     }
 
     public enum GameInputMode
@@ -64,8 +65,14 @@ namespace DarkFlare
 
         public bool IsCurrent(PlayerSkillInput request)
         {
-            return !_disposed && IsGameplayEnabled && request.Epoch == _inputService.GameplayEpoch
+            return !_disposed && _inputService.IsSkillPressCurrent(request)
                 && (!request.PointerButton || !_inputService.IsGameplayPointerConsumed && !IsPointerBlocked(request.Pointer));
+        }
+
+        public bool TryReadSkillInput(PlayerSkillInput press, bool requireHeld, out PlayerSkillInput current)
+        {
+            current = default;
+            return !_disposed && _inputService.TryReadSkillInput(press, requireHeld, out current) && IsCurrent(current);
         }
 
         bool IsPointerBlocked(Vector2 pointer)

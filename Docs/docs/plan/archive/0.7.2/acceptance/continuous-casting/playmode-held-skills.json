@@ -1,0 +1,48 @@
+{
+  "status": "completed",
+  "duration": 18.13,
+  "summary": {
+    "total": 5,
+    "passed": 5,
+    "failed": 0,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "results": [
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.ManualSkills_DeathStopsHoldAndRespawnAcceptsNewPress",
+      "Status": "Passed",
+      "Duration": 4.986337,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.ManualSkills_HeldInputDoesNotResumeAfterUiPauseOrSuspension",
+      "Status": "Passed",
+      "Duration": 3.3681524,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.ManualSkills_HeldSourceReplacementCancelsAndManaRecoveryAllowsValidHold",
+      "Status": "Passed",
+      "Duration": 1.8880153,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.ManualSkills_HoldRepeatsWithLatestAimAndReleaseStops",
+      "Status": "Passed",
+      "Duration": 3.0046403,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.ManualSkills_RequireInputKeepFlamesSeparateAndDoNotCastThroughHud",
+      "Status": "Passed",
+      "Duration": 4.78854,
+      "Message": null,
+      "StackTrace": null
+    }
+  ]
+}

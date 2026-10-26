@@ -90,6 +90,10 @@ namespace DarkFlare
             }
 
             bool requiresSkillDamage = definition.DamageSource == ProjectileDamageSource.Skill;
+            if (!definition.HasValidProjectileSettings)
+            {
+                issues.Add("投射物数量须为 1–32、额外穿透数须为 0–32、总散射角须为 0–360 的有限数值");
+            }
             if (definition.OnHitStatus != null)
             {
                 issues.AddRange(definition.OnHitStatus.ValidateConfiguration());

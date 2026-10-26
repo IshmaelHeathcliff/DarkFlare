@@ -1,0 +1,33 @@
+{
+  "success": true,
+  "command": "command script run",
+  "data": {
+    "command": "script run",
+    "parameters": {
+      "file": "Library/AgentValidation/alpha072/OriginalSaveCheck.cs",
+      "entry": "OriginalSaveCheck.Read"
+    },
+    "result": {
+      "diagnostics": [],
+      "compileMs": 1265,
+      "executeMs": 406,
+      "assemblyName": "PipelineRunScript_OriginalSaveCheck_d1f5fac38c9b46449cc0cb238cf1a886",
+      "success": true,
+      "result": {
+        "decoded": true,
+        "prepared": true,
+        "sourceGameVersion": "0.5.4-alpha",
+        "decodedSchema": 12,
+        "targetContent": 14,
+        "Issues": []
+      }
+    },
+    "target": {
+      "host": "127.0.0.1",
+      "port": 7800,
+      "projectPath": "C:\\Users\\darkf\\Home\\Projects\\DarkFlare"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -17,6 +17,11 @@ namespace DarkFlare.Tests
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
         static void Install()
         {
+            if (!PlayModeDataRunSetup.IsActive)
+            {
+                return;
+            }
+
             ReleaseAndDelete();
             RootPath = Path.Combine(
                 Application.temporaryCachePath,
@@ -32,6 +37,11 @@ namespace DarkFlare.Tests
 
         internal static void ReinstallForTestRun()
         {
+            if (!PlayModeDataRunSetup.IsActive)
+            {
+                throw new InvalidOperationException("没有当前自动化测试运行，拒绝安装临时存档路径");
+            }
+
             Install();
         }
 

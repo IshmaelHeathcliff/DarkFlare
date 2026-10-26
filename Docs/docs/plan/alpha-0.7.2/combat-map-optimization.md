@@ -1,6 +1,8 @@
 # 0.7.2-alpha 战斗与地图优化分计划
 
-状态：2026-10-25，待实施。版本与总范围见[总计划](../alpha-0.7.2-optimization-plan.md)。
+状态：2026-10-26，阶段一持续施法、三投射物与穿透已完成；阶段五地图与 300 名额待实施。版本与总范围见[总计划](../alpha-0.7.2-optimization-plan.md)。
+
+阶段一已按[实施计划](../archive/0.7.2/plans/phase-1-execution.md)完成[普通 Play 存档路径修复](../archive/0.7.2/plans/save-path-isolation-plan.md)、多枚生成、穿透与持续施法，见[验收](../archive/0.7.2/acceptance/continuous-casting/README.md)。本文件继续维护阶段五范围；阶段一细节保留为已完成合同。
 
 ## 按住按键连续施法：阶段 1
 

@@ -31,6 +31,10 @@ namespace DarkFlare
         Vector2 _lastAimDirection = Vector2.right;
         Vector3 _spawnPosition;
         float _respawnTime;
+        readonly SkillIntent[] _skillIntents = new SkillIntent[7];
+        readonly GetPlayerSkillQuery[] _skillQueries = new GetPlayerSkillQuery[7];
+        GetActorActionsQuery _actionsQuery;
+        bool _castingHeldSkills;
 
         public CombatActor Actor => _actor;
 
@@ -105,6 +109,8 @@ namespace DarkFlare
             _architecture = GameArchitectureProvider.RequireCurrent();
             _gameInput = this.GetUtility<GameInput>();
             _sessionObjects = this.GetUtility<SessionObjectRegistry>();
+            for (int i = 0; i < _skillQueries.Length; i++) { _skillQueries[i] = new GetPlayerSkillQuery(_actor, i - 1); }
+            _actionsQuery = new GetActorActionsQuery(_actor);
         }
 
         void OnEnable()
@@ -115,6 +121,10 @@ namespace DarkFlare
                 "enabled",
                 this.GetCancellationTokenOnDestroy());
             this.RegisterEvent<ActorDiedEvent>(OnActorDied).UnRegisterWhenDisabled(this);
+            this.RegisterEvent<EquipmentChangedEvent>(e => { if (e.Actor == _actor) { InvalidateChangedSkillSources(); } }).UnRegisterWhenDisabled(this);
+            this.RegisterEvent<PlayerSkillsChangedEvent>(_ => InvalidateChangedSkillSources()).UnRegisterWhenDisabled(this);
+            this.RegisterEvent<SkillBoardChangedEvent>(_ => InvalidateChangedSkillSources()).UnRegisterWhenDisabled(this);
+            this.RegisterEvent<GameplayPauseChangedEvent>(e => { if (e.IsPaused) { CancelHeldSkills(); } }).UnRegisterWhenDisabled(this);
             if (_gameInput != null) { _gameInput.SkillRequested += OnSkillRequested; }
         }
 
@@ -122,6 +132,8 @@ namespace DarkFlare
         {
             if (_gameInput != null) { _gameInput.SkillRequested -= OnSkillRequested; }
             _enableVersion++;
+            System.Array.Clear(_skillIntents, 0, _skillIntents.Length);
+            _castingHeldSkills = false;
             _componentScope?.BeginStop();
             _componentScope = null;
             _respawnScheduled = false;
@@ -196,28 +208,120 @@ namespace DarkFlare
 
         void OnSkillRequested(PlayerSkillInput request)
         {
-            if (_componentScope == null || _actor == null || !_actor.IsAlive) { return; }
-            PlayerSkillState source = request.Slot < 0 ? this.SendQuery(new GetPlayerNormalSkillQuery(_actor))
-                : this.SendQuery(new GetPlayerSkillsQuery())[request.Slot];
+            if (_componentScope == null || !_componentScope.CanAcceptWork || _actor == null || !_actor.IsAlive
+                || request.Slot < -1 || request.Slot > 5) { return; }
+            PlayerSkillState source = this.SendQuery(_skillQueries[request.Slot + 1]);
             if (source.Skill == null) { return; }
-            Vector2 direction = request.Look;
-            if (request.Family == InputDeviceFamily.KeyboardMouse && Camera.main != null)
+            _skillIntents[request.Slot + 1] = new SkillIntent(request, source.SourceId, _sessionObjects.MapOwner);
+            if (_castingHeldSkills) { return; }
+            _castingHeldSkills = true;
+            uint version = _enableVersion;
+            _componentScope.Tasks.Run("held-skills", token => CastWhileHeldAsync(version, token),
+                failurePolicy: LifecycleTaskFailurePolicy.ReportAndStopScope);
+        }
+
+        async UniTask CastWhileHeldAsync(uint version, CancellationToken token)
+        {
+            try
             {
-                Camera camera = Camera.main;
+                do
+                {
+                    await UniTask.Yield(PlayerLoopTiming.LastPostLateUpdate, token);
+                    if (version != _enableVersion || !isActiveAndEnabled || _actor == null || !_actor.IsAlive) { return; }
+                    for (int i = 0; i < _skillIntents.Length; i++)
+                    {
+                        SkillIntent intent = _skillIntents[i];
+                        if (intent == null) { continue; }
+                        bool first = intent.FirstPending;
+                        intent.FirstPending = false;
+                        PlayerSkillState source = this.SendQuery(_skillQueries[i]);
+                        if (!_gameInput.TryReadSkillInput(intent.Input, !first, out PlayerSkillInput current)
+                            || !ReferenceEquals(intent.MapOwner, _sessionObjects.MapOwner)
+                            || source.Skill == null || source.SourceId != intent.SourceId)
+                        {
+                            _skillIntents[i] = null;
+                            continue;
+                        }
+                        if (source.RemainingSeconds > 0 || !_actor.CanSpendMana(source.Skill.ManaCost))
+                        {
+                            continue;
+                        }
+                        ActorActionPermission permission = this.SendQuery(_actionsQuery);
+                        if (!permission.CanCast || source.Skill.DamageSource == ProjectileDamageSource.EquippedWeapon && !permission.CanAttack)
+                        {
+                            continue;
+                        }
+                        Vector2 direction = ReadAim(current);
+                        Vector3 origin = _firePoint != null ? _firePoint.position : transform.position + (Vector3)direction * .55f;
+                        SkillCastResult result = this.SendCommand(new CastPlayerSkillCommand(_actor, current.Slot, intent.SourceId, origin, direction));
+                        if (result.Status == SkillCastStatus.InvalidSource || result.Status == SkillCastStatus.InvalidOwner
+                            || result.Status == SkillCastStatus.InvalidDamageSource || result.Status == SkillCastStatus.SpawnFailed)
+                        {
+                            _skillIntents[i] = null;
+                        }
+                    }
+                }
+                while (HasSkillIntents());
+            }
+            finally
+            {
+                if (version == _enableVersion)
+                {
+                    _castingHeldSkills = false;
+                    System.Array.Clear(_skillIntents, 0, _skillIntents.Length);
+                }
+            }
+        }
+
+        bool HasSkillIntents()
+        {
+            foreach (SkillIntent intent in _skillIntents) { if (intent != null) { return true; } }
+            return false;
+        }
+
+        void InvalidateChangedSkillSources()
+        {
+            for (int i = 0; i < _skillIntents.Length; i++)
+            {
+                if (_skillIntents[i] != null && this.SendQuery(_skillQueries[i]).SourceId != _skillIntents[i].SourceId)
+                {
+                    _skillIntents[i] = null;
+                }
+            }
+        }
+
+        void CancelHeldSkills()
+        {
+            System.Array.Clear(_skillIntents, 0, _skillIntents.Length);
+            _gameInput?.InvalidateSkills();
+        }
+
+        Vector2 ReadAim(PlayerSkillInput request)
+        {
+            Vector2 direction = request.Look;
+            Camera camera = Camera.main;
+            if (request.Family == InputDeviceFamily.KeyboardMouse && camera != null)
+            {
                 Vector3 point = camera.ScreenToWorldPoint(new Vector3(request.Pointer.x, request.Pointer.y,
                     transform.position.z - camera.transform.position.z));
                 direction = point - transform.position;
             }
             if (direction.sqrMagnitude > 0.01f) { _lastAimDirection = direction.normalized; }
-            direction = _lastAimDirection;
-            Vector3 origin = _firePoint != null ? _firePoint.position : transform.position + (Vector3)direction * 0.55f;
-            uint version = _enableVersion;
-            _componentScope.Tasks.Run("manual-cast", async token =>
+            return _lastAimDirection;
+        }
+
+        sealed class SkillIntent
+        {
+            public PlayerSkillInput Input { get; }
+            public string SourceId { get; }
+            public object MapOwner { get; }
+            public bool FirstPending { get; set; } = true;
+            public SkillIntent(PlayerSkillInput input, string sourceId, object mapOwner)
             {
-                await UniTask.Yield(PlayerLoopTiming.LastPostLateUpdate, token);
-                if (version != _enableVersion || !isActiveAndEnabled || !_gameInput.IsCurrent(request)) { return; }
-                this.SendCommand(new CastPlayerSkillCommand(_actor, request.Slot, source.SourceId, origin, direction));
-            }, failurePolicy: LifecycleTaskFailurePolicy.ReportAndStopScope);
+                Input = input;
+                SourceId = sourceId;
+                MapOwner = mapOwner;
+            }
         }
 
         void OnActorDied(ActorDiedEvent e)
@@ -233,6 +337,8 @@ namespace DarkFlare
             }
 
             _enableVersion++;
+            System.Array.Clear(_skillIntents, 0, _skillIntents.Length);
+            _castingHeldSkills = false;
             _gameInput?.InvalidateSkills();
             StartRespawn(_respawnDelay);
         }

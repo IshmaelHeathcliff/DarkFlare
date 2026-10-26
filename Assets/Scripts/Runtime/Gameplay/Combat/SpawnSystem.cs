@@ -334,5 +334,57 @@ namespace DarkFlare
             controller.Init(skill, direction, attack);
             return controller;
         }
+
+        internal ProjectileController[] PrepareProjectiles(ProjectileSkillDefinition skill, Vector3 position,
+            Vector2 direction, IReadOnlyList<AttackSnapshot> attacks)
+        {
+            GameObject prefab = this.GetUtility<PrefabAssetLoader>().GetPrefab(skill.Prefab);
+            if (prefab == null)
+            {
+                ApplicationLog.Error(LogEventIds.GameplayCombat, $"[SpawnSystem] 投射物 Prefab 未加载: {skill.Id}");
+                return null;
+            }
+            var projectiles = new ProjectileController[attacks.Count];
+            try
+            {
+                for (int i = 0; i < attacks.Count; i++)
+                {
+                    GameObject instance = CreateProjectileInstance(prefab, position, i);
+                    if (instance == null) { throw new System.InvalidOperationException($"第 {i + 1} 枚投射物创建失败"); }
+                    this.GetUtility<SessionObjectRegistry>().RegisterMapObject(instance);
+                    ProjectileController controller = instance.GetComponent<ProjectileController>();
+                    if (controller == null)
+                    {
+                        this.GetUtility<SessionObjectRegistry>().Release(instance);
+                        throw new System.InvalidOperationException("投射物缺少 ProjectileController");
+                    }
+                    projectiles[i] = controller;
+                    float angle = skill.GetProjectileAngle(i) * Mathf.Deg2Rad;
+                    Vector2 heading = new Vector2(direction.x * Mathf.Cos(angle) - direction.y * Mathf.Sin(angle),
+                        direction.x * Mathf.Sin(angle) + direction.y * Mathf.Cos(angle));
+                    controller.Prepare(skill, heading, attacks[i]);
+                }
+                return projectiles;
+            }
+            catch (System.Exception exception)
+            {
+                ReleaseProjectiles(projectiles);
+                ApplicationLog.Warning(LogEventIds.GameplayCombat, $"[SpawnSystem] 准备投射物失败: {exception}");
+                return null;
+            }
+        }
+
+        protected virtual GameObject CreateProjectileInstance(GameObject prefab, Vector3 position, int index)
+        {
+            return Object.Instantiate(prefab, position, Quaternion.identity);
+        }
+
+        internal void ReleaseProjectiles(IReadOnlyList<ProjectileController> projectiles)
+        {
+            foreach (ProjectileController projectile in projectiles)
+            {
+                if (projectile != null) { this.GetUtility<SessionObjectRegistry>().Release(projectile.gameObject); }
+            }
+        }
     }
 }

@@ -1,0 +1,186 @@
+{
+  "CapturedUtc": "2026-10-25T16:59:20.9556603Z",
+  "Branch": "main",
+  "Head": "da2474c623c0c9db05a46a516c65f0554688d0c2",
+  "ImplementationBase": "da2474c",
+  "Identity": "基线加本轮未提交改动；正式运行版本在完整回归通过后推进",
+  "ExcludedExistingChanges": [
+    "Assets/Settings/UI/Fonts/GameCjkFont.asset"
+  ],
+  "Editor": {
+    "unity": "6000.6.7f1",
+    "version": "0.7.2-alpha.1",
+    "versionPersisted": true,
+    "content": 14,
+    "contentValid": true,
+    "contentIssues": [],
+    "saveSchema": 12,
+    "settingsSchema": 1,
+    "skill": {
+      "ProjectileCount": 3,
+      "SpreadAngleDegrees": 20,
+      "PierceCount": 1,
+      "Cooldown": 0.6,
+      "ManaCost": 1
+    },
+    "skillIssues": [],
+    "coverage": {
+      "Passed": true,
+      "TypeCount": 35,
+      "SerializedFieldCount": 274,
+      "CoveredFieldCount": 274,
+      "Issues": []
+    },
+    "playing": false,
+    "compiling": false,
+    "enterOptionsEnabled": true,
+    "enterOptions": 1,
+    "scenes": [
+      "Assets/Scenes/Bootstrap.unity"
+    ],
+    "hostExists": false,
+    "testMarker": ""
+  },
+  "Files": [
+    {
+      "Path": "Assets/Data/Preset/Content/正式内容目录.asset",
+      "Sha256": "297908B0B3F3CD1E32AF9925F672C656FE7620A508C5EC7DB881E42416C2DE6F"
+    },
+    {
+      "Path": "Assets/Data/Preset/Skills/great_sword_normal.asset",
+      "Sha256": "0BD71CC2A500FF2EE5C57706CFF0E761B35E4A8C4AB33D91A282D8FCB2EE84A2"
+    },
+    {
+      "Path": "Assets/Scripts/Runtime/Data/Skills/ProjectileSkillDefinition.cs",
+      "Sha256": "7858FC6ADD5B9BBACFE83722650ED9C399A7BA284252EB4BC0B38BCD7270649E"
+    },
+    {
+      "Path": "Assets/Scripts/Runtime/Gameplay/Actors/PlayerController.cs",
+      "Sha256": "01049E02270D885C4330C01A5CE3D19C698346B0C37080CC42FA18268E8E190F"
+    },
+    {
+      "Path": "Assets/Scripts/Runtime/Gameplay/Combat/AttackRandomRolls.cs",
+      "Sha256": "C69C46DB8361D51FC9EA3D9A22F1445DDF53C059FFEA34A3749BAE76C138BCD4"
+    },
+    {
+      "Path": "Assets/Scripts/Runtime/Gameplay/Combat/AttackSnapshotFactory.cs",
+      "Sha256": "CA633292E0501C424757412290DDEE1F144C679B89E92616E4B75312E14C6610"
+    },
+    {
+      "Path": "Assets/Scripts/Runtime/Gameplay/Combat/Commands/FireProjectileCommand.cs",
+      "Sha256": "D2354B66EF9058455631D1F38F82E59931C7604D2C68C0D4BC053075EA5D087A"
+    },
+    {
+      "Path": "Assets/Scripts/Runtime/Gameplay/Combat/PlayerSkillState.cs",
+      "Sha256": "AEFD18184FF22D26414E6B3262E467FF18C8937B05B9CFBD58224C836C5944CF"
+    },
+    {
+      "Path": "Assets/Scripts/Runtime/Gameplay/Combat/RandomizationConfigurationValidator.cs",
+      "Sha256": "C86E09220130901B4830AACCF1874BEA9B364AD356AE6C8A4FC170CBDFEDBF82"
+    },
+    {
+      "Path": "Assets/Scripts/Runtime/Gameplay/Combat/SpawnSystem.cs",
+      "Sha256": "683E27CA1A98D53F9ED744A4E0B9655A4C322D9B6A7123B008CC75BAE78F53E7"
+    },
+    {
+      "Path": "Assets/Scripts/Runtime/Gameplay/Input/GameInput.cs",
+      "Sha256": "715BAAC4149C0C23609EEC61269DC7F9A65DEFDEDFC57F5287DE25DCF27ACF60"
+    },
+    {
+      "Path": "Assets/Scripts/Runtime/Gameplay/Skills/ProjectileController.cs",
+      "Sha256": "31931182CA322D44BEA2F3D2EE4E36546BB9E857E2808A812FB34C0A70B696BC"
+    },
+    {
+      "Path": "Assets/Scripts/Runtime/Infrastructure/Input/ApplicationInputService.cs",
+      "Sha256": "0CD3B440CF89DFFC6D51BA881CFF2D428E0CFF6613470396BF83A8EA6896C49F"
+    },
+    {
+      "Path": "Assets/Scripts/Runtime/Infrastructure/Persistence/SaveRestorePreparer.cs",
+      "Sha256": "379CB9415C39B2071E218BBBC66ABEC2488F72E3A0AB7AC603B37C4ED494760E"
+    },
+    {
+      "Path": "Assets/Scripts/Runtime/Infrastructure/UI/RuntimePanelView.cs",
+      "Sha256": "27555B531E00D6A15C74ED7D4BFF274D5515F39109AE88B703BC4B69D6C49067"
+    },
+    {
+      "Path": "Assets/Scripts/Tests/EditMode/ApplicationInputServiceTests.cs",
+      "Sha256": "3790FC2E9F2E448E30591878373278A32166F2664F2C93BAE5A583A2FA4974C2"
+    },
+    {
+      "Path": "Assets/Scripts/Tests/EditMode/PlayerSkillsTests.cs",
+      "Sha256": "720938544DD78D6C8A4F29098418C5DB8EEF757F24F0D113E68D1D9C238F131B"
+    },
+    {
+      "Path": "Assets/Scripts/Tests/EditMode/SaveRestorePreparerTests.cs",
+      "Sha256": "F4283E680D198A68191A446B6413701EE7D9E8FC2AABF1E9555D214CEA58C43D"
+    },
+    {
+      "Path": "Assets/Scripts/Tests/PlayMode/Alpha014ResourceSystemPlayModeTests.cs",
+      "Sha256": "433F53D1AB84ED874910875A090ADC17EF9CC1AB1B604F8A92615F352836E1B3"
+    },
+    {
+      "Path": "Assets/Scripts/Tests/PlayMode/Alpha014ResourceSystemPlayModeTests.Projectiles.cs",
+      "Sha256": "030D8E334EBE68CB92D27B2D8E60E310CA31949D5E3110620736D0061605F59C"
+    },
+    {
+      "Path": "Assets/Scripts/Tests/PlayMode/Alpha014ResourceSystemPlayModeTests.Projectiles.cs.meta",
+      "Sha256": "4E1AC888C31B048FE1AD6D2DB0F6CB87E9C30827ADEA04BA253290270726087E"
+    },
+    {
+      "Path": "Assets/Scripts/Tests/PlayMode/Alpha017BaselinePlayModeTests.cs",
+      "Sha256": "D115BAC51E868C104778C5BD0E723D0E30F5F81D482238EE67F31DF642181CD5"
+    },
+    {
+      "Path": "Assets/Scripts/Tests/PlayMode/Alpha025InputOwnershipPlayModeTests.cs",
+      "Sha256": "9A2DB7AE3C1243D44231046F845A4EEA264388710452AD98C4913304C2E385C3"
+    },
+    {
+      "Path": "Assets/Scripts/Tests/PlayMode/Alpha027IntegratedAcceptancePlayModeTests.cs",
+      "Sha256": "5800838EE81043A3B46CAE05C1BBF2BA8B8ECC26C138B1406F66C33BFFFFFA7C"
+    },
+    {
+      "Path": "Assets/Scripts/Tests/PlayMode/Alpha027PlayModeDataEnvironment.cs",
+      "Sha256": "14B399282E08F1C273FD0153CEA0D24892FC86D9DA66C439A769B9B746B585DC"
+    },
+    {
+      "Path": "Assets/Scripts/Tests/PlayMode/Alpha027ShellUiMatrixPlayModeTests.cs",
+      "Sha256": "CE15A99254752F3E4976EB552F46B44E668C7BA4A8F5AD2EB70C2459275FD94D"
+    },
+    {
+      "Path": "Assets/Scripts/Tests/PlayMode/ApplicationLifecyclePlayModeTests.cs",
+      "Sha256": "5256B0508ACF3383DB11F4F44BA2E69F561C8FC1CF442DE118C28CA604181085"
+    },
+    {
+      "Path": "Assets/Scripts/Tests/PlayMode/EquipmentPhase2PlayModeTests.cs",
+      "Sha256": "83D16CBCF3633E7D95AE4D79180CA42431614E9240915D73B9D440A96CA62BA0"
+    },
+    {
+      "Path": "Assets/Scripts/Tests/PlayMode/Phase1UxPlayModeTests.ContinuousSkills.cs",
+      "Sha256": "11CF87FE15962FF5348EB20AED677DF4DC9F91F7BFEC7ADB4F480A5E333784B6"
+    },
+    {
+      "Path": "Assets/Scripts/Tests/PlayMode/Phase1UxPlayModeTests.ContinuousSkills.cs.meta",
+      "Sha256": "2847E5377AD7438388CC4F84B2DB90BF352DCDE219189BA02C455E37C81806A8"
+    },
+    {
+      "Path": "Assets/Scripts/Tests/PlayMode/Phase1UxPlayModeTests.cs",
+      "Sha256": "AEA7C455D5F7F26D5DACA7B1F8DC90D01CF88044F8B3A1560CD2314389D0343B"
+    },
+    {
+      "Path": "Assets/Scripts/Tests/PlayMode/PlayModeDataRunSetup.cs",
+      "Sha256": "9A285772A2401B009E41D37C5AA9D38B07E0307B20D79AE80F970196FE73C850"
+    },
+    {
+      "Path": "Assets/Scripts/Tests/PlayMode/PlayModeDataRunSetup.cs.meta",
+      "Sha256": "750F0E92CD1FB74649C6D6AF9B887C9BDDAD7762E46E1B03C03C2F1CC9D18E7A"
+    },
+    {
+      "Path": "Assets/Scripts/Tests/PlayMode/WorldMapPlayModeTests.cs",
+      "Sha256": "DC12EEE87D1B56A102746121113847024F4291AAB610025A09A0158FC07BEA6B"
+    },
+    {
+      "Path": "ProjectSettings/ProjectSettings.asset",
+      "Sha256": "15B7C956C373D18748F718BD5A6E6F3A5E66CB970CBDECC52218D81FFB440A19"
+    }
+  ]
+}

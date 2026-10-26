@@ -38,8 +38,16 @@ namespace DarkFlare
     public readonly struct PlayerSkillCastEvent
     {
         public CombatActor Actor { get; }
-        public AttackSnapshot Attack { get; }
-        public PlayerSkillCastEvent(CombatActor actor, AttackSnapshot attack) { Actor = actor; Attack = attack; }
+        readonly IReadOnlyList<AttackSnapshot> _attacks;
+        public IReadOnlyList<AttackSnapshot> Attacks => _attacks ?? Array.Empty<AttackSnapshot>();
+        public AttackSnapshot Attack => Attacks.Count > 0 ? Attacks[0] : null;
+        public PlayerSkillCastEvent(CombatActor actor, AttackSnapshot attack)
+            : this(actor, Array.AsReadOnly(new[] { attack })) { }
+        public PlayerSkillCastEvent(CombatActor actor, IReadOnlyList<AttackSnapshot> attacks)
+        {
+            Actor = actor;
+            _attacks = attacks;
+        }
     }
 
     public sealed class PlayerSkillStateRegistry : AbstractSystem
@@ -150,6 +158,12 @@ namespace DarkFlare
                     {
                         if (flame == null) { this.GetModel<PlayerSkillsModel>().NormalCooldownEnd = Time.timeAsDouble + state.Skill.Cooldown; }
                         else { flame.SkillBoardState.RestoreCooldown(state.Skill.Cooldown); }
+                    }, () =>
+                    {
+                        if (_disposed || actor == null || !actor.IsAlive || !IsInputEnabled
+                            || this.GetSystem<GameplayPauseSystem>().IsPaused) { return false; }
+                        PlayerSkillState current = slot == -1 ? Capture(actor) : CaptureSlot(slot);
+                        return current.SourceId == expectedSourceId && current.Skill == state.Skill && current.RemainingSeconds <= 0;
                     });
             }
             finally { _casting = false; }
@@ -197,6 +211,18 @@ namespace DarkFlare
         {
             PlayerSkillStateRegistry skills = this.GetSystem<PlayerSkillStateRegistry>();
             return Array.AsReadOnly(Enumerable.Range(0, 6).Select(skills.CaptureSlot).ToArray());
+        }
+    }
+
+    public sealed class GetPlayerSkillQuery : AbstractQuery<PlayerSkillState>
+    {
+        readonly CombatActor _actor;
+        readonly int _slot;
+        public GetPlayerSkillQuery(CombatActor actor, int slot) { _actor = actor; _slot = slot; }
+        protected override PlayerSkillState OnDo()
+        {
+            PlayerSkillStateRegistry skills = this.GetSystem<PlayerSkillStateRegistry>();
+            return _slot == -1 ? skills.Capture(_actor) : skills.CaptureSlot(_slot);
         }
     }
 

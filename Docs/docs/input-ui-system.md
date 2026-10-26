@@ -17,6 +17,7 @@ Main / Shell 在模块 USS 后加载公共 `Components.uss`，按钮按下只改
 Bootstrap 和 Main 均使用原生 `PanelRenderer`，通过 `RuntimePanelView` 的版本化 `RegisterUIReloadCallback` 接收根节点。Controller 只从 `RuntimePanelView.Root` 获取视觉树，不自行克隆 UXML。原生 Renderer 持有 `visualTreeAsset`、`panelSettings` 和 `sortingOrder`，共享视图组件只协调生命周期。
 
 - `RuntimePanelView` 在根节点 `DetachFromPanelEvent` 时先通知全部消费者解绑，避免重载回调到达时旧元素已释放。重载完成后统一发布新根与新版本，避免多个窗口混用旧 Workspace 和新视觉树。
+- 同一根节点重新挂回面板时，`AttachToPanelEvent` 也会发布恢复通知，补齐不产生新版本回调的路径；替换根节点和销毁组件时移除旧根的挂载 / 脱离监听，避免过期事件干扰新界面。
 - 玩法 Controller 在重载时清理旧窗口、拖放、对比、焦点、动画与 Session 订阅，恢复 Gameplay；随后通过既有 `SceneSessionBinding` 绑定新树与当前 Session。业务数据不变。`GameMenuController.IsReady` 表示绑定就绪，测试夹具等待该状态，不假设 Scene Flow 完成的同一帧即可访问 UI。
 - 单独禁用 Renderer 保留视觉内容；禁用并重新启用宿主时 Controller 解除并重新建立订阅。首次绑定仍等待 Panel 附着，适配 Reload Scene Only。
 - Shell 保持同一 Controller 身份；重载前保存设置页、Busy、Modal、Toast、Fatal 的展示状态和确认动作，保留输入 / 暂停所有权，绑定后恢复层级与模态焦点。Settings 重绑定捕获在解绑时取消，Toast 在恢复后重新计时。
@@ -54,7 +55,7 @@ Cancel 先由 Application Shell 处理 Fatal、Busy、Modal、Settings，再交�
 
 Point / Look 在 Context 切换后会回放当前指针位置；相同控件的未变化位置不视为新设备活动，避免手柄返回时 Glyph 误切键盘。真实位置变化与按钮输入仍更新活动设备族。
 
-普通技能与六火焰技能均使用 Button 单次按下，来源 / 冷却由 Session 技能系统复核。请求保存真实输入设备和瞄准快照；上下文、重绑定、挂起、死亡和设备断开递增世代使旧请求失效。按住跨切换必须释放再按；HUD 左键操作会消费同次普攻。详见[手动技能模块](skill-board/manual-skills.md)。
+普通技能与六火焰技能使用 Button，支持短按首发和有效按住时跨冷却连放，来源 / 冷却由 Session 技能系统复核。输入服务保存真实按下控件、设备、按下代次与输入世代，每次提交读取当前瞄准；松开后不积攒补发。上下文、重绑定、挂起、死亡和设备断开使旧请求失效，跨切换必须释放再按；HUD 左键操作既消费首发，也阻止建立保持意图。详见[手动技能模块](skill-board/manual-skills.md)。
 
 旧设置保留已有覆盖；新增技能的未覆盖默认键若与旧覆盖冲突，只在运行时改用空闲 F1–F12，手柄依次尝试摇杆按下 / 十字键。后续正常设置提交会保存实际覆盖，读入时不回写历史设置。没有 Sprite 的鼠标按键使用可读文本，不显示空 Glyph。
 
@@ -77,7 +78,7 @@ Point / Look 在 Context 切换后会回放当前指针位置；相同控件的�
 | 按住对比装备 | 左 Shift | 左扳机 |
 | UI 返回 / 关闭 | Escape | 东键 |
 
-`Look` 与 `Attack` 已接入武器普通技能的手动瞄准和施法，六火焰槽使用独立输入。当前均为单次按下请求；按住连续施法属于[0.7.2 待实施范围](plan/alpha-0.7.2-optimization-plan.md)。
+`Look` 与 `Attack` 已接入武器普通技能的手动瞄准和施法，六火焰槽使用独立输入。0.7.2 第一阶段接入按住连续施法，实际阶段状态见[实施计划](plan/archive/0.7.2/plans/phase-1-execution.md)。
 
 ### 编辑器进入 Play Mode 约束
 
@@ -186,7 +187,7 @@ alpha 0.3.2 将 HUD 改为底部双资源仪表与技能状态区，背包 / 属
 - HUD、背包、商店、打造、详情和设置页已完成首版统一视觉；菜单切换仍以即时显隐为主，音频只接入首个 UI Confirm Cue。
 - 背包已支持鼠标拖拽与键盘 / 手柄拿起—放置的精确移动、单目标交换和装备换位；仍不支持旋转、堆叠、重量和自动整理。
 - 商店和打造共用首版单实例运行时数据；商人运行时库存已随 `auto` 存档恢复，但仍不支持多商人独立状态。
-- 已接入 `Attack`、`Look` 与六槽手动战斗；当前尚不支持保持按键跨冷却连续施法。
+- 已接入 `Attack`、`Look` 与六槽手动战斗；按住连放不跨窗口、暂停、输入挂起或 Session 延续。
 - PlayMode 已包含角色动画状态与阶段 0 背包体验两项项目测试；包内测试另有上游不稳定用例按原标记跳过。
 
 物品的 Enter / 手柄南键打开动作菜单，Space / 手柄西键拿起或放置；右键执行当前可见上下文动作。共享会话独占指针捕获与放置导航，设备断开和上层接管取消未提交事务。

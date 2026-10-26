@@ -33,6 +33,7 @@ namespace DarkFlare
         void OnDestroy()
         {
             Root?.UnregisterCallback<DetachFromPanelEvent>(OnDetached);
+            Root?.UnregisterCallback<AttachToPanelEvent>(OnAttached);
             Root = null;
             Reloading = null;
             Reloaded = null;
@@ -53,10 +54,20 @@ namespace DarkFlare
         {
             if (!_detached && ReferenceEquals(Root, root) && _version == version) { return; }
             if (!_detached) { Reloading?.Invoke(); }
+            Root?.UnregisterCallback<DetachFromPanelEvent>(OnDetached);
+            Root?.UnregisterCallback<AttachToPanelEvent>(OnAttached);
             Root = root;
             _version = version;
             _detached = false;
             root.RegisterCallback<DetachFromPanelEvent>(OnDetached);
+            root.RegisterCallback<AttachToPanelEvent>(OnAttached);
+            Reloaded?.Invoke();
+        }
+
+        void OnAttached(AttachToPanelEvent evt)
+        {
+            if (!ReferenceEquals(evt.target, Root) || !_detached) { return; }
+            _detached = false;
             Reloaded?.Invoke();
         }
 

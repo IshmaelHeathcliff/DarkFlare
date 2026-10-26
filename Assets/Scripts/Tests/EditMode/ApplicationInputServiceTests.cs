@@ -108,6 +108,66 @@ namespace DarkFlare.Tests
         }
 
         [Test]
+        public void HeldSkillSnapshot_TracksReleaseNewPressAndLatestAim()
+        {
+            Gamepad pad = InputSystem.AddDevice<Gamepad>();
+            PlayerSkillInput press = default;
+            _service.SkillRequested += value => press = value;
+            _service.SwitchContext(InputContext.Gameplay);
+            Press(pad.buttonWest);
+            PlayerSkillInput first = press;
+            Set(pad.rightStick, Vector2.up);
+            Assert.IsTrue(_service.TryReadSkillInput(first, true, out PlayerSkillInput latest));
+            Assert.That(Vector2.Distance(latest.Look, Vector2.up), Is.LessThan(.001f));
+            Release(pad.buttonWest);
+            Assert.IsFalse(_service.TryReadSkillInput(first, true, out _));
+            Assert.IsTrue(_service.TryReadSkillInput(first, false, out _), "短按首发仍可在帧末提交");
+            Press(pad.buttonWest);
+            Assert.IsFalse(_service.IsSkillPressCurrent(first), "旧按下不能认领新保持状态");
+            Assert.IsTrue(_service.TryReadSkillInput(press, true, out _));
+            using (_service.AcquireSuspension(InputSuspensionReason.FocusLost)) { }
+            Assert.IsFalse(_service.TryReadSkillInput(press, true, out _));
+            Release(pad.buttonWest);
+            Press(pad.buttonWest);
+            Assert.IsTrue(_service.TryReadSkillInput(press, true, out _));
+            InputSystem.RemoveDevice(pad);
+            Assert.IsFalse(_service.TryReadSkillInput(press, true, out _));
+        }
+
+        [Test]
+        public void HeldSkillBindings_KeepTwoActionsIndependent()
+        {
+            Keyboard keyboard = InputSystem.AddDevice<Keyboard>();
+            var presses = new System.Collections.Generic.List<PlayerSkillInput>();
+            _service.SkillRequested += presses.Add;
+            _service.SwitchContext(InputContext.Gameplay);
+            Press(keyboard.digit1Key);
+            Press(keyboard.digit6Key);
+            Assert.AreEqual(2, presses.Count);
+            Assert.IsTrue(_service.TryReadSkillInput(presses[0], true, out _));
+            Assert.IsTrue(_service.TryReadSkillInput(presses[1], true, out _));
+            Release(keyboard.digit1Key);
+            Assert.IsFalse(_service.TryReadSkillInput(presses[0], true, out _));
+            Assert.IsTrue(_service.TryReadSkillInput(presses[1], true, out _));
+        }
+
+        [Test]
+        public void HeldMouseSkill_ReadsCurrentPointerWithoutCreatingMorePresses()
+        {
+            Mouse mouse = InputSystem.AddDevice<Mouse>();
+            int requests = 0;
+            PlayerSkillInput press = default;
+            _service.SkillRequested += value => { press = value; requests++; };
+            _service.SwitchContext(InputContext.Gameplay);
+            Set(mouse.position, new Vector2(10, 20));
+            Press(mouse.leftButton);
+            Set(mouse.position, new Vector2(150, 250));
+            Assert.IsTrue(_service.TryReadSkillInput(press, true, out PlayerSkillInput latest));
+            Assert.AreEqual(new Vector2(150, 250), latest.Pointer);
+            Assert.AreEqual(1, requests);
+        }
+
+        [Test]
         public void SkillBindings_AcceptMouseButtonsAndRejectConflictsWithNormalAttack()
         {
             InputSystem.AddDevice<Mouse>();

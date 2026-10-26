@@ -229,7 +229,8 @@ namespace DarkFlare.Tests
             WorldMapRuntime maps = host.CurrentSession.Architecture.GetUtility<WorldMapRuntime>();
             yield return Change(host, "map:wilderness", "arrival");
             yield return Change(host, "map:town", "return");
-            for (int i = 0; i < 120 && host.SaveCoordinator.IsBusy; i++) { yield return null; }
+            float saveDeadline = Time.realtimeSinceStartup + 30f;
+            while (host.SaveCoordinator.IsBusy && Time.realtimeSinceStartup < saveDeadline) { yield return null; }
             Assert.IsFalse(host.SaveCoordinator.IsBusy);
             var snapshots = new SessionSnapshotSource(host.CurrentSession, host.ContentCatalog, maps.Active.Spawner);
             MapStateDto previous = snapshots.Capture().Payload.Run.FrozenMaps.Single(map => map.MapId == "map:wilderness");

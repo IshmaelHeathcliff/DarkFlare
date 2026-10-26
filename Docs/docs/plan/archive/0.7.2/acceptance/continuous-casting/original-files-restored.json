@@ -1,0 +1,23 @@
+[
+  {
+    "Domain": "persistent",
+    "Path": "C:\\Users\\darkf\\AppData\\LocalLow\\DefaultCompany\\DarkFlare\\DarkFlare\\Saves\\auto\\1.save",
+    "OriginalSha256": "5763D8F5F392AEFC5262B89124CD880A7D04047CA5F1F56136A1760C08EB8399",
+    "ActualSha256": "5763D8F5F392AEFC5262B89124CD880A7D04047CA5F1F56136A1760C08EB8399",
+    "Unchanged": true
+  },
+  {
+    "Domain": "temporary",
+    "Path": "C:\\Users\\darkf\\AppData\\Local\\Temp\\DefaultCompany\\DarkFlare\\DarkFlare\\PlayModeTests\\61894efbccdf4576a4ae98389d0452d1\\Saves\\auto\\3.save",
+    "OriginalSha256": "92122B0AFA465877BC98D6E134E422C954C96C1C273F1CCEDB22C58A5E2BC743",
+    "ActualSha256": "92122B0AFA465877BC98D6E134E422C954C96C1C273F1CCEDB22C58A5E2BC743",
+    "Unchanged": true
+  },
+  {
+    "Domain": "temporary",
+    "Path": "C:\\Users\\darkf\\AppData\\Local\\Temp\\DefaultCompany\\DarkFlare\\DarkFlare\\PlayModeTests\\61894efbccdf4576a4ae98389d0452d1\\Saves\\auto\\4.save",
+    "OriginalSha256": "33B4CA6B6A0F18A27BF7F848C6B71240EB15F00FDCFA557A51009C8190A47940",
+    "ActualSha256": "33B4CA6B6A0F18A27BF7F848C6B71240EB15F00FDCFA557A51009C8190A47940",
+    "Unchanged": true
+  }
+]

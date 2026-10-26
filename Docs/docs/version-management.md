@@ -41,7 +41,7 @@
 
 ## 当前状态与版本来源
 
-2026-10-25，当前运行版本为 `0.7.1-alpha.5`；[0.7.2-alpha 体验优化](plan/alpha-0.7.2-optimization-plan.md)进入规划，尚未实施，不因计划建立而修改 `bundleVersion`。当前 core v13、Save / Settings Schema 12 / 1、地图 V4；[0.7 总计划](./plan/alpha-0.7-plan.md)继续活动。
+2026-10-26，当前运行版本为 `0.7.2-alpha.1`，阶段一实现及验证完成，见[验收](plan/archive/0.7.2/acceptance/continuous-casting/README.md)。当前 core v14、Save / Settings Schema 12 / 1、地图 V4；[0.7.2 总计划](plan/alpha-0.7.2-optimization-plan.md)与[0.7 总计划](plan/alpha-0.7-plan.md)继续活动。
 
 2026-09-29 的 `0.7.0-alpha.2` 历史验收为核心定向 52/52、版本域及存档定向 32/32、完整 EditMode 882/882、PlayMode 102/102，均为 0 失败 / 跳过。见[0.7.0 执行与验收](plan/archive/0.7.0/plans/alpha-0.7.0-semver-plan.md)；该版 Player、真实设备、跨进程及性能矩阵未执行。
 
@@ -88,8 +88,8 @@ bool currentParsed = GameVersion.Current.TryGetSemanticVersion(out SemanticVersi
 
 | 版本域 | 当前基线 | 更新条件 |
 | --- | --- | --- |
-| GameVersion | `0.7.1-alpha.5` | 已验证的应用基线、小版本或阶段交付 |
-| ContentVersion | core v13 | 正式内容目录的语义变化；评估内容迁移 |
+| GameVersion | `0.7.2-alpha.1` | 已验证的应用基线、小版本或阶段交付 |
+| ContentVersion | core v14 | 正式内容目录的语义变化；评估内容迁移 |
 | SaveSchemaVersion | 12 | 存档 DTO 结构与迁移合同变化 |
 | SettingsSchemaVersion | 1 | 用户设置结构与迁移合同变化 |
 | 地图 FormatVersion | V4 | 地图交换格式变化 |
@@ -109,4 +109,3 @@ bool currentParsed = GameVersion.Current.TryGetSemanticVersion(out SemanticVersi
 6. 需要发布标签时使用 `v<完整版本>`，例如 `v0.7.0-alpha.2`，指向已验收交付提交。发布记录至少包含版本、提交、范围、验证结果、兼容影响及未执行项；构建 Player 时另记构建身份和哈希。
 
 阶段计划中的目标版本与源码实际版本必须区分。阶段失败、功能未完成或只有文档更新时，不把目标版本写成已交付；规则确定后也不改写旧验收数字。测试遵守[测试维护规范](./testing/test-maintenance.md)，不为每个版本建立永久验收测试套件。只有用户针对当前任务明确要求 Player 验收时才构建 Player。
-

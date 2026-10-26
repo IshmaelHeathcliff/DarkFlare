@@ -125,7 +125,9 @@ namespace DarkFlare.Tests
             Button deleteSave = FindButton("front-end-delete-save");
             Button modalConfirm = FindButton("application-modal-retry");
             VisualElement modal = FindElement("application-modal");
+            yield return WaitUntil(() => deleteSave.enabledInHierarchy, "等待删除入口完成存档预检");
             InvokeButton(deleteSave);
+            yield return WaitUntil(() => modal.resolvedStyle.display == DisplayStyle.Flex, "等待删除确认可见");
             Assert.AreEqual(DisplayStyle.Flex, modal.resolvedStyle.display);
             SceneFlowContinuePreparation beforeConfirmation = null;
             yield return host.PrepareContinueAsync(default)

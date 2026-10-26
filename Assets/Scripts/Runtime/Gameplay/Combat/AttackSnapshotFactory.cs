@@ -10,7 +10,7 @@ namespace DarkFlare
             ProjectileSkillDefinition skill,
             EquipmentModel equipment)
         {
-            if (attacker == null || skill == null)
+            if (attacker == null || skill == null || !skill.HasValidProjectileSettings)
             {
                 return false;
             }

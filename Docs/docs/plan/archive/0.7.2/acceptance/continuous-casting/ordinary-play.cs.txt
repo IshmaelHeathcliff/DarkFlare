@@ -1,0 +1,71 @@
+using System;
+using System.Linq;
+using System.Reflection;
+using System.Threading.Tasks;
+using DarkFlare;
+using UnityEngine;
+using UnityEngine.UIElements;
+
+public static class OrdinaryPlay
+{
+    public static async Task<object> NewSave()
+    {
+        return await Run(GameStartIntent.NewGame);
+    }
+
+    public static async Task<object> ContinueSave()
+    {
+        return await Run(GameStartIntent.Continue);
+    }
+
+    static async Task<object> Run(GameStartIntent intent)
+    {
+        double deadline = Time.realtimeSinceStartupAsDouble + 30;
+        while ((!ApplicationHost.HasCurrent || ApplicationHost.Current.SceneFlow == null
+                || ApplicationHost.Current.SceneFlow.State != GameFlowState.FrontEnd
+                || ApplicationHost.Current.SaveCoordinator.IsBusy)
+            && Time.realtimeSinceStartupAsDouble < deadline)
+        {
+            await Task.Delay(30);
+        }
+        ApplicationHost host = ApplicationHost.Current;
+        await host.PlatformLifecycle.HandleFocusChangedAsync(true, default);
+        Button continueButton = null;
+        deadline = Time.realtimeSinceStartupAsDouble + 30;
+        while (intent == GameStartIntent.Continue && (continueButton == null || !continueButton.enabledInHierarchy)
+            && Time.realtimeSinceStartupAsDouble < deadline)
+        {
+            continueButton = UnityEngine.Object.FindObjectsByType<RuntimePanelView>(FindObjectsInactive.Exclude)
+                .Select(view => view.Root?.Q<Button>("front-end-continue")).FirstOrDefault(button => button != null);
+            await Task.Delay(30);
+        }
+        if (intent == GameStartIntent.Continue && (continueButton == null || !continueButton.enabledInHierarchy))
+        {
+            throw new InvalidOperationException("继续按钮未通过预检");
+        }
+        string root = (string)typeof(ApplicationHost).GetProperty("SaveRootPath", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(host);
+        var paths = typeof(ApplicationHost).Assembly.GetType("DarkFlare.ApplicationDataPathProviderFactory");
+        string settingsRoot = ((ISettingsPathProvider)paths.GetMethod("CreateSettingsPathProvider", BindingFlags.Static | BindingFlags.NonPublic).Invoke(null, null)).RootPath;
+        if (!root.StartsWith(Application.persistentDataPath, StringComparison.OrdinalIgnoreCase))
+        {
+            throw new InvalidOperationException("普通 Play 未使用正式目录: " + root);
+        }
+        bool continueEnabled = continueButton?.enabledInHierarchy ?? false;
+        SceneFlowResult start = await host.SceneFlow.RequestAsync(SceneFlowRequest.StartGame(intent));
+        if (!start.Succeeded) { throw new InvalidOperationException("启动失败", start.Exception); }
+        SaveOperationResult save = await host.SessionSaveFacade.SaveAutoAsync();
+        if (!save.Succeeded) { throw new InvalidOperationException("保存失败: " + save.ErrorCode, save.Exception); }
+        IArchitecture architecture = host.CurrentSession.Architecture;
+        InventoryModel inventory = architecture.GetModel<InventoryModel>();
+        string[] itemIds = inventory.Grid.Placements.Keys.Select(i => i.InstanceId).OrderBy(i => i).ToArray();
+        PlayerController player = UnityEngine.Object.FindAnyObjectByType<PlayerController>();
+        string actorId = player.Actor.ActorId;
+        string weaponId = architecture.GetModel<EquipmentModel>().GetWeapon(player.Actor)?.InstanceId;
+        int gold = inventory.Gold;
+        int content = host.ContentCatalog.ContentVersion;
+        SceneFlowResult returned = await host.SceneFlow.RequestAsync(SceneFlowRequest.ReturnToFrontEnd());
+        if (!returned.Succeeded) { throw new InvalidOperationException("返回失败", returned.Exception); }
+        return new { intent = intent.ToString(), root, settingsRoot, version = Application.version, content,
+            continueEnabled, save.CommitSequence, actorId, weaponId, gold, itemIds, returned = returned.Succeeded };
+    }
+}

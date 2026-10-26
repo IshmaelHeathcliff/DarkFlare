@@ -21,14 +21,22 @@ namespace DarkFlare
     {
         public SkillCastStatus Status { get; }
 
-        public ProjectileController Projectile { get; }
+        readonly IReadOnlyList<ProjectileController> _projectiles;
+        public IReadOnlyList<ProjectileController> Projectiles => _projectiles ?? Array.Empty<ProjectileController>();
+        public ProjectileController Projectile => Projectiles.Count > 0 ? Projectiles[0] : null;
 
         public bool IsSuccess => Status == SkillCastStatus.Success;
 
         public SkillCastResult(SkillCastStatus status, ProjectileController projectile = null)
         {
             Status = status;
-            Projectile = projectile;
+            _projectiles = projectile != null ? Array.AsReadOnly(new[] { projectile }) : Array.Empty<ProjectileController>();
+        }
+
+        internal SkillCastResult(ProjectileController[] projectiles)
+        {
+            Status = SkillCastStatus.Success;
+            _projectiles = Array.AsReadOnly(projectiles);
         }
     }
 
@@ -41,12 +49,14 @@ namespace DarkFlare
         IReadOnlyList<ModifierInstance> _localModifiers;
         string _flameId;
         Action _commitCooldown;
+        Func<bool> _validateSource;
 
         internal static SkillCastResult Perform(IArchitecture architecture, CombatActor owner, ProjectileSkillDefinition skill,
-            Vector3 position, Vector2 direction, IReadOnlyList<ModifierInstance> modifiers, string flameId, Action commitCooldown)
+            Vector3 position, Vector2 direction, IReadOnlyList<ModifierInstance> modifiers, string flameId,
+            Action commitCooldown, Func<bool> validateSource)
         {
             var command = new FireProjectileCommand(owner, skill, position, direction)
-            { _localModifiers = modifiers, _flameId = flameId, _commitCooldown = commitCooldown };
+            { _localModifiers = modifiers, _flameId = flameId, _commitCooldown = commitCooldown, _validateSource = validateSource };
             return architecture.SendCommand(command);
         }
 
@@ -96,36 +106,46 @@ namespace DarkFlare
             }
 
             int seed = this.GetSystem<GameplayRandomSystem>().NextSeed(GameplayRandomChannel.PlayerAttack);
-            AttackSnapshot attack = AttackSnapshotFactory.CreateProjectile(
-                _owner,
-                _skill,
-                equipment,
-                seed, _localModifiers, _flameId);
-
-            if (attack == null)
+            var attacks = new AttackSnapshot[_skill.ProjectileCount];
+            for (int i = 0; i < attacks.Length; i++)
             {
-                return Reject(
-                    SkillCastStatus.InvalidDamageSource,
-                    SkillCastRejectionReason.InvalidDamageSource);
+                attacks[i] = AttackSnapshotFactory.CreateProjectile(_owner, _skill, equipment,
+                    AttackRandomRolls.ProjectileSeed(seed, i), _localModifiers, _flameId);
+                if (attacks[i] == null)
+                {
+                    return Reject(SkillCastStatus.InvalidDamageSource, SkillCastRejectionReason.InvalidDamageSource);
+                }
             }
 
-            ProjectileController projectile = this.GetSystem<SpawnSystem>().SpawnProjectile(
-                _skill,
-                _position,
-                _direction,
-                attack);
+            SpawnSystem spawner = this.GetSystem<SpawnSystem>();
+            object mapOwner = this.GetUtility<SessionObjectRegistry>().MapOwner;
+            ProjectileController[] projectiles = spawner.PrepareProjectiles(_skill, _position, _direction, attacks);
 
-            if (projectile != null)
+            if (projectiles != null)
             {
+                if (_owner == null || !_owner.IsAlive || !_owner.isActiveAndEnabled
+                    || !ReferenceEquals(mapOwner, this.GetUtility<SessionObjectRegistry>().MapOwner)
+                    || !(_validateSource?.Invoke() ?? true))
+                {
+                    spawner.ReleaseProjectiles(projectiles);
+                    return new SkillCastResult(SkillCastStatus.InvalidSource);
+                }
+                permission = this.SendQuery(new GetActorActionsQuery(_owner));
+                if (!permission.CanCast || _skill.DamageSource == ProjectileDamageSource.EquippedWeapon && !permission.CanAttack)
+                {
+                    spawner.ReleaseProjectiles(projectiles);
+                    return Reject(SkillCastStatus.ActionBlocked, SkillCastRejectionReason.ActionBlocked);
+                }
                 CombatResourceSnapshot before = _owner.Resources;
                 if (!_owner.TrySpendMana(_skill.ManaCost))
                 {
-                    UnityEngine.Object.Destroy(projectile.gameObject);
+                    spawner.ReleaseProjectiles(projectiles);
                     return Reject(
                         SkillCastStatus.InsufficientMana,
                         SkillCastRejectionReason.InsufficientMana);
                 }
                 _commitCooldown?.Invoke();
+                foreach (ProjectileController projectile in projectiles) { projectile.Launch(); }
                 try { this.GetSystem<CombatSystem>().PublishResourceChanges(_owner, before, ActorResourceChangeReason.SkillCost); }
                 finally
                 {
@@ -135,11 +155,11 @@ namespace DarkFlare
                         if (_commitCooldown != null)
                         {
                             try { this.SendEvent(new PlayerSkillsChangedEvent()); }
-                            finally { this.SendEvent(new PlayerSkillCastEvent(_owner, attack)); }
+                            finally { this.SendEvent(new PlayerSkillCastEvent(_owner, Array.AsReadOnly(attacks))); }
                         }
                     }
                 }
-                return new SkillCastResult(SkillCastStatus.Success, projectile);
+                return new SkillCastResult(projectiles);
             }
 
             return Reject(SkillCastStatus.SpawnFailed, SkillCastRejectionReason.SpawnFailed);

@@ -3,13 +3,19 @@
 Alpha 0.5.5 已联验 Schema 5 导航意图、城镇 / 野外跨进程继续与真实 Schema 4 夹具恢复，原输入保持不变；1000 单位的快照 / 序列化 / 持久保存 / 继续恢复耗时和托管内存观察峰值见 [I 保存测量](../plan/archive/0.5.5/acceptance/maps/i/performance.md)。
 
 > 状态：已实现本地存档闭环；`alpha 0.4.0` 增加数量及金币物品迁移
-> 最近更新：2026-10-15；core v13 / Save Schema 12 接入手动技能及实例冷却
+> 最近更新：2026-10-25；接入 core v14 内容兼容，Save Schema 12 保持，普通 Play 与自动化测试路径分离
 
 ## 模块目标
 
 本模块为当前 Main 玩法 Session 提供可验证的本地存档闭环：运行中捕获一致快照、提交 `auto` 槽位、在加载 Main 前完成读档预检、以独立 Restore 事务建立 Session，并在返回前台或应用退出前完成受控保存。
 
 正式存档只写入 `Application.persistentDataPath/DarkFlare/Saves`。玩法 Model、System、Command、Controller 和 Session Initializer 不直接访问文件；UI 只调用当前 Session 的 `SessionSaveFacade`。
+
+### Editor 试玩与测试隔离
+
+2026-10-25 修复了普通 Play 被测试初始化切换到随机临时路径的问题。`PlayModeDataRunSetup` 通过 Test Framework 的程序集级 PrebuildSetup 声明当前测试运行；只有此标记有效时，早期运行时入口才安装临时设置 / 存档路径。普通 Play 使用固定正式路径，测试程序集加载本身不表示正在跑测试。
+
+测试结束、错误或退出测试 Play 时解除标记并释放本轮路径安装；没有测试身份时，显式重装拒绝执行。普通 Play 两轮“保存 → 返回主菜单 → 停止 → 再进入 → 继续”已验证同一路径和物品实例身份，原正式文件已恢复并核对 SHA-256。实现与阶段总验收见[前置记录](../plan/archive/0.7.2/plans/save-path-isolation-plan.md)。不自动认领或覆盖历史临时档；直接点击 Unity Stop 不保证等待异步保存的边界保持不变。
 
 ## 分层与职责
 
@@ -48,6 +54,8 @@ Schema 12 将玩家六火焰槽和普通技能剩余冷却放入 `Run.Player.Ski
 保存捕获等待切图稳定，再取得状态时钟；切图等待既有状态捕获完成。写盘只使用已冻结 DTO，允许与后续模拟并行。返回前台先等既有保存结束，再提交退出检查点。FrontEnd 摘要预检与 Continue 共用协调器，继续请求等待摘要预检结束。完整冻结和所有权合同见[双地图模块](../maps/world-map-lifecycle.md)。
 
 ## 消耗品保存与兼容
+
+core 13→14 接受默认大剑技能的三投射物 / 穿透配置增强，所有已登记早期内容版本可接续到 14。保持原物品、槽位、成长、冷却与随机状态，不修改 Save Schema 12；输入保持状态和飞行中投射物继续不入档。
 
 统一使用事务只保存已提交的物品余量、角色资源和状态快照，不持久化半完成请求，也不会在读取时重放即时回血 / 回蓝。来源物品用尽后，其临时状态仍独立保存恢复。core v4 → v5 是追加内容迁移，保持 Schema 3，旧商人库存原样恢复，不补发新增药水。独立 Player 的退出重启与真实历史文件验收见[alpha 0.4.2 综合验收](../plan/archive/0.4.2/acceptance/item-use-acceptance/README.md)。
 

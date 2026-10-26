@@ -34,6 +34,12 @@ namespace DarkFlare
                 ToUnitInterval(critical));
         }
 
+        public static int ProjectileSeed(int rootSeed, int index)
+        {
+            if (index < 0) { throw new System.ArgumentOutOfRangeException(nameof(index)); }
+            return index == 0 ? rootSeed : unchecked((int)Mix(rootSeed, 0x91E10DA5u ^ (uint)index));
+        }
+
         static uint Mix(int rootSeed, uint purpose)
         {
             unchecked

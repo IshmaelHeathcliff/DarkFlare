@@ -30,7 +30,7 @@ namespace DarkFlare
 
         [SerializeField]
         [MinValue(0.05f)]
-        [LabelText("自动释放间隔")]
+        [LabelText("施法冷却")]
         float _cooldown = 0.6f;
 
         [SerializeField]
@@ -57,6 +57,15 @@ namespace DarkFlare
         [MinValue(0.1f)]
         [LabelText("投射物寿命")]
         float _projectileLifetime = 2f;
+
+        [SerializeField, PropertyRange(1, 32), LabelText("投射物数量")]
+        int _projectileCount = 1;
+
+        [SerializeField, PropertyRange(0, 360), LabelText("总散射角度")]
+        float _spreadAngleDegrees;
+
+        [SerializeField, PropertyRange(0, 32), LabelText("额外穿透目标数")]
+        int _pierceCount;
 
         [SerializeField]
         [LabelText("自定义技能标签")]
@@ -90,6 +99,30 @@ namespace DarkFlare
         public float ProjectileRadius => _projectileRadius;
 
         public float ProjectileLifetime => _projectileLifetime;
+
+        public int ProjectileCount => _projectileCount;
+        public float SpreadAngleDegrees => _spreadAngleDegrees;
+        public int PierceCount => _pierceCount;
+        public bool HasValidProjectileSettings => _projectileCount >= 1 && _projectileCount <= 32
+            && _pierceCount >= 0 && _pierceCount <= 32
+            && !float.IsNaN(_spreadAngleDegrees) && !float.IsInfinity(_spreadAngleDegrees)
+            && _spreadAngleDegrees >= 0 && _spreadAngleDegrees <= 360;
+
+        public float GetProjectileAngle(int index)
+        {
+            if (!HasValidProjectileSettings || index < 0 || index >= _projectileCount)
+            {
+                throw new ArgumentOutOfRangeException(nameof(index));
+            }
+            if (_projectileCount == 1) { return 0; }
+            int slot = index;
+            if ((_projectileCount & 1) != 0)
+            {
+                int middle = _projectileCount / 2;
+                slot = index == 0 ? middle : index <= middle ? middle - index : index;
+            }
+            return -_spreadAngleDegrees * .5f + _spreadAngleDegrees * slot / (_projectileCount - 1);
+        }
 
         public IReadOnlyList<TagDefinition> Tags => _tags;
 

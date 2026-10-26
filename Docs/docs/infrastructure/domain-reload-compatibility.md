@@ -1,5 +1,7 @@
 # Domain Reload 兼容检查
 
+2026-10-25 修复普通 Editor Play 执行测试临时路径安装的问题，见[0.7.2-alpha.1 前置记录](../plan/archive/0.7.2/plans/save-path-isolation-plan.md)。测试身份由 Test Framework 的 PrebuildSetup 声明，结束 / 错误 / 返回 Edit Mode 时清理；普通 Play 不安装隔离路径。已分别观察自动化路径与真实两轮普通启动保存 / 继续，后者根目录和物品身份一致。下述历史矩阵保留其原环境含义，不能替代本阶段总回归。
+
 2026-09-11–12，Unity `6000.6.0f1`，游戏版本 `0.3.4-alpha`。范围为 Editor Play Mode 生命周期；升级 API 与字体修复见[Unity 6.6 升级记录](./unity-6.6-upgrade.md)。
 
 ## 手动刷新脚本域

@@ -81,6 +81,8 @@ namespace DarkFlare
         bool _closed;
         bool _waitForInteractRelease;
         readonly HashSet<InputAction> _blockedSkills = new HashSet<InputAction>();
+        readonly int[] _skillPressIds = new int[7];
+        readonly InputControl[] _skillControls = new InputControl[7];
         int _pointerConsumedFrame = -1;
         Vector2 _lastGamepadAim = Vector2.right;
         public int GameplayEpoch { get; private set; }
@@ -88,6 +90,27 @@ namespace DarkFlare
         public event Action<PlayerSkillInput> SkillRequested;
         public void ConsumeGameplayPointer() { _pointerConsumedFrame = Time.frameCount; }
         public void ResetAim() { _lastGamepadAim = Vector2.right; }
+        public bool IsSkillPressCurrent(PlayerSkillInput press)
+        {
+            int index = press.Slot + 1;
+            return IsGameplayEnabled && index >= 0 && index < _skillPressIds.Length
+                && press.Epoch == GameplayEpoch && press.PressId == _skillPressIds[index];
+        }
+
+        public bool TryReadSkillInput(PlayerSkillInput press, bool requireHeld, out PlayerSkillInput current)
+        {
+            current = default;
+            if (!IsSkillPressCurrent(press) || requireHeld && !IsPressed(_skillControls[press.Slot + 1])) { return false; }
+            current = new PlayerSkillInput(press.Slot, press.Epoch, press.Family,
+                _actions.UI.Point.ReadValue<Vector2>(), _lastGamepadAim, press.PointerButton, press.PressId);
+            return true;
+        }
+
+        static bool IsPressed(InputControl control)
+        {
+            return control != null && control.device.added
+                && control is UnityEngine.InputSystem.Controls.ButtonControl button && button.isPressed;
+        }
         public void InvalidateSkills()
         {
             GameplayEpoch++;
@@ -95,6 +118,7 @@ namespace DarkFlare
             {
                 if (IsSkillAction(action) && IsHeld(action)) { _blockedSkills.Add(action); }
             }
+            Array.Clear(_skillControls, 0, _skillControls.Length);
         }
 
         static bool IsSkillAction(InputAction action)
@@ -107,12 +131,19 @@ namespace DarkFlare
         {
             foreach (InputControl control in action.controls)
             {
-                if (control is UnityEngine.InputSystem.Controls.ButtonControl button && button.isPressed) { return true; }
+                if (IsPressed(control)) { return true; }
             }
             return false;
         }
 
-        void CheckSkillRelease() { _blockedSkills.RemoveWhere(action => !IsHeld(action)); }
+        void CheckSkillRelease()
+        {
+            _blockedSkills.RemoveWhere(action => !IsHeld(action));
+            for (int i = 0; i < _skillControls.Length; i++)
+            {
+                if (!IsPressed(_skillControls[i])) { _skillControls[i] = null; }
+            }
+        }
 
         public void WaitForInteractRelease()
         {
@@ -1053,12 +1084,23 @@ namespace DarkFlare
         {
             if (context.performed && context.action == _actions.Player.Look && context.ReadValue<Vector2>().sqrMagnitude > 0.01f)
             { _lastGamepadAim = context.ReadValue<Vector2>().normalized; }
+            if (IsSkillAction(context.action) && context.canceled && !IsHeld(context.action))
+            {
+                int index = context.action.name == "Attack" ? 0 : int.Parse(context.action.name.Substring(5));
+                _skillControls[index] = null;
+            }
             if (IsSkillAction(context.action) && context.performed && IsGameplayEnabled
                 && !_blockedSkills.Contains(context.action))
             {
                 int slot = context.action.name == "Attack" ? -1 : int.Parse(context.action.name.Substring(5)) - 1;
-                SkillRequested?.Invoke(new PlayerSkillInput(slot, GameplayEpoch, GetDeviceFamily(context.control.device),
-                    _actions.UI.Point.ReadValue<Vector2>(), _lastGamepadAim, context.control.device is Mouse));
+                int index = slot + 1;
+                if (!IsPressed(_skillControls[index]))
+                {
+                    _skillControls[index] = context.control;
+                    int pressId = ++_skillPressIds[index];
+                    SkillRequested?.Invoke(new PlayerSkillInput(slot, GameplayEpoch, GetDeviceFamily(context.control.device),
+                        _actions.UI.Point.ReadValue<Vector2>(), _lastGamepadAim, context.control.device is Mouse, pressId));
+                }
             }
             if (context.phase != InputActionPhase.Performed || context.control == null)
             {

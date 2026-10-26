@@ -1,0 +1,42 @@
+{
+  "EditMode": {
+    "total": 982,
+    "passed": 982,
+    "failed": 0,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "PlayMode": {
+    "total": 112,
+    "passed": 112,
+    "failed": 0,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "OrdinaryPlay": {
+    "BothContinueEnabled": true,
+    "StableSaveRoot": true,
+    "StableSettingsRoot": true,
+    "StableActorWeaponInventoryAndGold": true,
+    "CommitSequences": [
+      2,
+      4
+    ],
+    "ReturnedToFrontEnd": true
+  },
+  "OriginalFilesRestored": [
+    {
+      "Domain": "persistent",
+      "Unchanged": true
+    },
+    {
+      "Domain": "temporary",
+      "Unchanged": true
+    },
+    {
+      "Domain": "temporary",
+      "Unchanged": true
+    }
+  ],
+  "PlayerBuilt": false
+}

@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -23,6 +25,11 @@ namespace DarkFlare
         uint _lifetimeVersion;
         WorldSortParticipant _sortParticipant;
         string _visualIdentity;
+        readonly HashSet<CombatActor> _hitTargets = new HashSet<CombatActor>();
+        int _remainingTargets;
+        float _speed;
+
+        public AttackSnapshot Attack => _attack;
 
         public IArchitecture GetArchitecture()
         {
@@ -34,18 +41,32 @@ namespace DarkFlare
             Vector2 direction,
             AttackSnapshot attack)
         {
+            Prepare(skill, direction, attack);
+            Launch();
+        }
+
+        internal void Prepare(ProjectileSkillDefinition skill, Vector2 direction, AttackSnapshot attack)
+        {
+            if (skill == null || attack == null || !skill.HasValidProjectileSettings || !isActiveAndEnabled)
+            {
+                throw new ArgumentException("投射物技能或攻击快照无效");
+            }
             EnsureComponents();
             _attack = attack;
+            _initialized = false;
+            _collider.enabled = false;
+            _rigidbody.linearVelocity = Vector2.zero;
+            _hitTargets.Clear();
+            _remainingTargets = 1 + skill.PierceCount;
+            _speed = skill.ProjectileSpeed;
             _sortParticipant = GetComponent<WorldSortParticipant>();
             if (_sortParticipant == null) { _sortParticipant = gameObject.AddComponent<WorldSortParticipant>(); }
             _visualIdentity = this.GetUtility<VisualEffectPool>().NextIdentity(attack.AttackerId);
             _sortParticipant.ConfigureExplicit(WorldSortCategory.Effect, _visualIdentity, transform);
             this.GetUtility<WorldSortingSystem>().Register(_sortParticipant);
             _direction = direction.sqrMagnitude > 0f ? direction.normalized : Vector2.right;
-            _initialized = true;
             transform.right = _direction;
             _collider.radius = skill.ProjectileRadius;
-            _rigidbody.linearVelocity = _direction * skill.ProjectileSpeed;
             _lifetimeScope?.BeginStop();
             _lifetimeScope = ComponentLifecycle.CreateScope(
                 this,
@@ -58,6 +79,13 @@ namespace DarkFlare
                 failurePolicy: LifecycleTaskFailurePolicy.ReportAndStopScope);
         }
 
+        internal void Launch()
+        {
+            _initialized = true;
+            _collider.enabled = true;
+            _rigidbody.linearVelocity = _direction * _speed;
+        }
+
         public bool TryHit(CombatActor target, out DamageResult result)
         {
             result = null;
@@ -66,25 +94,49 @@ namespace DarkFlare
                 || target == null
                 || _attack == null
                 || target.Team == _attack.AttackerTeam
-                || !target.IsAlive)
+                || !target.IsAlive
+                || !target.isActiveAndEnabled
+                || !IsRegistered(target)
+                || !_hitTargets.Add(target))
             {
                 return false;
             }
 
-            result = this.SendCommand(new ApplyDamageCommand(_attack, target));
-            _initialized = false;
-
-            if (CombatEffectPalette.ShouldPlayProjectileImpact(result))
+            bool exhausted = --_remainingTargets == 0;
+            if (exhausted)
             {
-                this.GetUtility<VisualEffectPool>().TryPlay(
-                    _impactEffectPrefab,
-                    transform.position,
-                    CombatEffectPalette.ArcaneProjectileTint,
-                    new WorldEffectContext(this.GetUtility<WorldSortingSystem>(), _visualIdentity + ":impact", transform.position));
+                _initialized = false;
+                _collider.enabled = false;
             }
 
-            Destroy(gameObject);
-            return true;
+            try
+            {
+                result = this.SendCommand(new ApplyDamageCommand(_attack, target));
+
+                if (CombatEffectPalette.ShouldPlayProjectileImpact(result))
+                {
+                    this.GetUtility<VisualEffectPool>().TryPlay(
+                        _impactEffectPrefab,
+                        transform.position,
+                        CombatEffectPalette.ArcaneProjectileTint,
+                        new WorldEffectContext(this.GetUtility<WorldSortingSystem>(), _visualIdentity + ":impact", transform.position));
+                }
+
+                return true;
+            }
+            finally
+            {
+                if (exhausted) { _sessionObjects.Release(gameObject); }
+            }
+        }
+
+        bool IsRegistered(CombatActor target)
+        {
+            foreach (CombatActor actor in this.GetModel<CombatModel>().GetActorsByTeam(target.Team))
+            {
+                if (actor == target) { return true; }
+            }
+            return false;
         }
 
         void Awake()
@@ -153,7 +205,7 @@ namespace DarkFlare
 
             if (this != null && version == _lifetimeVersion)
             {
-                Destroy(gameObject);
+                _sessionObjects.Release(gameObject);
             }
         }
     }

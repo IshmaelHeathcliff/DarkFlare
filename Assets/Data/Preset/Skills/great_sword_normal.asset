@@ -16,9 +16,9 @@ MonoBehaviour:
   _displayName: "\u5927\u5251\u666E\u901A\u653B\u51FB"
   _projectilePrefab:
     m_AssetGUID: 3b6e21dfbc7f54e4f9e0312efd6c6af5
-    m_SubObjectName:
-    m_SubObjectType:
-    m_SubObjectGUID:
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
     m_EditorAssetChanged: 0
   _cooldown: 0.6
   _manaCost: 1
@@ -26,6 +26,9 @@ MonoBehaviour:
   _projectileSpeed: 12
   _projectileRadius: 0.16
   _projectileLifetime: 2
+  _projectileCount: 3
+  _spreadAngleDegrees: 20
+  _pierceCount: 1
   _tags: []
   _damageSource: 1
   _baseDamages: []

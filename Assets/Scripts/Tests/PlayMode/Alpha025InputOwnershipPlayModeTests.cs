@@ -143,6 +143,22 @@ namespace DarkFlare.Tests
                 }
                 yield return null;
                 Assert.IsFalse(shell.IsSettingsOpen);
+                view.Renderer.visualTreeAsset = source;
+                yield return null;
+                yield return null;
+                Object.Destroy(replacement);
+                replacement = null;
+                yield return null;
+                yield return null;
+                shell.OpenSettings();
+                yield return null;
+                Assert.IsTrue(shell.IsSettingsOpen, "恢复原视觉树后仍须完成界面绑定");
+                using (NavigationSubmitEvent submit = NavigationSubmitEvent.GetPooled())
+                {
+                    view.Root.Q<Button>("settings-back").SendEvent(submit);
+                }
+                yield return null;
+                Assert.IsFalse(shell.IsSettingsOpen);
             }
             finally
             {

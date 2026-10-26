@@ -1,0 +1,59 @@
+{
+  "success": true,
+  "command": "command script run",
+  "data": {
+    "command": "script run",
+    "parameters": {
+      "file": "Library/AgentValidation/alpha072/EditorFinalCheck.cs",
+      "entry": "EditorFinalCheck.Read"
+    },
+    "result": {
+      "diagnostics": [],
+      "compileMs": 116,
+      "executeMs": 14,
+      "assemblyName": "PipelineRunScript_EditorFinalCheck_2f17a81650f94d9f89c93a56c5901a8c",
+      "success": true,
+      "result": {
+        "unity": "6000.6.7f1",
+        "version": "0.7.2-alpha.1",
+        "versionPersisted": true,
+        "content": 14,
+        "contentValid": true,
+        "contentIssues": [],
+        "saveSchema": 12,
+        "settingsSchema": 1,
+        "skill": {
+          "ProjectileCount": 3,
+          "SpreadAngleDegrees": 20,
+          "PierceCount": 1,
+          "Cooldown": 0.6,
+          "ManaCost": 1
+        },
+        "skillIssues": [],
+        "coverage": {
+          "Passed": true,
+          "TypeCount": 35,
+          "SerializedFieldCount": 274,
+          "CoveredFieldCount": 274,
+          "Issues": []
+        },
+        "playing": false,
+        "compiling": false,
+        "enterOptionsEnabled": true,
+        "enterOptions": 1,
+        "scenes": [
+          "Assets/Scenes/Bootstrap.unity"
+        ],
+        "hostExists": false,
+        "testMarker": ""
+      }
+    },
+    "target": {
+      "host": "127.0.0.1",
+      "port": 7800,
+      "projectPath": "C:\\Users\\darkf\\Home\\Projects\\DarkFlare"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

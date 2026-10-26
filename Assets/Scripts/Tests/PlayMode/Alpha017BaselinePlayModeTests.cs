@@ -85,6 +85,7 @@ namespace DarkFlare.Tests
             StatBlock stats = new StatBlock();
             stats.SetValue(StatIds.Evasion, 0f);
             defender.Configure("alpha017_projectile_defender", ActorTeam.Monster, 100f, stats, TagSet.Empty);
+            _architecture.GetSystem<CombatSystem>().RegisterActor(defender);
             return defender;
         }
 

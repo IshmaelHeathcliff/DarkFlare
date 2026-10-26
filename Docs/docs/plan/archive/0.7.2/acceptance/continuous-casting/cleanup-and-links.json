@@ -1,0 +1,30 @@
+{
+  "RemovedTemporaryScripts": [
+    "CaptureFinalEvidence.ps1",
+    "ConfigureContent.cs",
+    "EditorFinalCheck.cs",
+    "FinalizeDocs.ps1",
+    "OrdinaryPlay.cs",
+    "OriginalSaveCheck.cs",
+    "RestoreOriginalSaves.ps1"
+  ],
+  "RemainingTemporaryScripts": 0,
+  "Documentation": {
+    "ChangedMarkdownDocuments": 20,
+    "CheckedLinks": 395,
+    "MissingLinks": 0
+  },
+  "SourceIdentity": {
+    "Files": 35,
+    "HashMismatches": 0
+  },
+  "NativeProjectSettingsSave": {
+    "PersistedVersion": "0.7.2-alpha.1",
+    "FontFileUnchanged": true,
+    "NonWhitespaceChange": "bundleVersion only"
+  },
+  "MapSourcesUnchanged": true,
+  "EditorSettingsUnchanged": true,
+  "PlayerBuilt": false,
+  "SaveBackupsPreserved": "Library/AgentBackups/alpha-0.7.2-1"
+}

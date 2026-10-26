@@ -319,6 +319,10 @@ namespace DarkFlare.Tests
             Button button = FindInventoryButton(root, displayName);
             Assert.IsNotNull(button, $"背包中缺少 {displayName}");
             yield return Submit(button, submitControl);
+            GameMenuController menu = Object.FindAnyObjectByType<GameMenuController>();
+            float deadline = Time.realtimeSinceStartup + 5;
+            while (!menu.Workspace.Interactions.IsMenuOpen && Time.realtimeSinceStartup < deadline) { yield return null; }
+            Assert.IsTrue(menu.Workspace.Interactions.IsMenuOpen, $"{displayName} 的动作菜单未打开");
         }
 
         IEnumerator Submit(Button button, ButtonControl submitControl)
@@ -411,11 +415,12 @@ namespace DarkFlare.Tests
         CombatActor CreateDefender()
         {
             GameObject defenderObject = new GameObject("Phase2SnapshotDefender");
-            defenderObject.SetActive(false);
             _objects.Add(defenderObject);
             defenderObject.AddComponent<CircleCollider2D>();
             CombatActor defender = defenderObject.AddComponent<CombatActor>();
             defender.Configure("phase2_snapshot_defender", ActorTeam.Monster, 1000f, new StatBlock(), TagSet.Empty);
+            defender.GetComponent<CircleCollider2D>().enabled = false;
+            _architecture.GetSystem<CombatSystem>().RegisterActor(defender);
             return defender;
         }
 

@@ -1,0 +1,41 @@
+{
+  "success": true,
+  "command": "command script run",
+  "data": {
+    "command": "script run",
+    "parameters": {
+      "file": "Library/AgentValidation/alpha072/OrdinaryPlay.cs",
+      "entry": "OrdinaryPlay.ContinueSave"
+    },
+    "result": {
+      "diagnostics": [],
+      "compileMs": 115,
+      "executeMs": 1258,
+      "assemblyName": "PipelineRunScript_OrdinaryPlay_0ac27f27cc9c4127a0b879c6412a9e05",
+      "success": true,
+      "result": {
+        "intent": "Continue",
+        "root": "C:/Users/darkf/AppData/LocalLow/DefaultCompany/DarkFlare\\DarkFlare\\Saves",
+        "settingsRoot": "C:/Users/darkf/AppData/LocalLow/DefaultCompany/DarkFlare\\DarkFlare\\Settings",
+        "version": "0.7.2-alpha.1",
+        "content": 14,
+        "continueEnabled": true,
+        "CommitSequence": 4,
+        "actorId": "player",
+        "weaponId": "b47789c4c6d84a30bdcaa9041f1be203",
+        "gold": 100,
+        "itemIds": [
+          "a2851baa67b24d989f626c34de79ceac"
+        ],
+        "returned": true
+      }
+    },
+    "target": {
+      "host": "127.0.0.1",
+      "port": 7800,
+      "projectPath": "C:\\Users\\darkf\\Home\\Projects\\DarkFlare"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

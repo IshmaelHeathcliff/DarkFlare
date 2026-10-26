@@ -69,6 +69,38 @@ namespace DarkFlare.Tests
         }
 
         [Test]
+        public void ProjectilePattern_PreservesSingleShotAndRejectsInvalidConfiguration()
+        {
+            var skill = ScriptableObject.CreateInstance<ProjectileSkillDefinition>();
+            try
+            {
+                Assert.IsTrue(skill.HasValidProjectileSettings);
+                Assert.AreEqual(0, skill.GetProjectileAngle(0));
+                var serialized = new SerializedObject(skill);
+                serialized.FindProperty("_projectileCount").intValue = 3;
+                serialized.FindProperty("_spreadAngleDegrees").floatValue = 20;
+                serialized.FindProperty("_pierceCount").intValue = 1;
+                serialized.ApplyModifiedPropertiesWithoutUndo();
+                CollectionAssert.AreEqual(new[] { 0f, -10f, 10f }, Enumerable.Range(0, 3).Select(skill.GetProjectileAngle));
+                typeof(ProjectileSkillDefinition).GetField("_spreadAngleDegrees", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).SetValue(skill, float.NaN);
+                Assert.IsFalse(skill.HasValidProjectileSettings);
+                Assert.Throws<ArgumentOutOfRangeException>(() => skill.GetProjectileAngle(0));
+            }
+            finally { UnityEngine.Object.DestroyImmediate(skill); }
+        }
+
+        [Test]
+        public void ProjectileSeeds_AreStableIndependentAndKeepFirstShotCompatible()
+        {
+            const int root = 12345;
+            Assert.AreEqual(root, AttackRandomRolls.ProjectileSeed(root, 0));
+            int[] first = Enumerable.Range(0, 8).Select(i => AttackRandomRolls.ProjectileSeed(root, i)).ToArray();
+            Assert.AreEqual(first.Length, first.Distinct().Count());
+            CollectionAssert.AreEqual(first, Enumerable.Range(0, 8).Select(i => AttackRandomRolls.ProjectileSeed(root, i)));
+            Assert.Throws<ArgumentOutOfRangeException>(() => AttackRandomRolls.ProjectileSeed(root, -1));
+        }
+
+        [Test]
         public void FlameAssignment_MovesUniqueReferenceAndExtractionClearsOnlyAfterCommit()
         {
             (ItemInstance wood, ItemInstance flame) = InstallFlame();

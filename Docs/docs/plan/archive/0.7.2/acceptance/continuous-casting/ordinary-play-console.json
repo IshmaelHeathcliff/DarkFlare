@@ -1,0 +1,41 @@
+{
+  "success": true,
+  "command": "command console get",
+  "data": {
+    "command": "console get",
+    "parameters": {
+      "tail": "10",
+      "level": "error"
+    },
+    "result": {
+      "entries": [],
+      "cursor": 37032,
+      "session": "83dd708592b74f3fbe05fb4c91da1032",
+      "returned": 0,
+      "dropped": false,
+      "reset": false,
+      "counts": {
+        "error": 0,
+        "warn": 0,
+        "log": 56
+      },
+      "groundTruth": {
+        "sampledUtc": "2026-10-25T16:51:50.8646506Z",
+        "ageMs": 25,
+        "compilationFailed": false,
+        "compiling": false,
+        "consoleErrors": 0,
+        "consoleWarnings": 0,
+        "consoleLogs": 28,
+        "seeded": true
+      }
+    },
+    "target": {
+      "host": "127.0.0.1",
+      "port": 7800,
+      "projectPath": "C:\\Users\\darkf\\Home\\Projects\\DarkFlare"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

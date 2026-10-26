@@ -223,7 +223,11 @@ namespace DarkFlare.Tests
                             "删除与退出按钮不能重叠");
 
                         shell.OpenSettings();
-                        yield return null;
+                        float settingsDeadline = Time.realtimeSinceStartup + 5;
+                        while ((FindElement("application-settings").resolvedStyle.display == DisplayStyle.None
+                            || FindElement("application-settings").worldBound.height <= 0)
+                            && Time.realtimeSinceStartup < settingsDeadline) { yield return null; }
+                        Assert.IsTrue(shell.IsSettingsOpen, "设置入口必须已打开实际面板");
 
                         if (localeMode == "qps-ploc")
                         {

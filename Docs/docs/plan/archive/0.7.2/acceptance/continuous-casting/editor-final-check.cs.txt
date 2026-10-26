@@ -1,0 +1,69 @@
+using System;
+using System.Linq;
+using DarkFlare;
+using DarkFlare.Editor;
+using UnityEditor;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+
+public static class EditorFinalCheck
+{
+    public static object AdvanceVersion()
+    {
+        if (EditorApplication.isPlayingOrWillChangePlaymode || EditorApplication.isCompiling)
+        {
+            throw new InvalidOperationException("需先停止运行并完成编译");
+        }
+        PlayerSettings.bundleVersion = "0.7.2-alpha.1";
+        UnityEngine.Object[] pending = UnityEngine.Resources.FindObjectsOfTypeAll<UnityEngine.Object>()
+            .Where(asset => EditorUtility.IsDirty(asset) && AssetDatabase.GetAssetPath(asset).StartsWith("Assets/", StringComparison.Ordinal)).ToArray();
+        foreach (UnityEngine.Object asset in pending) { EditorUtility.ClearDirty(asset); }
+        try
+        {
+            AssetDatabase.SaveAssets();
+            if (!System.IO.File.ReadAllText("ProjectSettings/ProjectSettings.asset").Contains("bundleVersion: 0.7.2-alpha.1"))
+            {
+                EditorApplication.ExecuteMenuItem("File/Save Project");
+            }
+        }
+        finally
+        {
+            foreach (UnityEngine.Object asset in pending) { if (asset != null) { EditorUtility.SetDirty(asset); } }
+        }
+        if (!System.IO.File.ReadAllText("ProjectSettings/ProjectSettings.asset").Contains("bundleVersion: 0.7.2-alpha.1"))
+        {
+            throw new InvalidOperationException("运行版本未写入项目设置");
+        }
+        return Read();
+    }
+
+    public static object Read()
+    {
+        var definition = AssetDatabase.LoadAssetAtPath<ContentCatalogDefinition>("Assets/Data/Preset/Content/正式内容目录.asset");
+        ContentCatalogBuildResult build = ContentCatalog.Build(definition);
+        var skill = AssetDatabase.LoadAssetAtPath<ProjectileSkillDefinition>("Assets/Data/Preset/Skills/great_sword_normal.asset");
+        ConfigurationDocumentationCoverageReport coverage = ConfigurationDocumentationCoverage.ScanOfficial();
+        return new
+        {
+            unity = Application.unityVersion,
+            version = PlayerSettings.bundleVersion,
+            versionPersisted = System.IO.File.ReadAllText("ProjectSettings/ProjectSettings.asset")
+                .Contains("bundleVersion: " + PlayerSettings.bundleVersion),
+            content = build.Catalog?.ContentVersion,
+            contentValid = build.Succeeded,
+            contentIssues = build.Issues.Select(issue => issue.Message).ToArray(),
+            saveSchema = SaveSchemaVersion.Current.Value,
+            settingsSchema = SettingsSchemaVersion.Current.Value,
+            skill = new { skill.ProjectileCount, skill.SpreadAngleDegrees, skill.PierceCount, skill.Cooldown, skill.ManaCost },
+            skillIssues = RandomizationConfigurationValidator.Validate(skill),
+            coverage = new { coverage.Passed, coverage.TypeCount, coverage.SerializedFieldCount, coverage.CoveredFieldCount, coverage.Issues },
+            playing = EditorApplication.isPlaying,
+            compiling = EditorApplication.isCompiling,
+            enterOptionsEnabled = EditorSettings.enterPlayModeOptionsEnabled,
+            enterOptions = (int)EditorSettings.enterPlayModeOptions,
+            scenes = Enumerable.Range(0, SceneManager.sceneCount).Select(i => SceneManager.GetSceneAt(i).path).ToArray(),
+            hostExists = ApplicationHost.HasCurrent,
+            testMarker = SessionState.GetString("DarkFlare.Tests.PlayMode.DataRun", "")
+        };
+    }
+}

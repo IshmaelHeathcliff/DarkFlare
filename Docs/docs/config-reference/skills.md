@@ -19,6 +19,9 @@
 | `_projectileSpeed` | `float` / `12` | 至少 `0.1` | `ProjectileController` 位移消费 |
 | `_projectileRadius` | `float` / `0.16` | 至少 `0.05` | 投射物命中空间查询消费；不由贴图尺寸隐式推导 |
 | `_projectileLifetime` | `float` / `2` | 至少 `0.1` 秒 | 未命中时的自动回收/销毁消费 |
+| `_projectileCount` | `int` / `1` | 1–32；旧资产缺省单枚 | 一次施法整组生成，费用与冷却只提交一次 |
+| `_spreadAngleDegrees` | `float` / `0` | 0–360 的有限数；总扇形角度 | 多枚均匀分布；奇数枚序号 0 为中心，单枚保持瞄准方向 |
+| `_pierceCount` | `int` / `0` | 0–32；额外可结算目标数 | 每枚独立去重，最多结算 `1 + 穿透数` 个不同合法敌人 |
 | `_tags` | `List<TagDefinition>` / 空 | 只允许非派生 Skill 标签；正式投射物技能当前为空 | `CombatTagResolver` 自动派生 `projectile`，不得重复手填 |
 | `_damageSource` | `ProjectileDamageSource` / `Skill` | 必填；Skill 或 EquippedWeapon | `AttackSnapshotFactory` 决定伤害唯一所有者；切换必须同步 `_baseDamages` |
 | `_baseDamages` | `List<DamageRollDefinition>` / 空 | Skill 必须非空；EquippedWeapon 必须为空 | Skill 来源按攻击伤害种子掷值；武器来源只读取 Weapon 槽物品基础伤害 |
@@ -29,6 +32,7 @@
 ### 校验、随机与迁移
 
 - 配置中心检查稳定 ID、Prefab、正数运动参数、非负法力、派生标签重复事实和伤害来源所有权。
+- core v14 的默认大剑为数量 3、总散射 20°、穿透 1；其他技能保留原配置。数量 / 穿透越界和非有限角度明确拒绝，不用运行时裁剪修正资产。
 - `CreateDamagePackets(seed)` 只为 Skill 自有伤害创建本地 `System.Random`；命中、暴击与闪避仍由攻击根种子的其他子种子负责。
 - 从 Skill 迁到 EquippedWeapon 时先确保所有可用武器具有合法 `_baseDamages`，再清空技能伤害；反向迁移则必须补齐技能伤害。
 - 调整半径、速度或寿命后需验证投射物 Prefab、视觉特效与命中空间，不得靠 Transform 缩放补偿配置错误。
