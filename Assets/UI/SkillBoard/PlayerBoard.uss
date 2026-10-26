@@ -22,7 +22,6 @@
 .board-skill-slot .board-button { min-width: 0; font-size: 12px; padding: 3px; }
 .board-actions { flex-shrink: 0; }
 .board-actions .board-button { flex-grow: 1; }
-.board-bottle-slot { min-height: 70px; border-color: rgb(85,139,164); }
 .board-link { white-space: normal; min-height: 28px; margin-bottom: 6px; }
 .game-menu-panel--board .item-tooltip { display: none; }
 

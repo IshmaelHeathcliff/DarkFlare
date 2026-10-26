@@ -1,0 +1,22 @@
+{
+  "RemovedValidationFiles": [
+    "C:\\Users\\darkf\\AppData\\LocalLow\\DefaultCompany\\DarkFlare\\DarkFlare\\Saves\\auto\\7.save",
+    "C:\\Users\\darkf\\AppData\\LocalLow\\DefaultCompany\\DarkFlare\\DarkFlare\\Saves\\auto\\8.save",
+    "C:\\Users\\darkf\\AppData\\LocalLow\\DefaultCompany\\DarkFlare\\DarkFlare\\Settings\\settings.bak",
+    "C:\\Users\\darkf\\AppData\\LocalLow\\DefaultCompany\\DarkFlare\\DarkFlare\\Settings\\settings.json"
+  ],
+  "Originals": [
+    {
+      "Path": "C:\\Users\\darkf\\AppData\\LocalLow\\DefaultCompany\\DarkFlare\\DarkFlare\\Saves\\auto\\5.save",
+      "OriginalSha256": "FDBA441D921929CBF5521E1EE54ECE53FF237AF67F481B685B0DDEE24B99970C",
+      "ActualSha256": "FDBA441D921929CBF5521E1EE54ECE53FF237AF67F481B685B0DDEE24B99970C",
+      "Unchanged": true
+    },
+    {
+      "Path": "C:\\Users\\darkf\\AppData\\LocalLow\\DefaultCompany\\DarkFlare\\DarkFlare\\Saves\\auto\\6.save",
+      "OriginalSha256": "B13EEF636E634D7ABB3C1C95A9F46F0471395A0FF705FF283C6DBD1E54E427CF",
+      "ActualSha256": "B13EEF636E634D7ABB3C1C95A9F46F0471395A0FF705FF283C6DBD1E54E427CF",
+      "Unchanged": true
+    }
+  ]
+}

@@ -26,7 +26,7 @@ Bootstrap 和 Main 均使用原生 `PanelRenderer`，通过 `RuntimePanelView` �
 
 ## 输入层
 
-背包现为十个真实装备槽，导航按视觉矩形而非枚举编号。商店完整商品网格采用固定视口纵向滚动：同窗方向可选中屏外商品并显露，跨窗只选择视口内可见邻居。唯一目标装备自动定位到对应槽，多目标戒指保持显式选择。详见[物品工作台](./item-ui-workbench.md)。
+背包包含十个真实战斗装备槽和独立能量瓶栏，导航按视觉矩形而非枚举编号。瓶子沿用右键、动作菜单、拿起 / 放置与指定格投放；积蓄推进 Revision 后取消旧瓶来源，换瓶成功留在可见背包。天赋只保留中心充能选择与确认。商店完整商品网格采用固定视口纵向滚动：同窗方向可选中屏外商品并显露，跨窗只选择视口内可见邻居。唯一目标装备自动定位到对应槽，多目标戒指保持显式选择。详见[物品工作台](./item-ui-workbench.md)。
 
 `Assets/Settings/InputSystem_Actions.inputactions` 是唯一输入源，并生成 `InputSystem_Actions.cs`。运行时只由 Application 级 `ApplicationInputService` 创建并持有一个 `InputSystem_Actions` 实例；Session 级 `GameInput` 作为 `IUtility` Adapter 注册到 `GameArchitecture`，只转发既有玩法 API，不创建或销毁 Action Asset。
 

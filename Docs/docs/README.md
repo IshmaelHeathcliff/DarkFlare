@@ -76,8 +76,10 @@
 ## 计划与验收
 
 - [Alpha 0.7 活动总计划](./plan/alpha-0.7-plan.md)
-- [0.7.2-alpha 体验优化总计划（阶段一完成）](./plan/alpha-0.7.2-optimization-plan.md)
-- [0.7.2 阶段一验收与归档](./plan/archive/0.7.2/README.md)
+- [0.7.2-alpha 体验优化总计划（阶段一、二完成）](./plan/alpha-0.7.2-optimization-plan.md)
+- [0.7.2-alpha.2 能量瓶装备入口迁移实施计划（已归档）](./plan/archive/0.7.2/plans/phase-2-execution.md)
+- [0.7.2 已完成阶段与验收归档](./plan/archive/0.7.2/README.md)
+- [0.7.2-alpha.2 能量瓶入口验收与画面](./plan/archive/0.7.2/acceptance/energy-bottle-equipment/README.md)
 - [0.7.2-alpha.1 存档前置修复与持续施法实施计划](plan/archive/0.7.2/plans/phase-1-execution.md)
 - [0.7.2-alpha.1 普通 Play 存档路径隔离修复计划](plan/archive/0.7.2/plans/save-path-isolation-plan.md)
 - [0.7.1 启动准备](plan/archive/0.7.1/plans/alpha-0.7.1-startup.md)
@@ -94,6 +96,8 @@
 完成的执行计划与验收文档、截图、日志和结果统一按版本收纳到 `plan/archive/<版本号>/`，各版本提供 `plans/`、`acceptance/` 与 `README.md` 入口。模块文档继续保留在对应职责目录。
 
 ## 计划状态
+
+2026-10-26：**0.7.2-alpha.2 阶段二完成**。背包独立能量瓶栏、共享换瓶 / 指定格卸瓶、天赋中心充能及键鼠 / 手柄闭环已交付；EditMode 984/984、PlayMode 114/114，均无失败 / 跳过，三语言 9 状态画面和普通 Play 保存继续通过，原存档哈希恢复一致。[计划与验收](plan/archive/0.7.2/acceptance/energy-bottle-equipment/README.md)已归档。core v14、Schema 12 / 1、地图 V4 保持；未构建 Player，阶段三至五继续活动。
 
 2026-10-26：**0.7.2-alpha.1 阶段一完成**。存档路径、持续施法、大剑增强及界面重载恢复已验收；EditMode 982/982、PlayMode 112/112，均无失败 / 跳过。详见[本阶段验收](plan/archive/0.7.2/acceptance/continuous-casting/README.md)，后续阶段继续活动，未构建 Player。
 
@@ -133,5 +137,5 @@
 
 ## 说明
 
-当前项目已完成首版最小循环、初步体验优化及 Alpha 0.1–0.4 已归档计划，Alpha 0.5 的地图基础、编辑器、世界层级、双地图、批量导航与综合交付，以及 Alpha 0.6 的行为、Boss、有限刷怪、手动重置与 Editor 综合交付均已完成。Alpha 0.7 已完成 SemVer、棋盘几何、道具 / 能量瓶、成长与六键技能阶段，当前运行版本为 `0.7.2-alpha.1`，core v14；普通 Play 存档路径、按住连放与大剑三投射物 / 一次穿透已完成，阶段二至五待实施。已完成的执行计划统一保存在 `Docs/docs/plan/archive/`。
+当前项目已完成首版最小循环、初步体验优化及 Alpha 0.1–0.4 已归档计划，Alpha 0.5 的地图基础、编辑器、世界层级、双地图、批量导航与综合交付，以及 Alpha 0.6 的行为、Boss、有限刷怪、手动重置与 Editor 综合交付均已完成。Alpha 0.7 已完成 SemVer、棋盘几何、道具 / 能量瓶、成长与六键技能阶段，当前运行版本为 `0.7.2-alpha.2`，core v14；普通 Play 存档路径、按住连放、大剑增强与能量瓶装备入口迁移已完成，阶段三至五待实施。已完成的执行计划统一保存在 `Docs/docs/plan/archive/`。
 后续新增系统、配置或流程时，应优先更新对应文档，避免 `Docs/docs/` 与实现脱节。游戏设计文档位于 `Docs/design/`，不属于 Agent 的常规维护范围。

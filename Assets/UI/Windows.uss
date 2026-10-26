@@ -104,7 +104,7 @@
 .equipment-slot-layout > .inventory-equipment-slot { position: absolute; margin: 0; width: 100px; height: 100px; }
 .equipment-slot-layout > .equipment-slot--head { left: 208px; top: 0; }
 .equipment-slot-layout > .equipment-slot--armor { left: 208px; top: 104px; height: 152px; }
-.equipment-slot-layout > .equipment-slot--weapon { left: 28px; top: 48px; height: 152px; }
+.equipment-slot-layout > .equipment-slot--weapon { left: 28px; top: 52px; height: 152px; }
 .equipment-slot-layout > .equipment-slot--off-hand { left: 388px; top: 48px; height: 152px; }
 .equipment-slot-layout > .equipment-slot--hands { left: 52px; top: 208px; }
 .equipment-slot-layout > .equipment-slot--legs { left: 364px; top: 208px; }

@@ -1,0 +1,811 @@
+{
+  "status": "completed",
+  "duration": 321.61,
+  "summary": {
+    "total": 114,
+    "passed": 111,
+    "failed": 3,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "results": [
+    {
+      "FullName": "DarkFlare.Tests.ActorAnimationPlayModeTests.MainScene_ActorEventsSwitchAttackHitDeathAndRevive",
+      "Status": "Passed",
+      "Duration": 2.2526624,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Alpha012DamageResolutionPlayModeTests.MainScene_EquipsStartingWeaponBeforeSpawnerAndSupportsUnequipRecovery",
+      "Status": "Passed",
+      "Duration": 0.8855093,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Alpha013CollisionSafetyPlayModeTests.DefaultLayerTrigger_StillReceivesPlayerAndMonsterActors",
+      "Status": "Passed",
+      "Duration": 0.3403498,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Alpha013CollisionSafetyPlayModeTests.PlayerPassesThroughMonsterCrowd_ButWorldObstacleStillBlocksMovement",
+      "Status": "Passed",
+      "Duration": 4.6907732,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Alpha014ResourceSystemPlayModeTests.MainScene_CastsAtomicallyRegeneratesAndUpdatesManaHud",
+      "Status": "Passed",
+      "Duration": 1.5845625,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Alpha014ResourceSystemPlayModeTests.MainScene_PartialProjectilePreparationRollsBack",
+      "Status": "Passed",
+      "Duration": 1.084203,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Alpha014ResourceSystemPlayModeTests.MainScene_ProjectileGroupCommitsOnceAndPiercesDistinctTargets",
+      "Status": "Passed",
+      "Duration": 1.1794199,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Alpha015MonsterAffixPlayModeTests.Controller_AppliesModifiersAndVisualTracksLifecycle",
+      "Status": "Passed",
+      "Duration": 0.3682186,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Alpha015MonsterAffixPlayModeTests.Visual_HidesEmptyInstancesAndCapsPresentationAtTwoLines",
+      "Status": "Passed",
+      "Duration": 0.0162006,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Alpha017BaselinePlayModeTests.ProjectileTryHit_ConsumesSnapshotAndResolvesExactlyOnce",
+      "Status": "Passed",
+      "Duration": 0.0141052,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Alpha017EffectRuntimePlayModeTests.Pool_IsPrewarmedBoundedReusableAndReleasedWithArchitecture",
+      "Status": "Passed",
+      "Duration": 0.3137699,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Alpha017EffectRuntimePlayModeTests.WorldAndAttachedEffectsReleaseSortingOnCancellationAndHostDisable",
+      "Status": "Passed",
+      "Duration": 0.3227584,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Alpha017WorldSortingPlayModeTests.Participants_RemainStableAcrossCrossingFlipDisableAndIdentityReuse",
+      "Status": "Passed",
+      "Duration": 0.0166352,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Alpha024SceneFlowPlayModeTests.Continue_RestoresCommittedRunWithoutNewGameGrant",
+      "Status": "Passed",
+      "Duration": 2.1835309,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Alpha024SceneFlowPlayModeTests.ThreeCycles_NewGamePauseAndReturnKeepTopologyUnique",
+      "Status": "Passed",
+      "Duration": 2.7758133,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Alpha025InputOwnershipPlayModeTests.AudioAccessibilityAndPlatformServicesUseApplicationLifetime",
+      "Status": "Passed",
+      "Duration": 0.0348579,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Alpha025InputOwnershipPlayModeTests.BootstrapAndThreeSessionsShareOneRuntimeActionAsset",
+      "Status": "Passed",
+      "Duration": 2.2431054,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Alpha025InputOwnershipPlayModeTests.InputFixtureRuntime_RestoresOriginalMouseAndProjectAction",
+      "Status": "Passed",
+      "Duration": 0.6213296,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Alpha025InputOwnershipPlayModeTests.SettingsPageOpensFromFrontEndAndPausedMenuWithoutReleasingPause",
+      "Status": "Passed",
+      "Duration": 0.8877994,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Alpha025InputOwnershipPlayModeTests.ShellPanelReload_PreservesModalActionSettingsAndOwnership",
+      "Status": "Passed",
+      "Duration": 1.6796021,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Alpha027ApplicationDataIsolationPlayModeTests.ApplicationHost_UsesTemporaryIsolatedDataRoots",
+      "Status": "Passed",
+      "Duration": 0.0060939,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Alpha027IntegratedAcceptancePlayModeTests.FullPlayerPath_DeleteAndResetPersistAcrossHostRestart",
+      "Status": "Passed",
+      "Duration": 4.3633899,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Alpha027ShellUiMatrixPlayModeTests.FrontEndSettingsAndErrorModal_FitThreeLocalesAtStandardResolution",
+      "Status": "Passed",
+      "Duration": 0.372965,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Alpha027ShellUiMatrixPlayModeTests.GameplayMenu_SettingsAndConfirmationOwnInputUntilDismissed",
+      "Status": "Passed",
+      "Duration": 1.4285139,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.ApplicationHostSceneTransitionPlayModeTests.ApplicationScopeTimeout_ShutdownReturnsFailureAndKeepsDiagnostics",
+      "Status": "Passed",
+      "Duration": 0.1317337,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.ApplicationHostSceneTransitionPlayModeTests.BootCancellation_DoesNotReclassifyCancelledLocalizationAsFailure",
+      "Status": "Passed",
+      "Duration": 0.2661921,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.ApplicationHostSceneTransitionPlayModeTests.ControlledStop_CleanupFailureAfterSessionClearsMarksApplicationFailed",
+      "Status": "Passed",
+      "Duration": 0.0286252,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.ApplicationHostSceneTransitionPlayModeTests.DirectCreateBindInitialize_NotifiesExactlyOncePerGeneration",
+      "Status": "Passed",
+      "Duration": 0.0256821,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.ApplicationHostSceneTransitionPlayModeTests.EmergencyShutdown_LateControlledStopCannotOverwriteShutdown",
+      "Status": "Passed",
+      "Duration": 0.0320781,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.ApplicationHostSceneTransitionPlayModeTests.HangingRollback_SettlesRequestsAndShutdownWithoutStartingLatestGeneration",
+      "Status": "Passed",
+      "Duration": 10.4021027,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.ApplicationHostSceneTransitionPlayModeTests.MainReloadDuringPreviousRollback_LatestInitializationEventuallyRuns",
+      "Status": "Passed",
+      "Duration": 0.9411596,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.ApplicationHostSceneTransitionPlayModeTests.MultipleComponentTimeouts_StopSessionOnceAndPreserveAbandonedLease",
+      "Status": "Passed",
+      "Duration": 0.1525875,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.ApplicationHostSceneTransitionPlayModeTests.ProfileScopeTimeout_ShutdownReturnsFailureAndKeepsDiagnostics",
+      "Status": "Passed",
+      "Duration": 0.1280408,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.ApplicationHostSceneTransitionPlayModeTests.ThreeRapidSceneRequests_OnlyLatestRequestReachesRunning",
+      "Status": "Passed",
+      "Duration": 0.0252014,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.ApplicationLifecyclePlayModeTests.ConcurrentInitializationRequest_IsRejectedSynchronously",
+      "Status": "Passed",
+      "Duration": 0.0215446,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.ApplicationLifecyclePlayModeTests.ConcurrentStop_IsIdempotentAndClearsOnlyTheCapturedSession",
+      "Status": "Passed",
+      "Duration": 0.0133275,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.ApplicationLifecyclePlayModeTests.DestroyedSessionObject_UnregistersFromRegistry",
+      "Status": "Passed",
+      "Duration": 0.0146016,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.ApplicationLifecyclePlayModeTests.DirectMainReload_CoordinatesStopCreateBindAndInitialize",
+      "Status": "Passed",
+      "Duration": 2.0116794,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.ApplicationLifecyclePlayModeTests.ExternalInitializationCancellation_RollsBackAndNeverCommits",
+      "Status": "Passed",
+      "Duration": 0.3464815,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.ApplicationLifecyclePlayModeTests.InvalidNewGameConfiguration_RollsBackWithoutRuntimeObjects",
+      "Status": "Passed",
+      "Duration": 0.0109186,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.ApplicationLifecyclePlayModeTests.MainColdStart_HasUniqueHostArchitecturePlayerAndCommittedSpawner",
+      "Status": "Passed",
+      "Duration": 2.3333973,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.ApplicationLifecyclePlayModeTests.PreCancelledInitializationRequest_ReturnsCallbackExactlyOnce",
+      "Status": "Passed",
+      "Duration": 0.0134251,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.ApplicationLifecyclePlayModeTests.RepeatedTestInitialization_ReplacesIsolatedPathsAndSkipsOrdinaryPlay",
+      "Status": "Passed",
+      "Duration": 1.1724903,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.ApplicationLifecyclePlayModeTests.ThreeSessionRestarts_DoNotDuplicateHostPlayerOrArchitecture",
+      "Status": "Passed",
+      "Duration": 3.1792852,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.ApplicationLifecyclePlayModeTests.UnloadingBoundMainScene_StopsSessionAndReleasesArchitecture",
+      "Status": "Passed",
+      "Duration": 1.2688264,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.BehaviorPlayModeTests.AnimatorBridge_OptionalAndSingleOwner_RejectsLateCallbacksAndReuse",
+      "Status": "Passed",
+      "Duration": 1.3723491,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.BehaviorPlayModeTests.DebugPanel_KeyboardAndGamepad_SelectionLocalizationAndRelease",
+      "Status": "Passed",
+      "Duration": 0.5677997,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.EquipmentPhase2PlayModeTests.InventorySlots_SupportKeyboardGamepadLayoutAndProjectileSnapshot",
+      "Status": "Failed",
+      "Duration": 1.4892375,
+      "Message": "  背包格超出下边界\r\n  Expected: less than or equal to 785.0f\r\n  But was:  834.0f\r\n",
+      "StackTrace": "at DarkFlare.Tests.EquipmentPhase2PlayModeTests.AssertLayoutInsideRoot (UnityEngine.UIElements.VisualElement root, System.Collections.Generic.IReadOnlyList`1[T] names) [0x001e6] in C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Tests\\PlayMode\\EquipmentPhase2PlayModeTests.cs:510\r\nat DarkFlare.Tests.EquipmentPhase2PlayModeTests+<InventorySlots_SupportKeyboardGamepadLayoutAndProjectileSnapshot>d__6.MoveNext () [0x00f27] in C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Tests\\PlayMode\\EquipmentPhase2PlayModeTests.cs:218\r\nat UnityEngine.TestTools.TestEnumerator+<Execute>d__8.MoveNext () [0x0003a] in .\\Library\\PackageCache\\com.unity.test-framework@ee3fe9477490\\UnityEngine.TestRunner\\NUnitExtensions\\Attributes\\TestEnumerator.cs:52\r\n"
+    },
+    {
+      "FullName": "DarkFlare.Tests.MapGeometryPlayModeTests.PhysicalActor_StopsAtWaterAndBoundsAndRepeatedProjectionReleases",
+      "Status": "Passed",
+      "Duration": 0.0698247,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.MonsterBehaviorPlayModeTests.FailedMapCommit_RestoresWindupCooldownAndRandomWithoutOldAuthorization",
+      "Status": "Passed",
+      "Duration": 3.4640367,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.MonsterBehaviorPlayModeTests.FormalDiagnostics_UsesSeparateInputAndReturnsGameplayFocus",
+      "Status": "Passed",
+      "Duration": 2.1896975,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.MonsterBehaviorPlayModeTests.FormalMonster_SleepsWandersAndChasesUsingCurrentOcclusion",
+      "Status": "Passed",
+      "Duration": 3.572588,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.MonsterBehaviorPlayModeTests.MovingPlayer_ChaseAnimationKeepsPlaybackProgress_AndSleepStopsMovement",
+      "Status": "Passed",
+      "Duration": 4.5714317,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.MonsterBehaviorPlayModeTests.NavigationOverride_IsExplicit_AndReturnsToBehaviorDecision",
+      "Status": "Passed",
+      "Duration": 2.2276003,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.MonsterBehaviorPlayModeTests.WindupCancellation_DoesNotConsumeDamageRng_AndRecoveryDoesNotRepeatHit",
+      "Status": "Passed",
+      "Duration": 3.3109315,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.NavigationPlayModeTests.MixedStrategies_DetourDynamicWall_RespectControlAndInvalidateHandles",
+      "Status": "Passed",
+      "Duration": 6.2885936,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.NavigationPlayModeTests.MovingPlayer_KeepsFreshCompletedGuidance_AndPublishesWhileMoving",
+      "Status": "Passed",
+      "Duration": 4.3792578,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase0ExperiencePlayModeTests.MainScene_InventorySupportsKeyboardGamepadAndStandardResolution",
+      "Status": "Failed",
+      "Duration": 1.689311,
+      "Message": "  背包格超出下边界\r\n  Expected: less than or equal to 785.0f\r\n  But was:  834.0f\r\n",
+      "StackTrace": "at DarkFlare.Tests.Phase0ExperiencePlayModeTests.AssertInventoryGridInsideFrame (UnityEngine.UIElements.VisualElement root) [0x0008d] in C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Tests\\PlayMode\\Phase0ExperiencePlayModeTests.cs:515\r\nat DarkFlare.Tests.Phase0ExperiencePlayModeTests.AssertLayoutInsideRoot (UnityEngine.UIElements.VisualElement root) [0x00179] in C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Tests\\PlayMode\\Phase0ExperiencePlayModeTests.cs:489\r\nat DarkFlare.Tests.Phase0ExperiencePlayModeTests+<MainScene_InventorySupportsKeyboardGamepadAndStandardResolution>d__5.MoveNext () [0x005a7] in C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Tests\\PlayMode\\Phase0ExperiencePlayModeTests.cs:119\r\nat UnityEngine.TestTools.TestEnumerator+<Execute>d__8.MoveNext () [0x0003a] in .\\Library\\PackageCache\\com.unity.test-framework@ee3fe9477490\\UnityEngine.TestRunner\\NUnitExtensions\\Attributes\\TestEnumerator.cs:52\r\n"
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase0ExperiencePlayModeTests.MainScene_PointerDragMovesInventoryItemAndEquipsIt",
+      "Status": "Passed",
+      "Duration": 1.2628075,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.Attributes_IndependentWindowsRefreshAndNavigateWithoutTakingItemOwnership",
+      "Status": "Passed",
+      "Duration": 2.6292128,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.Board_CancelDeviceRemovalAndStaleBottleCannotCommitPendingRequests",
+      "Status": "Passed",
+      "Duration": 1.2374464,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.Board_LocalesKeepCanvasInventoryAndConfirmationReachable",
+      "Status": "Passed",
+      "Duration": 1.64168,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.Board_PlayerTransactionsUseSharedCarryConfirmationAndSixSlots",
+      "Status": "Passed",
+      "Duration": 6.558851,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.Consumables_BuyMergeUseAndRestoreFocusThroughKeyboardAndGamepad",
+      "Status": "Passed",
+      "Duration": 1.4005074,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.Crafting_OnlyUsesItemsPlacedInTheInputSlot",
+      "Status": "Passed",
+      "Duration": 1.230115,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.EnergyBottle_GamepadActionsCarryAndEnergyChangesCancelStaleSource",
+      "Status": "Passed",
+      "Duration": 1.3486027,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.EnergyBottle_InventoryPointerSwapAndExactReturnKeepOwnership",
+      "Status": "Passed",
+      "Duration": 2.0901656,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.GamepadNavigation_MovesHeldGridItemsAndCrossesCraftingBoundary",
+      "Status": "Passed",
+      "Duration": 1.3075046,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.Hud_CurrentResourcesMotionAndEntriesRespectInputOwnership",
+      "Status": "Passed",
+      "Duration": 1.5797496,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.IndependentWindows_TradeAndCraftWithoutInventoryAndRevokeInvalidTargets",
+      "Status": "Passed",
+      "Duration": 1.4121922,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.ItemActions_EquipmentMenuDiscardAndDeviceLossKeepOwnership",
+      "Status": "Passed",
+      "Duration": 1.3966638,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.ItemActions_TradeByPointerAndGamepadAndReturnCraftingToExactCell",
+      "Status": "Passed",
+      "Duration": 1.9408901,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.ManualSkills_DeathStopsHoldAndRespawnAcceptsNewPress",
+      "Status": "Passed",
+      "Duration": 3.8448848,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.ManualSkills_HeldInputDoesNotResumeAfterUiPauseOrSuspension",
+      "Status": "Passed",
+      "Duration": 3.4954787,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.ManualSkills_HeldSourceReplacementCancelsAndManaRecoveryAllowsValidHold",
+      "Status": "Passed",
+      "Duration": 1.9703557,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.ManualSkills_HoldRepeatsWithLatestAimAndReleaseStops",
+      "Status": "Passed",
+      "Duration": 3.068804,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.ManualSkills_RequireInputKeepFlamesSeparateAndDoNotCastThroughHud",
+      "Status": "Passed",
+      "Duration": 4.8282826,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.PanelReload_RebindsGameplayAndPreservesRendererDisabledContent",
+      "Status": "Passed",
+      "Duration": 1.5341408,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.Shop_RefreshSupportsKeyboardAndGamepadAndReopeningPreservesStock",
+      "Status": "Passed",
+      "Duration": 1.1684535,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.ShopPurchase_UsesGridAndRestoresNeighborFocusFeedbackAndTooltip",
+      "Status": "Passed",
+      "Duration": 1.9164664,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.StatusDetails_GamepadScrollBackAndDispelKeepFocusReachable",
+      "Status": "Passed",
+      "Duration": 1.4037306,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase1UxPlayModeTests.StatusVisibility_FiltersHudAndMenuWithoutRemovingGameplayLayers",
+      "Status": "Passed",
+      "Duration": 1.3954043,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.Phase4ContentPlayModeTests.MainScene_OfficialEquipmentCompletesTradeCraftAndRegisteredSlotFlow",
+      "Status": "Passed",
+      "Duration": 2.6157749,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.RandomizationPhase3PlayModeTests.MainScene_DefaultRandomSeedChangesBetweenRuns",
+      "Status": "Passed",
+      "Duration": 2.1885681,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.RandomizationPhase3PlayModeTests.MainScene_SameFixedSeedReplaysMonsterHealthDamageAndLoot",
+      "Status": "Passed",
+      "Duration": 5.4976022,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SaveCaptureRestorePlayModeTests.DeadPlayer_RestoresWithoutStatusProjectionAndRebindsOnRevive",
+      "Status": "Passed",
+      "Duration": 3.6230526,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SaveCaptureRestorePlayModeTests.GameMenu_SaveActionsArePresentFocusableAndReflectSlotProbe",
+      "Status": "Passed",
+      "Duration": 1.0672752,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SaveCaptureRestorePlayModeTests.MainSession_CapturePrepareRestorePreservesStateWithoutNewGameGrant",
+      "Status": "Failed",
+      "Duration": 5.0642346,
+      "Message": "  Expected: 161.10415649414063d +/- 0.0010000000474974513d\r\n  But was:  161.35415649414063d\r\n",
+      "StackTrace": "at DarkFlare.Tests.SaveCaptureRestorePlayModeTests+<MainSession_CapturePrepareRestorePreservesStateWithoutNewGameGrant>d__6.MoveNext () [0x01a83] in C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Assets\\Scripts\\Tests\\PlayMode\\SaveCaptureRestorePlayModeTests.cs:365\r\nat UnityEngine.TestTools.TestEnumerator+<Execute>d__8.MoveNext () [0x0003a] in .\\Library\\PackageCache\\com.unity.test-framework@ee3fe9477490\\UnityEngine.TestRunner\\NUnitExtensions\\Attributes\\TestEnumerator.cs:52\r\n"
+    },
+    {
+      "FullName": "DarkFlare.Tests.SaveCaptureRestorePlayModeTests.SessionFacade_SaveIsSessionScopedAndCrossSessionMethodsAreRemoved",
+      "Status": "Passed",
+      "Duration": 1.0711427,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SceneSessionComponentBindingPlayModeTests.BindingException_RollsBackWithoutReportingSuccess",
+      "Status": "Passed",
+      "Duration": 1.1722636,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SceneSessionComponentBindingPlayModeTests.MainToMain_PreplacedConsumersBindNewSessionExactlyOnce",
+      "Status": "Passed",
+      "Duration": 1.8874413,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SceneSessionComponentBindingPlayModeTests.NoProviderEmptySceneToMain_ConsumersWaitForRunningSessionAndBindExactlyOnce",
+      "Status": "Passed",
+      "Duration": 1.1403633,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SceneSessionComponentBindingPlayModeTests.RetryResult_DoesNotExposeFalseBindingAndBindsExactlyOnceAfterLaterFrame",
+      "Status": "Passed",
+      "Duration": 1.075108,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SceneSessionComponentBindingPlayModeTests.TaintedScene_DisableEnableDoesNotRebindOrScheduleRetry",
+      "Status": "Passed",
+      "Duration": 1.2965738,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.SessionObjectRegistryOwnershipPlayModeTests.DelayedDestroy_UnregistersCapturedRegistryOnly",
+      "Status": "Passed",
+      "Duration": 0.0116858,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.StatusCombatPlayModeTests.ClockHold_DrainsBudgetAndCancellationReleasesPause",
+      "Status": "Passed",
+      "Duration": 0.8629867,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.StatusCombatPlayModeTests.ConfiguredActors_BlockMovementAndRebindAfterDisableAndDeath",
+      "Status": "Passed",
+      "Duration": 2.7689755,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.StatusCombatPlayModeTests.SessionClock_AdvancesPausesAndCancelsWithSession",
+      "Status": "Passed",
+      "Duration": 1.4733821,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.TerrainPresentationPlayModeTests.PublishedTerrain_LoadsCompleteTilesAndReleasesBetweenOwners",
+      "Status": "Passed",
+      "Duration": 0.0202065,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.VisualExperiencePhase05PlayModeTests.LootRarityRing_RotatesAndUsesRuntimeRarityColor",
+      "Status": "Passed",
+      "Duration": 0.3252005,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.VisualExperiencePhase05PlayModeTests.MainScene_UsesSharedBoundsAndKeepsCameraOnGround",
+      "Status": "Passed",
+      "Duration": 0.9636019,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.WorldMapPlayModeTests.AllRangeBatches_ActivateAndSpawnTheirReservedMonsters",
+      "Status": "Passed",
+      "Duration": 3.5327085,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.WorldMapPlayModeTests.CommittedCleanupFailure_EntersFatalWithoutPretendingRollback",
+      "Status": "Passed",
+      "Duration": 2.1559988,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.WorldMapPlayModeTests.FiniteBatches_TriggerOnceAfterPauseAndFastCrossing",
+      "Status": "Passed",
+      "Duration": 5.423948,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.WorldMapPlayModeTests.FormalInteractions_ReceivePhysicsFocusAndWallContactsCanRestore",
+      "Status": "Passed",
+      "Duration": 3.9263179,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.WorldMapPlayModeTests.FrozenMap_RoundTripsMonstersDropsRandomAndReleasesOwners",
+      "Status": "Passed",
+      "Duration": 39.9120976,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.WorldMapPlayModeTests.GuardianBoss_FightsAndPersists",
+      "Status": "Passed",
+      "Duration": 9.390061,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.WorldMapPlayModeTests.ManualReset_PostCommitCleanupFailureKeepsDurableNewEpoch",
+      "Status": "Passed",
+      "Duration": 5.336327,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.WorldMapPlayModeTests.ManualReset_PreparationAndSaveFailuresKeepOldMap",
+      "Status": "Passed",
+      "Duration": 7.0363535,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.WorldMapPlayModeTests.ManualReset_ReplacesOnlyTargetInstanceAndPersistsAcrossContinue",
+      "Status": "Passed",
+      "Duration": 7.1216398,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.WorldMapPlayModeTests.ManualReset_TwentyCyclesReleaseMapOwners",
+      "Status": "Passed",
+      "Duration": 49.380902,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.WorldMapPlayModeTests.MapPortalChoice_OffersResetConfirmationAndCancelKeepsMap",
+      "Status": "Passed",
+      "Duration": 2.8069389,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.WorldMapPlayModeTests.MapSwitch_RollsBackEveryCommitBoundaryAndKeepsSessionPlayer",
+      "Status": "Passed",
+      "Duration": 7.3752534,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "DarkFlare.Tests.WorldMapPlayModeTests.Requests_CancelSupersedeAndRejectStaleTargetsWithoutPublishingCandidates",
+      "Status": "Passed",
+      "Duration": 3.5881609,
+      "Message": null,
+      "StackTrace": null
+    }
+  ]
+}

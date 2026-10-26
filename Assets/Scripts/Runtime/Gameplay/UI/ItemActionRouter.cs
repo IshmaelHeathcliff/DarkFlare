@@ -4,8 +4,8 @@ using UnityEngine.UIElements;
 
 namespace DarkFlare
 {
-    public enum ItemSourceKind { Inventory, Equipment, Merchant, Crafting, Board }
-    public enum ItemActionKind { None, Move, Equip, Unequip, Buy, Sell, Place, Return, Discard, Use, BoardPlace, EquipBottle }
+    public enum ItemSourceKind { Inventory, Equipment, Merchant, Crafting, Board, EnergyBottle }
+    public enum ItemActionKind { None, Move, Equip, Unequip, Buy, Sell, Place, Return, Discard, Use, BoardPlace, EquipBottle, UnequipBottle }
 
     public readonly struct ItemActionSource
     {
@@ -14,6 +14,7 @@ namespace DarkFlare
         public GameMenuPage Window { get; }
         public EquipmentSlot Slot { get; }
         public Button Element { get; }
+        public int Revision { get; }
 
         public ItemActionSource(ItemInstance item, ItemSourceKind kind, GameMenuPage window, Button element, EquipmentSlot slot = default)
         {
@@ -22,6 +23,7 @@ namespace DarkFlare
             Window = window;
             Element = element;
             Slot = slot;
+            Revision = item?.Revision ?? 0;
         }
     }
 
@@ -71,10 +73,13 @@ namespace DarkFlare
         {
             if (_scope?.CanAcceptWork != true || source.Item == null || !_menu.IsWindowVisible(source.Window)
                 || source.Kind != ItemSourceKind.Board && source.Element != null && !GameMenuController.IsNavigable(source.Element)) { return false; }
+            if (source.Item.BaseDefinition.ItemType == ItemType.EnergyBottle && source.Revision != source.Item.Revision) { return false; }
             InventorySnapshot snapshot = Inventory;
             if (source.Kind == ItemSourceKind.Board)
             { return snapshot.HasPlayer && snapshot.Player.IsAlive && _menu.Board?.IsItemCurrent(source.Item) == true; }
             if (!snapshot.HasPlayer || !snapshot.Player.IsAlive) { return false; }
+            if (source.Kind == ItemSourceKind.EnergyBottle)
+            { return source.Window == GameMenuPage.Inventory && this.SendQuery(new GetSkillBoardQuery()).EnergyBottle == source.Item; }
             if (source.Kind == ItemSourceKind.Equipment)
             {
                 foreach (EquipmentSlotSnapshot slot in snapshot.EquipmentSlots)
@@ -107,12 +112,15 @@ namespace DarkFlare
         {
             if (source.Kind == ItemSourceKind.Merchant) { return new ItemActionTarget(ItemActionKind.Buy); }
             if (source.Kind == ItemSourceKind.Equipment) { return new ItemActionTarget(ItemActionKind.Unequip); }
+            if (source.Kind == ItemSourceKind.EnergyBottle) { return new ItemActionTarget(ItemActionKind.UnequipBottle); }
             if (source.Kind == ItemSourceKind.Crafting) { return new ItemActionTarget(ItemActionKind.Return); }
-            if (_menu.IsWindowVisible(GameMenuPage.SkillBoard) && source.Item.BaseDefinition.IsSkillBoardItem)
-            { return new ItemActionTarget(source.Item.BaseDefinition.ItemType == ItemType.EnergyBottle ? ItemActionKind.EquipBottle : ItemActionKind.BoardPlace,
-                source.Item.BaseDefinition.ItemType == ItemType.EnergyBottle ? _menu.GetComponent<RuntimePanelView>().Root.Q("board-bottle-drop") : _menu.Board.Canvas); }
+            if (_menu.IsWindowVisible(GameMenuPage.SkillBoard) && source.Item.BaseDefinition.IsSkillBoardItem
+                && source.Item.BaseDefinition.ItemType != ItemType.EnergyBottle)
+            { return new ItemActionTarget(ItemActionKind.BoardPlace, _menu.Board.Canvas); }
             if (_menu.IsWindowVisible(GameMenuPage.Shop)) { return new ItemActionTarget(ItemActionKind.Sell); }
             if (_menu.IsWindowVisible(GameMenuPage.Crafting)) { return new ItemActionTarget(ItemActionKind.Place); }
+            if (source.Item.BaseDefinition.ItemType == ItemType.EnergyBottle)
+            { return new ItemActionTarget(ItemActionKind.EquipBottle, _menu.GetComponent<RuntimePanelView>().Root.Q("inventory-bottle-slot")); }
             if (source.Item.BaseDefinition.UseDefinition != null) { return new ItemActionTarget(ItemActionKind.Use); }
             EquipmentSlot? compatible = null;
             foreach (EquipmentSlot slot in EquipmentSlots.All)
@@ -135,9 +143,12 @@ namespace DarkFlare
                     if ((carried || source.Kind == ItemSourceKind.Board) && _menu.IsWindowVisible(GameMenuPage.SkillBoard)) { return _menu.Board.ValidateDrop(source.Item); }
                     break;
                 case ItemActionKind.EquipBottle:
-                    if (carried && _menu.IsWindowVisible(GameMenuPage.SkillBoard))
+                case ItemActionKind.UnequipBottle:
+                    if (_menu.IsWindowVisible(GameMenuPage.Inventory)
+                        && (target.Element == null || GameMenuController.IsNavigable(target.Element))
+                        && (target.Kind == ItemActionKind.EquipBottle ? carried : source.Kind == ItemSourceKind.EnergyBottle))
                     {
-                        SkillBoardPreview bottle = this.SendQuery(new PreviewSkillBoardQuery(SkillBoardPlayerIdentity.GetProfileId(inventory.Player), new SkillBoardRequest(SkillBoardOperation.EquipBottle, source.Item)));
+                        SkillBoardPreview bottle = PreviewBottle(source, target, inventory.Player);
                         return bottle.Success ? null : "board.error." + bottle.Failure;
                     }
                     break;
@@ -193,7 +204,8 @@ namespace DarkFlare
             {
                 case ItemActionKind.BoardPlace: return _menu.Board.CommitDrop(source.Item);
                 case ItemActionKind.EquipBottle:
-                    SkillBoardPreview bottle = this.SendQuery(new PreviewSkillBoardQuery(SkillBoardPlayerIdentity.GetProfileId(player), new SkillBoardRequest(SkillBoardOperation.EquipBottle, source.Item)));
+                case ItemActionKind.UnequipBottle:
+                    SkillBoardPreview bottle = PreviewBottle(source, target, player);
                     return bottle.Success && this.SendCommand(new CommitSkillBoardCommand(bottle));
                 case ItemActionKind.Use:
                     ItemUseRequest request = _useRequest;
@@ -236,6 +248,13 @@ namespace DarkFlare
                 _useRequest = this.SendCommand(new CreateItemUseRequestCommand(Inventory.Player, item));
             }
             return this.SendQuery(new GetItemUseSnapshotQuery(_useRequest));
+        }
+
+        SkillBoardPreview PreviewBottle(ItemActionSource source, ItemActionTarget target, CombatActor player)
+        {
+            var request = new SkillBoardRequest(target.Kind == ItemActionKind.EquipBottle
+                ? SkillBoardOperation.EquipBottle : SkillBoardOperation.UnequipBottle, source.Item, inventoryOrigin: target.Origin);
+            return this.SendQuery(new PreviewSkillBoardQuery(SkillBoardPlayerIdentity.GetProfileId(player), request));
         }
 
         public void ClearUsePreview()

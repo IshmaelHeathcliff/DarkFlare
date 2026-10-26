@@ -34,10 +34,9 @@
 <ui:Label name="board-links-caption" class="board-text" picking-mode="Ignore"><Bindings><l:LocalizedString property="text" table="ui" entry="board.links" /></Bindings></ui:Label>
 <ui:VisualElement name="board-links" />
 <ui:Label name="board-normal" class="board-text" picking-mode="Ignore"></ui:Label>
-<ui:VisualElement name="board-bottle-icon" class="board-selected-icon" picking-mode="Ignore" /><ui:Button name="board-bottle-drop" class="board-button board-bottle-slot"></ui:Button>
+<ui:VisualElement name="board-bottle-icon" class="board-selected-icon" picking-mode="Ignore" /><ui:Label name="board-bottle-summary" class="board-text" picking-mode="Ignore" />
+<ui:Button name="board-charge-equipped" class="board-button"><Bindings><l:LocalizedString property="text" table="ui" entry="board.charge_equipped" /></Bindings></ui:Button>
 <ui:Label name="board-bottle-help" class="board-text" picking-mode="Ignore"><Bindings><l:LocalizedString property="text" table="ui" entry="board.bottle_help" /></Bindings></ui:Label>
-<ui:Button name="board-equip" class="board-button"><Bindings><l:LocalizedString property="text" table="ui" entry="board.equip" /></Bindings></ui:Button>
-<ui:Button name="board-unequip" class="board-button"><Bindings><l:LocalizedString property="text" table="ui" entry="board.unequip" /></Bindings></ui:Button>
 <ui:Button name="board-choose-bottle" class="board-button"><Bindings><l:LocalizedString property="text" table="ui" entry="board.choose_bottle" /></Bindings></ui:Button>
 <ui:Label name="board-attribute-strength" class="board-text" picking-mode="Ignore"></ui:Label>
 <ui:Button name="board-allocate-strength" class="board-button"></ui:Button>

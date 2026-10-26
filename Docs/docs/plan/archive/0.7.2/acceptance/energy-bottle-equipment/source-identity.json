@@ -1,0 +1,102 @@
+{
+  "BaseCommit": "479f9018dee4d37ed217f9f11d828092fa6c9ebc",
+  "WorkingTreeChanges": true,
+  "Unity": "6000.6.7f1",
+  "ApplicationVersion": "0.7.2-alpha.2",
+  "CoreVersion": 14,
+  "SaveSchema": 12,
+  "SettingsSchema": 1,
+  "MapFormat": 4,
+  "TownRevision": 1,
+  "WildernessRevision": 9,
+  "EditMode": "984/984",
+  "PlayMode": "114/114",
+  "ValidationApplicationVersion": "0.7.2-alpha.1 + stage 2 working tree",
+  "VersionAdvanceAfterValidation": true,
+  "Files": [
+    {
+      "Path": "Assets/Scripts/Runtime/Gameplay/SkillBoard/SkillBoardSystem.cs",
+      "Sha256": "15C0708B5A6EA0E3F50A8D8AFFFF5D8B8DE577630D981FECBF33DB62EF5FDE40"
+    },
+    {
+      "Path": "Assets/Scripts/Runtime/Gameplay/UI/InventoryPanelController.cs",
+      "Sha256": "015B218FBB0EA12F543482863D72E89CE7F6B736A9921265AAF0D566B046435E"
+    },
+    {
+      "Path": "Assets/Scripts/Runtime/Gameplay/UI/InventoryPanelBottle.cs",
+      "Sha256": "53A1755DC64C59706AC3B1D24A2B844BEFC2929B02E1EF0A8FB8E8607005735B"
+    },
+    {
+      "Path": "Assets/Scripts/Runtime/Gameplay/UI/InventoryPanelBottle.cs.meta",
+      "Sha256": "FE436D0C79EFA1D2108CB616BDB012A78E1835AE8EFE768225ACA1351D59D881"
+    },
+    {
+      "Path": "Assets/Scripts/Runtime/Gameplay/UI/ItemActionRouter.cs",
+      "Sha256": "98D36986AA1FBD2A19EC70C139A31C9532A9F325351443C110AB7B7E3EFEACA8"
+    },
+    {
+      "Path": "Assets/Scripts/Runtime/Gameplay/UI/ItemInteractionSession.cs",
+      "Sha256": "B5C7DC59B211F00644604C7FC0392B4CC9EA7517D98463A89FC6369230A18CA8"
+    },
+    {
+      "Path": "Assets/Scripts/Runtime/Gameplay/UI/SkillBoardPanelController.cs",
+      "Sha256": "8F703837773A7528CFF151DFA167A47136BC2F51B7C642B2F6D502C582125010"
+    },
+    {
+      "Path": "Assets/Scripts/Tests/EditMode/SkillBoardTransactionsTests.cs",
+      "Sha256": "C42D3EB334B9BB21B59A2D43647B84A3C9C63CE491F3C4352EC46AB4F72193B6"
+    },
+    {
+      "Path": "Assets/Scripts/Tests/PlayMode/Phase1UxPlayModeTests.SkillBoard.cs",
+      "Sha256": "EAF2A1E2F427863E7B8AA3F5987B35AD4926A7F111DFD3DAC04A3200A8B9306B"
+    },
+    {
+      "Path": "Assets/Scripts/Tests/PlayMode/Phase1UxPlayModeTests.EnergyBottle.cs",
+      "Sha256": "244FDE412BFCB88EB17A033B325B25660E8716332874F1E2D974358C3576BE98"
+    },
+    {
+      "Path": "Assets/Scripts/Tests/PlayMode/Phase1UxPlayModeTests.EnergyBottle.cs.meta",
+      "Sha256": "255816973435BB25B5654BF12C85BA9DA6359E8C06E37DCC459EE58E245D0B58"
+    },
+    {
+      "Path": "Assets/Scripts/Tests/PlayMode/SaveCaptureRestorePlayModeTests.cs",
+      "Sha256": "BA7C8D0507F2ECD50C96D58C5A5349362E8EC80425175D7DC20BB50869F1CD30"
+    },
+    {
+      "Path": "Assets/UI/ItemWorkbench.uxml",
+      "Sha256": "A1E6097541BC70B2C231487FF71387CA0F6C8BEF6FB50AD251709A037686ABBB"
+    },
+    {
+      "Path": "Assets/UI/ItemWorkbench.uss",
+      "Sha256": "421FD34EDFDAFBCF70216A050358D637E550BB8616A492617B4DB3CD64362DDD"
+    },
+    {
+      "Path": "Assets/UI/Windows.uss",
+      "Sha256": "E44B5A8F370E4C2A31FC4F3DE700DB43C8A299356DCC5C45746E10417D69B438"
+    },
+    {
+      "Path": "Assets/UI/SkillBoard/PlayerBoard.uxml",
+      "Sha256": "669EF1035333F563539EE4465AB8A8EB275768B1E52C0EDEA44C7C5B062ADCA1"
+    },
+    {
+      "Path": "Assets/UI/SkillBoard/PlayerBoard.uss",
+      "Sha256": "F5A3E53C31A25B104A4696D90AC199D24165E105E1EB1082A74A85DB817C3C81"
+    },
+    {
+      "Path": "Assets/Localization/Tables/ui Shared Data.asset",
+      "Sha256": "9F054A68B750A6FF3FBD4D83EEA919D665E05E7F5FE1CFC5324E52EF293CB092"
+    },
+    {
+      "Path": "Assets/Localization/Tables/ui_en.asset",
+      "Sha256": "D69B34E4A482FA4CC0C2FA01506C0C1638D48F2AB1EB00DBDED3840D6FBFB1F0"
+    },
+    {
+      "Path": "Assets/Localization/Tables/ui_zh-Hans.asset",
+      "Sha256": "D64D0DE53FD2E778E56999E48B1294206B7BFE9DCF43FAF1020905EACF38E080"
+    },
+    {
+      "Path": "ProjectSettings/ProjectSettings.asset",
+      "Sha256": "5309691C6F4E28C486FF01179537FFFFF21AA128F1C02168EF8728080A3EE161"
+    }
+  ]
+}

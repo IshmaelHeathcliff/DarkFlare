@@ -39,17 +39,19 @@ namespace DarkFlare.Tests
             Keyboard keyboard = InputSystem.AddDevice<Keyboard>();
             Gamepad pad = InputSystem.AddDevice<Gamepad>();
             Mouse mouse = InputSystem.AddDevice<Mouse>();
+            menu.OpenPage(GameMenuPage.Inventory);
+            yield return null; yield return null;
+            Assert.That(menu.Board.IsVisible, Is.False);
+            yield return DragPointer(mouse, root, FindItemButton(root, bottle, "inventory-item").worldBound.center,
+                root.Q("inventory-bottle-slot").worldBound.center, menu.GetComponent<InventoryPanelController>());
+            Assert.That(_architecture.SendQuery(new GetSkillBoardQuery()).EnergyBottle, Is.SameAs(bottle));
+            menu.ClosePage(GameMenuPage.Inventory);
             menu.OpenPage(GameMenuPage.Attributes);
             menu.OpenPage(GameMenuPage.SkillBoard);
             yield return null; yield return null;
             Assert.That(menu.OpenWindows, Is.EqualTo(GameMenuAccess.Inventory | GameMenuAccess.SkillBoard));
             SkillBoardPanelController board = menu.Board;
             Assert.That(board.Canvas.worldBound.height, Is.GreaterThan(100));
-            FindItemButton(root, bottle, "inventory-item").Focus(); yield return null;
-            yield return BoardPress(root, "board-equip", keyboard);
-            Assert.That(_architecture.SendQuery(new GetSkillBoardQuery()).EnergyBottle, Is.Null, "确认前不换装");
-            yield return BoardPress(root, "board-confirm", keyboard);
-            Assert.That(_architecture.SendQuery(new GetSkillBoardQuery()).EnergyBottle, Is.SameAs(bottle));
             PlayerController player = Object.FindAnyObjectByType<PlayerController>();
             MonsterSpawner spawner = Object.FindAnyObjectByType<MonsterSpawner>();
             spawner.StopSpawning();
@@ -64,7 +66,7 @@ namespace DarkFlare.Tests
             }
             Assert.That(bottle.SkillBoardState.Energy, Is.InRange(500, 999), "实际怪物击杀收益形成部分瓶");
             int earned = new PlayerGrowthState().Charge(bottle.SkillBoardState.Energy).EarnedPoints;
-            yield return BoardPress(root, "board-bottle-drop", keyboard);
+            yield return BoardPress(root, "board-charge-equipped", keyboard);
             Assert.That(_architecture.SendQuery(new GetPlayerGrowthQuery()).EarnedPoints, Is.Zero);
             yield return BoardPress(root, "board-confirm", keyboard);
             Assert.That(_architecture.SendQuery(new GetSkillBoardQuery()).EnergyBottle, Is.Null);
@@ -199,6 +201,12 @@ namespace DarkFlare.Tests
             yield return _fixture.EnterMain();
             ApplicationHost host = ApplicationHost.Current;
             GameMenuController menu = Object.FindAnyObjectByType<GameMenuController>();
+            _architecture = menu.GetArchitecture();
+            ItemInstance fullBottle = CreateBottle("energy_bottle_small", 1000);
+            Assert.That(_architecture.GetModel<InventoryModel>().TryAddItem(fullBottle), Is.True);
+            PlayerController bottlePlayer = Object.FindAnyObjectByType<PlayerController>();
+            Assert.That(_architecture.SendCommand(new CommitSkillBoardCommand(_architecture.SendQuery(
+                new PreviewSkillBoardQuery(bottlePlayer.Id.Value, new SkillBoardRequest(SkillBoardOperation.EquipBottle, fullBottle))))), Is.True);
             VisualElement root = menu.GetComponent<RuntimePanelView>().Root;
             IArchitecture architecture = menu.GetArchitecture();
             PlayerController player = Object.FindAnyObjectByType<PlayerController>();
@@ -235,7 +243,7 @@ namespace DarkFlare.Tests
                 {
                     yield return host.Localization.ChangeLanguageAsync(locale == "zh-Hans" ? UserLanguagePreference.SimplifiedChinese : UserLanguagePreference.English).ToCoroutine();
                     menu.Board.Refresh(); yield return null; yield return null;
-                    AssertLayoutInsideRoot(root, new[] { "board-window", "inventory-window", "board-canvas", "board-confirm", "board-cancel", "board-skill-slots" });
+                    AssertLayoutInsideRoot(root, new[] { "board-window", "inventory-window", "board-canvas", "board-confirm", "board-cancel", "board-skill-slots", "inventory-bottle-slot", "inventory-bottle-energy" });
                     AssertElementsDoNotOverlap(root, "board-window", "inventory-window");
                     Assert.That(root.Q("board-canvas").worldBound.height, Is.GreaterThan(100), locale);
                     Keyboard keyboard = InputSystem.AddDevice<Keyboard>();

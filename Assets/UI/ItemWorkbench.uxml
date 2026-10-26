@@ -31,11 +31,16 @@
           <ui:Button name="inventory-slot-belt" text="" class="inventory-equipment-slot equipment-slot--belt" />
         </ui:VisualElement>
       </ui:VisualElement>
-      <ui:Label text="" class="item-workbench-help">
-        <Bindings>
-          <l:LocalizedString property="text" table="ui" entry="workbench.equipment.help" />
-        </Bindings>
-      </ui:Label>
+      <ui:VisualElement class="inventory-bottle-section">
+        <ui:Button name="inventory-bottle-slot" class="inventory-equipment-slot inventory-bottle-slot">
+          <ui:VisualElement name="inventory-bottle-icon" class="inventory-item-icon" picking-mode="Ignore" />
+          <ui:Label class="inventory-equipment-slot-label inventory-bottle-title" picking-mode="Ignore"><Bindings><l:LocalizedString property="text" table="ui" entry="inventory.bottle.title" /></Bindings></ui:Label>
+        </ui:Button>
+        <ui:VisualElement class="inventory-bottle-summary" picking-mode="Ignore">
+          <ui:Label name="inventory-bottle-energy" class="inventory-bottle-energy" />
+          <ui:Label name="inventory-bottle-state" class="inventory-bottle-state inventory-bottle-state--hidden" />
+        </ui:VisualElement>
+      </ui:VisualElement>
     </ui:VisualElement>
     <ui:VisualElement class="item-workbench-inventory ui-panel-frame">
       <ui:VisualElement class="item-workbench-section-header">

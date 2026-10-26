@@ -120,6 +120,8 @@ namespace DarkFlare
             InputSystem.onDeviceChange += OnDeviceChange;
             _registrations.Add(menu.GetArchitecture().RegisterEvent<InventoryChangedEvent>(_ => OnSourceChanged()));
             _registrations.Add(menu.GetArchitecture().RegisterEvent<EquipmentChangedEvent>(_ => OnSourceChanged()));
+            _registrations.Add(menu.GetArchitecture().RegisterEvent<SkillBoardChangedEvent>(_ => OnSourceChanged()));
+            _registrations.Add(menu.GetArchitecture().RegisterEvent<EnergyCollectedEvent>(_ => OnSourceChanged()));
             _workspace.CraftingItemChanged += OnSourceChanged;
             _actionMenu.style.display = DisplayStyle.None;
             Refresh();
@@ -178,6 +180,11 @@ namespace DarkFlare
             if (button.name == "crafting-input-slot")
             {
                 source = new ItemActionSource(_workspace.CraftingItem, ItemSourceKind.Crafting, window, button);
+            }
+            else if (window == GameMenuPage.Inventory && button.name == "inventory-bottle-slot")
+            {
+                source = new ItemActionSource(_menu.GetArchitecture().SendQuery(new GetSkillBoardQuery()).EnergyBottle,
+                    ItemSourceKind.EnergyBottle, window, button);
             }
             else if (window == GameMenuPage.Inventory && _equipment.ContainsValue(button))
             {
@@ -412,7 +419,8 @@ namespace DarkFlare
         ItemActionTarget GridTarget(Vector2Int origin)
         {
             ItemActionKind kind = _source.Kind == ItemSourceKind.Merchant ? ItemActionKind.Buy
-                : _source.Kind == ItemSourceKind.Equipment ? ItemActionKind.Unequip : ItemActionKind.Move;
+                : _source.Kind == ItemSourceKind.Equipment ? ItemActionKind.Unequip
+                : _source.Kind == ItemSourceKind.EnergyBottle ? ItemActionKind.UnequipBottle : ItemActionKind.Move;
             return new ItemActionTarget(kind, _grid, origin);
         }
 
@@ -432,7 +440,7 @@ namespace DarkFlare
             Add("crafting-slot-remove", ItemActionKind.Return);
             Add("item-discard-zone", ItemActionKind.Discard);
             Add("board-canvas", ItemActionKind.BoardPlace);
-            Add("board-bottle-drop", ItemActionKind.EquipBottle);
+            Add("inventory-bottle-slot", ItemActionKind.EquipBottle);
             return targets;
             void Add(string name, ItemActionKind kind)
             {
@@ -664,7 +672,7 @@ namespace DarkFlare
             _feedbackItem = source.Item;
             _menu.Board?.FinishDrop();
             CloseMenu(false);
-            if (target.Kind == ItemActionKind.BoardPlace || target.Kind == ItemActionKind.EquipBottle)
+            if (target.Kind == ItemActionKind.BoardPlace)
             {
                 _workspace.Activate(GameMenuPage.SkillBoard);
                 if (_menu.Board.IsReviewingLinks) { _feedback = "board.links"; }
@@ -729,6 +737,9 @@ namespace DarkFlare
             if (source.Kind == ItemSourceKind.Inventory) { Add(new ItemActionTarget(ItemActionKind.Discard)); }
             if (source.Kind == ItemSourceKind.Inventory && source.Item.BaseDefinition.UseDefinition != null
                 && primary.Kind != ItemActionKind.Use) { Add(new ItemActionTarget(ItemActionKind.Use)); }
+            if (source.Kind == ItemSourceKind.Inventory && source.Item.BaseDefinition.ItemType == ItemType.EnergyBottle
+                && primary.Kind != ItemActionKind.EquipBottle && _menu.IsWindowVisible(GameMenuPage.Inventory))
+            { Add(new ItemActionTarget(ItemActionKind.EquipBottle, _root.Q("inventory-bottle-slot"))); }
             var close = new Button(() => CloseMenu(true)) { text = Text("window.close") };
             close.AddToClassList("item-action-option");
             _actionMenu.Add(close);
@@ -777,7 +788,7 @@ namespace DarkFlare
 
         string Describe(ItemActionSource source, ItemActionTarget target)
         {
-            string text = Text(target.Kind == ItemActionKind.BoardPlace ? "item.action.board_place" : target.Kind == ItemActionKind.EquipBottle ? "board.equip" : "item.action." + target.Kind.ToString().ToLowerInvariant());
+            string text = Text(target.Kind == ItemActionKind.BoardPlace ? "item.action.board_place" : "item.action." + target.Kind.ToString().ToLowerInvariant());
             if (target.Kind == ItemActionKind.Buy || target.Kind == ItemActionKind.Sell)
             {
                 text += " · " + _router.Price(source.Item, target.Kind == ItemActionKind.Buy);

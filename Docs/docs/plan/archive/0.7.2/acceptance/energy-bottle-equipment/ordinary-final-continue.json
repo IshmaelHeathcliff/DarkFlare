@@ -1,0 +1,44 @@
+{
+  "success": true,
+  "command": "command script run",
+  "data": {
+    "command": "script run",
+    "parameters": {
+      "file": "Temp/Agent/BottleAcceptance.cs",
+      "entry": "BottleAcceptance.Continue"
+    },
+    "result": {
+      "diagnostics": [],
+      "compileMs": 1771,
+      "executeMs": 2174,
+      "assemblyName": "PipelineRunScript_BottleAcceptance_afdb4cd1b9ad408db2e80a3a13d110b7",
+      "success": true,
+      "result": {
+        "version": "0.7.2-alpha.1",
+        "unity": "6000.6.7f1",
+        "saveRoot": "C:/Users/darkf/AppData/LocalLow/DefaultCompany/DarkFlare\\DarkFlare\\Saves",
+        "formalRoot": true,
+        "testMarker": "",
+        "windows": "Inventory",
+        "playerId": "local_player",
+        "bottleId": null,
+        "energy": null,
+        "boundToCurrentInstance": true,
+        "icon": null,
+        "energyText": "空栏",
+        "stateText": "",
+        "bottleBounds": "(x:664.00, y:139.00, width:100.00, height:48.00)",
+        "gridBounds": "(x:656.00, y:461.00, width:530.00, height:308.00)",
+        "boardSummary": "",
+        "failures": []
+      }
+    },
+    "target": {
+      "host": "127.0.0.1",
+      "port": 7800,
+      "projectPath": "C:\\Users\\darkf\\Home\\Projects\\DarkFlare"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,43 @@
+{
+  "success": true,
+  "command": "command script run",
+  "data": {
+    "command": "script run",
+    "parameters": {
+      "file": "Temp/Agent/FinishBottleStage.cs",
+      "entry": "FinishBottleStage.Advance"
+    },
+    "result": {
+      "diagnostics": [],
+      "compileMs": 120,
+      "executeMs": 60,
+      "assemblyName": "PipelineRunScript_FinishBottleStage_b53a9e568e9f49e889d34a0161f9957f",
+      "success": true,
+      "result": {
+        "unity": "6000.6.7f1",
+        "version": "0.7.2-alpha.2",
+        "versionPersisted": true,
+        "core": 14,
+        "contentValid": true,
+        "issues": [],
+        "saveSchema": 12,
+        "settingsSchema": 1,
+        "playing": false,
+        "compiling": false,
+        "reloadEnabled": true,
+        "reloadOptions": 1,
+        "testMarker": "",
+        "scenes": [
+          "Assets/Scenes/Bootstrap.unity"
+        ]
+      }
+    },
+    "target": {
+      "host": "127.0.0.1",
+      "port": 7800,
+      "projectPath": "C:\\Users\\darkf\\Home\\Projects\\DarkFlare"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

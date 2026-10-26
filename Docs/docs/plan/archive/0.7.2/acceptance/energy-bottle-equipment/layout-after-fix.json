@@ -1,0 +1,20 @@
+{
+  "status": "completed",
+  "duration": 2.43,
+  "summary": {
+    "total": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "results": [
+    {
+      "FullName": "DarkFlare.Tests.Phase0ExperiencePlayModeTests.MainScene_InventorySupportsKeyboardGamepadAndStandardResolution",
+      "Status": "Passed",
+      "Duration": 2.345947,
+      "Message": null,
+      "StackTrace": null
+    }
+  ]
+}

@@ -2515,6 +2515,38 @@ MonoBehaviour:
     m_Key: board.rotate_bindings
     m_Metadata:
       m_Items: []
+  - m_Id: 24472742630776832
+    m_Key: inventory.bottle.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 24472742723051520
+    m_Key: inventory.bottle.empty
+    m_Metadata:
+      m_Items: []
+  - m_Id: 24472742723051521
+    m_Key: inventory.bottle.energy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 24472742723051522
+    m_Key: inventory.bottle.help
+    m_Metadata:
+      m_Items: []
+  - m_Id: 24472742723051523
+    m_Key: item.action.equipbottle
+    m_Metadata:
+      m_Items: []
+  - m_Id: 24472742723051524
+    m_Key: item.action.unequipbottle
+    m_Metadata:
+      m_Items: []
+  - m_Id: 24472742723051525
+    m_Key: board.charge_equipped
+    m_Metadata:
+      m_Items: []
+  - m_Id: 24484628743053312
+    m_Key: inventory.bottle.full
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

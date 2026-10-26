@@ -136,11 +136,63 @@ namespace DarkFlare.Tests
             Assert.That(System.Preview(Player, new SkillBoardRequest(SkillBoardOperation.UnequipBottle)).Success, Is.False);
         }
         [Test]
+        public void BottleUnequip_UsesRequestedCellsAndPreservesInstanceEnergy()
+        {
+            ItemInstance bottle = Create("energy_bottle_small");
+            Inventory.TryAddItem(bottle);
+            bottle.CollectEnergy(321);
+            Commit(new SkillBoardRequest(SkillBoardOperation.EquipBottle, bottle));
+            var origin = new Vector2Int(4, 2);
+            Commit(new SkillBoardRequest(SkillBoardOperation.UnequipBottle, bottle, inventoryOrigin: origin));
+            Assert.That(Board.State.EnergyBottle, Is.Null);
+            Assert.That(Inventory.Grid.Placements[bottle].position, Is.EqualTo(origin));
+            Assert.That(bottle.SkillBoardState.Energy, Is.EqualTo(321));
+        }
+
+        [Test]
+        public void BottleUnequip_BlockedOrOutOfBoundsCellsDoNotFallBackOrPublishSuccess()
+        {
+            ItemInstance bottle = Create("energy_bottle_small");
+            Inventory.TryAddItem(bottle);
+            Commit(new SkillBoardRequest(SkillBoardOperation.EquipBottle, bottle));
+            ItemInstance blocker = Create("ember_power");
+            var occupied = new Vector2Int(4, 2);
+            Inventory.TryAddItemAt(blocker, occupied);
+            SkillBoardState before = Board.State;
+            long revision = Inventory.Grid.Revision;
+            int events = 0;
+            IUnRegister inventoryEvent = _architecture.RegisterEvent<InventoryChangedEvent>(_ => events++);
+            IUnRegister boardEvent = _architecture.RegisterEvent<SkillBoardChangedEvent>(_ => events++);
+            foreach (Vector2Int origin in new[] { occupied, new Vector2Int(-1, 0), new Vector2Int(Inventory.Grid.Width - 1, 0),
+                new Vector2Int(0, Inventory.Grid.Height), new Vector2Int(int.MaxValue, 0), new Vector2Int(0, int.MinValue) })
+            {
+                SkillBoardPreview preview = System.Preview(Player,
+                    new SkillBoardRequest(SkillBoardOperation.UnequipBottle, bottle, inventoryOrigin: origin));
+                Assert.That(preview.Success, Is.False);
+                Assert.That(System.Commit(preview, out _), Is.False);
+                Assert.That(Board.State, Is.SameAs(before));
+                Assert.That(Inventory.Grid.Revision, Is.EqualTo(revision));
+                Assert.That(Inventory.Grid.Placements.ContainsKey(bottle), Is.False);
+                Assert.That(Inventory.Grid.Placements[blocker].position, Is.EqualTo(occupied));
+                Assert.That(events, Is.Zero);
+            }
+            inventoryEvent.UnRegister();
+            boardEvent.UnRegister();
+            Assert.That(System.Preview(Player, new SkillBoardRequest(SkillBoardOperation.UnequipBottle,
+                Create("energy_bottle_small"), inventoryOrigin: Vector2Int.zero)).Failure, Is.EqualTo(SkillBoardFailure.InvalidSource));
+            Assert.That(System.Preview(Player, new SkillBoardRequest(SkillBoardOperation.EquipBottle,
+                blocker, inventoryOrigin: Vector2Int.zero)).Failure, Is.EqualTo(SkillBoardFailure.InvalidPlacement));
+            Commit(new SkillBoardRequest(SkillBoardOperation.UnequipBottle));
+            Assert.That(Inventory.Grid.Placements.ContainsKey(bottle), Is.True, "快捷卸瓶仍自动找空位");
+        }
+
+        [Test]
         public void BottleCollection_InvalidatesPendingUnequipPreview()
         {
             ItemInstance bottle = Create("energy_bottle_small"); Inventory.TryAddItem(bottle);
             Commit(new SkillBoardRequest(SkillBoardOperation.EquipBottle, bottle));
-            SkillBoardPreview preview = System.Preview(Player, new SkillBoardRequest(SkillBoardOperation.UnequipBottle));
+            SkillBoardPreview preview = System.Preview(Player, new SkillBoardRequest(SkillBoardOperation.UnequipBottle,
+                bottle, inventoryOrigin: new Vector2Int(4, 2)));
             bottle.CollectEnergy(7);
             Assert.That(System.Commit(preview, out _), Is.False);
             Assert.That(Board.State.EnergyBottle, Is.SameAs(bottle));

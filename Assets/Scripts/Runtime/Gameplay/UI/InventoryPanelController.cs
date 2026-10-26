@@ -7,7 +7,7 @@ namespace DarkFlare
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(RuntimePanelView))]
-    public class InventoryPanelController : MonoBehaviour, IController
+    public partial class InventoryPanelController : MonoBehaviour, IController
     {
         const float CellSize = 48f;
         const float CellGap = 4f;
@@ -16,7 +16,8 @@ namespace DarkFlare
         {
             None,
             Inventory,
-            Equipment
+            Equipment,
+            EnergyBottle
         }
 
         [SerializeField]
@@ -175,6 +176,8 @@ namespace DarkFlare
 
         public bool FocusDefault()
         {
+            if (_selectionHighlightSource == SelectionHighlightSource.EnergyBottle && _bottleSlot != null)
+            { _bottleSlot.Focus(); return true; }
             if (_selectedItem != null && _itemButtons.TryGetValue(_selectedItem, out Button selectedButton))
             {
                 selectedButton.Focus();
@@ -251,7 +254,7 @@ namespace DarkFlare
             RegisterEvents();
             RefreshInventory();
             SetVisible(IsVisible);
-            ApplicationLog.Info(LogEventIds.GameplayUi, "[InventoryPanelController] 背包与四槽装备面板初始化完成", this);
+            ApplicationLog.Info(LogEventIds.GameplayUi, "[InventoryPanelController] 背包、十槽装备与能量瓶栏初始化完成", this);
             return SceneSessionBindResult.Success;
         }
 
@@ -346,6 +349,7 @@ namespace DarkFlare
             _attributeGrid = root.Q<VisualElement>("inventory-attribute-grid");
             _equipButton = root.Q<Button>("inventory-equip");
             _unequipButton = root.Q<Button>("inventory-unequip");
+            BindBottle(root);
             _slotButtons.Clear();
             foreach (EquipmentSlot slot in EquipmentSlots.All)
             {
@@ -363,6 +367,10 @@ namespace DarkFlare
                 || _attributeGrid == null
                 || _equipButton == null
                 || _unequipButton == null
+                || _bottleSlot == null
+                || _bottleEnergy == null
+                || _bottleState == null
+                || _bottleIcon == null
                 || _slotButtons.Count != EquipmentSlots.All.Count
                 || _workspace == null)
             {
@@ -399,6 +407,7 @@ namespace DarkFlare
 
         void UnbindButtons()
         {
+            UnbindBottle();
             if (_equipButton != null)
             {
                 _equipButton.clicked -= OnEquipClicked;
@@ -437,6 +446,8 @@ namespace DarkFlare
             _eventRegistrations.Add(this.RegisterEvent<InventoryChangedEvent>(_ => RefreshInventory()));
             _eventRegistrations.Add(this.RegisterEvent<EquipmentChangedEvent>(_ => RefreshInventory()));
             _eventRegistrations.Add(this.RegisterEvent<ItemCraftedEvent>(_ => RefreshInventory()));
+            _eventRegistrations.Add(this.RegisterEvent<SkillBoardChangedEvent>(_ => RefreshSelection()));
+            _eventRegistrations.Add(this.RegisterEvent<EnergyCollectedEvent>(_ => RefreshSelection()));
         }
 
         void BuildGrid(InventorySnapshot snapshot)
@@ -627,6 +638,10 @@ namespace DarkFlare
             RefreshDetail();
             RefreshTargetSlotLabel();
 
+            if (_selectionHighlightSource == SelectionHighlightSource.EnergyBottle
+                || _selectedItem?.BaseDefinition.ItemType == ItemType.EnergyBottle)
+            { RefreshBottleActions(); return; }
+
             bool hasTarget = _targetSlot.HasValue;
             bool hasCandidate = TryGetSelectedSnapshot(out InventoryItemSnapshot selected);
             bool canEquip = LastSnapshot.HasPlayer
@@ -672,6 +687,7 @@ namespace DarkFlare
 
         void RefreshEquipmentSlots()
         {
+            RefreshBottle();
             for (int i = 0; i < LastSnapshot.EquipmentSlots.Count; i++)
             {
                 EquipmentSlotSnapshot snapshot = LastSnapshot.EquipmentSlots[i];
@@ -727,6 +743,11 @@ namespace DarkFlare
         {
             ItemInstance highlightedInventoryItem = null;
             EquipmentSlot? highlightedEquipmentSlot = null;
+            if (_bottleSlot != null)
+            {
+                _workspace.Highlight(GameMenuPage.Inventory, _bottleSlot, "inventory-equipment-slot--selected",
+                    _previewItem != null ? _previewItem == _equippedBottle : _selectionHighlightSource == SelectionHighlightSource.EnergyBottle);
+            }
 
             if (_previewItem != null)
             {
@@ -880,6 +901,8 @@ namespace DarkFlare
 
         void OnEquipClicked()
         {
+            if (_selectedItem?.BaseDefinition.ItemType == ItemType.EnergyBottle)
+            { CommitBottle(true); return; }
             if (_selectedItem == null || !LastSnapshot.HasPlayer || !_targetSlot.HasValue)
             {
                 SetFeedback("inventory.feedback.equip_select");
@@ -909,6 +932,9 @@ namespace DarkFlare
 
         void OnUnequipClicked()
         {
+            if (_selectionHighlightSource == SelectionHighlightSource.EnergyBottle
+                || _selectedItem?.BaseDefinition.ItemType == ItemType.EnergyBottle)
+            { CommitBottle(false); return; }
             if (!LastSnapshot.HasPlayer
                 || !_targetSlot.HasValue
                 || !TryGetSlotSnapshot(_targetSlot.Value, out EquipmentSlotSnapshot snapshot)

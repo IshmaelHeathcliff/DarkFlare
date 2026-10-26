@@ -2333,11 +2333,11 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 20873743621414929
-    m_Localized: Only the equipped bottle collects energy. Overflow is discarded; replace a full bottle manually.
+    m_Localized: Equip or swap bottles in Inventory. Select a bottle here, then confirm to consume it for energy.
     m_Metadata:
       m_Items: []
   - m_Id: 20873743625609216
-    m_Localized: 'Energy bottle: empty'
+    m_Localized: No energy bottle equipped
     m_Metadata:
       m_Items: []
   - m_Id: 20873743625609217
@@ -2578,13 +2578,45 @@ MonoBehaviour:
     m_Localized: 'Rotate: {0} / {1}; select connections, then confirm placement'
     m_Metadata:
       m_Items: []
+  - m_Id: 24472742630776832
+    m_Localized: Energy bottle
+    m_Metadata:
+      m_Items: []
+  - m_Id: 24472742723051520
+    m_Localized: Empty
+    m_Metadata:
+      m_Items: []
+  - m_Id: 24472742723051521
+    m_Localized: '{0} / {1}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 24472742723051522
+    m_Localized: "Collects kill energy \xB7 Drop to equip"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 24472742723051523
+    m_Localized: Equip energy bottle
+    m_Metadata:
+      m_Items: []
+  - m_Id: 24472742723051524
+    m_Localized: Unequip energy bottle
+    m_Metadata:
+      m_Items: []
+  - m_Id: 24472742723051525
+    m_Localized: Charge with equipped bottle
+    m_Metadata:
+      m_Items: []
+  - m_Id: 24484628743053312
+    m_Localized: Full
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:
     - rid: 6738608143192817845
       type: {class: SmartFormatTag, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
       data:
-        m_Entries:
+        m_Entries: 
         m_SharedEntries:
         - id: 18975395143680
         - id: 18975453863938

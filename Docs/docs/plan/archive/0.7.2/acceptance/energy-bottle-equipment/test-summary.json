@@ -1,0 +1,22 @@
+{
+  "EditMode": {
+    "total": 984,
+    "passed": 984,
+    "failed": 0,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "PlayMode": {
+    "total": 114,
+    "passed": 114,
+    "failed": 0,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "VisualStates": 9,
+  "VisualTextFailures": 0,
+  "OriginalFilesRestored": true,
+  "Player": "Not run",
+  "ActualDevice": "Not run",
+  "CrossProcess": "Not run"
+}

@@ -1,0 +1,49 @@
+$ErrorActionPreference = 'Stop'
+$records = @(Get-Content -LiteralPath 'Temp/Agent/verified-backups.json' -Raw | ConvertFrom-Json)
+$roots = @(
+  'C:\Users\darkf\AppData\LocalLow\DefaultCompany\DarkFlare\DarkFlare\Saves',
+  'C:\Users\darkf\AppData\LocalLow\DefaultCompany\DarkFlare\DarkFlare\Settings'
+)
+function Test-PlayerFilePath([string]$path)
+{
+  $absolute = [IO.Path]::GetFullPath($path)
+  foreach ($root in $roots)
+  {
+    if ($absolute.StartsWith([IO.Path]::GetFullPath($root) + [IO.Path]::DirectorySeparatorChar, [StringComparison]::OrdinalIgnoreCase)) { return $true }
+  }
+  return $false
+}
+if ($records.Count -eq 0) { throw 'Missing backup records' }
+foreach ($record in $records)
+{
+  if (!(Test-PlayerFilePath $record.Path)) { throw 'Original file outside authorized roots' }
+  if ((Get-FileHash -LiteralPath $record.Backup -Algorithm SHA256).Hash -ne $record.Hash) { throw 'Backup file identity mismatch' }
+}
+$removed = @()
+foreach ($root in $roots)
+{
+  if (!(Test-Path -LiteralPath $root)) { continue }
+  foreach ($file in Get-ChildItem -LiteralPath $root -File -Recurse)
+  {
+    if (!(Test-PlayerFilePath $file.FullName)) { throw 'Unexpected cleanup target' }
+    if (!($records | Where-Object { [string]::Equals($_.Path, $file.FullName, [StringComparison]::OrdinalIgnoreCase) }))
+    {
+      Remove-Item -LiteralPath $file.FullName -Force
+      $removed += $file.FullName
+    }
+  }
+}
+foreach ($record in $records)
+{
+  New-Item -ItemType Directory -Path ([IO.Path]::GetDirectoryName($record.Path)) -Force | Out-Null
+  Copy-Item -LiteralPath $record.Backup -Destination $record.Path -Force
+}
+$verified = foreach ($record in $records)
+{
+  $actual = (Get-FileHash -LiteralPath $record.Path -Algorithm SHA256).Hash
+  if ($actual -ne $record.Hash) { throw 'Restored file identity mismatch' }
+  [pscustomobject]@{ Path = $record.Path; OriginalSha256 = $record.Hash; ActualSha256 = $actual; Unchanged = $true }
+}
+[pscustomobject]@{ RemovedValidationFiles = $removed; Originals = $verified } |
+  ConvertTo-Json -Depth 8 | Set-Content -LiteralPath 'Temp/Agent/original-files-restored.json' -Encoding utf8
+$verified | ConvertTo-Json -Depth 5

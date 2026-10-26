@@ -1,0 +1,155 @@
+// 整理后的采集片段；备份与恢复见 restore-player-files.ps1.txt 和实际哈希记录。
+using System;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Threading.Tasks;
+using DarkFlare;
+using DarkFlare.Editor;
+using UnityEditor;
+using UnityEngine;
+using UnityEngine.UIElements;
+
+public static class BottleAcceptance
+{
+    public static async Task<object> Continue()
+    {
+        double deadline = Time.realtimeSinceStartupAsDouble + 30;
+        while ((!ApplicationHost.HasCurrent || ApplicationHost.Current.SceneFlow?.State != GameFlowState.FrontEnd
+            || ApplicationHost.Current.SaveCoordinator.IsBusy) && Time.realtimeSinceStartupAsDouble < deadline) { await Task.Delay(30); }
+        ApplicationHost host = ApplicationHost.Current;
+        await host.PlatformLifecycle.HandleFocusChangedAsync(true, default);
+        Button button = null;
+        while ((button == null || !button.enabledInHierarchy) && Time.realtimeSinceStartupAsDouble < deadline)
+        {
+            button = UnityEngine.Object.FindObjectsByType<RuntimePanelView>(FindObjectsInactive.Exclude)
+                .Select(view => view.Root?.Q<Button>("front-end-continue")).FirstOrDefault(value => value != null);
+            await Task.Delay(30);
+        }
+        if (button?.enabledInHierarchy != true) { throw new InvalidOperationException("普通 Play 继续按钮不可用"); }
+        SceneFlowResult result = await host.SceneFlow.RequestAsync(SceneFlowRequest.StartGame(GameStartIntent.Continue));
+        if (!result.Succeeded) { throw new InvalidOperationException("继续游戏失败", result.Exception); }
+        GameMenuController menu = null;
+        deadline = Time.realtimeSinceStartupAsDouble + 30;
+        while ((menu == null || !menu.IsReady) && Time.realtimeSinceStartupAsDouble < deadline)
+        { menu = UnityEngine.Object.FindAnyObjectByType<GameMenuController>(); await Task.Delay(30); }
+        menu.OpenPage(GameMenuPage.Inventory);
+        await Task.Delay(100);
+        return Read();
+    }
+
+    static GameMenuController Menu => UnityEngine.Object.FindAnyObjectByType<GameMenuController>();
+
+    public static object EquipPartial()
+    {
+        IArchitecture architecture = Menu.GetArchitecture();
+        ItemBaseDefinition definition = ApplicationHost.Current.ContentCatalog.Resolve<ItemBaseDefinition>(ContentId.Parse("item:energy_bottle_small")).Value;
+        ItemInstance bottle = definition.CreateInstance(architecture.GetUtility<IItemInstanceIdGenerator>().Next(), 1, 72, ItemRarity.Normal);
+        Collect(bottle, 321);
+        if (!architecture.GetModel<InventoryModel>().TryAddItem(bottle)) { throw new InvalidOperationException("验收瓶无法放入背包"); }
+        PlayerController player = UnityEngine.Object.FindAnyObjectByType<PlayerController>();
+        SkillBoardPreview preview = architecture.SendQuery(new PreviewSkillBoardQuery(player.Id.Value, new SkillBoardRequest(SkillBoardOperation.EquipBottle, bottle)));
+        if (!preview.Success || !architecture.SendCommand(new CommitSkillBoardCommand(preview))) { throw new InvalidOperationException(preview.Error); }
+        return Read();
+    }
+
+    public static async Task<object> PreparePartial()
+    {
+        IArchitecture architecture = Menu.GetArchitecture();
+        ItemBaseDefinition definition = ApplicationHost.Current.ContentCatalog.Resolve<ItemBaseDefinition>(ContentId.Parse("item:energy_bottle_small")).Value;
+        await architecture.GetUtility<SpriteAssetLoader>().PreloadAsync(new[] { definition.Icon }, ApplicationHost.Current.CurrentSession.SceneScope.Token);
+        object result = EquipPartial();
+        await Task.Delay(100);
+        return Read();
+    }
+
+    public static object Fill()
+    {
+        IArchitecture architecture = Menu.GetArchitecture();
+        ItemInstance bottle = architecture.SendQuery(new GetSkillBoardQuery()).EnergyBottle;
+        Collect(bottle, bottle.BaseDefinition.SkillBoard.EnergyCapacity);
+        Menu.GetComponent<InventoryPanelController>().RefreshInventory();
+        return Read();
+    }
+
+    public static object Unequip()
+    {
+        IArchitecture architecture = Menu.GetArchitecture();
+        PlayerController player = UnityEngine.Object.FindAnyObjectByType<PlayerController>();
+        SkillBoardPreview preview = architecture.SendQuery(new PreviewSkillBoardQuery(player.Id.Value, new SkillBoardRequest(SkillBoardOperation.UnequipBottle)));
+        if (!preview.Success || !architecture.SendCommand(new CommitSkillBoardCommand(preview))) { throw new InvalidOperationException(preview.Error); }
+        return Read();
+    }
+
+    public static async Task<object> Locale(string locale)
+    {
+        await ApplicationHost.Current.Localization.ChangeLanguageAsync(locale == "zh-Hans" ? UserLanguagePreference.SimplifiedChinese : UserLanguagePreference.English);
+        await Task.Delay(100);
+        VisualElement root = Menu.GetComponent<RuntimePanelView>().Root;
+        if (locale == "qps-ploc")
+        {
+            foreach (TextElement text in root.Query<TextElement>().ToList())
+            {
+                if (!string.IsNullOrWhiteSpace(text.text) && text.text.Any(char.IsLetter) && GameMenuController.IsNavigable(text)
+                    && !text.ClassListContains("input-binding-token") && !(text.text[0] == '[' && text.text[text.text.Length - 1] == ']'))
+                { text.text = PseudoLocalizationUtility.Localize(text.text); }
+            }
+        }
+        await Task.Delay(100);
+        return Read();
+    }
+
+    static void Collect(ItemInstance bottle, int energy)
+    {
+        typeof(ItemInstance).GetMethod("CollectEnergy", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(bottle, new object[] { energy });
+    }
+
+    public static object Board()
+    {
+        Menu.OpenPage(GameMenuPage.SkillBoard);
+        return Read();
+    }
+
+    public static object Read()
+    {
+        ApplicationHost host = ApplicationHost.Current;
+        IArchitecture architecture = Menu.GetArchitecture();
+        ItemInstance bottle = architecture.SendQuery(new GetSkillBoardQuery()).EnergyBottle;
+        VisualElement root = Menu.GetComponent<RuntimePanelView>().Root;
+        Button slot = root.Q<Button>("inventory-bottle-slot");
+        string saveRoot = (string)typeof(ApplicationHost).GetProperty("SaveRootPath", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(host);
+        return new
+        {
+            version = Application.version, unity = Application.unityVersion, saveRoot,
+            formalRoot = string.Equals(Path.GetFullPath(saveRoot), Path.GetFullPath(new PersistentSavePathProvider().RootPath), StringComparison.OrdinalIgnoreCase),
+            testMarker = SessionState.GetString("DarkFlare.Tests.PlayMode.DataRun", ""),
+            windows = Menu.OpenWindows.ToString(),
+            playerId = UnityEngine.Object.FindAnyObjectByType<PlayerController>().Id.Value,
+            bottleId = bottle?.InstanceId, energy = bottle?.SkillBoardState.Energy,
+            boundToCurrentInstance = slot.userData == bottle, icon = root.Q("inventory-bottle-icon").resolvedStyle.backgroundImage.sprite?.name,
+            energyText = root.Q<Label>("inventory-bottle-energy").text,
+            stateText = root.Q<Label>("inventory-bottle-state").text,
+            bottleBounds = slot.worldBound.ToString(), gridBounds = root.Q("inventory-grid-frame").worldBound.ToString(),
+            boardSummary = root.Q<Label>("board-bottle-summary").text,
+            failures = root.Q("inventory-equipment").Query<TextElement>().ToList().Where(text => GameMenuController.IsNavigable(text)
+                && !string.IsNullOrWhiteSpace(text.text) && text.contentRect.width > 1 && text.contentRect.height > 1).Where(text =>
+                {
+                    bool wraps = text.resolvedStyle.whiteSpace == WhiteSpace.Normal;
+                    Vector2 size = text.MeasureTextSize(text.text, wraps ? text.contentRect.width : 0,
+                        wraps ? VisualElement.MeasureMode.AtMost : VisualElement.MeasureMode.Undefined, 0, VisualElement.MeasureMode.Undefined);
+                    return wraps ? size.y > text.contentRect.height + 2 : size.x > text.contentRect.width + 2;
+                }).Select(text => text.name + ": " + text.text).ToArray()
+        };
+    }
+
+    public static async Task<object> SaveAndReturn()
+    {
+        ApplicationHost host = ApplicationHost.Current;
+        object state = Read();
+        SaveOperationResult save = await host.SessionSaveFacade.SaveAutoAsync();
+        if (!save.Succeeded) { throw new InvalidOperationException("保存失败", save.Exception); }
+        SceneFlowResult returned = await host.SceneFlow.RequestAsync(SceneFlowRequest.ReturnToFrontEnd());
+        if (!returned.Succeeded) { throw new InvalidOperationException("返回主菜单失败", returned.Exception); }
+        return new { state, save.CommitSequence, returned = returned.Succeeded };
+    }
+}

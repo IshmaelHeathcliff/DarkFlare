@@ -8,7 +8,15 @@
 | 中 | 2000 | 200 |
 | 大 | 4000 | 400 |
 
-容量与小瓶价格由用户暂定，中大价格按容量 1∶2∶4 推导；实际买卖继续叠加既有商人倍率。换瓶把旧瓶放到新瓶原背包 2×1 位置，最终背包空间不足整次失败；空专栏卸下使用背包合法空位。预检期间积蓄推进物品 Revision，旧换装预览须重做。
+容量与小瓶价格由用户暂定，中大价格按容量 1∶2∶4 推导；实际买卖继续叠加既有商人倍率。换瓶把旧瓶放到新瓶原背包 2×1 位置，最终背包空间不足整次失败；快捷卸下自动寻找合法空位，拖动 / 手柄放回背包时仅尝试指定区域，被占或越界不自动换格。预检期间积蓄推进物品 Revision，旧换装预览须重做。
+
+## 玩家装备入口
+
+背包装备区提供独立的 2×1 能量瓶栏，显示实际图标、能量 / 容量和满瓶状态。只打开背包即可通过拖放、动作菜单、右键或键盘 / 手柄拿起放置进行装备、替换和卸下，不要求天赋页可见，成功后焦点留在背包。商店上下文仍默认出售背包瓶；已装备瓶需先卸下再出售 / 丢弃，不能直接投入打造。
+
+`InventoryPanelBottle` 是现有 `InventoryPanelController` 的分文件实现，通过 Query 读取专栏，通过原棋盘 Command 提交；共享 `ItemActionRouter` / `ItemInteractionSession` 识别独立的已装备瓶来源。状态与能量事件刷新读数，能量 Revision 改变使旧拖动来源失效；关闭、设备移除、Shell 接管和 Session 结束清理未提交操作。
+
+天赋页只显示装备瓶摘要并提供「选择装备瓶充能」和背包瓶选择；拖瓶到画布中心也只准备充能。原瓶保留归属，明确确认后才整瓶消费；天赋页不再装备或卸下瓶子。
 
 ## 收益与归属
 
@@ -24,4 +32,4 @@
 
 瓶能量随 ItemInstanceDto.SkillBoard.Energy 保存，Profile.SkillBoard.EnergyBottleInstanceId 指定唯一装备所有者。Restore 拒绝负值、越容量和错误角色；不会填瓶、补领或更换实例。
 
-当前可通过[玩家天赋棋盘](player-board.md)及开发窗口装备 / 卸下和查看积蓄；[0.7.2 计划](../plan/alpha-0.7.2/ui-optimization.md)将装备入口迁到背包装备区，尚未实施。阶段三已实现中心整瓶消费、跨瓶余额、1 天赋点＋1 属性点兑换、递增成本与点亮，见[成长模块](growth.md)和[合同](../plan/archive/0.7.1/plans/energy-progression-contract.md)。长期 `EnergyBottleTests` 保护四个收益因素、归属、去重、容量舍弃、手动换瓶和 Session 隔离；真实死亡、保存继续和切图由现有 PlayMode 保存套件覆盖。
+正式装备入口在背包；[玩家天赋棋盘](player-board.md)保留中心充能，开发窗口继续复用同一领域事务。成长已实现整瓶消费、跨瓶余额、1 天赋点＋1 属性点兑换、递增成本与点亮，见[成长模块](growth.md)和[合同](../plan/archive/0.7.1/plans/energy-progression-contract.md)。本次入口迁移不改 core v14 / Save Schema 12，也不改变击杀收益。长期 `EnergyBottleTests` 保护四个收益因素、归属、去重、容量舍弃和 Session 隔离；`SkillBoardTransactionsTests` 保护换瓶、指定格卸瓶、失败回退与过期预览，现有物品 / 棋盘和保存 PlayMode 验证真实输入、死亡、继续及切图。

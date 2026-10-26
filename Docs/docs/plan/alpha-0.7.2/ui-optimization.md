@@ -1,6 +1,6 @@
 # 0.7.2-alpha 界面优化分计划
 
-状态：2026-10-25，待实施。范围与阶段版本以[总计划](../alpha-0.7.2-optimization-plan.md)为准。
+状态：2026-10-26，阶段二已完成，见[实施计划](../archive/0.7.2/plans/phase-2-execution.md)与[验收](../archive/0.7.2/acceptance/energy-bottle-equipment/README.md)；阶段三、四待实施。范围与阶段版本以[总计划](../alpha-0.7.2-optimization-plan.md)为准。
 
 ## 能量瓶装备入口：阶段 2
 
@@ -15,7 +15,9 @@
 
 复用 `EnergyBottleSystem`、`SkillBoardOperation.EquipBottle / UnequipBottle` 与现有预检 / 提交事务；不把 UI 迁移改成一套新的瓶子所有权系统。保存字段继续使用现有 `EnergyBottleInstanceId`，不用新增装备槽枚举来存放同一件瓶子。
 
-重点调整 `Inventory.uxml/.uss`、`InventoryPanelController`、`ItemActionRouter`、共享来源 / 投放目标和棋盘面板。当前路由直接寻找 `board-bottle-drop`，必须一并改为新的可见装备目标；关闭棋盘后不能失去换瓶能力。
+装备区实际位于 `ItemWorkbench.uxml`，阶段二调整了它及 `Windows.uss`、`ItemWorkbench.uss`、`InventoryPanelController`、`ItemActionRouter`、共享来源 / 投放目标和棋盘面板，副边操作复用现有控件。原路由直接寻找 `board-bottle-drop`，现已改为背包内可见的 `inventory-bottle-slot`，关闭棋盘后仍可换瓶。
+
+具体操作与回退以[已归档阶段二计划](../archive/0.7.2/plans/phase-2-execution.md)为准：已增加独立已装备瓶来源及可选卸瓶目标格，快捷卸下仍自动找位，换瓶成功留在背包。瓶栏利用装备区左上空位，保持原高度和格子尺度；原 `board-bottle-drop` 已替换为只读摘要和明确的装备瓶充能选择入口。
 
 ### 验收
 
@@ -28,7 +30,7 @@
 | 天赋中心充入装备瓶 / 背包瓶 | 明确确认才消费，装备槽同步更新；取消不转移所有权 |
 | 商店 / 打造 / Shell / Session 切换 | 旧目标失效，拖动与预览取消，不操作隐藏界面或新 Session |
 
-长期回归补充 `EnergyBottleTests` 和现有物品 / 棋盘 PlayMode 套件；更新[能量瓶](../../skill-board/energy-bottles.md)、[安装事务](../../skill-board/items-installation.md)、[装备](../../equipment-system.md)和[物品工作台](../../item-ui-workbench.md)。
+长期回归优先补充 `SkillBoardTransactionsTests` 与现有物品 / 棋盘 PlayMode 套件；复用 `EnergyBottleTests` 的收益与收集覆盖，不重复编写未变化的规则。更新[能量瓶](../../skill-board/energy-bottles.md)、[安装事务](../../skill-board/items-installation.md)、[装备](../../equipment-system.md)和[物品工作台](../../item-ui-workbench.md)。
 
 ## 天赋界面：阶段 3
 

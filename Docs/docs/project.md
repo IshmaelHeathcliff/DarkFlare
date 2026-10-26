@@ -2,7 +2,9 @@
 
 ## 项目状态
 
-2026-10-26：**0.7.2-alpha.1 阶段一完成**。普通 Play 存档路径修复、七入口按住连放、大剑三投射物与每枚一次穿透已交付。当前 core v14 / Save Schema 12 / Settings 1 / 地图 V4；EditMode 982/982、PlayMode 112/112，均无失败 / 跳过，两轮普通 Play 继续保存及原文件恢复通过。实现身份为 `main` / `da2474c` 加本轮改动，见[验收](plan/archive/0.7.2/acceptance/continuous-casting/README.md)。阶段二至五待实施，未构建 Player。
+2026-10-26：**0.7.2-alpha.2 阶段二完成**。背包装备区已提供独立瓶栏，支持共享换瓶、快捷卸下与指定格卸瓶；天赋中心保留两类来源的确认充能。EditMode 984/984、PlayMode 114/114，均无失败 / 跳过，三语言 9 状态画面与普通 Play 保存继续通过；原存档 SHA-256 恢复一致。core v14、Schema 12 / 1、地图 V4 保持。基线为 `main` / `479f901` 加本轮改动，见[实施计划](plan/archive/0.7.2/plans/phase-2-execution.md)和[验收](plan/archive/0.7.2/acceptance/energy-bottle-equipment/README.md)。阶段三至五待实施，未构建 Player。
+
+2026-10-26：**0.7.2-alpha.1 阶段一完成**。普通 Play 存档路径修复、七入口按住连放、大剑三投射物与每枚一次穿透已交付。当前 core v14 / Save Schema 12 / Settings 1 / 地图 V4；EditMode 982/982、PlayMode 112/112，均无失败 / 跳过，两轮普通 Play 继续保存及原文件恢复通过。验收时身份为 `main` / `da2474c` 加当时未提交改动，见[验收](plan/archive/0.7.2/acceptance/continuous-casting/README.md)。阶段二至五待实施，未构建 Player。
 
 2026-10-25：**进入 0.7.2-alpha 体验优化规划，尚未实施**。[优化计划](plan/alpha-0.7.2-optimization-plan.md)覆盖 HUD、天赋精简与方位、按住连放、能量瓶装备入口、地图缩小、300 名额及默认技能三投射物 / 一次穿透。当前源码 `main` / `5cb3022`、Unity `6000.6.7f1`，运行版本仍为 `0.7.1-alpha.5`，core v13 / Save Schema 12 / Settings 1 / 地图 V4；本轮未重跑 Unity 测试或构建 Player。
 
@@ -26,13 +28,13 @@ Alpha 0.6.3 有限刷怪为地图 V4、core v10、Schema 8，野外固定 100 �
 
 0.6.1 普通怪物已交付并[归档](plan/archive/0.6.1/plans/alpha-0.6.1-monster-behavior-plan.md)：该阶段完整 EditMode 808/808、PlayMode 92/92，Windows Player、跨进程恢复及 500 / 1000 普通怪物性能矩阵通过，见[历史验收](plan/archive/0.6.1/acceptance/behavior/README.md)。
 
-Alpha 0.5 的 A–I 全部完成；当前交付版本为 `0.7.2-alpha.1`，本阶段 Windows Player 验收未执行。四地表地图、手绘 / AI 编辑、Y 排序、城镇交易打造、野外刷怪和 Flow Field / A* 批量寻路已形成完整链路，详见 [I 综合验收](plan/archive/0.5.5/acceptance/maps/i/README.md)。
+Alpha 0.5 的 A–I 全部完成；当前交付版本为 `0.7.2-alpha.2`，本阶段 Windows Player 验收未执行。四地表地图、手绘 / AI 编辑、Y 排序、城镇交易打造、野外刷怪和 Flow Field / A* 批量寻路已形成完整链路，详见 [I 综合验收](plan/archive/0.5.5/acceptance/maps/i/README.md)。
 
 2026-09-22：[Alpha 0.6 总计划](plan/archive/0.6/plans/alpha-0.6-plan.md)的 **0.6.0 已完成**：HFSM 与行为树独立置于现有 Core，交付组合样例、Animator 桥接、Editor 实时图与开发 Player 面板。完整 EditMode 788/788、PlayMode 87/87，独立 Windows Player 及核心规模验证通过，见[行为模块及验收](./behavior/README.md)。后续怪物、Boss、有限刷怪、手动重置及综合交付也已按各阶段门槛完成。
 
 `DarkFlare` 已完成首版最小循环、初步体验优化、`alpha 0.1` 封板和 `alpha 0.2.0–0.2.7` 基础设施封板。当前可从常驻 `Bootstrap.unity` 的 FrontEnd 新建或继续游戏，additive 进入 `Main.unity` 完成战斗、掉落、十槽装备、交易和打造，暂停后保存并安全返回前台；FrontEnd 可二次确认删除自动档，共享设置页可恢复完整默认设置，中英语言、音量、按键、设备 Glyph 和降低动态效果即时收敛。
 
-从 0.7 起按[SemVer 版本管理](./version-management.md)推进：小版本为 `0.7.0-alpha`、`0.7.1-alpha`，小版本内阶段为 `0.7.0-alpha.1`、`0.7.0-alpha.2`，阶段序号随小版本重置。0.7 系列预计持续处于 alpha；下一里程碑或明确进入 beta 时进入 0.8。0.1–0.6 的三段式历史阶段名称和归档保留原意。当前源码版本为 `0.7.2-alpha.1`，当前版本未完成 Player 验收；完成记录见[alpha 0.2 综合验收记录](plan/archive/0.2.7/acceptance/alpha-0.2-acceptance.md)与[计划归档](./plan/archive/README.md)。
+从 0.7 起按[SemVer 版本管理](./version-management.md)推进：小版本为 `0.7.0-alpha`、`0.7.1-alpha`，小版本内阶段为 `0.7.0-alpha.1`、`0.7.0-alpha.2`，阶段序号随小版本重置。0.7 系列预计持续处于 alpha；下一里程碑或明确进入 beta 时进入 0.8。0.1–0.6 的三段式历史阶段名称和归档保留原意。当前源码版本为 `0.7.2-alpha.2`，当前版本未完成 Player 验收；完成记录见[alpha 0.2 综合验收记录](plan/archive/0.2.7/acceptance/alpha-0.2-acceptance.md)与[计划归档](./plan/archive/README.md)。
 
 2026-09-18：[Alpha 0.5 总计划](plan/archive/0.5/plans/alpha-0.5-plan.md)已完成 [0.5.0 地图基础 A–D](plan/archive/0.5.0/plans/alpha-0.5.0-map-foundation-plan.md)，包含数据 / 导入、Wang 解析与预览、正式四材质发布，以及[同源碰撞和静态通行](./maps/map-geometry.md)。D 已提交 `e396485`。[0.5.1 手工 / AI 地图编辑器](./maps/map-editor.md)的 E1–E5 也已完成并[归档](plan/archive/0.5.1/plans/alpha-0.5.1-map-editor-plan.md)，E 验证为 EditMode 697/697、PlayMode 77/77，见 [E 验收](plan/archive/0.5.1/acceptance/maps/e/README.md)。[0.5.2 世界层级 F1–F5](plan/archive/0.5.2/plans/alpha-0.5.2-world-sorting-plan.md)已完成，EditMode 707/707、PlayMode 78/78；城镇 / 野外与生命周期 G 已完成；Flow Field / A* / Job / Burst 已由 H 完成。目标为 500 活动怪物、1000 压力测试，地图离场暂停并保留状态。Main 已成为通用双地图玩法容器。
 
@@ -42,7 +44,7 @@ Alpha 0.5 的 A–I 全部完成；当前交付版本为 `0.7.2-alpha.1`，本�
 - Alpha 0.4.2：[统一使用](./item-use-system.md)与[消耗品](./consumables.md)完成回血、回蓝、临时状态和驱散；core v5、Schema 3。2026-09-15 EditMode 563/563、PlayMode 74/74 及独立 Windows Player 验收通过，见[交付证据](plan/archive/0.4.2/acceptance/item-use-acceptance/README.md)。
 - 后续[随机商店](./trading-system.md)已完成每批 16 件、随机品质 / 词条、购买减单件、免费刷新与库存恢复，运行版本仍为 `0.4.2-alpha`。2026-09-16 EditMode 568/568、PlayMode 75/75 通过；该轮未重建 Windows Player，见[验收记录](plan/archive/0.4.2/acceptance/random-shop/README.md)。
 
-上述 A–I 数字为历史验收记录；I 的大规模切图 / 保存数据见 [I 验收](plan/archive/0.5.5/acceptance/maps/i/README.md)。当前交付 `0.7.2-alpha.1`、core v14、Schema 12 / 1、地图 V4；EditMode 982/982、PlayMode 112/112，均无失败 / 跳过，范围与未执行项见[持续施法验收](plan/archive/0.7.2/acceptance/continuous-casting/README.md)。玩法综合回归保留 [0.6.5 记录](plan/archive/0.6.5/acceptance/behavior/README.md)，上一正式 Player 数据见 [0.6.1 验收](plan/archive/0.6.1/acceptance/behavior/README.md)。大规模切图 / 保存的耗时与内存边界单独记录，不能用行为或导航稳态预算代替。
+上述 A–I 数字为历史验收记录；I 的大规模切图 / 保存数据见 [I 验收](plan/archive/0.5.5/acceptance/maps/i/README.md)。当前交付 `0.7.2-alpha.2`、core v14、Schema 12 / 1、地图 V4；EditMode 984/984、PlayMode 114/114，均无失败 / 跳过，范围与未执行项见[能量瓶入口验收](plan/archive/0.7.2/acceptance/energy-bottle-equipment/README.md)。玩法综合回归保留 [0.6.5 记录](plan/archive/0.6.5/acceptance/behavior/README.md)，上一正式 Player 数据见 [0.6.1 验收](plan/archive/0.6.1/acceptance/behavior/README.md)。大规模切图 / 保存的耗时与内存边界单独记录，不能用行为或导航稳态预算代替。
 
 ## 游戏定位
 
@@ -140,7 +142,7 @@ Alpha 0.3 前置[测试审计](plan/archive/0.3/acceptance/testing/test-suite-au
 - Settings V1 已有语言、音频、输入与 Reduce Motion 真实消费者；Text Scale、High Contrast、Screen Shake 和 Display Mode 仍为数据预留，不在玩家 UI 中开放。
 - 背包已支持拖拽换位、单目标原子交换和键鼠 / 手柄拿起放置，已支持物品堆叠与材料消耗，尚无旋转和重量；装备已实现十槽及精确拖入 / 拖回，每槽至少两件正式基底，但没有耐久、套装、完整纸娃娃或唯一装备特效。
 - 交易没有回购或多商人独立库存；打造已消耗锻造矿石，尚无配方和批量操作。
-- [玩家棋盘](./skill-board/player-board.md)、[几何与柴薪生成](./skill-board/geometry.md)、[道具与安装事务](./skill-board/items-installation.md)、[能量瓶装备 / 收集](./skill-board/energy-bottles.md)、[中心充能 / 属性与点亮](./skill-board/growth.md)、天赋 / 余烬效果和键鼠 / 手柄闭环已交付。当前[普通技能与六火焰槽](./skill-board/manual-skills.md)均为单次按下手动施法；按住连续施法、三投射物与界面优化属于[0.7.2 待实施计划](plan/alpha-0.7.2-optimization-plan.md)。
+- [玩家棋盘](./skill-board/player-board.md)、[几何与柴薪生成](./skill-board/geometry.md)、[道具与安装事务](./skill-board/items-installation.md)、[能量瓶装备 / 收集](./skill-board/energy-bottles.md)、[中心充能 / 属性与点亮](./skill-board/growth.md)、天赋 / 余烬效果和键鼠 / 手柄闭环已交付。[普通技能与六火焰槽](./skill-board/manual-skills.md)已支持按住连续施法，大剑普通技能已增强为三投射物、每枚一次穿透。能量瓶装备入口迁移与后续界面 / 地图优化按[0.7.2 活动计划](plan/alpha-0.7.2-optimization-plan.md)继续。
 - 战斗内容密度、场景规模和 UI 功能深度仍属于原型基线；现有首批视觉不视为最终美术质量。
 
 完整流程与模块边界见 [`gameplay-loop.md`](./gameplay-loop.md)，生命周期见[应用生命周期与会话作用域](./infrastructure/application-lifecycle.md)，稳定身份和迁移见[稳定身份、内容目录与迁移框架](./infrastructure/content-identity-migration.md)，本地持久化见[本地存档与 Session 恢复](./infrastructure/local-save.md)，设置与语言见[用户设置与本地化](./infrastructure/user-settings-localization.md)，输入、菜单和场景交互结构见 [`input-ui-system.md`](./input-ui-system.md)。

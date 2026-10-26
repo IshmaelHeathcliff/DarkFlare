@@ -15,8 +15,10 @@ namespace DarkFlare
         public int Rotation { get; }
         public FirewoodPortReference Slot { get; }
         public IReadOnlyList<FirewoodConnection> Connections { get; }
+        public Vector2Int? InventoryOrigin { get; }
         public SkillBoardRequest(SkillBoardOperation operation, ItemInstance item = null, HexCoordinate anchor = default,
-            int rotation = 0, FirewoodPortReference slot = default, IEnumerable<FirewoodConnection> connections = null)
+            int rotation = 0, FirewoodPortReference slot = default, IEnumerable<FirewoodConnection> connections = null,
+            Vector2Int? inventoryOrigin = null)
         {
             Operation = operation;
             Item = item;
@@ -24,6 +26,7 @@ namespace DarkFlare
             Rotation = rotation;
             Slot = slot;
             Connections = connections == null ? null : Array.AsReadOnly(connections.ToArray());
+            InventoryOrigin = inventoryOrigin;
         }
     }
 
@@ -107,6 +110,8 @@ namespace DarkFlare
         public SkillBoardPreview Preview(string actorId, SkillBoardRequest request)
         {
             if (!IsCurrentPlayer(actorId) || request == null) { return new SkillBoardPreview("当前玩家身份无效", SkillBoardFailure.InvalidOwner); }
+            if (request.InventoryOrigin.HasValue && request.Operation != SkillBoardOperation.UnequipBottle)
+            { return new SkillBoardPreview("只有卸瓶支持指定背包格", SkillBoardFailure.InvalidPlacement); }
             SkillBoardModel model = this.GetModel<SkillBoardModel>();
             if (model.PlayerId.Length > 0 && model.PlayerId != actorId) { return new SkillBoardPreview("棋盘属于其他玩家", SkillBoardFailure.InvalidOwner); }
             SkillBoardState before = model.State;
@@ -172,6 +177,8 @@ namespace DarkFlare
                     break;
                 case SkillBoardOperation.UnequipBottle:
                     if (bottle == null) { return new SkillBoardPreview("专栏为空", SkillBoardFailure.InvalidSource); }
+                    if (item != null && !ReferenceEquals(item, bottle))
+                    { return new SkillBoardPreview("装备瓶已变化", SkillBoardFailure.InvalidSource); }
                     outgoing = bottle;
                     bottle = null;
                     break;
@@ -207,7 +214,12 @@ namespace DarkFlare
             }
             if (outgoing != null)
             {
-                bool added = incoming != null ? final.TryAddAt(outgoing, grid.Placements[incoming].position) : final.TryAdd(outgoing);
+                if (request.InventoryOrigin is Vector2Int origin && (origin.x < 0 || origin.y < 0
+                    || origin.x > grid.Width - outgoing.BaseDefinition.GridSize.x
+                    || origin.y > grid.Height - outgoing.BaseDefinition.GridSize.y))
+                { return new SkillBoardPreview("指定格超出背包边界", SkillBoardFailure.InvalidPlacement); }
+                bool added = incoming != null ? final.TryAddAt(outgoing, grid.Placements[incoming].position)
+                    : request.InventoryOrigin.HasValue ? final.TryAddAt(outgoing, request.InventoryOrigin.Value) : final.TryAdd(outgoing);
                 if (!added) { return new SkillBoardPreview("背包没有足够空间取回道具", SkillBoardFailure.NoSpace); }
             }
             CombatActor actor = GetAttributeDetailsQuery.FindPlayer(this.GetModel<CombatModel>());

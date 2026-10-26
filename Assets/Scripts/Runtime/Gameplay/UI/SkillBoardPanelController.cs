@@ -70,10 +70,8 @@ namespace DarkFlare
             }
             Bind("take", TakeBag); Bind("move", TakeMounted); Bind("activate", Activate);
             Bind("extract", Extract); Bind("remove", Remove); Bind("confirm", Confirm); Bind("cancel", () => Cancel());
-            Bind("equip", () => Prepare(new SkillBoardRequest(SkillBoardOperation.EquipBottle, SelectedBag())));
-            Bind("unequip", () => Prepare(new SkillBoardRequest(SkillBoardOperation.UnequipBottle)));
             Bind("choose-bottle", () => SelectBottle(SelectedBag()));
-            Bind("bottle-drop", () => SelectBottle(_board?.EnergyBottle));
+            Bind("charge-equipped", () => SelectBottle(_board?.EnergyBottle));
             foreach (string stat in new[] { StatIds.Strength, StatIds.Dexterity, StatIds.Intelligence })
             {
                 string id = stat; Bind("allocate-" + stat, () => Allocate(id));
@@ -241,9 +239,9 @@ namespace DarkFlare
             ItemInstance bottle = _board.EnergyBottle;
             ItemVisualPresenter.ApplyIcon(_root.Q("board-bottle-icon"), bottle?.BaseDefinition.Icon.AssetGUID);
             _root.Q("board-bottle-icon").style.display = bottle == null ? DisplayStyle.None : DisplayStyle.Flex;
-            _root.Q<Button>("board-bottle-drop").text = bottle == null ? L("bottle_empty")
+            Text("bottle-summary", bottle == null ? L("bottle_empty")
                 : L("bottle", Name(bottle), bottle.SkillBoardState.Energy, bottle.BaseDefinition.SkillBoard.EnergyCapacity,
-                    bottle.SkillBoardState.Energy >= bottle.BaseDefinition.SkillBoard.EnergyCapacity ? L("full") : string.Empty);
+                    bottle.SkillBoardState.Energy >= bottle.BaseDefinition.SkillBoard.EnergyCapacity ? L("full") : string.Empty));
             RefreshDetails(); RefreshSlots(); Draw();
         }
 
@@ -287,8 +285,7 @@ namespace DarkFlare
             _root.Q<Button>("board-activate").SetEnabled(_wood != null);
             _root.Q<Button>("board-extract").SetEnabled(Embedding != null);
             _root.Q<Button>("board-remove").SetEnabled(_wood != null);
-            _root.Q<Button>("board-equip").SetEnabled(bag?.BaseDefinition.ItemType == ItemType.EnergyBottle);
-            _root.Q<Button>("board-unequip").SetEnabled(_board.EnergyBottle != null);
+            _root.Q<Button>("board-charge-equipped").SetEnabled(_board.EnergyBottle?.SkillBoardState.Energy > 0);
             _root.Q<Button>("board-choose-bottle").SetEnabled(bag?.BaseDefinition.ItemType == ItemType.EnergyBottle);
             _root.Q<Button>("board-confirm").SetEnabled(_preview?.Success == true || _growthPreview?.Success == true);
             _root.Q<Button>("board-confirm").text = L(_charging ? "consume" : "confirm");

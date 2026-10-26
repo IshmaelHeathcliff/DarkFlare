@@ -1,0 +1,41 @@
+{
+  "success": true,
+  "command": "command script run",
+  "data": {
+    "command": "script run",
+    "parameters": {
+      "file": "Temp/Agent/BottleAcceptance.cs",
+      "entry": "BottleAcceptance.Backup"
+    },
+    "result": {
+      "diagnostics": [],
+      "compileMs": 501,
+      "executeMs": 24,
+      "assemblyName": "PipelineRunScript_BottleAcceptance_c7dc6beee9da446ebcc22b565c39905f",
+      "success": true,
+      "result": {
+        "roots": [
+          "C:/Users/darkf/AppData/LocalLow/DefaultCompany/DarkFlare\\DarkFlare\\Saves",
+          "C:/Users/darkf/AppData/LocalLow/DefaultCompany/DarkFlare\\DarkFlare\\Settings"
+        ],
+        "files": [
+          {
+            "Path": "C:\\Users\\darkf\\AppData\\LocalLow\\DefaultCompany\\DarkFlare\\DarkFlare\\Saves\\auto\\5.save",
+            "Hash": "FDBA441D921929CBF5521E1EE54ECE53FF237AF67F481B685B0DDEE24B99970C"
+          },
+          {
+            "Path": "C:\\Users\\darkf\\AppData\\LocalLow\\DefaultCompany\\DarkFlare\\DarkFlare\\Saves\\auto\\6.save",
+            "Hash": "B13EEF636E634D7ABB3C1C95A9F46F0471395A0FF705FF283C6DBD1E54E427CF"
+          }
+        ]
+      }
+    },
+    "target": {
+      "host": "127.0.0.1",
+      "port": 7800,
+      "projectPath": "C:\\Users\\darkf\\Home\\Projects\\DarkFlare"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

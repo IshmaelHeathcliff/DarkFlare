@@ -434,6 +434,16 @@ namespace DarkFlare.Tests
                 Assert.That(travelled.EnergyBottle.SkillBoardState.Energy, Is.GreaterThanOrEqualTo(
                     captured.Payload.Items.Single(i => i.InstanceId == boardBottle.InstanceId).SkillBoard.Energy));
             }
+            yield return null; yield return null;
+            GameMenuController restoredMenu = UnityEngine.Object.FindAnyObjectByType<GameMenuController>();
+            restoredMenu.OpenPage(GameMenuPage.Inventory);
+            yield return null; yield return null;
+            VisualElement restoredRoot = restoredMenu.GetComponent<RuntimePanelView>().Root;
+            Assert.That(restoredRoot.Q<Button>("inventory-bottle-slot").userData, Is.SameAs(restoredBoard.EnergyBottle),
+                "继续游戏后专栏应绑定恢复后的实例，不能保留旧 Session 引用");
+            Assert.That(restoredRoot.Q<Label>("inventory-bottle-energy").text,
+                Does.Contain(restoredBoard.EnergyBottle.SkillBoardState.Energy.ToString()));
+            restoredMenu.ClosePage(GameMenuPage.Inventory);
         }
 
         [UnityTest]
