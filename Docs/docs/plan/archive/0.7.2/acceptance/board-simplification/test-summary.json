@@ -1,0 +1,22 @@
+{
+  "EditMode": {
+    "Total": 985,
+    "Passed": 985,
+    "Failed": 0,
+    "Skipped": 0,
+    "Inconclusive": 0
+  },
+  "PlayMode": {
+    "Total": 117,
+    "Passed": 117,
+    "Failed": 0,
+    "Skipped": 0,
+    "Inconclusive": 0
+  },
+  "FinalFocusedAndVisual": "10/10 before navigation scope correction",
+  "NavigationScopeRegression": "9/9 after correction",
+  "VisualPngCount": 21,
+  "Player": "Not run",
+  "ActualDevice": "Not run",
+  "CrossProcess": "Not run"
+}

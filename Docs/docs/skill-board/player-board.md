@@ -4,12 +4,13 @@
 
 ## 浏览与操作
 
-- 无固定边界的轴坐标棋盘只绘制可见网格；滚轮缩放、中键平移。中心、六空洞、缩放及适配网络均有按钮，手柄不必走过根之间的全部空格。
-- 中心一格用于选择能量瓶，力量、敏捷、智力各占相隔 120° 的一格，另三格留白。七格都保留碰撞。大中心可嵌火焰，中中心留白；裂缝与显式长连线按实际布局绘制。
+- 无固定边界的轴坐标棋盘只绘制可见网格；滚轮缩放、中键平移。回中、适配、缩放及六根定位收进「视图工具」，默认收起详情；首次进入在布局完成后适配当前网络，之后保留会话内视图。
+- 中心一格用于选择能量瓶；力量在上、敏捷左下、智力右下，另三格留白。玩家显示投影顺时针 30°，三属性对应保留邻格 4 / 2 / 0，显示映射不交换实际属性值。七格都保留碰撞；大中心可嵌火焰，中中心留白。
 - 背包聚焦的道具同步详情。拿起后只持引用，指针或六邻居逻辑游标选择位置；上 / 下一窗口输入在持有柴薪时改为双向 60° 旋转。按键显示读取实际绑定。
-- 单一配对可直接预览；有多个候选时，放下进入连接选择，焦点转到可勾选的连接列表，再确认提交完整连接集合。不会静默选择一个父节点。
+- 单一配对可直接预览；有多个候选时，放下进入连接选择，焦点转到可勾选、可换行的连接列表，再确认提交完整连接集合。不会静默选择一个父节点。
 - 激活、取出、拆卸、充能、属性分配均先预览后确认。装备 / 卸下瓶移到背包装备区，沿用共享物品操作。拆卸展示连接数与实花点退款，嵌入物须先逐件取出；失败保留所有权与点数。
-- 手柄在画布内导航逻辑格，提交进入详情；返回先取消当前预览，再返回画布，最后关闭。窗口循环可切换背包与棋盘，详情采用滚动区，焦点会滚动到目标。
+- 手柄按屏幕方向移动逻辑游标，接近边缘自动平移；提交进入相关操作，无相关操作时到达工具入口。工具导航只在弹层内移动，执行视图动作后回画布。返回逐层关闭工具、取消预览、收起详情，最后关闭棋盘并恢复原窗口组合。
+- 详情按选择显示；中心提供充能，属性格只显示当前属性的实际分配 / 最终值与分配动作，安装节点提供对应事务。确认消费或退款时保持详情展开，并将确认按钮滚动到可见位置。
 
 ## 瓶子、成长与六槽
 
@@ -17,14 +18,14 @@
 
 顶部显示天赋点、属性点、角色能量池和下一兑换成本。属性分配每次一点，显示已分配及最终值；柴薪和普通天赋分别花点。详情解释全局或局部词条，局部目标及步数来自正式 `SkillBoardEffects.Resolve.FlameSteps`，高亮真实生效火焰，不使用几何半径。
 
-选择已安装点亮的火焰后按槽按钮分配，清槽单独操作。同实例改分配会移槽；六槽显示实际绑定、技能、耗蓝、状态和剩余冷却。普通技能仅说明当前武器来源。关闭棋盘后 Gameplay HUD 和手动施法继续读取同一权威数据。
+选择已安装点亮的火焰后按槽按钮分配；未选火焰时按槽进入该槽详情。同实例改分配会移槽。六槽常驻真实绑定、槽号及已分配标识，技能、耗蓝、状态和剩余冷却进入选中槽详情；有内容时才显示该槽的清除动作，清除后焦点回原槽。普通技能仅说明当前武器来源。关闭棋盘后 Gameplay HUD 和手动施法继续读取同一权威数据。
 
 ## 实现与生命周期
 
-`GameMenuBoard` 管理入口、窗口组合和绑定；`SkillBoardPanelController` / `SkillBoardPanelActions` 通过 Query / Command / Event 管理临时操作；`SkillBoardViewport` 只负责投影、命中、导航与 Painter2D 绘制。布局在 `Assets/UI/SkillBoard/PlayerBoard.uxml/.uss`，文本进入 `ui` Localization 表，图标沿用 Session 的 Addressables 加载器。
+`GameMenuBoard` 管理入口、窗口组合和绑定；`SkillBoardPanelController` / `SkillBoardPanelActions` 通过 Query / Command / Event 管理临时操作，`SkillBoardPanelView` 管理工具、相关操作显隐和焦点；`SkillBoardViewport` 负责统一投影、命中、导航与 Painter2D 绘制。布局在 `Assets/UI/SkillBoard/PlayerBoard.uxml/.uss`，文本进入 `ui` Localization 表，图标沿用 Session 的 Addressables 加载器。
 
 棋盘扩展既有 `ItemInteractionSession` / `ItemActionRouter`，共享唯一拖放 owner；坐标不转换成背包格。正式预览暴露只读候选最终态和 `SkillBoardFailure`，界面不匹配调试中文或重算事务 / 范围。多连接选择也是待确认态，仍由领域校验决定最终合法性。
 
-冷却显示使用 Scene 子作用域内可取消的 UniTask，100ms 仅刷新技能与绑定；棋盘按数据和视图变化重绘。挂起、Settings / Modal、拔出设备、死亡、面板重载和 Session 解绑清理预览、捕获、任务及事件。旧 Controller 不持有新 Session 数据。
+冷却显示使用 Scene 子作用域内可取消的 UniTask，100ms 仅刷新技能与绑定；棋盘按数据和视图变化重绘。展开后的焦点由 UI 调度器等待有效布局，旧请求会在重置操作、切窗、挂起及解绑时停止。自定义导航调用 `FocusController.IgnoreEvent`，避免 Unity 再执行默认焦点移动。挂起、Settings / Modal、拔出设备、死亡、面板重载和 Session 解绑清理预览、捕获、任务及事件。旧 Controller 不持有新 Session 数据。
 
-长期回归在现有 `Phase1UxPlayModeTests` 中验证真实键鼠 / 模拟手柄、渠道到保存继续、取消 / 失效源及三语言布局；`SkillBoardGeometryTests` 覆盖投影与溢出，`PlayerSkillsTests` 证明显示步数与真实效果共用图。完整棋盘历史闭环见[阶段五报告](../plan/archive/0.7.1/acceptance/player-board/README.md)，能量瓶入口迁移与当前回归见[0.7.2 阶段二验收](../plan/archive/0.7.2/acceptance/energy-bottle-equipment/README.md)。
+长期回归在现有 `Phase1UxPlayModeTests` 中验证真实键鼠 / 模拟手柄、渠道到保存继续、取消 / 失效源、三属性身份、连续平移、工具交接及多连接闭环；`SkillBoardGeometryTests` 覆盖投影、共边、屏幕方向及溢出，`PlayerSkillsTests` 证明显示步数与真实效果共用图。历史闭环见[阶段五报告](../plan/archive/0.7.1/acceptance/player-board/README.md)，瓶子迁移见[阶段二验收](../plan/archive/0.7.2/acceptance/energy-bottle-equipment/README.md)，当前界面与方位见[阶段三验收](../plan/archive/0.7.2/acceptance/board-simplification/README.md)。

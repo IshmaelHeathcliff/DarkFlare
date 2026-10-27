@@ -40,6 +40,7 @@ namespace DarkFlare
         SkillBoardFailure _feedback;
         HexCoordinate _lastAnchor;
         int _lastRotation = -1;
+        HexCoordinate _selectedCell;
 
         public SkillBoardViewport Canvas { get; }
         public bool IsVisible { get; private set; }
@@ -59,14 +60,17 @@ namespace DarkFlare
             Canvas.CursorChanged += OnCell;
             Canvas.Activated += OnActivateCell;
             Canvas.TakeRequested += TakeMountedPointer;
-            Bind("center", () => Jump(default)); Bind("fit", Canvas.Fit);
-            Bind("zoom-in", () => Canvas.Zoom(1.25f)); Bind("zoom-out", () => Canvas.Zoom(0.8f));
+            Bind("tools", () => SetTools(!_toolsOpen));
+            Bind("tools-close", () => SetTools(false));
+            Bind("details-toggle", () => ShowDetails(!_detailsOpen));
+            Bind("center", () => ViewAction(() => Jump(default))); Bind("fit", () => ViewAction(Canvas.Fit));
+            Bind("zoom-in", () => ViewAction(() => Canvas.Zoom(1.25f))); Bind("zoom-out", () => ViewAction(() => Canvas.Zoom(0.8f)));
             for (int i = 0; i < 6; i++)
             {
                 int slot = i;
-                Bind("root-" + i, () => Jump(SkillBoardGeometry.Roots[slot]));
-                Bind("slot-" + i, () => Assign(slot));
-                Bind("clear-" + i, () => { this.SendCommand(new AssignPlayerSkillCommand(PlayerId, slot, string.Empty)); Refresh(); });
+                Bind("root-" + i, () => ViewAction(() => Jump(SkillBoardGeometry.Roots[slot])));
+                Bind("slot-" + i, () => SelectSlot(slot));
+                Bind("clear-" + i, () => ClearSlot(slot));
             }
             Bind("take", TakeBag); Bind("move", TakeMounted); Bind("activate", Activate);
             Bind("extract", Extract); Bind("remove", Remove); Bind("confirm", Confirm); Bind("cancel", () => Cancel());
@@ -81,6 +85,7 @@ namespace DarkFlare
             _locale.LocaleChanged += OnLocale;
             ApplicationHost.Current.Input.SuspensionChanged += OnSuspended;
             InputSystem.onDeviceChange += OnDeviceChanged;
+            _root.RegisterCallback<PointerDownEvent>(OnPanelPointerDown, TrickleDown.TrickleDown);
             _registrations.Add(this.RegisterEvent<InventoryChangedEvent>(_ => OnSourceChanged()));
             _registrations.Add(this.RegisterEvent<SkillBoardChangedEvent>(_ => OnSourceChanged()));
             _registrations.Add(this.RegisterEvent<PlayerGrowthChangedEvent>(_ => OnSourceChanged()));
@@ -103,7 +108,7 @@ namespace DarkFlare
             if (_disposed || IsVisible == visible) { return; }
             IsVisible = visible;
             _refresh?.BeginStop(); _refresh = null;
-            if (!visible) { ResetOperation(); return; }
+            if (!visible) { SetTools(false, false); ResetOperation(); ShowDetails(false); return; }
             _bagItem = _menu.Workspace.SelectedInventoryItem;
             Refresh();
             _refresh = _scene.CreateChild("player-board");
@@ -112,6 +117,8 @@ namespace DarkFlare
 
         async UniTask RefreshClockAsync(CancellationToken token)
         {
+            if (await UniTask.Yield(PlayerLoopTiming.LastPostLateUpdate, token).SuppressCancellationThrow()) { return; }
+            if (!_initialFit) { Canvas.Fit(); _initialFit = true; }
             while (!token.IsCancellationRequested)
             {
                 if (await UniTask.Delay(100, ignoreTimeScale: true, cancellationToken: token).SuppressCancellationThrow()) { return; }
@@ -122,12 +129,14 @@ namespace DarkFlare
         public bool FocusDefault()
         {
             if (!IsVisible) { return false; }
-            _root.Q<Button>("board-center").Focus(); return true;
+            Canvas.Focus(); return true;
         }
 
         public bool Navigate(Vector2 direction)
         {
-            if (!IsVisible || Canvas.panel?.focusController.focusedElement != Canvas) { return false; }
+            if (!IsVisible) { return false; }
+            if (_toolsOpen) { NavigateTools(direction); return true; }
+            if (Canvas.panel?.focusController.focusedElement != Canvas) { return false; }
             Canvas.Navigate(direction); return true;
         }
 
@@ -139,7 +148,11 @@ namespace DarkFlare
         void OnCell(HexCoordinate cell)
         {
             if (!IsVisible) { return; }
+            StopFocusRequest();
+            if (!_selectedCell.Equals(cell) && _moving == null && !_reviewingLinks) { ResetOperation(); }
+            _selectedCell = cell;
             ReadState(); SelectNode();
+            _selectedSlot = -1;
             if (!_menu.Workspace.IsDragging) { _root.Q<ScrollView>("board-details-scroll").scrollOffset = Vector2.zero; }
             if (_moving != null) { UpdatePlacement(); }
             RefreshDetails(); Draw();
@@ -163,19 +176,15 @@ namespace DarkFlare
         void OnActivateCell()
         {
             if (!IsVisible || _menu.Workspace.IsDragging) { return; }
-            if (Canvas.Cursor.Equals(default)) { SelectBottle(SelectedBag()); }
-            else
-            {
-                for (int i = 0; i < 3; i++)
-                {
-                    if (Canvas.Cursor.Equals(SkillBoardGeometry.NeighborDirections[i * 2]))
-                    { Allocate(new[] { StatIds.Strength, StatIds.Dexterity, StatIds.Intelligence }[i]); break; }
-                }
-            }
+            ShowDetails(true);
             Button focus = _root.Q<Button>(_preview != null || _growthPreview != null ? "board-confirm" : "board-activate");
-            if (!focus.enabledInHierarchy) { focus = _root.Q<Button>("board-take"); }
-            if (!focus.enabledInHierarchy) { focus = _root.Q<Button>("board-center"); }
-            focus.Focus();
+            string attribute = SkillBoardProjection.AttributeAt(Canvas.Cursor);
+            if (attribute.Length > 0) { focus = _root.Q<Button>("board-allocate-" + attribute); }
+            else if (Canvas.Cursor.Equals(default))
+            { focus = _root.Q<Button>(SelectedBag()?.BaseDefinition.ItemType == ItemType.EnergyBottle ? "board-choose-bottle" : "board-charge-equipped"); }
+            if (!focus.enabledSelf || focus.ClassListContains("board-hidden")) { focus = _root.Q<Button>("board-take"); }
+            if (!focus.enabledSelf || focus.ClassListContains("board-hidden")) { focus = _root.Q<Button>("board-tools"); }
+            FocusControl(focus);
         }
 
         void ReadState()
@@ -187,16 +196,24 @@ namespace DarkFlare
 
         void OnBag(ItemInstance item)
         {
+            StopFocusRequest();
             _bagItem = item;
             if (!IsVisible || _menu.Workspace.IsDragging) { return; }
-            _wood = null; _node = string.Empty; Refresh();
+            _wood = null; _node = string.Empty; _selectedSlot = -1;
+            if (item != null) { ShowDetails(true); }
+            Refresh();
         }
-        void OnLocale(string locale) { if (IsVisible) { Refresh(); } }
-        void OnSuspend() { ResetOperation(); }
-        void OnSuspended(InputSuspensionReason reasons) { if (reasons != InputSuspensionReason.None) { _menu.Workspace.CancelDrag(); ResetOperation(); } }
+        void OnLocale(string locale)
+        {
+            if (!IsVisible) { return; }
+            Refresh();
+            if (_preview != null || _growthPreview != null || _bottle != null) { FocusPrepared(); }
+        }
+        void OnSuspend() { SetTools(false, false); ResetOperation(); }
+        void OnSuspended(InputSuspensionReason reasons) { if (reasons != InputSuspensionReason.None) { _menu.Workspace.CancelDrag(); OnSuspend(); } }
         void OnDeviceChanged(InputDevice device, InputDeviceChange change)
         {
-            if (change == InputDeviceChange.Removed || change == InputDeviceChange.Disconnected) { _menu.Workspace.CancelDrag(); ResetOperation(); }
+            if (change == InputDeviceChange.Removed || change == InputDeviceChange.Disconnected) { _menu.Workspace.CancelDrag(); OnSuspend(); }
         }
         void OnSourceChanged()
         {
@@ -226,7 +243,7 @@ namespace DarkFlare
         {
             if (_disposed || !IsVisible) { return; }
             ReadState();
-            Text("summary", L("growth", _growth.TalentPoints, _growth.AttributePoints, _growth.Energy, _growth.Rules.NextCost(_growth.EarnedPoints)));
+            Text("summary", L("growth_compact", _growth.TalentPoints, _growth.AttributePoints, _growth.Energy, _growth.Rules.NextCost(_growth.EarnedPoints)));
             for (int i = 0; i < 6; i++) { _root.Q<Button>("board-root-" + i).text = L("root", i + 1); }
             for (int i = 0; i < 3; i++)
             {
@@ -238,7 +255,7 @@ namespace DarkFlare
             }
             ItemInstance bottle = _board.EnergyBottle;
             ItemVisualPresenter.ApplyIcon(_root.Q("board-bottle-icon"), bottle?.BaseDefinition.Icon.AssetGUID);
-            _root.Q("board-bottle-icon").style.display = bottle == null ? DisplayStyle.None : DisplayStyle.Flex;
+            Visible("bottle-icon", bottle != null && Canvas.Cursor.Equals(default) && _selectedSlot < 0);
             Text("bottle-summary", bottle == null ? L("bottle_empty")
                 : L("bottle", Name(bottle), bottle.SkillBoardState.Energy, bottle.BaseDefinition.SkillBoard.EnergyCapacity,
                     bottle.SkillBoardState.Energy >= bottle.BaseDefinition.SkillBoard.EnergyCapacity ? L("full") : string.Empty));
@@ -251,7 +268,7 @@ namespace DarkFlare
             ItemInstance inspected = Embedding?.Item ?? _wood?.Item ?? bag;
             Text("selected-name", inspected == null ? L("no_selection") : Name(inspected));
             ItemVisualPresenter.ApplyIcon(_root.Q("board-selected-icon"), inspected?.BaseDefinition.Icon.AssetGUID);
-            _root.Q("board-selected-icon").style.display = inspected == null ? DisplayStyle.None : DisplayStyle.Flex;
+            Visible("selected-icon", inspected != null && SkillBoardProjection.AttributeAt(Canvas.Cursor).Length == 0 && _selectedSlot < 0);
             var text = new StringBuilder();
             _targets.Clear();
             if (_wood != null)
@@ -279,7 +296,6 @@ namespace DarkFlare
                 foreach (ModifierInstance modifier in inspected.CollectModifiers()) { text.AppendLine(Describe(modifier)); }
             }
             Text("selected-details", text.ToString());
-            Text("cursor", L("cursor", Canvas.Cursor, _wood == null ? SkillBoardGeometry.CenterReservation.Contains(Canvas.Cursor) ? L("reserved") : L("empty") : Name(_wood.Item)));
             _root.Q<Button>("board-take").SetEnabled(bag?.BaseDefinition.IsSkillBoardItem == true && bag.BaseDefinition.ItemType != ItemType.EnergyBottle);
             _root.Q<Button>("board-move").SetEnabled(_wood != null);
             _root.Q<Button>("board-activate").SetEnabled(_wood != null);
@@ -289,6 +305,7 @@ namespace DarkFlare
             _root.Q<Button>("board-choose-bottle").SetEnabled(bag?.BaseDefinition.ItemType == ItemType.EnergyBottle);
             _root.Q<Button>("board-confirm").SetEnabled(_preview?.Success == true || _growthPreview?.Success == true);
             _root.Q<Button>("board-confirm").text = L(_charging ? "consume" : "confirm");
+            RefreshContext();
         }
 
         string Describe(ModifierInstance modifier)
@@ -313,7 +330,9 @@ namespace DarkFlare
         {
             string previous = ApplicationHost.Current.Input.GetBindingDisplayString(new InputBindingTarget(RebindableInputAction.UiPreviousWindow, InputBindingPart.Primary, ApplicationHost.Current.Input.DisplayDeviceFamily));
             string next = ApplicationHost.Current.Input.GetBindingDisplayString(new InputBindingTarget(RebindableInputAction.UiNextWindow, InputBindingPart.Primary, ApplicationHost.Current.Input.DisplayDeviceFamily));
-            Text("help", L("help") + "\n" + L("rotate_bindings", previous, next));
+            string submit = ApplicationHost.Current.Input.GetBindingDisplayString(new InputBindingTarget(RebindableInputAction.UiSubmit, InputBindingPart.Primary, ApplicationHost.Current.Input.DisplayDeviceFamily));
+            string cancel = ApplicationHost.Current.Input.GetBindingDisplayString(new InputBindingTarget(RebindableInputAction.UiCancel, InputBindingPart.Primary, ApplicationHost.Current.Input.DisplayDeviceFamily));
+            Text("help", L("help_compact", submit, cancel, previous, next));
             IReadOnlyList<PlayerSkillState> skills = this.SendQuery(new GetPlayerSkillsQuery());
             for (int i = 0; i < skills.Count; i++)
             {
@@ -321,10 +340,17 @@ namespace DarkFlare
                 AttributeRuntimeSnapshot state = this.SendQuery(new GetPlayerSkillRuntimeQuery(i));
                 string binding = ApplicationHost.Current.Input.GetBindingDisplayString(new InputBindingTarget(
                     RebindableInputAction.PlayerSkill1 + i, InputBindingPart.Primary, ApplicationHost.Current.Input.DisplayDeviceFamily));
-                _root.Q<Button>("board-slot-" + i).text = L("slot", binding,
+                string description = L("slot", binding,
                     skill.Skill == null ? L("unbound") : _locale.GetString("ui", "attributes.skill." + skill.Skill.Id),
                     skill.Skill == null ? string.Empty : _locale.GetString("ui", "hud.flame.details", new object[] { skill.Skill.ManaCost, _locale.GetString("ui", "attributes.state." + state.SkillState) + " " + ItemDetailFormatter.FormatNumber(skill.RemainingSeconds) }));
+                Button slot = _root.Q<Button>("board-slot-" + i);
+                slot.text = L("slot_compact", binding, i + 1);
+                slot.tooltip = description;
+                slot.EnableInClassList("board-skill-slot--filled", skill.Skill != null);
+                slot.EnableInClassList("board-skill-slot--selected", _selectedSlot == i);
+                if (_selectedSlot == i) { Text("slot-details", description); }
                 _root.Q<Button>("board-clear-" + i).SetEnabled(skill.Skill != null);
+                Visible("clear-" + i, _detailsOpen && _selectedSlot == i && skill.Skill != null);
             }
             PlayerSkillState normal = this.SendQuery(new GetPlayerNormalSkillQuery(_inventory.Player));
             Text("normal", L("normal", normal.Skill == null ? L("none") : _locale.GetString("ui", "attributes.skill." + normal.Skill.Id)));
@@ -335,20 +361,25 @@ namespace DarkFlare
             Canvas.SetState(_board, _growth, _moving == null ? null : _preview?.Result, _moving, _preview?.Success == true,
                 L("center_short"), new[] { L("strength_short"), L("dexterity_short"), L("intelligence_short") }, _targets);
         }
-        void Text(string name, string value) { _root.Q<Label>("board-" + name).text = value; }
+        void Text(string name, string value)
+        {
+            _root.Q<Label>("board-" + name).text = value;
+            if (name == "preview") { Visible("preview", !string.IsNullOrEmpty(value)); }
+        }
         string Name(ItemInstance item) { return _locale.GetString(item.BaseDefinition.LocalizedName.Message); }
         string L(string key, params object[] args) { return _locale.GetString("ui", "board." + key, args); }
 
         public void Dispose()
         {
             if (_disposed) { return; }
-            _disposed = true; _refresh?.BeginStop(); ResetOperation();
+            _disposed = true; _refresh?.BeginStop(); StopFocusRequest(); ResetOperation();
             foreach (IUnRegister registration in _registrations) { registration.UnRegister(); }
             foreach (KeyValuePair<Button, Action> pair in _buttons) { pair.Key.clicked -= pair.Value; }
             _menu.Workspace.InventorySelectionChanged -= OnBag; _menu.Workspace.Suspending -= OnSuspend;
             _locale.LocaleChanged -= OnLocale;
             ApplicationHost.Current.Input.SuspensionChanged -= OnSuspended;
             InputSystem.onDeviceChange -= OnDeviceChanged;
+            _root.UnregisterCallback<PointerDownEvent>(OnPanelPointerDown, TrickleDown.TrickleDown);
             Canvas.CursorChanged -= OnCell; Canvas.Activated -= OnActivateCell; Canvas.TakeRequested -= TakeMountedPointer;
             Canvas.Dispose(); Canvas.RemoveFromHierarchy();
         }

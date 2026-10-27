@@ -1,0 +1,112 @@
+{
+    "Frames": [
+        {
+            "Locale": "zh-Hans",
+            "State": "default",
+            "ContentWidth": 1212.0,
+            "ContentHeight": 746.0,
+            "CanvasWidth": 1210.0,
+            "CanvasHeight": 635.0,
+            "AreaRatio": 0.849801778793335
+        },
+        {
+            "Locale": "zh-Hans",
+            "State": "details",
+            "ContentWidth": 1212.0,
+            "ContentHeight": 746.0,
+            "CanvasWidth": 974.0,
+            "CanvasHeight": 635.0,
+            "AreaRatio": 0.6840553283691406
+        },
+        {
+            "Locale": "zh-Hans",
+            "State": "tools",
+            "ContentWidth": 1212.0,
+            "ContentHeight": 746.0,
+            "CanvasWidth": 1210.0,
+            "CanvasHeight": 635.0,
+            "AreaRatio": 0.7487446665763855
+        },
+        {
+            "Locale": "zh-Hans",
+            "State": "confirm",
+            "ContentWidth": 1212.0,
+            "ContentHeight": 746.0,
+            "CanvasWidth": 974.0,
+            "CanvasHeight": 635.0,
+            "AreaRatio": 0.6840553283691406
+        },
+        {
+            "Locale": "en",
+            "State": "default",
+            "ContentWidth": 1212.0,
+            "ContentHeight": 746.0,
+            "CanvasWidth": 1210.0,
+            "CanvasHeight": 635.0,
+            "AreaRatio": 0.849801778793335
+        },
+        {
+            "Locale": "en",
+            "State": "details",
+            "ContentWidth": 1212.0,
+            "ContentHeight": 746.0,
+            "CanvasWidth": 974.0,
+            "CanvasHeight": 635.0,
+            "AreaRatio": 0.6840553283691406
+        },
+        {
+            "Locale": "en",
+            "State": "tools",
+            "ContentWidth": 1212.0,
+            "ContentHeight": 746.0,
+            "CanvasWidth": 1210.0,
+            "CanvasHeight": 635.0,
+            "AreaRatio": 0.7487446665763855
+        },
+        {
+            "Locale": "en",
+            "State": "confirm",
+            "ContentWidth": 1212.0,
+            "ContentHeight": 746.0,
+            "CanvasWidth": 974.0,
+            "CanvasHeight": 635.0,
+            "AreaRatio": 0.6840553283691406
+        },
+        {
+            "Locale": "qps-ploc",
+            "State": "default",
+            "ContentWidth": 1212.0,
+            "ContentHeight": 729.0,
+            "CanvasWidth": 1210.0,
+            "CanvasHeight": 618.0,
+            "AreaRatio": 0.8463377356529236
+        },
+        {
+            "Locale": "qps-ploc",
+            "State": "details",
+            "ContentWidth": 1212.0,
+            "ContentHeight": 729.0,
+            "CanvasWidth": 974.0,
+            "CanvasHeight": 618.0,
+            "AreaRatio": 0.6812669038772583
+        },
+        {
+            "Locale": "qps-ploc",
+            "State": "tools",
+            "ContentWidth": 1212.0,
+            "ContentHeight": 729.0,
+            "CanvasWidth": 1210.0,
+            "CanvasHeight": 618.0,
+            "AreaRatio": 0.6977651715278625
+        },
+        {
+            "Locale": "qps-ploc",
+            "State": "confirm",
+            "ContentWidth": 1212.0,
+            "ContentHeight": 729.0,
+            "CanvasWidth": 974.0,
+            "CanvasHeight": 618.0,
+            "AreaRatio": 0.6812669038772583
+        }
+    ]
+}

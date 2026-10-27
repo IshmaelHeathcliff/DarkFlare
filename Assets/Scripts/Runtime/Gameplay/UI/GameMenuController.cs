@@ -157,6 +157,7 @@ namespace DarkFlare
         void ActivateWindow(GameMenuPage page)
         {
             if (!IsWindowVisible(page)) { return; }
+            if (page != GameMenuPage.SkillBoard) { _board?.LeaveFocus(); }
             CurrentPage = page;
             _inventoryTemplate?.EnableInClassList("item-window--active", page == GameMenuPage.Inventory);
             _shopTemplate?.EnableInClassList("item-window--active", page == GameMenuPage.Shop);
@@ -720,6 +721,8 @@ namespace DarkFlare
                 _ => Vector2.zero,
             };
             if (direction == Vector2.zero) { return; }
+            if (evt.target is VisualElement source && (source == _boardTemplate || _boardTemplate?.Contains(source) == true))
+            { _panel.panel?.focusController.IgnoreEvent(evt); }
             evt.StopImmediatePropagation();
             if (Workspace.Interactions?.NavigateMenu(direction) == true) { return; }
             Workspace.AllowPreview();

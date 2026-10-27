@@ -43,7 +43,7 @@ namespace DarkFlare
         void BeginPlacement(ItemInstance item)
         {
             if (_moving == item) { return; }
-            ResetOperation(); ReadState(); _moving = item;
+            ResetOperation(); ReadState(); _moving = item; _selectedSlot = -1;
             _rotation = _board.Firewoods.FirstOrDefault(w => w.Item == item)?.Placement.Rotation ?? 0;
             _lastRotation = -1;
         }
@@ -78,7 +78,10 @@ namespace DarkFlare
                             FirewoodConnection pair = connection;
                             InstalledFirewood a = woods.First(w => w.Item.InstanceId == pair.First.PlacementId);
                             InstalledFirewood b = woods.First(w => w.Item.InstanceId == pair.Second.PlacementId);
-                            var toggle = new Toggle(L("link", Name(a.Item) + " " + a.Placement.Anchor, CrackNumber(a, pair.First.NodeId), Name(b.Item) + " " + b.Placement.Anchor, CrackNumber(b, pair.Second.NodeId)));
+                            var toggle = new Toggle
+                            {
+                                text = L("link", Name(a.Item) + " " + a.Placement.Anchor, CrackNumber(a, pair.First.NodeId), Name(b.Item) + " " + b.Placement.Anchor, CrackNumber(b, pair.Second.NodeId))
+                            };
                             toggle.AddToClassList("board-link"); toggle.SetValueWithoutNotify(_chosen.Contains(pair));
                             toggle.RegisterValueChangedCallback(evt => { if (evt.newValue) { _chosen.Add(pair); } else { _chosen.Remove(pair); } UpdatePlacement(); RefreshDetails(); Draw(); });
                             links.Add(toggle);
@@ -118,7 +121,7 @@ namespace DarkFlare
             if (!IsVisible || _moving != item) { return false; }
             if (_multipleLinks) { _reviewingLinks = true; RefreshDetails(); return true; }
             if (_preview?.Success != true) { return false; }
-            if (_charging) { _moving = null; RefreshDetails(); _root.Q<Button>("board-confirm").Focus(); return true; }
+            if (_charging) { _moving = null; RefreshDetails(); FocusPrepared(); return true; }
             return CommitPrepared();
         }
 
@@ -127,7 +130,7 @@ namespace DarkFlare
             if (_reviewingLinks)
             {
                 Toggle first = _root.Q("board-links").Q<Toggle>();
-                first?.GetFirstAncestorOfType<ScrollView>()?.ScrollTo(first); first?.Focus();
+                if (first != null) { FocusControl(first); }
                 RefreshDetails(); Draw(); return;
             }
             _moving = null;
@@ -145,11 +148,13 @@ namespace DarkFlare
 
         void Prepare(SkillBoardRequest request)
         {
+            ShowDetails(true);
             ResetOperation(); ReadState();
             _preview = this.SendQuery(new PreviewSkillBoardQuery(PlayerId, request));
             _feedback = _preview.Failure;
             Text("preview", L("preview", L(_preview.Success ? "ready" : "error." + _feedback)));
             RefreshDetails();
+            FocusPrepared();
         }
 
         void Extract()
@@ -172,6 +177,7 @@ namespace DarkFlare
         void Activate()
         {
             if (_wood == null) { return; }
+            ShowDetails(true);
             string wood = _wood.Item.InstanceId;
             string node = _wood.Placement.Layout.Nodes.Any(n => n.Id == _node && n.Kind == FirewoodNodeKind.Talent) ? _node : string.Empty;
             ResetOperation();
@@ -179,21 +185,26 @@ namespace DarkFlare
             Text("preview", _growthPreview.Success ? L("activation", _growth.TalentPoints - _growthPreview.Result.TalentPoints, _growthPreview.Result.TalentPoints)
                 : L("error." + _growthPreview.Failure));
             RefreshDetails();
+            FocusPrepared();
         }
         void Allocate(string stat)
         {
+            ShowDetails(true);
             ResetOperation(); ReadState();
             _growthPreview = this.SendQuery(new PreviewPlayerGrowthQuery(PlayerId, stat));
             Text("preview", _growthPreview.Success ? L("allocation", _growthPreview.Result.AttributePoints) : L("error." + _growthPreview.Failure));
             RefreshDetails();
+            FocusPrepared();
         }
 
         void SelectBottle(ItemInstance item)
         {
+            ShowDetails(true);
             ResetOperation(); ReadState();
             _bottle = this.SendQuery(new SelectEnergyBottleQuery(PlayerId, item));
             _preview = this.SendQuery(new PreviewEnergyChargeQuery(_bottle)); _charging = true;
             DescribeCharge(); RefreshDetails();
+            FocusPrepared();
         }
         void DescribeCharge()
         {
@@ -218,7 +229,7 @@ namespace DarkFlare
             }
             finally
             {
-                _executing = false; ResetOperation(); ReadState(); SelectNode(); Refresh();
+                _executing = false; ResetOperation(); ReadState(); SelectNode(); Refresh(); Canvas.Focus();
             }
             Text("preview", success ? L("success") : L("error.Stale"));
             return success;
@@ -236,13 +247,17 @@ namespace DarkFlare
         public bool Cancel()
         {
             if (!IsVisible) { return false; }
+            if (_menu.Workspace.ActiveWindow != GameMenuPage.SkillBoard) { return false; }
+            StopFocusRequest();
+            if (_toolsOpen) { SetTools(false); return true; }
             if (_menu.Workspace.IsDragging) { _menu.Workspace.CancelDrag(); ResetOperation(); return true; }
             if (_preview != null || _growthPreview != null || _bottle != null) { ResetOperation(); Refresh(); return true; }
-            if (Canvas.panel?.focusController.focusedElement != Canvas) { Canvas.Focus(); return true; }
+            if (_detailsOpen || Canvas.panel?.focusController.focusedElement != Canvas) { ShowDetails(false); Canvas.Focus(); return true; }
             return false;
         }
         void ResetOperation()
         {
+            StopFocusRequest();
             _moving = null; _preview = null; _growthPreview = null; _bottle = null; _charging = false; _feedback = SkillBoardFailure.None;
             _chosen.Clear(); _lastRotation = -1; _multipleLinks = false; _reviewingLinks = false;
             _root.Q("board-links")?.Clear();

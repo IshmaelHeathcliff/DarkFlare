@@ -31,6 +31,31 @@ namespace DarkFlare.Tests
         }
 
         [Test]
+        public void Projection_PreservesAttributeIdentityAndSharedHexEdges()
+        {
+            Vector2 strength = SkillBoardProjection.Project(SkillBoardProjection.AttributeCell(0));
+            Vector2 dexterity = SkillBoardProjection.Project(SkillBoardProjection.AttributeCell(1));
+            Vector2 intelligence = SkillBoardProjection.Project(SkillBoardProjection.AttributeCell(2));
+            Assert.That(strength.x, Is.EqualTo(0).Within(0.0001f));
+            Assert.That(strength.y, Is.LessThan(0));
+            Assert.That(dexterity.x, Is.LessThan(0)); Assert.That(dexterity.y, Is.GreaterThan(0));
+            Assert.That(intelligence.x, Is.GreaterThan(0)); Assert.That(intelligence.y, Is.GreaterThan(0));
+            Assert.That(SkillBoardProjection.AttributeAt(SkillBoardProjection.AttributeCell(0)), Is.EqualTo(StatIds.Strength));
+            Assert.That(SkillBoardProjection.AttributeAt(SkillBoardProjection.AttributeCell(1)), Is.EqualTo(StatIds.Dexterity));
+            Assert.That(SkillBoardProjection.AttributeAt(SkillBoardProjection.AttributeCell(2)), Is.EqualTo(StatIds.Intelligence));
+            Assert.That(SkillBoardProjection.AttributeAt(default), Is.Empty);
+            foreach (HexCoordinate neighbor in SkillBoardGeometry.NeighborDirections)
+            {
+                Vector2 center = SkillBoardProjection.Project(neighbor);
+                Assert.That(SkillBoardProjection.Unproject(center * 0.49f), Is.EqualTo(default(HexCoordinate)));
+                Assert.That(SkillBoardProjection.Unproject(center * 0.51f), Is.EqualTo(neighbor));
+                int sharedVertices = Enumerable.Range(0, 6).Count(i => Enumerable.Range(0, 6)
+                    .Any(j => Vector2.Distance(SkillBoardProjection.Corner(i), center + SkillBoardProjection.Corner(j)) < 0.0001f));
+                Assert.That(sharedVertices, Is.EqualTo(2), "相邻格必须共享完整的一条边");
+            }
+        }
+
+        [Test]
         public void Coordinates_PreserveDistanceUnderRotationAndTranslation()
         {
             HexCoordinate first = new HexCoordinate(-7, 11);

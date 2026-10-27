@@ -76,7 +76,9 @@
 ## 计划与验收
 
 - [Alpha 0.7 活动总计划](./plan/alpha-0.7-plan.md)
-- [0.7.2-alpha 体验优化总计划（阶段一、二完成）](./plan/alpha-0.7.2-optimization-plan.md)
+- [0.7.2-alpha 体验优化总计划（阶段一至三完成）](./plan/alpha-0.7.2-optimization-plan.md)
+- [0.7.2-alpha.3 天赋界面精简与属性方位实施计划（已归档）](./plan/archive/0.7.2/plans/phase-3-execution.md)
+- [0.7.2-alpha.3 天赋界面验收与前后画面](./plan/archive/0.7.2/acceptance/board-simplification/README.md)
 - [0.7.2-alpha.2 能量瓶装备入口迁移实施计划（已归档）](./plan/archive/0.7.2/plans/phase-2-execution.md)
 - [0.7.2 已完成阶段与验收归档](./plan/archive/0.7.2/README.md)
 - [0.7.2-alpha.2 能量瓶入口验收与画面](./plan/archive/0.7.2/acceptance/energy-bottle-equipment/README.md)
@@ -96,6 +98,10 @@
 完成的执行计划与验收文档、截图、日志和结果统一按版本收纳到 `plan/archive/<版本号>/`，各版本提供 `plans/`、`acceptance/` 与 `README.md` 入口。模块文档继续保留在对应职责目录。
 
 ## 计划状态
+
+2026-10-27：**0.7.2-alpha.3 阶段三完成**。天赋工具与详情精简、紧凑六槽、显示方位、连续手柄导航与多连接确认 / 保存已交付；EditMode 985/985、PlayMode 117/117，均无失败 / 跳过。三语言画布占比默认约 85%、详情约 68%，core v14 / Schema 12 / 1 / 地图 V4 保持，见[计划与验收](plan/archive/0.7.2/acceptance/board-simplification/README.md)。当前未构建 Player；阶段四、五继续活动。
+
+2026-10-26：**阶段二已提交 `6315bd3`，阶段三待实施**。[新实施计划](plan/archive/0.7.2/plans/phase-3-execution.md)已明确天赋画布扩大、工具 / 详情精简、统一投影与属性映射、手柄焦点路线及保存兼容验收。当前运行 `0.7.2-alpha.2` 与各数据版本保持；本次未修改运行代码或重跑 Unity 测试。
 
 2026-10-26：**0.7.2-alpha.2 阶段二完成**。背包独立能量瓶栏、共享换瓶 / 指定格卸瓶、天赋中心充能及键鼠 / 手柄闭环已交付；EditMode 984/984、PlayMode 114/114，均无失败 / 跳过，三语言 9 状态画面和普通 Play 保存继续通过，原存档哈希恢复一致。[计划与验收](plan/archive/0.7.2/acceptance/energy-bottle-equipment/README.md)已归档。core v14、Schema 12 / 1、地图 V4 保持；未构建 Player，阶段三至五继续活动。
 

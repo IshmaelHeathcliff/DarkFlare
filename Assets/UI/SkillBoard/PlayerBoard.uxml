@@ -1,49 +1,70 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:l="UnityEngine.Localization"><ui:VisualElement class="board-content">
-<ui:Label name="board-summary" class="board-text" picking-mode="Ignore"></ui:Label>
-<ui:VisualElement class="board-toolbar">
-<ui:Button name="board-center" class="board-button"><Bindings><l:LocalizedString property="text" table="ui" entry="board.center" /></Bindings></ui:Button>
-<ui:Button name="board-fit" class="board-button"><Bindings><l:LocalizedString property="text" table="ui" entry="board.fit" /></Bindings></ui:Button>
-<ui:Button name="board-zoom-in" class="board-button"><Bindings><l:LocalizedString property="text" table="ui" entry="board.zoom_in" /></Bindings></ui:Button>
-<ui:Button name="board-zoom-out" class="board-button"><Bindings><l:LocalizedString property="text" table="ui" entry="board.zoom_out" /></Bindings></ui:Button>
-<ui:Button name="board-root-0" class="board-button"></ui:Button>
-<ui:Button name="board-root-1" class="board-button"></ui:Button>
-<ui:Button name="board-root-2" class="board-button"></ui:Button>
-<ui:Button name="board-root-3" class="board-button"></ui:Button>
-<ui:Button name="board-root-4" class="board-button"></ui:Button>
-<ui:Button name="board-root-5" class="board-button"></ui:Button>
-</ui:VisualElement>
-<ui:Label name="board-cursor" class="board-text" picking-mode="Ignore"></ui:Label>
-<ui:VisualElement class="board-workspace"><ui:VisualElement class="board-view-column"><ui:VisualElement name="board-viewport" class="board-viewport" />
-<ui:Label name="board-help" class="board-help" picking-mode="Ignore" />
-<ui:VisualElement name="board-skill-slots" class="board-skill-slots">
-<ui:VisualElement class="board-skill-slot"><ui:Button name="board-slot-0" class="board-button"></ui:Button><ui:Button name="board-clear-0" class="board-button"><Bindings><l:LocalizedString property="text" table="ui" entry="board.clear" /></Bindings></ui:Button></ui:VisualElement>
-<ui:VisualElement class="board-skill-slot"><ui:Button name="board-slot-1" class="board-button"></ui:Button><ui:Button name="board-clear-1" class="board-button"><Bindings><l:LocalizedString property="text" table="ui" entry="board.clear" /></Bindings></ui:Button></ui:VisualElement>
-<ui:VisualElement class="board-skill-slot"><ui:Button name="board-slot-2" class="board-button"></ui:Button><ui:Button name="board-clear-2" class="board-button"><Bindings><l:LocalizedString property="text" table="ui" entry="board.clear" /></Bindings></ui:Button></ui:VisualElement>
-<ui:VisualElement class="board-skill-slot"><ui:Button name="board-slot-3" class="board-button"></ui:Button><ui:Button name="board-clear-3" class="board-button"><Bindings><l:LocalizedString property="text" table="ui" entry="board.clear" /></Bindings></ui:Button></ui:VisualElement>
-<ui:VisualElement class="board-skill-slot"><ui:Button name="board-slot-4" class="board-button"></ui:Button><ui:Button name="board-clear-4" class="board-button"><Bindings><l:LocalizedString property="text" table="ui" entry="board.clear" /></Bindings></ui:Button></ui:VisualElement>
-<ui:VisualElement class="board-skill-slot"><ui:Button name="board-slot-5" class="board-button"></ui:Button><ui:Button name="board-clear-5" class="board-button"><Bindings><l:LocalizedString property="text" table="ui" entry="board.clear" /></Bindings></ui:Button></ui:VisualElement>
-</ui:VisualElement></ui:VisualElement><ui:ScrollView name="board-details-scroll" class="board-details-scroll" horizontal-scroller-visibility="Hidden">
-<ui:Label name="board-selected-name" class="board-title" picking-mode="Ignore"><Bindings><l:LocalizedString property="text" table="ui" entry="board.no_selection" /></Bindings></ui:Label>
-<ui:VisualElement name="board-selected-icon" class="board-selected-icon" picking-mode="Ignore" /><ui:Label name="board-selected-details" class="board-text" picking-mode="Ignore"></ui:Label>
-<ui:Label name="board-range" class="board-text" picking-mode="Ignore"></ui:Label>
-<ui:Button name="board-take" class="board-button"><Bindings><l:LocalizedString property="text" table="ui" entry="board.take" /></Bindings></ui:Button>
-<ui:Button name="board-move" class="board-button"><Bindings><l:LocalizedString property="text" table="ui" entry="board.move" /></Bindings></ui:Button>
-<ui:Button name="board-activate" class="board-button"><Bindings><l:LocalizedString property="text" table="ui" entry="board.activate" /></Bindings></ui:Button>
-<ui:Button name="board-extract" class="board-button"><Bindings><l:LocalizedString property="text" table="ui" entry="board.extract" /></Bindings></ui:Button>
-<ui:Button name="board-remove" class="board-button"><Bindings><l:LocalizedString property="text" table="ui" entry="board.remove" /></Bindings></ui:Button>
-<ui:Label name="board-links-caption" class="board-text" picking-mode="Ignore"><Bindings><l:LocalizedString property="text" table="ui" entry="board.links" /></Bindings></ui:Label>
-<ui:VisualElement name="board-links" />
-<ui:Label name="board-normal" class="board-text" picking-mode="Ignore"></ui:Label>
-<ui:VisualElement name="board-bottle-icon" class="board-selected-icon" picking-mode="Ignore" /><ui:Label name="board-bottle-summary" class="board-text" picking-mode="Ignore" />
-<ui:Button name="board-charge-equipped" class="board-button"><Bindings><l:LocalizedString property="text" table="ui" entry="board.charge_equipped" /></Bindings></ui:Button>
-<ui:Label name="board-bottle-help" class="board-text" picking-mode="Ignore"><Bindings><l:LocalizedString property="text" table="ui" entry="board.bottle_help" /></Bindings></ui:Label>
-<ui:Button name="board-choose-bottle" class="board-button"><Bindings><l:LocalizedString property="text" table="ui" entry="board.choose_bottle" /></Bindings></ui:Button>
-<ui:Label name="board-attribute-strength" class="board-text" picking-mode="Ignore"></ui:Label>
-<ui:Button name="board-allocate-strength" class="board-button"></ui:Button>
-<ui:Label name="board-attribute-dexterity" class="board-text" picking-mode="Ignore"></ui:Label>
-<ui:Button name="board-allocate-dexterity" class="board-button"></ui:Button>
-<ui:Label name="board-attribute-intelligence" class="board-text" picking-mode="Ignore"></ui:Label>
-<ui:Button name="board-allocate-intelligence" class="board-button"></ui:Button>
-</ui:ScrollView></ui:VisualElement>
-<ui:Label name="board-preview" class="board-text" picking-mode="Ignore"></ui:Label>
-<ui:VisualElement class="board-actions"><ui:Button name="board-confirm" class="board-button"></ui:Button><ui:Button name="board-cancel" class="board-button"><Bindings><l:LocalizedString property="text" table="ui" entry="board.cancel" /></Bindings></ui:Button></ui:VisualElement></ui:VisualElement></ui:UXML>
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:l="UnityEngine.Localization">
+  <ui:VisualElement class="board-content">
+    <ui:VisualElement class="board-header">
+      <ui:Label name="board-summary" class="board-text board-summary" picking-mode="Ignore" />
+      <ui:Button name="board-tools" class="board-button"><Bindings><l:LocalizedString property="text" table="ui" entry="board.tools" /></Bindings></ui:Button>
+      <ui:Button name="board-details-toggle" class="board-button"><Bindings><l:LocalizedString property="text" table="ui" entry="board.details" /></Bindings></ui:Button>
+    </ui:VisualElement>
+    <ui:VisualElement class="board-workspace">
+      <ui:VisualElement class="board-view-column"><ui:VisualElement name="board-viewport" class="board-viewport" /></ui:VisualElement>
+      <ui:ScrollView name="board-details-scroll" class="board-details-scroll board-hidden" horizontal-scroller-visibility="Hidden">
+        <ui:Label name="board-selected-name" class="board-title" picking-mode="Ignore" />
+        <ui:VisualElement name="board-selected-icon" class="board-selected-icon" picking-mode="Ignore" />
+        <ui:Label name="board-selected-details" class="board-text" picking-mode="Ignore" />
+        <ui:Label name="board-range" class="board-text" picking-mode="Ignore" />
+        <ui:Button name="board-take" class="board-button"><Bindings><l:LocalizedString property="text" table="ui" entry="board.take" /></Bindings></ui:Button>
+        <ui:Button name="board-move" class="board-button"><Bindings><l:LocalizedString property="text" table="ui" entry="board.move" /></Bindings></ui:Button>
+        <ui:Button name="board-activate" class="board-button"><Bindings><l:LocalizedString property="text" table="ui" entry="board.activate" /></Bindings></ui:Button>
+        <ui:Button name="board-extract" class="board-button"><Bindings><l:LocalizedString property="text" table="ui" entry="board.extract" /></Bindings></ui:Button>
+        <ui:Button name="board-remove" class="board-button"><Bindings><l:LocalizedString property="text" table="ui" entry="board.remove" /></Bindings></ui:Button>
+        <ui:Label name="board-links-caption" class="board-text" picking-mode="Ignore"><Bindings><l:LocalizedString property="text" table="ui" entry="board.links" /></Bindings></ui:Label>
+        <ui:VisualElement name="board-links" />
+        <ui:VisualElement name="board-bottle-icon" class="board-selected-icon" picking-mode="Ignore" />
+        <ui:Label name="board-bottle-summary" class="board-text" picking-mode="Ignore" />
+        <ui:Button name="board-charge-equipped" class="board-button"><Bindings><l:LocalizedString property="text" table="ui" entry="board.charge_equipped" /></Bindings></ui:Button>
+        <ui:Label name="board-bottle-help" class="board-text" picking-mode="Ignore"><Bindings><l:LocalizedString property="text" table="ui" entry="board.bottle_help" /></Bindings></ui:Label>
+        <ui:Button name="board-choose-bottle" class="board-button"><Bindings><l:LocalizedString property="text" table="ui" entry="board.choose_bottle" /></Bindings></ui:Button>
+        <ui:Label name="board-attribute-strength" class="board-text" picking-mode="Ignore" /><ui:Button name="board-allocate-strength" class="board-button" />
+        <ui:Label name="board-attribute-dexterity" class="board-text" picking-mode="Ignore" /><ui:Button name="board-allocate-dexterity" class="board-button" />
+        <ui:Label name="board-attribute-intelligence" class="board-text" picking-mode="Ignore" /><ui:Button name="board-allocate-intelligence" class="board-button" />
+        <ui:Label name="board-slot-details" class="board-text" picking-mode="Ignore" />
+        <ui:Label name="board-normal" class="board-text" picking-mode="Ignore" />
+        <ui:Button name="board-clear-0" class="board-button board-hidden"><Bindings><l:LocalizedString property="text" table="ui" entry="board.clear" /></Bindings></ui:Button>
+        <ui:Button name="board-clear-1" class="board-button board-hidden"><Bindings><l:LocalizedString property="text" table="ui" entry="board.clear" /></Bindings></ui:Button>
+        <ui:Button name="board-clear-2" class="board-button board-hidden"><Bindings><l:LocalizedString property="text" table="ui" entry="board.clear" /></Bindings></ui:Button>
+        <ui:Button name="board-clear-3" class="board-button board-hidden"><Bindings><l:LocalizedString property="text" table="ui" entry="board.clear" /></Bindings></ui:Button>
+        <ui:Button name="board-clear-4" class="board-button board-hidden"><Bindings><l:LocalizedString property="text" table="ui" entry="board.clear" /></Bindings></ui:Button>
+        <ui:Button name="board-clear-5" class="board-button board-hidden"><Bindings><l:LocalizedString property="text" table="ui" entry="board.clear" /></Bindings></ui:Button>
+        <ui:Label name="board-preview" class="board-text board-hidden" picking-mode="Ignore" />
+        <ui:VisualElement name="board-actions" class="board-actions board-hidden">
+          <ui:Button name="board-confirm" class="board-button" />
+          <ui:Button name="board-cancel" class="board-button"><Bindings><l:LocalizedString property="text" table="ui" entry="board.cancel" /></Bindings></ui:Button>
+        </ui:VisualElement>
+      </ui:ScrollView>
+    </ui:VisualElement>
+    <ui:VisualElement name="board-skill-slots" class="board-skill-slots">
+      <ui:Button name="board-slot-0" class="board-button board-skill-slot" />
+      <ui:Button name="board-slot-1" class="board-button board-skill-slot" />
+      <ui:Button name="board-slot-2" class="board-button board-skill-slot" />
+      <ui:Button name="board-slot-3" class="board-button board-skill-slot" />
+      <ui:Button name="board-slot-4" class="board-button board-skill-slot" />
+      <ui:Button name="board-slot-5" class="board-button board-skill-slot" />
+    </ui:VisualElement>
+    <ui:Label name="board-help" class="board-help" picking-mode="Ignore" />
+    <ui:VisualElement name="board-tools-popup" class="board-tools-popup board-hidden">
+      <ui:VisualElement class="board-tool-grid">
+        <ui:Button name="board-center" class="board-button"><Bindings><l:LocalizedString property="text" table="ui" entry="board.center" /></Bindings></ui:Button>
+        <ui:Button name="board-fit" class="board-button"><Bindings><l:LocalizedString property="text" table="ui" entry="board.fit" /></Bindings></ui:Button>
+        <ui:Button name="board-zoom-in" class="board-button"><Bindings><l:LocalizedString property="text" table="ui" entry="board.zoom_in" /></Bindings></ui:Button>
+        <ui:Button name="board-zoom-out" class="board-button"><Bindings><l:LocalizedString property="text" table="ui" entry="board.zoom_out" /></Bindings></ui:Button>
+        <ui:Button name="board-root-0" class="board-button" />
+        <ui:Button name="board-root-1" class="board-button" />
+        <ui:Button name="board-root-2" class="board-button" />
+        <ui:Button name="board-root-3" class="board-button" />
+        <ui:Button name="board-root-4" class="board-button" />
+        <ui:Button name="board-root-5" class="board-button" />
+      </ui:VisualElement>
+      <ui:Button name="board-tools-close" class="board-button"><Bindings><l:LocalizedString property="text" table="ui" entry="window.close" /></Bindings></ui:Button>
+    </ui:VisualElement>
+  </ui:VisualElement>
+</ui:UXML>

@@ -7,15 +7,38 @@ namespace DarkFlare
 {
     public static class SkillBoardProjection
     {
+        static readonly string[] Attributes = { StatIds.Strength, StatIds.Dexterity, StatIds.Intelligence };
+
+        public static HexCoordinate AttributeCell(int index)
+        {
+            if (index < 0 || index >= Attributes.Length) { throw new ArgumentOutOfRangeException(nameof(index)); }
+            return SkillBoardGeometry.NeighborDirections[4 - index * 2];
+        }
+
+        public static string AttributeAt(HexCoordinate cell)
+        {
+            for (int i = 0; i < Attributes.Length; i++)
+            {
+                if (AttributeCell(i).Equals(cell)) { return Attributes[i]; }
+            }
+            return string.Empty;
+        }
+
         public static Vector2 Project(HexCoordinate cell)
         {
-            return new Vector2(Mathf.Sqrt(3) * (cell.Q + cell.R * 0.5f), cell.R * 1.5f);
+            return new Vector2(cell.Q * 1.5f, Mathf.Sqrt(3) * (cell.R + cell.Q * 0.5f));
+        }
+
+        public static Vector2 Corner(int index)
+        {
+            float angle = (60 + index * 60) * Mathf.Deg2Rad;
+            return new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
         }
 
         public static HexCoordinate Unproject(Vector2 point)
         {
-            double r = point.y / 1.5;
-            double q = point.x / Math.Sqrt(3) - r * 0.5;
+            double q = point.x / 1.5;
+            double r = point.y / Math.Sqrt(3) - q * 0.5;
             double s = -q - r;
             double rq = Math.Round(q), rr = Math.Round(r), rs = Math.Round(s);
             double dq = Math.Abs(rq - q), dr = Math.Abs(rr - r), ds = Math.Abs(rs - s);
@@ -51,6 +74,7 @@ namespace DarkFlare
         Vector2 _pan;
         Vector2 _center;
         float _radius = 18;
+        bool _fitPending;
         string _centerText = string.Empty;
         string[] _attributes = Array.Empty<string>();
         readonly HashSet<string> _targets = new HashSet<string>();
@@ -127,19 +151,50 @@ namespace DarkFlare
 
         public void Fit()
         {
-            Vector2 minimum = new Vector2(-30, -26), maximum = new Vector2(30, 26);
-            foreach (InstalledFirewood wood in _board.Firewoods)
-            {
-                Vector2 point = SkillBoardProjection.Project(wood.Placement.Anchor);
-                minimum = Vector2.Min(minimum, point - Vector2.one * 5);
-                maximum = Vector2.Max(maximum, point + Vector2.one * 5);
-            }
+            if (contentRect.width < 1 || contentRect.height < 1) { _fitPending = true; return; }
+            _fitPending = false;
+            Vector2 minimum = Vector2.positiveInfinity, maximum = Vector2.negativeInfinity;
+            Include(_board);
+            if (_candidate != null) { Include(_candidate); }
             _center = (minimum + maximum) * 0.5f; _pan = Vector2.zero;
-            _radius = Mathf.Clamp(Mathf.Min(contentRect.width / (maximum.x - minimum.x), contentRect.height / (maximum.y - minimum.y)), 7, 52);
+            _radius = Mathf.Clamp(Mathf.Min((contentRect.width - 80) / (maximum.x - minimum.x),
+                (contentRect.height - 48) / (maximum.y - minimum.y)), 7, 52);
             UpdateLabels(); MarkDirtyRepaint();
+
+            void Include(SkillBoardState board)
+            {
+                foreach (HexCoordinate cell in SkillBoardGeometry.CenterReservation) { IncludeCell(cell); }
+                foreach (HexCoordinate cell in SkillBoardGeometry.Roots) { IncludeCell(cell); }
+                foreach (InstalledFirewood wood in board.Firewoods)
+                {
+                    try
+                    {
+                        foreach (HexCoordinate cell in wood.Placement.Layout.Body) { IncludeCell(wood.Placement.ToWorld(cell)); }
+                        foreach (FirewoodNode node in wood.Placement.Layout.Nodes)
+                        {
+                            if (node.Outward.HasValue && !HasConnection(board, new FirewoodPortReference(wood.Item.InstanceId, node.Id)))
+                            { IncludeCell(wood.Placement.ToWorld(node.Position.Add(node.Outward.Value))); }
+                        }
+                    }
+                    catch (OverflowException) { }
+                }
+            }
+            void IncludeCell(HexCoordinate cell)
+            {
+                Vector2 center = SkillBoardProjection.Project(cell);
+                for (int i = 0; i < 6; i++)
+                {
+                    Vector2 corner = center + SkillBoardProjection.Corner(i);
+                    minimum = Vector2.Min(minimum, corner); maximum = Vector2.Max(maximum, corner);
+                }
+            }
         }
 
-        void OnGeometry(GeometryChangedEvent evt) { UpdateLabels(); }
+        void OnGeometry(GeometryChangedEvent evt)
+        {
+            if (_fitPending) { Fit(); }
+            else { UpdateLabels(); }
+        }
         void OnSubmit(NavigationSubmitEvent evt) { Activated?.Invoke(); evt.StopImmediatePropagation(); }
 
         void UpdateLabels()
@@ -147,17 +202,28 @@ namespace DarkFlare
             foreach (Label label in _labels) { label.RemoveFromHierarchy(); }
             _labels.Clear();
             AddLabel(_centerText, default);
-            for (int i = 0; i < _attributes.Length; i++) { AddLabel(_attributes[i], SkillBoardGeometry.NeighborDirections[i * 2]); }
+            for (int i = 0; i < _attributes.Length; i++) { AddLabel(_attributes[i], SkillBoardProjection.AttributeCell(i), true); }
             for (int i = 0; i < 6; i++) { AddLabel((i + 1).ToString(), SkillBoardGeometry.Roots[i]); }
         }
 
-        void AddLabel(string text, HexCoordinate cell)
+        Vector2 LabelPosition(HexCoordinate cell, bool attribute)
         {
             Vector2 position = CellPosition(cell);
+            if (attribute)
+            {
+                Vector2 direction = SkillBoardProjection.Project(cell);
+                position += direction.normalized * Mathf.Max(0, 48 - direction.magnitude * _radius);
+            }
+            return position;
+        }
+
+        void AddLabel(string text, HexCoordinate cell, bool attribute = false)
+        {
+            Vector2 position = LabelPosition(cell, attribute);
             if (position.x < -50 || position.x > contentRect.width + 50 || position.y < -20 || position.y > contentRect.height + 20) { return; }
             var label = new Label(text) { pickingMode = PickingMode.Ignore };
             label.AddToClassList("board-cell-label");
-            label.style.left = position.x - 36; label.style.top = position.y - 10;
+            label.style.left = position.x; label.style.top = position.y;
             Add(label); _labels.Add(label);
         }
 
@@ -168,16 +234,29 @@ namespace DarkFlare
             HexCoordinate origin;
             try { origin = SkillBoardProjection.Unproject(_center - _pan / _radius); }
             catch (OverflowException) { return; }
-            int reach = Mathf.CeilToInt(Mathf.Max(contentRect.width, contentRect.height) / (_radius * 1.5f)) + 2;
-            for (int q = -reach; q <= reach; q++)
+            int qReach = Mathf.CeilToInt(contentRect.width / (_radius * 3)) + 2;
+            int rReach = Mathf.CeilToInt(contentRect.height / (_radius * Mathf.Sqrt(3) * 2) + contentRect.width / (_radius * 6)) + 2;
+            for (int q = -qReach; q <= qReach; q++)
             {
-                for (int r = -reach; r <= reach; r++)
+                for (int r = -rReach; r <= rReach; r++)
                 {
                     try { Hex(painter, origin.Add(new HexCoordinate(q, r)), new Color(0.06f, 0.07f, 0.09f), new Color(0.14f, 0.15f, 0.17f)); }
                     catch (OverflowException) { }
                 }
             }
-            foreach (HexCoordinate cell in SkillBoardGeometry.CenterReservation) { Hex(painter, cell, new Color(0.21f, 0.15f, 0.11f), new Color(0.65f, 0.5f, 0.27f)); }
+            foreach (HexCoordinate cell in SkillBoardGeometry.CenterReservation)
+            {
+                string attribute = SkillBoardProjection.AttributeAt(cell);
+                Color fill = attribute == StatIds.Strength ? new Color(0.36f, 0.1f, 0.08f)
+                    : attribute == StatIds.Dexterity ? new Color(0.1f, 0.29f, 0.15f)
+                    : attribute == StatIds.Intelligence ? new Color(0.1f, 0.18f, 0.38f) : new Color(0.21f, 0.15f, 0.11f);
+                Hex(painter, cell, fill, new Color(0.65f, 0.5f, 0.27f));
+                if (attribute.Length > 0 && _radius * Mathf.Sqrt(3) < 48)
+                {
+                    painter.BeginPath(); painter.MoveTo(CellPosition(cell)); painter.LineTo(LabelPosition(cell, true));
+                    painter.strokeColor = new Color(0.65f, 0.5f, 0.27f); painter.lineWidth = 1; painter.Stroke();
+                }
+            }
             foreach (HexCoordinate cell in SkillBoardGeometry.Roots) { Hex(painter, cell, new Color(0.09f, 0.17f, 0.25f), new Color(0.38f, 0.57f, 0.7f)); }
             PaintBoard(painter, _board, false);
             if (_candidate != null && _moving != null) { PaintBoard(painter, _candidate, true); }
@@ -250,8 +329,7 @@ namespace DarkFlare
             painter.BeginPath();
             for (int i = 0; i < 6; i++)
             {
-                float angle = (30 + i * 60) * Mathf.Deg2Rad;
-                Vector2 corner = point + new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * (_radius - 1);
+                Vector2 corner = point + SkillBoardProjection.Corner(i) * (_radius - 1);
                 if (i == 0) { painter.MoveTo(corner); } else { painter.LineTo(corner); }
             }
             painter.ClosePath(); painter.fillColor = fill; painter.Fill();

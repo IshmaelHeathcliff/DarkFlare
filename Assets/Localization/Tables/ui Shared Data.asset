@@ -2547,6 +2547,26 @@ MonoBehaviour:
     m_Key: inventory.bottle.full
     m_Metadata:
       m_Items: []
+  - m_Id: 24659435380006912
+    m_Key: board.tools
+    m_Metadata:
+      m_Items: []
+  - m_Id: 24659435417755648
+    m_Key: board.hide_details
+    m_Metadata:
+      m_Items: []
+  - m_Id: 24659435417755649
+    m_Key: board.growth_compact
+    m_Metadata:
+      m_Items: []
+  - m_Id: 24659435417755650
+    m_Key: board.help_compact
+    m_Metadata:
+      m_Items: []
+  - m_Id: 24659435417755651
+    m_Key: board.slot_compact
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

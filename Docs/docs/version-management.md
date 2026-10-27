@@ -41,7 +41,7 @@
 
 ## 当前状态与版本来源
 
-2026-10-26，当前运行版本为 `0.7.2-alpha.2`，阶段一、二实现及验证完成，见[阶段二验收](plan/archive/0.7.2/acceptance/energy-bottle-equipment/README.md)。当前 core v14、Save / Settings Schema 12 / 1、地图 V4；纯界面入口迁移及瞬时卸瓶目标不改变持久化格式。[0.7.2 总计划](plan/alpha-0.7.2-optimization-plan.md)与[0.7 总计划](plan/alpha-0.7-plan.md)继续活动。
+2026-10-27，当前运行版本为 `0.7.2-alpha.3`，阶段一至三实现及验证完成，见[阶段三验收](plan/archive/0.7.2/acceptance/board-simplification/README.md)。当前 core v14、Save / Settings Schema 12 / 1、地图 V4；界面精简及显示投影不改变逻辑坐标、安装身份和持久化格式。完整 EditMode 985/985、PlayMode 117/117，均无失败 / 跳过；验证后仅推进运行版本。[0.7.2 总计划](plan/alpha-0.7.2-optimization-plan.md)与[0.7 总计划](plan/alpha-0.7-plan.md)继续活动。
 
 2026-09-29 的 `0.7.0-alpha.2` 历史验收为核心定向 52/52、版本域及存档定向 32/32、完整 EditMode 882/882、PlayMode 102/102，均为 0 失败 / 跳过。见[0.7.0 执行与验收](plan/archive/0.7.0/plans/alpha-0.7.0-semver-plan.md)；该版 Player、真实设备、跨进程及性能矩阵未执行。
 

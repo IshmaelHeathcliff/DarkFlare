@@ -1,0 +1,58 @@
+{
+    "Frames": [
+        {
+            "Locale": "zh-Hans",
+            "State": "default",
+            "ContentWidth": 1212.0,
+            "ContentHeight": 746.0,
+            "CanvasWidth": 908.0,
+            "CanvasHeight": 320.0,
+            "AreaRatio": 0.3213618993759155
+        },
+        {
+            "Locale": "zh-Hans",
+            "State": "details",
+            "ContentWidth": 1212.0,
+            "ContentHeight": 746.0,
+            "CanvasWidth": 908.0,
+            "CanvasHeight": 320.0,
+            "AreaRatio": 0.3213618993759155
+        },
+        {
+            "Locale": "en",
+            "State": "default",
+            "ContentWidth": 1212.0,
+            "ContentHeight": 746.0,
+            "CanvasWidth": 908.0,
+            "CanvasHeight": 320.0,
+            "AreaRatio": 0.3213618993759155
+        },
+        {
+            "Locale": "en",
+            "State": "details",
+            "ContentWidth": 1212.0,
+            "ContentHeight": 746.0,
+            "CanvasWidth": 908.0,
+            "CanvasHeight": 320.0,
+            "AreaRatio": 0.3213618993759155
+        },
+        {
+            "Locale": "qps-ploc",
+            "State": "default",
+            "ContentWidth": 1212.0,
+            "ContentHeight": 729.0,
+            "CanvasWidth": 908.0,
+            "CanvasHeight": 266.0,
+            "AreaRatio": 0.2733615040779114
+        },
+        {
+            "Locale": "qps-ploc",
+            "State": "details",
+            "ContentWidth": 1212.0,
+            "ContentHeight": 729.0,
+            "CanvasWidth": 908.0,
+            "CanvasHeight": 266.0,
+            "AreaRatio": 0.2733615040779114
+        }
+    ]
+}

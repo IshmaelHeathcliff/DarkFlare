@@ -106,6 +106,10 @@ namespace DarkFlare.Tests
             Assert.That(_architecture.SendQuery(new GetSkillBoardQuery()).Embeddings.Single().Item, Is.SameAs(flame));
             board.Jump(mounted.Placement.Anchor); yield return null;
             yield return BoardPress(root, "board-slot-0", keyboard);
+            yield return BoardPress(root, "board-clear-0", keyboard);
+            Assert.That(_architecture.SendQuery(new GetPlayerSkillsQuery())[0].Skill, Is.Null);
+            Assert.That(root.focusController.focusedElement, Is.SameAs(root.Q("board-slot-0")));
+            yield return BoardPress(root, "board-slot-0", keyboard);
             yield return BoardPress(root, "board-slot-5", keyboard);
             var skills = _architecture.SendQuery(new GetPlayerSkillsQuery());
             Assert.That(skills[0].Skill, Is.Null);
@@ -129,6 +133,7 @@ namespace DarkFlare.Tests
             Assert.That(_architecture.SendQuery(new GetPlayerSkillsQuery())[5].RemainingSeconds, Is.GreaterThan(0));
             menu.OpenPage(GameMenuPage.SkillBoard); yield return null;
             float remaining = _architecture.SendQuery(new GetPlayerSkillsQuery())[5].RemainingSeconds;
+            string boardIdentity = BoardIdentity(_architecture.SendQuery(new GetSkillBoardQuery()));
             ApplicationHost host = ApplicationHost.Current;
             SaveOperationResult saved = null;
             yield return host.SessionSaveFacade.SaveAutoAsync().ToCoroutine(value => saved = value);
@@ -144,6 +149,8 @@ namespace DarkFlare.Tests
             root = menu.GetComponent<RuntimePanelView>().Root;
             menu.OpenPage(GameMenuPage.SkillBoard); yield return null; yield return null;
             Assert.That(_architecture.SendQuery(new GetSkillBoardQuery()).Embeddings.Count, Is.EqualTo(2));
+            Assert.That(BoardIdentity(_architecture.SendQuery(new GetSkillBoardQuery())), Is.EqualTo(boardIdentity),
+                "保存继续必须保持逻辑安装坐标、旋转、实例、节点和连接，不能保存显示映射");
             Assert.That(_architecture.SendQuery(new GetPlayerGrowthQuery()).Strength, Is.EqualTo(1));
             Assert.That(_architecture.SendQuery(new GetPlayerSkillsQuery())[5].SourceId, Is.EqualTo(flame.InstanceId));
             Assert.That(_architecture.SendQuery(new GetPlayerSkillsQuery())[5].RemainingSeconds, Is.EqualTo(remaining).Within(.1f));
@@ -243,7 +250,7 @@ namespace DarkFlare.Tests
                 {
                     yield return host.Localization.ChangeLanguageAsync(locale == "zh-Hans" ? UserLanguagePreference.SimplifiedChinese : UserLanguagePreference.English).ToCoroutine();
                     menu.Board.Refresh(); yield return null; yield return null;
-                    AssertLayoutInsideRoot(root, new[] { "board-window", "inventory-window", "board-canvas", "board-confirm", "board-cancel", "board-skill-slots", "inventory-bottle-slot", "inventory-bottle-energy" });
+                    AssertLayoutInsideRoot(root, new[] { "board-window", "inventory-window", "board-canvas", "board-tools", "board-details-toggle", "board-skill-slots", "inventory-bottle-slot", "inventory-bottle-energy" });
                     AssertElementsDoNotOverlap(root, "board-window", "inventory-window");
                     Assert.That(root.Q("board-canvas").worldBound.height, Is.GreaterThan(100), locale);
                     Keyboard keyboard = InputSystem.AddDevice<Keyboard>();
@@ -251,14 +258,25 @@ namespace DarkFlare.Tests
                     Assert.That(menu.Board.Canvas.Cursor, Is.EqualTo(SkillBoardGeometry.Roots[5]));
                     yield return BoardPress(root, "board-center", keyboard);
                     Assert.That(menu.Board.Canvas.Cursor, Is.EqualTo(default(HexCoordinate)));
-                    InputSystem.RemoveDevice(keyboard); yield return null; yield return null;
                     if (locale == "qps-ploc")
                     {
                         Assert.That(ApplyPseudoLocalization(root), Is.GreaterThan(0));
                         yield return null; yield return null;
-                        AssertLayoutInsideRoot(root, new[] { "board-canvas", "board-confirm", "board-skill-slots" });
+                        AssertLayoutInsideRoot(root, new[] { "board-canvas", "board-tools", "board-skill-slots" });
                     }
                     AssertVisibleTextFits(root, locale, new Vector2Int(1920, 1080));
+                    yield return BoardPress(root, "board-charge-equipped", keyboard);
+                    yield return BoardWaitForFocus(root, "board-confirm");
+                    if (locale == "qps-ploc")
+                    {
+                        ApplyPseudoLocalization(root); yield return null; yield return null;
+                        root.Q<ScrollView>("board-details-scroll").ScrollTo(root.Q("board-confirm")); yield return null;
+                    }
+                    Assert.That(root.Q<ScrollView>("board-details-scroll").contentViewport.worldBound.Contains(root.Q("board-confirm").worldBound.center), Is.True);
+                    AssertVisibleTextFits(root, locale, new Vector2Int(1920, 1080));
+                    yield return BoardKeyBack(keyboard);
+                    yield return BoardKeyBack(keyboard);
+                    InputSystem.RemoveDevice(keyboard); yield return null; yield return null;
                 }
             }
             finally
@@ -270,12 +288,39 @@ namespace DarkFlare.Tests
 
         IEnumerator BoardPress(VisualElement root, string name, Keyboard keyboard)
         {
+            GameMenuController menu = Object.FindAnyObjectByType<GameMenuController>();
+            if (name == "board-center" || name == "board-fit" || name.StartsWith("board-root-") || name.StartsWith("board-zoom-"))
+            {
+                if (!GameMenuController.IsNavigable(root.Q(name))) { yield return BoardPress(root, "board-tools", keyboard); }
+            }
+            if (name.StartsWith("board-allocate-"))
+            {
+                for (int i = 0; i < 3; i++)
+                {
+                    HexCoordinate cell = SkillBoardProjection.AttributeCell(i);
+                    if (name == "board-allocate-" + SkillBoardProjection.AttributeAt(cell)) { menu.Board.Jump(cell); break; }
+                }
+            }
+            else if (name == "board-charge-equipped" || name == "board-choose-bottle") { menu.Board.Jump(default); }
+            if (!GameMenuController.IsNavigable(root.Q(name)) && root.Q("board-details-scroll").ClassListContains("board-hidden"))
+            { yield return BoardPress(root, "board-details-toggle", keyboard); }
             Button button = root.Q<Button>(name);
             Assert.That(button, Is.Not.Null, name);
+            yield return null;
             button.GetFirstAncestorOfType<ScrollView>()?.ScrollTo(button);
             button.Focus(); yield return null;
-            Assert.That(button.enabledInHierarchy, Is.True, name);
+            Assert.That(root.focusController.focusedElement, Is.SameAs(button), name + " 应获得可见焦点");
+            Assert.That(button.enabledInHierarchy, Is.True, name + " · " + menu.Board.Canvas.Cursor + " · " + root.Q<Label>("board-preview").text);
             _inputFixture.PressAndRelease(keyboard.enterKey); yield return null; yield return null;
+            if (name == "board-tools") { yield return BoardWaitForFocus(root, "board-center"); }
+        }
+
+        static string BoardIdentity(SkillBoardState board)
+        {
+            return string.Join(";", board.Firewoods.Select(w => w.Item.InstanceId + ":" + w.Placement.Anchor + ":" + w.Placement.Rotation
+                + ":" + string.Join(",", w.Placement.Layout.Nodes.Select(n => n.Id + ":" + n.Position + ":" + n.Outward))).OrderBy(s => s))
+                + "|" + string.Join(";", board.Connections.Select(c => c.First.PlacementId + ":" + c.First.NodeId + "=" + c.Second.PlacementId + ":" + c.Second.NodeId).OrderBy(s => s))
+                + "|" + string.Join(";", board.Embeddings.Select(e => e.Item.InstanceId + ":" + e.Slot.PlacementId + ":" + e.Slot.NodeId).OrderBy(s => s));
         }
     }
 }

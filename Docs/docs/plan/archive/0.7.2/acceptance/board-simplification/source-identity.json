@@ -1,0 +1,91 @@
+{
+  "BaseCommit": "6315bd34749be9cc1e3d4a13af880f22f40bab9c",
+  "WorkingTreeChanges": true,
+  "Unity": "6000.6.7f1",
+  "ApplicationVersion": "0.7.2-alpha.3",
+  "ValidationApplicationVersion": "0.7.2-alpha.2 + stage 3 working tree",
+  "VersionAdvanceAfterValidation": true,
+  "CoreVersion": 14,
+  "SaveSchema": 12,
+  "SettingsSchema": 1,
+  "MapFormat": 4,
+  "TownRevision": 1,
+  "WildernessRevision": 9,
+  "EditMode": "985/985",
+  "PlayMode": "117/117",
+  "VisualCaptureNote": "Only navigation ownership scope changed after capture; final focused and both full runs passed afterward.",
+  "Files": [
+    {
+      "Path": "Assets/Localization/Tables/ui Shared Data.asset",
+      "Sha256": "803FFFB4E05BC794E8A8B4997FDFB6EB2EDC576DC2ECFD9682099D40B98EC83E"
+    },
+    {
+      "Path": "Assets/Localization/Tables/ui_en.asset",
+      "Sha256": "0B15B4022003716272AEE8B3A4DC7D733511AFE45C05D133BC91A22E298664EF"
+    },
+    {
+      "Path": "Assets/Localization/Tables/ui_zh-Hans.asset",
+      "Sha256": "B98DDA1CCBBA48653492AB6CAB55647C942B7A58A6722A022AF55C22C011730A"
+    },
+    {
+      "Path": "Assets/Scripts/Runtime/Gameplay/UI/GameMenuController.cs",
+      "Sha256": "2CEBAA1168C13068CF69B875046514AE6405E74BB8CA8348BC94D2E1271EF97C"
+    },
+    {
+      "Path": "Assets/Scripts/Runtime/Gameplay/UI/SkillBoardPanelActions.cs",
+      "Sha256": "16244D867A04A1075362F0204D21273BD28CDA8BBBE076363FEA5A486EA53C1D"
+    },
+    {
+      "Path": "Assets/Scripts/Runtime/Gameplay/UI/SkillBoardPanelController.cs",
+      "Sha256": "F0C33F6C05393C14EEA56BF42A9FFE0424E953226DE2A9909F5BDB0CC6363558"
+    },
+    {
+      "Path": "Assets/Scripts/Runtime/Gameplay/UI/SkillBoardPanelView.cs",
+      "Sha256": "A6BC618CBA2A3B25581E9CEC7D09C66D1DCC92631DAAB8AAE277162CDE0323A0"
+    },
+    {
+      "Path": "Assets/Scripts/Runtime/Gameplay/UI/SkillBoardPanelView.cs.meta",
+      "Sha256": "EA87EFF0635751B19658438AF627FA25124961A7074C66BD65ED5E6A71C4E47C"
+    },
+    {
+      "Path": "Assets/Scripts/Runtime/Gameplay/UI/SkillBoardViewport.cs",
+      "Sha256": "5B54ABE118F4D4B3B576551D1EE0545FAEBD5E7A7D7EBE595A9EDC454934FBE4"
+    },
+    {
+      "Path": "Assets/Scripts/Tests/EditMode/SkillBoardGeometryTests.cs",
+      "Sha256": "71F22B0E3397A189EB6AEFC6917048972B78E57AFAE77287A8F7E98F582C11D3"
+    },
+    {
+      "Path": "Assets/Scripts/Tests/PlayMode/Phase1UxPlayModeTests.SkillBoard.cs",
+      "Sha256": "6784200A611D7ADAD8FD8ABD66B9EEB35F3042A28081A9B405CFD14AA17240A0"
+    },
+    {
+      "Path": "Assets/Scripts/Tests/PlayMode/Phase1UxPlayModeTests.BoardView.cs",
+      "Sha256": "8F6E3D9B7E75615E19D17B2C9AD2F7A909DC032D512ECE0AE84B2B61B418C1BA"
+    },
+    {
+      "Path": "Assets/Scripts/Tests/PlayMode/Phase1UxPlayModeTests.BoardView.cs.meta",
+      "Sha256": "44B03AB82B82E9D0AE5FCDC3564634210081F2C94AB15ABE82D6231D2F30A6AB"
+    },
+    {
+      "Path": "Assets/Scripts/Tests/PlayMode/Phase1UxPlayModeTests.BoardLinks.cs",
+      "Sha256": "C096445094AC682BF04A1309C7BE36EF91FC0C731F104E4F3F02916B64C0C32D"
+    },
+    {
+      "Path": "Assets/Scripts/Tests/PlayMode/Phase1UxPlayModeTests.BoardLinks.cs.meta",
+      "Sha256": "61A66A4A65EF5C1E3C1F5F4194067A74DD168BF321AA39A3606BD240A4AECB3D"
+    },
+    {
+      "Path": "Assets/UI/SkillBoard/PlayerBoard.uxml",
+      "Sha256": "AF3489543FA6CDF2F6C218BCF8A3C3A20834FF9D60A09117D47D909FDA546EC3"
+    },
+    {
+      "Path": "Assets/UI/SkillBoard/PlayerBoard.uss",
+      "Sha256": "88C9FA7D4303678F3EC53EF3BB70B16CE86F53683F7BCED23D93417179C04D30"
+    },
+    {
+      "Path": "ProjectSettings/ProjectSettings.asset",
+      "Sha256": "3669044CDE43EF89D1FA24B7277FD20F1FCDD554C03C7F68E0AA74A8ADCD55B4"
+    }
+  ]
+}

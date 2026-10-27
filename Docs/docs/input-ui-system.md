@@ -47,6 +47,8 @@ Bootstrap 和 Main 均使用原生 `PanelRenderer`，通过 `RuntimePanelView` �
 
 Cancel 先由 Application Shell 处理 Fatal、Busy、Modal、Settings，再交给 Session 的暂停页、物品动作菜单、拖放、展开的来源选择器与活动窗口处理；每级在首个所有者消费后停止分发，一次输入只处理一层。Shell 阻挡期间不向玩法物品界面转发导航和拿起动作，也不执行排队中的 Gameplay 切换。关闭底层菜单只更新请求，不能释放上层 UI / pause lease。
 
+天赋画布按旋转后的屏幕方向导航，边缘自动平移；提交进入相关详情，无相关操作时到达视图工具。工具菜单提供缩放、回中、适配和六根定位，导航只在弹层内处理；切换到背包释放工具焦点。已接管的导航通过 `FocusController.IgnoreEvent` 阻止额外默认焦点移动。展开后的焦点等待有效布局，取消、挂起、切窗和解绑停止旧请求；返回逐层处理工具、预览、详情与棋盘窗口。沿用现有 Action Asset 与肩键的窗口 / 60° 旋转分工，见[玩家棋盘](skill-board/player-board.md)。
+
 ### 重绑定、设备族与 Glyph
 
 `ApplicationInputService` 维护正式可重绑定 Action / Composite Part 清单，并把 Binding Overrides JSON 与 `GlyphPreference` 保存到 Settings V1。一次变更按“临时覆盖 → 合同 / 冲突校验 → Settings 提交 → 失败回滚”执行；交互捕获期间持有 Rebinding suspension lease，Escape、超时或设备拔出都恢复旧覆盖。恢复默认只移除 runtime override，不修改 `InputSystem_Actions.inputactions`。

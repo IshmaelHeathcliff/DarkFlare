@@ -2285,7 +2285,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 20873743621414917
-    m_Localized: Node and item
+    m_Localized: Details
     m_Metadata:
       m_Items: []
   - m_Id: 20873743621414918
@@ -2608,6 +2608,26 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 24484628743053312
     m_Localized: Full
+    m_Metadata:
+      m_Items: []
+  - m_Id: 24659435380006912
+    m_Localized: View tools
+    m_Metadata:
+      m_Items: []
+  - m_Id: 24659435417755648
+    m_Localized: Hide details
+    m_Metadata:
+      m_Items: []
+  - m_Id: 24659435417755649
+    m_Localized: "Talent {0} \xB7 Attributes {1} \xB7 Energy {2} \xB7 Next {3}"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 24659435417755650
+    m_Localized: "Wheel: zoom \xB7 MMB: pan \xB7 {0}: inspect / act \xB7 {1}: back \xB7 {2} / {3}: rotate wood"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 24659435417755651
+    m_Localized: "{0} \xB7 Flame {1}"
     m_Metadata:
       m_Items: []
   references:

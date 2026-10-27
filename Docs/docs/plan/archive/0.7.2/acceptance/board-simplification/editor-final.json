@@ -1,0 +1,20 @@
+{
+  "Version": "0.7.2-alpha.3",
+  "ApplicationVersion": "0.7.2-alpha.3",
+  "Unity": "6000.6.7f1",
+  "Play": false,
+  "Compiling": false,
+  "OptionsEnabled": true,
+  "Options": 1,
+  "TestMarker": "",
+  "Scenes": [
+    {
+      "Path": "Assets/Scenes/Bootstrap.unity",
+      "Dirty": false
+    }
+  ],
+  "ScreenWidth": 640,
+  "ScreenHeight": 480,
+  "TemporaryRunnerExists": false,
+  "TemporaryCaptureExists": false
+}

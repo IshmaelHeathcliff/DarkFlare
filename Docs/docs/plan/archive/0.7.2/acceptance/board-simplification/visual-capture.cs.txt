@@ -1,0 +1,179 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using Cysharp.Threading.Tasks;
+using NUnit.Framework;
+using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.TestTools;
+using UnityEngine.UIElements;
+
+namespace DarkFlare.Tests
+{
+    public partial class Phase1UxPlayModeTests
+    {
+        [Serializable]
+        public sealed class AgentBoardFrame
+        {
+            public string Locale;
+            public string State;
+            public float ContentWidth;
+            public float ContentHeight;
+            public float CanvasWidth;
+            public float CanvasHeight;
+            public float AreaRatio;
+        }
+
+        [Serializable]
+        public sealed class AgentBoardFrames
+        {
+            public List<AgentBoardFrame> Frames = new List<AgentBoardFrame>();
+        }
+
+        [UnityTest]
+        public IEnumerator AgentCaptureBoard()
+        {
+            yield return _fixture.EnterMain();
+            ApplicationHost host = ApplicationHost.Current;
+            GameMenuController menu = UnityEngine.Object.FindAnyObjectByType<GameMenuController>();
+            IArchitecture architecture = menu.GetArchitecture();
+            PlayerController player = UnityEngine.Object.FindAnyObjectByType<PlayerController>();
+            architecture.GetSystem<PlayerGrowthSystem>().Restore(player.Id.Value, new PlayerGrowthState().Charge(1000), player.Actor);
+            ItemInstance Create(string id)
+            {
+                ItemInstance item = host.ContentCatalog.GetAll<ItemBaseDefinition>().Single(d => d.Id == id)
+                    .CreateInstance(architecture.GetUtility<IItemInstanceIdGenerator>().Next(), 1, 42, ItemRarity.Normal);
+                Assert.That(architecture.GetModel<InventoryModel>().TryAddItem(item), Is.True);
+                return item;
+            }
+            ItemInstance wood = Create("firewood_large");
+            SkillBoardPreview preview = architecture.SendQuery(new PreviewSkillBoardQuery(player.Id.Value,
+                new SkillBoardRequest(SkillBoardOperation.Install, wood, SkillBoardGeometry.Roots[0])));
+            Assert.That(architecture.SendCommand(new CommitSkillBoardCommand(preview)), Is.True);
+            ItemInstance bottle = Create("energy_bottle_small"); bottle.CollectEnergy(321);
+            Keyboard keyboard = InputSystem.AddDevice<Keyboard>();
+            Vector2Int previous = new Vector2Int(Screen.width, Screen.height);
+            UserLanguagePreference language = host.Settings.Current.Language;
+            string prefix = File.ReadAllText("Temp/Agent/capture-prefix.txt").Trim();
+            Directory.CreateDirectory("Temp/Agent/board-capture");
+            var frames = new AgentBoardFrames();
+            VisualElement root = menu.GetComponent<RuntimePanelView>().Root;
+            try
+            {
+                SetGameViewResolution(new Vector2Int(1920, 1080));
+                yield return null; yield return null;
+                menu.OpenPage(GameMenuPage.SkillBoard);
+                foreach (string locale in new[] { "zh-Hans", "en", "qps-ploc" })
+                {
+                    yield return host.Localization.ChangeLanguageAsync(locale == "zh-Hans" ? UserLanguagePreference.SimplifiedChinese : UserLanguagePreference.English).ToCoroutine();
+                    foreach (string state in prefix == "before" ? new[] { "default", "details" } : new[] { "default", "details", "tools", "confirm" })
+                    {
+                        if (prefix != "before")
+                        {
+                            while (menu.Board.Cancel()) { }
+                        }
+                        menu.Board.Jump(state == "details" ? SkillBoardGeometry.Roots[0] : default);
+                        menu.Board.Refresh();
+                        if (prefix != "before" && state == "details")
+                        {
+                            using (NavigationSubmitEvent submit = NavigationSubmitEvent.GetPooled())
+                            { submit.target = menu.Board.Canvas; menu.Board.Canvas.SendEvent(submit); }
+                        }
+                        else if (state == "tools") { yield return BoardPress(root, "board-tools", keyboard); }
+                        else if (state == "confirm")
+                        {
+                            FindItemButton(root, bottle, "inventory-item").Focus(); yield return null;
+                            yield return BoardPress(root, "board-choose-bottle", keyboard);
+                        }
+                        yield return null; yield return null;
+                        if (locale == "qps-ploc")
+                        {
+                            (typeof(SkillBoardPanelController).GetField("_refresh", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
+                                .GetValue(menu.Board) as LifecycleScope)?.BeginStop();
+                            ApplyPseudoLocalization(root); yield return null; yield return null;
+                        }
+                        if (state == "confirm")
+                        {
+                            yield return BoardWaitForFocus(root, "board-confirm");
+                            root.Q<ScrollView>("board-details-scroll").ScrollTo(root.Q("board-confirm"));
+                            yield return null; yield return null;
+                        }
+                        AssertVisibleTextFits(root, locale, new Vector2Int(1920, 1080));
+                        Rect content = root.Q(className: "board-content").worldBound;
+                        Rect canvas = menu.Board.Canvas.worldBound;
+                        float covered = 0;
+                        if (state == "tools")
+                        {
+                            Rect popup = root.Q("board-tools-popup").worldBound;
+                            covered = Mathf.Max(0, Mathf.Min(canvas.xMax, popup.xMax) - Mathf.Max(canvas.xMin, popup.xMin))
+                                * Mathf.Max(0, Mathf.Min(canvas.yMax, popup.yMax) - Mathf.Max(canvas.yMin, popup.yMin));
+                        }
+                        frames.Frames.Add(new AgentBoardFrame
+                        {
+                            Locale = locale, State = state, ContentWidth = content.width, ContentHeight = content.height,
+                            CanvasWidth = canvas.width, CanvasHeight = canvas.height,
+                            AreaRatio = (canvas.width * canvas.height - covered) / (content.width * content.height)
+                        });
+                        yield return new WaitForEndOfFrame();
+                        Texture2D screenshot = ScreenCapture.CaptureScreenshotAsTexture();
+                        File.WriteAllBytes("Temp/Agent/board-capture/" + prefix + "-" + state + "-" + locale + ".png", screenshot.EncodeToPNG());
+                        UnityEngine.Object.Destroy(screenshot);
+                    }
+                }
+                File.WriteAllText("Temp/Agent/board-capture/" + prefix + "-matrix.json", JsonUtility.ToJson(frames, true));
+            }
+            finally { SetGameViewResolution(previous); }
+            yield return host.Localization.ChangeLanguageAsync(language).ToCoroutine();
+        }
+
+        [UnityTest]
+        public IEnumerator AgentCaptureBoardLinks()
+        {
+            yield return _fixture.EnterMain();
+            ApplicationHost host = ApplicationHost.Current;
+            GameMenuController menu = UnityEngine.Object.FindAnyObjectByType<GameMenuController>();
+            _architecture = menu.GetArchitecture();
+            ItemInstance closing = PrepareBoardLoop();
+            VisualElement root = menu.GetComponent<RuntimePanelView>().Root;
+            Keyboard keyboard = InputSystem.AddDevice<Keyboard>();
+            Gamepad pad = InputSystem.AddDevice<Gamepad>();
+            Vector2Int previous = new Vector2Int(Screen.width, Screen.height);
+            UserLanguagePreference language = host.Settings.Current.Language;
+            try
+            {
+                SetGameViewResolution(new Vector2Int(1920, 1080)); yield return null; yield return null;
+                menu.OpenPage(GameMenuPage.SkillBoard); yield return null; yield return null;
+                foreach (string locale in new[] { "zh-Hans", "en", "qps-ploc" })
+                {
+                    yield return host.Localization.ChangeLanguageAsync(locale == "zh-Hans" ? UserLanguagePreference.SimplifiedChinese : UserLanguagePreference.English).ToCoroutine();
+                    menu.Board.Jump(new HexCoordinate(17, 3));
+                    FindItemButton(root, closing, "inventory-item").Focus(); yield return null;
+                    yield return BoardPress(root, "board-take", keyboard);
+                    for (int i = 0; i < 2; i++) { _inputFixture.PressAndRelease(pad.rightShoulder); yield return null; yield return null; }
+                    yield return BoardPadSubmit(pad);
+                    Assert.That(menu.Board.IsReviewingLinks, Is.True);
+                    Toggle[] links = root.Q("board-links").Query<Toggle>().ToList().ToArray();
+                    foreach (Toggle link in links) { link.Focus(); yield return null; _inputFixture.PressAndRelease(keyboard.enterKey); yield return null; yield return null; }
+                    if (locale == "qps-ploc")
+                    {
+                        (typeof(SkillBoardPanelController).GetField("_refresh", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
+                            .GetValue(menu.Board) as LifecycleScope)?.BeginStop();
+                        ApplyPseudoLocalization(root); yield return null; yield return null;
+                    }
+                    ScrollView scroll = root.Q<ScrollView>("board-details-scroll");
+                    scroll.ScrollTo(root.Q("board-confirm")); root.Q("board-confirm").Focus(); yield return null; yield return null;
+                    AssertVisibleTextFits(root, locale, new Vector2Int(1920, 1080));
+                    yield return new WaitForEndOfFrame();
+                    Texture2D screenshot = ScreenCapture.CaptureScreenshotAsTexture();
+                    File.WriteAllBytes("Temp/Agent/board-capture/after-links-" + locale + ".png", screenshot.EncodeToPNG());
+                    UnityEngine.Object.Destroy(screenshot);
+                    _inputFixture.PressAndRelease(keyboard.escapeKey); yield return null; yield return null;
+                }
+            }
+            finally { SetGameViewResolution(previous); }
+            yield return host.Localization.ChangeLanguageAsync(language).ToCoroutine();
+        }
+    }
+}
