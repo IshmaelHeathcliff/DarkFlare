@@ -1,0 +1,46 @@
+{
+  "manifest": "C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Temp\\Agent\\compact-hud\\talent-manifest.json",
+  "family": "compact-hud-entries",
+  "canvas": [
+    96,
+    96
+  ],
+  "errors": [],
+  "assets": [
+    {
+      "name": "talent",
+      "image": "C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Temp\\Agent\\compact-hud\\talent.png",
+      "canvas": [
+        96,
+        96
+      ],
+      "visible_bbox": [
+        16,
+        14,
+        80,
+        82
+      ],
+      "visible_width": 64,
+      "visible_height": 68,
+      "margins": {
+        "left": 16,
+        "top": 14,
+        "right": 16,
+        "bottom": 14
+      },
+      "alpha_coverage": 0.2954644097222222,
+      "visual_center": [
+        48.07713785932997,
+        49.0551564566243
+      ],
+      "errors": [],
+      "warnings": []
+    }
+  ],
+  "summary": {
+    "assets": 1,
+    "errors": 0,
+    "warnings": 0,
+    "passed": true
+  }
+}

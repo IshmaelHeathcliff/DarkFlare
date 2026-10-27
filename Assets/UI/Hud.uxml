@@ -1,108 +1,88 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:l="UnityEngine.Localization" editor-extension-mode="False">
-  <ui:VisualElement name="hud-root" class="hud-root" picking-mode="Ignore">
-    <ui:VisualElement name="interaction-prompt" class="interaction-prompt" picking-mode="Ignore">
-      <ui:Label name="interaction-prompt-label" class="interaction-prompt__label" picking-mode="Ignore" />
-    </ui:VisualElement>
-    <ui:VisualElement name="hud-flames" class="hud-flames" picking-mode="Ignore">
-      <ui:VisualElement name="hud-flame-0" class="hud-flame" picking-mode="Ignore">
-        <ui:Label name="hud-flame-binding-0" class="hud-flame-binding input-binding-token" picking-mode="Ignore" />
-        <ui:VisualElement name="hud-flame-icon-0" class="hud-flame-icon" picking-mode="Ignore" />
-        <ui:Label name="hud-flame-name-0" class="hud-flame-name" picking-mode="Ignore" />
-        <ui:Label name="hud-flame-state-0" class="hud-flame-state" picking-mode="Ignore" />
-        <ui:ProgressBar name="hud-flame-cooldown-0" class="hud-flame-cooldown" low-value="0" high-value="1" picking-mode="Ignore" />
-      </ui:VisualElement>
-      <ui:VisualElement name="hud-flame-1" class="hud-flame" picking-mode="Ignore">
-        <ui:Label name="hud-flame-binding-1" class="hud-flame-binding input-binding-token" picking-mode="Ignore" />
-        <ui:VisualElement name="hud-flame-icon-1" class="hud-flame-icon" picking-mode="Ignore" />
-        <ui:Label name="hud-flame-name-1" class="hud-flame-name" picking-mode="Ignore" />
-        <ui:Label name="hud-flame-state-1" class="hud-flame-state" picking-mode="Ignore" />
-        <ui:ProgressBar name="hud-flame-cooldown-1" class="hud-flame-cooldown" low-value="0" high-value="1" picking-mode="Ignore" />
-      </ui:VisualElement>
-      <ui:VisualElement name="hud-flame-2" class="hud-flame" picking-mode="Ignore">
-        <ui:Label name="hud-flame-binding-2" class="hud-flame-binding input-binding-token" picking-mode="Ignore" />
-        <ui:VisualElement name="hud-flame-icon-2" class="hud-flame-icon" picking-mode="Ignore" />
-        <ui:Label name="hud-flame-name-2" class="hud-flame-name" picking-mode="Ignore" />
-        <ui:Label name="hud-flame-state-2" class="hud-flame-state" picking-mode="Ignore" />
-        <ui:ProgressBar name="hud-flame-cooldown-2" class="hud-flame-cooldown" low-value="0" high-value="1" picking-mode="Ignore" />
-      </ui:VisualElement>
-      <ui:VisualElement name="hud-flame-3" class="hud-flame" picking-mode="Ignore">
-        <ui:Label name="hud-flame-binding-3" class="hud-flame-binding input-binding-token" picking-mode="Ignore" />
-        <ui:VisualElement name="hud-flame-icon-3" class="hud-flame-icon" picking-mode="Ignore" />
-        <ui:Label name="hud-flame-name-3" class="hud-flame-name" picking-mode="Ignore" />
-        <ui:Label name="hud-flame-state-3" class="hud-flame-state" picking-mode="Ignore" />
-        <ui:ProgressBar name="hud-flame-cooldown-3" class="hud-flame-cooldown" low-value="0" high-value="1" picking-mode="Ignore" />
-      </ui:VisualElement>
-      <ui:VisualElement name="hud-flame-4" class="hud-flame" picking-mode="Ignore">
-        <ui:Label name="hud-flame-binding-4" class="hud-flame-binding input-binding-token" picking-mode="Ignore" />
-        <ui:VisualElement name="hud-flame-icon-4" class="hud-flame-icon" picking-mode="Ignore" />
-        <ui:Label name="hud-flame-name-4" class="hud-flame-name" picking-mode="Ignore" />
-        <ui:Label name="hud-flame-state-4" class="hud-flame-state" picking-mode="Ignore" />
-        <ui:ProgressBar name="hud-flame-cooldown-4" class="hud-flame-cooldown" low-value="0" high-value="1" picking-mode="Ignore" />
-      </ui:VisualElement>
-      <ui:VisualElement name="hud-flame-5" class="hud-flame" picking-mode="Ignore">
-        <ui:Label name="hud-flame-binding-5" class="hud-flame-binding input-binding-token" picking-mode="Ignore" />
-        <ui:VisualElement name="hud-flame-icon-5" class="hud-flame-icon" picking-mode="Ignore" />
-        <ui:Label name="hud-flame-name-5" class="hud-flame-name" picking-mode="Ignore" />
-        <ui:Label name="hud-flame-state-5" class="hud-flame-state" picking-mode="Ignore" />
-        <ui:ProgressBar name="hud-flame-cooldown-5" class="hud-flame-cooldown" low-value="0" high-value="1" picking-mode="Ignore" />
-      </ui:VisualElement>
-    </ui:VisualElement>
-    <ui:VisualElement name="hud-combat-row" class="hud-combat-row" picking-mode="Ignore">
-      <ui:VisualElement name="health-card" class="hud-resource hud-health" picking-mode="Ignore">
-        <ui:VisualElement name="hud-low-warning" class="hud-low-warning" picking-mode="Ignore" />
-        <ui:Label class="hud-caption" picking-mode="Ignore">
-          <Bindings>
-            <l:LocalizedString property="text" table="ui" entry="hud.health" />
-          </Bindings>
-        </ui:Label>
-        <ui:ProgressBar name="health-bar" low-value="0" high-value="1" value="0" picking-mode="Ignore" />
-        <ui:Label name="hud-health-state" class="hud-resource-state" picking-mode="Ignore" />
-      </ui:VisualElement>
-      <ui:VisualElement name="hud-center" class="hud-center" picking-mode="Ignore">
-        <ui:VisualElement class="hud-skill-heading" picking-mode="Ignore">
-          <ui:Label name="hud-attack-binding" class="hud-binding input-binding-token" picking-mode="Ignore" />
-          <ui:Label name="hud-skill-name" picking-mode="Ignore" />
-          <ui:Label name="gold-label" picking-mode="Ignore" />
-        </ui:VisualElement>
-        <ui:VisualElement class="hud-skill-readout" picking-mode="Ignore">
-          <ui:Label name="hud-skill-details" picking-mode="Ignore" />
-          <ui:Label name="skill-status-label" picking-mode="Ignore" />
-        </ui:VisualElement>
-        <ui:ProgressBar name="skill-cooldown" title="" low-value="0" high-value="1" value="0" picking-mode="Ignore" />
-        <ui:VisualElement name="hud-entries" class="hud-entries" picking-mode="Ignore">
-          <ui:Button name="game-hud-inventory" class="hud-entry">
-            <ui:Label picking-mode="Ignore">
-              <Bindings>
-                <l:LocalizedString property="text" table="ui" entry="menu.tab.inventory" />
-              </Bindings>
-            </ui:Label>
-            <ui:Label name="hud-inventory-binding" class="hud-binding input-binding-token" picking-mode="Ignore" />
-          </ui:Button>
-          <ui:Button name="game-hud-attributes" class="hud-entry">
-            <Bindings>
-              <l:LocalizedString property="text" table="ui" entry="attributes.title" />
-            </Bindings>
-          </ui:Button>
-          <ui:Button name="game-hud-board" class="hud-entry"><Bindings><l:LocalizedString property="text" table="ui" entry="board.title" /></Bindings></ui:Button>
-          <ui:Button name="game-hud-pause" class="hud-entry">
-            <ui:Label picking-mode="Ignore">
-              <Bindings>
-                <l:LocalizedString property="text" table="ui" entry="window.pause" />
-              </Bindings>
-            </ui:Label>
-            <ui:Label name="hud-pause-binding" class="hud-binding input-binding-token" picking-mode="Ignore" />
-          </ui:Button>
-        </ui:VisualElement>
-      </ui:VisualElement>
-      <ui:VisualElement name="mana-card" class="hud-resource hud-mana" picking-mode="Ignore">
-        <ui:Label class="hud-caption" picking-mode="Ignore">
-          <Bindings>
-            <l:LocalizedString property="text" table="ui" entry="hud.mana" />
-          </Bindings>
-        </ui:Label>
-        <ui:ProgressBar name="mana-bar" low-value="0" high-value="1" value="0" picking-mode="Ignore" />
-        <ui:Label class="hud-resource-state" picking-mode="Ignore" name="hud-mana-state" />
-      </ui:VisualElement>
-    </ui:VisualElement>
-  </ui:VisualElement>
+<ui:VisualElement name="hud-root" class="hud-root" picking-mode="Ignore">
+<ui:VisualElement name="interaction-prompt" class="interaction-prompt" picking-mode="Ignore"><ui:Label name="interaction-prompt-label" class="interaction-prompt__label" picking-mode="Ignore" /></ui:VisualElement>
+<ui:VisualElement name="hud-combat-row" class="hud-combat-row" picking-mode="Ignore">
+<ui:VisualElement name="health-card" class="hud-resource hud-health" picking-mode="Ignore">
+<ui:VisualElement name="hud-low-warning" class="hud-low-warning" picking-mode="Ignore" />
+<ui:Label class="hud-caption" picking-mode="Ignore"><Bindings><l:LocalizedString property="text" table="ui" entry="hud.health" /></Bindings></ui:Label>
+<ui:ProgressBar name="health-bar" low-value="0" high-value="1" picking-mode="Ignore" />
+<ui:Label name="hud-health-state" class="hud-resource-state" picking-mode="Ignore" />
+</ui:VisualElement>
+<ui:VisualElement name="hud-center" class="hud-center" picking-mode="Ignore">
+<ui:VisualElement class="hud-actions" picking-mode="Ignore"><ui:VisualElement name="hud-normal" class="hud-skill-slot hud-pointer-interaction" focusable="false">
+<ui:Label name="hud-attack-binding" class="hud-binding input-binding-token" picking-mode="Ignore" />
+<ui:VisualElement class="hud-icon-frame" picking-mode="Ignore">
+<ui:VisualElement name="hud-normal-icon" class="hud-skill-icon" picking-mode="Ignore" />
+<ui:ProgressBar name="skill-cooldown" class="hud-cooldown" low-value="0" high-value="1" picking-mode="Ignore" />
+<ui:Label name="hud-normal-time" class="hud-cooldown-time" picking-mode="Ignore" />
+</ui:VisualElement>
+<ui:Label name="skill-status-label" class="hud-skill-state" picking-mode="Ignore" />
+</ui:VisualElement><ui:VisualElement name="hud-flames" class="hud-flames" picking-mode="Ignore"><ui:VisualElement name="hud-flame-0" class="hud-skill-slot hud-pointer-interaction" focusable="false">
+<ui:Label name="hud-flame-binding-0" class="hud-binding input-binding-token" picking-mode="Ignore" />
+<ui:VisualElement class="hud-icon-frame" picking-mode="Ignore">
+<ui:VisualElement name="hud-flame-icon-0" class="hud-skill-icon" picking-mode="Ignore" />
+<ui:ProgressBar name="hud-flame-cooldown-0" class="hud-cooldown" low-value="0" high-value="1" picking-mode="Ignore" />
+<ui:Label name="hud-flame-0-time" class="hud-cooldown-time" picking-mode="Ignore" />
+</ui:VisualElement>
+<ui:Label name="hud-flame-state-0" class="hud-skill-state" picking-mode="Ignore" />
+</ui:VisualElement>
+<ui:VisualElement name="hud-flame-1" class="hud-skill-slot hud-pointer-interaction" focusable="false">
+<ui:Label name="hud-flame-binding-1" class="hud-binding input-binding-token" picking-mode="Ignore" />
+<ui:VisualElement class="hud-icon-frame" picking-mode="Ignore">
+<ui:VisualElement name="hud-flame-icon-1" class="hud-skill-icon" picking-mode="Ignore" />
+<ui:ProgressBar name="hud-flame-cooldown-1" class="hud-cooldown" low-value="0" high-value="1" picking-mode="Ignore" />
+<ui:Label name="hud-flame-1-time" class="hud-cooldown-time" picking-mode="Ignore" />
+</ui:VisualElement>
+<ui:Label name="hud-flame-state-1" class="hud-skill-state" picking-mode="Ignore" />
+</ui:VisualElement>
+<ui:VisualElement name="hud-flame-2" class="hud-skill-slot hud-pointer-interaction" focusable="false">
+<ui:Label name="hud-flame-binding-2" class="hud-binding input-binding-token" picking-mode="Ignore" />
+<ui:VisualElement class="hud-icon-frame" picking-mode="Ignore">
+<ui:VisualElement name="hud-flame-icon-2" class="hud-skill-icon" picking-mode="Ignore" />
+<ui:ProgressBar name="hud-flame-cooldown-2" class="hud-cooldown" low-value="0" high-value="1" picking-mode="Ignore" />
+<ui:Label name="hud-flame-2-time" class="hud-cooldown-time" picking-mode="Ignore" />
+</ui:VisualElement>
+<ui:Label name="hud-flame-state-2" class="hud-skill-state" picking-mode="Ignore" />
+</ui:VisualElement>
+<ui:VisualElement name="hud-flame-3" class="hud-skill-slot hud-pointer-interaction" focusable="false">
+<ui:Label name="hud-flame-binding-3" class="hud-binding input-binding-token" picking-mode="Ignore" />
+<ui:VisualElement class="hud-icon-frame" picking-mode="Ignore">
+<ui:VisualElement name="hud-flame-icon-3" class="hud-skill-icon" picking-mode="Ignore" />
+<ui:ProgressBar name="hud-flame-cooldown-3" class="hud-cooldown" low-value="0" high-value="1" picking-mode="Ignore" />
+<ui:Label name="hud-flame-3-time" class="hud-cooldown-time" picking-mode="Ignore" />
+</ui:VisualElement>
+<ui:Label name="hud-flame-state-3" class="hud-skill-state" picking-mode="Ignore" />
+</ui:VisualElement>
+<ui:VisualElement name="hud-flame-4" class="hud-skill-slot hud-pointer-interaction" focusable="false">
+<ui:Label name="hud-flame-binding-4" class="hud-binding input-binding-token" picking-mode="Ignore" />
+<ui:VisualElement class="hud-icon-frame" picking-mode="Ignore">
+<ui:VisualElement name="hud-flame-icon-4" class="hud-skill-icon" picking-mode="Ignore" />
+<ui:ProgressBar name="hud-flame-cooldown-4" class="hud-cooldown" low-value="0" high-value="1" picking-mode="Ignore" />
+<ui:Label name="hud-flame-4-time" class="hud-cooldown-time" picking-mode="Ignore" />
+</ui:VisualElement>
+<ui:Label name="hud-flame-state-4" class="hud-skill-state" picking-mode="Ignore" />
+</ui:VisualElement>
+<ui:VisualElement name="hud-flame-5" class="hud-skill-slot hud-pointer-interaction" focusable="false">
+<ui:Label name="hud-flame-binding-5" class="hud-binding input-binding-token" picking-mode="Ignore" />
+<ui:VisualElement class="hud-icon-frame" picking-mode="Ignore">
+<ui:VisualElement name="hud-flame-icon-5" class="hud-skill-icon" picking-mode="Ignore" />
+<ui:ProgressBar name="hud-flame-cooldown-5" class="hud-cooldown" low-value="0" high-value="1" picking-mode="Ignore" />
+<ui:Label name="hud-flame-5-time" class="hud-cooldown-time" picking-mode="Ignore" />
+</ui:VisualElement>
+<ui:Label name="hud-flame-state-5" class="hud-skill-state" picking-mode="Ignore" />
+</ui:VisualElement></ui:VisualElement><ui:VisualElement name="hud-entries" class="hud-entries" picking-mode="Ignore"><ui:Button name="game-hud-inventory" class="hud-entry" focusable="false"><ui:VisualElement class="hud-entry-icon hud-entry-icon--inventory" picking-mode="Ignore" /><ui:Label name="hud-inventory-binding" class="hud-binding input-binding-token" picking-mode="Ignore" /></ui:Button>
+<ui:Button name="game-hud-attributes" class="hud-entry" focusable="false"><ui:VisualElement class="hud-entry-icon hud-entry-icon--attributes" picking-mode="Ignore" /></ui:Button>
+<ui:Button name="game-hud-board" class="hud-entry" focusable="false"><ui:VisualElement class="hud-entry-icon hud-entry-icon--board" picking-mode="Ignore" /></ui:Button>
+<ui:Button name="game-hud-pause" class="hud-entry" focusable="false"><ui:VisualElement class="hud-entry-icon hud-entry-icon--pause" picking-mode="Ignore" /><ui:Label name="hud-pause-binding" class="hud-binding input-binding-token" picking-mode="Ignore" /></ui:Button></ui:VisualElement></ui:VisualElement>
+<ui:Label name="gold-label" class="" picking-mode="Ignore" />
+</ui:VisualElement>
+<ui:VisualElement name="mana-card" class="hud-resource hud-mana" picking-mode="Ignore">
+
+<ui:Label class="hud-caption" picking-mode="Ignore"><Bindings><l:LocalizedString property="text" table="ui" entry="hud.mana" /></Bindings></ui:Label>
+<ui:ProgressBar name="mana-bar" low-value="0" high-value="1" picking-mode="Ignore" />
+<ui:Label name="hud-mana-state" class="hud-resource-state" picking-mode="Ignore" />
+</ui:VisualElement>
+</ui:VisualElement>
+<ui:VisualElement name="hud-skill-tooltip" class="hud-skill-tooltip hud-pointer-interaction" focusable="false"><ui:Label name="hud-skill-name" class="" picking-mode="Ignore" /><ui:Label name="hud-skill-details" class="" picking-mode="Ignore" /><ui:Label name="hud-detail-status" class="" picking-mode="Ignore" /></ui:VisualElement>
+</ui:VisualElement>
 </ui:UXML>

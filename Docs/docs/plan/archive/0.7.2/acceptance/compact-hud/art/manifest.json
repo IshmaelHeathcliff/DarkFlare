@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "family": "compact-hud-entries",
+  "alpha_threshold": 8,
+  "canvas": {
+    "width": 96,
+    "height": 96
+  },
+  "alpha_required": true,
+  "assets": [
+    {
+      "name": "talent",
+      "image": "../../../../../../../../Assets/Art/Sprites/UI/Icons/ui_icon_talent.png",
+      "visible_width": [
+        64,
+        78
+      ],
+      "visible_height": [
+        64,
+        78
+      ],
+      "alpha_coverage": [
+        0.12,
+        0.6
+      ],
+      "visual_center_x": [
+        45,
+        51
+      ],
+      "visual_center_y": [
+        45,
+        51
+      ],
+      "edge_clearance": 5
+    },
+    {
+      "name": "pause",
+      "image": "../../../../../../../../Assets/Art/Sprites/UI/Icons/ui_icon_pause.png",
+      "visible_width": [
+        48,
+        72
+      ],
+      "visible_height": [
+        64,
+        78
+      ],
+      "alpha_coverage": [
+        0.12,
+        0.6
+      ],
+      "visual_center_x": [
+        45,
+        51
+      ],
+      "visual_center_y": [
+        45,
+        51
+      ],
+      "edge_clearance": 5
+    }
+  ]
+}

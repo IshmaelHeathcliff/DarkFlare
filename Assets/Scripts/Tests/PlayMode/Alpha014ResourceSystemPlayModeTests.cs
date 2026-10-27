@@ -85,7 +85,8 @@ namespace DarkFlare.Tests
             Assert.That(actor.CurrentMana, Is.EqualTo(1).Within(.001f));
             Assert.That(architecture.SendQuery(new GetPlayerSkillRuntimeQuery(0)).SkillState, Is.EqualTo("no_mana"));
             Label slotState = hud.GetComponent<RuntimePanelView>().Root.Q<Label>("hud-flame-state-0");
-            StringAssert.Contains(host.Localization.GetString("ui", "attributes.state.no_mana"), slotState.text);
+            Assert.That(slotState.text, Is.EqualTo(host.Localization.GetString("ui", "hud.state.no_mana")),
+                "紧凑 HUD 保留可读的法力不足短提示");
             regeneration.AdvanceRegeneration((skill.ManaCost - 1) / (actor.MaxMana * .05f));
             Assert.That(architecture.SendQuery(new GetPlayerSkillRuntimeQuery(0)).SkillState, Is.EqualTo("ready"));
             SkillCastResult recovered = Cast();

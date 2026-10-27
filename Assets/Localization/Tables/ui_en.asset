@@ -2630,6 +2630,34 @@ MonoBehaviour:
     m_Localized: "{0} \xB7 Flame {1}"
     m_Metadata:
       m_Items: []
+  - m_Id: 24865757362905088
+    m_Localized: Empty
+    m_Metadata:
+      m_Items: []
+  - m_Id: 24865757409042432
+    m_Localized: No source
+    m_Metadata:
+      m_Items: []
+  - m_Id: 24865757409042433
+    m_Localized: No mana
+    m_Metadata:
+      m_Items: []
+  - m_Id: 24865757409042434
+    m_Localized: Paused
+    m_Metadata:
+      m_Items: []
+  - m_Id: 24865757409042435
+    m_Localized: Dead
+    m_Metadata:
+      m_Items: []
+  - m_Id: 24865757409042436
+    m_Localized: Off
+    m_Metadata:
+      m_Items: []
+  - m_Id: 24865757409042437
+    m_Localized: Waiting
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:

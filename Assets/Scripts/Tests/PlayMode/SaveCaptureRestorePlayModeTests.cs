@@ -354,6 +354,20 @@ namespace DarkFlare.Tests
             Assert.That(restoredWeakness.Effects.Resistance.RawResistance, Is.EqualTo(savedWeakness.Effects.Resistance.Raw));
             Assert.AreEqual(expectedHealth, restoredPlayer.Actor.CurrentHealth, 0.001f);
             Assert.AreEqual(expectedMana, restoredPlayer.Actor.CurrentMana, 0.001f, "恢复不能再次执行即时回蓝");
+            HudController restoredHud = UnityEngine.Object.FindAnyObjectByType<HudController>();
+            float hudDeadline = Time.realtimeSinceStartup + 3;
+            while (!restoredHud.RuntimeSnapshot.HasPlayer && Time.realtimeSinceStartup < hudDeadline) { yield return null; }
+            restoredHud.RefreshHud();
+            VisualElement restoredHudRoot = restoredHud.GetComponent<RuntimePanelView>().Root;
+            PlayerSkillState restoredNormal = restoredArchitecture.SendQuery(new GetPlayerNormalSkillQuery(restoredPlayer.Actor));
+            Assert.AreEqual(expectedHealth, restoredHud.RuntimeSnapshot.Health, .001f);
+            Assert.AreEqual(expectedMana, restoredHud.RuntimeSnapshot.Mana, .001f);
+            Assert.AreSame(restoredArchitecture.GetUtility<SpriteAssetLoader>().GetSprite(restoredNormal.IconGuid),
+                restoredHudRoot.Q("hud-normal-icon").style.backgroundImage.value.sprite, "恢复 HUD 绑定当前武器图标");
+            Assert.That(restoredHudRoot.Q<ProgressBar>("skill-cooldown").value,
+                Is.EqualTo(restoredArchitecture.SendQuery(new GetAttributeRuntimeQuery()).CooldownNormalized).Within(.001f));
+            Assert.That(restoredHudRoot.Q<ProgressBar>("hud-flame-cooldown-4").value,
+                Is.EqualTo(restoredArchitecture.SendQuery(new GetPlayerSkillRuntimeQuery(4)).CooldownNormalized).Within(.001f));
             ItemInstance restoredPotion = restoredArchitecture.GetModel<InventoryModel>().Grid.Placements.Keys.Single(item => item.InstanceId == potionStack.InstanceId);
             Assert.AreEqual(1, restoredPotion.Quantity);
             Assert.AreSame(manaPotion.UseDefinition, restoredPotion.BaseDefinition.UseDefinition);

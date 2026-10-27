@@ -76,7 +76,9 @@
 ## 计划与验收
 
 - [Alpha 0.7 活动总计划](./plan/alpha-0.7-plan.md)
-- [0.7.2-alpha 体验优化总计划（阶段一至三完成）](./plan/alpha-0.7.2-optimization-plan.md)
+- [0.7.2-alpha 体验优化总计划（阶段一至四完成）](./plan/alpha-0.7.2-optimization-plan.md)
+- [0.7.2-alpha.4 战斗 HUD 紧凑化与入口图标实施计划（已归档）](plan/archive/0.7.2/plans/phase-4-execution.md)
+- [0.7.2-alpha.4 紧凑HUD验收、三语言画面与源码身份](./plan/archive/0.7.2/acceptance/compact-hud/README.md)
 - [0.7.2-alpha.3 天赋界面精简与属性方位实施计划（已归档）](./plan/archive/0.7.2/plans/phase-3-execution.md)
 - [0.7.2-alpha.3 天赋界面验收与前后画面](./plan/archive/0.7.2/acceptance/board-simplification/README.md)
 - [0.7.2-alpha.2 能量瓶装备入口迁移实施计划（已归档）](./plan/archive/0.7.2/plans/phase-2-execution.md)
@@ -89,7 +91,7 @@
 - [0.7.1-alpha.1 已归档实施计划](plan/archive/0.7.1/plans/phase-1-execution.md)
 - [0.7.1-alpha.2 道具、安装事务与能量瓶实施计划](plan/archive/0.7.1/plans/phase-2-execution.md)
 - [0.7.1-alpha.3 中心充能、属性分配与天赋点亮实施计划](plan/archive/0.7.1/plans/phase-3-execution.md)
-- [0.7.1-alpha.4 武器普通技能、六键施法与路径范围实施计划](plan/archive/0.7.1/plans/phase-4-execution.md)
+- [0.7.1-alpha.4 武器普通技能、六键施法与路径范围实施计划](plan/archive/0.7.2/plans/phase-4-execution.md)
 - [0.7.1-alpha.5 玩家棋盘与操作闭环实施计划](plan/archive/0.7.1/plans/phase-5-execution.md)
 - [0.7.1 六键手动施法、输入与存档合同](plan/archive/0.7.1/plans/manual-skills-contract.md)
 - [0.7.1 能量瓶、充能兑换与天赋成长合同](plan/archive/0.7.1/plans/energy-progression-contract.md)
@@ -98,6 +100,8 @@
 完成的执行计划与验收文档、截图、日志和结果统一按版本收纳到 `plan/archive/<版本号>/`，各版本提供 `plans/`、`acceptance/` 与 `README.md` 入口。模块文档继续保留在对应职责目录。
 
 ## 计划状态
+
+2026-10-27：**阶段三已提交 `998893d`，阶段四待实施**。[HUD 新实施计划](plan/archive/0.7.2/plans/phase-4-execution.md)已明确布局、图标资源、真实冷却 / 绑定、鼠标悬停与手柄查看、面积和回归标准。当前运行 `0.7.2-alpha.3` 与各数据版本保持；本次只提交和规划，未执行 HUD 实现或重跑 Unity 测试。
 
 2026-10-27：**0.7.2-alpha.3 阶段三完成**。天赋工具与详情精简、紧凑六槽、显示方位、连续手柄导航与多连接确认 / 保存已交付；EditMode 985/985、PlayMode 117/117，均无失败 / 跳过。三语言画布占比默认约 85%、详情约 68%，core v14 / Schema 12 / 1 / 地图 V4 保持，见[计划与验收](plan/archive/0.7.2/acceptance/board-simplification/README.md)。当前未构建 Player；阶段四、五继续活动。
 

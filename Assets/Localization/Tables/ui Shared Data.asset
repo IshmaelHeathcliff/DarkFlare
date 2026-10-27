@@ -2567,6 +2567,34 @@ MonoBehaviour:
     m_Key: board.slot_compact
     m_Metadata:
       m_Items: []
+  - m_Id: 24865757362905088
+    m_Key: hud.state.empty
+    m_Metadata:
+      m_Items: []
+  - m_Id: 24865757409042432
+    m_Key: hud.state.no_source
+    m_Metadata:
+      m_Items: []
+  - m_Id: 24865757409042433
+    m_Key: hud.state.no_mana
+    m_Metadata:
+      m_Items: []
+  - m_Id: 24865757409042434
+    m_Key: hud.state.paused
+    m_Metadata:
+      m_Items: []
+  - m_Id: 24865757409042435
+    m_Key: hud.state.dead
+    m_Metadata:
+      m_Items: []
+  - m_Id: 24865757409042436
+    m_Key: hud.state.inactive
+    m_Metadata:
+      m_Items: []
+  - m_Id: 24865757409042437
+    m_Key: hud.state.waiting
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

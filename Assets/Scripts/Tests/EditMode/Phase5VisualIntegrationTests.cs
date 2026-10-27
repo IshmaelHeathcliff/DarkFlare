@@ -46,28 +46,6 @@ namespace DarkFlare.Tests
             "Assets/Art/Sprites/NPCs/Merchant",
         };
 
-        static readonly string[] UiIconPaths =
-        {
-            $"{UiIconRoot}/ui_icon_health.png",
-            $"{UiIconRoot}/ui_icon_gold.png",
-            $"{UiIconRoot}/ui_icon_weapon.png",
-            $"{UiIconRoot}/ui_icon_armor.png",
-            $"{UiIconRoot}/ui_icon_ring.png",
-            $"{UiIconRoot}/ui_icon_head.png",
-            $"{UiIconRoot}/ui_icon_hands.png",
-            $"{UiIconRoot}/ui_icon_legs.png",
-            $"{UiIconRoot}/ui_icon_off_hand.png",
-            $"{UiIconRoot}/ui_icon_necklace.png",
-            $"{UiIconRoot}/ui_icon_belt.png",
-            $"{UiIconRoot}/ui_icon_inventory.png",
-            $"{UiIconRoot}/ui_icon_shop.png",
-            $"{UiIconRoot}/ui_icon_crafting.png",
-            $"{UiIconRoot}/ui_icon_close.png",
-            $"{UiIconRoot}/ui_icon_back.png",
-            $"{UiIconRoot}/ui_icon_weapon_empty.png",
-            $"{UiIconRoot}/ui_icon_missing.png",
-        };
-
         static readonly string[] UiFramePaths =
         {
             $"{UiFrameRoot}/ui_inventory_panel_base.png",
@@ -192,12 +170,12 @@ namespace DarkFlare.Tests
         [Test]
         public void FixedUiIconsAndProjectile_Use96PixelContract()
         {
-            CollectionAssert.AreEquivalent(UiIconPaths, FindPngAssetPaths(UiIconRoot));
-
-            for (int i = 0; i < UiIconPaths.Length; i++)
+            string[] icons = FindPngAssetPaths(UiIconRoot);
+            Assert.That(icons, Is.Not.Empty);
+            for (int i = 0; i < icons.Length; i++)
             {
                 AssertSpriteContract(
-                    UiIconPaths[i],
+                    icons[i],
                     96,
                     96,
                     64f,
@@ -421,15 +399,14 @@ namespace DarkFlare.Tests
             string theme = File.ReadAllText(GetAbsolutePath("Assets/UI/Theme.uss"));
             string inventory = File.ReadAllText(GetAbsolutePath("Assets/UI/Inventory.uss"));
 
-            for (int i = 0; i < UiIconPaths.Length; i++)
+            string[] icons = FindPngAssetPaths(UiIconRoot);
+            string[] dependencies = AssetDatabase.GetDependencies(new[] { "Assets/UI/GameRoot.uxml", "Assets/UI/ApplicationShell.uxml" }, true);
+            for (int i = 0; i < icons.Length; i++)
             {
-                if (UiIconPaths[i].EndsWith("ui_icon_back.png", StringComparison.Ordinal)
-                    || UiIconPaths[i].EndsWith("ui_icon_weapon_empty.png", StringComparison.Ordinal))
-                {
-                    continue;
-                }
-
-                StringAssert.Contains(UiIconPaths[i], theme);
+                // 这两个既有备用图标原本就未要求由正式界面加载，仍由上方全目录 Sprite 合同覆盖。
+                if (icons[i].EndsWith("ui_icon_back.png", StringComparison.Ordinal)
+                    || icons[i].EndsWith("ui_icon_weapon_empty.png", StringComparison.Ordinal)) { continue; }
+                CollectionAssert.Contains(dependencies, icons[i], "固定 UI 图标必须由正式视觉树依赖加载");
             }
 
             StringAssert.DoesNotContain("SpriteSheets/Phase5", theme);

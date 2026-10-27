@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="37" result="Failed(Child)" total="37" passed="36" failed="1" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-27 06:22:40Z" end-time="2026-10-27 06:22:40Z" duration="0.6563112">
+  <test-suite type="TestSuite" id="1000" name="DarkFlare" fullname="DarkFlare" runstate="Runnable" testcasecount="986" result="Failed" site="Child" start-time="2026-10-27 06:22:40Z" end-time="2026-10-27 06:22:40Z" duration="0.656311" total="37" passed="36" failed="1" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="EditMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="2127" name="DarkFlare.Tests.EditMode.dll" fullname="C:/Users/darkf/Home/Projects/DarkFlare/Library/ScriptAssemblies/DarkFlare.Tests.EditMode.dll" runstate="Runnable" testcasecount="985" result="Failed" site="Child" start-time="2026-10-27 06:22:40Z" end-time="2026-10-27 06:22:40Z" duration="0.625921" total="37" passed="36" failed="1" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="3876" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestSuite" id="2128" name="DarkFlare" fullname="DarkFlare" runstate="Runnable" testcasecount="892" result="Failed" site="Child" start-time="2026-10-27 06:22:40Z" end-time="2026-10-27 06:22:40Z" duration="0.624660" total="37" passed="36" failed="1" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-suite type="TestSuite" id="2129" name="Tests" fullname="DarkFlare.Tests" runstate="Runnable" testcasecount="892" result="Failed" site="Child" start-time="2026-10-27 06:22:40Z" end-time="2026-10-27 06:22:40Z" duration="0.624362" total="37" passed="36" failed="1" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[One or more child tests had errors]]></message>
+          </failure>
+          <test-suite type="TestFixture" id="1262" name="ApplicationInputServiceTests" fullname="DarkFlare.Tests.ApplicationInputServiceTests" classname="DarkFlare.Tests.ApplicationInputServiceTests" runstate="Runnable" testcasecount="26" result="Passed" start-time="2026-10-27 06:22:40Z" end-time="2026-10-27 06:22:40Z" duration="0.390052" total="26" passed="26" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1278" name="AcquireSuspension_RejectsNoneAndCombinedReasons" fullname="DarkFlare.Tests.ApplicationInputServiceTests.AcquireSuspension_RejectsNoneAndCombinedReasons" methodname="AcquireSuspension_RejectsNoneAndCombinedReasons" classname="DarkFlare.Tests.ApplicationInputServiceTests" runstate="Runnable" seed="883393137" result="Passed" start-time="2026-10-27 06:22:40Z" end-time="2026-10-27 06:22:40Z" duration="0.061963" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1283" name="ApplyBindingOverride_PersistsAndConflictLeavesStableState" fullname="DarkFlare.Tests.ApplicationInputServiceTests.ApplyBindingOverride_PersistsAndConflictLeavesStableState" methodname="ApplyBindingOverride_PersistsAndConflictLeavesStableState" classname="DarkFlare.Tests.ApplicationInputServiceTests" runstate="Runnable" seed="2025589465" result="Passed" start-time="2026-10-27 06:22:40Z" end-time="2026-10-27 06:22:40Z" duration="0.082584" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1280" name="ArchitectureProvider_RejectsMissingInputOwner" fullname="DarkFlare.Tests.ApplicationInputServiceTests.ArchitectureProvider_RejectsMissingInputOwner" methodname="ArchitectureProvider_RejectsMissingInputOwner" classname="DarkFlare.Tests.ApplicationInputServiceTests" runstate="Runnable" seed="1372631380" result="Passed" start-time="2026-10-27 06:22:40Z" end-time="2026-10-27 06:22:40Z" duration="0.007320" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1276" name="Cancel_StopsAfterFirstOwnerConsumesInput" fullname="DarkFlare.Tests.ApplicationInputServiceTests.Cancel_StopsAfterFirstOwnerConsumesInput" methodname="Cancel_StopsAfterFirstOwnerConsumesInput" classname="DarkFlare.Tests.ApplicationInputServiceTests" runstate="Runnable" seed="1645926077" result="Passed" start-time="2026-10-27 06:22:40Z" end-time="2026-10-27 06:22:40Z" duration="0.024233" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1272" name="Constructor_EnablesUiContextOnly" fullname="DarkFlare.Tests.ApplicationInputServiceTests.Constructor_EnablesUiContextOnly" methodname="Constructor_EnablesUiContextOnly" classname="DarkFlare.Tests.ApplicationInputServiceTests" runstate="Runnable" seed="670782173" result="Passed" start-time="2026-10-27 06:22:40Z" end-time="2026-10-27 06:22:40Z" duration="0.004226" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1282" name="DeviceActivity_ChangesAutoGlyphFamilyAndExplicitPreferenceOverridesDisplay" fullname="DarkFlare.Tests.ApplicationInputServiceTests.DeviceActivity_ChangesAutoGlyphFamilyAndExplicitPreferenceOverridesDisplay" methodname="DeviceActivity_ChangesAutoGlyphFamilyAndExplicitPreferenceOverridesDisplay" classname="DarkFlare.Tests.ApplicationInputServiceTests" runstate="Runnable" seed="576511259" result="Passed" start-time="2026-10-27 06:22:40Z" end-time="2026-10-27 06:22:40Z" duration="0.032289" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1279" name="Dispose_DisablesActionsAndLeavesOldLeaseSafe" fullname="DarkFlare.Tests.ApplicationInputServiceTests.Dispose_DisablesActionsAndLeavesOldLeaseSafe" methodname="Dispose_DisablesActionsAndLeavesOldLeaseSafe" classname="DarkFlare.Tests.ApplicationInputServiceTests" runstate="Runnable" seed="1836084955" result="Passed" start-time="2026-10-27 06:22:40Z" end-time="2026-10-27 06:22:40Z" duration="0.005826" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1271" name="ExistingBindingOverrides_KeepTheirKeysAndNewSkillDefaultsAvoidCollision" fullname="DarkFlare.Tests.ApplicationInputServiceTests.ExistingBindingOverrides_KeepTheirKeysAndNewSkillDefaultsAvoidCollision" methodname="ExistingBindingOverrides_KeepTheirKeysAndNewSkillDefaultsAvoidCollision" classname="DarkFlare.Tests.ApplicationInputServiceTests" runstate="Runnable" seed="1834915255" result="Passed" start-time="2026-10-27 06:22:40Z" end-time="2026-10-27 06:22:40Z" duration="0.018797" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1270" name="GamepadAim_PreservesLastDirectionAndNewSessionResetsIt" fullname="DarkFlare.Tests.ApplicationInputServiceTests.GamepadAim_PreservesLastDirectionAndNewSessionResetsIt" methodname="GamepadAim_PreservesLastDirectionAndNewSessionResetsIt" classname="DarkFlare.Tests.ApplicationInputServiceTests" runstate="Runnable" seed="1345602935" result="Passed" start-time="2026-10-27 06:22:40Z" end-time="2026-10-27 06:22:40Z" duration="0.006360" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1288" name="GlyphResolver_KnownAndUnknownControlsNeverExposeRawPath" fullname="DarkFlare.Tests.ApplicationInputServiceTests.GlyphResolver_KnownAndUnknownControlsNeverExposeRawPath" methodname="GlyphResolver_KnownAndUnknownControlsNeverExposeRawPath" classname="DarkFlare.Tests.ApplicationInputServiceTests" runstate="Runnable" seed="161151381" result="Passed" start-time="2026-10-27 06:22:40Z" end-time="2026-10-27 06:22:40Z" duration="0.002814" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1268" name="HeldMouseSkill_ReadsCurrentPointerWithoutCreatingMorePresses" fullname="DarkFlare.Tests.ApplicationInputServiceTests.HeldMouseSkill_ReadsCurrentPointerWithoutCreatingMorePresses" methodname="HeldMouseSkill_ReadsCurrentPointerWithoutCreatingMorePresses" classname="DarkFlare.Tests.ApplicationInputServiceTests" runstate="Runnable" seed="690870136" result="Passed" start-time="2026-10-27 06:22:40Z" end-time="2026-10-27 06:22:40Z" duration="0.003200" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1265" name="HeldSkillAcrossUiOrSuspension_RequiresReleaseAndNewPress" fullname="DarkFlare.Tests.ApplicationInputServiceTests.HeldSkillAcrossUiOrSuspension_RequiresReleaseAndNewPress" methodname="HeldSkillAcrossUiOrSuspension_RequiresReleaseAndNewPress" classname="DarkFlare.Tests.ApplicationInputServiceTests" runstate="Runnable" seed="1904722017" result="Passed" start-time="2026-10-27 06:22:40Z" end-time="2026-10-27 06:22:40Z" duration="0.004161" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1267" name="HeldSkillBindings_KeepTwoActionsIndependent" fullname="DarkFlare.Tests.ApplicationInputServiceTests.HeldSkillBindings_KeepTwoActionsIndependent" methodname="HeldSkillBindings_KeepTwoActionsIndependent" classname="DarkFlare.Tests.ApplicationInputServiceTests" runstate="Runnable" seed="1360786805" result="Passed" start-time="2026-10-27 06:22:40Z" end-time="2026-10-27 06:22:40Z" duration="0.003643" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1266" name="HeldSkillSnapshot_TracksReleaseNewPressAndLatestAim" fullname="DarkFlare.Tests.ApplicationInputServiceTests.HeldSkillSnapshot_TracksReleaseNewPressAndLatestAim" methodname="HeldSkillSnapshot_TracksReleaseNewPressAndLatestAim" classname="DarkFlare.Tests.ApplicationInputServiceTests" runstate="Runnable" seed="15619487" result="Passed" start-time="2026-10-27 06:22:40Z" end-time="2026-10-27 06:22:40Z" duration="0.004716" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1285" name="InteractiveRebind_DeviceRemovalRollsBackWithoutOverride" fullname="DarkFlare.Tests.ApplicationInputServiceTests.InteractiveRebind_DeviceRemovalRollsBackWithoutOverride" methodname="InteractiveRebind_DeviceRemovalRollsBackWithoutOverride" classname="DarkFlare.Tests.ApplicationInputServiceTests" runstate="Runnable" seed="1358500348" result="Passed" start-time="2026-10-27 06:22:40Z" end-time="2026-10-27 06:22:40Z" duration="0.017223" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1284" name="InteractiveRebind_EscapeCancelsAndRestoresUiContext" fullname="DarkFlare.Tests.ApplicationInputServiceTests.InteractiveRebind_EscapeCancelsAndRestoresUiContext" methodname="InteractiveRebind_EscapeCancelsAndRestoresUiContext" classname="DarkFlare.Tests.ApplicationInputServiceTests" runstate="Runnable" seed="386495720" result="Passed" start-time="2026-10-27 06:22:40Z" end-time="2026-10-27 06:22:40Z" duration="0.011962" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1286" name="InteractiveRebind_TimeoutRollsBackAndReleasesSuspension" fullname="DarkFlare.Tests.ApplicationInputServiceTests.InteractiveRebind_TimeoutRollsBackAndReleasesSuspension" methodname="InteractiveRebind_TimeoutRollsBackAndReleasesSuspension" classname="DarkFlare.Tests.ApplicationInputServiceTests" runstate="Runnable" seed="992511844" result="Passed" start-time="2026-10-27 06:22:40Z" end-time="2026-10-27 06:22:40Z" duration="0.031261" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1263" name="SessionWindowActions_WorkInUiAndYieldToUpperOwners" fullname="DarkFlare.Tests.ApplicationInputServiceTests.SessionWindowActions_WorkInUiAndYieldToUpperOwners" methodname="SessionWindowActions_WorkInUiAndYieldToUpperOwners" classname="DarkFlare.Tests.ApplicationInputServiceTests" runstate="Runnable" seed="1572175363" result="Passed" start-time="2026-10-27 06:22:40Z" end-time="2026-10-27 06:22:40Z" duration="0.007531" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1287" name="SettingsCommitFailure_RollsBackRuntimeOverride" fullname="DarkFlare.Tests.ApplicationInputServiceTests.SettingsCommitFailure_RollsBackRuntimeOverride" methodname="SettingsCommitFailure_RollsBackRuntimeOverride" classname="DarkFlare.Tests.ApplicationInputServiceTests" runstate="Runnable" seed="2056485246" result="Passed" start-time="2026-10-27 06:22:40Z" end-time="2026-10-27 06:22:40Z" duration="0.011706" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1281" name="SettingsSnapshot_WithDomainValuesPreservesOtherDomains" fullname="DarkFlare.Tests.ApplicationInputServiceTests.SettingsSnapshot_WithDomainValuesPreservesOtherDomains" methodname="SettingsSnapshot_WithDomainValuesPreservesOtherDomains" classname="DarkFlare.Tests.ApplicationInputServiceTests" runstate="Runnable" seed="386634000" result="Passed" start-time="2026-10-27 06:22:40Z" end-time="2026-10-27 06:22:40Z" duration="0.003699" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1264" name="SevenSkillActions_AreDistinctAndGameplayOnlyForKeyboardAndGamepad" fullname="DarkFlare.Tests.ApplicationInputServiceTests.SevenSkillActions_AreDistinctAndGameplayOnlyForKeyboardAndGamepad" methodname="SevenSkillActions_AreDistinctAndGameplayOnlyForKeyboardAndGamepad" classname="DarkFlare.Tests.ApplicationInputServiceTests" runstate="Runnable" seed="1322059316" result="Passed" start-time="2026-10-27 06:22:40Z" end-time="2026-10-27 06:22:40Z" duration="0.005651" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1269" name="SkillBindings_AcceptMouseButtonsAndRejectConflictsWithNormalAttack" fullname="DarkFlare.Tests.ApplicationInputServiceTests.SkillBindings_AcceptMouseButtonsAndRejectConflictsWithNormalAttack" methodname="SkillBindings_AcceptMouseButtonsAndRejectConflictsWithNormalAttack" classname="DarkFlare.Tests.ApplicationInputServiceTests" runstate="Runnable" seed="1955353825" result="Passed" start-time="2026-10-27 06:22:40Z" end-time="2026-10-27 06:22:40Z" duration="0.002914" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1277" name="SuspensionLease_ReleaseIsIdempotent" fullname="DarkFlare.Tests.ApplicationInputServiceTests.SuspensionLease_ReleaseIsIdempotent" methodname="SuspensionLease_ReleaseIsIdempotent" classname="DarkFlare.Tests.ApplicationInputServiceTests" runstate="Runnable" seed="1559550192" result="Passed" start-time="2026-10-27 06:22:40Z" end-time="2026-10-27 06:22:40Z" duration="0.001956" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1274" name="Suspensions_ReferenceCountAndOverlapBeforeRestoringContext" fullname="DarkFlare.Tests.ApplicationInputServiceTests.Suspensions_ReferenceCountAndOverlapBeforeRestoringContext" methodname="Suspensions_ReferenceCountAndOverlapBeforeRestoringContext" classname="DarkFlare.Tests.ApplicationInputServiceTests" runstate="Runnable" seed="1553581790" result="Passed" start-time="2026-10-27 06:22:40Z" end-time="2026-10-27 06:22:40Z" duration="0.002257" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1273" name="SwitchContext_ChangesMapsAndPublishesOnce" fullname="DarkFlare.Tests.ApplicationInputServiceTests.SwitchContext_ChangesMapsAndPublishesOnce" methodname="SwitchContext_ChangesMapsAndPublishesOnce" classname="DarkFlare.Tests.ApplicationInputServiceTests" runstate="Runnable" seed="473501419" result="Passed" start-time="2026-10-27 06:22:40Z" end-time="2026-10-27 06:22:40Z" duration="0.002412" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1275" name="UiContextOwners_PreserveLatestRequestAndRespectSuspension" fullname="DarkFlare.Tests.ApplicationInputServiceTests.UiContextOwners_PreserveLatestRequestAndRespectSuspension" methodname="UiContextOwners_PreserveLatestRequestAndRespectSuspension" classname="DarkFlare.Tests.ApplicationInputServiceTests" runstate="Runnable" seed="1386729285" result="Passed" start-time="2026-10-27 06:22:40Z" end-time="2026-10-27 06:22:40Z" duration="0.002749" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1383" name="GameInputTests" fullname="DarkFlare.Tests.GameInputTests" classname="DarkFlare.Tests.GameInputTests" runstate="Runnable" testcasecount="8" result="Passed" start-time="2026-10-27 06:22:40Z" end-time="2026-10-27 06:22:40Z" duration="0.034054" total="8" passed="8" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1384" name="Constructor_EnablesGameplayMapOnly" fullname="DarkFlare.Tests.GameInputTests.Constructor_EnablesGameplayMapOnly" methodname="Constructor_EnablesGameplayMapOnly" classname="DarkFlare.Tests.GameInputTests" runstate="Runnable" seed="498534578" result="Passed" start-time="2026-10-27 06:22:40Z" end-time="2026-10-27 06:22:40Z" duration="0.003926" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1391" name="Dispose_DoesNotCloseOwnerAndRestoresUiContext" fullname="DarkFlare.Tests.GameInputTests.Dispose_DoesNotCloseOwnerAndRestoresUiContext" methodname="Dispose_DoesNotCloseOwnerAndRestoresUiContext" classname="DarkFlare.Tests.GameInputTests" runstate="Runnable" seed="1998638442" result="Passed" start-time="2026-10-27 06:22:40Z" end-time="2026-10-27 06:22:40Z" duration="0.001917" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1387" name="Interact_UsesKeyboardAndGamepad_OnlyInGameplayMode" fullname="DarkFlare.Tests.GameInputTests.Interact_UsesKeyboardAndGamepad_OnlyInGameplayMode" methodname="Interact_UsesKeyboardAndGamepad_OnlyInGameplayMode" classname="DarkFlare.Tests.GameInputTests" runstate="Runnable" seed="246707035" result="Passed" start-time="2026-10-27 06:22:40Z" end-time="2026-10-27 06:22:40Z" duration="0.004346" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1388" name="InteractBindingDisplayString_UsesOnlyCurrentDisplayFamily" fullname="DarkFlare.Tests.GameInputTests.InteractBindingDisplayString_UsesOnlyCurrentDisplayFamily" methodname="InteractBindingDisplayString_UsesOnlyCurrentDisplayFamily" classname="DarkFlare.Tests.GameInputTests" runstate="Runnable" seed="1039375682" result="Passed" start-time="2026-10-27 06:22:40Z" end-time="2026-10-27 06:22:40Z" duration="0.005324" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1385" name="Move_ReadsKeyboardAndGamepad" fullname="DarkFlare.Tests.GameInputTests.Move_ReadsKeyboardAndGamepad" methodname="Move_ReadsKeyboardAndGamepad" classname="DarkFlare.Tests.GameInputTests" runstate="Runnable" seed="1058938828" result="Passed" start-time="2026-10-27 06:22:40Z" end-time="2026-10-27 06:22:40Z" duration="0.005899" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1389" name="SwitchMethods_IgnoreRepeatedMode" fullname="DarkFlare.Tests.GameInputTests.SwitchMethods_IgnoreRepeatedMode" methodname="SwitchMethods_IgnoreRepeatedMode" classname="DarkFlare.Tests.GameInputTests" runstate="Runnable" seed="1830678247" result="Passed" start-time="2026-10-27 06:22:40Z" end-time="2026-10-27 06:22:40Z" duration="0.002284" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1386" name="ToggleMenuAndCancel_SwitchActionMaps" fullname="DarkFlare.Tests.GameInputTests.ToggleMenuAndCancel_SwitchActionMaps" methodname="ToggleMenuAndCancel_SwitchActionMaps" classname="DarkFlare.Tests.GameInputTests" runstate="Runnable" seed="861576064" result="Passed" start-time="2026-10-27 06:22:40Z" end-time="2026-10-27 06:22:40Z" duration="0.004278" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1390" name="UiRearrangeNavigateAndConsumedCancel_AreForwarded" fullname="DarkFlare.Tests.GameInputTests.UiRearrangeNavigateAndConsumedCancel_AreForwarded" methodname="UiRearrangeNavigateAndConsumedCancel_AreForwarded" classname="DarkFlare.Tests.GameInputTests" runstate="Runnable" seed="1824296316" result="Passed" start-time="2026-10-27 06:22:40Z" end-time="2026-10-27 06:22:40Z" duration="0.003578" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1706" name="Phase5VisualIntegrationTests" fullname="DarkFlare.Tests.Phase5VisualIntegrationTests" classname="DarkFlare.Tests.Phase5VisualIntegrationTests" runstate="Runnable" testcasecount="16" result="Failed" site="Child" start-time="2026-10-27 06:22:40Z" end-time="2026-10-27 06:22:40Z" duration="0.073612" total="2" passed="1" failed="1" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-case id="1710" name="FixedUiIconsAndProjectile_Use96PixelContract" fullname="DarkFlare.Tests.Phase5VisualIntegrationTests.FixedUiIconsAndProjectile_Use96PixelContract" methodname="FixedUiIconsAndProjectile_Use96PixelContract" classname="DarkFlare.Tests.Phase5VisualIntegrationTests" runstate="Runnable" seed="240698932" result="Passed" start-time="2026-10-27 06:22:40Z" end-time="2026-10-27 06:22:40Z" duration="0.017357" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1717" name="UiAndWorldConsumers_ReferenceIndependentSprites" fullname="DarkFlare.Tests.Phase5VisualIntegrationTests.UiAndWorldConsumers_ReferenceIndependentSprites" methodname="UiAndWorldConsumers_ReferenceIndependentSprites" classname="DarkFlare.Tests.Phase5VisualIntegrationTests" runstate="Runnable" seed="1952282424" result="Failed" start-time="2026-10-27 06:22:40Z" end-time="2026-10-27 06:22:40Z" duration="0.054688" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <failure>
+                <message><![CDATA[  固定 UI 图标必须由正式视觉树依赖加载
+  Expected: collection containing "Assets/Art/Sprites/UI/Icons/ui_icon_back.png"
+  But was:  < "Assets/UI/SkillBoard/PlayerBoard.uss", "Assets/UI/GameMenu.uss", "Assets/UI/ApplicationShell.uss", "Assets/Settings/UI/Fonts/GameCjkFont.asset", "Assets/TextMesh Pro/Shaders/TMP_SDF.shader", "Assets/Art/Sprites/UI/Icons/ui_icon_legs.png", "Assets/UI/Shop.uxml", "Assets/Art/Sprites/UI/Icons/ui_icon_gold.png", "Assets/Art/Sprites/UI/Icons/ui_icon_close.png", "Assets/UI/SkillBoard/PlayerBoard.uxml", "Assets/Art/Sprites/UI/Icons/ui_icon_hands.png", "Assets/UI/Statuses.uss", "Assets/Art/UI/InputGlyphs/gamepad_start.png", "Assets/Art/Sprites/UI/Icons/ui_icon_necklace.png", "Assets/Art/UI/InputGlyphs/gamepad_button_south.png", "Assets/UI/GameRoot.uxml", "Assets/Art/Sprites/UI/Icons/ui_icon_talent.png", "Assets/UI/Shop.uss", "Assets/UI/ItemWorkbench.uss", "Assets/UI/Inventory.uss", "Assets/UI/Crafting.uss", "Assets/UI/ItemWorkbench.uxml", "Assets/Art/Sprites/UI/Frames/ui_slot_base.png", "Assets/Art/Sprites/UI/Icons/ui_icon_weapon.png", "Assets/Art/Sprites/UI/Frames/ui_control_base.png", "Assets/TextMesh Pro/Fonts/QiushuiShotai.ttf", "Assets/UI/Theme.uss", "Assets/UI/Components.uss", "Assets/Art/Sprites/UI/Icons/ui_icon_off_hand.png", "Assets/UI/Hud.uxml", "Assets/UI/Hud.uss", "Assets/UI/ItemDetail.uss", "Assets/Art/UI/InputGlyphs/gamepad_left_stick.png", "Assets/Art/Sprites/UI/Icons/ui_icon_crafting.png", "Assets/Art/Sprites/UI/Icons/ui_icon_belt.png", "Assets/Art/Sprites/UI/Frames/ui_item_window_base.png", "Assets/UI/ApplicationShell.uxml", "Assets/UI/Crafting.uxml", "Assets/Art/Sprites/UI/Icons/ui_icon_pause.png", "Assets/UI/Inventory.uxml", "Assets/Art/UI/InputGlyphs/gamepad_button_west.png", "Assets/Art/Sprites/UI/Icons/ui_icon_shop.png", "Assets/Art/Sprites/UI/Icons/ui_icon_armor.png", "Assets/Art/UI/InputGlyphs/gamepad_button_north.png", "Assets/Art/Sprites/UI/Frames/ui_hud_resource_base.png", "Assets/Art/Sprites/UI/Icons/ui_icon_missing.png", "Assets/Art/Sprites/UI/Icons/ui_icon_health.png", "Assets/Settings/UI/Fonts/GameLatinFont.asset", "Assets/Art/UI/InputGlyphs/gamepad_button_east.png", "Assets/UI/Attributes.uss", "Assets/UI/InputGlyphs.uss", "Assets/UI/ItemDetail.uxml", "Assets/Art/UI/InputGlyphs/keyboard_keycap.png", "Assets/UI/Attributes.uxml", "Assets/Art/Sprites/UI/Icons/ui_icon_head.png", "Assets/Art/Sprites/UI/Icons/ui_icon_ring.png", "Assets/Art/UI/InputGlyphs/gamepad_dpad.png", "Assets/TextMesh Pro/Fonts/LiberationSans.ttf", "Assets/UI/Windows.uss", "Assets/Art/Sprites/UI/Icons/ui_icon_inventory.png" >
+]]></message>
+                <stack-trace><![CDATA[at NUnit.Framework.CollectionAssert.Contains (System.Collections.IEnumerable collection, System.Object actual, System.String message, System.Object[] args) [0x00008] in <8b63e8ac0a4746599ed207982825ae6c>:0
+at DarkFlare.Tests.Phase5VisualIntegrationTests.UiAndWorldConsumers_ReferenceIndependentSprites () [0x00056] in C:\Users\darkf\Home\Projects\DarkFlare\Assets\Scripts\Tests\EditMode\Phase5VisualIntegrationTests.cs:406
+]]></stack-trace>
+              </failure>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1742" name="PlayerSkillsTests" fullname="DarkFlare.Tests.PlayerSkillsTests" classname="DarkFlare.Tests.PlayerSkillsTests" runstate="Runnable" testcasecount="14" result="Passed" start-time="2026-10-27 06:22:40Z" end-time="2026-10-27 06:22:40Z" duration="0.122547" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1743" name="WeaponSkill_RequiresEquipmentAndKeepsCooldownWhenWeaponChanges" fullname="DarkFlare.Tests.PlayerSkillsTests.WeaponSkill_RequiresEquipmentAndKeepsCooldownWhenWeaponChanges" methodname="WeaponSkill_RequiresEquipmentAndKeepsCooldownWhenWeaponChanges" classname="DarkFlare.Tests.PlayerSkillsTests" runstate="Runnable" seed="1673661985" result="Passed" start-time="2026-10-27 06:22:40Z" end-time="2026-10-27 06:22:40Z" duration="0.121387" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[Saving results to: C:\Users\darkf\Home\Projects\DarkFlare\Temp\Agent\compact-hud\editmode-targeted.xml
+]]></output>
+            </test-case>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

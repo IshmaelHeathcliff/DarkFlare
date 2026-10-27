@@ -43,15 +43,18 @@ namespace DarkFlare.Tests
             Assert.That(Skills.Capture(_actor).Skill, Is.Null);
             ItemInstance sword = Equip("great_sword");
             Assert.That(Skills.Capture(_actor).Skill, Is.SameAs(sword.BaseDefinition.NormalSkill));
+            Assert.That(Skills.Capture(_actor).IconGuid, Is.EqualTo(sword.BaseDefinition.Icon.AssetGUID));
             Skills.Restore(EmptySlots(), 10);
             ItemInstance axe = Equip("war_axe");
             Assert.That(Skills.Capture(_actor).Skill, Is.SameAs(axe.BaseDefinition.NormalSkill));
+            Assert.That(Skills.Capture(_actor).IconGuid, Is.EqualTo(axe.BaseDefinition.Icon.AssetGUID));
             Assert.That(axe.BaseDefinition.NormalSkill, Is.Not.SameAs(sword.BaseDefinition.NormalSkill));
             Assert.That(Skills.Capture(_actor).RemainingSeconds, Is.GreaterThan(9));
             Assert.That(Skills.Cast(_actor, -1, sword.InstanceId, Vector3.zero, Vector2.right).Status, Is.EqualTo(SkillCastStatus.InvalidSource));
             Assert.That(Skills.Cast(_actor, -1, axe.InstanceId, Vector3.zero, Vector2.right).Status, Is.EqualTo(SkillCastStatus.Cooldown));
             _architecture.GetSystem<EquipmentSystem>().RestoreLoadout(_actor, new EquipmentLoadout());
             Assert.That(Skills.Capture(_actor).Skill, Is.Null);
+            Assert.That(Skills.Capture(_actor).IconGuid, Is.Empty);
         }
 
         [Test]

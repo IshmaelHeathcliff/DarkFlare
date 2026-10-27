@@ -136,7 +136,9 @@ namespace DarkFlare.Tests
                 for (int i = 0; i < 6; i++)
                 {
                     Assert.That(root.Q("hud-flame-" + i), Is.Not.Null);
-                    Assert.That(root.Q<Label>("hud-flame-name-" + i).text, Is.Not.Empty);
+                    Label binding = root.Q<Label>("hud-flame-binding-" + i);
+                    Assert.That(!string.IsNullOrEmpty(binding.text) || binding.resolvedStyle.backgroundImage.texture != null
+                        || binding.resolvedStyle.backgroundImage.sprite != null, Is.True, "隐藏后仍保留真实绑定内容");
                 }
             }
             finally { registration.UnRegister(); }
@@ -552,7 +554,8 @@ namespace DarkFlare.Tests
             Assert.IsTrue(hud.IsWarningAnimating);
             Assert.IsTrue(root.Q("hud-inventory-binding").ClassListContains("input-glyph--gamepad-start"),
                 $"Family={host.Input.DisplayDeviceFamily}; token={host.Input.GetGlyphToken(RebindableInputAction.PlayerToggleMenu).GlyphId}; classes={string.Join(",", root.Q("hud-inventory-binding").GetClasses())}");
-            Assert.LessOrEqual(root.Q("skill-cooldown").worldBound.yMax, root.Q("hud-entries").worldBound.yMin);
+            Assert.IsFalse(root.Q("skill-cooldown").worldBound.Overlaps(root.Q("hud-entries").worldBound),
+                "冷却遮罩不得盖住窗口入口");
             architecture.GetSystem<CombatSystem>().Revive(actor, actor.transform.position);
             Assert.IsFalse(hud.IsWarningAnimating);
             Assert.IsFalse(root.Q("health-card").ClassListContains("hud-resource--low"));

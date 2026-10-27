@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "family": "compact-hud-entries",
+  "alpha_threshold": 8,
+  "canvas": {
+    "width": 1254,
+    "height": 1254
+  },
+  "alpha_required": true,
+  "assets": [
+    {
+      "name": "talent",
+      "image": "talent-source.png",
+      "edge_clearance": 65,
+      "visual_center_x": [
+        587,
+        667
+      ],
+      "visual_center_y": [
+        587,
+        667
+      ]
+    },
+    {
+      "name": "pause",
+      "image": "pause-source.png",
+      "edge_clearance": 65,
+      "visual_center_x": [
+        587,
+        667
+      ],
+      "visual_center_y": [
+        587,
+        667
+      ]
+    }
+  ]
+}

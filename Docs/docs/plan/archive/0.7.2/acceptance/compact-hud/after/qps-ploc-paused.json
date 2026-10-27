@@ -1,0 +1,85 @@
+{
+    "Stage": "after",
+    "Locale": "qps-ploc",
+    "Slots": "paused",
+    "Area": 91260.0,
+    "Bounds": {
+        "serializedVersion": "2",
+        "x": 682.0,
+        "y": 899.0,
+        "width": 556.0,
+        "height": 169.0
+    },
+    "Backgrounds": [
+        {
+            "serializedVersion": "2",
+            "x": 682.0,
+            "y": 899.0,
+            "width": 160.0,
+            "height": 169.0
+        },
+        {
+            "serializedVersion": "2",
+            "x": 696.0,
+            "y": 967.0,
+            "width": 132.0,
+            "height": 24.0
+        },
+        {
+            "serializedVersion": "2",
+            "x": 699.0,
+            "y": 970.0,
+            "width": 22.0,
+            "height": 18.0
+        },
+        {
+            "serializedVersion": "2",
+            "x": 850.0,
+            "y": 899.0,
+            "width": 220.0,
+            "height": 169.0
+        },
+        {
+            "serializedVersion": "2",
+            "x": 870.0,
+            "y": 904.0,
+            "width": 57.0,
+            "height": 24.0
+        },
+        {
+            "serializedVersion": "2",
+            "x": 870.0,
+            "y": 928.0,
+            "width": 56.0,
+            "height": 56.0
+        },
+        {
+            "serializedVersion": "2",
+            "x": 874.0,
+            "y": 932.0,
+            "width": 48.0,
+            "height": 48.0
+        },
+        {
+            "serializedVersion": "2",
+            "x": 871.0,
+            "y": 929.0,
+            "width": 36.0,
+            "height": 24.0
+        },
+        {
+            "serializedVersion": "2",
+            "x": 1078.0,
+            "y": 899.0,
+            "width": 160.0,
+            "height": 169.0
+        },
+        {
+            "serializedVersion": "2",
+            "x": 1092.0,
+            "y": 967.0,
+            "width": 132.0,
+            "height": 24.0
+        }
+    ]
+}

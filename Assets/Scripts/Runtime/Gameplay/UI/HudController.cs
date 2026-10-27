@@ -10,7 +10,7 @@ namespace DarkFlare
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(RuntimePanelView))]
-    public class HudController : MonoBehaviour, IController
+    public partial class HudController : MonoBehaviour, IController
     {
         const float LowHealthThreshold = 0.25f;
         [SerializeField] RuntimePanelView _uiPanel;
@@ -33,10 +33,6 @@ namespace DarkFlare
         GameInput _input;
         Tween _warningTween;
         VisualElement _pointerRoot;
-        readonly Label[] _flameNames = new Label[6];
-        readonly Label[] _flameStates = new Label[6];
-        readonly VisualElement[] _flameIcons = new VisualElement[6];
-        readonly ProgressBar[] _flameCooldowns = new ProgressBar[6];
 
         public HudSnapshot LastSnapshot { get; private set; }
         public AttributeRuntimeSnapshot RuntimeSnapshot { get; private set; }
@@ -66,12 +62,7 @@ namespace DarkFlare
             _manaBar.value = state.MaxMana > 0f ? Mathf.Clamp01(state.Mana / state.MaxMana) : 0f;
             _healthBar.title = state.HasPlayer ? $"{state.Health:0.#} / {state.MaxHealth:0.#}" : L("hud.waiting_player");
             _manaBar.title = state.HasPlayer ? $"{state.Mana:0.#} / {state.MaxMana:0.#}" : L("hud.waiting_player");
-            _cooldownBar.value = state.CooldownNormalized;
-            _skillName.text = string.IsNullOrEmpty(state.SkillId) ? L("attributes.state.no_source") : L("attributes.skill." + state.SkillId);
-            _skillDetails.text = L("hud.combat.details", N(state.ManaCost), N(state.Interval), N(state.RemainingSeconds));
-            _skillStatusLabel.text = L("attributes.state." + state.SkillState);
-            _skillStatusLabel.style.display = DisplayStyle.Flex;
-            RefreshFlames();
+            RefreshSkills();
             bool low = state.HasPlayer && state.Health > 0f && health <= LowHealthThreshold;
             _healthCard.EnableInClassList("hud-resource--low", low);
             _healthState.text = !state.HasPlayer ? L("hud.waiting_player") : state.Health <= 0f ? L("attributes.state.dead")
@@ -98,31 +89,9 @@ namespace DarkFlare
             }
         }
 
-        void RefreshFlames()
-        {
-            _uiPanel.Root.Q("hud-flames")?.EnableInClassList("hud-flames--hidden", _input.IsUiEnabled);
-            IReadOnlyList<PlayerSkillState> slots = this.SendQuery(new GetPlayerSkillsQuery());
-            SpriteAssetLoader sprites = this.GetUtility<SpriteAssetLoader>();
-            for (int i = 0; i < slots.Count; i++)
-            {
-                if (_flameNames[i] == null) { continue; }
-                PlayerSkillState skill = slots[i];
-                AttributeRuntimeSnapshot runtime = this.SendQuery(new GetPlayerSkillRuntimeQuery(i));
-                _flameNames[i].text = skill.Skill == null ? L("hud.skill.empty") : L("attributes.skill." + skill.Skill.Id);
-                string status = L("attributes.state." + runtime.SkillState)
-                    + (runtime.RemainingSeconds > 0 ? " " + N(runtime.RemainingSeconds) + " s" : string.Empty);
-                _flameStates[i].text = skill.Skill == null ? string.Empty : L("hud.flame.details", N(runtime.ManaCost), status);
-                _flameCooldowns[i].value = runtime.CooldownNormalized;
-                Sprite icon = string.IsNullOrEmpty(skill.IconGuid) ? null : sprites.GetSprite(skill.IconGuid);
-                _flameIcons[i].style.backgroundImage = icon != null ? new StyleBackground(icon) : new StyleBackground(StyleKeyword.None);
-                _flameNames[i].parent.EnableInClassList("hud-flame--unavailable", runtime.SkillState != "ready");
-            }
-        }
-
         void OnPointerDown(PointerDownEvent evt)
         {
-            VisualElement target = evt.target as VisualElement;
-            if (target is Button || target?.GetFirstAncestorOfType<Button>() != null) { _input?.ConsumeGameplayPointer(); }
+            if (IsPointerInteraction(evt.target as VisualElement)) { _input?.ConsumeGameplayPointer(); }
         }
 
         bool BlocksGameplayPointer(Vector2 screenPosition)
@@ -131,7 +100,7 @@ namespace DarkFlare
             if (panel == null) { return false; }
             Vector2 point = RuntimePanelUtils.ScreenToPanel(panel, new Vector2(screenPosition.x, Screen.height - screenPosition.y));
             VisualElement hit = panel.Pick(point);
-            return hit is Button || hit?.GetFirstAncestorOfType<Button>() != null;
+            return IsPointerInteraction(hit);
         }
 
         void ApplyWarning(float opacity) { if (_lowWarning != null) { _lowWarning.style.opacity = opacity; } }
@@ -152,6 +121,7 @@ namespace DarkFlare
             Set("hud-pause-binding", RebindableInputAction.PlayerPause);
             Set("hud-attack-binding", RebindableInputAction.PlayerAttack);
             for (int i = 0; i < 6; i++) { Set("hud-flame-binding-" + i, RebindableInputAction.PlayerSkill1 + i); }
+            RefreshEntryNames();
             void Set(string name, RebindableInputAction action)
             {
                 Label label = root.Q<Label>(name);
@@ -231,13 +201,7 @@ namespace DarkFlare
             _input.GameplayPointerBlocked += BlocksGameplayPointer;
             _pointerRoot = root;
             root.RegisterCallback<PointerDownEvent>(OnPointerDown, TrickleDown.TrickleDown);
-            for (int i = 0; i < 6; i++)
-            {
-                _flameNames[i] = root.Q<Label>("hud-flame-name-" + i);
-                _flameStates[i] = root.Q<Label>("hud-flame-state-" + i);
-                _flameIcons[i] = root.Q("hud-flame-icon-" + i);
-                _flameCooldowns[i] = root.Q<ProgressBar>("hud-flame-cooldown-" + i);
-            }
+            BindSkillDetails(root);
             _localization.LocaleChanged += OnLocaleChanged;
             _accessibility.ProfileChanged += OnMotionChanged;
             _input.BindingDisplayChanged += RefreshBindings;
@@ -264,11 +228,8 @@ namespace DarkFlare
         void UnbindSession()
         {
             _pointerRoot?.UnregisterCallback<PointerDownEvent>(OnPointerDown, TrickleDown.TrickleDown);
+            UnbindSkillDetails();
             _pointerRoot = null;
-            Array.Clear(_flameNames, 0, 6);
-            Array.Clear(_flameStates, 0, 6);
-            Array.Clear(_flameIcons, 0, 6);
-            Array.Clear(_flameCooldowns, 0, 6);
             _scope?.BeginStop();
             _scope = null;
             StopWarning();

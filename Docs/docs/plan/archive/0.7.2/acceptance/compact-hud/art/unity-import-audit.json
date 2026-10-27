@@ -1,0 +1,46 @@
+[
+  {
+    "Path": "Assets/Art/Sprites/UI/Icons/ui_icon_talent.png",
+    "Guid": "21f3d4fdbd67a3f47992fc391f0ccdd2",
+    "Canvas": [
+      96,
+      96
+    ],
+    "SpriteMode": "Single",
+    "PPU": 64,
+    "Pivot": [
+      0.5,
+      0.5
+    ],
+    "Mesh": "FullRect",
+    "Filter": "Point",
+    "Compression": "Uncompressed",
+    "Mipmap": false,
+    "Srgb": true,
+    "Alpha": true,
+    "MainDependency": true,
+    "SpriteLoaded": true
+  },
+  {
+    "Path": "Assets/Art/Sprites/UI/Icons/ui_icon_pause.png",
+    "Guid": "e7c2eb49dbf40cb498f9b3d4550598a9",
+    "Canvas": [
+      96,
+      96
+    ],
+    "SpriteMode": "Single",
+    "PPU": 64,
+    "Pivot": [
+      0.5,
+      0.5
+    ],
+    "Mesh": "FullRect",
+    "Filter": "Point",
+    "Compression": "Uncompressed",
+    "Mipmap": false,
+    "Srgb": true,
+    "Alpha": true,
+    "MainDependency": true,
+    "SpriteLoaded": true
+  }
+]

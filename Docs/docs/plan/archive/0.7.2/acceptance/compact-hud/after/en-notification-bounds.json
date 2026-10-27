@@ -1,0 +1,50 @@
+{
+    "Stage": "notifications",
+    "Locale": "en",
+    "Slots": "",
+    "Area": 0.0,
+    "Bounds": {
+        "serializedVersion": "2",
+        "x": 0.0,
+        "y": 0.0,
+        "width": 0.0,
+        "height": 0.0
+    },
+    "Backgrounds": [
+        {
+            "serializedVersion": "2",
+            "x": 439.0,
+            "y": 940.0,
+            "width": 1043.0,
+            "height": 128.0
+        },
+        {
+            "serializedVersion": "2",
+            "x": 892.0,
+            "y": 885.0,
+            "width": 136.0,
+            "height": 43.0
+        },
+        {
+            "serializedVersion": "2",
+            "x": 604.0,
+            "y": 771.0,
+            "width": 360.0,
+            "height": 104.0
+        },
+        {
+            "serializedVersion": "2",
+            "x": 1392.0,
+            "y": 16.0,
+            "width": 512.0,
+            "height": 70.0
+        },
+        {
+            "serializedVersion": "2",
+            "x": 896.0,
+            "y": 88.0,
+            "width": 127.0,
+            "height": 52.0
+        }
+    ]
+}

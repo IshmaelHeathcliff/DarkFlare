@@ -1,0 +1,75 @@
+{
+  "manifest": "C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Docs\\docs\\plan\\archive\\0.7.2\\acceptance\\compact-hud\\art\\source-manifest.json",
+  "family": "compact-hud-entries",
+  "canvas": [
+    1254,
+    1254
+  ],
+  "errors": [],
+  "assets": [
+    {
+      "name": "talent",
+      "image": "C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Docs\\docs\\plan\\archive\\0.7.2\\acceptance\\compact-hud\\art\\talent-source.png",
+      "canvas": [
+        1254,
+        1254
+      ],
+      "visible_bbox": [
+        216,
+        184,
+        1038,
+        1069
+      ],
+      "visible_width": 822,
+      "visible_height": 885,
+      "margins": {
+        "left": 216,
+        "top": 184,
+        "right": 216,
+        "bottom": 185
+      },
+      "alpha_coverage": 0.2709142546085382,
+      "visual_center": [
+        628.0347101714485,
+        640.7389904107694
+      ],
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "name": "pause",
+      "image": "C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Docs\\docs\\plan\\archive\\0.7.2\\acceptance\\compact-hud\\art\\pause-source.png",
+      "canvas": [
+        1254,
+        1254
+      ],
+      "visible_bbox": [
+        317,
+        209,
+        949,
+        1093
+      ],
+      "visible_width": 632,
+      "visible_height": 884,
+      "margins": {
+        "left": 317,
+        "top": 209,
+        "right": 305,
+        "bottom": 161
+      },
+      "alpha_coverage": 0.27319594840370465,
+      "visual_center": [
+        632.2913148678915,
+        651.230764621429
+      ],
+      "errors": [],
+      "warnings": []
+    }
+  ],
+  "summary": {
+    "assets": 2,
+    "errors": 0,
+    "warnings": 0,
+    "passed": true
+  }
+}

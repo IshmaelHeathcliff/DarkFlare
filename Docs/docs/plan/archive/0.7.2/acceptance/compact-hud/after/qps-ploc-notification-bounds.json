@@ -1,0 +1,50 @@
+{
+    "Stage": "notifications",
+    "Locale": "qps-ploc",
+    "Slots": "",
+    "Area": 0.0,
+    "Bounds": {
+        "serializedVersion": "2",
+        "x": 0.0,
+        "y": 0.0,
+        "width": 0.0,
+        "height": 0.0
+    },
+    "Backgrounds": [
+        {
+            "serializedVersion": "2",
+            "x": 439.0,
+            "y": 882.0,
+            "width": 1043.0,
+            "height": 186.0
+        },
+        {
+            "serializedVersion": "2",
+            "x": 815.0,
+            "y": 827.0,
+            "width": 291.0,
+            "height": 43.0
+        },
+        {
+            "serializedVersion": "2",
+            "x": 604.0,
+            "y": 693.0,
+            "width": 360.0,
+            "height": 124.0
+        },
+        {
+            "serializedVersion": "2",
+            "x": 1392.0,
+            "y": 16.0,
+            "width": 512.0,
+            "height": 70.0
+        },
+        {
+            "serializedVersion": "2",
+            "x": 794.0,
+            "y": 88.0,
+            "width": 330.0,
+            "height": 52.0
+        }
+    ]
+}

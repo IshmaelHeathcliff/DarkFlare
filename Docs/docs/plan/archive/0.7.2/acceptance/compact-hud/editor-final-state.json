@@ -1,0 +1,25 @@
+{
+  "Version": "0.7.2-alpha.4",
+  "Unity": "6000.6.7f1",
+  "Playing": false,
+  "Compiling": false,
+  "CompilationFailed": false,
+  "Scene": "Assets/Scenes/Bootstrap.unity",
+  "ReloadOptionsEnabled": true,
+  "ReloadOptions": "DisableDomainReload",
+  "Screen": [
+    1023,
+    933
+  ],
+  "TestDataRun": "",
+  "InputActions": "InputSystem_Actions",
+  "NativeUiProviderEnabled": true,
+  "BridgeExists": false,
+  "CaptureExists": false,
+  "GameViewTargetSize": [
+    640,
+    480
+  ],
+  "SelectedSizeIndex": 7,
+  "ScreenMeasurementNote": "Non-Play Screen describes the Editor surface; GameViewTargetSize is the restored game resolution."
+}

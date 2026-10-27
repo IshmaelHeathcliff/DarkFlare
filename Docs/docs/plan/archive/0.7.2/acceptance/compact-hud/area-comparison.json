@@ -1,0 +1,125 @@
+{
+  "method": "Union of visible main-HUD background rectangles in Gameplay at 1920x1080; includes containers, seven skill positions, entries, resource bars and bindings; excludes transient details/prompt/toast/status. Same catalog, resources, slots and default bindings before/after. Long rebindings verified after only.",
+  "samples": [
+    {
+      "case": "en-empty",
+      "before_area": 344736.0,
+      "after_area": 129402.0,
+      "reduction_percent": 62.46,
+      "before_bounds": {
+        "serializedVersion": "2",
+        "x": 228.0,
+        "y": 784.0,
+        "width": 1464.0,
+        "height": 284.0
+      },
+      "after_bounds": {
+        "serializedVersion": "2",
+        "x": 439.0,
+        "y": 942.0,
+        "width": 1043.0,
+        "height": 126.0
+      }
+    },
+    {
+      "case": "en-full",
+      "before_area": 344736.0,
+      "after_area": 129402.0,
+      "reduction_percent": 62.46,
+      "before_bounds": {
+        "serializedVersion": "2",
+        "x": 228.0,
+        "y": 784.0,
+        "width": 1464.0,
+        "height": 284.0
+      },
+      "after_bounds": {
+        "serializedVersion": "2",
+        "x": 439.0,
+        "y": 942.0,
+        "width": 1043.0,
+        "height": 126.0
+      }
+    },
+    {
+      "case": "qps-ploc-empty",
+      "before_area": 368952.0,
+      "after_area": 175915.0,
+      "reduction_percent": 52.32,
+      "before_bounds": {
+        "serializedVersion": "2",
+        "x": 228.0,
+        "y": 763.0,
+        "width": 1464.0,
+        "height": 305.0
+      },
+      "after_bounds": {
+        "serializedVersion": "2",
+        "x": 370.0,
+        "y": 917.0,
+        "width": 1181.0,
+        "height": 151.0
+      }
+    },
+    {
+      "case": "qps-ploc-full",
+      "before_area": 368952.0,
+      "after_area": 155077.0,
+      "reduction_percent": 57.97,
+      "before_bounds": {
+        "serializedVersion": "2",
+        "x": 228.0,
+        "y": 763.0,
+        "width": 1464.0,
+        "height": 305.0
+      },
+      "after_bounds": {
+        "serializedVersion": "2",
+        "x": 439.0,
+        "y": 917.0,
+        "width": 1043.0,
+        "height": 151.0
+      }
+    },
+    {
+      "case": "zh-Hans-empty",
+      "before_area": 344736.0,
+      "after_area": 129402.0,
+      "reduction_percent": 62.46,
+      "before_bounds": {
+        "serializedVersion": "2",
+        "x": 228.0,
+        "y": 784.0,
+        "width": 1464.0,
+        "height": 284.0
+      },
+      "after_bounds": {
+        "serializedVersion": "2",
+        "x": 439.0,
+        "y": 942.0,
+        "width": 1043.0,
+        "height": 126.0
+      }
+    },
+    {
+      "case": "zh-Hans-full",
+      "before_area": 344736.0,
+      "after_area": 129402.0,
+      "reduction_percent": 62.46,
+      "before_bounds": {
+        "serializedVersion": "2",
+        "x": 228.0,
+        "y": 784.0,
+        "width": 1464.0,
+        "height": 284.0
+      },
+      "after_bounds": {
+        "serializedVersion": "2",
+        "x": 439.0,
+        "y": 942.0,
+        "width": 1043.0,
+        "height": 126.0
+      }
+    }
+  ]
+}

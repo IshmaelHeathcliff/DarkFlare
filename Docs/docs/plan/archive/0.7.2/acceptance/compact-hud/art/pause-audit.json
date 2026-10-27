@@ -1,0 +1,46 @@
+{
+  "manifest": "C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Temp\\Agent\\compact-hud\\pause-manifest.json",
+  "family": "compact-hud-entries",
+  "canvas": [
+    96,
+    96
+  ],
+  "errors": [],
+  "assets": [
+    {
+      "name": "pause",
+      "image": "C:\\Users\\darkf\\Home\\Projects\\DarkFlare\\Temp\\Agent\\compact-hud\\pause.png",
+      "canvas": [
+        96,
+        96
+      ],
+      "visible_bbox": [
+        24,
+        16,
+        73,
+        84
+      ],
+      "visible_width": 49,
+      "visible_height": 68,
+      "margins": {
+        "left": 24,
+        "top": 16,
+        "right": 23,
+        "bottom": 12
+      },
+      "alpha_coverage": 0.2839626736111111,
+      "visual_center": [
+        48.40542636398018,
+        49.86453635638441
+      ],
+      "errors": [],
+      "warnings": []
+    }
+  ],
+  "summary": {
+    "assets": 1,
+    "errors": 0,
+    "warnings": 0,
+    "passed": true
+  }
+}

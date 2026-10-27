@@ -1,6 +1,6 @@
 # 0.7.2-alpha 界面优化分计划
 
-状态：2026-10-27，阶段二、三已完成；阶段二已提交 `6315bd3`，阶段三当前运行 `0.7.2-alpha.3`，见[实施计划](../archive/0.7.2/plans/phase-3-execution.md)与[验收](../archive/0.7.2/acceptance/board-simplification/README.md)。阶段四待实施。范围与阶段版本以[总计划](../alpha-0.7.2-optimization-plan.md)为准。
+状态：2026-10-27，阶段二至四已完成，当前运行 `0.7.2-alpha.4`，阶段四尚未提交，见[HUD验收](../archive/0.7.2/acceptance/compact-hud/README.md)。范围与阶段版本以[总计划](../alpha-0.7.2-optimization-plan.md)为准。
 
 ## 能量瓶装备入口：阶段 2
 
@@ -65,6 +65,8 @@
 主要入口为 `PlayerBoard.uxml/.uss`、`SkillBoardViewport`、`SkillBoardPanelController / Actions`、`GameMenuBoard`；复用 `SkillBoardGeometryTests`、`SpatialNavigationTests` 和 `Phase1UxPlayModeTests`。模块更新[玩家棋盘](../../skill-board/player-board.md)及[几何](../../skill-board/geometry.md)。
 
 ## 主界面 HUD：阶段 4
+
+详细布局、面积口径、图标合同、输入与验证顺序见[阶段四实施计划](../archive/0.7.2/plans/phase-4-execution.md)。本节范围已交付；运行版本 `0.7.2-alpha.4`，主HUD面积减少52.32%–62.46%，三语言、真实输入和保存恢复通过。
 
 ### 视觉与信息层级
 

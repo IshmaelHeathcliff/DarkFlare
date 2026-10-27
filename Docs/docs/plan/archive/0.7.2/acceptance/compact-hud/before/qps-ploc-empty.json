@@ -1,0 +1,246 @@
+{
+    "Stage": "before",
+    "Locale": "qps-ploc",
+    "Slots": "empty",
+    "Area": 368952.0,
+    "Bounds": {
+        "serializedVersion": "2",
+        "x": 228.0,
+        "y": 763.0,
+        "width": 1464.0,
+        "height": 305.0
+    },
+    "Backgrounds": [
+        {
+            "serializedVersion": "2",
+            "x": 412.0,
+            "y": 763.0,
+            "width": 176.0,
+            "height": 156.0
+        },
+        {
+            "serializedVersion": "2",
+            "x": 560.0,
+            "y": 769.0,
+            "width": 21.0,
+            "height": 23.0
+        },
+        {
+            "serializedVersion": "2",
+            "x": 421.0,
+            "y": 911.0,
+            "width": 158.0,
+            "height": 3.0
+        },
+        {
+            "serializedVersion": "2",
+            "x": 596.0,
+            "y": 763.0,
+            "width": 176.0,
+            "height": 156.0
+        },
+        {
+            "serializedVersion": "2",
+            "x": 744.0,
+            "y": 769.0,
+            "width": 21.0,
+            "height": 23.0
+        },
+        {
+            "serializedVersion": "2",
+            "x": 605.0,
+            "y": 911.0,
+            "width": 158.0,
+            "height": 3.0
+        },
+        {
+            "serializedVersion": "2",
+            "x": 780.0,
+            "y": 763.0,
+            "width": 176.0,
+            "height": 156.0
+        },
+        {
+            "serializedVersion": "2",
+            "x": 928.0,
+            "y": 769.0,
+            "width": 21.0,
+            "height": 23.0
+        },
+        {
+            "serializedVersion": "2",
+            "x": 789.0,
+            "y": 911.0,
+            "width": 158.0,
+            "height": 3.0
+        },
+        {
+            "serializedVersion": "2",
+            "x": 964.0,
+            "y": 763.0,
+            "width": 176.0,
+            "height": 156.0
+        },
+        {
+            "serializedVersion": "2",
+            "x": 1112.0,
+            "y": 769.0,
+            "width": 21.0,
+            "height": 23.0
+        },
+        {
+            "serializedVersion": "2",
+            "x": 973.0,
+            "y": 911.0,
+            "width": 158.0,
+            "height": 3.0
+        },
+        {
+            "serializedVersion": "2",
+            "x": 1148.0,
+            "y": 763.0,
+            "width": 176.0,
+            "height": 156.0
+        },
+        {
+            "serializedVersion": "2",
+            "x": 1296.0,
+            "y": 769.0,
+            "width": 21.0,
+            "height": 23.0
+        },
+        {
+            "serializedVersion": "2",
+            "x": 1157.0,
+            "y": 911.0,
+            "width": 158.0,
+            "height": 3.0
+        },
+        {
+            "serializedVersion": "2",
+            "x": 1332.0,
+            "y": 763.0,
+            "width": 176.0,
+            "height": 156.0
+        },
+        {
+            "serializedVersion": "2",
+            "x": 1480.0,
+            "y": 769.0,
+            "width": 21.0,
+            "height": 23.0
+        },
+        {
+            "serializedVersion": "2",
+            "x": 1341.0,
+            "y": 911.0,
+            "width": 158.0,
+            "height": 3.0
+        },
+        {
+            "serializedVersion": "2",
+            "x": 228.0,
+            "y": 927.0,
+            "width": 300.0,
+            "height": 141.0
+        },
+        {
+            "serializedVersion": "2",
+            "x": 258.0,
+            "y": 974.0,
+            "width": 240.0,
+            "height": 24.0
+        },
+        {
+            "serializedVersion": "2",
+            "x": 261.0,
+            "y": 977.0,
+            "width": 234.0,
+            "height": 18.0
+        },
+        {
+            "serializedVersion": "2",
+            "x": 540.0,
+            "y": 927.0,
+            "width": 840.0,
+            "height": 141.0
+        },
+        {
+            "serializedVersion": "2",
+            "x": 563.0,
+            "y": 933.0,
+            "width": 41.0,
+            "height": 26.0
+        },
+        {
+            "serializedVersion": "2",
+            "x": 555.0,
+            "y": 1006.0,
+            "width": 810.0,
+            "height": 4.0
+        },
+        {
+            "serializedVersion": "2",
+            "x": 433.0,
+            "y": 1013.0,
+            "width": 259.0,
+            "height": 49.0
+        },
+        {
+            "serializedVersion": "2",
+            "x": 644.0,
+            "y": 1026.0,
+            "width": 36.0,
+            "height": 24.0
+        },
+        {
+            "serializedVersion": "2",
+            "x": 698.0,
+            "y": 1013.0,
+            "width": 259.0,
+            "height": 49.0
+        },
+        {
+            "serializedVersion": "2",
+            "x": 963.0,
+            "y": 1013.0,
+            "width": 259.0,
+            "height": 49.0
+        },
+        {
+            "serializedVersion": "2",
+            "x": 1228.0,
+            "y": 1013.0,
+            "width": 259.0,
+            "height": 49.0
+        },
+        {
+            "serializedVersion": "2",
+            "x": 1403.0,
+            "y": 1026.0,
+            "width": 60.0,
+            "height": 24.0
+        },
+        {
+            "serializedVersion": "2",
+            "x": 1392.0,
+            "y": 927.0,
+            "width": 300.0,
+            "height": 141.0
+        },
+        {
+            "serializedVersion": "2",
+            "x": 1422.0,
+            "y": 974.0,
+            "width": 240.0,
+            "height": 24.0
+        },
+        {
+            "serializedVersion": "2",
+            "x": 1425.0,
+            "y": 977.0,
+            "width": 234.0,
+            "height": 18.0
+        }
+    ]
+}

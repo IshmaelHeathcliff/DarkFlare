@@ -2,6 +2,10 @@
 
 ## 项目状态
 
+2026-10-27：**0.7.2-alpha.4 阶段四完成，尚未提交**。紧凑七技能位置、四入口图标、真实冷却与状态、悬停屏蔽和提示安全区已交付；主HUD背景面积减少52.32%–62.46%。EditMode 985/985、PlayMode 119/119，均无失败 / 跳过，三语言27张前后画面、保存恢复和重载通过。core v14 / Schema12 / 1 / 地图V4保持，见[HUD验收](plan/archive/0.7.2/acceptance/compact-hud/README.md)。阶段五地图与300名额继续活动，未构建Player。
+
+2026-10-27：**阶段三已提交 `998893d`，阶段四计划已细化**。[HUD 实施计划](plan/archive/0.7.2/plans/phase-4-execution.md)明确紧凑七技能位置、四入口图标、主 HUD 面积减少目标、悬停防穿透与手柄查看路径。当前运行仍为 `0.7.2-alpha.3`，core v14 / Schema 12 / 1 / 地图 V4 保持；本次仅提交与规划，没有生成资产、修改运行代码或重跑 Unity 验收。
+
 2026-10-27：**0.7.2-alpha.3 阶段三完成**。天赋工具收纳、相关详情与六槽精简、力量上 / 敏捷左下 / 智力右下及统一命中导航已交付；画布默认约 85%、详情展开约 68%。EditMode 985/985、PlayMode 117/117，均无失败 / 跳过，三语言、多连接确认与保存继续通过。实施基线 `main` / `6315bd3` 加本轮改动，core v14 / Schema 12 / 1 / 地图 V4 保持，见[验收与画面](plan/archive/0.7.2/acceptance/board-simplification/README.md)。计划已归档，HUD 与地图后续阶段继续活动；未构建 Player。
 
 2026-10-26：**阶段二已提交 `6315bd3`，阶段三计划已细化**。[天赋界面实施计划](plan/archive/0.7.2/plans/phase-3-execution.md)确定精简常驻按钮、画布面积目标、顺时针 30° 显示变换及三属性映射，保留键鼠 / 手柄完整操作和旧存档身份。当前运行仍为 `0.7.2-alpha.2`，core v14 / Schema 12 / 1 / 地图 V4 保持；本次只规划，未开始实现或重跑 Unity 验收。
@@ -32,13 +36,13 @@ Alpha 0.6.3 有限刷怪为地图 V4、core v10、Schema 8，野外固定 100 �
 
 0.6.1 普通怪物已交付并[归档](plan/archive/0.6.1/plans/alpha-0.6.1-monster-behavior-plan.md)：该阶段完整 EditMode 808/808、PlayMode 92/92，Windows Player、跨进程恢复及 500 / 1000 普通怪物性能矩阵通过，见[历史验收](plan/archive/0.6.1/acceptance/behavior/README.md)。
 
-Alpha 0.5 的 A–I 全部完成；当前交付版本为 `0.7.2-alpha.3`，本阶段 Windows Player 验收未执行。四地表地图、手绘 / AI 编辑、Y 排序、城镇交易打造、野外刷怪和 Flow Field / A* 批量寻路已形成完整链路，详见 [I 综合验收](plan/archive/0.5.5/acceptance/maps/i/README.md)。
+Alpha 0.5 的 A–I 全部完成；当前交付版本为 `0.7.2-alpha.4`，本阶段 Windows Player 验收未执行。四地表地图、手绘 / AI 编辑、Y 排序、城镇交易打造、野外刷怪和 Flow Field / A* 批量寻路已形成完整链路，详见 [I 综合验收](plan/archive/0.5.5/acceptance/maps/i/README.md)。
 
 2026-09-22：[Alpha 0.6 总计划](plan/archive/0.6/plans/alpha-0.6-plan.md)的 **0.6.0 已完成**：HFSM 与行为树独立置于现有 Core，交付组合样例、Animator 桥接、Editor 实时图与开发 Player 面板。完整 EditMode 788/788、PlayMode 87/87，独立 Windows Player 及核心规模验证通过，见[行为模块及验收](./behavior/README.md)。后续怪物、Boss、有限刷怪、手动重置及综合交付也已按各阶段门槛完成。
 
 `DarkFlare` 已完成首版最小循环、初步体验优化、`alpha 0.1` 封板和 `alpha 0.2.0–0.2.7` 基础设施封板。当前可从常驻 `Bootstrap.unity` 的 FrontEnd 新建或继续游戏，additive 进入 `Main.unity` 完成战斗、掉落、十槽装备、交易和打造，暂停后保存并安全返回前台；FrontEnd 可二次确认删除自动档，共享设置页可恢复完整默认设置，中英语言、音量、按键、设备 Glyph 和降低动态效果即时收敛。
 
-从 0.7 起按[SemVer 版本管理](./version-management.md)推进：小版本为 `0.7.0-alpha`、`0.7.1-alpha`，小版本内阶段为 `0.7.0-alpha.1`、`0.7.0-alpha.2`，阶段序号随小版本重置。0.7 系列预计持续处于 alpha；下一里程碑或明确进入 beta 时进入 0.8。0.1–0.6 的三段式历史阶段名称和归档保留原意。当前源码版本为 `0.7.2-alpha.3`，当前版本未完成 Player 验收；完成记录见[alpha 0.2 综合验收记录](plan/archive/0.2.7/acceptance/alpha-0.2-acceptance.md)与[计划归档](./plan/archive/README.md)。
+从 0.7 起按[SemVer 版本管理](./version-management.md)推进：小版本为 `0.7.0-alpha`、`0.7.1-alpha`，小版本内阶段为 `0.7.0-alpha.1`、`0.7.0-alpha.2`，阶段序号随小版本重置。0.7 系列预计持续处于 alpha；下一里程碑或明确进入 beta 时进入 0.8。0.1–0.6 的三段式历史阶段名称和归档保留原意。当前源码版本为 `0.7.2-alpha.4`，当前版本未完成 Player 验收；完成记录见[alpha 0.2 综合验收记录](plan/archive/0.2.7/acceptance/alpha-0.2-acceptance.md)与[计划归档](./plan/archive/README.md)。
 
 2026-09-18：[Alpha 0.5 总计划](plan/archive/0.5/plans/alpha-0.5-plan.md)已完成 [0.5.0 地图基础 A–D](plan/archive/0.5.0/plans/alpha-0.5.0-map-foundation-plan.md)，包含数据 / 导入、Wang 解析与预览、正式四材质发布，以及[同源碰撞和静态通行](./maps/map-geometry.md)。D 已提交 `e396485`。[0.5.1 手工 / AI 地图编辑器](./maps/map-editor.md)的 E1–E5 也已完成并[归档](plan/archive/0.5.1/plans/alpha-0.5.1-map-editor-plan.md)，E 验证为 EditMode 697/697、PlayMode 77/77，见 [E 验收](plan/archive/0.5.1/acceptance/maps/e/README.md)。[0.5.2 世界层级 F1–F5](plan/archive/0.5.2/plans/alpha-0.5.2-world-sorting-plan.md)已完成，EditMode 707/707、PlayMode 78/78；城镇 / 野外与生命周期 G 已完成；Flow Field / A* / Job / Burst 已由 H 完成。目标为 500 活动怪物、1000 压力测试，地图离场暂停并保留状态。Main 已成为通用双地图玩法容器。
 

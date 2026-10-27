@@ -491,6 +491,7 @@ namespace DarkFlare
         void ApplyState(GameFlowState state)
         {
             bool isFrontEnd = state == GameFlowState.FrontEnd;
+            _root.EnableInClassList("application-shell--gameplay", state == GameFlowState.InGame || state == GameFlowState.Paused);
             SetVisible(_frontEndPage, isFrontEnd);
             _frontEndController?.SetActive(isFrontEnd);
 

@@ -77,7 +77,8 @@ namespace DarkFlare
             ItemInstance weapon = this.GetModel<EquipmentModel>().GetWeapon(actor);
             if (actor.GetComponent<PlayerController>() == null && _readers.TryGetValue(actor, out Func<PlayerSkillState> reader)) { return reader(); }
             return new PlayerSkillState(weapon?.BaseDefinition.NormalSkill,
-                this.GetModel<PlayerSkillsModel>().NormalCooldownRemaining, weapon?.InstanceId ?? string.Empty);
+                this.GetModel<PlayerSkillsModel>().NormalCooldownRemaining, weapon?.InstanceId ?? string.Empty,
+                weapon?.BaseDefinition.Icon?.AssetGUID ?? string.Empty);
         }
 
         public PlayerSkillState CaptureSlot(int slot)
@@ -242,7 +243,13 @@ namespace DarkFlare
     public sealed class GetPlayerNormalSkillQuery : AbstractQuery<PlayerSkillState>
     {
         readonly CombatActor _actor;
+        readonly bool _currentPlayer;
         public GetPlayerNormalSkillQuery(CombatActor actor) { _actor = actor; }
-        protected override PlayerSkillState OnDo() { return this.GetSystem<PlayerSkillStateRegistry>().Capture(_actor); }
+        public GetPlayerNormalSkillQuery() { _currentPlayer = true; }
+        protected override PlayerSkillState OnDo()
+        {
+            CombatActor actor = _currentPlayer ? GetAttributeDetailsQuery.FindPlayer(this.GetModel<CombatModel>()) : _actor;
+            return this.GetSystem<PlayerSkillStateRegistry>().Capture(actor);
+        }
     }
 }

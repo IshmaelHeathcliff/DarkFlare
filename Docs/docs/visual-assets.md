@@ -1,5 +1,9 @@
 # 视觉资产清单
 
+## 0.7.2-alpha.4 HUD 图标
+
+新增 `ui_icon_talent.png` 与 `ui_icon_pause.png`，用于天赋与暂停入口；背包 / 属性复用已有图标。两张均为透明96×96、Sprite Single / Full Rect、PPU64、Center、Point、无压缩 / Mipmap，固定 USS 引用。由1254原图按同一全画布LANCZOS规则导出，不按主体修剪；可见主体分别64×68与49×68px，中心偏差低于3px、四边至少12px，逐张审计无错误。见[生成记录](plan/archive/0.7.2/acceptance/compact-hud/art/generation-record.md)与[运行验收](plan/archive/0.7.2/acceptance/compact-hud/README.md)。
+
 历史 `DarkFlare/Alpha 0.1.7` 菜单（视觉迁移预检、世界排序验证、应用特效导入合同、构建候选动画）已移除。对应脚本方法及自动特效导入处理仍保留，迁移记录不作为当前菜单操作指南。
 
 ## Alpha 0.3.4 装备增量
