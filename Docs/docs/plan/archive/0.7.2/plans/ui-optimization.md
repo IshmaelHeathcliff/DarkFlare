@@ -1,6 +1,8 @@
 # 0.7.2-alpha 界面优化分计划
 
-状态：2026-10-27，阶段二至四已完成，当前运行 `0.7.2-alpha.4`，阶段四尚未提交，见[HUD验收](../archive/0.7.2/acceptance/compact-hud/README.md)。范围与阶段版本以[总计划](../alpha-0.7.2-optimization-plan.md)为准。
+状态：2026-10-27，实施与验收完成，五阶段全部收尾。当前`0.7.2-alpha.5` / core15 / Save12 / Settings1 / 地图V4，城镇r3 / 野外r11；本轮尚未提交。EditMode993/993、PlayMode119/119，无失败 / 跳过。见[地图综合验收](../acceptance/compact-maps/README.md)。
+
+以下保留实施前目标、基线与验收合同；实际实现和未执行项以上述验收为准。原有字体修改独立保留。
 
 ## 能量瓶装备入口：阶段 2
 
@@ -17,7 +19,7 @@
 
 装备区实际位于 `ItemWorkbench.uxml`，阶段二调整了它及 `Windows.uss`、`ItemWorkbench.uss`、`InventoryPanelController`、`ItemActionRouter`、共享来源 / 投放目标和棋盘面板，副边操作复用现有控件。原路由直接寻找 `board-bottle-drop`，现已改为背包内可见的 `inventory-bottle-slot`，关闭棋盘后仍可换瓶。
 
-具体操作与回退以[已归档阶段二计划](../archive/0.7.2/plans/phase-2-execution.md)为准：已增加独立已装备瓶来源及可选卸瓶目标格，快捷卸下仍自动找位，换瓶成功留在背包。瓶栏利用装备区左上空位，保持原高度和格子尺度；原 `board-bottle-drop` 已替换为只读摘要和明确的装备瓶充能选择入口。
+具体操作与回退以[已归档阶段二计划](phase-2-execution.md)为准：已增加独立已装备瓶来源及可选卸瓶目标格，快捷卸下仍自动找位，换瓶成功留在背包。瓶栏利用装备区左上空位，保持原高度和格子尺度；原 `board-bottle-drop` 已替换为只读摘要和明确的装备瓶充能选择入口。
 
 ### 验收
 
@@ -30,11 +32,11 @@
 | 天赋中心充入装备瓶 / 背包瓶 | 明确确认才消费，装备槽同步更新；取消不转移所有权 |
 | 商店 / 打造 / Shell / Session 切换 | 旧目标失效，拖动与预览取消，不操作隐藏界面或新 Session |
 
-长期回归优先补充 `SkillBoardTransactionsTests` 与现有物品 / 棋盘 PlayMode 套件；复用 `EnergyBottleTests` 的收益与收集覆盖，不重复编写未变化的规则。更新[能量瓶](../../skill-board/energy-bottles.md)、[安装事务](../../skill-board/items-installation.md)、[装备](../../equipment-system.md)和[物品工作台](../../item-ui-workbench.md)。
+长期回归优先补充 `SkillBoardTransactionsTests` 与现有物品 / 棋盘 PlayMode 套件；复用 `EnergyBottleTests` 的收益与收集覆盖，不重复编写未变化的规则。更新[能量瓶](../../../../skill-board/energy-bottles.md)、[安装事务](../../../../skill-board/items-installation.md)、[装备](../../../../equipment-system.md)和[物品工作台](../../../../item-ui-workbench.md)。
 
 ## 天赋界面：阶段 3
 
-具体布局、方位映射、输入路线、实施顺序及验收条件见[阶段三实施计划](../archive/0.7.2/plans/phase-3-execution.md)。本节范围已交付，当前模块见[玩家棋盘](../../skill-board/player-board.md)；实际画布占比默认 84.63%–84.98%、详情展开 68.13%–68.41%，三语言与保存 / 输入闭环通过。
+具体布局、方位映射、输入路线、实施顺序及验收条件见[阶段三实施计划](phase-3-execution.md)。本节范围已交付，当前模块见[玩家棋盘](../../../../skill-board/player-board.md)；实际画布占比默认 84.63%–84.98%、详情展开 68.13%–68.41%，三语言与保存 / 输入闭环通过。
 
 ### 精简与画布
 
@@ -62,11 +64,11 @@
 - 返回逐层取消，关闭后恢复原窗口组合；三语言文本、焦点和预览不越界。
 - 同一存档在优化前后安装坐标、连接、点数及六槽一致。
 
-主要入口为 `PlayerBoard.uxml/.uss`、`SkillBoardViewport`、`SkillBoardPanelController / Actions`、`GameMenuBoard`；复用 `SkillBoardGeometryTests`、`SpatialNavigationTests` 和 `Phase1UxPlayModeTests`。模块更新[玩家棋盘](../../skill-board/player-board.md)及[几何](../../skill-board/geometry.md)。
+主要入口为 `PlayerBoard.uxml/.uss`、`SkillBoardViewport`、`SkillBoardPanelController / Actions`、`GameMenuBoard`；复用 `SkillBoardGeometryTests`、`SpatialNavigationTests` 和 `Phase1UxPlayModeTests`。模块更新[玩家棋盘](../../../../skill-board/player-board.md)及[几何](../../../../skill-board/geometry.md)。
 
 ## 主界面 HUD：阶段 4
 
-详细布局、面积口径、图标合同、输入与验证顺序见[阶段四实施计划](../archive/0.7.2/plans/phase-4-execution.md)。本节范围已交付；运行版本 `0.7.2-alpha.4`，主HUD面积减少52.32%–62.46%，三语言、真实输入和保存恢复通过。
+详细布局、面积口径、图标合同、输入与验证顺序见[阶段四实施计划](phase-4-execution.md)。本节范围已交付；运行版本 `0.7.2-alpha.4`，主HUD面积减少52.32%–62.46%，三语言、真实输入和保存恢复通过。
 
 ### 视觉与信息层级
 
@@ -91,4 +93,4 @@
 - 键盘 / 手柄沿用既有窗口入口与窗口循环到达功能；Gameplay 保持原输入隔离，不为图标组常开 UI 导航而截走移动。
 - 换装、换槽、资源变化、暂停、设备族 / 绑定变化即时反映；禁用、切图和 Session 结束后任务与资源正确释放。
 
-复用 `GameplayUiFoundationTests`、`ApplicationInputServiceTests`、资源和 `Phase1UxPlayModeTests`；更新[HUD](../../hud-system.md)、[输入](../../input-ui-system.md)、[组件规范](../../ui-component-style.md)及[视觉资产](../../visual-assets.md)。截图 / 生成与审计证据随 0.7.2 归档，临时采集脚本清理。
+复用 `GameplayUiFoundationTests`、`ApplicationInputServiceTests`、资源和 `Phase1UxPlayModeTests`；更新[HUD](../../../../hud-system.md)、[输入](../../../../input-ui-system.md)、[组件规范](../../../../ui-component-style.md)及[视觉资产](../../../../visual-assets.md)。截图 / 生成与审计证据随 0.7.2 归档，临时采集脚本清理。

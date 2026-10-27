@@ -1,8 +1,8 @@
 # Alpha 0.7 执行计划
 
-状态：2026-10-27，0.7.0与0.7.1均完成；0.7.2阶段一至四已交付，当前 `0.7.2-alpha.4` / core v14。EditMode 985/985、PlayMode 119/119，均无失败 / 跳过，见[阶段四验收](archive/0.7.2/acceptance/compact-hud/README.md)。[0.7.2总计划](alpha-0.7.2-optimization-plan.md)与0.7里程碑继续活动。
+状态：2026-10-27，0.7.0、0.7.1及0.7.2五阶段均已完成。当前`0.7.2-alpha.5` / core15 / Save12 / Settings1 / 地图V4，EditMode993/993、PlayMode119/119，无失败 / 跳过；见[最终地图验收](archive/0.7.2/acceptance/compact-maps/README.md)。
 
-阶段一已提交 `479f901`，阶段二已提交 `6315bd3`，阶段三已提交 `998893d`；[阶段一](archive/0.7.2/plans/phase-1-execution.md)、[阶段二](archive/0.7.2/plans/phase-2-execution.md)、[阶段三](archive/0.7.2/plans/phase-3-execution.md)实施计划和证据已归档，原验收身份保留当时基线加工作区的含义。[阶段四HUD计划](archive/0.7.2/plans/phase-4-execution.md)已完成并归档；阶段四尚未提交，阶段五地图 / 300名额继续活动。
+0.7.2总计划、分计划与五阶段验收已[统一归档](archive/0.7.2/README.md)。阶段一至四已有提交479f901 / 6315bd3 / 998893d / 8c15fbe，阶段五本轮尚未提交。0.7里程碑总计划继续活动，下一小版本范围另行明确；未构建Player。
 
 ## 基线与顺序
 
@@ -22,7 +22,7 @@
 | `0.7.0-alpha.1` | 不可变纯 C# SemVer 对象，严格解析、数值及先行优先级、构建身份、文化独立性和长数字回归 | 完成，52/52 定向 EditMode |
 | `0.7.0-alpha.2` | `GameVersion` 显式解析桥接，历史原始字符串与独立数据版本域兼容 | 完成，32/32 定向回归；收尾 EditMode 882/882、PlayMode 102/102 |
 | `0.7.1-alpha` | 六边形技能面板、柴薪 / 火焰 / 余烬；能量瓶、充能兑换、属性与天赋点亮；技能重构和六键施法、交易、存档与键鼠 / 手柄闭环 | 五阶段完成；[执行与验收入口](archive/0.7.1/plans/alpha-0.7.1-skill-board-plan.md) |
-| `0.7.2-alpha` | 紧凑 HUD、天赋精简与方位、按住连放、能量瓶装备入口迁移、缩小双地图、300 普通名额、默认三投射物与一次穿透 | 阶段一至四完成，阶段五待实施；[五阶段计划](alpha-0.7.2-optimization-plan.md)，目标 `alpha.1` 至 `alpha.5` |
+| `0.7.2-alpha` | 紧凑 HUD、天赋精简与方位、按住连放、能量瓶装备入口迁移、缩小双地图、300 普通名额、默认三投射物与一次穿透 | 五阶段已完成并归档；[五阶段计划](archive/0.7.2/plans/alpha-0.7.2-optimization-plan.md)，目标 `alpha.1` 至 `alpha.5` |
 
 0.7.0 未构建 Player，也未执行真实设备、跨进程或当前版本性能矩阵；Editor 结果不能替代这些验收。具体测试范围、源码身份与兼容结论已归档。
 

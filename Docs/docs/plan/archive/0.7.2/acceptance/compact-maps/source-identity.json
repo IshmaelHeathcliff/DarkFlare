@@ -1,0 +1,67 @@
+{
+  "baseCommit": "8c15fbe652303107586f301421c9cab63d3cbbed",
+  "branch": "main",
+  "workingTree": "uncommitted stage-five changes plus independently preserved user font",
+  "capturedUtc": "2026-10-27T12:14:39.096228+00:00",
+  "version": "0.7.2-alpha.5",
+  "unity": "6000.6.7f1",
+  "core": 15,
+  "saveSchema": 12,
+  "settingsSchema": 1,
+  "mapFormat": 4,
+  "mapRevisions": {
+    "town": 3,
+    "wilderness": 11
+  },
+  "tests": {
+    "EditMode": {
+      "total": 993,
+      "passed": 993,
+      "failed": 0,
+      "skipped": 0
+    },
+    "PlayMode": {
+      "total": 119,
+      "passed": 119,
+      "failed": 0,
+      "skipped": 0
+    }
+  },
+  "originalFontSha256": "EBBA3E8B8D41456CB5DDD2E684811A5E0125B3D2856FEC713093A2172FDE43FB",
+  "files": {
+    "Assets/Data/Maps/History.meta": "52fe5af013e978d7c20532cf991a3bb76f8d9190e5452576c7f9b895d9188213",
+    "Assets/Data/Maps/History/town-r1.json": "dcee92de0a0fbb91432bc9b8a4a3c4d80ff6d9b95cbb1c2838e742aa82bfd7a5",
+    "Assets/Data/Maps/History/town-r1.json.meta": "9d5168d5462e79972191eb7b507fd35d6c79256f040312f32b7b9eacbb122e26",
+    "Assets/Data/Maps/History/wilderness-r9.json": "877be5069af7e1b6e440a0bf278873d9ac7b30467b4d0894576c76c82a1fdb8b",
+    "Assets/Data/Maps/History/wilderness-r9.json.meta": "6381ec25d66d1af4eb3098e4b06bbcd2e7cca2209805fd3927b8cb3f4d32c370",
+    "Assets/Data/Maps/World/town.dfmap": "38bf558c4f26021794f3493e8eed50e6264fd181295865a5528b1dcb2c089d66",
+    "Assets/Data/Maps/World/wilderness.dfmap": "ea5cc5bb316786b3ca2f2186d44a75cbf7c0dc34cdaf5ef32f124a12f1db350b",
+    "Assets/Data/Preset/Content/正式内容目录.asset": "54846650f421e7a422117327e8bbc3547c57b76b36ca1dfd5d84254b444bceec",
+    "Assets/Localization/Tables/ui Shared Data.asset": "40d5014b5b50c4f70f82db5ee20f411e624805f78508cce5cecf142b6f00afa5",
+    "Assets/Localization/Tables/ui_en.asset": "dde489495afda0641f62a7e7b821813022e8bef6558bf696ac57fa729e192d01",
+    "Assets/Localization/Tables/ui_zh-Hans.asset": "be688f05fc1dc6da576639e465eab67a7d5fe4f005a4e92fb5a258f83a738a07",
+    "Assets/Scripts/Editor/Maps/MapDocumentImporter.cs": "9ee0798cfe08e81e6eb2aabecd92f8c128edd8843ad7085e99dcc202035a9642",
+    "Assets/Scripts/Runtime/Data/Maps/MapDefinition.cs": "e73de4b9e56f830913de7efc762b90ef14ee14fd995604f7fb1a1c3e0b0de010",
+    "Assets/Scripts/Runtime/Gameplay/Spawning/MonsterSpawner.cs": "b94aa9e56e53a2e9b580923b024d070f9298bb5096997854b6adc5758353b1f6",
+    "Assets/Scripts/Runtime/Infrastructure/Persistence/SaveRestorePreparer.cs": "b45f7635a3015ee7bd3ffe8eb3063aed7bcf44a0c75afa261bf32d5d861bf073",
+    "Assets/Scripts/Runtime/Infrastructure/UI/ApplicationShellController.cs": "bd206c038d36723cbf77ed567c6733e7273bfe2d56e0106d80cf3a26cbaf2bdf",
+    "Assets/Scripts/Runtime/Maps/CompactMapProjection.cs": "6f3467aa6a9e70421be982ae55f1832e01a7a31f0ae6f952c69de3c1ee46e16d",
+    "Assets/Scripts/Runtime/Maps/CompactMapProjection.cs.meta": "6f6f3d37c1d80e100b2431e9126b2b288079cd5a0e85bd78e6a86c23b9827230",
+    "Assets/Scripts/Runtime/Maps/WorldMapCatalog.Compatibility.cs": "23cdc9f548557235ed9202e70c6da3e9a44f6705910239a70e35366377b224c6",
+    "Assets/Scripts/Runtime/Maps/WorldMapCatalog.Compatibility.cs.meta": "3b5f5b07cff8de0847b416889ce2c7b3adfdd23611bbadb6d7db353dc490a374",
+    "Assets/Scripts/Runtime/Maps/WorldMapCatalog.cs": "053b289ec8d8880b31ba567e7a3453d3b2fea522c4014e143009d639a07083d1",
+    "Assets/Scripts/Tests/EditMode/MapEditTests.cs": "61e06be7d17e0e6b3d98e095977c90dfbbdc5f09deeaf66304a9483882a21547",
+    "Assets/Scripts/Tests/EditMode/SaveRestorePreparerTests.cs": "28c4be8fcb436934ef46de346c921adcef5ee291c033d522381255a0aaafd85e",
+    "Assets/Scripts/Tests/EditMode/WorldMapStateTests.Compatibility.cs": "8ad9a7f2972c04ab309192d845900b8117826a13704c63786f6818949377e30d",
+    "Assets/Scripts/Tests/EditMode/WorldMapStateTests.Compatibility.cs.meta": "827972ecdb79faf5cdd39bbd6f80daa7013355966b53b1675c2233ef7b0c60c8",
+    "Assets/Scripts/Tests/EditMode/WorldMapStateTests.cs": "5f6cf4f61fc0bba355709bf859463b521c1e0579b42ea184bd276b4e61d9d4fa",
+    "Assets/Scripts/Tests/Fixtures/Migration/manifest.json": "caf48b1ba24a1899d2c70bcbb7a7b5c62f8629885c697fe223b65e0b799dcb2c",
+    "Assets/Scripts/Tests/Fixtures/Migration/save-core14-town.json": "8474026ff4473a7f69cf10165c6fa3f2d6dc433ea896ea0151e60c3104faf1a2",
+    "Assets/Scripts/Tests/Fixtures/Migration/save-core14-town.json.meta": "56796cc6edf5751957d1f993fe64c04f1a3fb5d8877451d0bdcd27e32687e29a",
+    "Assets/Scripts/Tests/Fixtures/Migration/save-core14-wilderness.json": "0c7352653c606d078106ff4e737ebabbefa51ca3c5cd11411ca6c0bc8589ae3e",
+    "Assets/Scripts/Tests/Fixtures/Migration/save-core14-wilderness.json.meta": "6a592eb763c4ca3c96618ca70a2faaf1e161ff02e0e8656867964ac18c71229f",
+    "Assets/Scripts/Tests/PlayMode/Phase1UxPlayModeTests.HudSkills.cs": "5623aa7b37bfb835de08a2d09c768f696aa5a410f6a0d54c4860a5617228afa7",
+    "Assets/Scripts/Tests/PlayMode/WorldMapPlayModeTests.cs": "196d9f236866ad108b6fbf92c4fce6b74505476126a6fafc8a4309f3326517e1",
+    "ProjectSettings/ProjectSettings.asset": "06b53e49b036ce85c7852291d446421e9796ece96720dfac27828b3eaec857ba"
+  }
+}

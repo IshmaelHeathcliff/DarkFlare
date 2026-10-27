@@ -7,7 +7,7 @@ using UnityEditor;
 
 namespace DarkFlare.Tests
 {
-    public sealed class WorldMapStateTests
+    public sealed partial class WorldMapStateTests
     {
         [Test]
         public void KnownWildernessRevisions_UpgradeOnlyHistoricalLayouts()
@@ -16,8 +16,10 @@ namespace DarkFlare.Tests
                 "Assets/Data/Preset/Content/正式内容目录.asset")).Catalog;
             WorldMapCatalog maps = WorldMapCatalog.FromContent(catalog);
             var run = new RunSaveData { ActiveMapId = "map:wilderness", MapRevision = 1,
+                Spawner = new MonsterSpawnerStateDto { SpawnContentId = "spawn:main", Mode = FiniteSpawnMode.LegacyPreserved },
                 Boss = new BossEncounterStateDto { Status = BossEncounterStatus.LegacyAbsent } };
             run.FrozenMaps.Add(new MapStateDto { MapId = "map:wilderness", Revision = 1,
+                Spawner = new MonsterSpawnerStateDto { SpawnContentId = "spawn:main", Mode = FiniteSpawnMode.LegacyPreserved },
                 Boss = new BossEncounterStateDto { Status = BossEncounterStatus.LegacyAbsent } });
             maps.UpgradeKnownWildernessRevision(run);
             Assert.AreEqual(maps.Get("map:wilderness").Revision, run.MapRevision);
@@ -33,7 +35,7 @@ namespace DarkFlare.Tests
             Assert.AreEqual(maps.Get("map:wilderness").Revision, run.MapRevision);
             Assert.AreEqual(run.MapRevision, run.FrozenMaps[0].Revision);
             run.MapRevision = 2;
-            maps.UpgradeKnownWildernessRevision(run);
+            Assert.Throws<InvalidOperationException>(() => maps.UpgradeKnownWildernessRevision(run));
             Assert.AreEqual(2, run.MapRevision, "未知修订不能被宽松迁移");
         }
 
@@ -48,21 +50,22 @@ namespace DarkFlare.Tests
             MonsterSpawnerStateDto second = FiniteSpawnPlan.Create(map, maps.Definitions, 49123);
             Assert.AreEqual(JObject.FromObject(first).ToString(), JObject.FromObject(second).ToString());
             Assert.AreEqual(FiniteSpawnMode.Finite, first.Mode);
-            Assert.AreEqual(100, first.Slots.Count);
-            Assert.AreEqual(20, first.Slots.Count(slot => first.Batches.Single(batch => batch.BatchId == slot.BatchId).IsActivated));
+            Assert.AreEqual(300, first.Slots.Count);
+            Assert.AreEqual(50, first.Slots.Count(slot => first.Batches.Single(batch => batch.BatchId == slot.BatchId).IsActivated));
             MapSpawnBatchRecord[] triggers = map.CreateEditableCopy().SpawnBatches
                 .Where(batch => batch.Activation == MapSpawnActivation.PlayerRange).ToArray();
-            Assert.GreaterOrEqual(triggers.Length, 10);
-            Assert.AreEqual(80, triggers.Sum(batch => batch.Count));
-            Assert.Greater(triggers.Max(batch => batch.TriggerCenter.X) - triggers.Min(batch => batch.TriggerCenter.X), 80);
-            Assert.Greater(triggers.Max(batch => batch.TriggerCenter.Y) - triggers.Min(batch => batch.TriggerCenter.Y), 80);
+            Assert.AreEqual(10, triggers.Length);
+            Assert.IsTrue(triggers.All(batch => batch.Count == 25));
+            Assert.AreEqual(250, triggers.Sum(batch => batch.Count));
+            Assert.Greater(triggers.Max(batch => batch.TriggerCenter.X) - triggers.Min(batch => batch.TriggerCenter.X), map.Width / 2);
+            Assert.Greater(triggers.Max(batch => batch.TriggerCenter.Y) - triggers.Min(batch => batch.TriggerCenter.Y), map.Height / 2);
             for (int i = 0; i < triggers.Length; i++)
             {
                 for (int j = i + 1; j < triggers.Length; j++)
                 {
                     double dx = triggers[i].TriggerCenter.X - triggers[j].TriggerCenter.X;
                     double dy = triggers[i].TriggerCenter.Y - triggers[j].TriggerCenter.Y;
-                    Assert.Greater(Math.Sqrt(dx * dx + dy * dy), 16, "触发点不应堆叠");
+                    Assert.Greater(Math.Sqrt(dx * dx + dy * dy), Math.Max(triggers[i].TriggerRadius, triggers[j].TriggerRadius), "触发点不应堆叠");
                 }
             }
             Assert.IsTrue(first.Slots.All(slot => slot.Status == SpawnSlotStatus.Pending && string.IsNullOrEmpty(slot.InstanceId)));
@@ -77,7 +80,7 @@ namespace DarkFlare.Tests
             ContentCatalog catalog = ContentCatalog.Build(AssetDatabase.LoadAssetAtPath<ContentCatalogDefinition>(
                 "Assets/Data/Preset/Content/正式内容目录.asset")).Catalog;
             WorldMapCatalog maps = WorldMapCatalog.FromContent(catalog);
-            MapDocument source = maps.Get("map:wilderness").CreateEditableCopy();
+            MapDocument source = MapDocumentJson.Read(AssetDatabase.LoadAssetAtPath<UnityEngine.TextAsset>("Assets/Data/Maps/History/wilderness-r9.json").text);
             source.Revision = 7;
             source.Regions = source.Regions.Where(region => region.RegionId is "entry_safe" or "wild_spawn").ToArray();
             source.SpawnBatches = new[]
@@ -88,13 +91,15 @@ namespace DarkFlare.Tests
                     Activation = MapSpawnActivation.OnEnter }
             };
             MonsterSpawnerStateDto old = FiniteSpawnPlan.Create(MapDocumentCompiler.Compile(source, maps.Definitions), maps.Definitions, 49123);
+            old.SpawnContentId = "spawn:main";
             old.Batches.Single(batch => batch.BatchId == "east_patrol").IsActivated = true;
             old.Slots[0].Status = SpawnSlotStatus.Defeated;
             old.Slots[1].Status = SpawnSlotStatus.Alive;
             old.Slots[1].InstanceId = "preserved-monster";
             Dictionary<string, string> oldSlots = old.Slots.ToDictionary(slot => slot.SlotId,
                 slot => JObject.FromObject(slot).ToString(), StringComparer.Ordinal);
-            var run = new RunSaveData { ActiveMapId = "map:wilderness", MapRevision = 7, Spawner = old };
+            var run = new RunSaveData { ActiveMapId = "map:wilderness", MapRevision = 7, Spawner = old,
+                Boss = new BossEncounterStateDto { Status = BossEncounterStatus.LegacyAbsent } };
             maps.UpgradeKnownWildernessRevision(run);
             Assert.AreEqual(100, run.Spawner.Slots.Count);
             Assert.AreEqual(20, run.Spawner.Slots.Count(slot => slot.BatchId == "initial"));

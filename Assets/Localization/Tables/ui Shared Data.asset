@@ -2595,6 +2595,10 @@ MonoBehaviour:
     m_Key: hud.state.waiting
     m_Metadata:
       m_Items: []
+  - m_Id: 24952901146238976
+    m_Key: world.reset.confirm_plan
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

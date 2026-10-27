@@ -42,3 +42,7 @@ Unity 的 [USS 属性语法](https://docs.unity3d.com/cn/6000.0/Manual/UIE-USS-S
 2026-09-12 补充提交 23 个特效 Sprite 的导入器新增字段（`spriteTessellationMethod = 0`、`spriteGeometrySubdivision = -1`），其余导入配置未变；保留 URP 自动更新的 `m_Prefilter*` 派生数据，包内 `UniversalRenderPipelineAsset.UpdateShaderKeywordPrefiltering` 负责写入这些字段，正式渲染功能配置未变。本次仅复核差异，未重复运行功能套件或构建 Player。
 
 未纳入此次提交：中文字体的动态图集 / 字形缓存与 Inspector 字段、拉丁字体的行尾空白、Odin NoEditor 两个 DLL 的平台配置变化（Win64 `enabled: 1 → 0`）、Project Auditor 的 Standalone 参数组删除。后两项涉及配置语义，不能仅凭序列化格式升级认定安全；这些本地差异保持原样。
+
+## 6000.6.7f1 图形会话恢复
+
+2026-10-27遇到原生`ReleaseDynamicVBOFrame: Expected frame number to increase`持续刷屏。单独关闭后台刷新或切换Play无效；重新打开同一项目、保持Direct3D12后恢复，空闲 / 主界面启动 / 退出复测Error0、Warning0。Pipeline强制后台刷新在自动化结束后保持关闭。具体证据、边界与字体重新序列化说明见[恢复记录](../plan/archive/0.7.2/acceptance/editor-console-recovery.md)，不将此会话恢复描述为游戏代码修复或已确定的引擎根因。

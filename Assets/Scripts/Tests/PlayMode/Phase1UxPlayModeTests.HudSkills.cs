@@ -36,6 +36,11 @@ namespace DarkFlare.Tests
                 SetGameViewResolution(new Vector2Int(1920, 1080));
                 yield return WaitForResolution(new Vector2Int(1920, 1080), 5);
                 yield return null; yield return null;
+                float inputDeadline = Time.realtimeSinceStartup + 5;
+                while (!ApplicationHost.Current.Input.IsGameplayEnabled && Time.realtimeSinceStartup < inputDeadline) { yield return null; }
+                Assert.IsTrue(ApplicationHost.Current.Input.IsGameplayEnabled);
+                _inputFixture.Set(mouse.position, new Vector2(10, 10));
+                yield return null; yield return null;
                 yield return Hover("hud-flame-0");
                 Assert.That(details.resolvedStyle.display, Is.EqualTo(DisplayStyle.Flex));
                 Assert.That(root.Q<Label>("hud-skill-name").text, Is.EqualTo(ApplicationHost.Current.Localization.GetString("ui", "hud.skill.empty")));
@@ -118,6 +123,8 @@ namespace DarkFlare.Tests
             {
                 _inputFixture.Set(mouse.position, PanelToScreen(root, root.Q(name).worldBound.center));
                 yield return null; yield return null;
+                float deadline = Time.realtimeSinceStartup + 2;
+                while (details.resolvedStyle.display != DisplayStyle.Flex && Time.realtimeSinceStartup < deadline) { yield return null; }
             }
         }
 

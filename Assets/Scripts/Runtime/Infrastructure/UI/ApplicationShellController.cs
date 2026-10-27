@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using UnityEngine.UIElements;
 
 namespace DarkFlare
@@ -250,10 +251,15 @@ namespace DarkFlare
         {
             if (!_bound || _host.SceneFlow.IsBusy) { return; }
             _retryRequest = null;
+            int count = _host.ContentCatalog.GetAll<MapDefinition>()
+                .Where(map => "map:" + map.Id == mapId)
+                .Select(map => MapDocumentJson.Read(map.CanonicalJson).SpawnBatches.Sum(batch => batch.Count)).Single();
+            LocalizedMessage resetMessage = count > 0 ? LocalizedMessage.Ui("world.reset.confirm_plan", count)
+                : LocalizedMessage.Ui("world.reset.confirm_message");
             _modalPrimaryAction = () => RunRequest(SceneFlowRequest.ChangeMap(mapId, entryId));
             _modalSecondaryAction = () => ShowConfirmation(
                 LocalizedMessage.Ui("world.reset.confirm_title"),
-                LocalizedMessage.Ui("world.reset.confirm_message"),
+                resetMessage,
                 () => RunRequest(SceneFlowRequest.ResetAndChangeMap(mapId, entryId)));
             _focusBeforeModal = _root?.panel?.focusController?.focusedElement as VisualElement;
             _modalTitle.text = Resolve(LocalizedMessage.Ui("world.reset.choice_title"), "Map Portal");

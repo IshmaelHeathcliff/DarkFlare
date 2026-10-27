@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="11" result="Passed" total="11" passed="11" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-27 11:15:44Z" end-time="2026-10-27 11:16:02Z" duration="18.1077022">
+  <test-suite type="TestSuite" id="1000" name="DarkFlare" fullname="DarkFlare" runstate="Runnable" testcasecount="986" result="Passed" start-time="2026-10-27 11:15:44Z" end-time="2026-10-27 11:16:02Z" duration="18.107702" total="11" passed="11" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="EditMode" />
+    </properties>
+    <test-suite type="Assembly" id="2127" name="DarkFlare.Tests.EditMode.dll" fullname="C:/Users/darkf/Home/Projects/DarkFlare/Library/ScriptAssemblies/DarkFlare.Tests.EditMode.dll" runstate="Runnable" testcasecount="985" result="Passed" start-time="2026-10-27 11:15:44Z" end-time="2026-10-27 11:16:02Z" duration="18.084524" total="11" passed="11" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="3876" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <test-suite type="TestSuite" id="2128" name="DarkFlare" fullname="DarkFlare" runstate="Runnable" testcasecount="892" result="Passed" start-time="2026-10-27 11:15:44Z" end-time="2026-10-27 11:16:02Z" duration="18.083689" total="11" passed="11" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="2129" name="Tests" fullname="DarkFlare.Tests" runstate="Runnable" testcasecount="892" result="Passed" start-time="2026-10-27 11:15:44Z" end-time="2026-10-27 11:16:02Z" duration="18.083265" total="11" passed="11" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestFixture" id="2115" name="WorldMapStateTests" fullname="DarkFlare.Tests.WorldMapStateTests" classname="DarkFlare.Tests.WorldMapStateTests" runstate="Runnable" testcasecount="11" result="Passed" start-time="2026-10-27 11:15:44Z" end-time="2026-10-27 11:16:02Z" duration="18.082007" total="11" passed="11" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="2122" name="FrozenClock_PreservesRemainingTimeAndTickPhaseWithoutMutatingSource" fullname="DarkFlare.Tests.WorldMapStateTests.FrozenClock_PreservesRemainingTimeAndTickPhaseWithoutMutatingSource" methodname="FrozenClock_PreservesRemainingTimeAndTickPhaseWithoutMutatingSource" classname="DarkFlare.Tests.WorldMapStateTests" runstate="Runnable" seed="727432943" result="Passed" start-time="2026-10-27 11:15:44Z" end-time="2026-10-27 11:15:44Z" duration="0.044028" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="2125" name="FrozenMaps_ValidateGlobalIdentityAndRoundTripThousandMonsters" fullname="DarkFlare.Tests.WorldMapStateTests.FrozenMaps_ValidateGlobalIdentityAndRoundTripThousandMonsters" methodname="FrozenMaps_ValidateGlobalIdentityAndRoundTripThousandMonsters" classname="DarkFlare.Tests.WorldMapStateTests" runstate="Runnable" seed="2106670743" result="Passed" start-time="2026-10-27 11:15:44Z" end-time="2026-10-27 11:15:58Z" duration="13.956792" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[1000 monsters + 1000 status layers + drop + stock: 4224622 bytes
+]]></output>
+            </test-case>
+            <test-case id="2116" name="KnownWildernessRevisions_UpgradeOnlyHistoricalLayouts" fullname="DarkFlare.Tests.WorldMapStateTests.KnownWildernessRevisions_UpgradeOnlyHistoricalLayouts" methodname="KnownWildernessRevisions_UpgradeOnlyHistoricalLayouts" classname="DarkFlare.Tests.WorldMapStateTests" runstate="Runnable" seed="687014777" result="Passed" start-time="2026-10-27 11:15:58Z" end-time="2026-10-27 11:15:58Z" duration="0.654475" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="2124" name="MapInstanceEpoch_MigratesOldMapsAndDerivesStableNewPlans" fullname="DarkFlare.Tests.WorldMapStateTests.MapInstanceEpoch_MigratesOldMapsAndDerivesStableNewPlans" methodname="MapInstanceEpoch_MigratesOldMapsAndDerivesStableNewPlans" classname="DarkFlare.Tests.WorldMapStateTests" runstate="Runnable" seed="1469878299" result="Passed" start-time="2026-10-27 11:15:58Z" end-time="2026-10-27 11:15:58Z" duration="0.076711" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[[gameplay.combat.message] [GameplayRandomSystem] 根种子: 49123（固定）
+]]></output>
+            </test-case>
+            <test-case id="2123" name="MapRandom_RestoresMapChannelsWithoutRewindingPlayerOrCrafting" fullname="DarkFlare.Tests.WorldMapStateTests.MapRandom_RestoresMapChannelsWithoutRewindingPlayerOrCrafting" methodname="MapRandom_RestoresMapChannelsWithoutRewindingPlayerOrCrafting" classname="DarkFlare.Tests.WorldMapStateTests" runstate="Runnable" seed="616205048" result="Passed" start-time="2026-10-27 11:15:58Z" end-time="2026-10-27 11:15:58Z" duration="0.001444" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[[gameplay.combat.message] [GameplayRandomSystem] 根种子: 876（固定）
+]]></output>
+            </test-case>
+            <test-case id="2120" name="RestorePreflight_RejectsMissingFinitePlanOnVisitedWilderness" fullname="DarkFlare.Tests.WorldMapStateTests.RestorePreflight_RejectsMissingFinitePlanOnVisitedWilderness" methodname="RestorePreflight_RejectsMissingFinitePlanOnVisitedWilderness" classname="DarkFlare.Tests.WorldMapStateTests" runstate="Runnable" seed="1306433110" result="Passed" start-time="2026-10-27 11:15:58Z" end-time="2026-10-27 11:15:59Z" duration="0.814563" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="2126" name="RestorePreflight_RejectsUnknownMapAndBlockedPositionWithoutChangingInput" fullname="DarkFlare.Tests.WorldMapStateTests.RestorePreflight_RejectsUnknownMapAndBlockedPositionWithoutChangingInput" methodname="RestorePreflight_RejectsUnknownMapAndBlockedPositionWithoutChangingInput" classname="DarkFlare.Tests.WorldMapStateTests" runstate="Runnable" seed="984425618" result="Passed" start-time="2026-10-27 11:15:59Z" end-time="2026-10-27 11:16:00Z" duration="0.960116" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="2118" name="RevisionSevenFinitePlan_ExpandsWithoutChangingExistingSlots" fullname="DarkFlare.Tests.WorldMapStateTests.RevisionSevenFinitePlan_ExpandsWithoutChangingExistingSlots" methodname="RevisionSevenFinitePlan_ExpandsWithoutChangingExistingSlots" classname="DarkFlare.Tests.WorldMapStateTests" runstate="Runnable" seed="1754466010" result="Passed" start-time="2026-10-27 11:16:00Z" end-time="2026-10-27 11:16:01Z" duration="0.517051" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="2121" name="SchemaSevenMigration_PreservesVisitedMonstersAndStopsRefill" fullname="DarkFlare.Tests.WorldMapStateTests.SchemaSevenMigration_PreservesVisitedMonstersAndStopsRefill" methodname="SchemaSevenMigration_PreservesVisitedMonstersAndStopsRefill" classname="DarkFlare.Tests.WorldMapStateTests" runstate="Runnable" seed="2146895481" result="Passed" start-time="2026-10-27 11:16:01Z" end-time="2026-10-27 11:16:01Z" duration="0.001901" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="2119" name="WildernessBatchCompiler_RejectsInvalidQuotaRegionAndTrigger" fullname="DarkFlare.Tests.WorldMapStateTests.WildernessBatchCompiler_RejectsInvalidQuotaRegionAndTrigger" methodname="WildernessBatchCompiler_RejectsInvalidQuotaRegionAndTrigger" classname="DarkFlare.Tests.WorldMapStateTests" runstate="Runnable" seed="360216883" result="Passed" start-time="2026-10-27 11:16:01Z" end-time="2026-10-27 11:16:01Z" duration="0.615448" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="2117" name="WildernessFinitePlan_HasStableReservedSlotsAndSeparateBoss" fullname="DarkFlare.Tests.WorldMapStateTests.WildernessFinitePlan_HasStableReservedSlotsAndSeparateBoss" methodname="WildernessFinitePlan_HasStableReservedSlotsAndSeparateBoss" classname="DarkFlare.Tests.WorldMapStateTests" runstate="Runnable" seed="1122732430" result="Passed" start-time="2026-10-27 11:16:01Z" end-time="2026-10-27 11:16:02Z" duration="0.421456" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[Saving results to: C:\Users\darkf\Home\Projects\DarkFlare\Temp\Agent\compact-maps\compat-before.xml
+]]></output>
+            </test-case>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

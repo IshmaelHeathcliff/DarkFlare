@@ -1,21 +1,25 @@
 # 0.7.2-alpha 体验优化计划
 
-状态：2026-10-27，阶段一至四已完成，当前运行 `0.7.2-alpha.4` / core v14；Save / Settings Schema 12 / 1、地图 V4保持。EditMode 985/985、PlayMode 119/119，均无失败 / 跳过，见[阶段四验收](archive/0.7.2/acceptance/compact-hud/README.md)。阶段四尚未提交，阶段五待实施，本总计划继续活动。
+状态：2026-10-27，实施与验收完成，五阶段全部收尾。当前`0.7.2-alpha.5` / core15 / Save12 / Settings1 / 地图V4，城镇r3 / 野外r11；本轮尚未提交。EditMode993/993、PlayMode119/119，无失败 / 跳过。见[地图综合验收](../acceptance/compact-maps/README.md)。
+
+以下保留实施前目标、基线与验收合同；实际实现和未执行项以上述验收为准。原有字体修改独立保留。
 
 ## 目标与资料入口
 
 在已有玩法闭环上，减少界面遮挡和重复操作，提高持续施法与野外战斗的流畅度。本轮覆盖用户提出的七项改进，不扩展新的成长系统、装备规则或无限刷怪模式。
 
-- [阶段一实施计划](archive/0.7.2/plans/phase-1-execution.md)：先修普通 Play 存档路径，再交付持续施法、三投射物与穿透。
-- [存档路径隔离前置计划](archive/0.7.2/plans/save-path-isolation-plan.md)：处理测试初始化影响普通试玩的问题，保留正式 / 临时文件与自动化测试隔离。
-- [阶段二实施计划](archive/0.7.2/plans/phase-2-execution.md)：已完成能量瓶装备入口迁移、中心充能保留和指定格卸瓶，见[验收](archive/0.7.2/acceptance/energy-bottle-equipment/README.md)。
-- [阶段三实施计划](archive/0.7.2/plans/phase-3-execution.md)：已完成天赋精简、画布扩大、统一显示旋转 / 属性映射、键鼠与手柄闭环及保存兼容，见[验收与画面](archive/0.7.2/acceptance/board-simplification/README.md)。
-- [阶段四实施计划](archive/0.7.2/plans/phase-4-execution.md)：紧凑 HUD、四入口图标、真实状态 / 绑定、悬停与指针屏蔽、资源合同及验收；已完成并归档。
-- [界面优化分计划](alpha-0.7.2/ui-optimization.md)：HUD、天赋棋盘、能量瓶装备入口。
-- [战斗与地图分计划](alpha-0.7.2/combat-map-optimization.md)：按住连放、三投射物与穿透、地图缩小、300 名额。
-- [0.7 活动总计划](alpha-0.7-plan.md)、[版本规则](../version-management.md)、[测试维护规范](../testing/test-maintenance.md)。
+- [阶段一实施计划](phase-1-execution.md)：先修普通 Play 存档路径，再交付持续施法、三投射物与穿透。
+- [存档路径隔离前置计划](save-path-isolation-plan.md)：处理测试初始化影响普通试玩的问题，保留正式 / 临时文件与自动化测试隔离。
+- [阶段二实施计划](phase-2-execution.md)：已完成能量瓶装备入口迁移、中心充能保留和指定格卸瓶，见[验收](../acceptance/energy-bottle-equipment/README.md)。
+- [阶段三实施计划](phase-3-execution.md)：已完成天赋精简、画布扩大、统一显示旋转 / 属性映射、键鼠与手柄闭环及保存兼容，见[验收与画面](../acceptance/board-simplification/README.md)。
+- [阶段四实施计划](phase-4-execution.md)：紧凑 HUD、四入口图标、真实状态 / 绑定、悬停与指针屏蔽、资源合同及验收；已完成并归档。
+- [阶段五实施计划](phase-5-execution.md)：双地图候选、50+10×25、新旧实例区分、迁移前置及联合验收，已完成。
+- [地图旧档兼容计划](map-save-compatibility.md)：冻结旧布局、合法落点、旧100计划保留及历史链接续；正式改图前必须通过。
+- [界面优化分计划](ui-optimization.md)：HUD、天赋棋盘、能量瓶装备入口。
+- [战斗与地图分计划](combat-map-optimization.md)：按住连放、三投射物与穿透、地图缩小、300 名额。
+- [0.7 活动总计划](../../../alpha-0.7-plan.md)、[版本规则](../../../../version-management.md)、[测试维护规范](../../../../testing/test-maintenance.md)。
 
-仅阅读 `Docs/docs/` 开发文档和相关实现；未读取 `Docs/design/`。阶段一已交付存档路径修复、持续施法与大剑增强，详见[验收记录](archive/0.7.2/acceptance/continuous-casting/README.md)；阶段二至四已交付瓶子入口、天赋界面与紧凑HUD；地图与300名额留在阶段五。
+仅阅读 `Docs/docs/` 开发文档和相关实现；未读取 `Docs/design/`。阶段一已交付存档路径修复、持续施法与大剑增强，详见[验收记录](../acceptance/continuous-casting/README.md)；阶段二至四已交付瓶子入口、天赋界面与紧凑HUD；阶段五现已完成地图与300名额及联合验收。
 
 ## 规划时核对的基线（实现前）
 
@@ -31,7 +35,7 @@
 | 施法 | 普通技能与六火焰技能均单次按下请求；投射物命中首个合法敌对目标后结束 |
 | 地图与怪物 | 城镇 64×64 / r1，野外 128×128 / r9；普通怪物 `20 + 10×8 = 100`，Boss 独立 |
 
-资料依据为[HUD](../hud-system.md)、[玩家棋盘](../skill-board/player-board.md)、[手动技能](../skill-board/manual-skills.md)、[能量瓶](../skill-board/energy-bottles.md)、[有限刷怪](../behavior/finite-spawning.md)、[地图生命周期](../maps/world-map-lifecycle.md)，并核对对应 UXML / USS、投影、输入、投射物及正式 `.dfmap`。
+资料依据为[HUD](../../../../hud-system.md)、[玩家棋盘](../../../../skill-board/player-board.md)、[手动技能](../../../../skill-board/manual-skills.md)、[能量瓶](../../../../skill-board/energy-bottles.md)、[有限刷怪](../../../../behavior/finite-spawning.md)、[地图生命周期](../../../../maps/world-map-lifecycle.md)，并核对对应 UXML / USS、投影、输入、投射物及正式 `.dfmap`。
 
 阶段一准备基线为 `main` / `da2474c`。总计划提交后发现普通 Play 会执行测试路径初始化，将设置 / 存档指向每轮随机目录；新增为阶段一前置缺陷修复，不改后续五阶段顺序，不把已有文件自动迁移或删除。
 
@@ -65,11 +69,11 @@
 
 | 顺序 / 目标版本 | 交付范围 | 进入下一阶段的条件 | 状态 |
 | --- | --- | --- | --- |
-| 1 / `0.7.2-alpha.1` | 普通 Play 存档路径前置修复；按住连放、默认三投射物、单枚一次穿透 | 普通启动持久化与测试隔离先通过，再验证输入中断、多枚生成回滚和一次耗蓝 / 冷却 | [已完成并归档](archive/0.7.2/plans/phase-1-execution.md) |
-| 2 / `0.7.2-alpha.2` | 能量瓶装备入口迁到背包装备区 | 鼠标与手柄换瓶、中心充能、保存恢复和满背包回滚通过 | [已完成并归档](archive/0.7.2/plans/phase-2-execution.md) |
-| 3 / `0.7.2-alpha.3` | 天赋精简、画布扩大、属性方位调整 | 安装 / 取回 / 连接 / 点亮 / 分配闭环和旋转后命中导航通过 | [已完成并归档](archive/0.7.2/plans/phase-3-execution.md) |
-| 4 / `0.7.2-alpha.4` | HUD 布局、紧凑技能槽及入口图标 | 三语言、真实绑定、技能状态、窗口入口、UI 点击防连放通过 | [已完成并归档](archive/0.7.2/plans/phase-4-execution.md) |
-| 5 / `0.7.2-alpha.5` | 缩小双地图、重排刷怪点、300 名额及综合收尾 | 地图兼容方案先落实，再通过真实路线、刷怪、切图、存档和组合战斗验证 | 待实施 |
+| 1 / `0.7.2-alpha.1` | 普通 Play 存档路径前置修复；按住连放、默认三投射物、单枚一次穿透 | 普通启动持久化与测试隔离先通过，再验证输入中断、多枚生成回滚和一次耗蓝 / 冷却 | [已完成并归档](phase-1-execution.md) |
+| 2 / `0.7.2-alpha.2` | 能量瓶装备入口迁到背包装备区 | 鼠标与手柄换瓶、中心充能、保存恢复和满背包回滚通过 | [已完成并归档](phase-2-execution.md) |
+| 3 / `0.7.2-alpha.3` | 天赋精简、画布扩大、属性方位调整 | 安装 / 取回 / 连接 / 点亮 / 分配闭环和旋转后命中导航通过 | [已完成并归档](phase-3-execution.md) |
+| 4 / `0.7.2-alpha.4` | HUD 布局、紧凑技能槽及入口图标 | 三语言、真实绑定、技能状态、窗口入口、UI 点击防连放通过 | [已完成并归档](phase-4-execution.md) |
+| 5 / `0.7.2-alpha.5` | 缩小双地图、重排刷怪点、300 名额及综合收尾 | 地图兼容方案先落实，再通过真实路线、刷怪、切图、存档和组合战斗验证 | [已完成并归档](phase-5-execution.md) |
 
 阶段 1 先消除试玩保存路径缺陷，再建立新的施法行为；阶段 2 先移除天赋页的装备职责，阶段 3 再精简棋盘，阶段 4 使用稳定后的信息重做 HUD；阶段 5 在新地图上联合验证持续施法与更高战斗密度。阶段号是目标，不能把规划或未通过的实现登记为完成。
 
@@ -78,7 +82,7 @@
 - 沿用 QFramework 的 Query / Command / Event 分工；Controller 不发送领域 Event，不直接改领域状态。新的循环任务使用可取消 UniTask，归属现有 Session / Scene 生命周期。
 - 输入仍由 Application 服务统一管理；资源沿用 Addressables；动效使用 PrimeTween；新增界面文本使用 Localization。
 - 运行时 UI 延续 UI Toolkit；实际 UI 创建、布局与验证使用 Unity MCP。地图修改优先调用既有 `MapEditApi` 事务，不直接修改 Editor 已打开的场景文件。
-- 新图标遵守[美术资产规范](../visual-asset-generation.md)：生成前确定家族尺寸，一张 PNG 一个生产 Sprite，自动检查与导入。复用可用资产，确需生成时使用 ImageGen 及相应资产工作流。
+- 新图标遵守[美术资产规范](../../../../visual-asset-generation.md)：生成前确定家族尺寸，一张 PNG 一个生产 Sprite，自动检查与导入。复用可用资产，确需生成时使用 ImageGen 及相应资产工作流。
 - 地图缩小必须先定义并验证旧档兼容；不能只改 Revision、静默删除越界对象或借升级清空地图。具体前置见战斗与地图分计划。
 - 版本域按实际变化分别评估：纯界面迁移和显示旋转不改 Save Schema；技能配置语义 / 地图内容变化评估 core 与地图 Revision；DTO 或格式变化才改对应 Schema / FormatVersion。
 

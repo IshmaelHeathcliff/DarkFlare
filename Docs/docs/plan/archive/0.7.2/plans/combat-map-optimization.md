@@ -1,8 +1,8 @@
 # 0.7.2-alpha 战斗与地图优化分计划
 
-状态：2026-10-26，阶段一持续施法、三投射物与穿透已完成；阶段五地图与 300 名额待实施。版本与总范围见[总计划](../alpha-0.7.2-optimization-plan.md)。
+状态：2026-10-27，实施与验收完成，五阶段全部收尾。当前`0.7.2-alpha.5` / core15 / Save12 / Settings1 / 地图V4，城镇r3 / 野外r11；本轮尚未提交。EditMode993/993、PlayMode119/119，无失败 / 跳过。见[地图综合验收](../acceptance/compact-maps/README.md)。
 
-阶段一已按[实施计划](../archive/0.7.2/plans/phase-1-execution.md)完成[普通 Play 存档路径修复](../archive/0.7.2/plans/save-path-isolation-plan.md)、多枚生成、穿透与持续施法，见[验收](../archive/0.7.2/acceptance/continuous-casting/README.md)。本文件继续维护阶段五范围；阶段一细节保留为已完成合同。
+以下保留实施前目标、基线与验收合同；实际实现和未执行项以上述验收为准。原有字体修改独立保留。
 
 ## 按住按键连续施法：阶段 1
 
@@ -24,7 +24,7 @@
 
 在 `ApplicationInputServiceTests`、`PlayerSkillsTests` 和现有输入 / 资源 PlayMode 用例中验证：短按一次、长按跨多个冷却、冷却中松开、无蓝后恢复、多键同时按住、重绑定、扳机释放、瞄准更新、来源变化以及上述全部中断边界。重点证明一份保持意图只产生合法次数，旧 Session 不能操作新角色。
 
-更新[手动技能](../../skill-board/manual-skills.md)、[输入](../../input-ui-system.md)与必要生命周期说明。
+更新[手动技能](../../../../skill-board/manual-skills.md)、[输入](../../../../input-ui-system.md)与必要生命周期说明。
 
 ## 默认技能三投射物与一次穿透：阶段 1
 
@@ -46,11 +46,13 @@
 
 长期用例补入 `PlayerSkillsTests` 与既有伤害、资源、随机和生命周期套件，覆盖三方向、两目标上限、同 Actor 去重、友方过滤、不同投射物独立、部分生成失败、一次扣蓝 / 冷却 / 通知、来源冻结。正式场景实测持续按住三投射物、怪群穿透和切图清理。
 
-更新[技能配置](../../config-reference/skills.md)、[手动技能](../../skill-board/manual-skills.md)及相关战斗 / 资源说明；内容语义变化评估 core 版本，纯配置扩展不自动提升 Save Schema。
+更新[技能配置](../../../../config-reference/skills.md)、[手动技能](../../../../skill-board/manual-skills.md)及相关战斗 / 资源说明；内容语义变化评估 core 版本，纯配置扩展不自动提升 Save Schema。
 
 ## 缩小城镇与野外：阶段 5
 
 ### 布局候选与路线
+
+实际执行顺序、完整候选导入、版本和验收门槛以[阶段五计划](phase-5-execution.md)为准。现有SetMapMetadata不裁剪旧数据，缩图不能只修改宽高。
 
 | 地图 | 当前 | 首轮候选 | 保留的功能 |
 | --- | --- | --- | --- |
@@ -70,7 +72,7 @@
 
 1. 修改源图前保存可复现的旧布局 / 语义基线，明确城镇 r1、野外 r9 及更早迁移链的接续方案；分别覆盖活动图和冻结图。
 2. 先完成兼容方案与夹具验证，再替换正式地图。优先明确迁移已知旧修订：确定角色、活怪、掉落、行为锚点、导航意图的坐标映射与合法落点政策，保留实例身份、已掷结果、资源、Boss 与击败进度。
-3. 普通 100 名额扩到 300 时，保持旧名额状态与种子；新名额使用稳定身份和确定性种子。已激活批次新增 Pending 的启动时机必须明确，避免继续游戏时悄悄补发大量怪物；`LegacyPreserved` 不凭空推算击杀或收益。
+3. 按用户已确认的新建 / 手动重置实例规则，当前r9旧实例保留100名额及全部状态和种子，不在继续时补200个Pending；新实例才建立300。通过完整批次、名额集合与原算法种子识别已登记旧 / 新计划，不仅凭数量放行；历史r7→r9先按既有链在冻结旧布局上接续。`LegacyPreserved`不凭空推算击杀或收益，见[兼容方案](map-save-compatibility.md)。
 4. 不把升级实现为自动重置，不截断掉落、不删除越界对象、不重复发收益；迁移无法满足合法位置和容量时，应完整拒绝并保留原档。若需要改为保留旧布局或由玩家明确重置，再单独确定该方案后实施，不能临时静默降级。
 5. 未知修订继续明确拒绝；不能只替换修订号绕过校验。地图 Revision 单独推进；仅在 DTO / 格式确有变化时升级对应 Schema / FormatVersion。
 
@@ -97,4 +99,4 @@
 - 旧档覆盖城镇 / 野外活动与冻结组合、已击败 / 存活 / Pending、Boss、掉落和已装备瓶；未知修订与失败恢复不修改原档。
 - 使用当前版本测量 50 入图、单 / 多批次触发、持续三投射物和尽量接近 300 存活单位的 Editor 场景，记录实际数量、帧时间 / 峰值 / 分配、加载和保存耗时；与同环境基线比较，调查持续超出约 16.7 ms 帧预算及新增尖峰的主要原因。不能把总名额当成同时存活数量，也不能用历史 Player 结果替代本次采集。
 
-复用 `WorldMapStateTests`、`MapEditTests`、`WorldMapPlayModeTests`、保存迁移和现有生命周期套件；保留真正历史存档夹具，清理一次性采集脚本。更新[有限刷怪](../../behavior/finite-spawning.md)、[地图生命周期](../../maps/world-map-lifecycle.md)、[手动重置](../../behavior/map-reset.md)、[导航](../../maps/navigation.md)与配置参考，证据统一随 0.7.2 归档。
+复用 `WorldMapStateTests`、`MapEditTests`、`WorldMapPlayModeTests`、保存迁移和现有生命周期套件；保留真正历史存档夹具，清理一次性采集脚本。更新[有限刷怪](../../../../behavior/finite-spawning.md)、[地图生命周期](../../../../maps/world-map-lifecycle.md)、[手动重置](../../../../behavior/map-reset.md)、[导航](../../../../maps/navigation.md)与配置参考，证据统一随 0.7.2 归档。

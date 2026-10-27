@@ -1,0 +1,23 @@
+{
+  "Version": "0.7.2-alpha.5",
+  "Unity": "6000.6.7f1",
+  "Core": 15,
+  "Playing": false,
+  "Compiling": false,
+  "CompilationFailed": false,
+  "Scenes": [
+    {
+      "Name": "Bootstrap",
+      "Dirty": false
+    }
+  ],
+  "ReloadSceneOnly": true,
+  "GameViewTarget": {
+    "Width": 640.0,
+    "Height": 480.0
+  },
+  "SavePathProvider": "PersistentSavePathProvider",
+  "SettingsPathProvider": "PersistentSettingsPathProvider",
+  "TestRunActive": false,
+  "AgentBridgePresent": false
+}

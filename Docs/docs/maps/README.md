@@ -1,6 +1,6 @@
 # 地图文档与导入
 
-地图运行时导航见[批量导航与怪物移动](./navigation.md)，切图与冻结见[双地图生命周期](./world-map-lifecycle.md)。
+地图运行时导航见[批量导航与怪物移动](./navigation.md)，切图与冻结见[双地图生命周期](./world-map-lifecycle.md)，旧布局 / 名额恢复见[紧凑地图兼容](./compact-map-compatibility.md)。
 
 Alpha 0.5.0 地图基础已完成，当前包含文档服务、SO 定义、严格校验、规范导出、只读导入、地表资源发布与[静态几何 / 通行查询](./map-geometry.md)。已增加[手绘 / AI 地图编辑器](./map-editor.md)，Main 已接入[城镇 / 野外及地图生命周期](./world-map-lifecycle.md)，正式怪物使用[批量导航](./navigation.md)绕障。`0.5.5-alpha` 的 [I 综合交付](../plan/archive/0.5.5/acceptance/maps/i/README.md)已完成：当前地图制作、双地图 Player、历史存档和组合压力通过，执行计划已归档。
 

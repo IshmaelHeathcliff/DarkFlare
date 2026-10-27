@@ -67,6 +67,7 @@
 - [地图编辑器与 AI 事务](./maps/map-editor.md)
 - [地图对象表现与分段遮挡](./maps/object-presentation.md)
 - [城镇、野外与地图生命周期](./maps/world-map-lifecycle.md)
+- [紧凑地图与旧实例兼容](./maps/compact-map-compatibility.md)
 - [批量导航与怪物移动](./maps/navigation.md)
 - [行为管理与独立 HFSM](./behavior/README.md)
 - [有限刷怪与地图名额](./behavior/finite-spawning.md)
@@ -76,7 +77,9 @@
 ## 计划与验收
 
 - [Alpha 0.7 活动总计划](./plan/alpha-0.7-plan.md)
-- [0.7.2-alpha 体验优化总计划（阶段一至四完成）](./plan/alpha-0.7.2-optimization-plan.md)
+- [0.7.2-alpha 体验优化总计划（已完成并归档）](plan/archive/0.7.2/plans/alpha-0.7.2-optimization-plan.md)
+- [0.7.2-alpha.5 双地图缩小、300名额与综合收尾（已完成）](plan/archive/0.7.2/plans/phase-5-execution.md)
+- [0.7.2 紧凑地图旧存档兼容计划](plan/archive/0.7.2/plans/map-save-compatibility.md)
 - [0.7.2-alpha.4 战斗 HUD 紧凑化与入口图标实施计划（已归档）](plan/archive/0.7.2/plans/phase-4-execution.md)
 - [0.7.2-alpha.4 紧凑HUD验收、三语言画面与源码身份](./plan/archive/0.7.2/acceptance/compact-hud/README.md)
 - [0.7.2-alpha.3 天赋界面精简与属性方位实施计划（已归档）](./plan/archive/0.7.2/plans/phase-3-execution.md)
@@ -101,6 +104,8 @@
 
 ## 计划状态
 
+2026-10-27：**0.7.2-alpha.5与五阶段整体完成，尚未提交**。城镇32×32 / r3、野外64×64 / r11，新实例50+10×25=300普通名额，Boss独立；旧100及LegacyPreserved进度保留。EditMode993/993、PlayMode119/119，无失败 / 跳过。core15 / Save12 / Settings1 / 地图V4；[计划与验收](plan/archive/0.7.2/README.md)整体归档，0.7总计划继续活动。已实测300普通怪物同时存活，Editor仍有偶发尖峰，未构建Player。
+
 2026-10-27：**阶段三已提交 `998893d`，阶段四待实施**。[HUD 新实施计划](plan/archive/0.7.2/plans/phase-4-execution.md)已明确布局、图标资源、真实冷却 / 绑定、鼠标悬停与手柄查看、面积和回归标准。当前运行 `0.7.2-alpha.3` 与各数据版本保持；本次只提交和规划，未执行 HUD 实现或重跑 Unity 测试。
 
 2026-10-27：**0.7.2-alpha.3 阶段三完成**。天赋工具与详情精简、紧凑六槽、显示方位、连续手柄导航与多连接确认 / 保存已交付；EditMode 985/985、PlayMode 117/117，均无失败 / 跳过。三语言画布占比默认约 85%、详情约 68%，core v14 / Schema 12 / 1 / 地图 V4 保持，见[计划与验收](plan/archive/0.7.2/acceptance/board-simplification/README.md)。当前未构建 Player；阶段四、五继续活动。
@@ -113,7 +118,7 @@
 
 2026-10-25：**0.7.2-alpha.1 实施准备已细化，待编码**。先修复测试初始化导致普通 Play 使用临时存档路径的问题，再实施三投射物 / 穿透、按住连放及 core 13→14 兼容接续，见[阶段一计划](plan/archive/0.7.2/plans/phase-1-execution.md)。准备基线 `main` / `da2474c`；运行版本仍为 `0.7.1-alpha.5`、core v13 / Schema 12 / 1 / 地图 V4。本轮仅更新计划与已知问题说明，未执行修复或重跑 Unity 验收。
 
-2026-10-25：**进入 0.7.2-alpha 规划，尚未实施**。七项优化按连续施法与三投射物、能量瓶入口迁移、天赋精简、HUD 重做、双地图与 300 名额分五阶段推进，见[优化计划](plan/alpha-0.7.2-optimization-plan.md)。用户已确认三属性最终方位优先，以及普通返回地图保留进度。源码基线 `main` / `5cb3022`、Unity `6000.6.7f1`，运行版本保持 `0.7.1-alpha.5` / core v13 / Schema 12 / 1 / 地图 V4；本轮只核对文档与相关实现，未重跑 Unity 测试或构建 Player。
+2026-10-25：**进入 0.7.2-alpha 规划，尚未实施**。七项优化按连续施法与三投射物、能量瓶入口迁移、天赋精简、HUD 重做、双地图与 300 名额分五阶段推进，见[优化计划](plan/archive/0.7.2/plans/alpha-0.7.2-optimization-plan.md)。用户已确认三属性最终方位优先，以及普通返回地图保留进度。源码基线 `main` / `5cb3022`、Unity `6000.6.7f1`，运行版本保持 `0.7.1-alpha.5` / core v13 / Schema 12 / 1 / 地图 V4；本轮只核对文档与相关实现，未重跑 Unity 测试或构建 Player。
 
 2026-10-16：**0.7.1 五阶段完成，当前 `0.7.1-alpha.5`**。玩家棋盘、瓶子 / 成长、六槽分配与键鼠 / 模拟手柄操作闭环已交付；EditMode 970/970、PlayMode 106/106，均无失败 / 跳过。core v13、Save / Settings Schema 12 / 1、地图 V4 保持。实现基于 `main` / `9fd34f8` 加本轮未提交改动，见[玩家模块](skill-board/player-board.md)和[阶段五验收](plan/archive/0.7.1/acceptance/player-board/README.md)。计划、合同与清单已归档；0.7 总计划继续活动。当前未构建 Player。
 
@@ -147,5 +152,5 @@
 
 ## 说明
 
-当前项目已完成首版最小循环、初步体验优化及 Alpha 0.1–0.4 已归档计划，Alpha 0.5 的地图基础、编辑器、世界层级、双地图、批量导航与综合交付，以及 Alpha 0.6 的行为、Boss、有限刷怪、手动重置与 Editor 综合交付均已完成。Alpha 0.7 已完成 SemVer、棋盘几何、道具 / 能量瓶、成长与六键技能阶段，当前运行版本为 `0.7.2-alpha.2`，core v14；普通 Play 存档路径、按住连放、大剑增强与能量瓶装备入口迁移已完成，阶段三至五待实施。已完成的执行计划统一保存在 `Docs/docs/plan/archive/`。
+当前项目已完成首版最小循环、初步体验优化及 Alpha 0.1–0.4 已归档计划，Alpha 0.5 的地图基础、编辑器、世界层级、双地图、批量导航与综合交付，以及 Alpha 0.6 的行为、Boss、有限刷怪、手动重置与 Editor 综合交付均已完成。Alpha 0.7 已完成 SemVer、棋盘几何、道具 / 能量瓶、成长与六键技能阶段，当前运行`0.7.2-alpha.5`、core15；0.7.2五阶段优化均已完成，EditMode993/993、PlayMode119/119，计划及验收已整体归档，0.7里程碑继续活动。已完成的执行计划统一保存在 `Docs/docs/plan/archive/`。
 后续新增系统、配置或流程时，应优先更新对应文档，避免 `Docs/docs/` 与实现脱节。游戏设计文档位于 `Docs/design/`，不属于 Agent 的常规维护范围。

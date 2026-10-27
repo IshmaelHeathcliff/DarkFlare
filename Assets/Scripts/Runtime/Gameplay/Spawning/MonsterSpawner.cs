@@ -21,6 +21,8 @@ namespace DarkFlare
         public int RejectedSpawnAttempts { get; private set; }
         [ShowInInspector, ReadOnly, LabelText("最近刷怪失败")]
         public string LastSpawnFailure { get; private set; } = string.Empty;
+        [ShowInInspector, ReadOnly, LabelText("本帧刷怪耗时(ms)")]
+        public double LastSpawnMilliseconds { get; private set; }
         [ShowInInspector, ReadOnly, LabelText("普通怪物名额总数")]
         public int PlannedCount => _finiteState?.Slots.Count ?? 0;
         [ShowInInspector, ReadOnly, LabelText("待生成名额")]
@@ -261,14 +263,19 @@ namespace DarkFlare
 
         void SpawnPendingActivated(int budget, bool failFast, bool onlyInitial = false)
         {
+            long started = System.Diagnostics.Stopwatch.GetTimestamp();
+            int attempted = 0;
             foreach (SpawnSlotStateDto slot in _finiteState.Slots)
             {
-                if (budget == 0) { break; }
+                // 范围批次最多4次，并在一次完整生成后检查2ms预算；入图准备仍全部完成后才放行。
+                if (budget == 0 || !failFast && attempted > 0
+                    && (System.Diagnostics.Stopwatch.GetTimestamp() - started) * 1000.0 / System.Diagnostics.Stopwatch.Frequency >= 2) { break; }
                 if (slot.Status != SpawnSlotStatus.Pending) { continue; }
                 MapSpawnBatchRecord batch = _batches.First(item => item.BatchId == slot.BatchId);
                 if (onlyInitial && batch.Activation != MapSpawnActivation.OnEnter) { continue; }
                 if (!_finiteState.Batches.First(item => item.BatchId == slot.BatchId).IsActivated) { continue; }
                 budget--;
+                attempted++;
                 MonsterDefinition definition = _definitions.Resolve<MonsterDefinition>(ContentId.Parse(slot.MonsterDefinitionId));
                 if (!TryGetPlannedPosition(batch, slot, definition, out Vector3 position))
                 {
@@ -288,6 +295,7 @@ namespace DarkFlare
                 slot.Status = SpawnSlotStatus.Alive;
                 _aliveMonsters.Add(monster);
             }
+            LastSpawnMilliseconds = (System.Diagnostics.Stopwatch.GetTimestamp() - started) * 1000.0 / System.Diagnostics.Stopwatch.Frequency;
         }
 
         bool TryGetPlannedPosition(MapSpawnBatchRecord batch, SpawnSlotStateDto slot,

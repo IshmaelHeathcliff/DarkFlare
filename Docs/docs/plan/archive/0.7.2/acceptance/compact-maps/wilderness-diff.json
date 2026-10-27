@@ -1,0 +1,203 @@
+{
+  "code": "Ok",
+  "revision": 11,
+  "hash": "ea5cc5bb316786b3ca2f2186d44a75cbf7c0dc34cdaf5ef32f124a12f1db350b",
+  "changedCells": 13937,
+  "affectedDisplay": {
+    "minX": -1,
+    "minY": -1,
+    "maxX": 127,
+    "maxY": 127
+  },
+  "objects": [
+    {
+      "id": "barrier_0",
+      "change": "modified"
+    },
+    {
+      "id": "barrier_1",
+      "change": "modified"
+    },
+    {
+      "id": "barrier_2",
+      "change": "modified"
+    },
+    {
+      "id": "barrier_3",
+      "change": "modified"
+    },
+    {
+      "id": "barrier_4",
+      "change": "modified"
+    },
+    {
+      "id": "exit",
+      "change": "modified"
+    },
+    {
+      "id": "tree_0",
+      "change": "modified"
+    },
+    {
+      "id": "tree_1",
+      "change": "modified"
+    },
+    {
+      "id": "tree_10",
+      "change": "modified"
+    },
+    {
+      "id": "tree_11",
+      "change": "modified"
+    },
+    {
+      "id": "tree_2",
+      "change": "modified"
+    },
+    {
+      "id": "tree_3",
+      "change": "modified"
+    },
+    {
+      "id": "tree_4",
+      "change": "modified"
+    },
+    {
+      "id": "tree_5",
+      "change": "modified"
+    },
+    {
+      "id": "tree_6",
+      "change": "modified"
+    },
+    {
+      "id": "tree_7",
+      "change": "modified"
+    },
+    {
+      "id": "tree_8",
+      "change": "modified"
+    },
+    {
+      "id": "tree_9",
+      "change": "modified"
+    }
+  ],
+  "regions": [
+    {
+      "id": "entry_safe",
+      "change": "modified"
+    },
+    {
+      "id": "spawn_center_north",
+      "change": "modified"
+    },
+    {
+      "id": "spawn_center_south",
+      "change": "modified"
+    },
+    {
+      "id": "spawn_east",
+      "change": "modified"
+    },
+    {
+      "id": "spawn_east_patrol",
+      "change": "modified"
+    },
+    {
+      "id": "spawn_north",
+      "change": "modified"
+    },
+    {
+      "id": "spawn_northwest",
+      "change": "modified"
+    },
+    {
+      "id": "spawn_south",
+      "change": "modified"
+    },
+    {
+      "id": "spawn_southeast",
+      "change": "modified"
+    },
+    {
+      "id": "spawn_southwest",
+      "change": "modified"
+    },
+    {
+      "id": "spawn_west",
+      "change": "modified"
+    },
+    {
+      "id": "wild_spawn",
+      "change": "modified"
+    }
+  ],
+  "overrides": [],
+  "entries": [
+    {
+      "id": "arrival",
+      "change": "modified"
+    },
+    {
+      "id": "respawn",
+      "change": "modified"
+    },
+    {
+      "id": "return",
+      "change": "modified"
+    }
+  ],
+  "bossSpawns": [
+    {
+      "id": "guardian",
+      "change": "modified"
+    }
+  ],
+  "spawnBatches": [
+    {
+      "id": "center_north",
+      "change": "modified"
+    },
+    {
+      "id": "center_south",
+      "change": "modified"
+    },
+    {
+      "id": "east",
+      "change": "modified"
+    },
+    {
+      "id": "east_patrol",
+      "change": "modified"
+    },
+    {
+      "id": "initial",
+      "change": "modified"
+    },
+    {
+      "id": "north",
+      "change": "modified"
+    },
+    {
+      "id": "northwest",
+      "change": "modified"
+    },
+    {
+      "id": "south",
+      "change": "modified"
+    },
+    {
+      "id": "southeast",
+      "change": "modified"
+    },
+    {
+      "id": "southwest",
+      "change": "modified"
+    },
+    {
+      "id": "west",
+      "change": "modified"
+    }
+  ]
+}

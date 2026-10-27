@@ -108,3 +108,5 @@ Editor 发布校验源修订、输出内容、地址唯一性、标签与运行�
 MapDefinition 是只读导入产物，不属于可创建配置，也不进入本文件的字段覆盖列表。仅由 `.dfmap` 生成，不能创建第二份 `.asset` 布局。地表显示目录已单独登记 Addressables；地图内容目录及运行时场景接入在后续阶段完成。
 
 静态几何通过 `MapGeometryInput.Capture` / `MapGeometryCompiler.Compile` 按需派生，不增加可手工编辑的 SO。默认 4×4 导航子格与 0.0125 物理余量，容量和坐标精度限制见[模块合同](../maps/map-geometry.md)。预览中勾选“构建碰撞与通行”即可检查；导入成功不代表任意派生预算都可接受该地图。
+
+0.7.2-alpha.5 正式城镇32×32 / r3、野外64×64 / r11，core15。MapDefinition的隐藏历史JSON由导入器从History源依赖写入，只用于[紧凑地图迁移](../maps/compact-map-compatibility.md)；不能将它作为另一份可编辑布局或重复内容身份。当前地图与新实例名额仍以dfmap为唯一源。

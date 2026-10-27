@@ -50,14 +50,15 @@ namespace DarkFlare.Tests
                     target.MapBinding.Kind + " player=" + body.position + " target=" + target.transform.position);
             }
             player.enabled = false;
-            body.position = new Vector2(-30, 0);
+            float leftEdge = (float)host.CurrentSession.Architecture.GetUtility<WorldMapRuntime>().Active.Geometry.Bounds.MinX;
+            body.position = new Vector2(leftEdge + 2, 0);
             for (int i = 0; i < 60; i++) { body.linearVelocity = Vector2.left * 5; yield return new WaitForFixedUpdate(); }
             body.linearVelocity = Vector2.zero;
             player.enabled = true;
-            Assert.Greater(body.position.x, -32, "物理边界不能穿透");
+            Assert.Greater(body.position.x, leftEdge, "物理边界不能穿透");
             yield return _fixture.EnterFrontEnd();
             yield return _fixture.EnterMain(GameStartIntent.Continue);
-            Assert.Less(UnityEngine.Object.FindAnyObjectByType<PlayerController>().transform.position.x, -31, "接触点应原样恢复");
+            Assert.Less(UnityEngine.Object.FindAnyObjectByType<PlayerController>().transform.position.x, leftEdge + 2, "接触点应原样恢复");
         }
 
         [UnityTest]
@@ -72,7 +73,7 @@ namespace DarkFlare.Tests
             Assert.IsNull(maps.Active.Spawner.SpawnDefinition);
             CompositeCollider2D geometry = maps.Active.Root.GetComponentInChildren<CompositeCollider2D>();
             Assert.Greater(geometry.pathCount, 0);
-            Assert.IsTrue(geometry.OverlapPoint(new Vector2(-20, 16)), "正式地表水区必须存在物理阻挡");
+            Assert.IsTrue(geometry.OverlapPoint(new Vector2((float)maps.Active.Geometry.Bounds.MinX + .5f, 0)), "正式地表水区必须存在物理阻挡");
             Assert.IsFalse(geometry.OverlapPoint(Vector2.zero), "默认入口必须可通行");
             foreach (string boundary in new[] { "prepared", "source-detached", "target-restored", "before-commit" })
             {
@@ -107,27 +108,28 @@ namespace DarkFlare.Tests
             WorldMapRuntime maps = host.CurrentSession.Architecture.GetUtility<WorldMapRuntime>();
             yield return Change(host, "map:wilderness", "arrival");
             MonsterSpawner spawner = maps.Active.Spawner;
-            Assert.AreEqual(100, spawner.PlannedCount);
-            Assert.AreEqual(80, spawner.PendingCount);
-            Assert.AreEqual(20, spawner.AliveCount);
-            Assert.AreEqual(21, UnityEngine.Object.FindObjectsByType<MonsterController>().Length, "Boss 独立于普通名额");
+            Assert.AreEqual(300, spawner.PlannedCount);
+            Assert.AreEqual(250, spawner.PendingCount);
+            Assert.AreEqual(50, spawner.AliveCount);
+            Assert.AreEqual(51, UnityEngine.Object.FindObjectsByType<MonsterController>().Length, "Boss 独立于普通名额");
             yield return null;
             using GamePauseLease pause = host.GameTime.AcquirePause("finite-batch-test");
             PlayerController player = UnityEngine.Object.FindAnyObjectByType<PlayerController>();
-            Vector3 destination = new Vector3(36, 32);
+            MapSpawnBatchRecord trigger = maps.Active.Map.CreateEditableCopy().SpawnBatches.Single(b => b.BatchId == "east_patrol");
+            Vector3 destination = new Vector3((float)(maps.Active.Map.OriginX + trigger.TriggerCenter.X), (float)(maps.Active.Map.OriginY + trigger.TriggerCenter.Y));
             player.transform.position = destination;
             Rigidbody2D body = player.GetComponent<Rigidbody2D>();
             body.position = destination;
             Physics2D.SyncTransforms();
             yield return null;
-            Assert.AreEqual(80, spawner.PendingCount, "暂停时不能激活范围批次");
+            Assert.AreEqual(250, spawner.PendingCount, "暂停时不能激活范围批次");
             pause.Dispose();
-            for (int i = 0; i < 60 && spawner.PendingCount > 72; i++) { yield return null; }
-            Assert.AreEqual(72, spawner.PendingCount, spawner.LastSpawnFailure);
-            Assert.AreEqual(28, spawner.AliveCount + spawner.DefeatedCount);
+            for (int i = 0; i < 60 && spawner.PendingCount > 225; i++) { yield return null; }
+            Assert.AreEqual(225, spawner.PendingCount, spawner.LastSpawnFailure);
+            Assert.AreEqual(75, spawner.AliveCount + spawner.DefeatedCount);
             for (int i = 0; i < 10; i++) { yield return null; }
-            Assert.AreEqual(100, spawner.PlannedCount, "重复进入范围不能追加名额");
-            Assert.AreEqual(72, spawner.PendingCount);
+            Assert.AreEqual(300, spawner.PlannedCount, "重复进入范围不能追加名额");
+            Assert.AreEqual(225, spawner.PendingCount);
             MonsterController victim = UnityEngine.Object.FindObjectsByType<MonsterController>()
                 .First(monster => monster.Definition.BossBehavior == null && monster.Actor.IsAlive);
             int defeatedBefore = spawner.DefeatedCount;
@@ -137,8 +139,8 @@ namespace DarkFlare.Tests
                 new Dictionary<DamageType, float> { [DamageType.Physical] = fatalDamage })));
             yield return null;
             Assert.AreEqual(defeatedBefore + 1, spawner.DefeatedCount);
-            Assert.AreEqual(72, spawner.PendingCount, "击杀后不能补怪");
-            Assert.AreEqual(100, spawner.PlannedCount);
+            Assert.AreEqual(225, spawner.PendingCount, "击杀后不能补怪");
+            Assert.AreEqual(300, spawner.PlannedCount);
             MonsterSpawnerStateDto before = spawner.CaptureState();
             yield return Change(host, "map:town", "return");
             yield return Change(host, "map:wilderness", "arrival");
@@ -174,7 +176,8 @@ namespace DarkFlare.Tests
             Assert.IsNotNull(host.CurrentSession.Architecture.GetSystem<LootSystem>()
                 .SpawnRestoredPickup(dropId, dropItem, new Vector3(-10, -10)));
             yield return Change(host, "map:town", "return");
-            for (int i = 0; i < 120 && host.SaveCoordinator.IsBusy; i++) { yield return null; }
+            float idleDeadline = Time.realtimeSinceStartup + 30;
+            while (host.SaveCoordinator.IsBusy && Time.realtimeSinceStartup < idleDeadline) { yield return null; }
             Assert.IsFalse(host.SaveCoordinator.IsBusy);
             var snapshots = new SessionSnapshotSource(host.CurrentSession, host.ContentCatalog, maps.Active.Spawner);
             SessionSnapshotResult before = snapshots.Capture();
@@ -191,9 +194,9 @@ namespace DarkFlare.Tests
             Assert.AreEqual(1, maps.ActiveMapEpoch);
             Assert.AreEqual("map:wilderness", maps.LastResetMapId);
             Assert.AreEqual(MapResetPhase.Completed, maps.LastResetPhase);
-            Assert.AreEqual(100, maps.Active.Spawner.PlannedCount);
-            Assert.AreEqual(20, maps.Active.Spawner.AliveCount);
-            Assert.AreEqual(80, maps.Active.Spawner.PendingCount);
+            Assert.AreEqual(300, maps.Active.Spawner.PlannedCount);
+            Assert.AreEqual(50, maps.Active.Spawner.AliveCount);
+            Assert.AreEqual(250, maps.Active.Spawner.PendingCount);
             Assert.AreEqual(0, maps.Active.Spawner.DefeatedCount);
             Assert.AreNotEqual(oldBossId, UnityEngine.Object.FindObjectsByType<MonsterController>()
                 .Single(monster => monster.Definition.BossBehavior != null).Instance.Id.Value);
@@ -217,7 +220,7 @@ namespace DarkFlare.Tests
             Assert.AreEqual("map:wilderness", maps.Active.Map.MapId);
             Assert.AreEqual(1, maps.ActiveMapEpoch);
             Assert.AreEqual(0, maps.Active.Spawner.DefeatedCount);
-            Assert.AreEqual(100, maps.Active.Spawner.PlannedCount);
+            Assert.AreEqual(300, maps.Active.Spawner.PlannedCount);
             Assert.IsFalse(UnityEngine.Object.FindObjectsByType<LootPickupController>().Any(drop => drop.Id == dropId));
         }
 
@@ -317,7 +320,7 @@ namespace DarkFlare.Tests
             Assert.AreEqual("map:wilderness", maps.Active.Map.MapId, "传送门确认按钮应实际发起重置切图");
             Assert.AreEqual(1, maps.ActiveMapEpoch);
             Assert.AreEqual(MapResetPhase.Completed, maps.LastResetPhase);
-            Assert.AreEqual(20, maps.Active.Spawner.AliveCount);
+            Assert.AreEqual(50, maps.Active.Spawner.AliveCount);
             Assert.IsFalse(host.ApplicationShell.BlocksGameplay);
         }
 
@@ -348,8 +351,8 @@ namespace DarkFlare.Tests
             Assert.IsTrue(saved.Succeeded, saved.OperationResult.Exception?.ToString());
             Assert.AreEqual("map:wilderness", saved.PreparedRestore.Document.Payload.Run.ActiveMapId);
             Assert.AreEqual(1, saved.PreparedRestore.Document.Payload.Run.ActiveMapEpoch);
-            Assert.AreEqual(100, saved.PreparedRestore.Document.Payload.Run.Spawner.Slots.Count);
-            Assert.AreEqual(20, saved.PreparedRestore.Document.Payload.Run.Spawner.Slots.Count(
+            Assert.AreEqual(300, saved.PreparedRestore.Document.Payload.Run.Spawner.Slots.Count);
+            Assert.AreEqual(50, saved.PreparedRestore.Document.Payload.Run.Spawner.Slots.Count(
                 slot => slot.Status == SpawnSlotStatus.Alive));
         }
 
@@ -375,9 +378,9 @@ namespace DarkFlare.Tests
                     .ToCoroutine(value => result = value);
                 Assert.IsTrue(result.Succeeded, $"cycle {i}: {result.Exception}");
                 Assert.AreEqual(i, maps.ActiveMapEpoch);
-                Assert.AreEqual(100, maps.Active.Spawner.PlannedCount);
-                Assert.AreEqual(20, maps.Active.Spawner.AliveCount);
-                Assert.AreEqual(21, UnityEngine.Object.FindObjectsByType<MonsterController>().Length);
+                Assert.AreEqual(300, maps.Active.Spawner.PlannedCount);
+                Assert.AreEqual(50, maps.Active.Spawner.AliveCount);
+                Assert.AreEqual(51, UnityEngine.Object.FindObjectsByType<MonsterController>().Length);
                 long currentNative = architecture.GetModel<NavigationModel>().NativeBytes;
                 if (nativeBytes < 0) { nativeBytes = currentNative; }
                 else { Assert.AreEqual(nativeBytes, currentNative, "导航容量不应逐轮增加"); }
@@ -431,9 +434,10 @@ namespace DarkFlare.Tests
             player.transform.position = Vector2.zero;
             body.position = Vector2.zero;
             Physics2D.SyncTransforms();
-            for (int i = 0; i < 120 && spawner.PendingCount > 0; i++) { yield return null; }
+            float spawnDeadline = Time.realtimeSinceStartup + 20;
+            while (spawner.PendingCount > 0 && Time.realtimeSinceStartup < spawnDeadline) { yield return null; }
             Assert.AreEqual(0, spawner.PendingCount, spawner.LastSpawnFailure);
-            Assert.AreEqual(100, spawner.AliveCount + spawner.DefeatedCount);
+            Assert.AreEqual(300, spawner.AliveCount + spawner.DefeatedCount);
         }
 
         [UnityTest]
@@ -539,7 +543,9 @@ namespace DarkFlare.Tests
             MonsterController boss = UnityEngine.Object.FindObjectsByType<MonsterController>()
                 .Single(value => value.Definition.BossBehavior != null);
             Assert.IsNotNull(boss.BossRuntime);
-            Assert.AreEqual(new Vector2(20, 12), boss.Body.position);
+            MapBossSpawnRecord spawn = maps.Active.Map.CreateEditableCopy().BossSpawns.Single();
+            Vector2 bossStart = new Vector2((float)(maps.Active.Map.OriginX + spawn.Position.X), (float)(maps.Active.Map.OriginY + spawn.Position.Y));
+            Assert.AreEqual(bossStart, boss.Body.position);
             int bossAttacks = 0;
             IUnRegister attackObserver = architecture.RegisterEvent<ActorAttackedEvent>(attack =>
             {
@@ -553,7 +559,7 @@ namespace DarkFlare.Tests
                 player.transform.position = point; playerBody.position = point; playerBody.linearVelocity = Vector2.zero;
                 Physics2D.SyncTransforms();
             }
-            MovePlayer(new Vector2(19, 12));
+            MovePlayer(bossStart + Vector2.left);
             float deadline = Time.realtimeSinceStartup + 4;
             while (boss.BossRuntime.Action != BossActionPhase.SwipeWarning && Time.realtimeSinceStartup < deadline) { yield return null; }
             Assert.AreEqual(BossActionPhase.SwipeWarning, boss.BossRuntime.Action);
@@ -566,7 +572,7 @@ namespace DarkFlare.Tests
             Assert.AreEqual(BossActionPhase.SwipeRecovery, boss.BossRuntime.Action);
             Assert.AreEqual(1, bossAttacks, "近战命中只能由 Boss 发起一次");
 
-            MovePlayer(new Vector2(17, 12));
+            MovePlayer(bossStart + Vector2.left * 3);
             deadline = Time.realtimeSinceStartup + 5;
             while (boss.BossRuntime.Action != BossActionPhase.ChargeWarning && Time.realtimeSinceStartup < deadline) { yield return null; }
             Assert.AreEqual(BossActionPhase.ChargeWarning, boss.BossRuntime.Action);
@@ -575,7 +581,7 @@ namespace DarkFlare.Tests
             Assert.AreEqual(BossEncounterStatus.Alive, savedWarning.Boss.Status);
             Assert.AreEqual(BossActionPhase.ChargeWarning, savedWarning.Monsters.Single(value => value.Boss != null).Boss.Action);
             float health = player.Actor.CurrentHealth;
-            MovePlayer(new Vector2(17, 15));
+            MovePlayer(bossStart + new Vector2(-3, 3));
             deadline = Time.realtimeSinceStartup + 5;
             while (boss.BossRuntime.Action != BossActionPhase.ChargeRecovery && Time.realtimeSinceStartup < deadline) { yield return null; }
             Assert.AreEqual(BossActionPhase.ChargeRecovery, boss.BossRuntime.Action);

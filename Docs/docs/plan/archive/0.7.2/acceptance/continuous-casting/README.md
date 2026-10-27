@@ -1,6 +1,6 @@
 # 0.7.2-alpha.1 存档路径与持续施法验收
 
-2026-10-26：**阶段一完成，当前 `0.7.2-alpha.1` / core v14**。实施基线为 `main` / `da2474c` 加本轮改动，Unity `6000.6.7f1`，见[源码身份](source-identity.json)。[实施计划](../../plans/phase-1-execution.md)与[存档前置计划](../../plans/save-path-isolation-plan.md)已归档；[优化总计划](../../../../alpha-0.7.2-optimization-plan.md)继续活动。
+2026-10-26：**阶段一完成，当前 `0.7.2-alpha.1` / core v14**。实施基线为 `main` / `da2474c` 加本轮改动，Unity `6000.6.7f1`，见[源码身份](source-identity.json)。[实施计划](../../plans/phase-1-execution.md)与[存档前置计划](../../plans/save-path-isolation-plan.md)已归档；[优化总计划](../../plans/alpha-0.7.2-optimization-plan.md)继续活动。
 
 ## 实际交付
 

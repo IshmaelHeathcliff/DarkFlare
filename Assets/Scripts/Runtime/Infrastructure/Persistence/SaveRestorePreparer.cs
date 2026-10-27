@@ -135,7 +135,7 @@ namespace DarkFlare
 
             document = MapStateData.Copy(document);
             if (document.Header.CatalogId == "core" && catalog.CatalogId == "core"
-                && document.Header.ContentVersion == 1 && (catalog.ContentVersion >= 2 && catalog.ContentVersion <= 14))
+                && document.Header.ContentVersion == 1 && (catalog.ContentVersion >= 2 && catalog.ContentVersion <= 15))
             {
                 // v1 stores four stable slots. New slots start empty; rolled values and stock stay intact.
                 if (document.Payload.Profile.Equipment.Any(loadout =>
@@ -150,7 +150,7 @@ namespace DarkFlare
             }
 
             if (document.Header.CatalogId == "core" && catalog.CatalogId == "core"
-                && document.Header.ContentVersion == 2 && (catalog.ContentVersion >= 3 && catalog.ContentVersion <= 14))
+                && document.Header.ContentVersion == 2 && (catalog.ContentVersion >= 3 && catalog.ContentVersion <= 15))
             {
                 document = JObject.FromObject(document).ToObject<SaveDocumentDto>();
                 ItemBaseDefinition gold = catalog.GetAll<ItemBaseDefinition>().FirstOrDefault(item => item.ItemType == ItemType.Currency);
@@ -201,7 +201,7 @@ namespace DarkFlare
             }
 
             if (document.Header.CatalogId == "core" && catalog.CatalogId == "core"
-                && document.Header.ContentVersion == 3 && (catalog.ContentVersion >= 4 && catalog.ContentVersion <= 14))
+                && document.Header.ContentVersion == 3 && (catalog.ContentVersion >= 4 && catalog.ContentVersion <= 15))
             {
                 // 新增异常、抗性和词条，不改写旧实例掷值；缺少抗性属性自然解析为 0。
                 document = JObject.FromObject(document).ToObject<SaveDocumentDto>();
@@ -209,7 +209,7 @@ namespace DarkFlare
             }
 
             if (document.Header.CatalogId == "core" && catalog.CatalogId == "core"
-                && document.Header.ContentVersion == 4 && catalog.ContentVersion >= 5 && catalog.ContentVersion <= 14)
+                && document.Header.ContentVersion == 4 && catalog.ContentVersion >= 5 && catalog.ContentVersion <= 15)
             {
                 // 消耗品为追加内容；保留历史库存与资源，不执行使用效果或补发商品。
                 document = JObject.FromObject(document).ToObject<SaveDocumentDto>();
@@ -217,14 +217,14 @@ namespace DarkFlare
             }
 
             if (document.Header.CatalogId == "core" && catalog.CatalogId == "core"
-                && document.Header.ContentVersion == 5 && catalog.ContentVersion >= 6 && catalog.ContentVersion <= 14)
+                && document.Header.ContentVersion == 5 && catalog.ContentVersion >= 6 && catalog.ContentVersion <= 15)
             {
                 document = MapStateData.Copy(document);
                 document.Header.ContentVersion = 6;
             }
 
             if (document.Header.CatalogId == "core" && catalog.CatalogId == "core"
-                && document.Header.ContentVersion == 6 && catalog.ContentVersion >= 7 && catalog.ContentVersion <= 14)
+                && document.Header.ContentVersion == 6 && catalog.ContentVersion >= 7 && catalog.ContentVersion <= 15)
             {
                 // 行为配置作为怪物定义依赖追加；Schema 迁移已经补齐实例状态，不重掷任何资源。
                 document = MapStateData.Copy(document);
@@ -232,7 +232,7 @@ namespace DarkFlare
             }
 
             if (document.Header.CatalogId == "core" && catalog.CatalogId == "core"
-                && document.Header.ContentVersion == 7 && catalog.ContentVersion >= 8 && catalog.ContentVersion <= 14)
+                && document.Header.ContentVersion == 7 && catalog.ContentVersion >= 8 && catalog.ContentVersion <= 15)
             {
                 // 守卫 Boss 为追加内容，旧图名额由 Schema 7 的 LegacyAbsent 保留。
                 document = MapStateData.Copy(document);
@@ -240,7 +240,7 @@ namespace DarkFlare
             }
 
             if (document.Header.CatalogId == "core" && catalog.CatalogId == "core"
-                && document.Header.ContentVersion == 8 && catalog.ContentVersion >= 9 && catalog.ContentVersion <= 14)
+                && document.Header.ContentVersion == 8 && catalog.ContentVersion >= 9 && catalog.ContentVersion <= 15)
             {
                 // V4 地图只追加刷怪批次；Schema 8 已冻结旧图进度。
                 document = MapStateData.Copy(document);
@@ -248,7 +248,7 @@ namespace DarkFlare
             }
 
             if (document.Header.CatalogId == "core" && catalog.CatalogId == "core"
-                && document.Header.ContentVersion == 9 && catalog.ContentVersion >= 10 && catalog.ContentVersion <= 14)
+                && document.Header.ContentVersion == 9 && catalog.ContentVersion >= 10 && catalog.ContentVersion <= 15)
             {
                 // 新地图扩大有限名额，旧实例与击败进度由地图修订迁移保留。
                 document = MapStateData.Copy(document);
@@ -256,7 +256,7 @@ namespace DarkFlare
             }
 
             if (document.Header.CatalogId == "core" && catalog.CatalogId == "core"
-                && document.Header.ContentVersion == 10 && catalog.ContentVersion >= 11 && catalog.ContentVersion <= 14)
+                && document.Header.ContentVersion == 10 && catalog.ContentVersion >= 11 && catalog.ContentVersion <= 15)
             {
                 // 棋盘道具与能量配置为追加内容；旧技能继续由当前阶段运行。
                 document = MapStateData.Copy(document);
@@ -264,25 +264,32 @@ namespace DarkFlare
             }
 
             if (document.Header.CatalogId == "core" && catalog.CatalogId == "core"
-                && document.Header.ContentVersion == 11 && catalog.ContentVersion >= 12 && catalog.ContentVersion <= 14)
+                && document.Header.ContentVersion == 11 && catalog.ContentVersion >= 12 && catalog.ContentVersion <= 15)
             {
                 document = MapStateData.Copy(document);
                 document.Header.ContentVersion = 12;
             }
 
             if (document.Header.CatalogId == "core" && catalog.CatalogId == "core"
-                && document.Header.ContentVersion == 12 && catalog.ContentVersion >= 13 && catalog.ContentVersion <= 14)
+                && document.Header.ContentVersion == 12 && catalog.ContentVersion >= 13 && catalog.ContentVersion <= 15)
             {
                 document = MapStateData.Copy(document);
                 document.Header.ContentVersion = 13;
             }
 
             if (document.Header.CatalogId == "core" && catalog.CatalogId == "core"
-                && document.Header.ContentVersion == 13 && catalog.ContentVersion == 14)
+                && document.Header.ContentVersion == 13 && catalog.ContentVersion >= 14 && catalog.ContentVersion <= 15)
             {
                 // 默认技能增强不重掷旧物品，也不重置冷却、成长或随机序列。
                 document = MapStateData.Copy(document);
                 document.Header.ContentVersion = 14;
+            }
+
+            if (document.Header.CatalogId == "core" && catalog.CatalogId == "core"
+                && document.Header.ContentVersion == 14 && catalog.ContentVersion == 15)
+            {
+                document = MapStateData.Copy(document);
+                document.Header.ContentVersion = 15;
             }
 
             if (!string.Equals(document.Header.CatalogId, catalog.CatalogId, StringComparison.Ordinal)
@@ -306,6 +313,7 @@ namespace DarkFlare
                 try
                 {
                     WorldMapCatalog maps = WorldMapCatalog.FromContent(catalog);
+                    document = MapStateData.Copy(document);
                     maps.UpgradeKnownWildernessRevision(document.Payload.Run);
                     validation = SaveDataValidator.ValidateDocument(document);
                     for (int i = 0; i < validation.Issues.Count; i++)

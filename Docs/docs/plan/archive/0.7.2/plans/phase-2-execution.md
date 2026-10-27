@@ -4,7 +4,7 @@
 
 ## 目标与基线
 
-按[总计划](../../../alpha-0.7.2-optimization-plan.md)和[界面分计划](../../../alpha-0.7.2/ui-optimization.md)交付阶段二：玩家只打开背包，就能在装备区装备、替换、卸下能量瓶；天赋中心继续承担整瓶充能。
+按[总计划](alpha-0.7.2-optimization-plan.md)和[界面分计划](ui-optimization.md)交付阶段二：玩家只打开背包，就能在装备区装备、替换、卸下能量瓶；天赋中心继续承担整瓶充能。
 
 - 实施起点：`main` / `479f9018dee4d37ed217f9f11d828092fa6c9ebc`，Unity `6000.6.7f1`。已有 `GameCjkFont.asset` 修改保持独立，不纳入本阶段。
 - 实施前数据：core v14、Save / Settings Schema 12 / 1、地图 V4，城镇 r1 / 野外 r9。本阶段预计全部保持；装备瓶仍由现有棋盘状态保存，不扩展十个战斗装备槽。

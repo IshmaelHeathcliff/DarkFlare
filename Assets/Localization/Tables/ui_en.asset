@@ -2149,7 +2149,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 12621335371964416
-    m_Localized: Enter the map, or reset it first?
+    m_Localized: Entering keeps existing monsters and trigger progress. You can also reset the map first.
     m_Metadata:
       m_Items: []
   - m_Id: 12621335371964417
@@ -2658,6 +2658,11 @@ MonoBehaviour:
     m_Localized: Waiting
     m_Metadata:
       m_Items: []
+  - m_Id: 24952901146238976
+    m_Localized: Reset to {0} ordinary monster slots and a separate boss. Existing monsters, trigger progress and unclaimed drops will be cleared. Continue?
+    m_Metadata:
+      m_Items:
+      - rid: 6738608143192817845
   references:
     version: 2
     RefIds:
@@ -2717,3 +2722,4 @@ MonoBehaviour:
         - id: 8678977106337792
         - id: 8678977169252353
         - id: 8974749538443264
+        - id: 24952901146238976

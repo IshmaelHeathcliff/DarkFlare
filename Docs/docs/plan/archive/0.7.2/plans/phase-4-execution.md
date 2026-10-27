@@ -4,7 +4,7 @@
 
 ## 目标与基线
 
-按[体验优化总计划](../../../alpha-0.7.2-optimization-plan.md)和[界面分计划](../../../alpha-0.7.2/ui-optimization.md)，将宽技能卡片与文字入口改为底部紧凑结构，减少遮挡，并保留真实资源、技能状态、绑定和输入所有权。
+按[体验优化总计划](alpha-0.7.2-optimization-plan.md)和[界面分计划](ui-optimization.md)，将宽技能卡片与文字入口改为底部紧凑结构，减少遮挡，并保留真实资源、技能状态、绑定和输入所有权。
 
 - 实施起点：`main` / `998893da7d3a6b6361fb61bd1f6adffadb1341ca`，Unity `6000.6.7f1`。原有 `GameCjkFont.asset` 修改独立保留。
 - 当前数据：core v14、Save / Settings Schema 12 / 1、地图 V4、城镇 r1 / 野外 r9。本阶段改变表现、只读图标信息与悬停交互，预计这些版本全部保持。

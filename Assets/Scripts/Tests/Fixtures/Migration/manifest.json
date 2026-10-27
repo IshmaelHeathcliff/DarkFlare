@@ -2,6 +2,22 @@
   "schemaVersion": 1,
   "fixtures": [
     {
+      "path": "save-core14-wilderness.json",
+      "domain": "save",
+      "sourceSchemaVersion": 12,
+      "sourceContentVersion": 14,
+      "sha256": "0c7352653c606d078106ff4e737ebabbefa51ca3c5cd11411ca6c0bc8589ae3e",
+      "expectedMigration": "Native 0.7.2-alpha.4 / core14 isolated Editor capture, active wilderness, original town r1 and wilderness r9. Preserve visited 100-slot plan, identities, resources and RNG when moving both active and frozen maps to compact layouts. Captured before source replacement from main 8c15fbe; real Save serializer with payload checksum."
+    },
+    {
+      "path": "save-core14-town.json",
+      "domain": "save",
+      "sourceSchemaVersion": 12,
+      "sourceContentVersion": 14,
+      "sha256": "8474026ff4473a7f69cf10165c6fa3f2d6dc433ea896ea0151e60c3104faf1a2",
+      "expectedMigration": "Native 0.7.2-alpha.4 / core14 isolated Editor capture, active town, original town r1 and wilderness r9. Preserve visited 100-slot plan, identities, resources and RNG when moving both active and frozen maps to compact layouts. Captured before source replacement from main 8c15fbe; real Save serializer with payload checksum."
+    },
+    {
       "path": "save-v9-migrated-player.json",
       "domain": "save",
       "sourceSchemaVersion": 9,

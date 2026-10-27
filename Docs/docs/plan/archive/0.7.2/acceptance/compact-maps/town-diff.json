@@ -1,0 +1,105 @@
+{
+  "code": "Ok",
+  "revision": 3,
+  "hash": "38bf558c4f26021794f3493e8eed50e6264fd181295865a5528b1dcb2c089d66",
+  "changedCells": 3584,
+  "affectedDisplay": {
+    "minX": -1,
+    "minY": -1,
+    "maxX": 63,
+    "maxY": 63
+  },
+  "objects": [
+    {
+      "id": "crafting",
+      "change": "modified"
+    },
+    {
+      "id": "exit",
+      "change": "modified"
+    },
+    {
+      "id": "merchant",
+      "change": "modified"
+    },
+    {
+      "id": "stock_rock",
+      "change": "modified"
+    },
+    {
+      "id": "tent",
+      "change": "modified"
+    },
+    {
+      "id": "tree_0",
+      "change": "modified"
+    },
+    {
+      "id": "tree_1",
+      "change": "modified"
+    },
+    {
+      "id": "tree_10",
+      "change": "modified"
+    },
+    {
+      "id": "tree_11",
+      "change": "modified"
+    },
+    {
+      "id": "tree_2",
+      "change": "modified"
+    },
+    {
+      "id": "tree_3",
+      "change": "modified"
+    },
+    {
+      "id": "tree_4",
+      "change": "modified"
+    },
+    {
+      "id": "tree_5",
+      "change": "modified"
+    },
+    {
+      "id": "tree_6",
+      "change": "modified"
+    },
+    {
+      "id": "tree_7",
+      "change": "modified"
+    },
+    {
+      "id": "tree_8",
+      "change": "modified"
+    },
+    {
+      "id": "tree_9",
+      "change": "modified"
+    }
+  ],
+  "regions": [
+    {
+      "id": "town_safe",
+      "change": "modified"
+    }
+  ],
+  "overrides": [],
+  "entries": [
+    {
+      "id": "new_game",
+      "change": "modified"
+    },
+    {
+      "id": "respawn",
+      "change": "modified"
+    },
+    {
+      "id": "return",
+      "change": "modified"
+    }
+  ],
+  "bossSpawns": [],
+  "spawnBatches": []
+}

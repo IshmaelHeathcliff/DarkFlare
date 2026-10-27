@@ -3,7 +3,7 @@
 Alpha 0.5.5 已联验 Schema 5 导航意图、城镇 / 野外跨进程继续与真实 Schema 4 夹具恢复，原输入保持不变；1000 单位的快照 / 序列化 / 持久保存 / 继续恢复耗时和托管内存观察峰值见 [I 保存测量](../plan/archive/0.5.5/acceptance/maps/i/performance.md)。
 
 > 状态：已实现本地存档闭环；`alpha 0.4.0` 增加数量及金币物品迁移
-> 最近更新：2026-10-25；接入 core v14 内容兼容，Save Schema 12 保持，普通 Play 与自动化测试路径分离
+> 最近更新：2026-10-27；接入core15紧凑地图与历史实例兼容，Save Schema 12 保持，普通 Play 与自动化测试路径分离
 
 ## 模块目标
 
@@ -189,3 +189,5 @@ FrontEnd 只在无活动 Session、Coordinator 空闲且 Flow 为 `FrontEnd` 时
 - Settings 已使用独立路径域、Schema 和服务，未写入游戏存档；存档 Storage 原语继续只服务 Save Domain。
 
 商店主动刷新通过 `MerchantStockRefreshedEvent` 标记待保存。当前剩余商品身份、顺序、稀有度与词条数值沿既有物品数据恢复，不重新抽样或补货；见[商店与随机库存](../trading-system.md)。
+
+core14→15 接入紧凑地图和新300名额。先复制输入文档，再接续真实旧布局及历史名额合同，转换活动 / 冻结地图的有效空间点；旧实例仍保留100或LegacyPreserved，资源 / 冷却 / 随机数与实例代次保持，失败不改原档。Save12 / Settings1保持，详见[紧凑地图兼容](../maps/compact-map-compatibility.md)。

@@ -2,6 +2,10 @@
 
 ## 项目状态
 
+2026-10-27：**0.7.2-alpha.5与五阶段整体完成，尚未提交**。城镇32×32 / r3、野外64×64 / r11，新实例50+10×25=300普通名额，Boss独立；旧100及LegacyPreserved进度保留。EditMode993/993、PlayMode119/119，无失败 / 跳过。core15 / Save12 / Settings1 / 地图V4；[计划与验收](plan/archive/0.7.2/README.md)整体归档，0.7总计划继续活动。已实测300普通怪物同时存活，Editor仍有偶发尖峰，未构建Player。
+
+2026-10-27：**阶段四已提交`8c15fbe`，阶段五计划已细化**。[地图与300名额计划](plan/archive/0.7.2/plans/phase-5-execution.md)及[旧档兼容方案](plan/archive/0.7.2/plans/map-save-compatibility.md)明确先迁移再改图、城镇32×32 / 野外64×64候选、新实例50+10×25及旧实例进度保留。当前仍为`0.7.2-alpha.4` / core14 / Schema12 / 1 / 地图V4；本次只提交与规划，未修改地图或运行代码、未重跑Unity测试。
+
 2026-10-27：**0.7.2-alpha.4 阶段四完成，尚未提交**。紧凑七技能位置、四入口图标、真实冷却与状态、悬停屏蔽和提示安全区已交付；主HUD背景面积减少52.32%–62.46%。EditMode 985/985、PlayMode 119/119，均无失败 / 跳过，三语言27张前后画面、保存恢复和重载通过。core v14 / Schema12 / 1 / 地图V4保持，见[HUD验收](plan/archive/0.7.2/acceptance/compact-hud/README.md)。阶段五地图与300名额继续活动，未构建Player。
 
 2026-10-27：**阶段三已提交 `998893d`，阶段四计划已细化**。[HUD 实施计划](plan/archive/0.7.2/plans/phase-4-execution.md)明确紧凑七技能位置、四入口图标、主 HUD 面积减少目标、悬停防穿透与手柄查看路径。当前运行仍为 `0.7.2-alpha.3`，core v14 / Schema 12 / 1 / 地图 V4 保持；本次仅提交与规划，没有生成资产、修改运行代码或重跑 Unity 验收。
@@ -14,7 +18,7 @@
 
 2026-10-26：**0.7.2-alpha.1 阶段一完成**。普通 Play 存档路径修复、七入口按住连放、大剑三投射物与每枚一次穿透已交付。当前 core v14 / Save Schema 12 / Settings 1 / 地图 V4；EditMode 982/982、PlayMode 112/112，均无失败 / 跳过，两轮普通 Play 继续保存及原文件恢复通过。验收时身份为 `main` / `da2474c` 加当时未提交改动，见[验收](plan/archive/0.7.2/acceptance/continuous-casting/README.md)。阶段二至五待实施，未构建 Player。
 
-2026-10-25：**进入 0.7.2-alpha 体验优化规划，尚未实施**。[优化计划](plan/alpha-0.7.2-optimization-plan.md)覆盖 HUD、天赋精简与方位、按住连放、能量瓶装备入口、地图缩小、300 名额及默认技能三投射物 / 一次穿透。当前源码 `main` / `5cb3022`、Unity `6000.6.7f1`，运行版本仍为 `0.7.1-alpha.5`，core v13 / Save Schema 12 / Settings 1 / 地图 V4；本轮未重跑 Unity 测试或构建 Player。
+2026-10-25：**进入 0.7.2-alpha 体验优化规划，尚未实施**。[优化计划](plan/archive/0.7.2/plans/alpha-0.7.2-optimization-plan.md)覆盖 HUD、天赋精简与方位、按住连放、能量瓶装备入口、地图缩小、300 名额及默认技能三投射物 / 一次穿透。当前源码 `main` / `5cb3022`、Unity `6000.6.7f1`，运行版本仍为 `0.7.1-alpha.5`，core v13 / Save Schema 12 / Settings 1 / 地图 V4；本轮未重跑 Unity 测试或构建 Player。
 
 2026-10-16：**0.7.1 五阶段完成，当前 `0.7.1-alpha.5`**。玩家棋盘、瓶子 / 成长、六槽分配与键鼠 / 模拟手柄操作闭环已交付；EditMode 970/970、PlayMode 106/106，均无失败 / 跳过。core v13、Save / Settings Schema 12 / 1、地图 V4 保持。实现基于 `main` / `9fd34f8` 加本轮未提交改动，见[玩家模块](skill-board/player-board.md)和[阶段五验收](plan/archive/0.7.1/acceptance/player-board/README.md)。计划、合同与清单已归档；0.7 总计划继续活动。当前未构建 Player。
 
@@ -150,7 +154,7 @@ Alpha 0.3 前置[测试审计](plan/archive/0.3/acceptance/testing/test-suite-au
 - Settings V1 已有语言、音频、输入与 Reduce Motion 真实消费者；Text Scale、High Contrast、Screen Shake 和 Display Mode 仍为数据预留，不在玩家 UI 中开放。
 - 背包已支持拖拽换位、单目标原子交换和键鼠 / 手柄拿起放置，已支持物品堆叠与材料消耗，尚无旋转和重量；装备已实现十槽及精确拖入 / 拖回，每槽至少两件正式基底，但没有耐久、套装、完整纸娃娃或唯一装备特效。
 - 交易没有回购或多商人独立库存；打造已消耗锻造矿石，尚无配方和批量操作。
-- [玩家棋盘](./skill-board/player-board.md)、[几何与柴薪生成](./skill-board/geometry.md)、[道具与安装事务](./skill-board/items-installation.md)、[能量瓶装备 / 收集](./skill-board/energy-bottles.md)、[中心充能 / 属性与点亮](./skill-board/growth.md)、天赋 / 余烬效果和键鼠 / 手柄闭环已交付。[普通技能与六火焰槽](./skill-board/manual-skills.md)已支持按住连续施法，大剑普通技能已增强为三投射物、每枚一次穿透。能量瓶装备入口与天赋界面精简 / 方位已交付，后续 HUD / 地图优化按[0.7.2 活动计划](plan/alpha-0.7.2-optimization-plan.md)继续。
+- [玩家棋盘](./skill-board/player-board.md)、[几何与柴薪生成](./skill-board/geometry.md)、[道具与安装事务](./skill-board/items-installation.md)、[能量瓶装备 / 收集](./skill-board/energy-bottles.md)、[中心充能 / 属性与点亮](./skill-board/growth.md)、天赋 / 余烬效果和键鼠 / 手柄闭环已交付。[普通技能与六火焰槽](./skill-board/manual-skills.md)已支持按住连续施法，大剑普通技能已增强为三投射物、每枚一次穿透。能量瓶装备入口与天赋界面精简 / 方位已交付，后续 HUD / 地图优化按[0.7.2 活动计划](plan/archive/0.7.2/plans/alpha-0.7.2-optimization-plan.md)继续。
 - 战斗内容密度、场景规模和 UI 功能深度仍属于原型基线；现有首批视觉不视为最终美术质量。
 
 完整流程与模块边界见 [`gameplay-loop.md`](./gameplay-loop.md)，生命周期见[应用生命周期与会话作用域](./infrastructure/application-lifecycle.md)，稳定身份和迁移见[稳定身份、内容目录与迁移框架](./infrastructure/content-identity-migration.md)，本地持久化见[本地存档与 Session 恢复](./infrastructure/local-save.md)，设置与语言见[用户设置与本地化](./infrastructure/user-settings-localization.md)，输入、菜单和场景交互结构见 [`input-ui-system.md`](./input-ui-system.md)。

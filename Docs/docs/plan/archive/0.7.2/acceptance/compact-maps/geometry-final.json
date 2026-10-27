@@ -1,0 +1,46 @@
+[
+  {
+    "MapId": "map:town",
+    "Revision": 3,
+    "Width": 32,
+    "Height": 32,
+    "OriginX": -16.0,
+    "OriginY": -16.0,
+    "SourceHash": "38bf558c4f26021794f3493e8eed50e6264fd181295865a5528b1dcb2c089d66",
+    "GeometryHash": "4c092918c6e96950e4c6d2530f59c1bcaebdb2c49c992be76d35fa0fe2c9d66e",
+    "Profiles": [
+      0.3,
+      0.36,
+      0.5,
+      0.75
+    ],
+    "Targets": 6,
+    "ConnectedChecks": 24,
+    "Initial": 0,
+    "Total": 0,
+    "RangeCount": 0,
+    "BossCount": 0
+  },
+  {
+    "MapId": "map:wilderness",
+    "Revision": 11,
+    "Width": 64,
+    "Height": 64,
+    "OriginX": -32.0,
+    "OriginY": -32.0,
+    "SourceHash": "ea5cc5bb316786b3ca2f2186d44a75cbf7c0dc34cdaf5ef32f124a12f1db350b",
+    "GeometryHash": "2c633914a8bea2c0ecf28cce9858f697bce7e72a15df8a38989a73a8dde7e46a",
+    "Profiles": [
+      0.3,
+      0.36,
+      0.5,
+      0.75
+    ],
+    "Targets": 15,
+    "ConnectedChecks": 60,
+    "Initial": 50,
+    "Total": 300,
+    "RangeCount": 10,
+    "BossCount": 1
+  }
+]

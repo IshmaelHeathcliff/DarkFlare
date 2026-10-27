@@ -58,4 +58,4 @@
 
 ## 未执行项
 
-本阶段按项目默认仅做 Editor 验证，未构建 Windows Player，未执行真实手柄、跨进程或 Player 性能验收。阶段三天赋精简 / 方位、阶段四 HUD、阶段五地图与 300 名额仍由[活动总计划](../../../../alpha-0.7.2-optimization-plan.md)推进。
+本阶段按项目默认仅做 Editor 验证，未构建 Windows Player，未执行真实手柄、跨进程或 Player 性能验收。阶段三天赋精简 / 方位、阶段四 HUD、阶段五地图与 300 名额仍由[活动总计划](../../plans/alpha-0.7.2-optimization-plan.md)推进。

@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="1" result="Passed" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-27 11:51:40Z" end-time="2026-10-27 11:51:55Z" duration="15.3113154">
+  <test-suite type="TestSuite" id="1165" name="DarkFlare" fullname="DarkFlare" runstate="Runnable" testcasecount="124" result="Passed" start-time="2026-10-27 11:51:40Z" end-time="2026-10-27 11:51:55Z" duration="15.311315" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <test-suite type="Assembly" id="1318" name="DarkFlare.Tests.PlayMode.dll" fullname="C:/Users/darkf/Home/Projects/DarkFlare/Library/ScriptAssemblies/DarkFlare.Tests.PlayMode.dll" runstate="Runnable" testcasecount="120" result="Passed" start-time="2026-10-27 11:51:40Z" end-time="2026-10-27 11:51:55Z" duration="15.268402" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="3876" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestSuite" id="1319" name="DarkFlare" fullname="DarkFlare" runstate="Runnable" testcasecount="120" result="Passed" start-time="2026-10-27 11:51:40Z" end-time="2026-10-27 11:51:55Z" duration="15.265908" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="SetUpFixture" id="1200" name="Tests" fullname="DarkFlare.Tests.Alpha027PlayModeDataEnvironmentFixture" classname="DarkFlare.Tests.Alpha027PlayModeDataEnvironmentFixture" runstate="Runnable" testcasecount="120" result="Passed" start-time="2026-10-27 11:51:40Z" end-time="2026-10-27 11:51:55Z" duration="15.262037" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestFixture" id="1247" name="Phase1UxPlayModeTests" fullname="DarkFlare.Tests.Phase1UxPlayModeTests" classname="DarkFlare.Tests.Phase1UxPlayModeTests" runstate="Runnable" testcasecount="29" result="Passed" start-time="2026-10-27 11:51:40Z" end-time="2026-10-27 11:51:55Z" duration="15.194921" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1248" name="Agent_CompactMapsVisualCombatAndContinue" fullname="DarkFlare.Tests.Phase1UxPlayModeTests.Agent_CompactMapsVisualCombatAndContinue" methodname="Agent_CompactMapsVisualCombatAndContinue" classname="DarkFlare.Tests.Phase1UxPlayModeTests" runstate="Runnable" seed="261710151" result="Passed" start-time="2026-10-27 11:51:40Z" end-time="2026-10-27 11:51:55Z" duration="15.167188" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[[gameplay.combat.message] [GameplayRandomSystem] 根种子: -1042013683（随机）
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 开始预热资源
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 3b6e21dfbc7f54e4f9e0312efd6c6af5 -> Projectile_Default
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 942c099ccdd7eed428f0ac0b1694f6ff -> Player
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 67b8ae84734f42f4792a4190aad88049 -> Monster_Basic
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000002 -> Monster_Swift
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000003 -> Monster_Heavy
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 07152fe41aa52d740b4d1df2049f9f3d -> LootPickup
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 1a1e12f2b0381f54c829d3ef4165a2de -> weapon_greatsword
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 9b427dc6b96c7bc4ba30998360436d86 -> weapon_war_axe
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 7ea0a2ad891e6cd4891051d02b338cf0 -> armor_leather
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: b25638dc709c3184cabc93ae9de79ee2 -> armor_plate
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: f597b10c126e825418717edee921bd16 -> ring_iron
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: d8c5c86107920ab4d9e117e19d6ed11e -> ring_jade
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: bf07871323670d148819cd1d7e079297 -> ring_obsidian
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: b3806fb8c8738174487f9f3e67c2f3f5 -> amber_amulet
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: c0e3f5b5a15ce4145b503f6d14008c18 -> chain_belt
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 8ad010ef0c777404f88b6750ceff0ce8 -> hunter_gloves
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 9fad0c26610c6044391a45574b771208 -> iron_gauntlets
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: d11b4ff31ee5f1b468f54a1ae53d0ecf -> iron_helm
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: b62b575d086885c4db4a12d760f0ca5e -> iron_shield
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 8f112e6ebb039bf499e46e941051893e -> leather_belt
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 30fc8a5dea98e7442930045f376687c7 -> leather_hood
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 83510c26851949145b53ddaa7fd05749 -> plated_greaves
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: a79ac64f5b2207c4dad1ea9dbd87f9ec -> ruby_ring
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 4a332dccf7ba1c243bf7ec03103acb8f -> scout_boots
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: dada93ae602fc6b4fac4c23ee7b69a84 -> silver_pendant
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: b534d7eb703c15f45931eb3923c04af1 -> warding_buckler
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 0f2baeba32b18b4438f66ad29c0d8840 -> item_health_potion
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 46b17262e95dcf94aa5541c87bb0df77 -> item_mana_potion
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: a171ac149f09be34bb18787f2bb5e8be -> item_fortitude_potion
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 84a274ee131612d49950b7c7abcce919 -> item_cleansing_potion
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 846bd88c705c966449b34bce0ac4bd6e -> firewood_large
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 8dd6eb8a588337b4699634bc49f8a275 -> firewood_medium
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 3834a73285e209741b795e1ac2b7aba1 -> firewood_small
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: a3ed89418bec4ff48a5e66531b0988df -> flame_projectile
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 9b60919ec63d2fa41bc72c6410874ccc -> ember_power
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 6d432d0ef87da5f40acfa3e248c11874 -> energy_bottle_small
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 5e0fa862a6527ca4c8279e333ff42ff5 -> energy_bottle_medium
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: d944fb0545e029d409623c3affcbc83e -> energy_bottle_large
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: d8ac47a9d99c13247946bc4941ac2d60 -> ui_icon_gold
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: de10016a657a2274087916e5c348b164 -> item_forging_ore
+[gameplay.combat.message] [EquipmentSystem] player 的主武器已装备 大剑
+[gameplay.trading.message] [TradingSystem] 商人库存初始化完成，共 16 件
+[gameplay.trading.message] [TradingSystem] 发放初始金币 100，当前金币 100
+[gameplay.bootstrap.message] [NewGameSessionInitializer] 新游戏 Session 初始化完成
+[gameplay.ui.message] [InventoryPanelController] 背包、十槽装备与能量瓶栏初始化完成
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: dd11b812efe2f0e4bb2f3758c9e10504 -> status_bleeding
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 18b49cc5353df08469e0f007e870c98a -> status_burning
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 0d0cfb023d79f274d9a106852e120815 -> status_chill
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: ddfd5ef3d65f3b145900bf174e194cea -> status_equipment_guard
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 08ad860b80cedd44e95e8feee056c114 -> status_poison
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 119ee3479621e8243b7f24b92a29347e -> status_shock
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: c86fcc1a858a50e4e801710766077e97 -> status_stun
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 01181768009028a4ab0b661b89b0bd2f -> status_weakness
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 9d17e7178383e4e40876ff746046ee68 -> status_fortitude
+[gameplay.ui.message] [GameMenuController] 游戏菜单初始化完成
+[gameplay.ui.message] [ShopPanelController] 商店面板初始化完成
+[gameplay.ui.message] [CraftingPanelController] 随机打造工作台初始化完成
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: aadcf3062b2eb4c469ae53feb3e7af0f -> Boss_Guardian
+[gameplay.combat.message] [CombatSystem] player:local_player 对 razor_hound 造成 33 点伤害 (Hit)
+[gameplay.combat.message] [CombatSystem] player:local_player 对 razor_hound 造成 24 点伤害 (Hit)
+[gameplay.combat.message] [CombatSystem] razor_hound 死亡
+[gameplay.combat.message] [LootSystem] razor_hound 生成 斥候长靴[Magic] 词条3条，掉落种子 602631544，物品种子 -1518239786
+[gameplay.combat.message] [CombatSystem] player:local_player 对 wasteland_wraith 造成 24 点伤害 (Hit)
+[gameplay.combat.message] [CombatSystem] player:local_player 对 iron_husk 造成 17.3 点伤害 (Hit)
+[gameplay.combat.message] [CombatSystem] player:local_player 对 iron_husk 造成 34.1 点伤害 (Hit)
+[gameplay.combat.message] [CombatSystem] player:local_player 对 wasteland_wraith 造成 33 点伤害 (Hit)
+[gameplay.combat.message] [CombatSystem] player:local_player 对 razor_hound 造成 33.7 点伤害 (Hit)
+[gameplay.combat.message] [CombatSystem] razor_hound 死亡
+[gameplay.combat.message] [LootSystem] razor_hound 生成 金币[Normal] 词条0条，掉落种子 -1154157427，物品种子 -776379200
+[gameplay.combat.message] [CombatSystem] player:local_player 对 wasteland_wraith 造成 36.7 点伤害 (Hit)
+[gameplay.combat.message] [CombatSystem] player:local_player 对 wasteland_wraith 造成 38.8 点伤害 (Hit)
+[gameplay.combat.message] [CombatSystem] wasteland_wraith 死亡
+[gameplay.combat.message] [LootSystem] wasteland_wraith 生成 金币[Normal] 词条0条，掉落种子 -1737724941，物品种子 -602129058
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 3b6e21dfbc7f54e4f9e0312efd6c6af5 -> Projectile_Default
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 942c099ccdd7eed428f0ac0b1694f6ff -> Player
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 67b8ae84734f42f4792a4190aad88049 -> Monster_Basic
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000002 -> Monster_Swift
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: f4600000000000000000000000000003 -> Monster_Heavy
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: aadcf3062b2eb4c469ae53feb3e7af0f -> Boss_Guardian
+[resource.prefab.message] [PrefabAssetLoader] 加载完成: 07152fe41aa52d740b4d1df2049f9f3d -> LootPickup
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: b534d7eb703c15f45931eb3923c04af1 -> warding_buckler
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 9b427dc6b96c7bc4ba30998360436d86 -> weapon_war_axe
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 4a332dccf7ba1c243bf7ec03103acb8f -> scout_boots
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: d8ac47a9d99c13247946bc4941ac2d60 -> ui_icon_gold
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 6d432d0ef87da5f40acfa3e248c11874 -> energy_bottle_small
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 8ad010ef0c777404f88b6750ceff0ce8 -> hunter_gloves
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 0f2baeba32b18b4438f66ad29c0d8840 -> item_health_potion
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: a171ac149f09be34bb18787f2bb5e8be -> item_fortitude_potion
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 1a1e12f2b0381f54c829d3ef4165a2de -> weapon_greatsword
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 9b60919ec63d2fa41bc72c6410874ccc -> ember_power
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 46b17262e95dcf94aa5541c87bb0df77 -> item_mana_potion
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 9fad0c26610c6044391a45574b771208 -> iron_gauntlets
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 83510c26851949145b53ddaa7fd05749 -> plated_greaves
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: c0e3f5b5a15ce4145b503f6d14008c18 -> chain_belt
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 8f112e6ebb039bf499e46e941051893e -> leather_belt
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 7ea0a2ad891e6cd4891051d02b338cf0 -> armor_leather
+[gameplay.ui.message] [InventoryPanelController] 背包、十槽装备与能量瓶栏初始化完成
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: dd11b812efe2f0e4bb2f3758c9e10504 -> status_bleeding
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 18b49cc5353df08469e0f007e870c98a -> status_burning
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 0d0cfb023d79f274d9a106852e120815 -> status_chill
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: ddfd5ef3d65f3b145900bf174e194cea -> status_equipment_guard
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 08ad860b80cedd44e95e8feee056c114 -> status_poison
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 119ee3479621e8243b7f24b92a29347e -> status_shock
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: c86fcc1a858a50e4e801710766077e97 -> status_stun
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 01181768009028a4ab0b661b89b0bd2f -> status_weakness
+[resource.sprite.message] [SpriteAssetLoader] 图标加载完成: 9d17e7178383e4e40876ff746046ee68 -> status_fortitude
+[gameplay.ui.message] [GameMenuController] 游戏菜单初始化完成
+[gameplay.ui.message] [ShopPanelController] 商店面板初始化完成
+[gameplay.ui.message] [CraftingPanelController] 随机打造工作台初始化完成
+[gameplay.combat.message] [CombatSystem] 5031f2994d50407bafe386e186d37c43:monster:40 对 player 造成 12.1 点伤害 (Hit)
+Saving results to: C:\Users\darkf\Home\Projects\DarkFlare\Temp\Agent\compact-maps\final-probe-3.xml
+]]></output>
+            </test-case>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

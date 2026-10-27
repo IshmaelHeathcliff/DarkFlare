@@ -1,12 +1,12 @@
 # 双地图与运行时作用域
 
-阶段 G 完成于 `0.5.3-alpha`，原有冻结合同见 [G 验收](../plan/archive/0.5.3/acceptance/maps/g/README.md)。H 已接入[地图导航所有权](./navigation.md)及 Schema 5 意图恢复；历史 `0.5.5-alpha` 的 Player 跨进程继续、历史档迁移、30 秒离场冻结与 1000 单位切图见 [I 综合验收](../plan/archive/0.5.5/acceptance/maps/i/README.md)。2026-10-26 当前运行 `0.7.2-alpha.1` / core v14 / Save Schema 12 / 地图 V4，地图仍为城镇 r1 / 野外 r9；[0.7.2 地图缩小与 300 名额](../plan/alpha-0.7.2/combat-map-optimization.md)尚待实施。历史[0.6.5 Editor 综合验收](../plan/archive/0.6.5/acceptance/behavior/README.md)及[0.7.0 验收](../plan/archive/0.7.0/plans/alpha-0.7.0-semver-plan.md)保留各自版本含义，当前版本 Player 未验收。
+阶段 G 完成于 `0.5.3-alpha`，原有冻结合同见 [G 验收](../plan/archive/0.5.3/acceptance/maps/g/README.md)。H 已接入[地图导航所有权](./navigation.md)及 Schema 5 意图恢复；历史 `0.5.5-alpha` 的 Player 跨进程继续、历史档迁移、30 秒离场冻结与 1000 单位切图见 [I 综合验收](../plan/archive/0.5.5/acceptance/maps/i/README.md)。2026-10-27当前紧凑布局为城镇32×32 / r3、野外64×64 / r11，core15 / Save12 / Settings1 / 地图V4；旧实例兼容见[紧凑地图模块](compact-map-compatibility.md)。历史[0.6.5 Editor 综合验收](../plan/archive/0.6.5/acceptance/behavior/README.md)及[0.7.0 验收](../plan/archive/0.7.0/plans/alpha-0.7.0-semver-plan.md)保留各自版本含义，当前版本Player未验收。
 
 ## 数据与入口
 
 初始安装完成后，`DarkFlare/地图/安装城镇与野外` 菜单已移除；日常修改通过地图工作台与配置中心完成。`WorldMapSetup.Ensure()` 保留为显式脚本安装入口，调用仍会更新正式配置并保存 Main 场景。
 
-正式源位于 `Assets/Data/Maps/World/`：城镇 64×64、野外 128×128，格宽 1。两图复用四地表发布资源及对象表现目录，当前 core 内容版本为 14。新游戏由 `WorldMapConfiguration` 的默认地图与入口决定。
+正式源位于 `Assets/Data/Maps/World/`：城镇32×32、野外64×64，格宽1。两图复用四地表发布资源及对象表现目录，当前core内容版本为15。新游戏由 `WorldMapConfiguration` 的默认地图与入口决定。
 
 地图交换格式 V2 增加 `entries`：稳定 `entryId`、用途 `Arrival / NewGame / Respawn`、局部世界坐标。每图最多 256 个入口，正式图必须有唯一复活入口。`Portal` 对象交互保存目标 `targetMapId / targetEntryId`，`contentId` 为空；商人和打造绑定相反。整套地图编译后交叉检查目标引用。V1 读取时只在内存补空入口和空出口字段，保存输出 V2，不在读取时改写原文件。
 
@@ -54,3 +54,5 @@ Schema 4 的 `Run` 保存活动 `ActiveMapId / MapRevision / MapRandom`，原 `M
 刷怪使用区域与圆足迹检查，Safe 始终排除；有限名额位置暂时无合法落点时保留 Pending，按帧重试并累计诊断计数；入图批次失败使候选切图回滚。相机使用当前图 Bounds，复活使用当前图唯一 Respawn 入口。
 
 阶段 H 已接入[批量导航](./navigation.md)：`MapScope` 同时持有 Native 网格、搜索池、共享场和固定步驱动。停用时立即取消驱动并完成 Job，提交成功后释放，回退重新激活。Schema 5 增加怪物导航意图；只冻结目标 / 模式和停止规则，路径与缓存重建。1000 怪物存档容量验证仍不能替代独立导航性能验收，性能结论见 H 记录。
+
+0.7.2-alpha.5 当前城镇32×32 / r3、野外64×64 / r11，单位尺度和格宽1保持。新野外50+10×25，已访问旧100实例保留原名额；[紧凑地图兼容](compact-map-compatibility.md)说明历史源依赖、合法坐标迁移与候选失败回退。

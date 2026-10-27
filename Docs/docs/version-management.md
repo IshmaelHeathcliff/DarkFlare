@@ -41,7 +41,7 @@
 
 ## 当前状态与版本来源
 
-2026-10-27，当前运行版本为 `0.7.2-alpha.4`，阶段一至四实现及验证完成，见[HUD验收](plan/archive/0.7.2/acceptance/compact-hud/README.md)。core v14、Save / Settings Schema12 / 1、地图V4保持；本阶段仅补只读图标与HUD表现，无新增持久化字段。EditMode 985/985、PlayMode 119/119，均无失败 / 跳过，验证后仅推进运行版本。0.7.2与0.7总计划继续活动。
+2026-10-27，当前运行`0.7.2-alpha.5`，五阶段实现及验证完成，见[地图验收](plan/archive/0.7.2/acceptance/compact-maps/README.md)。core15、Save12 / Settings1 / 地图V4；城镇r3、野外r11。EditMode993/993、PlayMode119/119，无失败 / 跳过；验证后推进运行版本。0.7.2计划已归档，0.7总计划继续活动，未构建Player。
 
 2026-09-29 的 `0.7.0-alpha.2` 历史验收为核心定向 52/52、版本域及存档定向 32/32、完整 EditMode 882/882、PlayMode 102/102，均为 0 失败 / 跳过。见[0.7.0 执行与验收](plan/archive/0.7.0/plans/alpha-0.7.0-semver-plan.md)；该版 Player、真实设备、跨进程及性能矩阵未执行。
 

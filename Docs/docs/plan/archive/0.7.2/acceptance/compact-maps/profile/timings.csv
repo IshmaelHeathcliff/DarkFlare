@@ -1,0 +1,17 @@
+layout,phase,ms
+old,new-session,1608.2843
+old,prepared,895.4471
+old,source-detached,977.6169
+old,target-restored,1267.0824
+old,before-commit,1267.7174
+old,source-released,1361.0273
+old,enter-total,1370.7337
+old,save-auto,879.1695
+compact,new-session,635.3608
+compact,prepared,1002.1797
+compact,source-detached,1025.3027
+compact,target-restored,1166.0085
+compact,before-commit,1166.0158
+compact,source-released,1184.3333
+compact,enter-total,1187.0797
+compact,save-auto,2494.7545

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace DarkFlare
 {
-    public sealed class WorldMapCatalog
+    public sealed partial class WorldMapCatalog
     {
         const string WildernessRevision4WithoutBatchesHash = "755d062a4677c29ab4e14c455387a19b725819c02a8c2894aacf7e9c85e0926c";
         const string WildernessRevision1WithoutBossOrBatchesHash = "818a95fb62d51a31e626bf0e0433ec5b0df9d74aa2434c2f6b8c49d585f42e8c";
@@ -21,15 +21,26 @@ namespace DarkFlare
 
         public void UpgradeKnownWildernessRevision(RunSaveData run)
         {
-            Upgrade(run.ActiveMapId, value => run.MapRevision = value, run.MapRevision, run.Spawner);
-            foreach (MapStateDto frozen in run.FrozenMaps)
+            if (run.MapRevision == Get(run.ActiveMapId).Revision && run.FrozenMaps.All(map => map.Revision == Get(map.MapId).Revision)) { return; }
+            RunSaveData candidate = MapStateData.Copy(run);
+            for (int i = 0; i < run.FrozenMaps.Count; i++) { candidate.FrozenMaps[i].Items = MapStateData.Copy(run.FrozenMaps[i].Items); }
+            Upgrade(candidate.ActiveMapId, value => candidate.MapRevision = value, candidate.MapRevision, candidate.Spawner);
+            foreach (MapStateDto frozen in candidate.FrozenMaps)
             { Upgrade(frozen.MapId, value => frozen.Revision = value, frozen.Revision, frozen.Spawner); }
+            UpgradeCompactLayouts(candidate);
+            run.MapRevision = candidate.MapRevision;
+            run.MapRandom = candidate.MapRandom;
+            run.Player.Position = candidate.Player.Position;
+            run.Monsters = candidate.Monsters;
+            run.WorldDrops = candidate.WorldDrops;
+            run.Spawner = candidate.Spawner;
+            run.FrozenMaps = candidate.FrozenMaps;
         }
 
         void Upgrade(string id, Action<int> set, int oldRevision, MonsterSpawnerStateDto spawner)
         {
             if (id != "map:wilderness" || oldRevision is not (1 or 4 or 7)) { return; }
-            CompiledMapDocument current = Get(id);
+            CompiledMapDocument current = _previousMaps.TryGetValue(id, out CompiledMapDocument previous) ? previous : Get(id);
             if (current.Revision != 9) { return; }
             MapDocument source = current.CreateEditableCopy();
             if (source.BossSpawns.Length != 1 || source.SpawnBatches.Length != 11) { return; }
@@ -94,9 +105,9 @@ namespace DarkFlare
         }
 
         void ValidateState(string id, int revision, Vector3Dto player, IEnumerable<MonsterRunStateDto> monsters,
-            IEnumerable<WorldDropStateDto> drops, MonsterSpawnerStateDto spawner, BossEncounterStateDto boss)
+            IEnumerable<WorldDropStateDto> drops, MonsterSpawnerStateDto spawner, BossEncounterStateDto boss, CompiledMapDocument sourceMap = null)
         {
-            CompiledMapDocument map = Get(id);
+            CompiledMapDocument map = sourceMap ?? Get(id);
             if (revision != 0 && revision != map.Revision) { throw new InvalidOperationException("地图修订不匹配：" + id); }
             MapDocument document = map.CreateEditableCopy();
             if (boss == null || !boss.IsValid) { throw new InvalidOperationException("Boss 名额非法：" + id); }
@@ -117,15 +128,13 @@ namespace DarkFlare
             { throw new InvalidOperationException("有限刷怪地图缺少名额模式：" + id); }
             if (spawner.Mode == FiniteSpawnMode.Finite)
             {
-                if (spawner.Batches.Count != document.SpawnBatches.Length
-                    || spawner.Slots.Count != document.SpawnBatches.Sum(batch => batch.Count))
-                { throw new InvalidOperationException("刷怪计划数量与地图批次不匹配：" + id); }
-                foreach (MapSpawnBatchRecord batch in document.SpawnBatches)
+                MapDocument plan = ResolveSpawnLayout(map, spawner).CreateEditableCopy();
+                foreach (MapSpawnBatchRecord batch in plan.SpawnBatches)
                 {
                     SpawnBatchStateDto state = spawner.Batches.SingleOrDefault(value => value.BatchId == batch.BatchId);
                     if (state == null || batch.Activation == MapSpawnActivation.OnEnter && !state.IsActivated)
                     { throw new InvalidOperationException("刷怪批次状态与地图不匹配：" + batch.BatchId); }
-                    MapRegionRecord region = document.Regions.Single(value => value.RegionId == batch.RegionId);
+                    MapRegionRecord region = plan.Regions.Single(value => value.RegionId == batch.RegionId);
                     MonsterSpawnDefinition pool = Definitions.Resolve<MonsterSpawnDefinition>(ContentId.Parse(region.SpawnDefinitionId));
                     HashSet<string> allowed = pool.AllMonsters.Select(value => "monster:" + value.Id).ToHashSet(StringComparer.Ordinal);
                     for (int index = 0; index < batch.Count; index++)
@@ -165,6 +174,7 @@ namespace DarkFlare
             foreach (MapDefinition definition in maps)
             {
                 CompiledMapDocument map = MapDocumentCompiler.Compile(MapDocumentJson.Read(definition.CanonicalJson), definitions);
+                RegisterPreviousLayout(definition, map);
                 if (!_maps.TryAdd(map.MapId, map)) { throw new InvalidOperationException("地图身份重复：" + map.MapId); }
                 MapDocument document = map.CreateEditableCopy();
                 if (document.Entries.Count(entry => entry.Kind == MapEntryKind.Respawn) != 1)

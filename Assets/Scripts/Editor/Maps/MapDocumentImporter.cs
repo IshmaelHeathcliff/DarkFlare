@@ -19,7 +19,15 @@ namespace DarkFlare.Editor
                 CompiledMapDocument document = MapDocumentCompiler.Compile(ReadSource(context.assetPath), MapEditorDefinitionIndex.Capture(context));
                 var asset = ScriptableObject.CreateInstance<MapDefinition>();
                 asset.name = Path.GetFileNameWithoutExtension(context.assetPath);
-                asset.Initialize(document);
+                string history = context.assetPath == "Assets/Data/Maps/World/town.dfmap" ? "Assets/Data/Maps/History/town-r1.json"
+                    : context.assetPath == "Assets/Data/Maps/World/wilderness.dfmap" ? "Assets/Data/Maps/History/wilderness-r9.json" : null;
+                string previous = null;
+                if (history != null)
+                {
+                    context.DependsOnSourceAsset(history);
+                    previous = File.ReadAllText(history, System.Text.Encoding.UTF8);
+                }
+                asset.Initialize(document, previous);
                 context.AddObjectToAsset("map_definition", asset);
                 context.SetMainObject(asset);
             }

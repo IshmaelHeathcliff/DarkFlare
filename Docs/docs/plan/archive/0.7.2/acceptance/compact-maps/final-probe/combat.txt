@@ -1,0 +1,5 @@
+casts=4
+planned=300
+alive=47
+defeated=3
+pending=250

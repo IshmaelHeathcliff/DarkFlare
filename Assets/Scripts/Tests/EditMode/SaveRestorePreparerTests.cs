@@ -147,6 +147,7 @@ namespace DarkFlare.Tests
         [TestCase(11)]
         [TestCase(12)]
         [TestCase(13)]
+        [TestCase(14)]
         public void Prepare_AdditiveContentPreservesLegacyValuesStockAndSourceDocument(int version)
         {
             SaveDocumentDto document = SaveRestorePreparer.Prepare(SaveDataContractTests.CreateValidDocument(), _catalog).Value.Document;
@@ -197,6 +198,16 @@ namespace DarkFlare.Tests
             {
                 SerializedObject serialized = new SerializedObject(target);
                 serialized.FindProperty("_contentVersion").intValue = 2;
+                // core 2 尚未引入双地图；本用例只覆盖装备槽内容迁移。
+                SerializedProperty entries = serialized.FindProperty("_entries");
+                for (int i = entries.arraySize - 1; i >= 0; i--)
+                {
+                    if (entries.GetArrayElementAtIndex(i).objectReferenceValue is MapDefinition)
+                    {
+                        entries.GetArrayElementAtIndex(i).objectReferenceValue = null;
+                        entries.DeleteArrayElementAtIndex(i);
+                    }
+                }
                 serialized.ApplyModifiedPropertiesWithoutUndo();
                 ContentCatalogBuildResult build = ContentCatalog.Build(target);
                 Assert.IsTrue(build.Succeeded);

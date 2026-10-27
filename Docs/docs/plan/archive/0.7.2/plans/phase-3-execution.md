@@ -4,7 +4,7 @@
 
 ## 目标与基线
 
-按[体验优化总计划](../../../alpha-0.7.2-optimization-plan.md)和[界面分计划](../../../alpha-0.7.2/ui-optimization.md)，减少常驻按钮、扩大棋盘画布，并实现力量在上、敏捷左下、智力右下；键鼠和手柄仍能完成现有全部操作。
+按[体验优化总计划](alpha-0.7.2-optimization-plan.md)和[界面分计划](ui-optimization.md)，减少常驻按钮、扩大棋盘画布，并实现力量在上、敏捷左下、智力右下；键鼠和手柄仍能完成现有全部操作。
 
 - 实施起点：`main` / `6315bd34749be9cc1e3d4a13af880f22f40bab9c`，Unity `6000.6.7f1`。已有 `GameCjkFont.asset` 修改独立保留，不纳入本阶段。
 - 当前数据：core v14、Save / Settings Schema 12 / 1、地图 V4、城镇 r1 / 野外 r9。本阶段仅改变表现与输入路由，预计全部保持，不新增存档迁移。
